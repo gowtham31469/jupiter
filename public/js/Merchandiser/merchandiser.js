@@ -213,32 +213,9 @@ function jsbarcode(code, id, svgDoc) {
 	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
 	// img.src - contains base64 URI from svg
-	console.log(img.src);
 
 	//remove temporary canvas
 	canvasTmp.remove();
 
-	//Check in browsers
-	//
-	//                var csrf_token = $('meta[name="csrf-token"]').attr('content');
-	//                        $.ajax({
-	//                            url: base_url + "/admin/template-management/base64_to_jpeg",
-	//                            type: "Post",
-	//                            data: {
-	//                                src: img.src,
-	//                                _token: csrf_token
-	//                            },
-	//                            beforeSend: function () {
-	//                                $(".loader").show();
-	//                                $(".loader").css('margin-top', '12%');
-	//                            },
-	//                            success: function (data) {
-	//                               svgDoc.getElementById(id).setAttribute('xlink:href',data);
-	//                                
-	//                            },
-	//                            error: function (data) {
-	//                               
-	//                            }
-	//                        })
 	svgDoc.getElementById(id).innerHTML = svg_xml;
 }

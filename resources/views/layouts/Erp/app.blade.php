@@ -40,6 +40,25 @@
 </head>
 
 <body>
+ <div class="container-fluid">
+        <div class="row">
+        @if (Auth::guard("erpuser")->user()) @include('layouts.Erp.navbar')
+        @elseif(!Auth::guest())
+            <script type="text/javascript">
+                customer  window.location = "{{ url('/erp/login') }}";
+            </script>
+        @endif
+        @yield('content')
+  
+        </div>
+    </div>
+    @yield('jqueryIncludes')
+    <script type="text/javascript" src="{{ asset('DataTables/jQuery-3.2.1/jquery-3.2.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bootstrap-3.3.7-dist/js/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('DataTables/DataTables-1.10.16/js/jquery.dataTables.min.js') }}"></script>
+    <script src="http://cdn.jsdelivr.net/bootstrap.datatables/0.1/js/datatables.js"></script> 
+    <script type="text/javascript" src="{{ asset('DataTables/Buttons-1.5.1/js/dataTables.buttons.min.js') }}"></script>
+
 
 	<div class="container-fluid">
 		<div class="row">
@@ -107,7 +126,12 @@
 			}
 		}
 	</script>
-	@yield('jqueryIncludes')
+	
+<!-- (Optional) Latest compiled and minified JavaScript translation files -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/i18n/defaults-*.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/easy-autocomplete/1.3.5/jquery.easy-autocomplete.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/1.3.1/js/toastr.js"></script>
+@yield('jqueryIncludes')
 </body>
 
 </html>

@@ -169,7 +169,6 @@ function orderStatus() {
                     function(start, end, label) {
                         $.fn.dataTableExt.afnFiltering.length = 0;
                         $tableSel.dataTable().fnDraw();
-                        // alert("A new date range was chosen: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
                         filterByDate(4, start, end); // We call our filter function
                         $tableSel.dataTable().fnDraw(); // Manually redraw the table after filtering
                 });
@@ -305,7 +304,6 @@ function orderStatus() {
                                                 if (old_po!=value1.purchase_order_no)
                                                 {
                                                     options += "<option>" + value1.purchase_order_no +"</option>";
-                                                    console.log(old_po)
                                                 }
                                                 old_po = value1.purchase_order_no
                                                 coun++;
@@ -406,7 +404,6 @@ function orderStatus() {
                                                 $count_li++;
                                             }
                                         });
-                                        //alert($count_li);
                                         if($count_li > 0)
                                         {
                                             var company_id=$(this).data('company');
@@ -503,7 +500,6 @@ function orderStatus() {
 											
 												if($('#new_po_no_status').val().length > 9)
 											{
-												//alert("a")
 												$('#new_po_error_length_status').removeClass('hidden');
 
 												$('#new_po_error_status').addClass('hidden');
@@ -515,7 +511,6 @@ function orderStatus() {
 												$('#exist_artwork_div_status input[type=checkbox]').each(function () {
 													if (this.checked) {
 														a.push($(this).parent().attr('data-id'));
-														//alert($(this).parent().attr('data-id'))
 													}
 												});
 												var aa = a.join(',');
@@ -590,7 +585,6 @@ function orderStatus() {
                                             {
 												if($('#new_po_no_status').val().length > 9)
 											{
-												//alert("a")
 												$('#new_po_error_length_status').removeClass('hidden');
 
 												$('#new_po_error_status').addClass('hidden');
@@ -598,12 +592,10 @@ function orderStatus() {
 											}
 											else
 											{
-												//alert("s")
 												var a = [];
                                                 $('#exist_artwork_div_status input[type=checkbox]').each(function () {
                                                     if (this.checked) {
                                                         a.push($(this).parent().attr('data-id'));
-                                                        //alert($(this).parent().attr('data-id'))
                                                     }
                                                 });
                                                 var aa = a.join(',');
@@ -823,7 +815,6 @@ function orderStatus() {
 
                     },
                     function (start, end, label) {
-                        // alert("A new date range was chosen: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
                         $.fn.dataTableExt.afnFiltering.length = 0;
                         $tableSel.dataTable().fnDraw();
                         filterByDate(5, start, end); // We call our filter function
@@ -1077,7 +1068,6 @@ function tescoOrderStatus()
                                                 if (old_po!=value1.purchase_order_no)
                                                 {
                                                     options += "<option>" + value1.purchase_order_no +"</option>";
-                                                    console.log(old_po)
                                                 }
                                                 old_po = value1.purchase_order_no
                                                 coun++;
@@ -1172,7 +1162,6 @@ function tescoOrderStatus()
                                                 $count_li++;
                                             }
                                         });
-                                        //alert($count_li);
                                         if($count_li > 0)
                                         {
                                             var company_id=$(this).data('company');
@@ -1268,7 +1257,6 @@ function tescoOrderStatus()
 											
 											if($('#new_po_no_status').val().length > 9)
 											{
-												//alert("a")
 												$('#new_po_error_length_status').removeClass('hidden');
 
 												$('#new_po_error_status').addClass('hidden');
@@ -1280,7 +1268,6 @@ function tescoOrderStatus()
 												$('#exist_artwork_div_status input[type=checkbox]').each(function () {
 													if (this.checked) {
 														a.push($(this).parent().attr('data-id'));
-														//alert($(this).parent().attr('data-id'))
 													}
 												});
 												var aa = a.join(',');
@@ -1358,7 +1345,6 @@ function tescoOrderStatus()
 												
 											if($('#new_po_no_status').val().length > 9)
 											{
-												//alert("a")
 												$('#new_po_error_length_status').removeClass('hidden');
 
 												$('#new_po_error_status').addClass('hidden');
@@ -1370,7 +1356,6 @@ function tescoOrderStatus()
                                                 $('#exist_artwork_div_status input[type=checkbox]').each(function () {
                                                     if (this.checked) {
                                                         a.push($(this).parent().attr('data-id'));
-                                                        //alert($(this).parent().attr('data-id'))
                                                     }
                                                 });
                                                 var aa = a.join(',');
@@ -1583,7 +1568,6 @@ function tescoOrderStatus()
 
                     },
                     function (start, end, label) {
-                        // alert("A new date range was chosen: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
                         $.fn.dataTableExt.afnFiltering.length = 0;
                         $tableSel.dataTable().fnDraw();
                         filterByDate(6, start, end); // We call our filter function
@@ -1962,6 +1946,7 @@ function tescoSetPO(obj,id,tableName,po_file)
    $('.tesco-po').css('border-color', '');
    var po_number  = $(obj).closest('tr').find('.tesco-po').val();
    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+   var buyer_id   = localStorage.getItem("buyer_id"); 
    if (po_number!="")
    {
     $.ajax({
@@ -1972,7 +1957,8 @@ function tescoSetPO(obj,id,tableName,po_file)
             _token: csrf_token,
             po_number:po_number,
             tableName:tableName,
-            id:id
+            id:id,
+            buyer_id:buyer_id
         },
         beforeSend: function () {
             $(".loader").show();
@@ -2065,319 +2051,7 @@ function AvoidSpace(event) {
  * call the method for getting all the details for profoma invoice generation
  * @return {[type]} [description]
  */
-function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,template_name,order_flag)
-{
-    $('#uvc_number').text(style_no)
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    var buyer_id = localStorage.getItem("buyer_id");
-    var tr = "";
-    $.ajax({
-        url: base_url + "/customer/tesco/order-management/show-tesco-pi",
-        type: "Post",
-        dataType: "json",
-        data: {
-            _token: csrf_token,
-            table_name: tableName,
-            buyer_id :buyer_id,
-            pi_status:pi_status,
-            style_no:style_no,
-            template_id:template_id,
-            buyer_po:buyer_po,
-            id:id,
-            template_name:template_name,
-            order_flag:order_flag
-        },
-        beforeSend: function (){
-            $(".loader").show();
-        },
-        statusCode:
-        {
-            /** [Show response status based on HTTP status code] */
-            200: function(data)
-            {
-               if ((jQuery.isEmptyObject(data.data.company_details)) || (jQuery.isEmptyObject(data.data.bank_details)) || (jQuery.isEmptyObject(data.data.ship_to)) || (jQuery.isEmptyObject(data.data.bill_to)))
-               {
-                    $('.snackbar_span').html("Customer Profile isn't complete");
-                    showSnackbar();
-               }
-               else
-               {
-                    $('.advnc').text(data.data.bank_details.payment_terms)
-                    $('.freight').text(data.data.bank_details.freight_terms)
-                    $('.pi_number').text(data.data.company_details.pi_number)
-				    var createdate = data.data.company_details.pi_date.replace(/-/g,'/')
-                    $('.pi-date').text(createdate)
-                    if (data.data.company_details.rev_number!=0)
-                    {
-                       $('.rev').removeClass('hidden')
-                       $('.rev_number').text(data.data.company_details.rev_number) 
-                    }
-                    else{
-                      $('.rev').addClass('hidden')
-                    }
-                    
 
-                    $('#company_details').html('<strong style="font-size:11px;">'+data.data.company_details.name+'</strong><br/>'+data.data.company_details.address+'<br/>PH : '+data.data.company_details.office_phone+', '+data.data.company_details.phone+'<br/>GST : '+data.data.company_details.gstin)
-                    $('#bill_to').html('<h4>Billing Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.bill_to.address+'</br> GSTN :'+data.data.bank_details.gstin_number+ '</p>')
-                    $('#ship_to').html('<h4>Shipping Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.ship_to.address+'</p>')
-                    $('#bank_details').html(' <strong>BANK DETAILS: </strong><table class="table table-condensed" style="width:50%;"><tr><td>Bank</td><td>'+data.data.company_details.bank+'</td></tr><tr><td>A/C No</td><td>'+data.data.company_details.account_no+'</td></tr><tr><td>A/C NAME</td><td>'+data.data.company_details.account_holder+'</td></tr><tr><td>IFSC CODE</td><td>'+data.data.company_details.ifsc_code+'</td></tr></table>')
-               
-               
-                    var i = 0;
-                    var totalqnty = 0;
-                    var subtotal = 0;
-                    var tax = 0 ;
-                    var tr = '';
-                    
-                    if (data.data.bank_details.template_type == "single")
-                    {
-                        tr += '<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>S.No.</th><th>Style</th><th>Po.No.</th><th>Ref</th><th class="size-pi">Size</th><th>Quantity</th><th>Unit Cost</th><th>Tax</th><th>Total</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12">';    
-                    }
-                    else
-                    {
-                        tr += '<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>S.No.</th><th>Style</th><th>Po.No.</th><th>Ref</th><th>Quantity</th><th>Unit Cost</th><th>Tax</th><th>Total</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12">';
-                    }        
-                     
-               
-                    if(data.data.item_details.length != 0 && data.data.price_list.length != 0)
-                    {
-                        var noPrice = 0;
-                        var noVol = 0 ;
-                        var taxamnt = 0;
-                        var amnt = 0;
-                        var totaltax = 0;
-                        var totalcgst = 0;
-                        var totalsgst = 0;
-                        var billamnt = 0;
-                        var amount = 0;
-                        // tax = data.data.item_details[0].tax;
-                        $.each(data.data.item_details, function (index, value)
-                        {
-                            var unit_price = 0;
-                            var tax = 0;
-                            $.each(data.data.price_list, function(i, val){
-                                if (value.item_id == val.item_id) {
-                                    if(value.quantity <= val.volume_to) {
-                                        unit_price = val.price;
-                                        tax = val.tax;
-                                         return false; 
-                                    }
-                                }
-                            });
-                            if(unit_price === 0){
-                                noPrice++;
-                            }
-                            taxamnt = (value.quantity*unit_price)*(tax/100);
-                            amnt =  (value.quantity*unit_price) + taxamnt ;
-                            if (data.data.bank_details.template_type == "single")
-                            {
-                                size = value.size ;
-                                tr += '<tr><td>'+ ++i +'</td><td>'+value.style+'</td><td>'+value.po_no+'</td><td>'+value.ref_no+'</td><td>'+size+'</td><td>'+value.quantity+'</td><td>'+unit_price+'</td><td>'+tax+'</td><td>'+amnt.toFixed(2)+'</td></tr>'
-                            }
-                            else
-                            {
-                                tr += '<tr><td>'+ ++i +'</td><td>'+value.style+'</td><td>'+value.po_no+'</td><td>'+value.ref_no+'</td><td>'+value.quantity+'</td><td>'+unit_price+'</td><td>'+tax+'</td><td>'+amnt.toFixed(2)+'</td></tr>'
-                            }
-                            totaltax+=parseInt(tax);
-                            if (data.data.bank_details.place_of_supply==1){
-                                totalcgst+=((parseInt(tax)/2)/100)*(value.quantity*unit_price);
-                                totalsgst+=((parseInt(tax)/2)/100)*(value.quantity*unit_price);
-                            }
-                            else if (data.data.bank_details.place_of_supply==2){
-                                totaligst+= ((parseInt(tax))/100)*(value.quantity*unit_price);
-                            }
-                            else{
-                               amount +=(totaltax/100)* (value.quantity*unit_price);
-                            }
-                            totalqnty+=value.quantity;
-                            subtotal+=(value.quantity*unit_price);
-                            billamnt+=amnt;
-                        });
-
-                        if(noPrice < 1) {
-
-                            tr += '</tbody></table></div><hr><h4 class="text-right"> Total Quantity : '+totalqnty+' </h4><hr><h4 class="text-right"> Sub-Total : ₹ '+subtotal.toFixed(2)+' </h4><hr/><div class="text-right">'
-                            if (data.data.bank_details.place_of_supply==1)
-                            {
-                              tr += '<h4> CGST : (<span>'+(totalcgst).toFixed(2)+'</span>)</h4><h4> SGST : (<span>'+(totalcgst).toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p  style="text-transform: capitalize" id="bilamnt">'+RsPaise(billamnt.toFixed(2))+'  </p></div><hr /></div>'
-                            }
-                            else if (data.data.bank_details.place_of_supply==2)
-                            {
-                                tr += '<h4> IGST : (<span>'+totaligst.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p style="text-transform: capitalize" id="bilamnt">'+RsPaise(billamnt.toFixed(2))+' </p></div><hr /></div>'
-                            }
-                            else
-                            {
-                                 tr += '<h4> Taxes : (<span>'+amount.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹'+billamnt.toFixed(2)+' </h4><p style="text-transform: capitalize">'+RsPaise(billamnt.toFixed(2))+'  </p></div><hr /></div>'
-                            }
-                            $('#item_details').html(tr)
-                            if (pi_status=="true")
-                            {
-                                $('.pi_actions').html('<button class="btn btn-default btn-xs downloadPi" id="downloadPi" >Download</button><button type="button" class="btn btn-default btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
-                            }
-                            else
-                            {
-                                $('.pi_actions').html('<button class="btn btn-success btn-xs" onclick=tescoApprovePI("'+template_id+'","'+id+'","'+tableName+'","'+billamnt+'")>Approve</button><button class="btn btn-danger btn-xs" onclick=tescoRejectPI("'+id+'","'+tableName+'","tesco")>Reject</button><button type="button" class="btn btn-primary btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
-                            }
-                            var logo = base_url+data.data.company_details.logo
-                            $('#company-logo').attr('src',logo);
-                            $('#profoma-invoice').modal("show")
-
-                            //Download Pi using JSPDF
-                            $('.downloadPi').click(function () {
-                                var myOffscreenEl = document.getElementById("proforma-invoice"),
-                                    useWidth      = myOffscreenEl.style.width,
-                                    useHeight     = myOffscreenEl.style.height;
-                                    myOffscreenEl.style.backgroundColor = 'white';
-
-                                html2pdf(myOffscreenEl, {
-                                  margin:       10,
-                                  filename:     'Proforma-Invoice.pdf',
-                                  image:        { type: 'jpeg', quality: 0.98 },
-                                  html2canvas:  { dpi: 300, letterRendering: true },
-                                  jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' }
-                                });
-                            });
-
-                        } else {
-                            $('.snackbar_span').html('Price details should be within a range !!');
-                            showSnackbar();
-                        }
-                        
-                    }
-                    else
-                    {
-                        $('.snackbar_span').html('Price Details are Missing !!');
-                        showSnackbar();
-                    }
-                } 
-            
-            },
-            400: function(data)
-            {
-               $('.snackbar_span').html('Something went wrong');
-               showSnackbar();
-            }
-        },
-        error: function (data)
-        {
-
-        },
-        complete: function () {
-            $(".loader").hide();
-        }
-    })
-}
-
-
-/**
- * method to call the PI approval functionality
- * @param  {[type]} id         [description]
- * @param  {[type]} table_name [description]
- * @return {[type]}            [description]
- */
-function tescoApprovePI(template_id,id,table_name,billamnt)
-{
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    var buyer_id = localStorage.getItem("buyer_id");
-    $.ajax({
-        url: base_url + "/customer/tesco/approve-tesco-pi",
-        type: "Post",
-        dataType: "json",
-        data: {
-            _token: csrf_token,
-            table_name: table_name,
-            buyer_id:buyer_id,
-            id:id,
-            template_id:template_id,
-            billamnt:billamnt
-        },
-        beforeSend: function () {
-            $(".loader").show();
-            $(".loader").css('margin-top', '12%');
-        },
-        statusCode:
-        {
-            /** [Show response status based on HTTP status code] */
-            200: function(data)
-            {
-               $('.snackbar_span').html('PI Approved Successfully');
-               $('#snackbar').css('background-color','#00b6ff');
-               $('#profoma-invoice').modal("hide");
-               $('#'+table_name+'_'+id+' .pi_class').removeClass().addClass('pi_class label label-PIApproved').text('PI Approved');
-               var attrbs = $('#'+table_name+'_'+id+' .pi_generation').attr('onclick');
-               var attrbs = attrbs.replace("false", "true");
-               $('#'+table_name+'_'+id+' .pi_generation').attr('onclick', attrbs);
-               showSnackbar();
-               location.reload();
-
-            },
-            400: function()
-            {
-               $('.snackbar_span').html('Something went wrong');
-               $('#profoma-invoice').modal("hide")
-               showSnackbar();
-            }
-        },
-        error: function (data){
-            console.log(data);
-        },
-        complete: function () {
-            $(".loader").hide();
-            $(".loader").css('margin-top', '0%');
-        }
-    })
-
-}
-/**
- * method to call the PI rejection functionality
- * @param  {[type]} id         [description]
- * @param  {[type]} table_name [description]
- * @return {[type]}            [description]
- */
-function tescoRejectPI(id,table_name)
-{
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    var buyer_id = localStorage.getItem("buyer_id");
-    $.ajax({
-        url: base_url + "/customer/tesco/reject-tesco-pi",
-        type: "Post",
-        dataType: "json",
-        data: {
-            _token: csrf_token,
-            table_name: table_name,
-            buyer_id:buyer_id,
-            id:id
-        },
-        beforeSend: function () {
-            $(".loader").show();
-            $(".loader").css('margin-top', '12%');
-        },
-        statusCode:
-        {
-            /** [Show response status based on HTTP status code] */
-            200: function(data)
-            {
-               $('.snackbar_span').html('PI Rejected!');
-               $('#profoma-invoice').modal("hide")
-               $('#'+table_name+'_'+id+' .pi_class').removeClass().addClass('pi_class label label-PIRejected').text('PI Rejected');
-               showSnackbar();             
-            },
-            400: function()
-            {
-               $('.snackbar_span').html('Something went wrong!');
-               $('#profoma-invoice').modal("hide")
-               showSnackbar();
-            }
-        },
-        error: function (data){
-            console.log(data);
-        },
-        complete: function () {
-            $(".loader").hide();
-            $(".loader").css('margin-top', '0%');
-        }
-    })
-}
 function updateArtwork(obj)
 {
     $('#po_already_error').addClass('hidden')
@@ -2537,7 +2211,6 @@ function updateArtwork(obj)
                             tr +='<tr><td class="tpnd"><div class="form-group has-feedback"> <input type="text" disabled class="form-control input-sm ce_ratio_orms_tpn" required="" id="os_tpnd_'+i+'" data-minlength="'+tpn_len+'" maxlength="'+tpn_len+'" data-required-error="Mandatory Field." data-minlength-error="Enter '+tpn_len+' digits." name="os_tpnd_'+i+'" onkeypress="return isNumber(event)" value="'+tpnd+'" placeholder="'+tpn_th+'" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td class="barcode"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_itf" disabled required="" data-minlength="'+maxlength+'" maxlength="'+maxlength+'" data-required-error="Mandatory Field." data-minlength-error="Enter '+maxlength+' digits." id="os_barcode_'+i+'" onkeyup="dynamicSVGTemplates()" name="os_barcode_'+i+'" onkeypress="return isNumber(event)" value="'+barcode_td+'" placeholder="Enter ITF Barcode"><label class="barcode_error hidden" style="color:red;margin-left: -55px;position: absolute;">Enter Valid Barcode</label><div class="help-block with-errors"></div></div></td><td class="size"><div class="form-group has-feedback"> <input disabled type="text" maxlength="'+unit_len+'" class="form-control input-sm ce_ratio_cpc" required="" id="os_case_qty_'+i+'" name="os_case_qty_'+i+'" onkeypress="return isNumber(event)" value="'+unit_qty+'" placeholder="Enter '+qty+'" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>'+th_td+'<td> <div class="form-group has-feedback has-success"><input disabled onkeypress="return checkNumbersOnly(event)" class="form-control  input-sm tot_qty_table" value="'+value.count+'" required=""  placeholder="Quantity" maxlength="4" type="text"><div class="help-block with-errors"></div></div></td></tr>';
                         i++;
                     })
-                     // <button disabled type="button" onclick=addRowOs(this,"'+TemplateName+'","'+data.order_details.zone+'") data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>
                      $('.edit-qty-table-div').html('<hr><h4 class="text-center">Order Quantity - '+TemplateName+'</h4><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px;margin-top: 15px;"> <thead> <tr> <th>'+tpnd_tr+'</th><th>'+barcode_tr+'</th> <th>'+qty+'</th>'+th_tr+' <th>Quantity</th></tr></thead> <tbody style="font-size: 11px">'+tr+'</tbody></table>') 
                     
                     $('#edit_template_name').val(TemplateName)
@@ -3653,7 +3326,6 @@ function jsbarcodetesco(code, id, svgDoc) {
     img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
     // img.src - contains base64 URI from svg
-    console.log(img.src);
 
     //remove temporary canvas
     canvasTmp.remove();
@@ -3716,7 +3388,6 @@ function jsbarcodetescoean(code, id, svgDoc) {
     img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
     // img.src - contains base64 URI from svg
-    console.log(img.src);
 
     //remove temporary canvas
     canvasTmp.remove();

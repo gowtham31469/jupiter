@@ -299,6 +299,7 @@ class ProfomaInvoice
                 $data['item_details'] = $item_details;
               }
           }  
+
           if ($item_id_array) {
             foreach (array_unique($item_id_array) as $item_id) {
              $price_list      = DB::table('price_taxation')

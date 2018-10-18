@@ -1958,7 +1958,7 @@ class OrderManagementCntrl extends Controller
    *
    * @return pdf
    */
-  
+	
     public function generateDivTesco(Request $request)
     {
 		    $svgarr = explode(',_',$request->svg);
@@ -1969,15 +1969,18 @@ class OrderManagementCntrl extends Controller
         PDF::setPrintHeader(false);
         PDF::setPrintFooter(false);
         PDF::SetFont('frankgothcnbt');
-    		PDF::SetAutoPageBreak(TRUE);
-      		foreach($svgarr as $value)
-      		{
-      			 PDF::SetMargins(0, 0, 0, false);
-      			 PDF::AddPage('L', array(80,127));
-      			 $svg=urldecode($value);
-      			 PDF::setImageScale(1.66);
-      			 PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=127, $h=80, $link='', $align='', $palign='', $border=0, $fitonpage=true);
-      		}
+		PDF::SetAutoPageBreak(TRUE);
+		$i=0;
+		foreach($svgarr as $value)
+		{
+			 PDF::SetMargins(0, 0, 0, false);
+			 PDF::AddPage('L', array(80,127));
+			 $svg=urldecode($value);
+			 PDF::setImageScale(1.66);
+			 PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=127, $h=80, $link='', $align='', $palign='', $border=0, $fitonpage=true);
+			 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+			 $i++;
+		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
 		
@@ -2105,9 +2108,9 @@ class OrderManagementCntrl extends Controller
 			 PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=40, $h=30, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			 PDF::ImageSVG('@' . $svg, $x=40, $y=0, $w=40, $h=30, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			
-			//PDF::Image(public_path('/storage/app/template/prince.png'), 2, 2, 33, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 3.7, 2, 33, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			
-			//PDF::Image(public_path('/storage/app/template/prince.png'), 42, 2, 33, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 43.7, 2, 33, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			$i++;
 		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
@@ -2119,16 +2122,22 @@ class OrderManagementCntrl extends Controller
      *
      * @return json value
      */
-  public function reOrder(Request $request)
+    public function reOrder(Request $request)
     {
-        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->select('*')->get();
-		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->select('*')->get();
-		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->select('*')->get();
-		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->select('*')->get();
-		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->select('*')->get();
-		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->select('*')->get();
-		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->select('*')->get();
-		echo json_encode($data);
+        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->select('*')->get();
+
+    		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->select('*')->get();
+
+    		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->select('*')->get();
+
+    		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->select('*')->get();
+
+    		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->select('*')->get();
+
+    		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->select('*')->get();
+        
+    		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->select('*')->get();
+    		echo json_encode($data);
     }
   /**
      * This Function is used to list all the artwork for particular style number.
@@ -2557,6 +2566,8 @@ class OrderManagementCntrl extends Controller
       $type         =   $request->type;
       $id           =   $request->id;
       $po           =   $request->po;
+	  $ocn_number   =   $request->ocn;
+	  $manufacture_date  =   $request->manufacture_date;
 	  $counts       =   explode(',',$request->counts);
       if($type == "tesco_tcl1_orders")
       {
@@ -2587,6 +2598,8 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+		  		$newTasks->ocn_number =$ocn_number;
+		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
 		  		$newTasks->order_flag = "repeatOrder";
@@ -2637,6 +2650,8 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+		  		$newTasks->ocn_number =$ocn_number;
+		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
@@ -2687,6 +2702,8 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+		  		$newTasks->ocn_number =$ocn_number;
+		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
@@ -2737,6 +2754,8 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+		  		$newTasks->ocn_number =$ocn_number;
+		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
@@ -2787,6 +2806,8 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+		  		$newTasks->ocn_number =$ocn_number;
+		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
@@ -2837,6 +2858,8 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+		  		$newTasks->ocn_number =$ocn_number;
+		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
@@ -2887,6 +2910,8 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+		  		$newTasks->ocn_number =$ocn_number;
+		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
@@ -4193,24 +4218,29 @@ class OrderManagementCntrl extends Controller
              /**  [Get parent customer id from tesco_suppliers metadata id] */
              $customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
              $moq_array = array();
+             $moq_value = array();
              foreach ($templates as $template_id) 
              {
+                $temp_name = DB::table('tesco_item_master')
+                         ->select('tesco_item_master.item_name')
+                         ->where('id','=',$template_id)
+                         ->first();
                 $moq = DB::table('price_taxation')
-                         ->select('moq')
+                         ->select('price_taxation.moq')
                          ->where('template_id','=',$template_id)
                          ->where('customer_id','=',$customer_id->customer_id)
                          ->where('buyer_id','=',$buyer_id)
                          ->first();
                 if($moq)
                 {
-                  $moq_value = $moq->moq;
+                  $moq_value[$temp_name->item_name] = $moq->moq;
                 }
                 else
                 {
-                  $moq_value = 0;
+                  $moq_value[$temp_name->item_name] = 0;
                 }
-                array_push($moq_array,$moq_value);
              }
+             array_push($moq_array,$moq_value);
            
            return response()->json(['error'=> false,'message' =>'success','moq' => $moq_array]);
        } catch (\Exception $e) {
@@ -4301,7 +4331,7 @@ class OrderManagementCntrl extends Controller
 		
 		$tabula       = Config::get('tabula.bar_jar');
 		
-		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.jpg').' '.$type.' 33 13');
+		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 33 13');
         $info    = json_decode($info, true);
 		return $info;
     }
@@ -4318,7 +4348,41 @@ class OrderManagementCntrl extends Controller
 		
 		$tabula       = Config::get('tabula.bar_jar');
 		
-		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.jpg').' '.$type.' 33 13');
+		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 33 13');
+        $info    = json_decode($info, true);
+		return $info;
+    }
+	/**
+     * This Function is used to generate barcode using java.
+     *
+     * @return path of barcode
+     */
+  	public function generateBarcodeEanBig(Request $request)
+    {
+		$name=$request['name'];
+		$type=$request['type'];
+		$barcode=$request['barcode'];
+		
+		$tabula       = Config::get('tabula.bar_jar');
+		
+		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 50 16');
+        $info    = json_decode($info, true);
+		return $info;
+    }
+	/**
+     * This Function is used to generate barcode using java.
+     *
+     * @return path of barcode
+     */
+  	public function generateBarcodeItfBig(Request $request)
+    {
+		$name=$request['name'];
+		$type=$request['type'];
+		$barcode=$request['barcode'];
+		
+		$tabula       = Config::get('tabula.bar_jar');
+		
+		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 50 16');
         $info    = json_decode($info, true);
 		return $info;
     }

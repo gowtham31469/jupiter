@@ -1,3 +1,73 @@
-function  invoice(argument) {
-	alert()
-}
+	function dynamicTable() {
+        var customer_id       = $("#customer option:selected").val();
+        var html = "";
+        $.ajax({
+            url: "/erp/erp-order-list",
+            type: 'GET',
+            data: {
+                customer_id:customer_id
+            },
+            tryCount: 0,
+            retryLimit: 2,
+            dataType: "json",
+            beforeSend: function () {
+                $(".loader").show();
+            },
+            success: function (data) {
+                console.log(data)
+                if(!empty(data.orderlist))
+                {
+                    $(data.orderlist).each(function(index, value)
+                    {
+                        html += '<tr><td><input name="select_all" value="2" data-id="vals2" id="'+value.id +'" class="po-select" type="checkbox" /></td><td>'+value.id +'</td><td>'+value.po_no+'</td><td>'+value.buyer_name+'</td></tr>';
+
+                        $('.dynamic-table').html('<form id="frm-example"><table class="table "><thead><tr><th></th><th class="text-center">ERP ID</th><th class="text-center">PO Number</th><th class="text-center">Buyer</th></tr></thead><tbody>'+html+'</tbody></table></form>');
+                    });
+                    $('.po-list').removeClass('hidden')
+                    $('.dynamic-table tbody').on('change', 'input[type="checkbox"]', function(){
+                      $('.po-select').not(this).prop('checked', false);  
+                      showOrderList(this)                           
+                    });
+                }
+                
+            },
+            error: function (errorXHR, errorStatus, errorThrown) {
+               
+            },
+            complete: function () {
+                $(".loader").hide();
+                /** [To make top menu active] */
+                $(function () {
+                    var url = window.location;
+                    $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                    $('.dynamic-menu a').filter(function () {
+                        return this.href == url;
+                    }).parent('li').addClass('current-page').find('a').addClass('active');
+                });
+            }
+        })
+	    
+	}
+    function showOrderList(obj) {
+        var row_id = $(obj).val()
+        var table  = $(obj).attr('data-id')
+        
+        var checkboxes = $('.dynamic-table td input[type="checkbox"]');
+        if(checkboxes.filter(':checked').length >0){
+            $('.order-details').html('<table class="table text-center"><thead><tr><th class="text-center">Style No</th><th class="text-center">Reference No</th><th class="text-center">Zone</th><th class="text-center">Style No</th><th class="text-center">Reference No</th><th class="text-center">Zone</th><th class="text-center">Style No</th><th class="text-center">Reference No</th><th class="text-center">Zone</th><th class="text-center">Style No</th><th class="text-center">Reference No</th><th class="text-center">Zone</th><th class="text-center">Style No</th><th class="text-center">Reference No</th></tr></thead><tbody><tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td><input type="text" value="10" class="form-control" onkeyup="updateAmount(this)"></td><td>1</td><td>1</td></tr><tr><td colspan="11">Total</td><td>1</td><td>1</td><td>1</td></tr></tbody></table>')
+            $('.order-details').removeClass('hidden')
+            // var editable = document.getElementById('qnty1');
+            // alert(editable)
+            // editable.addEventListener('input', function() {
+            //     alert('Hey, somebody changed something in my text!');
+            // });
+        }
+        else{
+            $('.order-details').addClass('hidden')
+        }
+
+    }
+
+    function updateAmount(obj) {
+        alert($(obj).val())
+    }

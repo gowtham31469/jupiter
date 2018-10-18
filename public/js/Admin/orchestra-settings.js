@@ -3072,7 +3072,6 @@ function readURL(input) {
     $("#cofreet_symbol").add("#astms_symbol").add("#edit_cofreet_symbol").add("#edit_astms_symbol").change(function() {
             readURL(this);
             if(".hidden_"+this.id != "undefined"){
-                console.log("hai")
                 $(".hidden_"+this.id).removeClass('hidden')
             }
 

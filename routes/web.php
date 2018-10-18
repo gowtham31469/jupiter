@@ -362,6 +362,9 @@ Route::post('admin/tesco/order-management/set-tesco-repeat-order', 'Admin\Tesco\
 Route::post('admin/tesco/generatebarcodetsl1', 'Admin\Tesco\OrderManagementCntrl@generateBarcodeTsl1');
 Route::post('admin/tesco/generatebarcodetsl3', 'Admin\Tesco\OrderManagementCntrl@generateBarcodeTsl3');
 
+Route::post('admin/tesco/generatebarcodeeanbig', 'Admin\Tesco\OrderManagementCntrl@generateBarcodeEanBig');
+Route::post('admin/tesco/generatebarcodeitfbig', 'Admin\Tesco\OrderManagementCntrl@generateBarcodeItfBig');
+
 
 // Route::get('upload', 'UploadController@index');
 // Route::post('admin/order-management/upload', ['as'=>'dropzone.store','uses'=>'UploadController@csvUpload']);
@@ -516,6 +519,8 @@ Route::post('customer/tesco/extra-quantity-reorder', 'Customer\Tesco\ReorderCont
 Route::post('customer/tesco/set-tesco-reorder', 'Customer\Tesco\ReorderController@setTescoReorder');
 Route::post('customer/tesco/set-tesco-repeat-order', 'Customer\Tesco\ReorderController@setTescoRepeatorder');
 
+Route::post('customer/tesco/edit-check-exist-po-repeat', 'Customer\Tesco\ReorderController@editCheckExistPoRepeat');
+
 Route::get('customer/tesco/get-tsl-size', 'Customer\Tesco\ReorderController@getTescoTSLSizechart');
 
 
@@ -570,5 +575,10 @@ Route::group(['prefix' => 'erp'], function () {
 	
 	/* Routes for Invoice Management */
 	Route::get('/invoice', 'ErpUser\Invoice\InvoiceController@index')->name('invoice'); 
+
+	Route::get('/erp-order-list', 'ErpUser\Invoice\InvoiceController@erpOrderList')->name('erp-orders'); 
+	
+	Route::get('/po-manager', 'ErpUser\Pomanager\PoManagerController@index')->name('poManager'); 
+
 
 });

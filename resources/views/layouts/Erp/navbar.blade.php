@@ -13,10 +13,7 @@
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                
-                 <ul class="nav navbar-nav dynamic-menu">
-                        <li><a  href="{{ url('/customer/dashboard') }}" class="active">Create Invoice</a></li>
-                    </ul>
+                @yield('navbar')
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle profile-dropdown-admin" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="well">{{ Auth::guard('erpuser')->user()->name[0] }}</span> {{ Auth::guard('erpuser')->user()->name}}<span class="caret"></span></a>

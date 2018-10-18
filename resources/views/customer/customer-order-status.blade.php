@@ -448,6 +448,7 @@
     <script src="{{ asset('js/html2pdf.bundle.min.js') }}"></script>
     <script src="{{ asset('js/Admin/order.js') }}"></script>
     <script src="{{ asset('js/Customer/customer-order-status.js') }}"></script>
+    <script src="{{ asset('js/Customer/customer-pi.js') }}"></script>
     <script type="text/javascript">
         var buyer = localStorage.getItem("buyer");
         Dropzone.options.poUpload = {   

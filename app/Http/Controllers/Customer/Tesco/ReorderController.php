@@ -75,26 +75,39 @@ class ReorderController extends Controller
 	  $customer_role_id = DB::table('customer_profile')->select('*')->where('id',$customer_id)->first();
 	  if($customer_role_id->role_id == 1)
 	  {
-		  $customer_id = Auth::guard('web_customer')->user()->id;
-        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->where('tesco_tcl1_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
-		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->where('tesco_tcl2_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
-		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->where('tesco_tcl4_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
-		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->where('tesco_thl1_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
-		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->where('tesco_thl3_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
-		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->where('tesco_tsl1_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
-		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->where('tesco_tsl3_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+		$customer_id = Auth::guard('web_customer')->user()->id;
+
+        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+
+		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+
+		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+
+		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+
+		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+
+		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+
+		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
 		echo json_encode($data);
 	  }
 	  else
 	  {
 		  $customer_id = Auth::guard('web_customer')->user()->id;
-        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->where('tesco_tcl1_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select('*')->get();
-		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->where('tesco_tcl2_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select('*')->get();
-		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->where('tesco_tcl4_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select('*')->get();
-		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->where('tesco_thl1_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select('*')->get();
-		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->where('tesco_thl3_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select('*')->get();
-		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->where('tesco_tsl1_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select('*')->get();
-		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->where('tesco_tsl3_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select('*')->get();
+        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select('*')->get();
+
+		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select('*')->get();
+
+		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select('*')->get();
+
+		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select('*')->get();
+
+		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select('*')->get();
+
+		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select('*')->get();
+
+		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select('*')->get();
 		echo json_encode($data);
 	  }
 		
@@ -112,7 +125,7 @@ class ReorderController extends Controller
 	  $customer_role_id = DB::table('customer_profile')->select('*')->where('id',$customer_id)->first();
 	  if($customer_role_id->role_id == 1)
 	  {
-		  $customer_id = Auth::guard('web_customer')->user()->id;
+		$customer_id = Auth::guard('web_customer')->user()->id;
     	$style=$request->style;
         $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->where('tesco_tcl1_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select(DB::raw('max("tesco_tcl1_orders"."id") as id'),DB::raw('max("tesco_tcl1_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_tcl1_orders.ce_style_ref','tesco_tcl1_orders.uk_style_ref','tesco_tcl1_orders.zone','tesco_tcl1_orders.po_number',DB::raw("'".$this->tcl1."'".' as "TemplateName"'),DB::raw("'".$this->tcl1_type."'".' as "type"'))->groupBy('tesco_tcl1_orders.uk_style_ref')->groupBy('tesco_tcl1_orders.ce_style_ref')->groupBy('tesco_tcl1_orders.zone')->groupBy('tesco_tcl1_orders.po_number')->get();
 	  
@@ -582,6 +595,8 @@ class ReorderController extends Controller
       $type         =   $request->type;
       $id           =   $request->id;
       $po           =   $request->po;
+	  $ocn_number   =   $request->ocn;
+	  $manufacture_date  =   $request->manufacture_date;
 	  $counts       =   explode(',',$request->counts);
       if($type == "tesco_tcl1_orders")
       {
@@ -612,6 +627,8 @@ class ReorderController extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+		  		$newTasks->ocn_number =$ocn_number;
+		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
 		  		$newTasks->order_flag = "repeatOrder";
@@ -662,6 +679,8 @@ class ReorderController extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+		  		$newTasks->ocn_number =$ocn_number;
+		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
@@ -712,6 +731,8 @@ class ReorderController extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+		  		$newTasks->ocn_number =$ocn_number;
+		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
@@ -762,6 +783,8 @@ class ReorderController extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+		  		$newTasks->ocn_number =$ocn_number;
+		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
@@ -812,6 +835,8 @@ class ReorderController extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+		  		$newTasks->ocn_number =$ocn_number;
+		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
@@ -862,6 +887,8 @@ class ReorderController extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+		  		$newTasks->ocn_number =$ocn_number;
+		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
@@ -912,6 +939,8 @@ class ReorderController extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+		  		$newTasks->ocn_number =$ocn_number;
+		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
@@ -960,4 +989,73 @@ class ReorderController extends Controller
            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
        }
     }
+	/**
+     * This function is used to check exist Po exists or not
+     * 
+     * @return boolean values
+     */
+    public function editCheckExistPoRepeat(Request $request)
+    {
+		$template_name  = $request['template_name'];
+		$uk_style	    = $request['uk_style'];
+		$po_number	    = $request['po_number'];
+		$ce_style	    = $request['ce_style'];
+		$zone =$request['zone'];
+		
+		if($template_name == "TCL1")
+		{
+			$table_name="tesco_tcl1_orders";
+			$qty_table_name="tesco_tcl1_orders_quanty";
+		}
+		else if($template_name == "TCL2")
+		{
+			$table_name="tesco_tcl2_orders";
+			$qty_table_name="tesco_tcl2_orders_quanty";
+		}
+		else if($template_name == "TCL4")
+		{
+			$table_name="tesco_tcl4_orders";
+			$qty_table_name="tesco_tcl4_orders_quanty";
+		}
+		else if($template_name == "TSL1")
+		{
+			$table_name="tesco_tsl1_orders";
+			$qty_table_name="tesco_tsl1_orders_quanty";
+		}
+		else if($template_name == "TSL3")
+		{
+			$table_name="tesco_tsl3_orders";
+			$qty_table_name="tesco_tsl3_orders_quanty";
+		}
+		else if($template_name == "THL1")
+		{
+			$table_name="tesco_thl1_orders";
+			$qty_table_name="tesco_thl1_orders_quanty";
+		}
+		else if($template_name == "THL3")
+		{
+			$table_name="tesco_thl3_orders";
+			$qty_table_name="tesco_thl3_orders_quanty";
+		}
+		
+		if($zone == "CE")
+		{
+			$template_exists=DB::table($table_name)->where('po_number',$po_number)->where('ce_style_ref',$ce_style)->where('order_flag','!=','reOrder')->select('*')->get();
+		}
+		else
+		{
+			$template_exists=DB::table($table_name)->where('po_number',$po_number)->where('uk_style_ref',$uk_style)->where('order_flag','!=','reOrder')->select('*')->get();
+		}
+		
+		if(count($template_exists) > 0) 
+		{
+			echo "false";
+		}
+		else
+		{
+			echo "true";
+		}
+		
+		
+	}
 }

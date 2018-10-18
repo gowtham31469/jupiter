@@ -48,9 +48,7 @@ function orders() {
         success: function (data) {
                 var path = base_url + "/admin/orchestra/order-management/orders"
                 var newObj = data.sticker_orders.concat(data.label_orders);
-                console.log(newObj);
                 var search_string= localStorage.getItem("search_string");
-            //alert(search_string)
                 $('.main-content').html(table(newObj,path)); 
                 $('.top-content').html("");
                 if(search_string != null)
@@ -114,7 +112,6 @@ function orderStatus() {
                 	
 				$('.main-content').append(table(newObj,path));
                 $('.top-content').html("")
-				console.log(newObj)
 				
 				var uniqueNames = [];
 				for(i = 0; i< newObj.length; i++){    
@@ -273,7 +270,7 @@ function orderStatus() {
 												$count_li++;
 											}
 										});
-										//alert($count_li);
+										
 										if($count_li > 0)
 										{
 											var company_id=$(this).data('company');
@@ -374,7 +371,6 @@ function orderStatus() {
 						$('#exist_artwork_div_status input[type=checkbox]').each(function () {
 							if (this.checked) {
 								a.push($(this).parent().attr('data-id'));
-								//alert($(this).parent().attr('data-id'))
 							}
 						});
 						var aa = a.join(',');
@@ -430,7 +426,6 @@ function orderStatus() {
 							$('#exist_artwork_div_status input[type=checkbox]').each(function () {
 								if (this.checked) {
 									a.push($(this).parent().attr('data-id'));
-									//alert($(this).parent().attr('data-id'))
 								}
 							});
 							var aa = a.join(',');
@@ -503,7 +498,6 @@ function orderStatus() {
 
 							},
 							success: function (data) {
-								//alert()
 								$('#po-file-upload-group').modal('hide')
 								$('.snackbar_span').html('PO Updated Successfully');
 								showSnackbar();
@@ -617,7 +611,6 @@ function orderStatus() {
 
                     },
                     function (start, end, label) {
-                        // alert("A new date range was chosen: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
 					 $.fn.dataTableExt.afnFiltering.length = 0;
                     $tableSel.dataTable().fnDraw();
                         filterByDate(5, start, end); // We call our filter function
@@ -988,7 +981,6 @@ function genaratePI(id,table_name,uvc,pi_status)
             /** [Show response status based on HTTP status code] */
             200: function(data)
             {
-               console.log(data.data)
                if ((jQuery.isEmptyObject(data.data.company_details)) || (jQuery.isEmptyObject(data.data.bank_details)) || (jQuery.isEmptyObject(data.data.ship_to)) || (jQuery.isEmptyObject(data.data.bill_to)))
                {
                     $('.snackbar_span').html('Something went wrong');
@@ -1171,7 +1163,6 @@ function rejectPI(id,table_name)
 
 function order_details(uvc, po) {
 
-    //alert($('.logo').text());
     if($('.logo').text() == "Orders")
     {
         localStorage.setItem("page_navigation", "orders");
@@ -1370,7 +1361,6 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
     
     if(localStorage.getItem("page_navigation") == "orders")
     {
-        //alert()
         var onclick = "orders()";
     }
     else
@@ -1400,8 +1390,6 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 		$('#update_new_po').addClass('hidden')
 		$('#new_po1').removeClass('hidden')
 		$('#map_po').removeClass('hidden')
-
-		//alert()
 
 		$.ajax({
 			url: base_url + "/admin/" + buyer + "/order-management/get_existing_solid_sticker_orders_po",
@@ -1522,7 +1510,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 							$count_li++;
 						}
 					});
-					//alert($count_li);
+
 					if($count_li > 0)
 					{
 						var company_id=$(this).data('company');
@@ -1567,7 +1555,6 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 						$('#exist_artwork_div input[type=checkbox]').each(function () {
 							if (this.checked) {
 								a.push($(this).parent().attr('data-id'));
-								//alert($(this).parent().attr('data-id'))
 							}
 						});
 						var aa = a.join(',');
@@ -1640,7 +1627,6 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 
 							},
 							success: function (data) {
-								//alert()
 								$('#po-file-upload-div').modal('hide')
 								$('.snackbar_span').html('PO Updated Successfully');
 								showSnackbar();
@@ -1723,8 +1709,6 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 		$('#update_new_po').addClass('hidden')
 		$('#new_po1').removeClass('hidden')
 		$('#map_po').removeClass('hidden')
-
-		//alert()
 
 		$.ajax({
 			url: base_url + "/admin/" + buyer + "/order-management/get_existing_standard_sticker_orders_po",
@@ -1845,7 +1829,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 							$count_li++;
 						}
 					});
-					//alert($count_li);
+
 					if($count_li > 0)
 					{
 						var company_id=$(this).data('company');
@@ -1890,7 +1874,6 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 						$('#exist_artwork_div input[type=checkbox]').each(function () {
 							if (this.checked) {
 								a.push($(this).parent().attr('data-id'));
-								//alert($(this).parent().attr('data-id'))
 							}
 						});
 						var aa = a.join(',');
@@ -1911,7 +1894,6 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 							data: form_data,
 							type: 'post',
 							success: function (data) {
-								//location.reload()
 								$('#po-file-upload-div').modal('hide')
 								$('.snackbar_span').html('PO Updated Successfully');
 								showSnackbar();
@@ -1963,7 +1945,6 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 
 							},
 							success: function (data) {
-								//alert()
 								$('#po-file-upload-div').modal('hide')
 								$('.snackbar_span').html('PO Updated Successfully');
 								showSnackbar();
@@ -2232,7 +2213,6 @@ function PopupSpecial(data) {
  */
 
 function PopupWash(data,dataid) {
-    //alert(dataid)
     if (dataid != undefined) {
         dataid=dataid;
     }
@@ -2247,9 +2227,6 @@ function PopupWash(data,dataid) {
     var success = false;
     var url = "";
     var made_in_select = $('.made_in_select' + dataid + ' option:selected').attr('data-id');
-    //alert(dataid)
-    //alert(made_in_select)
-    // window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
     
     var care_instruction = $('.care_instruction_select' + dataid + ' option:selected');
         var care_instruction_select = [];
@@ -2502,7 +2479,6 @@ function barcode_polybag(id, data) {
  */
 
 function barcode_carton(id, data) {
-	console.log(data);
 	var mySVG = document.getElementById(id);
 	var svgDoc;
 	mySVG.addEventListener("load", function () {
@@ -2699,9 +2675,7 @@ function label_order_details(uvc) {
             
             $('#washcarelabelform'+index+' table tbody tr').each(function (ind,val) {
                 var values= $(this).find('.tot_qty_table').val()
-                //var values1= $(this).find('.tot_qty_table_fin').text()
                 var v= $(this).find('.uvc_tco').text();
-                //alert(values)
                 $('#washcarelabelform'+washcare+' table tbody tr').each(function (inds,vals) {
                     if($(this).find('.uvc_tco').text() == v)
                     {
@@ -2750,7 +2724,6 @@ function label_order_details(uvc) {
                 
                  svgDoc.getElementById("parts_composition").innerHTML ="";
               $('#composition_remove_qty' + washcare + ' tr').each(function () {
-                  //alert($(this).find('select').find(':selected').text());
                   if($(this).find('select').find(':selected').val() != "Select Option")
                   {
                        svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german') + "-" + $(this).find('select' ).find(':selected').data('russian') + "-" + $(this).find('select' ).find(':selected').data('chinese') + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek')  + "-" + $(this).find('select' ).find(':selected').data('turkish')  + '</p>';
@@ -3219,9 +3192,6 @@ function washcarelabels(data, dataid) {
                         }
                         
                     }
-                    //comps+=","+value.percentage+"_"+value.english;
-                    
-                    //alert(comps)
                     svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + add_page_composition + '" id="composition_' + add_page_composition + '">' + value.percentage + "% " + value.french + "-" + value.english + "-" + value.spanish + "-" + value.portuguese + "-" + value.italian + "-" + value.dutch + "-" + value.german + "-" + value.russian + "-" + value.chinese + "-" + value.arabic + "-" + value.greek + "-" + value.turkish + '</p>';
 
                     page_id = value.page_id;
@@ -3233,7 +3203,6 @@ function washcarelabels(data, dataid) {
 
 
         $('.washing_select' + dataid + '.bootstrap-select').on('changed.bs.select', function () {
-            // alert()
             if ($('.washing_select' + dataid + ' option:selected').val() != "") {
                 svgDoc.getElementById("cofreet_symbol1").setAttribute('xlink:href', $('.washing_select' + dataid + ' option:selected').data('cofreet'));
                 svgDoc.getElementById("astm_symbol1").setAttribute('xlink:href', $('.washing_select' + dataid + ' option:selected').data('astm'));
@@ -3508,7 +3477,6 @@ function add_to_page(dataid) {
         {
               svgDoc.getElementById("parts_composition").innerHTML ="";
               $('#composition_remove_qty' + dataid + ' tr').each(function () {
-                  //alert($(this).find('select').find(':selected').text());
                   if($(this).find('select').find(':selected').val() != "Select Option")
                   {
                        svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german') + "-" + $(this).find('select' ).find(':selected').data('russian') + "-" + $(this).find('select' ).find(':selected').data('chinese') + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek')  + "-" + $(this).find('select' ).find(':selected').data('turkish')  + '</p>';
@@ -3739,7 +3707,6 @@ function mainlabels(data, dataid) {
 					if(!isNaN(parseInt($(this).find('.sum').text())))
 					{
 						 sum1+=parseInt($(this).find('.sum').text());
-						//alert(parseInt($(this).find('.sum').text()))
 					}
                     
 					
@@ -3785,9 +3752,6 @@ function mainlabels(data, dataid) {
               });
    
     $("#clickmemain" + dataid).click(function () {
-        // $('.sample-artwork').html("")
-        //alert($('.mainlabelname'+dataid).text())
-        //$('.mainlabelnameqty' + dataid).text($('.mainlabelname' + dataid).text())
         $("#mainlabelsform" + dataid + " .backdrop").toggleClass('active');
         $("#mainlabelsform" + dataid + " .right-panel").toggleClass('active');
         $('#mainlabelsform' + dataid + ' .scalable').toggleClass('active');
@@ -4048,7 +4012,6 @@ function hangtagmodal(data) {
     $("#tree1").on("loaded.jstree", function (e, data) {
         $('#tree1').jstree(true).select_node($template_front_id);
         var ids = $(this).parent().parent().parent().parent().parent().attr('id');
-        //alert()
         if ($template_front_id != "") {
             var buyer = localStorage.getItem("buyer");
             var template_id = $template_front_id;
@@ -4195,7 +4158,6 @@ function hangtagmodal(data) {
     //Show Template when Click tree node 
     $('#tree1').on('activate_node.jstree', function (e, data) {
         var ids = $(this).parent().parent().parent().parent().parent().attr('id');
-        //alert()
         if (data.instance.is_leaf(data.node)) {
             var buyer = localStorage.getItem("buyer");
             var template_id = data.node.id;
@@ -4399,7 +4361,6 @@ function hangtagmodal(data) {
 
 function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 
-	console.log(data.merchandisers);
 	var tr = "";
 	var barcode = "";
 	$.each(data.order_details, function (index, value) {
@@ -4490,8 +4451,6 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 		$('#update_new_po').addClass('hidden')
 		$('#new_po1').removeClass('hidden')
 		$('#map_po').removeClass('hidden')
-
-		//alert()
 
 		$.ajax({
 			url: base_url + "/admin/" + buyer + "/order-management/get_existing_label_orders_po",
@@ -4612,7 +4571,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 							$count_li++;
 						}
 					});
-					//alert($count_li);
+
 					if($count_li > 0)
 					{
 						var company_id=$(this).data('company');
@@ -4657,7 +4616,6 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 						$('#exist_artwork_div input[type=checkbox]').each(function () {
 							if (this.checked) {
 								a.push($(this).parent().attr('data-id'));
-								//alert($(this).parent().attr('data-id'))
 							}
 						});
 						var aa = a.join(',');
@@ -4730,7 +4688,6 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 
 							},
 							success: function (data) {
-								//alert()
 								$('#po-file-upload-div').modal('hide')
 								$('.snackbar_span').html('PO Updated Successfully');
 								showSnackbar();
@@ -4977,9 +4934,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
             
             $('#washcarelabelform table tbody tr').each(function (ind,val) {
                 var values= $(this).find('.tot_qty_table').val()
-                //var values1= $(this).find('.tot_qty_table_fin').text()
                 var v= $(this).find('.uvc_tco').text();
-                //alert(values)
                 $('#washcarelabelform'+washcare+' table tbody tr').each(function (inds,vals) {
                     if($(this).find('.uvc_tco').text() == v)
                     {
@@ -5028,7 +4983,6 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
                 
                  svgDoc.getElementById("parts_composition").innerHTML ="";
               $('#composition_remove_qty' + washcare + ' tr').each(function () {
-                  //alert($(this).find('select').find(':selected').text());
                   if($(this).find('select').find(':selected').val() != "Select Option")
                   {
                        svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german') + "-" + $(this).find('select' ).find(':selected').data('russian') + "-" + $(this).find('select' ).find(':selected').data('chinese') + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek')  + "-" + $(this).find('select' ).find(':selected').data('turkish')  + '</p>';
@@ -5200,11 +5154,8 @@ function treestructure(data, tree, template_id) {
 
 		$('#' + tree).jstree(true).select_node(template_id);
 		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
-		//alert(ids)
-		//alert()
 		if (template_id != "") {
 			var buyer = localStorage.getItem("buyer");
-			// var template_id = template_id;
 			var csrf_token = $('meta[name="csrf-token"]').attr('content');
 			$.ajax({
 				url: base_url + "/admin/" + buyer + "/template-management/template-view",
@@ -5315,11 +5266,8 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
 
 		$('#' + tree).jstree(true).select_node(template_id);
 		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
-		//alert(ids)
-		//alert()
 		if (template_id != "") {
 			var buyer = localStorage.getItem("buyer");
-			// var template_id = template_id;
 			var csrf_token = $('meta[name="csrf-token"]').attr('content');
 			$.ajax({
 				url: base_url + "/admin/" + buyer + "/template-management/template-view",
@@ -5421,7 +5369,6 @@ if(datas.order_details[0].Size == "TAILLE UNIQUE")
 
 									 svgDoc.getElementById("parts_composition").innerHTML ="";
 								  $('#composition_remove_qty' + dataid + ' tr').each(function () {
-									  //alert($(this).find('select').find(':selected').text());
 									  if($(this).find('select').find(':selected').val() != "Select Option")
 									  {
 										   svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german') + "-" + $(this).find('select' ).find(':selected').data('russian') + "-" + $(this).find('select' ).find(':selected').data('chinese') + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek')  + "-" + $(this).find('select' ).find(':selected').data('turkish')  + '</p>';
@@ -5438,7 +5385,6 @@ if(datas.order_details[0].Size == "TAILLE UNIQUE")
 								  })
 								  
         $('.washing_select' + dataid + '.bootstrap-select').on('changed.bs.select', function () {
-            // alert()
             if ($('.washing_select' + dataid + ' option:selected').val() != "") {
                 svgDoc.getElementById("cofreet_symbol1").setAttribute('xlink:href', $('.washing_select' + dataid + ' option:selected').data('cofreet'));
                 svgDoc.getElementById("astm_symbol1").setAttribute('xlink:href', $('.washing_select' + dataid + ' option:selected').data('astm'));
@@ -5651,7 +5597,6 @@ if(datas.order_details[0].Size == "TAILLE UNIQUE")
 
 									 svgDoc.getElementById("parts_composition").innerHTML ="";
 								  $('#composition_remove_qty' + dataid + ' tr').each(function () {
-									  //alert($(this).find('select').find(':selected').text());
 									  if($(this).find('select').find(':selected').val() != "Select Option")
 									  {
 										   svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german') + "-" + $(this).find('select' ).find(':selected').data('russian') + "-" + $(this).find('select' ).find(':selected').data('chinese') + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek')  + "-" + $(this).find('select' ).find(':selected').data('turkish')  + '</p>';
@@ -5668,7 +5613,6 @@ if(datas.order_details[0].Size == "TAILLE UNIQUE")
 								  })
 								  
         $('.washing_select' + dataid + '.bootstrap-select').on('changed.bs.select', function () {
-            // alert()
             if ($('.washing_select' + dataid + ' option:selected').val() != "") {
                 svgDoc.getElementById("cofreet_symbol1").setAttribute('xlink:href', $('.washing_select' + dataid + ' option:selected').data('cofreet'));
                 svgDoc.getElementById("astm_symbol1").setAttribute('xlink:href', $('.washing_select' + dataid + ' option:selected').data('astm'));
@@ -5824,7 +5768,6 @@ function jsbarcode(code, id, svgDoc) {
 	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
 	// img.src - contains base64 URI from svg
-	console.log(img.src);
 
 	//remove temporary canvas
 	canvasTmp.remove();
@@ -5882,7 +5825,6 @@ function jsbarcodewash(code, id, svgDoc) {
     img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
     // img.src - contains base64 URI from svg
-    console.log(img.src);
 
     //remove temporary canvas
     canvasTmp.remove();
@@ -5939,7 +5881,6 @@ function jsbarcode_hang(code, id, svgDoc) {
 	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
 	// img.src - contains base64 URI from svg
-	console.log(img.src);
 
 	//remove temporary canvas
 	canvasTmp.remove();
@@ -6051,7 +5992,6 @@ function setWashCareLabelStatus(dataid) {
         i++;
     })
     if (i != 0) {
-        //alert(localStorage.getItem("wash_composition_final"+ dataid));
         if( localStorage.getItem("wash_composition_final"+ dataid) != null)
         {
             $('#wash_composition_error' + dataid).addClass('hidden')
@@ -6065,12 +6005,10 @@ function setWashCareLabelStatus(dataid) {
         }
         else {
             $('#wash_composition_page_error' + dataid).removeClass('hidden')
-            //alert("fail")
         }
         
     } else {
         $('#wash_composition_error' + dataid).removeClass('hidden')
-        //alert("fail")
     }
 
 
@@ -6106,7 +6044,6 @@ function setHangTag(id) {
 	size_fin = size.join(',');
 	var buyer = localStorage.getItem("buyer");
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
-	//alert($('#uvc_id').val())
 	$.ajax({
 		url: base_url + "/admin/" + buyer + "/order-management/set_hang_tag",
 		type: "Post",
@@ -6167,7 +6104,6 @@ function setSpecialTag(id) {
     size_fin = size.join(',');
     var buyer = localStorage.getItem("buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    //alert($('#uvc_id').val())
     $.ajax({
         url: base_url + "/admin/" + buyer + "/order-management/set_special_tag",
         type: "Post",
@@ -6245,7 +6181,6 @@ function setMainLabel(index, dataid, id) {
     size_fin = size.join(',');
     var buyer = localStorage.getItem("buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    //alert($('#uvc_id').val())
     $.ajax({
         url: base_url + "/admin/" + buyer + "/order-management/set_main_label",
         type: "Post",
@@ -6290,7 +6225,6 @@ function removeMainLabel(id) {
 
 	var buyer = localStorage.getItem("buyer");
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
-	//alert($('#uvc_id').val())
 	$.ajax({
 		url: base_url + "/admin/" + buyer + "/order-management/remove_main_label",
 		type: "Post",
@@ -6321,7 +6255,6 @@ function removeWashLabel(id) {
 
 	var buyer = localStorage.getItem("buyer");
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
-	//alert($('#uvc_id').val())
 	$.ajax({
 		url: base_url + "/admin/" + buyer + "/order-management/remove_wash_label",
 		type: "Post",
@@ -6378,7 +6311,6 @@ function setWashLabel(index, dataid, id) {
 		
         if($('#wash_label_id').val() != 0)
 		{
-			//alert(index)
 			var template_id = $('#' + index).find('#tree_wash' + dataid).jstree('get_selected', true);
 			template_front_id = template_id[0].id;
 		}
@@ -6403,7 +6335,6 @@ function setWashLabel(index, dataid, id) {
             care_instruction_select.push([$(this).val()]);
         });
         var care_instruction_select_fin = care_instruction_select.join(',');
-        console.log(care_instruction_select_fin);
 
         //template_front_id = template_id[0].id;
         var tot_qty_table = [];
@@ -6422,7 +6353,6 @@ function setWashLabel(index, dataid, id) {
         size_fin = size.join(',');
         var buyer = localStorage.getItem("buyer");
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
-        //alert($('#uvc_id').val())
         $.ajax({
             url: base_url + "/admin/" + buyer + "/order-management/set_wash_label",
             type: "Post",
@@ -6460,7 +6390,6 @@ function setWashLabel(index, dataid, id) {
         })
         $('.composition_error_hidden').addClass('hidden')
         $('#washcare_label_card').css('display','inline-block') 
-//		alert(dataid)
 		$('#clone_washcare_label_card'+dataid).css('display','inline-block')
 		$('.wash-card'+dataid+' span').text('Buyer Approval Pending')
 		$('.wash-card'+dataid+' span').addClass('label label-BuyerApprovalPending label-status')
@@ -6484,9 +6413,7 @@ function save_label_orders() {
 	var finish = 0;
 	if (localStorage.getItem("wash_label") != null) {
 
-        alert("ins")
         if ($('.merchandisers').find("option:selected").val() != "") {
-            //alert("suc")
             var wash_json = JSON.parse(localStorage.getItem("wash_label"));
 
             $.each(wash_json, function (index, value) {
@@ -6495,7 +6422,6 @@ function save_label_orders() {
             });
 
         } else {
-            //alert("fail")
             return false;
 
 
@@ -6567,7 +6493,6 @@ function setSolidStickers() {
 	if ($('#carton_hidden').val() == "standard") {
 		var buyer = localStorage.getItem("buyer");
 		var csrf_token = $('meta[name="csrf-token"]').attr('content');
-		//alert($('#uvc_id').val())
 		$.ajax({
 			url: base_url + "/admin/" + buyer + "/order-management/set_standard_stickers",
 			type: "Post",
@@ -6621,7 +6546,6 @@ function setSolidStickers() {
 
 		var buyer = localStorage.getItem("buyer");
 		var csrf_token = $('meta[name="csrf-token"]').attr('content');
-		//alert($('#uvc_id').val())
 		$.ajax({
 			url: base_url + "/admin/" + buyer + "/order-management/set_solid_stickers",
 			type: "Post",
@@ -6639,7 +6563,6 @@ function setSolidStickers() {
 				carton_id: $('#carton_id').val(),
 				poly_id: $('#poly_id').val(),
 				po: $('#po').val(),
-				//size: size_fin,
 				_token: csrf_token
 			},
 			beforeSend: function () {
@@ -6666,10 +6589,7 @@ function clonewashcarelabels(index)
 	 if (washcare <= 5) {
                   washcare += 1;
                 $('#add_modal').append('<div class="col-md-4" ><div  style="border:1px dashed #333;height: 280px;" class="card add-card wash-card'+washcare+'" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false"><span></span>    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="clone_washcare_label_card' + washcare + '" style=";cursor:pointer;display: none;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div>')
-		 
-               // var index=washcare;
-				console.log(index);
-		 		console.log(washcare);
+
 				$('#clone_washcare_label_card'+washcare).on('click', function (e) {
 					clonewashcarelabels(washcare);
 				});
@@ -6744,9 +6664,7 @@ function clonewashcarelabels(index)
             
             $('#washcarelabelform'+index+' table tbody tr').each(function (ind,val) {
                 var values= $(this).find('.tot_qty_table').val()
-                //var values1= $(this).find('.tot_qty_table_fin').text()
                 var v= $(this).find('.uvc_tco').text();
-                //alert(values)
                 $('#washcarelabelform'+washcare+' table tbody tr').each(function (inds,vals) {
                     if($(this).find('.uvc_tco').text() == v)
                     {
@@ -6795,7 +6713,6 @@ function clonewashcarelabels(index)
                 
                  svgDoc.getElementById("parts_composition").innerHTML ="";
               $('#composition_remove_qty' + washcare + ' tr').each(function () {
-                  //alert($(this).find('select').find(':selected').text());
                   if($(this).find('select').find(':selected').val() != "Select Option")
                   {
                        svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german') + "-" + $(this).find('select' ).find(':selected').data('russian') + "-" + $(this).find('select' ).find(':selected').data('chinese') + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek')  + "-" + $(this).find('select' ).find(':selected').data('turkish')  + '</p>';

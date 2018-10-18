@@ -61,8 +61,9 @@
                     <div class="po_upload" id="po_upload">
                         <label>Upload Purchase Order</label>
                         <form method="post" class="dropzone" id="po-upload">
+                        <input type="hidden" name="buyer_id" id="buyer_id" value="">
                             <input type="hidden" name="tableName" id="tableName" value="">
-                            <input type="hidden" name="rowID" id="rowID" value=""> {{ csrf_field() }}
+                            <input type="hidden" name="id" id="rowID" value=""> {{ csrf_field() }}
                         </form>
                     </div>
 
@@ -126,8 +127,8 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
                     <button type="button" id="update_new_po" class="btn btn-primary btn-sm hidden">Update</button>
-                    <button type="button" id="update_po" class="btn btn-primary  btn-smhidden">Update</button>
-                    <button type="button" id="new_pos" class="btn btn-primary  btn-sm btn-sm hidden">Update</button>
+                    <button type="button" id="update_po" class="btn btn-primary btn-sm hidden">Update</button>
+                    <button type="button" id="new_pos" class="btn btn-primary btn-sm btn-sm hidden">Update</button>
                     
                 </div>
             </div>
@@ -267,8 +268,8 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
                     <button type="button" id="update_new_po_status" class="btn btn-primary hidden">Update</button>
-                    <button type="button" id="update_po_status" class="btn btn-primary hidden">Update</button>
-                    <button type="button" id="new_pos_status" class="btn btn-primary hidden">Update</button>
+                    <button type="button" id="update_po_status" class="btn btn-primary btn-sm hidden">Update</button>
+                    <button type="button" id="new_pos_status" class="btn btn-primary btn-sm hidden">Update</button>
                 </div>
             </div>
         </div>
@@ -491,6 +492,8 @@
              } else {
                  tescoOrderStatus();
              }
+             
+             
          } else {
              localStorage.removeItem("buyer");
              localStorage.removeItem("buyer_id");
