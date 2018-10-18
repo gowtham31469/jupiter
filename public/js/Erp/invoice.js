@@ -70,14 +70,14 @@
                     $(data.orderlist).each(function(index, value)
                     {
                         tr += '<tr class="trClass" id="'+value.id+'">';
-                        tr += '<td>'+value.id+'</td><td>'+value.id+'</td><td>'+value.id+'</td><td>'+value.id+'</td><td>'+value.id+'</td><td>'+value.id+'</td><td>'+value.id+'</td><td>'+value.id+'</td><td>'+value.id+'</td><td class="qnty">'+value.order_quantity+'</td><td><div class="col-xs-6"><input type="text" value="'+value.order_quantity+'" class="form-control delivery-qnty" onkeyup="updateAmount(this)"></div></td><td class="rate">2</td><td class="amnt">'+value.order_quantity * value.rate+'</td>';
+                        tr += '<td>'+value.id+'</td><td>'+value.id+'</td><td>'+value.id+'</td><td>'+value.id+'</td><td>'+value.id+'</td><td>'+value.id+'</td><td>'+value.id+'</td><td>'+value.id+'</td><td>'+value.id+'</td><td class="qnty">'+value.order_quantity+'</td><td><input type="text" value="" class="form-control delivery-qnty" onkeyup="updateAmount(this)"></td><td class="rate">2</td><td class="amnt">'+value.order_quantity * value.rate+'</td>';
                         tr += '</tr>';
                         qnty += value.order_quantity;
                         amnt += (value.order_quantity * value.rate);
 
                     });
 
-                        tr+= '<tr><td colspan="9">Total</td><td>'+qnty+'</td><td></td><td></td><td>'+amnt+'</td></tr>';
+                        tr+= '<tr><td colspan="9"><strong>Total</strong></td><td>'+qnty+'</td><td class="total-qnty" id="total-qnty"></td><td></td><td class="total-amnt">'+amnt+'</td></tr>';
 
                     $('.order-details').html('<form id="frm-orders"><table class="table text-center"><thead><tr><th>Order No</th><th>PO No</th><th>Style</th><th>OCN No</th><th>Item</th><th>Reference</th><th>Size</th><th>HSN No</th><th>Tax</th><th>Order Quantity</th><th>Quantity</th><th>Rate</th><th>Amount</th></tr></thead><tbody>'+tr+'</tbody></table></form>');
                         
@@ -103,8 +103,7 @@
     }
 
     function updateAmount(obj) {
-         var amnt  = 0 ;
-        console.log($(obj).val(),$(obj).closest('tr').find('.qnty').text())
+        var amnt  = 0 ;
         if($(obj).val() <= parseInt($(obj).closest('tr').find('.qnty').text())){
             amnt  = parseInt($(obj).val()) * parseInt($(obj).closest('tr').find('.rate').text());
             $(obj).closest('tr').find('.amnt').html(amnt)
@@ -113,5 +112,24 @@
             amnt  = parseInt($(obj).closest('tr').find('.qnty').text()) * parseInt($(obj).closest('tr').find('.rate').text());
             $(obj).closest('tr').find('.amnt').html(amnt)
             $(obj).val('')
-        }        
+        }
+        var result = [];
+        var num = []
+        $('table tr').each(function(){
+            $('td', this).each(function(index, val){
+                if(!result[index]) result[index] = 0;
+              result[index] += parseInt($(val).text());
+              console.log($(val).val())
+            });
+        }); 
+        var sum=0;
+        $('.delivery-qnty').each(function(i, obj){
+           if($.isNumeric(this.value)) {
+                    sum += parseFloat(this.value);
+              }
+        })
+        $('.total-amnt').html(result[12]) 
+        $('#total-qnty').html(sum) 
+        
+             
     }

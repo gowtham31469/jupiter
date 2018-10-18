@@ -28,7 +28,7 @@ class ErpOrders
             $qnty_id        =  str_replace("_orders","_order_id",str_replace("tesco_","",$table_name));
             $orders     	= DB::table($table_name)->where($table_name.'.id',$row_id)
             					->join('tesco_item_master',$table_name.'.template_id','=','tesco_item_master.id')
-                                ->select('order_id','po_number','uk_style_ref','ce_style_ref','season_code','short_description','eqos_site_code','manufacture_date','tesco_department_id','tesco_brand_id','tesco_supplier_id as customer_id','rfid_compliant','tag_at_source','zone','template_type','pi_status','po_status','po_file','purchase_order_no','order_status','template_id','delivery_date','order_placed_by','pi_rev_no','edit_permission','cancel_ord_flag','order_created_at','order_approved_at','order_cancelled_at','ocn_number','po_uploaded_at','tesco_item_master.company_id')->first();
+                                ->select('order_id','po_number','uk_style_ref','ce_style_ref','season_code','short_description','eqos_site_code','manufacture_date','tesco_department_id','tesco_brand_id','tesco_supplier_id as customer_id','rfid_compliant','tag_at_source','zone','template_type','pi_status','po_status','po_file','purchase_order_no','order_status','template_id','delivery_date','order_placed_by','pi_rev_no','edit_permission','cancel_ord_flag','order_created_at','order_approved_at','order_cancelled_at','ocn_number','po_uploaded_at','tesco_item_master.company_id','tesco_item_master.item_name')->first();
             $order_details  = DB::table($qnty_table)->where($qnty_id,$row_id)
             				->get();
 
@@ -74,6 +74,7 @@ class ErpOrders
 	            	'order_qnty_table_id' 	=> $vals->id,
 	            	'template_id'			=> $orders->template_id,
 	            	'company_id'			=> $orders->company_id,
+	            	'refenece_name'			=> $orders->item_name,
 	            	'status' 				=> "Artwork Approved"
 				]);
 			}
