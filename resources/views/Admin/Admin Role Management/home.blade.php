@@ -69,14 +69,14 @@
                       <div id="add_admin_result"></div>
                         <div class="form-group has-feedback">
                           {!! Form::label('name', 'Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required')) !!}
+                          {!! Form::text('name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required','maxlength' => '25')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
                           {!! Form::label('email', 'Email', ['class' => 'form_label']) !!}
                           <div class="input-group">
                             <span class="input-group-addon input-sm" id="basic-addon1">@</span>
-                            {!! Form::email('email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required','onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
+                            {!! Form::email('email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required','onkeyup' => '$(this).val($(this).val().toLowerCase());','maxlength' => '50')) !!}
                           </div>
                           <div class="help-block with-errors"></div>
                         </div>

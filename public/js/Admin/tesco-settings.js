@@ -1963,10 +1963,10 @@ function tescoErrorReportEmail() {
               $(".loader").show();
           },
           success: function (data) {
-                  var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoErrorReportEmailModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Error Report Email</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Error Report Emails</h3></div><table id="tesco-error-report-emails-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Company</th><th>Error Case</th><th>Contact Person Name</th><th>Contact Email </th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+                  var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoErrorReportEmailModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Error Report Email</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Error Report Emails</h3></div><table id="tesco-error-report-emails-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Error Case</th><th>Contact Person Name</th><th>Contact Email </th><th>Company</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.error_report_data, function(i, item){
                     var index = i+1;
-                    tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.company+'</td><td>'+item.error_case+'</td><td>'+item.contact_person+'</td><td>'+item.email_address+'</td>';
+                    tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.error_case+'</td><td>'+item.contact_person+'</td><td>'+item.email_address+'</td><td>'+item.company+'</td>';
                     if(item.is_enabled === true)
                     {
                      tesco_metadata += '<td><span class="label label-success">Enabled</span></td>';
