@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Classes\Modules;
 use App\Classes\ProfomaInvoice;
 use App\ProfomaInvoice as PI;
+use App\Classes\ErpOrders;
 use App\ProfomaInvoiceItemDetails;
 use Response;
 use View;
@@ -115,11 +116,18 @@ class OrderStatusCntrl extends Controller
 	{
 		try
 		{
-			$po_number   = $request->po_number;
-			$template_id = $request->id;
-            $table_name  = $request->tableName;
-            $po_details = DB::table($table_name)->where('id',$template_id)->select('po_file')->first();
-            
+			$buyer_id       = $request->buyer_id;
+            $erp_obj        = new ProfomaInvoice();
+            $po_number      = $request->po_number;
+			$template_id    = $request->id;
+            $table_name     = $request->tableName;
+            $po_details     = DB::table($table_name)->where('id',$template_id)
+                                ->select('po_file')->first();
+            $qnty_table     = $table_name.'_quanty' ;
+            $po_details     = DB::table($table_name)->where('id',$template_id)->select('*')->first();
+            $qnty_id        =  str_replace("_orders","_order_id",str_replace("tesco_","",$table_name));
+            $order_details  = DB::table($qnty_table)->where($qnty_id,$template_id)->select('*')->get();
+
             if ($po_details->po_file =="" || $po_details->po_file=="null")
             {
                 $po_status = "PO Pending";
@@ -127,9 +135,10 @@ class OrderStatusCntrl extends Controller
             else
             {
                 $po_status = "PO Uploaded";
+                $erp_obj->updateErpOrders($buyer_id,$po_number,$po_details,$order_details);
             }
 
-			$data 		 = DB::table($table_name)->where('id',$template_id)
+			$data 		=   DB::table($table_name)->where('id',$template_id)
 						      ->update([
                                   'purchase_order_no' => $po_number,
                                   'po_status' => $po_status,
