@@ -35,6 +35,7 @@
             <li id="4"  onclick="tescoSizeChart()"><a>Size Chart</a></li>
             <li id="5"  onclick="tescoTaxCode()"><a>Tax Code</a></li>
             <li id="6"  onclick="tescoMaterialMasters()"><a>Material Master</a></li>
+            <li id="7"  onclick="tescoEmailToCase()"><a>Email to Case</a></li>
           </ul>
         </div>
         <div class="content">
