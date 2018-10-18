@@ -70,7 +70,7 @@
                     $(data.orderlist).each(function(index, value)
                     {
                         tr += '<tr class="trClass" id="'+value.id+'">';
-                        tr += '<td>'+value.id+'</td><td>'+value.id+'</td><td>'+value.id+'</td><td>'+value.id+'</td><td>'+value.id+'</td><td>'+value.id+'</td><td>'+value.id+'</td><td>'+value.id+'</td><td>'+value.id+'</td><td class="qnty">'+value.order_quantity+'</td><td><input type="text" value="" class="form-control delivery-qnty" onkeyup="updateAmount(this)"></td><td class="rate">2</td><td class="amnt">'+value.order_quantity * value.rate+'</td>';
+                        tr += '<td>'+value.id+'</td><td>'+value.id+'</td><td>'+value.id+'</td><td>'+value.id+'</td><td>'+value.id+'</td><td>'+value.id+'</td><td>'+value.id+'</td><td>'+value.id+'</td><td>'+value.id+'</td><td class="qnty">'+value.order_quantity+'</td><td style="width: 116px;"><input type="text" value="" class="form-control delivery-qnty" onkeyup="updateAmount(this)"></td><td class="rate">2</td><td class="amnt">'+value.order_quantity * value.rate+'</td>';
                         tr += '</tr>';
                         qnty += value.order_quantity;
                         amnt += (value.order_quantity * value.rate);
