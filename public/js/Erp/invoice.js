@@ -15,17 +15,21 @@
             },
             success: function (data) {
                 console.log(data)
-                $(data.orderlist).each(function(index, value)
+                if(!empty(data.orderlist))
                 {
-                    html += '<tr><td><input name="select_all" value="2" data-id="vals2" id="'+value.id +'" class="po-select" type="checkbox" /></td><td>'+value.id +'</td><td>'+value.po_no+'</td><td>'+value.buyer_name+'</td></tr>';
+                    $(data.orderlist).each(function(index, value)
+                    {
+                        html += '<tr><td><input name="select_all" value="2" data-id="vals2" id="'+value.id +'" class="po-select" type="checkbox" /></td><td>'+value.id +'</td><td>'+value.po_no+'</td><td>'+value.buyer_name+'</td></tr>';
 
-                    $('.dynamic-table').html('<form id="frm-example"><table class="table "><thead><tr><th></th><th class="text-center">ERP ID</th><th class="text-center">PO Number</th><th class="text-center">Buyer</th></tr></thead><tbody>'+html+'</tbody></table></form>');
-                });
-                $('.po-list').removeClass('hidden')
-                $('.dynamic-table tbody').on('change', 'input[type="checkbox"]', function(){
-                  $('.po-select').not(this).prop('checked', false);  
-                  showOrderList(this)                           
-                });
+                        $('.dynamic-table').html('<form id="frm-example"><table class="table "><thead><tr><th></th><th class="text-center">ERP ID</th><th class="text-center">PO Number</th><th class="text-center">Buyer</th></tr></thead><tbody>'+html+'</tbody></table></form>');
+                    });
+                    $('.po-list').removeClass('hidden')
+                    $('.dynamic-table tbody').on('change', 'input[type="checkbox"]', function(){
+                      $('.po-select').not(this).prop('checked', false);  
+                      showOrderList(this)                           
+                    });
+                }
+                
             },
             error: function (errorXHR, errorStatus, errorThrown) {
                

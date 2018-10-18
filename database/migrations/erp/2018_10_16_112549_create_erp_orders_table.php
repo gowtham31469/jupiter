@@ -17,7 +17,7 @@ class CreateErpOrdersTable extends Migration
             $table->increments('id');
             $table->integer('customer_id')->unsigned();
             $table->integer('buyer_id')->unsigned();
-            $table->string('popen(command, mode)_no');
+            $table->string('po_no');
             $table->string('po_file');
             $table->string('status');
             $table->timestamps();
