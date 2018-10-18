@@ -565,6 +565,7 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::get('/home', 'ErpUser\UserController@index')->name('home');
 	/* Routes for User Management */
 	Route::get('/users', 'ErpUser\UserController@show')->name('erp-users');
+	Route::post('users', 'ErpUser\UserController@store')->name('erp.user');
 	
 	
 	/* Routes for Invoice Management */
