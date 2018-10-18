@@ -1,5 +1,6 @@
 	function dynamicTable() {
         var customer_id       = $("#customer option:selected").val();
+        var html = "";
         $.ajax({
             url: "/erp/erp-order-list",
             type: 'GET',
@@ -14,6 +15,17 @@
             },
             success: function (data) {
                 console.log(data)
+                $(data.orderlist).each(function(index, value)
+                {
+                    html += '<tr><td><input name="select_all" value="2" data-id="vals2" id="'+value.id +'" class="po-select" type="checkbox" /></td><td>'+value.id +'</td><td>'+value.po_no+'</td><td>'+value.buyer_name+'</td></tr>';
+
+                    $('.dynamic-table').html('<form id="frm-example"><table class="table "><thead><tr><th></th><th class="text-center">ERP ID</th><th class="text-center">PO Number</th><th class="text-center">Buyer</th></tr></thead><tbody>'+html+'</tbody></table></form>');
+                });
+                $('.po-list').removeClass('hidden')
+                $('.dynamic-table tbody').on('change', 'input[type="checkbox"]', function(){
+                  $('.po-select').not(this).prop('checked', false);  
+                  showOrderList(this)                           
+                });
             },
             error: function (errorXHR, errorStatus, errorThrown) {
                
@@ -30,14 +42,7 @@
                 });
             }
         })
-        alert(customer_id)
-	    $('.dynamic-table').html('<table class="table "><thead><tr><th></th><th class="text-center">Order ID</th><th class="text-center">PO Number</th><th class="text-center">Style No</th></tr></thead><tbody><tr><td><input name="select_all" class="po-select" value="1" data-id="vals1" id="example-select-all" type="checkbox" /></td><td>Tiger Nixon</td><td>System Architect</td><td>Edinburgh</td></tr><tr><td><input name="select_all" value="2" data-id="vals2" id="example-select-all" class="po-select" type="checkbox" /></td><td>Tiger Nixon</td><td>System Architect</td><td>Edinburgh</td></tr></tbody></table>')
-	    $('.po-list').removeClass('hidden')
-
-	    $('.dynamic-table tbody').on('change', 'input[type="checkbox"]', function(){
-	      $('.po-select').not(this).prop('checked', false);  
-	      showOrderList(this)                           
-	    });
+	    
 	}
     function showOrderList(obj) {
         var row_id = $(obj).val()

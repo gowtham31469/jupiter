@@ -42,7 +42,11 @@ class InvoiceController extends Controller
     {
         try {
             $customer_id = $request->customer_id;
-            $orderlist   = Erp::where('customer_id',$customer_id)->get();
+            $orderlist   = Erp::where('customer_id',$customer_id)
+                            ->join('customers','erp_orders.customer_id','customers.id')
+                            ->join('buyers','erp_orders.buyer_id','buyers.id')
+                            ->select('erp_orders.id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','erp_orders.po_no')
+                            ->get();
             $result      = response()->json(['error'=> false,'message' =>'success','orderlist'=>$orderlist ],200);
         }
         catch (\Exception $e)
