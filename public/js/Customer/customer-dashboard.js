@@ -341,7 +341,6 @@ $(document).ready(function() {
           }
       });
       var formdata = selected.join(',');
-      console.log(formdata)
       $.ajax({
           url: base_url + "/customer/tesco/order-management/viewed-selected-pending",
           type: "Post",
@@ -504,7 +503,6 @@ $(document).ready(function() {
           }
       });
       var formdata = selected.join(',');
-      console.log(formdata)
       $.ajax({
           url: base_url + "/customer/tesco/order-management/viewed-selected-cancelled",
           type: "Post",

@@ -1049,6 +1049,21 @@ function createOrders(parsedObj = false, oType = false) {
                     
                       html += '<div class="invisible-div"></div><h4>Order Preview</h4><div class="row">';
                       $.each(data.templates, function(i, item){
+						if(data.templates.length > 1)
+						{
+							if(data.templates.length == i+1)
+							{
+								var style="width:226px";
+							}
+							else
+							{
+								var style="";
+							}
+						}
+						else
+						{
+							var style="";
+						}
                        html += '<div class="col-md-4">\
                                   <div class="card add-card">\
                                     <div class="card-title">\
@@ -1056,7 +1071,7 @@ function createOrders(parsedObj = false, oType = false) {
                                        <h5><b>'+item.template_name+'</b></h5>\
                                     </div>\
                                     <div class="row">\
-                                       <div class="col-md-8 col-md-offset-2">\
+                                       <div class="col-md-8 col-md-offset-2" style="'+style+'">\
                                          <div class="tesco_artwork"> \
                                            <object style="border: 2px #333 solid;" id="tesco_svg'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object>\
                                            <div class="modal fade" id="'+item.template_name.replace(' ', '')+'" role="dialog">\
@@ -1347,8 +1362,6 @@ function printDivTesco(data,name) {
 							var str = s.serializeToString(d);
 
 							svgarr.push(str)
-							
-							//						 console.log(svgRoot)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
 							this.tryCount++;
@@ -1462,8 +1475,6 @@ function printDivTesco(data,name) {
 				
 			})
 			if (ajax_count == document.getElementById("table_row").rows.length) {
-			//				console.log("hai")
-			//				console.log(svgarr)
 				var svg_fin = svgarr.join(',_');
 
 
@@ -1606,7 +1617,6 @@ function printDivTesco(data,name) {
 
 							svgarr.push(str)
 							
-							//						 console.log(svgRoot)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
 							this.tryCount++;
@@ -1679,8 +1689,6 @@ function printDivTesco(data,name) {
 			ajax_count++;
 			})
 			if (ajax_count == document.getElementById("table_row").rows.length) {
-			//				console.log("hai")
-			//				console.log(svgarr)
 			var svg_fin = svgarr.join(',_');
 			
 			PopupTesco(svg_fin,name,zone);

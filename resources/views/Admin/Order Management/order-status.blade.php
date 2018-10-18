@@ -127,8 +127,8 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
                     <button type="button" id="update_new_po" class="btn btn-primary btn-sm hidden">Update</button>
-                    <button type="button" id="update_po" class="btn btn-primary  btn-smhidden">Update</button>
-                    <button type="button" id="new_pos" class="btn btn-primary  btn-sm btn-sm hidden">Update</button>
+                    <button type="button" id="update_po" class="btn btn-primary btn-sm hidden">Update</button>
+                    <button type="button" id="new_pos" class="btn btn-primary btn-sm btn-sm hidden">Update</button>
                     
                 </div>
             </div>
@@ -268,8 +268,8 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
                     <button type="button" id="update_new_po_status" class="btn btn-primary hidden">Update</button>
-                    <button type="button" id="update_po_status" class="btn btn-primary hidden">Update</button>
-                    <button type="button" id="new_pos_status" class="btn btn-primary hidden">Update</button>
+                    <button type="button" id="update_po_status" class="btn btn-primary btn-sm hidden">Update</button>
+                    <button type="button" id="new_pos_status" class="btn btn-primary btn-sm hidden">Update</button>
                 </div>
             </div>
         </div>

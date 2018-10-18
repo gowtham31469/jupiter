@@ -244,7 +244,6 @@ function tescoOrderStatus()
                                                 $count_li++;
                                             }
                                         });
-                                        //alert($count_li);
                                         if($count_li > 0)
                                         {
                                             var company_id=$(this).data('company');
@@ -350,7 +349,6 @@ function tescoOrderStatus()
                                             $('#exist_artwork_div_status input[type=checkbox]').each(function () {
                                                 if (this.checked) {
                                                     a.push($(this).parent().attr('data-id'));
-                                                    //alert($(this).parent().attr('data-id'))
                                                 }
                                             });
                                             var aa = a.join(',');
@@ -424,10 +422,8 @@ function tescoOrderStatus()
                                             $('#check_error_status').addClass('hidden')
                                             if ($('#new_po_no_status').val() != "" && $('#new_po_file_status').val() !="")
                                             {
-												//alert("h")
 													if($('#new_po_no_status').val().length > 9)
 													{
-														//alert("a")
 														$('#new_po_error_length_status').removeClass('hidden');
 														
 														$('#new_po_error_status').addClass('hidden');
@@ -435,12 +431,10 @@ function tescoOrderStatus()
 													}
 													else
 													{
-														//alert("i")
 														    var a = [];
 															$('#exist_artwork_div_status input[type=checkbox]').each(function () {
 																if (this.checked) {
 																	a.push($(this).parent().attr('data-id'));
-																	//alert($(this).parent().attr('data-id'))
 																}
 															});
 															var aa = a.join(',');
@@ -661,7 +655,6 @@ function tescoOrderStatus()
 
                     },
                     function (start, end, label) {
-                        // alert("A new date range was chosen: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
 						$.fn.dataTableExt.afnFiltering.length = 0;
 						$tableSel.dataTable().fnDraw();
                         filterByDate(6, start, end); // We call our filter function
@@ -799,7 +792,6 @@ function tescoStatusTable(data,path)
 	                {
                 		tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" value="'+value[key]+'" readonly></div></div></td>';
 
-                        // <span class="input-group-btn"><button type="button" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"'+value.tableID+'","'+value.tableName+'","'+po_file+'")>Save</button></span>
 	                }
                 }
                 else if (key == "OrderDate")
@@ -850,7 +842,6 @@ function tescoStatusTable(data,path)
                 else if (key == "PO Status")
                 {
                     var str= value[key] ;
-                    // if(str != null && str != "" && value['po_required']== 1 && value['is_order_count_empty'] == 0)
                     if(value['po_required']== 1 && value['is_order_count_empty'] == 0)
                     {
                         if(str != null && str != ""){

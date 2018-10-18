@@ -194,7 +194,17 @@ function mapStoredValues(oDetails) {
         count++;
         order_status = ele.order_status;
         last_insertions[ele.TemplateName.replace(/ /g,"")+'_id'] = ele.id;
-
+        /** [ Remove print and proof genration button if quantity is 0 ] */
+        if(ele.is_order_count_empty === 1)
+        {
+           $('#print_' + ele.TemplateName.replace(' ', '') + '_btn').hide();
+           $('#proof_' + ele.TemplateName.replace(' ', '') + '_btn').hide();
+        }
+        else
+        {
+            $('#print_' + ele.TemplateName.replace(' ', '') + '_btn').show();
+            $('#proof_' + ele.TemplateName.replace(' ', '') + '_btn').show();
+        }
     });
     
         var div_html='';
@@ -212,7 +222,6 @@ function mapStoredValues(oDetails) {
         $('#tesco_manufacture_date').prop('disabled',true);
         $("#datePicker1").datepicker("disabled");
         $('.delete-row, .add-row-btn, .submit-btn, .save-btn').remove();
-        $('.print-btn').show();
         if(order_status === 'Order Placed')
         {
             $('.approve-btn').show();

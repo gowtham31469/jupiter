@@ -110,6 +110,17 @@
                     </div>
                 </div>
             </div>
+			<div class="case-wrapper" title="Item" draggable="false">
+				 <a href="{{ url('/erp/po-manager') }}">
+                <div class="app-icon" style="background-color: #2196F3; position: relative; left: 0px; top: 0px; opacity: 1; transform: rotate(0deg);" title="Item"><i class="fa fa-shopping-cart" title="Item" style=""></i></div>
+                <div class="case-label ellipsis">
+                    <div class="circle module-count-list-item hidden" data-doctype="Item" style=""> <span class="circle-text">1</span> </div> <span class="case-label-text">PO Manager</span> </div>
+                <div class="circle module-remove" style="background-color: rgb(224, 224, 224); color: rgb(33, 33, 33); display: none;">
+                    <div class="circle-text">
+                        <b>×</b>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

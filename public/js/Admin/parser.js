@@ -52,7 +52,6 @@ function parseCEPurchaseOrder(data, callback) {
         // error statements
         console.error("Error:"+e);
     }
-    // console.log(cParsedObj);
 }
 
 /**
