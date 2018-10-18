@@ -575,8 +575,9 @@ Route::group(['prefix' => 'erp'], function () {
 	/* Routes for Invoice Management */
 	Route::get('/invoice', 'ErpUser\Invoice\InvoiceController@index')->name('invoice'); 
 
-	Route::get('/erp-order-list', 'ErpUser\Invoice\InvoiceController@erpOrderList')->name('erp-orders'); 
+	Route::get('/erp-po-list', 'ErpUser\Invoice\InvoiceController@erpPOList')->name('erp-po'); 
 	
+	Route::get('/erp-order-list', 'ErpUser\Invoice\InvoiceController@erpOrderList')->name('erp-orders');
 	Route::get('/po-manager', 'ErpUser\Pomanager\PoManagerController@index')->name('poManager'); 
 
 
