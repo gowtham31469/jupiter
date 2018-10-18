@@ -104,5 +104,47 @@ class UserController extends Controller
         \App\Erpuser::where('id', $request->id)->delete();
 		return redirect('erp/users')->with('message', 'User Deleted successfully');
     }
+	/**
+     * Get the specified company template hierarchy.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getTemplate(Request $request)
+    {
+		switch ($request->buyer){
+			case "tesco":
+				$treeviewData= DB::table("tesco_item_master")->select('id','item_name as text','parent_id')->whereIn('parent_id', [0,1])->get()->toArray();
+				break;
+				
+			case "orchestra":
+				$treeviewData= DB::table("orchestra_item_master")->select('id','item_name as text','parent_id')->whereIn('parent_id', [0,1])->get()->toArray();
+				break;
+				
+			default:
+				$treeviewData= DB::table("tesco_item_master")->select('id','item_name as text','parent_id')->whereIn('parent_id', [0,1])->get()->toArray();
+				break;
+		}
+        
+        if($treeviewData){
+			$childs = array();
+			foreach($treeviewData as &$item) 
+			{
+			$childs[$item->parent_id][] = &$item;
+			unset($item);
+			}
+			foreach($treeviewData as &$item) 
+			{
+				if (isset($childs[$item->id]))
+				{
+					$item->children = $childs[$item->id];
+					unset($item);
+				}
+			}
+			$tree = $childs[0];
+			$treefinalData=json_encode($tree);
+			return $treefinalData;
+       } 
+    }
 
 }

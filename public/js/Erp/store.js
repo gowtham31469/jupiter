@@ -17,10 +17,9 @@ function store(url, data) {
 				/** [ Show response status based on HTTP status code ] */
 				200: function (data) {
 					$('.snackbar_span').html(data.message);
-					
-//					setTimeout(function(){
-//						location.reload();
-//					}, 500);
+					setTimeout(function(){
+						location.reload();
+					}, 1000);
 				},
 				400: function () {
 					$('.snackbar_span').html(data.message);

@@ -132,6 +132,12 @@
 					</div>
 
 				</div>
+				<div class="row hidden" id="templateDiv" style="margin-top: 20px;">
+					<div class="form-group has-feedback col-md-12 text-center">
+						{!! Form::label('templates', 'Template Mapping', ['class' => 'form_label']) !!}
+					</div>
+					<div class="col-md-offset-1 col-md-10" id="templateHiecs"></div>
+				</div>
 			</div>
 			<div class="modal-footer">
 				{!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
@@ -177,7 +183,7 @@
 @endif
 
 @section('jqueryIncludes')
-    
+    <script src="{{ asset('js/Erp/template.js') }}"></script>
 <script>
 	/** submit add customer form and check validation **/
     $('#add_user_form').validator().on('submit', function (e) {
@@ -198,10 +204,26 @@
          store('/erp/users', data);
       }
     });
-	/** Edit User **/
+	/* Delete User */
 	$(document).on('click', '.delete-user',function () {
 		$(document).find('#delete_id').val($(this).closest('tr').attr('id'));
 	});
+	/* Delete User */
+	$(function () {
+		$("#user_buyer").on("changed.bs.select", function(e, clickedIndex, newValue) {
+			var sVal = $(this).find('option').eq(clickedIndex).val();
+			var selectedTxt = $(this).find('option').eq(clickedIndex).text();
+			if(newValue){
+				getTemplate(selectedTxt.toLowerCase(), sVal);
+			}else{
+				$('#templateHiecs').find('div#'+sVal).remove();
+				if(!$("#user_buyer").val().length){
+					$('#templateDiv').addClass('hidden')
+				}
+			}
+		});
+	});
+	
 	
 </script>
 @endsection

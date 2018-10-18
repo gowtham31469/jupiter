@@ -572,7 +572,7 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::get('/users', 'ErpUser\UserController@show')->name('erp-users');
 	Route::post('users', 'ErpUser\UserController@store')->name('erp.user.add');
 	Route::delete('users', 'ErpUser\UserController@destroy')->name('erp.user.delete');
-	
+	Route::post('get-template', 'ErpUser\UserController@getTemplate')->name('erp.user.getTemplate');
 	
 	/* Routes for Invoice Management */
 	Route::get('/invoice', 'ErpUser\Invoice\InvoiceController@index')->name('invoice'); 
