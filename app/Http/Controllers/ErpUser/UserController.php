@@ -41,7 +41,7 @@ class UserController extends Controller
      */
     public function show()
     {
-		$users 		= App\Erpuser::users();
+		$users 		= \App\Erpuser::users();
 		$company 	= DB::table('company')->pluck('name', 'id')->all();
 		$buyers 	= \App\Buyer::pluck('buyer_name as name', 'id')->all();
 		return view('erp.users.user-list', ['users' => $users, 'company' => $company, 'buyers' => $buyers]);
@@ -63,7 +63,7 @@ class UserController extends Controller
 		}
 		else
 		{
-			App\Erpuser::create([
+			\App\Erpuser::create([
 				'name'		=>	$request->name,
 				'email'		=>	$request->email,
 				'password'	=>	random_bytes(8)
