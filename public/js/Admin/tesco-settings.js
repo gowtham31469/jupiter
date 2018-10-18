@@ -1635,7 +1635,7 @@ function tescoMaterialMasters() {
               $(".loader").show();
           },
           success: function (data) {
-                  var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoMaterialModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Material</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Materials</h3></div><table id="tesco-materials-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Material Name For Employee</th><th>Material Name For Production</th><th>Material Name For Purchase</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+                  var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoMaterialModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Material</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Material Master</h3></div><table id="tesco-materials-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Material Name For Employee</th><th>Material Name For Production</th><th>Material Name For Purchase</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.tesco_materials, function(i, item){
                     var index = i+1;
                     tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.material_name_employee+'</td><td>'+item.material_name_production+'</td><td>'+item.material_name_purchase+'</td>';
@@ -1716,7 +1716,7 @@ function tescoMaterialMasters() {
                    },
                    208: function() {
                         $('#tesco_material_result').removeAttr('style');
-                        $('#tesco_material_result').html('Material already exists.')
+                        $('#tesco_material_result').html('This material names already exists.')
                         $("#tesco_material_result").addClass("alert alert-warning");
                    },
                    400: function() {
@@ -1825,7 +1825,7 @@ function tescoMaterialMasters() {
                 },
                 208: function() {
                      $('#edit_tesco_material_result').removeAttr('style');
-                     $('#edit_tesco_material_result').html('Material already exists.')
+                     $('#edit_tesco_material_result').html('This material names already exists.')
                      $("#edit_tesco_material_result").addClass("alert alert-warning");
                 },
            },
@@ -1940,6 +1940,337 @@ function tescoMaterialMasters() {
     }
    }
 
+   /**
+  * Function to Tesco error reporting email addess list home page
+  * @author <praveen>
+  */
+function tescoErrorReportEmail() {
+    try{
+      $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+      $('.tesco-sidebar').show();
+      $('.orchestra-sidebar').hide();
+      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      $.ajax({
+          url: base_url + "/admin/tesco/settings/error-report-emails",
+          type: "POST",
+          dataType: "json",
+          data: {
+              _token: csrf_token
+          },
+          tryCount : 0,
+          retryLimit : 2,
+          beforeSend: function () {
+              $(".loader").show();
+          },
+          success: function (data) {
+                  var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoErrorReportEmailModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Error Report Email</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Error Report Emails</h3></div><table id="tesco-error-report-emails-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Company</th><th>Error Case</th><th>Contact Person Name</th><th>Contact Email </th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+                   $.each(data.error_report_data, function(i, item){
+                    var index = i+1;
+                    tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.company+'</td><td>'+item.error_case+'</td><td>'+item.contact_person+'</td><td>'+item.email_address+'</td>';
+                    if(item.is_enabled === true)
+                    {
+                     tesco_metadata += '<td><span class="label label-success">Enabled</span></td>';
+                    }
+                    else
+                    {
+                     tesco_metadata += '<td><span class="label label-danger">Disabled</span></td>';
+                    }
+                    if(item.is_enabled === true)
+                    {
+                     tesco_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="make_error_report_email_disabled" data-placement="left"></i></a>';
+                    }
+                    else
+                    {
+                     tesco_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="make_error_report_email_enabled" data-placement="left"></i></a>';
+                    }
+
+                    tesco_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-tesco-error-report-email filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
+                   });
+                   tesco_metadata += '</tbody></table></div>';
+                   $('.content').html(tesco_metadata)
+                   $('.edit-tesco-error-report-email').tooltip('show')
+                   $('.edit-tesco-error-report-email').tooltip('toggle')
+                   $('.status').tooltip('show')
+                   $('.status').tooltip('toggle')
+                   $('#tesco-error-report-emails-list-table').DataTable();
+                   $("#tesco-error-report-emails-list-table_filter input").addClass('form-control input-sm');
+                   $("#tesco-error-report-emails-list-table_filter input").attr('placeholder', 'Data Search');
+                   $('#tesco-error-report-emails-list-table_length select').addClass('form-control input-sm');
+  
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+            this.tryCount++;
+            if (this.tryCount <= this.retryLimit) {
+                $.ajax(this);
+                return;
+            }
+          },
+          complete: function () {
+              $(".loader").hide();
+          }
+      })
+      } catch (e) {
+       console.log("Error:"+e)
+     }
+  }
+
+  /**
+  * Adds a tesco error report email.
+  * @author <praveen>
+  */
+  function addTescoErrorReportEmail()
+  {
+     try{
+          var company        = $('#company option:selected').val();
+          var error_case     = $('#error_case option:selected').text();
+          var contact_person = $('#contact_person').val();
+          var email          = $('#error_email').val();
+          var csrf_token     = $('meta[name="csrf-token"]').attr('content');
+ 
+          $.ajax({
+              url: base_url + "/admin/tesco/add-tesco-error-report-email",
+              method: 'POST',
+              data: {_token:csrf_token,company:company,error_case:error_case,contact_person:contact_person,email:email},
+              tryCount : 0,
+              retryLimit : 2,
+              beforeSend: function () {
+                $(".loader").show();
+              },
+              statusCode: {
+                   200: function() {
+                        $('.snackbar_span').html("Email Details Added Successfully");
+                        showSnackbar();
+                        $('#addTescoErrorReportEmailModal').modal('hide');
+                        tescoErrorReportEmail()
+                   },
+                   208: function() {
+                        $('#tesco_error_report_email_result').removeAttr('style');
+                        $('#tesco_error_report_email_result').html('This email,error case and email combination already exists.')
+                        $("#tesco_error_report_email_result").addClass("alert alert-warning");
+                   },
+                   400: function() {
+                        $('.snackbar_span').html("Something went wrong!!");
+                        showSnackbar();
+                   }
+              },
+              error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
+              },
+              complete: function () {
+                 $(".loader").hide();
+              }
+          })
+      } catch (e) {
+      console.log("Error:"+e)
+    }
+   }
+   /**
+      * Function for get tesco error report email details for editing
+      * @param id
+      * @author <praveen>
+      *
+      */
+     function getTescoErrorReportEmailById(id)
+     {
+       try{
+            if(isSubmitting) {
+                 return;
+             }
+             isSubmitting = true;
+            $.ajax({
+                url:base_url + "/admin/tesco/get-tesco-error-report-email-details",
+                dataType:"json",
+                method:"get",
+                data:{id:id},
+                tryCount : 0,
+                retryLimit : 2,
+                beforeSend: function () {
+                  $(".loader").show();
+                },
+                success: function(data){
+                    isSubmitting = false;
+                    $('#edit_tesco_error_report_email_id').val(id);
+                    $('#edit_company').val(data.error_report_data[0].company_id);
+                    $('#edit_error_case').val(data.error_report_data[0].error_case);
+                    $('#edit_contact_person').val(data.error_report_data[0].contact_person);
+                    $('#edit_error_email').val(data.error_report_data[0].email_address);
+           
+                    $('#editTescoErrorReportEmailModal').modal({
+                         backdrop: 'static',
+                         keyboard: false
+                    })
+                    $('#edit_tesco_error_report_email_form').validator('validate');
+                    $('#editTescoErrorReportEmailModal').modal('show');
+                },
+                error: function(errorXHR, errorStatus, errorThrown) {
+                   this.tryCount++;
+                   if (this.tryCount <= this.retryLimit) {
+                       $.ajax(this);
+                       return;
+                   }
+                 },
+                complete: function () {
+                    $(".loader").hide();
+                }
+            })
+      } catch (e) {
+        console.log("Error:"+e)
+      }
+     }
+ /**
+  * Edit a tesco error report email.
+  * @author <praveen>
+  */
+  function editTescoErrorReportEmail()
+  {
+     try{
+          var id             = $('#edit_tesco_error_report_email_id').val();
+          var company        = $('#edit_company option:selected').val();
+          var error_case     = $('#edit_error_case option:selected').text();
+          var contact_person = $('#edit_contact_person').val();
+          var email          = $('#edit_error_email').val();
+          var csrf_token     = $('meta[name="csrf-token"]').attr('content');
+ 
+          $.ajax({
+              url: base_url + "/admin/tesco/update-tesco-error-report-email",
+              method: 'PUT',
+              data: {_token:csrf_token,company:company,error_case:error_case,contact_person:contact_person,email:email,id:id},
+              tryCount : 0,
+              retryLimit : 2,
+              beforeSend: function () {
+                $(".loader").show();
+              },
+              statusCode: {
+                   200: function() {
+                        $('.snackbar_span').html("Email Details Updated Successfully");
+                        showSnackbar();
+                        $('#editTescoErrorReportEmailModal').modal('hide');
+                        tescoErrorReportEmail()
+                   },
+                   208: function() {
+                        $('#edit_tesco_error_report_email_result').removeAttr('style');
+                        $('#edit_tesco_error_report_email_result').html('This email,error case and email combination already exists.')
+                        $("#edit_tesco_error_report_email_result").addClass("alert alert-warning");
+                   },
+                   400: function() {
+                        $('.snackbar_span').html("Something went wrong!!");
+                        showSnackbar();
+                   }
+              },
+              error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
+              },
+              complete: function () {
+                 $(".loader").hide();
+              }
+          })
+      } catch (e) {
+      console.log("Error:"+e)
+    }
+   }
+ /**
+   * Makes a Error Report Email Enabled.
+   * @param id,csrf_token
+   * @author <praveen>
+   */
+   function makeErrorReportEmailEnabled(id,csrf_token)
+   {
+    try{
+          if(isSubmitting) 
+          {
+              return;
+          }
+          isSubmitting = true;
+          $.ajax({
+               url:base_url + "/admin/tesco/make-error-report-email-enabled",
+               dataType:"json",
+               beforeSend: function () {
+                 $(".loader").show();
+               },
+               method:"put",
+               data:{_token:csrf_token,id:id},
+               tryCount : 0,
+               retryLimit : 2,
+               statusCode: {
+                    /** [Show response status based on HTTP status code] */
+                    200: function() {
+                        isSubmitting = false; 
+                        $('.snackbar_span').html('Email Deatils is enabled ');
+                        showSnackbar();
+                    }
+               },
+               error: function(errorXHR, errorStatus, errorThrown) {
+                 this.tryCount++;
+                 if (this.tryCount <= this.retryLimit) {
+                     $.ajax(this);
+                     return;
+                 }
+               },
+               complete: function () {
+                 tescoErrorReportEmail();
+                 $(".loader").hide();
+               }
+           })
+    } catch (e) {
+     console.log("Error:"+e)
+    }
+   }
+
+ /**
+  * Makes a Error Report Email Diabled
+  * @param id,csrf_token
+  * @author <praveen>
+  */
+  function makeErrorReportEmailDisabled(id,csrf_token)
+   {
+    try{
+          if(isSubmitting) 
+          {
+              return;
+          }
+          isSubmitting = true;
+          $.ajax({
+               url:base_url + "/admin/tesco/make-error-report-email-disabled",
+               dataType:"json",
+               beforeSend: function () {
+                 $(".loader").show();
+               },
+               method:"put",
+               data:{_token:csrf_token,id:id},
+               tryCount : 0,
+               retryLimit : 2,
+               statusCode: {
+                    /** [Show response status based on HTTP status code] */
+                    200: function() {
+                         isSubmitting = false;
+                         $('.snackbar_span').html('Email Deatils  is disabled ');
+                         showSnackbar();
+                    }
+               },
+               error: function(errorXHR, errorStatus, errorThrown) {
+                 this.tryCount++;
+                 if (this.tryCount <= this.retryLimit) {
+                     $.ajax(this);
+                     return;
+                 }
+               },
+               complete: function () {
+                 tescoErrorReportEmail();
+                 $(".loader").hide();
+               }
+           })
+    } catch (e) {
+     console.log("Error:"+e)
+    }
+   }
 
    
    

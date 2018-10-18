@@ -509,6 +509,13 @@ Route::put('admin/tesco/update-tesco-material', 'Admin\Settings\Tesco\TescoSetti
 Route::put('admin/tesco/make-material-enabled', 'Admin\Settings\Tesco\TescoSettings@makeMaterialEnabled');
 Route::put('admin/tesco/make-material-disabled', 'Admin\Settings\Tesco\TescoSettings@makeMaterialDisabled');
 
+Route::post('admin/tesco/settings/error-report-emails', 'Admin\Settings\Tesco\TescoSettings@tescoErrorReportEmails');
+Route::post('admin/tesco/add-tesco-error-report-email', 'Admin\Settings\Tesco\TescoSettings@addTescoErrorReportEmail');
+Route::get('admin/tesco/get-tesco-error-report-email-details', 'Admin\Settings\Tesco\TescoSettings@getTescoErrorReportEmailById');
+Route::put('admin/tesco/update-tesco-error-report-email', 'Admin\Settings\Tesco\TescoSettings@updateTescoErrorReportEmailById');
+Route::put('admin/tesco/make-error-report-email-enabled', 'Admin\Settings\Tesco\TescoSettings@makeErrorReportEmailEnabled');
+Route::put('admin/tesco/make-error-report-email-disabled', 'Admin\Settings\Tesco\TescoSettings@makeErrorReportEmailDisabled');
+
 /** Tesco order-status**/
 Route::post('admin/tesco/tesco-orders', 'Admin\Tesco\OrderStatusCntrl@index');
 Route::post('admin/tesco/order-management/set-po-number', 'Admin\Tesco\OrderStatusCntrl@setPONumber');

@@ -35,7 +35,7 @@
             <li id="4"  onclick="tescoSizeChart()"><a>Size Chart</a></li>
             <li id="5"  onclick="tescoTaxCode()"><a>Tax Code</a></li>
             <li id="6"  onclick="tescoMaterialMasters()"><a>Material Master</a></li>
-            <li id="7"  onclick="tescoEmailToCase()"><a>Email to Case</a></li>
+            <li id="7"  onclick="tescoErrorReportEmail()"><a>Error Report Email</a></li>
           </ul>
         </div>
         <div class="content">
@@ -1818,6 +1818,93 @@
            </div>
        </div>
    </div>
+    {{-- Add Tesco error report email Modal --}}
+   <div class="modal fade" id="addTescoErrorReportEmailModal" tabindex="-1" role="dialog" aria-labelledby="addTescoErrorReportEmailLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="addTescoErrorReportEmailLabel">Add Error Report Email</h4>
+                </div>
+                {!! Form::open(['id' => 'add_tesco_error_report_email_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                        <div id="tesco_error_report_email_result"></div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('company', 'Select a Company', ['class' => 'form_label']) !!}
+                          {{  Form::select('company',(['' => '-- Select a Company --']+ $company),'',array('class' => 'form-control input-sm','id'=>'company','required')) }}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('error_case', 'Select an Error Case', ['class' => 'form_label']) !!}
+                          {{  Form::select('error_case',(['' => '-- Select an Error Case --','Wrong Price' => 'Wrong Price','Wrong Quantity' => 'Wrong Quantity','Wrong Reference' => 'Wrong Reference','Wrong Style' => 'Wrong Style','Partial PO' => 'Partial PO','Others' => 'Others']),'',array('class' => 'form-control input-sm','id'=>'error_case','required')) }}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('contact_person', 'Contact Person Name', ['class' => 'form_label']) !!}
+                          {!! Form::text('contact_person',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Contact Person Name','maxlength' => '25')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('error_email', 'Contact Email', ['class' => 'form_label']) !!}
+                          <div class="input-group">
+                            <span class="input-group-addon input-sm" id="basic-addon1">@</span>
+                            {!! Form::email('error_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Contact Email','required','onkeyup' => '$(this).val($(this).val().toLowerCase());',  'maxlength' => '50')) !!}
+                          </div>
+                          <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::submit('Submit', ['class' => 'btn btn-primary btn-sm'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+    {{-- Edit Tesco error report email Modal --}}
+   <div class="modal fade" id="editTescoErrorReportEmailModal" tabindex="-1" role="dialog" aria-labelledby="editTescoErrorReportEmailLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="editTescoErrorReportEmailLabel">Edit Error Report Email</h4>
+                </div>
+                {!! Form::open(['id' => 'edit_tesco_error_report_email_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                        <div id="edit_tesco_error_report_email_result"></div>
+                        {!! Form::hidden('edit_tesco_error_report_email_id',$value = null, array('id'=>'edit_tesco_error_report_email_id','class' => 'form-control input-sm')) !!}
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_company', 'Select a Company', ['class' => 'form_label']) !!}
+                          {{  Form::select('edit_company',(['' => '-- Select a Company --']+ $company),'',array('class' => 'form-control input-sm','id'=>'edit_company','required')) }}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_error_case', 'Select an Error Case', ['class' => 'form_label']) !!}
+                          {{  Form::select('edit_error_case',(['' => '-- Select an Error Case --','Wrong Price' => 'Wrong Price','Wrong Quantity' => 'Wrong Quantity','Wrong Reference' => 'Wrong Reference','Wrong Style' => 'Wrong Style','Partial PO' => 'Partial PO','Others' => 'Others']),'',array('class' => 'form-control input-sm','id'=>'edit_error_case','required')) }}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_contact_person', 'Contact Person Name', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_contact_person',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Contact Person Name','maxlength' => '25')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_error_email', 'Contact Email', ['class' => 'form_label']) !!}
+                          <div class="input-group">
+                            <span class="input-group-addon input-sm" id="basic-addon1">@</span>
+                            {!! Form::email('edit_error_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Contact Email','required','onkeyup' => '$(this).val($(this).val().toLowerCase());',  'maxlength' => '50')) !!}
+                          </div>
+                          <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::submit('Submit', ['class' => 'btn btn-primary btn-sm'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
    {{-- Show snackbar html code --}}
     <div id="snackbar"><span class="snackbar_span"></span></div>
     <!-- Buyer selection Modal -->
@@ -2002,6 +2089,7 @@
         $('#add_tesco_size_charts_form').trigger("reset");
         $('#add_tesco_tax_codes_form').trigger("reset");
         $('#add_tesco_material_form').trigger("reset");
+        $('#add_tesco_error_report_email_form').trigger("reset");
         $('#edit_orchestra_symbols_form').trigger("reset");
         $('#add_orchestra_symbols_form').trigger("reset");
         $('#add_orchestra_tax_codes_form').trigger("reset");
@@ -2019,6 +2107,8 @@
         $('#edit_orchestra_taxcode_result').hide();
         $('#tesco_material_result').hide();
         $('#edit_tesco_material_result').hide();
+        $('#tesco_error_report_email_result').hide();
+        $('#edit_tesco_error_report_email_result').hide();
        })
 
       /** Add orchestra garment form validation **/
@@ -2756,7 +2846,7 @@
             editOrchestraTaxCode();
          }
        });
-       /** Add Tesco material form validation **/
+     /** Add Tesco material form validation **/
      $('#add_tesco_material_form').validator().on('submit', function (e) {
         if (e.isDefaultPrevented())
         {
@@ -2770,7 +2860,7 @@
         }
       })
        
-         /** get edit Tesco material details **/
+       /** get edit Tesco material details **/
        $(document).on('click','.edit-tesco-material',function(e){
            var id = $(this).closest('tr').attr('id');
            e.preventDefault();
@@ -2795,7 +2885,7 @@
        $(document).on('click', '#make_material_enabled', function(e) {
            var id = $(this).closest('tr').attr('id');
            var csrf_token = $('meta[name="csrf-token"]').attr('content');
-           /* call makeMaterialEnabled function from orchestra-settings.js*/
+           /* call makeMaterialEnabled function from tesco-settings.js*/
            makeMaterialEnabled(id,csrf_token)
        });
 
@@ -2803,10 +2893,57 @@
        $(document).on('click', '#make_material_disabled', function(e) {
            var id = $(this).closest('tr').attr('id');
            var csrf_token = $('meta[name="csrf-token"]').attr('content');
-           /* call makeMaterialDisabled function from orchestra-settings.js*/
+           /* call makeMaterialDisabled function from tesco-settings.js*/
            makeMaterialDisabled(id,csrf_token)
        });
+     /** Add Tesco error report emails form validation **/
+     $('#add_tesco_error_report_email_form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented())
+        {
 
+        }
+        else
+        {
+           e.preventDefault();
+           /* call addTescoErrorReportEmail function from  tesco-settings.js*/
+           addTescoErrorReportEmail();
+        }
+      })
+     /** get edit Tesco error report email details **/
+     $(document).on('click','.edit-tesco-error-report-email',function(e){
+         var id = $(this).closest('tr').attr('id');
+         e.preventDefault();
+         /* call getTescoErrorReportEmailById function from tesco-settings.js*/
+         getTescoErrorReportEmailById(id);
+     });
+      /** submit edit Tesco error report email form **/
+       $('#edit_tesco_error_report_email_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            /* call editTescoErrorReportEmail function from tesco-settings.js*/
+            editTescoErrorReportEmail();
+         }
+       }) 
+      /** To Enable  Tesco error report email  on click **/
+       $(document).on('click', '#make_error_report_email_enabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeErrorReportEmailEnabled function from tesco-settings.js*/
+           makeErrorReportEmailEnabled(id,csrf_token)
+       });
+
+       /** To disable Tesco error report email  on click **/
+       $(document).on('click', '#make_error_report_email_disabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeErrorReportEmailDisabled function from tesco-settings.js*/
+           makeErrorReportEmailDisabled(id,csrf_token)
+       });
       /** [ Make sidebar active ] */
        $('.meta-data-list li a').click(function(){
         $('.meta-data-list li a').removeClass("active");
