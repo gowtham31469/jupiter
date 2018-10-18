@@ -27,10 +27,6 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/easy-autocomplete/1.3.5/easy-autocomplete.min.css">
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/easy-autocomplete/1.3.5/easy-autocomplete.themes.min.css">
-	<!--
-    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/v4-shims.js"></script>
--->
 
 <style>
 	#snackbar{
@@ -59,25 +55,6 @@
     <script src="http://cdn.jsdelivr.net/bootstrap.datatables/0.1/js/datatables.js"></script> 
     <script type="text/javascript" src="{{ asset('DataTables/Buttons-1.5.1/js/dataTables.buttons.min.js') }}"></script>
 
-
-	<div class="container-fluid">
-		<div class="row">
-			@if (Auth::guard("erpuser")->user()) @include('layouts.Erp.navbar')
-			@elseif(!Auth::guest())
-			<script type="text/javascript">
-				customer window.location = "{{ url('/erp/login') }}";
-			</script>
-			@endif
-			@yield('content')
-		</div>
-	</div>
-
-	<script type="text/javascript" src="{{ asset('DataTables/jQuery-3.2.1/jquery-3.2.1.min.js') }}"></script>
-	<script type="text/javascript" src="{{ asset('bootstrap-3.3.7-dist/js/bootstrap.min.js') }}"></script>
-	<script type="text/javascript" src="{{ asset('DataTables/DataTables-1.10.16/js/jquery.dataTables.min.js') }}"></script>
-	<script src="http://cdn.jsdelivr.net/bootstrap.datatables/0.1/js/datatables.js"></script>
-	<script type="text/javascript" src="{{ asset('DataTables/Buttons-1.5.1/js/dataTables.buttons.min.js') }}"></script>
-
 	<script type="text/javascript" src="{{ asset('DataTables/Buttons-1.5.1/js/buttons.html5.min.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('DataTables/Buttons-1.5.1/js/dataTables.buttons.min.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('DataTables/Buttons-1.5.1/js/buttons.print.min.js') }}"></script>
@@ -94,7 +71,6 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqtree/1.4.3/tree.jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.js"></script>
 
 	<!-- Bootstrap Date-Picker Plugin -->
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.js"></script>
