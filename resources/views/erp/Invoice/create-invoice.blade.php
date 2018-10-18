@@ -28,10 +28,10 @@
                     <label for="tesco_supplier" style="padding-top: 12px;">Customer</label>     
                 </div>
                 <div class="col-xs-3" style="margin-left:-135px;padding-top: 5px;">
-                    <select class="selectpicker" data-show-subtext="true" data-live-search="true" id="tesco_supplier" name="tesco_supplier" required="" onchange="dynamicTable()">
-                        <option value="">Select Supplier</option> 
-                        @foreach($tesco_suppliers as $suppliers)
-                            <option title="{{$suppliers->supplier_name}}" value="{{$suppliers->id}}">{{$suppliers->supplier_name}}
+                    <select class="selectpicker" data-show-subtext="true" data-live-search="true" id="customer" name="customer" required="" onchange="dynamicTable()">
+                        <option value="">Select Customers</option> 
+                        @foreach($customers as $vals)
+                            <option title="{{$vals->company_name}}" value="{{$vals->id}}">{{$vals->company_name}}
                             </option>
                         @endforeach
                     </select>

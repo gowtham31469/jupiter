@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Validator;
 use Response;
 use View;
 use DB;
+use App\ErpOrders as Erp;
+use App\ErpOrderDetails;
 
 class InvoiceController extends Controller
 {
@@ -30,14 +32,24 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        $tesco_suppliers = DB::table('tesco_suppliers')
-                              ->select('tesco_suppliers.supplier_name','tesco_suppliers.id')
-                              ->join('customer_metadata','customer_metadata.customer_metadata_id','=','tesco_suppliers.id')
-                              ->join('customer_profile','customer_profile.company_id','=','customer_metadata.customer_id')
-                              ->where('is_enabled','=',1)
-                              ->groupBy('tesco_suppliers.id')
+        $customers = DB::table('customers')
+                              ->where('is_active','=',1)
                               ->get();
-        return view('erp.Invoice.create-invoice',['tesco_suppliers' => $tesco_suppliers]);
+        return view('erp.Invoice.create-invoice',['customers' => $customers]);
 	}
+
+    public function erpOrderList(Request $request)
+    {
+        try {
+            $customer_id = $request->customer_id;
+            $orderlist   = Erp::where('customer_id',$customer_id)->get();
+            $result      = response()->json(['error'=> false,'message' =>'success','orderlist'=>$orderlist ],200);
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
 
 }

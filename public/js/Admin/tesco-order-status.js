@@ -1128,6 +1128,7 @@ function tescoPOUpload(obj,id,po_file,tableName)
     $('#po_link').attr("href",po_link);
     $('#rowID').val(id);
     $('#tableName').val(tableName);
+    $('#buyer_id').val(localStorage.getItem("buyer_id"));
     $('#po-file-upload').modal('show')
 
 }

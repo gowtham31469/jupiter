@@ -1,4 +1,36 @@
 	function dynamicTable() {
+        var customer_id       = $("#customer option:selected").val();
+        $.ajax({
+            url: "/erp/erp-order-list",
+            type: 'GET',
+            data: {
+                customer_id:customer_id
+            },
+            tryCount: 0,
+            retryLimit: 2,
+            dataType: "json",
+            beforeSend: function () {
+                $(".loader").show();
+            },
+            success: function (data) {
+                console.log(data)
+            },
+            error: function (errorXHR, errorStatus, errorThrown) {
+               
+            },
+            complete: function () {
+                $(".loader").hide();
+                /** [To make top menu active] */
+                $(function () {
+                    var url = window.location;
+                    $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                    $('.dynamic-menu a').filter(function () {
+                        return this.href == url;
+                    }).parent('li').addClass('current-page').find('a').addClass('active');
+                });
+            }
+        })
+        alert(customer_id)
 	    $('.dynamic-table').html('<table class="table "><thead><tr><th></th><th class="text-center">Order ID</th><th class="text-center">PO Number</th><th class="text-center">Style No</th></tr></thead><tbody><tr><td><input name="select_all" class="po-select" value="1" data-id="vals1" id="example-select-all" type="checkbox" /></td><td>Tiger Nixon</td><td>System Architect</td><td>Edinburgh</td></tr><tr><td><input name="select_all" value="2" data-id="vals2" id="example-select-all" class="po-select" type="checkbox" /></td><td>Tiger Nixon</td><td>System Architect</td><td>Edinburgh</td></tr></tbody></table>')
 	    $('.po-list').removeClass('hidden')
 

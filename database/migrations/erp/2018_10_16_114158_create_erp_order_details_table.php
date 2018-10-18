@@ -18,9 +18,9 @@ class CreateErpOrderDetailsTable extends Migration
             $table->integer('erp_order_id')->unsigned();
             $table->string('style_no');
             $table->integer('order_quantity');
-            $table->integer('delivered_quantity');
-            $table->string('size');
-            $table->string('delivery_date');
+            $table->integer('delivered_quantity')->nullable();
+            $table->string('size')->nullable();
+            $table->string('delivery_date')->nullable();
             $table->string('order_qnty_table_name');
             $table->integer('order_qnty_table_id');
             $table->string('status');

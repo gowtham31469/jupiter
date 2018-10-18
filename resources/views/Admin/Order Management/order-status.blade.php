@@ -61,8 +61,9 @@
                     <div class="po_upload" id="po_upload">
                         <label>Upload Purchase Order</label>
                         <form method="post" class="dropzone" id="po-upload">
+                        <input type="hidden" name="buyer_id" id="buyer_id" value="">
                             <input type="hidden" name="tableName" id="tableName" value="">
-                            <input type="hidden" name="rowID" id="rowID" value=""> {{ csrf_field() }}
+                            <input type="hidden" name="id" id="rowID" value=""> {{ csrf_field() }}
                         </form>
                     </div>
 
@@ -491,6 +492,8 @@
              } else {
                  tescoOrderStatus();
              }
+             
+             
          } else {
              localStorage.removeItem("buyer");
              localStorage.removeItem("buyer_id");
