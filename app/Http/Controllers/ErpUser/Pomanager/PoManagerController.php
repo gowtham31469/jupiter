@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
 use Response;
 use View;
 use DB;
@@ -32,7 +33,7 @@ class PoManagerController extends Controller
      */
     public function index()
     {
-		 $orders = DB::table('erp_orders')->join('customers','erp_orders.customer_id','customers.id')->select('erp_orders.*','customers.company_name')->get();
+		 $orders = DB::table('erp_orders')->join('customers','erp_orders.customer_id','customers.id')->select('erp_orders.*','customers.company_name')->orderBy('id', 'asc')->get();
 		
 		 return view('erp.Pomanager.poverify',['orders' => $orders]);
 	}
@@ -90,10 +91,56 @@ class PoManagerController extends Controller
 		    $price = $request->price;
 		    $po_complete = $request->po_complete;
 		    $comment = $request->comment;
+			$commenttext = $request->commenttext;
+			$count = $request->count_i;
+			$count_j = $request->count_j;
+			$erp_order_id = $request->erp_order_id;
 			   
+			if($count == 0)
+			{
+				$data 		=   DB::table('erp_orders')->where('id',$erp_order_id)
+						  		->update([
+								  'status' => "Moved To JC Queue"
+								]);
+				
+				$result      = response()->json(['error'=> false,'message' =>'success','status'=>true],200);
+			}
+		    else if($count_j == $count)
+		    {
+				$data 		=   DB::table('erp_orders')->where('id',$erp_order_id)
+						  		->update([
+								  'status' => "Moved To JC Queue"
+								]);
+				
+				$to_email =  DB::table('tesco_error_report_emails')->select('*')->where('id',1)->first();
+				
+				Mail::send('mails.error-report-po',['po'=> $po,'style_no'=>$style_no,'reference'=> $reference,'qty'=>$qty,'price'=> $price,'po_complete'=>$po_complete,'comment'=>$comment,'commenttext'=>$commenttext], function ($message) use ($to_email)
+				{
+					$message->from('praveen@wizroots.com');
+					$message->subject('Jupiter Garments Accessories - Error Report');
+					$message->to($to_email->email_address);
+				});  
+				$result      = response()->json(['error'=> false,'message' =>'success','status'=>true],200);
+			}
+			else
+		    {
+				
+				$data 		=   DB::table('erp_orders')->where('id',$erp_order_id)
+						  		->update([
+								  'status' => "Hold For JC Queue"
+								]);
+				
+				$to_email =  DB::table('tesco_error_report_emails')->select('*')->where('id',1)->first();
 			   
+				Mail::send('mails.error-report-po',['po'=> $po,'style_no'=>$style_no,'reference'=> $reference,'qty'=>$qty,'price'=> $price,'po_complete'=>$po_complete,'comment'=>$comment,'commenttext'=>$commenttext], function ($message) use ($to_email)
+				{
+					$message->from('praveen@wizroots.com');
+					$message->subject('Jupiter Garments Accessories - Error Report');
+					$message->to($to_email->email_address);
+				});  
+				$result      = response()->json(['error'=> false,'message' =>'success','status'=>false],200);
+		    }
 			   
-           $result      = response()->json(['error'=> false,'message' =>'success','orderlist'=>$orderlist ],200);
         }
         catch (\Exception $e)
         {
