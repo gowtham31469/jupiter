@@ -328,6 +328,7 @@ Route::post('admin/tesco/print-div-tesco-small', 'Admin\Tesco\OrderManagementCnt
 
 Route::post('admin/tesco/generate-div-tesco', 'Admin\Tesco\OrderManagementCntrl@generateDivTesco');
 Route::post('admin/tesco/generate-div-tesco-small', 'Admin\Tesco\OrderManagementCntrl@generateDivTescoSmall');
+Route::post('admin/tesco/pdfbox-div-tesco-small', 'Admin\Tesco\OrderManagementCntrl@pdfboxDivTescoSmall');
 
 Route::post('admin/tesco/set-ce-ratio-template-orders', 'Admin\Tesco\OrderManagementCntrl@setCERatioOrders');
 Route::post('admin/tesco/set-ce-single-template-orders', 'Admin\Tesco\OrderManagementCntrl@setCESingleOrders');
@@ -574,10 +575,9 @@ Route::group(['prefix' => 'erp'], function () {
 	
 	/* Routes for Invoice Management */
 	Route::get('/invoice', 'ErpUser\Invoice\InvoiceController@index')->name('invoice'); 
-
-	Route::get('/erp-order-list', 'ErpUser\Invoice\InvoiceController@erpOrderList')->name('erp-orders'); 
-	
+	/* Routes for PO Manager Module */
 	Route::get('/po-manager', 'ErpUser\Pomanager\PoManagerController@index')->name('poManager'); 
-
+	Route::post('/po-manager/order-details', 'ErpUser\Pomanager\PoManagerController@orderDetails');
+	Route::post('/po-manager/submit-po-verify', 'ErpUser\Pomanager\PoManagerController@submitPoVerify'); 
 
 });

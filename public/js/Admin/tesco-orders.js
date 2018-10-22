@@ -1776,7 +1776,8 @@ function GenerateDivTesco(data, name) {
 
 		if (ajax_count == document.getElementById("table_row").rows.length) {
 			var svg_fin = svgarr.join(',_');
-			PopupTescoGenerateSmall(svg_fin, name,svgDoc);
+			//PopupTescoGenerateSmall(svg_fin, name,svgDoc);
+			PdfboxGenerateSmall(svg_fin, name,svgDoc);
 		}
 
 	} else {
@@ -2111,6 +2112,52 @@ function PopupTescoGenerateSmall(data, name,svgDoc) {
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
 		url: base_url + "/admin/tesco/generate-div-tesco-small",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			svg: data,
+			name: name
+		},
+		tryCount: 0,
+		retryLimit: 2,
+		async: false,
+		success: function (data) {
+
+			var element = document.createElement('a');
+			element.setAttribute('href', data);
+			element.setAttribute('download', name);
+
+			element.style.display = 'none';
+			document.body.appendChild(element);
+
+			element.click();
+
+			document.body.removeChild(element);
+			
+			svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
+
+		},
+		error: function (errorXHR, errorStatus, errorThrown) {
+			this.tryCount++;
+			if (this.tryCount <= this.retryLimit) {
+				$.ajax(this);
+				return;
+			}
+		},
+	})
+}
+/**
+ * This Function is Sub Function of #printDivTesco.
+ *  For print preview of small stickers
+ * @return Pdf
+ */
+
+function PdfboxGenerateSmall(data, name,svgDoc) {
+
+	var url = "";
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/admin/tesco/pdfbox-div-tesco-small",
 		type: "post",
 		data: {
 			_token: csrf_token,
