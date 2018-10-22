@@ -29,6 +29,8 @@ use App\TescoTSL1OrdersQuantity;
 use App\TescoTSL3Orders;
 use App\TescoTSL3OrdersQuantity;
 use App\TescoTaxCode;
+use App\TescoMaterialMaster;
+use App\TescoErrorReportEmails;
 
 class TescoSettings extends Controller
 {
@@ -51,6 +53,7 @@ class TescoSettings extends Controller
     {
       try {
             $tesco_brand = DB::table('tesco_brand')->select('id','brand','is_enabled')->orderBy('is_enabled','desc')->get();
+
             return response()->json(['error'=>'false','message' =>'success', 'tesco_brands' => $tesco_brand]);
           } catch (\Exception $e)
           {
@@ -739,7 +742,7 @@ class TescoSettings extends Controller
                            'tax_type'   => $request['tax_type'],
                            'tax_code'   => $request['tax_code'],
                            'tax'        => $request['tax'],
-                           'is_enabled' => 0
+                           'is_enabled' => 1
                          ]);
                    $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
                 }
@@ -812,6 +815,311 @@ class TescoSettings extends Controller
            }
            return $result;
        }
+       /**
+         * Tesco metadata material list show using ajax.
+         * @author <Praveen>
+         * @return \Illuminate\Http\Response
+         */
+        public function tescoMaterials()
+        {
+          try {
+                $tesco_materials = DB::table('tesco_material_masters')->select('id','material_name_employee','material_name_production','is_enabled', 'material_name_purchase')->orderBy('is_enabled','desc')->get();
+                return response()->json(['error'=>'false','message' =>'success', 'tesco_materials' => $tesco_materials]);
+              } catch (\Exception $e)
+              {
+                return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+              }
+        }
+
+       /**
+         * Add Tesco material.
+         * @param \Illuminate\Http\Request
+         * @author <Praveen>
+         * @return \Illuminate\Http\Response
+         */
+        public function addTescoMaterial(Request $request)
+        {
+            try {
+                 $is_exists = TescoMaterialMaster::where('material_name_employee', 'ilike', $request['emp_material'])->where('material_name_production', 'ilike', $request['production_material'])->where('material_name_purchase', 'ilike', $request['purchase_material'])->select('id')->get();
+
+                 if(sizeof($is_exists) > 0)
+                 {
+                   $result = response()->json(['error'=> true,'message' =>'Material Already Exists'],208);
+                 }
+                 else
+                 {
+                    $inserted = TescoMaterialMaster::create([
+                            'material_name_employee'    => $request['emp_material'],
+                            'material_name_production'  => $request['production_material'],
+                            'material_name_purchase'    => $request['purchase_material'],
+                            'is_enabled'                => false
+                          ]);
+                    $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+                 }
+
+            } catch (\Exception $e)
+            {
+                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+       /**
+         * Get Tesco material details by ID for editing.
+         * @param Tesco material id
+         * @author <Praveen>
+         * @return \Illuminate\Http\Response
+         */
+        public function getTescoMaterialById(Request $request)
+        {
+        try {
+              $id = $request['id'];
+              $tesco_material = DB::table('tesco_material_masters')->select('id','material_name_employee','material_name_production','is_enabled', 'material_name_purchase')->where('tesco_material_masters.id',$id)->get();
+              return response()->json(['error'=>'false','message' =>'success', 'tesco_material' => $tesco_material]);
+            } catch (\Exception $e)
+            {
+              return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+        }
+       /**
+        * Update material by id.
+        * @param material id
+        * @author <Praveen>
+        * @return \Illuminate\Http\Response
+        */
+        public function updateTescoMaterialById(Request $request)
+        {
+        try {
+              $id                  = $request['id'];
+              $emp_material        = $request['emp_material'];
+              $production_material = $request['production_material'];
+              $purchase_material   = $request['purchase_material'];
+
+              /** @var array [Database Unique field validation] */
+              $is_exists = TescoMaterialMaster::select('id')
+                           ->where('material_name_employee', 'ilike', $emp_material)
+                           ->where('material_name_production', 'ilike', $production_material)
+                           ->where('material_name_purchase', 'ilike', $purchase_material)
+                           ->where('id','<>',$id)
+                           ->get();
+
+              if(sizeof($is_exists) > 0)
+              {
+                  $result = response()->json(['error'=> true,'message' =>'Material Already Exists'],208);
+              }
+              else
+              {
+                 TescoMaterialMaster::where('id',$id)
+                  ->update([
+                    'material_name_employee'    => $emp_material,
+                    'material_name_production'  => $production_material,
+                    'material_name_purchase'    => $purchase_material,
+                 ]);
+
+                 $result = response()->json(['error'=> false,'message' =>'Success'],200);
+              }
+            
+            } catch (\Exception $e)
+            {
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+      /**
+       * Make Material enabled
+       * @param Material id
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeMaterialEnabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              TescoMaterialMaster::where('id',$id)
+               ->update([
+                 'is_enabled'  => true
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+      /**
+       * Make Material disabled
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeMaterialDisabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              TescoMaterialMaster::where('id',$id)
+               ->update([
+                 'is_enabled'  => false
+              ]);
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+
+            } 
+            catch (\Exception $e)
+            {
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+      }
+      /**
+        * Tesco error report emails list show using ajax.
+        * @author <Praveen>
+        * @return \Illuminate\Http\Response
+        */
+       public function tescoErrorReportEmails()
+       {
+         try {
+               $error_report_data = TescoErrorReportEmails::select('tesco_error_report_emails.id','company.name as company','error_case','contact_person','email_address','is_enabled')->join('company','company.id','tesco_error_report_emails.company_id')->orderBy('tesco_error_report_emails.is_enabled','desc')->get();
+               
+               return response()->json(['error'=>'false','message' =>'success', 'error_report_data' => $error_report_data]);
+             } catch (\Exception $e)
+             {
+               return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+             }
+       }
+       /**
+        * Add Tesco PO error reporting emails.
+        * @param \Illuminate\Http\Request
+        * @author <Praveen>
+        * @return \Illuminate\Http\Response
+        */
+       public function addTescoErrorReportEmail(Request $request)
+       {
+           try {
+                $is_exists = TescoErrorReportEmails::where('error_case', 'ilike', $request['error_case'])->where('email_address', 'ilike', $request['email'])->where('company_id', '=', $request['company'])->select('id')->get();
+
+                if(sizeof($is_exists) > 0)
+                {
+                  $result = response()->json(['error'=> true,'message' =>'Email Details Already Exists'],208);
+                }
+                else
+                {
+                   $inserted = TescoErrorReportEmails::create([
+                           'company_id'     => $request['company'],
+                           'error_case'     => $request['error_case'],
+                           'contact_person' => $request['contact_person'],
+                           'email_address'  => $request['email'],
+                           'is_enabled'     => false
+                         ]);
+                   $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+                }
+
+           } catch (\Exception $e)
+           {
+               $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+           }
+           return $result;
+       }
+       /**
+         * Get Tesco Error Report Email details by ID for editing.
+         * @param Tesco Error Report Email id
+         * @author <Praveen>
+         * @return \Illuminate\Http\Response
+         */
+        public function getTescoErrorReportEmailById(Request $request)
+        {
+        try {
+              $id = $request['id'];
+              $error_report_data = TescoErrorReportEmails::select('*')->where('id',$id)->get();
+              return response()->json(['error'=>'false','message' =>'success', 'error_report_data' => $error_report_data]);
+            } catch (\Exception $e)
+            {
+              return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+        }
+        /**
+         * Edit Tesco PO error reporting emails.
+         * @param \Illuminate\Http\Request
+         * @author <Praveen>
+         * @return \Illuminate\Http\Response
+         */
+        public function updateTescoErrorReportEmailById(Request $request)
+        {
+            try {
+                 /** @var array [Database Unique field validation] */
+                 $is_exists = TescoErrorReportEmails::select('id')
+                             ->where('error_case', 'ilike', $request['error_case'])
+                             ->where('email_address', 'ilike', $request['email'])
+                             ->where('company_id', '=', $request['company'])
+                             ->where('id','<>',$request['id'])
+                             ->get();
+                 if(sizeof($is_exists) > 0)
+                 {
+                   $result = response()->json(['error'=> true,'message' =>'Email Details Already Exists'],208);
+                 }
+                 else
+                 {
+                    TescoErrorReportEmails::where('id',$request['id'])
+                     ->update([
+                        'company_id'     => $request['company'],
+                        'error_case'     => $request['error_case'],
+                        'contact_person' => $request['contact_person'],
+                        'email_address'  => $request['email']
+                    ]);
+                    $result = response()->json(['error'=> false,'message' =>'success'],200);
+                 }
+
+            } catch (\Exception $e)
+            {
+                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+      /**
+       * Make Tesco PO error reporting email  enabled
+       * @param Tesco PO error reporting email  id
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeErrorReportEmailEnabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              TescoErrorReportEmails::where('id',$id)
+               ->update([
+                 'is_enabled'  => true
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+      /**
+       * Make Tesco PO error reporting email disabled
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeErrorReportEmailDisabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              TescoErrorReportEmails::where('id',$id)
+               ->update([
+                 'is_enabled'  => false
+              ]);
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+
+            } 
+            catch (\Exception $e)
+            {
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+      }
     
 }
 

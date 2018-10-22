@@ -94,11 +94,15 @@ class TemplateManagementCntrl extends Controller
 	public function getCompany(Request $request)
     {
         $items = array();
-         $items['company'] = DB::table("company")
+         $items['company']  = DB::table("company")
                                 ->select('*')
                                 ->get();
-         $items['tax'] = DB::table("tesco_tax_code")
+         $items['tax']      = DB::table("tesco_tax_code")
                                 ->select('id','tax_type','tax_code')
+                                ->get();
+         $items['material'] = DB::table("tesco_material_masters")
+                                ->select('id','material_name_employee')
+                                ->where('is_enabled','=',true)
                                 ->get();
          return json_encode($items);
     }
@@ -116,8 +120,9 @@ class TemplateManagementCntrl extends Controller
 			$hsncode     = $request['hsncode'];
 			$sapcode     = $request['sapcode'];
             $glcode      = $request['glcode'];
+            $gl_text     = $request['gltext'];
             $color       = $request['color'];
-            $material    = $request['material'];
+            $material_id = $request['material_id'];
             $height      = $request['height'];
             $width       = $request['width'];
 
@@ -128,11 +133,12 @@ class TemplateManagementCntrl extends Controller
 						   'template_name'    => $ref,
 						   'hsn_code'         => $hsncode,
 						   'gl_code'          => $glcode,
+                           'gl_text'          => $gl_text,
                            'sap_ref'          => $sapcode,
                            'color'            => $color,
                            'dimension_height' => $height,
                            'dimension_width'  => $width,
-                           'material'         => $material
+                           'material_id'      => $material_id
                         ]);
 			
 			$items = DB::table("tesco_template")
