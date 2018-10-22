@@ -15,7 +15,8 @@ class DatabaseSeeder extends Seeder
 		$this->call([
 			ErpUsersTableSeeder::class,
 			ErpUsersCompanyMappingTableSeeder::class,
-			ErpUsersBuyerMappingTableSeeder::class
+			ErpUsersBuyerMappingTableSeeder::class,
+			ErpRolesTableSeeder::class
 		]);
     }
 }

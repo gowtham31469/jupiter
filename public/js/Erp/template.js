@@ -1,5 +1,5 @@
-function getTemplate(buyer, sVal){
-	
+function getTemplate(buyer, sVal) {
+
 	$.ajax({
 		url: base_url + "/erp/get-template",
 		type: "post",
@@ -13,19 +13,18 @@ function getTemplate(buyer, sVal){
 		},
 		success: function (data) {
 			$('#templateDiv').removeClass('hidden')
-			$('#templateHiecs').append(`<div class="col-md-4" id=`+sVal+` style="box-shadow: 2px 2px 10px 2px #eee;"><p style="font-weight: bold;margin-top: 10px;" class="text-center">`+buyer.toUpperCase()+`</p><div id="`+buyer+`_tree"> </div></div>`);
-				
-			$('#'+buyer+'_tree').jstree({
+			$('#templateHiecs').append(`<div class="col-md-6" id=` + sVal + ` style="box-shadow: 0px 1px 5px 1px #eee;padding:10px 0px;"><p style="font-weight: bold;" class="text-center">` + buyer.toUpperCase() + `</p><div id="` + buyer + `_tree"> </div></div>`);
+
+			$('#' + buyer + '_tree').jstree({
 				'core': {
-					'data': data
-				},
-				"types": {
-					"default": {
-						"icon": "fa fa-folder"
+					'data': data,
+					"themes":{
+						"icons":false
 					}
 				},
+				
 				"plugins": ["checkbox"]
-			});
+			})
 		},
 		error: function (data) {
 

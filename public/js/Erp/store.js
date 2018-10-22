@@ -25,7 +25,7 @@ function store(url, data) {
 					$('.snackbar_span').html(data.message);
 				},
 				500: function () {
-					$('.snackbar_span').html(data.message);
+					$('.snackbar_span').html("Something Went Wrong");
 				}
 				
 			},
