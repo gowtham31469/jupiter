@@ -264,31 +264,6 @@ Route::group(['middleware' => 'merchandiser_auth'], function()
 
 });
 
-//Erp Module
-
-Route::post('erp_logout', 'ErpAuth\LoginController@logout');
-Route::get('erp', 'ErpAuth\LoginController@showLoginForm');
-Route::post('erp', 'ErpAuth\LoginController@login');
-
-Route::group(['middleware' => 'erp_guest'], function() {
-
-Route::get('erp_register', 'ErpAuth\RegisterController@showRegistrationForm');
-Route::post('erp_register', 'ErpAuth\RegisterController@register');
-Route::get('erp', 'ErpAuth\LoginController@showLoginForm');
-Route::post('erp', 'ErpAuth\LoginController@login');
-
-});
-
-//Only logged in sellers can access or send requests to these pages
-Route::group(['middleware' => 'erp_auth'], function(){
-
-Route::post('erp/logout', 'ErpAuth\LoginController@logout');
-Route::get('/erp/dashboard', function(){
-  return view('erp.home');
-});
-
-});
-
 //Orchestra Order Management
 
 Route::get('admin/orchestra/order-management', 'Admin\Orchestra\OrderManagementCntrl@index');
@@ -353,6 +328,7 @@ Route::post('admin/tesco/print-div-tesco-small', 'Admin\Tesco\OrderManagementCnt
 
 Route::post('admin/tesco/generate-div-tesco', 'Admin\Tesco\OrderManagementCntrl@generateDivTesco');
 Route::post('admin/tesco/generate-div-tesco-small', 'Admin\Tesco\OrderManagementCntrl@generateDivTescoSmall');
+Route::post('admin/tesco/pdfbox-div-tesco-small', 'Admin\Tesco\OrderManagementCntrl@pdfboxDivTescoSmall');
 
 Route::post('admin/tesco/set-ce-ratio-template-orders', 'Admin\Tesco\OrderManagementCntrl@setCERatioOrders');
 Route::post('admin/tesco/set-ce-single-template-orders', 'Admin\Tesco\OrderManagementCntrl@setCESingleOrders');
@@ -386,6 +362,9 @@ Route::post('admin/tesco/order-management/set-tesco-repeat-order', 'Admin\Tesco\
 
 Route::post('admin/tesco/generatebarcodetsl1', 'Admin\Tesco\OrderManagementCntrl@generateBarcodeTsl1');
 Route::post('admin/tesco/generatebarcodetsl3', 'Admin\Tesco\OrderManagementCntrl@generateBarcodeTsl3');
+
+Route::post('admin/tesco/generatebarcodeeanbig', 'Admin\Tesco\OrderManagementCntrl@generateBarcodeEanBig');
+Route::post('admin/tesco/generatebarcodeitfbig', 'Admin\Tesco\OrderManagementCntrl@generateBarcodeItfBig');
 
 
 // Route::get('upload', 'UploadController@index');
@@ -588,3 +567,37 @@ Route::post('admin/tesco/disable-artwork-edit', 'Admin\Tesco\OrderStatusCntrl@di
 /** admin role Management **/
 Route::get('admin/audit-trail', 'Admin\AuditTrail\AuditTrailController@index');
 Route::get('admin/audit-trail/get-comparison-details', 'Admin\AuditTrail\AuditTrailController@getComparisonDataById');
+/* ERP Related Routes */
+Route::group(['prefix' => 'erp'], function () {
+	Route::get('/login', 'ErpuserAuth\LoginController@showLoginForm')->name('login');
+	Route::post('/login', 'ErpuserAuth\LoginController@login');
+	Route::post('/logout', 'ErpuserAuth\LoginController@logout')->name('logout');
+
+	Route::get('/register', 'ErpuserAuth\RegisterController@showRegistrationForm')->name('register');
+	Route::post('/register', 'ErpuserAuth\RegisterController@register');
+
+	Route::post('/password/email', 'ErpuserAuth\ForgotPasswordController@sendResetLinkEmail')->name('password.request');
+	Route::post('/password/reset', 'ErpuserAuth\ResetPasswordController@reset')->name('password.email');
+	Route::get('/password/reset', 'ErpuserAuth\ForgotPasswordController@showLinkRequestForm')->name('password.reset');
+	Route::get('/password/reset/{token}', 'ErpuserAuth\ResetPasswordController@showResetForm');
+	Route::get('/', 'ErpUser\UserController@index')->name('erp');
+	Route::get('/home', 'ErpUser\UserController@index')->name('home');
+	/* Routes for User Management */
+	Route::get('/users', 'ErpUser\UserController@show')->name('erp-users');
+	Route::post('users', 'ErpUser\UserController@store')->name('erp.user.add');
+	Route::delete('users', 'ErpUser\UserController@destroy')->name('erp.user.delete');
+	Route::post('get-template', 'ErpUser\UserController@getTemplate')->name('erp.user.getTemplate');
+	
+	/* Routes for Invoice Management */
+	Route::get('/invoice', 'ErpUser\Invoice\InvoiceController@index')->name('invoice'); 
+
+	/* Routes for PO Manager Module */
+
+	Route::get('/erp-po-list', 'ErpUser\Invoice\InvoiceController@erpPOList')->name('erp-po'); 
+	
+	Route::get('/erp-order-list', 'ErpUser\Invoice\InvoiceController@erpOrderList')->name('erp-orders');
+	Route::get('/po-manager', 'ErpUser\Pomanager\PoManagerController@index')->name('poManager'); 
+	Route::post('/po-manager/order-details', 'ErpUser\Pomanager\PoManagerController@orderDetails');
+	Route::post('/po-manager/submit-po-verify', 'ErpUser\Pomanager\PoManagerController@submitPoVerify'); 
+
+});

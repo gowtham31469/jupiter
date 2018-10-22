@@ -36,6 +36,11 @@ return [
     */
 
     'guards' => [
+        'erpuser' => [
+            'driver' => 'session',
+            'provider' => 'erpusers',
+        ],
+
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
@@ -52,10 +57,6 @@ return [
         'web_merchandiser' => [
             'driver' => 'session',
             'provider' => 'merchandisers',
-        ],
-	 'web_erp_user' => [
-            'driver' => 'session',
-            'provider' => 'erp_users',
         ],
 
     ],
@@ -78,6 +79,11 @@ return [
     */
 
     'providers' => [
+        'erpusers' => [
+            'driver' => 'eloquent',
+            'model' => App\Erpuser::class,
+        ],
+
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
@@ -91,10 +97,6 @@ return [
         'merchandisers' => [
             'driver' => 'eloquent',  //We are using eloquent model
             'model' => App\Merchandiser::class,
-        ],
-	'erp_users' => [
-            'driver' => 'eloquent',  //We are using eloquent model
-            'model' => App\Erp::class,
         ],
     ],
 
@@ -114,6 +116,12 @@ return [
     */
 
     'passwords' => [
+        'erpusers' => [
+            'provider' => 'erpusers',
+            'table' => 'erpuser_password_resets',
+            'expire' => 600,
+        ],
+
         'users' => [
             'provider' => 'users',
             'table' => 'password_resets',

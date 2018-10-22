@@ -320,7 +320,6 @@ function tescoRejectPI(id,table_name)
     })
 }
 
-
 function Rs(amount) {   
     var words = new Array();
     words[0]  = 'Zero';

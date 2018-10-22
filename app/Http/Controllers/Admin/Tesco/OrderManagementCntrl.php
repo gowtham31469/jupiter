@@ -1990,7 +1990,7 @@ class OrderManagementCntrl extends Controller
    *
    * @return pdf
    */
-  
+	
     public function generateDivTesco(Request $request)
     {
 		    $svgarr = explode(',_',$request->svg);
@@ -2001,15 +2001,18 @@ class OrderManagementCntrl extends Controller
         PDF::setPrintHeader(false);
         PDF::setPrintFooter(false);
         PDF::SetFont('frankgothcnbt');
-    		PDF::SetAutoPageBreak(TRUE);
-      		foreach($svgarr as $value)
-      		{
-      			 PDF::SetMargins(0, 0, 0, false);
-      			 PDF::AddPage('L', array(80,127));
-      			 $svg=urldecode($value);
-      			 PDF::setImageScale(1.66);
-      			 PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=127, $h=80, $link='', $align='', $palign='', $border=0, $fitonpage=true);
-      		}
+		PDF::SetAutoPageBreak(TRUE);
+		$i=0;
+		foreach($svgarr as $value)
+		{
+			 PDF::SetMargins(0, 0, 0, false);
+			 PDF::AddPage('L', array(80,127));
+			 $svg=urldecode($value);
+			 PDF::setImageScale(1.66);
+			 PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=127, $h=80, $link='', $align='', $palign='', $border=0, $fitonpage=true);
+			 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+			 $i++;
+		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
 		
@@ -2137,9 +2140,9 @@ class OrderManagementCntrl extends Controller
 			 PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=40, $h=30, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			 PDF::ImageSVG('@' . $svg, $x=40, $y=0, $w=40, $h=30, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			
-			//PDF::Image(public_path('/storage/app/template/prince.png'), 2, 2, 33, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 3.7, 2, 33, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			
-			//PDF::Image(public_path('/storage/app/template/prince.png'), 42, 2, 33, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 43.7, 2, 33, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			$i++;
 		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
@@ -4361,7 +4364,7 @@ class OrderManagementCntrl extends Controller
 		
 		$tabula       = Config::get('tabula.bar_jar');
 		
-		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.jpg').' '.$type.' 33 13');
+		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 33 13');
         $info    = json_decode($info, true);
 		return $info;
     }
@@ -4378,8 +4381,82 @@ class OrderManagementCntrl extends Controller
 		
 		$tabula       = Config::get('tabula.bar_jar');
 		
-		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.jpg').' '.$type.' 33 13');
+		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 33 13');
         $info    = json_decode($info, true);
 		return $info;
     }
+	/**
+     * This Function is used to generate barcode using java.
+     *
+     * @return path of barcode
+     */
+  	public function generateBarcodeEanBig(Request $request)
+    {
+		$name=$request['name'];
+		$type=$request['type'];
+		$barcode=$request['barcode'];
+		
+		$tabula       = Config::get('tabula.bar_jar');
+		
+		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 50 16');
+        $info    = json_decode($info, true);
+		return $info;
+    }
+	/**
+     * This Function is used to generate barcode using java.
+     *
+     * @return path of barcode
+     */
+  	public function generateBarcodeItfBig(Request $request)
+    {
+		$name=$request['name'];
+		$type=$request['type'];
+		$barcode=$request['barcode'];
+		
+		$tabula       = Config::get('tabula.bar_jar');
+		
+		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 50 16');
+        $info    = json_decode($info, true);
+		return $info;
+    }
+	public function pdfboxDivTescoSmall(Request $request)
+    {
+		$name=$request['name'];
+		$svg=$request['svg'];
+		
+		$tabula       = Config::get('tabula.pdf_jar');
+	
+		
+		$info    = shell_exec('java -jar '.$tabula.' "'.$svg.'" '.public_path('/storage/app/template/pdfbox/'.$name.'.pdf').' 40 30 true');
+        $info    = json_decode($info, true);
+		
+		return $info;
+    }
+	
+//	public function pdfboxDivTescoSmall(Request $request)
+//    {
+//		$name=$request['name'];
+//		$svg=$request['svg'];
+//		
+//		$tabula       = Config::get('tabula.pdf_jar');
+//		
+//		$svgarr = explode(',_',$request->svg);
+//    	$j=0;
+//		$pdfbox=array();
+//		foreach($svgarr as $value)
+//		{
+//			array_push($pdfbox,'/storage/app/template/demo_pdf_box_'.$j.'.svg');
+//			$svg=urldecode($value);
+//			file_put_contents(public_path('/storage/app/template/demo_pdf_box_'.$j.'.svg'), '<?xml version="1.0" encoding="utf-8"?>');
+//			file_put_contents(public_path('/storage/app/template/demo_pdf_box_'.$j.'.svg'), $svg);
+//			$j++;
+//		}
+//		$string = implode(",_",$pdfbox);
+//		print_r($string);
+//		
+//		$info    = shell_exec('java -jar '.$tabula.' "'.$string.'" '.public_path('/storage/app/template/pdfbox/'.$name.'.pdf').' 40 30 true');
+//        $info    = json_decode($info, true);
+//		
+//		return $info;
+//    }
 }

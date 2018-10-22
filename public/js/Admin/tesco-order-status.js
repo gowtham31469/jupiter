@@ -1032,6 +1032,7 @@ function tescoSetPO(obj,id,tableName,po_file)
    $('.tesco-po').css('border-color', '');
    var po_number  = $(obj).closest('tr').find('.tesco-po').val();
    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+   var buyer_id   = localStorage.getItem("buyer_id"); 
    if (po_number!="")
    {
     $.ajax({
@@ -1042,7 +1043,8 @@ function tescoSetPO(obj,id,tableName,po_file)
             _token: csrf_token,
             po_number:po_number,
             tableName:tableName,
-            id:id
+            id:id,
+            buyer_id:buyer_id
         },
         beforeSend: function () {
             $(".loader").show();
@@ -1117,6 +1119,7 @@ function tescoPOUpload(obj,id,po_file,tableName)
     $('#po_link').attr("href",po_link);
     $('#rowID').val(id);
     $('#tableName').val(tableName);
+    $('#buyer_id').val(localStorage.getItem("buyer_id"));
     $('#po-file-upload').modal('show')
 
 }

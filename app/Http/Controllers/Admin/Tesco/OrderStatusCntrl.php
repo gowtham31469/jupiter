@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Classes\Modules;
 use App\Classes\ProfomaInvoice;
 use App\ProfomaInvoice as PI;
+use App\Classes\ErpOrders;
 use App\ProfomaInvoiceItemDetails;
 use Response;
 use View;
@@ -115,11 +116,14 @@ class OrderStatusCntrl extends Controller
 	{
 		try
 		{
-			$po_number   = $request->po_number;
-			$template_id = $request->id;
-            $table_name  = $request->tableName;
-            $po_details = DB::table($table_name)->where('id',$template_id)->select('po_file')->first();
-            
+			$buyer_id       = $request->buyer_id;
+            $erp_obj        = new ErpOrders();
+            $po_number      = $request->po_number;
+			$template_id    = $request->id;
+            $table_name     = $request->tableName;            
+            $po_details     = DB::table($table_name)->where('id',$template_id)
+                                ->select('po_file')->first();
+                        
             if ($po_details->po_file =="" || $po_details->po_file=="null")
             {
                 $po_status = "PO Pending";
@@ -129,12 +133,16 @@ class OrderStatusCntrl extends Controller
                 $po_status = "PO Uploaded";
             }
 
-			$data 		 = DB::table($table_name)->where('id',$template_id)
+			$data 		=   DB::table($table_name)->where('id',$template_id)
 						      ->update([
                                   'purchase_order_no' => $po_number,
                                   'po_status' => $po_status,
                                   'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                                 ]);
+            if ($po_status == "PO Uploaded") {
+                
+               return $erp_obj->updateTescoErpOrders($request);
+            }
 
             $result = response()->json(['error'=> false,'message' =>'success'],200);
        
@@ -155,21 +163,22 @@ class OrderStatusCntrl extends Controller
     {
         try 
         {
+            $erp_obj    = new ErpOrders();
             $table_name = $request->tableName;
-            $row_id     = $request->rowID;
-            $po_file = $request->file('file');
-            $path = $request->file('file')->getRealPath();
-            $filename = $request->file('file')->getClientOriginalName();
+            $row_id     = $request->id;
+            $po_file    = $request->file('file');
+            $path       = $request->file('file')->getRealPath();
+            $filename   = $request->file('file')->getClientOriginalName();
             $destination_path='/storage/app/public/po-files/';
-            $path='storage/app/public/po-files/';
-            $Orname = $po_file->getClientOriginalName();
-            $filename= str_random(6).'_'.preg_replace('/\s+/', '-', $Orname);
+            $path       ='storage/app/public/po-files/';
+            $Orname     = $po_file->getClientOriginalName();
+            $filename   = str_random(6).'_'.preg_replace('/\s+/', '-', $Orname);
             $po_file->move($path,$filename);
             $destination_path_insert=$destination_path.$filename;
 
             $po_details = DB::table($table_name)->where('id',$row_id)->select('purchase_order_no')->first();
             
-            if ($po_details->purchase_order_no =="" || $po_details->purchase_order_no=="null")
+            if ($po_details->purchase_order_no == "" || $po_details->purchase_order_no=="null")
             {
                 $po_status = "PO Pending";
             }
@@ -184,6 +193,10 @@ class OrderStatusCntrl extends Controller
                           'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
 
                         ]);
+            if ($po_status == "PO Uploaded") {
+                
+                return $erp_obj->updateTescoErpOrders($request);
+            }
             if ($data)
             {
                $result = response()->json(['error'=> false,'message' =>'success','po_file'=>$destination_path_insert],200);
