@@ -599,5 +599,6 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::get('/po-manager', 'ErpUser\Pomanager\PoManagerController@index')->name('poManager'); 
 	Route::post('/po-manager/order-details', 'ErpUser\Pomanager\PoManagerController@orderDetails');
 	Route::post('/po-manager/submit-po-verify', 'ErpUser\Pomanager\PoManagerController@submitPoVerify'); 
+	Route::post('/po-manager/change_po_updated_status', 'ErpUser\Pomanager\PoManagerController@changePoUpdatedStatus'); 
 
 });

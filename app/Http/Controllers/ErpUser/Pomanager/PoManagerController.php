@@ -33,9 +33,33 @@ class PoManagerController extends Controller
      */
     public function index()
     {
-		 $orders = DB::table('erp_orders')->join('customers','erp_orders.customer_id','customers.id')->select('erp_orders.*','customers.company_name')->orderBy('id', 'asc')->get();
+		 $orders = DB::table('erp_orders')->join('customers','erp_orders.customer_id','customers.id')->where('erp_orders.status','Moved To ERP')->orWhere('erp_orders.status','Hold For JC Queue')->select('erp_orders.*','customers.company_name')->orderBy('id', 'asc')->get();
 		
 		 return view('erp.Pomanager.poverify',['orders' => $orders]);
+	} 
+	
+	/**
+     * Update the status of PO.
+     * @author [Gowtham] <[gowtham@wizroots.com]>
+     * @return \Illuminate\Http\Response
+     */
+    public function changePoUpdatedStatus(Request $request)
+    {
+		
+		$erp_order_id = $request->id;
+		try { 
+          $data 		=   DB::table('erp_orders')->where('id',$erp_order_id)
+						  		->update([
+								  'po_updated_status' => 0
+								]);
+		 $result        = response()->json(['error'=> false,'message' =>'success'],200);
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+		
 	}
 	
 	 /**
@@ -55,6 +79,10 @@ class PoManagerController extends Controller
                             ->select('erp_order_details.*','tesco_template.template_name')
                             ->get();
 			   
+			$orders   = Erp::where('erp_orders.id',$id)
+                            ->select('*')
+                            ->get();
+			   
 		   foreach($orderlist as $value)
 		   {
 			 // print_r($value->template_id);
@@ -68,7 +96,7 @@ class PoManagerController extends Controller
 			   $value->price = $price_range{0}->price;
 		   }
 			   
-           $result      = response()->json(['error'=> false,'message' =>'success','orderlist'=>$orderlist ],200);
+           $result      = response()->json(['error'=> false,'message' =>'success','orderlist'=>$orderlist,'orders'=>$orders],200);
         }
         catch (\Exception $e)
         {
@@ -100,7 +128,13 @@ class PoManagerController extends Controller
 			{
 				$data 		=   DB::table('erp_orders')->where('id',$erp_order_id)
 						  		->update([
-								  'status' => "Moved To JC Queue"
+								  'status' => "Moved To JC Queue",
+								  'partial_status' => 0
+								]);
+				
+				$data_erp		=   DB::table('erp_order_details')->where('erp_order_id',$erp_order_id)
+						  		->update([
+								  'status' => "Moved For JC Queue"
 								]);
 				
 				$result      = response()->json(['error'=> false,'message' =>'success','status'=>true],200);
@@ -109,7 +143,13 @@ class PoManagerController extends Controller
 		    {
 				$data 		=   DB::table('erp_orders')->where('id',$erp_order_id)
 						  		->update([
-								  'status' => "Moved To JC Queue"
+								  'status' => "Moved To JC Queue",
+								  'partial_status' => 1
+								]);
+				
+				$data_erp		=   DB::table('erp_order_details')->where('erp_order_id',$erp_order_id)
+						  		->update([
+								  'status' => "Moved For JC Queue"
 								]);
 				
 				$to_email =  DB::table('tesco_error_report_emails')->select('*')->where('id',1)->first();
@@ -126,6 +166,12 @@ class PoManagerController extends Controller
 		    {
 				
 				$data 		=   DB::table('erp_orders')->where('id',$erp_order_id)
+						  		->update([
+								  'status' => "Hold For JC Queue",
+								  'partial_status' => 0
+								]);
+				
+				$data_erp		=   DB::table('erp_order_details')->where('erp_order_id',$erp_order_id)
 						  		->update([
 								  'status' => "Hold For JC Queue"
 								]);

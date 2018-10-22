@@ -53,6 +53,7 @@
                           <th>ERP ID</th>
                           <th>Customer name</th>
                           <th>PO Number</th>
+							<th>Status</th>
 							<th>Actions</th>
                         </tr>
                       </thead>
@@ -63,7 +64,8 @@
 							  <td>{{$vals->id}}</td>
 							  <td>{{$vals->company_name}}</td>
 							  <td>{{$vals->po_no}}</td>
-							<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick="view_order_details({{ $vals->id }},{{ $vals->po_no }},{{ $vals->buyer_id }},{{ $vals->customer_id }})"><i class="fa fa-eye action-button-view" data-placement="top" title="" data-original-title="view Details"></i></a></td>
+							 <td><span class="label label-info">{{$vals->status}}</span></td>
+							<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick="view_order_details('{{ $vals->id }}','{{ $vals->po_no }}','{{ $vals->buyer_id }}','{{ $vals->customer_id }}','{{ $vals->po_file }}')"><i class="fa fa-eye action-button-view" data-placement="top" title="" data-original-title="view Details"></i></a></td>
                           </tr> 
 						  @endforeach
                          </tbody>
@@ -82,13 +84,14 @@
 	  <div class="modal-content buyer-selection-modal-content" style="color: #333;">
 		  <div class="modal-header">
 			  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			  <a href="" download onclick="" class="po-style"><i class="fa fa-download action-button-view" data-placement="top" title="" data-original-title="Download Pdf"></i></a>
+			  <a href="" download onclick="change_po_updated_status()" class="po_file" style="float:right;margin-right:12px"><i class="fa fa-download" data-placement="top" title="" data-original-title="Download Pdf"></i> Download Pdf</a>
 			  <h4 class="modal-title" id="myModalLabel">Order Details</h4>
 		  </div>
 
 		  <div class="modal-body buyer-selection-modal-body">
+			  <label class="label new-po-upload label-info hidden">New po has been uploaded before verify please download the latest pdf</label>
 			  <input type="hidden" id="erp_order_id">
-			  <table id="order-details-table" class="table table-bordered table-responsive" style="width:100%">
+			  <table id="order-details-table" class="table table-bordered table-responsive" style="width:100%;margin-top: 15px;">
                       <thead>
                         <tr>
                           <th>Sl. No </th>
@@ -99,6 +102,7 @@
 						  <th>Size</th>
                           <th>Quantity <i class="qty_check cur-po fa fa-times"></i></th>
 						   <th>Price <i class="price_check cur-po fa fa-times"></i></th>
+							<th>Status</th>
 						
                         </tr>
                       </thead>
@@ -250,6 +254,7 @@
 				 $('#orderDetailsModal').modal("hide")
 			     $('.snackbar_span').html('Po Verified successfully ...!');
 				 showSnackbar();
+				 location.reload()
 			},
 			error: function (data) {
 
@@ -279,10 +284,11 @@
 		}
 	}
 	 
-	 function view_order_details(id,po_no,buyer_id,customer_id)
+	 function view_order_details(id,po_no,buyer_id,customer_id,po_file)
 	 {
 		 
 		$('#erp_order_id').val(id)
+		$('.po_file').attr('href',po_file)
 		var csrf_token = $('meta[name="csrf-token"]').attr('content');
 		
 		$.ajax({
@@ -314,9 +320,15 @@
 							  <td class="size_td">`+index.size+`</td>
 							  <td class="qty_td">`+index.order_quantity+`</td>
 							  <td class="price_td">`+index.price+`</td>
+							  <td><span class="label label-info">`+index.status+`</span></td>
                           </tr>`)
 					i++;
 				})
+				
+				if(data.orders[0].po_updated_status == 1)
+				{
+					$('.new-po-upload').removeClass('hidden')
+				}
 				
 				
 				
@@ -333,6 +345,36 @@
 		 $('.po-complete-label').removeClass('active')
 		 
 		 $('#orderDetailsModal').modal("show")
+	 }
+	 
+	 function change_po_updated_status()
+	 {
+		 var id = $('#erp_order_id').val()
+		 $('.new-po-upload').addClass('hidden')
+		 var csrf_token = $('meta[name="csrf-token"]').attr('content');
+		
+		 $.ajax({
+			url: base_url + "/erp/po-manager/change_po_updated_status",
+			type: "Post",
+			dataType: "json",
+			data: {
+				_token: csrf_token,
+				id:id,
+			},
+			beforeSend: function () {
+
+			},
+			success: function (data) {
+				
+				
+			},
+			error: function (data) {
+
+			},
+			complete: function () {
+
+			}
+		 })
 	 }
 	 
 </script>
