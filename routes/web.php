@@ -572,10 +572,8 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::get('/login', 'ErpuserAuth\LoginController@showLoginForm')->name('login');
 	Route::post('/login', 'ErpuserAuth\LoginController@login');
 	Route::post('/logout', 'ErpuserAuth\LoginController@logout')->name('logout');
-
 	Route::get('/register', 'ErpuserAuth\RegisterController@showRegistrationForm')->name('register');
 	Route::post('/register', 'ErpuserAuth\RegisterController@register');
-
 	Route::post('/password/email', 'ErpuserAuth\ForgotPasswordController@sendResetLinkEmail')->name('password.request');
 	Route::post('/password/reset', 'ErpuserAuth\ResetPasswordController@reset')->name('password.email');
 	Route::get('/password/reset', 'ErpuserAuth\ForgotPasswordController@showLinkRequestForm')->name('password.reset');

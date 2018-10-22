@@ -4,7 +4,7 @@
 
 <style>
 
-#addModal .modal-dialog {
+	#addModal .modal-dialog {
   width: 100%;
   height: 100%;
   margin: 0;
@@ -26,18 +26,18 @@
 			<div class="clearfix"></div>
 			<div class="main-content">
 				@if (count($errors) > 0)
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                    @endif @if (session('message'))
-                    <div class="alert alert-success">
-                        {{ session('message') }}
-                    </div>
-                    @endif
+				<div class="alert alert-danger">
+					<ul>
+						@foreach ($errors->all() as $error)
+						<li>{{ $error }}</li>
+						@endforeach
+					</ul>
+				</div>
+				@endif @if (session('message'))
+				<div class="alert alert-success">
+					{{ session('message') }}
+				</div>
+				@endif
 				<div class="loader">
 					<div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>
 				</div>
@@ -49,7 +49,8 @@
 								<th>Name</th>
 								<th>Email</th>
 								<th>Company</th>
-								<th>Buyer</th>
+								<th>Buyers</th>
+								<th>Roles</th>
 								<th>Actions</th>
 							</tr>
 						</thead>
@@ -66,11 +67,14 @@
 									{{implode(', ', array_pluck($value->buyer, 'name'))}}
 								</td>
 								<td>
-									
-<!--									<a href="#" data-target="#editModal" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-pencil filterbtn options edit-user fa-button" title="Edit" data-placement="left"></i></a>-->
-									
+									{{implode(', ', array_pluck($value->roles, 'name'))}}
+								</td>
+								<td>
+
+									@if(!$value->is_admin)
+									<a href="#" data-target="#editModal" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-pencil filterbtn options edit-user fa-button" title="Edit" data-placement="left"></i></a>
 									<a href="#" data-target="#deleteModal" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-trash filterbtn options delete-user fa-button" title="Delete" data-placement="left"></i></a>
-									
+									@endif
 								</td>
 							</tr>
 							@endforeach
@@ -97,12 +101,12 @@
 				<div id="user_result"></div>
 				<div class="row">
 
-					<div class="col-md-3">
+					<div class="col-md-2">
 						<div class="form-group has-feedback">
 							{!! Form::label('user_name', 'User Name', ['class' => 'form_label']) !!}
 							{!! Form::text('user_name',$value = '', array('class' => 'form-control input-sm','id' => 'user_name','placeholder' => 'User Name', 'required')) !!}
 							<div class="help-block with-errors"></div>
-							
+
 						</div>
 					</div>
 
@@ -116,6 +120,14 @@
 							<div class="help-block with-errors"></div>
 						</div>
 					</div>
+					
+					<div class="col-md-2">
+						<div class="form-group has-feedback">
+							{!! Form::label('user_roles', 'User Role', ['class' => 'form_label']) !!}
+							{{ Form::select('user_roles', $roles, '', array('class' => 'form-control input-sm selectpicker', 'data-width' => '100%', 'id' => 'user_roles', 'required', 'multiple')) }}
+							<div class="help-block with-errors"></div>
+						</div>
+					</div>
 					<div class="col-md-3">
 						<div class="form-group has-feedback">
 							{!! Form::label('user_company', 'Select Company', ['class' => 'form_label']) !!}
@@ -123,7 +135,7 @@
 							<div class="help-block with-errors"></div>
 						</div>
 					</div>
-					<div class="col-md-3">
+					<div class="col-md-2">
 						<div class="form-group has-feedback">
 							{!! Form::label('user_buyer', 'Select Buyer', ['class' => 'form_label']) !!}
 							{{ Form::select('user_buyer', $buyers, '',array('class' => 'form-control input-sm selectpicker', 'data-width' => '100%', 'id' => 'user_buyer', 'required', 'multiple')) }}
@@ -138,8 +150,10 @@
 					</div>
 					<div class="col-md-offset-1 col-md-10" id="templateHiecs"></div>
 				</div>
+
 			</div>
 			<div class="modal-footer">
+				{!! Form::label('error_label', 'Select Templates *', ['class' => 'form_label hidden error_label', 'style' => 'color:red;']) !!}
 				{!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
 				{!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
 			</div>
@@ -155,7 +169,7 @@
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="text-danger fa fa-times"></i></button>
 				<h4 class="modal-title">Delete User</h4>
 			</div>
-			{!! Form::open(['class' => 'form-horizontal', 'url' => 'erp/users', 'method' => 'delete']) !!} 
+			{!! Form::open(['class' => 'form-horizontal', 'url' => 'erp/users', 'method' => 'delete']) !!}
 			{!! Form::hidden('id',$value = null, array('class' => 'form-control input-sm', 'id' => 'delete_id')) !!}
 			<div class="modal-body">
 				<div class="row">
@@ -183,47 +197,61 @@
 @endif
 
 @section('jqueryIncludes')
-    <script src="{{ asset('js/Erp/template.js') }}"></script>
+<script src="{{ asset('js/Erp/template.js') }}"></script>
 <script>
 	/** submit add customer form and check validation **/
-    $('#add_user_form').validator().on('submit', function (e) {
-      if (e.isDefaultPrevented())
-      {
+	$('#add_user_form').validator().on('submit', function(e) {
+		if (!e.isDefaultPrevented()) {
+			e.preventDefault();
+			/* Form Data Manipulation */
+			var templates = [];
+			/* Get value of templates from tree */
+			$('#user_buyer').find('option:selected').each(function() {
+				$this = $(this);
+				var treeTxt = $this.text();
+				var treeId = treeTxt + "_tree";
 
-      }
-      else
-      {
-         e.preventDefault();
-         /* call addCustomer function from customer.js*/
-		 var data = { name : $('#user_name').val(), 
-					  email: $('#user_email').val(), 
-					  company: $('#user_company').val(), 
-					  buyer: $('#user_buyer').val(),
-					 _token: $('meta[name="csrf-token"]').attr('content')
-					};
-         store('/erp/users', data);
-      }
-    });
+				$.each($('#' + treeId).jstree().get_selected(true), function() {
+					templates.push($(this)[0].id + "_" + treeTxt);
+				});
+			});
+			
+			var data = {
+				name: $('#user_name').val(),
+				email: $('#user_email').val(),
+				company: $('#user_company').val(),
+				roles: $('#user_roles').val(),
+				buyer: $('#user_buyer').val(),
+				templates: templates,
+				_token: $('meta[name="csrf-token"]').attr('content')
+			};
+			
+			if(templates.length){
+				store('/erp/users', data);
+			}else{
+				$('.error_label').removeClass('hidden')
+			}		
+		}
+
+	});
 	/* Delete User */
-	$(document).on('click', '.delete-user',function () {
+	$(document).on('click', '.delete-user', function() {
 		$(document).find('#delete_id').val($(this).closest('tr').attr('id'));
 	});
 	/* Delete User */
-	$(function () {
+	$(function() {
 		$("#user_buyer").on("changed.bs.select", function(e, clickedIndex, newValue) {
 			var sVal = $(this).find('option').eq(clickedIndex).val();
 			var selectedTxt = $(this).find('option').eq(clickedIndex).text();
-			if(newValue){
-				getTemplate(selectedTxt.toLowerCase(), sVal);
-			}else{
-				$('#templateHiecs').find('div#'+sVal).remove();
-				if(!$("#user_buyer").val().length){
+			if (newValue) {
+				getTemplate(selectedTxt, sVal);
+			} else {
+				$('#templateHiecs').find('div#' + sVal).remove();
+				if (!$("#user_buyer").val().length) {
 					$('#templateDiv').addClass('hidden')
 				}
 			}
 		});
 	});
-	
-	
 </script>
 @endsection
