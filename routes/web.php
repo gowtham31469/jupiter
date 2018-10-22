@@ -571,11 +571,18 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::get('/home', 'ErpUser\UserController@index')->name('home');
 	/* Routes for User Management */
 	Route::get('/users', 'ErpUser\UserController@show')->name('erp-users');
-	
+	Route::post('users', 'ErpUser\UserController@store')->name('erp.user.add');
+	Route::delete('users', 'ErpUser\UserController@destroy')->name('erp.user.delete');
+	Route::post('get-template', 'ErpUser\UserController@getTemplate')->name('erp.user.getTemplate');
 	
 	/* Routes for Invoice Management */
 	Route::get('/invoice', 'ErpUser\Invoice\InvoiceController@index')->name('invoice'); 
+
 	/* Routes for PO Manager Module */
+
+	Route::get('/erp-po-list', 'ErpUser\Invoice\InvoiceController@erpPOList')->name('erp-po'); 
+	
+	Route::get('/erp-order-list', 'ErpUser\Invoice\InvoiceController@erpOrderList')->name('erp-orders');
 	Route::get('/po-manager', 'ErpUser\Pomanager\PoManagerController@index')->name('poManager'); 
 	Route::post('/po-manager/order-details', 'ErpUser\Pomanager\PoManagerController@orderDetails');
 	Route::post('/po-manager/submit-po-verify', 'ErpUser\Pomanager\PoManagerController@submitPoVerify'); 

@@ -38,14 +38,40 @@ class InvoiceController extends Controller
         return view('erp.Invoice.create-invoice',['customers' => $customers]);
 	}
 
-    public function erpOrderList(Request $request)
+    /**
+     * method to get the PO list for a particular customer
+     * @param Request $request [description]
+     */
+    public function erpPOList(Request $request)
     {
         try {
             $customer_id = $request->customer_id;
-            $orderlist   = Erp::where('customer_id',$customer_id)
+            $po_list   = Erp::where('customer_id',$customer_id)
                             ->join('customers','erp_orders.customer_id','customers.id')
                             ->join('buyers','erp_orders.buyer_id','buyers.id')
                             ->select('erp_orders.id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','erp_orders.po_no')
+                            ->get();
+            $result      = response()->json(['error'=> false,'message' =>'success','po_list'=>$po_list ],200);
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+    /**
+     * method to get the orders list for an ERP ID
+     * @param Request $request [description]
+     */
+    public function erpOrderList(Request $request)
+    {
+        try {
+            $erp_id = $request->erp_id;
+            $orderlist   = ErpOrderDetails::where('erp_order_id',$erp_id)
+                            // ->join('customers','erp_orders.customer_id','customers.id')
+                            // ->join('buyers','erp_orders.buyer_id','buyers.id')
+                            // ->select('erp_orders.id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','erp_orders.po_no')
                             ->get();
             $result      = response()->json(['error'=> false,'message' =>'success','orderlist'=>$orderlist ],200);
         }
