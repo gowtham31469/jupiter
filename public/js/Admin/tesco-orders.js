@@ -5055,6 +5055,7 @@ function afterOrderSubmitted(data,po_number,stl_no) {
 	    /** Show approve button */
 		$('.approve-btn').show();
 		$('.cancel-btn').show();
+		$('.print-btn').show();
 		var div_html = '';
 		/** [ store last updated id as hidden input , for approve/cancel order functionality] */
 		$.each(data.last_insertions, function (index, value) {

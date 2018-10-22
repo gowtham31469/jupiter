@@ -4433,30 +4433,30 @@ class OrderManagementCntrl extends Controller
 		return $info;
     }
 	
-//	public function pdfboxDivTescoSmall(Request $request)
-//    {
-//		$name=$request['name'];
-//		$svg=$request['svg'];
-//		
-//		$tabula       = Config::get('tabula.pdf_jar');
-//		
-//		$svgarr = explode(',_',$request->svg);
-//    	$j=0;
-//		$pdfbox=array();
-//		foreach($svgarr as $value)
-//		{
-//			array_push($pdfbox,'/storage/app/template/demo_pdf_box_'.$j.'.svg');
-//			$svg=urldecode($value);
-//			file_put_contents(public_path('/storage/app/template/demo_pdf_box_'.$j.'.svg'), '<?xml version="1.0" encoding="utf-8"?>');
-//			file_put_contents(public_path('/storage/app/template/demo_pdf_box_'.$j.'.svg'), $svg);
-//			$j++;
-//		}
-//		$string = implode(",_",$pdfbox);
-//		print_r($string);
-//		
-//		$info    = shell_exec('java -jar '.$tabula.' "'.$string.'" '.public_path('/storage/app/template/pdfbox/'.$name.'.pdf').' 40 30 true');
-//        $info    = json_decode($info, true);
-//		
-//		return $info;
-//    }
+/*	public function pdfboxDivTescoSmall(Request $request)
+   {
+		$name=$request['name'];
+		$svg=$request['svg'];
+		
+		$tabula       = Config::get('tabula.pdf_jar');
+		
+		$svgarr = explode(',_',$request->svg);
+   	$j=0;
+		$pdfbox=array();
+		foreach($svgarr as $value)
+		{
+			array_push($pdfbox,'/storage/app/template/demo_pdf_box_'.$j.'.svg');
+			$svg=urldecode($value);
+			file_put_contents(public_path('/storage/app/template/demo_pdf_box_'.$j.'.svg'), '<?xml version="1.0" encoding="utf-8"?>');
+			file_put_contents(public_path('/storage/app/template/demo_pdf_box_'.$j.'.svg'), $svg);
+			$j++;
+		}
+		$string = implode(",_",$pdfbox);
+		print_r($string);
+		
+		$info    = shell_exec('java -jar '.$tabula.' "'.$string.'" '.public_path('/storage/app/template/pdfbox/'.$name.'.pdf').' 40 30 true');
+       $info    = json_decode($info, true);
+		
+		return $info;
+   }*/
 }
