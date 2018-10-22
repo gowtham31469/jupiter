@@ -63,7 +63,7 @@
 							  <td>{{$vals->id}}</td>
 							  <td>{{$vals->company_name}}</td>
 							  <td>{{$vals->po_no}}</td>
-							<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick="view_order_details({{ $vals->id }},{{ $vals->po_no }},{{ $vals->buyer_id }},{{ $vals->customer_id }})"><i class="fa fa-eye action-button-view" data-placement="top" title="" data-original-title="view Details"></i></a><a href="{{ $vals->po_file }}" download onclick="" class="po-style"><i class="fa fa-download action-button-view" data-placement="top" title="" data-original-title="Download Pdf"></i></a></td>
+							<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick="view_order_details({{ $vals->id }},{{ $vals->po_no }},{{ $vals->buyer_id }},{{ $vals->customer_id }})"><i class="fa fa-eye action-button-view" data-placement="top" title="" data-original-title="view Details"></i></a></td>
                           </tr> 
 						  @endforeach
                          </tbody>
@@ -73,17 +73,21 @@
     </div>
 </div>
 
+ {{-- Snackbar html code --}}
+    <div id="snackbar"><span class="snackbar_span"></span></div>
 
 {{-- Order Details modal --}}
 <div class="modal fade bd-example-modal-lg" id="orderDetailsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog modal-lg" role="document">
-	  <div class="modal-content">
+  <div class="modal-dialog modal-lg buyer-selection-modal-dialog" role="document">
+	  <div class="modal-content buyer-selection-modal-content" style="color: #333;">
 		  <div class="modal-header">
 			  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			  <a href="" download onclick="" class="po-style"><i class="fa fa-download action-button-view" data-placement="top" title="" data-original-title="Download Pdf"></i></a>
 			  <h4 class="modal-title" id="myModalLabel">Order Details</h4>
 		  </div>
 
-		  <div class="modal-body">
+		  <div class="modal-body buyer-selection-modal-body">
+			  <input type="hidden" id="erp_order_id">
 			  <table id="order-details-table" class="table table-bordered table-responsive" style="width:100%">
                       <thead>
                         <tr>
@@ -104,10 +108,10 @@
                      </table>
 			 <div class="border-div" style="border: 1px #333 solid;border-color:grey;border-radius: 5px; padding: 5px;width: 110px;"><i class="po_complete_check cur-po-comp fa fa-times"></i><label class="po-complete-label" style="margin-left:10px;color:grey">PO Complete</label></div>
 			  <label>Remark : </label>
-			  <textarea id="comment_box" class="form-control comment_box"></textarea>
+			  <textarea style="resize:vertical" rows=5 id="comment_box" class="form-control comment_box"></textarea>
 		  </div>
 
-		  <div class="modal-footer">
+		  <div class="modal-footer buyer-selection-modal-footer">
 				  {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
 			  	  <button class="btn btn-primary btn-sm" onclick="submit()">Submit</button>
 		  </div>
@@ -148,9 +152,13 @@
 	 
 	 function submit()
 	 {
+		 var i=0;
+		 var j=0;
+		 
 		 if($('.po_number_check').hasClass('active'))
 		 {
 			 var po = true;
+			 i++;
 		 }
 		 else
 		 {
@@ -159,6 +167,7 @@
 		 if($('.style_no_check').hasClass('active'))
 		 {
 			 var style_no = true;
+			 i++;
 		 }
 		 else
 		 {
@@ -167,6 +176,7 @@
 		 if($('.reference_check').hasClass('active'))
 		 {
 			 var reference = true;
+			 i++;
 		 }
 		 else
 		 {
@@ -175,6 +185,7 @@
 		 if($('.qty_check').hasClass('active'))
 		 {
 			var qty = true;
+			 i++;
 		 }
 		 else
 		 {
@@ -183,6 +194,7 @@
 		 if($('.price_check').hasClass('active'))
 		 {
 			 var price = true;
+			 i++;
 		 }
 		 else
 		 {
@@ -191,6 +203,8 @@
 		 if($('.po_complete_check').hasClass('active'))
 		 {
 			 var po_complete = true;
+			 i++;
+			 j++;
 		 }
 		 else
 		 {
@@ -199,15 +213,18 @@
 		 if($('#comment_box').val() != null && $('#comment_box').val() != "")
 		 {
 			 var comment = true;
+			 var commenttext	 = $('#comment_box').val();
+			 i++;
 		 }
 		 else
 		 {
 			 var comment = false;
+			 var commenttext = $('#comment_box').val();
 		 }
 		 
 		 
 		 var csrf_token = $('meta[name="csrf-token"]').attr('content');
-		
+		 var erp_order_id = $('#erp_order_id').val();
 		$.ajax({
 			url: base_url + "/erp/po-manager/submit-po-verify",
 			type: "Post",
@@ -220,14 +237,19 @@
 				qty:qty,
 				price:price,
 				po_complete:po_complete,
-				comment:comment
+				comment:comment,
+				commenttext:commenttext,
+				count_i:i,
+				count_j:j,
+				erp_order_id:erp_order_id
 			},
 			beforeSend: function () {
 
 			},
 			success: function (data) {
-				
-				
+				 $('#orderDetailsModal').modal("hide")
+			     $('.snackbar_span').html('Po Verified successfully ...!');
+				 showSnackbar();
 			},
 			error: function (data) {
 
@@ -237,14 +259,30 @@
 			}
 		})
 		 
-		 
-		 
-		 
 	 }
+	 
+	/** [showSnackbar function] */
+	function showSnackbar() {
+		try {
+			// Get the snackbar DIV
+			var x = document.getElementById("snackbar")
+
+			// Add the "show" class to DIV
+			x.className = "show";
+
+			// After 3 seconds, remove the show class from DIV
+			setTimeout(function () {
+				x.className = x.className.replace("show", "");
+			}, 3000);
+		} catch (e) {
+			console.log("Error:" + e)
+		}
+	}
 	 
 	 function view_order_details(id,po_no,buyer_id,customer_id)
 	 {
 		 
+		$('#erp_order_id').val(id)
 		var csrf_token = $('meta[name="csrf-token"]').attr('content');
 		
 		$.ajax({
@@ -281,6 +319,7 @@
 				})
 				
 				
+				
 			},
 			error: function (data) {
 
@@ -289,7 +328,10 @@
 
 			}
 		})
-				
+		 $('.fa-times').removeClass('active')
+		 $('.border-div').removeClass('active-border') 
+		 $('.po-complete-label').removeClass('active')
+		 
 		 $('#orderDetailsModal').modal("show")
 	 }
 	 
