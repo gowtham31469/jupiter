@@ -481,6 +481,19 @@ Route::post('admin/tesco/settings/tax-code', 'Admin\Settings\Tesco\TescoSettings
 Route::post('admin/tesco/add-tesco-tax-code', 'Admin\Settings\Tesco\TescoSettings@addTescoTaxCodes');
 Route::get('admin/tesco/get-tesco-tax-code-details', 'Admin\Settings\Tesco\TescoSettings@getTescoTaxCodesById');
 Route::put('admin/tesco/update-tesco-tax-code', 'Admin\Settings\Tesco\TescoSettings@updateTescoTaxCodesById');
+Route::post('admin/tesco/settings/material', 'Admin\Settings\Tesco\TescoSettings@tescoMaterials');
+Route::post('admin/tesco/add-tesco-material', 'Admin\Settings\Tesco\TescoSettings@addTescoMaterial');
+Route::get('admin/tesco/get-tesco-material-details', 'Admin\Settings\Tesco\TescoSettings@getTescoMaterialById');
+Route::put('admin/tesco/update-tesco-material', 'Admin\Settings\Tesco\TescoSettings@updateTescoMaterialById');
+Route::put('admin/tesco/make-material-enabled', 'Admin\Settings\Tesco\TescoSettings@makeMaterialEnabled');
+Route::put('admin/tesco/make-material-disabled', 'Admin\Settings\Tesco\TescoSettings@makeMaterialDisabled');
+
+Route::post('admin/tesco/settings/error-report-emails', 'Admin\Settings\Tesco\TescoSettings@tescoErrorReportEmails');
+Route::post('admin/tesco/add-tesco-error-report-email', 'Admin\Settings\Tesco\TescoSettings@addTescoErrorReportEmail');
+Route::get('admin/tesco/get-tesco-error-report-email-details', 'Admin\Settings\Tesco\TescoSettings@getTescoErrorReportEmailById');
+Route::put('admin/tesco/update-tesco-error-report-email', 'Admin\Settings\Tesco\TescoSettings@updateTescoErrorReportEmailById');
+Route::put('admin/tesco/make-error-report-email-enabled', 'Admin\Settings\Tesco\TescoSettings@makeErrorReportEmailEnabled');
+Route::put('admin/tesco/make-error-report-email-disabled', 'Admin\Settings\Tesco\TescoSettings@makeErrorReportEmailDisabled');
 
 /** Tesco order-status**/
 Route::post('admin/tesco/tesco-orders', 'Admin\Tesco\OrderStatusCntrl@index');

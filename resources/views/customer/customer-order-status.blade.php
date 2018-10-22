@@ -345,9 +345,9 @@
                         </select>
                     </div>
                            <div class="form-group has-feedback">
-                        <label for="tesco_supplier">Supplier</label> 
+                        <label for="tesco_supplier">Customer</label> 
                         <select class="selectpicker" data-live-search="true" id="tesco_supplier" name="tesco_supplier" required="" onchange="dynamicSVGTemplates()">
-                            <option value="">Select Supplier</option> @foreach($tesco_suppliers as $suppliers)
+                            <option value="">Select Customer</option> @foreach($tesco_suppliers as $suppliers)
                                 <option title="{{$suppliers->supplier_name}}" value="{{$suppliers->id}}">{{$suppliers->supplier_name}}
                                 </option>
                             @endforeach

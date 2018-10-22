@@ -58,8 +58,9 @@ class OrchestraSettings extends Controller
             $category = DB::table('orchestra_care_category')->pluck('category_name','id')->all();
 
             $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->get();
+            $company = DB::table('company')->pluck('name','id')->all();
             $buyer_count = count($buyers);
-            return view('Admin/Settings/home')->with(['buyers' => $buyers, 'category' => $category,'buyer_count' => $buyer_count]);
+            return view('Admin/Settings/home')->with(['buyers' => $buyers, 'category' => $category,'buyer_count' => $buyer_count, 'company' => $company]);
         }
         else
         {
@@ -1413,7 +1414,7 @@ class OrchestraSettings extends Controller
                            'tax_type'   => $request['tax_type'],
                            'tax_code'   => $request['tax_code'],
                            'tax'        => $request['tax'],
-                           'is_enabled' => 0
+                           'is_enabled' => 1
                          ]);
                    $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
                 }

@@ -707,9 +707,9 @@ function createOrders(parsedObj = false, oType = false) {
                              </div>\
                              <div class="col-md-3">\
                               <div class="form-group has-feedback">\
-                               <label for="tesco_supplier">Supplier</label> \
-                                <select class="selectpicker" data-live-search="true" id="tesco_supplier" name="tesco_supplier" required="" onclick="alert()" onchange="dynamicSVGTemplates()">\
-                                  <option value="">Select Supplier</option>';
+                               <label for="tesco_supplier">Customer</label> \
+                                <select class="selectpicker" data-live-search="true" id="tesco_supplier" name="tesco_supplier" required="">\
+                                  <option value="">Select Customer</option>';
 
 				/** [ Show dynamic supplier selectbox ] */
 				$.each(data.tesco_suppliers, function (index, item) {
@@ -805,7 +805,7 @@ function createOrders(parsedObj = false, oType = false) {
 						$.each(data.templates, function (i, item) {
 							html += '<td>\
                                             <div class="form-group has-feedback quantity-feedback">\
-                                                <input type="number" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '"  id="uk_ratio_count_' + item.template_name.replace(' ', '') + '_1" name="uk_ratio_count_' + item.template_name.replace(' ', '') + '_1" maxlength="4" placeholder="Enter Quantity"  data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)"  data-artwork="'+ item.template_name+'">\
+                                                <input type="number" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '"  id="uk_ratio_count_' + item.template_name.replace(' ', '') + '_1" name="uk_ratio_count_' + item.template_name.replace(' ', '') + '_1" maxlength="4" placeholder="Enter Quantity"  data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)">\
                                                 <div class="help-block with-errors"></div>\
                                             </div>\
                                         </td>';
@@ -882,7 +882,7 @@ function createOrders(parsedObj = false, oType = false) {
 						$.each(data.templates, function (i, item) {
 							html += '<td>\
                                             <div class="form-group has-feedback quantity-feedback">\
-                                                <input type="number" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" id="uk_single_count_' + item.template_name.replace(' ', '') + '_1" name="uk_single_count_' + item.template_name.replace(' ', '') + '_1" maxlength="4" placeholder="Enter Quantity" data-artwork="'+ item.template_name+'" data-lastid="" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)"  data-artwork="'+ item.template_name+'">\
+                                                <input type="number" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" id="uk_single_count_' + item.template_name.replace(' ', '') + '_1" name="uk_single_count_' + item.template_name.replace(' ', '') + '_1" maxlength="4" placeholder="Enter Quantity" data-artwork="'+ item.template_name+'" data-lastid="" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)">\
                                                 <div class="help-block with-errors"></div>\
                                             </div>\
                                         </td>';
@@ -1061,10 +1061,10 @@ function createOrders(parsedObj = false, oType = false) {
 						var style="";
 					}
 					
-					html += '<div class="col-md-4">\
+					html += '<div class="col-md-4 ">\
                                   <div class="card add-card">\
                                     <div class="card-title">\
-                                       <p class="pull-right" onclick=openmodaltesco("' + item.template_name.replace(' ', '') + '","' + i + '") style="cursor:pointer">Enlarge</p>\
+                                       <p class="pull-right tesco_artwork_svg" onclick=openmodaltesco("' + item.template_name.replace(' ', '') + '","' + i + '") style="cursor:pointer">Enlarge</p>\
                                        <h5><b>' + item.template_name + '</b></h5>\
                                     </div>\
                                     <div class="row">\
@@ -1119,6 +1119,14 @@ function createOrders(parsedObj = false, oType = false) {
 					minViewMode: 1,
 					format: 'MM,yyyy',
 				})
+				/** [ Get data from localstorage ] */
+				var data = JSON.parse(localStorage.getItem("data"));
+				/** [ Dynamic tesco suppliers preview and Get MOQ value based on supplier selection ] */
+				$('#tesco_supplier').on('change',function(){ 
+					$.each(data, function (i, item) {
+						dynamicTescoSuppliers("tesco_svg" + i);
+					});
+		        });
 				/** [ bootstrap validator for create tesco order form ] **/
 				$('#create_tesco_order_form').validator().on('submit', function (e) {
 					if (e.isDefaultPrevented()) {
@@ -3117,9 +3125,7 @@ function dynamicSVGTemplatescard(id, item) {
 		var tag_at_source = $('#tesco_tag_at_source option:selected').text();
 		var season_code = $('#tesco_season_code').val();
 		var manufacture_date = $('#tesco_manufacture_date').val();
-		var supplier_id = $('#tesco_supplier option:selected').val();
 		var supplier = $('#tesco_supplier option:selected').text();
-		var temp_data = JSON.parse(localStorage.getItem("data"));
 
 		if (po_number != '') {
 			svgDoc.getElementById("po_number").innerHTML = po_number.toUpperCase();
@@ -3194,74 +3200,12 @@ function dynamicSVGTemplatescard(id, item) {
 		} else {
 			svgDoc.getElementById("manufactured_date").innerHTML = '';
 		}
-		/** [ Dynamically change  svg supplier name ] */
+		 /** [ Dynamically change  svg supplier name ] */
 		if ($('#tesco_supplier option:selected').val() != '') {
-			
-			/*
-			 * Get MOQ value based on supplier value.
-			 */
-		    $.ajax({
-			       url:base_url + "/admin/tesco/get-moq-value",
-			       dataType:"json",
-			       method:"get",
-			       data:{supplier:supplier_id,buyer_id:buyer_id,templates:templates},
-		           tryCount : 0,
-		           retryLimit : 2,
-		           beforeSend: function () {
-		             $(".loader").show();
-		           },
-		           success: function(data){
-		           	     /** Store moq values for validation */
-		                 localStorage.setItem("moq_values", JSON.stringify(data.moq));
-		                 svgDoc.getElementById("supplier").innerHTML = supplier.toUpperCase().replace('&', '&amp;');
-		                 /** hide quantity missing error msgs */
-						$('.quantity-feedback').removeClass('has-error has-danger');
-						$('.quantity-feedback-err-msg').css('display', 'none');
-						$('.quantity-field').prop('required', false);
-						$('.quantity-field').parent().removeClass('has-error')
-						$('.help-block').html('');
-		                 /** [ Dynamic moq value assignment on supplier change ] */
-						 var moq_array = JSON.parse(localStorage.getItem("moq_values"));
-						 $.each(temp_data, function (i, item) {
-							var temp_name = item.template_name;
-							if(moq_array != null)
-							{
-								moq_array.forEach(function(i,j){
-									moq = i[temp_name];
-								})
-								$('.count_' + item.template_name.replace(' ', '') ).attr("min",moq); 
-								$('.count_' + item.template_name.replace(' ', '') ).data("min-error","MOQ should be greater than "+moq); 
-							}
-						});
-						 
-		           },
-		           error: function(errorXHR, errorStatus, errorThrown) {
-		                this.tryCount++;
-		                if (this.tryCount <= this.retryLimit) {
-		                    $.ajax(this);
-		                    return;
-		                }
-		            },
-		           complete: function () {
-		               $(".loader").hide();
-		           }
-		       })
-		} else {
-				localStorage.removeItem("moq_values");
-				svgDoc.getElementById("supplier").innerHTML = "";
-				
-				/** hide quantity missing error msgs */
-				$('.quantity-feedback').removeClass('has-error has-danger');
-				$('.quantity-feedback-err-msg').css('display', 'none');
-				$('.quantity-field').prop('required', false);
-				$('.quantity-field').parent().removeClass('has-error')
-				$('.help-block').html('');
-				/** [ Remove MOQ values] */
-				$.each(temp_data, function (i, item) {
-					$('.count_' + item.template_name.replace(' ', '') ).removeAttr("min"); 
-					$('.count_' + item.template_name.replace(' ', '') ).data("min-error",""); 
-				});
-		}
+		    svgDoc.getElementById("supplier").innerHTML = supplier.toUpperCase().replace('&', '&amp;');
+		 } else {
+		 	svgDoc.getElementById("supplier").innerHTML = "";
+		 }
 		if (zone === "CE") {
 			/**  [ if CE ratio template ] */
 			if (type === "ratio") {
@@ -5112,13 +5056,10 @@ function afterOrderSubmitted(data,po_number,stl_no) {
 		$('.approve-btn').show();
 		$('.cancel-btn').show();
 		var div_html = '';
-		/** [ store last updated id as hidden input , for approve order functionality] */
+		/** [ store last updated id as hidden input , for approve/cancel order functionality] */
 		$.each(data.last_insertions, function (index, value) {
 			div_html += '<input id="' + index.replace(' ', '') + '_id" name="' + index.replace(' ', '') + '_id" type="hidden" value="' + value + '">';
 
-			/** [ Remove print and proof genration button if quantity is 0 ] */
-			$('#print_' + index.replace(' ', '') + '_btn').show();
-			$('#proof_' + index.replace(' ', '') + '_btn').show();
 		});
 		$('.invisible-div').html(div_html);
 		$('.snackbar_span').html('Your order has been placed successfully');
@@ -5133,7 +5074,7 @@ function afterOrderSubmitted(data,po_number,stl_no) {
 	                     <div class="col-md-12">\
 	                         <br> <strong>Select Artworks :</strong>';
 			$.each(data.last_insertions, function (index, value) {
-				html += '<div class="row">\
+				html += '<div class="row" id="' + index.replace(' ', '') + '_row">\
 				          <div class="col-md-4">\
 				           <div class="form-check form-group has-feedback">\
 	                        <label class="form-check-label">\
@@ -5192,6 +5133,14 @@ function afterOrderSubmitted(data,po_number,stl_no) {
 	                    </div>';
 			/** Dynamic content for po upload modal tab */
 			$('#po-upload-modal-content').html(html);
+			$.each(data.zero_quantity, function (key, item) {
+				/** remove zero quantity templates from po upload modal */
+				$("#"+ item.replace(' ', '') + '_row').remove();
+
+				/** [ Remove print and proof genration button if quantity is 0 ] */
+				$('#print_' + item.replace(' ', '') + '_btn').hide();
+				$('#proof_' + item.replace(' ', '') + '_btn').hide();
+			});
 			$('#poUploadModal').modal('show');
 				/** [ Backdrop for bootstrap modal ] */
 			$('#poUploadModal').modal({
@@ -7015,4 +6964,100 @@ function checkMOQ(obj) {
 		/** [error statements] */
 		console.error("Error:" + e)
 	}
+}
+
+/**
+ * [Tesco supplier dynamic preview function]
+ * @author <praveen>
+ */
+function dynamicTescoSuppliers(id)
+{
+	/**  [ Dynamically change all svg templates ] */
+	var mySVG = document.getElementById(id);
+	var svgDoc = mySVG.contentDocument;
+	var supplier = $('#tesco_supplier option:selected').text();
+	var templates = localStorage.getItem("templates");
+	var buyer_id  = localStorage.getItem("buyer_id");
+	var supplier_id = $('#tesco_supplier option:selected').val();
+	/** [ Get template details from localstorage ] */
+	var temp_data = JSON.parse(localStorage.getItem("data"));
+	/** [ Dynamically change  svg supplier name ] */
+		if (supplier_id != '') {
+			/*
+			 * Get MOQ value based on supplier value.
+			 */
+			if(isSubmitting) 
+	        {
+	          return;
+	        }
+	        isSubmitting = true;
+		    $.ajax({
+			       url:base_url + "/admin/tesco/get-moq-value",
+			       dataType:"json",
+			       method:"get",
+			       data:{supplier:supplier_id,buyer_id:buyer_id,templates:templates},
+		           tryCount : 0,
+		           retryLimit : 2,
+		           beforeSend: function () {
+		             $(".loader").show();
+		           },
+		           success: function(data){
+					     if(svgDoc.getElementById("supplier"))
+		                 {
+		                   svgDoc.getElementById("supplier").innerHTML = supplier.toUpperCase().replace('&', '&amp;');
+		                 }
+		           	     /** Store moq values for validation */
+		                 localStorage.setItem("moq_values", JSON.stringify(data.moq));
+	                 	 
+		                 /** hide quantity missing error msgs */
+						 $('.quantity-feedback').removeClass('has-error has-danger');
+						 $('.quantity-feedback-err-msg').css('display', 'none');
+						 $('.quantity-field').prop('required', false);
+						 $('.quantity-field').parent().removeClass('has-error')
+						 $('.help-block').html('');
+		                 /** [ Dynamic moq value assignment on supplier change ] */
+						 var moq_array = JSON.parse(localStorage.getItem("moq_values"));
+						 $.each(temp_data, function (i, item) {
+							var temp_name = item.template_name;
+							if(moq_array != null)
+							{
+								moq_array.forEach(function(i,j){
+									moq = i[temp_name];
+								})
+								$('.count_' + item.template_name.replace(' ', '') ).attr("min",moq); 
+								$('.count_' + item.template_name.replace(' ', '') ).data("min-error","MOQ should be greater than "+moq); 
+							}
+						});
+						 
+		           },
+		           error: function(errorXHR, errorStatus, errorThrown) {
+		                this.tryCount++;
+		                if (this.tryCount <= this.retryLimit) {
+		                    $.ajax(this);
+		                    return;
+		                }
+		            },
+		           complete: function () {
+	                   isSubmitting = false;
+		               $(".loader").hide();
+		           }
+		       })
+		} else {
+				localStorage.removeItem("moq_values");
+				if(svgDoc.getElementById("supplier"))
+				{
+					svgDoc.getElementById("supplier").innerHTML = "";
+				}				
+				/** hide quantity missing error msgs */
+				$('.quantity-feedback').removeClass('has-error has-danger');
+				$('.quantity-feedback-err-msg').css('display', 'none');
+				$('.quantity-field').prop('required', false);
+				$('.quantity-field').parent().removeClass('has-error')
+				$('.help-block').html('');
+				/** [ Remove MOQ values] */
+				$.each(temp_data, function (i, item) {
+					$('.count_' + item.template_name.replace(' ', '') ).removeAttr("min"); 
+					$('.count_' + item.template_name.replace(' ', '') ).data("min-error",""); 
+				});
+		}
 }
