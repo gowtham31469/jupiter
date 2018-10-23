@@ -43,7 +43,7 @@ class ErpOrders
 				                    'customer_id'      => $orders->customer_id,
 				                    'po_no'            => $orders->purchase_order_no,
 				                    'po_file'          => $orders->po_file,
-				                    'status'		   => "Moved To ERP"
+				                    'status'		   => 1	
 								]);
 				$this->insertOrderDetails($qnty_table,$order_details,$orders,$erp_orders);
 			}
@@ -75,7 +75,7 @@ class ErpOrders
 	            	'template_id'			=> $orders->template_id,
 	            	'company_id'			=> $orders->company_id,
 	            	'refenece_name'			=> $orders->item_name,
-	            	'status' 				=> "Artwork Approved"
+	            	'status' 				=> 1
 				]);
 			}
 		}

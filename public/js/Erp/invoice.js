@@ -79,7 +79,7 @@
 
                         tr+= '<tr><td colspan="9"><strong>Total</strong></td><td>'+qnty+'</td><td class="total-qnty" id="total-qnty"></td><td></td><td class="total-amnt">'+amnt+'</td></tr>';
 
-                    $('.order-details').html('<form id="frm-orders"><table class="table text-center"><thead><tr><th>Order No</th><th>PO No</th><th>Style</th><th>OCN No</th><th>Item</th><th>Reference</th><th>Size</th><th>HSN No</th><th>Tax</th><th>Order Quantity</th><th>Quantity</th><th>Rate</th><th>Amount</th></tr></thead><tbody>'+tr+'</tbody></table></form>');
+                    $('.order-details').html('<form id="frm-orders"><table class="table text-center"><thead><tr><th>Order No</th><th>PO No</th><th>Style</th><th>OCN No</th><th>Item</th><th>Reference</th><th>Size</th><th>HSN No</th><th>Tax</th><th>Order Quantity</th><th>Delivered Quantity</th><th>Rate</th><th>Amount</th></tr></thead><tbody>'+tr+'</tbody></table></form>');
                         
                     var checkboxes = $('.dynamic-table td input[type="checkbox"]');
                     if(checkboxes.filter(':checked').length >0){
