@@ -583,8 +583,10 @@ Route::group(['prefix' => 'erp'], function () {
 	/* Routes for User Management */
 	Route::get('/users', 'ErpUser\UserController@show')->name('erp-users');
 	Route::post('users', 'ErpUser\UserController@store')->name('erp.user.add');
+	Route::put('users',  'ErpUser\UserController@update')->name('erp.user.update');
 	Route::delete('users', 'ErpUser\UserController@destroy')->name('erp.user.delete');
 	Route::post('get-template', 'ErpUser\UserController@getTemplate')->name('erp.user.getTemplate');
+	Route::get('get-user', 'ErpUser\UserController@getUser')->name('erp.user.getUser');
 	
 	/* Routes for Invoice Management */
 	Route::get('/invoice', 'ErpUser\Invoice\InvoiceController@index')->name('invoice'); 
