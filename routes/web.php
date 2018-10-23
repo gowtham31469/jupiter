@@ -328,6 +328,7 @@ Route::post('admin/tesco/print-div-tesco-small', 'Admin\Tesco\OrderManagementCnt
 
 Route::post('admin/tesco/generate-div-tesco', 'Admin\Tesco\OrderManagementCntrl@generateDivTesco');
 Route::post('admin/tesco/generate-div-tesco-small', 'Admin\Tesco\OrderManagementCntrl@generateDivTescoSmall');
+Route::post('admin/tesco/pdfbox-div-tesco-small', 'Admin\Tesco\OrderManagementCntrl@pdfboxDivTescoSmall');
 
 Route::post('admin/tesco/set-ce-ratio-template-orders', 'Admin\Tesco\OrderManagementCntrl@setCERatioOrders');
 Route::post('admin/tesco/set-ce-single-template-orders', 'Admin\Tesco\OrderManagementCntrl@setCESingleOrders');
@@ -480,6 +481,19 @@ Route::post('admin/tesco/settings/tax-code', 'Admin\Settings\Tesco\TescoSettings
 Route::post('admin/tesco/add-tesco-tax-code', 'Admin\Settings\Tesco\TescoSettings@addTescoTaxCodes');
 Route::get('admin/tesco/get-tesco-tax-code-details', 'Admin\Settings\Tesco\TescoSettings@getTescoTaxCodesById');
 Route::put('admin/tesco/update-tesco-tax-code', 'Admin\Settings\Tesco\TescoSettings@updateTescoTaxCodesById');
+Route::post('admin/tesco/settings/material', 'Admin\Settings\Tesco\TescoSettings@tescoMaterials');
+Route::post('admin/tesco/add-tesco-material', 'Admin\Settings\Tesco\TescoSettings@addTescoMaterial');
+Route::get('admin/tesco/get-tesco-material-details', 'Admin\Settings\Tesco\TescoSettings@getTescoMaterialById');
+Route::put('admin/tesco/update-tesco-material', 'Admin\Settings\Tesco\TescoSettings@updateTescoMaterialById');
+Route::put('admin/tesco/make-material-enabled', 'Admin\Settings\Tesco\TescoSettings@makeMaterialEnabled');
+Route::put('admin/tesco/make-material-disabled', 'Admin\Settings\Tesco\TescoSettings@makeMaterialDisabled');
+
+Route::post('admin/tesco/settings/error-report-emails', 'Admin\Settings\Tesco\TescoSettings@tescoErrorReportEmails');
+Route::post('admin/tesco/add-tesco-error-report-email', 'Admin\Settings\Tesco\TescoSettings@addTescoErrorReportEmail');
+Route::get('admin/tesco/get-tesco-error-report-email-details', 'Admin\Settings\Tesco\TescoSettings@getTescoErrorReportEmailById');
+Route::put('admin/tesco/update-tesco-error-report-email', 'Admin\Settings\Tesco\TescoSettings@updateTescoErrorReportEmailById');
+Route::put('admin/tesco/make-error-report-email-enabled', 'Admin\Settings\Tesco\TescoSettings@makeErrorReportEmailEnabled');
+Route::put('admin/tesco/make-error-report-email-disabled', 'Admin\Settings\Tesco\TescoSettings@makeErrorReportEmailDisabled');
 
 /** Tesco order-status**/
 Route::post('admin/tesco/tesco-orders', 'Admin\Tesco\OrderStatusCntrl@index');
@@ -558,10 +572,8 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::get('/login', 'ErpuserAuth\LoginController@showLoginForm')->name('login');
 	Route::post('/login', 'ErpuserAuth\LoginController@login');
 	Route::post('/logout', 'ErpuserAuth\LoginController@logout')->name('logout');
-
 	Route::get('/register', 'ErpuserAuth\RegisterController@showRegistrationForm')->name('register');
 	Route::post('/register', 'ErpuserAuth\RegisterController@register');
-
 	Route::post('/password/email', 'ErpuserAuth\ForgotPasswordController@sendResetLinkEmail')->name('password.request');
 	Route::post('/password/reset', 'ErpuserAuth\ResetPasswordController@reset')->name('password.email');
 	Route::get('/password/reset', 'ErpuserAuth\ForgotPasswordController@showLinkRequestForm')->name('password.reset');
@@ -572,15 +584,19 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::get('/users', 'ErpUser\UserController@show')->name('erp-users');
 	Route::post('users', 'ErpUser\UserController@store')->name('erp.user.add');
 	Route::delete('users', 'ErpUser\UserController@destroy')->name('erp.user.delete');
-	
+	Route::post('get-template', 'ErpUser\UserController@getTemplate')->name('erp.user.getTemplate');
 	
 	/* Routes for Invoice Management */
 	Route::get('/invoice', 'ErpUser\Invoice\InvoiceController@index')->name('invoice'); 
+
+	/* Routes for PO Manager Module */
 
 	Route::get('/erp-po-list', 'ErpUser\Invoice\InvoiceController@erpPOList')->name('erp-po'); 
 	
 	Route::get('/erp-order-list', 'ErpUser\Invoice\InvoiceController@erpOrderList')->name('erp-orders');
 	Route::get('/po-manager', 'ErpUser\Pomanager\PoManagerController@index')->name('poManager'); 
-
+	Route::post('/po-manager/order-details', 'ErpUser\Pomanager\PoManagerController@orderDetails');
+	Route::post('/po-manager/submit-po-verify', 'ErpUser\Pomanager\PoManagerController@submitPoVerify'); 
+	Route::post('/po-manager/change_po_updated_status', 'ErpUser\Pomanager\PoManagerController@changePoUpdatedStatus'); 
 
 });

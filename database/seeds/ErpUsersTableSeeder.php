@@ -12,13 +12,15 @@ class ErpUsersTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('erpusers')->insert([
-			'id'   => 1,
-            'name' => "ERP Admin",
-            'email' => 'erpadmin@gmail.com',
-            'password' => bcrypt('123456789'),
-            'created_at'=> Carbon::now('Asia/Kolkata')->toDateTimeString(),
-            'updated_at'=> Carbon::now('Asia/Kolkata')->toDateTimeString()
-        ]);	
+		if(!count(\App\Erpuser::all()) ){
+			\App\Erpuser::truncate();
+			\App\Erpuser::create([
+				'id'   => 1,
+				'name' => "ERP Admin",
+				'email' => 'erpadmin@gmail.com',
+				'password' => bcrypt('123456789'),
+				'is_admin'	=> true
+			]);	
+		}
     }
 }

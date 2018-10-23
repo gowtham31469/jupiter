@@ -135,7 +135,7 @@
                          {!! Form::label('feedback_email', 'Your Email', ['class' => 'form_label']) !!}
                          <div class="input-group">
                            <span class="input-group-addon input-sm" id="basic-addon1">@</span>
-                           {!! Form::email('feedback_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required','onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
+                           {!! Form::email('feedback_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required','onkeyup' => '$(this).val($(this).val().toLowerCase());','maxlength' => '50')) !!}
                          </div>
                          <div class="help-block with-errors"></div>
                        </div>
@@ -174,14 +174,14 @@
                    <div id="admin_profile_result"></div>
                      <div class="form-group has-feedback">
                        {!! Form::label('admin_profile_name', 'Name', ['class' => 'form_label']) !!}
-                       {!! Form::text('admin_profile_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required')) !!}
+                       {!! Form::text('admin_profile_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required','maxlength' => '25')) !!}
                        <div class="help-block with-errors"></div>
                      </div>
                      <div class="form-group has-feedback">
                        {!! Form::label('admin_profile_email', 'Email', ['class' => 'form_label']) !!}
                        <div class="input-group">
                          <span class="input-group-addon input-sm" id="basic-addon1">@</span>
-                         {!! Form::email('admin_profile_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required','onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
+                         {!! Form::email('admin_profile_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required','onkeyup' => '$(this).val($(this).val().toLowerCase());','maxlength' => '50')) !!}
                        </div>
                        <div class="help-block with-errors"></div>
                      </div>

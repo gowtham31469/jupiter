@@ -47,16 +47,21 @@ class Erpuser extends Authenticatable
      */
 	 public static function users()
     {
-        $base_data = Erpuser::all();
+        $base_data = Erpuser::orderBy('id', 'asc')->get();
 		$companies = array();
 		foreach($base_data as $base){
-			$base->company = ErpuserCompanyMapping::where('erp_user', $base->id)
+			$base->company = \App\ErpuserCompanyMapping::where('erp_user', $base->id)
 								->join('company', 'erpuser_company_mapping.company', 'company.id')
 								->select('company.name', 'company.id')->get();
 			
-			$base->buyer = ErpuserBuyerMapping::where('erp_user', $base->id)
+			$base->buyer = \App\ErpuserBuyerMapping::where('erp_user', $base->id)
 								->join('buyers', 'erpuser_buyer.buyer', 'buyers.id')
 								->select('buyers.buyer_name as name', 'buyers.id')
+								->get();
+			
+			$base->roles = \App\ErpUserRolesMapping::where('erp_user', $base->id)
+								->join('erp_roles', 'erpusers_roles_mapping.role', 'erp_roles.id')
+								->select('erp_roles.name', 'erp_roles.id')
 								->get();
 		}
 		 
