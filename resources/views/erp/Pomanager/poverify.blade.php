@@ -31,6 +31,25 @@
 	cursor:pointer;
 	color: grey;
 }
+.btn-loader {
+  border: 8px solid #f3f3f3 !important;
+  border-radius: 50% !important;
+  border-top: 8px solid #3498db !important;
+  width: 50px !important;
+  height: 50px !important;
+  -webkit-animation: spin 2s linear infinite !important; /* Safari */
+  animation: spin 2s linear infinite !important;
+}
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 </style>
 @section('navbar') 
 
@@ -58,13 +77,18 @@
                         </tr>
                       </thead>
                       <tbody>
-						  @foreach($orders as $vals)
+						    @foreach($orders as $vals)
+						  
                         <tr id="{{$vals->id}}">
                           	<td class="">{{ $loop->iteration }}</td>
 							  <td>{{$vals->id}}</td>
 							  <td>{{$vals->company_name}}</td>
 							  <td>{{$vals->po_no}}</td>
-							 <td><span class="label label-info">{{$vals->status}}</span></td>
+							  @if($vals->status == 2)
+								<td><span class="label label-danger">{{$vals->status_name}}</span></td>
+							  @else
+								<td><span class="label label-info">{{$vals->status_name}}</span></td>
+						      @endif
 							<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick="view_order_details('{{ $vals->id }}','{{ $vals->po_no }}','{{ $vals->buyer_id }}','{{ $vals->customer_id }}','{{ $vals->po_file }}')"><i class="fa fa-eye action-button-view" data-placement="top" title="" data-original-title="view Details"></i></a></td>
                           </tr> 
 						  @endforeach
@@ -117,7 +141,7 @@
 
 		  <div class="modal-footer buyer-selection-modal-footer">
 				  {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-			  	  <button class="btn btn-primary btn-sm" onclick="submit()">Submit</button>
+			  	  <button class="btn btn-primary btn-submit btn-sm" data-dismiss="modal" onclick="submit()">Submit</button>
 		  </div>
 
 	   </div>
@@ -225,7 +249,7 @@
 			 var comment = false;
 			 var commenttext = $('#comment_box').val();
 		 }
-		 
+		 //$('.btn-submit').addClass('btn-loader')
 		 
 		 var csrf_token = $('meta[name="csrf-token"]').attr('content');
 		 var erp_order_id = $('#erp_order_id').val();
@@ -310,6 +334,14 @@
 				var i=1;
 				
 				$(data.orderlist).each(function (key, index) {
+					if(index.status == 2)
+					{
+						var label = 'label label-danger';
+					}
+					else
+					{
+						var label = 'label label-info';
+					}
 					$('#order-details-table tbody').append(`
 						<tr id="`+index.id+`">
                           	<td class="">`+ i +`</td>
@@ -320,7 +352,7 @@
 							  <td class="size_td">`+index.size+`</td>
 							  <td class="qty_td">`+index.order_quantity+`</td>
 							  <td class="price_td">`+index.price+`</td>
-							  <td><span class="label label-info">`+index.status+`</span></td>
+							  <td><span class="`+label+`">`+index.status_name+`</span></td>
                           </tr>`)
 					i++;
 				})
