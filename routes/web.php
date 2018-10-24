@@ -569,6 +569,8 @@ Route::get('admin/audit-trail', 'Admin\AuditTrail\AuditTrailController@index');
 Route::get('admin/audit-trail/get-comparison-details', 'Admin\AuditTrail\AuditTrailController@getComparisonDataById');
 /* ERP Related Routes */
 Route::group(['prefix' => 'erp'], function () {
+	Route::get('/', 'ErpUser\UserController@index')->name('erp');
+	Route::get('/home', 'ErpUser\UserController@index')->name('home');
 	Route::get('/login', 'ErpuserAuth\LoginController@showLoginForm')->name('login');
 	Route::post('/login', 'ErpuserAuth\LoginController@login');
 	Route::post('/logout', 'ErpuserAuth\LoginController@logout')->name('logout');
@@ -578,8 +580,7 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::post('/password/reset', 'ErpuserAuth\ResetPasswordController@reset')->name('password.email');
 	Route::get('/password/reset', 'ErpuserAuth\ForgotPasswordController@showLinkRequestForm')->name('password.reset');
 	Route::get('/password/reset/{token}', 'ErpuserAuth\ResetPasswordController@showResetForm');
-	Route::get('/', 'ErpUser\UserController@index')->name('erp');
-	Route::get('/home', 'ErpUser\UserController@index')->name('home');
+	
 	/* Routes for User Management */
 	Route::get('/users', 'ErpUser\UserController@show')->name('erp-users');
 	Route::post('users', 'ErpUser\UserController@store')->name('erp.user.add');

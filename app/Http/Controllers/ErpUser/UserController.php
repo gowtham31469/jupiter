@@ -23,7 +23,9 @@ class UserController extends Controller
      */
     public function __construct()
     {
+		$roles = "ADMIN";
         $this->middleware('erpuser');
+        $this->middleware('role_permission:'.$roles)->except('index');
    
     }
 
