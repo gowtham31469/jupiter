@@ -15,7 +15,7 @@ class AddPartialStatusToErpOrders extends Migration
     {
       	 Schema::table('erp_orders', function($table) {
         	$table->tinyInteger('partial_status');
-		$table->tinyInteger('po_updated_status');
+		    $table->tinyInteger('po_updated_status');
    	 });
     }
 

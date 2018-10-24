@@ -67,4 +67,46 @@ class Erpuser extends Authenticatable
 		 
 		return $base_data;
     }
+	/**
+     * Fetch specified erpuser details.
+     *
+     * @param  erpuserid  $id
+     * @return void
+     */
+	 public static function user($id)
+    {
+        $base_data = Erpuser::where('id', $id)->get();
+		$companies = array();
+		foreach($base_data as $base){
+			$base->company = \App\ErpuserCompanyMapping::where('erp_user', $base->id)
+								->join('company', 'erpuser_company_mapping.company', 'company.id')
+								->select('company.id')->get();
+			
+			$base->buyer = \App\ErpuserBuyerMapping::where('erp_user', $base->id)
+								->join('buyers', 'erpuser_buyer.buyer', 'buyers.id')
+								->select('buyers.id')
+								->get();
+			
+			$base->roles = \App\ErpUserRolesMapping::where('erp_user', $base->id)
+								->join('erp_roles', 'erpusers_roles_mapping.role', 'erp_roles.id')
+								->select('erp_roles.id')
+								->get();
+			
+			$user_template = \App\ErpUsersTemplateMapping::where('erp_user', $base->id)
+								->join('buyers', 'erpusers_template_mapping.buyer', 'buyers.id')
+								->select('buyers.buyer_name', 'buyers.id', 'erpusers_template_mapping.templates')
+								->get();
+			$temp = array();
+			foreach($base->buyer as $b){
+				foreach($user_template as $t){
+					if($b->id == $t->id){
+						$temp[$t->buyer_name][] = $t->templates;
+					}
+				}
+			}
+			$base->user_template = $temp;
+		}
+		
+		return $base_data;
+    }
 }
