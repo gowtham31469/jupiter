@@ -3954,4 +3954,5 @@ class OrderController extends Controller
                 $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
             }
             return $result;
-        }
+          }
+}

@@ -6563,6 +6563,8 @@ function mapStoredValues(oDetails) {
     var order_status = '';
     var last_insertions = [];
     var header = 'Create Order For TESCO - '+localStorage.getItem('zone')+' - '+localStorage.getItem('template_group');
+    var temp_data = JSON.parse(localStorage.getItem("data"));
+    
     $('.page-header h4 strong').text(header);
     $('.save-btn').data('insert','false');
 
@@ -6662,6 +6664,21 @@ function mapStoredValues(oDetails) {
             $('.cancel-btn').hide();
         }
     }
+    /** [For MOQ validation after page load] */
+     /** [ Dynamic moq value assignment on supplier change ] */
+     var moq_array = JSON.parse(localStorage.getItem("moq_values"));
+     $.each(temp_data, function (i, item) {
+        var temp_name = item.template_name;
+        if(moq_array != null)
+        {
+            moq_array.forEach(function(i,j){
+                moq = i[temp_name];
+            })
+            $('.count_' + item.template_name.replace(' ', '') ).attr("min",moq); 
+            $('.count_' + item.template_name.replace(' ', '') ).data("min-error","MOQ should be greater than "+moq); 
+        }
+    });
+               
 	/** [ Refresh boostrap form-validator ]  */
 	$('#create_tesco_order_form').validator('validate');
     $(".selectpicker").selectpicker('refresh');
@@ -7016,7 +7033,6 @@ function validateMOQ(obj) {
                 quantity_array.push(quantity);
             });
         });
-
         if ($(obj).val() != '' && $(obj).val() > 0 ) {
             /** hide quantity missing error msgs */
             $('.quantity-feedback').removeClass('has-error has-danger');
