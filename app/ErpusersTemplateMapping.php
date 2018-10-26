@@ -18,7 +18,7 @@ class ErpusersTemplateMapping extends Model
       *
       * @var array
       */
-      protected $fillable = ['erp_user', 'buyer', 'templates', 'created_at', 'updated_at'];
+      protected $fillable = ['erp_user', 'buyer', 'templates', 'company', 'created_at', 'updated_at'];
 	
 	/**
 		* Get the Templates of user.

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Response;
 use View;
 use DB;
+use Auth;
 use App\Erpuser;
 use App\ErpuserBuyerMapping;
 use App\ErpuserCompanyMapping;
@@ -23,9 +24,9 @@ class UserController extends Controller
      */
     public function __construct()
     {
-		$roles = "ADMIN";
+		$role = "ADMIN";
         $this->middleware('erpuser');
-        $this->middleware('role_permission:'.$roles)->except('index');
+        $this->middleware('role_permission:'.$role)->except('index');
    
     }
 
@@ -96,10 +97,17 @@ class UserController extends Controller
 					$buyer 	= \App\Buyer::where('buyer_name', $t[1])
 								->value('id');
 					
+					$im_table 	= \App\Buyer::where('buyer_name', $t[1])
+								->value('item_master_table');
+					
+					$company_id	= DB::table($im_table)->where('id', intval($t[0]))
+										->value('company_id');
+					
 					\App\ErpusersTemplateMapping::create([
 						'erp_user'	=>	$data->id,
 						'buyer'		=>	$buyer,
-						'templates'	=>	intval($t[0])
+						'templates'	=>	intval($t[0]),
+						'company'	=>	$company_id
 					]);
 				}
 				/*   ErpUser - Roles Mapping  */
@@ -161,11 +169,18 @@ class UserController extends Controller
 				$t		= explode("_", $template);
 				$buyer 	= \App\Buyer::where('buyer_name', $t[1])
 							->value('id');
+				
+				$im_table 	= \App\Buyer::where('buyer_name', $t[1])
+								->value('item_master_table');
+					
+				$company_id	= DB::table($im_table)->where('id', intval($t[0]))
+										->value('company_id');
 
 				\App\ErpusersTemplateMapping::create([
 					'erp_user'	=>	$id,
 					'buyer'		=>	$buyer,
-					'templates'	=>	intval($t[0])
+					'templates'	=>	intval($t[0]),
+					'company'	=>	$company_id
 				]);
 			}
 			\App\ErpUserRolesMapping::where('erp_user', $id)->delete();
@@ -264,8 +279,9 @@ class UserController extends Controller
 			
 			$user[0]->templates = array_combine($t_name, $templates);
 		}
-		
+		if($request->ajax()){
+			return response()->json(['error'=> false,'data' => $user], 200);
+		}
 		return $user;
     }
-
 }
