@@ -74,7 +74,7 @@ class ErpOrders
 	            	'order_qnty_table_id' 	=> $vals->id,
 	            	'template_id'			=> $orders->template_id,
 	            	'company_id'			=> $orders->company_id,
-	            	'refenece_name'			=> $orders->item_name,
+	            	'reference_name'		=> $orders->item_name,
 	            	'ocn_number'	   		=> $orders->ocn_number,
 	            	'status' 				=> 1
 				]);
