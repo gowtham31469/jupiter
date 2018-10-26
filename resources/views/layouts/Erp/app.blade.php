@@ -84,6 +84,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/1.3.1/js/toastr.js"></script>
 	<!-- For Data Manipulation   -->
 	<script src="{{ asset('js/Erp/store.js') }}"></script>
+	<script src="{{ asset('js/Erp/update.js') }}"></script>
 	<script>
 		var base_url = "<?php echo  url('/') ?>";
 		function showSnackbar() {

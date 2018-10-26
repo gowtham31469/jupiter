@@ -706,15 +706,15 @@ class TescoSettings extends Controller
       }
 
         /**
-          * Tesco metadata tax code list show using ajax.
+          * Tesco/Orchestra metadata tax code list show using ajax.
           * @author <Praveen>
           * @return \Illuminate\Http\Response
           */
-         public function tescoTaxCode()
+         public function taxCode()
          {
            try {
-                 $tesco_taxcode = DB::table('tesco_tax_code')->select('id','tax_code','tax_type','is_enabled', 'tax')->orderBy('is_enabled','desc')->get();
-                 return response()->json(['error'=>'false','message' =>'success', 'tesco_taxcodes' => $tesco_taxcode]);
+                 $taxcode = DB::table('tesco_tax_code')->select('id','tax_code','tax_type','is_enabled', 'tax')->orderBy('is_enabled','desc')->get();
+                 return response()->json(['error'=>'false','message' =>'success', 'taxcodes' => $taxcode]);
                } catch (\Exception $e)
                {
                  return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
@@ -722,12 +722,12 @@ class TescoSettings extends Controller
          }
 
       /**
-        * Add Tesco tax code.
+        * Add Tesco/Orchestra tax code.
         * @param \Illuminate\Http\Request
         * @author <Praveen>
         * @return \Illuminate\Http\Response
         */
-       public function addTescoTaxCodes(Request $request)
+       public function addTaxCodes(Request $request)
        {
            try {
                 $is_exists = TescoTaxCode::where('tax_type', 'ilike', $request['tax_type'])->where('tax_code', 'ilike', $request['tax_code'])->where('tax', '=', $request['tax'])->select('id')->get();
@@ -754,29 +754,29 @@ class TescoSettings extends Controller
            return $result;
        }
       /**
-        * Get Tesco tax code details by ID for editing.
+        * Get Tesco/Orchestra tax code details by ID for editing.
         * @param Tesco tax code id
         * @author <Praveen>
         * @return \Illuminate\Http\Response
         */
-       public function getTescoTaxCodesById(Request $request)
+       public function getTaxCodesById(Request $request)
        {
        try {
              $id = $request['id'];
-             $tesco_tax_code = DB::table('tesco_tax_code')->select('id','tax_code','tax_type','is_enabled', 'tax')->where('tesco_tax_code.id',$id)->get();
-             return response()->json(['error'=>'false','message' =>'success', 'tesco_tax_codes' => $tesco_tax_code]);
+             $tax_code = DB::table('tesco_tax_code')->select('id','tax_code','tax_type','is_enabled', 'tax')->where('tesco_tax_code.id',$id)->get();
+             return response()->json(['error'=>'false','message' =>'success', 'tax_codes' => $tax_code]);
            } catch (\Exception $e)
            {
              return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
            }
        }
       /**
-       * Update tax code by id.
+       * Update Tesco/Orchestra tax code by id.
        * @param taxcode id
        * @author <Praveen>
        * @return \Illuminate\Http\Response
        */
-       public function updateTescoTaxCodesById(Request $request)
+       public function updateTaxCodesById(Request $request)
        {
        try {
              $id        = $request['id'];

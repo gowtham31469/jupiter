@@ -12,6 +12,7 @@ function getTemplate(buyer, sVal) {
 			$(".loader").show();
 		},
 		success: function (data) {
+			console.log(typeof data)
 			$('#templateDiv').removeClass('hidden')
 			$('#templateHiecs').append(`<div class="col-md-6" id=` + sVal + ` style="box-shadow: 0px 1px 5px 1px #eee;padding:10px 0px;"><p style="font-weight: bold;" class="text-center">` + buyer.toUpperCase() + `</p><div id="` + buyer + `_tree"> </div></div>`);
 

@@ -23,7 +23,9 @@ class UserController extends Controller
      */
     public function __construct()
     {
+		$roles = "ADMIN";
         $this->middleware('erpuser');
+        $this->middleware('role_permission:'.$roles)->except('index');
    
     }
 
@@ -115,6 +117,70 @@ class UserController extends Controller
 		}
 	}
 	/**
+     * Update the user.
+     * @author [Gba] <[guberakannan@wizroots.com]>
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request)
+    {
+		$input['email']	= $request->email;
+		$id				= $request->id;
+		$email_rules    = array('email' => 'unique:erpusers,email,'.$id);
+		$emailValidator = Validator::make($input,$email_rules);
+
+		if($emailValidator->fails())
+		{
+			return response()->json(['error'=> true, 'message' =>'Email Already Exists'], 409);
+		}
+		else
+		{
+			/*   Update ErpUser   */
+			\App\Erpuser::where('id', $id)->update([
+				'name'	=>	$request->name,
+				'email'	=>	$request->email,
+			]);
+			/*   ErpUser - Buyer Mapping  */
+			\App\ErpuserBuyerMapping::where('erp_user', $id)->delete();
+			foreach($request->buyer as $buyer){
+				\App\ErpuserBuyerMapping::create([
+					'erp_user'	=>	$id,
+					'buyer'	=>	$buyer
+				]);
+			}
+			/*   ErpUser - Company Mapping  */
+			\App\ErpuserCompanyMapping::where('erp_user', $id)->delete();
+			foreach($request->company as $company){
+				\App\ErpuserCompanyMapping::create([
+					'erp_user'	=>	$id,
+					'company'	=>	$company
+				]);
+			}
+			/*   ErpUser - Template Mapping  */
+			\App\ErpusersTemplateMapping::where('erp_user', $id)->delete();
+			foreach($request->templates as $template){
+				$t		= explode("_", $template);
+				$buyer 	= \App\Buyer::where('buyer_name', $t[1])
+							->value('id');
+
+				\App\ErpusersTemplateMapping::create([
+					'erp_user'	=>	$id,
+					'buyer'		=>	$buyer,
+					'templates'	=>	intval($t[0])
+				]);
+			}
+			\App\ErpUserRolesMapping::where('erp_user', $id)->delete();
+			/*   ErpUser - Roles Mapping  */
+			foreach($request->roles as $role){
+
+				\App\ErpUserRolesMapping::create([
+					'erp_user'	=>	$id,
+					'role'		=>	$role
+				]);
+			}
+			return Response::json(array('error' => false, 'message' => 'User Details Updated'), 200);
+		}
+	}
+	/**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
@@ -133,7 +199,17 @@ class UserController extends Controller
      */
     public function getTemplate(Request $request)
     {
-		switch ($request->buyer){
+		return $this->getTemplateDetail($request->buyer); 
+    }
+	/**
+     * Common Function to fetch template hierarchy.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getTemplateDetail($buyer)
+    {
+		switch ($buyer){
 			case "Tesco":
 				$treeviewData= DB::table("tesco_item_master")->select('id','item_name as text','parent_id')->whereIn('parent_id', [0,1])->get()->toArray();
 				break;
@@ -166,6 +242,30 @@ class UserController extends Controller
 			$treefinalData=json_encode($tree);
 			return $treefinalData;
        } 
+    }
+	/**
+     * Get the specified user details.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getUser(Request $request)
+    {
+		$user = \App\Erpuser::user($request->id);
+		$templates 	= array();
+		$t_name		= array();
+		foreach($user[0]->buyer as $buyer){
+			
+			$b = \App\Buyer::where('id', $buyer->id)->first();
+			if($b){
+				array_push($templates, $this->getTemplateDetail($b->buyer_name));
+				array_push($t_name, $b->buyer_name);
+			}
+			
+			$user[0]->templates = array_combine($t_name, $templates);
+		}
+		
+		return $user;
     }
 
 }
