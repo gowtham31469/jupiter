@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers\ErpUser;
+namespace App\Http\Controllers\ErpUser\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -9,12 +9,8 @@ use Response;
 use View;
 use DB;
 use Auth;
-use App\Erpuser;
-use App\ErpuserBuyerMapping;
-use App\ErpuserCompanyMapping;
-use App\Buyer;
 
-class UserController extends Controller
+class OrderController extends Controller
 {
     
     /**
@@ -26,7 +22,7 @@ class UserController extends Controller
     {
 		$role = "ADMIN";
         $this->middleware('erpuser');
-        $this->middleware('role_permission:'.$role)->except('index');
+        $this->middleware('role_permission:'.$role);
    
     }
 
@@ -37,17 +33,7 @@ class UserController extends Controller
      */
     public function index()
     {
-		if(Auth::guard('erpuser')->user()->is_user){
-			$roles 	= \App\ErpRoles::pluck('name')->all();
-		}else{
-			$id		= Auth::guard('erpuser')->user()->id;
-		
-			$roles 	= \App\ErpUserRolesMApping::where('erp_user', $id)
-						->join('erp_roles', 'erpusers_roles_mapping.role', 'erp_roles.id')
-						->pluck('name')->all();
-		}
-		
-		return view('erp.home', compact('roles'));
+		//
 	}
 	
 	/**
@@ -61,7 +47,7 @@ class UserController extends Controller
 		$roles 		= \App\ErpRoles::pluck('name', 'id')->all();
 		$company 	= DB::table('company')->pluck('name', 'id')->all();
 		$buyers 	= \App\Buyer::pluck('buyer_name as name', 'id')->all();
-		return view('erp.users.user-list', compact('users', 'company', 'buyers', 'roles'));
+		return view('erp.Admin Orders.index', compact('users', 'company', 'buyers', 'roles'));
 	}
 	/**
      * Store the users.
