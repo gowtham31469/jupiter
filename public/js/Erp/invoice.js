@@ -1,4 +1,5 @@
-	function dynamicTable() {
+	var place_of_supply = 0;
+    function dynamicTable() {
         var customer_id       = $("#customer option:selected").val();
         var html = "";
         $.ajax({
@@ -87,13 +88,14 @@
                         }) 
                         tax_amnt[vals] = sub_amnt;                                     
                     });
-                              
+                    place_of_supply = data.orderlist[0].place_of_supply;                 
                     $(data.orderlist).each(function(index, value)
                     {
+                        
                         var size = (value.size == null)?'-':value.size ; 
-                        console.log(uniqueTax)
+
                         tr += '<tr class="trClass" id="'+value.id+'">';
-                        tr += '<td><input name="select_all" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" /></td><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.id+'</td><td>'+value.refenece_name+'</td><td>'+size+'</td><td>'+value.hsn_code+'</td><td>'+value.tax+' %</td><td class="qnty">'+value.order_quantity+'</td><td style="width: 116px;"><input type="text" value="" class="form-control delivery-qnty" onkeyup="updateAmount.call(this,'+uniqueTax+')"></td><td class="rate">'+value.rate+'</td><td class="amnt">'+value.order_quantity * value.rate+'</td>';
+                        tr += '<td><input name="select_all" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" /></td><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.id+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td>'+value.hsn_code+'</td><td class="tax-td">'+value.tax+' %</td><td class="qnty">'+value.order_quantity+'</td><td style="width: 116px;"><input type="text" value="" class="form-control delivery-qnty" onkeyup="updateAmount.call(this,'+uniqueTax+')"></td><td class="rate">'+value.rate+'</td><td class="amnt">'+value.order_quantity * value.rate+'</td>';
                         tr += '</tr>';
                         qnty += value.order_quantity;
                         amnt += (value.order_quantity*value.rate);
@@ -105,26 +107,14 @@
 
                     $('.order-details').html('<form id="frm-orders"><table class="table text-center"><thead><tr><th></th><th>Order No</th><th>PO No</th><th>Style</th><th>OCN No</th><th>Item</th><th>Reference</th><th>Size</th><th>HSN No</th><th>Tax</th><th>Order Quantity</th><th>Delivered Quantity</th><th>Rate</th><th>Amount</th></tr></thead><tbody>'+tr+'</tbody></table></form>');
 
-                    var tax_table = $('.orders-tax').html('<form id="orders-tax"><table class="table text-center" style="margin-left: 31px;margin-top: -18px;"><thead><tr><th>Tax</th><th>Base value</th><th>Amount</th></tr></thead><tbody class="tax-tabl"></tbody></table></form>')
+                    // var tax_table = $('.orders-tax').html('<form id="orders-tax"><table class="table text-center" style="margin-left: 31px;margin-top: -18px;"><thead><tr><th>Tax</th><th>Base value</th><th>Amount</th></tr></thead><tbody class="tax-tabl"></tbody></table></form>')
 
-                    Object.keys(tax_amnt).forEach(function(key) {
+                    updateTaxAmount(tax_amnt)
+                    
 
-                      if (data.orderlist[0].place_of_supply==1){
-                        tax_tr = '<tr><td>CGST ('+(key/2)+'% )</td><td>'+tax_amnt[key]+'</td><td>'+(((key/2)/100)*tax_amnt[key]).toFixed(3)+'</td></tr><tr><td>SGST ('+(key/2)+'% )</td><td>'+tax_amnt[key]+'</td><td>'+ (((key/2)/100)*tax_amnt[key]).toFixed(3)+'</td></tr>'
-                        }
-                        else if (data.orderlist[0].place_of_supply==2){
-                            
-                            tax_tr = '<tr><td>IGST ('+key+'% )</td><td>'+tax_amnt[key]+'</td><td>'+((key/100)*tax_amnt[key]).toFixed(3)+'</td></tr>'
-                        }
-                        else{
-                            tax_tr = '<tr><td>Taxes ('+key+'% )</td><td>'+tax_amnt[key]+'</td><td>'+ ((key/100)*tax_amnt[key] ).toFixed(3)+'</td></tr>'
-                        }
-                        $('.tax-tabl').append(tax_tr);
-                    });
-
-                    $('.tax-tabl').append('<tr><td colspan="2"><strong>SubTotal</strong></td><td class="tax-total">'+ taxSubTotal() +'</td></tr><tr></tr>')                
-
-                    $('.extra-charges').html('<form id="extra-charges"><table class="table text-center" style="margin-left: 31px;margin-top: -18px;"><thead><tr><th>Description</th><th>Tax</th><th>Amount</th></tr></thead><tbody><tr><td><div style="width: 65%"><select class="charges" id="charges" name="charges" drequired=""><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td>1212</td><td>1212</td></tr><tr><td><div style="width: 65%"><select  id="charges" name="charges" class="charges" required=""><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td>1212</td><td>1212</td></tr><tr><td><div style="width: 65%"><select class="charges" id="charges" name="charges" drequired=""><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td>1212</td><td>1212</td></tr><tr><td colspan="2"><strong>SubTotal</strong></td><td>434</td></tr><tr></tr><tr><td colspan="2"><strong>Grand Total</strong></td><td>434</td></tr><tr></tr></tbody></table></form>')
+                    // $('.tax-tabl').append('<tr><td colspan="2"><strong>SubTotal</strong></td><td class="tax-total">'+ taxSubTotal() +'</td></tr><tr></tr>')                
+                    var grandTotal = updateTotal();
+                    $('.extra-charges').html('<form id="extra-charges"><table class="table text-center extra-charges" style="margin-left: 31px;margin-top: -18px;"><thead><tr><th colspan="2">Description</th><th>Amount</th></tr></thead><tbody><tr><td><div style="width: 65%"><select class="charges" id="charges" name="charges" drequired=""><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td style="width: 116px;" colspan="2"><input type="text" value="" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr><tr><td colspan="2"><div style="width: 65%"><select  id="charges" name="charges" class="charges" required=""><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td style="width: 116px;"><input type="text" value="" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr><tr><td colspan="2"><div style="width: 65%"><select class="charges" id="charges" name="charges" required=""><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td style="width: 116px;"><input type="text" value="" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr><tr><td colspan="2"><strong>SubTotal</strong></td><td class="sub-extra">0</td></tr><tr></tr><tr><td colspan="2"><strong>Grand Total</strong></td><td class="grand-total">'+grandTotal+'</td></tr><tr></tr></tbody></table></form>')
 
                     var checkboxes = $('.dynamic-table td input[type="checkbox"]');
                     $(document).find('.charges').selectpicker();                  
@@ -155,24 +145,39 @@
         })
     }
 
-    function updateAmount(obj) {     
+    function updateAmount() {
+        // var flg = 0;
         var tax_array= [].slice.call(arguments);
-        console.log(tax_array)
         var amnt  = 0 ;
-        if($(obj).val() <= parseInt($(obj).closest('tr').find('.qnty').text())){
+        var result = [];
+        var taxsum = {};
+        var arr = [];
 
-            amnt  = parseInt($(obj).val()) * $(obj).closest('tr').find('.rate').text();
-            $(obj).closest('tr').find('.amnt').html(amnt)
+        if($(this).val() <= parseInt($(this).closest('tr').find('.qnty').text())){
+
+            amnt  = parseInt($(this).val()) * $(this).closest('tr').find('.rate').text();
+            $(this).closest('tr').find('.amnt').html(amnt)
         }
         else{
-            amnt  = $(obj).closest('tr').find('.qnty').text() * $(obj).closest('tr').find('.rate').text();
-            $(obj).closest('tr').find('.amnt').html(amnt)
-            $(obj).val('')
+            amnt  = $(this).closest('tr').find('.qnty').text() * $(this).closest('tr').find('.rate').text();
+            $(this).closest('tr').find('.amnt').html(amnt)
+            $(this).val('')
         }        
         $('.total-amnt').html(totalAmount())
         $('#total-qnty').html(quantityTotal()) 
         $('.tax-total').html(taxSubTotal()) 
-        updateTaxAmount(uniqueTax)
+        $(tax_array).each(function(key, vals){
+            $('.order-details table tbody tr').each(function(){
+                if(parseInt($(this).find($(".tax-td")).text().split(" ")[0]) == vals){           
+                    val=taxsum[vals] == undefined ? 0 : taxsum[vals];
+                    val+= $(this).find($(".amnt")).text() == "" ? 0 :parseInt($(this).find($(".amnt")).text())
+                    taxsum[vals] = val;
+                    console.log(taxsum)
+                }
+            });
+        });
+        updateTaxAmount(taxsum)
+        updateTotal()
     }
     function totalAmount(){
         var result = [];
@@ -207,16 +212,36 @@
         return tax_amnt[2] ;
     }
 
-    function updateTaxAmount(uniqueTax){
-        console.log(uniqueTax)
-        // var taxIndexes = [] ;
-        // $(uniqueTax).each(function(key, vals){
-        //     var sub_amnt = 0;
-        //     taxIndexes[vals] = $.map(data.orderlist, function(obj, index) {
-        //         if(obj.tax == vals) {
-        //             sub_amnt += obj.order_quantity*obj.rate;
-        //         }
-        //     }) 
-        //     tax_amnt[vals] = sub_amnt;                                     
-        // });
+    function updateTaxAmount(tax_amnt){
+        var tax_tr = "";
+        var tax_table = $('.orders-tax').html('<form id="orders-tax"><table class="table text-center" style="margin-left: 31px;margin-top: -18px;"><thead><tr><th>Tax</th><th>Base value</th><th>Amount</th></tr></thead><tbody class="tax-tabl"></tbody></table></form>')
+        Object.keys(tax_amnt).forEach(function(key) {
+          if (place_of_supply==1){
+            tax_tr = '<tr><td>CGST ('+(key/2)+'% )</td><td class="cgst_'+key+'">'+tax_amnt[key]+'</td><td>'+(((key/2)/100)*tax_amnt[key]).toFixed(3)+'</td></tr><tr><td>SGST ('+(key/2)+'% )</td><td class="sgst_'+key+'">'+tax_amnt[key]+'</td><td>'+ (((key/2)/100)*tax_amnt[key]).toFixed(3)+'</td></tr>'
+            }
+            else if (place_of_supply==2){
+                
+                tax_tr = '<tr><td>IGST ('+key+'% )</td><td class="igst_'+key+'">'+tax_amnt[key]+'</td><td>'+((key/100)*tax_amnt[key]).toFixed(3)+'</td></tr>'
+            }
+            else{
+                tax_tr = '<tr><td>Taxes ('+key+'% )</td><td>'+tax_amnt[key]+'</td><td>'+ ((key/100)*tax_amnt[key] ).toFixed(3)+'</td></tr>'
+            }
+            $('.tax-tabl').append(tax_tr);
+        });
+        $('.tax-tabl').append('<tr><td colspan="2"><strong>SubTotal</strong></td><td class="tax-total">'+ taxSubTotal().toFixed(3) +'</td></tr><tr></tr>')
+    }
+
+    function updateTotal()
+    {
+        var result = 0;
+        $('.extra-amnt').each(function(i, obj){
+            if($.isNumeric(this.value)) {
+                result += (this.value) == "" ? 0 :parseFloat(this.value)
+                // result += parseFloat(this.value);
+            }
+        })
+        $('.sub-extra').html(result)
+        var grandTotal = parseFloat($('.tax-total').text())+ parseFloat($('.total-amnt').text()) + parseFloat($('.sub-extra').text());
+        $('.grand-total').html(grandTotal)
+        
     }
