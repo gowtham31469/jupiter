@@ -33,6 +33,7 @@ use App\Classes\ApproveTescoOrders;
 use App\Classes\CancelTescoOrders;
 use PDF;
 use Carbon\Carbon;
+use App\Classes\ErpOrders;
 
 class OrderController extends Controller
 {
@@ -1428,48 +1429,56 @@ class OrderController extends Controller
      * @return boolean true or false
      */
     public function uploadCombinedOrdersPO(Request $request)
-        {
-           try {
-            $template_ids  = explode(',',$request['template_id']);
-            $template     = explode(',',$request['templates']);
-            
-             $po_file = $request['po_file'];
-             $destination_path='/storage/app/public/po-files/';
-             $path='storage/app/public/po-files/';
-             $Orname = $po_file->getClientOriginalName();
-             $filename= 'TESCO_PO_'.time().'_'.preg_replace('/\s+/', '-', $Orname);
-             $po_file->move($path,$filename);
-             $destination_path_insert=$destination_path.$filename;
-              foreach($template_ids as $key => $template_id)
+    {
+      try {
+         $erp_obj      = new ErpOrders();
+         $template_ids = explode(',',$request['template_id']);
+         $template     = explode(',',$request['templates']);
+        
+         $po_file = $request['po_file'];
+         $destination_path='/storage/app/public/po-files/';
+         $path='storage/app/public/po-files/';
+         $Orname = $po_file->getClientOriginalName();
+         $filename= 'TESCO_PO_'.time().'_'.preg_replace('/\s+/', '-', $Orname);
+         $po_file->move($path,$filename);
+         $destination_path_insert=$destination_path.$filename;
+          foreach($template_ids as $key => $template_id)
+          {
+              if($template_id > 0)
               {
-                  if($template_id > 0)
-                  {
-                    //Dynamic function name and database model name for each templates
-                    $model_name = 'App\\'."Tesco".$template[$key]."Orders";
-                    $response = $model_name::where('id',$template_id)
-                                  ->update([
-                                  'po_status'         => "PO Uploaded",
-                                  'purchase_order_no' => $request['po_number'],
-                                  'po_file'           => $destination_path_insert,
-                                  'delivery_date'     => $request['delivery_date'],
-                                  'po_uploaded_at'    => $this->current_date
-                                ]);
-                  }
+                //Dynamic function name and database model name for each templates
+                $model_name = 'App\\'."Tesco".$template[$key]."Orders";
+                $response = $model_name::where('id',$template_id)
+                              ->update([
+                              'po_status'         => "PO Uploaded",
+                              'purchase_order_no' => $request['po_number'],
+                              'po_file'           => $destination_path_insert,
+                              'delivery_date'     => $request['delivery_date'],
+                              'po_uploaded_at'    => $this->current_date
+                            ]);
+                /** @var array [Pass array of values to updateTescoErpOrders function] */
+                $data_array = [];   
+                $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
+                $data_array['tableName'] = "tesco_".strtolower($template[$key])."_orders";
+                $data_array['buyer_id'] = $tesco_buyer_id->id;
+                $data_array['id'] = $template_id;
+                $updated_erp_table = $erp_obj->updateTescoErpOrders($data_array);
               }
-              if ($response != '')
-              {
-                $result = response()->json(['error'=> false,'message' =>'success', 'po_number' => $request['po_number']],200);
-              }
-              else
-              {
-               $result = response()->json(['error'=> true,'message' =>'Failed'],400);
-              }
-               
-           } catch (\Exception $e) {
-               $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-           }
-           return $result;
-        }
+          }
+          if ($updated_erp_table != '')
+          {
+            $result = response()->json(['error'=> false,'message' =>'success', 'po_number' => $request['po_number']],200);
+          }
+          else
+          {
+           $result = response()->json(['error'=> true,'message' =>'Failed'],400);
+          }
+           
+       } catch (\Exception $e) {
+           $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+       }
+       return $result;
+    }
     /**
      * Save CE ratio template orders
      * @param \Illuminate\Http\Request
