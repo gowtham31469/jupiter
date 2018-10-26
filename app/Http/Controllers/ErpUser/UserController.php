@@ -37,7 +37,17 @@ class UserController extends Controller
      */
     public function index()
     {
-		return view('erp.home');
+		if(Auth::guard('erpuser')->user()->is_user){
+			$roles 	= \App\ErpRoles::pluck('name')->all();
+		}else{
+			$id		= Auth::guard('erpuser')->user()->id;
+		
+			$roles 	= \App\ErpUserRolesMApping::where('erp_user', $id)
+						->join('erp_roles', 'erpusers_roles_mapping.role', 'erp_roles.id')
+						->pluck('name')->all();
+		}
+		
+		return view('erp.home', compact('roles'));
 	}
 	
 	/**
@@ -51,7 +61,7 @@ class UserController extends Controller
 		$roles 		= \App\ErpRoles::pluck('name', 'id')->all();
 		$company 	= DB::table('company')->pluck('name', 'id')->all();
 		$buyers 	= \App\Buyer::pluck('buyer_name as name', 'id')->all();
-		return view('erp.users.user-list', ['users' => $users, 'company' => $company, 'buyers' => $buyers, 'roles' => $roles]);
+		return view('erp.users.user-list', compact('users', 'company', 'buyers', 'roles'));
 	}
 	/**
      * Store the users.
@@ -223,7 +233,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function getTemplateDetail($buyer)
-    {
+    {	
 		switch ($buyer){
 			case "Tesco":
 				$treeviewData= DB::table("tesco_item_master")->select('id','item_name as text','parent_id')->whereIn('parent_id', [0,1])->get()->toArray();

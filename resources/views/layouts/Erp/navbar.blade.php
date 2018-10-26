@@ -16,21 +16,14 @@
                 @yield('navbar')
                 <ul class="nav navbar-nav navbar-right">
 					<li>
-						<a id="showProfileModal" href="#" data-target="#profileModal" data-toggle="modal" data-backdrop="static" data-keyboard="false"><span class="well navWell">{{ Auth::guard('erpuser')->user()->name[0] }}</span></a>
+						<a href="#"><span class="well navWell">{{ Auth::guard('erpuser')->user()->name[0] }}</span></a>
 						
 						</li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle profile-dropdown-admin" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> {{ Auth::guard('erpuser')->user()->name}}<span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="#">Profile</a></li>
-                            <li><a href="#">Settings</a></li>
-                  <!--       
-                            <li role="separator" class="divider"></li>
-                            <li> <a class="dropdown-item" href="{{ url('/erp/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
-                        <form id="logout-form" action="{{ url('/erp/logout') }}" method="POST" style="display: none;">
-                           {{ csrf_field() }}
-                        </form> -->
-                        
+                            <li><a id="showProfileModal" href="#" data-target="#profileModal" data-toggle="modal" data-backdrop="static" data-keyboard="false">Profile</a></li>
+                  
                         </ul>
                     </li>
                     <li>

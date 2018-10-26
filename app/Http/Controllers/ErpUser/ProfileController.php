@@ -37,6 +37,8 @@ class ProfileController extends Controller
 		$base = Auth::guard('erpuser')->user()->id;
 		$app = app();
     	$profile = $app->make('stdClass');
+		if(! Auth::guard('erpuser')->user()->is_admin){
+		
 		$profile->company = \App\ErpuserCompanyMapping::where('erp_user', $base)
 								->join('company', 'erpuser_company_mapping.company', 'company.id')
 								->pluck('company.name')->all();
@@ -72,7 +74,13 @@ class ProfileController extends Controller
 		}
 		
 		$profile->template	= $temp;
-		
+			
+		}else{
+			$profile->company	= array('Admin can access all Companies');
+			$profile->buyer		= array('Admin can access all Buyes');
+			$profile->roles		= array('You are Admin ! You have access to all modules');
+			$profile->template	= array('Admin can access all Templates');
+		}
 		if($request->ajax()){
 			return response()->json(['profile' => $profile], 200);
 		}
@@ -124,25 +132,25 @@ class ProfileController extends Controller
     {
 		$user	= Auth::guard('erpuser')->user();
 		
-			$input['old_pwd']	= $request->old_pwd;
-			$input['new_pwd']	= $request->new_pwd;
-			$input['new_pwd_confirmation']	= $request->new_pwd_confirmation;
-			$value	=	$input['old_pwd'];
-		
-			$messages = [
-				'old_pwd.required'    => 'Old Password is required',
-				'new_pwd.required'    => 'New Password is required',
-				'new_pwd.confirmed'   => 'New Password and confirm password doesnot match',
-			];
-		
-			$validator = Validator::make($input, [
-				'new_pwd' => 'required|confirmed',
-				'old_pwd' => ['required', function ($attribute, $value, $fail) use ($user) {
-					if (!\Hash::check($value, $user->password)) {
-						return $fail(__('The Old password is incorrect.'));
-					}
-				}],
-			], $messages);
+		$input['old_pwd']	= $request->old_pwd;
+		$input['new_pwd']	= $request->new_pwd;
+		$input['new_pwd_confirmation']	= $request->new_pwd_confirmation;
+		$value	=	$input['old_pwd'];
+
+		$messages = [
+			'old_pwd.required'    => 'Old Password is required',
+			'new_pwd.required'    => 'New Password is required',
+			'new_pwd.confirmed'   => 'New Password and confirm password doesnot match',
+		];
+
+		$validator = Validator::make($input, [
+			'new_pwd' => 'required|confirmed',
+			'old_pwd' => ['required', function ($attribute, $value, $fail) use ($user) {
+				if (!\Hash::check($value, $user->password)) {
+					return $fail(__('The Old password is incorrect.'));
+				}
+			}],
+		], $messages);
 
 		if ($validator->fails()) {
 			return response()->json(['message' =>$validator->errors()], 400);
@@ -156,6 +164,5 @@ class ProfileController extends Controller
 
 			return response()->json(['message' =>'Updated Successfully'], 200);
 		}	
-		
     }
 }
