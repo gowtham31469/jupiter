@@ -98,7 +98,8 @@ class TemplateManagementCntrl extends Controller
                                 ->select('*')
                                 ->get();
          $items['tax']      = DB::table("tesco_tax_code")
-                                ->select('id','tax_type','tax_code')
+                                ->select('tax')
+                                ->distinct()
                                 ->get();
          $items['material'] = DB::table("tesco_material_masters")
                                 ->select('id','material_name_employee')
@@ -129,7 +130,7 @@ class TemplateManagementCntrl extends Controller
             DB::table('tesco_template')
                         ->where('id',$template_id)
                         ->update([
-                           'tax_code_id'      => $taxation,
+                           'tax'              => $taxation,
 						   'template_name'    => $ref,
 						   'hsn_code'         => $hsncode,
 						   'gl_code'          => $glcode,

@@ -447,10 +447,6 @@ Route::post('admin/orchestra/settings/addOrchestraSymbols', 'Admin\Settings\Orch
 Route::post('admin/orchestra/settings/editOrchestraSymbols', 'Admin\Settings\Orchestra\OrchestraSettings@editOrchestraSymbols');
 Route::put('admin/orchestra/make-symbol-enabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeSymbolEnabled');
 Route::put('admin/orchestra/make-symbol-disabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeSymbolDisabled');
-Route::post('admin/orchestra/settings/tax-code', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraTaxCode');
-Route::post('admin/orchestra/add-orchestra-tax-code', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraTaxCodes');
-Route::get('admin/orchestra/get-orchestra-tax-code-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraTaxCodesById');
-Route::put('admin/orchestra/update-orchestra-tax-code', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraTaxCodesById');
 
 /**tesco Settings Page**/
 Route::post('admin/tesco/settings/brands', 'Admin\Settings\Tesco\TescoSettings@tescoBrands');
@@ -477,10 +473,10 @@ Route::get('admin/tesco/get-tesco-Sizecharts-details', 'Admin\Settings\Tesco\Tes
 Route::put('admin/tesco/update-tesco-sizecharts', 'Admin\Settings\Tesco\TescoSettings@updateTescoSizechartsById');
 Route::put('admin/tesco/make-sizechart-enabled', 'Admin\Settings\Tesco\TescoSettings@makeSizechartEnabled');
 Route::put('admin/tesco/make-sizechart-disabled', 'Admin\Settings\Tesco\TescoSettings@makeSizechartDisabled');
-Route::post('admin/tesco/settings/tax-code', 'Admin\Settings\Tesco\TescoSettings@tescoTaxCode');
-Route::post('admin/tesco/add-tesco-tax-code', 'Admin\Settings\Tesco\TescoSettings@addTescoTaxCodes');
-Route::get('admin/tesco/get-tesco-tax-code-details', 'Admin\Settings\Tesco\TescoSettings@getTescoTaxCodesById');
-Route::put('admin/tesco/update-tesco-tax-code', 'Admin\Settings\Tesco\TescoSettings@updateTescoTaxCodesById');
+Route::post('admin/tesco/settings/tax-code', 'Admin\Settings\Tesco\TescoSettings@taxCode');
+Route::post('admin/tesco/add-tesco-tax-code', 'Admin\Settings\Tesco\TescoSettings@addTaxCodes');
+Route::get('admin/tesco/get-tesco-tax-code-details', 'Admin\Settings\Tesco\TescoSettings@getTaxCodesById');
+Route::put('admin/tesco/update-tesco-tax-code', 'Admin\Settings\Tesco\TescoSettings@updateTaxCodesById');
 Route::post('admin/tesco/settings/material', 'Admin\Settings\Tesco\TescoSettings@tescoMaterials');
 Route::post('admin/tesco/add-tesco-material', 'Admin\Settings\Tesco\TescoSettings@addTescoMaterial');
 Route::get('admin/tesco/get-tesco-material-details', 'Admin\Settings\Tesco\TescoSettings@getTescoMaterialById');

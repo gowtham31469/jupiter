@@ -2988,7 +2988,6 @@ class OrderManagementCntrl extends Controller
               if($template_id > 0)
               {
                 //Dynamic function name and database model name for each templates
-                $func_name = "upload".$template[$key]."PO";
                 $model_name = 'App\\'."Tesco".$template[$key]."Orders";
                 $response = $model_name::where('id',$template_id)
                               ->update([
@@ -3000,7 +2999,7 @@ class OrderManagementCntrl extends Controller
                             ]);
               }
           }
-           if (($response != '') || ($response != "Invalid Template")) 
+           if ($response != '') 
            {
              $result = response()->json(['error'=> false,'message' =>'success', 'po_number' => $request['po_number']],200);
            }
