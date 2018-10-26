@@ -3004,7 +3004,7 @@ class OrderManagementCntrl extends Controller
                 $data_array['tableName'] = "tesco_".strtolower($template[$key])."_orders";
                 $data_array['buyer_id'] = $tesco_buyer_id->id;
                 $data_array['id'] = $template_id;
-                return $updated_erp_table = $erp_obj->updateTescoErpOrders($data_array);
+                $updated_erp_table = $erp_obj->updateTescoErpOrders($data_array);
               }
           }
           if ($updated_erp_table != '') 
