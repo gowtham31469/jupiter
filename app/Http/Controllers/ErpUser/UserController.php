@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Response;
 use View;
 use DB;
+use Auth;
 use App\Erpuser;
 use App\ErpuserBuyerMapping;
 use App\ErpuserCompanyMapping;
@@ -23,9 +24,9 @@ class UserController extends Controller
      */
     public function __construct()
     {
-		$roles = "ADMIN";
+		$role = "ADMIN";
         $this->middleware('erpuser');
-        $this->middleware('role_permission:'.$roles)->except('index');
+        $this->middleware('role_permission:'.$role)->except('index');
    
     }
 
@@ -36,7 +37,17 @@ class UserController extends Controller
      */
     public function index()
     {
-		return view('erp.home');
+		if(Auth::guard('erpuser')->user()->is_user){
+			$roles 	= \App\ErpRoles::pluck('name')->all();
+		}else{
+			$id		= Auth::guard('erpuser')->user()->id;
+		
+			$roles 	= \App\ErpUserRolesMApping::where('erp_user', $id)
+						->join('erp_roles', 'erpusers_roles_mapping.role', 'erp_roles.id')
+						->pluck('name')->all();
+		}
+		
+		return view('erp.home', compact('roles'));
 	}
 	
 	/**
@@ -50,7 +61,7 @@ class UserController extends Controller
 		$roles 		= \App\ErpRoles::pluck('name', 'id')->all();
 		$company 	= DB::table('company')->pluck('name', 'id')->all();
 		$buyers 	= \App\Buyer::pluck('buyer_name as name', 'id')->all();
-		return view('erp.users.user-list', ['users' => $users, 'company' => $company, 'buyers' => $buyers, 'roles' => $roles]);
+		return view('erp.users.user-list', compact('users', 'company', 'buyers', 'roles'));
 	}
 	/**
      * Store the users.
@@ -96,10 +107,17 @@ class UserController extends Controller
 					$buyer 	= \App\Buyer::where('buyer_name', $t[1])
 								->value('id');
 					
+					$im_table 	= \App\Buyer::where('buyer_name', $t[1])
+								->value('item_master_table');
+					
+					$company_id	= DB::table($im_table)->where('id', intval($t[0]))
+										->value('company_id');
+					
 					\App\ErpusersTemplateMapping::create([
 						'erp_user'	=>	$data->id,
 						'buyer'		=>	$buyer,
-						'templates'	=>	intval($t[0])
+						'templates'	=>	intval($t[0]),
+						'company'	=>	$company_id
 					]);
 				}
 				/*   ErpUser - Roles Mapping  */
@@ -161,11 +179,18 @@ class UserController extends Controller
 				$t		= explode("_", $template);
 				$buyer 	= \App\Buyer::where('buyer_name', $t[1])
 							->value('id');
+				
+				$im_table 	= \App\Buyer::where('buyer_name', $t[1])
+								->value('item_master_table');
+					
+				$company_id	= DB::table($im_table)->where('id', intval($t[0]))
+										->value('company_id');
 
 				\App\ErpusersTemplateMapping::create([
 					'erp_user'	=>	$id,
 					'buyer'		=>	$buyer,
-					'templates'	=>	intval($t[0])
+					'templates'	=>	intval($t[0]),
+					'company'	=>	$company_id
 				]);
 			}
 			\App\ErpUserRolesMapping::where('erp_user', $id)->delete();
@@ -208,7 +233,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function getTemplateDetail($buyer)
-    {
+    {	
 		switch ($buyer){
 			case "Tesco":
 				$treeviewData= DB::table("tesco_item_master")->select('id','item_name as text','parent_id')->whereIn('parent_id', [0,1])->get()->toArray();
@@ -264,8 +289,9 @@ class UserController extends Controller
 			
 			$user[0]->templates = array_combine($t_name, $templates);
 		}
-		
+		if($request->ajax()){
+			return response()->json(['error'=> false,'data' => $user], 200);
+		}
 		return $user;
     }
-
 }

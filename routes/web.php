@@ -576,7 +576,6 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::post('/password/reset', 'ErpuserAuth\ResetPasswordController@reset')->name('password.email');
 	Route::get('/password/reset', 'ErpuserAuth\ForgotPasswordController@showLinkRequestForm')->name('password.reset');
 	Route::get('/password/reset/{token}', 'ErpuserAuth\ResetPasswordController@showResetForm');
-	
 	/* Routes for User Management */
 	Route::get('/users', 'ErpUser\UserController@show')->name('erp-users');
 	Route::post('users', 'ErpUser\UserController@store')->name('erp.user.add');
@@ -584,7 +583,10 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::delete('users', 'ErpUser\UserController@destroy')->name('erp.user.delete');
 	Route::post('get-template', 'ErpUser\UserController@getTemplate')->name('erp.user.getTemplate');
 	Route::get('get-user', 'ErpUser\UserController@getUser')->name('erp.user.getUser');
-	
+	/* Routes for User Profile */
+	Route::get('profile', 'ErpUser\ProfileController@getProfile')->name('erp.user.getProfile');
+	Route::put('profile', 'ErpUser\ProfileController@putProfile')->name('erp.user.putProfile');
+	Route::put('password', 'ErpUser\ProfileController@putPassword')->name('erp.user.putPwd');
 	/* Routes for Invoice Management */
 	Route::get('/invoice', 'ErpUser\Invoice\InvoiceController@index')->name('invoice'); 
 
