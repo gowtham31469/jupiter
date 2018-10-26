@@ -2999,6 +2999,7 @@ class OrderManagementCntrl extends Controller
                               'delivery_date'     => $request['delivery_date'],
                               'po_uploaded_at'    => $this->current_date
                             ]);
+                /** @var array [Pass array of values to updateTescoErpOrders function] */
                 $data_array = [];   
                 $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
                 $data_array['tableName'] = "tesco_".strtolower($template[$key])."_orders";
