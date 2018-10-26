@@ -33,6 +33,7 @@ use App\Classes\ApproveTescoOrders;
 use App\Classes\CancelTescoOrders;
 use PDF;
 use Carbon\Carbon;
+use App\Classes\ErpOrders;
 
 class OrderManagementCntrl extends Controller
 {
@@ -2972,9 +2973,10 @@ class OrderManagementCntrl extends Controller
      */
     public function uploadCombinedOrdersPO(Request $request)
     {
-       try {
-        $template_ids  = explode(',',$request['template_id']);
-        $template     = explode(',',$request['templates']);
+      try {
+         $erp_obj        = new ErpOrders();
+         $template_ids  = explode(',',$request['template_id']);
+         $template      = explode(',',$request['templates']);
         
          $po_file = $request['po_file'];
          $destination_path='/storage/app/public/po-files/';
@@ -2997,16 +2999,22 @@ class OrderManagementCntrl extends Controller
                               'delivery_date'     => $request['delivery_date'],
                               'po_uploaded_at'    => $this->current_date
                             ]);
+                $data_array = [];   
+                $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
+                $data_array['tableName'] = "tesco_".strtolower($template[$key])."_orders";
+                $data_array['buyer_id'] = $tesco_buyer_id->id;
+                $data_array['id'] = $template_id;
+                return $updated_erp_table = $erp_obj->updateTescoErpOrders($data_array);
               }
           }
-           if ($response != '') 
-           {
-             $result = response()->json(['error'=> false,'message' =>'success', 'po_number' => $request['po_number']],200);
-           }
-           else
-           {
-            $result = response()->json(['error'=> true,'message' =>'Failed'],400);
-           }
+          if ($updated_erp_table != '') 
+          {
+            $result = response()->json(['error'=> false,'message' =>'success', 'po_number' => $request['po_number']],200);
+          }
+          else
+          {
+           $result = response()->json(['error'=> true,'message' =>'Failed'],400);
+          }
            
        } catch (\Exception $e) {
            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
