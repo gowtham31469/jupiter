@@ -63,7 +63,9 @@ class Kernel extends HttpKernel
         'customer_guest' => \App\Http\Middleware\RedirectIfCustomerAuthenticated::class,
         'merchandiser_auth' => \App\Http\Middleware\AuthenticateMerchandiser::class,
         'merchandiser_guest' => \App\Http\Middleware\RedirectIfMerchandiserAuthenticated::class,
-	'erp_auth' => \App\Http\Middleware\AuthenticateErp::class,
+		'erp_auth' => \App\Http\Middleware\AuthenticateErp::class,
         'erp_guest' => \App\Http\Middleware\RedirectIfErpAuthenticated::class,
+		/*	Middleware for role permission */
+		'role_permission' => \App\Http\Middleware\RolePermission::class,
     ];
 }

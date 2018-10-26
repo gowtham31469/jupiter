@@ -1399,10 +1399,10 @@ function tescoSizeChart() {
    }
 
 /**
-  * Function to Tesco Tax code Settings home page
+  * Function to Tesco/Orchestra Tax code Settings home page
   * @author <praveen>
   */
-function tescoTaxCode() {
+function taxCode() {
     try{
       $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
       $('.tesco-sidebar').show();
@@ -1421,21 +1421,21 @@ function tescoTaxCode() {
               $(".loader").show();
           },
           success: function (data) {
-                  var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoTaxCodesModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Tax Code</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Tax Codes</h3></div><table id="tesco-taxcodes-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Tax Type</th><th>Tax (%)</th><th>Tax Code</th><th>Actions</th></tr></thead><tbody>';
-                   $.each(data.tesco_taxcodes, function(i, item){
+                  var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTaxCodesModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Tax Code</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Tax Codes</h3></div><table id="taxcodes-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Tax Type</th><th>Tax (%)</th><th>Tax Code</th><th>Actions</th></tr></thead><tbody>';
+                   $.each(data.taxcodes, function(i, item){
                     var index = i+1;
-                    tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.tax_type+'</td><td>'+item.tax+'</td><td>'+item.tax_code+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-tesco-taxcodes filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
+                    tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.tax_type+'</td><td>'+item.tax+'</td><td>'+item.tax_code+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-taxcodes filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
                    });
                    tesco_metadata += '</tbody></table></div>';
                    $('.content').html(tesco_metadata)
-                   $('.edit-tesco-taxcodes').tooltip('show')
-                   $('.edit-tesco-taxcodes').tooltip('toggle')
+                   $('.edit-taxcodes').tooltip('show')
+                   $('.edit-taxcodes').tooltip('toggle')
                    $('.status').tooltip('show')
                    $('.status').tooltip('toggle')
-                   $('#tesco-taxcodes-list-table').DataTable();
-                   $("#tesco-taxcodes-list-table_filter input").addClass('form-control input-sm');
-                   $("#tesco-taxcodes-list-table_filter input").attr('placeholder', 'Data Search');
-                   $('#tesco-taxcodes-list-table_length select').addClass('form-control input-sm');
+                   $('#taxcodes-list-table').DataTable();
+                   $("#taxcodes-list-table_filter input").addClass('form-control input-sm');
+                   $("#taxcodes-list-table_filter input").attr('placeholder', 'Data Search');
+                   $('#taxcodes-list-table_length select').addClass('form-control input-sm');
   
           },
           error: function(errorXHR, errorStatus, errorThrown) {
@@ -1455,10 +1455,10 @@ function tescoTaxCode() {
   }
 
 /**
-  * Adds a tesco taxcode.
+  * Adds a Tesco/Orchestra taxcode.
   * @author <praveen>
   */
-  function addTescoTaxCodes()
+  function addTaxCodes()
   {
      try{
           var tax_type   = $('#tax_type').val();
@@ -1479,13 +1479,13 @@ function tescoTaxCode() {
                    200: function() {
                         $('.snackbar_span').html("Tax Code Added Successfully");
                         showSnackbar();
-                        $('#addTescoTaxCodesModal').modal('hide');
-                        tescoTaxCode()
+                        $('#addTaxCodesModal').modal('hide');
+                        taxCode()
                    },
                    208: function() {
-                        $('#tesco_taxcode_result').removeAttr('style');
-                        $('#tesco_taxcode_result').html('Tax Code already exists.')
-                        $("#tesco_taxcode_result").addClass("alert alert-warning");
+                        $('#taxcode_result').removeAttr('style');
+                        $('#taxcode_result').html('Tax Code already exists.')
+                        $("#taxcode_result").addClass("alert alert-warning");
                    },
                    400: function() {
                         $('.snackbar_span').html("Something went wrong!!");
@@ -1509,12 +1509,12 @@ function tescoTaxCode() {
    }
 
 /**
-   * Function for get tesco tax code details for editing
+   * Function for get Tesco/Orchestra tax code details for editing
    * @param id
    * @author <praveen>
    *
    */
-  function getTescoTaxCodesById(id)
+  function getTaxCodesById(id)
   {
     try{
          if(isSubmitting) {
@@ -1533,17 +1533,17 @@ function tescoTaxCode() {
              },
              success: function(data){
                  isSubmitting = false;
-                 $('#edit_tesco_tax_code_id').val(id);
-                 $('#edit_tax_code').val(data.tesco_tax_codes[0].tax_code);
-                 $('#edit_tax_type').val(data.tesco_tax_codes[0].tax_type);
-                 $('#edit_tax').val(data.tesco_tax_codes[0].tax);
+                 $('#edit_tax_code_id').val(id);
+                 $('#edit_tax_code').val(data.tax_codes[0].tax_code);
+                 $('#edit_tax_type').val(data.tax_codes[0].tax_type);
+                 $('#edit_tax').val(data.tax_codes[0].tax);
         
-                 $('#editTescoTaxCodesModal').modal({
+                 $('#editTaxCodesModal').modal({
                       backdrop: 'static',
                       keyboard: false
                  })
-                 $('#edit_tesco_tax_codes_form').validator('validate');
-                 $('#editTescoTaxCodesModal').modal('show');
+                 $('#edit_tax_codes_form').validator('validate');
+                 $('#editTaxCodesModal').modal('show');
              },
              error: function(errorXHR, errorStatus, errorThrown) {
                 this.tryCount++;
@@ -1562,13 +1562,13 @@ function tescoTaxCode() {
   }
 
 /**
-  * Function for edit tesco tax code details
+  * Function for edit Tesco/Orchestra tax code details
   * @author <praveen>
   */
- function editTescoTaxCode()
+ function editTaxCode()
  {
   try{
-       var id        = $('#edit_tesco_tax_code_id').val();
+       var id        = $('#edit_tax_code_id').val();
        var tax_type  = $('#edit_tax_type').val();
        var tax_code  = $('#edit_tax_code').val();
        var tax       = $('#edit_tax').val();
@@ -1588,13 +1588,13 @@ function tescoTaxCode() {
                 200: function() {
                        $('.snackbar_span').html("Tax Code Updated Successfully");
                        showSnackbar();
-                       $('#editTescoTaxCodesModal').modal('hide');
-                       tescoTaxCode()
+                       $('#editTaxCodesModal').modal('hide');
+                       taxCode()
                 },
                 208: function() {
-                     $('#edit_tesco_taxcode_result').removeAttr('style');
-                     $('#edit_tesco_taxcode_result').html('Tax Code already exists.')
-                     $("#edit_tesco_taxcode_result").addClass("alert alert-warning");
+                     $('#edit_taxcode_result').removeAttr('style');
+                     $('#edit_taxcode_result').html('Tax Code already exists.')
+                     $("#edit_taxcode_result").addClass("alert alert-warning");
                 },
            },
            error: function(errorXHR, errorStatus, errorThrown) {

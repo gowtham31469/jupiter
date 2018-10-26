@@ -60,8 +60,9 @@ class TemplateManagementCntrl extends Controller
          $items['company'] = DB::table("company")
                                 ->select('*')
                                 ->get();
-         $items['tax'] = DB::table("orchestra_taxcode")
-                                ->select('id','tax_type','tax_code')
+         $items['tax'] = DB::table("tesco_tax_code")
+                                ->select('tax')
+                                ->distinct()
                                 ->get();
          return json_encode($items);
     }  
@@ -134,13 +135,15 @@ class TemplateManagementCntrl extends Controller
             $material    = $request['material'];
             $height      = $request['height'];
             $width       = $request['width'];
+            $gltext      = $request['gltext'];
             DB::table('orchestra_template')
                         ->where('id',$template_id)
                         ->update([
-                          'tax_code_id'      => $taxation,
+                          'tax'              => $taxation,
                           'template_name'    => $ref,
                           'hsn_code'         => $hsncode,
                           'gl_code'          => $glcode,
+                          'gl_text'          => $gltext,
                           'sap_ref'          => $sapcode,
                           'color'            => $color,
                           'dimension_height' => $height,
