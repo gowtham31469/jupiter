@@ -1,295 +1,557 @@
 @extends('layouts.Erp.app')
 <style>
-.action-button-view
-{
-	border: 1px #333 solid;
-	background-color: #fff;
-	border-radius: 2px;
-	padding: 3px;
-	margin-right: 10px;
-}
-	.red-icon{
-  color: grey;
-  float: right;
-}
-.active{
-    color: #dc3545 !important;
-}
-.active-border{
-	border-color: #dc3545 !important;
-}
-.bad{
-  background-color: #dc3545;
-  color:#fff;
-}
-.cur-po{
-	cursor:pointer;
-	color: grey;
-    float: right;
-}
-.cur-po-comp{
-	cursor:pointer;
-	color: grey;
-}
-.btn-loader {
-  border: 8px solid #f3f3f3 !important;
-  border-radius: 50% !important;
-  border-top: 8px solid #3498db !important;
-  width: 50px !important;
-  height: 50px !important;
-  -webkit-animation: spin 2s linear infinite !important; /* Safari */
-  animation: spin 2s linear infinite !important;
-}
-/* Safari */
-@-webkit-keyframes spin {
-  0% { -webkit-transform: rotate(0deg); }
-  100% { -webkit-transform: rotate(360deg); }
-}
+	.action-button-view {
+		border: 1px #333 solid;
+		background-color: #fff;
+		border-radius: 2px;
+		padding: 3px;
+		margin-right: 10px;
+	}
+	
+	.red-icon {
+		color: grey;
+		float: right;
+	}
+	
+	.active {
+		color: #dc3545 !important;
+	}
+	
+	.active-border {
+		border-color: #dc3545 !important;
+	}
+	
+	.bad {
+		background-color: #dc3545;
+		color: #fff;
+	}
+	
+	.cur-po {
+		cursor: pointer;
+		color: grey;
+		float: right;
+	}
+	
+	.cur-po-comp {
+		cursor: pointer;
+		color: grey;
+	}
+	
+	.btn-loader {
+		border: 8px solid #f3f3f3 !important;
+		border-radius: 50% !important;
+		border-top: 8px solid #3498db !important;
+		width: 50px !important;
+		height: 50px !important;
+		-webkit-animation: spin 2s linear infinite !important;
+		/* Safari */
+		animation: spin 2s linear infinite !important;
+	}
+	/* Safari */
+	
+	@-webkit-keyframes spin {
+		0% {
+			-webkit-transform: rotate(0deg);
+		}
+		100% {
+			-webkit-transform: rotate(360deg);
+		}
+	}
+	
+	@keyframes spin {
+		0% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+	
+	label.btn span {
+		font-size: 1.5em;
+	}
+	
+	label input[type="radio"]~i.fa.fa-circle-o {
+		color: #c8c8c8;
+		display: inline;
+	}
+	
+	label input[type="radio"]~i.fa.fa-dot-circle-o {
+		display: none;
+	}
+	
+	label input[type="radio"]:checked~i.fa.fa-circle-o {
+		display: none;
+	}
+	
+	label input[type="radio"]:checked~i.fa.fa-dot-circle-o {
+		color: #7AA3CC;
+		display: inline;
+	}
+	
+	label:hover input[type="radio"]~i.fa {
+		color: #7AA3CC;
+	}
+	
+	label input[type="checkbox"]~i.fa.fa-square-o {
+		color: #c8c8c8;
+		display: inline;
+	}
+	
+	label input[type="checkbox"]~i.fa.fa-check-square-o {
+		display: none;
+	}
+	
+	label input[type="checkbox"]:checked~i.fa.fa-square-o {
+		display: none;
+	}
+	
+	label input[type="checkbox"]:checked~i.fa.fa-check-square-o {
+		color: #7AA3CC;
+		display: inline;
+	}
+	
+	label:hover input[type="checkbox"]~i.fa {
+		color: #7AA3CC;
+	}
+	
+	div[data-toggle="buttons"] label.active {
+		color: #7AA3CC;
+	}
+	
+	div[data-toggle="buttons"] label {
+		display: inline-block;
+		padding: 6px 12px;
+		margin-bottom: 0;
+		font-size: 14px;
+		font-weight: normal;
+		line-height: 2em;
+		text-align: left;
+		white-space: nowrap;
+		vertical-align: top;
+		cursor: pointer;
+		background-color: none;
+		border: 0px solid #c8c8c8;
+		border-radius: 3px;
+		color: #c8c8c8;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		-o-user-select: none;
+		user-select: none;
+	}
+	
+	div[data-toggle="buttons"] label:hover {
+		color: #7AA3CC;
+	}
+	
+	div[data-toggle="buttons"] label:active,
+	div[data-toggle="buttons"] label.active {
+		-webkit-box-shadow: none;
+		box-shadow: none;
+	}
+	
+	.first-padding {
+		padding: 10px 15px;
+		font-weight: bold;
+		font-size: 14px;
+	}
+	
+	.first-padding:nth-child(even),
+	.odd-padding {
+		background-color: #f2f2f2;
+	}
+	
+	.first-padding.col-md-4.text-center {
+		border-right: 5px solid #fff;
+	}
+	
+	.confirmation-container {
+		margin-top: 15px;
+	}
+	
+	.remark-align {
+		padding-left: 0px !important;
+	}
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
 </style>
-@section('navbar') 
+@section('navbar')
 
 <ul class="nav navbar-nav dynamic-menu">
-    <li><a  href="#" class="active">Po Verify</a></li>
+	<li><a href="#" class="active">Po Verify</a></li>
 </ul>
 
-@endsection
-@section('content')
+@endsection @section('content')
 <div class="col-sm-12 col-md-12 main">
-	 <div class="main-content">
-        
-		 
-		  <div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
-                  <div class="col" id="customer-table">
-                    <table id="po-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%">
-                      <thead>
-                        <tr>
-                          <th>Sl. No</th>
-                          <th>ERP ID</th>
-                          <th>Customer name</th>
-                          <th>PO Number</th>
-							<th>Status</th>
-							<th>Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-						    @foreach($orders as $vals)
-						  
-                        <tr id="{{$vals->id}}">
-                          	<td class="">{{ $loop->iteration }}</td>
-							  <td>{{$vals->id}}</td>
-							  <td>{{$vals->company_name}}</td>
-							  <td>{{$vals->po_no}}</td>
-							  @if($vals->status == 2)
-								<td><span class="label label-danger">{{$vals->status_name}}</span></td>
-							  @else
-								<td><span class="label label-info">{{$vals->status_name}}</span></td>
-						      @endif
-							<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick="view_order_details('{{ $vals->id }}','{{ $vals->po_no }}','{{ $vals->buyer_id }}','{{ $vals->customer_id }}','{{ $vals->po_file }}')"><i class="fa fa-eye action-button-view" data-placement="top" title="" data-original-title="view Details"></i></a></td>
-                          </tr> 
-						  @endforeach
-                         </tbody>
-                     </table>
-                  </div>
-        
-    </div>
+	  <div class="company-nav-div">
+           <a class="dropdown-toggle profile-dropdown-admin selected-buyer" style="text-transform:capitalize;cursor: pointer;">Select Company</a>
+        </div>
+	<div class="main-content">
+
+
+		<div class="loader">
+			<div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>
+		</div>
+		<div class="col" id="customer-table">
+			<input type="hidden" value="{{ session()->get('company') }}" id="company_id">
+			<input type="hidden" value="{{ session()->get('company_name') }}" id="company_name">
+			<table id="po-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%">
+				<thead>
+					<tr>
+						<th>Sl. No</th>
+						<th>ERP ID</th>
+						<th>Customer name</th>
+						<th>PO Number</th>
+						<th>Status</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach($orders as $vals)
+
+					<tr id="{{$vals->id}}">
+						<td class="">{{ $loop->iteration }}</td>
+						<td>{{$vals->id}}</td>
+						<td>{{$vals->company_name}}</td>
+						<td>{{$vals->po_no}}</td>
+						@if($vals->status == 2)
+						<td><span class="label label-danger">{{$vals->status_name}}</span></td>
+						@else
+						<td><span class="label label-info">{{$vals->status_name}}</span></td>
+						@endif
+						<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick="view_order_details('{{ $vals->id }}','{{ $vals->po_no }}','{{ $vals->buyer_id }}','{{ $vals->customer_id }}','{{ $vals->po_file }}')"><i class="fa fa-eye action-button-view" data-placement="top" title="" data-original-title="view Details"></i></a></td>
+					</tr>
+					@endforeach
+				</tbody>
+			</table>
+		</div>
+
+	</div>
 </div>
 
- {{-- Snackbar html code --}}
-    <div id="snackbar"><span class="snackbar_span"></span></div>
+<!-- Buyer selection Modal -->
+<div class="modal buyer-selection-modal fade" id="buyerSelectionModalCenter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+     <div class="modal-dialog buyer-selection-modal-dialog" role="document">
+         <div class="modal-content buyer-selection-modal-content">
+                <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                     <h4 class="modal-title buyer-modal-title" id="myModalLabel">Select a Company</h4>
+                 </div>
+                 <div class="modal-body buyer-selection-modal-body">
+                    <div class="alert alert-warning" role="alert" id="hidden-buyer-div" style="display: none;margin-bottom: 5px;">
+                      <strong>Warning!</strong> Select a Company to proceed.
+                    </div>
+                    @foreach($companies as $company)
+                     <a class="buyer-card-link" style="cursor: pointer;">
+                         <div class="card buyers-card elevation-2dp active-buyer" data-name ="{{$company->name}}"  data-value ="{{$company->company}}" id="{{ strtolower( str_replace(' ','',$company->name)) }}">
+                          {{ $company->name }}
+                         </div>
+                     </a>
+                    @endforeach
+                 </div>
+                 <div class="modal-footer buyer-selection-modal-footer">
+                     {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                 </div>
+            {!! Form::close() !!}
+         </div>
+     </div>
+ </div>
+
+{{-- Snackbar html code --}}
+<div id="snackbar"><span class="snackbar_span"></span></div>
 
 {{-- Order Details modal --}}
 <div class="modal fade bd-example-modal-lg" id="orderDetailsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog modal-lg buyer-selection-modal-dialog" role="document">
-	  <div class="modal-content buyer-selection-modal-content" style="color: #333;">
-		  <div class="modal-header">
-			  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			  <a href="" download onclick="change_po_updated_status()" class="po_file" style="float:right;margin-right:12px"><i class="fa fa-download" data-placement="top" title="" data-original-title="Download Pdf"></i> Download Pdf</a>
-			  <h4 class="modal-title" id="myModalLabel">Order Details</h4>
-		  </div>
+	<div class="modal-dialog modal-lg buyer-selection-modal-dialog" role="document">
+		<div class="modal-content buyer-selection-modal-content" style="color: #333;">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<a href="" download onclick="change_po_updated_status()" class="po_file" style="float:right;margin-right:12px"><i class="fa fa-download" data-placement="top" title="" data-original-title="Download Pdf"></i> Download Pdf</a>
+				<h4 class="modal-title" id="myModalLabel">Order Details</h4>
+			</div>
 
-		  <div class="modal-body buyer-selection-modal-body">
-			  <label class="label new-po-upload label-info hidden">New po has been uploaded before verify please download the latest pdf</label>
-			  <input type="hidden" id="erp_order_id">
-			  <table id="order-details-table" class="table table-bordered table-responsive" style="width:100%;margin-top: 15px;">
-                      <thead>
-                        <tr>
-                          <th>Sl. No </th>
-                          <th>ERP ID</th>
-							  <th>PO Number <i class="po_number_check cur-po fa fa-times"></i></th>
-                          <th>Style No <i class="style_no_check cur-po fa fa-times"></i></th>
-							<th>Reference <i class="reference_check cur-po fa fa-times"></i></th>
-						  <th>Size</th>
-                          <th>Quantity <i class="qty_check cur-po fa fa-times"></i></th>
-						   <th>Price <i class="price_check cur-po fa fa-times"></i></th>
+			<div class="modal-body buyer-selection-modal-body">
+				<label class="label new-po-upload label-info hidden">New po has been uploaded before verify please download the latest pdf</label>
+				<label class="label label-danger label-required-error hidden">Please check the checkbox</label>
+				<input type="hidden" id="erp_order_id">
+				<table id="order-details-table" class="table table-bordered table-responsive" style="width:100%;margin-top: 15px;">
+					<thead>
+						<tr>
+							<th>Sl. No </th>
+							<th>ERP ID</th>
+							<th>PO Number</th>
+							<th>Style No</th>
+							<th>Reference</th>
+							<th>Size</th>
+							<th>Quantity</th>
+							<th>Price</th>
 							<th>Status</th>
-						
-                        </tr>
-                      </thead>
-                      <tbody>
-						 
-                      </tbody>
-                     </table>
-			 <div class="border-div" style="border: 1px #333 solid;border-color:grey;border-radius: 5px; padding: 5px;width: 110px;"><i class="po_complete_check cur-po-comp fa fa-times"></i><label class="po-complete-label" style="margin-left:10px;color:grey">PO Complete</label></div>
-			  <label>Remark : </label>
-			  <textarea style="resize:vertical" rows=5 id="comment_box" class="form-control comment_box"></textarea>
-		  </div>
 
-		  <div class="modal-footer buyer-selection-modal-footer">
-				  {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-			  	  <button class="btn btn-primary btn-submit btn-sm" data-dismiss="modal" onclick="submit()">Submit</button>
-		  </div>
+						</tr>
+					</thead>
+					<tbody>
 
-	   </div>
-  </div>
+					</tbody>
+				</table>
+				<!--			 <div class="border-div" style="border: 1px #333 solid;border-color:grey;border-radius: 5px; padding: 5px;width: 110px;"><i class="po_complete_check cur-po-comp fa fa-times"></i><label class="po-complete-label" style="margin-left:10px;color:grey">PO Complete</label></div>-->
+
+
+				<div class="col-md-12 confirmation-container">
+					<div class="col-md-6">
+						<div class="col-md-4"></div>
+						<div class="first-padding col-md-4 text-center"> OK</div>
+						<div class="first-padding odd-padding col-md-4 text-center">Not OK</div>
+
+						<div class="col-md-4 first-padding">PO Number</div>
+						<div class="col-md-4 text-center"> <label class="btn"><input type="radio" name='po-number-radio' class="hidden" value="ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i> </label></div>
+						<div class="col-md-4 text-center"><label class="btn"><input type="radio" name='po-number-radio' class="hidden" value="not-ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i></label> </div>
+
+						<div class="col-md-4 first-padding">Style Number</div>
+						<div class="col-md-4 text-center"> <label class="btn"><input type="radio" name='style-number-radio' class="hidden" value="ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i> </label></div>
+						<div class="col-md-4 text-center"><label class="btn"><input type="radio" name='style-number-radio' class="hidden" value="not-ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i></label></div>
+
+						<div class="col-md-4 first-padding">Refernce Number</div>
+						<div class="col-md-4 text-center"> <label class="btn"><input type="radio" name='ref-number-radio' class="hidden" value="ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i> </label></div>
+						<div class="col-md-4 text-center"><label class="btn"><input type="radio" name='ref-number-radio' class="hidden" value="not-ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i></label></div>
+
+						<div class="col-md-4 first-padding">Quantity</div>
+						<div class="col-md-4 text-center"> <label class="btn"><input type="radio" name='qty-radio' class="hidden" value="ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i> </label></div>
+						<div class="col-md-4 text-center"><label class="btn"><input type="radio" name='qty-radio' class="hidden" value="not-ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i></label></div>
+
+						<div class="col-md-4 first-padding">Price</div>
+						<div class="col-md-4 text-center"> <label class="btn"><input type="radio" name='price-radio' class="hidden" value="ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i> </label></div>
+						<div class="col-md-4 text-center"><label class="btn"><input type="radio" name='price-radio' class="hidden" value="not-ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i></label></div>
+
+						<div class="col-md-4 first-padding">PO Complete</div>
+						<div class="col-md-4 text-center"> <label class="btn"><input type="radio" name='po-complete-radio' class="hidden" value="ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i> </label></div>
+						<div class="col-md-4 text-center"><label class="btn"><input type="radio" name='po-complete-radio' class="hidden" value="not-ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i></label></div>
+
+					</div>
+					<div class="col-md-6">
+						<label class="first-padding remark-align">Remark : </label>
+						<textarea style="resize:vertical" rows=5 id="comment_box" class="form-control comment_box"></textarea>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="modal-footer buyer-selection-modal-footer">
+				{!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+				<button class="btn btn-primary btn-submit btn-sm" onclick="submit()">Submit</button>
+			</div>
+
+		</div>
+	</div>
 </div>
-@endsection
-@section('jqueryIncludes')
- <script>
-	 var base_url = "<?php echo  url('/') ?>";
- 	 var table =   $('#po-list-table').DataTable();
-	  $(".style_no_check").click(function() {
-		  $(this).toggleClass('active')
-		  $('.style_no_td').toggleClass('bad')
-    });
-	  $(".qty_check").click(function() {
-		  $(this).toggleClass('active')
-		  $('.qty_td').toggleClass('bad')
-    });  
-	 $(".po_complete_check").click(function() {
-		  $(this).toggleClass('active')
-		  $('.po-complete-label').toggleClass('active')
-		  $('.border-div').toggleClass('active-border')
-    }); 
-	 $(".reference_check").click(function() {
-		  $(this).toggleClass('active')
-		  $('.reference_td').toggleClass('bad')
-    });
-	 $(".po_number_check").click(function() {
-          $(this).toggleClass('active')
-		  $('.po_number_td').toggleClass('bad')
-    });
-	 $(".price_check").click(function() {
-          $(this).toggleClass('active')
-		  $('.price_td').toggleClass('bad')
-    });
-	 
-	 function submit()
-	 {
-		 var i=0;
-		 var j=0;
-		 
-		 if($('.po_number_check').hasClass('active'))
-		 {
-			 var po = true;
-			 i++;
-		 }
-		 else
-		 {
-			 var po = false;
-		 }
-		 if($('.style_no_check').hasClass('active'))
-		 {
-			 var style_no = true;
-			 i++;
-		 }
-		 else
-		 {
-			 var style_no = false;
-		 }
-		 if($('.reference_check').hasClass('active'))
-		 {
-			 var reference = true;
-			 i++;
-		 }
-		 else
-		 {
-			 var reference = false;
-		 }
-		 if($('.qty_check').hasClass('active'))
-		 {
+@endsection @section('jqueryIncludes')
+<script>
+	
+	/** [ Make buyers card active ] */
+	$('div.buyers-card').click(function(){
+	  $('div.buyers-card').removeClass("active");
+	  $(this).addClass("active");
+	  $('#hidden-buyer-div').hide();
+
+	  /* Save selected buyer into localdb */
+      if ($('.buyers-card.active-buyer.active').length != 0) 
+      {
+          var company_id = $('.buyers-card.active-buyer.active').data("value"); 
+		  var company_name = $('.buyers-card.active-buyer.active').attr("id");
+          $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
+          $('#buyerSelectionModalCenter').modal('hide');
+		  
+		  var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			$.ajax({
+				url: base_url + "/erp/po-manager/set_company_session",
+				type: "Post",
+				dataType: "json",
+				data: {
+					_token: csrf_token,
+					company_id: company_id,
+					company_name:company_name
+				},
+				beforeSend: function() {
+
+				},
+				success: function(data) {
+				},
+				error: function(data) {
+
+				},
+				complete: function() {
+
+				}
+			})
+      }
+	  
+	});
+	
+	/** [ Show already selected(active) buyer on clicking buyer menu] */
+	$('.company-nav-menu').on('click', function() {
+	    
+	        $("#buyerSelectionModalCenter").modal("show");
+	    
+	});
+	//alert($('#company_name').val())
+	if($('#company_name').val() != null && $('#company_name').val() != "")
+	{
+		$('#'+$('#company_name').val()).addClass('active');
+	}
+	else
+	{
+		 $('div.buyers-card').first().addClass("active");
+	}
+	
+   
+    $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
+	
+	
+	$('.company-nav-menu').html($('.company-nav-div').html());
+	var base_url = "<?php echo  url('/') ?>";
+	var table = $('#po-list-table').DataTable();
+	
+	 $("#po-list-table_filter input[type=search]").addClass('form-control');
+	  $('.dataTables_length select').addClass('form-control');
+	  $("#po-list-table_filter input[type=search]").attr('placeholder', 'Data Search');
+	
+	$(".style_no_check").click(function() {
+		$(this).toggleClass('active')
+		$('.style_no_td').toggleClass('bad')
+	});
+	$(".qty_check").click(function() {
+		$(this).toggleClass('active')
+		$('.qty_td').toggleClass('bad')
+	});
+	$(".po_complete_check").click(function() {
+		$(this).toggleClass('active')
+		$('.po-complete-label').toggleClass('active')
+		$('.border-div').toggleClass('active-border')
+	});
+	$(".reference_check").click(function() {
+		$(this).toggleClass('active')
+		$('.reference_td').toggleClass('bad')
+	});
+	$(".po_number_check").click(function() {
+		$(this).toggleClass('active')
+		$('.po_number_td').toggleClass('bad')
+	});
+	$(".price_check").click(function() {
+		$(this).toggleClass('active')
+		$('.price_td').toggleClass('bad')
+	});
+
+	function submit() {
+		var i = 0;
+		var j = 0;
+		var error_msg=0;
+
+		if ($('input[name=po-number-radio]:checked').val() == "not-ok") {
+			var po = true;
+			i++;
+			error_msg++;
+		} else if ($('input[name=po-number-radio]:checked').val() == "ok"){
+			var po = false;
+			error_msg++;
+		}
+		if ($('input[name=style-number-radio]:checked').val() == "not-ok") {
+			var style_no = true;
+			i++;
+			error_msg++;
+		} else if ($('input[name=style-number-radio]:checked').val() == "ok"){
+			var style_no = false;
+			error_msg++;
+		}
+		if ($('input[name=ref-number-radio]:checked').val() == "not-ok"){
+			var reference = true;
+			i++;
+			error_msg++;
+		} else if ($('input[name=ref-number-radio]:checked').val() == "ok"){
+			var reference = false;
+			error_msg++;
+		}
+		if ($('input[name=qty-radio]:checked').val() == "not-ok"){
 			var qty = true;
-			 i++;
-		 }
-		 else
-		 {
-			 var qty = false;
-		 }
-		 if($('.price_check').hasClass('active'))
-		 {
-			 var price = true;
-			 i++;
-		 }
-		 else
-		 {
-			 var price = false;
-		 }
-		 if($('.po_complete_check').hasClass('active'))
-		 {
-			 var po_complete = true;
-			 i++;
-			 j++;
-		 }
-		 else
-		 {
-			 var po_complete = false;
-		 }
-		 if($('#comment_box').val() != null && $('#comment_box').val() != "")
-		 {
-			 var comment = true;
-			 var commenttext	 = $('#comment_box').val();
-			 i++;
-		 }
-		 else
-		 {
-			 var comment = false;
-			 var commenttext = $('#comment_box').val();
-		 }
-		 //$('.btn-submit').addClass('btn-loader')
-		 
-		 var csrf_token = $('meta[name="csrf-token"]').attr('content');
-		 var erp_order_id = $('#erp_order_id').val();
-		$.ajax({
-			url: base_url + "/erp/po-manager/submit-po-verify",
-			type: "Post",
-			dataType: "json",
-			data: {
-				_token: csrf_token,
-				po:po,
-				style_no:style_no,
-				reference:reference,
-				qty:qty,
-				price:price,
-				po_complete:po_complete,
-				comment:comment,
-				commenttext:commenttext,
-				count_i:i,
-				count_j:j,
-				erp_order_id:erp_order_id
-			},
-			beforeSend: function () {
+			i++;
+			error_msg++;
+		} else if ($('input[name=qty-radio]:checked').val() == "ok"){
+			var qty = false;
+			error_msg++;
+		}
+		if ($('input[name=price-radio]:checked').val() == "not-ok") {
+			var price = true;
+			i++;
+			error_msg++;
+		} else if ($('input[name=price-radio]:checked').val() == "ok"){
+			var price = false;
+			error_msg++;
+		}
+		if ($('input[name=po-complete-radio]:checked').val() == "not-ok"){
+			var po_complete = true;
+			i++;
+			j++;
+			error_msg++;
+		} else if ($('input[name=po-complete-radio]:checked').val() == "ok"){
+			var po_complete = false;
+			error_msg++;
+		}
+		if ($('#comment_box').val() != null && $('#comment_box').val() != "") {
+			var comment = true;
+			var commenttext = $('#comment_box').val();
+			i++;
+		} else {
+			var comment = false;
+			var commenttext = $('#comment_box').val();
+		}
+		if(error_msg < 6)
+		{
+			$('.label-required-error').removeClass('hidden')
+		}
+		else
+		{
+			$('.label-required-error').addClass('hidden')
+			$('.btn-submit').prop("disabled",true);
+			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			var erp_order_id = $('#erp_order_id').val();
+			$.ajax({
+				url: base_url + "/erp/po-manager/submit-po-verify",
+				type: "Post",
+				dataType: "json",
+				data: {
+					_token: csrf_token,
+					po: po,
+					style_no: style_no,
+					reference: reference,
+					qty: qty,
+					price: price,
+					po_complete: po_complete,
+					comment: comment,
+					commenttext: commenttext,
+					count_i: i,
+					count_j: j,
+					erp_order_id: erp_order_id
+				},
+				beforeSend: function() {
 
-			},
-			success: function (data) {
-				 $('#orderDetailsModal').modal("hide")
-			     $('.snackbar_span').html('Po Verified successfully ...!');
-				 showSnackbar();
-				 location.reload()
-			},
-			error: function (data) {
+				},
+				success: function(data) {
+					$('#orderDetailsModal').modal("hide")
+					$('.snackbar_span').html('Po Verified successfully ...!');
+					showSnackbar();
+					location.reload()
+					$('#orderDetailsModal').modal("hide")
+				},
+				error: function(data) {
 
-			},
-			complete: function () {
+				},
+				complete: function() {
 
-			}
-		})
-		 
-	 }
-	 
+				}
+			})
+		}
+		
+
+	}
+
 	/** [showSnackbar function] */
 	function showSnackbar() {
 		try {
@@ -300,115 +562,110 @@
 			x.className = "show";
 
 			// After 3 seconds, remove the show class from DIV
-			setTimeout(function () {
+			setTimeout(function() {
 				x.className = x.className.replace("show", "");
 			}, 3000);
 		} catch (e) {
 			console.log("Error:" + e)
 		}
 	}
-	 
-	 function view_order_details(id,po_no,buyer_id,customer_id,po_file)
-	 {
-		 
+
+	function view_order_details(id, po_no, buyer_id, customer_id, po_file) {
+
 		$('#erp_order_id').val(id)
-		$('.po_file').attr('href',po_file)
+		$('.po_file').attr('href', po_file)
 		var csrf_token = $('meta[name="csrf-token"]').attr('content');
-		
+
 		$.ajax({
 			url: base_url + "/erp/po-manager/order-details",
 			type: "Post",
 			dataType: "json",
 			data: {
 				_token: csrf_token,
-				id:id,
-				buyer_id:buyer_id,
-				customer_id:customer_id
+				id: id,
+				buyer_id: buyer_id,
+				customer_id: customer_id
 			},
-			beforeSend: function () {
+			beforeSend: function() {
 
 			},
-			success: function (data) {
+			success: function(data) {
 				$('#order-details-table tbody').html("");
-				
-				var i=1;
-				
-				$(data.orderlist).each(function (key, index) {
-					if(index.status == 2)
-					{
+
+				var i = 1;
+
+				$(data.orderlist).each(function(key, index) {
+					if (index.status == 2) {
 						var label = 'label label-danger';
-					}
-					else
-					{
+					} else {
 						var label = 'label label-info';
 					}
 					$('#order-details-table tbody').append(`
-						<tr id="`+index.id+`">
-                          	<td class="">`+ i +`</td>
-							  <td class="erp_td">`+index.erp_order_id+`</td>
-							  <td class="po_number_td">`+po_no+`</td>
-							  <td class="style_no_td">`+index.style_no+`</td>
-							  <td class="reference_td">`+index.template_name+`</td>
-							  <td class="size_td">`+index.size+`</td>
-							  <td class="qty_td">`+index.order_quantity+`</td>
-							  <td class="price_td">`+index.price+`</td>
-							  <td><span class="`+label+`">`+index.status_name+`</span></td>
+						<tr id="` + index.id + `">
+                          	<td class="">` + i + `</td>
+							  <td class="erp_td">` + index.erp_order_id + `</td>
+							  <td class="po_number_td">` + po_no + `</td>
+							  <td class="style_no_td">` + index.style_no + `</td>
+							  <td class="reference_td">` + index.template_name + `</td>
+							  <td class="size_td">` + index.size + `</td>
+							  <td class="qty_td">` + index.order_quantity + `</td>
+							  <td class="price_td">` + index.price + `</td>
+							  <td><span class="` + label + `">` + index.status_name + `</span></td>
                           </tr>`)
 					i++;
 				})
-				
-				if(data.orders[0].po_updated_status == 1)
-				{
+
+				if (data.orders[0].po_updated_status == 1) {
 					$('.new-po-upload').removeClass('hidden')
 				}
-				
-				
-				
-			},
-			error: function (data) {
+
+
 
 			},
-			complete: function () {
+			error: function(data) {
+
+			},
+			complete: function() {
 
 			}
 		})
-		 $('.fa-times').removeClass('active')
-		 $('.border-div').removeClass('active-border') 
-		 $('.po-complete-label').removeClass('active')
-		 
-		 $('#orderDetailsModal').modal("show")
-	 }
-	 
-	 function change_po_updated_status()
-	 {
-		 var id = $('#erp_order_id').val()
-		 $('.new-po-upload').addClass('hidden')
-		 var csrf_token = $('meta[name="csrf-token"]').attr('content');
-		
-		 $.ajax({
+		$('.fa-times').removeClass('active')
+		$('.border-div').removeClass('active-border')
+		$('.po-complete-label').removeClass('active')
+		$('.label-required-error').addClass('hidden')
+		$('#orderDetailsModal').modal("show")
+		$('.btn-submit').prop("disabled",false);
+	}
+
+	function change_po_updated_status() {
+		var id = $('#erp_order_id').val()
+		$('.new-po-upload').addClass('hidden')
+		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+
+		$.ajax({
 			url: base_url + "/erp/po-manager/change_po_updated_status",
 			type: "Post",
 			dataType: "json",
 			data: {
 				_token: csrf_token,
-				id:id,
+				id: id,
 			},
-			beforeSend: function () {
+			beforeSend: function() {
 
 			},
-			success: function (data) {
-				
-				
-			},
-			error: function (data) {
+			success: function(data) {
+
 
 			},
-			complete: function () {
+			error: function(data) {
+
+			},
+			complete: function() {
 
 			}
-		 })
-	 }
-	 
+		})
+	}
+
 </script>
 
 @endsection

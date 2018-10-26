@@ -1784,8 +1784,8 @@ function GenerateDivTesco(data, name) {
 
 		if (ajax_count == document.getElementById("table_row").rows.length) {
 			var svg_fin = svgarr.join(',_');
-			//PopupTescoGenerateSmall(svg_fin, name,svgDoc);
-			PdfboxGenerateSmall(svg_fin, name,svgDoc);
+			PopupTescoGenerateSmall(svg_fin, name,svgDoc);
+			//PdfboxGenerateSmall(svg_fin, name,svgDoc);
 		}
 
 	} else {
@@ -2096,7 +2096,7 @@ function PopupTescoGenerate(data, name,svgDoc) {
 
 			document.body.removeChild(element);
 			
-			svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
+			//svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
@@ -2142,7 +2142,7 @@ function PopupTescoGenerateSmall(data, name,svgDoc) {
 
 			document.body.removeChild(element);
 			
-			svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
+			//svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
