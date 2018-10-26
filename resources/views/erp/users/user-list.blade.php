@@ -280,6 +280,7 @@
 <script>
 	$(document).ready(function(){
 		$('#edit_user_roles').val('0').selectpicker('refresh');
+		$('#user-list-table').DataTable();
 	})
 	/** submit add customer form and check validation **/
 	$('#add_user_form').validator().on('submit', function(e) {
@@ -389,7 +390,7 @@
 					$(".loader").show();
 				},
 				success: function (data) {
-					var data = data[0];
+					var data = data.data[0];
 					var roles = data.roles.map(a => a.id);
 					var buyer = data.buyer.map(a => a.id);
 					var company = data.company.map(a => a.id);
