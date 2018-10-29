@@ -97,7 +97,7 @@ class TemplateManagementCntrl extends Controller
          $items['company']  = DB::table("company")
                                 ->select('*')
                                 ->get();
-         $items['tax']      = DB::table("tesco_tax_code")
+         $items['tax']      = DB::table("tax_code")
                                 ->select('tax')
                                 ->distinct()
                                 ->get();

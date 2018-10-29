@@ -11,7 +11,7 @@ class TescoTaxCode extends Model
       *
       * @var string
       */
-      protected $table = 'tesco_tax_code';
+      protected $table = 'tax_code';
 
      /**
       * The attributes that are mass assignable.
