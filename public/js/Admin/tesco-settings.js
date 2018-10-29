@@ -1921,7 +1921,12 @@ function tescoMaterialMasters() {
                          isSubmitting = false;
                          $('.snackbar_span').html('Material is disabled ');
                          showSnackbar();
-                    }
+                    },
+                    208: function() {
+                        isSubmitting = false;
+                        $('.snackbar_span').html("This action can't be completed because material is in use.")
+                        showSnackbar();
+                   }
                },
                error: function(errorXHR, errorStatus, errorThrown) {
                  this.tryCount++;

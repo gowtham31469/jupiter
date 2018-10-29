@@ -957,12 +957,20 @@ class TescoSettings extends Controller
       {
         try {
               $id      = $request['id'];
-              TescoMaterialMaster::where('id',$id)
-               ->update([
-                 'is_enabled'  => false
-              ]);
-              $result = response()->json(['error'=> false,'message' =>'Success'],200);
-
+              /** @var array [Database Unique field validation] */
+              $is_exists = DB::table('tesco_template')->where('material_id','=',$id)->select('id')->get();
+              if(sizeof($is_exists) > 0)
+             {
+               $result = response()->json(['error'=> true,'message' =>'Material is in use.'],208);
+             }
+             else
+             {
+                $inserted = TescoMaterialMaster::where('id',$id)
+                              ->update([
+                                'is_enabled'  => false
+                            ]);
+                $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+             }
             } 
             catch (\Exception $e)
             {
