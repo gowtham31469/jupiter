@@ -118,7 +118,7 @@
                     // var grandTotal = updateTotal();
 
                     var gndtotal = parseFloat($('.tax-total').text())+ parseFloat($('.total-amnt').text());
-                    $('.extra-charges').html('<form id="extra-charges"><table class="table text-center extra-charges" style="margin-left: 31px;margin-top: -18px;"><thead><tr><th colspan="2">Description</th><th>Amount</th></tr></thead><tbody><tr><td><div style="width: 65%"><select class="charges" id="charges" name="charges" drequired=""><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td style="width: 116px;" colspan="2"><input type="number" value="" min="0" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr><tr><td colspan="2"><div style="width: 65%"><select  id="charges" name="charges" class="charges" required=""><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td style="width: 116px;"><input type="number" min="0" value="" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr><tr><td colspan="2"><div style="width: 65%"><select class="charges" id="charges" name="charges" required=""><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td style="width: 116px;"><input type="number" min="0" value="" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr><tr><td colspan="2"><strong>SubTotal</strong></td><td class="sub-extra">0</td></tr><tr></tr><tr><td colspan="2"><strong>Grand Total</strong></td><td class="grand-total">'+gndtotal.toFixed(3)+'</td></tr><tr></tr></tbody></table></form>')
+                    $('.extra-charges').html('<form id="extra-charges"><table class="table text-center extra-charges" style="margin-left: 31px;margin-top: -18px;"><thead><tr><th colspan="2">Description</th><th>Amount</th></tr></thead><tbody><tr><td><div style="width: 65%"><select class="charges" id="charges" name="charges" drequired=""><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td style="width: 116px;" colspan="2"><input type="number" value="" min="0" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr><tr><td colspan="2"><div style="width: 65%"><select  id="charges" name="charges" class="charges" required=""><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td style="width: 116px;"><input type="number" min="0" value="" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr><tr><td colspan="2"><div style="width: 65%"><select class="charges" id="charges" name="charges" required=""><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td style="width: 116px;"><input type="number" min="0" value="" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr><tr><td colspan="2"><strong>SubTotal</strong></td><td class="sub-extra">0</td></tr><tr></tr><tr><td colspan="2"><strong>Grand Total</strong></td><td class="grand-total">'+gndtotal.toFixed(3)+'</td></tr><tr></tr></tbody></table></form><div class="create-invoice"><button type="button" class="btn btn-primary create-invoice pull-right" style="margin-right: -32px;">Create Invoice</button></div>')
 
                     var checkboxes = $('.dynamic-table td input[type="checkbox"]');
                     $(document).find('.charges').selectpicker();                  
@@ -128,6 +128,8 @@
                         $('.order-details').removeClass('hidden')
                         $('.remarks').removeClass('hidden')
                         $('.create-invoice').removeClass('hidden')
+                        $('.orders-tax').removeClass('hidden')
+                        $('.extra-charges').removeClass('hidden')
                     }
                     else{
                         
@@ -135,11 +137,15 @@
                         $('.order-details').addClass('hidden')
                         $('.remarks').addClass('hidden')
                         $('.create-invoice').addClass('hidden')
+                        $('.orders-tax').addClass('hidden')
+                        $('.extra-charges').addClass('hidden')
                     }
                 }
                 else{
                     $('.order-details').addClass('hidden')
                     $('.remarks').addClass('hidden')
+                    $('.extra-charges').addClass('hidden')
+                    $('.orders-tax').addClass('hidden')
                 }
             },
             error: function (errorXHR, errorStatus, errorThrown) {

@@ -87,9 +87,9 @@
                             
                         </div>
                     </div>
-                    <div class="w3-card order-footer">
+                    <!-- <div class="w3-card order-footer">
                          <button type="button" class="btn btn-primary create-invoice hidden">Create Invoice</button>
-                    </div>
+                    </div -->>
                 </div>
             <!-- </div> -->
         </div>

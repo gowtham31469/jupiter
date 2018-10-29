@@ -305,12 +305,12 @@ class ProfomaInvoice
              $price_list      = DB::table('price_taxation')
                                     ->join('price_range','price_range.price_taxation_id','price_taxation.id')
                                     ->join('tesco_template','tesco_template.item_id','price_taxation.template_id')
-                                    ->join('tax_code','tesco_template.tax_code_id','tax_code.id')
+                                    // ->join('tax_code','tesco_template.tax_code_id','tax_code.id')
                                     ->where('price_taxation.template_id','=',$item_id)
                                     ->where('price_taxation.customer_id',$customer_details->id)
                                     ->where('price_taxation.buyer_id',$buyer_id)
                                     ->orderBy('price_range.volume_to')
-                                    ->select('price_range.volume_from', 'price_range.volume_to','price_range.price',DB::raw($item_id.' as item_id'),'tax_code.tax')
+                                    ->select('price_range.volume_from', 'price_range.volume_to','price_range.price',DB::raw($item_id.' as item_id'),'tesco_template.tax')
                                     ->get()->toArray();
               $price_array = array_merge($price_array,$price_list);
             } 
