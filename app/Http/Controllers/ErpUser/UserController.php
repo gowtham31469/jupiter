@@ -42,7 +42,7 @@ class UserController extends Controller
 		}else{
 			$id		= Auth::guard('erpuser')->user()->id;
 		
-			$roles 	= \App\ErpUserRolesMApping::where('erp_user', $id)
+			$roles 	= \App\ErpUserRolesMapping::where('erp_user', $id)
 						->join('erp_roles', 'erpusers_roles_mapping.role', 'erp_roles.id')
 						->pluck('name')->all();
 		}

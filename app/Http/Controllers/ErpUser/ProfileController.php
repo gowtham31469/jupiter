@@ -53,7 +53,7 @@ class ProfileController extends Controller
 							->pluck('erp_roles.name')
 							->all();
 
-		$template 		= \App\ErpUsersTemplateMapping::where('erp_user', $base)
+		$template 		= \App\ErpusersTemplateMapping::where('erp_user', $base)
 							->select('erpusers_template_mapping.templates', 'erpusers_template_mapping.buyer')
 							->get();
 		

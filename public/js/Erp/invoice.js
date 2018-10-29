@@ -113,8 +113,8 @@
                     
 
                     // $('.tax-tabl').append('<tr><td colspan="2"><strong>SubTotal</strong></td><td class="tax-total">'+ taxSubTotal() +'</td></tr><tr></tr>')                
-                    var grandTotal = updateTotal();
-                    $('.extra-charges').html('<form id="extra-charges"><table class="table text-center extra-charges" style="margin-left: 31px;margin-top: -18px;"><thead><tr><th colspan="2">Description</th><th>Amount</th></tr></thead><tbody><tr><td><div style="width: 65%"><select class="charges" id="charges" name="charges" drequired=""><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td style="width: 116px;" colspan="2"><input type="text" value="" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr><tr><td colspan="2"><div style="width: 65%"><select  id="charges" name="charges" class="charges" required=""><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td style="width: 116px;"><input type="text" value="" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr><tr><td colspan="2"><div style="width: 65%"><select class="charges" id="charges" name="charges" required=""><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td style="width: 116px;"><input type="text" value="" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr><tr><td colspan="2"><strong>SubTotal</strong></td><td class="sub-extra">0</td></tr><tr></tr><tr><td colspan="2"><strong>Grand Total</strong></td><td class="grand-total">'+grandTotal+'</td></tr><tr></tr></tbody></table></form>')
+                    // var grandTotal = updateTotal();
+                    $('.extra-charges').html('<form id="extra-charges"><table class="table text-center extra-charges" style="margin-left: 31px;margin-top: -18px;"><thead><tr><th colspan="2">Description</th><th>Amount</th></tr></thead><tbody><tr><td><div style="width: 65%"><select class="charges" id="charges" name="charges" drequired=""><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td style="width: 116px;" colspan="2"><input type="text" value="" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr><tr><td colspan="2"><div style="width: 65%"><select  id="charges" name="charges" class="charges" required=""><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td style="width: 116px;"><input type="text" value="" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr><tr><td colspan="2"><div style="width: 65%"><select class="charges" id="charges" name="charges" required=""><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td style="width: 116px;"><input type="text" value="" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr><tr><td colspan="2"><strong>SubTotal</strong></td><td class="sub-extra">0</td></tr><tr></tr><tr><td colspan="2"><strong>Grand Total</strong></td><td class="grand-total" id="grand-total">3</td></tr><tr></tr></tbody></table></form>')
 
                     var checkboxes = $('.dynamic-table td input[type="checkbox"]');
                     $(document).find('.charges').selectpicker();                  
@@ -229,6 +229,10 @@
             $('.tax-tabl').append(tax_tr);
         });
         $('.tax-tabl').append('<tr><td colspan="2"><strong>SubTotal</strong></td><td class="tax-total">'+ taxSubTotal().toFixed(3) +'</td></tr><tr></tr>')
+        var grandTotal = parseFloat($('.tax-total').text())+ parseFloat($('.total-amnt').text());
+        $('.grand-total').html(grandTotal)
+        console.log($('.grand-total').text())
+
     }
 
     function updateTotal()
@@ -237,7 +241,6 @@
         $('.extra-amnt').each(function(i, obj){
             if($.isNumeric(this.value)) {
                 result += (this.value) == "" ? 0 :parseFloat(this.value)
-                // result += parseFloat(this.value);
             }
         })
         $('.sub-extra').html(result)
