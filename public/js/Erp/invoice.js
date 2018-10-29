@@ -256,6 +256,5 @@
                delvryQnty[$(this).data("id")] = parseFloat(this.value);
             }
         })
-
         console.log(delvryQnty)
     });
