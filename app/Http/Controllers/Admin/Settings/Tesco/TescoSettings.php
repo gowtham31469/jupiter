@@ -713,7 +713,7 @@ class TescoSettings extends Controller
          public function taxCode()
          {
            try {
-                 $taxcode = DB::table('tesco_tax_code')->select('id','tax_code','tax_type','is_enabled', 'tax')->orderBy('is_enabled','desc')->get();
+                 $taxcode = DB::table('tax_code')->select('id','tax_code','tax_type','is_enabled', 'tax')->orderBy('is_enabled','desc')->get();
                  return response()->json(['error'=>'false','message' =>'success', 'taxcodes' => $taxcode]);
                } catch (\Exception $e)
                {
@@ -763,7 +763,7 @@ class TescoSettings extends Controller
        {
        try {
              $id = $request['id'];
-             $tax_code = DB::table('tesco_tax_code')->select('id','tax_code','tax_type','is_enabled', 'tax')->where('tesco_tax_code.id',$id)->get();
+             $tax_code = DB::table('tax_code')->select('id','tax_code','tax_type','is_enabled', 'tax')->where('tax_code.id',$id)->get();
              return response()->json(['error'=>'false','message' =>'success', 'tax_codes' => $tax_code]);
            } catch (\Exception $e)
            {

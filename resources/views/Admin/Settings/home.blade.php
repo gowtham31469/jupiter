@@ -2014,7 +2014,7 @@
         $('#add_tesco_departments_form').trigger("reset");
         $('#add_tesco_suppliers_form').trigger("reset");
         $('#add_tesco_size_charts_form').trigger("reset");
-        $('#add_tesco_tax_codes_form').trigger("reset");
+        $('#add_tax_codes_form').trigger("reset");
         $('#add_tesco_material_form').trigger("reset");
         $('#add_tesco_error_report_email_form').trigger("reset");
         $('#edit_orchestra_symbols_form').trigger("reset");
