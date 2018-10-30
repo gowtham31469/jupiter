@@ -589,6 +589,7 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::put('password', 'ErpUser\ProfileController@putPassword')->name('erp.user.putPwd');
 	/* Routes for Admin Order Management */
 	Route::get('order-management', 'ErpUser\Admin\OrderController@show')->name('erp.admin.orders.show');
+	Route::delete('admin/order', 'ErpUser\Admin\OrderController@destroy')->name('erp.admin.orders.delete');
 	
 	/* Routes for Invoice Management */
 	Route::get('/invoice', 'ErpUser\Invoice\InvoiceController@index')->name('invoice'); 

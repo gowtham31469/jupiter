@@ -41,13 +41,10 @@ class OrderController extends Controller
      * @author [Gba] <[guberakannan@wizroots.com]>
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show(Request $request)
     {
-		$users 		= \App\Erpuser::users();
-		$roles 		= \App\ErpRoles::pluck('name', 'id')->all();
-		$company 	= DB::table('company')->pluck('name', 'id')->all();
-		$buyers 	= \App\Buyer::pluck('buyer_name as name', 'id')->all();
-		return view('erp.Admin Orders.index', compact('users', 'company', 'buyers', 'roles'));
+		$orders 	= \App\ErpOrders::orderDetails();
+		return view('erp.Admin Orders.index', compact('orders'));
 	}
 	/**
      * Store the users.
@@ -199,8 +196,8 @@ class OrderController extends Controller
      */
     public function destroy(Request $request)
     {
-        \App\Erpuser::where('id', $request->id)->delete();
-		return redirect('erp/users')->with('message', 'User Deleted successfully');
+        \App\ErpOrders::where('id', $request->id)->delete();
+		return redirect('erp/order-management')->with('message', 'Order Cancelled successfully');
     }
 	/**
      * Get the specified company template hierarchy.
