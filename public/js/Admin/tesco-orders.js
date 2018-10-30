@@ -1784,8 +1784,8 @@ function GenerateDivTesco(data, name) {
 
 		if (ajax_count == document.getElementById("table_row").rows.length) {
 			var svg_fin = svgarr.join(',_');
-			//PopupTescoGenerateSmall(svg_fin, name,svgDoc);
-			PdfboxGenerateSmall(svg_fin, name,svgDoc);
+			PopupTescoGenerateSmall(svg_fin, name,svgDoc);
+			//PdfboxGenerateSmall(svg_fin, name,svgDoc);
 		}
 
 	} else {
@@ -5134,14 +5134,7 @@ function afterOrderSubmitted(data,po_number,stl_no) {
 	                    </div>';
 			/** Dynamic content for po upload modal tab */
 			$('#po-upload-modal-content').html(html);
-			$.each(data.zero_quantity, function (key, item) {
-				/** remove zero quantity templates from po upload modal */
-				$("#"+ item.replace(' ', '') + '_row').remove();
 
-				/** [ Remove print and proof genration button if quantity is 0 ] */
-				$('#print_' + item.replace(' ', '') + '_btn').hide();
-				$('#proof_' + item.replace(' ', '') + '_btn').hide();
-			});
 			$('#poUploadModal').modal('show');
 				/** [ Backdrop for bootstrap modal ] */
 			$('#poUploadModal').modal({
@@ -5213,6 +5206,14 @@ function afterOrderSubmitted(data,po_number,stl_no) {
 			}
 			genarateTescoPI(row_id,tabl_name,pi_status,stl_no,template_id,po_number,template_name,order_flag)
 		}	
+		$.each(data.zero_quantity, function (key, item) {
+			/** remove zero quantity templates from po upload modal */
+			$("#"+ item.replace(' ', '') + '_row').remove();
+
+			/** [ Remove print and proof genration button if quantity is 0 ] */
+			$('#print_' + item.replace(' ', '') + '_btn').hide();
+			$('#proof_' + item.replace(' ', '') + '_btn').hide();
+		});
 	}
 
 	/** [ Show order already exists alertbox] */
