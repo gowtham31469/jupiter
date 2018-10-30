@@ -173,9 +173,10 @@
 	.remark-align {
 		padding-left: 0px !important;
 	}
-tfoot {
-     display: table-header-group;
-}
+	/** show datatable filter on top **/
+	tfoot {
+		display: table-header-group;
+	}
 </style>
 @section('navbar')
 
