@@ -2096,7 +2096,7 @@ function PopupTescoGenerate(data, name,svgDoc) {
 
 			document.body.removeChild(element);
 			
-			//svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
+			svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
@@ -2142,7 +2142,7 @@ function PopupTescoGenerateSmall(data, name,svgDoc) {
 
 			document.body.removeChild(element);
 			
-			//svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
+			svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {

@@ -173,7 +173,36 @@
 	.remark-align {
 		padding-left: 0px !important;
 	}
-
+	
+	#po-list-table {
+		font-size: 14px !important;
+		width: 100% !important;
+	}
+	
+	#order-details-table {
+		font-size: 14px !important;
+		width: 100%;
+		margin-top: 15px;
+	}
+	
+.modal-header {
+    padding: 15px;
+    border-bottom: 1px solid #e5e5e5;
+    box-shadow: -4px 2px 12px 0px rgba(0, 0, 0, 0.09);
+}
+	.close {
+  
+    font-weight: 100 !important;
+    color: #000000 !important;
+    opacity: 0.5 !important;
+}
+	.scroll {
+    height: calc(100vh - 130px);
+    min-height: 300px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    padding-right: 10px;
+}
 </style>
 @section('navbar')
 
@@ -183,9 +212,9 @@
 
 @endsection @section('content')
 <div class="col-sm-12 col-md-12 main">
-	  <div class="company-nav-div">
-           <a class="dropdown-toggle profile-dropdown-admin selected-buyer" style="text-transform:capitalize;cursor: pointer;">Select Company</a>
-        </div>
+	<div class="company-nav-div hidden">
+		<a class="dropdown-toggle profile-dropdown-admin selected-buyer" style="text-transform:capitalize;cursor: pointer;">Select Company</a>
+	</div>
 	<div class="main-content">
 
 
@@ -195,7 +224,7 @@
 		<div class="col" id="customer-table">
 			<input type="hidden" value="{{ session()->get('company') }}" id="company_id">
 			<input type="hidden" value="{{ session()->get('company_name') }}" id="company_name">
-			<table id="po-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%">
+			<table id="po-list-table" class="table table-hover table-striped table-bordered table-responsive">
 				<thead>
 					<tr>
 						<th>Sl. No</th>
@@ -231,31 +260,30 @@
 
 <!-- Buyer selection Modal -->
 <div class="modal buyer-selection-modal fade" id="buyerSelectionModalCenter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-     <div class="modal-dialog buyer-selection-modal-dialog" role="document">
-         <div class="modal-content buyer-selection-modal-content">
-                <div class="modal-header">
-                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                     <h4 class="modal-title buyer-modal-title" id="myModalLabel">Select a Company</h4>
-                 </div>
-                 <div class="modal-body buyer-selection-modal-body">
-                    <div class="alert alert-warning" role="alert" id="hidden-buyer-div" style="display: none;margin-bottom: 5px;">
-                      <strong>Warning!</strong> Select a Company to proceed.
-                    </div>
-                    @foreach($companies as $company)
-                     <a class="buyer-card-link" style="cursor: pointer;">
+	<div class="modal-dialog buyer-selection-modal-dialog" role="document">
+		<div class="modal-content buyer-selection-modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title buyer-modal-title" id="myModalLabel">Select a Company</h4>
+			</div>
+			<div class="modal-body buyer-selection-modal-body">
+				<div class="alert alert-warning" role="alert" id="hidden-buyer-div" style="display: none;margin-bottom: 5px;">
+					<strong>Warning!</strong> Select a Company to proceed.
+				</div>
+				@foreach($companies as $company)
+				<a class="buyer-card-link" style="cursor: pointer;">
                          <div class="card buyers-card elevation-2dp active-buyer" data-name ="{{$company->name}}"  data-value ="{{$company->company}}" id="{{ strtolower( str_replace(' ','',$company->name)) }}">
                           {{ $company->name }}
                          </div>
-                     </a>
-                    @endforeach
-                 </div>
-                 <div class="modal-footer buyer-selection-modal-footer">
-                     {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                 </div>
-            {!! Form::close() !!}
-         </div>
-     </div>
- </div>
+                     </a> @endforeach
+			</div>
+			<div class="modal-footer buyer-selection-modal-footer">
+				{!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+			</div>
+			{!! Form::close() !!}
+		</div>
+	</div>
+</div>
 
 {{-- Snackbar html code --}}
 <div id="snackbar"><span class="snackbar_span"></span></div>
@@ -266,15 +294,14 @@
 		<div class="modal-content buyer-selection-modal-content" style="color: #333;">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<a href="" download onclick="change_po_updated_status()" class="po_file" style="float:right;margin-right:12px"><i class="fa fa-download" data-placement="top" title="" data-original-title="Download Pdf"></i> Download Pdf</a>
 				<h4 class="modal-title" id="myModalLabel">Order Details</h4>
 			</div>
 
-			<div class="modal-body buyer-selection-modal-body">
+			<div class="modal-body buyer-selection-modal-body scroll">
 				<label class="label new-po-upload label-info hidden">New po has been uploaded before verify please download the latest pdf</label>
 				<label class="label label-danger label-required-error hidden">Please check the checkbox</label>
 				<input type="hidden" id="erp_order_id">
-				<table id="order-details-table" class="table table-bordered table-responsive" style="width:100%;margin-top: 15px;">
+				<table id="order-details-table" class="table table-striped table-responsive">
 					<thead>
 						<tr>
 							<th>Sl. No </th>
@@ -293,6 +320,7 @@
 
 					</tbody>
 				</table>
+				<hr>
 				<!--			 <div class="border-div" style="border: 1px #333 solid;border-color:grey;border-radius: 5px; padding: 5px;width: 110px;"><i class="po_complete_check cur-po-comp fa fa-times"></i><label class="po-complete-label" style="margin-left:10px;color:grey">PO Complete</label></div>-->
 
 
@@ -336,8 +364,10 @@
 			</div>
 
 			<div class="modal-footer buyer-selection-modal-footer">
+				
 				{!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
 				<button class="btn btn-primary btn-submit btn-sm" onclick="submit()">Submit</button>
+				<a href="" download onclick="change_po_updated_status()" class="po_file btn btn-default pull-left"><i class="fa fa-download" data-placement="top" title="" data-original-title="Download Pdf"></i> Download Pdf</a>
 			</div>
 
 		</div>
@@ -345,22 +375,23 @@
 </div>
 @endsection @section('jqueryIncludes')
 <script>
+	//$('.company-nav-div .profile-dropdown-admin').addClass('hidden')
 	
+	//$("#orderDetailsModal").niceScroll();
 	/** [ Make buyers card active ] */
-	$('div.buyers-card').click(function(){
-	  $('div.buyers-card').removeClass("active");
-	  $(this).addClass("active");
-	  $('#hidden-buyer-div').hide();
+	$('div.buyers-card').click(function() {
+		$('div.buyers-card').removeClass("active");
+		$(this).addClass("active");
+		$('#hidden-buyer-div').hide();
 
-	  /* Save selected buyer into localdb */
-      if ($('.buyers-card.active-buyer.active').length != 0) 
-      {
-          var company_id = $('.buyers-card.active-buyer.active').data("value"); 
-		  var company_name = $('.buyers-card.active-buyer.active').attr("id");
-          $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
-          $('#buyerSelectionModalCenter').modal('hide');
-		  
-		  var csrf_token = $('meta[name="csrf-token"]').attr('content');
+		/* Save selected buyer into localdb */
+		if ($('.buyers-card.active-buyer.active').length != 0) {
+			var company_id = $('.buyers-card.active-buyer.active').data("value");
+			var company_name = $('.buyers-card.active-buyer.active').attr("id");
+			$('.selected-buyer').text('Selected Company : ' + $('.buyers-card.active-buyer.active').data("name"))
+			$('#buyerSelectionModalCenter').modal('hide');
+
+			var csrf_token = $('meta[name="csrf-token"]').attr('content');
 			$.ajax({
 				url: base_url + "/erp/po-manager/set_company_session",
 				type: "Post",
@@ -368,13 +399,13 @@
 				data: {
 					_token: csrf_token,
 					company_id: company_id,
-					company_name:company_name
+					company_name: company_name
 				},
 				beforeSend: function() {
+					location.reload();
 
 				},
-				success: function(data) {
-				},
+				success: function(data) {},
 				error: function(data) {
 
 				},
@@ -382,38 +413,35 @@
 
 				}
 			})
-      }
-	  
+		}
+
 	});
-	
+
 	/** [ Show already selected(active) buyer on clicking buyer menu] */
 	$('.company-nav-menu').on('click', function() {
-	    
-	        $("#buyerSelectionModalCenter").modal("show");
-	    
+
+		$("#buyerSelectionModalCenter").modal("show");
+
 	});
 	//alert($('#company_name').val())
-	if($('#company_name').val() != null && $('#company_name').val() != "")
-	{
-		$('#'+$('#company_name').val()).addClass('active');
+	if ($('#company_name').val() != null && $('#company_name').val() != "") {
+		$('#' + $('#company_name').val()).addClass('active');
+	} else {
+		$('div.buyers-card').first().addClass("active");
 	}
-	else
-	{
-		 $('div.buyers-card').first().addClass("active");
-	}
-	
-   
-    $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
-	
-	
+
+
+	$('.selected-buyer').text('Selected Company : ' + $('.buyers-card.active-buyer.active').data("name"))
+
+
 	$('.company-nav-menu').html($('.company-nav-div').html());
 	var base_url = "<?php echo  url('/') ?>";
 	var table = $('#po-list-table').DataTable();
-	
-	 $("#po-list-table_filter input[type=search]").addClass('form-control');
-	  $('.dataTables_length select').addClass('form-control');
-	  $("#po-list-table_filter input[type=search]").attr('placeholder', 'Data Search');
-	
+
+	$("#po-list-table_filter input[type=search]").addClass('form-control');
+	$('.dataTables_length select').addClass('form-control');
+	$("#po-list-table_filter input[type=search]").attr('placeholder', 'Data Search');
+
 	$(".style_no_check").click(function() {
 		$(this).toggleClass('active')
 		$('.style_no_td').toggleClass('bad')
@@ -443,13 +471,13 @@
 	function submit() {
 		var i = 0;
 		var j = 0;
-		var error_msg=0;
+		var error_msg = 0;
 
 		if ($('input[name=po-number-radio]:checked').val() == "not-ok") {
 			var po = true;
 			i++;
 			error_msg++;
-		} else if ($('input[name=po-number-radio]:checked').val() == "ok"){
+		} else if ($('input[name=po-number-radio]:checked').val() == "ok") {
 			var po = false;
 			error_msg++;
 		}
@@ -457,23 +485,23 @@
 			var style_no = true;
 			i++;
 			error_msg++;
-		} else if ($('input[name=style-number-radio]:checked').val() == "ok"){
+		} else if ($('input[name=style-number-radio]:checked').val() == "ok") {
 			var style_no = false;
 			error_msg++;
 		}
-		if ($('input[name=ref-number-radio]:checked').val() == "not-ok"){
+		if ($('input[name=ref-number-radio]:checked').val() == "not-ok") {
 			var reference = true;
 			i++;
 			error_msg++;
-		} else if ($('input[name=ref-number-radio]:checked').val() == "ok"){
+		} else if ($('input[name=ref-number-radio]:checked').val() == "ok") {
 			var reference = false;
 			error_msg++;
 		}
-		if ($('input[name=qty-radio]:checked').val() == "not-ok"){
+		if ($('input[name=qty-radio]:checked').val() == "not-ok") {
 			var qty = true;
 			i++;
 			error_msg++;
-		} else if ($('input[name=qty-radio]:checked').val() == "ok"){
+		} else if ($('input[name=qty-radio]:checked').val() == "ok") {
 			var qty = false;
 			error_msg++;
 		}
@@ -481,16 +509,16 @@
 			var price = true;
 			i++;
 			error_msg++;
-		} else if ($('input[name=price-radio]:checked').val() == "ok"){
+		} else if ($('input[name=price-radio]:checked').val() == "ok") {
 			var price = false;
 			error_msg++;
 		}
-		if ($('input[name=po-complete-radio]:checked').val() == "not-ok"){
+		if ($('input[name=po-complete-radio]:checked').val() == "not-ok") {
 			var po_complete = true;
 			i++;
 			j++;
 			error_msg++;
-		} else if ($('input[name=po-complete-radio]:checked').val() == "ok"){
+		} else if ($('input[name=po-complete-radio]:checked').val() == "ok") {
 			var po_complete = false;
 			error_msg++;
 		}
@@ -502,14 +530,11 @@
 			var comment = false;
 			var commenttext = $('#comment_box').val();
 		}
-		if(error_msg < 6)
-		{
+		if (error_msg < 6) {
 			$('.label-required-error').removeClass('hidden')
-		}
-		else
-		{
+		} else {
 			$('.label-required-error').addClass('hidden')
-			$('.btn-submit').prop("disabled",true);
+			$('.btn-submit').prop("disabled", true);
 			var csrf_token = $('meta[name="csrf-token"]').attr('content');
 			var erp_order_id = $('#erp_order_id').val();
 			$.ajax({
@@ -548,7 +573,7 @@
 				}
 			})
 		}
-		
+
 
 	}
 
@@ -634,7 +659,7 @@
 		$('.po-complete-label').removeClass('active')
 		$('.label-required-error').addClass('hidden')
 		$('#orderDetailsModal').modal("show")
-		$('.btn-submit').prop("disabled",false);
+		$('.btn-submit').prop("disabled", false);
 	}
 
 	function change_po_updated_status() {
@@ -665,7 +690,6 @@
 			}
 		})
 	}
-
 </script>
 
 @endsection
