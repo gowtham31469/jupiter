@@ -71,6 +71,7 @@ class InvoiceController extends Controller
                             ->join('erp_orders','erp_orders.id','erp_order_details.erp_order_id')
                             ->join('customers','erp_orders.customer_id','customers.id')
                             ->join('buyers','erp_orders.buyer_id','buyers.id')
+                            ->where('erp_order_details.pending_orders','!=' , 0)
                             ->select('erp_order_details.id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','erp_orders.po_no','erp_order_details.style_no','erp_order_details.order_quantity','erp_order_details.rate','erp_order_details.size','erp_order_details.reference_name','customers.place_of_supply','erp_order_details.ocn_number','erp_order_details.template_id','erp_orders.id as erp_id','buyers.template_table','buyers.item_master_table')
                             ->get();
 

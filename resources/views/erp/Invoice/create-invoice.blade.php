@@ -1,6 +1,6 @@
 @extends('layouts.Erp.app')
 @if (Auth::guard("erpuser")->user())
-@section('content')
+
 <style>
     .order-footer{
        position: fixed;
@@ -12,6 +12,14 @@
        text-align: right;
     }
 </style>
+@section('navbar') 
+
+<ul class="nav navbar-nav dynamic-menu">
+    <li><a  href="" class="active">Create Invoice</a></li>
+</ul>
+
+@endsection
+@section('content')
 <div class="col-sm-12 col-md-12 main">
 	 <div class="main-content">
         <div class="select-buyer"></div>
