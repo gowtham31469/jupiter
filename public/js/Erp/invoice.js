@@ -16,13 +16,13 @@
                 {
                     $(data.po_list).each(function(index, value)
                     {
-                        html += '<tr><td><input name="select_all" value="'+value.id +'" id="'+value.id +'" class="po-select" type="checkbox" /></td><td>'+value.id +'</td><td>'+value.po_no+'</td><td>'+value.buyer_name+'</td></tr>';
+                        html += '<tr><td><input name="po_select" value="'+value.id +'" id="'+value.id +'" class="po-select" type="checkbox" /></td><td>'+value.erp_id +'</td><td>'+value.po_no+'</td><td>'+value.buyer_name+'</td></tr>';
                     });
                     $('.dynamic-table').html('<form id="po-list-form"><table class="table"><thead><tr><th></th><th class="text-center">ERP ID</th><th class="text-center">PO Number</th><th class="text-center">Buyer</th></tr></thead><tbody>'+html+'</tbody></table></form>');
                     $('.po-list').removeClass('hidden')
                     $('.dynamic-table tbody').on('change', 'input[type="checkbox"]', function(){
                     $('.po-select').not(this).prop('checked', false);  
-                    showOrderList(this)                           
+                        showOrderList(this)                           
                     });
                 }
                 else{
@@ -45,7 +45,6 @@
 	}
     function showOrderList(obj) {
         var erp_id = $(obj).val()
-        
         var table  = $(obj).attr('data-id')
         $.ajax({
             url: "/erp/erp-order-list",
@@ -58,6 +57,7 @@
             dataType: "json",
 
             success: function (data) {
+                
                 $('.order-details').html('');
                 var tr = "";
                 var qnty = 0;
@@ -70,6 +70,8 @@
 
                 if(data.orderlist.length != 0)
                 {   
+                    
+                    var order_data = data.orderlist;
                     var result = '';
                     var taxIndexes = [] ;
                     var taxlist = data.orderlist.map(a => a.tax);
@@ -97,7 +99,7 @@
                         var size = (value.size == null)?'-':value.size ; 
 
                         tr += '<tr class="trClass" id="'+value.id+'">';
-                        tr += '<td><input name="select_all" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" /></td><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.id+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td>'+value.hsn_code+'</td><td class="tax-td">'+value.tax+' %</td><td class="qnty">'+value.order_quantity+'</td><td style="width: 116px;"><input type="number" value="" class="form-control delivery-qnty" data-id="'+value.id+'" onkeyup="updateAmount.call(this,'+uniqueTax+')"></td><td class="rate">'+value.rate+'</td><td class="amnt">'+value.order_quantity * value.rate+'</td>';
+                        tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" checked/></td><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.id+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td>'+value.hsn_code+'</td><td class="tax-td">'+value.tax+' %</td><td class="qnty">'+value.order_quantity+'</td><td style="width: 116px;"><input type="number" value="" class="form-control delivery-qnty" required="" data-id="'+value.id+'" onkeyup="updateAmount.call(this,'+uniqueTax+')"></td><td class="rate">'+value.rate+'</td><td class="amnt">'+value.order_quantity * value.rate+'</td>';
                         tr += '</tr>';
                         qnty += value.order_quantity;
                         amnt += (value.order_quantity*value.rate);
@@ -107,7 +109,7 @@
                         tr+= '<tr><td colspan="10"><strong>Total</strong></td><td>'+qnty+'</td><td class="total-qnty" id="total-qnty">'+quantityTotal()+'</td><td></td><td class="total-amnt">'+amnt+'</td></tr>';
 
 
-                    $('.order-details').html('<form id="frm-orders"><table class="table text-center"><thead><tr><th></th><th>Order No</th><th>PO No</th><th>Style</th><th>OCN No</th><th>Item</th><th>Reference</th><th>Size</th><th>HSN No</th><th>Tax</th><th>Order Quantity</th><th>Delivered Quantity</th><th>Rate</th><th>Amount</th></tr></thead><tbody>'+tr+'</tbody></table></form>');
+                    $('.order-details').html('<table class="table text-center order-details"><thead><tr><th></th><th>Order No</th><th>PO No</th><th>Style</th><th>OCN No</th><th>Item</th><th>Reference</th><th>Size</th><th>HSN No</th><th>Tax</th><th>Order Quantity</th><th>Delivered Quantity</th><th>Rate</th><th>Amount</th></tr></thead><tbody>'+tr+'</tbody></table>');
 
                     // var tax_table = $('.orders-tax').html('<form id="orders-tax"><table class="table text-center" style="margin-left: 31px;margin-top: -18px;"><thead><tr><th>Tax</th><th>Base value</th><th>Amount</th></tr></thead><tbody class="tax-tabl"></tbody></table></form>')
 
@@ -118,8 +120,11 @@
                     // var grandTotal = updateTotal();
 
                     var gndtotal = parseFloat($('.tax-total').text())+ parseFloat($('.total-amnt').text());
-                    $('.extra-charges').html('<form id="extra-charges"><table class="table text-center extra-charges" style="margin-left: 31px;margin-top: -18px;"><thead><tr><th colspan="2">Description</th><th>Amount</th></tr></thead><tbody><tr><td><div style="width: 65%"><select class="charges" id="charges" name="charges" drequired=""><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td style="width: 116px;" colspan="2"><input type="number" value="" min="0" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr><tr><td colspan="2"><div style="width: 65%"><select  id="charges" name="charges" class="charges" required=""><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td style="width: 116px;"><input type="number" min="0" value="" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr><tr><td colspan="2"><div style="width: 65%"><select class="charges" id="charges" name="charges" required=""><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td style="width: 116px;"><input type="number" min="0" value="" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr><tr><td colspan="2"><strong>SubTotal</strong></td><td class="sub-extra">0</td></tr><tr></tr><tr><td colspan="2"><strong>Grand Total</strong></td><td class="grand-total">'+gndtotal.toFixed(3)+'</td></tr><tr></tr></tbody></table></form><div class="create-invoice"><button type="button" class="btn btn-primary create-invoice pull-right" style="margin-right: -32px;">Create Invoice</button></div>')
+                    $('.extra-charges').html('<table class="table text-center extra-charges" style="margin-left: 31px;margin-top: -18px;"><thead><tr><th colspan="2">Description</th><th>Amount</th></tr></thead><tbody><tr><td><div style="width: 65%"><select class="charges" id="charges1" name="charges1"><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td style="width: 116px;" colspan="2"><input type="number" value="" min="0" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr><tr><td colspan="2"><div style="width: 65%"><select  id="charges2" name="charges2" class="charges"><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td style="width: 116px;"><input type="number" min="0" value="" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr><tr><td colspan="2"><div style="width: 65%"><select class="charges" id="charges3" name="charges3" ><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td style="width: 116px;"><input type="number" min="0" value="" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr><tr><td colspan="2"><strong>SubTotal</strong></td><td class="sub-extra">0</td></tr><tr></tr><tr><td colspan="2"><strong>Grand Total</strong></td><td class="grand-total">'+gndtotal.toFixed(3)+'</td></tr><tr></tr></tbody></table><div class="create-invoice"><button type="button" class="btn btn-primary create-invoice pull-right" style="margin-right: -32px;margin-top: -10px;" id="create-invoice">Create Invoice</button></div>')
 
+                        $('#create-invoice').on('click',function(){
+                            createInvoice(data)
+                        })
                     var checkboxes = $('.dynamic-table td input[type="checkbox"]');
                     $(document).find('.charges').selectpicker();                  
 
@@ -204,9 +209,11 @@
     }
 
     function quantityTotal(){
+        
         var sum=0;
         $('.delivery-qnty').each(function(i, obj){
            if($.isNumeric(this.value)) {
+            $(this).css('border-color', '');
                 sum += parseFloat(this.value);
               }
         })
@@ -255,12 +262,38 @@
         $('.grand-total').html(grandTotal.toFixed(3))        
     }
 
-    $('.create-invoice').click(function () {
+    // $('#invoice_form').validator().on('submit', function (e) {
+    //     if (e.isDefaultPrevented()) {
+
+    //     } else {
+    //         e.preventDefault();
+    //         createInvoice();
+    //     }
+    // })
+
+    function createInvoice(data){
+        $('.delivery-qnty').css('border-color', '');
         var delvryQnty = {};
+        var count = 0 ;
         $('.delivery-qnty').each(function(i, obj){
-            if($.isNumeric(this.value)) {                
+            if($.isNumeric(this.value)) {             
                delvryQnty[$(this).data("id")] = parseFloat(this.value);
             }
+            else{
+                $(this).closest('tr').find('.delivery-qnty').focus();
+                $(this).closest('tr').find('.delivery-qnty').css('border-color', '#F44336');
+                $('.snackbar_span').html("Please provide delivered quantity details");
+                showSnackbar();
+            }
+            count = i;
         })
-        console.log(delvryQnty)
-    });
+        if (jQuery.isEmptyObject(delvryQnty) || Object.keys(delvryQnty).length<(count+1)) {
+           $('.snackbar_span').html("Please provide delivered quantity details");
+           showSnackbar();
+        }
+        else{
+            console.log($('input[name="po_select"]:checked').val())
+            $('#erp-invoice').modal("show")
+        }
+        
+    }

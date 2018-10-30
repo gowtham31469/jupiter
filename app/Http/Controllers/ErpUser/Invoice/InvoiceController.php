@@ -49,12 +49,11 @@ class InvoiceController extends Controller
             $po_list   = Erp::where('customer_id',$customer_id)
                             ->join('customers','erp_orders.customer_id','customers.id')
                             ->join('buyers','erp_orders.buyer_id','buyers.id')
-                            ->select('erp_orders.id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','erp_orders.po_no')
+                            ->select('erp_orders.id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','erp_orders.po_no','erp_orders.erp_id')
                             ->get();
             $result      = response()->json(['error'=> false,'message' =>'success','po_list'=>$po_list ],200);
         }
-        catch (\Exception $e)
-        {
+        catch (\Exception $e){
             $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
         return $result;
