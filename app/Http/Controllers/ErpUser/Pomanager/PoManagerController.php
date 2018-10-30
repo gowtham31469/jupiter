@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use Response;
 use View;
+use Auth;
 use DB;
+use Session;
 use App\ErpOrders as Erp;
 use App\ErpOrderDetails as ErpOrderDetails;
 
@@ -33,10 +35,87 @@ class PoManagerController extends Controller
      */
     public function index()
     {
-		 $orders = DB::table('erp_orders')->join('customers','erp_orders.customer_id','customers.id')->join('erp_status','erp_orders.status','erp_status.id')->where('erp_orders.status',1)->orWhere('erp_orders.status',2)->select('erp_orders.*','customers.company_name','erp_status.status_name')->orderBy('id', 'asc')->get();
+		$customer_id = Auth::guard('erpuser')->id();
 		
-		 return view('erp.Pomanager.poverify',['orders' => $orders]);
+		$companies   = 	DB::table('erpuser_company_mapping')
+								->join('company','erpuser_company_mapping.company','company.id')
+								->where('erpuser_company_mapping.erp_user',$customer_id)
+								->select('erpuser_company_mapping.*','company.name')
+								->get();
+		
+		$company_id   = DB::table('company')
+								->select('company.*')
+								->first();
+		
+		
+		if(session()->get('company') == "" && session()->get('company') == null)
+		{
+			session()->put('company', $company_id->id);
+			session()->put('company_name', strtolower( str_replace(' ','',$company_id->name)) );
+		}
+		
+		$templates   = 		DB::table('erpusers_template_mapping')
+								->join('buyers','erpusers_template_mapping.buyer','buyers.id')
+							    ->where('erpusers_template_mapping.company',session()->get('company'))
+								->where('erpusers_template_mapping.erp_user',$customer_id)
+								->select('erpusers_template_mapping.*','buyers.template_table','buyers.item_master_table','buyers.id as buyer_id')
+								->get();
+		
+		 $new_orders = array();
+		 $i=1;
+		 foreach($templates as $value)
+		 {
+			 $arr_template =  DB::table($value->template_table)
+							 ->where('hierarchy_id',$value->templates)
+							 ->pluck('item_id');
+			 if($arr_template)
+			 {
+				$new_orders[$value->buyer_id."-".$i] = $arr_template;
+			 }
+			 $i++;
+		 }
+		
+		 $orders_erp = array();
+		
+		 foreach($new_orders as $key => $values)
+		 {
+			foreach($values as $valuess)
+			{
+				$buyer_id = explode("-",$key);
+				
+				$erp_order_details = DB::table('erp_orders')->join('erp_order_details','erp_order_details.erp_order_id','erp_orders.id')
+										 ->join('customers','erp_orders.customer_id','customers.id')
+										 ->join('erp_status','erp_orders.status','erp_status.id')
+										 ->where('erp_order_details.template_id',$valuess)
+										 ->where('erp_orders.buyer_id',$buyer_id[0])
+										 ->where('erp_orders.status',1)
+										 ->orWhere('erp_orders.status',2)
+										 ->groupBy('erp_orders.id','customers.company_name','erp_status.status_name')
+										 ->select('erp_orders.*','customers.company_name','erp_status.status_name')
+										 ->get();
+				if(count($erp_order_details) > 0)
+				{
+					foreach($erp_order_details as $erp_order_det)
+					{
+						$orders_erp[$erp_order_det->id] = $erp_order_det;
+					}
+					
+				}
+			}
+			 
+		 }
+		return view('erp.Pomanager.poverify',['orders' => $orders_erp,'companies' => $companies]);
 	} 
+	
+	public function setCompanySession(Request $request)
+	{
+		$company_id = $request->company_id;
+		$company_name = $request->company_name;
+		session()->put('company', $company_id);
+		session()->put('company_name', $company_name);
+		$result      = response()->json(['error'=> false,'message' =>'success'],200);
+		return $result;
+	}
 	
 	/**
      * Update the status of PO.
@@ -74,10 +153,15 @@ class PoManagerController extends Controller
 			$buyer_id = $request->buyer_id;
 			$customer_id = $request->customer_id;
 			
-            $orderlist   = ErpOrderDetails::join('tesco_template','erp_order_details.template_id','tesco_template.id')
+			   
+			   $arr_template =  DB::table('buyers')
+								 ->where('id',$buyer_id)
+								 ->first();
+			   
+            $orderlist   = ErpOrderDetails::join($arr_template->template_table,'erp_order_details.template_id',$arr_template->template_table.'.id')
 							->join('erp_status','erp_order_details.status','erp_status.id')
 							->where('erp_order_details.erp_order_id',$id)
-                            ->select('erp_order_details.*','tesco_template.template_name','erp_status.status_name')
+                            ->select('erp_order_details.*',$arr_template->template_table.'.template_name','erp_status.status_name')
                             ->get();
 			   
 			$orders   = Erp::where('erp_orders.id',$id)
