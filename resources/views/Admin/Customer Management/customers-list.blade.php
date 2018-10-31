@@ -219,7 +219,7 @@
                               </div>
                               <div class="form-check form-group has-feedback po-required-div"  style="display: none;">
                                 <label class="form-check-label">
-                                  <input class="form-check-input" type="checkbox" value="" name="po_required" id="po_required">
+                                  <input class="form-check-input" checked="true" type="checkbox" value="" name="po_required" id="po_required">
                                   Purchase Order(PO) Required ? 
                                 </label>
                                 <div class="help-block with-errors"></div>
@@ -490,7 +490,7 @@
                     </div>
                     <div class="form-check form-group has-feedback edit-po-required-div"  style="display: none;">
                       <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" value="" name="edit_po_required" id="edit_po_required">
+                        <input class="form-check-input" type="checkbox" checked="true" value="" name="edit_po_required" id="edit_po_required">
                         Purchase Order(PO) Required ? 
                       </label>
                       <div class="help-block with-errors"></div>
@@ -797,14 +797,14 @@
            if($('#pi_required').is(':checked'))
            {
             $('div.po-required-div').show();
-            /** [ uncheck po required checkbox on page load ] */
+            /** [ uncheck po required checkbox ] */
             $('input:checkbox[name=po_required]').prop('checked',false);
            }
            else
            {
             $('div.po-required-div').hide();
-            /** [ uncheck po required checkbox while hidden ] */
-            $('input:checkbox[name=po_required]').prop('checked',false);
+            /** [ uncheck po required(default po_required) checkbox while hidden ] */
+            $('input:checkbox[name=po_required]').prop('checked',true);
            }
         });
 
@@ -813,14 +813,14 @@
            if($('#edit_pi_required').is(':checked'))
            {
             $('div.edit-po-required-div').show();
-            /** [ uncheck po required checkbox on page load ] */
+            /** [ uncheck po required(default po_required) checkbox ] */
             $('input:checkbox[name=edit_po_required]').prop('checked',false);
            }
            else
            {
             $('div.edit-po-required-div').hide();
-            /** [ uncheck po required checkbox while hidden ] */
-            $('input:checkbox[name=edit_po_required]').prop('checked',false);
+            /** [ check po required(default po_required) checkbox while hidden ] */
+            $('input:checkbox[name=edit_po_required]').prop('checked',true);
            }
         });
         /** [ To hide/show Nominated forwarder dropdown ( Based on freight type selected :Nominated Forwarded) ] */
