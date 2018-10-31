@@ -12,7 +12,7 @@ class ErpUsersBuyerMappingTableSeeder extends Seeder
     public function run()
     {
         if(!count(\App\ErpuserBuyerMapping::all()) ){
-			\App\ErpuserBuyerMapping::truncate();
+			
 			foreach(\App\Buyer::all() as $key => $val){
 				\App\ErpuserBuyerMapping::create([
 					'buyer' => $val->id, 'erp_user' => 1
