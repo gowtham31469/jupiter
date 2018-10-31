@@ -1752,12 +1752,13 @@ function tescoStatusTable(data,path)
                 else if (key == "PO Status")
                 {
                     var str=value[key] ;                    
-                    var status = ''
+                    var status = '';
+                    var status_text = '';
                     if(value['po_required']== 1 && value['is_order_count_empty'] == 0)
                     {
                         if(str != null && str != ""){
                             status=str.replace(/ /g, "");
-                            status_text='<span class="po_class label label-' + status + '">' + value[key] + '</span>';
+                            status_text='<span class="po_class label label-' + status + '">' + str + '</span>';
                         }
                         else{
                             str ="PO Pending"
@@ -1769,8 +1770,7 @@ function tescoStatusTable(data,path)
                     {
                         $status_text=" - ";
                     }
-                    
-                    tr += '<td align="center class="po_status">'+$status_text+'</td>';
+                    tr += '<td align="center class="po_status">'+status_text+'</td>';
                    
                 }
                 else if (key =="StyleNo")
