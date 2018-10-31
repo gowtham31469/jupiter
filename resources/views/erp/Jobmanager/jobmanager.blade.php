@@ -181,7 +181,7 @@
 @section('navbar')
 
 <ul class="nav navbar-nav dynamic-menu">
-	<li><a href="#" class="active">Job Manager</a></li>
+	<li><a href="javascript:void(0)" class="active">Job Card Manager</a></li>
 </ul>
 
 @endsection @section('content')
