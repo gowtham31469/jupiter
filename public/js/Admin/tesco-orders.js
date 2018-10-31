@@ -1784,8 +1784,8 @@ function GenerateDivTesco(data, name) {
 
 		if (ajax_count == document.getElementById("table_row").rows.length) {
 			var svg_fin = svgarr.join(',_');
-			//PopupTescoGenerateSmall(svg_fin, name,svgDoc);
-			PdfboxGenerateSmall(svg_fin, name,svgDoc);
+			PopupTescoGenerateSmall(svg_fin, name,svgDoc);
+			//PdfboxGenerateSmall(svg_fin, name,svgDoc);
 		}
 
 	} else {
