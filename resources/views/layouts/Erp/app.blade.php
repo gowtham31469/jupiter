@@ -41,7 +41,7 @@
 <body>
  <div class="container-fluid">
         <div class="row">
-        @if (Auth::guard("erpuser")->user()) @include('layouts.Erp.navbar')
+        @if (Auth::guard("erpuser")->user()) @include('layouts.Erp.navbar')@yield('navbar')
         @elseif(!Auth::guest())
             <script type="text/javascript">
                 customer  window.location = "{{ url('/erp/login') }}";

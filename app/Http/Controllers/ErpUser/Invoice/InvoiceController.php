@@ -32,11 +32,19 @@ class InvoiceController extends Controller
      */
     public function index()
     {
+        return view('erp.Invoice.invoice-list');
+	}
+     /**
+     * Show the application dashboard.
+     * @author [Praveen] <[praveen@wizroots.com]>
+     * @return \Illuminate\Http\Response
+     */
+    public function create(){
         $customers = DB::table('customers')
                               ->where('is_active','=',1)
                               ->get();
         return view('erp.Invoice.create-invoice',['customers' => $customers]);
-	}
+    }
 
     /**
      * method to get the PO list for a particular customer

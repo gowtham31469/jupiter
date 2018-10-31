@@ -588,7 +588,9 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::put('profile', 'ErpUser\ProfileController@putProfile')->name('erp.user.putProfile');
 	Route::put('password', 'ErpUser\ProfileController@putPassword')->name('erp.user.putPwd');
 	/* Routes for Invoice Management */
+	 
 	Route::get('/invoice', 'ErpUser\Invoice\InvoiceController@index')->name('invoice'); 
+	Route::get('/create-invoice', 'ErpUser\Invoice\InvoiceController@create')->name('invoice');
 
 	/* Routes for PO Manager Module */
 

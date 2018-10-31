@@ -1,21 +1,14 @@
 @extends('layouts.Erp.app')
 @if (Auth::guard("erpuser")->user())
-
+@section('navbar')
 <style>
-    .order-footer{
-       position: fixed;
-       right: 16px;
-       bottom: 10px;
-       width: 100%;
-       /*background-color: #fff;*/
-       color: white;
-       text-align: right;
+    .navbar-nav > li > a {
+    line-height: 12px !important;
     }
 </style>
-@section('navbar') 
-
 <ul class="nav navbar-nav dynamic-menu">
-    <li><a  href="" class="active">Create Invoice</a></li>
+<li><a href="{{ url('/erp/invoice') }}" class="">Invoice List</a></li>
+    <li><a href="{{ url('/erp/create-invoice') }}" class="active">Create Invoice</a></li>
 </ul>
 
 @endsection
