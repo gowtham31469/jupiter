@@ -354,7 +354,7 @@ $(document).ready(function() {
 	        $("#buyerSelectionModalCenter").modal("show");
 	    
 	});
-	//alert($('#company_name').val())
+
 	if($('#company_name').val() != null && $('#company_name').val() != "")
 	{
 		$('#'+$('#company_name').val()).addClass('active');

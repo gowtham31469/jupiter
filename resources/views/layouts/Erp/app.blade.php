@@ -85,6 +85,7 @@
 	<script src="{{ asset('js/Erp/store.js') }}"></script>
 	<script src="{{ asset('js/Erp/update.js') }}"></script>
 	<script src="{{ asset('js/Erp/userProfile.js') }}"></script>
+	<script src="{{ asset('js/Erp/job-card-manager.js') }}"></script>
 	<script>
 		var base_url = "<?php echo  url('/') ?>";
 		function showSnackbar() {
