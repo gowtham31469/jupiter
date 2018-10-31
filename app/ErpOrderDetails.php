@@ -18,5 +18,5 @@ class ErpOrderDetails extends Model
       *
       * @var array
       */
-      protected $fillable = ['id','erp_order_id','style_no','order_quantity','delivered_quantity','size','delivery_date','order_qnty_table_name','order_qnty_table_id','status','created_at','updated_at','company_id','template_id','refenece_name','ocn_number'];
+      protected $fillable = ['id','erp_order_id','style_no','order_quantity','delivered_quantity','size','delivery_date','order_qnty_table_name','order_qnty_table_id','status','created_at','updated_at','company_id','template_id','reference_name','ocn_number','pending_orders'];
 }

@@ -592,7 +592,9 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::delete('admin/order', 'ErpUser\Admin\OrderController@destroy')->name('erp.admin.orders.delete');
 	
 	/* Routes for Invoice Management */
+	 
 	Route::get('/invoice', 'ErpUser\Invoice\InvoiceController@index')->name('invoice'); 
+	Route::get('/create-invoice', 'ErpUser\Invoice\InvoiceController@create')->name('invoice');
 
 	/* Routes for PO Manager Module */
 

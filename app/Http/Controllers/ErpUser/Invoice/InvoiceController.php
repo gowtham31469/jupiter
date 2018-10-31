@@ -32,11 +32,19 @@ class InvoiceController extends Controller
      */
     public function index()
     {
+        return view('erp.Invoice.invoice-list');
+	}
+     /**
+     * Show the application dashboard.
+     * @author [Praveen] <[praveen@wizroots.com]>
+     * @return \Illuminate\Http\Response
+     */
+    public function create(){
         $customers = DB::table('customers')
                               ->where('is_active','=',1)
                               ->get();
         return view('erp.Invoice.create-invoice',['customers' => $customers]);
-	}
+    }
 
     /**
      * method to get the PO list for a particular customer
@@ -49,12 +57,11 @@ class InvoiceController extends Controller
             $po_list   = Erp::where('customer_id',$customer_id)
                             ->join('customers','erp_orders.customer_id','customers.id')
                             ->join('buyers','erp_orders.buyer_id','buyers.id')
-                            ->select('erp_orders.id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','erp_orders.po_no')
+                            ->select('erp_orders.id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','erp_orders.po_no','erp_orders.erp_id')
                             ->get();
             $result      = response()->json(['error'=> false,'message' =>'success','po_list'=>$po_list ],200);
         }
-        catch (\Exception $e)
-        {
+        catch (\Exception $e){
             $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
         return $result;
@@ -72,6 +79,7 @@ class InvoiceController extends Controller
                             ->join('erp_orders','erp_orders.id','erp_order_details.erp_order_id')
                             ->join('customers','erp_orders.customer_id','customers.id')
                             ->join('buyers','erp_orders.buyer_id','buyers.id')
+                            ->where('erp_order_details.pending_orders','!=' , 0)
                             ->select('erp_order_details.id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','erp_orders.po_no','erp_order_details.style_no','erp_order_details.order_quantity','erp_order_details.rate','erp_order_details.size','erp_order_details.reference_name','customers.place_of_supply','erp_order_details.ocn_number','erp_order_details.template_id','erp_orders.id as erp_id','buyers.template_table','buyers.item_master_table')
                             ->get();
 
