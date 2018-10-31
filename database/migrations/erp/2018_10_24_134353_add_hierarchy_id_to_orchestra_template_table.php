@@ -14,7 +14,7 @@ class AddHierarchyIdToOrchestraTemplateTable extends Migration
     public function up()
     {
         Schema::table('orchestra_template', function (Blueprint $table) {
-           $table->string('hierarchy_id');
+           $table->string('hierarchy_id')->default("null");
         });
     }
 
