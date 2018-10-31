@@ -14,7 +14,7 @@ class AddHierarchyIdToTescoTemplateTable extends Migration
     public function up()
     {
         Schema::table('tesco_template', function (Blueprint $table) {
-            $table->integer('hierarchy_id')->default("null");
+            $table->integer('hierarchy_id');
         });
     }
 
