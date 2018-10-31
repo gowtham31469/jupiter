@@ -285,7 +285,8 @@ $(document).ready(function() {
         initComplete: function () {
             this.api().columns().every( function () {
                 var column = this;
-                var select = $('<select><option value=""></option></select>')
+				console.log(column)
+                var select = $('<select><option value="">Apply Filter</option></select>')
                     .appendTo( $(column.footer()).empty() )
                     .on( 'change', function () {
                         var val = $.fn.dataTable.util.escapeRegex(
