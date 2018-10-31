@@ -13,7 +13,7 @@ class ErpStatusTableSeeder extends Seeder
     {
 
 		if(!count(\App\ErpStatus::all()) ){
-			\App\ErpStatus::truncate();
+			
 			\App\ErpStatus::create([
 				'id' =>1,
 				'status_name' => 'Moved To ERP',

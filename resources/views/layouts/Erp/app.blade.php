@@ -103,6 +103,11 @@
 				console.log("Error:" + e)
 			}
 		}
+		
+		$(document).ready(function(){
+			$('[data-toggle="tooltip"]').tooltip(); 
+			$('.dropdown-toggle').dropdown()
+		});
 	</script>
 @yield('jqueryIncludes')
 	

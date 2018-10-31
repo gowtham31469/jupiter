@@ -1,5 +1,14 @@
 @extends('layouts.Erp.app')
 @if (Auth::guard("erpuser")->user())
+@section('navbar') 
+
+<ul class="nav navbar-nav dynamic-menu">
+    <li><a href="#" class="active">User Management</a></li>
+    <li><a href="{{route('erp.admin.orders.show')}}">Order Management</a></li>
+</ul>
+
+@endsection
+
 @section('content')
 
 <style>

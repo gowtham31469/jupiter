@@ -12,7 +12,7 @@ class ErpRolesTableSeeder extends Seeder
     public function run()
     {
         if(!count(\App\ErpRoles::all()) ){
-			\App\ErpRoles::truncate();
+			
 			/*	Roles Array	*/
 			$roles = array('PO MANAGER', 'JOB CARD MANAGER', 'INVOICE MANAGER');
 			foreach($roles as $role){

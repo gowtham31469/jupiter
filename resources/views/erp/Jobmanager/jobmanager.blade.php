@@ -173,7 +173,9 @@
 	.remark-align {
 		padding-left: 0px !important;
 	}
-
+tfoot {
+     display: table-header-group;
+}
 </style>
 @section('navbar')
 
@@ -205,10 +207,19 @@
 						<th>Style Number</th>
 						<th>Reference Number</th>
 						<th>Delivery Date</th>
-						<th>Status</th>
-						<th>Actions</th>
 					</tr>
 				</thead>
+				<tfoot>
+					<tr>
+						<th>Sl. No</th>
+						<th>ERP ID</th>
+						<th>Customer name</th>
+						<th>PO Number</th>
+						<th>Style Number</th>
+						<th>Reference Number</th>
+						<th>Delivery Date</th>
+					</tr>
+				</tfoot>
 				<tbody>
 					@foreach($orders as $vals)
 
@@ -219,13 +230,11 @@
 						<td>{{$vals->po_no}}</td>
 						<td>{{$vals->style_no}}</td>
 						<td>{{$vals->reference_name}}</td>
-						<td>{{$vals->delivery_date}}</td>
-						@if($vals->status == 2)
-						<td><span class="label label-danger">{{$vals->status_name}}</span></td>
+						@if ($vals->delivery_date != '')
+							<td>{{$vals->delivery_date}}</td>
 						@else
-						<td><span class="label label-info">{{$vals->status_name}}</span></td>
+							<td>N/A</td>
 						@endif
-						<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick="view_order_details('{{ $vals->id }}','{{ $vals->po_no }}','{{ $vals->buyer_id }}','{{ $vals->customer_id }}','{{ $vals->po_file }}')"><i class="fa fa-eye action-button-view" data-placement="top" title="" data-original-title="view Details"></i></a></td>
 					</tr>
 					@endforeach
 				</tbody>
@@ -268,7 +277,35 @@
 
 @endsection @section('jqueryIncludes')
 <script>
-	
+$(document).ready(function() {
+	var base_url = "<?php echo  url('/') ?>";
+    $('#po-list-table').DataTable( {
+		/** Table column filter functionality **/
+        initComplete: function () {
+            this.api().columns().every( function () {
+                var column = this;
+                var select = $('<select><option value=""></option></select>')
+                    .appendTo( $(column.footer()).empty() )
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+ 
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+ 
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( "<option value='"+d+"'>"+d+"</option>" )
+                } );
+            } );
+        }
+    } );
+	$("#po-list-table_filter input[type=search]").addClass('form-control');
+	$('.dataTables_length select').addClass('form-control');
+	$("#po-list-table_filter input[type=search]").attr('placeholder', 'Data Search');
+} );
 	/** [ Make buyers card active ] */
 	$('div.buyers-card').click(function(){
 	  $('div.buyers-card').removeClass("active");
@@ -332,12 +369,9 @@
 	
 	$('.company-nav-menu').html($('.company-nav-div').html());
 	
-	var base_url = "<?php echo  url('/') ?>";
-	var table = $('#po-list-table').DataTable();
 	
-	 $("#po-list-table_filter input[type=search]").addClass('form-control');
-	  $('.dataTables_length select').addClass('form-control');
-	  $("#po-list-table_filter input[type=search]").attr('placeholder', 'Data Search');
+
+	
 	
 
 

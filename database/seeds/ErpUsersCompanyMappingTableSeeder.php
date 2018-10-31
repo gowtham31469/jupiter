@@ -13,7 +13,7 @@ class ErpUsersCompanyMappingTableSeeder extends Seeder
     public function run()
     {
 		if(!count (\App\ErpuserCompanyMapping::all())){
-			\App\ErpuserCompanyMapping::truncate();
+			
 			ErpuserCompanyMapping::create([
 				'company' => 1, 'erp_user' => 1
 			]);
