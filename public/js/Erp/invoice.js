@@ -312,7 +312,6 @@
             
             $('#erp-invoice').modal("show")
         }
-        
     }
 
     function updateInvoice(obj){
