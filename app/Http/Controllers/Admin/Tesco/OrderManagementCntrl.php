@@ -2140,9 +2140,9 @@ class OrderManagementCntrl extends Controller
 			 PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=40, $h=30, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			 PDF::ImageSVG('@' . $svg, $x=40, $y=0, $w=40, $h=30, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			
-			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 3.7, 2, 33, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+			//PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 3.7, 2, 33, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			
-			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 43.7, 2, 33, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+			//PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 43.7, 2, 33, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			$i++;
 		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
