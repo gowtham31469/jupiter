@@ -1504,7 +1504,7 @@ function printDivTesco(data, name) {
 				var s = new XMLSerializer();
 				var d = svgRoot;
 				var str = s.serializeToString(d);
-
+				var svg = encodeURI(str)
 				svgarr.push(str)
 			}
 
@@ -1943,8 +1943,8 @@ function GenerateDivTesco(data, name) {
 				var s = new XMLSerializer();
 				var d = svgRoot;
 				var str = s.serializeToString(d);
-
-				svgarr.push(str)
+				var svg = encodeURI(str)
+				svgarr.push(svg)
 			}
 
 
