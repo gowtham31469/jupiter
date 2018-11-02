@@ -588,6 +588,10 @@
                                        <td id="tin-number"></td>
                                      </tr>
                                      <tr>
+                                       <td class="pull-left">SAP Code :</td>
+                                       <td id="sap-code"></td>
+                                     </tr>
+                                     <tr>
                                        <td class="pull-left">Payment Terms :</td>
                                        <td id="payment-terms"></td>
                                      </tr>
