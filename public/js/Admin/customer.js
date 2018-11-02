@@ -1462,6 +1462,7 @@ function addCustomer()
                 $('#delivery-date-required').text(data.customers[0].delivery_date_required == 1?'Yes':'No');
                 $('#pi-required').text(data.customers[0].pi_required == 1?'Yes':'No');
                 $('#po-required').text(data.customers[0].po_required == 1?'Yes':'No');
+                $('#sap-code').text(data.customers[0].sap_code == null?'-':data.customers[0].sap_code);
 
                 /** @type {Array} [Show multiple buyers coma separated using array] */
                 var buyers_array = [];
