@@ -1192,7 +1192,7 @@ class CustomerManagementController extends Controller
       try {
             $id = $request['id'];
             $customer = DB::table('customers')
-                     ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.pi_required','customers.po_required','customers.delivery_date_required','nominated_forwarders.forwarder','freight_terms.freight_terms','delivery_day_count','short_name','payment_terms.payment_terms','place_of_supply.place_of_supply')
+                     ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.pi_required','customers.po_required','customers.delivery_date_required','nominated_forwarders.forwarder','freight_terms.freight_terms','delivery_day_count','short_name','payment_terms.payment_terms','place_of_supply.place_of_supply','customers.sap_code')
                      ->leftjoin('payment_terms','customers.payment_terms','payment_terms.id')
                      ->leftjoin('place_of_supply','customers.place_of_supply','place_of_supply.id')
                      ->leftjoin('freight_terms','customers.freight_type','freight_terms.id')
