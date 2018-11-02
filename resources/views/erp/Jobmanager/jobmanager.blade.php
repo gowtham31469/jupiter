@@ -177,6 +177,9 @@
 	tfoot {
 		display: table-header-group;
 	}
+	.highlight_row {
+		background: #eee;
+	}
 </style>
 @section('navbar')
 
@@ -198,7 +201,7 @@
 		<div class="col" id="customer-table">
 			<input type="hidden" value="{{ session()->get('company') }}" id="company_id">
 			<input type="hidden" value="{{ session()->get('company_name') }}" id="company_name">
-			<table id="po-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%">
+			<table id="approved-order-list" class="table table-bordered table-responsive" style="width:100%">
 				<thead>
 					<tr>
 						<th>Sl. No</th>
@@ -225,7 +228,15 @@
 					@foreach($orders as $vals)
 
 					<tr id="{{$vals->id}}">
-						<td class="">{{ $loop->iteration }}</td>
+						<td class="">
+						  
+							<div class="form-check">
+							  <a href="javascript:void(0)">
+								<label>
+									<input type="checkbox" name="row-check-{{ $loop->iteration }}" style="margin-right: 10px;"> <span class="label-text" class="hidden-val">{{ $loop->iteration }}</label>
+						      </a>
+							</div>
+				        </td>
 						<td>{{$vals->id}}</td>
 						<td>{{$vals->company_name}}</td>
 						<td>{{$vals->po_no}}</td>
@@ -280,35 +291,7 @@
 <script>
 $(document).ready(function() {
 	var base_url = "<?php echo  url('/') ?>";
-    $('#po-list-table').DataTable( {
-		/** Table column filter functionality **/
-        initComplete: function () {
-            this.api().columns().every( function () {
-                var column = this;
-				console.log(column)
-                var select = $('<select><option value="">Apply Filter</option></select>')
-                    .appendTo( $(column.footer()).empty() )
-                    .on( 'change', function () {
-                        var val = $.fn.dataTable.util.escapeRegex(
-                            $(this).val()
-                        );
- 
-                        column
-                            .search( val ? '^'+val+'$' : '', true, false )
-                            .draw();
-                    } );
- 
-                column.data().unique().sort().each( function ( d, j ) {
-                    select.append( "<option value='"+d+"'>"+d+"</option>" )
-                } );
-            } );
-        }
-    } );
-	$("#po-list-table_filter input[type=search]").addClass('form-control');
-	$('.dataTables_length select').addClass('form-control');
-	$("#po-list-table_filter input[type=search]").attr('placeholder', 'Data Search');
-} );
-	/** [ Make buyers card active ] */
+	/** [ Make companies card active ] */
 	$('div.buyers-card').click(function(){
 	  $('div.buyers-card').removeClass("active");
 	  $(this).addClass("active");
@@ -351,9 +334,7 @@ $(document).ready(function() {
 	
 	/** [ Show already selected(active) buyer on clicking buyer menu] */
 	$('.company-nav-menu').on('click', function() {
-	    
-	        $("#buyerSelectionModalCenter").modal("show");
-	    
+	    $("#buyerSelectionModalCenter").modal("show");
 	});
 
 	if($('#company_name').val() != null && $('#company_name').val() != "")
@@ -362,38 +343,65 @@ $(document).ready(function() {
 	}
 	else
 	{
-		    $('div.buyers-card').first().addClass("active");
+		$('div.buyers-card').first().addClass("active");
 	}
-	
    
     $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
 	
-	
 	$('.company-nav-menu').html($('.company-nav-div').html());
+
+	/** Datatable script**/
+    $('#approved-order-list').DataTable( {
+		/** Table column filter functionality **/
+        initComplete: function () {
+            this.api().columns().every( function () {
+                var column = this;
+                var select = $('<select><option value="">Apply Filter</option></select>')
+                    .appendTo( $(column.footer()).empty() )
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+ 
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+ 
+               column.data().unique().sort().each( function ( d, j ) {
+                    select.append( "<option value='"+d+"'>"+d+"</option>" )
+                } ); 
+            } );
+        }
+    } );
+	$("#approved-order-list_filter input[type=search]").addClass('form-control');
+	$('.dataTables_length select').addClass('form-control');
+	$("#approved-order-list_filter input[type=search]").attr('placeholder', 'Data Search');
+
+	$('.approved-order-list tr').click(function (event) {
+        if (event.target.type !== 'checkbox') {
+            $(':checkbox', this).trigger('click');
+        }
+    });
+
+	/** change table row background color	**/
+	$("input[type='checkbox']").change(function (e) {
+        if ($(this).is(":checked")) {
+            $(this).closest('tr').addClass("highlight_row");
+        } else {
+            $(this).closest('tr').removeClass("highlight_row");
+        }
+    });
+} );
+	
+	
+	
+
 	
 	
 
-	
-	
 
 
-	/** [showSnackbar function] */
-	function showSnackbar() {
-		try {
-			// Get the snackbar DIV
-			var x = document.getElementById("snackbar")
-
-			// Add the "show" class to DIV
-			x.className = "show";
-
-			// After 3 seconds, remove the show class from DIV
-			setTimeout(function() {
-				x.className = x.className.replace("show", "");
-			}, 3000);
-		} catch (e) {
-			console.log("Error:" + e)
-		}
-	}
 
 </script>
 
