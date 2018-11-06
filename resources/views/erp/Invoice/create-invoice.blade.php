@@ -9,7 +9,7 @@
         width: 1100px;
     }
 </style>
-<ul class="nav navbar-nav dynamic-menu">
+<ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
 <li><a href="{{ url('/erp/invoice') }}" class="">Invoice List</a></li>
     <li><a href="{{ url('/erp/create-invoice') }}" class="active">Create Invoice</a></li>
 </ul>

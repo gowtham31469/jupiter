@@ -183,25 +183,19 @@
 </style>
 @section('navbar')
 
-<ul class="nav navbar-nav dynamic-menu">
+<ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
 	<li><a href="javascript:void(0)" class="active">Job Card Manager</a></li>
 </ul>
 
 @endsection @section('content')
 <div class="col-sm-12 col-md-12 main">
-	  <div class="company-nav-div">
+	  <div class="company-nav-div hidden">
            <a class="dropdown-toggle profile-dropdown-admin selected-buyer" style="text-transform:capitalize;cursor: pointer;">Select Company</a>
         </div>
 	<div class="main-content">
-
-
 		<div class="loader">
 			<div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>
 		</div>
-		{{-- <div class="pull-right">
-			<a href="#" data-target="#addBuyerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-			Create Jobcard</a>
-		</div> --}}
 		<div class="col" id="customer-table">
 			<input type="hidden" value="{{ session()->get('company') }}" id="company_id">
 			<input type="hidden" value="{{ session()->get('company_name') }}" id="company_name">
@@ -397,16 +391,6 @@ $(document).ready(function() {
         }
     });
 } );
-	
-	
-	
-
-	
-	
-
-
-
-
 </script>
 
 @endsection
