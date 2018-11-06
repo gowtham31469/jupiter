@@ -90,6 +90,7 @@ class JobManagerController extends Controller
 											->where('erp_order_details.template_id',$valuess)
 											->where('erp_orders.buyer_id',$buyer_id[0])
 											->where('erp_orders.status',3)
+											->where('erp_orders.order_status_id',4)
 											->orderBy('erp_order_details.erp_order_id','asc')
 											->select('erp_orders.*','erp_order_details.id as erp_detail_id','erp_order_details.reference_name','erp_order_details.style_no','erp_order_details.delivery_date','customers.company_name','erp_status.status_name')
 											->get();

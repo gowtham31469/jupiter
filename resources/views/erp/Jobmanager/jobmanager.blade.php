@@ -198,6 +198,10 @@
 		<div class="loader">
 			<div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>
 		</div>
+		<div class="pull-right">
+			<a href="#" data-target="#addBuyerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+			Create Jobcard</a>
+		</div>
 		<div class="col" id="customer-table">
 			<input type="hidden" value="{{ session()->get('company') }}" id="company_id">
 			<input type="hidden" value="{{ session()->get('company_name') }}" id="company_name">
