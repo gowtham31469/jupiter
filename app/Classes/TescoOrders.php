@@ -47,10 +47,10 @@ class TescoOrders
             $tesco_order_obj = new SubmitTescoOrdersUpdateQuery(); 
 
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
-            $pi_status = $pi_required == 1?"PI Approval Pending":"";
+            $pi_status = $pi_required == 1?"PI Approval Pending":null;
 
             /** [ po_required for this customer or not. If required then po_staus will be "PO Pending"  ] */
-            $po_status = $po_required == 1?"PO Pending":"";
+            $po_status = $po_required == 1?"PO Pending":null;
 
             /** [ Get company id for template ] */
             $company_id = DB::table('tesco_item_master')->select('company_id')->where('id','=',$template_id)->first();
@@ -136,10 +136,10 @@ class TescoOrders
             $tesco_order_obj = new SubmitTescoOrdersUpdateQuery();
 
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
-            $pi_status = $pi_required == 1?"PI Approval Pending":"";
+            $pi_status = $pi_required == 1?"PI Approval Pending":null;
 
             /** [ po_required for this customer or not. If required then po_staus will be "PO Pending"  ] */
-            $po_status = $po_required == 1?"PO Pending":"";
+            $po_status = $po_required == 1?"PO Pending":null;
 
             /** [ Get company id for template ] */
             $company_id = DB::table('tesco_item_master')->select('company_id')->where('id','=',$template_id)->first();
@@ -224,10 +224,10 @@ class TescoOrders
             $tesco_order_obj = new SubmitTescoOrdersUpdateQuery();
 
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
-            $pi_status = $pi_required == 1?"PI Approval Pending":"";
+            $pi_status = $pi_required == 1?"PI Approval Pending":null;
 
             /** [ po_required for this customer or not. If required then po_staus will be "PO Pending"  ] */
-            $po_status = $po_required == 1?"PO Pending":"";
+            $po_status = $po_required == 1?"PO Pending":null;
 
             /** [ Get company id for template ] */
             $company_id = DB::table('tesco_item_master')->select('company_id')->where('id','=',$template_id)->first();
@@ -313,10 +313,10 @@ class TescoOrders
             $tesco_order_obj = new SubmitTescoOrdersUpdateQuery();
 
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
-            $pi_status = $pi_required == 1?"PI Approval Pending":"";
+            $pi_status = $pi_required == 1?"PI Approval Pending":null;
 
             /** [ po_required for this customer or not. If required then po_staus will be "PO Pending"  ] */
-            $po_status = $po_required == 1?"PO Pending":"";
+            $po_status = $po_required == 1?"PO Pending":null;
 
             /** [ Get company id for template ] */
             $company_id = DB::table('tesco_item_master')->select('company_id')->where('id','=',$template_id)->first();
@@ -401,10 +401,10 @@ class TescoOrders
             $tesco_order_obj = new SubmitTescoOrdersUpdateQuery();
 
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
-            $pi_status = $pi_required == 1?"PI Approval Pending":"";
+            $pi_status = $pi_required == 1?"PI Approval Pending":null;
 
             /** [ po_required for this customer or not. If required then po_staus will be "PO Pending"  ] */
-            $po_status = $po_required == 1?"PO Pending":"";
+            $po_status = $po_required == 1?"PO Pending":null;
 
            /** [ Get company id for template ] */
             $company_id = DB::table('tesco_item_master')->select('company_id')->where('id','=',$template_id)->first();
@@ -489,10 +489,10 @@ class TescoOrders
             $tesco_order_obj = new SubmitTescoOrdersUpdateQuery();
 
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
-            $pi_status = $pi_required == 1?"PI Approval Pending":"";
+            $pi_status = $pi_required == 1?"PI Approval Pending":null;
 
             /** [ po_required for this customer or not. If required then po_staus will be "PO Pending"  ] */
-            $po_status = $po_required == 1?"PO Pending":"";
+            $po_status = $po_required == 1?"PO Pending":null;
 
             /** [ Get company id for template ] */
             $company_id = DB::table('tesco_item_master')->select('company_id')->where('id','=',$template_id)->first();
@@ -578,10 +578,10 @@ class TescoOrders
             $tesco_order_obj = new SubmitTescoOrdersUpdateQuery();
 
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
-            $pi_status = $pi_required == 1?"PI Approval Pending":"";
+            $pi_status = $pi_required == 1?"PI Approval Pending":null;
 
             /** [ po_required for this customer or not. If required then po_staus will be "PO Pending"  ] */
-            $po_status = $po_required == 1?"PO Pending":"";
+            $po_status = $po_required == 1?"PO Pending":null;
 
             /** [ Get company id for template ] */
             $company_id = DB::table('tesco_item_master')->select('company_id')->where('id','=',$template_id)->first();

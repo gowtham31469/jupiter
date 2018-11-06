@@ -16,7 +16,9 @@ class DatabaseSeeder extends Seeder
 			ErpUsersTableSeeder::class,
 			ErpUsersCompanyMappingTableSeeder::class,
 			ErpUsersBuyerMappingTableSeeder::class,
-			ErpRolesTableSeeder::class
+			ErpRolesTableSeeder::class,
+			ErpStatusTableSeeder::class,
+			AddCancelStatusToErpStatusTableSeeder::class
 		]);
     }
 }

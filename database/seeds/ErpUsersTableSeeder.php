@@ -13,7 +13,7 @@ class ErpUsersTableSeeder extends Seeder
     public function run()
     {
 		if(!count(\App\Erpuser::all()) ){
-			\App\Erpuser::truncate();
+			
 			\App\Erpuser::create([
 				'id'   => 1,
 				'name' => "ERP Admin",

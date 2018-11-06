@@ -1,6 +1,13 @@
-	var place_of_supply = 0;
+    var place_of_supply = 0;
+    var order_data = '';
+   
+    var uniqueTax = [];
+    var tax_amnt = {};
+    var sub_amnt = 0;
+    var result = '';
+
     function dynamicTable() {
-        var customer_id       = $("#customer option:selected").val();
+        var customer_id  = $("#customer option:selected").val();
         var html = "";
         $.ajax({
             url: "/erp/erp-po-list",
@@ -16,13 +23,13 @@
                 {
                     $(data.po_list).each(function(index, value)
                     {
-                        html += '<tr><td><input name="select_all" value="'+value.id +'" id="'+value.id +'" class="po-select" type="checkbox" /></td><td>'+value.id +'</td><td>'+value.po_no+'</td><td>'+value.buyer_name+'</td></tr>';
+                        html += '<tr><td><input name="po_select" value="'+value.id +'" id="'+value.id +'" class="po-select" type="checkbox" /></td><td>'+value.erp_id +'</td><td>'+value.po_no+'</td><td>'+value.buyer_name+'</td></tr>';
                     });
                     $('.dynamic-table').html('<form id="po-list-form"><table class="table"><thead><tr><th></th><th class="text-center">ERP ID</th><th class="text-center">PO Number</th><th class="text-center">Buyer</th></tr></thead><tbody>'+html+'</tbody></table></form>');
                     $('.po-list').removeClass('hidden')
                     $('.dynamic-table tbody').on('change', 'input[type="checkbox"]', function(){
                     $('.po-select').not(this).prop('checked', false);  
-                    showOrderList(this)                           
+                        showOrderList(this)                           
                     });
                 }
                 else{
@@ -45,7 +52,6 @@
 	}
     function showOrderList(obj) {
         var erp_id = $(obj).val()
-        
         var table  = $(obj).attr('data-id')
         $.ajax({
             url: "/erp/erp-order-list",
@@ -58,88 +64,11 @@
             dataType: "json",
 
             success: function (data) {
-                $('.order-details').html('');
-                var tr = "";
-                var qnty = 0;
-                var amnt = 0;
-                var tax_tr = 0;
-                var totalcgst = 0;
-                var totalsgst = 0;
-                var totaligst = 0;
-                var totaltax = 0;
 
                 if(data.orderlist.length != 0)
-                {   
-                    var result = '';
-                    var taxIndexes = [] ;
-                    var taxlist = data.orderlist.map(a => a.tax);
-                    var uniqueTax = [];
-                    var tax_amnt = {};
-                    var sub_amnt = 0;
-
-                    $.each(taxlist, function(i, el){
-                        if($.inArray(el, uniqueTax) === -1) 
-                         uniqueTax.push(el);
-                    }); 
-                    $(uniqueTax).each(function(key, vals){
-                        var sub_amnt = 0;
-                        taxIndexes[vals] = $.map(data.orderlist, function(obj, index) {
-                            if(obj.tax == vals) {
-                                sub_amnt += obj.order_quantity*obj.rate;
-                            }
-                        }) 
-                        tax_amnt[vals] = sub_amnt;                                     
-                    });
-                    place_of_supply = data.orderlist[0].place_of_supply;                 
-                    $(data.orderlist).each(function(index, value)
-                    {
-                        
-                        var size = (value.size == null)?'-':value.size ; 
-
-                        tr += '<tr class="trClass" id="'+value.id+'">';
-                        tr += '<td><input name="select_all" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" /></td><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.id+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td>'+value.hsn_code+'</td><td class="tax-td">'+value.tax+' %</td><td class="qnty">'+value.order_quantity+'</td><td style="width: 116px;"><input type="number" value="" class="form-control delivery-qnty" data-id="'+value.id+'" onkeyup="updateAmount.call(this,'+uniqueTax+')"></td><td class="rate">'+value.rate+'</td><td class="amnt">'+value.order_quantity * value.rate+'</td>';
-                        tr += '</tr>';
-                        qnty += value.order_quantity;
-                        amnt += (value.order_quantity*value.rate);
-
-                    });
-
-                        tr+= '<tr><td colspan="10"><strong>Total</strong></td><td>'+qnty+'</td><td class="total-qnty" id="total-qnty">'+quantityTotal()+'</td><td></td><td class="total-amnt">'+amnt+'</td></tr>';
-
-
-                    $('.order-details').html('<form id="frm-orders"><table class="table text-center"><thead><tr><th></th><th>Order No</th><th>PO No</th><th>Style</th><th>OCN No</th><th>Item</th><th>Reference</th><th>Size</th><th>HSN No</th><th>Tax</th><th>Order Quantity</th><th>Delivered Quantity</th><th>Rate</th><th>Amount</th></tr></thead><tbody>'+tr+'</tbody></table></form>');
-
-                    // var tax_table = $('.orders-tax').html('<form id="orders-tax"><table class="table text-center" style="margin-left: 31px;margin-top: -18px;"><thead><tr><th>Tax</th><th>Base value</th><th>Amount</th></tr></thead><tbody class="tax-tabl"></tbody></table></form>')
-
-                    updateTaxAmount(tax_amnt)
-                    
-
-                    // $('.tax-tabl').append('<tr><td colspan="2"><strong>SubTotal</strong></td><td class="tax-total">'+ taxSubTotal() +'</td></tr><tr></tr>')                
-                    // var grandTotal = updateTotal();
-
-                    var gndtotal = parseFloat($('.tax-total').text())+ parseFloat($('.total-amnt').text());
-                    $('.extra-charges').html('<form id="extra-charges"><table class="table text-center extra-charges" style="margin-left: 31px;margin-top: -18px;"><thead><tr><th colspan="2">Description</th><th>Amount</th></tr></thead><tbody><tr><td><div style="width: 65%"><select class="charges" id="charges" name="charges" drequired=""><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td style="width: 116px;" colspan="2"><input type="number" value="" min="0" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr><tr><td colspan="2"><div style="width: 65%"><select  id="charges" name="charges" class="charges" required=""><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td style="width: 116px;"><input type="number" min="0" value="" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr><tr><td colspan="2"><div style="width: 65%"><select class="charges" id="charges" name="charges" required=""><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td style="width: 116px;"><input type="number" min="0" value="" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr><tr><td colspan="2"><strong>SubTotal</strong></td><td class="sub-extra">0</td></tr><tr></tr><tr><td colspan="2"><strong>Grand Total</strong></td><td class="grand-total">'+gndtotal.toFixed(3)+'</td></tr><tr></tr></tbody></table></form><div class="create-invoice"><button type="button" class="btn btn-primary create-invoice pull-right" style="margin-right: -32px;">Create Invoice</button></div>')
-
-                    var checkboxes = $('.dynamic-table td input[type="checkbox"]');
-                    $(document).find('.charges').selectpicker();                  
-
-                    if(checkboxes.filter(':checked').length >0){
-                        $('.order-heading').removeClass('hidden')
-                        $('.order-details').removeClass('hidden')
-                        $('.remarks').removeClass('hidden')
-                        $('.create-invoice').removeClass('hidden')
-                        $('.orders-tax').removeClass('hidden')
-                        $('.extra-charges').removeClass('hidden')
-                    }
-                    else{
-                        
-                        $('.order-heading').addClass('hidden')
-                        $('.order-details').addClass('hidden')
-                        $('.remarks').addClass('hidden')
-                        $('.create-invoice').addClass('hidden')
-                        $('.orders-tax').addClass('hidden')
-                        $('.extra-charges').addClass('hidden')
-                    }
+                {                       
+                    order_data = data.orderlist;
+                    createInvoice(order_data,order_data)                                       
                 }
                 else{
                     $('.order-details').addClass('hidden')
@@ -156,6 +85,108 @@
             }
         })
     }
+    function createInvoice(orderData,taxData){
+        
+        $('.order-details').html('');
+        var tr = "";
+        var qnty = 0;
+        var amnt = 0;
+        var tax_tr = 0;
+        var totalcgst = 0;
+        var totalsgst = 0;
+        var totaligst = 0;
+        var totaltax = 0;
+
+        taxDivision(taxData)
+        
+        place_of_supply = orderData[0].place_of_supply;                 
+        $(orderData).each(function(index, value)
+        {            
+            var size = (value.size == null)?'-':value.size ; 
+            tr += '<tr class="trClass" id="'+value.id+'">';
+            tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" checked/></td><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.id+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td>'+value.hsn_code+'</td><td class="tax-td">'+value.tax+' %</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty">'+value.pending_qnty+'</td><td style="width: 116px;"><input type="text" value="" class="form-control delivery-qnty" required data-id="'+value.id+'" min="1" onkeyup="updateAmount.call(this,'+uniqueTax+')"></td><td class="rate">'+value.rate+'</td><td class="amnt">'+value.pending_qnty * value.rate+'</td>';
+            tr += '</tr>';
+            qnty += value.order_quantity;
+            amnt += (value.pending_qnty*value.rate);
+
+        });
+
+        tr+= '<tr><td colspan="10"><strong>Total</strong></td><td>'+qnty+'</td><td class="balnc-qnty" id="balnc-qnty">'+qnty+'</td><td class="total-qnty" id="total-qnty">'+quantityTotal()+'</td><td></td><td class="total-amnt">'+amnt+'</td></tr>';
+
+
+        $('.order-details').html('<table class="table text-center order-details" id="order-details"><thead><tr><th></th><th>Order No</th><th>PO No</th><th>Style</th><th>OCN No</th><th>Item</th><th>Reference</th><th>Size</th><th>HSN No</th><th>Tax</th><th>Order Quantity</th><th>Pending Quantity</th><th>Delivered Quantity</th><th>Rate</th><th>Amount</th></tr></thead><tbody>'+tr+'</tbody></table>');
+
+        updateTaxAmount(tax_amnt)
+
+        var gndtotal = parseFloat($('.tax-total').text())+ parseFloat($('.total-amnt').text());
+        $('.extra-charges').html('<table class="table text-center extra-charges" style="margin-left: 31px;margin-top: -18px;"><thead><tr><th colspan="2">Description</th><th>Amount</th></tr></thead><tbody><tr><td><div style="width: 65%"><select class="charges" id="charges1" name="charges1"><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td style="width: 116px;" colspan="2"><input type="text" value="" min="0" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr><tr><td colspan="2"><div style="width: 65%"><select  id="charges2" name="charges2" class="charges"><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td style="width: 116px;"><input type="text" min="0" value="" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr><tr><td colspan="2"><div style="width: 65%"><select class="charges" id="charges3" name="charges3" ><option value="">Freight</option><option value="">Minimum charges</option><option value="">Job Work Charges</option></select></div></td><td style="width: 116px;"><input type="text" min="0" value="" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr><tr><td colspan="2"><strong>SubTotal</strong></td><td class="sub-extra">0</td></tr><tr></tr><tr><td colspan="2"><strong>Grand Total</strong></td><td class="grand-total">'+gndtotal.toFixed(3)+'</td></tr><tr></tr></tbody></table><div class="create-invoice"><button type="button" class="btn btn-primary create-invoice pull-right" style="margin-right: -32px;margin-top: -10px;" id="create-invoice">Create Invoice</button></div>')
+
+            $('#create-invoice').on('click',function(){
+                previewInvoice(orderData)
+            })
+        $('.order-details tbody').on('change', 'input[type="checkbox"]', function(){
+            updateInvoice(this)                           
+        });
+
+        var checkboxes = $('.dynamic-table td input[type="checkbox"]');
+        $(document).find('.charges').selectpicker();                  
+
+        if(checkboxes.filter(':checked').length >0){
+            $('.order-heading').removeClass('hidden')
+            $('.order-details').removeClass('hidden')
+            $('.remarks').removeClass('hidden')
+            $('.create-invoice').removeClass('hidden')
+            $('.orders-tax').removeClass('hidden')
+            $('.extra-charges').removeClass('hidden')
+        }
+        else{
+            
+            $('.order-heading').addClass('hidden')
+            $('.order-details').addClass('hidden')
+            $('.remarks').addClass('hidden')
+            $('.create-invoice').addClass('hidden')
+            $('.orders-tax').addClass('hidden')
+            $('.extra-charges').addClass('hidden')
+        }
+    }
+
+    function taxDivision(orderData){
+        var taxIndexes = [] ;
+        var taxlist = orderData.map(a => a.tax);
+        $.each(taxlist, function(i, el){
+            if($.inArray(el, uniqueTax) === -1) 
+             uniqueTax.push(el);
+        }); 
+        $(uniqueTax).each(function(key, vals){
+            var sub_amnt = 0;
+            taxIndexes[vals] = $.map(orderData, function(obj, index) {
+                if(obj.tax == vals) {
+                    sub_amnt += obj.order_quantity*obj.rate;
+                }
+            }) 
+            tax_amnt[vals] = sub_amnt;                                     
+        });
+        return tax_amnt;
+    }
+
+    function previewTaxDiv(newData){
+        var taxIndexes = [] ;
+        var taxlist = newData.map(a => a.tax);
+        $.each(taxlist, function(i, el){
+            if($.inArray(el, uniqueTax) === -1) 
+             uniqueTax.push(el);
+        }); 
+        $(uniqueTax).each(function(key, vals){
+            var sub_amnt = 0;
+            taxIndexes[vals] = $.map(newData, function(obj, index) {
+                if(obj.tax == vals) {
+                    sub_amnt += obj.delvry_qnty*obj.rate;
+                }
+            }) 
+            tax_amnt[vals] = sub_amnt;                                     
+        });
+        return tax_amnt;
+    }
 
     function updateAmount() {
         // var flg = 0;
@@ -164,27 +195,32 @@
         var result = [];
         var taxsum = {};
         var arr = [];
-
+        var pendingQnty = 0
+        
         if($(this).val() <= parseInt($(this).closest('tr').find('.qnty').text())){
-
             amnt  = parseInt($(this).val()) * $(this).closest('tr').find('.rate').text();
             $(this).closest('tr').find('.amnt').html(amnt)
+            pendingQnty = $(this).closest('tr').find('.qnty').text() - $(this).val()
+            $(this).closest('tr').find('.pending-qnty').html(pendingQnty)
         }
         else{
             amnt  = $(this).closest('tr').find('.qnty').text() * $(this).closest('tr').find('.rate').text();
             $(this).closest('tr').find('.amnt').html(amnt)
             $(this).val('')
-        }        
+        } 
+        // $(this).closest('tr').find('.order-select').attr("checked", "checked");   
+
         $('.total-amnt').html(totalAmount())
         $('#total-qnty').html(quantityTotal()) 
         $('.tax-total').html(taxSubTotal()) 
+        $('#balnc-qnty').html(balncTotal())
         $(tax_array).each(function(key, vals){
             $('.order-details table tbody tr').each(function(){
                 if(parseInt($(this).find($(".tax-td")).text().split(" ")[0]) == vals){           
                     val=taxsum[vals] == undefined ? 0 : taxsum[vals];
                     val+= $(this).find($(".amnt")).text() == "" ? 0 :parseInt($(this).find($(".amnt")).text())
                     taxsum[vals] = val;
-                    console.log(taxsum)
+                   
                 }
             });
         });
@@ -200,40 +236,79 @@
               result[index] += parseFloat($(val).text());
             });
         }); 
-        return result[13];
+        return result[14];
     }
-
+    function balncTotal(){
+       var pendingQnty = [];
+        $('.order-details tr').each(function(){
+            $('td', this).each(function(index, val){
+                if(!pendingQnty[index]) pendingQnty[index] = 0;
+              pendingQnty[index] += parseFloat($(val).text());
+            });
+        });
+        return pendingQnty[11] ;
+    }
     function quantityTotal(){
+        
         var sum=0;
         $('.delivery-qnty').each(function(i, obj){
            if($.isNumeric(this.value)) {
+            $(this).css('border-color', '');
                 sum += parseFloat(this.value);
               }
         })
         return sum;
     }   
     function taxSubTotal(){
-        var tax_amnt = [];
-        $('.orders-tax tr').each(function(){
+        var taxamnt = [];
+        $('.orders_tax tr').each(function(){
             $('td', this).each(function(index, val){
-                if(!tax_amnt[index]) tax_amnt[index] = 0;
-              tax_amnt[index] += parseFloat($(val).text());
+                if(index == 2){
+                if(!taxamnt[index]) taxamnt[index] = 0;
+                taxamnt[index] += parseFloat($(val).text());
+                console.log($(val).text())
+            }
             });
         });
-        return tax_amnt[2] ;
+        return taxamnt[2] ;
     }
+    function previewTaxTotal(){
+        var taxamnt = [];
+        $('.preview_orders_tax tr').each(function(){
+            $('td', this).each(function(index, val){
+                if(index == 2){
+                if(!taxamnt[index]) taxamnt[index] = 0;
+                taxamnt[index] += parseFloat($(val).text());
+                console.log($(val).text())
+            }
+            });
+        });
+        return taxamnt[2] ;
+    }
+    
+
 
     function updateTaxAmount(tax_amnt){
-        var tax_tr = "";
-       
-        var tax_table = $('.orders-tax').html('<form id="orders-tax"><table class="table text-center" style="margin-left: 31px;margin-top: -18px;"><thead><tr><th>Tax</th><th>Base value</th><th>Amount</th></tr></thead><tbody class="tax-tabl"></tbody></table></form>')
+
+        var tax_tr = "";       
+        var tax_table = $('.orders-tax').html('<table class="table text-center orders_tax" style="margin-left: 31px;margin-top: -18px;"><thead><tr><th>Tax</th><th>Base value</th><th>Amount</th></tr></thead><tbody class="tax-tabl"></tbody></table>')
         Object.keys(tax_amnt).forEach(function(key) {
           if (place_of_supply==1){
-            tax_tr = '<tr><td>CGST ('+(key/2)+'% )</td><td class="cgst_'+key+'">'+tax_amnt[key]+'</td><td>'+(((key/2)/100)*tax_amnt[key]).toFixed(3)+'</td></tr><tr><td>SGST ('+(key/2)+'% )</td><td class="sgst_'+key+'">'+tax_amnt[key]+'</td><td>'+ (((key/2)/100)*tax_amnt[key]).toFixed(3)+'</td></tr>'
+                if (tax_amnt[key]!=0) {
+                    tax_tr = '<tr><td>CGST ('+(key/2)+'% )</td><td class="cgst_'+key+'">'+tax_amnt[key]+'</td><td>'+(((key/2)/100)*tax_amnt[key]).toFixed(3)+'</td></tr><tr><td>SGST ('+(key/2)+'% )</td><td class="sgst_'+key+'">'+tax_amnt[key]+'</td><td>'+ (((key/2)/100)*tax_amnt[key]).toFixed(3)+'</td></tr>'
+                }
+                else{
+                    tax_tr = "";
+                }
             }
+            
             else if (place_of_supply==2){
-                
-                tax_tr = '<tr><td>IGST ('+key+'% )</td><td class="igst_'+key+'">'+tax_amnt[key]+'</td><td>'+((key/100)*tax_amnt[key]).toFixed(3)+'</td></tr>'
+                if (tax_amnt[key]!=0) {                
+                    tax_tr = '<tr><td>IGST ('+key+'% )</td><td class="igst_'+key+'">'+tax_amnt[key]+'</td><td>'+((key/100)*tax_amnt[key]).toFixed(3)+'</td></tr>'
+                }
+                else{
+                    tax_tr = "";
+                }
             }
             else{
                 tax_tr = '<tr><td>Taxes ('+key+'% )</td><td>'+tax_amnt[key]+'</td><td>'+ ((key/100)*tax_amnt[key] ).toFixed(3)+'</td></tr>'
@@ -255,12 +330,167 @@
         $('.grand-total').html(grandTotal.toFixed(3))        
     }
 
-    $('.create-invoice').click(function () {
+    function previewInvoice(data){
+        var selected = [];
+        var tr = "";
+        var qnty = 0;
+        var amnt = 0;
+        var tax_tr = 0;
+        var totalcgst = 0;
+        var totalsgst = 0;
+        var totaligst = 0;
+        var totaltax = 0;
+        var pending_qnty = 0;
+        var arr = [].concat(data);
+        $('.delivery-qnty').css('border-color', '');
         var delvryQnty = {};
+        var count = 0 ;
+        $('.order-details input[type=checkbox]').each(function () {
+            if ($(this).prop("checked") == false) {
+                selected.push($(this).attr('id'));           
+            }
+        });
+        count = selected.length;
         $('.delivery-qnty').each(function(i, obj){
-            if($.isNumeric(this.value)) {                
+            if($.isNumeric(this.value)) {             
                delvryQnty[$(this).data("id")] = parseFloat(this.value);
             }
+            else if($(this).closest('tr').find('.order-select').prop("checked") == true){
+                $(this).closest('tr').find('.delivery-qnty').focus();
+                $(this).closest('tr').find('.delivery-qnty').css('border-color', '#F44336');
+                $('.snackbar_span').html("Please provide delivered quantity details");
+                showSnackbar();
+            }
+           
         })
-        console.log(delvryQnty)
-    });
+        if (jQuery.isEmptyObject(delvryQnty) || Object.keys(delvryQnty).length<(count)) {
+           $('.snackbar_span').html("Please provide delivered quantity details");
+           showSnackbar();
+        }
+        else{
+            for(var i=0; i<selected.length;i++){
+               var removeIndex = arr.map(function(item) { return item.id; }).indexOf(parseInt(selected[i]));
+               var data = arr.splice(removeIndex, 1);
+            }
+            
+            $('#erp_id').text(arr[0].erp_id)
+            $('.invoice-date').text($('#invoice-date').val())
+            $('.invoice_number').text($('#invoice-no').val())
+            var pendingQnty = 0  ;
+            $(arr).each(function(index, value)
+            {            
+                var size = (value.size == null)?'-':value.size ;
+                var delQnty = 0
+                for (var k in delvryQnty) {
+                    if (delvryQnty.hasOwnProperty(k)) {
+                       if (k==value.id)
+                        delQnty = delvryQnty[k]
+                    }
+                }
+                value.delvry_qnty = delQnty;
+                pending_qnty = value.pending_qnty - delQnty
+                tr += '<tr class="trClass" id="'+value.id+'">';
+                tr += '<td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.id+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td>'+value.hsn_code+'</td><td class="tax-td">'+value.tax+' %</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty">'+pending_qnty+'</td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td class="amnt">'+delQnty * value.rate+'</td>';
+                tr += '</tr>';
+
+                qnty += value.order_quantity;
+                pendingQnty += pending_qnty
+                amnt += (delQnty*value.rate);
+
+            });
+            tr+= '<tr><td colspan="9"><strong>Total</strong></td><td>'+qnty+'</td><td class="balnc-qnty" id="balnc-qnty">'+pendingQnty+'</td><td class="total-qnty" id="total-qnty">'+quantityTotal()+'</td><td></td><td class="total-amnt">'+amnt+'</td></tr>';
+            $('#item_details').html('<table class="table text-center order-details" id="order-details"><thead><tr><th>Order No</th><th>PO No</th><th>Style</th><th>OCN No</th><th>Item</th><th>Reference</th><th>Size</th><th>HSN No</th><th>Tax</th><th>Order Quantity</th><th>Pending Quantity</th><th>Delivered Quantity</th><th>Rate</th><th>Amount</th></tr></thead><tbody>'+tr+'</tbody></table>');
+            var tax_tr = "";       
+            var tax_table = $('.preview-orders-tax').html('<table class="table text-center preview_orders_tax" style="margin-left: 31px;margin-top: -18px;"><thead><tr><th>Tax</th><th>Base value</th><th>Amount</th></tr></thead><tbody class="preview-tax-tabl"></tbody></table>')
+            var taxTotal = 0;
+
+            tax_amnt = previewTaxDiv(arr)
+            Object.keys(tax_amnt).forEach(function(key) {
+            
+                if (place_of_supply==1){
+                    if (tax_amnt[key]!=0) {
+                        tax_tr = '<tr><td>CGST ('+(key/2)+'% )</td><td class="cgst_'+key+'">'+tax_amnt[key]+'</td><td>'+(((key/2)/100)*tax_amnt[key]).toFixed(3)+'</td></tr><tr><td>SGST ('+(key/2)+'% )</td><td class="sgst_'+key+'">'+tax_amnt[key]+'</td><td>'+ (((key/2)/100)*tax_amnt[key]).toFixed(3)+'</td></tr>'    
+                    }
+                    else{
+                        tax_tr = ""; 
+                    }
+                }
+                else if (place_of_supply==2){
+                    if (tax_amnt[key]!=0) {
+                      tax_tr = '<tr><td>IGST ('+key+'% )</td><td class="igst_'+key+'">'+tax_amnt[key]+'</td><td>'+((key/100)*tax_amnt[key]).toFixed(3)+'</td></tr>'
+                    }
+                    else{
+                        tax_tr = ""; 
+                    }
+                }
+                else{
+                    tax_tr = '<tr><td>Taxes ('+key+'% )</td><td>'+tax_amnt[key]+'</td><td>'+ ((key/100)*tax_amnt[key] ).toFixed(3)+'</td></tr>'
+                }
+                $('.preview-tax-tabl').append(tax_tr);
+            });
+            
+            $('.preview-tax-tabl').append('<tr><td colspan="2"><strong>SubTotal</strong></td><td class="preview-tax-total">'+ previewTaxTotal().toFixed(3) +'</td></tr><tr></tr>')
+            $('.invoice_actions').html('<button class="btn btn-success btn-xs" id="save-invoice">Save & Send</button><button type="button" class="btn btn-primary btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
+            $('#save-invoice').on('click',function(){
+                alert()
+                saveInvoice(arr)
+            })
+            $('#erp-invoice').modal("show")
+        }
+    }
+
+
+    function updateInvoice(obj){
+        var val = $(obj).val();
+        var i = order_data.length;        
+        var arr = [].concat(order_data);
+        var selected = [];
+        $('.order-details input[type=checkbox]').each(function () {
+            var amt =0;
+            if ($(this).prop("checked") == false) {
+              selected.push($(this).attr('id'));
+              $(this).closest('tr').find('.amnt').text(0);
+              $(this).closest('tr').find('.delivery-qnty').removeAttr('required');
+              $(this).closest('tr').find('.delivery-qnty').css('border-color', '');              
+            }
+            else{
+               amt = $(this).closest('tr').find('.pending-qnty').text()*$(this).closest('tr').find('.rate').text()
+                $(this).closest('tr').find('.amnt').text(amt);
+                $(this).closest('tr').find('.delivery-qnty').attr('required');
+            }
+        });
+        for(var i=0; i<selected.length;i++){
+           var removeIndex = arr.map(function(item) { return item.id; }).indexOf(parseInt(selected[i]));
+           var data = arr.splice(removeIndex, 1);
+        }
+        var tax_amnt = taxDivision(arr)        
+        updateTaxAmount(tax_amnt)
+        $('.total-amnt').html(totalAmount())
+        updateTotal()       
+        // console.log(arr,"final")
+    }
+
+    function saveInvoice(finalData){
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+            url: "/erp/save-invoice",
+            type: 'POST',
+            data: {
+                _token: csrf_token,
+                finalData:finalData
+            },
+            tryCount: 0,
+            retryLimit: 2,
+            dataType: "json",
+
+            success: function (data) {
+                console.log(data)
+            },
+            error: function (errorXHR, errorStatus, errorThrown) {
+               
+            },
+            complete: function () {
+            
+            }
+        })
+    }

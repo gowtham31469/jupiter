@@ -38,7 +38,8 @@ class ErpOrders
 			$erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$orders->customer_id)->where('po_no',$orders->purchase_order_no)->first();
 
 			if ($erp_orders) {
-				$this->insertOrderDetails($qnty_table,$order_details,$orders,$erp_orders);				
+				Erp::where('id',$erp_orders->id)->update(['status'=>1]);
+				$this->insertOrderDetails($qnty_table,$order_details,$orders,$erp_orders);
 			}
 			else{
 				$erp_orders =   Erp::create([
@@ -48,7 +49,10 @@ class ErpOrders
 				                    'po_file'          => $orders->po_file,
 									'status'		   => 1,
 									'order_status_id'  => $order_status_id->id
- 								]);
+								]);
+				$erp_id = "ERPID-0".$erp_orders->id;
+				Erp::where('id',$erp_orders->id)->update(['erp_id'=>$erp_id]);
+
 				$this->insertOrderDetails($qnty_table,$order_details,$orders,$erp_orders);
 			}
 			$result = response()->json(['error'=> false,'message' =>'success'],200);
@@ -72,6 +76,7 @@ class ErpOrders
 					'erp_order_id'     		=> $erp_orders->id,
 	            	'style_no'         		=> $style_no,
 	           		'order_quantity'   		=> $vals->count,
+	           		'pending_orders'		=> $vals->count,
 	            	'size'         	   		=> $vals->size,
 	            	'delivery_date'	   		=> $orders->delivery_date,
 	            	'order_qnty_table_name' => $qnty_table,

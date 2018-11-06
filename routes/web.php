@@ -565,8 +565,8 @@ Route::get('admin/audit-trail', 'Admin\AuditTrail\AuditTrailController@index');
 Route::get('admin/audit-trail/get-comparison-details', 'Admin\AuditTrail\AuditTrailController@getComparisonDataById');
 /* ERP Related Routes */
 Route::group(['prefix' => 'erp'], function () {
-	Route::get('/', 'ErpUser\UserController@index')->name('erp');
-	Route::get('/home', 'ErpUser\UserController@index')->name('home');
+	Route::get('/', 'ErpUser\Admin\UserController@index')->name('erp');
+	Route::get('/home', 'ErpUser\Admin\UserController@index')->name('home');
 	Route::get('/login', 'ErpuserAuth\LoginController@showLoginForm')->name('login');
 	Route::post('/login', 'ErpuserAuth\LoginController@login');
 	Route::post('/logout', 'ErpuserAuth\LoginController@logout')->name('logout');
@@ -577,24 +577,34 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::get('/password/reset', 'ErpuserAuth\ForgotPasswordController@showLinkRequestForm')->name('password.reset');
 	Route::get('/password/reset/{token}', 'ErpuserAuth\ResetPasswordController@showResetForm');
 	/* Routes for User Management */
-	Route::get('/users', 'ErpUser\UserController@show')->name('erp-users');
-	Route::post('users', 'ErpUser\UserController@store')->name('erp.user.add');
-	Route::put('users',  'ErpUser\UserController@update')->name('erp.user.update');
-	Route::delete('users', 'ErpUser\UserController@destroy')->name('erp.user.delete');
-	Route::post('get-template', 'ErpUser\UserController@getTemplate')->name('erp.user.getTemplate');
-	Route::get('get-user', 'ErpUser\UserController@getUser')->name('erp.user.getUser');
+	Route::get('/users', 'ErpUser\Admin\UserController@show')->name('erp-users');
+	Route::post('users', 'ErpUser\Admin\UserController@store')->name('erp.user.add');
+	Route::put('users',  'ErpUser\Admin\UserController@update')->name('erp.user.update');
+	Route::delete('users', 'ErpUser\Admin\UserController@destroy')->name('erp.user.delete');
+	Route::post('get-template', 'ErpUser\Admin\UserController@getTemplate')->name('erp.user.getTemplate');
+	Route::get('get-user', 'ErpUser\Admin\UserController@getUser')->name('erp.user.getUser');
 	/* Routes for User Profile */
 	Route::get('profile', 'ErpUser\ProfileController@getProfile')->name('erp.user.getProfile');
 	Route::put('profile', 'ErpUser\ProfileController@putProfile')->name('erp.user.putProfile');
 	Route::put('password', 'ErpUser\ProfileController@putPassword')->name('erp.user.putPwd');
+	/* Routes for Admin Order Management */
+	Route::get('order-management', 'ErpUser\Admin\OrderController@show')->name('erp.admin.orders.show');
+	Route::delete('admin/order', 'ErpUser\Admin\OrderController@destroy')->name('erp.admin.orders.delete');
+	
 	/* Routes for Invoice Management */
+	 
 	Route::get('/invoice', 'ErpUser\Invoice\InvoiceController@index')->name('invoice'); 
+	Route::get('/create-invoice', 'ErpUser\Invoice\InvoiceController@create')->name('invoice');
 
 	/* Routes for PO Manager Module */
 
 	Route::get('/erp-po-list', 'ErpUser\Invoice\InvoiceController@erpPOList')->name('erp-po'); 
 	
 	Route::get('/erp-order-list', 'ErpUser\Invoice\InvoiceController@erpOrderList')->name('erp-orders');
+	Route::post('/save-invoice', 'ErpUser\Invoice\InvoiceController@setInvoice')->name('erp-orders');
+	
+
+
 	Route::get('/po-manager', 'ErpUser\Pomanager\PoManagerController@index')->name('poManager'); 
 	Route::post('/po-manager/order-details', 'ErpUser\Pomanager\PoManagerController@orderDetails');
 	Route::post('/po-manager/submit-po-verify', 'ErpUser\Pomanager\PoManagerController@submitPoVerify'); 
