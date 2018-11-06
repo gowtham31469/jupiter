@@ -1511,6 +1511,6 @@ span.batch-additional {
 .error-template {padding: 40px 15px;text-align: center;}
 .error-actions {margin-top:15px;margin-bottom:15px;}
 .error-actions .btn { margin-right:10px; }
-.dynamic-menu > li > a {
+.erp-dynamic-menu > li > a {
     line-height: 12px;
 }
