@@ -21,3 +21,19 @@
         console.log("Error:" + e)
     }
 }
+
+/**
+ * Job card generation 
+ * @author <Praveen> [praveen@wizroots.com]
+ */
+function generateJobcard(){
+    if ($("#approved-order-list input[class='row-checkbox']:not(:checked)").length > 0)
+    {
+        $('.snackbar_span').html("Select atleast one order.");
+		showSnackbar();
+    }
+    else
+    {
+        alert("Checked")
+    }
+}
