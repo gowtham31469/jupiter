@@ -572,9 +572,9 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::post('/logout', 'ErpuserAuth\LoginController@logout')->name('logout');
 	Route::get('/register', 'ErpuserAuth\RegisterController@showRegistrationForm')->name('register');
 	Route::post('/register', 'ErpuserAuth\RegisterController@register');
-	Route::post('/password/email', 'ErpuserAuth\ForgotPasswordController@sendResetLinkEmail')->name('password.request');
-	Route::post('/password/reset', 'ErpuserAuth\ResetPasswordController@reset')->name('password.email');
-	Route::get('/password/reset', 'ErpuserAuth\ForgotPasswordController@showLinkRequestForm')->name('password.reset');
+	Route::post('/password/email', 'ErpuserAuth\ForgotPasswordController@sendResetLinkEmail')->name('erp-password.request');
+	Route::post('/password/reset', 'ErpuserAuth\ResetPasswordController@reset')->name('erp-password.email');
+	Route::get('/password/reset', 'ErpuserAuth\ForgotPasswordController@showLinkRequestForm')->name('erp-password.reset');
 	Route::get('/password/reset/{token}', 'ErpuserAuth\ResetPasswordController@showResetForm');
 	/* Routes for User Management */
 	Route::get('/users', 'ErpUser\Admin\UserController@show')->name('erp-users');
