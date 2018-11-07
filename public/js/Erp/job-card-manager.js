@@ -21,7 +21,9 @@
         console.log("Error:" + e)
     }
 }
-
+function showFilter() {
+    $('.filter-window').toggle();
+}
 /**
  * Job card generation 
  * @author <Praveen> [praveen@wizroots.com]
