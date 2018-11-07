@@ -5,8 +5,12 @@
     .navbar-nav > li > a {
     line-height: 12px !important;
     }
-    .invoice-modal{
+  /*  .invoice-modal{
         width: 1100px;
+    }*/
+    .nopadding {
+       padding: 0 !important;
+       margin: 0 !important;
     }
 </style>
 <ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
@@ -16,7 +20,7 @@
 @endsection
 @section('content')
 <div class="col-sm-12 col-md-12 main">
-	 <div class="main-content">
+     <div class="main-content">
         <div class="select-buyer"></div>
         <div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
         <div class="col-md-12">
@@ -27,7 +31,7 @@
                     <label for="invoice-no" style="padding-top: 12px;margin-left: -12px;">No</label>
                 </div>
                 <div class="col-xs-2">
-                    <input type="text" class="form-control" name="invoice-no" id="invoice-no" style="margin-left: -145px;width: 91px;">
+                    <input type="text" class="form-control" name="invoice-no" id="invoice-no" style="margin-left: -145px;width: 91px;" value="{{$invID}}">
                 </div>
                 <div class="row">
                     <div class="col-xs-2">
@@ -35,8 +39,8 @@
                    
                     </div>
                     <div class="col-xs-2">
-                        <!-- <input type="text" class="form-control" name="" style="margin-left: -412px;width: 138px;" name="invoice-date" id="invoice-date" value ="{{ now('Asia/Kolkata')->toDateString() }}" readonly=""> -->
-                        <input class="form-control input-sm invoice-date" id="invoice-date" name="invoice-date"  style="margin-left: -412px;width: 138px;" placeholder="Select Date" readonly="">
+                        <input type="text" class="form-control invoice-date" id="invoice-date" name="invoice-date" style="margin-left: -412px;width: 136px;;" name="invoice-date" id="invoice-date" value ="{{ now('Asia/Kolkata')->format('d-m-Y') }}" readonly="">
+                        <!-- <input class="form-control input-sm invoice-date" id="invoice-date" name="invoice-date" style="margin-left: -412px;width: 138px;" placeholder="Select Date" readonly="" value ="{{ now('Asia/Kolkata')->format('d-m-Y') }}"> -->
                     </div>
                 </div>
                 <div class="row">
@@ -66,13 +70,13 @@
                 <br>
                 <div class="row">
                     <div class="order-heading hidden"> 
-                        <u><strong>ORDER DETAILS :</strong></u>
+                        <u><strong style="margin-left: 16px;">ORDER DETAILS :</strong></u>
                     </div>                     
                     
                     <div class="table-responsive order-details hidden">
                     
                     </div> 
-                    <div class="col-md-4 remarks hidden" style="margin-left: -16px;">
+                    <div class="col-md-4 remarks hidden">
                         <label>Remarks</label>
                         <div class='form-group'>
                             <textarea class='form-control input-sm' name='remarks' style='resize: vertical;min-height:10vh;'></textarea>
@@ -91,9 +95,6 @@
                             
                         </div>
                     </div>
-                    <!-- <div class="w3-card order-footer">
-                         <button type="button" class="btn btn-primary create-invoice hidden">Create Invoice</button>
-                    </div -->
                 </div>                    
             </form>
         </div>
@@ -101,7 +102,7 @@
     </div>
 </div>
 <div class="modal fade" id="erp-invoice" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-        <div class="modal-dialog invoice-modal" role="document">
+        <div class="modal-dialog modal-lg invoice-modal" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <div style="margin-left: 5px" class="invoice_actions pull-right">
@@ -110,34 +111,58 @@
                     <h5><strong>Invoice for <span id="erp_id"></span></strong></h5>
 
                 </div>
-                <div class="modal-body" id="erp-invoice">
-                    <div class="col-md-12 text-center">
-                        <h4><strong><u>Invoice</u></strong></h4>
-                    </div>
-                    <div class="col-md-12 color-invoice">
-                        <!-- <div class="col-md-12 col-md-offset-1">
-                            <div class=""> -->
-                                <div class="col-md-12">
-                                    <div class="right" style="float: right">
-                                        <img id="company-logo" style="height: 45px;" src="" class="img-responsive">
-                                        <strong>Date</strong>
-                                        <span style="padding-left: 37px;"> : <span style="padding-left: 6px;" class="invoice-date"></span>
-                                        </span></br>
-                                        <strong>Invoice No </strong>
-                                            <span style="padding-left: 3px;"> : </span>
-                                            <span style="padding-left: 4px;" class="invoice_number"></span>
-                                      
-                                    </div>
-                                    <div id="company_details">
-
-                                    </div>
-                               <!--  </div>
-                            </div> -->
-                            <hr />
-                            <div class="">
-                                <strong style="margin-left: 15px; font-size:11px;">Customer Details : </strong>
+                <div class="modal-body" id="invoice">
+                  <div class="container-fluid ">
+                  <div class="row">
+                            <div class="col-md-12">
+                               <div class="row text-center color-invoice">
+                                    <h4><strong><u>Invoice</u></strong></h4>
+                                </div> 
                             </div>
-                            <div class="">
+                        </div>
+                        <!-- <div class="row">
+                            <div class="right" style="float: right;margin-right: 16px;">
+                                <img id="company-logo" style="height: 45px;" src="" class="img-responsive">
+                                <strong>Date</strong>
+                                <span style="padding-left: 37px;"> : <span style="padding-left: 6px;" class="invoice-date"></span>
+                                </span><br>
+                                <strong>Invoice No </strong>
+                                    <span style="padding-left: 3px;"> : </span>
+                                    <span style="padding-left: 4px;" class="invoice_number"></span>
+                                  
+                            </div>
+                        </div> -->
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4">
+
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4">
+
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 pull-right" style="padding-left: 50px;">
+                                    <img id="company-logo" style="height: 45px;" src="" class="img-responsive">
+                                    <strong>Date</strong>
+                                    <span style="padding-left: 37px;"> : <span style="padding-left: 6px;" class="invoice-date"></span>
+                                    </span><br>
+                                    <strong>Invoice No </strong>
+                                    <span style="padding-left: 3px;"> : </span>
+                                    <span style="padding-left: 4px;" class="invoice_number"></span>
+
+                                </div>
+                                <div class="col-lg-5 col-md-5 col-sm-5">
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div id="company_details">
+
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row">
+                                <strong style="font-size:11px;margin-left: 14px;">Customer Details : </strong>
+                            </div>
+                            <div class="row">
                                 <div class="col-lg-4 col-md-4 col-sm-4" id="bill_to">
 
                                 </div>
@@ -152,36 +177,36 @@
                                 </div>
                             </div>
                             <hr />
-                            <strong>ORDER DETAILS :</strong>
-                            <div class="row" id="item_details">
-
+                            <div class="row">
+                                <strong style="margin-left: 14px;">ORDER DETAILS :</strong>
+                                <div class="col-md-12" id="item_details">
+                                    
+                                </div>
                             </div>
-                            <div class="col-md-4 remarks hidden" style="margin-left: -16px;">
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                <div class="col-md-4 nopadding remarks hidden">
                                 <label>Remarks</label>
-                                <div class='form-group'>
+                                <div class="form-group">
                                     <span>Datataatata</span>
                                 </div>
 
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-3 nopadding">
                                 
 
                             </div>
-                            <div class="col-md-5">
-                                <div class="preview-orders-tax">
-                                    
-                                </div>
+                            <div class="col-md-5 nopadding">
+                                <div class="preview-orders-tax"></div>
+                                <div class="preview-extra-charges"></div>
                                 
                             </div>
-                          
+                            </div>
+                            </div>
                         </div>
-                    </div>
-
                 </div>
-                <div class="modal-footer">
-                    <div style="float:right" class="invoice_actions">
-                    </div>
-                </div>
+                <div class="modal-footer"></div>
             </div>
         </div>
     </div>
@@ -193,7 +218,9 @@
 </script>
 @endif 
 @section('jqueryIncludes')
+<script src="{{ asset('js/html2pdf.bundle.min.js') }}"></script>
 <script src="{{ asset('js/Erp/invoice.js') }}"></script>
+
 <script>       
 $('body').on('focus',".invoice-date", function(){
     
