@@ -6675,7 +6675,7 @@ function mapStoredValues(oDetails) {
                 moq = i[temp_name];
             })
             $('.count_' + item.template_name.replace(' ', '') ).attr("min",moq); 
-            $('.count_' + item.template_name.replace(' ', '') ).data("min-error","MOQ should be > "+moq); 
+            $('.count_' + item.template_name.replace(' ', '') ).data("min-error","Min Order Qnty should be > "+moq); 
         }
     });
                
@@ -7009,7 +7009,7 @@ function checkMOQ(obj) {
                 moq = i[temp_name];
             })
             $(obj).attr("min",moq); 
-            $(obj).data("min-error","MOQ should be > "+moq); 
+            $(obj).data("min-error","Min Order Qnty should be > "+moq); 
         }
     } catch (e) {
         /** [error statements] */
