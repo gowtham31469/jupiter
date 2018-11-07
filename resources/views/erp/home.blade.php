@@ -9,7 +9,7 @@
 .grid-menu{
     display: none;
 }
-    .dynamic-menu{
+    .erp-dynamic-menu{
         display: none;
     }
     a.dropdown-toggle.profile-dropdown-admin:hover {

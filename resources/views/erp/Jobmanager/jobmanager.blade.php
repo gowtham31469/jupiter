@@ -173,78 +173,87 @@
 	.remark-align {
 		padding-left: 0px !important;
 	}
-tfoot {
-     display: table-header-group;
-}
+	.highlight_row {
+		background: #eee;
+	}
 </style>
 @section('navbar')
 
-<ul class="nav navbar-nav dynamic-menu">
-	<li><a href="#" class="active">Job Manager</a></li>
+<ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
+	<li><a href="javascript:void(0)" class="active">Job Card Manager</a></li>
 </ul>
 
 @endsection @section('content')
-<div class="col-sm-12 col-md-12 main">
-	  <div class="company-nav-div">
-           <a class="dropdown-toggle profile-dropdown-admin selected-buyer" style="text-transform:capitalize;cursor: pointer;">Select Company</a>
+<div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 col-md-12" style="padding-top: 25px;">
+              <div class="top-content">
+              </div>
+              <div class="main-sub-menu">
+			    <div class="company-nav-div hidden">
+			    	<a class="dropdown-toggle profile-dropdown-admin selected-buyer" style="text-transform:capitalize;cursor: pointer;">Select Company</a>
+				</div>
+                <div class="action-group pull-right sub-menu-button">
+                  <button class=" btn btn-primary btn-sm" onclick="generateJobcard()">
+                   Create Jobcard
+				  </button>
+                </div>
+              </div>
+          <div class="clearfix"></div>
+                <div class="main-content">
+                    <div class="loader">
+						<div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>
+					</div>
+                    <div class="col" id="customer-table">
+					<input type="hidden" value="{{ session()->get('company') }}" id="company_id">
+					<input type="hidden" value="{{ session()->get('company_name') }}" id="company_name">
+					<table id="approved-order-list" class="table table-bordered table-responsive table-hover table-striped" style="width:100%;font-size: 12px;">
+						<thead>
+							<tr>
+								<th>Sl. No</th>
+								<th>ERP ID</th>
+								<th>Customer name</th>
+								<th>PO Number</th>
+								<th>Style Number</th>
+								<th>Reference Number</th>
+								<th>Delivery Date</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach($orders as $vals)
+
+							<tr id="{{$vals->id}}">
+								<td class="">
+								
+									<div class="form-check">
+									<a href="javascript:void(0)">
+										<label>
+											<input class="row-checkbox" type="checkbox" name="row-check-{{ $loop->iteration }}" style="margin-right: 10px;"> <span class="label-text" class="hidden-val">{{ $loop->iteration }}</label>
+									</a>
+									</div>
+								</td>
+								<td>{{$vals->id}}</td>
+								<td>{{$vals->company_name}}</td>
+								<td>{{$vals->po_no}}</td>
+								<td>{{$vals->style_no}}</td>
+								<td>{{$vals->reference_name}}</td>
+								@if ($vals->delivery_date != '')
+									<td>{{$vals->delivery_date}}</td>
+								@else
+									<td>N/A</td>
+								@endif
+							</tr>
+							@endforeach
+						</tbody>
+					</table>
+				</div>
+              </div>
+                </div>
+            </div>
         </div>
-	<div class="main-content">
+    </div>
 
-
-		<div class="loader">
-			<div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>
-		</div>
-		<div class="col" id="customer-table">
-			<input type="hidden" value="{{ session()->get('company') }}" id="company_id">
-			<input type="hidden" value="{{ session()->get('company_name') }}" id="company_name">
-			<table id="po-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%">
-				<thead>
-					<tr>
-						<th>Sl. No</th>
-						<th>ERP ID</th>
-						<th>Customer name</th>
-						<th>PO Number</th>
-						<th>Style Number</th>
-						<th>Reference Number</th>
-						<th>Delivery Date</th>
-					</tr>
-				</thead>
-				<tfoot>
-					<tr>
-						<th>Sl. No</th>
-						<th>ERP ID</th>
-						<th>Customer name</th>
-						<th>PO Number</th>
-						<th>Style Number</th>
-						<th>Reference Number</th>
-						<th>Delivery Date</th>
-					</tr>
-				</tfoot>
-				<tbody>
-					@foreach($orders as $vals)
-
-					<tr id="{{$vals->id}}">
-						<td class="">{{ $loop->iteration }}</td>
-						<td>{{$vals->id}}</td>
-						<td>{{$vals->company_name}}</td>
-						<td>{{$vals->po_no}}</td>
-						<td>{{$vals->style_no}}</td>
-						<td>{{$vals->reference_name}}</td>
-						@if ($vals->delivery_date != '')
-							<td>{{$vals->delivery_date}}</td>
-						@else
-							<td>N/A</td>
-						@endif
-					</tr>
-					@endforeach
-				</tbody>
-			</table>
-		</div>
-
-	</div>
-</div>
-
-<!-- Buyer selection Modal -->
+<!-- company selection Modal -->
 <div class="modal buyer-selection-modal fade" id="buyerSelectionModalCenter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
      <div class="modal-dialog buyer-selection-modal-dialog" role="document">
          <div class="modal-content buyer-selection-modal-content">
@@ -279,34 +288,8 @@ tfoot {
 <script>
 $(document).ready(function() {
 	var base_url = "<?php echo  url('/') ?>";
-    $('#po-list-table').DataTable( {
-		/** Table column filter functionality **/
-        initComplete: function () {
-            this.api().columns().every( function () {
-                var column = this;
-                var select = $('<select><option value=""></option></select>')
-                    .appendTo( $(column.footer()).empty() )
-                    .on( 'change', function () {
-                        var val = $.fn.dataTable.util.escapeRegex(
-                            $(this).val()
-                        );
- 
-                        column
-                            .search( val ? '^'+val+'$' : '', true, false )
-                            .draw();
-                    } );
- 
-                column.data().unique().sort().each( function ( d, j ) {
-                    select.append( "<option value='"+d+"'>"+d+"</option>" )
-                } );
-            } );
-        }
-    } );
-	$("#po-list-table_filter input[type=search]").addClass('form-control');
-	$('.dataTables_length select').addClass('form-control');
-	$("#po-list-table_filter input[type=search]").attr('placeholder', 'Data Search');
-} );
-	/** [ Make buyers card active ] */
+	$('input[class="row-checkbox"]').prop('checked', false);
+	/** [ Make companies card active ] */
 	$('div.buyers-card').click(function(){
 	  $('div.buyers-card').removeClass("active");
 	  $(this).addClass("active");
@@ -349,50 +332,120 @@ $(document).ready(function() {
 	
 	/** [ Show already selected(active) buyer on clicking buyer menu] */
 	$('.company-nav-menu').on('click', function() {
-	    
-	        $("#buyerSelectionModalCenter").modal("show");
-	    
+	    $("#buyerSelectionModalCenter").modal("show");
 	});
-	//alert($('#company_name').val())
+
 	if($('#company_name').val() != null && $('#company_name').val() != "")
 	{
 		$('#'+$('#company_name').val()).addClass('active');
 	}
 	else
 	{
-		    $('div.buyers-card').first().addClass("active");
+		$('div.buyers-card').first().addClass("active");
 	}
-	
    
     $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
 	
-	
 	$('.company-nav-menu').html($('.company-nav-div').html());
+
+	/** Datatable filter script**/
+	var $tableSel = $('#approved-order-list');
+	$tableSel.DataTable({
+		/** Table column filter functionality **/
+		initComplete: function () {
+			$('.main-content > #customer-table > .dataTables_wrapper > .row > .col-sm-6 > #approved-order-list_filter:first').append(' <button class="filterbtn" type="button" onClick="showFilter()" title="Filter" data-placement="bottom"><i class="fa fa-filter" aria-hidden="true"></i></button>');
+			$('.main-content > #customer-table > .dataTables_wrapper > .row > .col-sm-6 > #approved-order-list_filter:first .dataTables_filter').css('display', 'inline-block');
+			$('.main-content > #customer-table > .dataTables_wrapper > .row > .col-sm-12:first').prepend('<div class="filter-window"><h5><strong>Jobcard Filter</strong></h5> <div class="row"> <div class="col-md-2"><select class="selectpicker" id="erpID"> <option disabled selected>SELECT AN ERP ID</option></select></div><div class="col-md-2"><select class="selectpicker" id="customerName"> <option disabled selected>SELECT A CUSTOMER</option></select></div><div class="col-md-2"><select class="selectpicker" id="poNumber"> <option disabled selected>SELECT A PO NUMBER</option></select></div><div class="col-md-2"><select class="selectpicker" id="styleNumber"> <option disabled selected>SELECT A STYLE NUMBER</option></select></div><div class="col-md-2"><select class="selectpicker" id="refNumber"> <option disabled selected>SELECT A REFERENCE</option></select></div><div class="col-md-2"><select class="selectpicker" id="delDate"> <option disabled selected>SELECT A DELIVERY DATE</option></select></div></div><div class="filter-actions"><button class="btn btn-primary input-sm pull-right" id="reset">Clear Filter</button><button id="closeFilter" class="btn btn-default input-sm pull-right" onclick="showFilter()">Close</button><div class="clearfix"></div></div></div>');
+
+			//For Custom Filters
+			this.api().columns().every( function (i) {
+				var column = this;
+				if(i === 1 || i === 2 || i === 3 || i === 4 || i === 5 || i === 6) {
+					var select;
+					switch(i) {
+						case 1:
+							select = $('#erpID')
+							break;
+						case 2:
+							select = $('#customerName')
+							break;
+						case 3:
+							select = $('#poNumber')
+							break;
+						case 4:
+							select = $('#styleNumber')
+							break;
+						case 5:
+							select = $('#refNumber')
+							break;
+						case 6:
+							select = $('#delDate')
+							break;
+					}
+					select.on( 'change', function () {
+						var val = $.fn.dataTable.util.escapeRegex(
+							$(this).val()
+						);
 	
-	
+						column
+							.search( val ? '^'+val+'$' : '', true, false )
+							.draw();
+					});
+					select.append( '<option value=""> </option>' );
+					column.data().unique().sort().each( function ( d, j ) {
+						cleanText = d.replace(/<\/?[^>]+(>|$)/g, "");
+						select.append('<option value="'+cleanText+'">'+cleanText+'</option>')
+					});
+				}
+				
+			});
 
-	
-	
-
-
-	/** [showSnackbar function] */
-	function showSnackbar() {
-		try {
-			// Get the snackbar DIV
-			var x = document.getElementById("snackbar")
-
-			// Add the "show" class to DIV
-			x.className = "show";
-
-			// After 3 seconds, remove the show class from DIV
-			setTimeout(function() {
-				x.className = x.className.replace("show", "");
-			}, 3000);
-		} catch (e) {
-			console.log("Error:" + e)
+			
 		}
-	}
+    } );
 
+	 $("#reset").on("click", function () {
+		$('#erpID').val('').change();
+		$('#customerName').val('').change();
+		$('#poNumber').val('').change();
+		$('#styleNumber').val('').change();
+		$('#refNumber').val('').change();
+		$('#delDate').val('').change();
+		$.fn.dataTableExt.afnFiltering.length = 0;
+		$tableSel.dataTable().fnDraw();
+		$('.selectpicker').selectpicker('val', 1);
+        $('.selectpicker').selectpicker('refresh');
+	});
+
+	$('.selectpicker').selectpicker();
+
+
+	// Clear the filter. Unlike normal filters in Datatables,
+	// custom filters need to be removed from the afnFiltering array.
+	$('.cancelBtn').on('click', function(e){
+		e.preventDefault();
+		$.fn.dataTableExt.afnFiltering.length = 0;
+		$tableSel.dataTable().fnDraw();
+	});
+	$("#approved-order-list_filter input[type=search]").addClass('form-control');
+	$('.dataTables_length select').addClass('form-control');
+	$("#approved-order-list_filter input[type=search]").attr('placeholder', 'Data Search');
+
+	$('.approved-order-list tr').click(function (event) {
+        if (event.target.type !== 'checkbox') {
+            $(':checkbox', this).trigger('click');
+        }
+    });
+
+	/** change table row background color	**/
+	$("input[type='checkbox']").change(function (e) {
+        if ($(this).is(":checked")) {
+            $(this).closest('tr').addClass("highlight_row");
+        } else {
+            $(this).closest('tr').removeClass("highlight_row");
+        }
+    });
+} );
 </script>
 
 @endsection

@@ -2,7 +2,7 @@
 @if (Auth::guard("erpuser")->user())
 @section('navbar')
 
-<ul class="nav navbar-nav dynamic-menu">
+<ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
 	<li><a href="{{route('erp-users')}}">User Management</a></li>
 	<li><a href="#" class="active">Order Management</a></li>
 </ul>

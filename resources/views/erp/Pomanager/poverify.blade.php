@@ -206,7 +206,7 @@
 </style>
 @section('navbar')
 
-<ul class="nav navbar-nav dynamic-menu">
+<ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
 	<li><a href="#" class="active">Po Verify</a></li>
 </ul>
 

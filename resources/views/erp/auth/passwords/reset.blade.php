@@ -6,7 +6,7 @@
 		<div class="login-section">
 			<div class="container">
 				<div class="login-card card-container">
-					<form class="form-horizontal" role="form" method="POST" action="{{ url('/erp/password/reset') }}">
+					<form class="form-horizontal" role="form" method="POST" action="{{ route('erp-password.email') }}">
 						{{ csrf_field() }}
 
 						<input type="hidden" name="token" value="{{ $token }}">

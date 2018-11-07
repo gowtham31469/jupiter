@@ -15,6 +15,7 @@ use App\TescoTHL3Orders;
 use App\TescoTSL1Orders;
 use App\TescoTSL3Orders;
 use Carbon\Carbon;
+use App\ErpOrders as Erp;
 /**
  * Class to cancel the tesco template orders
  * @author [Praveen] <[praveen@wizroots.com]>
@@ -39,14 +40,28 @@ class CancelTescoOrders
    * @param  [type] $template_id
    * @return tesco order table id
    */
-  public function cancelTCL1Order($template_id)
+  public function cancelTCL1Order($template_id, $buyer_id)
   {
     try {
-            return TescoTCL1Orders::where('id',$template_id)
+            TescoTCL1Orders::where('id',$template_id)
                           ->update([
                           'order_status'       => "Order Cancelled",
                           'order_cancelled_at' => $this->current_date
                         ]);
+            $order_details  = TescoTCL1Orders::where('id',$template_id)
+                                ->select('order_status','tesco_supplier_id','purchase_order_no')
+                                ->first();
+            $order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', $order_details->order_status)->first();
+
+            $erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$order_details->tesco_supplier_id)->where('po_no',$order_details->purchase_order_no)->first();
+
+            if ($erp_orders) {
+              Erp::where('id',$erp_orders->id)
+                    ->update([
+                              'order_status_id'  => $order_status_id->id
+                            ]);
+            }
+            return "cancelled";
             
         } catch (\Exception $e)
         {
@@ -59,14 +74,28 @@ class CancelTescoOrders
    * @param  [type] $template_id
    * @return tesco order table id
    */
-  public function cancelTCL2Order($template_id)
+  public function cancelTCL2Order($template_id, $buyer_id)
   {
     try {
-            return TescoTCL2Orders::where('id',$template_id)
+            TescoTCL2Orders::where('id',$template_id)
                           ->update([
                           'order_status'       => "Order Cancelled",
                           'order_cancelled_at' => $this->current_date
                         ]);
+            $order_details  = TescoTCL2Orders::where('id',$template_id)
+                                ->select('order_status','tesco_supplier_id','purchase_order_no')
+                                ->first();
+            $order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', $order_details->order_status)->first();
+
+            $erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$order_details->tesco_supplier_id)->where('po_no',$order_details->purchase_order_no)->first();
+
+            if ($erp_orders) {
+              Erp::where('id',$erp_orders->id)
+                    ->update([
+                              'order_status_id'  => $order_status_id->id
+                            ]);
+            }
+            return "cancelled";
             
         } catch (\Exception $e)
         {
@@ -79,14 +108,28 @@ class CancelTescoOrders
    * @param  [type] $template_id
    * @return tesco order table id
    */
-  public function cancelTSL1Order($template_id)
+  public function cancelTSL1Order($template_id, $buyer_id)
   {
     try {
-            return TescoTSL1Orders::where('id',$template_id)
+            TescoTSL1Orders::where('id',$template_id)
                           ->update([
                           'order_status'       => "Order Cancelled",
                           'order_cancelled_at' => $this->current_date
                         ]);
+            $order_details  = TescoTSL1Orders::where('id',$template_id)
+                                ->select('order_status','tesco_supplier_id','purchase_order_no')
+                                ->first();
+            $order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', $order_details->order_status)->first();
+
+            $erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$order_details->tesco_supplier_id)->where('po_no',$order_details->purchase_order_no)->first();
+
+            if ($erp_orders) {
+              Erp::where('id',$erp_orders->id)
+                    ->update([
+                              'order_status_id'  => $order_status_id->id
+                            ]);
+            }
+            return "cancelled";
             
         } catch (\Exception $e)
         {
@@ -99,14 +142,28 @@ class CancelTescoOrders
    * @param  [type] $template_id
    * @return tesco order table id
    */
-  public function cancelTCL4Order($template_id)
+  public function cancelTCL4Order($template_id, $buyer_id)
   {
     try {
-            return TescoTCL4Orders::where('id',$template_id)
+            TescoTCL4Orders::where('id',$template_id)
                           ->update([
                           'order_status'       => "Order Cancelled",
                           'order_cancelled_at' => $this->current_date
                         ]);
+            $order_details  = TescoTCL4Orders::where('id',$template_id)
+                                ->select('order_status','tesco_supplier_id','purchase_order_no')
+                                ->first();
+            $order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', $order_details->order_status)->first();
+
+            $erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$order_details->tesco_supplier_id)->where('po_no',$order_details->purchase_order_no)->first();
+
+            if ($erp_orders) {
+              Erp::where('id',$erp_orders->id)
+                    ->update([
+                              'order_status_id'  => $order_status_id->id
+                            ]);
+            }
+            return "cancelled";
             
         } catch (\Exception $e)
         {
@@ -119,14 +176,28 @@ class CancelTescoOrders
    * @param  [type] $template_id
    * @return tesco order table id
    */
-  public function cancelTSL3Order($template_id)
+  public function cancelTSL3Order($template_id, $buyer_id)
   {
     try {
-            return TescoTSL3Orders::where('id',$template_id)
+            TescoTSL3Orders::where('id',$template_id)
                           ->update([
                           'order_status'       => "Order Cancelled",
                           'order_cancelled_at' => $this->current_date
                         ]);
+            $order_details  = TescoTSL3Orders::where('id',$template_id)
+                                ->select('order_status','tesco_supplier_id','purchase_order_no')
+                                ->first();
+            $order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', $order_details->order_status)->first();
+
+            $erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$order_details->tesco_supplier_id)->where('po_no',$order_details->purchase_order_no)->first();
+
+            if ($erp_orders) {
+              Erp::where('id',$erp_orders->id)
+                    ->update([
+                              'order_status_id'  => $order_status_id->id
+                            ]);
+            }
+            return "cancelled";
             
         } catch (\Exception $e)
         {
@@ -139,14 +210,28 @@ class CancelTescoOrders
    * @param  [type] $template_id
    * @return tesco order table id
    */
-  public function cancelTHL1Order($template_id)
+  public function cancelTHL1Order($template_id, $buyer_id)
   {
     try {
-            return TescoTHL1Orders::where('id',$template_id)
+            TescoTHL1Orders::where('id',$template_id)
                           ->update([
                           'order_status'       => "Order Cancelled",
                           'order_cancelled_at' => $this->current_date
                         ]);
+            $order_details  = TescoTHL1Orders::where('id',$template_id)
+                                ->select('order_status','tesco_supplier_id','purchase_order_no')
+                                ->first();
+            $order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', $order_details->order_status)->first();
+
+            $erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$order_details->tesco_supplier_id)->where('po_no',$order_details->purchase_order_no)->first();
+
+            if ($erp_orders) {
+              Erp::where('id',$erp_orders->id)
+                    ->update([
+                              'order_status_id'  => $order_status_id->id
+                            ]);
+            }
+            return "cancelled";
             
         } catch (\Exception $e)
         {
@@ -159,14 +244,28 @@ class CancelTescoOrders
    * @param  [type] $template_id
    * @return tesco order table id
    */
-  public function cancelTHL3Order($template_id)
+  public function cancelTHL3Order($template_id, $buyer_id)
   {
     try {
-            return TescoTHL3Orders::where('id',$template_id)
+            TescoTHL3Orders::where('id',$template_id)
                               ->update([
                               'order_status'       => "Order Cancelled",
                               'order_cancelled_at' => $this->current_date
                             ]);
+            $order_details  = TescoTHL3Orders::where('id',$template_id)
+                                ->select('order_status','tesco_supplier_id','purchase_order_no')
+                                ->first();
+            $order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', $order_details->order_status)->first();
+
+            $erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$order_details->tesco_supplier_id)->where('po_no',$order_details->purchase_order_no)->first();
+
+            if ($erp_orders) {
+              Erp::where('id',$erp_orders->id)
+                    ->update([
+                              'order_status_id'  => $order_status_id->id
+                            ]);
+            }
+            return "cancelled";
             
         } catch (\Exception $e)
         {
