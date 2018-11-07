@@ -280,7 +280,7 @@ function mapStoredValues(oDetails) {
                                 moq = i[temp_name];
                             })
                             $('.count_' + item.template_name.replace(' ', '') ).attr("min",moq); 
-                            $('.count_' + item.template_name.replace(' ', '') ).data("min-error","MOQ should be greater than "+moq); 
+                            $('.count_' + item.template_name.replace(' ', '') ).data("min-error","MOQ should be > "+moq); 
                         }
                     });
                      
