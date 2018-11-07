@@ -98,6 +98,7 @@
 		padding: 4px 22px;
 		border-radius: 3px;
 		transition: 0.3s ease;
+		font-size: 10px;
 	}
 	
 	.btn-ghost:hover {

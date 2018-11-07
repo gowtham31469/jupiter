@@ -337,7 +337,7 @@ background: rgba(0,0,0,0.2);
 		padding: 4px -1px;
 		border-radius: 3px;
 		transition: 0.3s ease;
-		font-size: 12px;
+		font-size: 10px;
 	}
 	
 	.btn-ghost:hover {
