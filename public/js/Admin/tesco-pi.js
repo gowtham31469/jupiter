@@ -69,7 +69,7 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
                     }
                     else
                     {
-                        tr += '<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>S.No.</th><th>Style</th><th>Po.No.</th><th>Ref</th><th>Quantity</th><th>Unit Cost</th><th>Tax</th><th>Total</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12">';
+                        tr += '<table class="table table-bordered table-condensed"><thead><tr><th>S.No.</th><th>Style</th><th>Po.No.</th><th>Ref</th><th>Quantity</th><th>Unit Cost</th><th>Tax</th><th>Total</th></tr></thead>';
                     }
 
                     if(data.data.item_details.length != 0 && data.data.price_list.length != 0)

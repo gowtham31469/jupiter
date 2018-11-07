@@ -30,25 +30,25 @@
                 <thead>
                     <tr>
                         <th>Sl. No</th>
-                        <th>ERP ID</th>
                         <th>Invoice ID</th>
+                        <th>ERP ID</th>
                         <th>Customer name</th>
                         <th>PO Number</th>
-                        <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr id="">
-                        <td class=""></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td><span class="label label-danger"></span></td>
-                       
+                {{$i=0}}
+                @foreach($invoices as $vals)
+                    <tr id="{{$vals->id}}">
+                        <td>{{++$i}}</td>
+                        <td>{{$vals->invoice_id}}</td>
+                        <td>{{$vals->erp_id}}</td>
+                        <td>{{$vals->company_name}}</td>
+                        <td>{{$vals->po_no}}</td>
                         <td align="center"><a class="pi_generation" href="javascript:void(0)" ><i class="fa fa-eye action-button-view" data-placement="top" title="" data-original-title="view Details"></i></a></td>
                     </tr>
+                @endforeach    
                 </tbody>
             </table>
         </div>
