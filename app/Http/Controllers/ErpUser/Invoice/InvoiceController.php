@@ -10,6 +10,8 @@ use View;
 use DB;
 use App\ErpOrders as Erp;
 use App\ErpOrderDetails;
+use App\Invoices;
+use App\InvoiceDetails;
 
 class InvoiceController extends Controller
 {
@@ -80,7 +82,7 @@ class InvoiceController extends Controller
                             ->join('customers','erp_orders.customer_id','customers.id')
                             ->join('buyers','erp_orders.buyer_id','buyers.id')
                             ->where('erp_order_details.pending_orders','!=' , 0)
-                            ->select('erp_order_details.id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','erp_orders.po_no','erp_order_details.style_no','erp_order_details.order_quantity','erp_order_details.rate','erp_order_details.size','erp_order_details.reference_name','customers.place_of_supply','erp_order_details.ocn_number','erp_order_details.template_id','erp_orders.id as erp_id','buyers.template_table','buyers.item_master_table')
+                            ->select('erp_order_details.id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','erp_orders.po_no','erp_order_details.style_no','erp_order_details.order_quantity','erp_order_details.rate','erp_order_details.size','erp_order_details.reference_name','customers.place_of_supply','erp_order_details.ocn_number','erp_order_details.template_id','erp_orders.erp_id as erp_id','buyers.template_table','buyers.item_master_table','erp_order_details.pending_orders as pending_qnty','erp_orders.po_file')
                             ->get();
 
             foreach ($orderlist as $key => $value){
@@ -91,6 +93,45 @@ class InvoiceController extends Controller
                 $value->tax = $details->tax;
             }
             $result      = response()->json(['error'=> false,'message' =>'success','orderlist'=>$orderlist ],200);
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+    public function setInvoice(Request $request){
+        try {
+            $orders =  $request['finalData'];
+            if ($orders) {
+                $invoiceData = Invoices::create([
+                                'customer_id' => $orders[0]['customer_id'],
+                                'buyer_id'    => $orders[0]['buyer_id'],
+                                'po_no'       => $orders[0]['po_no'],
+                                'po_file'     => $orders[0]['po_file'],
+                                'erp_id'      => $orders[0]['erp_id'],
+                            ]);
+
+                foreach ($orders as $key => $value) {
+                    $pendingQnty = $value->pending_qnty - $value->delvry_qnty;
+                    InvoiceDetails::create([
+                        'invoice_id'    =>  $invoiceData->id,
+                        'erp_order_id'  =>  $value->id,
+                        'style_no'      =>  $value->style_no,
+                        'order_quantity'=>  $value->order_quantity,
+                        'delivered_qnty'=>  $value->id,
+                        'pending_qnty'  =>  $pendingQnty,
+                        'rate'          =>  $value->rate,
+                        'tax'           =>  $value->tax,
+                        'hsn_code'      =>  $value->hsn_code,
+                        'size'          =>  $value->size,
+                        'reference_no'  =>  $value->reference_name,
+                        'item'          =>  $value->reference_name,
+                    ]);
+                }
+            }
+            
         }
         catch (\Exception $e)
         {
