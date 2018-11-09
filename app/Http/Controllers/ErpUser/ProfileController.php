@@ -101,7 +101,7 @@ class ProfileController extends Controller
 			$email	= $request->email;
 			$input['email']	= $request->email;
 			
-			$email_rules    = array('email' => 'unique:erpusers,email,'.$id);
+			$email_rules    = array('email' => 'email|unique:erpusers,email,'.$id);
 			$emailValidator = Validator::make($input,$email_rules);
 
 			if($emailValidator->fails())
