@@ -51,10 +51,11 @@
 					<div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>
 				</div>
 				<div class="col" id="admin-orders-div">
-					<table id="admin-orders-table" class="table table-condensed table-responsive" style="width:100%">
+					<table id="admin-orders-table" class="table table-condensed table-responsive table-bordered" style="width:100%">
 						<thead>
 							<tr>
-								<th>#</th>
+								<th style="width: 1px;"></th>
+
 								<th>ERP ID</th>
 								<th>PO Number</th>
 								<th>Customer</th>
@@ -67,7 +68,17 @@
 						<tbody>
 							@foreach ($orders as $value)
 							<tr id="{{$value->id}}">
-								<td>{{ $loop->iteration }}</td>
+								@switch($value->status)
+								@case("Cancelled")
+								<td style="color:red;"><i class="fa fa-flag" style="color:red;" aria-hidden="true"></i></td>
+
+								@break
+								@default
+								<td style="color:#4CAF50;"><i class="fa fa-flag" style="color:#4CAF50;" aria-hidden="true"></i></td>
+
+								@break
+								@endswitch
+
 								<td>{{$value->erp_id}}</td>
 								<td>{{$value->po_no}}</td>
 								<td>{{$value->customer}}
@@ -75,27 +86,22 @@
 								<td>{{$value->buyer}}</td>
 								<td><a target="_blank" href="{{$value->po_file}}"><i class="fa fa-file" data-toggle="tooltip" title="{!! substr($value->po_file, strrpos($value->po_file, '/') + 1); !!}"></i></a>
 								</td>
-
+								@if(is_null($value->deleted_at))
 								@switch($value->status)
 								@case("Cancelled")
-								<td style="text-align:left !important;color:red;"><i class="fa fa-flag" style="color:red;" aria-hidden="true"></i> &nbsp;&nbsp; {{$value->status}}</td>
+								<td> <span class="label label-danger"> {{$value->status}} </span> </td>
 
 								@break
 								@default
-								<td style="text-align:left !important;color:#4CAF50;"><i class="fa fa-flag" style="color:#4CAF50;" aria-hidden="true"></i> &nbsp;&nbsp; {{$value->status}}</td>
+								<td> <span class="label label-success"> {{$value->status}} </span> </td>
 
 								@break
 								@endswitch
-								<td style="text-align:left !important;">
-									<div class="dropdown">
-                                      <span class="dropdown-toggle" data-toggle="dropdown">• • •
-                                      </span>
-                                      <ul class="dropdown-menu">
-                                      	<li>View</li>
-                                      	<li>View</li>
-                                      	<li>View</li>
-                                      </ul>
-                                    </div>
+								@else
+								<td> <span class="label label-warning"> HOLD </span></td>
+								@endif
+								<td>
+									<span class="label label-primary getODetails">View Order</span>
 								</td>
 							</tr>
 							@endforeach
@@ -108,38 +114,13 @@
 	{{-- Show snackbar html code --}}
 	<div id="snackbar"><span class="snackbar_span"></span></div>
 </div>
+<div id="appendModal"></div>
 
-<div class="modal fade" id="holdModal" tabindex="-1" role="dialog" aria-labelledby="holdModalLabel">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="text-danger fa fa-times"></i></button>
-				<h4 class="modal-title">Hold Order</h4>
-			</div>
-			{!! Form::open(['class' => 'form-horizontal', 'url' => 'erp/admin/order', 'method' => 'delete']) !!}
-			{!! Form::hidden('id',$value = null, array('class' => 'form-control input-sm', 'id' => 'hold_id')) !!}
-			<div class="modal-body">
-				<div class="row">
-					<div class="col-md-12">
-						<p style="font-size:20px;">Are you sure want to hold this order ?</p>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<div class="row">
-					<div class="col-md-12">
-						<button type="submit" class="btn btn-primary btn-sm pull-right">Hold Order</button>
-					</div>
-				</div>
-			</div>
-			{!!Form::close() !!}
-		</div>
-	</div>
-</div>
 @endsection
 @else
 <script type="text/javascript">
 	window.location = "{{ url('/erp') }}";
+
 </script>
 @endif
 
@@ -223,7 +204,6 @@
 	});
 	/* Delete User */
 	$(document).on('click', '.holdOrder', function() {
-		console.log("hai")
 		$('#holdModal').modal('show')
 		$(document).find('#hold_id').val($(this).closest('tr').attr('id'));
 	});
@@ -311,5 +291,52 @@
 			});
 		});
 	});
+	/* Get Order Details */
+	$(document).on("click", ".getODetails", function() {
+		var id = $(this).closest('tr').attr('id')
+
+		$.ajax({
+			url: "erp-order",
+			type: "get",
+			data: {
+				id: id
+			},
+			beforeSend: function() {
+				$(".loader").show();
+			},
+			success: function(data) {
+				/* Load Partial View */
+				$('#appendModal').html(data);
+				$('#detailsModal').modal('show');
+			},
+			complete: function() {
+				$(".loader").hide();
+			}
+		});
+	});
+	/* 	Hold Order 	*/
+	$(document).on("click", ".cOrder, .hOrder, .rOrder", function() {
+		var id 		= $(this).data('id');
+		var status 	= $(this).data('status');
+		$.ajax({
+			url: "erp-order",
+			type: "delete",
+			data: {
+				id: id,
+				status: status,
+				_token: $('meta[name="csrf-token"]').attr('content')
+			},
+			beforeSend: function() {
+				$(".loader").show();
+			},
+			success: function(data) {
+				location.reload()
+			},
+			complete: function() {
+				$(".loader").hide();
+			}
+		});
+	});
+
 </script>
 @endsection

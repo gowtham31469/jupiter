@@ -11,10 +11,12 @@ class AddCancelStatusToErpStatusTableSeeder extends Seeder
      */
     public function run()
     {
-        \App\ErpStatus::create([
+		if(! \App\ErpStatus::where('id', 4)->first() ){
+			 \App\ErpStatus::create([
 				'id' =>4,
 				'status_name' => 'Cancelled',
           		'status_desc' => 'Order or Order Item cancelled'
 			]);
+		}
     }
 }

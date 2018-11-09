@@ -31,6 +31,13 @@ class ErpOrders extends Model
         return $this->belongsTo('App\Customer');
     }
 	/**
+     * Get the Order Details.
+     */
+    public function orderDetails()
+    {
+        return $this->hasMany('App\ErpOrderDetails', 'erp_order_id');
+    }
+	/**
      * Get the buyer.
      */
     public function buyer()
@@ -51,11 +58,11 @@ class ErpOrders extends Model
       * @var array
       */
 	
-	public static function orderDetails() {
+	public static function orders() {
 		
     	$orders 	= \App\ErpOrders::withTrashed()->get();
 		foreach($orders as $order){
-			$customer 			= \App\ErpOrders::find($order->id);
+			$customer 			= \App\ErpOrders::withTrashed()->find($order->id);
 			$order->customer	= $customer->customer->company_name;
 			$order->buyer	 	= $customer->buyer->buyer_name;
 			$order->status	 	= $customer->getStatus->status_name;
