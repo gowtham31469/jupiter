@@ -36,6 +36,6 @@ function generateJobcard(){
     }
     else
     {
-        alert("Checked")
+        $('#jobcardCreationModalCenter').modal('show');
     }
 }
