@@ -279,7 +279,24 @@
          </div>
      </div>
  </div>
-
+<!-- Job card creation Modal -->
+<div class="modal jobcard-creation-modal fade" id="jobcardCreationModalCenter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+     <div class="modal-dialog jobcard-creation-modal-dialog" role="document">
+         <div class="modal-content jobcard-creation-modal-content">
+                <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                     <h4 class="modal-title jobcard-modal-title" id="myModalLabel">Create Jobcard</h4>
+                 </div>
+                 <div class="modal-body jobcard-creation-modal-body">
+                    
+                 </div>
+                 <div class="modal-footer jobcard-creation-modal-footer">
+                     {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                 </div>
+            {!! Form::close() !!}
+         </div>
+     </div>
+ </div>
 {{-- Snackbar html code --}}
 <div id="snackbar"><span class="snackbar_span"></span></div>
 
