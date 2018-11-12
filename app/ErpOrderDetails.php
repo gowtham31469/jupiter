@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ErpOrderDetails extends Model
 {
+	use SoftDeletes;
     /**
       * The table associated with the model.
       *
@@ -18,7 +20,7 @@ class ErpOrderDetails extends Model
       *
       * @var array
       */
-      protected $fillable = ['id', 'erp_order_id', 'style_no', 'order_quantity', 'delivered_quantity', 'size', 'delivery_date', 'order_qnty_table_name', 'order_qnty_table_id', 'status', 'created_at','updated_at', 'company_id', 'template_id', 'reference_name', 'ocn_number', 'pending_orders'];
+      protected $fillable = ['id', 'erp_order_id', 'style_no', 'order_quantity', 'delivered_quantity', 'size', 'delivery_date', 'order_qnty_table_name', 'order_qnty_table_id', 'status', 'created_at','updated_at', 'deleted_at', 'company_id', 'template_id', 'reference_name', 'ocn_number', 'pending_orders'];
 	/**
      * Get the Orders.
      */

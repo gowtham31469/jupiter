@@ -40,13 +40,18 @@
 }
 
 .oDetailsNav li.active > a {
-	border: none !important;
-	background-color: #00B6FF !important;
-	color: #fff !important;
-	padding: 5px;
-	border-radius: 14px;
+	border: 1px solid #555 !important;
+    background-color: #fff!important;
+    color: #555 !important;
+    padding: 5px;
+    border-radius: 14px;
 }
 
-.getODetails{
+.getODetails, .updateOItem{
 	cursor: pointer
+}
+
+.confirmation-buttons a{
+	margin: 5px;
+    border-radius: 5px !important;
 }

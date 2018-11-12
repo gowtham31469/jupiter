@@ -54,7 +54,7 @@ class OrderManagementController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  $request
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request)
@@ -62,7 +62,7 @@ class OrderManagementController extends Controller
 
 		$details 	= \App\ErpOrders::withTrashed()->find($request->id)->orderDetails;
 		foreach($details as $detail){
-			$oDetails = \App\ErpOrderDetails::find($detail->id);
+			$oDetails = \App\ErpOrderDetails::withTrashed()->find($detail->id);
 			$detail->company = $oDetails->company->name;
 			$detail->status	 = $oDetails->getStatus->status_name;
 		}
@@ -81,18 +81,38 @@ class OrderManagementController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  $request
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        switch($request->val){
+			case 1:
+				\App\ErpOrderDetails::where('id', $request->id)->delete();
+				$message = response()->json(['message' => "Order Item Changed to Hold Status"], 200);
+				break;
+			case 2:
+				\App\ErpOrderDetails::where('id', $request->id)->restore();
+				\App\ErpOrderDetails::where('id', $request->id)->update([
+					'status'	=> 4
+				]);
+				$message = response()->json(['message' => "Order Item Cancelled successfully"], 200);
+				break;
+			case 3:
+				\App\ErpOrderDetails::where('id', $request->id)->restore();
+				$message = response()->json(['message' => "Order Item Restored successfully"], 200);
+				break;
+			default:
+				$message = response()->json(['message' => "Something Went Wrong"], 500);
+				break;
+		}
+		return $message;
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  $request
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request)
@@ -103,6 +123,7 @@ class OrderManagementController extends Controller
 				$message = "Order Changed to Hold Status successfully";
 				break;
 			case "Cancel":
+				\App\ErpOrders::where('id', $request->id)->restore();
 				\App\ErpOrders::where('id', $request->id)->update([
 					'status'	=> 4
 				]);

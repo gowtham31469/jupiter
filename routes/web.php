@@ -591,6 +591,8 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::get('order-management', 'ErpUser\Admin\OrderController@show')->name('erp.admin.orders.show');
 	Route::get('erp-order', 'ErpUser\Admin\OrderManagementController@edit')->name('erp.admin.order.details');
 	Route::delete('erp-order', 'ErpUser\Admin\OrderManagementController@destroy')->name('erp.admin.order.delete');
+	/* Routes for Admin - Order Item Management */
+	Route::put('erp-order-item', 'ErpUser\Admin\OrderManagementController@update')->name('erp.admin.order-item.update');
 	
 	
 	/* Routes for Invoice Management */

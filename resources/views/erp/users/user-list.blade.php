@@ -1,10 +1,9 @@
 @extends('layouts.Erp.app')
 @if (Auth::guard("erpuser")->user())
-@section('navbar') 
-
+@section('navbar')
 <ul class="nav navbar-nav dynamic-menu">
-    <li><a href="#" class="active">User Management</a></li>
-    <li><a href="{{route('erp.admin.orders.show')}}">Order Management</a></li>
+	<li><a href="#" class="active">User Management</a></li>
+	<li><a href="{{route('erp.admin.orders.show')}}">Order Management</a></li>
 </ul>
 
 @endsection
@@ -50,6 +49,7 @@
 				<div class="loader">
 					<div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>
 				</div>
+
 				<div class="col" id="user-table">
 					<table id="user-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%">
 						<thead>
@@ -129,7 +129,7 @@
 							<div class="help-block with-errors"></div>
 						</div>
 					</div>
-					
+
 					<div class="col-md-2">
 						<div class="form-group has-feedback">
 							{!! Form::label('user_roles', 'User Role', ['class' => 'form_label']) !!}
@@ -147,7 +147,7 @@
 					<div class="col-md-2">
 						<div class="form-group has-feedback">
 							{!! Form::label('user_buyer', 'Select Buyer', ['class' => 'form_label']) !!}
-							{{ Form::select('user_buyer',  $buyers, '',array('class' => 'form-control input-sm selectpicker', 'data-width' => '100%', 'id' => 'user_buyer', 'required', 'multiple')) }}
+							{{ Form::select('user_buyer', $buyers, '',array('class' => 'form-control input-sm selectpicker', 'data-width' => '100%', 'id' => 'user_buyer', 'required', 'multiple')) }}
 							<div class="help-block with-errors"></div>
 						</div>
 					</div>
@@ -179,9 +179,9 @@
 				<h4 class="modal-title" id="editModalLabel">Edit User</h4>
 			</div>
 			{!! Form::open(['id' => 'edit_user_form', 'data-toggle' => 'validator', 'role' => 'form']) !!}
-			
-			<input type = "hidden" name = "hiddenid" id = "hiddenId">
-			
+
+			<input type="hidden" name="hiddenid" id="hiddenId">
+
 			<div class="modal-body">
 				<div id="user_result"></div>
 				<div class="row">
@@ -205,17 +205,17 @@
 							<div class="help-block with-errors"></div>
 						</div>
 					</div>
-					
+
 					<div class="col-md-2">
 						<div class="form-group has-feedback">
 							{!! Form::label('edit_user_roles', 'User Role', ['class' => 'form_label']) !!}
 
 							{{ Form::select('edit_user_roles',$roles,'',array('class' => 'form-control input-sm selectpicker', 'data-width' => '100%','multiple' =>'true', 'id' => 'edit_user_roles', 'required')) }}
-							
+
 							<div class="help-block with-errors"></div>
 						</div>
 					</div>
-					 
+
 					<div class="col-md-3">
 						<div class="form-group has-feedback">
 							{!! Form::label('edit_user_company', 'Select Company', ['class' => 'form_label']) !!}
@@ -281,13 +281,14 @@
 @else
 <script type="text/javascript">
 	window.location = "{{ url('/erp') }}";
+
 </script>
 @endif
 
 @section('jqueryIncludes')
 <script src="{{ asset('js/Erp/template.js') }}"></script>
 <script>
-	$(document).ready(function(){
+	$(document).ready(function() {
 		$('#edit_user_roles').val('0').selectpicker('refresh');
 		$('#user-list-table').DataTable();
 	})
@@ -317,13 +318,13 @@
 				templates: templates,
 				_token: $('meta[name="csrf-token"]').attr('content')
 			};
-			
-			if(templates.length){
+
+			if (templates.length) {
 				/* Pass to AJAX request */
 				store('/erp/users', data);
-			}else{
+			} else {
 				$('.error_label').removeClass('hidden')
-			}		
+			}
 		}
 	});
 	/** submit add customer form and check validation **/
@@ -353,13 +354,13 @@
 				templates: templates,
 				_token: $('meta[name="csrf-token"]').attr('content')
 			};
-			
-			if(templates.length){
+
+			if (templates.length) {
 				/* Pass to AJAX request */
 				update('/erp/users', data);
-			}else{
+			} else {
 				$('.edit_error_label').removeClass('hidden')
-			}		
+			}
 		}
 	});
 	/* Delete User */
@@ -383,8 +384,8 @@
 	});
 	/* Get User Details */
 	$(function() {
-		$(document).on("click", ".edit-user",function() {
-			
+		$(document).on("click", ".edit-user", function() {
+
 			$('#editTemplateDiv').addClass('hidden');
 			$('#editTH').html('')
 			var id = $(this).closest('tr').attr('id')
@@ -395,45 +396,45 @@
 				data: {
 					id: id
 				},
-				beforeSend: function () {
+				beforeSend: function() {
 					$(".loader").show();
 				},
-				success: function (data) {
+				success: function(data) {
 					var data = data.data[0];
 					var roles = data.roles.map(a => a.id);
 					var buyer = data.buyer.map(a => a.id);
 					var company = data.company.map(a => a.id);
-					$('#edit_user_roles').selectpicker('val', roles); 
+					$('#edit_user_roles').selectpicker('val', roles);
 					$('#edit_user_name').val(data.name);
 					$('#edit_user_email').val(data.email);
-					$('#edit_user_company').selectpicker('val', company); 
+					$('#edit_user_company').selectpicker('val', company);
 					$('#edit_user_buyer').selectpicker('val', buyer);
 					$('#edit_user_form').validator('validate');
 					/* Rendering Templates */
 					if (Object.values(data.templates).length) {
 						/*	Append Jstree Arrays  */
-						$.each(Object.values(data.templates), function(index, value){
+						$.each(Object.values(data.templates), function(index, value) {
 							var head = Object.keys(data.templates)[index].toUpperCase();
-							$('#editTH').append(`<div class="col-md-6 treeDiv" id="`+head+`" style="box-shadow: 0px 1px 5px 1px #eee;padding:10px 0px;">
+							$('#editTH').append(`<div class="col-md-6 treeDiv" id="` + head + `" style="box-shadow: 0px 1px 5px 1px #eee;padding:10px 0px;">
 								<p style="font-weight: bold;" class="text-center">` + head + `</p>
 	
-								<div id="`+Object.keys(data.templates)[index]+`_tree"> </div>
+								<div id="` + Object.keys(data.templates)[index] + `_tree"> </div>
 							</div>`);
-							
+
 							$('#' + Object.keys(data.templates)[index] + '_tree').jstree({
 								'core': {
 									'data': JSON.parse(value),
-									"themes":{
-										"icons":false
+									"themes": {
+										"icons": false
 									}
 								},
 								"plugins": ["checkbox"]
 							});
 						});
 						/*	User specific Jstree Data  */
-						setTimeout(function(){
-							$.each(data.user_template, function(index, value){
-								var $tree = $(document).find('#editTH').find('#'+index+'_tree');
+						setTimeout(function() {
+							$.each(data.user_template, function(index, value) {
+								var $tree = $(document).find('#editTH').find('#' + index + '_tree');
 								for (var i = 0; i < value.length; i++) {
 									$tree.jstree(true).select_node(value[i])
 								}
@@ -441,14 +442,15 @@
 						}, 100);
 						$('#editTemplateDiv').removeClass('hidden');
 					}
-					
+
 				},
-				complete: function(){
+				complete: function() {
 					$(".loader").hide();
 					$('#editModal').modal('show');
 				}
 			});
 		});
 	});
+
 </script>
 @endsection

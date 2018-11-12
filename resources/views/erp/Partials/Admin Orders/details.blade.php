@@ -97,7 +97,7 @@
 														{{ Form::label('po_file', 'PO File : *', ['class' => 'form_label']) }}
 													</div>
 													<div class="col-md-8 text-center">
-														<a target="_blank" href="{{$order->po_file}}"><i class="fa fa-5x fa-file" data-toggle="tooltip" title="{!! substr($order->po_file, strrpos($order->po_file, '/') + 1); !!}"></i></a>
+														<a target="_blank" href="{{$order->po_file}}"><i class="fa fa-5x fa-file-pdf-o" data-toggle="tooltip" title="{!! substr($order->po_file, strrpos($order->po_file, '/') + 1); !!}"></i></a>
 													</div>
 												</div>
 
@@ -129,12 +129,13 @@
 												<th>Quantity Ordered</th>
 												<th>Quantity Delivered</th>
 												<th>Pending Quantity</th>
-												<th>Order Status</th>
+												<th>Order Item Status</th>
+												<th>Actions</th>
 											</tr>
 										</thead>
 										<tbody>
 											@foreach ($details as $detail)
-											<tr id="{{$detail->id}}">
+											<tr>
 												<td>{{$loop->iteration}}</td>
 												<td>{{$detail->style_no}}</td>
 												<td>{{$detail->reference_name}}</td>
@@ -144,17 +145,34 @@
 												<td>{{$detail->order_quantity}}</td>
 												<td>{{$detail->delivered_quantity}}</td>
 												<td>{{$detail->pending_orders}}</td>
+												
+												@if(is_null($detail->deleted_at))
 
 												@switch($detail->status)
 												@case("Cancelled")
 												<td><span class="label label-danger">{{$detail->status}}</span></td>
+												<td></td>
 
 												@break
 												@default
 												<td><span class="label label-success">{{$detail->status}}</span></td>
+												<td>
+
+													<i id="{{$detail->id}}" data-toggle="confirmation" data-placement="left" data-popout="true" data-singleton="true" class="fa fa-pencil filterbtn options updateOItem fa-button activeItems"></i>
+
+												</td>
 
 												@break
 												@endswitch
+												@else
+												<td> <span class="label label-warning"> HOLD </span></td>
+												<td>
+
+													<i id="{{$detail->id}}" data-toggle="confirmation" data-placement="left" data-popout="true" data-singleton="true" class="fa fa-pencil filterbtn options updateOItem fa-button holdItems"></i>
+
+												</td>
+												
+												@endif
 
 											</tr>
 											@endforeach
