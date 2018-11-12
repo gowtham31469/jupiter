@@ -14,9 +14,12 @@
 @endsection
 @section('content')
 <div class="col-sm-12 col-md-12 main">
-    <div class="company-nav-div hidden">
-        <a class="dropdown-toggle profile-dropdown-admin selected-buyer" style="text-transform:capitalize;cursor: pointer;">Select Company</a>
-    </div>
+    <div class="main-sub-menu">
+        <div class="company-nav-div hidden">
+            <a class="dropdown-toggle profile-dropdown-admin selected-buyer" style="text-transform:capitalize;cursor: pointer;">Select Company</a>
+        </div>
+      </div>
+     <div class="clearfix"></div>
     <div class="main-content">
 
 
@@ -55,6 +58,33 @@
 
     </div>
 </div>
+    <!-- company selection Modal -->
+<div class="modal buyer-selection-modal fade" id="buyerSelectionModalCenter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+     <div class="modal-dialog buyer-selection-modal-dialog" role="document">
+         <div class="modal-content buyer-selection-modal-content">
+                <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                     <h4 class="modal-title buyer-modal-title" id="myModalLabel">Select a Company</h4>
+                 </div>
+                 <div class="modal-body buyer-selection-modal-body">
+                    <div class="alert alert-warning" role="alert" id="hidden-buyer-div" style="display: none;margin-bottom: 5px;">
+                      <strong>Warning!</strong> Select a Company to proceed.
+                    </div>
+                    @foreach($companies as $company)
+                     <a class="buyer-card-link" style="cursor: pointer;">
+                         <div class="card buyers-card elevation-2dp active-buyer" data-name ="{{$company->name}}"  data-value ="{{$company->company}}" id="{{ strtolower( str_replace(' ','',$company->name)) }}">
+                          {{ $company->name }}
+                         </div>
+                     </a>
+                    @endforeach
+                 </div>
+                 <div class="modal-footer buyer-selection-modal-footer">
+                     {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                 </div>
+            {!! Form::close() !!}
+         </div>
+     </div>
+ </div>
 {{-- Show snackbar html code --}}
 <div id="snackbar"><span class="snackbar_span"></span></div>
 @endsection @else
@@ -64,7 +94,69 @@
 @endif 
 @section('jqueryIncludes')
 <script src="{{ asset('js/Erp/invoice.js') }}"></script>
-<script>       
-var table = $('#invoice-list-table').DataTable();
+<script>  
+$(document).ready(function(){    
+    var table = $('#invoice-list-table').DataTable();
+/** [ Make companies card active ] */
+    $('div.buyers-card').click(function(){
+    
+      $('div.buyers-card').removeClass("active");
+      $(this).addClass("active");
+      $('#hidden-buyer-div').hide();
+
+      /* Save selected buyer into localdb */
+      if ($('.buyers-card.active-buyer.active').length != 0) 
+      {
+          var company_id = $('.buyers-card.active-buyer.active').data("value"); 
+          var company_name = $('.buyers-card.active-buyer.active').attr("id");
+          $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
+          $('#buyerSelectionModalCenter').modal('show');
+          
+          var csrf_token = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                url: base_url + "/erp/po-manager/set_company_session",
+                type: "Post",
+                dataType: "json",
+                data: {
+                    _token: csrf_token,
+                    company_id: company_id,
+                    company_name:company_name
+                },
+                beforeSend: function() {
+                    location.reload();
+
+                },
+                success: function(data) {
+                },
+                error: function(data) {
+
+                },
+                complete: function() {
+
+                }
+            })
+      }
+      
+    });
+    
+    /** [ Show already selected(active) buyer on clicking buyer menu] */
+    $('.company-nav-menu').on('click', function() {
+
+        $("#buyerSelectionModalCenter").modal("show");
+    });
+
+    if($('#company_name').val() != null && $('#company_name').val() != "")
+    {
+        $('#'+$('#company_name').val()).addClass('active');
+    }
+    else
+    {
+        $('div.buyers-card').first().addClass("active");
+    }
+   
+    $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
+    
+    $('.company-nav-menu').html($('.company-nav-div').html());
+})
 </script>
  @endsection

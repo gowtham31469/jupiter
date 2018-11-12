@@ -928,12 +928,12 @@ function tescoStatusTable(data,path)
                    if(value['is_order_count_empty'] == 0){
                         if (value[key] == null)
                        {
-                            tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input class="form-control input-sm datepicker_recurring_start" data-id="'+value.delivery_day_count+'" style="width: 107px; border-color: rgb(244, 67, 54);" placeholder="Enter Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'")  readonly></td>';
+                            tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input class="form-control input-sm datepicker_recurring_start" data-id="'+value.delivery_day_count+'" style="width: 107px; border-color: rgb(244, 67, 54);" placeholder="Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'")  readonly></td>';
                        }
                        else
                        {
                            
-                            tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input value="' + value[key] + '"class="form-control input-sm datepicker_recurring_start" data-id="'+value.delivery_day_count+'" style="width: 107px;" placeholder="Enter Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'") readonly></td>';
+                            tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input value="' + value[key] + '"class="form-control input-sm datepicker_recurring_start" data-id="'+value.delivery_day_count+'" style="width: 107px;" placeholder="Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'") readonly></td>';
                        }
                    }
                    else{

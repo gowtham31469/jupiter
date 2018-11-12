@@ -13,10 +13,10 @@ use App\ErpOrderDetails;
 use App\Invoices;
 use App\InvoiceDetails;
 use PDF;
+use App\Classes\Invoice;
 
 class InvoiceController extends Controller
 {
-    
     /**
      * Create a new controller instance.
      *
@@ -35,11 +35,15 @@ class InvoiceController extends Controller
      */
     public function index()
     {
+        $objInv     = new Invoice();
+        $companies  = $objInv->setCompany();
         $invoices   = Invoices::join('customers','invoice.customer_id','customers.id')
+                            ->join('invoice_details','invoice_details.invoice_id','invoice.id')
                             ->join('buyers','invoice.buyer_id','buyers.id')
-                            ->select('invoice_id','erp_id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','po_no')
+                            ->where('invoice_details.company_id',session()->get('company'))
+                            ->select('invoice.invoice_id','erp_id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','po_no')
                             ->get();
-        return view('erp.Invoice.invoice-list',['invoices'=>$invoices]);
+        return view('erp.Invoice.invoice-list',['invoices'=>$invoices,'companies' => $companies]);
 	}
      /**
      * Show the application dashboard.
@@ -47,11 +51,14 @@ class InvoiceController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create(){
-        $customers = DB::table('customers')
+        $objInv     = new Invoice();
+        $companies  = $objInv->setCompany();
+        $customers  = DB::table('customers')
                               ->where('is_active','=',1)
                               ->get();
-            $invID =   "INV-00".(Invoices::max('id')+1);               
-        return view('erp.Invoice.create-invoice',['customers' => $customers,'invID'=>$invID]);
+        $invID =   "INV-00".(Invoices::max('id')+1); 
+
+        return view('erp.Invoice.create-invoice',['customers' => $customers,'invID'=>$invID,'companies' => $companies]);
     }
 
     /**
@@ -63,7 +70,9 @@ class InvoiceController extends Controller
         try {
             $customer_id = $request->customer_id;
             $po_list   = Erp::where('customer_id',$customer_id)
-                            ->where('status','!=',5)
+                            ->join('erp_order_details','erp_order_details.erp_order_id','erp_orders.id')
+                            ->where('erp_orders.status','!=',5)
+                            ->where('erp_order_details.company_id',session()->get('company'))
                             ->join('customers','erp_orders.customer_id','customers.id')
                             ->join('buyers','erp_orders.buyer_id','buyers.id')
                             ->select('erp_orders.id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','erp_orders.po_no','erp_orders.erp_id')
@@ -85,12 +94,17 @@ class InvoiceController extends Controller
         try {
             $erp_id     = $request->erp_id;
             $orderlist  = ErpOrderDetails::where('erp_order_id',$erp_id)
+                            ->join('company','erp_order_details.company_id','company.id')
                             ->join('erp_orders','erp_orders.id','erp_order_details.erp_order_id')
                             ->join('customers','erp_orders.customer_id','customers.id')
                             ->join('buyers','erp_orders.buyer_id','buyers.id')
                             ->where('erp_order_details.pending_orders','!=' , 0)
+                            ->where('erp_order_details.company_id',session()->get('company'))
                             ->select('erp_order_details.id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','erp_orders.po_no','erp_order_details.style_no','erp_order_details.order_quantity','erp_order_details.rate','erp_order_details.size','erp_order_details.reference_name','customers.place_of_supply','erp_order_details.ocn_number','erp_order_details.template_id','erp_orders.erp_id as erp_id','buyers.template_table','buyers.item_master_table','erp_order_details.pending_orders as pending_qnty','erp_orders.po_file','erp_orders.customer_id','customers.gstin_number')
                             ->get();
+            $company_details =  DB::table('company')
+                                ->where('id',session()->get('company'))
+                                ->select('company.*')->first();
             $bill_to = DB::table('customer_bill_address')
                           ->where('customer_bill_address.customer_id',$orderlist[0]->customer_id)
                           ->where('customer_bill_address.is_billing_address',1)
@@ -109,7 +123,7 @@ class InvoiceController extends Controller
                 $value->hsn_code = $details->hsn_code;
                 $value->tax = $details->tax;
             }
-            $result      = response()->json(['error'=> false,'message' =>'success','orderlist'=>$orderlist,'bill_to'=>$bill_to,'ship_to'=>$ship_to ],200);
+            $result      = response()->json(['error'=> false,'message' =>'success','orderlist'=>$orderlist,'bill_to'=>$bill_to,'ship_to'=>$ship_to,'company_details'=>$company_details],200);
         }
         catch (\Exception $e)
         {
