@@ -231,6 +231,7 @@
 						<th>ERP ID</th>
 						<th>Customer name</th>
 						<th>PO Number</th>
+						<th>Partial</th>
 						<th>Status</th>
 						<th>Actions</th>
 					</tr>
@@ -243,6 +244,7 @@
 						<td>{{$vals->id}}</td>
 						<td>{{$vals->company_name}}</td>
 						<td>{{$vals->po_no}}</td>
+						<td>{{$vals->partial_status == 0 ? "NO":"YES"}}</td>
 						@if($vals->status == 2)
 						<td><span class="label label-danger">{{$vals->status_name}}</span></td>
 						@else
