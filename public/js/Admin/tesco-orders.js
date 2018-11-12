@@ -609,12 +609,12 @@ function createOrders(parsedObj = false, oType = false) {
                                 </div>\
                                 <br>\
                                 <form method="POST" id="create_tesco_order_form" data-toggle="validator" role="form" novalidate="true">';
-
+				         /** Buyer PO number length , for CE 7 digits and for UK 9 digits*/
 						if (zone === "CE") {
 							  html += '<div class="col-md-3">\
 																<div class="form-group has-feedback">\
 																	<label for="tesco_po_number">PO Number</label>\
-																	<input type="text" class="form-control" data-minlength="7" data-required-error="Mandatory Field." data-minlength-error="Enter 7 digits." name="tesco_po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number" onkeyup="dynamicSVGTemplates()" maxlength="9">\
+																	<input type="text" class="form-control" data-minlength="7" data-required-error="Mandatory Field." data-minlength-error="Enter 7 digits." name="tesco_po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number" onkeyup="dynamicSVGTemplates()" maxlength="7">\
 																	<div class="help-block with-errors"></div>\
 																</div>\
 															</div>';
