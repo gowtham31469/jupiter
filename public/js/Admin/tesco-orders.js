@@ -1504,7 +1504,7 @@ function printDivTesco(data, name) {
 				var s = new XMLSerializer();
 				var d = svgRoot;
 				var str = s.serializeToString(d);
-				var svg = encodeURI(str)
+
 				svgarr.push(str)
 			}
 
@@ -1943,8 +1943,8 @@ function GenerateDivTesco(data, name) {
 				var s = new XMLSerializer();
 				var d = svgRoot;
 				var str = s.serializeToString(d);
-				var svg = encodeURI(str)
-				svgarr.push(svg)
+
+				svgarr.push(str)
 			}
 
 
@@ -5329,7 +5329,15 @@ function jsbarcodetesco(code, id, svgDoc) {
 
 	svg.setAttribute('width', '408.900px');
 	svg.setAttribute('height', '328.02px');
+	
 
+	
+	//svg.removeAttribute('version');
+	//svg.removeAttribute('viewBox');
+//	svg.removeAttribute('x');
+//	svg.removeAttribute('y');
+	//svg.setAttribute('viewBox','0 ,0 ,463 ,222');
+	
 	canvas.id = 'canvas';
 	canvas.width = svg.getBoundingClientRect().width;
 	canvas.height = svg.getBoundingClientRect().height;
@@ -5395,6 +5403,12 @@ function jsbarcodetescoean(code, id, svgDoc) {
 
 	svg.setAttribute('width', '412.25px');
 	svg.setAttribute('height', '378.02px');
+	
+//	svg.removeAttribute('version');
+//	svg.removeAttribute('viewBox');
+//	svg.removeAttribute('x');
+//	svg.removeAttribute('y');
+	//svg.setAttribute('viewBox','0, 0, 393 ,190');
 
 	canvas.id = 'canvas';
 	canvas.width = svg.getBoundingClientRect().width;
@@ -5461,6 +5475,14 @@ function jsbarcodetescotslean(code, id, svgDoc) {
 	svg.setAttribute('width', '419.075px');
 	svg.setAttribute('height', '275.02px');
 
+	
+	
+//	svg.removeAttribute('version');
+//	svg.removeAttribute('viewBox');
+//	svg.removeAttribute('x');
+//	svg.removeAttribute('y');
+	//svg.setAttribute('viewBox','0 ,0 ,393 ,187');
+	
 	canvas.id = 'canvas';
 	canvas.width = svg.getBoundingClientRect().width;
 	canvas.height = svg.getBoundingClientRect().height;
@@ -5522,6 +5544,13 @@ function jsbarcodetescotsl(code, id, svgDoc) {
 
 	svg.setAttribute('width', '415.100px');
 	svg.setAttribute('height', '328.02px');
+	
+//	svg.removeAttribute('version');
+//	svg.removeAttribute('viewBox');
+//	svg.removeAttribute('x');
+//	svg.removeAttribute('y');
+	//svg.setAttribute('viewBox','0 0 231 109');
+	
 	canvas.id = 'canvas';
 	canvas.width = svg.getBoundingClientRect().width;
 	canvas.height = svg.getBoundingClientRect().height;
