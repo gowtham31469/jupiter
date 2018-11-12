@@ -66,7 +66,7 @@ function camelize(str) {
 var globalOrderType = 0;
 var barcode_checks = 0;
 var isSubmitting = false;
-function tescoOrders() {
+function tescoOrders(callback) {
     $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
     $('.top-content').html('');
     $('.template-error').html('');
@@ -558,7 +558,7 @@ function tescoOrders() {
                         viewOrder(po_num, artwork);  
                     }
                 })
-
+				callback();
         },
         error: function(errorXHR, errorStatus, errorThrown) {
           this.tryCount++;
