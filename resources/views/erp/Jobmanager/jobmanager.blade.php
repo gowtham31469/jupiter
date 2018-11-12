@@ -280,7 +280,38 @@
          </div>
      </div>
  </div>
-
+<!-- Job card creation Modal -->
+<div class="modal jobcard-creation-modal fade" id="jobcardCreationModalCenter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+     <div class="modal-dialog modal-lg jobcard-creation-modal-dialog" role="document">
+         <div class="modal-content jobcard-creation-modal-content">
+                <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                     <h4 class="modal-title jobcard-modal-title" id="myModalLabel">Create Jobcard</h4>
+                 </div>
+                 <div class="modal-body jobcard-creation-modal-body">
+                    <div class="container-fluid">
+					  <div class="row">
+					   <div class="col-md-12">
+					    <div class="col-md-4">
+						 <p>Jupiter Garments Accessories			
+							1-J-27-1&3, Jupiter Avenue			
+							Anupparpalayam, Tirupur - 641652</p>
+						</div>
+						<div class="col-md-4">
+						</div>
+						<div class="col-md-4">
+						</div>
+					   </div>
+					  </div>
+					</div>
+                 </div>
+                 <div class="modal-footer jobcard-creation-modal-footer">
+                     {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                 </div>
+            {!! Form::close() !!}
+         </div>
+     </div>
+ </div>
 {{-- Snackbar html code --}}
 <div id="snackbar"><span class="snackbar_span"></span></div>
 

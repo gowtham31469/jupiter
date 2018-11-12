@@ -1,23 +1,60 @@
 /* Navbar Well */
-.navWell{
+.navWell {
 	color: #000 !important;
 }
 
-.profileTemplates span, .profileRoles span, .profileBuyers span, .profileCompanies span{
+.profileTemplates span,
+.profileRoles span,
+.profileBuyers span,
+.profileCompanies span {
 	display: inline-block;
-    padding: 2px 4px;
-    background-color: #eee;
-    border-radius: 5px;
-    margin: 7px 0px 0px 5px;
-    border: 1px solid #ccc;
+	padding: 2px 4px;
+	background-color: #eee;
+	border-radius: 5px;
+	margin: 7px 0px 0px 5px;
+	border: 1px solid #ccc;
 }
 
 .customer_design {
-    border: 1px solid #eee;
-    border-radius: 4px;
-    box-shadow: 1px 1px 1px #eee;
-    padding: 10px;
-    cursor: pointer;
-    height: auto;
-    margin-bottom: 10px;
+	border: 1px solid #eee;
+	border-radius: 4px;
+	box-shadow: 1px 1px 1px #eee;
+	padding: 10px;
+	cursor: pointer;
+	height: auto;
+	margin-bottom: 10px;
 }
+
+.oDetailsNav {
+	border-bottom: none !important;
+	    margin-bottom: 15px;
+}
+
+.oDetailsNav li > a {
+	border: none !important;
+	background-color: #ccc !important;
+	color: #fff !important;
+	padding: 5px;
+	border-radius: 14px;
+	    margin: 10px;
+}
+
+.oDetailsNav li.active > a {
+	border: none !important;
+	background-color: #00B6FF !important;
+	color: #fff !important;
+	padding: 5px;
+	border-radius: 14px;
+}
+
+.getODetails{
+	cursor: pointer
+}
+
+.error-template {padding: 40px 15px;text-align: center;}
+.error-actions {margin-top:15px;margin-bottom:15px;}
+.error-actions .btn { margin-right:10px; }
+.erp-dynamic-menu > li > a {
+    line-height: 12px;
+}
+
