@@ -864,8 +864,7 @@ background: rgba(0,0,0,0.2);
                     {
                         orders();
                     } else {
-                        tescoOrders();
-                        reOrderTesco();
+                        tescoOrders(reOrderTesco);
                     }
                 } else {
                     localStorage.removeItem("buyer");
@@ -917,8 +916,7 @@ background: rgba(0,0,0,0.2);
                 {
                     orders();
                 } else {
-                    tescoOrders();
-					reOrderTesco();
+                    tescoOrders(reOrderTesco);
                 }
             }
 
@@ -939,8 +937,7 @@ background: rgba(0,0,0,0.2);
                     {
                         orders();
                     } else {
-                        tescoOrders();
-						reOrderTesco();
+                       tescoOrders(reOrderTesco);
                     }
               }
              })
