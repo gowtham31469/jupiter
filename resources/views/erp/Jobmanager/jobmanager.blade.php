@@ -432,6 +432,87 @@
 						<div class="row">
 							<div class="col-md-12">
 								<table class="table table-bordered">
+								    <thead>
+										<tr>
+											<th>REFNUM</th>
+											<th>PONUM</th>
+											<th>IDNUM</th>
+											<th>OCN</th>
+											<th>ORD NO</th>
+											<th>QNTY</th>
+											<th>P.QNTY</th>
+											<th>TOTAL</th>
+										</tr>
+									</thead>
+									<tbody>
+									<tr>
+										<td>TCL1 RatA</td>
+										<td>460-12344</td>
+										<td></td>
+										<td></td>
+										<td>999</td>
+										<td>150</td>
+										<td></td>
+										<td>800</td>
+									</tr>
+									<tr>
+											<td>TCL1 RatB</td>
+											<td>460-12344</td>
+											<td></td>
+											<td></td>
+											<td>999</td>
+											<td>150</td>
+											<td></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td>TCL2 RatA</td>
+											<td>460-12344</td>
+											<td></td>
+											<td></td>
+											<td>999</td>
+											<td>150</td>
+											<td></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td>TCL2 RatB</td>
+											<td>460-12344</td>
+											<td></td>
+											<td></td>
+											<td>999</td>
+											<td>150</td>
+											<td></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td>TSL1 RatA</td>
+											<td>460-12344</td>
+											<td></td>
+											<td></td>
+											<td>999</td>
+											<td>150</td>
+											<td></td>
+											<td>3434</td>
+										</tr>
+										<tr>
+											<td>TSL1 RatB</td>
+											<td>460-12344</td>
+											<td></td>
+											<td></td>
+											<td>999</td>
+											<td>150</td>
+											<td></td>
+											<td></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<hr>
+						<div class="row">
+							<div class="col-md-12">
+								<table class="table table-bordered">
 									<thead>
 										<tr>
 											<th>REFNUM</th>
@@ -453,7 +534,7 @@
 											<td>999</td>
 											<td>150</td>
 											<td></td>
-											<td rowspan="4"></td>
+											<td></td>
 										</tr>
 										<tr>
 											<td>TCL1 RatB</td>
@@ -462,6 +543,7 @@
 											<td></td>
 											<td>999</td>
 											<td>150</td>
+											<td></td>
 											<td></td>
 										</tr>
 										<tr>
@@ -472,6 +554,7 @@
 											<td>999</td>
 											<td>150</td>
 											<td></td>
+											<td></td>
 										</tr>
 										<tr>
 											<td>TCL2 RatB</td>
@@ -480,6 +563,7 @@
 											<td></td>
 											<td>999</td>
 											<td>150</td>
+											<td></td>
 											<td></td>
 										</tr>
 										<tr>
@@ -490,7 +574,7 @@
 											<td>999</td>
 											<td>150</td>
 											<td></td>
-											<td rowspan="2"></td>
+											<td></td>
 										</tr>
 										<tr>
 											<td>TSL1 RatB</td>
@@ -500,77 +584,10 @@
 											<td>999</td>
 											<td>150</td>
 											<td></td>
+											<td></td>
 										</tr>
 									</tbody>
 								</table>
-							</div>
-						</div>
-						<hr>
-						<div class="row">
-							<div class="col-md-12">
-							    
-
-								<table class="table table-bordered">
-
-									<thead>
-
-										<tr>
-
-											<th>Row</th>
-
-											<th>First Name</th>
-
-											<th>Last Name</th>
-
-											<th>Email</th>
-
-										</tr>
-
-									</thead>
-
-									<tbody>
-
-										<tr>
-
-											<td>1</td>
-
-											<td>John</td>
-
-											<td>Carter</td>
-
-											<td>johncarter@mail.com</td>
-
-										</tr>
-
-										<tr>
-
-											<td>2</td>
-
-											<td>Peter</td>
-
-											<td>Parker</td>
-
-											<td>peterparker@mail.com</td>
-
-										</tr>
-
-										<tr>
-
-											<td>3</td>
-
-											<td>John</td>
-
-											<td>Rambo</td>
-
-											<td>johnrambo@mail.com</td>
-
-										</tr>
-
-									</tbody>
-
-								</table>
-
-
 							</div>
 						</div>
 					</div>
