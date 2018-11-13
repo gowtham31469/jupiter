@@ -165,7 +165,6 @@ $style = [
                             </table>
                         </td>
                     </tr>
-
                     <!-- Footer -->
                     <tr>
                         <td>

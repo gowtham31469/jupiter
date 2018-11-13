@@ -1417,7 +1417,7 @@ class OrderManagementCntrl extends Controller
 
                          /** [ Return array of inserted id ] */
                          $last_insertions = array_merge($last_insertions,$templates_inserted);
-                         $quantity_empty  = $is_order_count_empty != 1?array('TCL 1'):[];
+                         $quantity_empty  = $is_order_count_empty == 1?array('TCL 1'):[];
                          $zero_quantity  = array_merge($zero_quantity,$quantity_empty);
                     }
                 }

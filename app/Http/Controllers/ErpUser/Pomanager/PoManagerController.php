@@ -173,9 +173,10 @@ class PoManagerController extends Controller
 			 // print_r($value->template_id);
 			  $price =  DB::table('price_taxation')->select('price_taxation.*')->where('customer_id',$customer_id)->where('buyer_id',$buyer_id)->where('template_id',$value->template_id)->get();
 			   
+			   
 			  $price_range =  DB::table('price_range')->select('price_range.*')->where('price_taxation_id',$price{0}->id)->where('volume_from','<=',$value->order_quantity)->where('volume_to','>=',$value->order_quantity)->get();
-			  
-			   if($price_range)
+			   
+			   if(empty($price_range))
 			   {
 					 $value->price = $price_range{0}->price;
 			   }
@@ -294,13 +295,15 @@ class PoManagerController extends Controller
 				$data 		=   DB::table('erp_orders')->where('id',$erp_order_id)
 						  		->update([
 								  'status' => 2,
-								  'partial_status' => 0
+								  'partial_status' => $count_j
 								]);
 				
-				$data_erp		=   DB::table('erp_order_details')->where('erp_order_id',$erp_order_id)
-						  		->update([
-								  'status' => 2
-								]);
+				$data_erp		=   DB::table('erp_order_details')
+									->where('status','!=',3)
+									->where('erp_order_id',$erp_order_id)
+									->update([
+									  'status' => 2
+									]);
 				
 				$to_email =  DB::table('tesco_error_report_emails')->select('*')->where('id',1)->first();
 			   

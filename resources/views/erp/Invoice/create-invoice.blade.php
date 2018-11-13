@@ -20,8 +20,15 @@
 @endsection
 @section('content')
 <div class="col-sm-12 col-md-12 main">
+      <div class="main-sub-menu">
+        <div class="company-nav-div hidden">
+            <a class="dropdown-toggle profile-dropdown-admin selected-buyer" style="text-transform:capitalize;cursor: pointer;">Select Company</a>
+        </div>
+      </div>
+     <div class="clearfix"></div>
      <div class="main-content">
-        <div class="select-buyer"></div>
+     <input type="hidden" value="{{ session()->get('company') }}" id="company_id">
+     <input type="hidden" value="{{ session()->get('company_name') }}" id="company_name">
         <div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
         <div class="col-md-12">
             <!-- <div class="card"> -->
@@ -40,7 +47,6 @@
                     </div>
                     <div class="col-xs-2">
                         <input type="text" class="form-control invoice-date" id="invoice-date" name="invoice-date" style="margin-left: -412px;width: 136px;;" name="invoice-date" id="invoice-date" value ="{{ now('Asia/Kolkata')->format('d-m-Y') }}" readonly="">
-                        <!-- <input class="form-control input-sm invoice-date" id="invoice-date" name="invoice-date" style="margin-left: -412px;width: 138px;" placeholder="Select Date" readonly="" value ="{{ now('Asia/Kolkata')->format('d-m-Y') }}"> -->
                     </div>
                 </div>
                 <div class="row">
@@ -120,44 +126,24 @@
                                 </div> 
                             </div>
                         </div>
-                        <!-- <div class="row">
-                            <div class="right" style="float: right;margin-right: 16px;">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-sm-4" id="company_details">
+
+                            </div>
+                             <div class="col-lg-4 col-md-4 col-sm-4 pull-right" style="padding-left: 50px;">
                                 <img id="company-logo" style="height: 45px;" src="" class="img-responsive">
                                 <strong>Date</strong>
                                 <span style="padding-left: 37px;"> : <span style="padding-left: 6px;" class="invoice-date"></span>
                                 </span><br>
                                 <strong>Invoice No </strong>
-                                    <span style="padding-left: 3px;"> : </span>
-                                    <span style="padding-left: 4px;" class="invoice_number"></span>
-                                  
+                                <span style="padding-left: 3px;"> : </span>
+                                <span style="padding-left: 4px;" class="invoice_number"></span>
+
                             </div>
-                        </div> -->
-                            <div class="row">
-                                <div class="col-lg-4 col-md-4 col-sm-4">
+                            <div class="col-lg-5 col-md-5 col-sm-5">
 
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4">
-
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 pull-right" style="padding-left: 50px;">
-                                    <img id="company-logo" style="height: 45px;" src="" class="img-responsive">
-                                    <strong>Date</strong>
-                                    <span style="padding-left: 37px;"> : <span style="padding-left: 6px;" class="invoice-date"></span>
-                                    </span><br>
-                                    <strong>Invoice No </strong>
-                                    <span style="padding-left: 3px;"> : </span>
-                                    <span style="padding-left: 4px;" class="invoice_number"></span>
-
-                                </div>
-                                <div class="col-lg-5 col-md-5 col-sm-5">
-
-                                </div>
                             </div>
-                            <div class="row">
-                                <div id="company_details">
-
-                                </div>
-                            </div>
+                        </div>
                             <hr />
                             <div class="row">
                                 <strong style="font-size:11px;margin-left: 14px;">Customer Details : </strong>
@@ -210,6 +196,33 @@
             </div>
         </div>
     </div>
+    <!-- company selection Modal -->
+<div class="modal buyer-selection-modal fade" id="buyerSelectionModalCenter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+     <div class="modal-dialog buyer-selection-modal-dialog" role="document">
+         <div class="modal-content buyer-selection-modal-content">
+                <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                     <h4 class="modal-title buyer-modal-title" id="myModalLabel">Select a Company</h4>
+                 </div>
+                 <div class="modal-body buyer-selection-modal-body">
+                    <div class="alert alert-warning" role="alert" id="hidden-buyer-div" style="display: none;margin-bottom: 5px;">
+                      <strong>Warning!</strong> Select a Company to proceed.
+                    </div>
+                    @foreach($companies as $company)
+                     <a class="buyer-card-link" style="cursor: pointer;">
+                         <div class="card buyers-card elevation-2dp active-buyer" data-name ="{{$company->name}}"  data-value ="{{$company->company}}" id="{{ strtolower( str_replace(' ','',$company->name)) }}">
+                          {{ $company->name }}
+                         </div>
+                     </a>
+                    @endforeach
+                 </div>
+                 <div class="modal-footer buyer-selection-modal-footer">
+                     {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                 </div>
+            {!! Form::close() !!}
+         </div>
+     </div>
+ </div>
         {{-- Show snackbar html code --}}
 <div id="snackbar"><span class="snackbar_span"></span></div>
 @endsection @else
@@ -221,7 +234,8 @@
 <script src="{{ asset('js/html2pdf.bundle.min.js') }}"></script>
 <script src="{{ asset('js/Erp/invoice.js') }}"></script>
 
-<script>       
+<script>    
+$(document).ready(function(){
 $('body').on('focus',".invoice-date", function(){
     
     $(this).datepicker({
@@ -229,5 +243,67 @@ $('body').on('focus',".invoice-date", function(){
         format:'dd-mm-yyyy'
     });
 });
+
+/** [ Make companies card active ] */
+    $('div.buyers-card').click(function(){
+    
+      $('div.buyers-card').removeClass("active");
+      $(this).addClass("active");
+      $('#hidden-buyer-div').hide();
+
+      /* Save selected buyer into localdb */
+      if ($('.buyers-card.active-buyer.active').length != 0) 
+      {
+          var company_id = $('.buyers-card.active-buyer.active').data("value"); 
+          var company_name = $('.buyers-card.active-buyer.active').attr("id");
+          $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
+          $('#buyerSelectionModalCenter').modal('show');
+          
+          var csrf_token = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                url: base_url + "/erp/po-manager/set_company_session",
+                type: "Post",
+                dataType: "json",
+                data: {
+                    _token: csrf_token,
+                    company_id: company_id,
+                    company_name:company_name
+                },
+                beforeSend: function() {
+                    location.reload();
+
+                },
+                success: function(data) {
+                },
+                error: function(data) {
+
+                },
+                complete: function() {
+
+                }
+            })
+      }
+      
+    });
+    
+    /** [ Show already selected(active) buyer on clicking buyer menu] */
+    $('.company-nav-menu').on('click', function() {
+
+        $("#buyerSelectionModalCenter").modal("show");
+    });
+
+    if($('#company_name').val() != null && $('#company_name').val() != "")
+    {
+        $('#'+$('#company_name').val()).addClass('active');
+    }
+    else
+    {
+        $('div.buyers-card').first().addClass("active");
+    }
+   
+    $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
+    
+    $('.company-nav-menu').html($('.company-nav-div').html());
+})
 </script>
  @endsection
