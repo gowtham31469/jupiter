@@ -288,12 +288,13 @@
                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                      <h4 class="modal-title jobcard-modal-title" id="myModalLabel">Create Jobcard</h4>
                  </div>
+				 {!! Form::open(['id' => 'create_jobcard','data-toggle' => 'validator','role' => 'form']) !!}
                  <div class="modal-body jobcard-creation-modal-body">
                     <div class="container-fluid">
 						<div class="row">
 							<div class="col-md-12">
 								<div class="col-md-4">
-									<p>Jupiter Garments Accessories			
+									<p><strong>Jupiter Garments Accessories	</strong><br>		
 										1-J-27-1&3, Jupiter Avenue			
 										Anupparpalayam, Tirupur - 641652
 									</p>
@@ -301,7 +302,7 @@
 								<div class="col-md-4">
 								</div>
 								<div class="col-md-4">
-								     <img src="/images/logo.png">
+								     <img src="/images/logo.png" class="pull-right" style="width: 150px;height: 60px;">
 								</div>
 							</div>
 						</div>
@@ -309,120 +310,175 @@
 						<div class="row">
 							<div class="col-md-12">
 								<div class="col-md-4">
-									<p>W O R K O R D E R - 1234
-									</p>
+									{!! Form::label('work_order', 'WORKORDER :', ['class' => 'form_label']) !!}
+								    <span>1234</span>
 								</div>
 								<div class="col-md-4">
 								</div>
 								<div class="col-md-4">
-								     <p>DATE : 	11/10/2018</p>
-								</div>
-							</div>
-							<div class="col-md-12">
-								<div class="col-md-4">
-									<p>ARTICLE : Sticker & Labels
-									</p>
-								</div>
-								<div class="col-md-4">
-								</div>
-								<div class="col-md-4">
-								     <p>MATERIAL: double side woven edge- white</p>
-								</div>
-							</div>
-						</div>
-						<hr>
-						<div class="row">
-							<div class="col-md-12">
-								<div class="col-md-4">
-									<p>CUST NAME	SPA
-									</p>
-								</div>
-								<div class="col-md-4">
-								    <p>STYLENUM		AA1234567
-									</p>
-								</div>
-								<div class="col-md-4">
-								     <p>ORDER TYPE	INITIAL</p>
+									 {!! Form::label('date', 'DATE :', ['class' => 'form_label']) !!}
+								    <span>11/10/2018</span>
 								</div>
 							</div>
 							<div class="col-md-12">
 								<div class="col-md-4">
-									<p>BUYER	TESCO
-									</p>
+									{!! Form::label('article', 'ARTICLE :', ['class' => 'form_label']) !!}
+								    <span>Sticker & Labels</span>
 								</div>
 								<div class="col-md-4">
-								    REFERENCE		FF/01/12345G	
 								</div>
 								<div class="col-md-4">
-								     <p>DISP MODE</p>
+									 {!! Form::label('material', 'MATERIAL :', ['class' => 'form_label']) !!}
+								    <span>double side woven edge- white</span>
 								</div>
 							</div>
 						</div>
 						<hr>
 						<div class="row">
 							<div class="col-md-12">
+								<div class="col-md-4">
+									{!! Form::label('customer', 'CUST NAME :', ['class' => 'form_label']) !!}
+								    <span>SPA</span>	
+								</div>
+								<div class="col-md-4">
+									{!! Form::label('style_no', 'STYLENUM :', ['class' => 'form_label']) !!}
+								    <span>AA1234567</span>	
+								</div>
+								<div class="col-md-4">
+									 {!! Form::label('order_type', 'ORDER TYPE :', ['class' => 'form_label']) !!}
+								    <span>INITIAL</span>	
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="col-md-4">
+									{!! Form::label('buyer', 'BUYER :', ['class' => 'form_label']) !!}
+								    <span>TESCO</span>	
+								</div>
+								<div class="col-md-4">
+								    {!! Form::label('reference', 'REFERENCE :', ['class' => 'form_label']) !!}
+								    <span>FF/01/12345G</span>	
+								</div>
+								<div class="col-md-4">
+									 <div class="form-group has-feedback form-inline">
+										{!! Form::label('disp_mode', 'DISP MODE :', ['class' => 'form_label']) !!}
+										{!! Form::text('disp_mode',$value = '', array('class' => 'form-control input-sm','placeholder' => 'DISP MODE','required','data-minlength' => '3','maxlength' => '40')) !!}
+										<div class="help-block with-errors"></div>
+									 </div>
+								</div>
+							</div>
+						</div>
+						<hr>
+						<div class="row">
+							<div class="col-md-12">
 								<div class="col-md-3">
-									<p>ORDER DT	10/10/2018
-									</p>
+									{!! Form::label('order_date', 'ORDER DT :', ['class' => 'form_label']) !!}
+								    <span>10/10/2018</span>
 								</div>
 								<div class="col-md-3">
-								    <p>LENGTH		25
-									</p>
+									{!! Form::label('length', 'LENGTH :', ['class' => 'form_label']) !!}
+								    <span>25</span>
 								</div>
 								<div class="col-md-3">
-								     <p>REPEAT GAP		25</p>
+								    <div class="form-group has-feedback form-inline">
+										{!! Form::label('repeat_gap', 'REPEAT GAP :', ['class' => 'form_label']) !!}
+										{!! Form::text('repeat_gap',$value = '', array('class' => 'form-control input-sm','placeholder' => 'REPEAT GAP','required','data-minlength' => '3','maxlength' => '40')) !!}
+										<div class="help-block with-errors"></div>
+									</div>
 								</div>
 								<div class="col-md-3">
-								     <p>MACHINE		5</p>
+								    <div class="form-group has-feedback form-inline">
+										{!! Form::label('machine', 'MACHINE :', ['class' => 'form_label']) !!}
+										{!! Form::text('machine',$value = '', array('class' => 'form-control input-sm','placeholder' => 'MACHINE','required','data-minlength' => '3','maxlength' => '40')) !!}
+										<div class="help-block with-errors"></div>
+									</div>
 								</div>
 							</div>
 							<div class="col-md-12">
 								<div class="col-md-3">
-									<p>CUS D.DT	10/10/2018
-									</p>
+								   <div class="form-group has-feedback form-inline">
+									{!! Form::label('cus_del_date', 'CUS D.DT :', ['class' => 'form_label']) !!}
+								    {!! Form::text('cus_del_date',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CUS D.DT','required','data-minlength' => '3','maxlength' => '40')) !!}
+									<div class="help-block with-errors"></div>
+								  </div>
 								</div>
 								<div class="col-md-3">
-								    <p>WIDTH		25</p>
+									{!! Form::label('width', 'WIDTH :', ['class' => 'form_label']) !!}
+								    <span>25</span>
 								</div>
 								<div class="col-md-3">
-								     <p>ROLL WIDTH		</p>
+								    <div class="form-group has-feedback form-inline">
+										{!! Form::label('roll_width', 'ROLL WIDTH :', ['class' => 'form_label']) !!}
+										{!! Form::text('roll_width',$value = '', array('class' => 'form-control input-sm','placeholder' => 'ROLL WIDTH','required','data-minlength' => '3','maxlength' => '40')) !!}
+										<div class="help-block with-errors"></div>
+								    </div>
 								</div>
 								<div class="col-md-3">
-								     <p>FILM NO		5</p>
-								</div>
-							</div>
-							<div class="col-md-12">
-								<div class="col-md-3">
-									<p>ACT D.DT	10/10/2018
-									</p>
-								</div>
-								<div class="col-md-3">
-								    <p>LENGTH SIDE		25</p>
-								</div>
-								<div class="col-md-3">
-								     <p>EXCESS %		</p>
-								</div>
-								<div class="col-md-3">
-								     <p>TEETH NO		5</p>
+								    <div class="form-group has-feedback form-inline">
+										{!! Form::label('film_no', 'FILM NO :', ['class' => 'form_label']) !!}
+										{!! Form::text('film_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'FILM NO','required','data-minlength' => '3','maxlength' => '40')) !!}
+										<div class="help-block with-errors"></div>
+									</div>
 								</div>
 							</div>
 							<div class="col-md-12">
 								<div class="col-md-3">
-									<p>INV NO	1234
-									</p>
+								   <div class="form-group has-feedback form-inline">
+										{!! Form::label('act_del_date', 'ACT D.DT :', ['class' => 'form_label']) !!}
+										{!! Form::text('act_del_date',$value = '', array('class' => 'form-control input-sm','placeholder' => 'ACT D.DT','required','data-minlength' => '3','maxlength' => '40')) !!}
+										<div class="help-block with-errors"></div>
+								   </div>
 								</div>
 								<div class="col-md-3">
-								    <p>NO OF STI		25</p>
+								   <div class="form-group has-feedback form-inline">
+										{!! Form::label('length_side', 'LENGTH SIDE :', ['class' => 'form_label']) !!}
+										{!! Form::text('length_side',$value = '', array('class' => 'form-control input-sm','placeholder' => 'LENGTH SIDE','required','data-minlength' => '3','maxlength' => '40')) !!}
+										<div class="help-block with-errors"></div>
+								   </div>
+								</div>
+								<div class="col-md-3">
+							        <div class="form-group has-feedback form-inline">
+										{!! Form::label('excess', 'EXCESS % :', ['class' => 'form_label']) !!}
+										{!! Form::text('excess',$value = '', array('class' => 'form-control input-sm','placeholder' => 'EXCESS','required','data-minlength' => '3','maxlength' => '40')) !!}
+										<div class="help-block with-errors"></div>
+									</div>
+								</div>
+								<div class="col-md-3">
+								    <div class="form-group has-feedback form-inline">
+										{!! Form::label('teeth_no', 'TEETH NO :', ['class' => 'form_label']) !!}
+										{!! Form::text('teeth_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'TEETH NO','required','data-minlength' => '3','maxlength' => '40')) !!}
+										<div class="help-block with-errors"></div>
+								    </div>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="col-md-3">
+								    <div class="form-group has-feedback form-inline">
+										{!! Form::label('inv_no', 'INV NO :', ['class' => 'form_label']) !!}
+										{!! Form::text('inv_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'INV NO','required','data-minlength' => '3','maxlength' => '40')) !!}
+										<div class="help-block with-errors"></div>
+									</div>
+								</div>
+								<div class="col-md-3">
+								    <div class="form-group has-feedback form-inline">
+										{!! Form::label('no_sticker', 'NO OF STI :', ['class' => 'form_label']) !!}
+										{!! Form::text('no_sticker',$value = '', array('class' => 'form-control input-sm','placeholder' => 'NO OF STI','required','data-minlength' => '3','maxlength' => '40')) !!}
+										<div class="help-block with-errors"></div>
+									</div>
 								</div>
 								<div class="col-md-3">
 								</div>
 								<div class="col-md-3">
-								     <p>FINISH TYPE		5</p>
+								    <div class="form-group has-feedback form-inline">
+										{!! Form::label('finish_type', 'FINISH TYPE :', ['class' => 'form_label']) !!}
+										{!! Form::text('finish_type',$value = '', array('class' => 'form-control input-sm','placeholder' => 'FINISH TYPE','required','data-minlength' => '3','maxlength' => '40')) !!}
+										<div class="help-block with-errors"></div>
+									</div>
 								</div>
 							</div>
 							<div class="col-md-12">
 							   <div class="col-md-8">
-							      <p>PRINT COLORS		485C, 201C,300C 485C, 201C,300C				</p>
+								  {!! Form::label('print_color', 'PRINT COLORS :', ['class' => 'form_label']) !!}
+								    <span>485C, 201C,300C 485C, 201C,300C</span>
 							   </div>
 							   <div class="col-md-4">
 							   </div>
@@ -431,89 +487,8 @@
 						<hr>
 						<div class="row">
 							<div class="col-md-12">
-								<table class="table table-bordered">
+								<table class="table table-bordered"  style="width:100%;font-size: 12px;">
 								    <thead>
-										<tr>
-											<th>REFNUM</th>
-											<th>PONUM</th>
-											<th>IDNUM</th>
-											<th>OCN</th>
-											<th>ORD NO</th>
-											<th>QNTY</th>
-											<th>P.QNTY</th>
-											<th>TOTAL</th>
-										</tr>
-									</thead>
-									<tbody>
-									<tr>
-										<td>TCL1 RatA</td>
-										<td>460-12344</td>
-										<td></td>
-										<td></td>
-										<td>999</td>
-										<td>150</td>
-										<td></td>
-										<td>800</td>
-									</tr>
-									<tr>
-											<td>TCL1 RatB</td>
-											<td>460-12344</td>
-											<td></td>
-											<td></td>
-											<td>999</td>
-											<td>150</td>
-											<td></td>
-											<td></td>
-										</tr>
-										<tr>
-											<td>TCL2 RatA</td>
-											<td>460-12344</td>
-											<td></td>
-											<td></td>
-											<td>999</td>
-											<td>150</td>
-											<td></td>
-											<td></td>
-										</tr>
-										<tr>
-											<td>TCL2 RatB</td>
-											<td>460-12344</td>
-											<td></td>
-											<td></td>
-											<td>999</td>
-											<td>150</td>
-											<td></td>
-											<td></td>
-										</tr>
-										<tr>
-											<td>TSL1 RatA</td>
-											<td>460-12344</td>
-											<td></td>
-											<td></td>
-											<td>999</td>
-											<td>150</td>
-											<td></td>
-											<td>3434</td>
-										</tr>
-										<tr>
-											<td>TSL1 RatB</td>
-											<td>460-12344</td>
-											<td></td>
-											<td></td>
-											<td>999</td>
-											<td>150</td>
-											<td></td>
-											<td></td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-						<hr>
-						<div class="row">
-							<div class="col-md-12">
-								<table class="table table-bordered">
-									<thead>
 										<tr>
 											<th>REFNUM</th>
 											<th>PONUM</th>
@@ -534,7 +509,7 @@
 											<td>999</td>
 											<td>150</td>
 											<td></td>
-											<td></td>
+											<td rowspan="4">800</td>
 										</tr>
 										<tr>
 											<td>TCL1 RatB</td>
@@ -543,7 +518,6 @@
 											<td></td>
 											<td>999</td>
 											<td>150</td>
-											<td></td>
 											<td></td>
 										</tr>
 										<tr>
@@ -554,7 +528,6 @@
 											<td>999</td>
 											<td>150</td>
 											<td></td>
-											<td></td>
 										</tr>
 										<tr>
 											<td>TCL2 RatB</td>
@@ -563,7 +536,6 @@
 											<td></td>
 											<td>999</td>
 											<td>150</td>
-											<td></td>
 											<td></td>
 										</tr>
 										<tr>
@@ -574,7 +546,7 @@
 											<td>999</td>
 											<td>150</td>
 											<td></td>
-											<td></td>
+											<td rowspan="2">3434</td>
 										</tr>
 										<tr>
 											<td>TSL1 RatB</td>
@@ -584,10 +556,211 @@
 											<td>999</td>
 											<td>150</td>
 											<td></td>
-											<td></td>
 										</tr>
 									</tbody>
 								</table>
+							</div>
+						</div>
+						<hr>
+						<div class="row">
+							<div class="col-md-12">
+								<table class="table table-bordered"  style="width:100%;font-size: 12px;">
+									<tbody>
+										<tr>
+											<th>ID Num</th>
+											<td colspan="2">1000</td>
+											<td colspan="2">1000</td>
+											<td colspan="2">1000</td>
+											<td colspan="5" rowspan="3">REFNUM  : TCL4</td>
+										</tr>
+										<tr>
+											<th>B. PO NUM</th>
+											<td colspan="2">460-12345</td>
+											<td colspan="2">460-12346</td>
+											<td colspan="2">460-12347</td>
+										</tr>
+										<tr>
+										    <th>OCN Num</th>
+											<td colspan="2">1</td>
+											<td colspan="2">2</td>
+											<td colspan="2">3</td>
+										</tr>
+										<tr>
+										<tr>
+											<th>SIZE /Price</th>
+											<th>O.QNT</th>
+											<th>P.QNT</th>
+											<th>O.QNT</th>
+											<th>P.QNT</th>
+											<th>O.QNT</th>
+											<th>P.QNT</th>
+											<th>TOTAL</th>
+											<th>EXCESS</th>
+											<th>MTRS</th>
+											<th>Stock</th>
+										</tr>
+										<tr>
+											<td>2-3</td>
+											<td>1000</td>
+											<td></td>
+											<td>1000</td>
+											<td></td>
+											<td>1000</td>
+											<td></td>
+											<td>3000</td>
+											<td>150</td>
+											<td></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td>2-3</td>
+											<td>1000</td>
+											<td></td>
+											<td>1000</td>
+											<td></td>
+											<td>1000</td>
+											<td></td>
+											<td>3000</td>
+											<td>150</td>
+											<td></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td>2-3</td>
+											<td>1000</td>
+											<td></td>
+											<td>1000</td>
+											<td></td>
+											<td>1000</td>
+											<td></td>
+											<td>3000</td>
+											<td>150</td>
+											<td></td>
+											<td></td>
+										</tr>
+										<tr>
+										    <th>TOTAL</th>
+											<td>25000</td>
+											<td></td>
+											<td>25000</td>
+											<td></td>
+											<td>25000</td>
+											<td></td>
+											<td>75000</td>
+											<td>3000</td>
+											<td>0</td>
+											<td>0</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="col-md-3">
+								{!! Form::label('act_excess', 'Act Excess % :', ['class' => 'form_label']) !!}
+								<span>7%</span>
+							</div>
+							<div class="col-md-3">
+								{!! Form::label('sticker_mtr', 'Mtrs for Stickers :', ['class' => 'form_label']) !!}
+								<span>30</span>
+							</div>
+							<div class="col-md-3">
+							    {!! Form::label('settings', 'Settings :', ['class' => 'form_label']) !!}
+								<span>30</span>
+							</div>
+							<div class="col-md-3">
+								{!! Form::label('total_mtrs', 'Total Mtrs :', ['class' => 'form_label']) !!}
+								<span>30</span>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="col-md-3">
+								<div class="form-group has-feedback form-inline">
+									{!! Form::label('compiled_by', 'Compiled By :', ['class' => 'form_label']) !!}
+									{!! Form::text('compiled_by',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Compiled By','required','data-minlength' => '3','maxlength' => '40')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback form-inline">
+									{!! Form::label('barcode_read', 'Barcode Read :', ['class' => 'form_label']) !!}
+									{!! Form::text('barcode_read',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Barcode Read','required','data-minlength' => '3','maxlength' => '40')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback form-inline">
+									{!! Form::label('operator', 'Operator :', ['class' => 'form_label']) !!}
+									{!! Form::text('operator',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Operator','required','data-minlength' => '3','maxlength' => '40')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback form-inline">
+									{!! Form::label('checker', 'Checker :', ['class' => 'form_label']) !!}
+									{!! Form::text('checker',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Checker','required','data-minlength' => '3','maxlength' => '40')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="col-md-3">
+								<div class="form-group has-feedback form-inline">
+									{!! Form::label('author', 'Authrz By :', ['class' => 'form_label']) !!}
+									{!! Form::text('author',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Authrz By','required','data-minlength' => '3','maxlength' => '40')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback form-inline">
+									{!! Form::label('axicon_verifier', 'Axicon Verifier :', ['class' => 'form_label']) !!}
+									{!! Form::text('axicon_verifier',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Axicon Verifier','required','data-minlength' => '3','maxlength' => '40')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback form-inline">
+									{!! Form::label('approved_by', 'Apprvd By :', ['class' => 'form_label']) !!}
+									{!! Form::text('approved_by',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Apprvd By','required','data-minlength' => '3','maxlength' => '40')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback form-inline">
+									{!! Form::label('packer', 'Packer :', ['class' => 'form_label']) !!}
+									{!! Form::text('packer',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Packer','required','data-minlength' => '3','maxlength' => '40')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="col-md-3">
+								<div class="form-group has-feedback form-inline">
+									{!! Form::label('approval_date', 'Approval Dt :', ['class' => 'form_label']) !!}
+									{!! Form::text('approval_date',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Approval Dt','required','data-minlength' => '3','maxlength' => '40')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback form-inline">
+									{!! Form::label('roll_issued_by', 'Roll issued By :', ['class' => 'form_label']) !!}
+									{!! Form::text('roll_issued_by',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Roll issued By','required','data-minlength' => '3','maxlength' => '40')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback form-inline">
+									{!! Form::label('cutter', 'Cutter :', ['class' => 'form_label']) !!}
+									{!! Form::text('cutter',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Cutter','required','data-minlength' => '3','maxlength' => '40')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback form-inline">
+									{!! Form::label('cartons', 'Cartons :', ['class' => 'form_label']) !!}
+									{!! Form::text('cartons',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Cartons','required','data-minlength' => '3','maxlength' => '40')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
 							</div>
 						</div>
 					</div>
