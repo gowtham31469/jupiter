@@ -76,7 +76,8 @@ class InvoiceController extends Controller
                             ->join('customers','erp_orders.customer_id','customers.id')
                             ->join('buyers','erp_orders.buyer_id','buyers.id')
                             ->select('erp_orders.id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','erp_orders.po_no','erp_orders.erp_id')
-                            ->get();
+                            ->distinct('erp_orders.id')->get();
+                            
             $result      = response()->json(['error'=> false,'message' =>'success','po_list'=>$po_list ],200);
         }
         catch (\Exception $e){
@@ -136,52 +137,63 @@ class InvoiceController extends Controller
         try {
             $orders   =  $request['finalData'];
             $htmlData = $request->htmlData;
-            if ($orders) {
-                $invoiceData = Invoices::create([
-                                'customer_id' => $orders[0]['customer_id'],
-                                'buyer_id'    => $orders[0]['buyer_id'],
-                                'po_no'       => $orders[0]['po_no'],
-                                'po_file'     => $orders[0]['po_file'],
-                                'erp_id'      => $orders[0]['erp_id'],
-                            ]);
-                $invoice_id =  "INV-00".$invoiceData->id;
-                Invoices::where('id', $invoiceData->id)->update(['invoice_id'=> $invoice_id ]);
+            // $pdf = html2pdf($htmlData);
+           
 
-                foreach ($orders as $key => $value) {
+            $html2pdf = new \HTML2PDF('P', 'Legal', 'en', true, 'UTF-8', array(25.4, 20.4, 25.4, 20.4));
+            $html2pdf->pdf->SetTitle('HTML2PDF Sample');
+            $html2pdf->WriteHTML($content);
+            $html2pdf->Output('example.pdf');
+            
+            // $tbl=utf8_encode($htmlData);
+            // PDF::writeHTML($tbl, true, false, false, false, '');
+            // PDF::Output( public_path('/storage/app/public/invoices/invoice.pdf'), 'F');
+            // if ($orders) {
+            //     $invoiceData = Invoices::create([
+            //                     'customer_id' => $orders[0]['customer_id'],
+            //                     'buyer_id'    => $orders[0]['buyer_id'],
+            //                     'po_no'       => $orders[0]['po_no'],
+            //                     'po_file'     => $orders[0]['po_file'],
+            //                     'erp_id'      => $orders[0]['erp_id'],
+            //                 ]);
+            //     $invoice_id =  "INV-00".$invoiceData->id;
+            //     Invoices::where('id', $invoiceData->id)->update(['invoice_id'=> $invoice_id ]);
 
-                    $pendingQnty = $value['pending_qnty'] - $value['delvry_qnty'];
-                    $size = $value['size'] == ""?"null":$value['size'];
-                    $status = $pendingQnty==0?5:6;
-                    InvoiceDetails::create([
-                        'invoice_id'    =>  $invoiceData->id,
-                        'order_no'      =>  $value['id'],
-                        'style_no'      =>  $value['style_no'],
-                        'ordered_qnty'  =>  $value['order_quantity'],
-                        'delivered_qnty'=>  $value['delvry_qnty'],
-                        'pending_qnty'  =>  $pendingQnty,
-                        'rate'          =>  $value['rate'],
-                        'tax'           =>  $value['tax'],
-                        // 'hsn_code'      =>  $value['hsn_code'],
-                        'hsn_code'      =>  2,
-                        'size'          =>  $size,
-                        'reference_no'  =>  $value['reference_name'],
-                        'item'          =>  $value['reference_name'],
-                        'ocn_no'        =>  $value['ocn_number'],
-                        'company_id'    =>  1,
-                    ]);
+            //     foreach ($orders as $key => $value) {
+
+            //         $pendingQnty = $value['pending_qnty'] - $value['delvry_qnty'];
+            //         $size = $value['size'] == ""?"null":$value['size'];
+            //         $status = $pendingQnty==0?5:6;
+            //         InvoiceDetails::create([
+            //             'invoice_id'    =>  $invoiceData->id,
+            //             'order_no'      =>  $value['id'],
+            //             'style_no'      =>  $value['style_no'],
+            //             'ordered_qnty'  =>  $value['order_quantity'],
+            //             'delivered_qnty'=>  $value['delvry_qnty'],
+            //             'pending_qnty'  =>  $pendingQnty,
+            //             'rate'          =>  $value['rate'],
+            //             'tax'           =>  $value['tax'],
+            //             // 'hsn_code'      =>  $value['hsn_code'],
+            //             'hsn_code'      =>  2,
+            //             'size'          =>  $size,
+            //             'reference_no'  =>  $value['reference_name'],
+            //             'item'          =>  $value['reference_name'],
+            //             'ocn_no'        =>  $value['ocn_number'],
+            //             'company_id'    =>  1,
+            //         ]);
                     
-                    ErpOrderDetails::where('id',$value['id'])
-                        ->update([
-                            'delivered_quantity'=> ( $value['order_quantity'] - $pendingQnty ),
-                            'pending_orders'    => $pendingQnty,
-                            'status'            => $status
-                            ]);
-                    Erp::where('erp_id',$orders[0]['erp_id'])
-                        ->update(['status'=>$status]);
+            //         ErpOrderDetails::where('id',$value['id'])
+            //             ->update([
+            //                 'delivered_quantity'=> ( $value['order_quantity'] - $pendingQnty ),
+            //                 'pending_orders'    => $pendingQnty,
+            //                 'status'            => $status
+            //                 ]);
+            //         Erp::where('erp_id',$orders[0]['erp_id'])
+            //             ->update(['status'=>$status]);
 
-                }
-                 $result    = response()->json(['error'=> false,'message' =>'success'],200);
-            }
+            //     }
+            //      $result    = response()->json(['error'=> false,'message' =>'success'],200);
+            // }
             
         }
         catch (\Exception $e)

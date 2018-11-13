@@ -20,7 +20,6 @@
             dataType: "json",
 
             success: function (data) {
-                
                 if(data.po_list.length != 0)
                 {
                     $(data.po_list).each(function(index, value)
@@ -474,7 +473,7 @@
     }
     function downloadInvoice(){
 
-        var myOffscreenEl = document.getElementById("invoice"),
+        var myOffscreenEl = document.getElementById("invoice")
             useWidth      = myOffscreenEl.style.width,
             useHeight     = myOffscreenEl.style.height;
             myOffscreenEl.style.backgroundColor = 'white';
@@ -484,8 +483,10 @@
             image       :  { type: 'jpeg', quality: 0.98 },
             html2canvas :  { dpi: 300, letterRendering: true },
             jsPDF       :  { unit: 'pt', format: 'a4', orientation: 'portrait' }
-        }).output('storage/app/public/invoices/invoice.pdf', 'F');
+        });
+       
        // dataPDF.save('storage/app/public/invoices/invoice.pdf', 'F');
+
     }
 
     function updateInvoice(obj){
@@ -522,6 +523,16 @@
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         var myOffscreenEl = document.getElementById("invoice");
         var htmlData =  myOffscreenEl.innerHTML;
+        //     useWidth      = myOffscreenEl.style.width,
+        //     useHeight     = myOffscreenEl.style.height;
+        // myOffscreenEl.style.backgroundColor = 'white';
+        // html2pdf(myOffscreenEl, {
+        //     margin      :  10,
+        //     filename    :  'Invoice.pdf',
+        //     image       :  { type: 'jpeg', quality: 0.98 },
+        //     html2canvas :  { dpi: 300, letterRendering: true },
+        //     jsPDF       :  { unit: 'pt', format: 'a4', orientation: 'portrait' }
+        // });
         $.ajax({
             url: "/erp/save-invoice",
             type: 'POST',
@@ -538,7 +549,7 @@
                 $('.snackbar_span').html("Invoice Send Successfully !");
                 showSnackbar();                
                 $('#erp-invoice').modal("hide")
-                setTimeout(function(){window.location = 'invoice';}, 3000); 
+                // setTimeout(function(){window.location = 'invoice';}, 3000); 
 
             },
             error: function (errorXHR, errorStatus, errorThrown) {
