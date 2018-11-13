@@ -624,7 +624,9 @@
 				$(data.orderlist).each(function(key, index) {
 					if (index.status == 2) {
 						var label = 'label label-danger';
-					} else {
+					}else if (index.status == 3){
+						var label = 'label label-success';
+					}else {
 						var label = 'label label-info';
 					}
 					$('#order-details-table tbody').append(`
