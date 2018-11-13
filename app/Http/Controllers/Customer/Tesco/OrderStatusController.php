@@ -442,6 +442,16 @@ class OrderStatusController extends Controller
                           'pi_status' => "PI Rejected",
                           'pi_rev_no' => $table_data->pi_rev_no + 1
                         ]);
+                    }
+                    else{
+                        DB::table($table)
+                        ->where('uk_style_ref',$table_data->uk_style_ref)
+                        ->where('po_number',$table_data->po_number)
+                        ->where('order_flag',$table_data->order_flag)
+                        ->update([
+                          'pi_status' => "PI Rejected",
+                          'pi_rev_no' => $table_data->pi_rev_no + 1
+                        ]);
                     }    
                 }
             }
@@ -651,7 +661,7 @@ class OrderStatusController extends Controller
                             ->where($col,$style_num)
                             ->get();
             $data['tsl3'] = DB::table('tesco_tsl3_orders')
-                            ->join('tesco_item_master','tesco_tsl3_orders_quanty.template_id','=','tesco_item_master.id')
+                            ->join('tesco_item_master','tesco_tsl3_orders.template_id','=','tesco_item_master.id')
                             ->join('customers','tesco_tsl3_orders.tesco_supplier_id','=','customers.id')
                             ->where('customers.po_required',1)
 				            ->where('tesco_tsl3_orders.order_status', '!=', 'Saved')

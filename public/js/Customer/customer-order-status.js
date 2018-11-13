@@ -1796,10 +1796,10 @@ function tescoStatusTable(data,path)
                         style_no = value.uk_style_ref;
                     }
                     if (value["Artwork Status"]!="Order Cancelled"){
-                      tr += '<td align="center" data-id="'+value.tableID+'" data-table="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>'+span_style+''+style_no+'</a></td>';
+                      tr += '<td align="center" data-id="'+value.tableID+'" data-table1="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>'+span_style+''+style_no+'</a></td>';
                     }
                     else{
-                      tr += '<td align="center" data-id="'+value.tableID+'" data-table="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'">'+span_style+''+style_no+'</td>';
+                      tr += '<td align="center" data-id="'+value.tableID+'" data-table1="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'">'+span_style+''+style_no+'</td>';
                     }
                     
                 }
@@ -1843,12 +1843,12 @@ function tescoStatusTable(data,path)
                    if(value['is_order_count_empty'] == 0){
                         if (value[key] == null)
                        {
-                            tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input class="form-control input-sm datepicker_recurring_start" data-id="'+value.delivery_day_count+'" style="width: 107px; border-color: rgb(244, 67, 54);" placeholder="Enter Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'")  readonly></td>';
+                            tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input class="form-control input-sm datepicker_recurring_start" data-id="'+value.delivery_day_count+'" style="width: 107px; border-color: rgb(244, 67, 54);" placeholder="Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'")  readonly></td>';
                        }
                        else
                        {
                            
-                            tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input value="' + value[key] + '"class="form-control input-sm datepicker_recurring_start" data-id="'+value.delivery_day_count+'" style="width: 107px;" placeholder="Enter Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'") readonly></td>';
+                            tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input value="' + value[key] + '"class="form-control input-sm datepicker_recurring_start" data-id="'+value.delivery_day_count+'" style="width: 107px;" placeholder="Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'") readonly></td>';
                        }
                    }
                    else{
@@ -2056,7 +2056,7 @@ function updateArtwork(obj)
 {
     $('#po_already_error').addClass('hidden')
     var id          =$(obj).parent().attr('data-id');
-    var table_name  =$(obj).parent().attr('data-table');
+    var table_name  =$(obj).parent().attr('data-table1');
     var TemplateName=$(obj).parent().attr('data-template');
     
     td_row          =$(obj).parent().parent();

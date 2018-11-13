@@ -142,7 +142,7 @@ function tescoOrderStatus()
                                                 if (old_po!=value1.purchase_order_no)
                                                 {
                                                     options += "<option>" + value1.purchase_order_no +"</option>";
-                                                    console.log(old_po)
+                                                    // console.log(old_po)
                                                 }
                                                 old_po = value1.purchase_order_no
                                                 coun++;
@@ -568,7 +568,7 @@ function tescoOrderStatus()
                                     }
                                 },
                                 error: function (data){
-                                    console.log(data);
+                                    // console.log(data);
                                 },
                                 complete: function () {
                                     $(".loader").hide();
@@ -637,6 +637,7 @@ function tescoOrderStatus()
                         });
                     }
                 });
+
                 $("#reset").on("click", function () {
                     $('#styleNumber').val('').change();
                     $('#supplierName').val('').change();
@@ -686,7 +687,7 @@ function tescoOrderStatus()
             }
         },
         error: function (data){
-            console.log(data);
+            // console.log(data);
         },
         complete: function () {
             $(".loader").hide();
@@ -928,12 +929,12 @@ function tescoStatusTable(data,path)
                    if(value['is_order_count_empty'] == 0){
                         if (value[key] == null)
                        {
-                            tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input class="form-control input-sm datepicker_recurring_start" data-id="'+value.delivery_day_count+'" style="width: 107px; border-color: rgb(244, 67, 54);" placeholder="Enter Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'")  readonly></td>';
+                            tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input class="form-control input-sm datepicker_recurring_start" data-id="'+value.delivery_day_count+'" style="width: 107px; border-color: rgb(244, 67, 54);" placeholder="Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'")  readonly></td>';
                        }
                        else
                        {
                            
-                            tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input value="' + value[key] + '"class="form-control input-sm datepicker_recurring_start" data-id="'+value.delivery_day_count+'" style="width: 107px;" placeholder="Enter Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'") readonly></td>';
+                            tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input value="' + value[key] + '"class="form-control input-sm datepicker_recurring_start" data-id="'+value.delivery_day_count+'" style="width: 107px;" placeholder="Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'") readonly></td>';
                        }
                    }
                    else{
@@ -942,7 +943,7 @@ function tescoStatusTable(data,path)
                 }
                 else if (key != "tableName" && key!="tableID" && key!="po_file" && key!="pi_required" && key!="po_required"&& key!="uk_style_ref" && key!="ce_style_ref" && key != "template_id"  && key!="customer_id" && key!="order_flag" && key!="delivery_day_count" && key!="is_order_count_empty")
                 {
-                	if (value[key]== "" || value[key]==null)
+                    if (value[key]== "" || value[key]==null)
                 	{
                 		tr += '<td> - </td>';
                 	}
@@ -1011,7 +1012,7 @@ function updateDeliveryDate(obj,tableID,tableName,count)
                 }
             },
             error: function (data){
-                console.log(data);
+                // console.log(data);
             },
             complete: function (){
                 $(".loader").hide();
@@ -1080,7 +1081,7 @@ function tescoSetPO(obj,id,tableName,po_file)
             }
         },
         error: function (data){
-            console.log(data);
+            // console.log(data);
         },
         complete: function () {
             $(".loader").hide();
@@ -1371,7 +1372,7 @@ function updateArtwork(obj)
             }
         },
         error: function (data){
-            console.log(data);
+            // console.log(data);
         },
         complete: function () {
             $(".loader").hide();
@@ -1439,7 +1440,7 @@ function updateArtwork(obj)
                 $('#disable_edit').addClass('hidden')
             },
             error: function (data){
-                console.log(data);
+                // console.log(data);
             },
             complete: function () {
 
@@ -1604,7 +1605,7 @@ function updateArtwork(obj)
 							location.reload()
 						 },
 						 error: function (data) {
-							console.log(data);
+							// console.log(data);
 						 },
 						 complete: function () {
 
@@ -2681,7 +2682,7 @@ function jsbarcodetesco(code, id, svgDoc) {
 	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
 	// img.src - contains base64 URI from svg
-	console.log(img.src);
+	// console.log(img.src);
 
 	//remove temporary canvas
 	canvasTmp.remove();
@@ -2743,7 +2744,7 @@ function jsbarcodetescoean(code, id, svgDoc) {
 	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
 	// img.src - contains base64 URI from svg
-	console.log(img.src);
+	// console.log(img.src);
 
 	//remove temporary canvas
 	canvasTmp.remove();
@@ -2968,7 +2969,7 @@ function checkjsbarcodeean(code) {
                $('#disable_edit').addClass('hidden')
            },
            error: function (data){
-               console.log(data);
+               // console.log(data);
            },
            complete: function () {            }
        })

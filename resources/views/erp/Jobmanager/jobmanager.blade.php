@@ -252,7 +252,6 @@
             </div>
         </div>
     </div>
-
 <!-- company selection Modal -->
 <div class="modal buyer-selection-modal fade" id="buyerSelectionModalCenter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
      <div class="modal-dialog buyer-selection-modal-dialog" role="document">
@@ -782,19 +781,20 @@ $(document).ready(function() {
 	$('input[class="row-checkbox"]').prop('checked', false);
 	/** [ Make companies card active ] */
 	$('div.buyers-card').click(function(){
-	  $('div.buyers-card').removeClass("active");
-	  $(this).addClass("active");
-	  $('#hidden-buyer-div').hide();
 
-	  /* Save selected buyer into localdb */
-      if ($('.buyers-card.active-buyer.active').length != 0) 
-      {
-          var company_id = $('.buyers-card.active-buyer.active').data("value"); 
-		  var company_name = $('.buyers-card.active-buyer.active').attr("id");
-          $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
-          $('#buyerSelectionModalCenter').modal('hide');
+		  $('div.buyers-card').removeClass("active");
+		  $(this).addClass("active");
+		  $('#hidden-buyer-div').hide();
+
+		  /* Save selected buyer into localdb */
+	      if ($('.buyers-card.active-buyer.active').length != 0) 
+	      {
+         	var company_id = $('.buyers-card.active-buyer.active').data("value"); 
+		  	var company_name = $('.buyers-card.active-buyer.active').attr("id");
+         	 $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
+          	$('#buyerSelectionModalCenter').modal('hide');
 		  
-		  var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	 		var csrf_token = $('meta[name="csrf-token"]').attr('content');
 			$.ajax({
 				url: base_url + "/erp/po-manager/set_company_session",
 				type: "Post",
@@ -817,7 +817,7 @@ $(document).ready(function() {
 
 				}
 			})
-      }
+	      }
 	  
 	});
 	
