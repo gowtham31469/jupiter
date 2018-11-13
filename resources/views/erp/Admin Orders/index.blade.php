@@ -68,17 +68,21 @@
 						<tbody>
 							@foreach ($orders as $value)
 							<tr id="{{$value->id}}">
+								@if(is_null($value->deleted_at))
 								@switch($value->status)
 								@case("Cancelled")
 								<td style="color:red;"><i class="fa fa-flag" style="color:red;" aria-hidden="true"></i></td>
 
 								@break
 								@default
-								<td style="color:#4CAF50;"><i class="fa fa-flag" style="color:#4CAF50;" aria-hidden="true"></i></td>
+								<td><i class="fa fa-flag" style="color:#4CAF50;" aria-hidden="true"></i></td>
 
 								@break
 								@endswitch
-
+								@else
+								<td style="color:red;"><i class="fa fa-flag" aria-hidden="true"></i></td>
+								@endif
+								
 								<td>{{$value->erp_id}}</td>
 								<td>{{$value->po_no}}</td>
 								<td>{{$value->customer}}

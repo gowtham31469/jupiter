@@ -74,6 +74,7 @@
 														{{ Form::label('erp_status', 'ERP Status : *', ['class' => 'form_label']) }}
 													</div>
 													<div class="col-md-8 text-center">
+														@if(is_null($order->deleted_at))
 														@switch($order->status)
 														@case("Cancelled")
 														<span class="label label-danger">{{$order->status}}</span>
@@ -84,6 +85,9 @@
 
 														@break
 														@endswitch
+														@else
+														<span class="label label-warning"> HOLD </span>
+														@endif
 													</div>
 												</div>
 											</div>
