@@ -161,16 +161,17 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
                                     useWidth      = myOffscreenEl.style.width,
                                     useHeight     = myOffscreenEl.style.height;
                                     myOffscreenEl.style.backgroundColor = 'white';
-
-                                html2pdf(myOffscreenEl, {
+                                var opt = {
                                   margin:       10,
                                   filename:     'Proforma-Invoice.pdf',
                                   image:        { type: 'jpeg', quality: 0.98 },
                                   html2canvas:  { dpi: 300, letterRendering: true },
-                                  jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' }
-                                });
+                                  jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' },
+                                 
+                                }
+                                html2pdf(myOffscreenEl,opt);
                             });
-
+                           
                         } else {
                             $('.snackbar_span').html('Price details should be within a range !!');
                             showSnackbar();
