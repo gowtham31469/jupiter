@@ -13,9 +13,8 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1"  style="margin-right: 10px;">
                 @yield('navbar')
-                <ul class="nav navbar-nav navbar-right">
-						
-					 <li class="dropdown company-nav-menu"></li>
+                <ul class="nav navbar-nav navbar-right">						
+					<li class="dropdown company-nav-menu nav-company"></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle profile-dropdown-admin" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <span class="well navWell">{{ Auth::guard('erpuser')->user()->name[0] }}</span>{{ Auth::guard('erpuser')->user()->name}}<span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">

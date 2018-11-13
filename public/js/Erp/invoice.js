@@ -6,6 +6,7 @@
     var result = '';
     var ship_to = '';
     var bill_to = '';
+    var company_details = '';
 
     function dynamicTable() {
         var customer_id  = $("#customer option:selected").val();
@@ -19,7 +20,6 @@
             dataType: "json",
 
             success: function (data) {
-                
                 if(data.po_list.length != 0)
                 {
                     $(data.po_list).each(function(index, value)
@@ -72,7 +72,8 @@
                 {                       
                     order_data = data.orderlist;
                     ship_to =  data.ship_to;
-                    bill_to = data.bill_to,
+                    bill_to = data.bill_to;
+                    company_details = data.company_details;
                     createInvoice(order_data,order_data)                                       
                 }
                 else{
@@ -264,7 +265,6 @@
                 sum += parseFloat(this.value);
               }
         })
-        console.log(sum)
         return sum;
     }   
     function taxSubTotal(){
@@ -284,7 +284,7 @@
                 if(index == 2){
                 if(!taxamnt[index]) taxamnt[index] = 0;
                 taxamnt[index] += parseFloat($(val).text());
-                console.log($(val).text())
+                // console.log($(val).text())
             }
             });
         });
@@ -353,6 +353,12 @@
         $('.delivery-qnty').css('border-color', '');
         var delvryQnty = {};
         var count = 0 ;
+        console.log(company_details)
+        $('#company-logo').attr('src',company_details.logo);
+
+        // $('#company_details').html('<strong style="font-size:11px;">'+company_details.name+'</strong><br/>'+company_details.address+'<br/>PH : '+company_details.office_phone+', '+company_details.phone+'<br/>GST : '+company_details.gstin)
+        $('#company_details').html('<h4>'+company_details.name+'</h4>'+company_details.address+'<p>PH : '+company_details.office_phone+', '+company_details.phone+'</br> GST : '+company_details.gstin+'</p>')
+
         $('#bill_to').html('<h4>Billing Address:</h4>'+data[0].company_name+'<p>'+bill_to.address+'</br> GSTN :'+data[0].gstin_number+ '</p>')
         $('#ship_to').html('<h4>Shipping Address:</h4>'+data[0].company_name+'<p>'+ship_to.address+'</p>')
 
@@ -452,10 +458,10 @@
             var trclass1 = $( "#charges1" ).val()==""?"hidden":'';
             var trclass2 = $( "#charges2" ).val()==""?"hidden":'';
             var trclass3 = $( "#charges3" ).val()==""?"hidden":'';
-            console.log(trclass1,trclass2,trclass3)
+            
             var tableHide = trclass1 && trclass2 && trclass3 =="hidden" ?"hidden":''
             
-            $('.preview-extra-charges').html('<table class="table table-bordered text-center preview-extra-charges '+tableHide+'" style="margin-top: -22px;;"><thead><tr><th colspan="2">Description</th><th>Amount (₹)</th></tr></thead><tbody><tr class="'+trclass1+'"><td colspan="2">'+$( "#charges1" ).val()+'</td><td style="width: 116px;" colspan="2"></td></tr><tr class="'+trclass2+'"><td colspan="2">'+$( "#charges2" ).val()+'</div></td><td style="width: 116px;"></td></tr><tr class="'+trclass3+'"><td colspan="2">'+$( "#charges3" ).val()+'</td><td style="width: 116px;"></td></tr><tr><td colspan="2"><strong>SubTotal</strong></td><td><strong class="preview-sub-extra"></strong></td></tr><tr></tr><tr><td colspan="2"><strong>Grand Total</strong></td><td><strong class="preview-grand-total"></strong></td></tr><tr></tr></tbody></table>')
+            $('.preview-extra-charges').html('<table class="table table-bordered text-center preview-extra-charges style="margin-top: -22px;;"><thead class="'+tableHide+'""><tr><th colspan="2">Description</th><th>Amount (₹)</th></tr></thead><tbody><tr class="'+trclass1+'"><td colspan="2">'+$( "#charges1" ).val()+'</td><td style="width: 116px;" colspan="2"></td></tr><tr class="'+trclass2+'"><td colspan="2">'+$( "#charges2" ).val()+'</div></td><td style="width: 116px;"></td></tr><tr class="'+trclass3+'"><td colspan="2">'+$( "#charges3" ).val()+'</td><td style="width: 116px;"></td></tr><tr><td colspan="2"><strong>SubTotal</strong></td><td><strong class="preview-sub-extra"></strong></td></tr><tr></tr><tr><td colspan="2"><strong>Grand Total</strong></td><td><strong class="preview-grand-total"></strong></td></tr><tr></tr></tbody></table>')
                 
 
             $('.invoice_actions').html('<button class="btn btn-default btn-xs downloadIn" id="downloadIn" onclick="downloadInvoice()" >View as PDF</button><button class="btn btn-success btn-xs" id="save-invoice">Save & Send</button><button type="button" class="btn btn-primary btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
@@ -466,18 +472,21 @@
         }
     }
     function downloadInvoice(){
-        var myOffscreenEl = document.getElementById("invoice"),
+
+        var myOffscreenEl = document.getElementById("invoice")
             useWidth      = myOffscreenEl.style.width,
             useHeight     = myOffscreenEl.style.height;
             myOffscreenEl.style.backgroundColor = 'white';
-        var dataPDF = html2pdf(myOffscreenEl, {
+        html2pdf(myOffscreenEl, {
             margin      :  10,
             filename    :  'Invoice.pdf',
             image       :  { type: 'jpeg', quality: 0.98 },
             html2canvas :  { dpi: 300, letterRendering: true },
             jsPDF       :  { unit: 'pt', format: 'a4', orientation: 'portrait' }
         });
+       
        // dataPDF.save('storage/app/public/invoices/invoice.pdf', 'F');
+
     }
 
     function updateInvoice(obj){
@@ -514,6 +523,16 @@
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         var myOffscreenEl = document.getElementById("invoice");
         var htmlData =  myOffscreenEl.innerHTML;
+        //     useWidth      = myOffscreenEl.style.width,
+        //     useHeight     = myOffscreenEl.style.height;
+        // myOffscreenEl.style.backgroundColor = 'white';
+        // html2pdf(myOffscreenEl, {
+        //     margin      :  10,
+        //     filename    :  'Invoice.pdf',
+        //     image       :  { type: 'jpeg', quality: 0.98 },
+        //     html2canvas :  { dpi: 300, letterRendering: true },
+        //     jsPDF       :  { unit: 'pt', format: 'a4', orientation: 'portrait' }
+        // });
         $.ajax({
             url: "/erp/save-invoice",
             type: 'POST',
@@ -527,11 +546,10 @@
             dataType: "json",
 
             success: function (data) {
-                console.log(data)
                 $('.snackbar_span').html("Invoice Send Successfully !");
                 showSnackbar();                
                 $('#erp-invoice').modal("hide")
-                setTimeout(function(){window.location = 'invoice';}, 3000); 
+                // setTimeout(function(){window.location = 'invoice';}, 3000); 
 
             },
             error: function (errorXHR, errorStatus, errorThrown) {

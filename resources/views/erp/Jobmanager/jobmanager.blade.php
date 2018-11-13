@@ -252,7 +252,6 @@
             </div>
         </div>
     </div>
-
 <!-- company selection Modal -->
 <div class="modal buyer-selection-modal fade" id="buyerSelectionModalCenter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
      <div class="modal-dialog buyer-selection-modal-dialog" role="document">
@@ -432,6 +431,87 @@
 						<div class="row">
 							<div class="col-md-12">
 								<table class="table table-bordered">
+								    <thead>
+										<tr>
+											<th>REFNUM</th>
+											<th>PONUM</th>
+											<th>IDNUM</th>
+											<th>OCN</th>
+											<th>ORD NO</th>
+											<th>QNTY</th>
+											<th>P.QNTY</th>
+											<th>TOTAL</th>
+										</tr>
+									</thead>
+									<tbody>
+									<tr>
+										<td>TCL1 RatA</td>
+										<td>460-12344</td>
+										<td></td>
+										<td></td>
+										<td>999</td>
+										<td>150</td>
+										<td></td>
+										<td>800</td>
+									</tr>
+									<tr>
+											<td>TCL1 RatB</td>
+											<td>460-12344</td>
+											<td></td>
+											<td></td>
+											<td>999</td>
+											<td>150</td>
+											<td></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td>TCL2 RatA</td>
+											<td>460-12344</td>
+											<td></td>
+											<td></td>
+											<td>999</td>
+											<td>150</td>
+											<td></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td>TCL2 RatB</td>
+											<td>460-12344</td>
+											<td></td>
+											<td></td>
+											<td>999</td>
+											<td>150</td>
+											<td></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td>TSL1 RatA</td>
+											<td>460-12344</td>
+											<td></td>
+											<td></td>
+											<td>999</td>
+											<td>150</td>
+											<td></td>
+											<td>3434</td>
+										</tr>
+										<tr>
+											<td>TSL1 RatB</td>
+											<td>460-12344</td>
+											<td></td>
+											<td></td>
+											<td>999</td>
+											<td>150</td>
+											<td></td>
+											<td></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<hr>
+						<div class="row">
+							<div class="col-md-12">
+								<table class="table table-bordered">
 									<thead>
 										<tr>
 											<th>REFNUM</th>
@@ -453,7 +533,7 @@
 											<td>999</td>
 											<td>150</td>
 											<td></td>
-											<td rowspan="4"></td>
+											<td></td>
 										</tr>
 										<tr>
 											<td>TCL1 RatB</td>
@@ -462,6 +542,7 @@
 											<td></td>
 											<td>999</td>
 											<td>150</td>
+											<td></td>
 											<td></td>
 										</tr>
 										<tr>
@@ -472,6 +553,7 @@
 											<td>999</td>
 											<td>150</td>
 											<td></td>
+											<td></td>
 										</tr>
 										<tr>
 											<td>TCL2 RatB</td>
@@ -480,6 +562,7 @@
 											<td></td>
 											<td>999</td>
 											<td>150</td>
+											<td></td>
 											<td></td>
 										</tr>
 										<tr>
@@ -490,7 +573,7 @@
 											<td>999</td>
 											<td>150</td>
 											<td></td>
-											<td rowspan="2"></td>
+											<td></td>
 										</tr>
 										<tr>
 											<td>TSL1 RatB</td>
@@ -500,77 +583,10 @@
 											<td>999</td>
 											<td>150</td>
 											<td></td>
+											<td></td>
 										</tr>
 									</tbody>
 								</table>
-							</div>
-						</div>
-						<hr>
-						<div class="row">
-							<div class="col-md-12">
-							    
-
-								<table class="table table-bordered">
-
-									<thead>
-
-										<tr>
-
-											<th>Row</th>
-
-											<th>First Name</th>
-
-											<th>Last Name</th>
-
-											<th>Email</th>
-
-										</tr>
-
-									</thead>
-
-									<tbody>
-
-										<tr>
-
-											<td>1</td>
-
-											<td>John</td>
-
-											<td>Carter</td>
-
-											<td>johncarter@mail.com</td>
-
-										</tr>
-
-										<tr>
-
-											<td>2</td>
-
-											<td>Peter</td>
-
-											<td>Parker</td>
-
-											<td>peterparker@mail.com</td>
-
-										</tr>
-
-										<tr>
-
-											<td>3</td>
-
-											<td>John</td>
-
-											<td>Rambo</td>
-
-											<td>johnrambo@mail.com</td>
-
-										</tr>
-
-									</tbody>
-
-								</table>
-
-
 							</div>
 						</div>
 					</div>
@@ -592,19 +608,20 @@ $(document).ready(function() {
 	$('input[class="row-checkbox"]').prop('checked', false);
 	/** [ Make companies card active ] */
 	$('div.buyers-card').click(function(){
-	  $('div.buyers-card').removeClass("active");
-	  $(this).addClass("active");
-	  $('#hidden-buyer-div').hide();
 
-	  /* Save selected buyer into localdb */
-      if ($('.buyers-card.active-buyer.active').length != 0) 
-      {
-          var company_id = $('.buyers-card.active-buyer.active').data("value"); 
-		  var company_name = $('.buyers-card.active-buyer.active').attr("id");
-          $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
-          $('#buyerSelectionModalCenter').modal('hide');
+		  $('div.buyers-card').removeClass("active");
+		  $(this).addClass("active");
+		  $('#hidden-buyer-div').hide();
+
+		  /* Save selected buyer into localdb */
+	      if ($('.buyers-card.active-buyer.active').length != 0) 
+	      {
+         	var company_id = $('.buyers-card.active-buyer.active').data("value"); 
+		  	var company_name = $('.buyers-card.active-buyer.active').attr("id");
+         	 $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
+          	$('#buyerSelectionModalCenter').modal('hide');
 		  
-		  var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	 		var csrf_token = $('meta[name="csrf-token"]').attr('content');
 			$.ajax({
 				url: base_url + "/erp/po-manager/set_company_session",
 				type: "Post",
@@ -627,7 +644,7 @@ $(document).ready(function() {
 
 				}
 			})
-      }
+	      }
 	  
 	});
 	

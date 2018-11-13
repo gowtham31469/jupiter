@@ -651,7 +651,7 @@ class OrderStatusController extends Controller
                             ->where($col,$style_num)
                             ->get();
             $data['tsl3'] = DB::table('tesco_tsl3_orders')
-                            ->join('tesco_item_master','tesco_tsl3_orders_quanty.template_id','=','tesco_item_master.id')
+                            ->join('tesco_item_master','tesco_tsl3_orders.template_id','=','tesco_item_master.id')
                             ->join('customers','tesco_tsl3_orders.tesco_supplier_id','=','customers.id')
                             ->where('customers.po_required',1)
 				            ->where('tesco_tsl3_orders.order_status', '!=', 'Saved')

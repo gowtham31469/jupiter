@@ -101,12 +101,17 @@ class ProfileController extends Controller
 			$email	= $request->email;
 			$input['email']	= $request->email;
 			
+			$messages = [
+				'email.email'    => 'Enter Valid Email',
+				'email.unique'    => 'Email Already Exists'
+			];
+			
 			$email_rules    = array('email' => 'email|unique:erpusers,email,'.$id);
-			$emailValidator = Validator::make($input,$email_rules);
+			$emailValidator = Validator::make($input, $email_rules, $messages);
 
 			if($emailValidator->fails())
 			{
-				return response()->json(['message' =>'Email Already Exists'], 409);
+				return response()->json(['message' => $emailValidator->errors()], 409);
 			}
 			else
 			{
@@ -154,15 +159,18 @@ class ProfileController extends Controller
 
 		if ($validator->fails()) {
 			return response()->json(['message' =>$validator->errors()], 400);
-		}
-		else
-		{
-			/*   Update Password   */
-			\App\Erpuser::where('id', $user->id)->update([
-				'password'	=>	\Hash::make($request->new_pwd)
-			]);
+		} else {
+			if($request->old_pwd === $request->new_pwd){
+				$err_array = array(array('Current Password and New Password Can\'t be same'));
+				return response()->json(['message' => $err_array], 400);
+			} else {
+				/*   Update Password   */
+				\App\Erpuser::where('id', $user->id)->update([
+					'password'	=>	\Hash::make($request->new_pwd)
+				]);
 
-			return response()->json(['message' =>'Updated Successfully'], 200);
+				return response()->json(['message' =>'Updated Successfully'], 200);
+			}
 		}	
     }
 }
