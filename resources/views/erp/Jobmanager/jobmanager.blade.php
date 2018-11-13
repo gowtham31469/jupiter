@@ -766,6 +766,7 @@
                  </div>
                  <div class="modal-footer jobcard-creation-modal-footer">
                      {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+					 {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                  </div>
             {!! Form::close() !!}
          </div>
