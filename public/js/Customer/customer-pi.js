@@ -162,7 +162,7 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
                                     useHeight     = myOffscreenEl.style.height;
                                     myOffscreenEl.style.backgroundColor = 'white';
                                 var opt = {
-                                  margin:       10,
+                                  margin:       [20, 15, 23, 15],
                                   filename:     'Proforma-Invoice.pdf',
                                   image:        { type: 'jpeg', quality: 0.98 },
                                   html2canvas:  { dpi: 300, letterRendering: true },
