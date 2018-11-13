@@ -78,21 +78,22 @@ class Erpuser extends Authenticatable
         $base_data = Erpuser::where('id', $id)->get();
 		$companies = array();
 		foreach($base_data as $base){
-			$base->company = \App\ErpuserCompanyMapping::where('erp_user', $base->id)
-								->join('company', 'erpuser_company_mapping.company', 'company.id')
-								->select('company.id')->get();
 			
 			$base->buyer = \App\ErpuserBuyerMapping::where('erp_user', $base->id)
 								->join('buyers', 'erpuser_buyer.buyer', 'buyers.id')
 								->select('buyers.id')
 								->get();
 			
+			$base->company = \App\ErpuserCompanyMapping::where('erp_user', $base->id)
+								->join('company', 'erpuser_company_mapping.company', 'company.id')
+								->select('company.id')->get();
+			
 			$base->roles = \App\ErpUserRolesMapping::where('erp_user', $base->id)
 								->join('erp_roles', 'erpusers_roles_mapping.role', 'erp_roles.id')
 								->select('erp_roles.id')
 								->get();
 			
-			$user_template = \App\ErpUsersTemplateMapping::where('erp_user', $base->id)
+			$user_template = \App\ErpusersTemplateMapping::where('erp_user', $base->id)
 								->join('buyers', 'erpusers_template_mapping.buyer', 'buyers.id')
 								->select('buyers.buyer_name', 'buyers.id', 'erpusers_template_mapping.templates')
 								->get();

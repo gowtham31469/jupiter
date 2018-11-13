@@ -84,15 +84,19 @@ document.getElementById("profileBtn").onclick = function () {
 				$('.alertProfile').addClass('alert-danger').removeClass('alert-success').removeClass('hidden').html(data.responseJSON.message)
 			},
 			409: function(data){
-				$('.alertProfile').addClass('alert-danger').removeClass('alert-success').removeClass('hidden').html(data.responseJSON.message)
+				
+				var vErrors = `<ul>`;
+				$.each(data.responseJSON.message, function(index, value){
+					vErrors += `<li>`+value[0]+`</li>`;
+				});
+				vErrors += `</ul>`;
+				$('.alertProfile').addClass('alert-danger').removeClass('alert-success').removeClass('hidden').html(vErrors);
 			}
-			
 		},
 		complete: function () {
 			$(".loader").hide();
 		}
 	});
-	
 }
 
 document.getElementById("pwdBtn").onclick = function () {
@@ -124,7 +128,6 @@ document.getElementById("pwdBtn").onclick = function () {
 			409: function(data){
 				$('.alertPwd').addClass('alert-danger').removeClass('alert-success').removeClass('hidden').html(data.responseJSON.message)
 			}
-			
 		},
 		complete: function () {
 			$(".loader").hide();
