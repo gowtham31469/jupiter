@@ -377,9 +377,24 @@
 			if (newValue) {
 				getTemplate(selectedTxt, sVal);
 			} else {
+				console.log(sVal)
 				$('#templateHiecs').find('div#' + sVal).remove();
 				if (!$("#user_buyer").val().length) {
 					$('#templateDiv').addClass('hidden')
+				}
+			}
+		});
+		
+		$("#edit_user_buyer").on("changed.bs.select", function(e, clickedI, newVal) {
+			var sVal = $(this).find('option').eq(clickedI).val();
+			var selectedTxt = $(this).find('option').eq(clickedI).text();
+			if (newVal) {
+				getEditTemplate(selectedTxt, sVal);
+			} else {
+				console.log(selectedTxt)
+				$('#editTH').find('div#' + selectedTxt.toUpperCase()).remove();
+				if (!$("#edit_user_buyer").val().length) {
+					$('#editTemplateDiv').addClass('hidden')
 				}
 			}
 		});
