@@ -5,7 +5,7 @@
  */
 function reOrderTesco()
 {
-    $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+    //$('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
 	var buyer = localStorage.getItem("buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
@@ -928,7 +928,7 @@ function setTescoReorder(type,id,liid)
 		 	val_count	+= parseInt($(item).val());
         });
         count = count.join(',');
-		$('#'+liid).append('<span class="label sticker" style="position: absolute;margin-left: -100px;margin-top: 5px;">'+val_count+'</span><img src="http://atlas-content-cdn.pixelsquid.com/stock-images/check-mark-z074ln3-600.jpg" alt="Tag" style="position: absolute;margin-left: 20px;margin-top: -2px;">');
+		$('#'+liid).append('<span class="label sticker" style="position: absolute;margin-left: -100px;margin-top: 5px;">'+val_count+'</span><img src="/images/tick.png" alt="Tag" style="position: absolute;margin-left: 20px;margin-top: -2px;">');
 	if(item == "Repeat Order")
 	{
 		var uvc=$('#style_number').val();
@@ -947,7 +947,7 @@ function setTescoReorder(type,id,liid)
 			 type: 'post',
 			 data: { _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,zone:zone,template_name:template_name},
 			 success: function (data) {
-				if(data == "true")
+				if($.trim(data) == "true")
 				{
 					$.ajax({
 						url: base_url + "/admin/" + buyer + "/order-management/set-tesco-repeat-order",

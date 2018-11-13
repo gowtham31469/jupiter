@@ -281,14 +281,315 @@
  </div>
 <!-- Job card creation Modal -->
 <div class="modal jobcard-creation-modal fade" id="jobcardCreationModalCenter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-     <div class="modal-dialog jobcard-creation-modal-dialog" role="document">
+     <div class="modal-dialog modal-lg jobcard-creation-modal-dialog" role="document">
          <div class="modal-content jobcard-creation-modal-content">
                 <div class="modal-header">
                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                      <h4 class="modal-title jobcard-modal-title" id="myModalLabel">Create Jobcard</h4>
                  </div>
                  <div class="modal-body jobcard-creation-modal-body">
-                    
+                    <div class="container-fluid">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-4">
+									<p>Jupiter Garments Accessories			
+										1-J-27-1&3, Jupiter Avenue			
+										Anupparpalayam, Tirupur - 641652
+									</p>
+								</div>
+								<div class="col-md-4">
+								</div>
+								<div class="col-md-4">
+								     <img src="/images/logo.png">
+								</div>
+							</div>
+						</div>
+						<hr>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-4">
+									<p>W O R K O R D E R - 1234
+									</p>
+								</div>
+								<div class="col-md-4">
+								</div>
+								<div class="col-md-4">
+								     <p>DATE : 	11/10/2018</p>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="col-md-4">
+									<p>ARTICLE : Sticker & Labels
+									</p>
+								</div>
+								<div class="col-md-4">
+								</div>
+								<div class="col-md-4">
+								     <p>MATERIAL: double side woven edge- white</p>
+								</div>
+							</div>
+						</div>
+						<hr>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-4">
+									<p>CUST NAME	SPA
+									</p>
+								</div>
+								<div class="col-md-4">
+								    <p>STYLENUM		AA1234567
+									</p>
+								</div>
+								<div class="col-md-4">
+								     <p>ORDER TYPE	INITIAL</p>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="col-md-4">
+									<p>BUYER	TESCO
+									</p>
+								</div>
+								<div class="col-md-4">
+								    REFERENCE		FF/01/12345G	
+								</div>
+								<div class="col-md-4">
+								     <p>DISP MODE</p>
+								</div>
+							</div>
+						</div>
+						<hr>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-3">
+									<p>ORDER DT	10/10/2018
+									</p>
+								</div>
+								<div class="col-md-3">
+								    <p>LENGTH		25
+									</p>
+								</div>
+								<div class="col-md-3">
+								     <p>REPEAT GAP		25</p>
+								</div>
+								<div class="col-md-3">
+								     <p>MACHINE		5</p>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="col-md-3">
+									<p>CUS D.DT	10/10/2018
+									</p>
+								</div>
+								<div class="col-md-3">
+								    <p>WIDTH		25</p>
+								</div>
+								<div class="col-md-3">
+								     <p>ROLL WIDTH		</p>
+								</div>
+								<div class="col-md-3">
+								     <p>FILM NO		5</p>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="col-md-3">
+									<p>ACT D.DT	10/10/2018
+									</p>
+								</div>
+								<div class="col-md-3">
+								    <p>LENGTH SIDE		25</p>
+								</div>
+								<div class="col-md-3">
+								     <p>EXCESS %		</p>
+								</div>
+								<div class="col-md-3">
+								     <p>TEETH NO		5</p>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="col-md-3">
+									<p>INV NO	1234
+									</p>
+								</div>
+								<div class="col-md-3">
+								    <p>NO OF STI		25</p>
+								</div>
+								<div class="col-md-3">
+								</div>
+								<div class="col-md-3">
+								     <p>FINISH TYPE		5</p>
+								</div>
+							</div>
+							<div class="col-md-12">
+							   <div class="col-md-8">
+							      <p>PRINT COLORS		485C, 201C,300C 485C, 201C,300C				</p>
+							   </div>
+							   <div class="col-md-4">
+							   </div>
+							</div>
+						</div>
+						<hr>
+						<div class="row">
+							<div class="col-md-12">
+								<table class="table table-bordered">
+								    <thead>
+										<tr>
+											<th>REFNUM</th>
+											<th>PONUM</th>
+											<th>IDNUM</th>
+											<th>OCN</th>
+											<th>ORD NO</th>
+											<th>QNTY</th>
+											<th>P.QNTY</th>
+											<th>TOTAL</th>
+										</tr>
+									</thead>
+									<tbody>
+									<tr>
+										<td>TCL1 RatA</td>
+										<td>460-12344</td>
+										<td></td>
+										<td></td>
+										<td>999</td>
+										<td>150</td>
+										<td></td>
+										<td>800</td>
+									</tr>
+									<tr>
+											<td>TCL1 RatB</td>
+											<td>460-12344</td>
+											<td></td>
+											<td></td>
+											<td>999</td>
+											<td>150</td>
+											<td></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td>TCL2 RatA</td>
+											<td>460-12344</td>
+											<td></td>
+											<td></td>
+											<td>999</td>
+											<td>150</td>
+											<td></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td>TCL2 RatB</td>
+											<td>460-12344</td>
+											<td></td>
+											<td></td>
+											<td>999</td>
+											<td>150</td>
+											<td></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td>TSL1 RatA</td>
+											<td>460-12344</td>
+											<td></td>
+											<td></td>
+											<td>999</td>
+											<td>150</td>
+											<td></td>
+											<td>3434</td>
+										</tr>
+										<tr>
+											<td>TSL1 RatB</td>
+											<td>460-12344</td>
+											<td></td>
+											<td></td>
+											<td>999</td>
+											<td>150</td>
+											<td></td>
+											<td></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<hr>
+						<div class="row">
+							<div class="col-md-12">
+								<table class="table table-bordered">
+									<thead>
+										<tr>
+											<th>REFNUM</th>
+											<th>PONUM</th>
+											<th>IDNUM</th>
+											<th>OCN</th>
+											<th>ORD NO</th>
+											<th>QNTY</th>
+											<th>P.QNTY</th>
+											<th>TOTAL</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>TCL1 RatA</td>
+											<td>460-12344</td>
+											<td></td>
+											<td></td>
+											<td>999</td>
+											<td>150</td>
+											<td></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td>TCL1 RatB</td>
+											<td>460-12344</td>
+											<td></td>
+											<td></td>
+											<td>999</td>
+											<td>150</td>
+											<td></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td>TCL2 RatA</td>
+											<td>460-12344</td>
+											<td></td>
+											<td></td>
+											<td>999</td>
+											<td>150</td>
+											<td></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td>TCL2 RatB</td>
+											<td>460-12344</td>
+											<td></td>
+											<td></td>
+											<td>999</td>
+											<td>150</td>
+											<td></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td>TSL1 RatA</td>
+											<td>460-12344</td>
+											<td></td>
+											<td></td>
+											<td>999</td>
+											<td>150</td>
+											<td></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td>TSL1 RatB</td>
+											<td>460-12344</td>
+											<td></td>
+											<td></td>
+											<td>999</td>
+											<td>150</td>
+											<td></td>
+											<td></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
                  </div>
                  <div class="modal-footer jobcard-creation-modal-footer">
                      {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
