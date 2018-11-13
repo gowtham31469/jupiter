@@ -1863,7 +1863,7 @@ function tescoStatusTable(data,path)
                     }
                     else
                     {   
-                        tr += '<td>' + value[key] + '</td>';
+                        tr += '<td><p>' + value[key] + '</p></td>';
                     }
                 }                
             }

@@ -442,6 +442,16 @@ class OrderStatusController extends Controller
                           'pi_status' => "PI Rejected",
                           'pi_rev_no' => $table_data->pi_rev_no + 1
                         ]);
+                    }
+                    else{
+                        DB::table($table)
+                        ->where('uk_style_ref',$table_data->uk_style_ref)
+                        ->where('po_number',$table_data->po_number)
+                        ->where('order_flag',$table_data->order_flag)
+                        ->update([
+                          'pi_status' => "PI Rejected",
+                          'pi_rev_no' => $table_data->pi_rev_no + 1
+                        ]);
                     }    
                 }
             }
