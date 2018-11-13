@@ -1113,11 +1113,6 @@ span.sticker-details {
     margin-bottom: -15px;
 }
 
-.tot_qty_table {
-    height: 20px;
-    margin-bottom: -13px;
-}
-
 .qty-table-modal input,
 .qty-table-modal input::-webkit-input-placeholder {
     font-size: 9px;
@@ -1512,7 +1507,3 @@ span.batch-additional {
     margin: 0 20px 40px;
     height: calc(100% - 10px);
 }
-
-.error-template {padding: 40px 15px;text-align: center;}
-.error-actions {margin-top:15px;margin-bottom:15px;}
-.error-actions .btn { margin-right:10px; }

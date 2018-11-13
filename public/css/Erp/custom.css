@@ -55,3 +55,11 @@
 	margin: 5px;
     border-radius: 5px !important;
 }
+
+.error-template {padding: 40px 15px;text-align: center;}
+.error-actions {margin-top:15px;margin-bottom:15px;}
+.error-actions .btn { margin-right:10px; }
+.erp-dynamic-menu > li > a {
+    line-height: 12px;
+}
+

@@ -5,7 +5,7 @@
  */
 function reOrderTesco()
 {
-    $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+    //$('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
 	var buyer = localStorage.getItem("buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
@@ -357,7 +357,7 @@ function extraQuantityTesco(type,id,name,zone,po_number,liid)
 						var th_td="";
 					}
 
-				 tr += '<tr><td class="tpnd">' + tpnd_td + '</td><td class="barcode">' + barcode_td + '</td><td class="size">' + unit_qty + '</td>'+th_td+'<td> <div class="form-group has-feedback has-success"><input min=1 onInput="checkLength(4,this)" type="number" class="form-control  input-sm tot_qty_table" value="" required placeholder="Quantity"><div class="help-block with-errors"></div></div></td></tr>';
+				 tr += '<tr><td class="tpnd">' + tpnd_td + '</td><td class="barcode">' + barcode_td + '</td><td class="size">' + unit_qty + '</td>'+th_td+'<td> <div class="form-group has-feedback has-success"><input min=1 onInput="checkLength(4,this)" type="number" class="form-control  input-sm tot_qty_table" value="" required placeholder="Quantity" data-min-error="Quantity must be > 0."><div class="help-block with-errors"></div></div></td></tr>';
 			});
 			$('.quantity').html('<form id="qty_table"><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px"> <thead> <tr> <th>'+tpnd_tr+'</th><th>'+barcode_tr+'</th> <th>'+qty+'</th> '+th_tr+'<th>Quantity</th> </tr></thead> <tbody style="font-size: 11px">'+tr+'</tbody></table><div class="po_div"></div><button style="margin-left: 10px;" class="btn btn-primary submitbutton pull-right">Submit</button><button type="button" class="btn btn-danger remove pull-right">Close</button><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></form>')
 			
@@ -928,7 +928,7 @@ function setTescoReorder(type,id,liid)
 		 	val_count	+= parseInt($(item).val());
         });
         count = count.join(',');
-		$('#'+liid).append('<span class="label sticker" style="position: absolute;margin-left: -100px;margin-top: 5px;">'+val_count+'</span><img src="http://atlas-content-cdn.pixelsquid.com/stock-images/check-mark-z074ln3-600.jpg" alt="Tag" style="position: absolute;margin-left: 20px;margin-top: -2px;">');
+		$('#'+liid).append('<span class="label sticker" style="position: absolute;margin-left: -100px;margin-top: 5px;">'+val_count+'</span><img src="/images/tick.png" alt="Tag" style="position: absolute;margin-left: 20px;margin-top: -2px;">');
 	if(item == "Repeat Order")
 	{
 		var uvc=$('#style_number').val();
@@ -947,7 +947,7 @@ function setTescoReorder(type,id,liid)
 			 type: 'post',
 			 data: { _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,zone:zone,template_name:template_name},
 			 success: function (data) {
-				if(data == "true")
+				if($.trim(data) == "true")
 				{
 					$.ajax({
 						url: base_url + "/admin/" + buyer + "/order-management/set-tesco-repeat-order",

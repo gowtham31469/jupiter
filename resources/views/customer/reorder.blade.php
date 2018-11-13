@@ -98,6 +98,7 @@
 		padding: 4px 22px;
 		border-radius: 3px;
 		transition: 0.3s ease;
+		font-size: 10px;
 	}
 	
 	.btn-ghost:hover {
@@ -170,7 +171,7 @@
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
 <div class="col-sm-12 col-md-12 main">
 	<div class="top-content">
-        <div class="buyer-nav-div">
+        <div class="buyer-nav-div hidden">
            <a class="dropdown-toggle profile-dropdown-admin selected-buyer" style="text-transform:capitalize;cursor: pointer;">Select Buyer</a>
         </div>
         {{ Form::hidden('invisible', $buyer_count, array('id' => 'invisible__count_id')) }}

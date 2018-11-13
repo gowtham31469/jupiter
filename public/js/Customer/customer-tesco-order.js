@@ -66,7 +66,7 @@ function camelize(str) {
 var globalOrderType = 0;
 var barcode_checks = 0;
 var isSubmitting = false;
-function tescoOrders() {
+function tescoOrders(callback) {
     $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
     $('.top-content').html('');
     $('.template-error').html('');
@@ -558,7 +558,7 @@ function tescoOrders() {
                         viewOrder(po_num, artwork);  
                     }
                 })
-
+				callback();
         },
         error: function(errorXHR, errorStatus, errorThrown) {
           this.tryCount++;
@@ -613,12 +613,12 @@ function createOrders(parsedObj = false, oType = false) {
                                 </div>\
                                 <br>\
                                 <form method="POST" id="create_tesco_order_form" data-toggle="validator" role="form" novalidate="true">';
-
+                        /** Buyer PO number length , for CE 7 digits and for UK 9 digits*/
 						if (zone === "CE") {
 							  html += '<div class="col-md-3">\
 																<div class="form-group has-feedback">\
 																	<label for="tesco_po_number">PO Number</label>\
-																	<input type="text" class="form-control" data-minlength="7" data-required-error="Mandatory Field." data-minlength-error="Enter 7 digits." name="tesco_po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number" onkeyup="dynamicSVGTemplates()" maxlength="9">\
+																	<input type="text" class="form-control" data-minlength="7" data-required-error="Mandatory Field." data-minlength-error="Enter 7 digits." name="tesco_po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number" onkeyup="dynamicSVGTemplates()" maxlength="7">\
 																	<div class="help-block with-errors"></div>\
 																</div>\
 															</div>';
@@ -4946,12 +4946,13 @@ try{
                         </div>';
             /** Dynamic content for po upload modal tab */
             $('#po-upload-modal-content').html(html);
-            $('#poUploadModal').modal('show');
             /** [ Backdrop for bootstrap modal ] */
             $('#poUploadModal').modal({
                 backdrop: 'static',
                 keyboard: false
             })
+            $('#poUploadModal').modal('show');
+            
            /** @type {Date} [Delivery date Datepicker format & validation] */
             var today = new Date(order_date);
             $('#datePicker3').datepicker({
@@ -6675,7 +6676,7 @@ function mapStoredValues(oDetails) {
                 moq = i[temp_name];
             })
             $('.count_' + item.template_name.replace(' ', '') ).attr("min",moq); 
-            $('.count_' + item.template_name.replace(' ', '') ).data("min-error","MOQ should be greater than "+moq); 
+            $('.count_' + item.template_name.replace(' ', '') ).data("min-error","Min Order Qnty should be > "+moq); 
         }
     });
                
@@ -7009,7 +7010,7 @@ function checkMOQ(obj) {
                 moq = i[temp_name];
             })
             $(obj).attr("min",moq); 
-            $(obj).data("min-error","MOQ should be greater than "+moq); 
+            $(obj).data("min-error","Min Order Qnty should be > "+moq); 
         }
     } catch (e) {
         /** [error statements] */

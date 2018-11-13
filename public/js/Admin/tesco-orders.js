@@ -65,7 +65,7 @@ function isNumberKey(evt) {
 var globalOrderType = 0;
 var barcode_checks = 0;
 var isSubmitting = false;
-function tescoOrders() {
+function tescoOrders(callback) {
 	$('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
 	$('.top-content').html('');
 	$('.template-error').html('');
@@ -553,7 +553,7 @@ function tescoOrders() {
 						viewOrder(po_num, artwork);
 					}
 				})
-
+				callback();
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
 				this.tryCount++;
@@ -565,6 +565,7 @@ function tescoOrders() {
 			complete: function () {
 
 				$(".loader").hide();
+				
 			}
 		})
 	} catch (e) {
@@ -608,12 +609,12 @@ function createOrders(parsedObj = false, oType = false) {
                                 </div>\
                                 <br>\
                                 <form method="POST" id="create_tesco_order_form" data-toggle="validator" role="form" novalidate="true">';
-
+				         /** Buyer PO number length , for CE 7 digits and for UK 9 digits*/
 						if (zone === "CE") {
 							  html += '<div class="col-md-3">\
 																<div class="form-group has-feedback">\
 																	<label for="tesco_po_number">PO Number</label>\
-																	<input type="text" class="form-control" data-minlength="7" data-required-error="Mandatory Field." data-minlength-error="Enter 7 digits." name="tesco_po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number" onkeyup="dynamicSVGTemplates()" maxlength="9">\
+																	<input type="text" class="form-control" data-minlength="7" data-required-error="Mandatory Field." data-minlength-error="Enter 7 digits." name="tesco_po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number" onkeyup="dynamicSVGTemplates()" maxlength="7">\
 																	<div class="help-block with-errors"></div>\
 																</div>\
 															</div>';
@@ -5134,13 +5135,13 @@ function afterOrderSubmitted(data,po_number,stl_no) {
 	                    </div>';
 			/** Dynamic content for po upload modal tab */
 			$('#po-upload-modal-content').html(html);
-
-			$('#poUploadModal').modal('show');
-				/** [ Backdrop for bootstrap modal ] */
+			/** [ Backdrop for bootstrap modal ] */
 			$('#poUploadModal').modal({
 				backdrop: 'static',
 				keyboard: false
 			})
+			$('#poUploadModal').modal('show');
+			
 			/** @type {Date} [Delivery date Datepicker format & validation] */
 			var today = new Date(order_date);
 			$('#datePicker3').datepicker({
@@ -5329,7 +5330,15 @@ function jsbarcodetesco(code, id, svgDoc) {
 
 	svg.setAttribute('width', '408.900px');
 	svg.setAttribute('height', '328.02px');
+	
 
+	
+	//svg.removeAttribute('version');
+	//svg.removeAttribute('viewBox');
+//	svg.removeAttribute('x');
+//	svg.removeAttribute('y');
+	//svg.setAttribute('viewBox','0 ,0 ,463 ,222');
+	
 	canvas.id = 'canvas';
 	canvas.width = svg.getBoundingClientRect().width;
 	canvas.height = svg.getBoundingClientRect().height;
@@ -5395,6 +5404,12 @@ function jsbarcodetescoean(code, id, svgDoc) {
 
 	svg.setAttribute('width', '412.25px');
 	svg.setAttribute('height', '378.02px');
+	
+//	svg.removeAttribute('version');
+//	svg.removeAttribute('viewBox');
+//	svg.removeAttribute('x');
+//	svg.removeAttribute('y');
+	//svg.setAttribute('viewBox','0, 0, 393 ,190');
 
 	canvas.id = 'canvas';
 	canvas.width = svg.getBoundingClientRect().width;
@@ -5461,6 +5476,14 @@ function jsbarcodetescotslean(code, id, svgDoc) {
 	svg.setAttribute('width', '419.075px');
 	svg.setAttribute('height', '275.02px');
 
+	
+	
+//	svg.removeAttribute('version');
+//	svg.removeAttribute('viewBox');
+//	svg.removeAttribute('x');
+//	svg.removeAttribute('y');
+	//svg.setAttribute('viewBox','0 ,0 ,393 ,187');
+	
 	canvas.id = 'canvas';
 	canvas.width = svg.getBoundingClientRect().width;
 	canvas.height = svg.getBoundingClientRect().height;
@@ -5522,6 +5545,13 @@ function jsbarcodetescotsl(code, id, svgDoc) {
 
 	svg.setAttribute('width', '415.100px');
 	svg.setAttribute('height', '328.02px');
+	
+//	svg.removeAttribute('version');
+//	svg.removeAttribute('viewBox');
+//	svg.removeAttribute('x');
+//	svg.removeAttribute('y');
+	//svg.setAttribute('viewBox','0 0 231 109');
+	
 	canvas.id = 'canvas';
 	canvas.width = svg.getBoundingClientRect().width;
 	canvas.height = svg.getBoundingClientRect().height;
@@ -6960,7 +6990,7 @@ function checkMOQ(obj) {
 				moq = i[temp_name];
 			})
 			$(obj).attr("min",moq); 
-			$(obj).data("min-error","MOQ should be greater than "+moq); 
+			$(obj).data("min-error","Min Order Qnty should be > "+moq); 
 		}
 	} catch (e) {
 		/** [error statements] */
@@ -7027,7 +7057,7 @@ function dynamicTescoSuppliers(id)
 									moq = i[temp_name];
 								})
 								$('.count_' + item.template_name.replace(' ', '') ).attr("min",moq); 
-								$('.count_' + item.template_name.replace(' ', '') ).data("min-error","MOQ should be greater than "+moq); 
+								$('.count_' + item.template_name.replace(' ', '') ).data("min-error","Min Order Qnty should be > "+moq); 
 							}
 						});
 						 
