@@ -377,6 +377,7 @@
 </div>
 @endsection @section('jqueryIncludes')
 <script>
+	$(document).ready(function() {
 	//$('.company-nav-div .profile-dropdown-admin').addClass('hidden')
 	
 	//$("#orderDetailsModal").niceScroll();
@@ -694,6 +695,7 @@
 			}
 		})
 	}
+	});
 </script>
 
 @endsection
