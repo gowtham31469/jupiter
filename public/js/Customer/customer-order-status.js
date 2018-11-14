@@ -2032,8 +2032,9 @@ function tescoPOUpload(obj,id,po_file,tableName)
     } 
     var po_link = base_url+po_file 
     $('#po_link').attr("href",po_link); 
-    $('#rowID').val(id); 
-    $('#tableName').val(tableName); 
+    $('#id').val(id); 
+    $('#tableName').val(tableName);
+    $('#buyer_id').val(localStorage.getItem("buyer_id"));
     $('#po-file-upload').modal('show') 
 }
 

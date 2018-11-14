@@ -136,18 +136,18 @@ class InvoiceController extends Controller
     public function setInvoice(Request $request){
         try {
             $orders   =  $request['finalData'];
-            $htmlData = $request->htmlData;
+            $htmlData =  $request->htmlData;
             // $pdf = html2pdf($htmlData);
-           
+            // echo file_put_contents("/storage/app/public/invoices/invoice",$htmlData);
 
-            $html2pdf = new \HTML2PDF('P', 'Legal', 'en', true, 'UTF-8', array(25.4, 20.4, 25.4, 20.4));
-            $html2pdf->pdf->SetTitle('HTML2PDF Sample');
-            $html2pdf->WriteHTML($content);
-            $html2pdf->Output('example.pdf');
+            // $html2pdf = new \HTML2PDF('P', 'Legal', 'en', true, 'UTF-8', array(25.4, 20.4, 25.4, 20.4));
+            // $html2pdf->pdf->SetTitle('HTML2PDF Sample');
+            // $html2pdf->WriteHTML($content);
+            // $html2pdf->Output('example.pdf');
             
-            // $tbl=utf8_encode($htmlData);
-            // PDF::writeHTML($tbl, true, false, false, false, '');
-            // PDF::Output( public_path('/storage/app/public/invoices/invoice.pdf'), 'F');
+            $tbl=utf8_encode($htmlData);
+            PDF::writeHTML($tbl, true, false, false, false, '');
+            PDF::Output( public_path('/storage/app/public/invoices/invoice.pdf'), 'F');
             // if ($orders) {
             //     $invoiceData = Invoices::create([
             //                     'customer_id' => $orders[0]['customer_id'],
