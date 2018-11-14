@@ -95,7 +95,7 @@
 				@endif
             </div>
             <div class="case-wrapper" title="Item" draggable="false">
-				<?php if(in_array('INVOICE MANAGER', $roles)) { ?>
+				<?php if(in_array('INVOICE MANAGER', $roles) || Auth::guard('erpuser')->user()->is_admin) { ?>
 						<a href="{{ url('/erp/invoice') }}">
 				<?php } ?>
                 			
@@ -107,7 +107,7 @@
                         <b>×</b>
                     </div>
                 </div>
-                <?php if(in_array('INVOICE MANAGER', $roles)) { ?>
+                <?php if(in_array('INVOICE MANAGER', $roles) || Auth::guard('erpuser')->user()->is_admin) { ?>
                 		</a>
 				<?php } ?>
 				
@@ -123,7 +123,7 @@
                 </div>
             </div>
 			<div class="case-wrapper" title="Item" draggable="false">
-				<?php if(in_array('PO MANAGER', $roles)) { ?>
+				<?php if(in_array('PO MANAGER', $roles) || Auth::guard('erpuser')->user()->is_admin) { ?>
 						<a href="{{ url('/erp/po-manager') }}">
 				<?php } ?>
 				 
@@ -135,13 +135,13 @@
                         <b>×</b>
                     </div>
                 </div>
-				<?php if(in_array('PO MANAGER', $roles)) { ?>
+				<?php if(in_array('PO MANAGER', $roles) || Auth::guard('erpuser')->user()->is_admin) { ?>
                 		</a>
 				<?php } ?>
             </div>
 			
 			<div class="case-wrapper" title="Item" draggable="false">
-				<?php if(in_array('JOB CARD MANAGER', $roles)) { ?>
+				<?php if(in_array('JOB CARD MANAGER', $roles) || Auth::guard('erpuser')->user()->is_admin) { ?>
 						<a href="{{ url('/erp/job-manager') }}">
 				<?php } ?>
                 <div class="app-icon" style="background-color: #2196F3; position: relative; left: 0px; top: 0px; opacity: 1; transform: rotate(0deg);" title="Item"><i class="fa fa-suitcase" title="Item" style=""></i></div>
@@ -152,7 +152,7 @@
                         <b>×</b>
                     </div>
                 </div>
-				<?php if(in_array('PO MANAGER', $roles)) { ?>
+				<?php if(in_array('PO MANAGER', $roles) || Auth::guard('erpuser')->user()->is_admin) { ?>
                 		</a>
 				<?php } ?>
             </div>
@@ -165,6 +165,3 @@
         window.location = "{{ url('/erp') }}";
     </script>
 @endif
-@section('jqueryIncludes')
-
-@endsection

@@ -42,13 +42,14 @@
  <div class="container-fluid">
         <div class="row">
         @if (Auth::guard("erpuser")->user()) @include('layouts.Erp.navbar')@yield('navbar')
+			@include('layouts.Erp.profile-modal')
         @elseif(!Auth::guest())
             <script type="text/javascript">
                 customer  window.location = "{{ url('/erp/login') }}";
             </script>
         @endif
         @yield('content')
-  		@include('layouts.Erp.profile-modal')
+  		
         </div>
     </div>
     <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
