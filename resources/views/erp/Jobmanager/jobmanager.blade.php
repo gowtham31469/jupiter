@@ -396,8 +396,14 @@
 								<div class="col-md-3">
 								   <div class="form-group has-feedback form-inline">
 									{!! Form::label('cus_del_date', 'CUS D.DT :', ['class' => 'form_label']) !!}
-								    {!! Form::text('cus_del_date',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CUS D.DT','required','data-minlength' => '3','maxlength' => '40')) !!}
+								    
+									<div class="input-group cus_del_date date input-sm" data-provide="datepicker" id="datePicker1">
+										<input value="" id="cus_del_date" name="cus_del_date" type="text" class="form-control " required="" placeholder="Select Customer Del Date">
+										<div class="input-group-addon">
+										<span class="glyphicon glyphicon-th"> </span >
+									</div >
 									<div class="help-block with-errors"></div>
+								  </div>
 								  </div>
 								</div>
 								<div class="col-md-3">
