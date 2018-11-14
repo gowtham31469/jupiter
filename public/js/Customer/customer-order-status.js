@@ -1796,10 +1796,10 @@ function tescoStatusTable(data,path)
                         style_no = value.uk_style_ref;
                     }
                     if (value["Artwork Status"]!="Order Cancelled"){
-                      tr += '<td align="center" data-id="'+value.tableID+'" data-table="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>'+span_style+''+style_no+'</a></td>';
+                      tr += '<td align="center" data-id="'+value.tableID+'" data-table1="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>'+span_style+''+style_no+'</a></td>';
                     }
                     else{
-                      tr += '<td align="center" data-id="'+value.tableID+'" data-table="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'">'+span_style+''+style_no+'</td>';
+                      tr += '<td align="center" data-id="'+value.tableID+'" data-table1="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'">'+span_style+''+style_no+'</td>';
                     }
                     
                 }
@@ -1863,7 +1863,7 @@ function tescoStatusTable(data,path)
                     }
                     else
                     {   
-                        tr += '<td><p>' + value[key] + '</p></td>';
+                        tr += '<td>' + value[key] + '</td>';
                     }
                 }                
             }
@@ -2032,8 +2032,9 @@ function tescoPOUpload(obj,id,po_file,tableName)
     } 
     var po_link = base_url+po_file 
     $('#po_link').attr("href",po_link); 
-    $('#rowID').val(id); 
-    $('#tableName').val(tableName); 
+    $('#id').val(id); 
+    $('#tableName').val(tableName);
+    $('#buyer_id').val(localStorage.getItem("buyer_id"));
     $('#po-file-upload').modal('show') 
 }
 
@@ -2056,7 +2057,7 @@ function updateArtwork(obj)
 {
     $('#po_already_error').addClass('hidden')
     var id          =$(obj).parent().attr('data-id');
-    var table_name  =$(obj).parent().attr('data-table');
+    var table_name  =$(obj).parent().attr('data-table1');
     var TemplateName=$(obj).parent().attr('data-template');
     
     td_row          =$(obj).parent().parent();
