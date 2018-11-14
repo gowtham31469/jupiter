@@ -2,7 +2,9 @@
 
 namespace App\Notifications;
 
+use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
 class ErpuserResetPassword extends Notification
@@ -12,6 +14,7 @@ class ErpuserResetPassword extends Notification
      *
      * @var string
      */
+	use Queueable;
     public $token;
 
     /**
@@ -19,9 +22,10 @@ class ErpuserResetPassword extends Notification
      *
      * @param $token
      */
-    public function __construct($token)
+    public function __construct($token,$name)
     {
-        $this->token = $token;
+		$this->token = $token;
+        $this->name = $name;
     }
 
     /**

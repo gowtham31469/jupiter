@@ -37,7 +37,7 @@ class Erpuser extends Authenticatable
      */
     public function sendPasswordResetNotification($token)
     {
-        $this->notify(new ErpuserResetPassword($token));
+        $this->notify(new ErpuserResetPassword($token,$this->name));
     }
 	/**
      * Fetch all the employees.
@@ -110,4 +110,5 @@ class Erpuser extends Authenticatable
 		
 		return $base_data;
     }
+	
 }

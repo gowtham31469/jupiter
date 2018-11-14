@@ -4,7 +4,7 @@ namespace App\Http\Controllers\ErpuserAuth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
-use Illuminate\Support\Facades\Password;
+use Password;
 
 class ForgotPasswordController extends Controller
 {

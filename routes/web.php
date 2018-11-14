@@ -567,7 +567,7 @@ Route::get('admin/audit-trail/get-comparison-details', 'Admin\AuditTrail\AuditTr
 Route::group(['prefix' => 'erp'], function () {
 	Route::get('/', 'ErpUser\Admin\UserController@index')->name('erp');
 	Route::get('/home', 'ErpUser\Admin\UserController@index')->name('home');
-	Route::get('/login', 'ErpuserAuth\LoginController@showLoginForm')->name('login');
+	Route::get('/login', 'ErpuserAuth\LoginController@showLoginForm')->name('erp.login');
 	Route::post('/login', 'ErpuserAuth\LoginController@login');
 	Route::post('/logout', 'ErpuserAuth\LoginController@logout')->name('logout');
 	Route::get('/register', 'ErpuserAuth\RegisterController@showRegistrationForm')->name('register');
