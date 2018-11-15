@@ -36,6 +36,47 @@ function generateJobcard(){
     }
     else
     {
-        $('#jobcardCreationModalCenter').modal('show');
+        orders = [];
+        /** [ Create array of orders selected ] */
+        $('.row-checkbox').each(function (i, item) {
+            if ($(this).is(':checked')) {
+                orders[i]      = $(this).closest('tr').attr('id');
+            }
+        });
+
+        $.ajax({
+            url:base_url + "/erp/get-jobcard-order-details",
+            dataType:"json",
+            method:"get",
+            data:{orders:orders},
+            tryCount : 0,
+            retryLimit : 2,
+            beforeSend: function () {
+              $(".loader").show();
+            },
+            success: function(data){
+                console.log(data)
+                /** [ Backdrop for bootstrap modal ] */
+                $('#jobcardCreationModalCenter').modal({
+                     backdrop: 'static',
+                     keyboard: false
+                })
+
+                /** [ Validate edit_merchandiser_form form using bootstrap validator ] */
+                $('#create_jobcard').validator('validate');
+                $('#jobcardCreationModalCenter').modal('show');
+            },
+            error: function(errorXHR, errorStatus, errorThrown) {
+               this.tryCount++;
+               if (this.tryCount <= this.retryLimit) {
+                   $.ajax(this);
+                   return;
+               }
+            },
+            complete: function () {
+                $(".loader").hide();
+            }
+        })
+        
     }
 }

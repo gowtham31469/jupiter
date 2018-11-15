@@ -850,7 +850,7 @@ function setTescoReorder(type, id, liid) {
 			 type: 'post',
 			 data: { _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,zone:zone,template_name:template_name},
 			 success: function (data) {
-				if($.trim(data) == "true")
+				if($.trim(data) == "true" || template_name == "TSL3")
 				{
 					$.ajax({
 						url: base_url + "/customer/tesco/set-tesco-repeat-order",

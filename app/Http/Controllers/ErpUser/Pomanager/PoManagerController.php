@@ -36,6 +36,14 @@ class PoManagerController extends Controller
     public function index()
     {
 		$customer_id = Auth::guard('erpuser')->id();
+		$new_orders_count=0;
+		$hold_orders_count=0;
+		
+				$buyers =   DB::table('erpuser_buyer')
+                                    ->where('erpuser_buyer.erp_user',$customer_id)
+                                    ->pluck('erpuser_buyer.buyer')
+                                    ->all();
+
 		
 		$companies   = 	DB::table('erpuser_company_mapping')
 								->join('company','erpuser_company_mapping.company','company.id')
@@ -83,11 +91,11 @@ class PoManagerController extends Controller
 			{
 				$buyer_id = explode("-",$key);
 				
-				$erp_order_details = DB::table('erp_orders')->join('erp_order_details','erp_order_details.erp_order_id','erp_orders.id')
+				$erp_order_details = Erp::join('erp_order_details','erp_order_details.erp_order_id','erp_orders.id')
 										 ->join('customers','erp_orders.customer_id','customers.id')
 										 ->join('erp_status','erp_orders.status','erp_status.id')
 										 ->where('erp_order_details.template_id',$valuess)
-										 ->where('erp_orders.buyer_id',$buyer_id[0])
+										 ->whereIn('erp_orders.buyer_id', $buyers)
 										 ->where('erp_orders.status',1)
 										 ->orWhere('erp_orders.status',2)
 										 ->groupBy('erp_orders.id','customers.company_name','erp_status.status_name')
@@ -98,13 +106,27 @@ class PoManagerController extends Controller
 					foreach($erp_order_details as $erp_order_det)
 					{
 						$orders_erp[$erp_order_det->id] = $erp_order_det;
+						
 					}
 					
 				}
 			}
 			 
 		 }
-		return view('erp.Pomanager.poverify',['orders' => $orders_erp,'companies' => $companies]);
+		foreach($orders_erp as $orders_erp_count)
+		{
+			
+				if($orders_erp_count->status == 1)
+				{
+					$new_orders_count++;
+				}
+				else if($orders_erp_count->status == 2)
+				{
+					$hold_orders_count++;
+				}
+		}
+		//return $new_orders;
+		return view('erp.Pomanager.poverify',['orders' => $orders_erp,'companies' => $companies,'new_orders' => $new_orders_count,'hold_orders' => $hold_orders_count]);
 	} 
 	
 	public function setCompanySession(Request $request)
@@ -158,7 +180,7 @@ class PoManagerController extends Controller
 								 ->where('id',$buyer_id)
 								 ->first();
 			   
-            $orderlist   = ErpOrderDetails::join($arr_template->template_table,'erp_order_details.template_id',$arr_template->template_table.'.id')
+            $orderlist   = ErpOrderDetails::join($arr_template->template_table,'erp_order_details.template_id',$arr_template->template_table.'.item_id')
 							->join('erp_status','erp_order_details.status','erp_status.id')
 							->where('erp_order_details.erp_order_id',$id)
                             ->select('erp_order_details.*',$arr_template->template_table.'.template_name','erp_status.status_name')
@@ -223,10 +245,11 @@ class PoManagerController extends Controller
 								  'partial_status' => 0
 								]);
 				
-				$data_erp		=   DB::table('erp_order_details')->where('erp_order_id',$erp_order_id)
-						  		->update([
-								  'status' => 3
-								]);
+				$data_erp		=   ErpOrderDetails::where('erp_order_id',$erp_order_id)
+									->where('status','!=',4)
+									->update([
+									  'status' => 3
+									]);
 				
 				
 				$orderlist   = ErpOrderDetails::join('erp_orders','erp_order_details.erp_order_id','erp_orders.id')
@@ -257,10 +280,11 @@ class PoManagerController extends Controller
 								  'partial_status' => 1
 								]);
 				
-				$data_erp		=   DB::table('erp_order_details')->where('erp_order_id',$erp_order_id)
-						  		->update([
-								  'status' => 3
-								]);
+				$data_erp		=   ErpOrderDetails::where('erp_order_id',$erp_order_id)
+									->where('status','!=',4)
+									->update([
+									  'status' => 3
+									]);
 				
 				$orderlist   = ErpOrderDetails::join('erp_orders','erp_order_details.erp_order_id','erp_orders.id')
 								->where('erp_order_details.erp_order_id',$erp_order_id)
@@ -298,8 +322,8 @@ class PoManagerController extends Controller
 								  'partial_status' => $count_j
 								]);
 				
-				$data_erp		=   DB::table('erp_order_details')
-									->where('status','!=',3)
+				$data_erp		=   ErpOrderDetails::where('status','!=',3)
+							    	->where('status','!=',4)
 									->where('erp_order_id',$erp_order_id)
 									->update([
 									  'status' => 2
