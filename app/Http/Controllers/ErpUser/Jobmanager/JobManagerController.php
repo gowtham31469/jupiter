@@ -43,7 +43,11 @@ class JobManagerController extends Controller
 									->where('erpuser_company_mapping.erp_user',$customer_id)
 									->select('erpuser_company_mapping.*','company.name')
 									->get();
-			
+			$buyers      = 	DB::table('erpuser_buyer')
+									->where('erpuser_buyer.erp_user',$customer_id)
+									->pluck('erpuser_buyer.buyer')
+									->all();
+
 			$company_id   = DB::table('company')
 									->select('company.*')
 									->first();
@@ -82,15 +86,13 @@ class JobManagerController extends Controller
 			{
 				foreach($values as $valuess)
 				{
-					$buyer_id = explode("-",$key);
-					
 					$erp_order_details = DB::table('erp_orders')->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
 											->join('customers', 'erp_orders.customer_id', 'customers.id')
 											->join('erp_status', 'erp_orders.status', 'erp_status.id')
 											->where('erp_order_details.template_id', '=', $valuess)
-											->where('erp_orders.buyer_id', '=', $buyer_id[0])
 											->where('erp_orders.status', '=', 3)
 											->where('erp_orders.order_status_id', '=', 4)
+											->whereIn('erp_orders.buyer_id', $buyers)
 											->orderBy('erp_order_details.erp_order_id', 'asc')
 											->select('erp_orders.*', 'erp_order_details.id as erp_detail_id','erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name')
 											->get();
@@ -114,4 +116,30 @@ class JobManagerController extends Controller
 		return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
 		}
 	}
+	/**
+     * Get order deatils for job card template creation by selected ids.
+     * @param order details id
+     * @author Praveen <praveen@wizroots.com>
+     * @return \Illuminate\Http\Response
+     */
+    public function getOrderDetailsByIds(Request $request)
+    {
+      try {
+			 $order_detail_ids = $request['orders'];
+			 
+			 foreach($order_detail_ids as $order_detail_id)
+			 {
+				$order_details_data = DB::table('erp_order_details')
+										  ->select('erp_order_details.*', 'erp_orders.*')
+										  ->join('erp_orders', 'erp_order_details.erp_order_id', 'erp_orders.id')
+										  ->where('erp_order_details.id', '=', $order_detail_id)
+										  ->get();
+			 }
+			 return $order_details_data;
+            
+          } catch (\Exception $e)
+          {
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+    }
 }
