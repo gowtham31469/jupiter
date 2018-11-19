@@ -203,6 +203,77 @@
     overflow-y: scroll;
     padding-right: 10px;
 }
+	
+
+#fixed-form-container{
+    position: fixed;
+    bottom: 0px;
+    left: 3%;
+    width: 94%;
+    text-align: center;
+    margin: 0;
+
+}
+
+#fixed-form-container .button:before { 
+   content: "- ";
+}
+
+#fixed-form-container .expanded:before { 
+    content: "+ ";
+}
+
+#fixed-form-container .button { 
+  font-size:1.1em; 
+	cursor: pointer;
+	margin-left: auto;
+  margin-right: auto;
+	border: 2px solid #e25454;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px 5px 0px 0px;
+	padding: 5px 20px 5px 20px;
+	background-color: #e25454;
+	color: #fff;
+	display: inline-block;
+	text-align: center;
+	text-decoration: none;
+  -webkit-box-shadow: 4px 0px 5px 0px rgba(0,0,0,0.3);
+  -moz-box-shadow: 4px 0px 5px 0px rgba(0,0,0,0.3);
+  box-shadow: 4px 0px 5px 0px rgba(0,0,0,0.3);
+}
+
+#fixed-form-container .body{
+    background-color: #fff; 
+    border-radius: 5px;
+    border: 2px solid #e25454;
+    margin-bottom: 16px;
+    padding: 10px; 
+    -webkit-box-shadow: 4px 4px 5px 0px rgba(0,0,0,0.3);
+    -moz-box-shadow: 4px 4px 5px 0px rgba(0,0,0,0.3);
+    box-shadow: 4px 4px 5px 0px rgba(0,0,0,0.3);
+}
+
+@media only screen and (min-width:768px){
+    #fixed-form-container .button{
+       margin: 0;
+
+    }
+    #fixed-form-container {
+        left: 70%;
+        width: 390px;
+        text-align: left;
+    }
+
+    #fixed-form-container .body{
+        padding: 30px;
+        border-radius: 0px 5px 5px 5px;
+    }
+}
+
+.align-button{
+  margin-left: 74% !important;
+}
 </style>
 @section('navbar')
 
@@ -375,12 +446,35 @@
 		</div>
 	</div>
 </div>
+
+<section id="fixed-form-container">
+	<div class="button align-button">Click</div>
+		<div class="body">
+		 <div class="form-group">
+        <label for="email">New order:</label>
+          {{$new_orders}}
+      </div>
+      <div class="form-group">
+        <label for="pwd">Hold order:</label>
+         {{$hold_orders}}
+      </div>
+ 
+      
+    </div>
+</section>
 @endsection @section('jqueryIncludes')
 <script>
+	$(document).ready(function() {
 	//$('.company-nav-div .profile-dropdown-admin').addClass('hidden')
 	
 	//$("#orderDetailsModal").niceScroll();
 	/** [ Make buyers card active ] */
+		
+		$("#fixed-form-container .button").click(function () {
+				$(this).next("#fixed-form-container div").slideToggle(400);
+				$(this).toggleClass("expanded");
+		});
+		
 	$('div.buyers-card').click(function() {
 		$('div.buyers-card').removeClass("active");
 		$(this).addClass("active");
@@ -468,6 +562,8 @@
 	$(".price_check").click(function() {
 		$(this).toggleClass('active')
 		$('.price_td').toggleClass('bad')
+	});
+		
 	});
 
 	function submit() {

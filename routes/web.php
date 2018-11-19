@@ -615,6 +615,8 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::post('/po-manager/change_po_updated_status', 'ErpUser\Pomanager\PoManagerController@changePoUpdatedStatus'); 
 	Route::post('/po-manager/set_company_session', 'ErpUser\Pomanager\PoManagerController@setCompanySession'); 
 	
+	/* Routes for jobcard Manager Module */
 	Route::get('/job-manager', 'ErpUser\Jobmanager\JobManagerController@index')->name('jobManager'); 
+	Route::get('/get-jobcard-order-details', 'ErpUser\Jobmanager\JobManagerController@getOrderDetailsByIds'); 
 
 });

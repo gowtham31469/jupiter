@@ -176,6 +176,22 @@
 	.highlight_row {
 		background: #eee;
 	}
+	#ratio-list-table tr,
+	#ratio-list-table th,
+	#ratio-list-table td,
+	#single-list-table tr,
+	#single-list-table th,
+	#single-list-table td {
+		border-right-width: 1px !important;
+		border-bottom-width: 1px !important;
+		border-left-width: 1px !important;
+		border-top-width: 1px !important;
+		border-left: 1px solid #DDD !important;
+		border-top: 1px solid #DDD !important;
+		border-right: 1px solid #DDD !important;
+		border-bottom: 1px solid #DDD !important;
+	}
+
 </style>
 @section('navbar')
 
@@ -207,7 +223,7 @@
                     <div class="col" id="customer-table">
 					<input type="hidden" value="{{ session()->get('company') }}" id="company_id">
 					<input type="hidden" value="{{ session()->get('company_name') }}" id="company_name">
-					<table id="approved-order-list" class="table table-bordered table-responsive table-hover table-striped" style="width:100%;font-size: 12px;">
+					<table id="approved-order-list" class="table table-bordered table-responsive table-hover " style="font-size: 12px;">
 						<thead>
 							<tr>
 								<th>Sl. No</th>
@@ -222,7 +238,7 @@
 						<tbody>
 							@foreach($orders as $vals)
 
-							<tr id="{{$vals->id}}">
+							<tr id="{{$vals->erp_detail_id}}">
 								<td class="">
 								
 									<div class="form-check">
@@ -360,7 +376,7 @@
 								<div class="col-md-4">
 									 <div class="form-group has-feedback form-inline">
 										{!! Form::label('disp_mode', 'DISP MODE :', ['class' => 'form_label']) !!}
-										{!! Form::text('disp_mode',$value = '', array('class' => 'form-control input-sm','placeholder' => 'DISP MODE','required','data-minlength' => '3','maxlength' => '40')) !!}
+										{!! Form::text('disp_mode',$value = '', array('class' => 'form-control input-sm','placeholder' => 'DISP MODE','required','maxlength' => '10')) !!}
 										<div class="help-block with-errors"></div>
 									 </div>
 								</div>
@@ -380,14 +396,14 @@
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('repeat_gap', 'REPEAT GAP :', ['class' => 'form_label']) !!}
-										{!! Form::text('repeat_gap',$value = '', array('class' => 'form-control input-sm','placeholder' => 'REPEAT GAP','required','data-minlength' => '3','maxlength' => '40')) !!}
+										{!! Form::number('repeat_gap',$value = '', array('class' => 'form-control input-sm','placeholder' => 'REPEAT GAP','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('machine', 'MACHINE :', ['class' => 'form_label']) !!}
-										{!! Form::text('machine',$value = '', array('class' => 'form-control input-sm','placeholder' => 'MACHINE','required','data-minlength' => '3','maxlength' => '40')) !!}
+										{!! Form::number('machine',$value = '', array('class' => 'form-control input-sm','placeholder' => 'MACHINE','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
@@ -396,14 +412,13 @@
 								<div class="col-md-3">
 								   <div class="form-group has-feedback form-inline">
 									{!! Form::label('cus_del_date', 'CUS D.DT :', ['class' => 'form_label']) !!}
-								    
-									<div class="input-group cus_del_date date input-sm" data-provide="datepicker" id="datePicker1">
-										<input value="" id="cus_del_date" name="cus_del_date" type="text" class="form-control " required="" placeholder="Select Customer Del Date">
-										<div class="input-group-addon">
+									<div class="input-group cus_del_date date" data-provide="datepicker" id="datePicker1">
+										<input value="" id="cus_del_date" name="cus_del_date" type="text" class="form-control input-sm " required="" placeholder="CUS D.DT">
+										<div class="input-group-addon input-sm">
 										<span class="glyphicon glyphicon-th"> </span >
 									</div >
-									<div class="help-block with-errors"></div>
 								  </div>
+								  <div class="help-block with-errors"></div>
 								  </div>
 								</div>
 								<div class="col-md-3">
@@ -413,14 +428,14 @@
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('roll_width', 'ROLL WIDTH :', ['class' => 'form_label']) !!}
-										{!! Form::text('roll_width',$value = '', array('class' => 'form-control input-sm','placeholder' => 'ROLL WIDTH','required','data-minlength' => '3','maxlength' => '40')) !!}
+										{!! Form::number('roll_width',$value = '', array('class' => 'form-control input-sm','placeholder' => 'ROLL WIDTH','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0')) !!}
 										<div class="help-block with-errors"></div>
 								    </div>
 								</div>
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('film_no', 'FILM NO :', ['class' => 'form_label']) !!}
-										{!! Form::text('film_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'FILM NO','required','data-minlength' => '3','maxlength' => '40')) !!}
+										{!! Form::number('film_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'FILM NO','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
@@ -428,29 +443,34 @@
 							<div class="col-md-12">
 								<div class="col-md-3">
 								   <div class="form-group has-feedback form-inline">
-										{!! Form::label('act_del_date', 'ACT D.DT :', ['class' => 'form_label']) !!}
-										{!! Form::text('act_del_date',$value = '', array('class' => 'form-control input-sm','placeholder' => 'ACT D.DT','required','data-minlength' => '3','maxlength' => '40')) !!}
-										<div class="help-block with-errors"></div>
-								   </div>
+									{!! Form::label('act_del_date', 'ACT D.DT :', ['class' => 'form_label']) !!}
+									<div class="input-group act_del_date date" data-provide="datepicker" id="datePicker1">
+										<input value="" id="act_del_date" name="act_del_date" type="text" class="form-control input-sm " required="" placeholder="ACT D.DT">
+										<div class="input-group-addon input-sm">
+										<span class="glyphicon glyphicon-th"> </span >
+									</div >
+								  </div>
+								  <div class="help-block with-errors"></div>
+								  </div>
 								</div>
 								<div class="col-md-3">
 								   <div class="form-group has-feedback form-inline">
 										{!! Form::label('length_side', 'LENGTH SIDE :', ['class' => 'form_label']) !!}
-										{!! Form::text('length_side',$value = '', array('class' => 'form-control input-sm','placeholder' => 'LENGTH SIDE','required','data-minlength' => '3','maxlength' => '40')) !!}
+										{!! Form::number('length_side',$value = '', array('class' => 'form-control input-sm','placeholder' => 'LENGTH SIDE','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0')) !!}
 										<div class="help-block with-errors"></div>
 								   </div>
 								</div>
 								<div class="col-md-3">
 							        <div class="form-group has-feedback form-inline">
 										{!! Form::label('excess', 'EXCESS % :', ['class' => 'form_label']) !!}
-										{!! Form::text('excess',$value = '', array('class' => 'form-control input-sm','placeholder' => 'EXCESS','required','data-minlength' => '3','maxlength' => '40')) !!}
+										{!! Form::number('excess',$value = '', array('class' => 'form-control input-sm','placeholder' => 'EXCESS','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('teeth_no', 'TEETH NO :', ['class' => 'form_label']) !!}
-										{!! Form::text('teeth_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'TEETH NO','required','data-minlength' => '3','maxlength' => '40')) !!}
+										{!! Form::number('teeth_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'TEETH NO','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0')) !!}
 										<div class="help-block with-errors"></div>
 								    </div>
 								</div>
@@ -459,14 +479,14 @@
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('inv_no', 'INV NO :', ['class' => 'form_label']) !!}
-										{!! Form::text('inv_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'INV NO','required','data-minlength' => '3','maxlength' => '40')) !!}
+										{!! Form::number('inv_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'INV NO','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('no_sticker', 'NO OF STI :', ['class' => 'form_label']) !!}
-										{!! Form::text('no_sticker',$value = '', array('class' => 'form-control input-sm','placeholder' => 'NO OF STI','required','data-minlength' => '3','maxlength' => '40')) !!}
+										{!! Form::number('no_sticker',$value = '', array('class' => 'form-control input-sm','placeholder' => 'NO OF STI','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
@@ -475,7 +495,7 @@
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('finish_type', 'FINISH TYPE :', ['class' => 'form_label']) !!}
-										{!! Form::text('finish_type',$value = '', array('class' => 'form-control input-sm','placeholder' => 'FINISH TYPE','required','data-minlength' => '3','maxlength' => '40')) !!}
+										{!! Form::number('finish_type',$value = '', array('class' => 'form-control input-sm','placeholder' => 'FINISH TYPE','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
@@ -492,7 +512,7 @@
 						<hr>
 						<div class="row">
 							<div class="col-md-12">
-								<table class="table table-bordered"  style="width:100%;font-size: 12px;">
+								<table class="table table-bordered table-responsive"  style="font-size: 12px;" id="ratio-list-table">
 								    <thead>
 										<tr>
 											<th>REFNUM</th>
@@ -566,10 +586,9 @@
 								</table>
 							</div>
 						</div>
-						<hr>
 						<div class="row">
 							<div class="col-md-12">
-								<table class="table table-bordered"  style="width:100%;font-size: 12px;">
+								<table class="table table-bordered table-responsive"  style="font-size: 12px;" id="single-list-table">
 									<tbody>
 										<tr>
 											<th>ID Num</th>
@@ -662,78 +681,48 @@
 						</div>
 						<div class="col-md-12">
 							<div class="col-md-3">
-								{!! Form::label('act_excess', 'Act Excess % :', ['class' => 'form_label']) !!}
-								<span>7%</span>
+								{!! Form::label('act_excess', 'ACT EXCESS % :', ['class' => 'form_label']) !!}
+								<span>7</span>
 							</div>
 							<div class="col-md-3">
-								{!! Form::label('sticker_mtr', 'Mtrs for Stickers :', ['class' => 'form_label']) !!}
+								{!! Form::label('sticker_mtr', 'MTRS FOR STICKERS :', ['class' => 'form_label']) !!}
 								<span>30</span>
 							</div>
 							<div class="col-md-3">
-							    {!! Form::label('settings', 'Settings :', ['class' => 'form_label']) !!}
+							    {!! Form::label('settings', 'SETTINGS :', ['class' => 'form_label']) !!}
 								<span>30</span>
 							</div>
 							<div class="col-md-3">
-								{!! Form::label('total_mtrs', 'Total Mtrs :', ['class' => 'form_label']) !!}
+								{!! Form::label('total_mtrs', 'TOTAL MTRS :', ['class' => 'form_label']) !!}
 								<span>30</span>
 							</div>
 						</div>
 						<div class="col-md-12">
 							<div class="col-md-3">
 								<div class="form-group has-feedback form-inline">
-									{!! Form::label('compiled_by', 'Compiled By :', ['class' => 'form_label']) !!}
-									{!! Form::text('compiled_by',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Compiled By','required','data-minlength' => '3','maxlength' => '40')) !!}
+									{!! Form::label('compiled_by', 'COMPILED BY :', ['class' => 'form_label']) !!}
+									{!! Form::text('compiled_by',$value = '', array('class' => 'form-control input-sm','placeholder' => 'COMPILED BY','required','maxlength' => '40')) !!}
 									<div class="help-block with-errors"></div>
 								</div>
 							</div>
 							<div class="col-md-3">
 								<div class="form-group has-feedback form-inline">
-									{!! Form::label('barcode_read', 'Barcode Read :', ['class' => 'form_label']) !!}
-									{!! Form::text('barcode_read',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Barcode Read','required','data-minlength' => '3','maxlength' => '40')) !!}
+									{!! Form::label('barcode_read', 'BARCODE READ :', ['class' => 'form_label']) !!}
+									{!! Form::text('barcode_read',$value = '', array('class' => 'form-control input-sm','placeholder' => 'BARCODE READ','required','maxlength' => '40')) !!}
 									<div class="help-block with-errors"></div>
 								</div>
 							</div>
 							<div class="col-md-3">
 								<div class="form-group has-feedback form-inline">
-									{!! Form::label('operator', 'Operator :', ['class' => 'form_label']) !!}
-									{!! Form::text('operator',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Operator','required','data-minlength' => '3','maxlength' => '40')) !!}
+									{!! Form::label('operator', 'OPERATOR :', ['class' => 'form_label']) !!}
+									{!! Form::text('operator',$value = '', array('class' => 'form-control input-sm','placeholder' => 'OPERATOR','required','maxlength' => '40')) !!}
 									<div class="help-block with-errors"></div>
 								</div>
 							</div>
 							<div class="col-md-3">
 								<div class="form-group has-feedback form-inline">
-									{!! Form::label('checker', 'Checker :', ['class' => 'form_label']) !!}
-									{!! Form::text('checker',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Checker','required','data-minlength' => '3','maxlength' => '40')) !!}
-									<div class="help-block with-errors"></div>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-12">
-							<div class="col-md-3">
-								<div class="form-group has-feedback form-inline">
-									{!! Form::label('author', 'Authrz By :', ['class' => 'form_label']) !!}
-									{!! Form::text('author',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Authrz By','required','data-minlength' => '3','maxlength' => '40')) !!}
-									<div class="help-block with-errors"></div>
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="form-group has-feedback form-inline">
-									{!! Form::label('axicon_verifier', 'Axicon Verifier :', ['class' => 'form_label']) !!}
-									{!! Form::text('axicon_verifier',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Axicon Verifier','required','data-minlength' => '3','maxlength' => '40')) !!}
-									<div class="help-block with-errors"></div>
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="form-group has-feedback form-inline">
-									{!! Form::label('approved_by', 'Apprvd By :', ['class' => 'form_label']) !!}
-									{!! Form::text('approved_by',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Apprvd By','required','data-minlength' => '3','maxlength' => '40')) !!}
-									<div class="help-block with-errors"></div>
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="form-group has-feedback form-inline">
-									{!! Form::label('packer', 'Packer :', ['class' => 'form_label']) !!}
-									{!! Form::text('packer',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Packer','required','data-minlength' => '3','maxlength' => '40')) !!}
+									{!! Form::label('checker', 'CHECKER :', ['class' => 'form_label']) !!}
+									{!! Form::text('checker',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CHECKER','required','maxlength' => '40')) !!}
 									<div class="help-block with-errors"></div>
 								</div>
 							</div>
@@ -741,29 +730,64 @@
 						<div class="col-md-12">
 							<div class="col-md-3">
 								<div class="form-group has-feedback form-inline">
-									{!! Form::label('approval_date', 'Approval Dt :', ['class' => 'form_label']) !!}
-									{!! Form::text('approval_date',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Approval Dt','required','data-minlength' => '3','maxlength' => '40')) !!}
+									{!! Form::label('author', 'AUTHRZ BY :', ['class' => 'form_label']) !!}
+									{!! Form::text('author',$value = '', array('class' => 'form-control input-sm','placeholder' => 'AUTHRZ BY','required','maxlength' => '40')) !!}
 									<div class="help-block with-errors"></div>
 								</div>
 							</div>
 							<div class="col-md-3">
 								<div class="form-group has-feedback form-inline">
-									{!! Form::label('roll_issued_by', 'Roll issued By :', ['class' => 'form_label']) !!}
-									{!! Form::text('roll_issued_by',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Roll issued By','required','data-minlength' => '3','maxlength' => '40')) !!}
+									{!! Form::label('axicon_verifier', 'AXICON VERIFIER :', ['class' => 'form_label']) !!}
+									{!! Form::text('axicon_verifier',$value = '', array('class' => 'form-control input-sm','placeholder' => 'AXICON VERIFIER','required','maxlength' => '40')) !!}
 									<div class="help-block with-errors"></div>
 								</div>
 							</div>
 							<div class="col-md-3">
 								<div class="form-group has-feedback form-inline">
-									{!! Form::label('cutter', 'Cutter :', ['class' => 'form_label']) !!}
-									{!! Form::text('cutter',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Cutter','required','data-minlength' => '3','maxlength' => '40')) !!}
+									{!! Form::label('approved_by', 'APPROVED BY :', ['class' => 'form_label']) !!}
+									{!! Form::text('approved_by',$value = '', array('class' => 'form-control input-sm','placeholder' => 'APPROVED BY','required','maxlength' => '40')) !!}
 									<div class="help-block with-errors"></div>
 								</div>
 							</div>
 							<div class="col-md-3">
 								<div class="form-group has-feedback form-inline">
-									{!! Form::label('cartons', 'Cartons :', ['class' => 'form_label']) !!}
-									{!! Form::text('cartons',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Cartons','required','data-minlength' => '3','maxlength' => '40')) !!}
+									{!! Form::label('packer', 'PACKER :', ['class' => 'form_label']) !!}
+									{!! Form::text('packer',$value = '', array('class' => 'form-control input-sm','placeholder' => 'PACKER','required','maxlength' => '40')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="col-md-3">
+								   <div class="form-group has-feedback form-inline">
+									{!! Form::label('approval_date', 'APPROVAL DT :', ['class' => 'form_label']) !!}
+									<div class="input-group approval_date date" data-provide="datepicker" id="datePicker1">
+										<input value="" id="approval_date" name="approval_date" type="text" class="form-control input-sm " required="" placeholder="APPROVAL DT">
+										<div class="input-group-addon input-sm">
+										<span class="glyphicon glyphicon-th"> </span >
+									</div >
+								  </div>
+								  <div class="help-block with-errors"></div>
+								  </div>
+								</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback form-inline">
+									{!! Form::label('roll_issued_by', 'ROLL ISSUED BY :', ['class' => 'form_label']) !!}
+									{!! Form::text('roll_issued_by',$value = '', array('class' => 'form-control input-sm','placeholder' => 'ROLL ISSUED BY','required','maxlength' => '40')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback form-inline">
+									{!! Form::label('cutter', 'CUTTER :', ['class' => 'form_label']) !!}
+									{!! Form::text('cutter',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CUTTER','required','maxlength' => '40')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback form-inline">
+									{!! Form::label('cartons', 'CARTONS :', ['class' => 'form_label']) !!}
+									{!! Form::text('cartons',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CARTONS','required','maxlength' => '40')) !!}
 									<div class="help-block with-errors"></div>
 								</div>
 							</div>
@@ -785,7 +809,16 @@
 <script>
 $(document).ready(function() {
 	var base_url = "<?php echo  url('/') ?>";
+
 	$('input[class="row-checkbox"]').prop('checked', false);
+
+	$('#create_jobcard').trigger("reset");
+
+	/** To refresh modal while hidden **/
+	$('.modal').on('hidden.bs.modal', function (e) {
+	$('#create_jobcard').trigger("reset");
+	})
+
 	/** [ Make companies card active ] */
 	$('div.buyers-card').click(function(){
 
