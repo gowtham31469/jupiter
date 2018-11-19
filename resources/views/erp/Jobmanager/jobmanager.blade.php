@@ -689,8 +689,11 @@
 								<span>30</span>
 							</div>
 							<div class="col-md-3">
-							    {!! Form::label('settings', 'SETTINGS :', ['class' => 'form_label']) !!}
-								<span>30</span>
+							<div class="form-group has-feedback form-inline">
+								{!! Form::label('settings', 'SETTINGS :', ['class' => 'form_label']) !!}
+								{!! Form::number('settings',$value = '', array('class' => 'form-control input-sm','placeholder' => 'SETTINGS','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0')) !!}
+								<div class="help-block with-errors"></div>
+							</div>
 							</div>
 							<div class="col-md-3">
 								{!! Form::label('total_mtrs', 'TOTAL MTRS :', ['class' => 'form_label']) !!}

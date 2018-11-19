@@ -126,12 +126,14 @@ class JobManagerController extends Controller
     {
       try {
 			 $order_detail_ids = $request['orders'];
-			 
+			 $order_details_data = array();
 			 foreach($order_detail_ids as $order_detail_id)
 			 {
-				$order_details_data = DB::table('erp_order_details')
-										  ->select('erp_order_details.*', 'erp_orders.*')
+				$order_details_data[] = DB::table('erp_order_details')
+										  ->select('erp_order_details.*', 'erp_orders.*','company.name as company_name', 'company.logo as company_logo', 'company.address as company_address', 'customers.company_name as customer_name')
 										  ->join('erp_orders', 'erp_order_details.erp_order_id', 'erp_orders.id')
+										  ->join('company', 'company.id','erp_order_details.company_id')
+										  ->join('customers', 'customers.id','erp_orders.customer_id')
 										  ->where('erp_order_details.id', '=', $order_detail_id)
 										  ->get();
 			 }
