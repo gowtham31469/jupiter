@@ -175,7 +175,7 @@ class InvoiceController extends Controller
                 PDF::SetPrintFooter(false);
                 PDF::AddPage();
                 PDF::writeHTML($dynView->render());
-                $pdfdata = PDF::output( public_path('storage/app/public/invoices/invoice'.$invoice_id.'.pdf'), 'F');
+                $pdfdata = PDF::output( public_path('/storage/app/public/invoices/invoices_'.$invoice_id.'.pdf'), 'F');
                 Invoices::where('id', $invoiceData->id)->update(['invoice_id'=> $invoice_id ,'invoice_file'=>'/storage/app/public/invoices/invoices_'.$invoice_id.'.pdf']);
 
                 foreach ($orders as $key => $value) {
@@ -215,16 +215,16 @@ class InvoiceController extends Controller
                     'erp_order_id'=>$orders[0]['erpid']
                     ]);
                 }
-                $attatchment =  public_path('storage/app/public/invoices/invoices'.$invoice_id.'.pdf');
+                $attatchment =  public_path('storage/app/public/invoices/invoices_'.$invoice_id.'.pdf');
                 //Mail notiication
                 $useremail = "aswathy@wizroots.com";
-                Mail::send('mails.invoice', ['title' => 'Invoice','to_email' => $useremail], function ($message) use ($useremail,$attatchment)
-                        {
-                            $message->from('admin@jga.com', 'JGA');
-                            $message->subject('Invoice');
-                            $message->attach($attatchment);
-                            $message->to($useremail);
-                        });
+                // Mail::send('mails.invoice', ['title' => 'Invoice','to_email' => $useremail], function ($message) use ($useremail,$attatchment)
+                //         {
+                //             $message->from('admin@jga.com', 'JGA');
+                //             $message->subject('Invoice');
+                //             $message->attach($attatchment);
+                //             $message->to($useremail);
+                //         });
                 $result    = response()->json(['error'=> false,'message' =>'success'],200);
             }
             

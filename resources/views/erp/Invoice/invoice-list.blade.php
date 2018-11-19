@@ -49,7 +49,7 @@
                         <td>{{$vals->erp_id}}</td>
                         <td>{{$vals->company_name}}</td>
                         <td>{{$vals->po_no}}</td>
-                        <td align="center"><a class="pi_generation" href="javascript:void(0)" ><i class="fa fa-eye action-button-view" data-placement="top" title="" data-original-title="view Details"></i></a></td>
+                        <td align="center"><a class="pi_generation" href="{{$vals->invoice_file}}" data-id="{{$vals->invoice_file}}"><i class="fa fa-eye action-button-view" data-placement="top" title="" data-original-title="view Details"></i></a></td>
                     </tr>
                 @endforeach    
                 </tbody>
