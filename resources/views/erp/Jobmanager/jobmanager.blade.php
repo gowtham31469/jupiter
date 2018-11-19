@@ -376,7 +376,7 @@
 								<div class="col-md-4">
 									 <div class="form-group has-feedback form-inline">
 										{!! Form::label('disp_mode', 'DISP MODE :', ['class' => 'form_label']) !!}
-										{!! Form::text('disp_mode',$value = '', array('class' => 'form-control input-sm','placeholder' => 'DISP MODE','required','maxlength' => '10')) !!}
+										{!! Form::text('disp_mode',$value = '', array('class' => 'form-control input-sm','placeholder' => 'DISPATCH MODE','required','maxlength' => '10')) !!}
 										<div class="help-block with-errors"></div>
 									 </div>
 								</div>
@@ -796,7 +796,7 @@
                  </div>
                  <div class="modal-footer jobcard-creation-modal-footer">
                      {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-					 {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+					 {!! Form::button('Print & Send', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                  </div>
             {!! Form::close() !!}
          </div>
