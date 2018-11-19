@@ -175,11 +175,10 @@ class InvoiceController extends Controller
                 PDF::SetPrintFooter(false);
                 PDF::AddPage();
                 PDF::writeHTML($dynView->render());
-                $pdfdata = PDF::output( public_path('/storage/app/public/invoices/invoices_'.$invoice_id.'.pdf'), 'F');
+                $pdfdata = PDF::output( public_path('storage/app/public/invoices/invoices_'.$invoice_id.'.pdf'), 'F');
                 Invoices::where('id', $invoiceData->id)->update(['invoice_id'=> $invoice_id ,'invoice_file'=>'/storage/app/public/invoices/invoices_'.$invoice_id.'.pdf']);
 
                 foreach ($orders as $key => $value) {
-
                     $pendingQnty = $value['pending_qnty'] - $value['delvry_qnty'];
                     $size = $value['size'] == ""?"null":$value['size'];
                     $status = $pendingQnty==0?5:6;
