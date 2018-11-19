@@ -350,6 +350,9 @@
         var totaltax = 0;
         var pending_qnty = 0;
         var arr = [].concat(data);
+
+console.log(arr)
+
         $('.delivery-qnty').css('border-color', '');
         var delvryQnty = {};
         var count = 0 ;
@@ -539,7 +542,10 @@
             data: {
                 _token: csrf_token,
                 finalData:finalData,
-                htmlData:htmlData
+                htmlData:htmlData,
+                tax_amnt:tax_amnt,
+                place_of_supply:place_of_supply
+
             },
             tryCount: 0,
             retryLimit: 2,
