@@ -27,6 +27,10 @@
     <link rel="stylesheet" href="{{ asset('css/bootstrap-select.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/easy-autocomplete.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/easy-autocomplete.themes.min.css') }}">
+    <link type="text/css" rel="stylesheet" href="{{ asset('css/simplePagination.css') }}"/>
+
+
+    
 <!--
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/v4-shims.js"></script>
@@ -72,6 +76,7 @@
     <script src="{{ asset('js/tree.jquery.min.js') }}"></script>
     <script src="{{ asset('js/jstree.min.js') }}"></script>  
     <script src="{{ asset('js/jquery.nicescroll.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.simplePagination.js') }}"></script>
     
       <!-- Bootstrap Date-Picker Plugin -->
     <script type="text/javascript" src="{{ asset('js/bootstrap-datepicker.js') }}"></script>

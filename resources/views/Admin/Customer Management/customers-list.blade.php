@@ -79,6 +79,7 @@
                          @endforeach
                          </tbody>
                      </table>
+                     <div class="pagination-page"></div>
                   </div>
               </div>
             </div>
@@ -658,7 +659,7 @@
       $('#add_customer_form').trigger("reset");
       $('#customer_result').hide();
       $('#customer_edit_result').hide();
-      $('#customers-list-table').DataTable();
+     // $('#customers-list-table').DataTable();
       $("#customers-list-table_filter input").addClass('form-control');
       $("#customers-list-table_filter input").attr('placeholder', 'Data Search');
       $('#payment_terms').val('0').selectpicker('refresh');
@@ -686,6 +687,13 @@
       $('div.po-required-div').hide();
       /* Refresh auto populate country functionality */
       autopopulateCountry(0)
+      $(function() {
+    $('.pagination-page').pagination({
+        items: 100,
+        itemsOnPage: 10,
+        cssStyle: 'light-theme'
+    });
+});
     });
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
 
