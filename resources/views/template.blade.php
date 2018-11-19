@@ -11,6 +11,7 @@
    	font-size: 8px !important;
    	margin:0px;
    }
+
    </style>
 </head>
 <body>
@@ -50,6 +51,7 @@
                                 <p>{{$bill_to->address}}</p>
                             </td>
  							<td style="text-align: right;" class="companyDetails">
+                                </br>
                                 <p><strong>Shipping Address:</strong></p>
                                 <p>{{$arr[0]['company_name']}}</p>
                                 <p>{{$ship_to->address}}</p>
@@ -64,7 +66,7 @@
                 </td>
             </tr>
         </table>
-		<table cellpadding="0" cellspacing="0" border="0.5"><thead><tr><th>Order No</th><th>PO No</th><th>Style</th><th>OCN</th><th>Item</th><th>Ref</th><th>Size</th><th>HSN</th><th>Tax (%)</th><th>Order Qty</th><th>Pending Qty</th><th>Del Qty</th><th>Rate (₹)</th><th>Amount (₹)</th></tr></thead><tbody>
+		<table cellpadding="0" cellspacing="0" border="0.5"><thead ><tr><th>Order No</th><th style="font-weight: bold;">PO No</th><th>Style</th><th>OCN</th><th>Item</th><th>Ref</th><th>Size</th><th>HSN</th><th>Tax (%)</th><th>Order Qty</th><th>Pending Qty</th><th>Del Qty</th><th>Rate (₹)</th><th>Amount (₹)</th></tr></thead><tbody>
                     @php 
                     	$totalQnty=0;
                     	$totalpendingQnty=0;

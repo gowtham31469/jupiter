@@ -44,7 +44,7 @@ class InvoiceController extends Controller
                             ->join('invoice_details','invoice_details.invoice_id','invoice.id')
                             ->join('buyers','invoice.buyer_id','buyers.id')
                             ->where('invoice_details.company_id',session()->get('company'))
-                            ->select('invoice.invoice_id','erp_id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','po_no')
+                            ->select('invoice.invoice_id','erp_id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','po_no','invoice_file')
                             ->get();
         return view('erp.Invoice.invoice-list',['invoices'=>$invoices,'companies' => $companies]);
 	}
@@ -175,11 +175,10 @@ class InvoiceController extends Controller
                 PDF::SetPrintFooter(false);
                 PDF::AddPage();
                 PDF::writeHTML($dynView->render());
-                $pdfdata = PDF::output( public_path('/storage/app/public/invoices/invoices_'.$invoice_id.'.pdf'), 'F');
+                $pdfdata = PDF::output( public_path('storage/app/public/invoices/invoices_'.$invoice_id.'.pdf'), 'F');
                 Invoices::where('id', $invoiceData->id)->update(['invoice_id'=> $invoice_id ,'invoice_file'=>'/storage/app/public/invoices/invoices_'.$invoice_id.'.pdf']);
 
                 foreach ($orders as $key => $value) {
-
                     $pendingQnty = $value['pending_qnty'] - $value['delvry_qnty'];
                     $size = $value['size'] == ""?"null":$value['size'];
                     $status = $pendingQnty==0?5:6;
