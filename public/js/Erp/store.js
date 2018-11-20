@@ -22,7 +22,7 @@ function store(url, data) {
 					}, 1000);
 				},
 				400: function () {
-					$('.snackbar_span').html(data.message);
+					$('.snackbar_span').html(data.responseJSON.message);
 				},
 				500: function () {
 					$('.snackbar_span').html("Something Went Wrong");

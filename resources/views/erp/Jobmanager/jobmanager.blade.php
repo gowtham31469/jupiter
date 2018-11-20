@@ -196,7 +196,7 @@
 @section('navbar')
 
 <ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
-	<li><a href="javascript:void(0)" class="active">Job Card Manager</a></li>
+	<li><a href="javascript:void(0)" class="active">Create Jobcard</a></li>
 </ul>
 
 @endsection @section('content')
@@ -220,7 +220,7 @@
                     <div class="loader">
 						<div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>
 					</div>
-                    <div class="col" id="customer-table">
+                    <div class="col" id="approved-orders-table">
 					<input type="hidden" value="{{ session()->get('company') }}" id="company_id">
 					<input type="hidden" value="{{ session()->get('company_name') }}" id="company_name">
 					<table id="approved-order-list" class="table table-bordered table-responsive table-hover " style="font-size: 12px;">
@@ -689,8 +689,11 @@
 								<span>30</span>
 							</div>
 							<div class="col-md-3">
-							    {!! Form::label('settings', 'SETTINGS :', ['class' => 'form_label']) !!}
-								<span>30</span>
+							<div class="form-group has-feedback form-inline">
+								{!! Form::label('settings', 'SETTINGS :', ['class' => 'form_label']) !!}
+								{!! Form::number('settings',$value = '', array('class' => 'form-control input-sm','placeholder' => 'SETTINGS','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0')) !!}
+								<div class="help-block with-errors"></div>
+							</div>
 							</div>
 							<div class="col-md-3">
 								{!! Form::label('total_mtrs', 'TOTAL MTRS :', ['class' => 'form_label']) !!}
@@ -730,8 +733,8 @@
 						<div class="col-md-12">
 							<div class="col-md-3">
 								<div class="form-group has-feedback form-inline">
-									{!! Form::label('author', 'AUTHRZ BY :', ['class' => 'form_label']) !!}
-									{!! Form::text('author',$value = '', array('class' => 'form-control input-sm','placeholder' => 'AUTHRZ BY','required','maxlength' => '40')) !!}
+									{!! Form::label('author', 'AUTHORIZED BY :', ['class' => 'form_label']) !!}
+									{!! Form::text('author',$value = '', array('class' => 'form-control input-sm','placeholder' => 'AUTHORIZED BY','required','maxlength' => '40')) !!}
 									<div class="help-block with-errors"></div>
 								</div>
 							</div>
@@ -884,9 +887,9 @@ $(document).ready(function() {
 	$tableSel.DataTable({
 		/** Table column filter functionality **/
 		initComplete: function () {
-			$('.main-content > #customer-table > .dataTables_wrapper > .row > .col-sm-6 > #approved-order-list_filter:first').append(' <button class="filterbtn" type="button" onClick="showFilter()" title="Filter" data-placement="bottom"><i class="fa fa-filter" aria-hidden="true"></i></button>');
-			$('.main-content > #customer-table > .dataTables_wrapper > .row > .col-sm-6 > #approved-order-list_filter:first .dataTables_filter').css('display', 'inline-block');
-			$('.main-content > #customer-table > .dataTables_wrapper > .row > .col-sm-12:first').prepend('<div class="filter-window"><h5><strong>Jobcard Filter</strong></h5> <div class="row"> <div class="col-md-2"><select class="selectpicker" id="erpID"> <option disabled selected>SELECT AN ERP ID</option></select></div><div class="col-md-2"><select class="selectpicker" id="customerName"> <option disabled selected>SELECT A CUSTOMER</option></select></div><div class="col-md-2"><select class="selectpicker" id="poNumber"> <option disabled selected>SELECT A PO NUMBER</option></select></div><div class="col-md-2"><select class="selectpicker" id="styleNumber"> <option disabled selected>SELECT A STYLE NUMBER</option></select></div><div class="col-md-2"><select class="selectpicker" id="refNumber"> <option disabled selected>SELECT A REFERENCE</option></select></div><div class="col-md-2"><select class="selectpicker" id="delDate"> <option disabled selected>SELECT A DELIVERY DATE</option></select></div></div><div class="filter-actions"><button class="btn btn-primary input-sm pull-right" id="reset">Clear Filter</button><button id="closeFilter" class="btn btn-default input-sm pull-right" onclick="showFilter()">Close</button><div class="clearfix"></div></div></div>');
+			$('.main-content > #approved-orders-table > .dataTables_wrapper > .row > .col-sm-6 > #approved-order-list_filter:first').append(' <button class="filterbtn" type="button" onClick="showFilter()" title="Filter" data-placement="bottom"><i class="fa fa-filter" aria-hidden="true"></i></button>');
+			$('.main-content > #approved-orders-table > .dataTables_wrapper > .row > .col-sm-6 > #approved-order-list_filter:first .dataTables_filter').css('display', 'inline-block');
+			$('.main-content > #approved-orders-table > .dataTables_wrapper > .row > .col-sm-12:first').prepend('<div class="filter-window"><h5><strong>Jobcard Filter</strong></h5> <div class="row"> <div class="col-md-2"><select class="selectpicker" id="erpID"> <option disabled selected>SELECT AN ERP ID</option></select></div><div class="col-md-2"><select class="selectpicker" id="customerName"> <option disabled selected>SELECT A CUSTOMER</option></select></div><div class="col-md-2"><select class="selectpicker" id="poNumber"> <option disabled selected>SELECT A PO NUMBER</option></select></div><div class="col-md-2"><select class="selectpicker" id="styleNumber"> <option disabled selected>SELECT A STYLE NUMBER</option></select></div><div class="col-md-2"><select class="selectpicker" id="refNumber"> <option disabled selected>SELECT A REFERENCE</option></select></div><div class="col-md-2"><select class="selectpicker" id="delDate"> <option disabled selected>SELECT A DELIVERY DATE</option></select></div></div><div class="filter-actions"><button class="btn btn-primary input-sm pull-right" id="reset">Clear Filter</button><button id="closeFilter" class="btn btn-default input-sm pull-right" onclick="showFilter()">Close</button><div class="clearfix"></div></div></div>');
 
 			//For Custom Filters
 			this.api().columns().every( function (i) {
