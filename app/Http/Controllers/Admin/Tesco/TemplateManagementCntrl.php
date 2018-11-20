@@ -101,7 +101,7 @@ class TemplateManagementCntrl extends Controller
                                 ->select('tax')
                                 ->distinct()
                                 ->get();
-         $items['material'] = DB::table("tesco_material_masters")
+         $items['material'] = DB::table("raw_material_master")
                                 ->select('id','material_name_employee')
                                 ->where('is_enabled','=',true)
                                 ->get();

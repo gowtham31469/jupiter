@@ -1673,7 +1673,7 @@
             </div>
         </div>
     </div>
-    {{-- Add Tesco Material Master Modal --}}
+    {{-- Add Raw Material Master Modal --}}
    <div class="modal fade" id="addTescoMaterialModal" tabindex="-1" role="dialog" aria-labelledby="addTescoMaterialLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -1709,7 +1709,7 @@
         </div>
     </div>
 
-    {{-- Edit Tesco material Modal --}}
+    {{-- Edit Raw material Modal --}}
     <div class="modal fade" id="editTescoMaterialModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
        <div class="modal-dialog" role="document">
            <div class="modal-content">
