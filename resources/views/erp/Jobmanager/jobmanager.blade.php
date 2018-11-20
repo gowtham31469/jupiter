@@ -196,7 +196,7 @@
 @section('navbar')
 
 <ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
-	<li><a href="javascript:void(0)" class="active">Job Card Manager</a></li>
+	<li><a href="javascript:void(0)" class="active">Create Jobcard</a></li>
 </ul>
 
 @endsection @section('content')
@@ -733,8 +733,8 @@
 						<div class="col-md-12">
 							<div class="col-md-3">
 								<div class="form-group has-feedback form-inline">
-									{!! Form::label('author', 'AUTHRZ BY :', ['class' => 'form_label']) !!}
-									{!! Form::text('author',$value = '', array('class' => 'form-control input-sm','placeholder' => 'AUTHRZ BY','required','maxlength' => '40')) !!}
+									{!! Form::label('author', 'AUTHORIZED BY :', ['class' => 'form_label']) !!}
+									{!! Form::text('author',$value = '', array('class' => 'form-control input-sm','placeholder' => 'AUTHORIZED BY','required','maxlength' => '40')) !!}
 									<div class="help-block with-errors"></div>
 								</div>
 							</div>

@@ -86,7 +86,8 @@ class ErpOrders
 	            	'company_id'			=> $orders->company_id,
 	            	'reference_name'		=> $orders->item_name,
 	            	'ocn_number'	   		=> $orders->ocn_number,
-	            	'status' 				=> 1
+					'status' 				=> 1,
+					'template_type'         => $orders->template_type
 				]);
 			}
 		}
