@@ -29,7 +29,7 @@ use App\TescoTSL1OrdersQuantity;
 use App\TescoTSL3Orders;
 use App\TescoTSL3OrdersQuantity;
 use App\TescoTaxCode;
-use App\TescoMaterialMaster;
+use App\RawMaterialMaster;
 use App\TescoErrorReportEmails;
 
 class TescoSettings extends Controller
@@ -816,15 +816,15 @@ class TescoSettings extends Controller
            return $result;
        }
        /**
-         * Tesco metadata material list show using ajax.
+         * Raw material Metadata list show using ajax.
          * @author <Praveen>
          * @return \Illuminate\Http\Response
          */
-        public function tescoMaterials()
+        public function rawMaterials()
         {
           try {
-                $tesco_materials = DB::table('tesco_material_masters')->select('id','material_name_employee','material_name_production','is_enabled', 'material_name_purchase')->orderBy('is_enabled','desc')->get();
-                return response()->json(['error'=>'false','message' =>'success', 'tesco_materials' => $tesco_materials]);
+                $raw_materials = DB::table('raw_material_master')->select('id','material_name_employee','material_name_production','is_enabled', 'material_name_purchase')->orderBy('is_enabled','desc')->get();
+                return response()->json(['error'=>'false','message' =>'success', 'raw_materials' => $raw_materials]);
               } catch (\Exception $e)
               {
                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
@@ -832,15 +832,15 @@ class TescoSettings extends Controller
         }
 
        /**
-         * Add Tesco material.
+         * Add Raw material Metadata.
          * @param \Illuminate\Http\Request
          * @author <Praveen>
          * @return \Illuminate\Http\Response
          */
-        public function addTescoMaterial(Request $request)
+        public function addRawMaterial(Request $request)
         {
             try {
-                 $is_exists = TescoMaterialMaster::where('material_name_employee', 'ilike', $request['emp_material'])->where('material_name_production', 'ilike', $request['production_material'])->where('material_name_purchase', 'ilike', $request['purchase_material'])->select('id')->get();
+                 $is_exists = RawMaterialMaster::where('material_name_employee', 'ilike', $request['emp_material'])->where('material_name_production', 'ilike', $request['production_material'])->where('material_name_purchase', 'ilike', $request['purchase_material'])->select('id')->get();
 
                  if(sizeof($is_exists) > 0)
                  {
@@ -848,7 +848,7 @@ class TescoSettings extends Controller
                  }
                  else
                  {
-                    $inserted = TescoMaterialMaster::create([
+                    $inserted = RawMaterialMaster::create([
                             'material_name_employee'    => $request['emp_material'],
                             'material_name_production'  => $request['production_material'],
                             'material_name_purchase'    => $request['purchase_material'],
@@ -864,29 +864,29 @@ class TescoSettings extends Controller
             return $result;
         }
        /**
-         * Get Tesco material details by ID for editing.
-         * @param Tesco material id
+         * Get Raw material Metadata details by ID for editing.
+         * @param Raw material id
          * @author <Praveen>
          * @return \Illuminate\Http\Response
          */
-        public function getTescoMaterialById(Request $request)
+        public function getRawMaterialById(Request $request)
         {
         try {
               $id = $request['id'];
-              $tesco_material = DB::table('tesco_material_masters')->select('id','material_name_employee','material_name_production','is_enabled', 'material_name_purchase')->where('tesco_material_masters.id',$id)->get();
-              return response()->json(['error'=>'false','message' =>'success', 'tesco_material' => $tesco_material]);
+              $raw_material = DB::table('raw_material_master')->select('id','material_name_employee','material_name_production','is_enabled', 'material_name_purchase')->where('raw_material_master.id',$id)->get();
+              return response()->json(['error'=>'false','message' =>'success', 'raw_material' => $raw_material]);
             } catch (\Exception $e)
             {
               return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
             }
         }
        /**
-        * Update material by id.
+        * Update Raw material Metadata by id.
         * @param material id
         * @author <Praveen>
         * @return \Illuminate\Http\Response
         */
-        public function updateTescoMaterialById(Request $request)
+        public function updateRawMaterialById(Request $request)
         {
         try {
               $id                  = $request['id'];
@@ -895,7 +895,7 @@ class TescoSettings extends Controller
               $purchase_material   = $request['purchase_material'];
 
               /** @var array [Database Unique field validation] */
-              $is_exists = TescoMaterialMaster::select('id')
+              $is_exists = RawMaterialMaster::select('id')
                            ->where('material_name_employee', 'ilike', $emp_material)
                            ->where('material_name_production', 'ilike', $production_material)
                            ->where('material_name_purchase', 'ilike', $purchase_material)
@@ -908,7 +908,7 @@ class TescoSettings extends Controller
               }
               else
               {
-                 TescoMaterialMaster::where('id',$id)
+                 RawMaterialMaster::where('id',$id)
                   ->update([
                     'material_name_employee'    => $emp_material,
                     'material_name_production'  => $production_material,
@@ -935,7 +935,7 @@ class TescoSettings extends Controller
         try {
               $id      = $request['id'];
               
-              TescoMaterialMaster::where('id',$id)
+              RawMaterialMaster::where('id',$id)
                ->update([
                  'is_enabled'  => true
               ]);
@@ -965,7 +965,7 @@ class TescoSettings extends Controller
              }
              else
              {
-                $inserted = TescoMaterialMaster::where('id',$id)
+                $inserted = RawMaterialMaster::where('id',$id)
                               ->update([
                                 'is_enabled'  => false
                             ]);

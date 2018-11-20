@@ -1,29 +1,83 @@
-<B>HI,</B>
-<p>The following things are the mismatch found by the po verifier :</p>
-@if($po != "false")
-<p> PO Mismatch </p>
-@endif	
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
 
-@if($style_no != "false")
-<p> Style No Mismatch </p>
-@endif	
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
 
-@if($reference != "false")
-<p> Reference No Mismatch </p>
-@endif	
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
+<B>Dear User,</B>
+<br>
+<table>
+	<thead>
+		<tr>
+			<th>Customer Name </th>
+			<th>ERP ID</th>
+			<th>PO Number</th>
+			<th>Reason</th>
+		</tr>
+	</thead>
+	<tbody>
+		@if($po != "false")
+		<tr>
+			<td>{{$customer_name}}</td>
+			<td>{{$erp_order_id}}</td>
+			<td>{{$purchase_order_number}}</td>
+			<td>PO Mismatch</td>
+		</tr>
+		@endif
+		@if($style_no != "false")
+		<tr>
+			<td>{{$customer_name}}</td>
+			<td>{{$erp_order_id}}</td>
+			<td>{{$purchase_order_number}}</td>
+			<td>Style No Mismatch</td>
+		</tr>
+		@endif @if($reference != "false")
+		<tr>
+			<td>{{$customer_name}}</td>
+			<td>{{$erp_order_id}}</td>
+			<td>{{$purchase_order_number}}</td>
+			<td>Reference No Mismatch</td>
+		</tr>
+		@endif @if($qty != "false")
+		<tr>
+			<td>{{$customer_name}}</td>
+			<td>{{$erp_order_id}}</td>
+			<td>{{$purchase_order_number}}</td>
+			<td>Quantity Mismatch</td>
+		</tr>
+		@endif @if($price != "false")
+		<tr>
+			<td>{{$customer_name}}</td>
+			<td>{{$erp_order_id}}</td>
+			<td>{{$purchase_order_number}}</td>
+			<td>Price Mismatch</td>
+		</tr>
+		@endif @if($po_complete != "false")
+		<tr>
+			<td>{{$customer_name}}</td>
+			<td>{{$erp_order_id}}</td>
+			<td>{{$purchase_order_number}}</td>
+			<td>Partial PO</td>
+		</tr>
+		@endif @if($comment != "false")
+		<tr>
+			<td>{{$customer_name}}</td>
+			<td>{{$erp_order_id}}</td>
+			<td>{{$purchase_order_number}}</td>
+			<td>{{ $commenttext }}</td>
+		</tr>
+		@endif
+	</tbody>
+</table>
 
-@if($qty != "false")
-<p> Quantity Mismatch </p>
-@endif	
-
-@if($price != "false")
-<p> Price Mismatch </p>
-@endif	
-
-@if($po_complete != "false")
-<p> Partial Po </p>
-@endif	
-
-@if($comment != "false")
-<p> {{ $commenttext }} </p>
-@endif	
