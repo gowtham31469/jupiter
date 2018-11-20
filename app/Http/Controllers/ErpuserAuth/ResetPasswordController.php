@@ -4,9 +4,12 @@ namespace App\Http\Controllers\ErpuserAuth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Auth\Events\PasswordReset;
 
 class ResetPasswordController extends Controller
 {
@@ -75,5 +78,18 @@ class ResetPasswordController extends Controller
     protected function guard()
     {
         return Auth::guard('erpuser');
+    }
+	
+	protected function resetPassword($user, $password)
+    {
+        $user->password = Hash::make($password);
+
+        $user->setRememberToken(Str::random(60));
+
+        $user->save();
+
+        event(new PasswordReset($user));
+
+        return redirect()->route('erp.login');
     }
 }

@@ -72,6 +72,6 @@ class LoginController extends Controller
     }
 	
 	public function logoutToPath() {
-        return '/';
+        return '/erp/home';
     }
 }

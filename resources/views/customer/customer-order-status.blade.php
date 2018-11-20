@@ -516,7 +516,7 @@
                 });
                 this.on("error", function(file, response) {
                     this.removeFile(file);
-                    $('.snackbar_span').html('Something went wrong');
+                    $('.snackbar_span').html('Cancelled Uploading !');
                     $('#snackbar').css('background-color', '#F44336');
                     showSnackbar();
                 });

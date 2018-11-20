@@ -350,13 +350,12 @@
         var totaltax = 0;
         var pending_qnty = 0;
         var arr = [].concat(data);
+
         $('.delivery-qnty').css('border-color', '');
         var delvryQnty = {};
         var count = 0 ;
-        console.log(company_details)
         $('#company-logo').attr('src',company_details.logo);
 
-        // $('#company_details').html('<strong style="font-size:11px;">'+company_details.name+'</strong><br/>'+company_details.address+'<br/>PH : '+company_details.office_phone+', '+company_details.phone+'<br/>GST : '+company_details.gstin)
         $('#company_details').html('<h4>'+company_details.name+'</h4>'+company_details.address+'<p>PH : '+company_details.office_phone+', '+company_details.phone+'</br> GST : '+company_details.gstin+'</p>')
 
         $('#bill_to').html('<h4>Billing Address:</h4>'+data[0].company_name+'<p>'+bill_to.address+'</br> GSTN :'+data[0].gstin_number+ '</p>')
@@ -380,7 +379,7 @@
             }
            
         })
-        if (jQuery.isEmptyObject(delvryQnty) || Object.keys(delvryQnty).length<(count)) {
+        if (jQuery.isEmptyObject(delvryQnty)) {
            $('.snackbar_span').html("Please provide delivered quantity details");
            showSnackbar();
         }
@@ -539,7 +538,10 @@
             data: {
                 _token: csrf_token,
                 finalData:finalData,
-                htmlData:htmlData
+                htmlData:htmlData,
+                tax_amnt:tax_amnt,
+                place_of_supply:place_of_supply
+
             },
             tryCount: 0,
             retryLimit: 2,

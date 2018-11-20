@@ -259,7 +259,9 @@ function tescoOrders(callback) {
                                                             <div class="loader ">
                                                                 <div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>
                                                             </div>
-                                                            <div class="templateDiv "><img style="height:150px;object-fit:cover;margin-top: 122px; " src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png "></div>
+															<div class="templateDiv ">
+															<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover;margin-top: 122px; font-size: 100px;"></i>
+															</div>
                                                             <div class="descriptionDiv "></div>
                                                         </div>
                                                     </div>
@@ -277,12 +279,12 @@ function tescoOrders(callback) {
 				});
 				
 				$('#newOrdertab').click(function () {
-					$('.templateDiv').html('<img style="height:150px;object-fit:cover;margin-top: 122px; " src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png ">')
+					$('.templateDiv').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover;margin-top: 122px; font-size: 100px;"></i>')
 					$('#head_template').html("Template Preview")
 				});
 				
 				$('#viewOrdertab').click(function () {
-					$('.templateDiv').html('<img style="height:150px;object-fit:cover;margin-top: 122px; " src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png ">')
+					$('.templateDiv').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover;margin-top: 122px; font-size: 100px;"></i>')
 					$('#head_template').html("Template Preview")
 				});
 				

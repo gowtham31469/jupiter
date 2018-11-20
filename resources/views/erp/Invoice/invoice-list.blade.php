@@ -41,7 +41,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                {{$i=0}}
+                @php $i=0; @endphp
                 @foreach($invoices as $vals)
                     <tr id="{{$vals->id}}">
                         <td>{{++$i}}</td>
@@ -49,7 +49,7 @@
                         <td>{{$vals->erp_id}}</td>
                         <td>{{$vals->company_name}}</td>
                         <td>{{$vals->po_no}}</td>
-                        <td align="center"><a class="pi_generation" href="javascript:void(0)" ><i class="fa fa-eye action-button-view" data-placement="top" title="" data-original-title="view Details"></i></a></td>
+                        <td align="center"><a class="pi_generation" target="_blank" href="javascript:void(0)" data-id="{{$vals->invoice_file}}"  onclick="showInvoice(this)"><i class="fa fa-eye action-button-view" data-placement="top" title="" data-original-title="view Details"></i></a></td>
                     </tr>
                 @endforeach    
                 </tbody>
@@ -158,5 +158,11 @@ $(document).ready(function(){
     
     $('.company-nav-menu').html($('.company-nav-div').html());
 })
+
+
+function showInvoice(obj){
+ var invoice_link = base_url+$(obj).attr('data-id')
+ $('.pi_generation').attr("href",invoice_link);
+}
 </script>
  @endsection
