@@ -111,7 +111,7 @@
         {            
             var size = (value.size == null)?'-':value.size ; 
             tr += '<tr class="trClass" id="'+value.id+'">';
-            tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" checked/></td><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.id+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td>'+value.hsn_code+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty">'+value.pending_qnty+'</td><td style="width: 116px;"><input type="text" value="" class="form-control delivery-qnty" required data-id="'+value.id+'" min="1" onkeyup="updateAmount.call(this,'+uniqueTax+')"></td><td class="rate">'+value.rate+'</td><td class="amnt">'+value.pending_qnty * value.rate+'</td>';
+            tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" checked/></td><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.id+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td>'+value.hsn_code+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><input type="text" value="" class="form-control delivery-qnty" required data-id="'+value.id+'" min="1" onkeyup="updateAmount.call(this,'+uniqueTax+')"></td><td class="rate">'+value.rate+'</td><td class="amnt">'+value.pending_qnty * value.rate+'</td>';
             tr += '</tr>';
             qnty += value.order_quantity;
             pendQnty += value.pending_qnty;
@@ -199,12 +199,18 @@
     function updateAmount() {
         // var flg = 0;
         var tax_array= [].slice.call(arguments);
-        var amnt  = 0 ;
+        var amnt  = '' ;
         var result = [];
         var taxsum = {};
         var arr = [];
         var pendingQnty = 0
-        
+        var oldPendQnty = $(this).closest('tr').find('.pending-qnty').attr('data-id');
+        if ($(this).val()=="") {
+            amnt  = oldPendQnty * $(this).closest('tr').find('.rate').text();
+            console.log(amnt)
+            $(this).closest('tr').find('.amnt').html(amnt)
+            $(this).closest('tr').find('.pending-qnty').html(oldPendQnty)
+        }
         if($(this).val() <= parseInt($(this).closest('tr').find('.pending-qnty').text())){
             amnt  = parseInt($(this).val()) * $(this).closest('tr').find('.rate').text();
             $(this).closest('tr').find('.amnt').html(amnt)
@@ -212,8 +218,9 @@
             $(this).closest('tr').find('.pending-qnty').html(pendingQnty)
         }
         else{
-            amnt  = $(this).closest('tr').find('.qnty').text() * $(this).closest('tr').find('.rate').text();
+            amnt  = oldPendQnty * $(this).closest('tr').find('.rate').text();
             $(this).closest('tr').find('.amnt').html(amnt)
+            $(this).closest('tr').find('.pending-qnty').html(oldPendQnty)
             $(this).val('')
         } 
         // $(this).closest('tr').find('.order-select').attr("checked", "checked");   

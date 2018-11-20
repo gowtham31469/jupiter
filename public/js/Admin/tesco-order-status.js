@@ -1605,7 +1605,7 @@ function updateArtwork(obj)
 							location.reload()
 						 },
 						 error: function (data) {
-							// console.log(data);
+                            
 						 },
 						 complete: function () {
 
