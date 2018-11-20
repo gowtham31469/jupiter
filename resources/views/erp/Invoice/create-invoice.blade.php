@@ -83,9 +83,13 @@
                     
                     </div> 
                     <div class="col-md-4 remarks hidden">
-                        <label>Remarks</label>
+                        <label>Credit Terms</label>
                         <div class='form-group'>
-                            <textarea class='form-control input-sm' name='remarks' style='resize: vertical;min-height:10vh;'></textarea>
+                           <input type="text" class="form-control" name="credit-terms" id="credit-terms">
+                        </div>
+                        <label>E-Way Bill No.</label>
+                        <div class='form-group'>
+                           <input type="text" class="form-control" name="eway-billno" id="eway-billno">
                         </div>
 
                     </div>
@@ -132,12 +136,6 @@
                             </div>
                              <div class="col-lg-4 col-md-4 col-sm-4 pull-right" style="padding-left: 50px;">
                                 <img id="company-logo" style="height: 45px;" src="" class="img-responsive">
-                                <strong>Date</strong>
-                                <span style="padding-left: 37px;"> : <span style="padding-left: 6px;" class="invoice-date"></span>
-                                </span><br>
-                                <strong>Invoice No </strong>
-                                <span style="padding-left: 3px;"> : </span>
-                                <span style="padding-left: 4px;" class="invoice_number"></span>
 
                             </div>
                             <div class="col-lg-5 col-md-5 col-sm-5">
@@ -156,6 +154,15 @@
 
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 pull-right" id="ship_to" style="padding-left: 50px;">
+                                    <strong>Date</strong>
+                                    <span style="padding-left: 37px;"> : <span style="padding-left: 6px;" class="invoice-date"></span>
+                                    </span><br>
+                                    <strong>Invoice No </strong>
+                                    <span style="padding-left: 3px;"> : </span>
+                                    <span style="padding-left: 4px;" class="invoice_number"></span>
+                                    <strong>Dispatch</strong>
+                                    <span style="padding-left: 3px;"> : </span>
+                                    <span style="padding-left: 4px;" class="invoice_number"></span>
 
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-5">
@@ -173,9 +180,8 @@
                             <div class="row">
                                 <div class="col-md-12">
                                 <div class="col-md-4 nopadding remarks hidden">
-                                <label>Remarks</label>
+                                <label>Credit Terms</label>
                                 <div class="form-group">
-                                    <span>Datataatata</span>
                                 </div>
 
                             </div>
