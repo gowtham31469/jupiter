@@ -30,7 +30,7 @@
 
  							<td style="text-align: right;" class="companyDetails">
                                 
-                                <img src="{{$company_details->logo}}" style="height: 30px"/>
+                                <img src="{{$company_details->logo}}" style="height: 62px;margin-top: 30px;"/>
                             </td>
 
                         </tr>
@@ -52,9 +52,9 @@
                             </td>
  							<td style="text-align: right;" class="companyDetails">
                                 </br>
-                                <p><strong>Shipping Address:</strong></p>
+                                <!-- <p><strong>Shipping Address:</strong></p>
                                 <p>{{$arr[0]['company_name']}}</p>
-                                <p>{{$ship_to->address}}</p>
+                                <p>{{$ship_to->address}}</p> -->
                             </td>
                         </tr>
                     </table>

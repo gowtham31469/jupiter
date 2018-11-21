@@ -239,11 +239,15 @@ function tescoApprovePI(template_id,id,table_name,billamnt)
                $('#profoma-invoice').modal("hide");
                $('#'+table_name+'_'+id+' .pi_class').removeClass().addClass('pi_class label label-PIApproved').text('PI Approved');
                var attrbs = $('#'+table_name+'_'+id+' .pi_generation').attr('onclick');
-               var attrbs = attrbs.replace("false", "true");
+               // var attrbs = attrbs.replace("false", "true");
                $('#'+table_name+'_'+id+' .pi_generation').attr('onclick', attrbs);
                showSnackbar();
-               location.reload();
-
+               // if($(location).attr('href') === base_url + "customer/create-order"){
+               //      alert()
+               //  }
+               // else{
+               //    location.reload();  
+               //  }
             },
             400: function()
             {
