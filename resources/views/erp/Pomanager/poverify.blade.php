@@ -374,6 +374,8 @@
 				<label class="label new-po-upload label-info hidden">New po has been uploaded before verify please download the latest pdf</label>
 				<label class="label label-danger label-required-error hidden">Please check the checkbox</label>
 				<input type="hidden" id="erp_order_id">
+				<input type="hidden" id="customer_name">
+				<input type="hidden" id="po_number">
 				<table id="order-details-table" class="table table-striped table-responsive">
 					<thead>
 						<tr>
@@ -447,7 +449,7 @@
 	</div>
 </div>
 
-<section id="fixed-form-container">
+<section id="fixed-form-container" style="z-index: 9999999;">
 	<div class="button align-button">Click</div>
 		<div class="body">
 		 <div class="form-group">
@@ -498,10 +500,10 @@
 					company_name: company_name
 				},
 				beforeSend: function() {
-					location.reload();
-
 				},
-				success: function(data) {},
+				success: function(data) {
+					location.reload();
+				},
 				error: function(data) {
 
 				},
@@ -651,7 +653,9 @@
 					commenttext: commenttext,
 					count_i: i,
 					count_j: j,
-					erp_order_id: erp_order_id
+					erp_order_id: erp_order_id,
+					purchase_order_number:$('#po_number').val(),
+					customer_name:$('#customer_name').val()
 				},
 				beforeSend: function() {
 
@@ -696,6 +700,7 @@
 	function view_order_details(id, po_no, buyer_id, customer_id, po_file) {
 
 		$('#erp_order_id').val(id)
+		$('#po_number').val(po_no)
 		$('.po_file').attr('href', po_file)
 		var csrf_token = $('meta[name="csrf-token"]').attr('content');
 
@@ -743,6 +748,8 @@
 				if (data.orders[0].po_updated_status == 1) {
 					$('.new-po-upload').removeClass('hidden')
 				}
+				
+				$('#customer_name').val(data.orders[0].company_name)
 
 
 

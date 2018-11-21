@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TescoMaterialMaster extends Model
+class RawMaterialMaster extends Model
 {
     /**
       * The table associated with the model.
       *
       * @var string
       */
-      protected $table = 'tesco_material_masters';
+      protected $table = 'raw_material_master';
 
      /**
       * The attributes that are mass assignable.

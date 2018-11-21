@@ -1636,7 +1636,7 @@ function tescoMaterialMasters() {
           },
           success: function (data) {
                   var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoMaterialModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Material</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Material Master</h3></div><table id="tesco-materials-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Material Name For Employee</th><th>Material Name For Production</th><th>Material Name For Purchase</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
-                   $.each(data.tesco_materials, function(i, item){
+                   $.each(data.raw_materials, function(i, item){
                     var index = i+1;
                     tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.material_name_employee+'</td><td>'+item.material_name_production+'</td><td>'+item.material_name_purchase+'</td>';
                     if(item.is_enabled === true)
@@ -1699,7 +1699,7 @@ function tescoMaterialMasters() {
           var csrf_token          = $('meta[name="csrf-token"]').attr('content');
  
           $.ajax({
-              url: base_url + "/admin/tesco/add-tesco-material",
+              url: base_url + "/admin/tesco/add-raw-material",
               method: 'POST',
               data: {_token:csrf_token,purchase_material:purchase_material,emp_material:emp_material,production_material:production_material},
               tryCount : 0,
@@ -1754,7 +1754,7 @@ function tescoMaterialMasters() {
           }
           isSubmitting = true;
          $.ajax({
-             url:base_url + "/admin/tesco/get-tesco-material-details",
+             url:base_url + "/admin/tesco/get-raw-material-details",
              dataType:"json",
              method:"get",
              data:{id:id},
@@ -1766,9 +1766,9 @@ function tescoMaterialMasters() {
              success: function(data){
                  isSubmitting = false;
                  $('#edit_tesco_material_id').val(id);
-                 $('#edit_material_name_employee').val(data.tesco_material[0].material_name_employee);
-                 $('#edit_material_name_production').val(data.tesco_material[0].material_name_production);
-                 $('#edit_material_name_purchase').val(data.tesco_material[0].material_name_purchase);
+                 $('#edit_material_name_employee').val(data.raw_material[0].material_name_employee);
+                 $('#edit_material_name_production').val(data.raw_material[0].material_name_production);
+                 $('#edit_material_name_purchase').val(data.raw_material[0].material_name_purchase);
         
                  $('#editTescoMaterialModal').modal({
                       backdrop: 'static',
@@ -1807,7 +1807,7 @@ function tescoMaterialMasters() {
        var csrf_token          = $('meta[name="csrf-token"]').attr('content');
 
        $.ajax({
-           url:base_url + "/admin/tesco/update-tesco-material",
+           url:base_url + "/admin/tesco/update-raw-material",
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();

@@ -485,8 +485,8 @@
 								</div>
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
-										{!! Form::label('no_sticker', 'NO OF STI :', ['class' => 'form_label']) !!}
-										{!! Form::number('no_sticker',$value = '', array('class' => 'form-control input-sm','placeholder' => 'NO OF STI','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0')) !!}
+										{!! Form::label('no_sticker', 'NO OF STICKERS :', ['class' => 'form_label']) !!}
+										{!! Form::number('no_sticker',$value = '', array('class' => 'form-control input-sm','placeholder' => 'NO OF STICKERS','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
@@ -519,7 +519,6 @@
 											<th>PONUM</th>
 											<th>IDNUM</th>
 											<th>OCN</th>
-											<th>ORD NO</th>
 											<th>QNTY</th>
 											<th>P.QNTY</th>
 											<th>TOTAL</th>
@@ -531,7 +530,6 @@
 											<td>460-12344</td>
 											<td></td>
 											<td></td>
-											<td>999</td>
 											<td>150</td>
 											<td></td>
 											<td rowspan="4">800</td>
@@ -541,7 +539,6 @@
 											<td>460-12344</td>
 											<td></td>
 											<td></td>
-											<td>999</td>
 											<td>150</td>
 											<td></td>
 										</tr>
@@ -550,7 +547,6 @@
 											<td>460-12344</td>
 											<td></td>
 											<td></td>
-											<td>999</td>
 											<td>150</td>
 											<td></td>
 										</tr>
@@ -559,7 +555,6 @@
 											<td>460-12344</td>
 											<td></td>
 											<td></td>
-											<td>999</td>
 											<td>150</td>
 											<td></td>
 										</tr>
@@ -568,7 +563,6 @@
 											<td>460-12344</td>
 											<td></td>
 											<td></td>
-											<td>999</td>
 											<td>150</td>
 											<td></td>
 											<td rowspan="2">3434</td>
@@ -578,7 +572,6 @@
 											<td>460-12344</td>
 											<td></td>
 											<td></td>
-											<td>999</td>
 											<td>150</td>
 											<td></td>
 										</tr>
@@ -848,10 +841,11 @@ $(document).ready(function() {
 					company_name:company_name
 				},
 				beforeSend: function() {
-					location.reload();
+					
 
 				},
 				success: function(data) {
+					location.reload();
 				},
 				error: function(data) {
 
