@@ -64,6 +64,10 @@ class TemplateManagementCntrl extends Controller
                                 ->select('tax')
                                 ->distinct()
                                 ->get();
+         $items['material'] = DB::table("raw_material_master")
+                                ->select('id','material_name_employee')
+                                ->where('is_enabled','=',true)
+                                ->get();
          return json_encode($items);
     }  
 	/**
@@ -132,7 +136,7 @@ class TemplateManagementCntrl extends Controller
             $sapcode     = $request['sapcode'];
             $glcode      = $request['glcode'];
             $color       = $request['color'];
-            $material    = $request['material'];
+            $material_id = $request['material_id'];
             $height      = $request['height'];
             $width       = $request['width'];
             $gltext      = $request['gltext'];
@@ -148,7 +152,7 @@ class TemplateManagementCntrl extends Controller
                           'color'            => $color,
                           'dimension_height' => $height,
                           'dimension_width'  => $width,
-                          'material'         => $material
+                          'material_id'      => $material_id
                           ]);
 			
 			$items = DB::table("orchestra_template")
