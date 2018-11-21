@@ -135,7 +135,7 @@
 
                             </div>
                              <div class="col-lg-4 col-md-4 col-sm-4 pull-right" style="padding-left: 50px;">
-                                <img id="company-logo" style="height: 45px;" src="" class="img-responsive">
+                                <img id="company-logo" style="height: 62px;margin-top: 34px;" src="" class="img-responsive">
 
                             </div>
                             <div class="col-lg-5 col-md-5 col-sm-5">
@@ -144,25 +144,22 @@
                         </div>
                             <hr />
                             <div class="row">
-                                <strong style="font-size:11px;margin-left: 14px;">Customer Details : </strong>
-                            </div>
-                            <div class="row">
                                 <div class="col-lg-4 col-md-4 col-sm-4" id="bill_to">
 
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4">
 
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 pull-right" id="ship_to" style="padding-left: 50px;">
+                                <div class="col-lg-4 col-md-4 col-sm-4 pull-right" id="ship_to" style="padding-left: 50px; margin-top: 35px;">
                                     <strong>Date</strong>
                                     <span style="padding-left: 37px;"> : <span style="padding-left: 6px;" class="invoice-date"></span>
                                     </span><br>
                                     <strong>Invoice No </strong>
                                     <span style="padding-left: 3px;"> : </span>
                                     <span style="padding-left: 4px;" class="invoice_number"></span>
-                                    <strong>Dispatch</strong>
-                                    <span style="padding-left: 3px;"> : </span>
-                                    <span style="padding-left: 4px;" class="invoice_number"></span>
+                                    <p><strong>Dispatch</strong>          
+                                    <span style="padding-left: 14px;"> : </span>
+                                    <span style="padding-left: 4px;" class="dispatch"></span></p>  
 
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-5">
@@ -180,15 +177,20 @@
                             <div class="row">
                                 <div class="col-md-12">
                                 <div class="col-md-4 nopadding remarks hidden">
-                                <label>Credit Terms</label>
+                                    <label>Credit Terms</label><span style="padding-left: 8px;">:</span><span class="credit-val" style="padding-left: 20px;">Data</span>
+                                    </br>
+                                    <label>E-Way Bill No</label><span style="padding-left: 6px;">:</span><span class="eway-val" style="padding-left: 20px;">Data</span>
+                                    </br>
+                                    <strong>AMOUNT IN WORDS</strong>
+                                    <p class="amnt-in-words"></p>
+                                    </div>
                                 <div class="form-group">
+
                                 </div>
 
-                            </div>
-                            <div class="col-md-3 nopadding">
-                                
-
-                            </div>
+                                </div>
+                                <div class="col-md-3 nopadding">
+                                </div>
                             <div class="col-md-5 nopadding">
                                 <div class="preview-orders-tax"></div>
                                 <div class="preview-extra-charges"></div>

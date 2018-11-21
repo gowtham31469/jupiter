@@ -2415,14 +2415,14 @@ function setEditOrderStatus()
         }
     if(barcode_checks == 0)
     {
-        $.ajax({
-             url: base_url + "/customer/tesco/edit-check-exist-po",
-             type: 'post',
-             data: { _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,zone:zone,edit_id:edit_id,template_name:template_name},
-             success: function (data) {
-                if(data == "true")
-                {
-                    $('#po_already_error').addClass('hidden')
+        // $.ajax({
+        //      url: base_url + "/customer/tesco/edit-check-exist-po",
+        //      type: 'post',
+        //      data: { _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,zone:zone,edit_id:edit_id,template_name:template_name},
+        //      success: function (data) {
+        //         if(data == "true")
+        //         {
+        //             $('#po_already_error').addClass('hidden')
                     $.ajax({
                          url: base_url + "/customer/tesco/set-tesco-order-status",
                          type: 'post',
@@ -2453,19 +2453,19 @@ function setEditOrderStatus()
                         td_row.find('td:nth-child(1) a').text(uk_style);
                     }
 
-                }
-                else
-                {
-                    $('#po_already_error').removeClass('hidden')
-                }
-             },
-             error: function (data) {
-                console.log(data);
-             },
-             complete: function () {
+        //         }
+        //         else
+        //         {
+        //             $('#po_already_error').removeClass('hidden')
+        //         }
+        //      },
+        //      error: function (data) {
+        //         console.log(data);
+        //      },
+        //      complete: function () {
 
-             }
-        })
+        //      }
+        // })
     }
      
     

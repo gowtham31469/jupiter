@@ -244,7 +244,7 @@ function tescoApprovePI(template_id,id,table_name,billamnt)
                $('#'+table_name+'_'+id+' .pi_class').removeClass().addClass('pi_class label label-PIApproved').text('PI Approved');
 
                var attrbs = $('#'+table_name+'_'+id+' .pi_generation').attr('onclick');
-               var attrbs = attrbs.replace("false", "true");
+               // var attrbs = attrbs.replace("false", "true");
                $('#'+table_name+'_'+id+' .pi_generation').attr('onclick', attrbs);
                showSnackbar();
               location.reload();
