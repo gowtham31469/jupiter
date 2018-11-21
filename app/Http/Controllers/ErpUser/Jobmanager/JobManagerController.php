@@ -88,13 +88,14 @@ class JobManagerController extends Controller
 				{
 					$erp_order_details = DB::table('erp_orders')->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
 											->join('customers', 'erp_orders.customer_id', 'customers.id')
+											->join('buyers', 'erp_orders.buyer_id', 'buyers.id')
 											->join('erp_status', 'erp_orders.status', 'erp_status.id')
 											->where('erp_order_details.template_id', '=', $valuess)
 											->where('erp_orders.status', '=', 3)
 											->where('erp_orders.order_status_id', '=', 4)
 											->whereIn('erp_orders.buyer_id', $buyers)
 											->orderBy('erp_order_details.erp_order_id', 'asc')
-											->select('erp_orders.*', 'erp_order_details.id as erp_detail_id','erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name')
+											->select('erp_orders.*', 'erp_order_details.id as erp_detail_id','erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name')
 											->get();
 					
 					if(count($erp_order_details) > 0)
@@ -125,20 +126,62 @@ class JobManagerController extends Controller
     public function getOrderDetailsByIds(Request $request)
     {
       try {
-			 $order_detail_ids = $request['orders'];
+			 $order_detail_ids   = $request['orders'];
 			 $order_details_data = array();
+			 $buyers_array       = array();
+			 $customers_array    = array();
+			 $company_array      = array();
+			 $order_details      = array();
+			 $template_array     = array();
+			 $is_templates_combined = 0;
+
 			 foreach($order_detail_ids as $order_detail_id)
 			 {
-				$order_details_data[] = DB::table('erp_order_details')
-										  ->select('erp_order_details.*', 'erp_orders.*','company.name as company_name', 'company.logo as company_logo', 'company.address as company_address', 'customers.company_name as customer_name')
-										  ->join('erp_orders', 'erp_order_details.erp_order_id', 'erp_orders.id')
-										  ->join('company', 'company.id','erp_order_details.company_id')
-										  ->join('customers', 'customers.id','erp_orders.customer_id')
-										  ->where('erp_order_details.id', '=', $order_detail_id)
-										  ->get();
+				$order_details = DB::table('erp_order_details')
+									->select('erp_order_details.*', 'erp_orders.*')
+									->join('erp_orders', 'erp_order_details.erp_order_id', 'erp_orders.id')
+									->where('erp_order_details.id', '=', $order_detail_id)
+									->get();
+				array_push($buyers_array,$order_details{0}->buyer_id);
+				array_push($customers_array,$order_details{0}->customer_id);
+				array_push($company_array,$order_details{0}->company_id);
+				array_push($template_array,$order_details{0}->reference_name);
 			 }
-			 return $order_details_data;
-            
+
+			 $buyer_first_val = current($buyers_array);
+			 foreach ($buyers_array as $val) {
+				 if ($buyer_first_val !== $val) {
+					 return response()->json(['error'=> true,'message' =>'Different Buyers Not Acceptable'],406);
+				 } else {
+					 $buyer = DB::table('buyers')->select('buyer_name', 'id as buyer_id')->where('id', '=', $buyer_first_val)->first();
+				 }
+			 }
+
+			 $customer_first_val = current($customers_array);
+			 foreach ($customers_array as $val) {
+				 if ($customer_first_val !== $val) {
+					 return response()->json(['error'=> true,'message' =>'Different Customers Not Acceptable'],406);
+				 } else {
+					$customer = DB::table('customers')->select('company_name as customer_name', 'id')->where('id', '=', $customer_first_val)->first();
+				 }
+			 }
+
+			 $company_first_val = current($company_array);
+			 foreach ($company_array as $val) {
+				 if ($company_first_val !== $val) {
+					 return response()->json(['error'=> true,'message' =>'Different Companies Not Acceptable'],406);
+				 } else {
+					$company = DB::table('company')->select('name', 'id', 'address', 'logo')->where('id', '=', $company_first_val)->first();
+				 }
+			 }
+
+			 $template_first_val = current($template_array);
+			 foreach ($template_array as $val) {
+				 if ($template_first_val !== $val) {
+					$is_templates_combined = 1;
+				 }
+			 }
+			 
           } catch (\Exception $e)
           {
             return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);

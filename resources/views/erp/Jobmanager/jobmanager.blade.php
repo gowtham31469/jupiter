@@ -229,6 +229,7 @@
 								<th>Sl. No</th>
 								<th>ERP ID</th>
 								<th>Customer name</th>
+								<th>Buyer name</th>
 								<th>PO Number</th>
 								<th>Style Number</th>
 								<th>Reference Number</th>
@@ -244,12 +245,13 @@
 									<div class="form-check">
 									<a href="javascript:void(0)">
 										<label>
-											<input class="row-checkbox" type="checkbox" name="row-check-{{ $loop->iteration }}" style="margin-right: 10px;"> <span class="label-text" class="hidden-val">{{ $loop->iteration }}</label>
+											<input class="row-checkbox" type="checkbox" data-customer-name="{{$vals->company_name}}" style="margin-right: 10px;" onchange="return selectOrders(this)" data-buyer-name="{{$vals->buyer_name}}"> <span class="label-text" class="hidden-val">{{ $loop->iteration }}</label>
 									</a>
 									</div>
 								</td>
 								<td>{{$vals->id}}</td>
 								<td>{{$vals->company_name}}</td>
+								<td>{{$vals->buyer_name}}</td>
 								<td>{{$vals->po_no}}</td>
 								<td>{{$vals->style_no}}</td>
 								<td>{{$vals->reference_name}}</td>
@@ -521,7 +523,6 @@
 											<th>OCN</th>
 											<th>QNTY</th>
 											<th>P.QNTY</th>
-											<th>TOTAL</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -532,7 +533,6 @@
 											<td></td>
 											<td>150</td>
 											<td></td>
-											<td rowspan="4">800</td>
 										</tr>
 										<tr>
 											<td>TCL1 RatB</td>
@@ -542,6 +542,32 @@
 											<td>150</td>
 											<td></td>
 										</tr>
+										<tr>
+											<th>Total</th>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td>8000</td>
+											<td></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<table class="table table-bordered table-responsive"  style="font-size: 12px;" id="ratio-list-table">
+								    <thead>
+										<tr>
+											<th>REFNUM</th>
+											<th>PONUM</th>
+											<th>IDNUM</th>
+											<th>OCN</th>
+											<th>QNTY</th>
+											<th>P.QNTY</th>
+										</tr>
+									</thead>
+									<tbody>
 										<tr>
 											<td>TCL2 RatA</td>
 											<td>460-12344</td>
@@ -559,20 +585,11 @@
 											<td></td>
 										</tr>
 										<tr>
-											<td>TSL1 RatA</td>
-											<td>460-12344</td>
+											<th>Total</th>
 											<td></td>
 											<td></td>
-											<td>150</td>
 											<td></td>
-											<td rowspan="2">3434</td>
-										</tr>
-										<tr>
-											<td>TSL1 RatB</td>
-											<td>460-12344</td>
-											<td></td>
-											<td></td>
-											<td>150</td>
+											<td>8000</td>
 											<td></td>
 										</tr>
 									</tbody>
@@ -961,15 +978,6 @@ $(document).ready(function() {
 	$('.approved-order-list tr').click(function (event) {
         if (event.target.type !== 'checkbox') {
             $(':checkbox', this).trigger('click');
-        }
-    });
-
-	/** change table row background color	**/
-	$("input[type='checkbox']").change(function (e) {
-        if ($(this).is(":checked")) {
-            $(this).closest('tr').addClass("highlight_row");
-        } else {
-            $(this).closest('tr').removeClass("highlight_row");
         }
     });
 } );

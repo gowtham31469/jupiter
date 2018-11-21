@@ -80,3 +80,38 @@ function generateJobcard(){
         
     }
 }
+
+/**
+ * Multi checkbox selection
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function selectOrders(event)
+{
+    /** Table checkbox click functionality	**/
+    var checkbox = $("input[class='row-checkbox']");
+    var customer_name = $(event).data('customer-name');
+    var buyer_name = $(event).data('buyer-name');
+    var ischecked= $(event).is(':checked');
+    var length= $(checkbox).filter(':checked').length;
+
+    if(ischecked)
+    {
+        /** change table row background color	**/
+        $(event).closest('tr').addClass("highlight_row");
+        /** Make checkboxes disabled(having different customer and buyer names) **/
+        $(checkbox).not("[data-customer-name='"+customer_name+"']").attr("disabled", "true");
+        $(checkbox).not("[data-buyer-name='"+buyer_name+"']").attr("disabled", "true");
+
+    }
+    else
+    {
+        /** change table row background color	**/
+        $(event).closest('tr').removeClass("highlight_row");
+        /** Make checkboxes enabled iff all checkboxes unchecked **/
+        if(length === 0)
+         $(checkbox).not("[data-customer-name='"+customer_name+"']").removeAttr("disabled");
+         $(checkbox).not("[data-buyer-name='"+buyer_name+"']").removeAttr("disabled");
+
+    }
+}
