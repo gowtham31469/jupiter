@@ -62,12 +62,25 @@ class PoManagerController extends Controller
 			session()->put('company_name', strtolower( str_replace(' ','',$company_id->name)) );
 		}
 		
-		$templates   = 		DB::table('erpusers_template_mapping')
+		if($customer_id != 1)
+		{
+			$templates   = 		DB::table('erpusers_template_mapping')
 								->join('buyers','erpusers_template_mapping.buyer','buyers.id')
 							    ->where('erpusers_template_mapping.company',session()->get('company'))
 								->where('erpusers_template_mapping.erp_user',$customer_id)
 								->select('erpusers_template_mapping.*','buyers.template_table','buyers.item_master_table','buyers.id as buyer_id')
 								->get();
+		}
+		else
+		{
+			$templates   = 		DB::table('erpusers_template_mapping')
+								->join('buyers','erpusers_template_mapping.buyer','buyers.id')
+							    ->where('erpusers_template_mapping.company',session()->get('company'))
+								->select('erpusers_template_mapping.*','buyers.template_table','buyers.item_master_table','buyers.id as buyer_id')
+								->get();
+		}
+		
+		
 		
 		 $new_orders = array();
 		 $i=1;
