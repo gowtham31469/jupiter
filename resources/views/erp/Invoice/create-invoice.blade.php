@@ -175,32 +175,57 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-md-12">
-                                <div class="col-md-4 nopadding remarks hidden">
-                                    <label>Credit Terms</label><span style="padding-left: 8px;">:</span><span class="credit-val" style="padding-left: 20px;">Data</span>
-                                    </br>
-                                    <label>E-Way Bill No</label><span style="padding-left: 6px;">:</span><span class="eway-val" style="padding-left: 20px;">Data</span>
-                                    </br>
-                                    <strong>AMOUNT IN WORDS</strong>
-                                    <p class="amnt-in-words"></p>
+                                 <div class="col-md-12">
+                                    <div class="col-md-4 nopadding remarks hidden">
+                                        <label>Credit Terms</label><span style="padding-left: 8px;">:</span><span class="credit-val" style="padding-left: 20px;">Data</span>
+                                        </br>
+                                        <label>E-Way Bill No</label><span style="padding-left: 6px;">:</span><span class="eway-val" style="padding-left: 20px;">Data</span>
+                                        </br>
+                                        
                                     </div>
-                                <div class="form-group">
-
-                                </div>
-
-                                </div>
-                                <div class="col-md-3 nopadding">
-                                </div>
-                            <div class="col-md-5 nopadding">
-                                <div class="preview-orders-tax"></div>
-                                <div class="preview-extra-charges"></div>
-                                
+                                    <div class="col-md-3 nopadding">
+                                    </div>
+                                    <div class="col-md-5 nopadding">
+                                        <div class="preview-orders-tax"></div>
+                                        <div class="preview-extra-charges"></div>
+                                    </div>
+                                    <div>
+                                        <strong>AMOUNT IN WORDS</strong>
+                                        <p class="amnt-in-words"></p>
+                                    </div>
+                                    <div>
+                                        <!-- <strong>Delivery At</strong>
+                                        <p class="delivery-at"></p> -->
+                                        <label>Delivery At</label><span style="padding-left: 8px;">:</span><span class="delivery-at" style="padding-left: 20px;">Data</span>
+                                    </div>
+                                    <div class="pull-right" style="padding-right: 55px;">
+                                        <span>For Jupiter Garments Accessories</span>
+                                    </div>
+                                 </div>
                             </div>
-                            </div>
+                            </br>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="col-md-3 nopadding">
+                                     <span>Recievers Signature</span>
+                                    </div>
+                                    <div class="col-md-3 nopadding">
+                                        <span>Prepared By</span>
+                                    </div>
+                                    <div class="col-md-3 nopadding">
+                                        <span>Verified By</span>
+                                    </div>
+                                    <div class="col-md-3 nopadding">
+                                        <span>Authorized Signatory</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                 </div>
-                <div class="modal-footer"></div>
+
+                <div class="modal-footer">
+                    
+                </div>
             </div>
         </div>
     </div>
