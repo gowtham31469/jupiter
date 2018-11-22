@@ -534,6 +534,13 @@
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         var myOffscreenEl = document.getElementById("invoice");
         var htmlData =  myOffscreenEl.innerHTML;
+        var roundOff = $('#round-off').val();
+        var taxTotal = $('.tax-total').text();
+        var creditTerms = $('#credit-terms').val();
+        var ewayNo = $('#eway-billno').val();
+        var amntInwords = $('.amnt-in-words').text(); 
+        var grandTotal = parseFloat($('.grand-total').text()).toFixed(2)
+       
         //     useWidth      = myOffscreenEl.style.width,
         //     useHeight     = myOffscreenEl.style.height;
         // myOffscreenEl.style.backgroundColor = 'white';
@@ -552,8 +559,13 @@
                 finalData:finalData,
                 htmlData:htmlData,
                 tax_amnt:tax_amnt,
-                place_of_supply:place_of_supply
-
+                place_of_supply:place_of_supply,
+                roundOff:roundOff,
+                taxTotal:taxTotal,
+                creditTerms:creditTerms,
+                ewayNo:ewayNo,
+                amntInwords:amntInwords,
+                grandTotal:grandTotal
             },
             tryCount: 0,
             retryLimit: 2,
@@ -581,9 +593,8 @@
             $('.grand-total').html(grandtotal)
        }
        else{
-            $('.grand-total').html(gndtotal)
+            $('.grand-total').html(gndtotal.toFixed(2))
        }    
-        
     }
 
     function Rs(amount) {   
