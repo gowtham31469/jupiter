@@ -1745,15 +1745,13 @@ function tescoStatusTable(data,path)
                     }
                     else{
                        tr += '<td align="center"><span class="label label-CreateOrder">Create Order</span></td>';
-                    }
-                    
-                   
+                    }                    
                 }
                 else if (key == "PO Status")
                 {
-                    var str=value[key] ;                    
+                    var str = value[key] ;                    
                     var status = '';
-                    var status_text = '';
+                    var status_text = " - ";
                     if(value['po_required']== 1 && value['is_order_count_empty'] == 0)
                     {
                         if(str != null && str != ""){
