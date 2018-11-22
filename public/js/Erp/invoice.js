@@ -540,6 +540,9 @@
         var ewayNo = $('#eway-billno').val();
         var amntInwords = $('.amnt-in-words').text(); 
         var grandTotal = parseFloat($('.grand-total').text()).toFixed(2)
+        var invoiceNo = $('#invoice-no').val();
+        var invoiceDate = $('#invoice-date').val();
+        console.log(invoiceDate ,invoiceNo )
        
         //     useWidth      = myOffscreenEl.style.width,
         //     useHeight     = myOffscreenEl.style.height;
@@ -565,7 +568,9 @@
                 creditTerms:creditTerms,
                 ewayNo:ewayNo,
                 amntInwords:amntInwords,
-                grandTotal:grandTotal
+                grandTotal:grandTotal,
+                invoiceNo:invoiceNo,
+                invoiceDate:invoiceDate
             },
             tryCount: 0,
             retryLimit: 2,

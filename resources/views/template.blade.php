@@ -50,8 +50,8 @@
                             </td>
  							<td style="text-align: right;" class="companyDetails">
                                
-                                <p><strong>Date : </strong>{{$arr[0]['company_name']}}</p>
-                                <p><strong>Invoice No :  </strong>{{$ship_to->address}}</p>
+                                <p><strong>Date : </strong>{{$invoiceDate}}</p>
+                                <p><strong>Invoice No :  </strong>{{$invoiceNo}}</p>
                                 <p><strong>Disp thru : </strong>{{$ship_to->address}}</p>
                             </td>
                         </tr>
