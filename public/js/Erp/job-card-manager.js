@@ -40,10 +40,10 @@ function generateJobcard(){
         /** [ Create array of orders selected ] */
         $('.row-checkbox').each(function (i, item) {
             if ($(this).is(':checked')) {
-                orders[i]      = $(this).closest('tr').attr('id');
+                orders.push($(this).closest('tr').attr('id')); 
             }
         });
-
+        orders   = orders.join(',');
         $.ajax({
             url:base_url + "/erp/get-jobcard-order-details",
             dataType:"json",

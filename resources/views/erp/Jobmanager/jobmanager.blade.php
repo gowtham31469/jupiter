@@ -251,7 +251,7 @@
 								</td>
 								<td>{{$vals->id}}</td>
 								<td>{{$vals->company_name}}</td>
-								<td>{{$vals->buyer_name}}</td>
+								<td data-buyer-id="{{$vals->buyer_id}}">{{$vals->buyer_name}}</td>
 								<td>{{$vals->po_no}}</td>
 								<td>{{$vals->style_no}}</td>
 								<td>{{$vals->reference_name}}</td>
