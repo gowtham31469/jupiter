@@ -205,19 +205,19 @@
         var arr = [];
         var pendingQnty = 0
         var oldPendQnty = $(this).closest('tr').find('.pending-qnty').attr('data-id');
-        if ($(this).val()=="") {
+        if ($(this).val()=="" || $(this).val() < parseInt($(this).closest('tr').find('.pending-qnty').text())) {
             amnt  = oldPendQnty * $(this).closest('tr').find('.rate').text();
             console.log(amnt)
             $(this).closest('tr').find('.amnt').html(amnt)
             $(this).closest('tr').find('.pending-qnty').html(oldPendQnty)
         }
-        else if($(this).val() <= parseInt($(this).closest('tr').find('.pending-qnty').text())){
-            amnt  = parseInt($(this).val()) * $(this).closest('tr').find('.rate').text();
-            $(this).closest('tr').find('.amnt').html(amnt)
-            pendingQnty = $(this).closest('tr').find('.pending-qnty').text() - $(this).val()
-            $(this).closest('tr').find('.pending-qnty').html(pendingQnty)
-        }
-        else{
+        // else if($(this).val() < parseInt($(this).closest('tr').find('.pending-qnty').text())){
+        //     amnt  = parseInt($(this).val()) * $(this).closest('tr').find('.rate').text();
+        //     $(this).closest('tr').find('.amnt').html(amnt)
+        //     pendingQnty = $(this).closest('tr').find('.pending-qnty').text() - $(this).val()
+        //     $(this).closest('tr').find('.pending-qnty').html(pendingQnty)
+        // }
+        else if($(this).val() > parseInt($(this).closest('tr').find('.pending-qnty').text())){
             amnt  = oldPendQnty * $(this).closest('tr').find('.rate').text();
             $(this).closest('tr').find('.amnt').html(amnt)
             $(this).closest('tr').find('.pending-qnty').html(oldPendQnty)
@@ -414,7 +414,7 @@
                 value.delvry_qnty = delQnty;
                 pending_qnty = value.pending_qnty - delQnty
                 tr += '<tr class="trClass" id="'+value.id+'">';
-                tr += '<td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.id+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td>'+value.hsn_code+'</td><td class="tax-td">'+value.tax+' </td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty">'+pending_qnty+'</td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td class="amnt">'+delQnty * value.rate+'</td>';
+                tr += '<td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.id+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td>'+value.hsn_code+'</td><td class="tax-td">'+value.tax+' </td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td class="amnt">'+delQnty * value.rate+'</td>';
                 tr += '</tr>';
 
                 qnty += value.order_quantity;
@@ -422,8 +422,8 @@
                 amnt += (delQnty*value.rate);
 
             });
-            tr+= '<tr><td colspan="9"><strong>Total</strong></td><td class="preview-qnty-sum"></td><td class="preview-balnc-qnty" id="preview-balnc-qnty"></td><td class="preview-total-qnty" id="preview-total-qnty"></td><td></td><td class="preview-total-amnt"></td></tr>';
-            $('#item_details').html('<table class="table table-bordered table-condensed order-details" id="preview-order-details" style="width:100%"><thead><tr><th>Order No</th><th>PO No</th><th>Style</th><th>OCN</th><th>Item</th><th>Ref</th><th>Size</th><th>HSN</th><th>Tax (%)</th><th>Order Qty</th><th>Pending Qty</th><th>Del Qty</th><th>Rate (₹)</th><th>Amount (₹)</th></tr></thead><tbody>'+tr+'</tbody></table>');
+            tr+= '<tr><td colspan="9"><strong>Total</strong></td><td class="preview-total-qnty" id="preview-total-qnty"></td><td></td><td class="preview-total-amnt"></td></tr>';
+            $('#item_details').html('<table class="table table-bordered table-condensed order-details" id="preview-order-details" style="width:100%"><thead><tr><th>Order No</th><th>PO No</th><th>Style</th><th>OCN</th><th>Item</th><th>Ref</th><th>Size</th><th>HSN</th><th>Tax (%)</th><th>Quantity</th><th>Rate (₹)</th><th>Amount (₹)</th></tr></thead><tbody>'+tr+'</tbody></table>');
             var tax_tr = "";       
             var tax_table = $('.preview-orders-tax').html('<table class="table table-bordered text-center preview_orders_tax" style="margin-top: -23px;"><thead><tr><th>Tax (%)</th><th>Base value (₹)</th><th>Amount (₹)</th></tr></thead><tbody class="preview-tax-tabl"></tbody></table>')
 

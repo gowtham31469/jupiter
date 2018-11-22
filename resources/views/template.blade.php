@@ -25,7 +25,7 @@
                                 <p><strong>{{$company_details->name}}</strong></p>
                                 <p>{{$company_details->address}}</p>
                                 <p>{{$company_details->office_phone}}, {{$company_details->phone}}</p>
-                                <p><strong>{{$company_details->gstin}}</strong></p>
+                                <p><strong>GSTIN  : </strong>{{$company_details->gstin}}</p>
                             </td>
 
  							<td style="text-align: right;" class="companyDetails">
@@ -64,7 +64,7 @@
                 </td>
             </tr>
         </table>
-		<table cellpadding="0" cellspacing="0" border="0.5"><thead ><tr><th>Order No</th><th style="font-weight: bold;">PO No</th><th>Style</th><th>OCN</th><th>Item</th><th>Ref</th><th>Size</th><th>HSN</th><th>Tax (%)</th><th>Order Qty</th><th>Pending Qty</th><th>Del Qty</th><th>Rate (₹)</th><th>Amount (₹)</th></tr></thead><tbody>
+		<table cellpadding="0" cellspacing="0" border="0.5"><thead ><tr><th>Order No</th><th style="font-weight: bold;">PO No</th><th>Style</th><th>OCN</th><th>Item</th><th>Ref</th><th>Size</th><th>HSN</th><th>Tax (%)</th><th>Quantity</th><th>Rate (₹)</th><th>Amount (₹)</th></tr></thead><tbody>
                     @php 
                     	$totalQnty=0;
                     	$totalpendingQnty=0;
@@ -82,15 +82,11 @@
 	                    <td>{{$data['size']}}</td>
 	                    <td>{{$data['hsn_code']}}</td>
 	                    <td>{{$data['tax']}}</td>
-	                    <td>{{$data['order_quantity']}}</td>
-	                    <td>{{$data['order_quantity'] - $data['delvry_qnty']}}</td>
 	                    <td>{{$data['delvry_qnty']}}</td>
 	                    <td>{{$data['rate']}}</td>
 	                    <td>{{$data['delvry_qnty'] * $data['rate']}}</td>
                     </tr>
 	                    @php 
-	                    	$totalQnty += $data['order_quantity'];
-	                    	$totalpendingQnty += ($data['order_quantity']-$data['delvry_qnty']);
 	                    	$totalDevlryQnty += $data['delvry_qnty'];
 	                    	$totalAmnt += ($data['delvry_qnty'] * $data['rate']);
 	                    @endphp
@@ -98,15 +94,12 @@
 
                     <tr>
                     	<td colspan="9">Total</td>
-                    	<td>{{$totalQnty}}</td>
-                    	<td>{{$totalpendingQnty}}</td>
                     	<td>{{$totalDevlryQnty}}</td>
                     	<td></td>
                     	<td>{{$totalAmnt}}</td>
                     </tr>
         </tbody>
         </table>
-
         <table cellpadding="0" cellspacing="0">
             <tr class="top">
             <td></td>
@@ -211,7 +204,5 @@
                 </td>
             </tr>
         </table>
-
 </body>
-
 </html>
