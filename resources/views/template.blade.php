@@ -22,10 +22,10 @@
                     <table>
                         <tr>
                             <td class="companyDetails">
-                                <p>{{$company_details->name}}</p>
+                                <p><strong>{{$company_details->name}}</strong></p>
                                 <p>{{$company_details->address}}</p>
                                 <p>{{$company_details->office_phone}}, {{$company_details->phone}}</p>
-                                <p>{{$company_details->gstin}}</p>
+                                <p><strong>{{$company_details->gstin}}</strong></p>
                             </td>
 
  							<td style="text-align: right;" class="companyDetails">
@@ -38,23 +38,21 @@
                 </td>
             </tr>
             <hr>
-
             <tr class="information">
                 <td>
                     <table>
                         <tr>
                             <td class="companyDetails">
-                                <p>Customer Details : </p>
-                                <p><strong>Billing Address:</strong></p>
-                                <p>{{$arr[0]['company_name']}}</p>
-                                <p>GSTN : {{$arr[0]['gstin_number']}}</p>
+                                <p>Buyer</p>
+                                <p><strong>{{$arr[0]['company_name']}}</strong></p>
                                 <p>{{$bill_to->address}}</p>
+                                <p>GSTN : {{$arr[0]['gstin_number']}}</p>
                             </td>
  							<td style="text-align: right;" class="companyDetails">
-                                </br>
-                                <!-- <p><strong>Shipping Address:</strong></p>
-                                <p>{{$arr[0]['company_name']}}</p>
-                                <p>{{$ship_to->address}}</p> -->
+                               
+                                <p><strong>Date : </strong>{{$arr[0]['company_name']}}</p>
+                                <p><strong>Invoice No :  </strong>{{$ship_to->address}}</p>
+                                <p><strong>Disp thru : </strong>{{$ship_to->address}}</p>
                             </td>
                         </tr>
                     </table>
@@ -150,7 +148,19 @@
                 </td>
             </tr>
             <tr class="information">
-             <td></td>
+                <td>
+                    <table>
+                        <tr>
+                            <td class="companyDetails">
+                                <p><strong>Credit Terms </strong></p>
+                                <p><strong>E-Way Bill No </strong></p>
+                                <p></p>
+                                <p><strong>Amount in words</strong></p>
+                                <p><strong>Delivery at</strong></p>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
                 <td style="text-align: right;">
                     <table cellpadding="0" cellspacing="0" border="0.5"><thead><tr><th>Tax (%)</th><th>Base value (₹)</th><th>Amount (₹)</th></tr></thead><tbody>
                         <tr>
@@ -177,7 +187,30 @@
             </tr>
         </table>
 
-
+        <table>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <p>For Jupiter Garments Accessories</p>
+                </td>
+            </tr>
+            <tr>
+                <td class="companyDetails">
+                    <p>Recievers Signature </p>
+                </td>
+                <td class="companyDetails">
+                    <p>Prepared By</p>
+                </td>
+                <td class="companyDetails">
+                    <p>Verified By</p>
+                </td>
+                <td class="companyDetails">
+                    <p>Authorized Signatory</p>
+                </td>
+            </tr>
+        </table>
 
 </body>
 

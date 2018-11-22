@@ -81,6 +81,7 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
                         var totaltax = 0;
                         var totalcgst = 0;
                         var totalsgst = 0;
+                        var totaligst = 0
                         var billamnt = 0;
                         var amount = 0;
                         // tax = data.data.item_details[0].tax;
@@ -117,7 +118,7 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
                                 totalsgst+=((parseInt(tax)/2)/100)*(value.quantity*unit_price);
                             }
                             else if (data.data.bank_details.place_of_supply==2){
-                                totaligst+= ((parseInt(tax))/100)*(value.quantity*unit_price);
+                                totaligst   += ((parseInt(tax))/100)*(value.quantity*unit_price);
                             }
                             else{
                                amount +=(totaltax/100)* (value.quantity*unit_price);

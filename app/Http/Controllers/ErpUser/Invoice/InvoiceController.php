@@ -159,7 +159,7 @@ class InvoiceController extends Controller
 
             $dynView = View::make('template')
                 ->with(['company_details' => $company_details, 'arr' => $orders, 'ship_to'=>$ship_to,'bill_to'=>$bill_to ,'tax_amnt'=>$tax_amnt ,'place_of_supply'=>$place_of_supply]);            
-
+                
             if ($orders) {
                 $invoiceData = Invoices::create([
                                 'customer_id' => $orders[0]['customer_id'],

@@ -81,6 +81,7 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
                         var totaltax = 0;
                         var totalcgst = 0;
                         var totalsgst = 0;
+                        var totaligst = 0;
                         var billamnt = 0;
                         var amount = 0;
                         $.each(data.data.item_details, function (index, value)
