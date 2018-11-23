@@ -127,7 +127,6 @@ class JobManagerController extends Controller
     {
       try {
 			 $order_detail_ids   = explode(',', $request['orders']);
-			 $order_details_data = array();
 			 $buyers_array       = array();
 			 $customers_array    = array();
 			 $company_array      = array();
@@ -135,11 +134,13 @@ class JobManagerController extends Controller
 			 $style_array        = array();
 			 $refnum_array       = array();
 			 $ordertype_array    = array();
-			 $articles_array     = array();
 			 $temp_id_array      = array();
 			 $temp_details_array = array();
 			 $template_types     = array();
-			 $order_details_table= array();
+			 $order_qty_table    = array();
+			 $order_qty_table_id = array();
+			 $template_data      = array();
+			 $templates          = array();
 			 $is_temp_combined   = 0;
 
 			 foreach($order_detail_ids as $order_detail_id)
@@ -156,23 +157,22 @@ class JobManagerController extends Controller
 
 				!in_array($order_details->company_id, $company_array)?array_push($company_array,$order_details->company_id):$company_array;
 
-				array_push($refnum_array,$order_details->reference_name);
-
 				!in_array($order_details->created_at, $order_dt_array)?array_push($order_dt_array,$order_details->created_at):$order_dt_array;
 
 			    !in_array($order_details->style_no, $style_array)?array_push($style_array,$order_details->style_no):$style_array;
-
 
 			    !in_array($order_details->order_type, $ordertype_array)?array_push($ordertype_array,$order_details->order_type):$ordertype_array;
 
 				!in_array($order_details->template_id, $temp_id_array)?array_push($temp_id_array,$order_details->template_id):$temp_id_array
 				;
-				array_push($template_types,$order_details->template_type);
 
-				$order_details_table[$order_details->order_qnty_table_id] = $order_details->order_qnty_table_name;
+				array_push($template_types,$order_details->template_type);
+				array_push($order_qty_table,$order_details->order_qnty_table_name);
+				array_push($order_qty_table_id,$order_details->order_qnty_table_id);
+				array_push($refnum_array,$order_details->reference_name);
 
 			 }
-
+			 
 			 /** Same buyer or not validation */
 			 $buyer_first_val = current($buyers_array);
 			 foreach ($buyers_array as $val) {
@@ -180,8 +180,15 @@ class JobManagerController extends Controller
 					 return response()->json(['error'=> true,'message' =>'Different Buyers Not Acceptable'],406);
 				 } else {
 					 $buyer = DB::table('buyers')->select('buyer_name', 'id as buyer_id', 'template_table', 'item_master_table')->where('id', '=', $buyer_first_val)->first();
+								 /** Dynamic artwork template table and item master table (Based on buyer) */
+			 		 $template_table    = $buyer->template_table;
+			 		 $item_master_table = $buyer->item_master_table;
 				 }
 			 }
+
+			 /** Unset unwanted values from buyers array */
+			 unset($buyer->template_table);
+			 unset($buyer->item_master_table);
 
 			 /** Same customer or not validation */
 			 $customer_first_val = current($customers_array);
@@ -189,7 +196,7 @@ class JobManagerController extends Controller
 				 if ($customer_first_val !== $val) {
 					 return response()->json(['error'=> true,'message' =>'Different Customers Not Acceptable'],406);
 				 } else {
-					$customer = DB::table('customers')->select('company_name as customer_name', 'id')->where('id', '=', $customer_first_val)->first();
+					$customer = DB::table('customers')->select('company_name as customer_name', 'id as customer_id')->where('id', '=', $customer_first_val)->first();
 				 }
 			 }
 
@@ -199,7 +206,7 @@ class JobManagerController extends Controller
 				 if ($company_first_val !== $val) {
 					 return response()->json(['error'=> true,'message' =>'Different Companies Not Acceptable'],406);
 				 } else {
-					$company = DB::table('company')->select('name', 'id', 'address', 'logo')->where('id', '=', $company_first_val)->first();
+					$company = DB::table('company')->select('name as company', 'id as company_id', 'address as company_address', 'logo as company_logo')->where('id', '=', $company_first_val)->first();
 				 }
 			 }
 
@@ -210,9 +217,16 @@ class JobManagerController extends Controller
 					$is_temp_combined = 1;
 				 }
 			 }
-			  
-			 $template_table    = $buyer->template_table;
-			 $item_master_table = $buyer->item_master_table;
+			 
+			 /** Push all array values into template_data array */
+			 $template_data['is_temp_combined'] = $is_temp_combined;
+			 $template_data['order_date'] = min($order_dt_array);
+			 $template_data['company'] = $company;
+			 $template_data['customer'] = $customer;
+			 $template_data['buyer'] = $buyer;
+			 $template_data['ordertype_array'] = $ordertype_array;
+			 $template_data['style_array'] = $style_array;
+			 $template_data['refnum_array'] = $refnum_array;
 			 
 			 foreach($temp_id_array as $template_id)
 			 {
@@ -221,32 +235,27 @@ class JobManagerController extends Controller
 											->join($item_master_table, $item_master_table.'.id', $template_table.'.hierarchy_id')
 											->join('raw_material_master', 'raw_material_master.id', $template_table.'.material_id')
 											->where($template_table.'.item_id', '=', $template_id)
-											->get()->toArray();
+											->first();
 				if($template_details)
-				 array_push($temp_details_array,$template_details{0});
+				 array_push($temp_details_array,$template_details);
 			 }
 
 			if(empty($temp_details_array)) 
 				return response()->json(['error'=> true,'message' =>'Template Details missing.'],404);
 
-			foreach($order_details_table as $row_id => $table)
-			{
-				$orders = DB::table($table)->select($table.'.*', 'erp_order_details.template_type', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_orders.erp_id')
-							->where($table.'.id', '=', $row_id)
-							->join('erp_order_details', 'erp_order_details.order_qnty_table_id', $table.'.id')
-							->join('erp_orders', 'erp_order_details.erp_order_id', 'erp_orders.id')
-							->first();
+			$template_data['template_details'] = $temp_details_array;
 
-				if($orders->template_type == 'ratio')
-				{
-					$orders_list['ratio'][$orders->reference_name] = $orders;
-				}
-				else 
-				{
-					$orders_list['single'][$orders->reference_name] = $orders;
-				}
+			foreach($refnum_array as $key => $refnum)
+			{
+				$templates = DB::table($order_qty_table[$key])->select($order_qty_table[$key].'.*','erp_order_details.template_type', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_orders.buyer_po_number')
+						->join('erp_order_details', 'erp_order_details.order_qnty_table_id', $order_qty_table[$key].'.id')
+						->join('erp_orders', 'erp_order_details.erp_order_id', 'erp_orders.id')
+						->where($order_qty_table[$key].'.id', '=', $order_qty_table_id[$key])
+						->where('erp_order_details.reference_name', 'ilike', $refnum)
+						->first();
+				$template_data[$template_types[$key]][$refnum][] = $templates;
 			}
-				return $orders_list;
+			return $template_data;
   
           } catch (\Exception $e)
           {
