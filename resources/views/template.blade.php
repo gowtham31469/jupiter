@@ -25,7 +25,7 @@
                                 <p><strong>{{$company_details->name}}</strong></p>
                                 <p>{{$company_details->address}}</p>
                                 <p>{{$company_details->office_phone}}, {{$company_details->phone}}</p>
-                                <p><strong>{{$company_details->gstin}}</strong></p>
+                                <p><strong>GSTIN  : </strong>{{$company_details->gstin}}</p>
                             </td>
 
  							<td style="text-align: right;" class="companyDetails">
@@ -50,8 +50,8 @@
                             </td>
  							<td style="text-align: right;" class="companyDetails">
                                
-                                <p><strong>Date : </strong>{{$arr[0]['company_name']}}</p>
-                                <p><strong>Invoice No :  </strong>{{$ship_to->address}}</p>
+                                <p><strong>Date : </strong>{{$invoiceDate}}</p>
+                                <p><strong>Invoice No :  </strong>{{$invoiceNo}}</p>
                                 <p><strong>Disp thru : </strong>{{$ship_to->address}}</p>
                             </td>
                         </tr>
@@ -64,16 +64,18 @@
                 </td>
             </tr>
         </table>
-		<table cellpadding="0" cellspacing="0" border="0.5"><thead ><tr><th>Order No</th><th style="font-weight: bold;">PO No</th><th>Style</th><th>OCN</th><th>Item</th><th>Ref</th><th>Size</th><th>HSN</th><th>Tax (%)</th><th>Order Qty</th><th>Pending Qty</th><th>Del Qty</th><th>Rate (₹)</th><th>Amount (₹)</th></tr></thead><tbody>
+		<table cellpadding="0" cellspacing="0" border="0.5"><thead ><tr><th><strong>Sno</strong></th><th><strong>Order No</strong></th><th style="font-weight: bold;"><strong>PO No</strong></th><th><strong>Style</strong></th><th><strong>OCN</strong></th><th><strong>Item</strong></th><th><strong>Ref</strong></th><th><strong>Size</strong></th><th><strong>HSN</strong></th><th><strong>Tax (%)</strong></th><th><strong>Quantity</strong></th><th><strong>Rate (₹)</strong></th><th><strong>Amount (₹)</strong></th></tr></thead><tbody>
                     @php 
                     	$totalQnty=0;
                     	$totalpendingQnty=0;
                     	$totalDevlryQnty = 0;
                     	$totalAmnt = 0;
+                        $i = 0;
                     @endphp
                     @foreach($arr as $data)
                     <tr>                    
-	                    <td>{{$data['id']}}</td>
+	                    <td>{{++$i}}</td>
+                        <td>{{$data['id']}}</td>
 	                    <td>{{$data['po_no']}}</td>
 	                    <td>{{$data['style_no']}}</td>
 	                    <td>{{$data['ocn_number']}}</td>
@@ -82,31 +84,24 @@
 	                    <td>{{$data['size']}}</td>
 	                    <td>{{$data['hsn_code']}}</td>
 	                    <td>{{$data['tax']}}</td>
-	                    <td>{{$data['order_quantity']}}</td>
-	                    <td>{{$data['order_quantity'] - $data['delvry_qnty']}}</td>
 	                    <td>{{$data['delvry_qnty']}}</td>
 	                    <td>{{$data['rate']}}</td>
 	                    <td>{{$data['delvry_qnty'] * $data['rate']}}</td>
                     </tr>
 	                    @php 
-	                    	$totalQnty += $data['order_quantity'];
-	                    	$totalpendingQnty += ($data['order_quantity']-$data['delvry_qnty']);
 	                    	$totalDevlryQnty += $data['delvry_qnty'];
 	                    	$totalAmnt += ($data['delvry_qnty'] * $data['rate']);
 	                    @endphp
                     @endforeach	
 
                     <tr>
-                    	<td colspan="9">Total</td>
-                    	<td>{{$totalQnty}}</td>
-                    	<td>{{$totalpendingQnty}}</td>
+                    	<td colspan="10">Total</td>
                     	<td>{{$totalDevlryQnty}}</td>
                     	<td></td>
                     	<td>{{$totalAmnt}}</td>
                     </tr>
         </tbody>
         </table>
-
         <table cellpadding="0" cellspacing="0">
             <tr class="top">
             <td></td>
@@ -141,8 +136,16 @@
                         @endforeach
                         	<tr>
 	                        	<td colspan="2"><strong>SubTotal</strong></td>
-	                        	<td><strong></strong></td>
+	                        	<td><strong>{{$taxTotal}}</strong></td>
                         	</tr>
+                            <tr>
+                                <td colspan="2"><strong>Round Off</strong></td>
+                                <td><strong>{{$roundOff}}</strong></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><strong>Grand Total</strong></td>
+                                <td><strong>{{$grandTotal}}</strong></td>
+                            </tr>
                         </tbody>
                     </table>
                 </td>
@@ -152,16 +155,16 @@
                     <table>
                         <tr>
                             <td class="companyDetails">
-                                <p><strong>Credit Terms </strong></p>
-                                <p><strong>E-Way Bill No </strong></p>
+                                <p><strong>Credit Terms </strong>{{$creditTerms}}</p>
+                                <p><strong>E-Way Bill No </strong>{{$ewayNo}}</p>
                                 <p></p>
-                                <p><strong>Amount in words</strong></p>
-                                <p><strong>Delivery at</strong></p>
+                                <p><strong>Amount in words</strong>{{$amntInwords}}</p>
+                                <p><strong>Delivery at</strong>{{$creditTerms}}</p>
                             </td>
                         </tr>
                     </table>
                 </td>
-                <td style="text-align: right;">
+              <!--   <td style="text-align: right;">
                     <table cellpadding="0" cellspacing="0" border="0.5"><thead><tr><th>Tax (%)</th><th>Base value (₹)</th><th>Amount (₹)</th></tr></thead><tbody>
                         <tr>
                             <td>
@@ -178,7 +181,7 @@
                         </tr>
                         </tbody>
                     </table>
-                </td>
+                </td> -->
             </tr>
             <tr class="payment">
                <td >
@@ -211,7 +214,5 @@
                 </td>
             </tr>
         </table>
-
 </body>
-
 </html>

@@ -138,15 +138,23 @@ class InvoiceController extends Controller
 
     public function setInvoice(Request $request){
         try {
-            $orders   =  $request['finalData'];
-            $htmlData =  $request->htmlData;
-            $tax_amnt =  $request->tax_amnt;
+            $orders        =  $request['finalData'];
+            $htmlData      =  $request->htmlData;
+            $tax_amnt      =  $request->tax_amnt;
+            $ewayNo        =  $request->ewayNo; 
+            $creditTerms   =  $request->creditTerms;
+            $taxTotal      = $request->taxTotal;
             $place_of_supply = $request->place_of_supply;
+            $roundOff      = $request->roundOff;
+            $amntInwords   = $request->amntInwords;
+            $grandTotal    = $request->grandTotal;
+            $invoiceNo  = $request->invoiceNo;
+            $invoiceDate  = $request->invoiceDate;
             $bill_to = DB::table('customer_bill_address')
                           ->where('customer_bill_address.customer_id',$orders[0]['customer_id'])
                           ->where('customer_bill_address.is_billing_address',1)
                           ->select('address','country')
-                          ->first();                 
+                           ->first();                 
             $ship_to = DB::table('customer_bill_address')
                           ->where('customer_bill_address.customer_id',$orders[0]['customer_id'])
                           ->where('customer_bill_address.is_shipping_address',1)
@@ -158,8 +166,8 @@ class InvoiceController extends Controller
                                 ->first();
 
             $dynView = View::make('template')
-                ->with(['company_details' => $company_details, 'arr' => $orders, 'ship_to'=>$ship_to,'bill_to'=>$bill_to ,'tax_amnt'=>$tax_amnt ,'place_of_supply'=>$place_of_supply]);            
-                
+                ->with(['company_details' => $company_details, 'arr' => $orders, 'ship_to'=>$ship_to,'bill_to'=>$bill_to ,'tax_amnt'=>$tax_amnt ,'place_of_supply'=>$place_of_supply ,'roundOff'=>$roundOff,'taxTotal'=>$taxTotal, 'creditTerms'=>$creditTerms,'amntInwords'=>$amntInwords,'ewayNo'=>$ewayNo,'grandTotal'=>$grandTotal,'invoiceNo'=>$invoiceNo,'invoiceDate'=>$invoiceDate]);            
+
             if ($orders) {
                 $invoiceData = Invoices::create([
                                 'customer_id' => $orders[0]['customer_id'],
