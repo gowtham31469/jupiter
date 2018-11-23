@@ -105,14 +105,25 @@
         var totaltax = 0;
 
         taxDivision(taxData)
-        
+        var itemName = "";
         place_of_supply = orderData[0].place_of_supply;                 
         $(orderData).each(function(index, value)
         {            
-            var size = (value.size == null)?'-':value.size ; 
-            tr += '<tr class="trClass" id="'+value.id+'">';
-            tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" checked/></td><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.id+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td>'+value.hsn_code+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><input type="text" value="" class="form-control delivery-qnty" required data-id="'+value.id+'" min="1" onkeyup="updateAmount.call(this,'+uniqueTax+')"></td><td class="rate">'+value.rate+'</td><td class="amnt">'+value.pending_qnty * value.rate+'</td>';
-            tr += '</tr>';
+            var size = (value.size == null)?'-':value.size ;
+
+            if (itemName==value.item_name) {
+                tr += '<tr class="trClass" id="'+value.id+'">';
+                tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" checked/></td><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.id+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td>'+value.hsn_code+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><input type="text" value="" class="form-control delivery-qnty" required data-id="'+value.id+'" min="1" onkeyup="updateAmount.call(this,'+uniqueTax+')"></td><td class="rate">'+value.rate+'</td><td class="amnt">'+value.pending_qnty * value.rate+'</td>';
+                tr += '</tr>';
+            }
+            else{
+                itemName =  value.item_name;
+                tr += '<tr><td></td><td colspan="14"><strong style="float: left;">'+value.item_name+'</strong></td></tr><tr class="trClass" id="'+value.id+'">';
+                tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" checked/></td><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.id+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td>'+value.hsn_code+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><input type="text" value="" class="form-control delivery-qnty" required data-id="'+value.id+'" min="1" onkeyup="updateAmount.call(this,'+uniqueTax+')"></td><td class="rate">'+value.rate+'</td><td class="amnt">'+value.pending_qnty * value.rate+'</td>';
+                tr += '</tr>';
+            }
+            
+            
             qnty += value.order_quantity;
             pendQnty += value.pending_qnty;
             amnt += (value.pending_qnty*value.rate);
@@ -401,6 +412,7 @@
             $('.eway-val').text($('#eway-billno').val())
             
             var pendingQnty = 0  ;
+            var itemName ="";
             $(arr).each(function(index, value)
             {            
                 var size = (value.size == null)?'-':value.size ;
@@ -413,9 +425,18 @@
                 }
                 value.delvry_qnty = delQnty;
                 pending_qnty = value.pending_qnty - delQnty
-                tr += '<tr class="trClass" id="'+value.id+'">';
-                tr += '<td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td>'+value.hsn_code+'</td><td class="tax-td">'+value.tax+' </td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td class="amnt">'+delQnty * value.rate+'</td>';
-                tr += '</tr>';
+                if (itemName==value.item_name) {
+
+                    tr += '<tr class="trClass" id="'+value.id+'">';
+                    tr += '<td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td>'+value.hsn_code+'</td><td class="tax-td">'+value.tax+' </td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td class="amnt">'+delQnty * value.rate+'</td>';
+                    tr += '</tr>';
+                }
+                else{
+                    itemName = value.item_name;
+                    tr += '<tr><td colspan="14"><strong style="float: left;">'+value.item_name+'</strong></td></tr><tr class="trClass" id="'+value.id+'">';
+                    tr += '<td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td>'+value.hsn_code+'</td><td class="tax-td">'+value.tax+' </td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td class="amnt">'+delQnty * value.rate+'</td>';
+                    tr += '</tr>';
+                }                
 
                 qnty += value.order_quantity;
                 pendingQnty += pending_qnty

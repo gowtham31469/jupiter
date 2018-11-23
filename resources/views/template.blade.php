@@ -71,23 +71,50 @@
                     	$totalDevlryQnty = 0;
                     	$totalAmnt = 0;
                         $i = 0;
+                        $itemName="";
                     @endphp
                     @foreach($arr as $data)
-                    <tr>                    
-	                    <td>{{++$i}}</td>
+                    @if($itemName == $data['item_name'])
+                        <tr>                    
+                        <td>{{++$i}}</td>
                         <td>{{$data['id']}}</td>
-	                    <td>{{$data['po_no']}}</td>
-	                    <td>{{$data['style_no']}}</td>
-	                    <td>{{$data['ocn_number']}}</td>
-	                    <td>{{$data['reference_name']}}</td>
-	                    <td>{{$data['reference_name']}}</td>
-	                    <td>{{$data['size']}}</td>
-	                    <td>{{$data['hsn_code']}}</td>
-	                    <td>{{$data['tax']}}</td>
-	                    <td>{{$data['delvry_qnty']}}</td>
-	                    <td>{{$data['rate']}}</td>
-	                    <td>{{$data['delvry_qnty'] * $data['rate']}}</td>
+                        <td>{{$data['po_no']}}</td>
+                        <td>{{$data['style_no']}}</td>
+                        <td>{{$data['ocn_number']}}</td>
+                        <td>{{$data['reference_name']}}</td>
+                        <td>{{$data['reference_name']}}</td>
+                        <td>{{$data['size']}}</td>
+                        <td>{{$data['hsn_code']}}</td>
+                        <td>{{$data['tax']}}</td>
+                        <td>{{$data['delvry_qnty']}}</td>
+                        <td>{{$data['rate']}}</td>
+                        <td>{{$data['delvry_qnty'] * $data['rate']}}</td>
                     </tr>
+                    @else
+                        @php 
+                            $itemName = $data['item_name'];
+                        @endphp
+                        <tr>
+                            <td></td>
+                            <td colspan="12"><strong>{{$itemName}}</strong></td>
+                        </tr>
+                        <tr>                    
+                        <td>{{++$i}}</td>
+                        <td>{{$data['id']}}</td>
+                        <td>{{$data['po_no']}}</td>
+                        <td>{{$data['style_no']}}</td>
+                        <td>{{$data['ocn_number']}}</td>
+                        <td>{{$data['reference_name']}}</td>
+                        <td>{{$data['reference_name']}}</td>
+                        <td>{{$data['size']}}</td>
+                        <td>{{$data['hsn_code']}}</td>
+                        <td>{{$data['tax']}}</td>
+                        <td>{{$data['delvry_qnty']}}</td>
+                        <td>{{$data['rate']}}</td>
+                        <td>{{$data['delvry_qnty'] * $data['rate']}}</td>
+                    </tr>
+                    @endif
+                    
 	                    @php 
 	                    	$totalDevlryQnty += $data['delvry_qnty'];
 	                    	$totalAmnt += ($data['delvry_qnty'] * $data['rate']);
@@ -106,7 +133,7 @@
             <tr class="top">
             <td></td>
                 <td style="text-align: right;">
-                    <table cellpadding="0" cellspacing="0" border="0.5"><thead><tr><th>Tax (%)</th><th>Base value (₹)</th><th>Amount (₹)</th></tr></thead><tbody>
+                    <table cellpadding="0" cellspacing="0" border="0.5"><thead><tr><th><strong>Tax (%)</strong></th><th><strong>Base value (₹)</strong></th><th><strong>Amount (₹)</strong></th></tr></thead><tbody>
                    
                         @foreach($tax_amnt as $key=>$tax)
 	                        @if ($place_of_supply ==1)
@@ -158,7 +185,7 @@
                                 <p><strong>Credit Terms </strong>{{$creditTerms}}</p>
                                 <p><strong>E-Way Bill No </strong>{{$ewayNo}}</p>
                                 <p></p>
-                                <p><strong>Amount in words</strong>{{$amntInwords}}</p>
+                                <p><strong>Amount in words :  </strong>{{$amntInwords}}</p>
                                 <p><strong>Delivery at</strong>{{$creditTerms}}</p>
                             </td>
                         </tr>
