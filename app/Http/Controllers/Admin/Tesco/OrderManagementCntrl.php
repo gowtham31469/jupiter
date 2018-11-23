@@ -4419,7 +4419,7 @@ class OrderManagementCntrl extends Controller
 		$type=$request['type'];
 		$barcode=$request['barcode'];
 		
-		$tabula       = Config::get('tabula.bar_jar');
+		$tabula       = Config::get('tabula.bar_jar_big');
 		
 		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 50 16');
         $info    = json_decode($info, true);
@@ -4436,7 +4436,7 @@ class OrderManagementCntrl extends Controller
 		$type=$request['type'];
 		$barcode=$request['barcode'];
 		
-		$tabula       = Config::get('tabula.bar_jar');
+		$tabula       = Config::get('tabula.bar_jar_big');
 		
 		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 50 16');
         $info    = json_decode($info, true);

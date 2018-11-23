@@ -23,6 +23,8 @@ return [
    
 	'bar_jar' => '/var/www/html/jupiter/BarcodeGenHeigConst.jar',
 	
+	'bar_jar_big' => '/var/www/html/jupiter/BarcodeGenerator.jar',
+	
 	'pdf_jar' => '/var/www/html/jupiter/PdfGenerator.jar',
 
    /*
