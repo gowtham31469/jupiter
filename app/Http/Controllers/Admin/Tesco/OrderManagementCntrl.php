@@ -2150,9 +2150,20 @@ class OrderManagementCntrl extends Controller
 			 PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=40, $h=30, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			 PDF::ImageSVG('@' . $svg, $x=40, $y=0, $w=40, $h=30, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			
-			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 0.7, 2, 42, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+			 if($name == "TSL3-sticker")
+			 {
+				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 0.7, 2, 39, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			
-			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 39.7, 2, 42, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 39.7, 2, 39, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+			 }
+			 else
+			 {
+				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -0.7, 2, 42, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+			
+				PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 39.7, 2, 42, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+			 }
+			
+			
 			
 			
 //			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -1.7, 2, 42, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
