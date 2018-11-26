@@ -13,10 +13,11 @@ use DB;
 use Session;
 use App\ErpOrders as Erp;
 use App\ErpOrderDetails as ErpOrderDetails;
+use Carbon\Carbon;
 
 class JobManagerController extends Controller
 {
-    
+	private $current_date;
     /**
      * Create a new controller instance.
      *
@@ -24,7 +25,9 @@ class JobManagerController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('erpuser');
+		$this->middleware('erpuser');
+		// get the current time
+		$this->current_date = Carbon::now('Asia/Kolkata')->format('d-m-Y');
    
     }
 
@@ -141,7 +144,13 @@ class JobManagerController extends Controller
 			 $order_qty_table_id = array();
 			 $template_data      = array();
 			 $templates          = array();
-			 $is_temp_combined   = 0;
+			 $print_color_array  = array();
+			 $material_array     = array();
+			 $article_array      = array();
+			 $length_array       = array();
+			 $width_array        = array();
+			 $distinct_ref_array = array();
+			 $workorder_id       = substr(number_format(Carbon::now()->timestamp * rand(),0,'',''),0,8);
 
 			 foreach($order_detail_ids as $order_detail_id)
 			 {
@@ -166,13 +175,16 @@ class JobManagerController extends Controller
 				!in_array($order_details->template_id, $temp_id_array)?array_push($temp_id_array,$order_details->template_id):$temp_id_array
 				;
 
+				!in_array($order_details->reference_name, $distinct_ref_array)?array_push($distinct_ref_array,$order_details->reference_name):$distinct_ref_array
+				;
+
 				array_push($template_types,$order_details->template_type);
 				array_push($order_qty_table,$order_details->order_qnty_table_name);
 				array_push($order_qty_table_id,$order_details->order_qnty_table_id);
 				array_push($refnum_array,$order_details->reference_name);
 
 			 }
-			 
+
 			 /** Same buyer or not validation */
 			 $buyer_first_val = current($buyers_array);
 			 foreach ($buyers_array as $val) {
@@ -196,7 +208,7 @@ class JobManagerController extends Controller
 				 if ($customer_first_val !== $val) {
 					 return response()->json(['error'=> true,'message' =>'Different Customers Not Acceptable'],406);
 				 } else {
-					$customer = DB::table('customers')->select('company_name as customer_name', 'id as customer_id')->where('id', '=', $customer_first_val)->first();
+					$customer = DB::table('customers')->select('short_name as customer_name', 'id as customer_id')->where('id', '=', $customer_first_val)->first();
 				 }
 			 }
 
@@ -209,24 +221,6 @@ class JobManagerController extends Controller
 					$company = DB::table('company')->select('name as company', 'id as company_id', 'address as company_address', 'logo as company_logo')->where('id', '=', $company_first_val)->first();
 				 }
 			 }
-
-			 /** Check if, it is combined templates or not */
-			 $template_first_val = current($refnum_array);
-			 foreach ($refnum_array as $val) {
-				 if ($template_first_val !== $val) {
-					$is_temp_combined = 1;
-				 }
-			 }
-			 
-			 /** Push all array values into template_data array */
-			 $template_data['is_temp_combined'] = $is_temp_combined;
-			 $template_data['order_date'] = min($order_dt_array);
-			 $template_data['company'] = $company;
-			 $template_data['customer'] = $customer;
-			 $template_data['buyer'] = $buyer;
-			 $template_data['ordertype_array'] = $ordertype_array;
-			 $template_data['style_array'] = $style_array;
-			 $template_data['refnum_array'] = $refnum_array;
 			 
 			 foreach($temp_id_array as $template_id)
 			 {
@@ -236,14 +230,40 @@ class JobManagerController extends Controller
 											->join('raw_material_master', 'raw_material_master.id', $template_table.'.material_id')
 											->where($template_table.'.item_id', '=', $template_id)
 											->first();
+
 				if($template_details)
-				 array_push($temp_details_array,$template_details);
+				{
+					!in_array($template_details->color, $print_color_array)?array_push($print_color_array,$template_details->color):$print_color_array;
+
+					!in_array($material_array[$template_details->material_id]=$template_details->material, $material_array)?$material_array[$template_details->material_id]=$template_details->material:$material_array;
+
+					!in_array($template_details->article, $article_array)?array_push($article_array,$template_details->article):$article_array;
+
+					!in_array($template_details->length, $length_array)?array_push($length_array,$template_details->length):$length_array;
+
+					!in_array($template_details->width, $width_array)?array_push($width_array,$template_details->width):$width_array;
+				}
+				else 
+				{
+					return response()->json(['error'=> true,'message' =>'Template details are missing, contact your admin.'],404);
+				}
+				
 			 }
-
-			if(empty($temp_details_array)) 
-				return response()->json(['error'=> true,'message' =>'Template Details missing.'],404);
-
-			$template_data['template_details'] = $temp_details_array;
+			/** Push all array values into template_data array */
+			$template_data['order_date']       = Carbon::parse(min($order_dt_array))->format('d-m-Y');
+			$template_data['today_date']       = $this->current_date;
+			$template_data['workorder_id']     = $workorder_id;
+			$template_data['company']          = $company;
+			$template_data['customer']         = $customer;
+			$template_data['buyer']            = $buyer;
+			$template_data['ordertype_array']  = $ordertype_array;
+			$template_data['style_array']      = $style_array;
+			$template_data['refnum_array']     = $distinct_ref_array;
+			$template_data['color']            = $print_color_array;
+			$template_data['material']		   = $material_array;
+			$template_data['article']          = $article_array;
+			$template_data['length']   		   = $length_array;
+			$template_data['width']            = $width_array;
 
 			foreach($refnum_array as $key => $refnum)
 			{
@@ -255,7 +275,8 @@ class JobManagerController extends Controller
 						->first();
 				$template_data[$template_types[$key]][$refnum][] = $templates;
 			}
-			return $template_data;
+
+			return response()->json(['error'=> false,'message' =>'Success', 'template_data' => $template_data],200);
   
           } catch (\Exception $e)
           {

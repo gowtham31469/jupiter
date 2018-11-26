@@ -249,7 +249,7 @@
 									</a>
 									</div>
 								</td>
-								<td>{{$vals->id}}</td>
+								<td>{{$vals->erp_id}}</td>
 								<td>{{$vals->company_name}}</td>
 								<td data-buyer-id="{{$vals->buyer_id}}">{{$vals->buyer_name}}</td>
 								<td>{{$vals->po_no}}</td>
@@ -311,15 +311,13 @@
 						<div class="row">
 							<div class="col-md-12">
 								<div class="col-md-4">
-									<p><strong>Jupiter Garments Accessories	</strong><br>		
-										1-J-27-1&3, Jupiter Avenue			
-										Anupparpalayam, Tirupur - 641652
-									</p>
+									<p><strong id="company-name"></strong></p>
+									<p id="company-address"></p>
 								</div>
 								<div class="col-md-4">
 								</div>
 								<div class="col-md-4">
-								     <img src="/images/logo.png" class="pull-right" style="width: 150px;height: 60px;">
+								     <img src="" class="pull-right " id="company-logo" style="width: 150px;height: 60px;">
 								</div>
 							</div>
 						</div>
@@ -328,25 +326,25 @@
 							<div class="col-md-12">
 								<div class="col-md-4">
 									{!! Form::label('work_order', 'WORKORDER :', ['class' => 'form_label']) !!}
-								    <span>1234</span>
+								    <span id="work_order"></span>
 								</div>
 								<div class="col-md-4">
 								</div>
 								<div class="col-md-4">
-									 {!! Form::label('date', 'DATE :', ['class' => 'form_label']) !!}
-								    <span>11/10/2018</span>
+									 {!! Form::label('today-date', 'DATE :', ['class' => 'form_label']) !!}
+								    <span id="today-date"></span>
 								</div>
 							</div>
 							<div class="col-md-12">
 								<div class="col-md-4">
 									{!! Form::label('article', 'ARTICLE :', ['class' => 'form_label']) !!}
-								    <span>Sticker & Labels</span>
+								    <span id="article"></span>
 								</div>
 								<div class="col-md-4">
 								</div>
 								<div class="col-md-4">
 									 {!! Form::label('material', 'MATERIAL :', ['class' => 'form_label']) !!}
-								    <span>double side woven edge- white</span>
+								    <span id="material"></span>
 								</div>
 							</div>
 						</div>
@@ -355,25 +353,25 @@
 							<div class="col-md-12">
 								<div class="col-md-4">
 									{!! Form::label('customer', 'CUST NAME :', ['class' => 'form_label']) !!}
-								    <span>SPA</span>	
+								    <span id="customer" data-customer-id=""></span>	
 								</div>
 								<div class="col-md-4">
 									{!! Form::label('style_no', 'STYLENUM :', ['class' => 'form_label']) !!}
-								    <span>AA1234567</span>	
+								    <span id="style_no" ></span>	
 								</div>
 								<div class="col-md-4">
 									 {!! Form::label('order_type', 'ORDER TYPE :', ['class' => 'form_label']) !!}
-								    <span>INITIAL</span>	
+								    <span  id="order_type" ></span>	
 								</div>
 							</div>
 							<div class="col-md-12">
 								<div class="col-md-4">
 									{!! Form::label('buyer', 'BUYER :', ['class' => 'form_label']) !!}
-								    <span>TESCO</span>	
+								    <span id="buyer"></span>	
 								</div>
 								<div class="col-md-4">
 								    {!! Form::label('reference', 'REFERENCE :', ['class' => 'form_label']) !!}
-								    <span>FF/01/12345G</span>	
+								    <span id="reference"></span>	
 								</div>
 								<div class="col-md-4">
 									 <div class="form-group has-feedback form-inline">
@@ -389,11 +387,11 @@
 							<div class="col-md-12">
 								<div class="col-md-3">
 									{!! Form::label('order_date', 'ORDER DT :', ['class' => 'form_label']) !!}
-								    <span>10/10/2018</span>
+								    <span id="order_date"></span>
 								</div>
 								<div class="col-md-3">
 									{!! Form::label('length', 'LENGTH :', ['class' => 'form_label']) !!}
-								    <span>25</span>
+								    <span id="length"></span>
 								</div>
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
@@ -425,7 +423,7 @@
 								</div>
 								<div class="col-md-3">
 									{!! Form::label('width', 'WIDTH :', ['class' => 'form_label']) !!}
-								    <span>25</span>
+								    <span id="width"></span>
 								</div>
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
@@ -505,7 +503,7 @@
 							<div class="col-md-12">
 							   <div class="col-md-8">
 								  {!! Form::label('print_color', 'PRINT COLORS :', ['class' => 'form_label']) !!}
-								    <span>485C, 201C,300C 485C, 201C,300C</span>
+								    <span id="print_color"></span>
 							   </div>
 							   <div class="col-md-4">
 							   </div>
@@ -513,89 +511,10 @@
 						</div>
 						<hr>
 						<div class="row">
-							<div class="col-md-12">
-								<table class="table table-bordered table-responsive"  style="font-size: 12px;" id="ratio-list-table">
-								    <thead>
-										<tr>
-											<th>REFNUM</th>
-											<th>PONUM</th>
-											<th>IDNUM</th>
-											<th>OCN</th>
-											<th>QNTY</th>
-											<th>P.QNTY</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td>TCL1 RatA</td>
-											<td>460-12344</td>
-											<td></td>
-											<td></td>
-											<td>150</td>
-											<td></td>
-										</tr>
-										<tr>
-											<td>TCL1 RatB</td>
-											<td>460-12344</td>
-											<td></td>
-											<td></td>
-											<td>150</td>
-											<td></td>
-										</tr>
-										<tr>
-											<th>Total</th>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td>8000</td>
-											<td></td>
-										</tr>
-									</tbody>
-								</table>
+							<div class="col-md-12 ratio-list-table-div">
 							</div>
 						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<table class="table table-bordered table-responsive"  style="font-size: 12px;" id="ratio-list-table">
-								    <thead>
-										<tr>
-											<th>REFNUM</th>
-											<th>PONUM</th>
-											<th>IDNUM</th>
-											<th>OCN</th>
-											<th>QNTY</th>
-											<th>P.QNTY</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td>TCL2 RatA</td>
-											<td>460-12344</td>
-											<td></td>
-											<td></td>
-											<td>150</td>
-											<td></td>
-										</tr>
-										<tr>
-											<td>TCL2 RatB</td>
-											<td>460-12344</td>
-											<td></td>
-											<td></td>
-											<td>150</td>
-											<td></td>
-										</tr>
-										<tr>
-											<th>Total</th>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td>8000</td>
-											<td></td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
+						
 						<div class="row">
 							<div class="col-md-12">
 								<table class="table table-bordered table-responsive"  style="font-size: 12px;" id="single-list-table">

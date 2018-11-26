@@ -54,18 +54,196 @@ function generateJobcard(){
             beforeSend: function () {
               $(".loader").show();
             },
-            success: function(data){
-                console.log(data)
-                /** [ Backdrop for bootstrap modal ] */
-                $('#jobcardCreationModalCenter').modal({
-                     backdrop: 'static',
-                     keyboard: false
-                })
+            statusCode: {
+                /** [Show response status based on HTTP status code] */
+                200: function(data) {
+                    
+                    if(data.error === false)
+                    {
+                        if(data.template_data.company)
+                        {
+                            $('#company-name').text(data.template_data.company.company)
+                            $('#company-address').text(data.template_data.company.company_address)
+                            $('#company-logo').attr('src', data.template_data.company.company_logo);
+                            $('#company-name').attr('data-company-id', data.template_data.company.company_id)
+                        }
 
-                /** [ Validate edit_merchandiser_form form using bootstrap validator ] */
-                $('#create_jobcard').validator('validate');
-                $('#jobcardCreationModalCenter').modal('show');
-            },
+                        var workorder_id = data.template_data.company.company === 'Jupiter Garments Accessories'?'JGA-JC-':'SP-JC-';
+                        $('#today-date').text( data.template_data.today_date);
+                        $('#work_order').text( workorder_id+data.template_data.workorder_id);
+                        data.template_data.article.length > 0?$('#article').text(data.template_data.article):'';
+                        $.each(data.template_data.material, function(key, item){
+                            $('#material').text(item)
+                            $('#material').attr('data-material-id', key)
+                        });
+
+                        if(data.template_data.customer)
+                        {
+                            $('#customer').text(data.template_data.customer.customer_name)
+                            $('#customer').attr('data-cutomer-id', data.template_data.customer.cutomer_id)
+                        }
+
+                        if(data.template_data.buyer)
+                        {
+                            $('#buyer').text(data.template_data.buyer.buyer_name)
+                            $('#buyer').attr('data-buyer-id', data.template_data.buyer.buyer_id)
+                        }
+
+                        if(data.template_data.style_array.length === 1)
+                        {
+                            $('#style_no').text(data.template_data.style_array)
+                        }
+                        else
+                        {
+                            $('#style_no').text('')
+                        }
+
+                        if(data.template_data.refnum_array.length === 1)
+                        {
+                            $('#reference').text(data.template_data.refnum_array)
+                        }
+                        else
+                        {
+                            $('#reference').text('')
+                        }
+                        
+                        if(data.template_data.ordertype_array.length === 1)
+                        {
+                           if(data.template_data.ordertype_array[0] === 'newOrder')
+                           {
+                             $('#order_type').text('Initial')
+                           }
+                           else if(data.template_data.ordertype_array[0] ===  'reOrder')
+                           {
+                             $('#order_type').text('ReOrder')
+                           }
+                           else if(data.template_data.ordertype_array[0] === 'repeatOrder')
+                           {
+                             $('#order_type').text('RepeatOrder')
+                           }
+                           else
+                           {
+                             $('#order_type').text('')
+                           }
+                        }
+                        else 
+                        {
+                            $('#order_type').text('')
+                        } 
+                        
+                        $('#order_date').text(data.template_data.order_date);  
+
+                        if(data.template_data.length.length === 1)
+                        {
+                            $('#length').text(data.template_data.length)
+                        }
+                        else
+                        {
+                            $('#length').text('')
+                        } 
+
+                        if(data.template_data.width.length === 1)
+                        {
+                            $('#width').text(data.template_data.width)
+                        }
+                        else
+                        {
+                            $('#width').text('')
+                        } 
+
+                        if(data.template_data.color.length === 1)
+                        {
+                            $('#print_color').text(data.template_data.color)
+                        }
+                        else
+                        {
+                            $('#print_color').text('')
+                        }
+                        var ratio_table_html = '';
+                        var ratio_array = ['RatA', 'RatB'];
+                        if(data.template_data.ratio)
+                        {
+                            $.each(data.template_data.ratio, function(key, template){
+                                var total = 0;
+                                var i = 0;
+                                ratio_table_html += '<table class="table table-bordered table-responsive"  style="font-size: 12px;" id="ratio-list-table">\
+                                                        <thead>\
+                                                            <tr>\
+                                                                <th>REFNUM</th>\
+                                                                <th>PONUM</th>\
+                                                                <th>IDNUM</th>\
+                                                                <th>OCN</th>\
+                                                                <th>QNTY</th>\
+                                                                <th>P.QNTY</th>\
+                                                            </tr>\
+                                                        </thead>\
+                                                        <tbody>';
+                                                            $.each(template, function(index, row){
+                                                                if(i > 1)
+                                                                {
+                                                                    i -= 2;
+                                                                }
+                                                                total += row.count;
+                                                                ratio_table_html += '<tr>\
+                                                                <td>'+row.reference_name+' '+ratio_array[i]+'</td>\
+                                                                <td>'+row.buyer_po_number+'</td>\
+                                                                <td>'+row.erp_id+'</td>\
+                                                                <td>'+row.ocn_number+'</td>\
+                                                                <td>'+row.count+'</td>\
+                                                                <td></td>\
+                                                            </tr>';
+                                                            i++
+                                                            });
+                                                            ratio_table_html += '<tr>\
+                                                                <th>Total</th>\
+                                                                <td></td>\
+                                                                <td></td>\
+                                                                <td></td>\
+                                                                <td>'+total+'</td>\
+                                                                <td></td>\
+                                                            </tr>\
+                                                        </tbody>\
+                                                    </table>';
+                            });
+                        }
+                        $('.ratio-list-table-div').html(ratio_table_html);
+                        if(data.template_data.single)
+                        {
+                            
+                        }
+            
+                        
+                    }
+                    else
+                    {
+                        $('.snackbar_span').html("Something went wrong");
+                        showSnackbar();
+                    }
+                       
+                    
+                    /** [ Backdrop for bootstrap modal ] */
+                    $('#jobcardCreationModalCenter').modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    })
+
+                    /** [ Validate edit_merchandiser_form form using bootstrap validator ] */
+                    $('#create_jobcard').validator('validate');
+                    $('#jobcardCreationModalCenter').modal('show');
+                },
+                406: function(data) {
+                     $('.snackbar_span').html(data.responseJSON.message);
+                     showSnackbar();
+                },
+                404: function(data) {
+                    $('.snackbar_span').html(data.responseJSON.message);
+                    showSnackbar();
+               },
+                400: function() {
+                    $('.snackbar_span').html("Something went wrong");
+                    showSnackbar();
+                }
+           },
             error: function(errorXHR, errorStatus, errorThrown) {
                this.tryCount++;
                if (this.tryCount <= this.retryLimit) {
