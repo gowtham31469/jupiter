@@ -2135,6 +2135,7 @@ class OrderManagementCntrl extends Controller
         PDF::setPrintHeader(false);
         PDF::setPrintFooter(false);
         PDF::SetFont('frankgothcnbt');
+		PDF::SetFont('myriad');
 		PDF::SetAutoPageBreak(TRUE);
 		$i=0;
 		foreach($svgarr as $value)
@@ -2149,9 +2150,26 @@ class OrderManagementCntrl extends Controller
 			 PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=40, $h=30, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			 PDF::ImageSVG('@' . $svg, $x=40, $y=0, $w=40, $h=30, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			
-			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 3.7, 2, 33, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+			 if($name == "TSL3-sticker")
+			 {
+				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 0.7, 2, 39, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			
-			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 43.7, 2, 33, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 39.7, 2, 39, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+			 }
+			 else
+			 {
+				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 2.7, 2, 36, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+			
+				PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 41.7, 2, 36, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+			 }
+			
+			
+			
+			
+//			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -1.7, 2, 42, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+//			
+//			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 39.7, 2, 42, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+//			
 			$i++;
 		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
@@ -2951,7 +2969,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
-		  		$newTasks->ocn_number =$ocn_number;
+		  	//	$newTasks->ocn_number =$ocn_number;
 		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
@@ -4412,7 +4430,7 @@ class OrderManagementCntrl extends Controller
 		$type=$request['type'];
 		$barcode=$request['barcode'];
 		
-		$tabula       = Config::get('tabula.bar_jar');
+		$tabula       = Config::get('tabula.bar_jar_big');
 		
 		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 50 16');
         $info    = json_decode($info, true);
@@ -4429,7 +4447,7 @@ class OrderManagementCntrl extends Controller
 		$type=$request['type'];
 		$barcode=$request['barcode'];
 		
-		$tabula       = Config::get('tabula.bar_jar');
+		$tabula       = Config::get('tabula.bar_jar_big');
 		
 		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 50 16');
         $info    = json_decode($info, true);

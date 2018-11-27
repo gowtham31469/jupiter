@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Response;
 use View;
 use DB;
+use Auth;
 use Mail;
 use App\ErpOrders as Erp;
 use App\ErpOrderDetails;
@@ -96,8 +97,9 @@ class InvoiceController extends Controller
     public function erpOrderList(Request $request)
     {
         try {
-            $erp_id     = $request->erp_id;
-            $orderlist  = ErpOrderDetails::where('erp_order_id',$erp_id)
+            $customer_id = Auth::guard('erpuser')->id();
+            $erp_id      = $request->erp_id;
+            $orderlist   = ErpOrderDetails::where('erp_order_id',$erp_id)
                             ->join('company','erp_order_details.company_id','company.id')
                             ->join('erp_orders','erp_orders.id','erp_order_details.erp_order_id')
                             ->join('customers','erp_orders.customer_id','customers.id')
@@ -123,9 +125,11 @@ class InvoiceController extends Controller
             foreach ($orderlist as $key => $value){
                $details = DB::table($value->template_table)
                             ->where($value->template_table.'.item_id',$value->template_id)
-                            ->select($value->template_table.'.hsn_code',$value->template_table.'.tax')->first();
+                            ->select($value->template_table.'.hsn_code',$value->template_table.'.tax','hierarchy_id')->first();
+                     
                 $value->hsn_code = $details->hsn_code;
                 $value->tax = $details->tax;
+                $value->item_name =  DB::table($value->item_master_table)->where('id',$details->hierarchy_id)->value('item_name');
             }
             $result      = response()->json(['error'=> false,'message' =>'success','orderlist'=>$orderlist,'bill_to'=>$bill_to,'ship_to'=>$ship_to,'company_details'=>$company_details],200);
         }

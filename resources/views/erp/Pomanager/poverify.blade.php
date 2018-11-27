@@ -723,13 +723,22 @@
 				var i = 1;
 
 				$(data.orderlist).each(function(key, index) {
-					if (index.status == 2) {
+					if (index.status == 2 || index.status == 4) {
 						var label = 'label label-danger';
 					}else if (index.status == 3){
 						var label = 'label label-success';
 					}else {
 						var label = 'label label-info';
 					}
+					
+					if(index.size != null)
+						{
+							var size=index.size;
+						}
+					else
+						{
+							var size="-";
+						}
 					$('#order-details-table tbody').append(`
 						<tr id="` + index.id + `">
                           	<td class="">` + i + `</td>
@@ -737,7 +746,7 @@
 							  <td class="po_number_td">` + po_no + `</td>
 							  <td class="style_no_td">` + index.style_no + `</td>
 							  <td class="reference_td">` + index.template_name + `</td>
-							  <td class="size_td">` + index.size + `</td>
+							  <td class="size_td">` + size + `</td>
 							  <td class="qty_td">` + index.order_quantity + `</td>
 							  <td class="price_td">` + index.price + `</td>
 							  <td><span class="` + label + `">` + index.status_name + `</span></td>

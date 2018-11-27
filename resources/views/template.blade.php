@@ -64,7 +64,7 @@
                 </td>
             </tr>
         </table>
-		<table cellpadding="0" cellspacing="0" border="0.5"><thead ><tr><th><strong>Sno</strong></th><th><strong>Order No</strong></th><th style="font-weight: bold;"><strong>PO No</strong></th><th><strong>Style</strong></th><th><strong>OCN</strong></th><th><strong>Item</strong></th><th><strong>Ref</strong></th><th><strong>Size</strong></th><th><strong>HSN</strong></th><th><strong>Tax (%)</strong></th><th><strong>Quantity</strong></th><th><strong>Rate (₹)</strong></th><th><strong>Amount (₹)</strong></th></tr></thead><tbody>
+		<table cellpadding="0" cellspacing="0" border="0.5"><thead ><tr><th><strong>Sno</strong></th><th><strong>Order No</strong></th><th style="font-weight: bold;"><strong>PO No</strong></th><th><strong>Style</strong></th><th><strong>OCN</strong></th><th><strong>Ref</strong></th><th><strong>Size</strong></th><th><strong>Tax (%)</strong></th><th><strong>Quantity</strong></th><th><strong>Rate (₹)</strong></th><th><strong>Amount (₹)</strong></th></tr></thead><tbody>
                     @php 
                     	$totalQnty=0;
                     	$totalpendingQnty=0;
@@ -80,9 +80,7 @@
 	                    <td>{{$data['style_no']}}</td>
 	                    <td>{{$data['ocn_number']}}</td>
 	                    <td>{{$data['reference_name']}}</td>
-	                    <td>{{$data['reference_name']}}</td>
 	                    <td>{{$data['size']}}</td>
-	                    <td>{{$data['hsn_code']}}</td>
 	                    <td>{{$data['tax']}}</td>
 	                    <td>{{$data['delvry_qnty']}}</td>
 	                    <td>{{$data['rate']}}</td>
@@ -95,7 +93,7 @@
                     @endforeach	
 
                     <tr>
-                    	<td colspan="10">Total</td>
+                    	<td colspan="8">Total</td>
                     	<td>{{$totalDevlryQnty}}</td>
                     	<td></td>
                     	<td>{{$totalAmnt}}</td>
