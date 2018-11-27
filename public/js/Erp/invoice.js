@@ -217,7 +217,6 @@
 
         if ($.isNumeric($(this).val())) {
             if ($(this).val() == parseInt($(this).closest('tr').find('.pending-qnty').text())) {
-                alert("g")
                 amnt  = parseInt($(this).val()) * $(this).closest('tr').find('.rate').text();
                 $(this).closest('tr').find('.amnt').html(amnt)
                 pendingQnty = $(this).closest('tr').find('.pending-qnty').text() - $(this).val()
