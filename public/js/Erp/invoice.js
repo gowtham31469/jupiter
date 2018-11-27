@@ -135,7 +135,7 @@
         updateTaxAmount(tax_amnt)
 
         var gndtotal = parseFloat($('.tax-total').text())+ parseFloat($('.total-amnt').text());
-        $('.extra-charges').html('<table class="table table-borderedtext-center extra-charges" style="margin-top: -22px;"><thead><tr><th>Description</th><th>Amount (₹)</th><th><button type="button" onclick="addExtraCharges(this,event)" data-id="1" class="btn btn-default btn-sm add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i></button></th></tr></thead><tbody id="table_row"><tr><td><div style="width: 65%"><select class="charges" id="charges1" name="charges1"><option></option><option>Freight</option><option>Minimum charges</option><option>Job Work Charges</option></select></div></td><td style="width: 116px;"><input type="text" value="" min="0" id="chrg_val1" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr><tr><td colspan="2"><strong>SubTotal</strong></td><td class="sub-extra">0</td></tr><tr></tr><tr><td colspan="2"><strong>Round Off</strong></td><td style="width: 116px;"><input type="text" min="0" value="" id="round-off" class="form-control round-off" onkeyup="updateGrandTotal(this,'+gndtotal+')"></td></tr><tr><td colspan="2"><strong>Grand Total</strong></td><td class="grand-total">'+gndtotal.toFixed(2)+'</td></tr><tr></tr></tbody></table><div class="create-invoice"><button type="button" class="btn btn-primary create-invoice pull-right" style="margin-top: -10px;" id="create-invoice">Create Invoice</button></div>')
+        $('.extra-charges').html('<table class="table table-borderedtext-center extra-charges" style="margin-top: -22px;"><thead><tr><th>Description</th><th>Amount (₹)</th><th><button type="button" onclick="addExtraCharges(this,event)" data-id="1" class="btn btn-default btn-sm add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i></button></th></tr></thead><tbody id="table_row"><tr><td><div style="width: 65%"><select class="charges" id="charges1" name="charges1"><option></option><option>Freight</option><option>Minimum charges</option><option>Job Work Charges</option></select></div></td><td style="width: 116px;"><input type="text" value="" min="0" id="chrg_val1" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr></tbody></table><table class="table table-borderedtext-center" style="margin-top: -22px;"><tbody><tr><td colspan="2"><strong>SubTotal</strong></td><td class="sub-extra">0</td></tr><tr></tr><tr><td colspan="2"><strong>Round Off</strong></td><td style="width: 116px;"><input type="text" min="0" value="" id="round-off" class="form-control round-off" onkeyup="updateGrandTotal(this)"></td></tr><tr><td colspan="2"><strong>Grand Total</strong></td><td class="grand-total">'+gndtotal.toFixed(2)+'</td></tr><tr></tr></tbody></table><div class="create-invoice"><button type="button" class="btn btn-primary create-invoice pull-right" style="margin-top: -10px;" id="create-invoice">Create Invoice</button></div>')
 
             $('#create-invoice').on('click',function(){
                 previewInvoice(orderData)
@@ -486,6 +486,7 @@
                 $('.preview-round-off').text($('#round-off').val())
                 $('.preview-total-amnt').text($('.total-amnt').text())
                 $('#preview-qnty-sum').text($('.qnty-sum').text())
+                $('.preview-sub-extra').text($('.sub-extra').text())
                 $('.preview-grand-total').text($('.grand-total').text())
                 
             $('.invoice_actions').html('<button class="btn btn-default btn-xs downloadIn" id="downloadIn" onclick="downloadInvoice()" >View as PDF</button><button class="btn btn-success btn-xs" id="save-invoice">Save & Send</button><button type="button" class="btn btn-primary btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
@@ -595,10 +596,12 @@
         })
     }
 
-    function updateGrandTotal(obj,gndtotal){
+    function updateGrandTotal(obj){
+        // $(obj).closest('tr').find('.grand-total').text();
        if($.isNumeric(parseFloat($(obj).val()))) {
-            var grandtotal = parseFloat($(obj).val())+ parseFloat(gndtotal)
-            $('.grand-total').html(grandtotal)
+            alert($('.grand-total').text())
+            var grandtotal = parseFloat($(obj).val())+ parseFloat($('.grand-total').text())
+            $('.grand-total').html(grandtotal.toFixed(2))
        }
        else{
             $('.grand-total').html(gndtotal.toFixed(2))
@@ -614,21 +617,22 @@
                     <a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRow(this,event)"></i></a>\
                    </td>\
                    </tr>';
-        $(rem).closest('tr').find('#table_row').append(html);
+        $('#table_row').append(html);
         $('.delete-row').tooltip('show')
         $('.delete-row').tooltip('toggle')
     }
     function removeRow(rem,event)
     {
-        try{
-            
-             event.preventDefault();
-             /** [ Remove Row from table ] */
-             $(rem).parent().parent().parent().remove();
-          } catch (e) {
-            /** [ error statements ] */
-           console.log("Error:"+e)
-         }
+        try{            
+            event.preventDefault();
+            /** [ Remove Row from table ] */
+            $(rem).parent().parent().parent().remove();
+            updateTotal()
+        } 
+        catch (e) {
+           /** [ error statements ] */
+          console.log("Error:"+e)
+        }
     }
     function Rs(amount)
     {   
