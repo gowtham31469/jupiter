@@ -18,5 +18,5 @@ class TescoTSL1OrdersQuantity extends Model
       *
       * @var array
       */
-      protected $fillable = ['tsl1_order_id','tpnd','itf_barcode','units_per_carton','ean_barcode','size','case_size','orms_tpn','cases_per_carton','count','cases_per_carton'];
+      protected $fillable = ['tsl1_order_id','tpnd','itf_barcode','units_per_carton','ean_barcode','size','case_size','orms_tpn','cases_per_carton','count','cases_per_carton', 'ratio_pack_type'];
 }
