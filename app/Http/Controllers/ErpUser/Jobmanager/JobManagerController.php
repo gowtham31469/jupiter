@@ -267,7 +267,7 @@ class JobManagerController extends Controller
 
 			foreach($refnum_array as $key => $refnum)
 			{
-				$templates = DB::table($order_qty_table[$key])->select($order_qty_table[$key].'.*','erp_order_details.template_type', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_orders.buyer_po_number')
+				$templates = DB::table($order_qty_table[$key])->select($order_qty_table[$key].'.*','erp_order_details.template_type', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_orders.buyer_po_number', 'erp_order_details.id as erp_order_details_id')
 						->join('erp_order_details', 'erp_order_details.order_qnty_table_id', $order_qty_table[$key].'.id')
 						->join('erp_orders', 'erp_order_details.erp_order_id', 'erp_orders.id')
 						->where($order_qty_table[$key].'.id', '=', $order_qty_table_id[$key])

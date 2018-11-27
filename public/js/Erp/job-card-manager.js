@@ -69,9 +69,12 @@ function generateJobcard(){
                         }
 
                         var workorder_id = data.template_data.company.company === 'Jupiter Garments Accessories'?'JGA-JC-':'SP-JC-';
-                        $('#today-date').text( data.template_data.today_date);
                         $('#work_order').text( workorder_id+data.template_data.workorder_id);
+
+                        $('#today-date').text( data.template_data.today_date);
+
                         data.template_data.article.length > 0?$('#article').text(data.template_data.article):'';
+
                         $.each(data.template_data.material, function(key, item){
                             $('#material').text(item)
                             $('#material').attr('data-material-id', key)
@@ -159,13 +162,13 @@ function generateJobcard(){
                         {
                             $('#print_color').text('')
                         }
+
+                        /** Show ratio templates dynamic table */
                         var ratio_table_html = '';
-                        var ratio_array = ['RatA', 'RatB'];
                         if(data.template_data.ratio)
                         {
                             $.each(data.template_data.ratio, function(key, template){
                                 var total = 0;
-                                var i = 0;
                                 ratio_table_html += '<table class="table table-bordered table-responsive"  style="font-size: 12px;" id="ratio-list-table">\
                                                         <thead>\
                                                             <tr>\
@@ -178,40 +181,44 @@ function generateJobcard(){
                                                             </tr>\
                                                         </thead>\
                                                         <tbody>';
-                                                            $.each(template, function(index, row){
-                                                                if(i > 1)
-                                                                {
-                                                                    i -= 2;
-                                                                }
-                                                                total += row.count;
-                                                                ratio_table_html += '<tr>\
-                                                                <td>'+row.reference_name+' '+ratio_array[i]+'</td>\
-                                                                <td>'+row.buyer_po_number+'</td>\
-                                                                <td>'+row.erp_id+'</td>\
-                                                                <td>'+row.ocn_number+'</td>\
-                                                                <td>'+row.count+'</td>\
-                                                                <td></td>\
+                                                        template.sort(function(a, b){
+                                                            return a.id - b.id;
+                                                        });
+                                                        $.each(template, function(index, row){
+                                                            total += row.count;
+                                                            ratio_table_html += '<tr id='+row.erp_order_details_id+'>\
+                                                            <td>'+row.reference_name+' '+row.ratio_pack_type+'</td>\
+                                                            <td>'+row.buyer_po_number+'</td>\
+                                                            <td>'+row.erp_id+'</td>\
+                                                            <td>'+row.ocn_number+'</td>\
+                                                            <td>'+row.count+'</td>\
+                                                            <td></td>\
                                                             </tr>';
-                                                            i++
-                                                            });
-                                                            ratio_table_html += '<tr>\
-                                                                <th>Total</th>\
-                                                                <td></td>\
-                                                                <td></td>\
-                                                                <td></td>\
-                                                                <td>'+total+'</td>\
-                                                                <td></td>\
-                                                            </tr>\
-                                                        </tbody>\
-                                                    </table>';
+                                                        });
+                                                        ratio_table_html += '<tr>\
+                                                            <th>Total</th>\
+                                                            <td></td>\
+                                                            <td></td>\
+                                                            <td></td>\
+                                                            <td><strong>'+total+'</strong></td>\
+                                                            <td></td>\
+                                                        </tr>\
+                                                    </tbody>\
+                                                </table>';
                             });
+                            $('.ratio-list-table-div').html(ratio_table_html);
                         }
-                        $('.ratio-list-table-div').html(ratio_table_html);
+
+                        /** Show single templates dynamic table */
+                        var single_table_html = '';
                         if(data.template_data.single)
                         {
-                            
+                            $.each(data.template_data.single, function(key, template){
+                                var total = 0;
+                                single_table_html += '';
+                            });
+                            $('.single-list-table-div').html(single_table_html);
                         }
-            
                         
                     }
                     else
