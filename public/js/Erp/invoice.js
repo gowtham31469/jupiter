@@ -212,25 +212,37 @@
         var taxsum = {};
         var arr = [];
         var pendingQnty = 0
+        console.log($(this).val())
         var oldPendQnty = $(this).closest('tr').find('.pending-qnty').attr('data-id');
-        if ($(this).val() == parseInt($(this).closest('tr').find('.pending-qnty').text()) || $(this).val() < parseInt($(this).closest('tr').find('.pending-qnty').text())) {
-            amnt  = parseInt($(this).val()) * $(this).closest('tr').find('.rate').text();
-            $(this).closest('tr').find('.amnt').html(amnt)
-            pendingQnty = $(this).closest('tr').find('.pending-qnty').text() - $(this).val()
-            $(this).closest('tr').find('.pending-qnty').html(pendingQnty)
+
+        if ($.isNumeric($(this).val())) {
+            if ($(this).val() == parseInt($(this).closest('tr').find('.pending-qnty').text())) {
+                alert("g")
+                amnt  = parseInt($(this).val()) * $(this).closest('tr').find('.rate').text();
+                $(this).closest('tr').find('.amnt').html(amnt)
+                pendingQnty = $(this).closest('tr').find('.pending-qnty').text() - $(this).val()
+                $(this).closest('tr').find('.pending-qnty').html(pendingQnty)
+            }
+            else if($(this).val() < parseInt($(this).closest('tr').find('.pending-qnty').text())){
+                amnt  = parseInt($(this).val()) * $(this).closest('tr').find('.rate').text();
+                $(this).closest('tr').find('.amnt').html(amnt)
+                pendingQnty = $(this).closest('tr').find('.pending-qnty').text() - $(this).val()
+                $(this).closest('tr').find('.pending-qnty').html(pendingQnty)
+            }
+            else if($(this).val()=="" || $(this).val() > parseInt($(this).closest('tr').find('.pending-qnty').text())){
+                amnt  = oldPendQnty * $(this).closest('tr').find('.rate').text();
+                $(this).closest('tr').find('.amnt').html(amnt)
+                $(this).closest('tr').find('.pending-qnty').html(oldPendQnty)
+                $(this).val('')
+            }
         }
-        // else if($(this).val() == parseInt($(this).closest('tr').find('.pending-qnty').text())){
-        //     amnt  = parseInt($(this).val()) * $(this).closest('tr').find('.rate').text();
-        //     $(this).closest('tr').find('.amnt').html(amnt)
-        //     pendingQnty = $(this).closest('tr').find('.pending-qnty').text() - $(this).val()
-        //     $(this).closest('tr').find('.pending-qnty').html(pendingQnty)
-        // }
-        else if($(this).val()=="" || $(this).val() > parseInt($(this).closest('tr').find('.pending-qnty').text())){
+        else{
             amnt  = oldPendQnty * $(this).closest('tr').find('.rate').text();
             $(this).closest('tr').find('.amnt').html(amnt)
             $(this).closest('tr').find('.pending-qnty').html(oldPendQnty)
             $(this).val('')
-        } 
+        }
+                
         $(this).closest('tr').find('.order-select').attr("checked", "checked");   
 
         $('.total-amnt').html(totalAmount())
