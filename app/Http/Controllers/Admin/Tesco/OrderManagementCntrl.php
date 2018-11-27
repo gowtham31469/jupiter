@@ -2158,9 +2158,9 @@ class OrderManagementCntrl extends Controller
 			 }
 			 else
 			 {
-				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -0.7, 2, 42, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 2.7, 2, 36, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			
-				PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 39.7, 2, 42, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 41.7, 2, 36, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			 }
 			
 			
@@ -2969,7 +2969,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
-		  		$newTasks->ocn_number =$ocn_number;
+		  	//	$newTasks->ocn_number =$ocn_number;
 		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
