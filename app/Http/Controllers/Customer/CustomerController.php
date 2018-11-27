@@ -33,6 +33,7 @@ class CustomerController extends Controller
     {
           try {
                  $customer_id = Auth::guard('web_customer')->user()->id;
+			   $company_id = Auth::guard('web_customer')->user()->company_id;
                  $buyers          = DB::table('customer_profile_buyer')
 								  ->join('buyers', 'buyers.id', 'customer_profile_buyer.buyer_id')
 								  ->where('customer_profile_buyer.customer_profile_id',$customer_id)
@@ -54,7 +55,7 @@ class CustomerController extends Controller
                                      ->get();  
                 
                    
-                     return view('customer/company')->with(['company' => $company, 'buyers' => $buyers,'customers' => $customers,'roles' => $roles,'customer_id'=>$customer_id]);
+                     return view('customer/company')->with(['company' => $company, 'buyers' => $buyers,'customers' => $customers,'roles' => $roles,'customer_id'=>$customer_id,'company_id'=>$company_id]);
                  
          } catch (\Exception $e)
          {
