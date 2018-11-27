@@ -152,7 +152,6 @@
 	}
 	
 	.first-padding {
-		padding: 10px 15px;
 		font-weight: bold;
 		font-size: 14px;
 	}
@@ -273,6 +272,14 @@
 
 .align-button{
   margin-left: 74% !important;
+}
+
+.confirmation-container > .col-md-6{
+	padding-left: 50px;
+}
+
+#comment_box{
+	height: 100px;
 }
 </style>
 @section('navbar')
@@ -398,34 +405,56 @@
 
 
 				<div class="col-md-12 confirmation-container">
-					<div class="col-md-6">
+					<div class="col-md-5">
+						<div class="row">
 						<div class="col-md-4"></div>
 						<div class="first-padding col-md-4 text-center"> OK</div>
 						<div class="first-padding odd-padding col-md-4 text-center">Not OK</div>
+						</div>
 
+						<div class="row">
 						<div class="col-md-4 first-padding">PO Number</div>
-						<div class="col-md-4 text-center"> <label class="btn"><input type="radio" name='po-number-radio' class="hidden" value="ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i> </label></div>
-						<div class="col-md-4 text-center"><label class="btn"><input type="radio" name='po-number-radio' class="hidden" value="not-ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i></label> </div>
+						<div class="col-md-4 text-center"> 
+						<input type="radio" name='po-number-radio' value="ok">
+						</div>
+						<div class="col-md-4 text-center">
+						<input type="radio" name='po-number-radio' value="not-ok">
+						</div>
+						</div>
 
+						<div class="row">
 						<div class="col-md-4 first-padding">Style Number</div>
-						<div class="col-md-4 text-center"> <label class="btn"><input type="radio" name='style-number-radio' class="hidden" value="ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i> </label></div>
-						<div class="col-md-4 text-center"><label class="btn"><input type="radio" name='style-number-radio' class="hidden" value="not-ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i></label></div>
+						<div class="col-md-4 text-center"> 
+						<input type="radio" name='style-number-radio'  value="ok">
+						</div>
+						<div class="col-md-4 text-center">
+						<input type="radio" name='style-number-radio'  value="not-ok">
+						</div>
+						</div>
 
+						<div class="row">
 						<div class="col-md-4 first-padding">Refernce Number</div>
-						<div class="col-md-4 text-center"> <label class="btn"><input type="radio" name='ref-number-radio' class="hidden" value="ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i> </label></div>
-						<div class="col-md-4 text-center"><label class="btn"><input type="radio" name='ref-number-radio' class="hidden" value="not-ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i></label></div>
+						<div class="col-md-4 text-center"><input type="radio" name='ref-number-radio'  value="ok"></div>
+						<div class="col-md-4 text-center"><input type="radio" name='ref-number-radio'  value="not-ok"></div>
+						</div>
 
+						<div class="row">
 						<div class="col-md-4 first-padding">Quantity</div>
-						<div class="col-md-4 text-center"> <label class="btn"><input type="radio" name='qty-radio' class="hidden" value="ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i> </label></div>
-						<div class="col-md-4 text-center"><label class="btn"><input type="radio" name='qty-radio' class="hidden" value="not-ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i></label></div>
+						<div class="col-md-4 text-center"> <input type="radio" name='qty-radio' value="ok"></div>
+						<div class="col-md-4 text-center"><input type="radio" name='qty-radio'  value="not-ok"></div>
+						</div>
 
+						<div class="row">
 						<div class="col-md-4 first-padding">Price</div>
-						<div class="col-md-4 text-center"> <label class="btn"><input type="radio" name='price-radio' class="hidden" value="ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i> </label></div>
-						<div class="col-md-4 text-center"><label class="btn"><input type="radio" name='price-radio' class="hidden" value="not-ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i></label></div>
+						<div class="col-md-4 text-center"><input type="radio" name='price-radio' value="ok"></div>
+						<div class="col-md-4 text-center"><input type="radio" name='price-radio' value="not-ok"></div>
+						</div>
 
+						<div class="row">
 						<div class="col-md-4 first-padding">PO Complete</div>
-						<div class="col-md-4 text-center"> <label class="btn"><input type="radio" name='po-complete-radio' class="hidden" value="ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i> </label></div>
-						<div class="col-md-4 text-center"><label class="btn"><input type="radio" name='po-complete-radio' class="hidden" value="not-ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i></label></div>
+						<div class="col-md-4 text-center"><input type="radio" name='po-complete-radio'  value="ok"></div>
+						<div class="col-md-4 text-center"><input type="radio" name='po-complete-radio' value="not-ok"></div>
+						</div>
 
 					</div>
 					<div class="col-md-6">
