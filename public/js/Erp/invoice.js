@@ -7,7 +7,7 @@
     var ship_to = '';
     var bill_to = '';
     var company_details = '';
-
+    var eChargesArr = []
     function dynamicTable() {
         var customer_id  = $("#customer option:selected").val();
         var html = "";
@@ -488,11 +488,13 @@
             var trclass1 = $( "#charges1" ).val()==""?"hidden":'';
             var trclass2 = $( "#charges2" ).val()==""?"hidden":'';
             var trclass3 = $( "#charges3" ).val()==""?"hidden":'';
-            $('.charges').each(function()
+            
+            $(document).find('#table_row').find('tr').each(function()
             {
-                var $val = $("option:selected",this).text();
-                console.log(($val));
-                eTr += '<tr class="'+trclass1+'"><td colspan="2">'+$val+'</td><td></td></tr>'
+                var eName = $(this).find("select option:selected").text();
+                let eAmount = $(this).find('.extra-amnt').val();
+                eChargesArr[eName] = eAmount;               
+                eTr += '<tr class="'+trclass1+'"><td colspan="2">'+eName+'</td><td>'+eAmount+'</td></tr>'
             });
             var tableHide = trclass1 && trclass2 && trclass3 =="hidden" ?"hidden":''
             $('.preview-extra-charges').html('<table class="table table-bordered text-center preview-extra-charges" style="margin-top: -22px;"><thead><tr class='+tableHide+'><th colspan="2">Description</th><th>Amount (₹)</th></tr></thead><tbody>'+eTr+'<tr class='+tableHide+'><td colspan="2"><strong>SubTotal</strong></td><td><strong class="preview-sub-extra"></strong></td></tr><tr><td colspan="2"><strong>Round Off</strong></td><td><strong class="preview-round-off" id="preview-round-off"></strong></td></tr><tr></tr><tr><td colspan="2"><strong>Grand Total</strong></td><td><strong class="preview-grand-total"></strong></td></tr><tr></tr></tbody></table>')
@@ -588,7 +590,8 @@
                 amntInwords:amntInwords,
                 grandTotal:grandTotal,
                 invoiceNo:invoiceNo,
-                invoiceDate:invoiceDate
+                invoiceDate:invoiceDate,
+                eChargesArr:eChargesArr
             },
             tryCount: 0,
             retryLimit: 2,
