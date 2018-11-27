@@ -516,8 +516,96 @@
 						</div>
 						
 						<div class="row">
-							<div class="col-md-12 single-list-table-div">
-								
+							<div class="col-md-12 single-list-table">
+								<table class="table table-bordered table-responsive"  style="font-size: 12px;" id="single-list-table">
+									<tbody>
+										<tr>
+											<th>ID Num</th>
+											<td colspan="2">1000</td>
+											<td colspan="2">1000</td>
+											<td colspan="2">1000</td>
+											<td colspan="5" rowspan="3">REFNUM  : TCL4</td>
+										</tr>
+										<tr>
+											<th>B. PO NUM</th>
+											<td colspan="2">460-12345</td>
+											<td colspan="2">460-12346</td>
+											<td colspan="2">460-12347</td>
+										</tr>
+										<tr>
+										    <th>OCN Num</th>
+											<td colspan="2">1</td>
+											<td colspan="2">2</td>
+											<td colspan="2">3</td>
+										</tr>
+										<tr>
+										<tr>
+											<th>SIZE /Price</th>
+											<th>O.QNT</th>
+											<th>P.QNT</th>
+											<th>O.QNT</th>
+											<th>P.QNT</th>
+											<th>O.QNT</th>
+											<th>P.QNT</th>
+											<th>TOTAL</th>
+											<th>EXCESS</th>
+											<th>MTRS</th>
+											<th>Stock</th>
+										</tr>
+										<tr>
+											<td>2-3</td>
+											<td>1000</td>
+											<td></td>
+											<td>1000</td>
+											<td></td>
+											<td>1000</td>
+											<td></td>
+											<td>3000</td>
+											<td>150</td>
+											<td></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td>2-3</td>
+											<td>1000</td>
+											<td></td>
+											<td>1000</td>
+											<td></td>
+											<td>1000</td>
+											<td></td>
+											<td>3000</td>
+											<td>150</td>
+											<td></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td>2-3</td>
+											<td>1000</td>
+											<td></td>
+											<td>1000</td>
+											<td></td>
+											<td>1000</td>
+											<td></td>
+											<td>3000</td>
+											<td>150</td>
+											<td></td>
+											<td></td>
+										</tr>
+										<tr>
+										    <th>TOTAL</th>
+											<td>25000</td>
+											<td></td>
+											<td>25000</td>
+											<td></td>
+											<td>25000</td>
+											<td></td>
+											<td>75000</td>
+											<td>3000</td>
+											<td>0</td>
+											<td>0</td>
+										</tr>
+									</tbody>
+								</table>
 							</div>
 						</div>
 						<div class="col-md-12">
@@ -735,7 +823,7 @@ $(document).ready(function() {
 			//For Custom Filters
 			this.api().columns().every( function (i) {
 				var column = this;
-				if(i === 1 || i === 2 || i === 3 || i === 4 || i === 5 || i === 6) {
+				if(i === 1 || i === 2 || i === 4 || i === 5 || i === 6 || i === 7) {
 					var select;
 					switch(i) {
 						case 1:
@@ -744,16 +832,16 @@ $(document).ready(function() {
 						case 2:
 							select = $('#customerName')
 							break;
-						case 3:
+						case 4:
 							select = $('#poNumber')
 							break;
-						case 4:
+						case 5:
 							select = $('#styleNumber')
 							break;
-						case 5:
+						case 6:
 							select = $('#refNumber')
 							break;
-						case 6:
+						case 7:
 							select = $('#delDate')
 							break;
 					}

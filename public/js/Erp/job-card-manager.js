@@ -182,16 +182,16 @@ function generateJobcard(){
                                                         </thead>\
                                                         <tbody>';
                                                         template.sort(function(a, b){
-                                                            return a.id - b.id;
+                                                            return a.qty_table_id - b.qty_table_id;
                                                         });
                                                         $.each(template, function(index, row){
-                                                            total += row.count;
+                                                            total += row.order_quantity;
                                                             ratio_table_html += '<tr id='+row.erp_order_details_id+'>\
                                                             <td>'+row.reference_name+' '+row.ratio_pack_type+'</td>\
                                                             <td>'+row.buyer_po_number+'</td>\
                                                             <td>'+row.erp_id+'</td>\
                                                             <td>'+row.ocn_number+'</td>\
-                                                            <td>'+row.count+'</td>\
+                                                            <td>'+row.order_quantity+'</td>\
                                                             <td></td>\
                                                             </tr>';
                                                         });
@@ -215,7 +215,69 @@ function generateJobcard(){
                         {
                             $.each(data.template_data.single, function(key, template){
                                 var total = 0;
-                                single_table_html += '';
+                                single_table_html += '<table class="table table-bordered table-responsive"  style="font-size: 12px;" id="single-list-table">\
+                                                    <tbody>\
+                                                        <tr>\
+                                                            <th>ID Num</th>\
+                                                            <td colspan="2">1000</td>\
+                                                            <td colspan="2">1000</td>\
+                                                            <td colspan="2">1000</td>\
+                                                            <td colspan="5" rowspan="3">REFNUM  : TCL4</td>\
+                                                        </tr>\
+                                                        <tr>\
+                                                            <th>B. PO NUM</th>\
+                                                            <td colspan="2">460-12345</td>\
+                                                            <td colspan="2">460-12346</td>\
+                                                            <td colspan="2">460-12347</td>\
+                                                        </tr>\
+                                                        <tr>\
+                                                            <th>OCN Num</th>\
+                                                            <td colspan="2">1</td>\
+                                                            <td colspan="2">2</td>\
+                                                            <td colspan="2">3</td>\
+                                                        </tr>\
+                                                        <tr>\
+                                                        <tr>\
+                                                            <th>SIZE /Price</th>\
+                                                            <th>O.QNT</th>\
+                                                            <th>P.QNT</th>\
+                                                            <th>O.QNT</th>\
+                                                            <th>P.QNT</th>\
+                                                            <th>O.QNT</th>\
+                                                            <th>P.QNT</th>\
+                                                            <th>TOTAL</th>\
+                                                            <th>EXCESS</th>\
+                                                            <th>MTRS</th>\
+                                                            <th>Stock</th>\
+                                                        </tr>\
+                                                        <tr>\
+                                                            <td>2-3</td>\
+                                                            <td>1000</td>\
+                                                            <td></td>\
+                                                            <td>1000</td>\
+                                                            <td></td>\
+                                                            <td>1000</td>\
+                                                            <td></td>\
+                                                            <td>3000</td>\
+                                                            <td>150</td>\
+                                                            <td></td>\
+                                                            <td></td>\
+                                                        </tr>\
+                                                        <tr>\
+                                                            <th>TOTAL</th>\
+                                                            <td>25000</td>\
+                                                            <td></td>\
+                                                            <td>25000</td>\
+                                                            <td></td>\
+                                                            <td>25000</td>\
+                                                            <td></td>\
+                                                            <td>75000</td>\
+                                                            <td>3000</td>\
+                                                            <td>0</td>\
+                                                            <td>0</td>\
+                                                        </tr>\
+                                                    </tbody>\
+                                                </table>';
                             });
                             $('.single-list-table-div').html(single_table_html);
                         }

@@ -150,6 +150,7 @@ class JobManagerController extends Controller
 			 $length_array       = array();
 			 $width_array        = array();
 			 $distinct_ref_array = array();
+
 			 $workorder_id       = substr(number_format(Carbon::now()->timestamp * rand(),0,'',''),0,8);
 
 			 foreach($order_detail_ids as $order_detail_id)
@@ -182,7 +183,6 @@ class JobManagerController extends Controller
 				array_push($order_qty_table,$order_details->order_qnty_table_name);
 				array_push($order_qty_table_id,$order_details->order_qnty_table_id);
 				array_push($refnum_array,$order_details->reference_name);
-
 			 }
 
 			 /** Same buyer or not validation */
@@ -265,17 +265,44 @@ class JobManagerController extends Controller
 			$template_data['length']   		   = $length_array;
 			$template_data['width']            = $width_array;
 
-			foreach($refnum_array as $key => $refnum)
-			{
-				$templates = DB::table($order_qty_table[$key])->select($order_qty_table[$key].'.*','erp_order_details.template_type', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_orders.buyer_po_number', 'erp_order_details.id as erp_order_details_id')
-						->join('erp_order_details', 'erp_order_details.order_qnty_table_id', $order_qty_table[$key].'.id')
-						->join('erp_orders', 'erp_order_details.erp_order_id', 'erp_orders.id')
-						->where($order_qty_table[$key].'.id', '=', $order_qty_table_id[$key])
-						->where('erp_order_details.reference_name', 'ilike', $refnum)
-						->first();
-				$template_data[$template_types[$key]][$refnum][] = $templates;
-			}
 
+			$single = [];
+			foreach($order_detail_ids as $key => $order_detail_id)
+			{
+				if($template_types[$key] == 'ratio')
+				{
+					$templates = DB::table('erp_order_details')->select('erp_order_details.order_quantity', $order_qty_table[$key].'.ratio_pack_type', $order_qty_table[$key].'.id as qty_table_id',  'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_orders.buyer_po_number', 'erp_order_details.id as erp_order_details_id')
+						->join($order_qty_table[$key], 'erp_order_details.order_qnty_table_id', $order_qty_table[$key].'.id')
+						->join('erp_orders', 'erp_order_details.erp_order_id', 'erp_orders.id')
+						->where('erp_order_details.id', '=', $order_detail_id)
+						->first();
+					$template_data[$template_types[$key]][$refnum_array[$key]][] = $templates;
+				}
+				else
+				{
+					$templates = DB::table('erp_orders')->select('erp_order_details.ocn_number', 'erp_orders.erp_id')
+						->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
+						->where('erp_order_details.id', '=', $order_detail_id)
+						->first();
+						
+					!in_array($templates, $single)?array_push($single,$templates):$single;
+					
+					foreach($single as $template)
+					{
+						$size = DB::table('erp_order_details')->select('erp_order_details.size', 'erp_order_details.order_quantity', 'erp_order_details.id as erp_order_details_id')
+						->where('erp_order_details.id', '=', $order_detail_id)
+						->first();
+						
+					}
+					
+				//!in_array($size, $single)?array_push($single,$size):$single;
+					//$single['size'][] = $size;
+				}
+				
+				
+			}
+			$template_data[$template_types[$key]][$refnum_array[$key]] = $single;
+			return $template_data;
 			return response()->json(['error'=> false,'message' =>'Success', 'template_data' => $template_data],200);
   
           } catch (\Exception $e)
