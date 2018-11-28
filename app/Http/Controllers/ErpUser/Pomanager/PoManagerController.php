@@ -75,7 +75,6 @@ class PoManagerController extends Controller
 		{
 			$templates   = 		DB::table('erpusers_template_mapping')
 								->join('buyers','erpusers_template_mapping.buyer','buyers.id')
-							    ->where('erpusers_template_mapping.company',session()->get('company'))
 								->select('erpusers_template_mapping.*','buyers.template_table','buyers.item_master_table','buyers.id as buyer_id')
 								->get();
 		}
@@ -206,27 +205,25 @@ class PoManagerController extends Controller
 			   
 		   foreach($orderlist as $value)
 		   {
-			 // print_r($value->template_id);
-			  $price =  DB::table('price_taxation')->select('price_taxation.*')->where('customer_id',$customer_id)->where('buyer_id',$buyer_id)->where('template_id',$value->template_id)->get();
+			  $price =  DB::table('price_taxation')->select('price_taxation.*')->where('customer_id',$customer_id)->where('buyer_id',$buyer_id)->where('template_id',$value->template_id)->first();
 			   
-			  if(!empty($price))
-			  {
-				   $price_range =  DB::table('price_range')->select('price_range.*')->where('price_taxation_id',$price{0}->id)->where('volume_from','<=',$value->order_quantity)->where('volume_to','>=',$value->order_quantity)->get();
+			   if (empty($price)) {
+				  $value->price = 0;
+			   }
+			   else
+			   {
+				  $price_range =  DB::table('price_range')->select('price_range.*')->where('price_taxation_id',$price->id)->where('volume_from','<=',$value->order_quantity)->where('volume_to','>=',$value->order_quantity)->first();
 
-				   if(!empty($price_range))
+				   if(empty($price_range))
 				   {
-						 $value->price = $price_range{0}->price;
+					   $value->price = 0;	 
 				   }
 				   else
 				   {
-						$value->price = 0;
+						$value->price = $price_range->price;
 				   }
-			  }
-			  else
-			  {
-				  $value->price = 0;
-			  }
-			 
+			   }
+
 			  
 		   }
 			   
