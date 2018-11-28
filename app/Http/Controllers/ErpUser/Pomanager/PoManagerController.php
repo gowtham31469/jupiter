@@ -209,17 +209,24 @@ class PoManagerController extends Controller
 			 // print_r($value->template_id);
 			  $price =  DB::table('price_taxation')->select('price_taxation.*')->where('customer_id',$customer_id)->where('buyer_id',$buyer_id)->where('template_id',$value->template_id)->get();
 			   
-			   
-			  $price_range =  DB::table('price_range')->select('price_range.*')->where('price_taxation_id',$price{0}->id)->where('volume_from','<=',$value->order_quantity)->where('volume_to','>=',$value->order_quantity)->get();
-			   
-			   if(empty($price_range))
-			   {
-					 $value->price = $price_range{0}->price;
-			   }
-			   else
-			   {
-				    $value->price = 0;
-			   }
+			  if(!empty($price))
+			  {
+				   $price_range =  DB::table('price_range')->select('price_range.*')->where('price_taxation_id',$price{0}->id)->where('volume_from','<=',$value->order_quantity)->where('volume_to','>=',$value->order_quantity)->get();
+
+				   if(!empty($price_range))
+				   {
+						 $value->price = $price_range{0}->price;
+				   }
+				   else
+				   {
+						$value->price = 0;
+				   }
+			  }
+			  else
+			  {
+				  $value->price = 0;
+			  }
+			 
 			  
 		   }
 			   
