@@ -85,11 +85,11 @@
                     <div class="col-md-4 remarks hidden">
                         <label>Credit Terms</label>
                         <div class='form-group'>
-                           <input type="text" class="form-control" name="credit-terms" id="credit-terms">
+                           <input type="text" class="form-control" name="credit-terms" id="credit-terms" required="">
                         </div>
                         <label>E-Way Bill No.</label>
                         <div class='form-group'>
-                           <input type="text" class="form-control" name="eway-billno" id="eway-billno">
+                           <input type="text" class="form-control" name="eway-billno" id="eway-billno" required="">
                         </div>
 
                     </div>
