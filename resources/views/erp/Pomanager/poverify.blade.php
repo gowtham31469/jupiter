@@ -210,13 +210,14 @@
 position: fixed;
 bottom: 45px;
 right: 52px;
+z-index: 9999;
 }
  
 .zoom-fab {
 display: inline-block;
 width: 40px;
 height: 40px;
-line-height: 40px;
+padding-top:14px;
 border-radius: 50%;
 background-color: #009688;
 vertical-align: middle;
@@ -227,7 +228,12 @@ box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 
 cursor: pointer;
 color: #FFF;
 }
- 
+	
+ @-moz-document url-prefix() {
+	 li.zoom-fab{
+		 padding-top:10px !important;
+	 }
+}
 .zoom-fab:hover {
 background-color: #4db6ac;
 box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.14), 0 1px 7px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -1px rgba(0, 0, 0, 0.2);
@@ -480,10 +486,10 @@ transform: scale(1);
 <div class="zoom">
 <a class="zoom-fab zoom-btn-large" id="zoomBtn"><i class="fa fa-bars"></i></a>
 <ul class="zoom-menu">
-<li data-toggle="tooltip" data-placement="bottom" title="Hold order: 0" class="zoom-fab zoom-btn-sm zoom-btn-report scale-transition scale-out">
+<li data-toggle="tooltip" data-placement="bottom" title="Hold order: {{$hold_orders}}" class="zoom-fab zoom-btn-sm zoom-btn-report scale-transition scale-out">
 <i class="fa fa-edit"></i>
 </li>
-<li data-toggle="tooltip" data-placement="bottom" title="New order: 0" class="zoom-fab zoom-btn-sm zoom-btn-report scale-transition scale-out">
+<li data-toggle="tooltip" data-placement="bottom" title="New order: {{$new_orders}}" class="zoom-fab zoom-btn-sm zoom-btn-report scale-transition scale-out">
 <i class="fa fa-bell"></i>
 </li>
 </ul>
