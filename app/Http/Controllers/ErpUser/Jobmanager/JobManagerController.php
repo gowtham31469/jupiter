@@ -144,14 +144,15 @@ class JobManagerController extends Controller
 			 $order_qty_table_id = array();
 			 $template_data      = array();
 			 $ratio_templates    = array();
-			 $single_templates    = array();
+			 $single_templates   = array();
 			 $print_color_array  = array();
 			 $material_array     = array();
 			 $article_array      = array();
 			 $length_array       = array();
 			 $width_array        = array();
 			 $distinct_ref_array = array();
-		     $single_template    = array();
+			 $single_temp_data   = array();
+			 $single_temp_array  = [];
 
 			 $workorder_id       = substr(number_format(Carbon::now()->timestamp * rand(),0,'',''),0,8);
 
@@ -276,47 +277,31 @@ class JobManagerController extends Controller
 						->join('erp_orders', 'erp_order_details.erp_order_id', 'erp_orders.id')
 						->where('erp_order_details.id', '=', $order_detail_id)
 						->first();
-					$template_data[$template_types[$key]][$refnum_array[$key]][] = $ratio_templates;
+					$template_data['ratio'][$refnum_array[$key]][] = $ratio_templates;
 				}
 				else
 				{
-					$single_template[$order_detail_id] = DB::table('erp_orders')->select('erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_orders.buyer_po_number')
+					$single_temp_data = DB::table('erp_orders')->select('erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_orders.buyer_po_number', 'erp_order_details.id as erp_order_details_id', 'erp_orders.id as erp_table_id')
 								->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
 								->where('erp_order_details.id', '=', $order_detail_id)
-								->get();
-					
-					foreach($single_template[$order_detail_id] as $template)
-					{
-						$size = DB::table('erp_order_details')->select('erp_order_details.size', 'erp_order_details.order_quantity', 'erp_order_details.id as erp_order_details_id')
-						->where('erp_order_details.id', '=', $order_detail_id)
-						->get();
+								->first();
+					$single_temp_data->size = DB::table('erp_order_details')->select('erp_order_details.size', 'erp_order_details.order_quantity')
+								->where('erp_order_details.id', '=', $order_detail_id)
+								->first();
+					array_push($single_temp_array, $single_temp_data);
 
-						$template->size = $size;
-					}
-					/** eliminate same ocn_number, buyer_po_number and erp_id */
-					// $template_first_val = current($single_template[$order_detail_id]);
-
-					// foreach ($single_template[$order_detail_id] as $val) {
-					// 	if (($template_first_val{0}->ocn_number == $val->ocn_number) && ($template_first_val{0}->buyer_po_number == $val->buyer_po_number) && ($val->erp_id == $val->erp_id)) {
-
-					// 		!in_array(['ocn_number' => $val->ocn_number], $single_templates)?array_push($single_templates,['ocn_number' => $val->ocn_number]):$single_templates;
-
-					// 		!in_array(['buyer_po_number' => $val->buyer_po_number], $single_templates)?array_push($single_templates,['buyer_po_number' => $val->buyer_po_number]):$single_templates;
-
-					// 		!in_array(['erp_id' => $val->erp_id], $single_templates)?array_push($single_templates,['erp_id' => $val->erp_id]):$single_templates;
-
-					// 		!in_array(['size' => $val->size], $single_templates)?array_push($single_templates,['size' => $val->size]):$single_templates;
-
-					// 		//$single_templates['ocn_number'] = $val->ocn_number;
-					// 		//$single_templates['buyer_po_number'] = $val->buyer_po_number;
-					// 		//$single_templates['erp_id']= $val->erp_id;
-					// 		//$single_templates['size'][] = $val->size{0};
-					// 	}
-					// }
-					$template_data[$template_types[$key]][$refnum_array[$key]] = $single_template;
 				}
 			}
 
+			foreach($single_temp_array as $key => $single_item)
+			{
+				 $single_templates[$refnum_array[$key]][$single_item->erp_id]['ocn_number'] = $single_item->ocn_number;
+				 $single_templates[$refnum_array[$key]][$single_item->erp_id]['erp_id'] = $single_item->erp_id;
+				 $single_templates[$refnum_array[$key]][$single_item->erp_id]['buyer_po_number'] = $single_item->buyer_po_number;
+				 $single_templates[$refnum_array[$key]][$single_item->erp_id]['size'][] = $single_item->size;
+			}
+			$template_data['single'] = $single_templates;
+			
 			return response()->json(['error'=> false,'message' =>'Success', 'template_data' => $template_data],200);
   
           } catch (\Exception $e)
