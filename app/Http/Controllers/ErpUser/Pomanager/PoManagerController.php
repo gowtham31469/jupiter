@@ -128,8 +128,6 @@ class PoManagerController extends Controller
 			}
 			 
 		 }
-		return $new_orders;
-		
 		foreach($orders_erp as $orders_erp_count)
 		{
 			
