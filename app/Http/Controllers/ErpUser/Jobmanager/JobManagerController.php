@@ -143,13 +143,15 @@ class JobManagerController extends Controller
 			 $order_qty_table    = array();
 			 $order_qty_table_id = array();
 			 $template_data      = array();
-			 $templates          = array();
+			 $ratio_templates    = array();
+			 $single_templates    = array();
 			 $print_color_array  = array();
 			 $material_array     = array();
 			 $article_array      = array();
 			 $length_array       = array();
 			 $width_array        = array();
 			 $distinct_ref_array = array();
+		     $single_template    = array();
 
 			 $workorder_id       = substr(number_format(Carbon::now()->timestamp * rand(),0,'',''),0,8);
 
@@ -265,44 +267,56 @@ class JobManagerController extends Controller
 			$template_data['length']   		   = $length_array;
 			$template_data['width']            = $width_array;
 
-
-			$single = [];
 			foreach($order_detail_ids as $key => $order_detail_id)
 			{
 				if($template_types[$key] == 'ratio')
 				{
-					$templates = DB::table('erp_order_details')->select('erp_order_details.order_quantity', $order_qty_table[$key].'.ratio_pack_type', $order_qty_table[$key].'.id as qty_table_id',  'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_orders.buyer_po_number', 'erp_order_details.id as erp_order_details_id')
+					$ratio_templates = DB::table('erp_order_details')->select('erp_order_details.order_quantity', $order_qty_table[$key].'.ratio_pack_type', $order_qty_table[$key].'.id as qty_table_id',  'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_orders.buyer_po_number', 'erp_order_details.id as erp_order_details_id')
 						->join($order_qty_table[$key], 'erp_order_details.order_qnty_table_id', $order_qty_table[$key].'.id')
 						->join('erp_orders', 'erp_order_details.erp_order_id', 'erp_orders.id')
 						->where('erp_order_details.id', '=', $order_detail_id)
 						->first();
-					$template_data[$template_types[$key]][$refnum_array[$key]][] = $templates;
+					$template_data[$template_types[$key]][$refnum_array[$key]][] = $ratio_templates;
 				}
 				else
 				{
-					$templates = DB::table('erp_orders')->select('erp_order_details.ocn_number', 'erp_orders.erp_id')
-						->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
-						->where('erp_order_details.id', '=', $order_detail_id)
-						->first();
-						
-					!in_array($templates, $single)?array_push($single,$templates):$single;
+					$single_template[$order_detail_id] = DB::table('erp_orders')->select('erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_orders.buyer_po_number')
+								->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
+								->where('erp_order_details.id', '=', $order_detail_id)
+								->get();
 					
-					foreach($single as $template)
+					foreach($single_template[$order_detail_id] as $template)
 					{
 						$size = DB::table('erp_order_details')->select('erp_order_details.size', 'erp_order_details.order_quantity', 'erp_order_details.id as erp_order_details_id')
 						->where('erp_order_details.id', '=', $order_detail_id)
-						->first();
-						
+						->get();
+
+						$template->size = $size;
 					}
-					
-				//!in_array($size, $single)?array_push($single,$size):$single;
-					//$single['size'][] = $size;
+					/** eliminate same ocn_number, buyer_po_number and erp_id */
+					// $template_first_val = current($single_template[$order_detail_id]);
+
+					// foreach ($single_template[$order_detail_id] as $val) {
+					// 	if (($template_first_val{0}->ocn_number == $val->ocn_number) && ($template_first_val{0}->buyer_po_number == $val->buyer_po_number) && ($val->erp_id == $val->erp_id)) {
+
+					// 		!in_array(['ocn_number' => $val->ocn_number], $single_templates)?array_push($single_templates,['ocn_number' => $val->ocn_number]):$single_templates;
+
+					// 		!in_array(['buyer_po_number' => $val->buyer_po_number], $single_templates)?array_push($single_templates,['buyer_po_number' => $val->buyer_po_number]):$single_templates;
+
+					// 		!in_array(['erp_id' => $val->erp_id], $single_templates)?array_push($single_templates,['erp_id' => $val->erp_id]):$single_templates;
+
+					// 		!in_array(['size' => $val->size], $single_templates)?array_push($single_templates,['size' => $val->size]):$single_templates;
+
+					// 		//$single_templates['ocn_number'] = $val->ocn_number;
+					// 		//$single_templates['buyer_po_number'] = $val->buyer_po_number;
+					// 		//$single_templates['erp_id']= $val->erp_id;
+					// 		//$single_templates['size'][] = $val->size{0};
+					// 	}
+					// }
+					$template_data[$template_types[$key]][$refnum_array[$key]] = $single_template;
 				}
-				
-				
 			}
-			$template_data[$template_types[$key]][$refnum_array[$key]] = $single;
-			return $template_data;
+
 			return response()->json(['error'=> false,'message' =>'Success', 'template_data' => $template_data],200);
   
           } catch (\Exception $e)
