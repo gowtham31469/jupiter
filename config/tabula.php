@@ -21,7 +21,9 @@ return [
    'tabula_jar' => '/var/www/html/jupiter/tabula-1.0.1-jar-with-dependencies.jar',
 	
    
-	'bar_jar' => '/var/www/html/jupiter/BarcodeGenerator.jar',
+	'bar_jar' => '/var/www/html/jupiter/BarcodeGen2711727.jar',
+	
+	'bar_jar_big' => '/var/www/html/jupiter/BarcodeGenerator.jar',
 	
 	'pdf_jar' => '/var/www/html/jupiter/PdfGenerator.jar',
 

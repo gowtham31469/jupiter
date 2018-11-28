@@ -1394,16 +1394,16 @@ span.batch-additional {
 }
 
 .buyer-selection-modal-content {    
-      height: calc(100% - 20px);
+      /* height: calc(100% - 20px); */
       border-radius: 0;
       color:white;
-      overflow:auto;
+      /* overflow:auto; */
       margin: 15px 15px 15px 15px;
 }
 
 .buyer-selection-modal-footer {
   border-radius: 0;
-  bottom:0px;
+  background: #ffff;
   position:absolute;
   width:100%;
 }

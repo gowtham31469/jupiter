@@ -81,6 +81,7 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
                         var totaltax = 0;
                         var totalcgst = 0;
                         var totalsgst = 0;
+                        var totaligst = 0;
                         var billamnt = 0;
                         var amount = 0;
                         $.each(data.data.item_details, function (index, value)
@@ -244,7 +245,7 @@ function tescoApprovePI(template_id,id,table_name,billamnt)
                $('#'+table_name+'_'+id+' .pi_class').removeClass().addClass('pi_class label label-PIApproved').text('PI Approved');
 
                var attrbs = $('#'+table_name+'_'+id+' .pi_generation').attr('onclick');
-               var attrbs = attrbs.replace("false", "true");
+               // var attrbs = attrbs.replace("false", "true");
                $('#'+table_name+'_'+id+' .pi_generation').attr('onclick', attrbs);
                showSnackbar();
               location.reload();

@@ -843,7 +843,7 @@ function tescoStatusTable(data,path)
                 else if (key == "PO Status")
                 {
                     var str= value[key] ;
-                    var status_text = ''
+                    var status_text = " - "
                     if(value['po_required']== 1 && value['is_order_count_empty'] == 0)
                     {
                         if(str != null && str != ""){
@@ -1605,7 +1605,7 @@ function updateArtwork(obj)
 							location.reload()
 						 },
 						 error: function (data) {
-							// console.log(data);
+                            
 						 },
 						 complete: function () {
 

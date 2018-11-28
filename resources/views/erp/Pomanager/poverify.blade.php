@@ -152,7 +152,6 @@
 	}
 	
 	.first-padding {
-		padding: 10px 15px;
 		font-weight: bold;
 		font-size: 14px;
 	}
@@ -204,75 +203,84 @@
     padding-right: 10px;
 }
 	
-
-#fixed-form-container{
-    position: fixed;
-    bottom: 0px;
-    left: 3%;
-    width: 94%;
-    text-align: center;
-    margin: 0;
-
+#zoomBtn{
+	padding: 22px;
+}
+.zoom {
+position: fixed;
+bottom: 45px;
+right: 52px;
+}
+ 
+.zoom-fab {
+display: inline-block;
+width: 40px;
+height: 40px;
+line-height: 40px;
+border-radius: 50%;
+background-color: #009688;
+vertical-align: middle;
+text-decoration: none;
+text-align: center;
+transition: 0.2s ease-out;
+box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+cursor: pointer;
+color: #FFF;
+}
+ 
+.zoom-fab:hover {
+background-color: #4db6ac;
+box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.14), 0 1px 7px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -1px rgba(0, 0, 0, 0.2);
+}
+ 
+.zoom-btn-large {
+width: 60px;
+height: 60px;
+}
+ 
+.zoom-btn-report {
+background-color: #2196F3;
+}
+ 
+.zoom-btn-report:hover {
+background-color: #64b5f6;
+}
+ 
+.zoom-menu {
+position: fixed;
+bottom: 110px;
+transform: translateX(-28%);
+list-style-type: none;
 }
 
-#fixed-form-container .button:before { 
-   content: "- ";
+.zoom-menu li {
+/* display: inline-block; */
+margin-top: 13px;
 }
-
-#fixed-form-container .expanded:before { 
-    content: "+ ";
+ 
+.scale-transition {
+transition: transform 0.3s cubic-bezier(0.53, 0.01, 0.36, 1.63) !important;
 }
-
-#fixed-form-container .button { 
-  font-size:1.1em; 
-	cursor: pointer;
-	margin-left: auto;
-  margin-right: auto;
-	border: 2px solid #e25454;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border-radius: 5px 5px 0px 0px;
-	padding: 5px 20px 5px 20px;
-	background-color: #e25454;
-	color: #fff;
-	display: inline-block;
-	text-align: center;
-	text-decoration: none;
-  -webkit-box-shadow: 4px 0px 5px 0px rgba(0,0,0,0.3);
-  -moz-box-shadow: 4px 0px 5px 0px rgba(0,0,0,0.3);
-  box-shadow: 4px 0px 5px 0px rgba(0,0,0,0.3);
+ 
+.scale-transition.scale-out {
+transform: scale(0);
+transition: transform 0.2s !important;
 }
-
-#fixed-form-container .body{
-    background-color: #fff; 
-    border-radius: 5px;
-    border: 2px solid #e25454;
-    margin-bottom: 16px;
-    padding: 10px; 
-    -webkit-box-shadow: 4px 4px 5px 0px rgba(0,0,0,0.3);
-    -moz-box-shadow: 4px 4px 5px 0px rgba(0,0,0,0.3);
-    box-shadow: 4px 4px 5px 0px rgba(0,0,0,0.3);
-}
-
-@media only screen and (min-width:768px){
-    #fixed-form-container .button{
-       margin: 0;
-
-    }
-    #fixed-form-container {
-        left: 70%;
-        width: 390px;
-        text-align: left;
-    }
-
-    #fixed-form-container .body{
-        padding: 30px;
-        border-radius: 0px 5px 5px 5px;
-    }
+ 
+.scale-transition.scale-in {
+transform: scale(1);
 }
 
 .align-button{
   margin-left: 74% !important;
+}
+
+.confirmation-container > .col-md-6{
+	padding-left: 50px;
+}
+
+#comment_box{
+	height: 100px;
 }
 </style>
 @section('navbar')
@@ -321,7 +329,7 @@
 						@else
 						<td><span class="label label-info">{{$vals->status_name}}</span></td>
 						@endif
-						<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick="view_order_details('{{ $vals->id }}','{{ $vals->po_no }}','{{ $vals->buyer_id }}','{{ $vals->customer_id }}','{{ $vals->po_file }}')"><i class="fa fa-eye action-button-view" data-placement="top" title="" data-original-title="view Details"></i></a></td>
+						<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick="view_order_details('{{ $vals->id }}','{{ $vals->po_no }}','{{ $vals->buyer_id }}','{{ $vals->customer_id }}','{{ $vals->po_file }}')"><i class="fa fa-eye action-button-view"  title="" data-original-title="view Details"></i></a></td>
 					</tr>
 					@endforeach
 				</tbody>
@@ -398,37 +406,59 @@
 
 
 				<div class="col-md-12 confirmation-container">
-					<div class="col-md-6">
+					<div class="col-md-5">
+						<div class="row">
 						<div class="col-md-4"></div>
 						<div class="first-padding col-md-4 text-center"> OK</div>
 						<div class="first-padding odd-padding col-md-4 text-center">Not OK</div>
+						</div>
 
+						<div class="row">
 						<div class="col-md-4 first-padding">PO Number</div>
-						<div class="col-md-4 text-center"> <label class="btn"><input type="radio" name='po-number-radio' class="hidden" value="ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i> </label></div>
-						<div class="col-md-4 text-center"><label class="btn"><input type="radio" name='po-number-radio' class="hidden" value="not-ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i></label> </div>
+						<div class="col-md-4 text-center"> 
+						<input type="radio" name='po-number-radio' value="ok">
+						</div>
+						<div class="col-md-4 text-center">
+						<input type="radio" name='po-number-radio' value="not-ok">
+						</div>
+						</div>
 
+						<div class="row">
 						<div class="col-md-4 first-padding">Style Number</div>
-						<div class="col-md-4 text-center"> <label class="btn"><input type="radio" name='style-number-radio' class="hidden" value="ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i> </label></div>
-						<div class="col-md-4 text-center"><label class="btn"><input type="radio" name='style-number-radio' class="hidden" value="not-ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i></label></div>
+						<div class="col-md-4 text-center"> 
+						<input type="radio" name='style-number-radio'  value="ok">
+						</div>
+						<div class="col-md-4 text-center">
+						<input type="radio" name='style-number-radio'  value="not-ok">
+						</div>
+						</div>
 
+						<div class="row">
 						<div class="col-md-4 first-padding">Refernce Number</div>
-						<div class="col-md-4 text-center"> <label class="btn"><input type="radio" name='ref-number-radio' class="hidden" value="ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i> </label></div>
-						<div class="col-md-4 text-center"><label class="btn"><input type="radio" name='ref-number-radio' class="hidden" value="not-ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i></label></div>
+						<div class="col-md-4 text-center"><input type="radio" name='ref-number-radio'  value="ok"></div>
+						<div class="col-md-4 text-center"><input type="radio" name='ref-number-radio'  value="not-ok"></div>
+						</div>
 
+						<div class="row">
 						<div class="col-md-4 first-padding">Quantity</div>
-						<div class="col-md-4 text-center"> <label class="btn"><input type="radio" name='qty-radio' class="hidden" value="ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i> </label></div>
-						<div class="col-md-4 text-center"><label class="btn"><input type="radio" name='qty-radio' class="hidden" value="not-ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i></label></div>
+						<div class="col-md-4 text-center"> <input type="radio" name='qty-radio' value="ok"></div>
+						<div class="col-md-4 text-center"><input type="radio" name='qty-radio'  value="not-ok"></div>
+						</div>
 
+						<div class="row">
 						<div class="col-md-4 first-padding">Price</div>
-						<div class="col-md-4 text-center"> <label class="btn"><input type="radio" name='price-radio' class="hidden" value="ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i> </label></div>
-						<div class="col-md-4 text-center"><label class="btn"><input type="radio" name='price-radio' class="hidden" value="not-ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i></label></div>
+						<div class="col-md-4 text-center"><input type="radio" name='price-radio' value="ok"></div>
+						<div class="col-md-4 text-center"><input type="radio" name='price-radio' value="not-ok"></div>
+						</div>
 
+						<div class="row">
 						<div class="col-md-4 first-padding">PO Complete</div>
-						<div class="col-md-4 text-center"> <label class="btn"><input type="radio" name='po-complete-radio' class="hidden" value="ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i> </label></div>
-						<div class="col-md-4 text-center"><label class="btn"><input type="radio" name='po-complete-radio' class="hidden" value="not-ok"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i></label></div>
+						<div class="col-md-4 text-center"><input type="radio" name='po-complete-radio'  value="ok"></div>
+						<div class="col-md-4 text-center"><input type="radio" name='po-complete-radio' value="not-ok"></div>
+						</div>
 
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<label class="first-padding remark-align">Remark : </label>
 						<textarea style="resize:vertical" rows=5 id="comment_box" class="form-control comment_box"></textarea>
 					</div>
@@ -440,28 +470,24 @@
 				
 				{!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
 				<button class="btn btn-primary btn-submit btn-sm" onclick="submit()">Submit</button>
-				<a href="" download onclick="change_po_updated_status()" class="po_file btn btn-default pull-left"><i class="fa fa-download" data-placement="top" title="" data-original-title="Download Pdf"></i> Download Pdf</a>
+				<a href="" download onclick="change_po_updated_status()" class="po_file btn btn-default pull-left"><i class="fa fa-download" title="" data-original-title="Download Pdf"></i> Download Pdf</a>
 			</div>
 
 		</div>
 	</div>
 </div>
 
-<section id="fixed-form-container">
-	<div class="button align-button">Click</div>
-		<div class="body">
-		 <div class="form-group">
-        <label for="email">New order:</label>
-          {{$new_orders}}
-      </div>
-      <div class="form-group">
-        <label for="pwd">Hold order:</label>
-         {{$hold_orders}}
-      </div>
- 
-      
-    </div>
-</section>
+<div class="zoom">
+<a class="zoom-fab zoom-btn-large" id="zoomBtn"><i class="fa fa-bars"></i></a>
+<ul class="zoom-menu">
+<li data-toggle="tooltip" data-placement="bottom" title="Hold order: 0" class="zoom-fab zoom-btn-sm zoom-btn-report scale-transition scale-out">
+<i class="fa fa-edit"></i>
+</li>
+<li data-toggle="tooltip" data-placement="bottom" title="New order: 0" class="zoom-fab zoom-btn-sm zoom-btn-report scale-transition scale-out">
+<i class="fa fa-bell"></i>
+</li>
+</ul>
+</div>
 @endsection @section('jqueryIncludes')
 <script>
 	$(document).ready(function() {
@@ -469,12 +495,13 @@
 	
 	//$("#orderDetailsModal").niceScroll();
 	/** [ Make buyers card active ] */
-		
-		$("#fixed-form-container .button").click(function () {
-				$(this).next("#fixed-form-container div").slideToggle(400);
-				$(this).toggleClass("expanded");
+
+		$('[data-toggle="tooltip"]').tooltip({});
+		$('#zoomBtn').click(function() {
+		$('.zoom-btn-sm').toggleClass('scale-out');
 		});
-		
+
+
 	$('div.buyers-card').click(function() {
 		$('div.buyers-card').removeClass("active");
 		$(this).addClass("active");
@@ -725,6 +752,15 @@
 					}else {
 						var label = 'label label-info';
 					}
+					
+					if(index.size != null)
+					{
+						var size = index.size;
+					}
+					else
+					{
+						var size = "-";
+					}
 					$('#order-details-table tbody').append(`
 						<tr id="` + index.id + `">
                           	<td class="">` + i + `</td>
@@ -732,7 +768,7 @@
 							  <td class="po_number_td">` + po_no + `</td>
 							  <td class="style_no_td">` + index.style_no + `</td>
 							  <td class="reference_td">` + index.template_name + `</td>
-							  <td class="size_td">` + index.size + `</td>
+							  <td class="size_td">` + size + `</td>
 							  <td class="qty_td">` + index.order_quantity + `</td>
 							  <td class="price_td">` + index.price + `</td>
 							  <td><span class="` + label + `">` + index.status_name + `</span></td>
