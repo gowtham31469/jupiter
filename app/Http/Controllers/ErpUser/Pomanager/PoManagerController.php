@@ -75,12 +75,13 @@ class PoManagerController extends Controller
 		{
 			$templates   = 		DB::table('erpusers_template_mapping')
 								->join('buyers','erpusers_template_mapping.buyer','buyers.id')
+								->where('erpusers_template_mapping.company',session()->get('company'))
 								->select('erpusers_template_mapping.*','buyers.template_table','buyers.item_master_table','buyers.id as buyer_id')
 								->get();
 		}
 		
 		
-		return $templates;
+		//return $templates;
 		
 		
 		 $new_orders = array();
