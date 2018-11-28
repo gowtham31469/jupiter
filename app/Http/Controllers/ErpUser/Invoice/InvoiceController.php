@@ -125,8 +125,7 @@ class InvoiceController extends Controller
             foreach ($orderlist as $key => $value){
                $details = DB::table($value->template_table)
                             ->where($value->template_table.'.item_id',$value->template_id)
-                            ->select($value->template_table.'.hsn_code',$value->template_table.'.tax','hierarchy_id')->first();
-                     
+                            ->select($value->template_table.'.hsn_code',$value->template_table.'.tax','hierarchy_id')->first();                     
                 $value->hsn_code = $details->hsn_code;
                 $value->tax = $details->tax;
                 $value->item_name =  DB::table($value->item_master_table)->where('id',$details->hierarchy_id)->value('item_name');
