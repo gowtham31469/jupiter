@@ -457,7 +457,7 @@
 						</div>
 
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<label class="first-padding remark-align">Remark : </label>
 						<textarea style="resize:vertical" rows=5 id="comment_box" class="form-control comment_box"></textarea>
 					</div>
@@ -754,6 +754,15 @@
 					}else {
 						var label = 'label label-info';
 					}
+					
+					if(index.size != null)
+					{
+						var size = index.size;
+					}
+					else
+					{
+						var size = "-";
+					}
 					$('#order-details-table tbody').append(`
 						<tr id="` + index.id + `">
                           	<td class="">` + i + `</td>
@@ -761,7 +770,7 @@
 							  <td class="po_number_td">` + po_no + `</td>
 							  <td class="style_no_td">` + index.style_no + `</td>
 							  <td class="reference_td">` + index.template_name + `</td>
-							  <td class="size_td">` + index.size + `</td>
+							  <td class="size_td">` + size + `</td>
 							  <td class="qty_td">` + index.order_quantity + `</td>
 							  <td class="price_td">` + index.price + `</td>
 							  <td><span class="` + label + `">` + index.status_name + `</span></td>
