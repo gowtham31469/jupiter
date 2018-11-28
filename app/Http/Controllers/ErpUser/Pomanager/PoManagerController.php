@@ -80,6 +80,8 @@ class PoManagerController extends Controller
 		}
 		
 		
+		return $templates;
+		
 		
 		 $new_orders = array();
 		 $i=1;
