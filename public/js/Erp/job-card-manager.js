@@ -3,8 +3,169 @@
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
+$(document).ready(function() {
+    var base_url = "<?php echo  url('/') ?>";
 
-/** [showSnackbar function] */
+	$('input[class="row-checkbox"]').prop('checked', false);
+
+	$('#create_jobcard').trigger("reset");
+
+	/** To refresh modal while hidden **/
+	$('.modal').on('hidden.bs.modal', function (e) {
+	$('#create_jobcard').trigger("reset");
+	})
+
+	/** [ Make companies card active ] */
+	$('div.buyers-card').click(function(){
+
+		  $('div.buyers-card').removeClass("active");
+		  $(this).addClass("active");
+		  $('#hidden-buyer-div').hide();
+
+		  /* Save selected buyer into localdb */
+	      if ($('.buyers-card.active-buyer.active').length != 0) 
+	      {
+         	var company_id = $('.buyers-card.active-buyer.active').data("value"); 
+		  	var company_name = $('.buyers-card.active-buyer.active').attr("id");
+         	 $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
+          	$('#buyerSelectionModalCenter').modal('hide');
+		  
+	 		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			$.ajax({
+				url: base_url + "/erp/po-manager/set_company_session",
+				type: "Post",
+				dataType: "json",
+				data: {
+					_token: csrf_token,
+					company_id: company_id,
+					company_name:company_name
+				},
+				beforeSend: function() {
+					location.reload();
+				},
+				success: function(data) {
+				},
+				error: function(data) {
+
+				},
+				complete: function() {
+
+				}
+			})
+	      }
+	  
+	});
+	
+	/** [ Show already selected(active) buyer on clicking buyer menu] */
+	$('.company-nav-menu').on('click', function() {
+	    $("#buyerSelectionModalCenter").modal("show");
+	});
+
+	if($('#company_name').val() != null && $('#company_name').val() != "")
+	{
+		$('#'+$('#company_name').val()).addClass('active');
+	}
+	else
+	{
+		$('div.buyers-card').first().addClass("active");
+	}
+   
+    $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
+	
+	$('.company-nav-menu').html($('.company-nav-div').html());
+
+	// Checkbox click functionality
+	$('.approved-order-list tr').click(function (event) {
+        if (event.target.type !== 'checkbox') {
+            $(':checkbox', this).trigger('click');
+        }
+    });
+    /** Datatable filter script**/
+	var listTable = $('#approved-order-list').dataTable({
+		stateSave: true,
+		/** Table column filter functionality **/
+		initComplete: function () {
+			$('.main-content > #approved-orders-table > .dataTables_wrapper > .row > .col-sm-6 > #approved-order-list_filter:first').append(' <button class="filterbtn" type="button" onClick="showFilter()" title="Filter" data-placement="bottom"><i class="fa fa-filter" aria-hidden="true"></i></button>');
+			$('.main-content > #approved-orders-table > .dataTables_wrapper > .row > .col-sm-6 > #approved-order-list_filter:first .dataTables_filter').css('display', 'inline-block');
+			$('.main-content > #approved-orders-table > .dataTables_wrapper > .row > .col-sm-12:first').prepend('<div class="filter-window"><h5><strong>Jobcard Filter</strong></h5> <div class="row"> <div class="col-md-2"><select class="selectpicker" id="erpID"> <option disabled selected>SELECT AN ERP ID</option></select></div><div class="col-md-2"><select class="selectpicker" id="customerName"> <option disabled selected>SELECT A CUSTOMER</option></select></div><div class="col-md-2"><select class="selectpicker" id="poNumber"> <option disabled selected>SELECT A PO NUMBER</option></select></div><div class="col-md-2"><select class="selectpicker" id="styleNumber"> <option disabled selected>SELECT A STYLE NUMBER</option></select></div><div class="col-md-2"><select class="selectpicker" id="refNumber"> <option disabled selected>SELECT A REFERENCE</option></select></div><div class="col-md-2"><select class="selectpicker" id="delDate"> <option disabled selected>SELECT A DELIVERY DATE</option></select></div></div><div class="filter-actions"><button class="btn btn-primary input-sm pull-right" id="reset">Clear Filter</button><button id="closeFilter" class="btn btn-default input-sm pull-right" onclick="showFilter()">Close</button><div class="clearfix"></div></div></div>');
+
+			//For Custom Filters
+			this.api().columns().every( function (i) {
+				var column = this;
+				if(i === 1 || i === 2 || i === 4 || i === 5 || i === 6 || i === 7) {
+					var select;
+					switch(i) {
+						case 1:
+							select = $('#erpID')
+							break;
+						case 2:
+							select = $('#customerName')
+							break;
+						case 4:
+							select = $('#poNumber')
+							break;
+						case 5:
+							select = $('#styleNumber')
+							break;
+						case 6:
+							select = $('#refNumber')
+							break;
+						case 7:
+							select = $('#delDate')
+							break;
+					}
+					select.on( 'change', function () {
+						var val = $.fn.dataTable.util.escapeRegex(
+							$(this).val()
+						);
+	
+						column
+							.search( val ? '^'+val+'$' : '', true, false )
+							.draw();
+					});
+					select.append( '<option value=""> </option>' );
+					column.data().unique().sort().each( function ( d, j ) {
+						cleanText = d.replace(/<\/?[^>]+(>|$)/g, "");
+						select.append('<option value="'+cleanText+'">'+cleanText+'</option>')
+					});
+				}
+			});
+		}
+    } );
+	/** Get an array of the TR nodes that are used in the table's body */
+	allPages = listTable.fnGetNodes();
+
+	$("#reset").on("click", function () {
+		$('#erpID').val('').change();
+		$('#customerName').val('').change();
+		$('#poNumber').val('').change();
+		$('#styleNumber').val('').change();
+		$('#refNumber').val('').change();
+		$('#delDate').val('').change();
+		$.fn.dataTableExt.afnFiltering.length = 0;
+		listTable.dataTable().fnDraw();
+		$('.selectpicker').selectpicker('val', 1);
+        $('.selectpicker').selectpicker('refresh');
+	});
+
+	$('.selectpicker').selectpicker();
+
+	// Clear the filter. Unlike normal filters in Datatables,
+	// custom filters need to be removed from the afnFiltering array.
+	$('.cancelBtn').on('click', function(e){
+		e.preventDefault();
+		$.fn.dataTableExt.afnFiltering.length = 0;
+		listTable.dataTable().fnDraw();
+	});
+	$("#approved-order-list_filter input[type=search]").addClass('form-control');
+	$('.dataTables_length select').addClass('form-control');
+	$("#approved-order-list_filter input[type=search]").attr('placeholder', 'Data Search');
+});
+/* End of document.ready() */
+
+/** [showSnackbar function]
+ *  @author <Praveen> [praveen@wizroots.com]
+ */
     function showSnackbar() {
     try {
         // Get the snackbar DIV
@@ -21,15 +182,21 @@
         console.log("Error:" + e)
     }
 }
+
+/**
+ * Toggle show filter window
+ *  @author <Praveen> [praveen@wizroots.com]
+ */
 function showFilter() {
     $('.filter-window').toggle();
 }
+
 /**
  * Job card generation 
  * @author <Praveen> [praveen@wizroots.com]
  */
 function generateJobcard(){
-    if ($("#approved-order-list input[class='row-checkbox']:checked").length === 0)
+    if ($("input[class='row-checkbox']:checked", allPages).length === 0)
     {
         $('.snackbar_span').html("Select atleast one order.");
 		showSnackbar();
@@ -38,7 +205,7 @@ function generateJobcard(){
     {
         orders = [];
         /** [ Create array of orders selected ] */
-        $('.row-checkbox').each(function (i, item) {
+        $('.row-checkbox', allPages).each(function (i, item) {
             if ($(this).is(':checked')) {
                 orders.push($(this).closest('tr').attr('id')); 
             }
@@ -196,10 +363,7 @@ function generateJobcard(){
                                                             </tr>';
                                                         });
                                                         ratio_table_html += '<tr>\
-                                                            <th>Total</th>\
-                                                            <td></td>\
-                                                            <td></td>\
-                                                            <td></td>\
+                                                            <th class="highlight_row" colspan="4">Total</th>\
                                                             <td><strong>'+total+'</strong></td>\
                                                             <td></td>\
                                                         </tr>\
@@ -213,72 +377,67 @@ function generateJobcard(){
                         var single_table_html = '';
                         if(data.template_data.single)
                         {
-                            $.each(data.template_data.single, function(key, template){
+                            $.each(data.template_data.single, function(key, erpid){
                                 var total = 0;
                                 single_table_html += '<table class="table table-bordered table-responsive"  style="font-size: 12px;" id="single-list-table">\
-                                                    <tbody>\
-                                                        <tr>\
-                                                            <th>ID Num</th>\
-                                                            <td colspan="2">1000</td>\
-                                                            <td colspan="2">1000</td>\
-                                                            <td colspan="2">1000</td>\
-                                                            <td colspan="5" rowspan="3">REFNUM  : TCL4</td>\
-                                                        </tr>\
-                                                        <tr>\
-                                                            <th>B. PO NUM</th>\
-                                                            <td colspan="2">460-12345</td>\
-                                                            <td colspan="2">460-12346</td>\
-                                                            <td colspan="2">460-12347</td>\
-                                                        </tr>\
-                                                        <tr>\
-                                                            <th>OCN Num</th>\
-                                                            <td colspan="2">1</td>\
-                                                            <td colspan="2">2</td>\
-                                                            <td colspan="2">3</td>\
-                                                        </tr>\
-                                                        <tr>\
-                                                        <tr>\
-                                                            <th>SIZE /Price</th>\
-                                                            <th>O.QNT</th>\
-                                                            <th>P.QNT</th>\
-                                                            <th>O.QNT</th>\
-                                                            <th>P.QNT</th>\
-                                                            <th>O.QNT</th>\
-                                                            <th>P.QNT</th>\
-                                                            <th>TOTAL</th>\
-                                                            <th>EXCESS</th>\
-                                                            <th>MTRS</th>\
-                                                            <th>Stock</th>\
-                                                        </tr>\
-                                                        <tr>\
-                                                            <td>2-3</td>\
-                                                            <td>1000</td>\
-                                                            <td></td>\
-                                                            <td>1000</td>\
-                                                            <td></td>\
-                                                            <td>1000</td>\
-                                                            <td></td>\
-                                                            <td>3000</td>\
-                                                            <td>150</td>\
-                                                            <td></td>\
-                                                            <td></td>\
-                                                        </tr>\
-                                                        <tr>\
-                                                            <th>TOTAL</th>\
-                                                            <td>25000</td>\
-                                                            <td></td>\
-                                                            <td>25000</td>\
-                                                            <td></td>\
-                                                            <td>25000</td>\
-                                                            <td></td>\
-                                                            <td>75000</td>\
-                                                            <td>3000</td>\
-                                                            <td>0</td>\
-                                                            <td>0</td>\
-                                                        </tr>\
-                                                    </tbody>\
+                                <tbody>';
+                                $.each(erpid, function(index, data){
+                                    single_table_html += '<tr>\
+                                                                <th>IDNUM</th>\
+                                                                <td colspan="3">'+data.erp_id+'</td>\
+                                                                <td colspan="5" class="highlight_row" rowspan="3">REFNUM  : '+key+'</td>\
+                                                            </tr>\
+                                                            <tr>\
+                                                                <th>B. PONUM</th>\
+                                                                <td colspan="3">'+data.buyer_po_number+'</td>\
+                                                            </tr>\
+                                                            <tr>\
+                                                                <th>OCN</th>\
+                                                                <td colspan="3">'+data.ocn_number+'</td>\
+                                                            </tr>\
+                                                            <tr>\
+                                                                <th>SL.NO</th>\
+                                                                <th>SIZE /PRICE</th>\
+                                                                <th>O.QNT</th>\
+                                                                <th>P.QNT</th>\
+                                                                <th>TOTAL</th>\
+                                                                <th>EXCESS</th>\
+                                                                <th>MTRS</th>\
+                                                                <th>STOCK</th>\
+                                                            </tr>';
+                                                            var i=0;
+                                                            var qty_total = 0;
+
+                                                            $.each(data.size, function(index1, size){
+                                                                i = index1+1;
+                                                               // qty_total += size.order_quantity;
+                                                                single_table_html +='<tr>\
+                                                                                        <td>'+i+'</td>\
+                                                                                        <td>'+size.size+'</td>\
+                                                                                        <td>'+size.order_quantity+'</td>\
+                                                                                        <td></td>\
+                                                                                        <td>'+qty_total+'</td>\
+                                                                                        <td>150</td>\
+                                                                                        <td></td>\
+                                                                                        <td></td>\
+                                                                                    </tr>';
+                                                            });
+                                                            
+                                                });
+                                                single_table_html += '<tr>\
+                                                                                    <th class="highlight_row">TOTAL</th>\
+                                                                                    <td></td>\
+                                                                                    <td>25000</td>\
+                                                                                    <td></td>\
+                                                                                    <td>75000</td>\
+                                                                                    <td>3000</td>\
+                                                                                    <td>0</td>\
+                                                                                    <td>0</td>\
+                                                                                </tr>';
+                                    single_table_html += ' </tbody>\
                                                 </table>';
-                            });
+                                });
+                                
                             $('.single-list-table-div').html(single_table_html);
                         }
                         
@@ -329,14 +488,14 @@ function generateJobcard(){
 }
 
 /**
- * Multi checkbox selection
+ * Multi checkbox selection and disable different customer/buyer checkbox
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
 function selectOrders(event)
 {
     /** Table checkbox click functionality	**/
-    var checkbox = $("input[class='row-checkbox']");
+    var checkbox = $("input[class='row-checkbox']", allPages);
     var customer_name = $(event).data('customer-name');
     var buyer_name = $(event).data('buyer-name');
     var ischecked= $(event).is(':checked');
@@ -349,7 +508,6 @@ function selectOrders(event)
         /** Make checkboxes disabled(having different customer and buyer names) **/
         $(checkbox).not("[data-customer-name='"+customer_name+"']").attr("disabled", "true");
         $(checkbox).not("[data-buyer-name='"+buyer_name+"']").attr("disabled", "true");
-
     }
     else
     {
@@ -359,6 +517,5 @@ function selectOrders(event)
         if(length === 0)
          $(checkbox).not("[data-customer-name='"+customer_name+"']").removeAttr("disabled");
          $(checkbox).not("[data-buyer-name='"+buyer_name+"']").removeAttr("disabled");
-
     }
 }

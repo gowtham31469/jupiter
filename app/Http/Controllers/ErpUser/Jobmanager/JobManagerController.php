@@ -138,10 +138,8 @@ class JobManagerController extends Controller
 			 $refnum_array       = array();
 			 $ordertype_array    = array();
 			 $temp_id_array      = array();
-			 $temp_details_array = array();
 			 $template_types     = array();
 			 $order_qty_table    = array();
-			 $order_qty_table_id = array();
 			 $template_data      = array();
 			 $ratio_templates    = array();
 			 $single_templates   = array();
@@ -152,7 +150,8 @@ class JobManagerController extends Controller
 			 $width_array        = array();
 			 $distinct_ref_array = array();
 			 $single_temp_data   = array();
-			 $single_temp_array  = [];
+			 $single_ref         = array();
+			 $single_temp_array  = array();
 
 			 $workorder_id       = substr(number_format(Carbon::now()->timestamp * rand(),0,'',''),0,8);
 
@@ -184,7 +183,6 @@ class JobManagerController extends Controller
 
 				array_push($template_types,$order_details->template_type);
 				array_push($order_qty_table,$order_details->order_qnty_table_name);
-				array_push($order_qty_table_id,$order_details->order_qnty_table_id);
 				array_push($refnum_array,$order_details->reference_name);
 			 }
 
@@ -195,7 +193,7 @@ class JobManagerController extends Controller
 					 return response()->json(['error'=> true,'message' =>'Different Buyers Not Acceptable'],406);
 				 } else {
 					 $buyer = DB::table('buyers')->select('buyer_name', 'id as buyer_id', 'template_table', 'item_master_table')->where('id', '=', $buyer_first_val)->first();
-								 /** Dynamic artwork template table and item master table (Based on buyer) */
+					 /** Dynamic artwork template table and item master table (Based on buyer) */
 			 		 $template_table    = $buyer->template_table;
 			 		 $item_master_table = $buyer->item_master_table;
 				 }
@@ -250,8 +248,8 @@ class JobManagerController extends Controller
 				{
 					return response()->json(['error'=> true,'message' =>'Template details are missing, contact your admin.'],404);
 				}
-				
 			 }
+
 			/** Push all array values into template_data array */
 			$template_data['order_date']       = Carbon::parse(min($order_dt_array))->format('d-m-Y');
 			$template_data['today_date']       = $this->current_date;
@@ -270,17 +268,17 @@ class JobManagerController extends Controller
 
 			foreach($order_detail_ids as $key => $order_detail_id)
 			{
-				if($template_types[$key] == 'ratio')
+				if($template_types[$key] == "ratio")
 				{
-					$ratio_templates = DB::table('erp_order_details')->select('erp_order_details.order_quantity', $order_qty_table[$key].'.ratio_pack_type', $order_qty_table[$key].'.id as qty_table_id',  'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_orders.buyer_po_number', 'erp_order_details.id as erp_order_details_id')
+					$ratio_templates[$refnum_array[$key]][] = DB::table('erp_order_details')->select('erp_order_details.order_quantity', $order_qty_table[$key].'.ratio_pack_type', $order_qty_table[$key].'.id as qty_table_id',  'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_orders.buyer_po_number', 'erp_order_details.id as erp_order_details_id')
 						->join($order_qty_table[$key], 'erp_order_details.order_qnty_table_id', $order_qty_table[$key].'.id')
 						->join('erp_orders', 'erp_order_details.erp_order_id', 'erp_orders.id')
 						->where('erp_order_details.id', '=', $order_detail_id)
 						->first();
-					$template_data['ratio'][$refnum_array[$key]][] = $ratio_templates;
 				}
 				else
 				{
+					array_push($single_ref, $refnum_array[$key]);
 					$single_temp_data = DB::table('erp_orders')->select('erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_orders.buyer_po_number', 'erp_order_details.id as erp_order_details_id', 'erp_orders.id as erp_table_id')
 								->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
 								->where('erp_order_details.id', '=', $order_detail_id)
@@ -289,17 +287,18 @@ class JobManagerController extends Controller
 								->where('erp_order_details.id', '=', $order_detail_id)
 								->first();
 					array_push($single_temp_array, $single_temp_data);
-
 				}
 			}
 
+			/** Json format creation for single templates */
 			foreach($single_temp_array as $key => $single_item)
 			{
-				 $single_templates[$refnum_array[$key]][$single_item->erp_id]['ocn_number'] = $single_item->ocn_number;
-				 $single_templates[$refnum_array[$key]][$single_item->erp_id]['erp_id'] = $single_item->erp_id;
-				 $single_templates[$refnum_array[$key]][$single_item->erp_id]['buyer_po_number'] = $single_item->buyer_po_number;
-				 $single_templates[$refnum_array[$key]][$single_item->erp_id]['size'][] = $single_item->size;
+				 $single_templates[$single_ref[$key]][$single_item->erp_id]['ocn_number'] = $single_item->ocn_number;
+				 $single_templates[$single_ref[$key]][$single_item->erp_id]['erp_id'] = $single_item->erp_id;
+				 $single_templates[$single_ref[$key]][$single_item->erp_id]['buyer_po_number'] = $single_item->buyer_po_number;
+				 $single_templates[$single_ref[$key]][$single_item->erp_id]['size'][] = $single_item->size;
 			}
+			$template_data['ratio']  = $ratio_templates;
 			$template_data['single'] = $single_templates;
 			
 			return response()->json(['error'=> false,'message' =>'Success', 'template_data' => $template_data],200);
