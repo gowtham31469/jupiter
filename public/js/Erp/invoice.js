@@ -118,7 +118,7 @@
             }
             else{
                 tr += '<tr><td></td><td colspan="13"><strong style="float: left;">ITEM: '+value.item_name+'  HSNCode: '+value.hsn_code+'</strong></td></tr><tr class="trClass" id="'+value.id+'">';
-                tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" checked/></td><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><input type="text" value="" class="form-control delivery-qnty" required data-id="'+value.id+'" min="1" onkeyup="updateAmount.call(this,'+uniqueTax+')"></td><td class="rate">'+value.rate+'</td><td class="amnt">'+value.pending_qnty * value.rate+'</td>';
+                tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" checked/></td><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><input type="text" value="" class="form-control delivery-qnty" required data-id="'+value.id+'" min="1" onkeyup="updateAmount.call(this,'+uniqueTax+')"></td><td class="rate">'+value.rate+'</td><td class="amnt">'+(value.pending_qnty * value.rate).toFixed(2)+'</td>';
                 tr += '</tr>';
             }
             qnty += value.order_quantity;
@@ -218,19 +218,19 @@
         if ($.isNumeric($(this).val())) {
             if ($(this).val() == parseInt($(this).closest('tr').find('.pending-qnty').text())) {
                 amnt  = parseInt($(this).val()) * $(this).closest('tr').find('.rate').text();
-                $(this).closest('tr').find('.amnt').html(amnt)
+                $(this).closest('tr').find('.amnt').html(amnt.toFixed(2))
                 pendingQnty = $(this).closest('tr').find('.pending-qnty').text() - $(this).val()
                 $(this).closest('tr').find('.pending-qnty').html(pendingQnty)
             }
             else if($(this).val() < parseInt($(this).closest('tr').find('.pending-qnty').text())){
                 amnt  = parseInt($(this).val()) * $(this).closest('tr').find('.rate').text();
-                $(this).closest('tr').find('.amnt').html(amnt)
+                $(this).closest('tr').find('.amnt').html(amnt.toFixed(2))
                 pendingQnty = $(this).closest('tr').find('.pending-qnty').text() - $(this).val()
                 $(this).closest('tr').find('.pending-qnty').html(pendingQnty)
             }
             else if($(this).val()=="" || $(this).val() > parseInt($(this).closest('tr').find('.pending-qnty').text())){
                 amnt  = oldPendQnty * $(this).closest('tr').find('.rate').text();
-                $(this).closest('tr').find('.amnt').html(amnt)
+                $(this).closest('tr').find('.amnt').html(amnt.toFixed(2))
                 $(this).closest('tr').find('.pending-qnty').html(oldPendQnty)
                 $(this).val('')
             }
