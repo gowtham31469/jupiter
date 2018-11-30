@@ -339,9 +339,9 @@ function generateJobcard(){
                                 ratio_table_html += '<table class="table table-bordered table-responsive"  style="font-size: 12px;" id="ratio-list-table">\
                                                         <thead>\
                                                             <tr>\
-                                                                <th>REFNUM</th>\
-                                                                <th>PONUM</th>\
-                                                                <th>IDNUM</th>\
+                                                                <th>REF.NO</th>\
+                                                                <th>PO.NO</th>\
+                                                                <th>ID.NO</th>\
                                                                 <th>OCN</th>\
                                                                 <th>QNTY</th>\
                                                                 <th>P.QNTY</th>\
@@ -383,12 +383,12 @@ function generateJobcard(){
                                 <tbody>';
                                 $.each(erpid, function(index, data){
                                     single_table_html += '<tr>\
-                                                                <th>IDNUM</th>\
+                                                                <th>ID.NO</th>\
                                                                 <td colspan="3">'+data.erp_id+'</td>\
                                                                 <td colspan="5" class="highlight_row" rowspan="3">REFNUM  : '+key+'</td>\
                                                             </tr>\
                                                             <tr>\
-                                                                <th>B. PONUM</th>\
+                                                                <th>B.PO.NO</th>\
                                                                 <td colspan="3">'+data.buyer_po_number+'</td>\
                                                             </tr>\
                                                             <tr>\
