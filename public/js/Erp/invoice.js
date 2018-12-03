@@ -118,7 +118,7 @@
             }
             else{
                 tr += '<tr><td></td><td colspan="13"><strong style="float: left;">ITEM: '+value.item_name+'  HSNCode: '+value.hsn_code+'</strong></td></tr><tr class="trClass" id="'+value.id+'">';
-                tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" checked/></td><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><input type="text" value="" class="form-control delivery-qnty" required data-id="'+value.id+'" min="1" onkeyup="updateAmount.call(this,'+uniqueTax+')"></td><td class="rate">'+value.rate+'</td><td class="amnt">'+value.pending_qnty * value.rate+'</td>';
+                tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" checked/></td><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><input type="text" value="" class="form-control delivery-qnty" required data-id="'+value.id+'" min="1" onkeyup="updateAmount.call(this,'+uniqueTax+')"></td><td class="rate">'+value.rate+'</td><td class="amnt">'+(value.pending_qnty * value.rate).toFixed(2)+'</td>';
                 tr += '</tr>';
             }
             qnty += value.order_quantity;
@@ -127,7 +127,7 @@
 
         });
 
-        tr+= '<tr><td colspan="8"><strong>Total</strong></td><td class="qnty-sum">'+qnty+'</td><td class="balnc-qnty" id="balnc-qnty">'+pendQnty+'</td><td class="total-qnty" id="total-qnty">'+quantityTotal()+'</td><td></td><td class="total-amnt">'+amnt+'</td></tr>';
+        tr+= '<tr><td colspan="8"><strong>Total</strong></td><td class="qnty-sum">'+qnty+'</td><td class="balnc-qnty" id="balnc-qnty">'+pendQnty+'</td><td class="total-qnty" id="total-qnty">'+quantityTotal()+'</td><td></td><td class="total-amnt">'+amnt.toFixed(2)+'</td></tr>';
 
 
         $('.order-details').html('<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table text-center table-bordered order-details" id="order-details"><thead><tr><th></th><th>Order No</th><th>PO No</th><th>Style</th><th>OCN No</th><th>Reference</th><th>Size</th><th>Tax (%)</th><th>Order Quantity</th><th>Pending Quantity</th><th>Delivered Quantity</th><th>Rate (₹)</th><th>Amount (₹)</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12"><tbody>'+tr+'</tbody></table></div></div>');
@@ -135,7 +135,7 @@
         updateTaxAmount(tax_amnt)
 
         var gndtotal = parseFloat($('.tax-total').text())+ parseFloat($('.total-amnt').text());
-        $('.extra-charges').html('<table class="table table-borderedtext-center extra-charges" style="margin-top: -22px;"><thead><tr><th>Description</th><th>Amount (₹)</th><th><button type="button" onclick="addExtraCharges(this,event)" data-id="1" class="btn btn-default btn-sm add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i></button></th></tr></thead><tbody id="table_row"><tr><td><select class="charges" id="charges1" name="charges1" required><option value=""></option><option value="freight">Freight</option><option value="minimumcharges">Minimum charges</option><option value="jobwork">Job Work Charges</option></select></td><td style="width: 116px;"><input type="text" value="" min="0" id="chrg_val1" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr></tbody></table><table class="table table-borderedtext-center" style="margin-top: -22px;"><tbody><tr><td colspan="2"><strong>SubTotal</strong></td><td class="sub-extra">0</td></tr><tr></tr><tr><td colspan="2"><strong>Round Off</strong></td><td style="width: 116px;"><input type="text" min="0" value="" id="round-off" class="form-control round-off" onkeyup="updateGrandTotal(this)"></td></tr><tr><td colspan="2"><strong>Grand Total</strong></td><td class="grand-total">'+gndtotal.toFixed(2)+'</td></tr><tr></tr></tbody></table><div class="create-invoice"><button type="button" class="btn btn-primary create-invoice pull-right" style="margin-top: -10px;" id="create-invoice">Create Invoice</button></div>')
+        $('.extra-charges').html('<table class="table table-borderedtext-center extra-charges" style="margin-top: -22px;"><thead><tr><th>Description</th><th>Amount (₹)</th><th><button type="button" onclick="addExtraCharges(this,event)" data-id="1" class="btn btn-default btn-sm add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i></button></th></tr></thead><tbody id="table_row"><tr><td><select class="charges" id="charges1" name="charges1" required><option value=""></option><option value="freight">Freight</option><option value="minimumcharges">Minimum charges</option><option value="jobwork">Job Work Charges</option></select></td><td style="width: 116px;"><input type="text" value="" min="0" id="chrg_val1" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr></tbody></table><table class="table table-borderedtext-center" style="margin-top: -22px;"><tbody><tr><td colspan="2"><strong>SubTotal</strong></td><td class="sub-extra">0.00</td></tr><tr></tr><tr><td colspan="2"><strong>Round Off</strong></td><td style="width: 116px;"><input type="text" min="0" value="" id="round-off" class="form-control round-off" onkeyup="updateGrandTotal(this)"></td></tr><tr><td colspan="2"><strong>Grand Total</strong></td><td class="grand-total">'+gndtotal.toFixed(2)+'</td></tr><tr></tr></tbody></table><div class="create-invoice"><button type="button" class="btn btn-primary create-invoice pull-right" style="margin-top: -10px;" id="create-invoice">Create Invoice</button></div>')
 
             $('#create-invoice').on('click',function(){
                 previewInvoice(orderData)
@@ -218,19 +218,19 @@
         if ($.isNumeric($(this).val())) {
             if ($(this).val() == parseInt($(this).closest('tr').find('.pending-qnty').text())) {
                 amnt  = parseInt($(this).val()) * $(this).closest('tr').find('.rate').text();
-                $(this).closest('tr').find('.amnt').html(amnt)
+                $(this).closest('tr').find('.amnt').html(amnt.toFixed(2))
                 pendingQnty = $(this).closest('tr').find('.pending-qnty').text() - $(this).val()
                 $(this).closest('tr').find('.pending-qnty').html(pendingQnty)
             }
             else if($(this).val() < parseInt($(this).closest('tr').find('.pending-qnty').text())){
                 amnt  = parseInt($(this).val()) * $(this).closest('tr').find('.rate').text();
-                $(this).closest('tr').find('.amnt').html(amnt)
+                $(this).closest('tr').find('.amnt').html(amnt.toFixed(2))
                 pendingQnty = $(this).closest('tr').find('.pending-qnty').text() - $(this).val()
                 $(this).closest('tr').find('.pending-qnty').html(pendingQnty)
             }
             else if($(this).val()=="" || $(this).val() > parseInt($(this).closest('tr').find('.pending-qnty').text())){
                 amnt  = oldPendQnty * $(this).closest('tr').find('.rate').text();
-                $(this).closest('tr').find('.amnt').html(amnt)
+                $(this).closest('tr').find('.amnt').html(amnt.toFixed(2))
                 $(this).closest('tr').find('.pending-qnty').html(oldPendQnty)
                 $(this).val('')
             }
@@ -244,9 +244,9 @@
                 
         $(this).closest('tr').find('.order-select').attr("checked", "checked");   
 
-        $('.total-amnt').html(totalAmount())
+        $('.total-amnt').html(totalAmount().toFixed(2))
         $('#total-qnty').html(quantityTotal()) 
-        $('.tax-total').html(taxSubTotal()) 
+        $('.tax-total').html(taxSubTotal().toFixed(2)) 
         $('#balnc-qnty').html(balncTotal())
         $(tax_array).each(function(key, vals){
             $('.order-details table tbody tr').each(function(){
@@ -358,7 +358,7 @@
                 result += (this.value) == "" ? 0 :parseFloat(this.value)
             }
         })
-        $('.sub-extra').html(result)
+        $('.sub-extra').html(result.toFixed(2))
         var grandTotal = parseFloat($('.tax-total').text())+ parseFloat($('.total-amnt').text()) + parseFloat($('.sub-extra').text());
         $('.grand-total').html(grandTotal.toFixed(2))        
     }
@@ -434,12 +434,12 @@
                 pending_qnty = value.pending_qnty - delQnty
                 if (itemName==value.item_name) {
                     tr += '<tr class="trClass" id="'+value.id+'">';
-                    tr += '<td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+' </td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td class="amnt">'+delQnty * value.rate+'</td>';
+                    tr += '<td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+' </td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td class="amnt">'+(delQnty * value.rate).toFixed(2)+'</td>';
                     tr += '</tr>';
                 }
                 else{
                     tr += '<tr><td></td><td colspan="13"><strong style="float: left;">ITEM: '+value.item_name+'  HSNCode: '+value.hsn_code+'</strong></td></tr><tr class="trClass" id="'+value.id+'">';
-                    tr += '<td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+' </td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td class="amnt">'+delQnty * value.rate+'</td>';
+                    tr += '<td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+' </td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td class="amnt">'+(delQnty * value.rate).toFixed(2)+'</td>';
                     tr += '</tr>';
                 }               
                 qnty += value.order_quantity;
@@ -557,7 +557,7 @@
         }
         var tax_amnt = taxDivision(arr)        
         updateTaxAmount(tax_amnt)
-        $('.total-amnt').html(totalAmount())
+        $('.total-amnt').html(totalAmount().toFixed(2))
         updateTotal()       
         // console.log(arr,"final")
     }
