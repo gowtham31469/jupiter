@@ -751,7 +751,7 @@ transform: scale(1);
 				var i = 1;
 
 				$(data.orderlist).each(function(key, index) {
-					if (index.status == 2) {
+					if (index.status == 2 || index.status == 4) {
 						var label = 'label label-danger';
 					}else if (index.status == 3){
 						var label = 'label label-success';
@@ -800,6 +800,12 @@ transform: scale(1);
 		$('.border-div').removeClass('active-border')
 		$('.po-complete-label').removeClass('active')
 		$('.label-required-error').addClass('hidden')
+		$('input:radio[name=po-number-radio]').prop('checked', false);
+		$('input:radio[name=style-number-radio]').prop('checked', false);
+		$('input:radio[name=ref-number-radio]').prop('checked', false);
+		$('input:radio[name=qty-radio]').prop('checked', false);
+		$('input:radio[name=price-radio]').prop('checked', false);
+		$('input:radio[name=po-complete-radio]').prop('checked', false);
 		$('#orderDetailsModal').modal("show")
 		$('.btn-submit').prop("disabled", false);
 	}
