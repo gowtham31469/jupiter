@@ -291,13 +291,17 @@ class JobManagerController extends Controller
 			}
 
 			/** Json format creation for single templates */
-			foreach($single_temp_array as $key => $single_item)
+			if(!empty($single_temp_array))
 			{
-				 $single_templates[$single_ref[$key]][$single_item->erp_id]['ocn_number'] = $single_item->ocn_number;
-				 $single_templates[$single_ref[$key]][$single_item->erp_id]['erp_id'] = $single_item->erp_id;
-				 $single_templates[$single_ref[$key]][$single_item->erp_id]['buyer_po_number'] = $single_item->buyer_po_number;
-				 $single_templates[$single_ref[$key]][$single_item->erp_id]['size'][] = $single_item->size;
+				foreach($single_temp_array as $key => $single_item)
+				{
+					$single_templates[$single_ref[$key]][$single_item->erp_id]['ocn_number'] = $single_item->ocn_number;
+					$single_templates[$single_ref[$key]][$single_item->erp_id]['erp_id'] = $single_item->erp_id;
+					$single_templates[$single_ref[$key]][$single_item->erp_id]['buyer_po_number'] = $single_item->buyer_po_number;
+					$single_templates[$single_ref[$key]][$single_item->erp_id]['size'][] = $single_item->size;
+				}
 			}
+			
 			$template_data['ratio']  = $ratio_templates;
 			$template_data['single'] = $single_templates;
 			
