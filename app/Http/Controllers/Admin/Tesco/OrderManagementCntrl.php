@@ -34,6 +34,7 @@ use App\Classes\CancelTescoOrders;
 use PDF;
 use Carbon\Carbon;
 use App\Classes\ErpOrders;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class OrderManagementCntrl extends Controller
 {
@@ -2152,15 +2153,23 @@ class OrderManagementCntrl extends Controller
 			
 			 if($name == "TSL3-sticker")
 			 {
-				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.bmp'), 0.7, 2, 39, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 0.7, 2, 39, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			
-				PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.bmp'), 39.7, 2, 39, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 39.7, 2, 39, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			 }
 			 else
 			 {
-				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.bmp'), 0.7, 2, 39, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+//				 $img = Image::make(public_path('/storage/app/template/barcode_'.$i.'.png'));
+//
+//				// now you are able to resize the instance
+//				$img->resize(150, 50);
+//
+//				// finally we save the image as a new file
+//				$img->save(public_path('/storage/app/template/barcode_RESIZE.png'));
+				 
+				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 0.7, 2,'', '', 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			
-				PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.bmp'), 40.7, 2, 39, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 40.7, 2, '', '', 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			 }
 			
 			
@@ -4398,7 +4407,7 @@ class OrderManagementCntrl extends Controller
 		
 		$tabula       = Config::get('tabula.bar_jar');
 		
-		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.bmp').' '.$type.' 33 13');
+		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 33 22');
         $info    = json_decode($info, true);
 		return $info;
     }
@@ -4415,7 +4424,7 @@ class OrderManagementCntrl extends Controller
 		
 		$tabula       = Config::get('tabula.bar_jar');
 		
-		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.bmp').' '.$type.' 33 13');
+		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 33 13');
         $info    = json_decode($info, true);
 		return $info;
     }
