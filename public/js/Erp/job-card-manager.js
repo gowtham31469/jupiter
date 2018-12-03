@@ -380,60 +380,71 @@ function generateJobcard(){
                             $.each(data.template_data.single, function(key, erpid){
                                 var total = 0;
                                 single_table_html += '<table class="table table-bordered table-responsive"  style="font-size: 12px;" id="single-list-table">\
-                                <tbody>';
+                                <tbody><tr>\
+                                <th>ID.NO</th>';
                                 $.each(erpid, function(index, data){
-                                    single_table_html += '<tr>\
-                                                                <th>ID.NO</th>\
-                                                                <td colspan="3">'+data.erp_id+'</td>\
-                                                                <td colspan="5" class="highlight_row" rowspan="3">REFNUM  : '+key+'</td>\
-                                                            </tr>\
+                                    single_table_html += '<td colspan="3">'+data.erp_id+'</td>';
+                                });
+                                single_table_html += '<td colspan="4" class="highlight_row" rowspan="3">REFNUM  : </td></tr>\
                                                             <tr>\
-                                                                <th>B.PO.NO</th>\
-                                                                <td colspan="3">'+data.buyer_po_number+'</td>\
-                                                            </tr>\
+                                                                <th>B.PO.NO</th>';
+                                $.each(erpid, function(index1, data){
+                                    single_table_html += '<td colspan="3">'+data.buyer_po_number+'</td>';
+                                });
+                                single_table_html += '</tr>\
                                                             <tr>\
-                                                                <th>OCN</th>\
-                                                                <td colspan="3">'+data.ocn_number+'</td>\
-                                                            </tr>\
-                                                            <tr>\
-                                                                <th>SL.NO</th>\
-                                                                <th>SIZE /PRICE</th>\
-                                                                <th>O.QNT</th>\
-                                                                <th>P.QNT</th>\
-                                                                <th>TOTAL</th>\
+                                                                <th>OCN</th>';
+                                $.each(erpid, function(index2, data){
+                                    single_table_html += '<td colspan="3">'+data.ocn_number+'</td>';
+                                });
+                                single_table_html += '</tr>\
+                                                            <tr><th>SL.NO</th>';
+                                $.each(erpid, function(index3, data){
+                                    single_table_html += '<th>SIZE /PRICE</th>\
+                                    <th>O.QNT</th>\
+                                    <th>P.QNT</th>';
+                                });
+                                single_table_html += '<th>TOTAL</th>\
                                                                 <th>EXCESS</th>\
                                                                 <th>MTRS</th>\
                                                                 <th>STOCK</th>\
                                                             </tr>';
-                                                            var i=0;
-                                                            var qty_total = 0;
+                                single_table_html += '<tr><td>1</td><td>s</td><td>111</td><td></td><td>s</td><td>112</td><td></td><td>s</td><td>113</td><td></td></tr><tr><td>2</td><td>s</td><td>114</td><td></td><td>s</td><td>115</td><td></td><td>s</td><td>116</td><td></td></tr><tr><td>3</td><td>s</td><td>117</td><td></td><td>s</td><td>118</td><td></td><td>s</td><td>119</td><td></td></tr>';
 
-                                                            $.each(data.size, function(index1, size){
-                                                                i = index1+1;
-                                                               // qty_total += size.order_quantity;
-                                                                single_table_html +='<tr>\
-                                                                                        <td>'+i+'</td>\
-                                                                                        <td>'+size.size+'</td>\
-                                                                                        <td>'+size.order_quantity+'</td>\
-                                                                                        <td></td>\
-                                                                                        <td>'+qty_total+'</td>\
-                                                                                        <td>150</td>\
-                                                                                        <td></td>\
-                                                                                        <td></td>\
-                                                                                    </tr>';
-                                                            });
-                                                            
-                                                });
+                                // $.each(erpid, function(index4, data){
+                                //     var i=0;
+                                //     var qty_total = 0;
+                                //     console.log(data)
+                                //     console.log(data.size[0]["size"])
+                                //     console.log(data.size[1]["size"])
+                                //     $.each(data.size, function(index5, size){
+                                //         i = index5+1;
+                                //         single_table_html += '<tr><td>'+i+'</td>\
+                                //                                 <td>'+size.size+'</td>\
+                                //                                 <td>'+size.order_quantity+'</td>\
+                                //                                 <td></td>';
+                                //     });
+                                //     single_table_html += '<td></td>\
+                                //     <td>150</td>\
+                                //     <td></td>\
+                                //     <td></td></tr>';       
+                                // });
                                                 single_table_html += '<tr>\
-                                                                                    <th class="highlight_row">TOTAL</th>\
-                                                                                    <td></td>\
-                                                                                    <td>25000</td>\
-                                                                                    <td></td>\
-                                                                                    <td>75000</td>\
-                                                                                    <td>3000</td>\
-                                                                                    <td>0</td>\
-                                                                                    <td>0</td>\
-                                                                                </tr>';
+                                                                        <th class="highlight_row">TOTAL</th>\
+                                                                        <td></td>\
+                                                                        <td>25000</td>\
+                                                                        <td></td>\
+                                                                        <td></td>\
+                                                                        <td>25000</td>\
+                                                                        <td></td>\
+                                                                        <td></td>\
+                                                                        <td>25000</td>\
+                                                                        <td></td>\
+                                                                        <td>75000</td>\
+                                                                        <td>3000</td>\
+                                                                        <td>0</td>\
+                                                                        <td>0</td>\
+                                                                    </tr>';
                                     single_table_html += ' </tbody>\
                                                 </table>';
                                 });
