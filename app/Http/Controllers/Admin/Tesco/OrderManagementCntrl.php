@@ -2167,9 +2167,9 @@ class OrderManagementCntrl extends Controller
 //				// finally we save the image as a new file
 //				$img->save(public_path('/storage/app/template/barcode_RESIZE.png'));
 				 
-				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 0.7, 2,39, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -0.7, 2,42, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			
-				PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 40.7, 2, 39, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 38.7, 2, 42, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			 }
 			
 			
