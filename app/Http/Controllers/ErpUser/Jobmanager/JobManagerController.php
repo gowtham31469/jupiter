@@ -152,6 +152,8 @@ class JobManagerController extends Controller
 			 $single_temp_data   = array();
 			 $single_ref         = array();
 			 $single_temp_array  = array();
+			 
+			 sort($order_detail_ids);
 
 			 $workorder_id       = substr(number_format(Carbon::now()->timestamp * rand(),0,'',''),0,8);
 
@@ -283,10 +285,14 @@ class JobManagerController extends Controller
 								->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
 								->where('erp_order_details.id', '=', $order_detail_id)
 								->first();
-					$single_temp_data->size = DB::table('erp_order_details')->select('erp_order_details.size', 'erp_order_details.order_quantity')
+					$size_data = DB::table('erp_order_details')->select('erp_order_details.size', 'erp_order_details.order_quantity')
 								->where('erp_order_details.id', '=', $order_detail_id)
 								->first();
+					$single_temp_data->size = $size_data->size;
+					$single_temp_data->qty  = $size_data->order_quantity;
+					
 					array_push($single_temp_array, $single_temp_data);
+					//arsort($single_temp_array);
 				}
 			}
 
@@ -295,10 +301,11 @@ class JobManagerController extends Controller
 			{
 				foreach($single_temp_array as $key => $single_item)
 				{
-					$single_templates[$single_ref[$key]][$single_item->erp_id]['ocn_number'] = $single_item->ocn_number;
-					$single_templates[$single_ref[$key]][$single_item->erp_id]['erp_id'] = $single_item->erp_id;
-					$single_templates[$single_ref[$key]][$single_item->erp_id]['buyer_po_number'] = $single_item->buyer_po_number;
-					$single_templates[$single_ref[$key]][$single_item->erp_id]['size'][] = $single_item->size;
+					$single_templates[$single_ref[$key]]['order_data'][$single_item->erp_id]['ocn_number'] = $single_item->ocn_number;
+					$single_templates[$single_ref[$key]]['order_data'][$single_item->erp_id]['erp_id'] = $single_item->erp_id;
+					$single_templates[$single_ref[$key]]['order_data'][$single_item->erp_id]['buyer_po_number'] = $single_item->buyer_po_number;
+					//$single_templates[$single_ref[$key]][$single_item->erp_id]['size'][] = $single_item->size;
+					$single_templates[$single_ref[$key]]['size'][$single_item->size][]= $single_item->qty;
 				}
 			}
 			
