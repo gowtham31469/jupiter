@@ -2012,15 +2012,18 @@ class OrderManagementCntrl extends Controller
 			 $svg=urldecode($value);
 			 PDF::setImageScale(1.66);
 			 PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=127, $h=80, $link='', $align='', $palign='', $border=0, $fitonpage=true);
-			
-			 if($name != "THL3-sticker")
-			 {
-				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-			 }
-			else
+			if($name != "TCL2-sticker" && $name != "TCL4-sticker")
 			{
-				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 0, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				 if($name != "THL3-sticker")
+				 {
+					 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				 }
+				else
+				{
+					 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 0, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				}
 			}
+			
 			 $i++;
 		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
