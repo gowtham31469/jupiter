@@ -217,13 +217,13 @@
         var oldPendQnty = $(this).closest('tr').find('.pending-qnty').attr('data-id');
 
         if ($.isNumeric($(this).val())) {
-            if ($(this).val() == parseInt($(this).closest('tr').find('.pending-qnty').text())) {
+            if ($(this).val() == parseInt(oldPendQnty)) {
                 amnt  = parseInt($(this).val()) * $(this).closest('tr').find('.rate').text();
                 $(this).closest('tr').find('.amnt').html(amnt.toFixed(2))
                 pendingQnty = oldPendQnty - $(this).val()
                 $(this).closest('tr').find('.pending-qnty').html(pendingQnty)
             }
-            else if($(this).val() < parseInt($(this).closest('tr').find('.pending-qnty').text())){
+            else if($(this).val() < parseInt(oldPendQnty)){
                 amnt  = parseInt($(this).val()) * $(this).closest('tr').find('.rate').text();
                 $(this).closest('tr').find('.amnt').html(amnt.toFixed(2))
                 pendingQnty = oldPendQnty - $(this).val()
@@ -439,8 +439,8 @@
                     tr += '</tr>';
                 }
                 else{
-                    tr += '<tr><td></td><td colspan="13"><strong style="float: left;">ITEM: '+value.item_name+'  HSNCode: '+value.hsn_code+'</strong></td></tr><tr class="trClass" id="'+value.id+'">';
-                    tr += '<td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+' </td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td class="amnt">'+(delQnty * value.rate).toFixed(2)+'</td>';
+                    tr += '<tr><td></td><td colspan="13"><strong style="float: left;">ITEM: '+value.item_name+'  HSNCode: '+value.hsn_code+'</strong></td></tr>';
+                    tr += '<tr class="trClass" id="'+value.id+'"><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+' </td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td class="amnt">'+(delQnty * value.rate).toFixed(2)+'</td>';
                     tr += '</tr>';
                 }               
                 qnty += value.order_quantity;
@@ -617,7 +617,6 @@
     function updateGrandTotal(obj,gndtotal){
         // $(obj).closest('tr').find('.grand-total').text();
        if($.isNumeric(parseFloat($(obj).val()))) {
-            alert($(obj).val())
             var grandtotal = parseFloat($(obj).val())+ parseFloat(gndtotal)
             $('.grand-total').html(grandtotal.toFixed(2))
        }
