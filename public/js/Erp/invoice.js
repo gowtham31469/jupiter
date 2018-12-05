@@ -213,23 +213,23 @@
         var taxsum = {};
         var arr = [];
         var pendingQnty = 0
-        console.log($(this).val())
+        console.log($(this).closest('tr').find('.pending-qnty').text())
         var oldPendQnty = $(this).closest('tr').find('.pending-qnty').attr('data-id');
 
         if ($.isNumeric($(this).val())) {
             if ($(this).val() == parseInt($(this).closest('tr').find('.pending-qnty').text())) {
                 amnt  = parseInt($(this).val()) * $(this).closest('tr').find('.rate').text();
                 $(this).closest('tr').find('.amnt').html(amnt.toFixed(2))
-                pendingQnty = $(this).closest('tr').find('.pending-qnty').text() - $(this).val()
+                pendingQnty = oldPendQnty - $(this).val()
                 $(this).closest('tr').find('.pending-qnty').html(pendingQnty)
             }
             else if($(this).val() < parseInt($(this).closest('tr').find('.pending-qnty').text())){
                 amnt  = parseInt($(this).val()) * $(this).closest('tr').find('.rate').text();
                 $(this).closest('tr').find('.amnt').html(amnt.toFixed(2))
-                pendingQnty = $(this).closest('tr').find('.pending-qnty').text() - $(this).val()
+                pendingQnty = oldPendQnty - $(this).val()
                 $(this).closest('tr').find('.pending-qnty').html(pendingQnty)
             }
-            else if($(this).val()=="" || $(this).val() > parseInt($(this).closest('tr').find('.pending-qnty').text())){
+            else if($(this).val()=="" || $(this).val() > parseInt(oldPendQnty)){
                 amnt  = oldPendQnty * $(this).closest('tr').find('.rate').text();
                 $(this).closest('tr').find('.amnt').html(amnt.toFixed(2))
                 $(this).closest('tr').find('.pending-qnty').html(oldPendQnty)
