@@ -14,7 +14,7 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
         dataType: "json",
         data: {
             _token: csrf_token,
-            table_name: tableName,
+            tableName: tableName,
             buyer_id :buyer_id,
             pi_status:pi_status,
             style_no:style_no,
@@ -223,7 +223,7 @@ function tescoApprovePI(template_id,id,table_name,billamnt)
         dataType: "json",
         data: {
             _token: csrf_token,
-            table_name: table_name,
+            tableName: table_name,
             buyer_id:buyer_id,
             id:id,
             template_id:template_id,

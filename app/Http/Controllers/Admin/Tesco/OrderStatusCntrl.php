@@ -141,7 +141,7 @@ class OrderStatusCntrl extends Controller
                                 ]);
             if ($po_status == "PO Uploaded") {
                 
-               return $erp_obj->updateTescoErpOrders($request);
+               $erp_obj->updateTescoErpOrders($request);
             }
 
             $result = response()->json(['error'=> false,'message' =>'success'],200);
@@ -252,13 +252,14 @@ class OrderStatusCntrl extends Controller
         try
         {
             $row_id     =   $request->id;
-            $table_name =   $request->table_name;
+            $table_name =   $request->tableName;
             $buyer_id   =   $request->buyer_id;
             $billamnt   =   $request->billamnt;
             $total_qnty =   0 ; 
             $sub_total  =   0 ;
             $pi_obj     =   new ProfomaInvoice();
             $data       =   $pi_obj->getTescoPIDetails($request);
+            $erp_obj    = new ErpOrders();
             if ($data)
             {
                 if ($data['bank_details']->zone == "CE")
@@ -362,7 +363,8 @@ class OrderStatusCntrl extends Controller
                                        'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                                     ]);
             }
-            
+
+            $erp_obj->updateTescoErpOrders($request);
             
             if ($approved_data)
             {

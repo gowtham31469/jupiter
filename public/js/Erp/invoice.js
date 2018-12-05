@@ -522,7 +522,7 @@
             useHeight     = myOffscreenEl.style.height;
             myOffscreenEl.style.backgroundColor = 'white';
         html2pdf(myOffscreenEl, {
-            margin      :  10,
+            margin:       [30, 25, 33, 25],
             filename    :  'Invoice.pdf',
             image       :  { type: 'jpeg', quality: 0.98 },
             html2canvas :  { dpi: 300, letterRendering: true },
