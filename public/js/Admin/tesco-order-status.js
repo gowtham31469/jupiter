@@ -791,7 +791,7 @@ function tescoStatusTable(data,path)
 	                }
 	                else
 	                {
-                		tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" value="'+value[key]+'" readonly></div></div></td>';
+                		tr += '<td class="text-center">'+value[key]+'</td>';
 
 	                }
                 }
@@ -1060,8 +1060,10 @@ function tescoSetPO(obj,id,tableName,po_file)
                $('.snackbar_span').html('Purchase Order Number added Successfully');
                $(obj).closest('tr').find('.tesco-po').val(po_number);
                $(obj).closest('tr').find('.po-span').addClass('hidden');
-               $(obj).closest('tr').find('.tesco-po').attr('readonly', true);
-
+			   $ponumber = $(obj).closest('tr').find('.tesco-po').val();
+			   $div = $(obj).closest('tr').find('.text-center');
+               $(obj).closest('tr').find('.tesco-po').parent().parent().remove();
+			   $div.text($ponumber)
                if ($(obj).closest('tr').find('.po_class').text() =="PO Pending" && po_file!="null")
                {
                  $(obj).closest('tr').find('.po_class').html("PO Uploaded")

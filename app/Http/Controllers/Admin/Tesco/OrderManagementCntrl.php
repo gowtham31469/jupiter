@@ -34,6 +34,7 @@ use App\Classes\CancelTescoOrders;
 use PDF;
 use Carbon\Carbon;
 use App\Classes\ErpOrders;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class OrderManagementCntrl extends Controller
 {
@@ -2011,15 +2012,18 @@ class OrderManagementCntrl extends Controller
 			 $svg=urldecode($value);
 			 PDF::setImageScale(1.66);
 			 PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=127, $h=80, $link='', $align='', $palign='', $border=0, $fitonpage=true);
-			
-			 if($name != "THL3-sticker")
-			 {
-				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-			 }
-			else
+			if($name != "TCL2-sticker" && $name != "TCL4-sticker")
 			{
-				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 0, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				 if($name != "THL3-sticker")
+				 {
+					 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				 }
+				else
+				{
+					 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 0, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				}
 			}
+			
 			 $i++;
 		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
@@ -2152,15 +2156,23 @@ class OrderManagementCntrl extends Controller
 			
 			 if($name == "TSL3-sticker")
 			 {
-				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 0.7, 2, 39, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 0.9, 2, 36.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			
-				PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 39.7, 2, 39, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 40.9, 2, 36.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			 }
 			 else
 			 {
-				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 2.7, 2, 36, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+//				 $img = Image::make(public_path('/storage/app/template/barcode_'.$i.'.png'));
+//
+//				// now you are able to resize the instance
+//				$img->resize(150, 50);
+//
+//				// finally we save the image as a new file
+//				$img->save(public_path('/storage/app/template/barcode_RESIZE.png'));
+				 
+				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -1.1, 2,41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			
-				PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 41.7, 2, 36, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 38.7, 2, 41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			 }
 			
 			
