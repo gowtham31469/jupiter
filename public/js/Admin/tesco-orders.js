@@ -1840,7 +1840,11 @@ function GenerateDivTesco(data, name) {
 							_token: csrf_token,
 						},
 						success: function (data) {
-							
+							ajax_count++;
+							if (ajax_count == document.getElementById("table_row").rows.length) {
+								var svg_fin = svgarr.join(',_');
+								PopupTescoGenerate(svg_fin, name,svgDoc);
+							}
 						},
 						complete: function () {
 
@@ -1873,7 +1877,11 @@ function GenerateDivTesco(data, name) {
 							_token: csrf_token,
 						},
 						success: function (data) {
-							
+							ajax_count++;
+							if (ajax_count == document.getElementById("table_row").rows.length) {
+								var svg_fin = svgarr.join(',_');
+								PopupTescoGenerate(svg_fin, name,svgDoc);
+							}
 						},
 						complete: function () {
 
@@ -1954,7 +1962,6 @@ function GenerateDivTesco(data, name) {
 
 				svgarr.push(str)
 			}
-
 
 
 
