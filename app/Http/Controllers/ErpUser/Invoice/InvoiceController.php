@@ -46,6 +46,7 @@ class InvoiceController extends Controller
                             ->join('buyers','invoice.buyer_id','buyers.id')
                             ->where('invoice_details.company_id',session()->get('company'))
                             ->select('invoice.invoice_id','erp_id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','po_no','invoice_file')
+                            ->distinct('invoice.id')
                             ->get();
         return view('erp.Invoice.invoice-list',['invoices'=>$invoices,'companies' => $companies]);
 	}
