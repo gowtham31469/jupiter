@@ -259,7 +259,7 @@ class OrderStatusCntrl extends Controller
             $sub_total  =   0 ;
             $pi_obj     =   new ProfomaInvoice();
             $data       =   $pi_obj->getTescoPIDetails($request);
-            $erp_obj    = new ErpOrders();
+            $erp_obj    =   new ErpOrders();
             if ($data)
             {
                 if ($data['bank_details']->zone == "CE")
@@ -363,7 +363,6 @@ class OrderStatusCntrl extends Controller
                                        'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                                     ]);
             }
-
             // $erp_obj->updateTescoErpOrders($request);
             
             if ($approved_data)
