@@ -364,7 +364,7 @@ class OrderStatusCntrl extends Controller
                                     ]);
             }
 
-            $erp_obj->updateTescoErpOrders($request);
+            // $erp_obj->updateTescoErpOrders($request);
             
             if ($approved_data)
             {
