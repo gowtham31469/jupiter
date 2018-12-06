@@ -150,8 +150,9 @@ class JobManagerController extends Controller
 			 $width_array        = array();
 			 $distinct_ref_array = array();
 			 $single_temp_data   = array();
-			// $single_ref         = array();
-			 $single_temp_array  = array();
+			 $common_data_chunk  = array();
+			 $size_chunk         = array();
+			 $final_chunk        = array();
 			 
 			 sort($order_detail_ids);
 
@@ -280,49 +281,41 @@ class JobManagerController extends Controller
 				}
 				else
 				{
-					//array_push($single_ref, $refnum_array[$key]);
 					$single_temp_data = DB::table('erp_orders')->select('erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_orders.buyer_po_number', 'erp_order_details.id as erp_order_details_id', 'erp_orders.id as erp_table_id', 'erp_order_details.size', 'erp_order_details.order_quantity', 'erp_order_details.reference_name')
 								->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
 								->where('erp_order_details.id', '=', $order_detail_id)
 								->first();
-					// $size_data = DB::table('erp_order_details')->select('erp_order_details.size', 'erp_order_details.order_quantity')
-					// 			->where('erp_order_details.id', '=', $order_detail_id)
-					// 			->first();
-					// $single_temp_data->size = $size_data->size;
-					// $single_temp_data->qty  = $size_data->order_quantity;
-					// !in_array($single_temp_data->erp_id, $erp_id_array)?array_push($erp_id_array,$single_temp_data->erp_id):$erp_id_array;
 					
 					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id]['ocn_number'] = $single_temp_data->ocn_number;
 					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id]['erp_id'] = $single_temp_data->erp_id;
 					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id]['buyer_po_number'] = $single_temp_data->buyer_po_number;
 					$single_templates[$single_temp_data->reference_name]['size'][$single_temp_data->size][]= $single_temp_data->order_quantity;
-					//$single_templates[$single_temp_data->reference_name][$single_temp_data->erp_id]['size'][] = $single_temp_data->size;
-
-					//array_push($single_temp_array, $single_temp_data);
-					
-					//arsort($single_temp_array);
 				}
 			}
 
+			/** Split template data array into small chunks (3 elements in each chunks) */
+			foreach($single_templates as $template => $template_item)
+			{
+				/** common data chunk */
+				$common_data_chunk = array_chunk($template_item['order_data'], 3);
+				foreach($common_data_chunk as $key => $data)
+				{
+					$final_chunk[$template.'_'.$key]['order_data'] = $data;
+				}
 
-			/** Json format creation for single templates */
-			// if(!empty($single_temp_array))
-			// {
-			// 	$i = 0;
-			// 	foreach($single_temp_array as $key => $single_item)
-			// 	{
-			// 		$single_templates[$single_item->reference_name.'_'.$i]['order_data'][$single_item->erp_id]['ocn_number'] = $single_item->ocn_number;
-			// 		$single_templates[$single_item->reference_name.'_'.$i]['order_data'][$single_item->erp_id]['erp_id'] = $single_item->erp_id;
-			// 		$single_templates[$single_item->reference_name.'_'.$i]['order_data'][$single_item->erp_id]['buyer_po_number'] = $single_item->buyer_po_number;
-			// 		$single_templates[$single_item->reference_name.'_'.$i]['order_data'][$single_item->erp_id]['erp_order_details_id'] = $single_item->erp_order_details_id;
-					//$single_templates[$single_item->reference_name][$single_item->erp_id]['size'][] = $single_item->size;
-					//$single_templates[$single_item->reference_name]['size'][$single_item->size][]= $single_item->order_quantity;
-					
-			// 	}
-			// }
-			//return count($single_templates[$single_item->reference_name]['order_data']);
+				/** size-quantity chunk */
+				foreach($template_item['size'] as $size => $qty)
+				{
+					$size_chunk =  array_chunk($qty, 3);
+					foreach($size_chunk as $key2 => $value2)
+					{
+						$final_chunk[$template.'_'.$key2]['size'][$size.'_'.$key2] = $value2;
+					}
+				}
+				
+			}
 			$template_data['ratio']  = $ratio_templates;
-			$template_data['single'] = $single_templates;
+			$template_data['single'] = $final_chunk;
 			
 			return response()->json(['error'=> false,'message' =>'Success', 'template_data' => $template_data],200);
   

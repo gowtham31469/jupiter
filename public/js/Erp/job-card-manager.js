@@ -384,7 +384,8 @@ function generateJobcard(){
                                 $.each(erpid.order_data, function(index, common_data){
                                     single_table_html += '<td colspan="2">'+common_data.erp_id+'</td>';
                                 });
-                                single_table_html += '<td colspan="5" class="highlight_row" rowspan="3">REFNUM  : '+key+'</td></tr>\
+                                var template_name = key.split("_");
+                                single_table_html += '<td colspan="5" class="highlight_row" rowspan="3">REFNUM  : '+template_name[0]+'</td></tr>\
                                                             <tr>\
                                                                 <th>B.PO.NO</th>';
                                 $.each(erpid.order_data, function(index, common_data){
@@ -410,7 +411,8 @@ function generateJobcard(){
                                                             </tr>';
                                 $.each(erpid.size, function(index2, quantity_data){
                                     var total_qty_sizewise = 0;
-                                    single_table_html += '<tr><td>'+index2+'</td>';
+                                    var size_text = index2.split("_");
+                                    single_table_html += '<tr><td>'+size_text[0]+'</td>';
                                     $.each(quantity_data, function(index3, qty){
                                         total_qty_sizewise += qty;
                                         single_table_html +='<td class="single-quantity quantity_'+index3+'">'+qty+'</td><td></td>';
