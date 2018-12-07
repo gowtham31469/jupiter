@@ -618,7 +618,7 @@
     function updateGrandTotal(obj,gndtotal){
         // $(obj).closest('tr').find('.grand-total').text();
        if($.isNumeric(parseFloat($(obj).val()))) {
-            var grandtotal = parseFloat($(obj).val())+ parseFloat(gndtotal)
+            var grandtotal = parseFloat($(obj).val())+ parseFloat($('.grand-total').text())
             $('.grand-total').html(grandtotal.toFixed(2))
        }
        else{
