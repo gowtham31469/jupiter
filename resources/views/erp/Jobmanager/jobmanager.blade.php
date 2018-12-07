@@ -233,6 +233,7 @@
 								<th>PO Number</th>
 								<th>Style Number</th>
 								<th>Reference Number</th>
+								<th>Size</th>
 								<th>Delivery Date</th>
 							</tr>
 						</thead>
@@ -255,10 +256,15 @@
 								<td>{{$vals->po_no}}</td>
 								<td>{{$vals->style_no}}</td>
 								<td>{{$vals->reference_name}}</td>
+								@if ($vals->size != '')
+									<td>{{$vals->size}}</td>
+								@else
+									<td>-</td>
+								@endif
 								@if ($vals->delivery_date != '')
 									<td>{{$vals->delivery_date}}</td>
 								@else
-									<td>N/A</td>
+									<td>-</td>
 								@endif
 							</tr>
 							@endforeach

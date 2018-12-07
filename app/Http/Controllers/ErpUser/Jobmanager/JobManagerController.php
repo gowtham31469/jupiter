@@ -98,7 +98,7 @@ class JobManagerController extends Controller
 											->where('erp_orders.order_status_id', '=', 4)
 											->whereIn('erp_orders.buyer_id', $buyers)
 											->orderBy('erp_order_details.erp_order_id', 'asc')
-											->select('erp_orders.*', 'erp_order_details.id as erp_detail_id','erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name', 'buyers.id as buyer_id')
+											->select('erp_orders.*', 'erp_order_details.id as erp_detail_id','erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name', 'buyers.id as buyer_id', 'erp_order_details.size')
 											->get();
 					
 					if(count($erp_order_details) > 0)
@@ -296,20 +296,30 @@ class JobManagerController extends Controller
 			/** Split template data array into small chunks (3 elements in each chunks) */
 			foreach($single_templates as $template => $template_item)
 			{
-				/** common data chunk */
-				$common_data_chunk = array_chunk($template_item['order_data'], 3);
-				foreach($common_data_chunk as $key => $data)
-				{
-					$final_chunk[$template.'_'.$key]['order_data'] = $data;
-				}
-
-				/** size-quantity chunk */
+				$order_count = count($template_item['order_data']);
 				foreach($template_item['size'] as $size => $qty)
 				{
-					$size_chunk =  array_chunk($qty, 3);
-					foreach($size_chunk as $key2 => $value2)
+					$size_qty_count = count($qty);
+					/** Check if all po numbers have same size & quantity */
+					if($order_count == $size_qty_count)
 					{
-						$final_chunk[$template.'_'.$key2]['size'][$size.'_'.$key2] = $value2;
+						/** common data chunk */
+						$common_data_chunk = array_chunk($template_item['order_data'], 3);
+						foreach($common_data_chunk as $key => $data)
+						{
+							$final_chunk[$template.'_'.$key]['order_data'] = $data;
+						}
+
+						/** size-quantity chunk */
+						$size_chunk =  array_chunk($qty, 3);
+						foreach($size_chunk as $key2 => $value2)
+						{
+							$final_chunk[$template.'_'.$key2]['size'][$size.'_'.$key2] = $value2;
+						}
+					}
+					else
+					{
+						return response()->json(['error'=> true,'message' =>'Select equal numbers of size/quantity for each PO numbers.'],406);
 					}
 				}
 				

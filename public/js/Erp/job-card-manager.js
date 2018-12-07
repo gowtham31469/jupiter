@@ -92,7 +92,7 @@ $(document).ready(function() {
 			//For Custom Filters
 			this.api().columns().every( function (i) {
 				var column = this;
-				if(i === 1 || i === 2 || i === 4 || i === 5 || i === 6 || i === 7) {
+				if(i === 1 || i === 2 || i === 4 || i === 5 || i === 6 || i === 8) {
 					var select;
 					switch(i) {
 						case 1:
@@ -110,7 +110,7 @@ $(document).ready(function() {
 						case 6:
 							select = $('#refNumber')
 							break;
-						case 7:
+						case 8:
 							select = $('#delDate')
 							break;
 					}
@@ -352,7 +352,7 @@ function generateJobcard(){
                                                             return a.qty_table_id - b.qty_table_id;
                                                         });
                                                         $.each(template, function(index, row){
-                                                            total += row.order_quantity;
+                                                            total += parseInt(row.order_quantity);
                                                             ratio_table_html += '<tr id='+row.erp_order_details_id+'>\
                                                             <td>'+row.reference_name+' '+row.ratio_pack_type+'</td>\
                                                             <td>'+row.buyer_po_number+'</td>\
@@ -379,27 +379,27 @@ function generateJobcard(){
                         {
                             $.each(data.template_data.single, function(key, erpid){   
                                 single_table_html += '<table class="table table-bordered table-responsive"  style="font-size: 12px;" id="single-list-table">\
-                                <tbody><tr>\
-                                <th>ID.NO</th>';
+                                <tbody id="single-list-table-body"><tr>\
+                                <th width="80px">ID.NO</th>';
                                 $.each(erpid.order_data, function(index, common_data){
                                     single_table_html += '<td colspan="2">'+common_data.erp_id+'</td>';
                                 });
                                 var template_name = key.split("_");
                                 single_table_html += '<td colspan="5" class="highlight_row" rowspan="3">REFNUM  : '+template_name[0]+'</td></tr>\
                                                             <tr>\
-                                                                <th>B.PO.NO</th>';
+                                                                <th width="80px">B.PO.NO</th>';
                                 $.each(erpid.order_data, function(index, common_data){
                                     single_table_html += '<td colspan="2">'+common_data.buyer_po_number+'</td>';
                                 });
                                 single_table_html += '</tr>\
                                                             <tr>\
-                                                                <th>OCN</th>';
+                                                                <th width="80px">OCN</th>';
                                 $.each(erpid.order_data, function(index, common_data){
                                     single_table_html += '<td colspan="2">'+common_data.ocn_number+'</td>';
                                 });
 
                                 single_table_html += '</tr>\
-                                                      <th>SIZE /PRICE</th>';
+                                                      <th width="80px">SIZE /PRICE</th>';
                                 $.each(erpid.order_data, function(index, common_data){
                                     single_table_html += '<th>O.QNT</th>\
                                     <th>P.QNT</th>';
@@ -409,27 +409,42 @@ function generateJobcard(){
                                                                 <th>MTRS</th>\
                                                                 <th>STOCK</th>\
                                                             </tr>';
+                                var total_quantity_final = 0;
+                                var i = 0;
+                                var sum = [];
+                                var results = [];
                                 $.each(erpid.size, function(index2, quantity_data){
                                     var total_qty_sizewise = 0;
                                     var size_text = index2.split("_");
                                     single_table_html += '<tr><td>'+size_text[0]+'</td>';
+
+                                    /** column wise quantity total calculation */
+                                    size_count = quantity_data.length;
+                                    for(i=0; i<size_count; i++)
+                                    {
+                                        sum[i] = quantity_data[i] + (sum[i] || 0);
+                                    }
+                                    
                                     $.each(quantity_data, function(index3, qty){
-                                        total_qty_sizewise += qty;
-                                        single_table_html +='<td class="single-quantity quantity_'+index3+'">'+qty+'</td><td></td>';
+                                        total_qty_sizewise += parseInt(qty);
+                                        single_table_html +='<td class="single-quantity quantity_'+index3+'">'+parseInt(qty)+'</td><td></td>';
                                     });
-                                    single_table_html += '<td>'+total_qty_sizewise+'</td><td></td><td></td><td></td></tr>';
+                                    single_table_html += '<td>'+parseInt(total_qty_sizewise)+'</td><td></td><td></td><td></td></tr>';
+
+                                    total_quantity_final += parseInt(total_qty_sizewise);
                                 });
+
                                 single_table_html += '<tr>\
                                                       <th class="highlight_row">TOTAL</th>';
                                 $.each(erpid.order_data, function(index, common_data){
-                                    single_table_html += '<td></td>\
+                                    single_table_html += '<td>'+sum[index]+'</td>\
                                                           <td></td>';
                                 });
                                 
-                                single_table_html += '<td>75000</td>\
-                                                        <td>3000</td>\
-                                                        <td>0</td>\
-                                                        <td>0</td>\
+                                single_table_html += '<td>'+parseInt(total_quantity_final)+'</td>\
+                                                        <td></td>\
+                                                        <td></td>\
+                                                        <td></td>\
                                                     </tr>';
                                     single_table_html += ' </tbody>\
                                                 </table>';
