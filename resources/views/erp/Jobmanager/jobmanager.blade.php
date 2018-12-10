@@ -233,14 +233,12 @@
 								<th>PO Number</th>
 								<th>Style Number</th>
 								<th>Reference Number</th>
-								<th>Size</th>
 								<th>Delivery Date</th>
 							</tr>
 						</thead>
 						<tbody>
 							@foreach($orders as $vals)
-
-							<tr id="{{$vals->erp_detail_id}}">
+							<tr id="{{$vals->id}}" data-refname="{{$vals->reference_name}}">
 								<td class="">
 								
 									<div class="form-check">
@@ -256,11 +254,6 @@
 								<td>{{$vals->po_no}}</td>
 								<td>{{$vals->style_no}}</td>
 								<td>{{$vals->reference_name}}</td>
-								@if ($vals->size != '')
-									<td>{{$vals->size}}</td>
-								@else
-									<td>-</td>
-								@endif
 								@if ($vals->delivery_date != '')
 									<td>{{$vals->delivery_date}}</td>
 								@else
@@ -469,7 +462,7 @@
 								<div class="col-md-3">
 							        <div class="form-group has-feedback form-inline">
 										{!! Form::label('excess', 'EXCESS % :', ['class' => 'form_label']) !!}
-										{!! Form::number('excess',$value = '', array('class' => 'form-control input-sm','placeholder' => 'EXCESS','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0')) !!}
+										{!! Form::number('excess',$value = '', array('class' => 'form-control input-sm','placeholder' => 'EXCESS','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'onkeyup' => 'return calculateExcess(this)')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>

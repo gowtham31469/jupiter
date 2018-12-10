@@ -92,7 +92,7 @@ $(document).ready(function() {
 			//For Custom Filters
 			this.api().columns().every( function (i) {
 				var column = this;
-				if(i === 1 || i === 2 || i === 4 || i === 5 || i === 6 || i === 8) {
+				if(i === 1 || i === 2 || i === 4 || i === 5 || i === 6 || i === 7) {
 					var select;
 					switch(i) {
 						case 1:
@@ -110,7 +110,7 @@ $(document).ready(function() {
 						case 6:
 							select = $('#refNumber')
 							break;
-						case 8:
+						case 7:
 							select = $('#delDate')
 							break;
 					}
@@ -211,11 +211,19 @@ function generateJobcard(){
             }
         });
         orders   = orders.join(',');
+        ref_array = [];
+        /** [ Create array of reference selected ] */
+        $('.row-checkbox', allPages).each(function (i, item) {
+            if ($(this).is(':checked')) {
+                ref_array.push($(this).closest('tr').data('refname')); 
+            }
+        });
+        ref_array   = ref_array.join(',');
         $.ajax({
             url:base_url + "/erp/get-jobcard-order-details",
             dataType:"json",
             method:"get",
-            data:{orders:orders},
+            data:{orders:orders, ref_array:ref_array},
             tryCount : 0,
             retryLimit : 2,
             beforeSend: function () {
@@ -427,9 +435,9 @@ function generateJobcard(){
                                     
                                     $.each(quantity_data, function(index3, qty){
                                         total_qty_sizewise += parseInt(qty);
-                                        single_table_html +='<td class="single-quantity quantity_'+index3+'">'+parseInt(qty)+'</td><td></td>';
+                                        single_table_html +='<td>'+parseInt(qty)+'</td><td></td>';
                                     });
-                                    single_table_html += '<td>'+parseInt(total_qty_sizewise)+'</td><td></td><td></td><td></td></tr>';
+                                    single_table_html += '<td class="total_quantity">'+parseInt(total_qty_sizewise)+'</td><td class="total_excess"></td><td></td><td></td></tr>';
 
                                     total_quantity_final += parseInt(total_qty_sizewise);
                                 });
@@ -437,12 +445,12 @@ function generateJobcard(){
                                 single_table_html += '<tr>\
                                                       <th class="highlight_row">TOTAL</th>';
                                 $.each(erpid.order_data, function(index, common_data){
-                                    single_table_html += '<td>'+sum[index]+'</td>\
+                                    single_table_html += '<td class="total_quantity">'+sum[index]+'</td>\
                                                           <td></td>';
                                 });
                                 
                                 single_table_html += '<td>'+parseInt(total_quantity_final)+'</td>\
-                                                        <td></td>\
+                                                        <td class="total_excess"></td>\
                                                         <td></td>\
                                                         <td></td>\
                                                     </tr>';
@@ -531,3 +539,13 @@ function selectOrders(event)
          $(checkbox).not("[data-buyer-name='"+buyer_name+"']").removeAttr("disabled");
     }
 }
+
+// function calculateExcess(evt)
+// {
+//     var item = $('.total_quantity');
+//     $.each(item, function(key, value){
+//         var total_excess = parseInt(parseInt($(value).text()) * parseInt(evt.value*1/100));
+//         $('.total_excess').text(total_excess);
+//     })
+
+// }

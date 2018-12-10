@@ -98,21 +98,22 @@ class JobManagerController extends Controller
 											->where('erp_orders.order_status_id', '=', 4)
 											->whereIn('erp_orders.buyer_id', $buyers)
 											->orderBy('erp_order_details.erp_order_id', 'asc')
-											->select('erp_orders.*', 'erp_order_details.id as erp_detail_id','erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name', 'buyers.id as buyer_id', 'erp_order_details.size')
+											->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id')
+											->select('erp_orders.*','erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name', 'buyers.id as buyer_id')
 											->get();
 					
 					if(count($erp_order_details) > 0)
 					{
 						foreach($erp_order_details as $erp_order_det)
 						{
-							$orders_erp[$erp_order_det->id.'-'.$erp_order_det->erp_detail_id] = $erp_order_det;
+							$orders_erp[] = $erp_order_det;
 						}
 						
 					}
 				}
 				
 			}
-			ksort($orders_erp);
+			asort($orders_erp);
 			return view('erp.Jobmanager.jobmanager', ['orders' => $orders_erp, 'companies' => $companies]);
 		}
 		catch (\Exception $e)
@@ -129,7 +130,8 @@ class JobManagerController extends Controller
     public function getOrderDetailsByIds(Request $request)
     {
       try {
-			 $order_detail_ids   = explode(',', $request['orders']);
+			 $erp_orders_id      = explode(',', $request['orders']);
+			 $selected_ref_array = explode(',', $request['ref_array']);
 			 $buyers_array       = array();
 			 $customers_array    = array();
 			 $company_array      = array();
@@ -153,8 +155,13 @@ class JobManagerController extends Controller
 			 $common_data_chunk  = array();
 			 $size_chunk         = array();
 			 $final_chunk        = array();
-			 
-			 sort($order_detail_ids);
+			 $order_detail_ids   = array();
+
+			 $order_detail_ids = DB::table('erp_order_details')
+									->whereIn('erp_order_details.erp_order_id', $erp_orders_id)
+									->whereIn('erp_order_details.reference_name', $selected_ref_array)
+									->pluck('erp_order_details.id')->all();
+ 			 sort($order_detail_ids);
 
 			 $workorder_id       = substr(number_format(Carbon::now()->timestamp * rand(),0,'',''),0,8);
 
