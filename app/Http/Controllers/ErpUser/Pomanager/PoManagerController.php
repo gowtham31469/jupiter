@@ -62,12 +62,27 @@ class PoManagerController extends Controller
 			session()->put('company_name', strtolower( str_replace(' ','',$company_id->name)) );
 		}
 		
-		$templates   = 		DB::table('erpusers_template_mapping')
+		if($customer_id != 1)
+		{
+			$templates   = 		DB::table('erpusers_template_mapping')
 								->join('buyers','erpusers_template_mapping.buyer','buyers.id')
 							    ->where('erpusers_template_mapping.company',session()->get('company'))
 								->where('erpusers_template_mapping.erp_user',$customer_id)
 								->select('erpusers_template_mapping.*','buyers.template_table','buyers.item_master_table','buyers.id as buyer_id')
 								->get();
+		}
+		else
+		{
+			$templates   = 		DB::table('erpusers_template_mapping')
+								->join('buyers','erpusers_template_mapping.buyer','buyers.id')
+								->where('erpusers_template_mapping.company',session()->get('company'))
+								->select('erpusers_template_mapping.*','buyers.template_table','buyers.item_master_table','buyers.id as buyer_id')
+								->get();
+		}
+		
+		
+		//return $templates;
+		
 		
 		 $new_orders = array();
 		 $i=1;
@@ -186,26 +201,32 @@ class PoManagerController extends Controller
                             ->select('erp_order_details.*',$arr_template->template_table.'.template_name','erp_status.status_name')
                             ->get();
 			   
-			$orders   = Erp::where('erp_orders.id',$id)
-                            ->select('*')
+				$orders   = Erp::where('erp_orders.id',$id)
+							->join('customers','erp_orders.customer_id','customers.id')
+                            ->select('erp_orders.*','customers.company_name')
                             ->get();
 			   
 		   foreach($orderlist as $value)
 		   {
-			 // print_r($value->template_id);
-			  $price =  DB::table('price_taxation')->select('price_taxation.*')->where('customer_id',$customer_id)->where('buyer_id',$buyer_id)->where('template_id',$value->template_id)->get();
+			  $price =  DB::table('price_taxation')->select('price_taxation.*')->where('customer_id',$customer_id)->where('buyer_id',$buyer_id)->where('template_id',$value->template_id)->first();
 			   
-			   
-			  $price_range =  DB::table('price_range')->select('price_range.*')->where('price_taxation_id',$price{0}->id)->where('volume_from','<=',$value->order_quantity)->where('volume_to','>=',$value->order_quantity)->get();
-			   
-			   if(empty($price_range))
-			   {
-					 $value->price = $price_range{0}->price;
+			   if (empty($price)) {
+				  $value->price = 0;
 			   }
 			   else
 			   {
-				    $value->price = 0;
+				  $price_range =  DB::table('price_range')->select('price_range.*')->where('price_taxation_id',$price->id)->where('volume_from','<=',$value->order_quantity)->where('volume_to','>=',$value->order_quantity)->first();
+
+				   if(empty($price_range))
+				   {
+					   $value->price = 0;	 
+				   }
+				   else
+				   {
+						$value->price = $price_range->price;
+				   }
 			   }
+
 			  
 		   }
 			   
@@ -236,6 +257,8 @@ class PoManagerController extends Controller
 			$count = $request->count_i;
 			$count_j = $request->count_j;
 			$erp_order_id = $request->erp_order_id;
+			   $purchase_order_number = $request->purchase_order_number;
+			   $customer_name = $request->customer_name;
 			   
 			if($count == 0)
 			{
@@ -305,7 +328,7 @@ class PoManagerController extends Controller
 				
 				$to_email =  DB::table('tesco_error_report_emails')->select('*')->where('id',1)->first();
 				
-				Mail::send('mails.error-report-po',['po'=> $po,'style_no'=>$style_no,'reference'=> $reference,'qty'=>$qty,'price'=> $price,'po_complete'=>$po_complete,'comment'=>$comment,'commenttext'=>$commenttext], function ($message) use ($to_email)
+				Mail::send('mails.error-report-po',['po'=> $po,'style_no'=>$style_no,'reference'=> $reference,'qty'=>$qty,'price'=> $price,'po_complete'=>$po_complete,'comment'=>$comment,'commenttext'=>$commenttext,'purchase_order_number'=>$purchase_order_number,'customer_name'=>$customer_name,'erp_order_id'=>$erp_order_id], function ($message) use ($to_email)
 				{
 					$message->from('praveen@wizroots.com');
 					$message->subject('Jupiter Garments Accessories - Error Report');
@@ -331,7 +354,7 @@ class PoManagerController extends Controller
 				
 				$to_email =  DB::table('tesco_error_report_emails')->select('*')->where('id',1)->first();
 			   
-				Mail::send('mails.error-report-po',['po'=> $po,'style_no'=>$style_no,'reference'=> $reference,'qty'=>$qty,'price'=> $price,'po_complete'=>$po_complete,'comment'=>$comment,'commenttext'=>$commenttext], function ($message) use ($to_email)
+				Mail::send('mails.error-report-po',['po'=> $po,'style_no'=>$style_no,'reference'=> $reference,'qty'=>$qty,'price'=> $price,'po_complete'=>$po_complete,'comment'=>$comment,'commenttext'=>$commenttext,'purchase_order_number'=>$purchase_order_number,'customer_name'=>$customer_name,'erp_order_id'=>$erp_order_id], function ($message) use ($to_email)
 				{
 					$message->from('praveen@wizroots.com');
 					$message->subject('Jupiter Garments Accessories - Error Report');

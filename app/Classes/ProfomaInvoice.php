@@ -148,8 +148,8 @@ class ProfomaInvoice
      */
     public function getTescoPIDetails($request)
     {
-        $id         =   $request->id;
-        $table_name =   $request->table_name;
+        $id         =   $request['id'];
+        $table_name =   $request['tableName'];
         $buyer_id   =   $request->buyer_id;
         $pi_id      =   DB::table('profoma_invoices')->max('id');
         $today      =   Carbon::now('Asia/Kolkata');

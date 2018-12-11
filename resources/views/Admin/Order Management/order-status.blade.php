@@ -181,7 +181,7 @@
                                 <div class="col-lg-4 col-md-4 col-sm-4">
 
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 pull-right" id="ship_to" style="padding-left: 50px;">
+                                <div class="col-lg-4 col-md-4 col-sm-4 pull-right" id="ship_to" style="padding-left: 45px;">
 
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-5">

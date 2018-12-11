@@ -34,6 +34,7 @@ use App\Classes\CancelTescoOrders;
 use PDF;
 use Carbon\Carbon;
 use App\Classes\ErpOrders;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class OrderManagementCntrl extends Controller
 {
@@ -2030,7 +2031,18 @@ class OrderManagementCntrl extends Controller
 			 $svg=urldecode($value);
 			 PDF::setImageScale(1.66);
 			 PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=127, $h=80, $link='', $align='', $palign='', $border=0, $fitonpage=true);
-			 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+			if($name != "TCL2-sticker" && $name != "TCL4-sticker")
+			{
+				 if($name != "THL3-sticker")
+				 {
+					 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				 }
+				else
+				{
+					 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 0, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				}
+			}
+			
 			 $i++;
 		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
@@ -2146,6 +2158,7 @@ class OrderManagementCntrl extends Controller
         PDF::setPrintHeader(false);
         PDF::setPrintFooter(false);
         PDF::SetFont('frankgothcnbt');
+		PDF::SetFont('myriad');
 		PDF::SetAutoPageBreak(TRUE);
 		$i=0;
 		foreach($svgarr as $value)
@@ -2160,9 +2173,34 @@ class OrderManagementCntrl extends Controller
 			 PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=40, $h=30, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			 PDF::ImageSVG('@' . $svg, $x=40, $y=0, $w=40, $h=30, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			
-			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 3.7, 2, 33, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+			 if($name == "TSL3-sticker")
+			 {
+				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 0.9, 2, 36.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			
-			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 43.7, 2, 33, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 40.9, 2, 36.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+			 }
+			 else
+			 {
+//				 $img = Image::make(public_path('/storage/app/template/barcode_'.$i.'.png'));
+//
+//				// now you are able to resize the instance
+//				$img->resize(150, 50);
+//
+//				// finally we save the image as a new file
+//				$img->save(public_path('/storage/app/template/barcode_RESIZE.png'));
+				 
+				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -1.1, 2,41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+			
+				PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 38.7, 2, 41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+			 }
+			
+			
+			
+			
+//			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -1.7, 2, 42, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+//			
+//			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 39.7, 2, 42, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+//			
 			$i++;
 		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
@@ -2962,7 +3000,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
-		  		$newTasks->ocn_number =$ocn_number;
+		  	//	$newTasks->ocn_number =$ocn_number;
 		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
@@ -4423,7 +4461,7 @@ class OrderManagementCntrl extends Controller
 		$type=$request['type'];
 		$barcode=$request['barcode'];
 		
-		$tabula       = Config::get('tabula.bar_jar');
+		$tabula       = Config::get('tabula.bar_jar_big');
 		
 		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 50 16');
         $info    = json_decode($info, true);
@@ -4440,7 +4478,7 @@ class OrderManagementCntrl extends Controller
 		$type=$request['type'];
 		$barcode=$request['barcode'];
 		
-		$tabula       = Config::get('tabula.bar_jar');
+		$tabula       = Config::get('tabula.bar_jar_big');
 		
 		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 50 16');
         $info    = json_decode($info, true);

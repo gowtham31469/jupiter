@@ -98,7 +98,7 @@
 						<div class="col-md-6 edit_forwarder_div">
                       <div class="form-group has-feedback">
                         {!! Form::label('customer_add_company', 'Select Company', ['class' => 'form_label']) !!}
-                          {{ Form::select('customer_add_company',(['' => '-- Select Company --']+ $company),$customer_id,array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'customer_add_company','required','disabled')) }}
+                          {{ Form::select('customer_add_company',(['' => '-- Select Company --']+ $company),$company_id,array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'customer_add_company','required','disabled')) }}
                         <div class="help-block with-errors"></div>
                       </div>
                     </div>
