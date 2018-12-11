@@ -53,6 +53,7 @@ class OrderController extends Controller
     private $tsl1_type;
     private $tsl3_type;
     private $current_date;
+    private $ratio_pack_type;
 
     /**
      * Create a new controller instance.
@@ -81,6 +82,8 @@ class OrderController extends Controller
 
        // get the current time
        $this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
+
+       $this->ratio_pack_type = ['RatA', 'RatB', 'RatC', 'RatD', 'RatE', 'RatF', 'RatG', 'RatH', 'RatI', 'RatJ', 'RatK', 'RatL', 'RatM', 'RatN', 'RatO', 'RatP', 'RatQ', 'RatR', 'RatS', 'RatT', 'RatU', 'RatV', 'RatW', 'RatX', 'RatY', 'RatZ'];
     }
 
     /**
@@ -314,7 +317,8 @@ class OrderController extends Controller
                                 'orms_tpn'         => $tpn,
                                 'itf_barcode'      => $itf_code[$i],
                                 'cases_per_carton' => $cases_per_carton[$i],
-                                'count'            => $count_TCL1[$i]
+                                'count'            => $count_TCL1[$i],
+                                'ratio_pack_type'  => $this->ratio_pack_type[$i]
                               ]);
                            $i++;
                          }
@@ -334,7 +338,8 @@ class OrderController extends Controller
                                 'orms_tpn'         => $tpn,
                                 'itf_barcode'      => $itf_code[$i],
                                 'cases_per_carton' => $cases_per_carton[$i],
-                                'count'            => $count_TCL1[$i]
+                                'count'            => $count_TCL1[$i],
+                                'ratio_pack_type'  => $this->ratio_pack_type[$i]
                               ]);
                            $i++;
                          }
@@ -379,7 +384,8 @@ class OrderController extends Controller
                                   'orms_tpn'         => $tpn,
                                   'itf_barcode'      => $itf_code[$i],
                                   'cases_per_carton' => $cases_per_carton[$i],
-                                  'count'            => $count_TCL2[$i]
+                                  'count'            => $count_TCL2[$i],
+                                  'ratio_pack_type'  => $this->ratio_pack_type[$i]
                                 ]);
                              $i++;
                            }
@@ -399,7 +405,8 @@ class OrderController extends Controller
                                   'orms_tpn'         => $tpn,
                                   'itf_barcode'      => $itf_code[$i],
                                   'cases_per_carton' => $cases_per_carton[$i],
-                                  'count'            => $count_TCL2[$i]
+                                  'count'            => $count_TCL2[$i],
+                                  'ratio_pack_type'  => $this->ratio_pack_type[$i]
                                 ]);
                              $i++;
                            }
@@ -445,7 +452,8 @@ class OrderController extends Controller
                                   'orms_tpn'         => $tpn,
                                   'itf_barcode'      => $itf_code[$i],
                                   'cases_per_carton' => $cases_per_carton[$i],
-                                  'count'            => $count_TSL1[$i]
+                                  'count'            => $count_TSL1[$i],
+                                  'ratio_pack_type'  => $this->ratio_pack_type[$i]
                                 ]);
                              $i++;
                            }
@@ -465,7 +473,8 @@ class OrderController extends Controller
                                   'orms_tpn'         => $tpn,
                                   'itf_barcode'      => $itf_code[$i],
                                   'cases_per_carton' => $cases_per_carton[$i],
-                                  'count'            => $count_TSL1[$i]
+                                  'count'            => $count_TSL1[$i],
+                                  'ratio_pack_type'  => $this->ratio_pack_type[$i]
                                 ]);
                              $i++;
                            }
@@ -514,7 +523,8 @@ class OrderController extends Controller
                               'orms_tpn'         => $tpn,
                               'itf_barcode'      => $itf_code[$i],
                               'cases_per_carton' => $cases_per_carton[$i],
-                              'count'            => $count_THL1[$i]
+                              'count'            => $count_THL1[$i],
+                              'ratio_pack_type'  => $this->ratio_pack_type[$i]
                             ]);
                          $i++;
                        }
@@ -534,7 +544,8 @@ class OrderController extends Controller
                               'orms_tpn'         => $tpn,
                               'itf_barcode'      => $itf_code[$i],
                               'cases_per_carton' => $cases_per_carton[$i],
-                              'count'            => $count_THL1[$i]
+                              'count'            => $count_THL1[$i],
+                              'ratio_pack_type'  => $this->ratio_pack_type[$i]
                             ]);
                          $i++;
                        }
@@ -910,7 +921,8 @@ class OrderController extends Controller
                                   'tpnd'             => $value,
                                   'itf_barcode'      => $itf_code[$i],
                                   'units_per_carton' => $units_per_carton[$i],
-                                  'count'            => $count_TCL1[$i]
+                                  'count'            => $count_TCL1[$i],
+                                  'ratio_pack_type'  => $this->ratio_pack_type[$i]
                                 ]);
                              $i++;
                            }
@@ -930,7 +942,8 @@ class OrderController extends Controller
                                   'tpnd'             => $value,
                                   'itf_barcode'      => $itf_code[$i],
                                   'units_per_carton' => $units_per_carton[$i],
-                                  'count'            => $count_TCL1[$i]
+                                  'count'            => $count_TCL1[$i],
+                                  'ratio_pack_type'  => $this->ratio_pack_type[$i]
                                 ]);
                              $i++;
                            }
@@ -976,7 +989,8 @@ class OrderController extends Controller
                                   'tpnd'             => $value,
                                   'itf_barcode'      => $itf_code[$i],
                                   'units_per_carton' => $units_per_carton[$i],
-                                  'count'            => $count_TCL2[$i]
+                                  'count'            => $count_TCL2[$i],
+                                  'ratio_pack_type'  => $this->ratio_pack_type[$i]
                                 ]);
                              $i++;
                            }
@@ -996,7 +1010,8 @@ class OrderController extends Controller
                                   'tpnd'             => $value,
                                   'itf_barcode'      => $itf_code[$i],
                                   'units_per_carton' => $units_per_carton[$i],
-                                  'count'            => $count_TCL2[$i]
+                                  'count'            => $count_TCL2[$i],
+                                  'ratio_pack_type'  => $this->ratio_pack_type[$i]
                                 ]);
                              $i++;
                            }
@@ -1042,7 +1057,8 @@ class OrderController extends Controller
                               'tpnd'             => $value,
                               'itf_barcode'      => $itf_code[$i],
                               'units_per_carton' => $units_per_carton[$i],
-                              'count'            => $count_TSL1[$i]
+                              'count'            => $count_TSL1[$i],
+                              'ratio_pack_type'  => $this->ratio_pack_type[$i]
                             ]);
                          $i++;
                        }
@@ -1062,7 +1078,8 @@ class OrderController extends Controller
                               'tpnd'             => $value,
                               'itf_barcode'      => $itf_code[$i],
                               'units_per_carton' => $units_per_carton[$i],
-                              'count'            => $count_TSL1[$i]
+                              'count'            => $count_TSL1[$i],
+                              'ratio_pack_type'  => $this->ratio_pack_type[$i]
                             ]);
                          $i++;
                        }
@@ -1111,7 +1128,8 @@ class OrderController extends Controller
                                   'tpnd'             => $value,
                                   'itf_barcode'      => $itf_code[$i],
                                   'units_per_carton' => $units_per_carton[$i],
-                                  'count'            => $count_THL1[$i]
+                                  'count'            => $count_THL1[$i],
+                                  'ratio_pack_type'  => $this->ratio_pack_type[$i]
                                 ]);
                              $i++;
                            }
@@ -1131,7 +1149,8 @@ class OrderController extends Controller
                                   'tpnd'             => $value,
                                   'itf_barcode'      => $itf_code[$i],
                                   'units_per_carton' => $units_per_carton[$i],
-                                  'count'            => $count_THL1[$i]
+                                  'count'            => $count_THL1[$i],
+                                  'ratio_pack_type'  => $this->ratio_pack_type[$i]
                                 ]);
                              $i++;
                            }
