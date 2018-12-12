@@ -153,6 +153,7 @@ class JobManagerController extends Controller
 			$size_chunk         = array();
 			$final_chunk        = array();
 			$order_detail_ids   = array();
+			$erp_id_array       = array();
 
 			/** Get erp order details table ids from erp orders table id */
 			foreach($erp_orders_ids as $row => $erp_orders_id)
@@ -208,11 +209,13 @@ class JobManagerController extends Controller
 								->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
 								->where('erp_order_details.id', '=', $order_detail_id)
 								->first();
-					
+
+					!in_array($single_temp_data->erp_id, $erp_id_array)?array_push($erp_id_array,$single_temp_data->erp_id):$erp_id_array
+								;
 					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id]['ocn_number'] = $single_temp_data->ocn_number;
 					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id]['erp_id'] = $single_temp_data->erp_id;
 					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id]['buyer_po_number'] = $single_temp_data->buyer_po_number;
-					$single_templates[$single_temp_data->reference_name]['size'][$single_temp_data->size][]= $single_temp_data->order_quantity;
+					$single_templates[$single_temp_data->reference_name]['size'][$single_temp_data->size][$single_temp_data->erp_id]= $single_temp_data->order_quantity;
 				}
 			}
 
@@ -282,10 +285,31 @@ class JobManagerController extends Controller
 					return response()->json(['error'=> true,'message' =>'Template details are missing, contact your admin.'],404);
 				}
 			}
-
-			/** Split template data array into small chunks (3 elements in each chunks) */
+			
+			/** Different size breakup value handling */
 			foreach($single_templates as $template => $template_item)
 			{
+				$po_count = sizeof($template_item['order_data']);
+
+				foreach($template_item['size'] as $size => $qty)
+				{
+					$size_count = sizeof($qty);
+
+					if($size_count < $po_count)
+					{
+						for($i = 0; $i < sizeof($erp_id_array); $i++)
+						{
+							$qty = !array_key_exists($erp_id_array[$i], $qty)?array_merge($qty , [$erp_id_array[$i] => 0]):$qty;
+						}
+					}
+					ksort($qty);
+
+					$template_item['size'][$size] = $qty;
+				}
+				
+				$single_templates[$template] = $template_item;
+
+				/** Split template data array into small chunks (3 elements in each chunks) */
 				/** common data chunk */
 				$common_data_chunk = array_chunk($template_item['order_data'], 3);
 				foreach($common_data_chunk as $key => $data)
@@ -296,7 +320,7 @@ class JobManagerController extends Controller
 				foreach($template_item['size'] as $size => $qty)
 				{
 					/** size-quantity chunk */
-					$size_chunk =  array_chunk($qty, 3);
+					$size_chunk =  array_chunk($qty, 3, true);
 					foreach($size_chunk as $key2 => $value2)
 					{
 						$final_chunk[$template.'_'.$key2]['size'][$size.'_'.$key2] = $value2;
