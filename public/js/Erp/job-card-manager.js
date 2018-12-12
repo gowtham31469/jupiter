@@ -420,7 +420,6 @@ function generateJobcard(){
                                 var total_quantity_final = 0;
                                 var i = 0;
                                 var sum = [];
-                                var results = [];
                                 $.each(erpid.size, function(index2, quantity_data){
                                     var total_qty_sizewise = 0;
                                     var size_text = index2.split("_");
