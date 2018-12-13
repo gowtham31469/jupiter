@@ -158,12 +158,12 @@ class JobManagerController extends Controller
 			/** Get erp order details table ids from erp orders table id */
 			foreach($erp_orders_ids as $row => $erp_orders_id)
 			{
-			$order_detail_id_array = DB::table('erp_order_details')
-								->where('erp_order_details.erp_order_id', $erp_orders_id)
-								->where('erp_order_details.reference_name', $selected_ref_arrays[$row])
-								->pluck('erp_order_details.id')->all();
+				$order_detail_id_array = DB::table('erp_order_details')
+									->where('erp_order_details.erp_order_id', $erp_orders_id)
+									->where('erp_order_details.reference_name', $selected_ref_arrays[$row])
+									->pluck('erp_order_details.id')->all();
 
-			$order_detail_ids = array_merge($order_detail_ids,$order_detail_id_array);
+				$order_detail_ids = array_merge($order_detail_ids,$order_detail_id_array);
 			}
 
  			sort($order_detail_ids);
@@ -195,6 +195,7 @@ class JobManagerController extends Controller
 				!in_array($order_details->reference_name, $distinct_ref_array)?array_push($distinct_ref_array,$order_details->reference_name):$distinct_ref_array
 				;
 
+				/** Create separate ratio/single templates array  */
 				if($order_details->template_type == "ratio")
 				{
 					$ratio_templates[$order_details->reference_name][] = DB::table('erp_order_details')->select('erp_order_details.order_quantity', $order_details->order_qnty_table_name.'.ratio_pack_type', $order_details->order_qnty_table_name.'.id as qty_table_id',  'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_orders.buyer_po_number', 'erp_order_details.id as erp_order_details_id')
@@ -209,9 +210,9 @@ class JobManagerController extends Controller
 								->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
 								->where('erp_order_details.id', '=', $order_detail_id)
 								->first();
+								
+					$erp_id_array[$single_temp_data->reference_name][] = $single_temp_data->erp_id;
 
-					!in_array($single_temp_data->erp_id, $erp_id_array)?array_push($erp_id_array,$single_temp_data->erp_id):$erp_id_array
-								;
 					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id]['ocn_number'] = $single_temp_data->ocn_number;
 					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id]['erp_id'] = $single_temp_data->erp_id;
 					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id]['buyer_po_number'] = $single_temp_data->buyer_po_number;
@@ -258,7 +259,8 @@ class JobManagerController extends Controller
 				$company = DB::table('company')->select('name as company', 'id as company_id', 'address as company_address', 'logo as company_logo')->where('id', '=', $company_first_val)->first();
 				}
 			}
-			 
+			
+			/** Get templates metadata details */
 			foreach($temp_id_array as $template_id)
 			{
 				$template_details = DB::table($template_table)
@@ -297,9 +299,10 @@ class JobManagerController extends Controller
 
 					if($size_count < $po_count)
 					{
-						for($i = 0; $i < sizeof($erp_id_array); $i++)
+						/** push 0 qty value for missing/additional size-breakup  */
+						for($i = 0; $i < sizeof($erp_id_array[$template]); $i++)
 						{
-							$qty = !array_key_exists($erp_id_array[$i], $qty)?array_merge($qty , [$erp_id_array[$i] => 0]):$qty;
+							$qty = !array_key_exists($erp_id_array[$template][$i], $qty)?array_merge($qty , [$erp_id_array[$template][$i] => 0]):$qty;
 						}
 					}
 					ksort($qty);
@@ -323,7 +326,13 @@ class JobManagerController extends Controller
 					$size_chunk =  array_chunk($qty, 3, true);
 					foreach($size_chunk as $key2 => $value2)
 					{
-						$final_chunk[$template.'_'.$key2]['size'][$size.'_'.$key2] = $value2;
+						/** check if all the size values are 0 or not
+						*/
+						$is_size_qty_empty = array_filter($value2) != NULL?0:1;
+						if($is_size_qty_empty != 1)
+						{
+							$final_chunk[$template.'_'.$key2]['size'][$size.'_'.$key2] = $value2;
+						}
 					}
 				}
 			}
