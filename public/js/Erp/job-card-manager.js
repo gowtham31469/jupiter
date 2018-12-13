@@ -418,23 +418,19 @@ function generateJobcard(){
                                                                 <th>STOCK</th>\
                                                             </tr>';
                                 var total_quantity_final = 0;
-                                var i = 0;
                                 var sum = [];
                                 $.each(erpid.size, function(index2, quantity_data){
                                     var total_qty_sizewise = 0;
                                     var size_text = index2.split("_");
+                                    var col = 0;
                                     single_table_html += '<tr><td>'+size_text[0]+'</td>';
-
-                                    /** column wise quantity total calculation */
-                                    size_count = quantity_data.length;
-                                    for(i=0; i<size_count; i++)
-                                    {
-                                        sum[i] = quantity_data[i] + (sum[i] || 0);
-                                    }
                                     
                                     $.each(quantity_data, function(index3, qty){
                                         total_qty_sizewise += parseInt(qty);
-                                        single_table_html +='<td>'+parseInt(qty)+'</td><td></td>';
+                                        single_table_html +='<td class="quantity-'+col+'">'+parseInt(qty)+'</td><td></td>';
+                                        /** Column wise total quantity calculation */
+                                        sum[col] = qty + (sum[col] || 0);
+                                        col++;
                                     });
                                     single_table_html += '<td class="total_quantity">'+parseInt(total_qty_sizewise)+'</td><td class="total_excess"></td><td></td><td></td></tr>';
 
@@ -443,9 +439,11 @@ function generateJobcard(){
 
                                 single_table_html += '<tr>\
                                                       <th class="highlight_row">TOTAL</th>';
+                                var total_col = 0;
                                 $.each(erpid.order_data, function(index, common_data){
-                                    single_table_html += '<td class="total_quantity">'+sum[index]+'</td>\
+                                    single_table_html += '<td class="total_quantity-'+total_col+'">'+sum[total_col]+'</td>\
                                                           <td></td>';
+                                    total_col++;
                                 });
                                 
                                 single_table_html += '<td>'+parseInt(total_quantity_final)+'</td>\
