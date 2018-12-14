@@ -579,7 +579,7 @@ function calculateExcess(evt)
         let total_excess = parseFloat($(value).text() * (evt.value*1/100)).toFixed(2);
         $('#total_excess_row_table_'+key).val(total_excess);
     })
-
+    $('#act_excess').text(evt.value)
     totalExcess(evt);
 }
 
