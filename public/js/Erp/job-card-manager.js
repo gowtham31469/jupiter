@@ -169,7 +169,7 @@ $(document).ready(function() {
     function showSnackbar() {
     try {
         // Get the snackbar DIV
-        var x = document.getElementById("snackbar")
+        let x = document.getElementById("snackbar")
 
         // Add the "show" class to DIV
         x.className = "show";
@@ -183,6 +183,32 @@ $(document).ready(function() {
     }
 }
 
+/**  
+ * Validation for numeric values with dot
+ * @param   evt 
+ * @return {Boolean} 
+ * @author <praveen>    
+ */
+function isNumberKey(evt) {
+	try {
+		var charCode = (evt.which) ? evt.which : event.keyCode
+
+		if (charCode == 46) {
+			var inputValue = $("#inputfield").val()
+			if (inputValue.indexOf('.') < 1) {
+				return true;
+			}
+			return false;
+		}
+		/** [ Checking key stroke values for numeric values ] */
+		if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+			return false;
+		}
+		return true;
+	} catch (e) {
+		console.log("Error:" + e)
+	}
+}
 /**
  * Toggle show filter window
  *  @author <Praveen> [praveen@wizroots.com]
@@ -344,7 +370,7 @@ function generateJobcard(){
                         {
                             $.each(data.template_data.ratio, function(key, template){
                                 var total = 0;
-                                ratio_table_html += '<table class="table table-bordered table-responsive"  style="font-size: 12px;" id="ratio-list-table">\
+                                ratio_table_html += '<table class="table table-bordered table-responsive ratio-list-table"  style="font-size: 12px;" id="ratio-list-table">\
                                                         <thead>\
                                                             <tr>\
                                                                 <th>REF.NO</th>\
@@ -385,8 +411,10 @@ function generateJobcard(){
                         var single_table_html = '';
                         if(data.template_data.single)
                         {
+                            var row = 0;
+                            var table = 0;
                             $.each(data.template_data.single, function(key, erpid){   
-                                single_table_html += '<table class="table table-bordered table-responsive"  style="font-size: 12px;" id="single-list-table">\
+                                single_table_html += '<table class="table table-bordered table-responsive single-list-table"  style="font-size: 12px;" id="single-list-table-'+table+'">\
                                 <tbody id="single-list-table-body"><tr>\
                                 <th width="80px">ID.NO</th>';
                                 $.each(erpid.order_data, function(index, common_data){
@@ -413,7 +441,7 @@ function generateJobcard(){
                                     <th>P.QNT</th>';
                                 });
                                 single_table_html += '<th>TOTAL</th>\
-                                                                <th>EXCESS</th>\
+                                                                <th width="115px">EXCESS</th>\
                                                                 <th>MTRS</th>\
                                                                 <th>STOCK</th>\
                                                             </tr>';
@@ -432,27 +460,30 @@ function generateJobcard(){
                                         sum[col] = qty + (sum[col] || 0);
                                         col++;
                                     });
-                                    single_table_html += '<td class="total_quantity">'+parseInt(total_qty_sizewise)+'</td><td class="total_excess"></td><td></td><td></td></tr>';
 
+                                    single_table_html += '<td class="total-quantity-class total-quantity-row-'+row+'">'+parseInt(total_qty_sizewise)+'</td><td class="total-excess"><div class="form-group has-feedback"><input type="text" class="form-control input-sm total-excess-row-table-'+table+'" required="" id="total_excess_row_table_'+row+'" data-required-error="Mandatory Field." onkeypress="return isNumberKey(event)" name="total_excess_row_table_'+row+'"" placeholder="Excess %" onkeyup="return totalExcess(this)"><div class="help-block with-errors"></div></div></td><td></td><td></td></tr>';
+                                
                                     total_quantity_final += parseInt(total_qty_sizewise);
+                                    row++;
                                 });
 
                                 single_table_html += '<tr>\
                                                       <th class="highlight_row">TOTAL</th>';
                                 var total_col = 0;
                                 $.each(erpid.order_data, function(index, common_data){
-                                    single_table_html += '<td class="total_quantity-'+total_col+'">'+sum[total_col]+'</td>\
+                                    single_table_html += '<td class="total-quantity-col-'+total_col+'">'+sum[total_col]+'</td>\
                                                           <td></td>';
                                     total_col++;
                                 });
                                 
                                 single_table_html += '<td>'+parseInt(total_quantity_final)+'</td>\
-                                                        <td class="total_excess"></td>\
+                                                        <td class="total-excess-col-table-'+table+'"></td>\
                                                         <td></td>\
                                                         <td></td>\
                                                     </tr>';
                                     single_table_html += ' </tbody>\
                                                 </table>';
+                                 table++;
                                 });
                                 
                             $('.single-list-table-div').html(single_table_html);
@@ -473,7 +504,7 @@ function generateJobcard(){
                     })
 
                     /** [ Validate edit_merchandiser_form form using bootstrap validator ] */
-                    $('#create_jobcard').validator('validate');
+                    $('#create_jobcard').validator('update');
                     $('#jobcardCreationModalCenter').modal('show');
                 },
                 406: function(data) {
@@ -512,11 +543,11 @@ function generateJobcard(){
 function selectOrders(event)
 {
     /** Table checkbox click functionality	**/
-    var checkbox = $("input[class='row-checkbox']", allPages);
-    var customer_name = $(event).data('customer-name');
-    var buyer_name = $(event).data('buyer-name');
-    var ischecked= $(event).is(':checked');
-    var length= $(checkbox).filter(':checked').length;
+    let checkbox = $("input[class='row-checkbox']", allPages);
+    let customer_name = $(event).data('customer-name');
+    let buyer_name = $(event).data('buyer-name');
+    let ischecked= $(event).is(':checked');
+    let length= $(checkbox).filter(':checked').length;
 
     if(ischecked)
     {
@@ -536,13 +567,39 @@ function selectOrders(event)
          $(checkbox).not("[data-buyer-name='"+buyer_name+"']").removeAttr("disabled");
     }
 }
+/**
+ * Dynamic Excess calculation based on excess value entered.
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function calculateExcess(evt)
+{
+    let item = $('.total-quantity-class');
+    $.each(item, function(key, value){
+        let total_excess = parseFloat($(value).text() * (evt.value*1/100)).toFixed(2);
+        $('#total_excess_row_table_'+key).val(total_excess);
+    })
 
-// function calculateExcess(evt)
-// {
-//     var item = $('.total_quantity');
-//     $.each(item, function(key, value){
-//         var total_excess = parseInt(parseInt($(value).text()) * parseInt(evt.value*1/100));
-//         $('.total_excess').text(total_excess);
-//     })
+    totalExcess(evt);
+}
 
-// }
+/**
+ * Dynamic Total Excess calculation based on calculated excess value.
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function totalExcess(evt)
+{
+    var table = 0;
+    $('.single-list-table').each(function () {
+        var total_excess_final = 0;
+        $(this).find('.total-excess-row-table-'+table).each(function () {
+            var excess = $(this).val();
+            if (!isNaN(excess) && excess.length !== 0) {
+                total_excess_final += parseFloat(excess);
+            }
+        });
+        $('.total-excess-col-table-'+table).text(total_excess_final.toFixed(2));
+        table++;
+    });
+}

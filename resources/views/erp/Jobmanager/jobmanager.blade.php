@@ -176,12 +176,12 @@
 	.highlight_row {
 		background: #eee;
 	}
-	#ratio-list-table tr,
-	#ratio-list-table th,
-	#ratio-list-table td,
-	#single-list-table tr,
-	#single-list-table th,
-	#single-list-table td {
+	.ratio-list-table tr,
+	.ratio-list-table th,
+	.ratio-list-table td,
+	.single-list-table tr,
+	.single-list-table th,
+	.single-list-table td {
 		border-right-width: 1px !important;
 		border-bottom-width: 1px !important;
 		border-left-width: 1px !important;
