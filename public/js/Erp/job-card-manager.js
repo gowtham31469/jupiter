@@ -461,7 +461,7 @@ function generateJobcard(){
                                         col++;
                                     });
 
-                                    single_table_html += '<td class="total-quantity-class total-quantity-row-'+row+'">'+parseInt(total_qty_sizewise)+'</td><td class="total-excess"><div class="form-group has-feedback"><input type="text" class="form-control input-sm total-excess-row-table-'+table+'" required="" id="total_excess_row_table_'+row+'" data-required-error="Mandatory Field." onkeypress="return isNumberKey(event)" name="total_excess_row_table_'+row+'"" placeholder="Excess %" onkeyup="return totalExcess(this)"><div class="help-block with-errors"></div></div></td><td></td><td></td></tr>';
+                                    single_table_html += '<td class="total-quantity-class total-quantity-row-'+row+'"><strong>'+parseInt(total_qty_sizewise)+'</strong></td><td class="total-excess"><div class="form-group has-feedback"><input type="text" class="form-control input-sm total-excess-row-table-'+table+'" required="" id="total_excess_row_table_'+row+'" data-required-error="Mandatory Field." onkeypress="return isNumberKey(event)" name="total_excess_row_table_'+row+'"" placeholder="Excess %" onkeyup="return totalExcess(this)"><div class="help-block with-errors"></div></div></td><td></td><td></td></tr>';
                                 
                                     total_quantity_final += parseInt(total_qty_sizewise);
                                     row++;
@@ -471,12 +471,12 @@ function generateJobcard(){
                                                       <th class="highlight_row">TOTAL</th>';
                                 var total_col = 0;
                                 $.each(erpid.order_data, function(index, common_data){
-                                    single_table_html += '<td class="total-quantity-col-'+total_col+'">'+sum[total_col]+'</td>\
+                                    single_table_html += '<td class="total-quantity-col-'+total_col+'"><strong>'+sum[total_col]+'</strong></td>\
                                                           <td></td>';
                                     total_col++;
                                 });
                                 
-                                single_table_html += '<td>'+parseInt(total_quantity_final)+'</td>\
+                                single_table_html += '<td><strong>'+parseInt(total_quantity_final)+'</strong></td>\
                                                         <td class="total-excess-col-table-'+table+'"></td>\
                                                         <td></td>\
                                                         <td></td>\
@@ -599,7 +599,8 @@ function totalExcess(evt)
                 total_excess_final += parseFloat(excess);
             }
         });
-        $('.total-excess-col-table-'+table).text(total_excess_final.toFixed(2));
+        $('.total-excess-col-table-'+table).html('<strong>'+total_excess_final.toFixed(2)+'</strong>');
         table++;
     });
+    $('#create_jobcard').validator('validate');
 }
