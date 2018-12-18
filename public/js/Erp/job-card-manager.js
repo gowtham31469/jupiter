@@ -87,7 +87,7 @@ $(document).ready(function() {
 		initComplete: function () {
 			$('.main-content > #approved-orders-table > .dataTables_wrapper > .row > .col-sm-6 > #approved-order-list_filter:first').append(' <button class="filterbtn" type="button" onClick="showFilter()" title="Filter" data-placement="bottom"><i class="fa fa-filter" aria-hidden="true"></i></button>');
 			$('.main-content > #approved-orders-table > .dataTables_wrapper > .row > .col-sm-6 > #approved-order-list_filter:first .dataTables_filter').css('display', 'inline-block');
-			$('.main-content > #approved-orders-table > .dataTables_wrapper > .row > .col-sm-12:first').prepend('<div class="filter-window"><h5><strong>Jobcard Filter</strong></h5> <div class="row"> <div class="col-md-2"><select class="selectpicker" id="erpID"> <option disabled selected>SELECT AN ERP ID</option></select></div><div class="col-md-2"><select class="selectpicker" id="customerName"> <option disabled selected>SELECT A CUSTOMER</option></select></div><div class="col-md-2"><select class="selectpicker" id="poNumber"> <option disabled selected>SELECT A PO NUMBER</option></select></div><div class="col-md-2"><select class="selectpicker" id="styleNumber"> <option disabled selected>SELECT A STYLE NUMBER</option></select></div><div class="col-md-2"><select class="selectpicker" id="refNumber"> <option disabled selected>SELECT A REFERENCE</option></select></div><div class="col-md-2"><select class="selectpicker" id="delDate"> <option disabled selected>SELECT A DELIVERY DATE</option></select></div></div><div class="filter-actions"><button class="btn btn-primary input-sm pull-right" id="reset">Clear Filter</button><button id="closeFilter" class="btn btn-default input-sm pull-right" onclick="showFilter()">Close</button><div class="clearfix"></div></div></div>');
+			$('.main-content > #approved-orders-table > .dataTables_wrapper > .row > .col-sm-12:first').prepend('<div class="filter-window"><h5><strong>Jobcard Filter</strong></h5> <div class="row"> <div class="col-md-2"><select class="selectpicker" id="erp_id_filter"> <option disabled selected>SELECT AN ERP ID</option></select></div><div class="col-md-2"><select class="selectpicker" id="customer_name_filter"> <option disabled selected>SELECT A CUSTOMER</option></select></div><div class="col-md-2"><select class="selectpicker" id="po_number_filter"> <option disabled selected>SELECT A PO NUMBER</option></select></div><div class="col-md-2"><select class="selectpicker" id="style_number_filter"> <option disabled selected>SELECT A STYLE NUMBER</option></select></div><div class="col-md-2"><select class="selectpicker" id="ref_number_filter"> <option disabled selected>SELECT A REFERENCE</option></select></div><div class="col-md-2"><select class="selectpicker" id="delivery_date_filter"> <option disabled selected>SELECT A DELIVERY DATE</option></select></div></div><div class="filter-actions"><button class="btn btn-primary input-sm pull-right" id="reset">Clear Filter</button><button id="close_filter" class="btn btn-default input-sm pull-right" onclick="showFilter()">Close</button><div class="clearfix"></div></div></div>');
 
 			//For Custom Filters
 			this.api().columns().every( function (i) {
@@ -96,22 +96,22 @@ $(document).ready(function() {
 					var select;
 					switch(i) {
 						case 1:
-							select = $('#erpID')
+							select = $('#erp_id_filter')
 							break;
 						case 2:
-							select = $('#customerName')
+							select = $('#customer_name_filter')
 							break;
 						case 4:
-							select = $('#poNumber')
+							select = $('#po_number_filter')
 							break;
 						case 5:
-							select = $('#styleNumber')
+							select = $('#style_number_filter')
 							break;
 						case 6:
-							select = $('#refNumber')
+							select = $('#ref_number_filter')
 							break;
 						case 7:
-							select = $('#delDate')
+							select = $('#delivery_date_filter')
 							break;
 					}
 					select.on( 'change', function () {
@@ -136,12 +136,12 @@ $(document).ready(function() {
 	allPages = listTable.fnGetNodes();
 
 	$("#reset").on("click", function () {
-		$('#erpID').val('').change();
-		$('#customerName').val('').change();
-		$('#poNumber').val('').change();
-		$('#styleNumber').val('').change();
-		$('#refNumber').val('').change();
-		$('#delDate').val('').change();
+		$('#erp_id_filter').val('').change();
+		$('#customer_name_filter').val('').change();
+		$('#po_number_filter').val('').change();
+		$('#style_number_filter').val('').change();
+		$('#ref_number_filter').val('').change();
+		$('#delivery_date_filter').val('').change();
 		$.fn.dataTableExt.afnFiltering.length = 0;
 		listTable.dataTable().fnDraw();
 		$('.selectpicker').selectpicker('val', 1);
@@ -183,32 +183,6 @@ $(document).ready(function() {
     }
 }
 
-/**  
- * Validation for numeric values with dot
- * @param   evt 
- * @return {Boolean} 
- * @author <praveen>    
- */
-function isNumberKey(evt) {
-	try {
-		var charCode = (evt.which) ? evt.which : event.keyCode
-
-		if (charCode == 46) {
-			var inputValue = $("#inputfield").val()
-			if (inputValue.indexOf('.') < 1) {
-				return true;
-			}
-			return false;
-		}
-		/** [ Checking key stroke values for numeric values ] */
-		if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
-			return false;
-		}
-		return true;
-	} catch (e) {
-		console.log("Error:" + e)
-	}
-}
 /**
  * Toggle show filter window
  *  @author <Praveen> [praveen@wizroots.com]
@@ -263,16 +237,16 @@ function generateJobcard(){
                     {
                         if(data.template_data.company)
                         {
-                            $('#company-name').text(data.template_data.company.company)
-                            $('#company-address').text(data.template_data.company.company_address)
-                            $('#company-logo').attr('src', data.template_data.company.company_logo);
-                            $('#company-name').attr('data-company-id', data.template_data.company.company_id)
+                            $('#company_name').text(data.template_data.company.company)
+                            $('#company_address').text(data.template_data.company.company_address)
+                            $('#company_logo').attr('src', data.template_data.company.company_logo);
+                            $('#company_name').attr('data-company-id', data.template_data.company.company_id)
                         }
 
                         var workorder_id = data.template_data.company.company === 'Jupiter Garments Accessories'?'JGA-JC-':'SP-JC-';
                         $('#work_order').text( workorder_id+data.template_data.workorder_id);
 
-                        $('#today-date').text( data.template_data.today_date);
+                        $('#today_date').text( data.template_data.today_date);
 
                         data.template_data.article.length > 0?$('#article').text(data.template_data.article):'';
 
@@ -370,7 +344,7 @@ function generateJobcard(){
                         {
                             $.each(data.template_data.ratio, function(key, template){
                                 var total = 0;
-                                ratio_table_html += '<table class="table table-bordered table-responsive ratio-list-table"  style="font-size: 12px;" id="ratio-list-table">\
+                                ratio_table_html += '<table class="table table-bordered table-responsive ratio-list-table"  style="font-size: 12px;" id="ratio_list_table">\
                                                         <thead>\
                                                             <tr>\
                                                                 <th>REF.NO</th>\
@@ -414,8 +388,8 @@ function generateJobcard(){
                             var row = 0;
                             var table = 0;
                             $.each(data.template_data.single, function(key, erpid){   
-                                single_table_html += '<table class="table table-bordered table-responsive single-list-table"  style="font-size: 12px;" id="single-list-table-'+table+'">\
-                                <tbody id="single-list-table-body"><tr>\
+                                single_table_html += '<table class="table table-bordered table-responsive single-list-table"  style="font-size: 12px;" id="single_list_table_'+table+'">\
+                                <tbody id="single_list_table_body"><tr>\
                                 <th width="80px">ID.NO</th>';
                                 $.each(erpid.order_data, function(index, common_data){
                                     single_table_html += '<td colspan="2">'+common_data.erp_id+'</td>';
@@ -461,7 +435,7 @@ function generateJobcard(){
                                         col++;
                                     });
 
-                                    single_table_html += '<td class="total-quantity-class total-quantity-row-'+row+'"><strong>'+parseInt(total_qty_sizewise)+'</strong></td><td class="total-excess"><div class="form-group has-feedback"><input type="text" class="form-control input-sm total-excess-row-table-'+table+'" required="" id="total_excess_row_table_'+row+'" data-required-error="Mandatory Field." onkeypress="return isNumberKey(event)" name="total_excess_row_table_'+row+'"" placeholder="Excess %" onkeyup="return totalExcess(this)"><div class="help-block with-errors"></div></div></td><td></td><td></td></tr>';
+                                    single_table_html += '<td class="total-quantity-class total-quantity-row-'+row+'"><strong>'+parseInt(total_qty_sizewise)+'</strong></td><td class="total-excess"><div class="form-group has-feedback"><input type="number" step="0.01" min="0" data-min-error="Value must be >= 0" class="form-control input-sm total-excess-row-table-'+table+'" required="" id="total_excess_row_table_'+row+'" data-required-error="Mandatory Field." name="total_excess_row_table_'+row+'"" placeholder="Excess %" onkeyup="return totalExcess(this)"><div class="help-block with-errors"></div></div></td><td></td><td></td></tr>';
                                 
                                     total_quantity_final += parseInt(total_qty_sizewise);
                                     row++;
@@ -579,7 +553,8 @@ function calculateExcess(evt)
         let total_excess = parseFloat($(value).text() * (evt.value*1/100)).toFixed(2);
         $('#total_excess_row_table_'+key).val(total_excess);
     })
-    $('#act_excess').text(evt.value)
+    $('#act_excess').text(evt.value);
+    $('#create_jobcard').validator('validate');
     totalExcess(evt);
 }
 
@@ -602,5 +577,4 @@ function totalExcess(evt)
         $('.total-excess-col-table-'+table).html('<strong>'+total_excess_final.toFixed(2)+'</strong>');
         table++;
     });
-    $('#create_jobcard').validator('validate');
 }

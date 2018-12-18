@@ -310,13 +310,13 @@
 						<div class="row">
 							<div class="col-md-12">
 								<div class="col-md-4">
-									<p><strong id="company-name"></strong></p>
-									<p id="company-address"></p>
+									<p><strong id="company_name"></strong></p>
+									<p id="company_address"></p>
 								</div>
 								<div class="col-md-4">
 								</div>
 								<div class="col-md-4">
-								     <img src="" class="pull-right " id="company-logo" style="width: 150px;height: 60px;">
+								     <img src="" class="pull-right " id="company_logo" style="width: 150px;height: 60px;">
 								</div>
 							</div>
 						</div>
@@ -330,8 +330,8 @@
 								<div class="col-md-4">
 								</div>
 								<div class="col-md-4">
-									 {!! Form::label('today-date', 'DATE :', ['class' => 'form_label']) !!}
-								    <span id="today-date"></span>
+									 {!! Form::label('today_date', 'DATE :', ['class' => 'form_label']) !!}
+								    <span id="today_date"></span>
 								</div>
 							</div>
 							<div class="col-md-12">
