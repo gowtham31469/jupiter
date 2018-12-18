@@ -395,7 +395,7 @@
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('repeat_gap', 'REPEAT GAP :', ['class' => 'form_label']) !!}
-										{!! Form::number('repeat_gap',$value = '', array('class' => 'form-control input-sm','placeholder' => 'REPEAT GAP','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0')) !!}
+										{!! Form::number('repeat_gap',$value = '', array('class' => 'form-control input-sm','placeholder' => 'REPEAT GAP','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'step' => '0.01')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
@@ -427,7 +427,7 @@
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('roll_width', 'ROLL WIDTH :', ['class' => 'form_label']) !!}
-										{!! Form::number('roll_width',$value = '', array('class' => 'form-control input-sm','placeholder' => 'ROLL WIDTH','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0')) !!}
+										{!! Form::number('roll_width',$value = '', array('class' => 'form-control input-sm','placeholder' => 'ROLL WIDTH','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'step' => '0.01')) !!}
 										<div class="help-block with-errors"></div>
 								    </div>
 								</div>
@@ -455,14 +455,14 @@
 								<div class="col-md-3">
 								   <div class="form-group has-feedback form-inline">
 										{!! Form::label('length_side', 'LENGTH SIDE :', ['class' => 'form_label']) !!}
-										{!! Form::number('length_side',$value = '', array('class' => 'form-control input-sm','placeholder' => 'LENGTH SIDE','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0')) !!}
+										{!! Form::number('length_side',$value = '', array('class' => 'form-control input-sm','placeholder' => 'LENGTH SIDE','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'step' => '0.01')) !!}
 										<div class="help-block with-errors"></div>
 								   </div>
 								</div>
 								<div class="col-md-3">
 							        <div class="form-group has-feedback form-inline">
 										{!! Form::label('excess', 'EXCESS % :', ['class' => 'form_label']) !!}
-										{!! Form::number('excess',$value = '', array('class' => 'form-control input-sm','placeholder' => 'EXCESS','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'onkeyup' => 'return calculateExcess(this)')) !!}
+										{!! Form::number('excess',$value = '', array('class' => 'form-control input-sm','placeholder' => 'EXCESS','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'onkeyup' => 'return calculateExcess(this)', 'step' => '0.01')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
@@ -518,28 +518,8 @@
 							<div class="col-md-12 single-list-table-div">
 							</div>
 						</div>
-						<div class="col-md-12">
-							<div class="row">
-								<div class="col-md-3">
-									{!! Form::label('act_excess', 'ACT EXCESS % :', ['class' => 'form_label']) !!}
-									<span id="act_excess"></span>
-								</div>
-								<div class="col-md-3">
-									{!! Form::label('sticker_mtr', 'MTRS FOR STICKERS :', ['class' => 'form_label']) !!}
-									<span>30</span>
-								</div>
-								<div class="col-md-3">
-								<div class="form-group has-feedback form-inline">
-									{!! Form::label('settings', 'SETTINGS :', ['class' => 'form_label']) !!}
-									{!! Form::number('settings',$value = '', array('class' => 'form-control input-sm','placeholder' => 'SETTINGS','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0')) !!}
-									<div class="help-block with-errors"></div>
-								</div>
-								</div>
-								<div class="col-md-3">
-									{!! Form::label('total_mtrs', 'TOTAL MTRS :', ['class' => 'form_label']) !!}
-									<span>30</span>
-								</div>
-							</div>
+						<div class="col-md-12 meter-calculation-div">
+							
 						</div>
 						<div class="col-md-12">
 							<div class="row">

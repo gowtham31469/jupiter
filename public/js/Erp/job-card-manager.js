@@ -383,6 +383,7 @@ function generateJobcard(){
 
                         /** Show single templates dynamic table */
                         var single_table_html = '';
+                        var meters_div_html = '';
                         if(data.template_data.single)
                         {
                             var row = 0;
@@ -458,9 +459,31 @@ function generateJobcard(){
                                     single_table_html += ' </tbody>\
                                                 </table>';
                                  table++;
+                                 meters_div_html +='<div class="row">\
+                                                <div class="col-md-3">\
+                                                    <label for="act_excess" >'+template_name[0]+' ACT EXCESS % :</label>\
+                                                    <span id="act_excess"></span>\
+                                                </div>\
+                                                <div class="col-md-3">\
+                                                    <label for="sticker_mtr" >MTRS FOR STICKERS :</label>\
+                                                    <span>30</span>\
+                                                </div>\
+                                                <div class="col-md-3">\
+                                                <div class="form-group has-feedback form-inline">\
+                                                    <label for="settings" >SETTINGS :</label>\
+                                                    <input type="number" step="0.01" min="1" data-min-error="Value must be >= 1" class="form-control input-sm" required="" name="settings" placeholder="SETTINGS" id="settings">\
+                                                    <div class="help-block with-errors"></div>\
+                                                </div>\
+                                                </div>\
+                                                <div class="col-md-3">\
+                                                   <label for="total_mtrs" >TOTAL MTRS :</label>\
+                                                   <span>30</span>\
+                                                </div>\
+                                            </div>';
                                 });
                                 
                             $('.single-list-table-div').html(single_table_html);
+                            $('.meter-calculation-div').html(meters_div_html);
                         }
                         
                     }
