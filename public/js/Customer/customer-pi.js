@@ -10,7 +10,7 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
         dataType: "json",
         data: {
             _token: csrf_token,
-            table_name: tableName,
+            tableName: tableName,
             buyer_id :buyer_id,
             pi_status:pi_status,
             style_no:style_no,
