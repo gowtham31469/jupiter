@@ -1822,7 +1822,7 @@ function tescoStatusTable(data,path)
                     }
                     else if (po_required ==1 && pi_required ==0)
                     {
-                        tr += '<td align="center"><a href="javascript:void(0)" style="margin-left:36px" class="po-style" onclick=tescoPOUpload(this,"'+value.tableID+'","'+po_file+'","'+value.tableName+'") ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" '+style_po+'></i></a></td>';
+                        tr += '<td align="center"><a href="javascript:void(0)" class="po-style" onclick=tescoPOUpload(this,"'+value.tableID+'","'+po_file+'","'+value.tableName+'") ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" '+style_po+'></i></a></td>';
                     }
                     else if (pi_required ==1 && po_required ==0)
                     {
