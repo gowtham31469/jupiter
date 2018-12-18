@@ -21,7 +21,7 @@ class ErpOrders extends Model
       * @var array
       */
 
-      protected $fillable = ['id','customer_id','buyer_id','po_no','po_file','status','created_at','updated_at', 'deleted_at', 'order_status_id', 'order_type'];
+      protected $fillable = ['id','customer_id','buyer_id','po_no','po_file','status','created_at','updated_at', 'deleted_at', 'order_status_id', 'order_type', 'buyer_po_number'];
 	
 	/**
      * Get the customer.

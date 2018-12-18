@@ -49,7 +49,8 @@ class ErpOrders
 				                    'po_file'          => $orders->po_file,
 									'status'		   => 1,
 									'order_status_id'  => $order_status_id->id,
-									'order_type'       => $orders->order_flag
+									'order_type'       => $orders->order_flag,
+									'buyer_po_number'  => $orders->po_number
 								]);
 				$erp_id = "ERPID-0".$erp_orders->id;
 				Erp::where('id',$erp_orders->id)->update(['erp_id'=>$erp_id]);
