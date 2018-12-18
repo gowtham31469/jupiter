@@ -459,7 +459,7 @@ function generateJobcard(){
                                     single_table_html += ' </tbody>\
                                                 </table>';
                                  table++;
-                                 meters_div_html +='<div class="row">\
+                                 meters_div_html +='<div class="col-md-12">\
                                                 <div class="col-md-3">\
                                                     <label for="act_excess" >'+template_name[0]+' ACT EXCESS % :</label>\
                                                     <span id="act_excess"></span>\

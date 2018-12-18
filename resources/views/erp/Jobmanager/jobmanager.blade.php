@@ -518,11 +518,11 @@
 							<div class="col-md-12 single-list-table-div">
 							</div>
 						</div>
-						<div class="col-md-12 meter-calculation-div">
-							
+						<div class="row meter-calculation-div">
 						</div>
-						<div class="col-md-12">
-							<div class="row">
+						<hr>
+						<div class="row">
+							<div class="col-md-12">
 								<div class="col-md-3">
 									<div class="form-group has-feedback form-inline">
 										{!! Form::label('compiled_by', 'COMPILED BY :', ['class' => 'form_label']) !!}
@@ -553,8 +553,8 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-12">
-							<div class="row">
+						<div class="row">
+							<div class="col-md-12">
 								<div class="col-md-3">
 									<div class="form-group has-feedback form-inline">
 										{!! Form::label('author', 'AUTHORIZED BY :', ['class' => 'form_label']) !!}
@@ -585,8 +585,8 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-12">
-							<div class="row">
+						<div class="row">
+							<div class="col-md-12">
 								<div class="col-md-3">
 									<div class="form-group has-feedback form-inline">
 										{!! Form::label('approval_date', 'APPROVAL DT :', ['class' => 'form_label']) !!}
