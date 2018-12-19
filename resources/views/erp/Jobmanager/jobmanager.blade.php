@@ -395,14 +395,14 @@
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('repeat_gap', 'REPEAT GAP :', ['class' => 'form_label']) !!}
-										{!! Form::number('repeat_gap',$value = '', array('class' => 'form-control input-sm','placeholder' => 'REPEAT GAP','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'step' => '0.01')) !!}
+										{!! Form::number('repeat_gap',$value = '', array('class' => 'form-control input-sm','placeholder' => 'REPEAT GAP','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeyup' => 'return mtrsForStickers()')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('machine', 'MACHINE :', ['class' => 'form_label']) !!}
-										{!! Form::number('machine',$value = '', array('class' => 'form-control input-sm','placeholder' => 'MACHINE','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0')) !!}
+										{!! Form::number('machine',$value = '', array('class' => 'form-control input-sm','placeholder' => 'MACHINE','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
@@ -427,14 +427,14 @@
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('roll_width', 'ROLL WIDTH :', ['class' => 'form_label']) !!}
-										{!! Form::number('roll_width',$value = '', array('class' => 'form-control input-sm','placeholder' => 'ROLL WIDTH','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'step' => '0.01')) !!}
+										{!! Form::number('roll_width',$value = '', array('class' => 'form-control input-sm','placeholder' => 'ROLL WIDTH','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.')) !!}
 										<div class="help-block with-errors"></div>
 								    </div>
 								</div>
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('film_no', 'FILM NO :', ['class' => 'form_label']) !!}
-										{!! Form::number('film_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'FILM NO','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0')) !!}
+										{!! Form::number('film_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'FILM NO','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
@@ -455,21 +455,21 @@
 								<div class="col-md-3">
 								   <div class="form-group has-feedback form-inline">
 										{!! Form::label('length_side', 'LENGTH SIDE :', ['class' => 'form_label']) !!}
-										{!! Form::number('length_side',$value = '', array('class' => 'form-control input-sm','placeholder' => 'LENGTH SIDE','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'step' => '0.01')) !!}
+										{!! Form::number('length_side',$value = '', array('class' => 'form-control input-sm','placeholder' => 'LENGTH SIDE','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeyup' => 'return mtrsForStickers()')) !!}
 										<div class="help-block with-errors"></div>
 								   </div>
 								</div>
 								<div class="col-md-3">
 							        <div class="form-group has-feedback form-inline">
 										{!! Form::label('excess', 'EXCESS % :', ['class' => 'form_label']) !!}
-										{!! Form::number('excess',$value = '', array('class' => 'form-control input-sm','placeholder' => 'EXCESS','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'onkeyup' => 'return calculateExcess(this)', 'step' => '0.01')) !!}
+										{!! Form::number('excess',$value = '', array('class' => 'form-control input-sm','placeholder' => 'EXCESS','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'onkeyup' => 'return calculateExcess(this)', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('teeth_no', 'TEETH NO :', ['class' => 'form_label']) !!}
-										{!! Form::number('teeth_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'TEETH NO','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0')) !!}
+										{!! Form::number('teeth_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'TEETH NO','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.')) !!}
 										<div class="help-block with-errors"></div>
 								    </div>
 								</div>
@@ -478,14 +478,14 @@
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('inv_no', 'INV NO :', ['class' => 'form_label']) !!}
-										{!! Form::number('inv_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'INV NO','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0')) !!}
+										{!! Form::number('inv_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'INV NO','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('no_sticker', 'NO OF STICKERS :', ['class' => 'form_label']) !!}
-										{!! Form::number('no_sticker',$value = '', array('class' => 'form-control input-sm','placeholder' => 'NO OF STICKERS','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0')) !!}
+										{!! Form::number('no_sticker',$value = '', array('class' => 'form-control input-sm','placeholder' => 'NO OF STICKERS','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.', 'onkeyup' => 'return mtrsForStickers()')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
@@ -494,7 +494,7 @@
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('finish_type', 'FINISH TYPE :', ['class' => 'form_label']) !!}
-										{!! Form::number('finish_type',$value = '', array('class' => 'form-control input-sm','placeholder' => 'FINISH TYPE','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0')) !!}
+										{!! Form::number('finish_type',$value = '', array('class' => 'form-control input-sm','placeholder' => 'FINISH TYPE','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>

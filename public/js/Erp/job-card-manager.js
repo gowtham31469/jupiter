@@ -12,7 +12,7 @@ $(document).ready(function() {
 
 	/** To refresh modal while hidden **/
 	$('.modal').on('hidden.bs.modal', function (e) {
-	$('#create_jobcard').trigger("reset");
+ 	  $('#create_jobcard').trigger("reset");
 	})
 
 	/** [ Make companies card active ] */
@@ -416,7 +416,7 @@ function generateJobcard(){
                                     <th>P.QNT</th>';
                                 });
                                 single_table_html += '<th>TOTAL</th>\
-                                                                <th width="115px">EXCESS</th>\
+                                                                <th width="180px">EXCESS</th>\
                                                                 <th>MTRS</th>\
                                                                 <th>STOCK</th>\
                                                             </tr>';
@@ -436,14 +436,14 @@ function generateJobcard(){
                                         col++;
                                     });
 
-                                    single_table_html += '<td class="total-quantity-class total-quantity-row-'+row+'"><strong>'+parseInt(total_qty_sizewise)+'</strong></td><td class="total-excess"><div class="form-group has-feedback"><input type="number" step="0.01" min="0" data-min-error="Value must be >= 0" class="form-control input-sm total-excess-row-table-'+table+'" required="" id="total_excess_row_table_'+row+'" data-required-error="Mandatory Field." name="total_excess_row_table_'+row+'"" placeholder="Excess %" onkeyup="return totalExcess(this)"><div class="help-block with-errors"></div></div></td><td></td><td></td></tr>';
+                                    single_table_html += '<td class="total-quantity-class total-quantity-row-'+row+'"><strong>'+parseInt(total_qty_sizewise)+'</strong></td><td class="total-excess"><div class="form-group has-feedback"><input type="number" step="0.01" data-step-error="Max 2 decimal places allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm total-excess-row-table-'+table+'" required="" id="total_excess_row_table_'+row+'" data-required-error="Mandatory Field." name="total_excess_row_table_'+row+'"" placeholder="Excess %" onkeyup="return totalExcess()" ><div class="help-block with-errors"></div></div></td><td></td><td></td></tr>';
                                 
                                     total_quantity_final += parseInt(total_qty_sizewise);
                                     row++;
                                 });
 
                                 single_table_html += '<tr>\
-                                                      <th class="highlight_row">TOTAL</th>';
+                                                      <th class="highlight_row total-text" data-ref-name = "'+template_name[0].replace(' ', '_')+'">TOTAL</th>';
                                 var total_col = 0;
                                 $.each(erpid.order_data, function(index, common_data){
                                     single_table_html += '<td class="total-quantity-col-'+total_col+'"><strong>'+sum[total_col]+'</strong></td>\
@@ -451,35 +451,39 @@ function generateJobcard(){
                                     total_col++;
                                 });
                                 
-                                single_table_html += '<td><strong>'+parseInt(total_quantity_final)+'</strong></td>\
-                                                        <td class="total-excess-col-table-'+table+'"></td>\
+                                single_table_html += '<td><strong class="total-qty-'+template_name[0].replace(' ', '_')+'">'+parseInt(total_quantity_final)+'</strong></td>\
+                                                        <td class="total-excess-col-table-'+table+' total-excess-'+template_name[0].replace(' ', '_')+'"></td>\
                                                         <td></td>\
                                                         <td></td>\
                                                     </tr>';
-                                    single_table_html += ' </tbody>\
+                                single_table_html += ' </tbody>\
                                                 </table>';
-                                 table++;
-                                 meters_div_html +='<div class="col-md-12">\
-                                                <div class="col-md-3">\
-                                                    <label for="act_excess" >'+template_name[0]+' ACT EXCESS % :</label>\
-                                                    <span id="act_excess"></span>\
-                                                </div>\
-                                                <div class="col-md-3">\
-                                                    <label for="sticker_mtr" >MTRS FOR STICKERS :</label>\
-                                                    <span>30</span>\
-                                                </div>\
-                                                <div class="col-md-3">\
-                                                <div class="form-group has-feedback form-inline">\
-                                                    <label for="settings" >SETTINGS :</label>\
-                                                    <input type="number" step="0.01" min="1" data-min-error="Value must be >= 1" class="form-control input-sm" required="" name="settings" placeholder="SETTINGS" id="settings">\
-                                                    <div class="help-block with-errors"></div>\
-                                                </div>\
-                                                </div>\
-                                                <div class="col-md-3">\
-                                                   <label for="total_mtrs" >TOTAL MTRS :</label>\
-                                                   <span>30</span>\
-                                                </div>\
-                                            </div>';
+                                table++;
+                                    /** Show actual excess % and meters div only once for each references */
+                                    if(template_name[1] === '0')
+                                    {
+                                        meters_div_html +='<div class="col-md-12">\
+                                                    <div class="col-md-3">\
+                                                        <label for="act_excess_'+template_name[0].replace(' ', '_')+'" >ACT EXCESS % ('+template_name[0]+'):</label>\
+                                                        <span id="act_excess_'+template_name[0].replace(' ', '_')+'"></span>\
+                                                    </div>\
+                                                    <div class="col-md-3">\
+                                                        <label for="sticker_mtr_'+template_name[0].replace(' ', '_')+'" >MTRS FOR STICKERS ('+template_name[0]+'):</label>\
+                                                        <span id="sticker_mtr_'+template_name[0].replace(' ', '_')+'"></span>\
+                                                    </div>\
+                                                    <div class="col-md-3">\
+                                                    <div class="form-group has-feedback form-inline">\
+                                                        <label for="settings_'+template_name[0].replace(' ', '_')+'" >SETTINGS ('+template_name[0]+') :</label>\
+                                                        <input type="number" step="0.01" min="1" data-step-error="Max 2 decimal places allowed." data-min-error="Value must be >= 1" class="form-control input-sm" required="" name="settings_'+template_name[0].replace(' ', '_')+'" placeholder="SETTINGS" id="settings_'+template_name[0].replace(' ', '_')+'" onkeyup="return totalMeters()">\
+                                                        <div class="help-block with-errors"></div>\
+                                                    </div>\
+                                                    </div>\
+                                                    <div class="col-md-3">\
+                                                    <label for="total_mtrs_'+template_name[0].replace(' ', '_')+'" >TOTAL MTRS ('+template_name[0]+'):</label>\
+                                                    <span id="total_mtrs_'+template_name[0].replace(' ', '_')+'" class="total-meters"></span>\
+                                                    </div>\
+                                                </div>';
+                                    }
                                 });
                                 
                             $('.single-list-table-div').html(single_table_html);
@@ -500,7 +504,7 @@ function generateJobcard(){
                         keyboard: false
                     })
 
-                    /** [ Validate edit_merchandiser_form form using bootstrap validator ] */
+                    /** [ Validate create_jobcard form using bootstrap validator ] */
                     $('#create_jobcard').validator('update');
                     $('#jobcardCreationModalCenter').modal('show');
                 },
@@ -575,10 +579,10 @@ function calculateExcess(evt)
     $.each(item, function(key, value){
         let total_excess = parseFloat($(value).text() * (evt.value*1/100)).toFixed(2);
         $('#total_excess_row_table_'+key).val(total_excess);
-    })
-    $('#act_excess').text(evt.value);
-    $('#create_jobcard').validator('validate');
-    totalExcess(evt);
+        /** refresh excess values fields in single ref table */
+        $('#total_excess_row_table_'+key).trigger('input');
+    });
+    totalExcess();
 }
 
 /**
@@ -586,7 +590,7 @@ function calculateExcess(evt)
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
-function totalExcess(evt)
+function totalExcess()
 {
     var table = 0;
     $('.single-list-table').each(function () {
@@ -598,6 +602,90 @@ function totalExcess(evt)
             }
         });
         $('.total-excess-col-table-'+table).html('<strong>'+total_excess_final.toFixed(2)+'</strong>');
+
         table++;
     });
+    actualExcess()
 }
+
+/**
+ * Dynamic Actual Excess calculation based on excess value and total quantity.
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function actualExcess()
+{
+    $('.total-text').each(function(){
+        let ref_name              = $(this).data('ref-name');
+        let total_qty             = 0;
+        let total_excess          = 0;
+        let act_excess            = 0;
+
+        $('.total-qty-'+ref_name).each(function(){
+            if (!isNaN(total_qty) && total_qty.length !== 0) {
+                total_qty += parseInt($(this).text());
+            }
+        });
+        $('.total-excess-'+ref_name).each(function(){
+            if (!isNaN(total_excess) && total_excess.length !== 0) {
+                total_excess += parseFloat($(this).text());
+            }
+        });
+        if (!isNaN(total_qty) && !isNaN(total_excess)) {
+            act_excess = parseFloat((total_excess/total_qty)*100).toFixed(2);
+        }
+        $('#act_excess_'+ref_name).text(act_excess)
+    });
+}
+
+/**
+ * Dynamic Mtrs for sticker calculation.
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function mtrsForStickers()
+{
+    var length_side_dimension = $('#length_side').val() === ''?0:$('#length_side').val();
+    $('.total-text').each(function(){
+        let ref_name              = $(this).data('ref-name');
+        let total_qty             = 0;
+        let mtrs                  = 0;
+        let no_of_repeats         = $('#no_sticker').val() === ''?0:$('#no_sticker').val();
+        let repeat_gap            = $('#repeat_gap').val() === ''?0:$('#repeat_gap').val();
+
+        $('.total-qty-'+ref_name).each(function(){
+            if (!isNaN(total_qty) && total_qty.length !== 0) {
+                total_qty += parseInt($(this).text());
+            }
+        });
+
+        if(!isNaN(total_qty) && !isNaN(length_side_dimension) && !isNaN(no_of_repeats) && !isNaN(repeat_gap) && no_of_repeats != 0 && repeat_gap != 0)
+        {
+            mtrs =  parseFloat((parseInt(total_qty)/parseInt(no_of_repeats)) * ((parseInt(length_side_dimension) + parseInt(repeat_gap))/1000)).toFixed(2);
+        }
+        
+        $('#sticker_mtr_'+ref_name).text(mtrs)
+        totalMeters()
+    });
+}
+
+/**
+ * Dynamic Total Meters calculation.
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function totalMeters()
+{
+    $('.total-meters').each(function(){
+       let total_mtrs_id = $(this).attr('id').split("_");
+       let ref_name = total_mtrs_id[2]+'_'+total_mtrs_id[3];
+       let mtrs_for_stickers = $('#sticker_mtr_'+ref_name).text() === ''?0:$('#sticker_mtr_'+ref_name).text();
+       let settings = $('#settings_'+ref_name).val() === ''?0:$('#settings_'+ref_name).val();
+       if (!isNaN(settings) && !isNaN(mtrs_for_stickers)) {
+           var total_mtr = parseFloat(settings) + parseFloat(mtrs_for_stickers);
+        }
+       $('#total_mtrs_'+ref_name).text(total_mtr.toFixed(2));
+    });
+}
+
+
