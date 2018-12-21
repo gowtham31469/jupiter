@@ -163,6 +163,47 @@ $(document).ready(function() {
 });
 /* End of document.ready() */
 
+/**
+ * method to check the input value is a number or not
+ * @param  input data
+ * @return {Boolean}
+ */
+function isNumber(evt) {
+	try {
+		evt = (evt) ? evt : window.event;
+		var charCode = (evt.which) ? evt.which : evt.keyCode;
+		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+			return false;
+		}
+		return true;
+	} catch (e) {
+		console.log("Error:" + e)
+	}
+}
+
+/**  
+ * Validation for numeric values with dot
+ * @param   evt 
+ * @return {Boolean} 
+ * @author <praveen>    
+ */
+function isNumberKey(evt) {
+	try {
+		var charCode = (evt.which) ? evt.which : event.keyCode
+
+		if (charCode == 46) {
+			return true;
+		}
+		/** [ Checking key stroke values for numeric values ] */
+		if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+			return false;
+		}
+		return true;
+	} catch (e) {
+		console.log("Error:" + e)
+	}
+}
+
 /** [showSnackbar function]
  *  @author <Praveen> [praveen@wizroots.com]
  */
@@ -237,10 +278,10 @@ function generateJobcard(){
                     {
                         if(data.template_data.company)
                         {
-                            $('#company_name').text(data.template_data.company.company)
+                            $('#jc_company_name').text(data.template_data.company.company)
                             $('#company_address').text(data.template_data.company.company_address)
                             $('#company_logo').attr('src', data.template_data.company.company_logo);
-                            $('#company_name').attr('data-company-id', data.template_data.company.company_id)
+                            $('#jc_company_name').attr('data-company-id', data.template_data.company.company_id)
                         }
 
                         var workorder_id = data.template_data.company.company === 'Jupiter Garments Accessories'?'JGA-JC-':'SP-JC-';
@@ -258,7 +299,7 @@ function generateJobcard(){
                         if(data.template_data.customer)
                         {
                             $('#customer').text(data.template_data.customer.customer_name)
-                            $('#customer').attr('data-cutomer-id', data.template_data.customer.cutomer_id)
+                            $('#customer').attr('data-customer-id', data.template_data.customer.customer_id)
                         }
 
                         if(data.template_data.buyer)
@@ -340,7 +381,7 @@ function generateJobcard(){
 
                         /** Show ratio templates dynamic table */
                         var ratio_table_html = '';
-                        if(data.template_data.ratio)
+                        if(data.template_data.ratio.length != 0)
                         {
                             $.each(data.template_data.ratio, function(key, template){
                                 var total = 0;
@@ -361,7 +402,7 @@ function generateJobcard(){
                                                         });
                                                         $.each(template, function(index, row){
                                                             total += parseInt(row.order_quantity);
-                                                            ratio_table_html += '<tr id='+row.erp_order_details_id+'>\
+                                                            ratio_table_html += '<tr id='+row.erp_order_details_id+' data-template-id='+row.template_id+'>\
                                                             <td>'+row.reference_name+' '+row.ratio_pack_type+'</td>\
                                                             <td>'+row.buyer_po_number+'</td>\
                                                             <td>'+row.erp_id+'</td>\
@@ -380,11 +421,14 @@ function generateJobcard(){
                             });
                             $('.ratio-list-table-div').html(ratio_table_html);
                         }
+                        else{
+                            $('.ratio-list-table-div').html(ratio_table_html);
+                        }
 
                         /** Show single templates dynamic table */
                         var single_table_html = '';
                         var meters_div_html = '';
-                        if(data.template_data.single)
+                       if(data.template_data.single.length != 0)
                         {
                             var row = 0;
                             var table = 0;
@@ -393,7 +437,7 @@ function generateJobcard(){
                                 <tbody id="single_list_table_body"><tr>\
                                 <th width="80px">ID.NO</th>';
                                 $.each(erpid.order_data, function(index, common_data){
-                                    single_table_html += '<td colspan="2">'+common_data.erp_id+'</td>';
+                                    single_table_html += '<td colspan="2" data-template-id="'+common_data.template_id+'">'+common_data.erp_id+'</td>';
                                 });
                                 var template_name = key.split("_");
                                 single_table_html += '<td colspan="5" class="highlight_row" rowspan="3">REFNUM  : '+template_name[0]+'</td></tr>\
@@ -488,6 +532,20 @@ function generateJobcard(){
                                 
                             $('.single-list-table-div').html(single_table_html);
                             $('.meter-calculation-div').html(meters_div_html);
+                            $('#excess').prop('required', true);
+                            $('#repeat_gap').prop('required', true);
+                            $('#roll_width').prop('required', true);
+                            $('#length_side').prop('required', true);
+                            $('#no_sticker').prop('required', true);
+                        } else {
+                            $('.single-list-table-div').html(single_table_html);
+                            $('.meter-calculation-div').html(meters_div_html);
+                            /** Toggle mandatory/optional fields */
+                            $('#excess').prop('required', false);
+                            $('#repeat_gap').prop('required', false);
+                            $('#roll_width').prop('required', false);
+                            $('#length_side').prop('required', false);
+                            $('#no_sticker').prop('required', false);
                         }
                         
                     }
@@ -507,6 +565,9 @@ function generateJobcard(){
                     /** [ Validate create_jobcard form using bootstrap validator ] */
                     $('#create_jobcard').validator('update');
                     $('#jobcardCreationModalCenter').modal('show');
+                    $('.datepicker').datepicker({
+                        format: 'dd-mm-yyyy'
+                    });
                 },
                 406: function(data) {
                      $('.snackbar_span').html(data.responseJSON.message);

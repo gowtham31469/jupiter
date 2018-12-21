@@ -15,6 +15,26 @@ class CreateJobcardMainTable extends Migration
     {
         Schema::create('jobcard_main_table', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('work_order_id');  
+            $table->integer('company_id')->unsigned();          
+            $table->integer('customer_id')->unsigned();
+            $table->integer('buyer_id')->unsigned();
+            $table->date('created_date'); 
+            $table->string('material')->nullable();
+            $table->string('article')->nullable();
+            $table->string('style_number')->nullable();
+            $table->string('reference')->nullable();
+            $table->string('order_type')->nullable();
+            $table->string('dispatch_mode')->nullable();
+            $table->date('order_date'); 
+            $table->double('length'); 
+            $table->double('repeat_gap');
+            $table->integer('machine');
+            $table->date('customer_del_date');
+            $table->double('width'); 
+            $table->double('roll_width'); 
+            $table->integer('film_no');
+            $table->date('act_del_date');
             $table->timestamps();
         });
     }
