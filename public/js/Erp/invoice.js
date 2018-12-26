@@ -630,14 +630,18 @@
         e.preventDefault();
         var id = $(rem).attr("data-id");
         var val = parseInt(id) + 1;
-        var html = '<tr><td><div style="width: 65%"><select class="charges" id="charges_'+val+'" name="charges_'+val+'" required><option value=""></option><option value="freight">Freight</option><option value="minimumcharges">Minimum charges</option><option value="jobwork">Job Work Charges</option></select></div></td><td style="width: 116px;"><input type="text" value="" min="0" id="chrg_'+val+'" class="form-control extra-amnt" onkeyup="updateTotal()"></td>';
-        html += '<td>\
-                    <a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRow(this,event)"></i></a>\
-                   </td>\
-                   </tr>';
-        $('#table_row').append(html);
-        $('.delete-row').tooltip('show')
-        $('.delete-row').tooltip('toggle')
+        if (val<=3) {
+            var html = '<tr><td><div width: 340px;><select class="charges form-control" id="charges_'+val+'" name="charges_'+val+'" required><option value=""></option><option value="freight">Freight</option><option value="minimumcharges">Minimum charges</option><option value="jobwork">Job Work Charges</option></select></div></td><td style="width: 116px;"><input type="text" value="" min="0" id="chrg_'+val+'" class="form-control extra-amnt" onkeyup="updateTotal()"></td>';
+            html += '<td>\
+                        <a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRow(this,event)"></i></a>\
+                       </td>\
+                       </tr>';
+            $('#table_row').append(html);
+            $(rem).attr("data-id", val);
+            $(document).find('#charges_'+val).selectpicker();
+            $('.delete-row').tooltip('show')
+            $('.delete-row').tooltip('toggle')
+        }        
     }
     function removeRow(rem,event)
     {
