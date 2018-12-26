@@ -441,7 +441,8 @@
                     tr += '</tr>';
                 }
                 else{
-                    tr += '<tr><td></td><td colspan="13"><strong style="float: left;">ITEM: '+value.item_name+'  HSNCode: '+value.hsn_code+'</strong></td></tr>';
+                    var hsnCode = value.hsn_code==null?'-':value.hsn_code;
+                    tr += '<tr><td></td><td colspan="13"><strong style="float: left;">ITEM: '+value.item_name+'  HSNCode: '+hsnCode+'</strong></td></tr>';
                     tr += '<tr class="trClass" id="'+value.id+'"><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+' </td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td class="amnt">'+(delQnty * value.rate).toFixed(2)+'</td>';
                     tr += '</tr>';
                 }               
@@ -605,7 +606,7 @@
                 $('.snackbar_span').html("Invoice Send Successfully !");
                 showSnackbar();                
                 $('#erp-invoice').modal("hide")
-                setTimeout(function(){window.location = 'invoice';}, 3000); 
+                setTimeout(function(){window.location = 'invoice';}, 1000); 
 
             },
             error: function (errorXHR, errorStatus, errorThrown) {
