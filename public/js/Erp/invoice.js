@@ -606,7 +606,7 @@
                 $('.snackbar_span').html("Invoice Send Successfully !");
                 showSnackbar();                
                 $('#erp-invoice').modal("hide")
-                setTimeout(function(){window.location = 'invoice';}, 3000); 
+                setTimeout(function(){window.location = 'invoice';}, 1000); 
 
             },
             error: function (errorXHR, errorStatus, errorThrown) {
