@@ -40,6 +40,8 @@
                     $('.order-heading').addClass('hidden')
                     $('.order-details').addClass('hidden')
                     $('.remarks').addClass('hidden')
+                    $('.extra-charges').addClass('hidden')
+                    $('.orders-tax').addClass('hidden')
                     $('.create-invoice').addClass('hidden')
                     
                     
@@ -131,7 +133,7 @@
         tr+= '<tr><td colspan="8"><strong>Total</strong></td><td class="qnty-sum">'+qnty+'</td><td class="balnc-qnty" id="balnc-qnty">'+pendQnty+'</td><td class="total-qnty" id="total-qnty">'+quantityTotal()+'</td><td></td><td class="total-amnt">'+amnt.toFixed(2)+'</td></tr>';
 
 
-        $('.order-details').html('<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table text-center table-bordered order-details" id="order-details"><thead><tr><th></th><th>Order No</th><th>PO No</th><th>Style</th><th>OCN No</th><th>Reference</th><th>Size</th><th>Tax (%)</th><th>Order Quantity</th><th>Pending Quantity</th><th>Delivered Quantity</th><th>Rate (₹)</th><th>Amount (₹)</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12"><tbody>'+tr+'</tbody></table></div></div>');
+        $('.order-details').html('<div class="col-lg-12 col-md-12 col-sm-12"><div><table class="table text-center table-bordered order-details" id="order-details"><thead><tr><th></th><th>Order No</th><th>PO No</th><th>Style</th><th>OCN No</th><th>Reference</th><th>Size</th><th>Tax (%)</th><th>Order Quantity</th><th>Pending Quantity</th><th>Delivered Quantity</th><th>Rate (₹)</th><th>Amount (₹)</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12"><tbody>'+tr+'</tbody></table></div></div>');
 
         updateTaxAmount(tax_amnt)
 
@@ -603,7 +605,7 @@
                 $('.snackbar_span').html("Invoice Send Successfully !");
                 showSnackbar();                
                 $('#erp-invoice').modal("hide")
-                // setTimeout(function(){window.location = 'invoice';}, 3000); 
+                setTimeout(function(){window.location = 'invoice';}, 3000); 
 
             },
             error: function (errorXHR, errorStatus, errorThrown) {
@@ -618,8 +620,9 @@
     function updateGrandTotal(obj,gndtotal){
         // $(obj).closest('tr').find('.grand-total').text();
        if($.isNumeric(parseFloat($(obj).val()))) {
-            var grandtotal = parseFloat($(obj).val())+ parseFloat($('.grand-total').text())
-            $('.grand-total').html(grandtotal.toFixed(2))
+            var grandTotal = parseFloat($(obj).val())+ parseFloat($('.grand-total').text())
+            // alert(parseFloat($('.grand-total').text()))
+            $('.grand-total').html(grandTotal.toFixed(2))
        }
        else{
             $('.grand-total').html(gndtotal.toFixed(2))
