@@ -12,8 +12,10 @@ class Dashboard
 	   		$pendingproduction['tcl1'] = DB::table('tesco_tcl1_orders')
 				->join('customers','customers.id','=','tesco_tcl1_orders.tesco_supplier_id')
 											->whereIn('order_status',['Order Approved','Order Placed'])
-											->where('po_file',null)
-											->orWhere('purchase_order_no',null)
+											->where(function ($query) {
+												$query->where('po_file',null)
+												->orWhere('purchase_order_no',null);
+											})
 											->where('pen_pro_flag',0)
 											->where('is_order_count_empty',0)
 											->select('tesco_tcl1_orders.*','customers.company_name')
@@ -21,8 +23,10 @@ class Dashboard
 			$pendingproduction['tcl2'] = DB::table('tesco_tcl2_orders')
 				->join('customers','customers.id','=','tesco_tcl2_orders.tesco_supplier_id')
 											->whereIn('order_status',['Order Approved','Order Placed'])
-											->where('po_file',null)
-											->orWhere('purchase_order_no',null)
+											->where(function ($query) {
+												$query->where('po_file',null)
+												->orWhere('purchase_order_no',null);
+											})
 											->where('pen_pro_flag',0)
 											->where('is_order_count_empty',0)
 											->select('tesco_tcl2_orders.*','customers.company_name')
@@ -30,8 +34,10 @@ class Dashboard
 			$pendingproduction['tcl4'] = DB::table('tesco_tcl4_orders')
 				->join('customers','customers.id','=','tesco_tcl4_orders.tesco_supplier_id')
 											->whereIn('order_status',['Order Approved','Order Placed'])
-											->where('po_file',null)
-											->orWhere('purchase_order_no',null)
+											->where(function ($query) {
+												$query->where('po_file',null)
+												->orWhere('purchase_order_no',null);
+											})
 											->where('pen_pro_flag',0)
 											->where('is_order_count_empty',0)
 											->select('tesco_tcl4_orders.*','customers.company_name')
@@ -39,8 +45,10 @@ class Dashboard
 			$pendingproduction['tsl1'] = DB::table('tesco_tsl1_orders')
 				->join('customers','customers.id','=','tesco_tsl1_orders.tesco_supplier_id')
 											->whereIn('order_status',['Order Approved','Order Placed'])
-											->where('po_file',null)
-											->orWhere('purchase_order_no',null)
+											->where(function ($query) {
+												$query->where('po_file',null)
+												->orWhere('purchase_order_no',null);
+											})
 											->where('pen_pro_flag',0)
 											->where('is_order_count_empty',0)
 											->select('tesco_tsl1_orders.*','customers.company_name')
@@ -48,8 +56,10 @@ class Dashboard
 			$pendingproduction['tsl3'] = DB::table('tesco_tsl3_orders')
 				->join('customers','customers.id','=','tesco_tsl3_orders.tesco_supplier_id')
 											->whereIn('order_status',['Order Approved','Order Placed'])
-											->where('po_file',null)
-											->orWhere('purchase_order_no',null)
+											->where(function ($query) {
+												$query->where('po_file',null)
+												->orWhere('purchase_order_no',null);
+											})
 											->where('pen_pro_flag',0)
 											->where('is_order_count_empty',0)
 											->select('tesco_tsl3_orders.*','customers.company_name')
@@ -57,8 +67,10 @@ class Dashboard
 			$pendingproduction['thl1'] = DB::table('tesco_thl1_orders')
 				->join('customers','customers.id','=','tesco_thl1_orders.tesco_supplier_id')
 											->whereIn('order_status',['Order Approved','Order Placed'])
-											->where('po_file',null)
-											->orWhere('purchase_order_no',null)
+											->where(function ($query) {
+												$query->where('po_file',null)
+												->orWhere('purchase_order_no',null);
+											})
 											->where('pen_pro_flag',0)
 											->where('is_order_count_empty',0)
 											->select('tesco_thl1_orders.*','customers.company_name')
@@ -66,8 +78,10 @@ class Dashboard
 			$pendingproduction['thl3'] = DB::table('tesco_thl3_orders')
 				->join('customers','customers.id','=','tesco_thl3_orders.tesco_supplier_id')
 											->whereIn('order_status',['Order Approved','Order Placed'])
-											->where('po_file',null)
-											->orWhere('purchase_order_no',null)
+											->where(function ($query) {
+												$query->where('po_file',null)
+												->orWhere('purchase_order_no',null);
+											})
 											->where('pen_pro_flag',0)
 											->where('is_order_count_empty',0)
 											->select('tesco_thl3_orders.*','customers.company_name')

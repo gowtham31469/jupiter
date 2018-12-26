@@ -102,7 +102,7 @@
                           <div class="col-md-6">
                               <div class="form-group has-feedback">
                                   {!! Form::label('factory_code', 'Factory Code', ['class' => 'form_label']) !!}
-                                  {!! Form::text('factory_code',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Factory Code','required','pattern'=>'[a-z0-9]+')) !!}
+                                  {!! Form::text('factory_code',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Factory Code','required')) !!}
                                   <div class="help-block with-errors"></div>
                               </div>
                           </div>

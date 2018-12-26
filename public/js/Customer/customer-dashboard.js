@@ -251,7 +251,16 @@ $(document).ready(function() {
           {
               var style_no = value.uk_style_ref;
           }   
-          html += '<tr><td><input type="checkbox" class="form-control" value="'+value.tablename+'_'+value.id+'" id="'+value.tablename+'_'+value.id+'" name="row_id" data-id="'+value.tablename+'"/></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>'+value.TemplateName+'</td><td>'+value.order_created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.order_approved_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.purchase_order_no+'</td><td><label onclick=viewedApproved("'+value.id+'","'+value.tablename+'") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+		  
+		  if(value.purchase_order_no != null)
+		  {
+			 var po_no=value.purchase_order_no;
+		  }
+		  else
+		  {
+			  var po_no='-';
+		  }
+          html += '<tr><td><input type="checkbox" class="form-control" value="'+value.tablename+'_'+value.id+'" id="'+value.tablename+'_'+value.id+'" name="row_id" data-id="'+value.tablename+'"/></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>'+value.TemplateName+'</td><td style="width:63px">'+value.order_created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.order_approved_at.split(' ')[0].split('-').reverse().join('-')+'</td><td class="dt-body-center">'+po_no+'</td><td><label onclick=viewedApproved("'+value.id+'","'+value.tablename+'") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
       });
       $('#approvedModal .modal-body').html('<form id="frm-example"><table id ="approved-orders" class="table approved-orders "><thead><tr><th style="width: 0px;padding-right: 8px !important;"><input name="select_all" value="1" id="select-all" type="checkbox" class="form-control" /></th><th>Customer Name</th><th>Buyer</th><th>Style No</th><th>Product</th><th>Reference</th><th>Order Date</th><th>Approval Date</th><th>PO/PI Number</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table></form>');
       $('.approved-count').text(data.approved_count)
