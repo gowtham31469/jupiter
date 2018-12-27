@@ -409,9 +409,13 @@
 		function pendingproductionsubmit()
 		{
 			var myCheckboxes = new Array();
-										$("input:checked").each(function() {
-											myCheckboxes.push($(this).val());
-										});
+			
+								var oTable = $('.pending_table').dataTable();
+								var rowcollection =  oTable.$(".checkbox:checked", {"page": "all"});
+								rowcollection.each(function(index,elem){
+									myCheckboxes.push($(elem).val());
+								});
+			
 										$.ajax({
 											url: base_url + "/admin/order-management/viewed_pen_production_all",
 											type: "Post",
@@ -569,9 +573,13 @@
 		function neworderssubmit()
 		{
 			var myCheckboxes = new Array();
-				$("input:checked").each(function() {
-					myCheckboxes.push($(this).val());
-				});
+			
+				var oTable = $('.new_orders').dataTable();
+			var rowcollection =  oTable.$(".checkbox:checked", {"page": "all"});
+			rowcollection.each(function(index,elem){
+				myCheckboxes.push($(elem).val());
+			});
+			
 				$.ajax({
 					url: base_url + "/admin/order-management/viewedneworders_all",
 					type: "Post",
@@ -600,9 +608,12 @@
 		function aowpsubmit()
 		{
 			var myCheckboxes = new Array();
-				$("input:checked").each(function() {
-					myCheckboxes.push($(this).val());
-				});
+			var oTable = $('.aowp_orders').dataTable();
+			var rowcollection =  oTable.$(".checkbox:checked", {"page": "all"});
+			rowcollection.each(function(index,elem){
+				myCheckboxes.push($(elem).val());
+			});
+			
 				$.ajax({
 					url: base_url + "/admin/order-management/viewedaowp_all",
 					type: "Post",
@@ -629,9 +640,13 @@
 		function approvedorderssubmit()
 		{
 			var myCheckboxes = new Array();
-				$("input:checked").each(function() {
-					myCheckboxes.push($(this).val());
-				});
+			
+			var oTable = $('.approved_orders').dataTable();
+			var rowcollection =  oTable.$(".checkbox:checked", {"page": "all"});
+			rowcollection.each(function(index,elem){
+				myCheckboxes.push($(elem).val());
+			});
+			
 				$.ajax({
 					url: base_url + "/admin/order-management/viewedapporders_all",
 					type: "Post",
@@ -660,10 +675,15 @@
 		
 		function pendingorderssubmit()
 		{
+			
 			var myCheckboxes = new Array();
-				$("input:checked").each(function() {
-					myCheckboxes.push($(this).val());
-				});
+			
+			var oTable = $('.pending_orders').dataTable();
+			var rowcollection =  oTable.$(".checkbox:checked", {"page": "all"});
+			rowcollection.each(function(index,elem){
+				myCheckboxes.push($(elem).val());
+			});
+			
 				$.ajax({
 					url: base_url + "/admin/order-management/viewedpenorders_all",
 					type: "Post",

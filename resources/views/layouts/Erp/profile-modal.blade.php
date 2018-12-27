@@ -66,7 +66,7 @@
 							<div class="customer_design">
 								<div class="row">
 									<div class="col-md-12">
-										{!! Form::label('profile_buyer', 'Companies Assigned : ', ['class' => 'form_label']) !!}
+										{!! Form::label('profile_buyer', 'Buyers Assigned : ', ['class' => 'form_label']) !!}
 									</div>
 									<div class="col-md-12 text-center profileBuyers">
 										<i class="fa fa-spinner fa-pulse"></i>

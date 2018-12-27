@@ -181,7 +181,7 @@
                                 <div class="col-lg-4 col-md-4 col-sm-4">
 
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 pull-right" id="ship_to" style="padding-left: 50px;">
+                                <div class="col-lg-4 col-md-4 col-sm-4 pull-right" id="ship_to" style="padding-left: 45px;">
 
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-5">
@@ -627,6 +627,7 @@
                 $('#snackbar').css('background-color','#00b6ff');
                 $('.snackbar_span').html('Purchase Order File Uploaded Successfully');
                 showSnackbar();
+                window.location = "{{ url('/admin/order-management/order-status') }}";
             });
             this.on("error", function(file, response) {
                 this.removeFile(file);

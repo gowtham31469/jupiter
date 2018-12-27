@@ -229,6 +229,7 @@
 								<th>Sl. No</th>
 								<th>ERP ID</th>
 								<th>Customer name</th>
+								<th>Buyer name</th>
 								<th>PO Number</th>
 								<th>Style Number</th>
 								<th>Reference Number</th>
@@ -237,26 +238,26 @@
 						</thead>
 						<tbody>
 							@foreach($orders as $vals)
-
-							<tr id="{{$vals->erp_detail_id}}">
+							<tr id="{{$vals->id}}" data-refname="{{$vals->reference_name}}">
 								<td class="">
 								
 									<div class="form-check">
 									<a href="javascript:void(0)">
 										<label>
-											<input class="row-checkbox" type="checkbox" name="row-check-{{ $loop->iteration }}" style="margin-right: 10px;"> <span class="label-text" class="hidden-val">{{ $loop->iteration }}</label>
+											<input class="row-checkbox" type="checkbox" data-customer-name="{{$vals->company_name}}" style="margin-right: 10px;" onchange="return selectOrders(this)" data-buyer-name="{{$vals->buyer_name}}"> <span class="label-text" class="hidden-val">{{ $loop->iteration }}</label>
 									</a>
 									</div>
 								</td>
-								<td>{{$vals->id}}</td>
+								<td>{{$vals->erp_id}}</td>
 								<td>{{$vals->company_name}}</td>
+								<td data-buyer-id="{{$vals->buyer_id}}">{{$vals->buyer_name}}</td>
 								<td>{{$vals->po_no}}</td>
 								<td>{{$vals->style_no}}</td>
 								<td>{{$vals->reference_name}}</td>
 								@if ($vals->delivery_date != '')
 									<td>{{$vals->delivery_date}}</td>
 								@else
-									<td>N/A</td>
+									<td>-</td>
 								@endif
 							</tr>
 							@endforeach
@@ -309,15 +310,13 @@
 						<div class="row">
 							<div class="col-md-12">
 								<div class="col-md-4">
-									<p><strong>Jupiter Garments Accessories	</strong><br>		
-										1-J-27-1&3, Jupiter Avenue			
-										Anupparpalayam, Tirupur - 641652
-									</p>
+									<p><strong id="company-name"></strong></p>
+									<p id="company-address"></p>
 								</div>
 								<div class="col-md-4">
 								</div>
 								<div class="col-md-4">
-								     <img src="/images/logo.png" class="pull-right" style="width: 150px;height: 60px;">
+								     <img src="" class="pull-right " id="company-logo" style="width: 150px;height: 60px;">
 								</div>
 							</div>
 						</div>
@@ -326,25 +325,25 @@
 							<div class="col-md-12">
 								<div class="col-md-4">
 									{!! Form::label('work_order', 'WORKORDER :', ['class' => 'form_label']) !!}
-								    <span>1234</span>
+								    <span id="work_order"></span>
 								</div>
 								<div class="col-md-4">
 								</div>
 								<div class="col-md-4">
-									 {!! Form::label('date', 'DATE :', ['class' => 'form_label']) !!}
-								    <span>11/10/2018</span>
+									 {!! Form::label('today-date', 'DATE :', ['class' => 'form_label']) !!}
+								    <span id="today-date"></span>
 								</div>
 							</div>
 							<div class="col-md-12">
 								<div class="col-md-4">
 									{!! Form::label('article', 'ARTICLE :', ['class' => 'form_label']) !!}
-								    <span>Sticker & Labels</span>
+								    <span id="article"></span>
 								</div>
 								<div class="col-md-4">
 								</div>
 								<div class="col-md-4">
 									 {!! Form::label('material', 'MATERIAL :', ['class' => 'form_label']) !!}
-								    <span>double side woven edge- white</span>
+								    <span id="material"></span>
 								</div>
 							</div>
 						</div>
@@ -353,25 +352,25 @@
 							<div class="col-md-12">
 								<div class="col-md-4">
 									{!! Form::label('customer', 'CUST NAME :', ['class' => 'form_label']) !!}
-								    <span>SPA</span>	
+								    <span id="customer" data-customer-id=""></span>	
 								</div>
 								<div class="col-md-4">
 									{!! Form::label('style_no', 'STYLENUM :', ['class' => 'form_label']) !!}
-								    <span>AA1234567</span>	
+								    <span id="style_no" ></span>	
 								</div>
 								<div class="col-md-4">
 									 {!! Form::label('order_type', 'ORDER TYPE :', ['class' => 'form_label']) !!}
-								    <span>INITIAL</span>	
+								    <span  id="order_type" ></span>	
 								</div>
 							</div>
 							<div class="col-md-12">
 								<div class="col-md-4">
 									{!! Form::label('buyer', 'BUYER :', ['class' => 'form_label']) !!}
-								    <span>TESCO</span>	
+								    <span id="buyer"></span>	
 								</div>
 								<div class="col-md-4">
 								    {!! Form::label('reference', 'REFERENCE :', ['class' => 'form_label']) !!}
-								    <span>FF/01/12345G</span>	
+								    <span id="reference"></span>	
 								</div>
 								<div class="col-md-4">
 									 <div class="form-group has-feedback form-inline">
@@ -387,11 +386,11 @@
 							<div class="col-md-12">
 								<div class="col-md-3">
 									{!! Form::label('order_date', 'ORDER DT :', ['class' => 'form_label']) !!}
-								    <span>10/10/2018</span>
+								    <span id="order_date"></span>
 								</div>
 								<div class="col-md-3">
 									{!! Form::label('length', 'LENGTH :', ['class' => 'form_label']) !!}
-								    <span>25</span>
+								    <span id="length"></span>
 								</div>
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
@@ -423,7 +422,7 @@
 								</div>
 								<div class="col-md-3">
 									{!! Form::label('width', 'WIDTH :', ['class' => 'form_label']) !!}
-								    <span>25</span>
+								    <span id="width"></span>
 								</div>
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
@@ -463,7 +462,7 @@
 								<div class="col-md-3">
 							        <div class="form-group has-feedback form-inline">
 										{!! Form::label('excess', 'EXCESS % :', ['class' => 'form_label']) !!}
-										{!! Form::number('excess',$value = '', array('class' => 'form-control input-sm','placeholder' => 'EXCESS','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0')) !!}
+										{!! Form::number('excess',$value = '', array('class' => 'form-control input-sm','placeholder' => 'EXCESS','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'onkeyup' => 'return calculateExcess(this)')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
@@ -503,7 +502,7 @@
 							<div class="col-md-12">
 							   <div class="col-md-8">
 								  {!! Form::label('print_color', 'PRINT COLORS :', ['class' => 'form_label']) !!}
-								    <span>485C, 201C,300C 485C, 201C,300C</span>
+								    <span id="print_color"></span>
 							   </div>
 							   <div class="col-md-4">
 							   </div>
@@ -511,165 +510,12 @@
 						</div>
 						<hr>
 						<div class="row">
-							<div class="col-md-12">
-								<table class="table table-bordered table-responsive"  style="font-size: 12px;" id="ratio-list-table">
-								    <thead>
-										<tr>
-											<th>REFNUM</th>
-											<th>PONUM</th>
-											<th>IDNUM</th>
-											<th>OCN</th>
-											<th>QNTY</th>
-											<th>P.QNTY</th>
-											<th>TOTAL</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td>TCL1 RatA</td>
-											<td>460-12344</td>
-											<td></td>
-											<td></td>
-											<td>150</td>
-											<td></td>
-											<td rowspan="4">800</td>
-										</tr>
-										<tr>
-											<td>TCL1 RatB</td>
-											<td>460-12344</td>
-											<td></td>
-											<td></td>
-											<td>150</td>
-											<td></td>
-										</tr>
-										<tr>
-											<td>TCL2 RatA</td>
-											<td>460-12344</td>
-											<td></td>
-											<td></td>
-											<td>150</td>
-											<td></td>
-										</tr>
-										<tr>
-											<td>TCL2 RatB</td>
-											<td>460-12344</td>
-											<td></td>
-											<td></td>
-											<td>150</td>
-											<td></td>
-										</tr>
-										<tr>
-											<td>TSL1 RatA</td>
-											<td>460-12344</td>
-											<td></td>
-											<td></td>
-											<td>150</td>
-											<td></td>
-											<td rowspan="2">3434</td>
-										</tr>
-										<tr>
-											<td>TSL1 RatB</td>
-											<td>460-12344</td>
-											<td></td>
-											<td></td>
-											<td>150</td>
-											<td></td>
-										</tr>
-									</tbody>
-								</table>
+							<div class="col-md-12 ratio-list-table-div">
 							</div>
 						</div>
+						
 						<div class="row">
-							<div class="col-md-12">
-								<table class="table table-bordered table-responsive"  style="font-size: 12px;" id="single-list-table">
-									<tbody>
-										<tr>
-											<th>ID Num</th>
-											<td colspan="2">1000</td>
-											<td colspan="2">1000</td>
-											<td colspan="2">1000</td>
-											<td colspan="5" rowspan="3">REFNUM  : TCL4</td>
-										</tr>
-										<tr>
-											<th>B. PO NUM</th>
-											<td colspan="2">460-12345</td>
-											<td colspan="2">460-12346</td>
-											<td colspan="2">460-12347</td>
-										</tr>
-										<tr>
-										    <th>OCN Num</th>
-											<td colspan="2">1</td>
-											<td colspan="2">2</td>
-											<td colspan="2">3</td>
-										</tr>
-										<tr>
-										<tr>
-											<th>SIZE /Price</th>
-											<th>O.QNT</th>
-											<th>P.QNT</th>
-											<th>O.QNT</th>
-											<th>P.QNT</th>
-											<th>O.QNT</th>
-											<th>P.QNT</th>
-											<th>TOTAL</th>
-											<th>EXCESS</th>
-											<th>MTRS</th>
-											<th>Stock</th>
-										</tr>
-										<tr>
-											<td>2-3</td>
-											<td>1000</td>
-											<td></td>
-											<td>1000</td>
-											<td></td>
-											<td>1000</td>
-											<td></td>
-											<td>3000</td>
-											<td>150</td>
-											<td></td>
-											<td></td>
-										</tr>
-										<tr>
-											<td>2-3</td>
-											<td>1000</td>
-											<td></td>
-											<td>1000</td>
-											<td></td>
-											<td>1000</td>
-											<td></td>
-											<td>3000</td>
-											<td>150</td>
-											<td></td>
-											<td></td>
-										</tr>
-										<tr>
-											<td>2-3</td>
-											<td>1000</td>
-											<td></td>
-											<td>1000</td>
-											<td></td>
-											<td>1000</td>
-											<td></td>
-											<td>3000</td>
-											<td>150</td>
-											<td></td>
-											<td></td>
-										</tr>
-										<tr>
-										    <th>TOTAL</th>
-											<td>25000</td>
-											<td></td>
-											<td>25000</td>
-											<td></td>
-											<td>25000</td>
-											<td></td>
-											<td>75000</td>
-											<td>3000</td>
-											<td>0</td>
-											<td>0</td>
-										</tr>
-									</tbody>
-								</table>
+							<div class="col-md-12 single-list-table-div">
 							</div>
 						</div>
 						<div class="col-md-12">
@@ -802,178 +648,5 @@
 <div id="snackbar"><span class="snackbar_span"></span></div>
 
 @endsection @section('jqueryIncludes')
-<script>
-$(document).ready(function() {
-	var base_url = "<?php echo  url('/') ?>";
-
-	$('input[class="row-checkbox"]').prop('checked', false);
-
-	$('#create_jobcard').trigger("reset");
-
-	/** To refresh modal while hidden **/
-	$('.modal').on('hidden.bs.modal', function (e) {
-	$('#create_jobcard').trigger("reset");
-	})
-
-	/** [ Make companies card active ] */
-	$('div.buyers-card').click(function(){
-
-		  $('div.buyers-card').removeClass("active");
-		  $(this).addClass("active");
-		  $('#hidden-buyer-div').hide();
-
-		  /* Save selected buyer into localdb */
-	      if ($('.buyers-card.active-buyer.active').length != 0) 
-	      {
-         	var company_id = $('.buyers-card.active-buyer.active').data("value"); 
-		  	var company_name = $('.buyers-card.active-buyer.active').attr("id");
-         	 $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
-          	$('#buyerSelectionModalCenter').modal('hide');
-		  
-	 		var csrf_token = $('meta[name="csrf-token"]').attr('content');
-			$.ajax({
-				url: base_url + "/erp/po-manager/set_company_session",
-				type: "Post",
-				dataType: "json",
-				data: {
-					_token: csrf_token,
-					company_id: company_id,
-					company_name:company_name
-				},
-				beforeSend: function() {
-					
-
-				},
-				success: function(data) {
-					location.reload();
-				},
-				error: function(data) {
-
-				},
-				complete: function() {
-
-				}
-			})
-	      }
-	  
-	});
-	
-	/** [ Show already selected(active) buyer on clicking buyer menu] */
-	$('.company-nav-menu').on('click', function() {
-	    $("#buyerSelectionModalCenter").modal("show");
-	});
-
-	if($('#company_name').val() != null && $('#company_name').val() != "")
-	{
-		$('#'+$('#company_name').val()).addClass('active');
-	}
-	else
-	{
-		$('div.buyers-card').first().addClass("active");
-	}
-   
-    $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
-	
-	$('.company-nav-menu').html($('.company-nav-div').html());
-
-	/** Datatable filter script**/
-	var $tableSel = $('#approved-order-list');
-	$tableSel.DataTable({
-		/** Table column filter functionality **/
-		initComplete: function () {
-			$('.main-content > #approved-orders-table > .dataTables_wrapper > .row > .col-sm-6 > #approved-order-list_filter:first').append(' <button class="filterbtn" type="button" onClick="showFilter()" title="Filter" data-placement="bottom"><i class="fa fa-filter" aria-hidden="true"></i></button>');
-			$('.main-content > #approved-orders-table > .dataTables_wrapper > .row > .col-sm-6 > #approved-order-list_filter:first .dataTables_filter').css('display', 'inline-block');
-			$('.main-content > #approved-orders-table > .dataTables_wrapper > .row > .col-sm-12:first').prepend('<div class="filter-window"><h5><strong>Jobcard Filter</strong></h5> <div class="row"> <div class="col-md-2"><select class="selectpicker" id="erpID"> <option disabled selected>SELECT AN ERP ID</option></select></div><div class="col-md-2"><select class="selectpicker" id="customerName"> <option disabled selected>SELECT A CUSTOMER</option></select></div><div class="col-md-2"><select class="selectpicker" id="poNumber"> <option disabled selected>SELECT A PO NUMBER</option></select></div><div class="col-md-2"><select class="selectpicker" id="styleNumber"> <option disabled selected>SELECT A STYLE NUMBER</option></select></div><div class="col-md-2"><select class="selectpicker" id="refNumber"> <option disabled selected>SELECT A REFERENCE</option></select></div><div class="col-md-2"><select class="selectpicker" id="delDate"> <option disabled selected>SELECT A DELIVERY DATE</option></select></div></div><div class="filter-actions"><button class="btn btn-primary input-sm pull-right" id="reset">Clear Filter</button><button id="closeFilter" class="btn btn-default input-sm pull-right" onclick="showFilter()">Close</button><div class="clearfix"></div></div></div>');
-
-			//For Custom Filters
-			this.api().columns().every( function (i) {
-				var column = this;
-				if(i === 1 || i === 2 || i === 3 || i === 4 || i === 5 || i === 6) {
-					var select;
-					switch(i) {
-						case 1:
-							select = $('#erpID')
-							break;
-						case 2:
-							select = $('#customerName')
-							break;
-						case 3:
-							select = $('#poNumber')
-							break;
-						case 4:
-							select = $('#styleNumber')
-							break;
-						case 5:
-							select = $('#refNumber')
-							break;
-						case 6:
-							select = $('#delDate')
-							break;
-					}
-					select.on( 'change', function () {
-						var val = $.fn.dataTable.util.escapeRegex(
-							$(this).val()
-						);
-	
-						column
-							.search( val ? '^'+val+'$' : '', true, false )
-							.draw();
-					});
-					select.append( '<option value=""> </option>' );
-					column.data().unique().sort().each( function ( d, j ) {
-						cleanText = d.replace(/<\/?[^>]+(>|$)/g, "");
-						select.append('<option value="'+cleanText+'">'+cleanText+'</option>')
-					});
-				}
-				
-			});
-
-			
-		}
-    } );
-
-	 $("#reset").on("click", function () {
-		$('#erpID').val('').change();
-		$('#customerName').val('').change();
-		$('#poNumber').val('').change();
-		$('#styleNumber').val('').change();
-		$('#refNumber').val('').change();
-		$('#delDate').val('').change();
-		$.fn.dataTableExt.afnFiltering.length = 0;
-		$tableSel.dataTable().fnDraw();
-		$('.selectpicker').selectpicker('val', 1);
-        $('.selectpicker').selectpicker('refresh');
-	});
-
-	$('.selectpicker').selectpicker();
-
-
-	// Clear the filter. Unlike normal filters in Datatables,
-	// custom filters need to be removed from the afnFiltering array.
-	$('.cancelBtn').on('click', function(e){
-		e.preventDefault();
-		$.fn.dataTableExt.afnFiltering.length = 0;
-		$tableSel.dataTable().fnDraw();
-	});
-	$("#approved-order-list_filter input[type=search]").addClass('form-control');
-	$('.dataTables_length select').addClass('form-control');
-	$("#approved-order-list_filter input[type=search]").attr('placeholder', 'Data Search');
-
-	$('.approved-order-list tr').click(function (event) {
-        if (event.target.type !== 'checkbox') {
-            $(':checkbox', this).trigger('click');
-        }
-    });
-
-	/** change table row background color	**/
-	$("input[type='checkbox']").change(function (e) {
-        if ($(this).is(":checked")) {
-            $(this).closest('tr').addClass("highlight_row");
-        } else {
-            $(this).closest('tr').removeClass("highlight_row");
-        }
-    });
-} );
-</script>
 
 @endsection

@@ -24,16 +24,21 @@ function store(url, data) {
 				400: function () {
 					$('.snackbar_span').html(data.responseJSON.message);
 				},
+				409: function (data) {
+					$('.snackbar_span').html(data.responseJSON.message);
+				},
 				500: function () {
 					$('.snackbar_span').html("Something Went Wrong");
 				}
 				
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
-				this.tryCount++;
-				if (this.tryCount <= this.retryLimit) {
-					$.ajax(this);
-					return;
+				if(errorXHR.status == 503){
+					this.tryCount++;
+					if (this.tryCount <= this.retryLimit) {
+						$.ajax(this);
+						return;
+					}
 				}
 			},
 			complete: function () {

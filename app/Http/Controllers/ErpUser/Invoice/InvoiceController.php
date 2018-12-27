@@ -46,6 +46,7 @@ class InvoiceController extends Controller
                             ->join('buyers','invoice.buyer_id','buyers.id')
                             ->where('invoice_details.company_id',session()->get('company'))
                             ->select('invoice.invoice_id','erp_id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','po_no','invoice_file')
+                            ->distinct('invoice.id')
                             ->get();
         return view('erp.Invoice.invoice-list',['invoices'=>$invoices,'companies' => $companies]);
 	}
@@ -97,7 +98,7 @@ class InvoiceController extends Controller
     public function erpOrderList(Request $request)
     {
         try {
-            $customer_id = Auth::guard('erpuser')->id();
+            $customer_id = Auth::guard('erpuser')->id(); 
             $erp_id      = $request->erp_id;
             $orderlist   = ErpOrderDetails::where('erp_order_id',$erp_id)
                             ->join('company','erp_order_details.company_id','company.id')
@@ -151,8 +152,9 @@ class InvoiceController extends Controller
             $roundOff      = $request->roundOff;
             $amntInwords   = $request->amntInwords;
             $grandTotal    = $request->grandTotal;
-            $invoiceNo  = $request->invoiceNo;
+            $invoiceNo     = $request->invoiceNo;
             $invoiceDate  = $request->invoiceDate;
+            $eChargesArr  = $request->eChargesArr;
             $bill_to = DB::table('customer_bill_address')
                           ->where('customer_bill_address.customer_id',$orders[0]['customer_id'])
                           ->where('customer_bill_address.is_billing_address',1)
@@ -169,7 +171,7 @@ class InvoiceController extends Controller
                                 ->first();
 
             $dynView = View::make('template')
-                ->with(['company_details' => $company_details, 'arr' => $orders, 'ship_to'=>$ship_to,'bill_to'=>$bill_to ,'tax_amnt'=>$tax_amnt ,'place_of_supply'=>$place_of_supply ,'roundOff'=>$roundOff,'taxTotal'=>$taxTotal, 'creditTerms'=>$creditTerms,'amntInwords'=>$amntInwords,'ewayNo'=>$ewayNo,'grandTotal'=>$grandTotal,'invoiceNo'=>$invoiceNo,'invoiceDate'=>$invoiceDate]);            
+                ->with(['company_details' => $company_details, 'arr' => $orders, 'ship_to'=>$ship_to,'bill_to'=>$bill_to ,'tax_amnt'=>$tax_amnt ,'place_of_supply'=>$place_of_supply ,'roundOff'=>$roundOff,'taxTotal'=>$taxTotal, 'creditTerms'=>$creditTerms,'amntInwords'=>$amntInwords,'ewayNo'=>$ewayNo,'grandTotal'=>$grandTotal,'invoiceNo'=>$invoiceNo,'invoiceDate'=>$invoiceDate ,'eChargesArr'=>$eChargesArr]);            
 
             if ($orders) {
                 $invoiceData = Invoices::create([
@@ -192,6 +194,7 @@ class InvoiceController extends Controller
                 foreach ($orders as $key => $value) {
                     $pendingQnty = $value['pending_qnty'] - $value['delvry_qnty'];
                     $size = $value['size'] == ""?"null":$value['size'];
+                    $hsn_code = $value['hsn_code']==""?0: $value['hsn_code'];
                     $status = $pendingQnty==0?5:6;
                     InvoiceDetails::create([
                         'invoice_id'    =>  $invoiceData->id,
@@ -202,8 +205,8 @@ class InvoiceController extends Controller
                         'pending_qnty'  =>  $pendingQnty,
                         'rate'          =>  $value['rate'],
                         'tax'           =>  $value['tax'],
-                        // 'hsn_code'      =>  $value['hsn_code'],
-                        'hsn_code'      =>  2,
+                        'hsn_code'      =>  $hsn_code,
+                        // 'hsn_code'      =>  2,
                         'size'          =>  $size,
                         'reference_no'  =>  $value['reference_name'],
                         'item'          =>  $value['reference_name'],
@@ -228,6 +231,7 @@ class InvoiceController extends Controller
                 $attatchment =  public_path('storage/app/public/invoices/invoices_'.$invoice_id.'.pdf');
                 //Mail notiication
                 $useremail = "aswathy@wizroots.com";
+                // $useremail = Auth::guard('erpuser')->email();
                 // Mail::send('mails.invoice', ['title' => 'Invoice','to_email' => $useremail], function ($message) use ($useremail,$attatchment)
                 //         {
                 //             $message->from('admin@jga.com', 'JGA');

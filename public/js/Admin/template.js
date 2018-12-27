@@ -523,11 +523,11 @@ function saveOrchestraTax(temp_id) {
 			if (data.data.length > 0) {
 				$(data.data).each(function (key, index) {
 					
-                	$('.featuresDiv').append("<div class='form-group'><textarea class='form-control input-sm' name='edit_details[]' style='resize: vertical;min-height:10vh;'>"+data.data[key].notes+"</textarea></div>");
+                	$('.featuresDiv').append("<div class='form-group'><textarea class='form-control input-sm' name='edit_details[]' style='resize: vertical;min-height:10vh;' required>"+data.data[key].notes+"</textarea></div>");
            		});
 			}
 			else{
-				$('.featuresDiv').append("<div class='form-group'><textarea class='form-control input-sm' name='edit_details[]' placeholder='Enter details' style='resize: vertical;min-height:10vh;'></textarea></div>");
+				$('.featuresDiv').append("<div class='form-group'><textarea class='form-control input-sm' name='edit_details[]' placeholder='Enter details' style='resize: vertical;min-height:10vh;'required></textarea></div>");
 			}
 			
 		},
@@ -558,3 +558,4 @@ function showSnackbar() {
 		x.className = x.className.replace("show", "");
 	}, 3000);
 }
+

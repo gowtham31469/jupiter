@@ -286,7 +286,7 @@ class OrderStatusController extends Controller
         try
         {
             $row_id     =   $request->id;
-            $table_name =   $request->table_name;
+            $table_name =   $request->tableName;
             $buyer_id   =   $request->buyer_id;
             $billamnt   =   $request->billamnt;
             $total_qnty =   0 ; 
