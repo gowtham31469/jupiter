@@ -230,7 +230,7 @@
          $(document).on('click', '.addNew', function() {
         $(".featuresDiv").append(`<div class="row form-group">
                 {{ Form::textarea('edit_details[]', null, ['class' => 'form-control input-sm','rows' => '3', 'cols'=>'25', 'placeholder' => 'Enter details', 'style' => 'resize:none;' ,'required']) }}
-                
+                  
         </div>`);
         });
          $('.modal').on('hidden.bs.modal', function (e) {

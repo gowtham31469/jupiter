@@ -513,6 +513,7 @@
                     $('#snackbar').css('background-color','#00b6ff');
                     $('.snackbar_span').html('Purchase Order File Uploaded Successfully');
                     showSnackbar();
+                    window.location = "{{ url('/customer/order-status') }}";
                 });
                 this.on("error", function(file, response) {
                     this.removeFile(file);
