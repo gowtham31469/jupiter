@@ -121,7 +121,6 @@ class TemplateController extends Controller
                             'notes'       => $note
                         ]);
                     }
-                    
             }
             return redirect('admin/template-management')->with('message', 'Notes added successfully');
         }
