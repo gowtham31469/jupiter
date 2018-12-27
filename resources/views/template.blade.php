@@ -73,6 +73,7 @@
                     	$totalDevlryQnty = 0;
                     	$totalAmnt = 0;
                         $i = 0;
+                        $size = '-';
                     @endphp
                     @foreach($arr as $data)
                     <tr>                    
@@ -82,7 +83,10 @@
 	                    <td>{{$data['style_no']}}</td>
 	                    <td>{{$data['ocn_number']}}</td>
 	                    <td>{{$data['reference_name']}}</td>
-                        <td>{{$data['size']}}</td>
+                        @php
+                            $size = $data['size']==""?'-':$data['size'];
+                        @endphp
+                        <td>{{$size}}</td>
 	                    <td>{{$data['tax']}}</td>
 	                    <td>{{$data['delvry_qnty']}}</td>
 	                    <td>{{$data['rate']}}</td>
@@ -102,7 +106,7 @@
                     </tr>
         </tbody>
         </table>
-        <table class="tabl-design" cellpadding="0" cellspacing="0">
+        <table cellpadding="0" cellspacing="0">
             <tr class="top">
             <td></td>
                 <td style="text-align: center;">
