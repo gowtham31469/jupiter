@@ -220,7 +220,7 @@ function tescoApprovePI(template_id,id,table_name,billamnt)
         dataType: "json",
         data: {
             _token: csrf_token,
-            table_name: table_name,
+            tableName: table_name,
             buyer_id:buyer_id,
             id:id,
             template_id:template_id,
