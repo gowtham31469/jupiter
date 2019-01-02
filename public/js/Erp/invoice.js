@@ -26,7 +26,7 @@
                     {
                         html += '<tr><td><input name="po_select" value="'+value.id +'" id="'+value.id +'" class="po-select" type="checkbox" /></td><td>'+value.erp_id +'</td><td>'+value.po_no+'</td><td>'+value.buyer_name+'</td></tr>';
                     });
-                    $('.dynamic-table').html('<form id="po-list-form"><table class="table"><thead><tr><th></th><th class="text-center">ERP ID</th><th class="text-center">PO Number</th><th class="text-center">Buyer</th></tr></thead><tbody>'+html+'</tbody></table></form>');
+                    $('.dynamic-table').html('<form id="po-list-form"><table class="table table-fixed"><thead><tr><th></th><th class="text-center">ERP ID</th><th class="text-center">PO Number</th><th class="text-center">Buyer</th></tr></thead><tbody>'+html+'</tbody></table></form>');
                     $('.po-list').removeClass('hidden')
                     $('.dynamic-table tbody').on('change', 'input[type="checkbox"]', function(){
                     $('.po-select').not(this).prop('checked', false);  

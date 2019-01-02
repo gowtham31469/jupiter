@@ -12,6 +12,19 @@
        padding: 0 !important;
        margin: 0 !important;
     }
+    .table-fixed {
+      width: 100%;
+      /*background-color: #f3f3f3;*/
+    }
+    .table-fixed tbody {
+      height: 130px;
+      overflow-y: auto;
+      width: 100%;
+    }
+    .table-fixed thead, .table-fixed tbody {
+      display: block;
+    }
+ 
 </style>
 <ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
 <li><a href="{{ url('/erp/invoice') }}" class="">Invoice List</a></li>
@@ -69,7 +82,7 @@
                     
                 </div>
                 <!-- <div class="panel"> -->
-                <div class="table-bordered table-responsive dynamic-table pull-left" style="margin-left:-120px; width: 350px;margin-top: 6px;border-radius: 5px;">
+                <div class="dynamic-table pull-left" style="margin-left:-120px; width:285px;margin-top: 6px;border-radius: 5px;">
                 </div>
                 </div>
                 <br>
