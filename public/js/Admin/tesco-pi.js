@@ -169,7 +169,7 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
                                     myOffscreenEl.style.backgroundColor = 'white';
 
                                 html2pdf(myOffscreenEl, {
-                                  margin:       [30, 25, 33, 25],
+                                  margin:       [28, 23, 31, 23],
                                   filename:     'Proforma-Invoice.pdf',
                                   image:        { type: 'jpeg', quality: 0.98 },
                                   html2canvas:  { dpi: 300, letterRendering: true },
