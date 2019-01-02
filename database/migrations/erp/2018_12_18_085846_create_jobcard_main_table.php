@@ -35,6 +35,26 @@ class CreateJobcardMainTable extends Migration
             $table->double('roll_width'); 
             $table->integer('film_no');
             $table->date('act_del_date');
+            $table->integer('length_side');
+            $table->double('excess_percentage');
+            $table->integer('teeth_no');
+            $table->string('invoice_num');
+            $table->integer('no_of_stickers');
+            $table->integer('finish_type');
+            $table->string('print_color')->nullable();
+            $table->string('compiled_by');
+            $table->string('barcode_read');
+            $table->string('operator');
+            $table->string('checker');
+            $table->string('authorized_by');
+            $table->string('axicon_verifier');
+            $table->string('approved_by');
+            $table->string('packer');
+            $table->date('approval_date');
+            $table->string('roll_issued_by');
+            $table->string('cutter');
+            $table->string('cartons');
+            $table->string('file_path');
             $table->timestamps();
         });
     }
