@@ -259,7 +259,9 @@ class OrderStatusCntrl extends Controller
             $sub_total  =   0 ;
             $pi_obj     =   new ProfomaInvoice();
             $data       =   $pi_obj->getTescoPIDetails($request);
+            $erpOrders  =   [];
             $erp_obj    =   new ErpOrders();
+
             if ($data)
             {
                 if ($data['bank_details']->zone == "CE")
@@ -328,9 +330,17 @@ class OrderStatusCntrl extends Controller
             }
 
             if ($data['item_details'][0]->order_flag == "newOrder") {
+                $tableID = 0;
                foreach ($data['tables'] as $table => $vals) {
                     if ($data['bank_details']->zone == "CE") {
-                        $approved_data   =   DB::table($table)
+                        
+                        $tableID =  DB::table($table)
+                                            ->where($table.'.is_order_count_empty',0)
+                                            ->where('ce_style_ref',$style_no)
+                                            ->where('order_flag',$data['item_details'][0]->order_flag)
+                                            ->where('pi_status',$data['item_details'][0]->pi_status)
+                                            ->where('po_number',$data['bank_details']->po_number)->value('id');
+                        $approved_data  =   DB::table($table)
                                             ->where($table.'.is_order_count_empty',0)
                                             ->where('ce_style_ref',$style_no)
                                             ->where('order_flag',$data['item_details'][0]->order_flag)
@@ -342,6 +352,12 @@ class OrderStatusCntrl extends Controller
                                             ]);
                     }
                     else {
+                        $tableID = DB::table($table)
+                                            ->where($table.'.is_order_count_empty',0)
+                                            ->where('uk_style_ref',$style_no)
+                                            ->where('order_flag',$data['item_details'][0]->order_flag)
+                                            ->where('pi_status',$data['item_details'][0]->pi_status)
+                                            ->where('po_number',$data['bank_details']->po_number)->value('id');
                         $approved_data   = DB::table($table)
                                             ->where($table.'.is_order_count_empty',0)
                                             ->where('uk_style_ref',$style_no)
@@ -353,6 +369,10 @@ class OrderStatusCntrl extends Controller
                                                'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                                             ]);
                     }
+                    $erpOrders['tableName'] = $table;
+                    $erpOrders['id'] = $tableID;
+                    $erpOrders['buyer_id'] = $buyer_id;
+                    // $erp_obj->updateTescoErpOrders($erpOrders);
                 }
             }
             else{
@@ -361,10 +381,9 @@ class OrderStatusCntrl extends Controller
                                     ->update([
                                        'pi_status' => "PI Approved",
                                        'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
-                                    ]);
+                                    ]);                                    
+                // $erp_obj->updateTescoErpOrders($request);
             }
-            // $erp_obj->updateTescoErpOrders($request);
-            
             if ($approved_data)
             {
                $result = response()->json(['error'=> false,'message' =>'success'    ],200);

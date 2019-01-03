@@ -66,7 +66,7 @@
                 </td>
             </tr>
         </table>
-		<table class="tabl-design" cellpadding="0" cellspacing="0" border="0.2"><thead ><tr><th><strong>Sno</strong></th><th><strong>Order No</strong></th><th><strong>PO No</strong></th><th><strong>Style</strong></th><th><strong>OCN</strong></th><th><strong>Ref</strong></th><th><strong>Size</strong></th><th><strong>Tax (%)</strong></th><th><strong>Quantity</strong></th><th><strong>Rate (INR)</strong></th><th><strong>Amount (INR)</strong></th></tr></thead><tbody>
+		<table class="tabl-design" cellpadding="0" cellspacing="0" border="0.2"><thead ><tr><th><strong>Sno</strong></th><th><strong>Order No</strong></th><th><strong>PO No</strong></th><th><strong>Style</strong></th><th><strong>OCN</strong></th><th><strong>Ref</strong></th><th><strong>Size</strong></th><th><strong>Tax (%)</strong></th><th><strong>Quantity</strong></th><th><strong>Rate(INR)</strong></th><th><strong>Amount (INR)</strong></th></tr></thead><tbody>
                     @php 
                     	$totalQnty=0;
                     	$totalpendingQnty=0;
