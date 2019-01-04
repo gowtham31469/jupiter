@@ -138,10 +138,20 @@
 		                        </tr>
 	                        @endif
                         @endforeach
-                        	<tr>
+                           	<tr>
 	                        	<td colspan="2"><strong>SubTotal</strong></td>
 	                        	<td><strong>{{$taxTotal}}</strong></td>
                         	</tr>
+                        @if($eChargesArr)
+                        @foreach($eChargesArr as $objts)
+                            @foreach($objts as $key=>$vals)
+                                <tr>
+                                    <td colspan="2">{{$key}}</td>
+                                    <td>{{$vals}}</td>
+                                </tr>
+                            @endforeach
+                        @endforeach
+                         @endif
                             <tr>
                                 <td colspan="2"><strong>Round Off</strong></td>
                                 <td><strong>{{$roundOff}}</strong></td>

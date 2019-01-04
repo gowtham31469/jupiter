@@ -902,6 +902,7 @@ function tescoStatusTable(data,path)
                    }                
                     var pi_required = value['pi_required'];
                     var po_required = value['po_required'];
+                    console.log(value["Artwork Status"])
                     if (value["Artwork Status"]!="Order Cancelled" && value['is_order_count_empty'] == 0) 
                     {
                        if (pi_required==1 && po_required ==1)

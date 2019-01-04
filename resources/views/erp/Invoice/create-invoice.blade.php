@@ -24,6 +24,11 @@
     .table-fixed thead, .table-fixed tbody {
       display: block;
     }
+
+    table.table-bordered th:last-child, table.table-bordered td:last-child {
+        border-right-width: 1px !important; 
+    }
+
  
 </style>
 <ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">

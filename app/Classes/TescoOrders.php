@@ -709,15 +709,15 @@ class TescoOrders
                     'rfid_compliant'       => $request['rfid'],
                     'tag_at_source'        => $request['tag_at_source'],
                   ]);
-          $i=0;
+        $i=0;
+        $old_data = DB::table($qunty_tbl)
+                      ->where($qnty_id,$table_data->id)->orderBy('id')->get();
         foreach($tpnd as $value)
         {
             if(($template_name == "TCL1" && $zone=="CE") ||($template_name == "TCL2" && $zone=="CE") || ($template_name == "TSL1" && $zone=="CE") || ($template_name == "THL1" && $zone=="CE"))
-            {
-                    
-                
+            {              
                 DB::table($qunty_tbl)
-                    ->where($qnty_id,$table_data->id)
+                    ->where('id',$old_data[$i]->id)
                     ->update([
                       'orms_tpn'           => $value,
                       'itf_barcode'        => $barcode[$i],
@@ -729,7 +729,7 @@ class TescoOrders
             {
                     
                 DB::table($qunty_tbl)
-                    ->where($qnty_id,$table_data->id)
+                    ->where('id',$old_data[$i]->id)
                     ->update([
                       'orms_tpn'           => $value,
                       'ean_barcode'        => $barcode[$i],
@@ -741,7 +741,7 @@ class TescoOrders
             {
                 
                 DB::table($qunty_tbl)
-                  ->where($qnty_id,$table_data->id)
+                  ->where('id',$old_data[$i]->id)
                   ->update([
                     'tpnd'           => $value,
                     'ean_barcode'        => $barcode[$i],
@@ -753,7 +753,7 @@ class TescoOrders
             {
                 
                 DB::table($qunty_tbl)
-                    ->where($qnty_id,$table_data->id)
+                    ->where('id',$old_data[$i]->id)
                     ->update([
                       'tpnd'               => $value,
                       'itf_barcode'        => $barcode[$i],
@@ -826,6 +826,12 @@ class TescoOrders
                     'tag_at_source'        => $request['tag_at_source'],
                   ]);
           $i=0;
+
+          $old_data = DB::table($qunty_tbl)
+                      ->where($qnty_id,$table_data->id)->orderBy('id')->get();
+
+
+
         foreach($tpnd as $value)
         {
             if(($template_name == "TCL1" && $zone=="CE") ||($template_name == "TCL2" && $zone=="CE") || ($template_name == "TSL1" && $zone=="CE") || ($template_name == "THL1" && $zone=="CE"))
@@ -833,7 +839,7 @@ class TescoOrders
                     
                 
                 DB::table($qunty_tbl)
-                    ->where($qnty_id,$table_data->id)
+                    ->where('id',$old_data[$i]->id)
                     ->update([
                       'orms_tpn'           => $value,
                       'itf_barcode'        => $barcode[$i],
@@ -843,9 +849,8 @@ class TescoOrders
             }
             else if(($template_name == "TCL4" && $zone=="CE") || ($template_name == "TSL3" && $zone=="CE") || ($template_name == "THL3" && $zone=="CE"))
             {
-                    
                 DB::table($qunty_tbl)
-                    ->where($qnty_id,$table_data->id)
+                    ->where('id',$old_data[$i]->id)
                     ->update([
                       'orms_tpn'           => $value,
                       'ean_barcode'        => $barcode[$i],
@@ -857,7 +862,7 @@ class TescoOrders
             {
                 
                 DB::table($qunty_tbl)
-                  ->where($qnty_id,$table_data->id)
+                  ->where('id',$old_data[$i]->id)
                   ->update([
                     'tpnd'           => $value,
                     'ean_barcode'        => $barcode[$i],
@@ -869,7 +874,7 @@ class TescoOrders
             {
                 
                 DB::table($qunty_tbl)
-                    ->where($qnty_id,$table_data->id)
+                    ->where('id',$old_data[$i]->id)
                     ->update([
                       'tpnd'               => $value,
                       'itf_barcode'        => $barcode[$i],
