@@ -750,7 +750,7 @@ class OrderStatusCntrl extends Controller
                             ->select('*')->first();
             $qnty_id         =  str_replace("_orders","_order_id",str_replace("tesco_","",$table_name));
             $quantity_details = DB::table($table_name.'_quanty')
-                                ->where($qnty_id,$order_details->id)->orderBy('id')->orderBy('id')->get();
+                                ->where($qnty_id,$order_details->id)->orderBy('id')->get();
 			$template_file=DB::table('tesco_template')->where('item_id',$order_details->template_id)->select('*')->get();
             if ($order_details && $quantity_details)
             {
