@@ -11,7 +11,9 @@
    	font-size: 8px !important;
    	margin:0px;
    }
-
+   .tabl-design{
+    text-align: center !important;
+   }
    </style>
 </head>
 <body>
@@ -64,13 +66,14 @@
                 </td>
             </tr>
         </table>
-		<table cellpadding="0" cellspacing="0" border="0.5"><thead ><tr><th><strong>Sno</strong></th><th><strong>Order No</strong></th><th style="font-weight: bold;"><strong>PO No</strong></th><th><strong>Style</strong></th><th><strong>OCN</strong></th><th><strong>Ref</strong></th><th><strong>Size</strong></th><th><strong>Tax (%)</strong></th><th><strong>Quantity</strong></th><th><strong>Rate (₹)</strong></th><th><strong>Amount (₹)</strong></th></tr></thead><tbody>
+		<table class="tabl-design" cellpadding="0" cellspacing="0" border="0.2"><thead ><tr><th><strong>Sno</strong></th><th><strong>Order No</strong></th><th><strong>PO No</strong></th><th><strong>Style</strong></th><th><strong>OCN</strong></th><th><strong>Ref</strong></th><th><strong>Size</strong></th><th><strong>Tax (%)</strong></th><th><strong>Quantity</strong></th><th><strong>Rate(INR)</strong></th><th><strong>Amount (INR)</strong></th></tr></thead><tbody>
                     @php 
                     	$totalQnty=0;
                     	$totalpendingQnty=0;
                     	$totalDevlryQnty = 0;
                     	$totalAmnt = 0;
                         $i = 0;
+                        $size = '-';
                     @endphp
                     @foreach($arr as $data)
                     <tr>                    
@@ -80,7 +83,10 @@
 	                    <td>{{$data['style_no']}}</td>
 	                    <td>{{$data['ocn_number']}}</td>
 	                    <td>{{$data['reference_name']}}</td>
-	                    <td>{{$data['size']}}</td>
+                        @php
+                            $size = $data['size']==""?'-':$data['size'];
+                        @endphp
+                        <td>{{$size}}</td>
 	                    <td>{{$data['tax']}}</td>
 	                    <td>{{$data['delvry_qnty']}}</td>
 	                    <td>{{$data['rate']}}</td>
@@ -103,8 +109,8 @@
         <table cellpadding="0" cellspacing="0">
             <tr class="top">
             <td></td>
-                <td style="text-align: right;">
-                    <table cellpadding="0" cellspacing="0" border="0.5"><thead><tr><th>Tax (%)</th><th>Base value (₹)</th><th>Amount (₹)</th></tr></thead><tbody>
+                <td style="text-align: center;">
+                    <table cellpadding="0" cellspacing="0" border="0.5"><thead><tr><th>Tax (%)</th><th>Base value (INR)</th><th>Amount (INR)</th></tr></thead><tbody>
                    
                         @foreach($tax_amnt as $key=>$tax)
 	                        @if ($place_of_supply ==1)
@@ -132,10 +138,20 @@
 		                        </tr>
 	                        @endif
                         @endforeach
-                        	<tr>
+                           	<tr>
 	                        	<td colspan="2"><strong>SubTotal</strong></td>
 	                        	<td><strong>{{$taxTotal}}</strong></td>
                         	</tr>
+                        @if($eChargesArr)
+                        @foreach($eChargesArr as $objts)
+                            @foreach($objts as $key=>$vals)
+                                <tr>
+                                    <td colspan="2">{{$key}}</td>
+                                    <td>{{$vals}}</td>
+                                </tr>
+                            @endforeach
+                        @endforeach
+                         @endif
                             <tr>
                                 <td colspan="2"><strong>Round Off</strong></td>
                                 <td><strong>{{$roundOff}}</strong></td>

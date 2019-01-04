@@ -34,8 +34,13 @@ class ErpOrders
 			$order_status = $orders->order_status;
 
 			$order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', $order_status)->first();
-
-			$erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$orders->customer_id)->where('po_no',$orders->purchase_order_no)->first();
+			
+			if ($orders->purchase_order_no == "" && $orders->po_file == "" && $orders->po_file=="") {
+				
+			}
+			else{
+				$erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$orders->customer_id)->where('po_no',$orders->purchase_order_no)->first();
+			}			
 
 			if ($erp_orders) {
 				Erp::where('id',$erp_orders->id)->update(['status'=>1]);
