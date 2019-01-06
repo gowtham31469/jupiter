@@ -159,7 +159,21 @@ $(document).ready(function() {
 	});
 	$("#approved-order-list_filter input[type=search]").addClass('form-control');
 	$('.dataTables_length select').addClass('form-control');
-	$("#approved-order-list_filter input[type=search]").attr('placeholder', 'Data Search');
+    $("#approved-order-list_filter input[type=search]").attr('placeholder', 'Data Search');
+    
+    /** Create job card form validation **/
+    $('#create_jobcard').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented())
+        {
+
+        }
+        else
+        {
+           e.preventDefault();
+           var formData = $('#create_jobcard').serialize();
+           storeJobcard(formData);
+        }
+      })
 });
 /* End of document.ready() */
 
@@ -747,6 +761,16 @@ function totalMeters()
         }
        $('#total_mtrs_'+ref_name).text(total_mtr.toFixed(2));
     });
+}
+
+/**
+ * Store jobcard
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function storeJobcard(formData)
+{
+    console.log(formData)
 }
 
 
