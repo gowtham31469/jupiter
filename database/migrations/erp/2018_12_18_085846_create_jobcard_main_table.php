@@ -54,8 +54,12 @@ class CreateJobcardMainTable extends Migration
             $table->string('roll_issued_by');
             $table->string('cutter');
             $table->string('cartons');
-            $table->string('file_path');
+            $table->string('file_path')->nullable();
+            $table->jsonb('template_quantity_json')->nullable();
             $table->timestamps();
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
+            $table->foreign('buyer_id')->references('id')->on('buyers')->onDelete('cascade');
+            $table->foreign('company_id')->references('id')->on('company')->onDelete('cascade');
         });
     }
 
