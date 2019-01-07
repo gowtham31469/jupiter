@@ -817,8 +817,7 @@ function storeJobcard(formData)
       ref_name = $(this).data('ratio-ref-table').replace(' ', '-');
     
       $('.tr-'+ref_name).each(function (index, row) {
-
-        console.log(document.getElementById("ratio_tr_refname").innerHTML)
+        console.log(row.find('td.one').text())
 
       });
 
