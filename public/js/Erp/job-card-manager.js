@@ -818,7 +818,7 @@ function storeJobcard(formData)
     
       $('.tr-'+ref_name).each(function (index, row) {
 
-        console.log(row.getElementById("ratio_tr_refname").innerHTML)
+        console.log(document.getElementById("ratio_tr_refname").innerHTML)
 
       });
 
