@@ -1233,7 +1233,7 @@ function printDivTesco(data,name) {
 					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
 					
 					//svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 26 53.6)");
-					svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 25.5 53.6014)");
+					svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 29.5 53.6014)");
 				}
 				else
 				{
@@ -1248,7 +1248,7 @@ function printDivTesco(data,name) {
 					jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
 					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
 					
-					svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 23 53.6)");
+					svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 27 53.6)");
 					
 				}
 				
@@ -1528,7 +1528,7 @@ function printDivTesco(data,name) {
 					}
 					jsbarcodetescoean(barcode_change, 'barcode', svgDoc)
 					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
-					svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 63.9998 204)");
+					svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 68 204)");
 				}
 				else if((name == "TCL1-sticker")  || (name == "THL1-sticker"))
 				{
@@ -1545,11 +1545,11 @@ function printDivTesco(data,name) {
 					
 					if((name == "TCL1-sticker"))
 					{
-						svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 63 204.0012)");
+						svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 67 204.0012)");
 					}
 					else if((name == "THL1-sticker"))
 					{
-						svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 60.9998 204.0003)");
+						svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 65 204.0003)");
 					}
 					
 					
