@@ -355,7 +355,7 @@ class JobManagerController extends Controller
 			$template_data['width']            = $width_array;
 			$template_data['ratio']            = $ratio_templates;
 			$template_data['single']           = $final_chunk;
-			
+
 			return response()->json(['error'=> false,'message' =>'Success', 'template_data' => $template_data],200);
   
           } catch (\Exception $e)
