@@ -414,16 +414,17 @@ function generateJobcard(){
                                                         template.sort(function(a, b){
                                                             return a.qty_table_id - b.qty_table_id;
                                                         });
-                                                        $.each(template, function(index, row){
+                                                        $.each(template, function(ratio_table_row, row){
                                                             total += parseInt(row.order_quantity);
                                                             ratio_table_html += '<tr class="tr-'+row.reference_name.replace(' ', '-')+'" id='+row.erp_order_details_id+' data-template-id='+row.template_id+'>\
-                                                            <td id="ratio_tr_refname">'+row.reference_name+' '+row.ratio_pack_type+'</td>\
-                                                            <td id="ratio_tr_buyer_po">'+row.buyer_po_number+'</td>\
-                                                            <td id="ratio_tr_erp_id">'+row.erp_id+'</td>\
-                                                            <td id="ratio_tr_ocn">'+row.ocn_number+'</td>\
-                                                            <td id="ratio_tr_qty">'+row.order_quantity+'</td>\
+                                                            <td id="ratio_tr_refname_'+ratio_table_row+'">'+row.reference_name+' '+row.ratio_pack_type+'</td>\
+                                                            <td id="ratio_tr_buyer_po_'+ratio_table_row+'">'+row.buyer_po_number+'</td>\
+                                                            <td id="ratio_tr_erp_id_'+ratio_table_row+'">'+row.erp_id+'</td>\
+                                                            <td id="ratio_tr_ocn_'+ratio_table_row+'">'+row.ocn_number+'</td>\
+                                                            <td id="ratio_tr_qty_'+ratio_table_row+'">'+row.order_quantity+'</td>\
                                                             <td></td>\
                                                             </tr>';
+                                                            ratio_table_row++;
                                                         });
                                                         ratio_table_html += '<tr>\
                                                             <th class="highlight_row" colspan="4">Total</th>\
@@ -770,58 +771,65 @@ function totalMeters()
  */
 function storeJobcard(formData)
 {
-    var company_id = $('#jc_company_name').data('company-id');
-    var workorder_id = $('#work_order').text() === ''?null:$('#work_order').text();
-    var created_date = $('#today_date').text() === ''?null:$('#today_date').text();
-    var article = $('#article').text() === ''?null:$('#article').text();
-    var material = $('#material').text() === ''?null:$('#material').text();
-    var customer_id = $('#customer').data('customer-id');
-    var style_no = $('#style_no').text() === ''?null:$('#style_no').text();
-    var order_type = $('#order_type').text() === ''?null:$('#order_type').text();
-    var buyer_id = $('#buyer').data('buyer-id');
-    var reference = $('#reference').text() === ''?null:$('#reference').text();
-    var disp_mode = $('#disp_mode').val();
-    var order_date = $('#order_date').text() === ''?null:$('#order_date').text();
-    var length = $('#length').text() === ''?null:$('#length').text();
-    var repeat_gap = $('#repeat_gap').val();
-    var machine = $('#machine').val();
-    var cus_del_date = $('#cus_del_date').val();
-    var roll_width = $('#roll_width').val();
-    var width = $('#width').text() === ''?null:$('#width').text();
-    var film_no = $('#film_no').val();
-    var act_del_date = $('#act_del_date').val();
-    var length_side = $('#length_side').val();
-    var excess = $('#excess').val();
-    var teeth_no = $('#teeth_no').val();
-    var inv_no = $('#inv_no').val();
-    var no_sticker = $('#no_sticker').val();
-    var finish_type = $('#finish_type').val();
-    var print_color = $('#print_color').text() === ''?null:$('#print_color').text();
-    var compiled_by = $('#compiled_by').val();
-    var barcode_read = $('#barcode_read').val();
-    var operator = $('#operator').val();
-    var checker = $('#checker').val();
-    var authorized_by = $('#author').val();
+    var company_id      = $('#jc_company_name').data('company-id');
+    var workorder_id    = $('#work_order').text() === ''?null:$('#work_order').text();
+    var created_date    = $('#today_date').text() === ''?null:$('#today_date').text();
+    var article         = $('#article').text() === ''?null:$('#article').text();
+    var material        = $('#material').text() === ''?null:$('#material').text();
+    var customer_id     = $('#customer').data('customer-id');
+    var style_no        = $('#style_no').text() === ''?null:$('#style_no').text();
+    var order_type      = $('#order_type').text() === ''?null:$('#order_type').text();
+    var buyer_id        = $('#buyer').data('buyer-id');
+    var reference       = $('#reference').text() === ''?null:$('#reference').text();
+    var disp_mode       = $('#disp_mode').val();
+    var order_date      = $('#order_date').text() === ''?null:$('#order_date').text();
+    var length          = $('#length').text() === ''?null:$('#length').text();
+    var repeat_gap      = $('#repeat_gap').val();
+    var machine         = $('#machine').val();
+    var cus_del_date    = $('#cus_del_date').val();
+    var roll_width      = $('#roll_width').val();
+    var width           = $('#width').text() === ''?null:$('#width').text();
+    var film_no         = $('#film_no').val();
+    var act_del_date    = $('#act_del_date').val();
+    var length_side     = $('#length_side').val();
+    var excess          = $('#excess').val();
+    var teeth_no        = $('#teeth_no').val();
+    var inv_no          = $('#inv_no').val();
+    var no_sticker      = $('#no_sticker').val();
+    var finish_type     = $('#finish_type').val();
+    var print_color     = $('#print_color').text() === ''?null:$('#print_color').text();
+    var compiled_by     = $('#compiled_by').val();
+    var barcode_read    = $('#barcode_read').val();
+    var operator        = $('#operator').val();
+    var checker         = $('#checker').val();
+    var authorized_by   = $('#author').val();
     var axicon_verifier = $('#axicon_verifier').val();
-    var approved_by = $('#approved_by').val();
-    var packer = $('#packer').val();
-    var approval_date = $('#approval_date').val();
-    var roll_issued_by = $('#roll_issued_by').val();
-    var cutter = $('#cutter').val();
-    var cartons = $('#cartons').val();
+    var approved_by     = $('#approved_by').val();
+    var packer          = $('#packer').val();
+    var approval_date   = $('#approval_date').val();
+    var roll_issued_by  = $('#roll_issued_by').val();
+    var cutter          = $('#cutter').val();
+    var cartons         = $('#cartons').val();
     
-    var jsonObj = {};
-    var array = [];
+    var jsonObj         = {};
+    var array           = [];
     $('.ratio-list-table').each(function (i, table) {
 
-      ref_name = $(this).data('ratio-ref-table').replace(' ', '-');
-    
-      $('.tr-'+ref_name).each(function (index, row) {
-        console.log(row.find('td.one').text())
+     var ref_name = $(this).data('ratio-ref-table').replace(' ', '-');
+     // var row_count = $(this).find('tbody tr').length;
 
+      $(this).find('tbody tr:not(:last)').each(function (index, row) {
+        console.log('ref:',document.getElementById ( "ratio_tr_refname_"+index ).innerText)
+        console.log('PO.NO:',document.getElementById ( "ratio_tr_buyer_po_"+index ).innerText)
+        console.log('erp_id:',document.getElementById ( "ratio_tr_erp_id_"+index ).innerText)
+        console.log('ocn:',document.getElementById ( "ratio_tr_ocn_"+index ).innerText)
+        console.log('qty:',document.getElementById ( "ratio_tr_qty_"+index ).innerText)
+
+        index++;
       });
 
     });
+
 
 }
 
