@@ -818,13 +818,12 @@ function storeJobcard(formData)
      var ref_name = $(this).data('ratio-ref-table').replace(' ', '-');
      // var row_count = $(this).find('tbody tr').length;
 
-      $(this).find('tbody tr:not(:last)').each(function (index, row) {
-        console.log('ref:',document.getElementById ( "ratio_tr_refname_"+index ).innerText)
-        console.log('PO.NO:',document.getElementById ( "ratio_tr_buyer_po_"+index ).innerText)
-        console.log('erp_id:',document.getElementById ( "ratio_tr_erp_id_"+index ).innerText)
-        console.log('ocn:',document.getElementById ( "ratio_tr_ocn_"+index ).innerText)
-        console.log('qty:',document.getElementById ( "ratio_tr_qty_"+index ).innerText)
-
+      $(table).find('tbody tr:not(:last)').each(function (index, row) {
+        console.log('ref:',$(row).find ( "#ratio_tr_refname_"+index ).text())
+        console.log('PO.NO:',$(row).find ( "#ratio_tr_buyer_po_"+index ).text())
+        console.log('erp_id:',$(row).find ( "#ratio_tr_erp_id_"+index ).text())
+        console.log('ocn:',$(row).find ( "#ratio_tr_ocn_"+index ).text())
+        console.log('qty:',$(row).find ( "#ratio_tr_qty_"+index ).text())
         index++;
       });
 
