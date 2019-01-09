@@ -354,14 +354,14 @@ function template_list() {
 												      })
 
 												} else {
-													$('.viewDiv').html('<img style="height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
+													$('.viewDiv').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
 
 													$('.descriptionDiv').html('<b>Template Not Found</b>');
 													$('.descriptionDiv').css('margin-top', '0px')
 													$('.viewDiv').css('margin-top', '140px')
 												}
 											} else {
-												$('.viewDiv').html('<img style="height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
+												$('.viewDiv').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
 												$('.descriptionDiv').html('<b>Template Not Found</b>');
 												$('.descriptionDiv').css('margin-top', '0px')
 												$('.viewDiv').css('margin-top', '140px')

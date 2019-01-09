@@ -1,5 +1,5 @@
 @extends('layouts.Admin.app') @if (Auth::guard("web")->user()) @section('content')
-<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+ <link rel="stylesheet" type="text/css" href="{{ asset('css/daterangepicker.css') }}" />
 <style type="text/css">
     .bank_details tr {
         display: table-row;
