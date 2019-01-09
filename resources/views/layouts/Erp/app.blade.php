@@ -83,7 +83,8 @@
 <!-- Latest compiled and minified JavaScript -->
 <script src="{{ asset('js/bootstrap-select.min.js') }}"></script>
 <!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/i18n/defaults-*.min.js"></script> -->
-<script src="{{ asset('js/jquery.easy-autocomplete.min.js') }}"></script><script src="{{ asset('js/toastr.js') }}"></script>
+<script src="{{ asset('js/jquery.easy-autocomplete.min.js') }}">
+	</script><script src="{{ asset('js/toastr.js') }}"></script>
 	<!-- For Data Manipulation   -->
 	<script src="{{ asset('js/Erp/store.js') }}"></script>
 	<script src="{{ asset('js/Erp/update.js') }}"></script>
