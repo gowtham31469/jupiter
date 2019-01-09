@@ -750,7 +750,7 @@ class OrderStatusCntrl extends Controller
                             ->select('*')->first();
             $qnty_id         =  str_replace("_orders","_order_id",str_replace("tesco_","",$table_name));
             $quantity_details = DB::table($table_name.'_quanty')
-                                ->where($qnty_id,$order_details->id)->get();
+                                ->where($qnty_id,$order_details->id)->orderBy('id')->get();
 			$template_file=DB::table('tesco_template')->where('item_id',$order_details->template_id)->select('*')->get();
             if ($order_details && $quantity_details)
             {
@@ -850,7 +850,7 @@ class OrderStatusCntrl extends Controller
         $order_qnty = (array_sum($count)>0)?0:1 ;
         
         if ($temp_data->order_flag == "newOrder" && $template_name != "THL3" && $template_name != "THL1") {
-            $orderObj->updateTescoAdminOrders($table_name,$temp_data,$request,$customer_ids{0}->customer_id);
+           $orderObj->updateTescoAdminOrders($table_name,$temp_data,$request,$customer_ids{0}->customer_id);
         }
 		DB::table($table_name)->where('id',$template_id)
 						      ->update([
@@ -870,18 +870,14 @@ class OrderStatusCntrl extends Controller
 								  'rfid_compliant'       => $request['rfid'],
 								  'tag_at_source'        => $request['tag_at_source'],
                                   'is_order_count_empty' => $order_qnty
-                                ]);
-		
+                                ]);	
        
-
 		DB::table($qty_table_name)->where($foreign_key,$template_id)->delete();
 		$i=0;
 		foreach($tpnd as $value)
 		{
 			if(($template_name == "TCL1" && $zone=="CE") ||($template_name == "TCL2" && $zone=="CE") || ($template_name == "TSL1" && $zone=="CE") || ($template_name == "THL1" && $zone=="CE"))
-			{
-					
-				
+			{					
 					DB::table($qty_table_name)->insert([
 					  'orms_tpn'           => $value,
 					  'itf_barcode'        => $barcode[$i],

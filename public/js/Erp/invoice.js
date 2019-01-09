@@ -26,7 +26,7 @@
                     {
                         html += '<tr><td><input name="po_select" value="'+value.id +'" id="'+value.id +'" class="po-select" type="checkbox" /></td><td>'+value.erp_id +'</td><td>'+value.po_no+'</td><td>'+value.buyer_name+'</td></tr>';
                     });
-                    $('.dynamic-table').html('<form id="po-list-form"><table class="table table-fixed"><thead><tr><th></th><th class="text-center">ERP ID</th><th class="text-center">PO Number</th><th class="text-center">Buyer</th></tr></thead><tbody>'+html+'</tbody></table></form>');
+                    $('.dynamic-table').html('<form id="po-list-form"><table class="table table-fixed"><thead><tr><th></th><th style="padding-left: 30px;">ERP ID</th><th style="padding-left: 20px;">PO Number</th><th style="padding-left: 10px;">Buyer</th></tr></thead><tbody>'+html+'</tbody></table></form>');
                     $('.po-list').removeClass('hidden')
                     $('.dynamic-table tbody').on('change', 'input[type="checkbox"]', function(){
                     $('.po-select').not(this).prop('checked', false);  
@@ -138,7 +138,7 @@
         updateTaxAmount(tax_amnt)
 
         var gndtotal = parseFloat($('.tax-total').text())+ parseFloat($('.total-amnt').text());
-        $('.extra-charges').html('<table class="table table-borderedtext-center extra-charges" style="margin-top: -22px;"><thead><tr><th>Description</th><th>Amount (₹)</th><th><button type="button" onclick="addExtraCharges(this,event)" data-id="1" class="btn btn-default btn-sm add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i></button></th></tr></thead><tbody id="table_row"><tr><td><select class="charges" id="charges1" name="charges1" required><option value=""></option><option value="freight">Freight</option><option value="minimumcharges">Minimum charges</option><option value="jobwork">Job Work Charges</option></select></td><td style="width: 116px;"><input type="text" value="" min="0" id="chrg_val1" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr></tbody></table><table class="table table-borderedtext-center" style="margin-top: -22px;"><tbody><tr><td colspan="2"><strong>SubTotal</strong></td><td class="sub-extra">0.00</td></tr><tr></tr><tr><td colspan="2"><strong>Round Off</strong></td><td style="width: 116px;"><input type="text" min="0" value="" id="round-off" class="form-control round-off" onkeyup="updateGrandTotal(this,'+gndtotal+')"></td></tr><tr><td colspan="2"><strong>Grand Total</strong></td><td class="grand-total">'+gndtotal.toFixed(2)+'</td></tr><tr></tr></tbody></table><div class="create-invoice"><button type="button" class="btn btn-primary create-invoice pull-right" style="margin-top: -10px;" id="create-invoice">Create Invoice</button></div>')
+        $('.extra-charges').html('<table class="table table-bordered text-center extra-charges" style="margin-top: -22px;"><thead><tr><th>Description</th><th>Amount (₹)</th><th><button type="button" onclick="addExtraCharges(this,event)" data-id="1" class="btn btn-default btn-sm add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i></button></th></tr></thead><tbody id="table_row"><tr><td><select class="charges" id="charges1" name="charges1" required><option  data-id="0" value=""></option><option data-id="Freight" value="freight">Freight</option><option data-id="Minimum charges" value="minimumcharges">Minimum charges</option><option data-id="Job Work Charges" value="jobwork">Job Work Charges</option></select></td><td style="width: 116px;"><input type="text" value="" min="0" id="chrg_val1" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr></tbody></table><table class="table table-bordered text-center" style="margin-top: -22px;"><tbody><tr><td colspan="2"><strong>SubTotal</strong></td><td class="sub-extra">0.00</td></tr><tr></tr><tr><td colspan="2"><strong>Round Off</strong></td><td style="width: 116px;"><input type="text" min="0" value="" id="round-off" class="form-control round-off" onkeyup="updateGrandTotal(this,'+gndtotal+')"></td></tr><tr><td colspan="2"><strong>Grand Total</strong></td><td class="grand-total">'+gndtotal.toFixed(2)+'</td></tr><tr></tr></tbody></table><div class="create-invoice"><button type="button" class="btn btn-primary create-invoice pull-right" style="margin-top: -10px;" id="create-invoice">Create Invoice</button></div>')
 
             $('#create-invoice').on('click',function(){
                 previewInvoice(orderData)
@@ -492,12 +492,13 @@
             var trclass1 = $( "#charges1" ).val()==""?"hidden":'';
             var trclass2 = $( "#charges2" ).val()==""?"hidden":'';
             var trclass3 = $( "#charges3" ).val()==""?"hidden":'';
-            
+
             $(document).find('#table_row').find('tr').each(function()
             {
                 var eName = $(this).find("select option:selected").text();
-                let eAmount = $(this).find('.extra-amnt').val();
-                eChargesArr[eName] = eAmount;               
+                var eAmount = $(this).find('.extra-amnt').val();
+                eChargesArr[eName] = eAmount;   
+
                 eTr += '<tr class="'+trclass1+'"><td colspan="2">'+eName+'</td><td>'+eAmount+'</td></tr>'
             });
             var tableHide = trclass1 && trclass2 && trclass3 =="hidden" ?"hidden":''
@@ -513,7 +514,20 @@
 
             $('.amnt-in-words').text(RsPaise($('.grand-total').text()))
             $('#save-invoice').on('click',function(){
-                saveInvoice(arr)
+
+            var eChargesArr1 = [];
+
+            $(document).find('#table_row').find('tr').each(function()
+            {
+                var eName = $(this).find("select option:selected").attr('data-id');
+                var eAmount = $(this).find('.extra-amnt').val();
+                var obj = {}
+                if ($(this).find("select option:selected").attr('data-id') != "0") {
+                    obj[$(this).find("select option:selected").attr('data-id')] = $(this).find('.extra-amnt').val()
+                    eChargesArr1.push(obj) 
+                }                             
+            });
+                saveInvoice(arr,eChargesArr1)
             })
             $('#erp-invoice').modal("show")
         }
@@ -566,7 +580,7 @@
         // console.log(arr,"final")
     }
 
-    function saveInvoice(finalData){
+    function saveInvoice(finalData,eCharges){
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         var myOffscreenEl = document.getElementById("invoice");
         var htmlData =  myOffscreenEl.innerHTML;
@@ -578,7 +592,7 @@
         var grandTotal = parseFloat($('.grand-total').text()).toFixed(2)
         var invoiceNo = $('#invoice-no').val();
         var invoiceDate = $('#invoice-date').val();
-        console.log(eChargesArr)
+        console.log(eCharges);
         $.ajax({
             url: "/erp/save-invoice",
             type: 'POST',
@@ -596,7 +610,7 @@
                 grandTotal:grandTotal,
                 invoiceNo:invoiceNo,
                 invoiceDate:invoiceDate,
-                eChargesArr:eChargesArr
+                eCharges:eCharges
             },
             tryCount: 0,
             retryLimit: 2,
@@ -606,7 +620,7 @@
                 $('.snackbar_span').html("Invoice Send Successfully !");
                 showSnackbar();                
                 $('#erp-invoice').modal("hide")
-                setTimeout(function(){window.location = 'invoice';}, 1000); 
+                // setTimeout(function(){window.location = 'invoice';}, 1000); 
 
             },
             error: function (errorXHR, errorStatus, errorThrown) {
@@ -635,7 +649,7 @@
         var id = $(rem).attr("data-id");
         var val = parseInt(id) + 1;
         if (val<=3) {
-            var html = '<tr><td><div width: 340px;><select class="charges form-control" id="charges_'+val+'" name="charges_'+val+'" required><option value=""></option><option value="freight">Freight</option><option value="minimumcharges">Minimum charges</option><option value="jobwork">Job Work Charges</option></select></div></td><td style="width: 116px;"><input type="text" value="" min="0" id="chrg_'+val+'" class="form-control extra-amnt" onkeyup="updateTotal()"></td>';
+            var html = '<tr><td><div width: 340px;><select class="charges form-control" id="charges_'+val+'" name="charges_'+val+'" required><option data-id="0" value=""></option><option value="freight" data-id="Freight">Freight</option><option data-id="Minimum charges" value="minimumcharges">Minimum charges</option><option data-id="Job Work Charges" value="jobwork">Job Work Charges</option></select></div></td><td style="width: 116px;"><input type="text" value="" min="0" id="chrg_'+val+'" class="form-control extra-amnt" onkeyup="updateTotal()"></td>';
             html += '<td>\
                         <a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRow(this,event)"></i></a>\
                        </td>\
