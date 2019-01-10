@@ -811,21 +811,42 @@ function storeJobcard(formData)
     var cutter          = $('#cutter').val();
     var cartons         = $('#cartons').val();
     
-    var jsonObj         = {};
-    var array           = [];
+
+    var arrayList       = [];
+    var ref_name;
     $('.ratio-list-table').each(function (i, table) {
 
-     var ref_name = $(this).data('ratio-ref-table').replace(' ', '-');
+     ref_name = $(this).data('ratio-ref-table').replace(' ', '-');
      // var row_count = $(this).find('tbody tr').length;
 
       $(table).find('tbody tr:not(:last)').each(function (index, row) {
-        console.log('ref:',$(row).find ( "#ratio_tr_refname_"+index ).text())
-        console.log('PO.NO:',$(row).find ( "#ratio_tr_buyer_po_"+index ).text())
-        console.log('erp_id:',$(row).find ( "#ratio_tr_erp_id_"+index ).text())
-        console.log('ocn:',$(row).find ( "#ratio_tr_ocn_"+index ).text())
-        console.log('qty:',$(row).find ( "#ratio_tr_qty_"+index ).text())
+        var jsonObj                = {};
+        var jsonObj2               = {};
+        jsonObj["reference_name"]  = $(row).find ( "#ratio_tr_refname_"+index ).text();
+        jsonObj["erp_id"]          = $(row).find ( "#ratio_tr_erp_id_"+index ).text();   
+        jsonObj["buyer_po_number"] = $(row).find ( "#ratio_tr_buyer_po_"+index ).text();   
+        jsonObj["ocn_number"]      = $(row).find ( "#ratio_tr_ocn_"+index ).text();   
+        jsonObj["order_quantity"]  = $(row).find ( "#ratio_tr_qty_"+index ).text();   
+
+        jsonObj2[ref_name] = jsonObj;
+      //  jsonObj2["order_quantity"]  = $(row).find ( "#ratio_tr_qty_"+index ).text(); 
+        arrayList.push(jsonObj2);
+        // console.log('PO.NO:',$(row).find ( "#ratio_tr_buyer_po_"+index ).text());
+        // console.log('erp_id:',$(row).find ( "#ratio_tr_erp_id_"+index ).text());
+        // console.log('ocn:',$(row).find ( "#ratio_tr_ocn_"+index ).text());
+        // console.log('qty:',$(row).find ( "#ratio_tr_qty_"+index ).text());
         index++;
+        // for(var i in jsonObj) {
+        //     console.log(jsonObj)
+        //     arrayList.push(jsonObj[i]);
+        // }
+        
       });
+     
+    console.log(arrayList)
+      
+
+     // console.log(JSON.stringify(arrayList))
 
     });
 
