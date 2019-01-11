@@ -813,28 +813,38 @@ function storeJobcard(formData)
     
 
     var arrayList       = [];
-    var ref_name;
+    var json_obj =   {
+        "ratio": [],
+        "single": []
+          };
+       
+    var myObject = new Object();
     $('.ratio-list-table').each(function (i, table) {
 
-     ref_name = $(this).data('ratio-ref-table').replace(' ', '-');
+     ref_name = $(this).data('ratio-ref-table');
      // var row_count = $(this).find('tbody tr').length;
-
+     
       $(table).find('tbody tr:not(:last)').each(function (index, row) {
-        var jsonObj                = {};
-        var jsonObj2               = {};
-        jsonObj["reference_name"]  = $(row).find ( "#ratio_tr_refname_"+index ).text();
-        jsonObj["erp_id"]          = $(row).find ( "#ratio_tr_erp_id_"+index ).text();   
-        jsonObj["buyer_po_number"] = $(row).find ( "#ratio_tr_buyer_po_"+index ).text();   
-        jsonObj["ocn_number"]      = $(row).find ( "#ratio_tr_ocn_"+index ).text();   
-        jsonObj["order_quantity"]  = $(row).find ( "#ratio_tr_qty_"+index ).text();   
+        myObject = {};
+        
+        myObject.reference_name = $(row).find ( "#ratio_tr_refname_"+index ).text();
+        myObject.erp_id = $(row).find ( "#ratio_tr_erp_id_"+index ).text();
+        myObject.buyer_po_number = $(row).find ( "#ratio_tr_buyer_po_"+index ).text();
+        myObject.ocn_number = $(row).find ( "#ratio_tr_ocn_"+index ).text();
+        myObject.order_quantity = $(row).find ( "#ratio_tr_qty_"+index ).text();
 
-        jsonObj2[ref_name] = jsonObj;
-        arrayList.push(jsonObj2);
+        // jsonObj[ref_name] = myObject;
+        // arrayList.push(myObject);
+        // adding new company into your companies array
+        //  json_obj.ratio.push(myObject);
         index++;
         
       });
+      var myArray = [];
+      myArray[ref_name] = myObject;
+      json_obj.ratio.push(myArray);
      
-    console.log(arrayList)
+    console.log(json_obj)
     });
 
 
