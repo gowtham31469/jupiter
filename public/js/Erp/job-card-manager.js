@@ -819,7 +819,7 @@ function storeJobcard(formData)
     $('.ratio-list-table').each(function (i, table) {
      var myObject   = new Object();   
      var arrayList  = [];
-     var ratioArray = [];
+     var ratioArray = {};
 
      ref_name = $(this).data('ratio-ref-table');
 
@@ -839,7 +839,6 @@ function storeJobcard(formData)
       json_obj.ratio.push(ratioArray);
     });
     console.log(json_obj)
-
 
 }
 
