@@ -455,7 +455,7 @@ function generateJobcard(){
                                     single_table_html += '<td colspan="2" data-template-id="'+common_data.template_id+'">'+common_data.erp_id+'</td>';
                                 });
                                 var template_name = key.split("_");
-                                single_table_html += '<td colspan="5" class="highlight_row" rowspan="3">REFNUM  : '+template_name[0]+'</td></tr>\
+                                single_table_html += '<td colspan="5" class="highlight_row" rowspan="3" data-single-ref-name ="'+template_name[0]+'">REFNUM  : '+template_name[0]+'</td></tr>\
                                                             <tr>\
                                                                 <th width="80px">B.PO.NO</th>';
                                 $.each(erpid.order_data, function(index, common_data){
@@ -489,7 +489,7 @@ function generateJobcard(){
                                     
                                     $.each(quantity_data, function(index3, qty){
                                         total_qty_sizewise += parseInt(qty);
-                                        single_table_html +='<td class="quantity-'+col+'">'+parseInt(qty)+'</td><td></td>';
+                                        single_table_html +='<td class="quantity-'+col+'" data-size-value="'+size_text[0]+'">'+parseInt(qty)+'</td><td></td>';
                                         /** Column wise total quantity calculation */
                                         sum[col] = qty + (sum[col] || 0);
                                         col++;
@@ -838,7 +838,11 @@ function storeJobcard(formData)
       // pushing ratio templates array into json object
       json_obj.ratio.push(ratioArray);
     });
-    console.log(json_obj)
+
+    /** Create single templates json object */
+    $('.single-list-table').each(function (i, table) {
+        console.log(table)
+    });
 
 }
 
