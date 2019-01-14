@@ -810,42 +810,35 @@ function storeJobcard(formData)
     var roll_issued_by  = $('#roll_issued_by').val();
     var cutter          = $('#cutter').val();
     var cartons         = $('#cartons').val();
-    
 
-    var arrayList       = [];
     var json_obj =   {
         "ratio": [],
         "single": []
           };
-       
-    var myObject = new Object();
+    /** Create ratio templates json object */
     $('.ratio-list-table').each(function (i, table) {
+     var myObject   = new Object();   
+     var arrayList  = [];
+     var ratioArray = [];
 
      ref_name = $(this).data('ratio-ref-table');
-     // var row_count = $(this).find('tbody tr').length;
-     
+
       $(table).find('tbody tr:not(:last)').each(function (index, row) {
         myObject = {};
-        
-        myObject.reference_name = $(row).find ( "#ratio_tr_refname_"+index ).text();
-        myObject.erp_id = $(row).find ( "#ratio_tr_erp_id_"+index ).text();
+        myObject.reference_name  = $(row).find ( "#ratio_tr_refname_"+index ).text();
+        myObject.erp_id          = $(row).find ( "#ratio_tr_erp_id_"+index ).text();
         myObject.buyer_po_number = $(row).find ( "#ratio_tr_buyer_po_"+index ).text();
-        myObject.ocn_number = $(row).find ( "#ratio_tr_ocn_"+index ).text();
-        myObject.order_quantity = $(row).find ( "#ratio_tr_qty_"+index ).text();
+        myObject.ocn_number      = $(row).find ( "#ratio_tr_ocn_"+index ).text();
+        myObject.order_quantity  = $(row).find ( "#ratio_tr_qty_"+index ).text();
 
-        // jsonObj[ref_name] = myObject;
-        // arrayList.push(myObject);
-        // adding new company into your companies array
-        //  json_obj.ratio.push(myObject);
+        arrayList.push(JSON.stringify(myObject));
         index++;
-        
       });
-      var myArray = [];
-      myArray[ref_name] = myObject;
-      json_obj.ratio.push(myArray);
-     
-    console.log(json_obj)
+      ratioArray[ref_name] = arrayList;
+      // pushing ratio templates array into json object
+      json_obj.ratio.push(ratioArray);
     });
+    console.log(json_obj)
 
 
 }
