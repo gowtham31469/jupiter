@@ -60,10 +60,10 @@
                         <td>{{$vals->erp_id}}</td>
                         <td>{{$vals->company_name}}</td>
                         <td>{{$vals->po_no}}</td>
-                        @if($vals->invoice_file=="")
+                        @if($vals->invoice_file=="" || $vals->invoice_file=="null")
                           <td align="center"><a href="javascript:void(0)" data-backdrop="static" data-keyboard="false"><i class="fa fa-pencil filterbtn options edit-user fa-button" title="Link E-way No" data-placement="left"></i></a></td>
                         @else
-                            <td align="center"><a href="javascript:void(0)" data-backdrop="static" data-keyboard="false"><i class="fa fa-pencil filterbtn options edit-user fa-button" title="Link E-way No" data-placement="left"></i></a><a class="pi_generation" target="_blank" href="javascript:void(0)" data-id="{{$vals->invoice_file}}"  onclick="showInvoice(this)"><i class="fa fa-eye action-button-view" data-placement="top" title="" data-original-title="view Details"></i></a></td>
+                            <td align="center"><a class="pi_generation" target="_blank" href="javascript:void(0)" data-id="{{$vals->invoice_file}}"  onclick="showInvoice(this)"><i class="fa fa-print action-button-view" data-placement="top" title="View & Print" data-original-title="view Details"></i></a></td>
                         @endif
                     </tr>
                 @endforeach    
@@ -399,7 +399,7 @@ function showInvoice(obj){
           var rndClass = roundOff==0?"hidden":''
           $('.inv-extra-charges').html('<table class="table table-bordered text-center inv-extra-charges" style="margin-top: -22px;"><thead><tr><th colspan="2">Description</th><th>Amount (₹)</th></tr></thead><tbody>'+taxTr+'<tr><td colspan="2"><strong>SubTotal</strong></td><td><strong class="preview-sub-extra">'+parseFloat(exAmnt).toFixed(2)+'</strong></td></tr><tr class="'+rndClass+'"><td colspan="2"><strong>Round Off</strong></td><td><strong id="preview-round-off">'+parseFloat(roundOff).toFixed(2)+'</strong></td></tr><tr></tr><tr><td colspan="2"><strong>Grand Total</strong></td><td class="grand-total"><strong>'+parseFloat(data.inv_details[0].grand_total).toFixed(2)+'</strong></td></tr><tr></tr></tbody></table>')
           $('.amnt-in-words').text(RsPaise($('.grand-total').text()))
-          $('.invoice_actions').html('<button class="btn btn-default btn-xs">Close</button><button class="btn btn-primary btn-xs" onclick="editInvoice()">Save & Send</button><button class="btn btn-default btn-xs downloadIn" id="downloadIn" onclick="downloadInvoice()">View as PDF</button>')
+          $('.invoice_actions').html('<button data-dismiss="modal" class=" btn btn-default btn-xs">Close</button><button class="btn btn-primary btn-xs" onclick="editInvoice()">Save & Send</button><button class="btn btn-default btn-xs downloadIn" id="downloadIn" onclick="downloadInvoice()">View as PDF</button>')
         },
        
         complete: function() {
