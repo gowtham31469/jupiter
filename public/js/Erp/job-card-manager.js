@@ -452,20 +452,20 @@ function generateJobcard(){
                                 <tbody id="single_list_table_body"><tr>\
                                 <th width="80px">ID.NO</th>';
                                 $.each(erpid.order_data, function(index, common_data){
-                                    single_table_html += '<td colspan="2" data-template-id="'+common_data.template_id+'">'+common_data.erp_id+'</td>';
+                                    single_table_html += '<td colspan="2" data-template-id="'+common_data.template_id+'" class="single-erpid-'+index+'">'+common_data.erp_id+'</td>';
                                 });
                                 var template_name = key.split("_");
                                 single_table_html += '<td colspan="5" class="highlight_row" rowspan="3" data-single-ref-name ="'+template_name[0]+'">REFNUM  : '+template_name[0]+'</td></tr>\
                                                             <tr>\
                                                                 <th width="80px">B.PO.NO</th>';
                                 $.each(erpid.order_data, function(index, common_data){
-                                    single_table_html += '<td colspan="2">'+common_data.buyer_po_number+'</td>';
+                                    single_table_html += '<td colspan="2" class="single-buyer-po-'+index+'">'+common_data.buyer_po_number+'</td>';
                                 });
                                 single_table_html += '</tr>\
                                                             <tr>\
                                                                 <th width="80px">OCN</th>';
                                 $.each(erpid.order_data, function(index, common_data){
-                                    single_table_html += '<td colspan="2">'+common_data.ocn_number+'</td>';
+                                    single_table_html += '<td colspan="2" class="single-ocn-'+index+'">'+common_data.ocn_number+'</td>';
                                 });
 
                                 single_table_html += '</tr>\
@@ -811,39 +811,79 @@ function storeJobcard(formData)
     var cutter          = $('#cutter').val();
     var cartons         = $('#cartons').val();
 
-    var json_obj =   {
+    var final_json_obj =   {
         "ratio": [],
         "single": []
           };
     /** Create ratio templates json object */
     $('.ratio-list-table').each(function (i, table) {
-     var myObject   = new Object();   
-     var arrayList  = [];
-     var ratioArray = {};
-
-     ref_name = $(this).data('ratio-ref-table');
+     var my_object    = new Object();   
+     var array_list   = [];
+     var ratio_object = {};
+         ref_name     = $(this).data('ratio-ref-table');
 
       $(table).find('tbody tr:not(:last)').each(function (index, row) {
-        myObject = {};
-        myObject.reference_name  = $(row).find ( "#ratio_tr_refname_"+index ).text();
-        myObject.erp_id          = $(row).find ( "#ratio_tr_erp_id_"+index ).text();
-        myObject.buyer_po_number = $(row).find ( "#ratio_tr_buyer_po_"+index ).text();
-        myObject.ocn_number      = $(row).find ( "#ratio_tr_ocn_"+index ).text();
-        myObject.order_quantity  = $(row).find ( "#ratio_tr_qty_"+index ).text();
+        my_object = {};
+        my_object.reference_name  = $(row).find ( "#ratio_tr_refname_"+index ).text();
+        my_object.erp_id          = $(row).find ( "#ratio_tr_erp_id_"+index ).text();
+        my_object.buyer_po_number = $(row).find ( "#ratio_tr_buyer_po_"+index ).text();
+        my_object.ocn_number      = $(row).find ( "#ratio_tr_ocn_"+index ).text();
+        my_object.order_quantity  = $(row).find ( "#ratio_tr_qty_"+index ).text();
 
-        arrayList.push(JSON.stringify(myObject));
+        array_list.push(JSON.stringify(my_object));
         index++;
       });
-      ratioArray[ref_name] = arrayList;
+      ratio_object[ref_name] = array_list;
       // pushing ratio templates array into json object
-      json_obj.ratio.push(ratioArray);
+      final_json_obj.ratio.push(ratio_object);
     });
 
     /** Create single templates json object */
-    $('.single-list-table').each(function (i, table) {
-        console.log(table)
+    $('.single-list-table').each(function (index, table) {
+        var single_obj = {
+            "erp_id": [],
+            "buyer_po": [],
+            "ocn": []
+              };
+        var single_ref_obj = {};
+        var erp_id_bject   = {};
+        var erp_id_array   = [];
+        var po_object      = {};
+        var po_array       = [];
+        var ocn_object     = {};
+        var ocn_array      = [];
+        single_ref_name    = $(table).find('tbody tr:eq(0) td:last-child').data('single-ref-name');
+        
+        // create erp_id array
+        $(table).find('tbody tr:eq(0) td:not(:last)').each(function (i, item) {
+            erp_id_bject = {};
+            erp_id_bject = item.innerHTML;
+            erp_id_array.push(JSON.stringify(erp_id_bject));
+        });
+        single_obj['erp_id'] = erp_id_array;
+
+        // create po number array
+        $(table).find('tbody tr:eq(1) td').each(function (i, item) {
+            po_object = {};
+            po_object = item.innerHTML;
+            po_array.push(JSON.stringify(po_object));
+        });
+        single_obj['buyer_po'] = po_array;
+
+        // create ocn number array
+        $(table).find('tbody tr:eq(2) td').each(function (i, item) {
+            ocn_object = {};
+            ocn_object = item.innerHTML;
+            ocn_array.push(JSON.stringify(ocn_object));
+        });
+        single_obj['ocn'] = ocn_array;
+
+        single_ref_obj[single_ref_name] = single_obj;
+        // pushing single templates array into json object
+        final_json_obj.single.push(single_ref_obj);
     });
 
+    console.log(final_json_obj)
 }
 
 
