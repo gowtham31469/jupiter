@@ -15,9 +15,9 @@
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
     <link rel="stylesheet" href="{{ asset('DataTables/datatables.css') }}">
     <link rel="stylesheet" href="{{ asset('DataTables/Buttons-1.5.1/css/buttons.dataTables.min.css') }}">
-    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+      <link rel="stylesheet" href="{{ asset('css/ion-icons.min.css') }}">
      <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet" />
-     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+     <link href="{{ asset('font-awesome-4.7.0/css/font-awesome.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/jqtree.min.css') }}" rel="stylesheet" /> 
    <link rel="stylesheet" href="{{ asset('css/style.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/toastr.css') }}" />
@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="{{ asset('css/bootstrap-select.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/easy-autocomplete.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/easy-autocomplete.themes.min.css') }}">
+	
 <!--
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/v4-shims.js"></script>
@@ -77,6 +78,8 @@
     <script type="text/javascript" src="{{ asset('js/bootstrap-datepicker.js') }}"></script>
     <script src="{{ asset('js/jquery.nicescroll-ajax.js') }}" type="text/javascript"></script>
 
+	<!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/i18n/defaults-*.min.js"></script> -->
+	
 <!-- Latest compiled and minified JavaScript -->
 <script src="{{ asset('js/bootstrap-select.min.js') }}"></script>
 

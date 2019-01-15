@@ -34,7 +34,7 @@ function orders() {
                 $("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
                 $('#datatable-example-2_length select').addClass('form-control input-sm');
             } else {
-                $('.main-content').html('<div class="container-fluid"><div class="row col-md-4"><div class="card"><h4>Create Order</h4><hr/><form id = "create_order_form" data-toggle = "validator" role = "form"><div class="form-group has-feedback"><label for="order_type" class="form_label">Order type</label><select class="form-control order_type" name="order_type" id="order_type" required=""><option value="">Select Order Type</option><option value="1">PO Upload</option><option value="2">Manual Entry</option></select><div class="help-block with-errors"></div></div><br><div class="form-group"><label for="template" class="form_label">Select Template</label><input class="search-input form-control" placeholder="Search for Awesomeness"><div id="jstree""></div></div><div class="form-group"><div class="po-upload"><div class="form-group files hidden" id="single_file"><label>Upload PO<sub>(Single File upload)</sub></label><input class="form-control" multiple="" type="file"></div><div class="form-group files hidden" id="multiple_file"><label>Upload PO<sub>(Multiple File upload)</sub></label><input class="form-control" multiple="" type="file"></div></div></div><button class="btn btn-primary btn-block">Create Order</button></form><br/></div></div><div class="col-md-8"><div class="card" style="height:calc(100vh - 100px); overflow:auto"><h4>Template Preview</h4><hr/><div class="row"><div class="loader"></div><div class="viewDiv"><img style="height:150px;object-fit:cover;margin-top: 122px;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png"></div><div class="descriptionDiv"></div></div></div></div></div></div>')
+                $('.main-content').html('<div class="container-fluid"><div class="row col-md-4"><div class="card"><h4>Create Order</h4><hr/><form id = "create_order_form" data-toggle = "validator" role = "form"><div class="form-group has-feedback"><label for="order_type" class="form_label">Order type</label><select class="form-control order_type" name="order_type" id="order_type" required=""><option value="">Select Order Type</option><option value="1">PO Upload</option><option value="2">Manual Entry</option></select><div class="help-block with-errors"></div></div><br><div class="form-group"><label for="template" class="form_label">Select Template</label><input class="search-input form-control" placeholder="Search for Awesomeness"><div id="jstree""></div></div><div class="form-group"><div class="po-upload"><div class="form-group files hidden" id="single_file"><label>Upload PO<sub>(Single File upload)</sub></label><input class="form-control" multiple="" type="file"></div><div class="form-group files hidden" id="multiple_file"><label>Upload PO<sub>(Multiple File upload)</sub></label><input class="form-control" multiple="" type="file"></div></div></div><button class="btn btn-primary btn-block">Create Order</button></form><br/></div></div><div class="col-md-8"><div class="card" style="height:calc(100vh - 100px); overflow:auto"><h4>Template Preview</h4><hr/><div class="row"><div class="loader"></div><div class="viewDiv"><i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover;margin-top: 122px; font-size: 100px;"></i></div><div class="descriptionDiv"></div></div></div></div></div></div>')
 
                 $(".search-input").keyup(function () {
                     var searchString = $(this).val();
@@ -145,7 +145,7 @@ function orders() {
                                         }
                                     });
                                 } else {
-                                    $('.viewDiv').html('<img style="height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
+                                    $('.viewDiv').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover;margin-top: 122px; font-size: 100px;"></i>')
 
                                     $('.descriptionDiv').html('<b>Template Not Found</b>');
                                     $('.descriptionDiv').css('margin-top', '0px')
@@ -1708,7 +1708,7 @@ function hangtagmodal(data) {
                     if (data.length > 0) {
                         $('#' + ids).find('.sample-artwork').html('<object id="svg_hang_front" style="height: 486px;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
                     } else {
-                        $('#' + ids).find('.sample-artwork').html('<img style="width:160px;height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
+                        $('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover;margin-top: 122px; font-size: 100px;"></i>')
                     }
                     var mySVG = document.getElementById("svg_hang_front");
                     var svgDoc;
@@ -1772,7 +1772,7 @@ function hangtagmodal(data) {
                     if (data.length > 0) {
                         $('#' + ids).find('.sample-artwork').html('<object id="svg_hang_front" style="height: 486px;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
                     } else {
-                        $('#' + ids).find('.sample-artwork').html('<img style="width:160px;height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
+                        $('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover;margin-top: 122px; font-size: 100px;"></i>')
                     }
                     var mySVG = document.getElementById("svg_hang_front");
                     var svgDoc;
@@ -2124,7 +2124,7 @@ function treestructure(data, tree, template_id) {
                     if (data.length > 0) {
                         $('#' + ids).find('.sample-artwork').html('<object id="svg2" style="height: 370px;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
                     } else {
-                        $('#' + ids).find('.sample-artwork').html('<img style="width:160px;height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
+                        $('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover;margin-top: 122px; font-size: 100px;"></i>')
                     }
 
 
@@ -2162,7 +2162,7 @@ function treestructure(data, tree, template_id) {
                     if (data.length > 0) {
                         $('#' + ids).find('.sample-artwork').html('<object id="svg2" style="height: 370px;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
                     } else {
-                        $('#' + ids).find('.sample-artwork').html('<img style="width:160px;height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
+                        $('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover;margin-top: 122px; font-size: 100px;"></i>')
                     }
 
 
