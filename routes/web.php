@@ -598,14 +598,17 @@ Route::group(['prefix' => 'erp'], function () {
 	/* Routes for Invoice Management */
 	 
 	Route::get('/invoice', 'ErpUser\Invoice\InvoiceController@index')->name('invoice'); 
-	Route::get('/create-invoice', 'ErpUser\Invoice\InvoiceController@create')->name('invoice');
-
+	Route::get('/create-invoice', 'ErpUser\Invoice\InvoiceController@create')->name('create-invoice');
+	Route::post('/update-invoice', 'ErpUser\Invoice\InvoiceController@updateInvoice')->name('update-invoice');
+	
 	/* Routes for PO Manager Module */
 
 	Route::get('/erp-po-list', 'ErpUser\Invoice\InvoiceController@erpPOList')->name('erp-po'); 
 	
 	Route::get('/erp-order-list', 'ErpUser\Invoice\InvoiceController@erpOrderList')->name('erp-orders');
-	Route::post('/save-invoice', 'ErpUser\Invoice\InvoiceController@setInvoice')->name('erp-orders');
+	Route::post('/save-invoice', 'ErpUser\Invoice\InvoiceController@setInvoice')->name('save-invoice');
+	Route::get('/get-invoice', 'ErpUser\Invoice\InvoiceController@getInvoice')->name('get-invoice');
+	
 	
 
 

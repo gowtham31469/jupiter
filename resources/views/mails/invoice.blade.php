@@ -4,6 +4,8 @@
 	<title></title>
 </head>
 <body>
-<p>Hai</p>
+<p>Dear </p>
+
+<p>Please find your attatched invoice. We appreciate your prompt payment</p>
 </body>
 </html>

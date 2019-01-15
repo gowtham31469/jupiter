@@ -18,5 +18,5 @@ class Invoices extends Model
       *
       * @var array
       */
-      protected $fillable = ['id','customer_id','buyer_id','po_no','po_file','status','created_at','updated_at', 'invoice_file','erp_id','invoice_id','status_id'];
+      protected $fillable = ['id','customer_id','buyer_id','po_no','po_file','status','created_at','updated_at', 'invoice_file','erp_id','invoice_id','status_id','round_off_amnt','grand_total','eway_no','credit_limit','dispatch_thru','place_of_supply'];
 }

@@ -138,7 +138,8 @@
         updateTaxAmount(tax_amnt)
 
         var gndtotal = parseFloat($('.tax-total').text())+ parseFloat($('.total-amnt').text());
-        $('.extra-charges').html('<table class="table table-bordered text-center extra-charges" style="margin-top: -22px;"><thead><tr><th>Description</th><th>Amount (₹)</th><th><button type="button" onclick="addExtraCharges(this,event)" data-id="1" class="btn btn-default btn-sm add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i></button></th></tr></thead><tbody id="table_row"><tr><td><select class="charges" id="charges1" name="charges1" required><option  data-id="0" value=""></option><option data-id="Freight" value="freight">Freight</option><option data-id="Minimum charges" value="minimumcharges">Minimum charges</option><option data-id="Job Work Charges" value="jobwork">Job Work Charges</option></select></td><td style="width: 116px;"><input type="text" value="" min="0" id="chrg_val1" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr></tbody></table><table class="table table-bordered text-center" style="margin-top: -22px;"><tbody><tr><td colspan="2"><strong>SubTotal</strong></td><td class="sub-extra">0.00</td></tr><tr></tr><tr><td colspan="2"><strong>Round Off</strong></td><td style="width: 116px;"><input type="text" min="0" value="" id="round-off" class="form-control round-off" onkeyup="updateGrandTotal(this,'+gndtotal+')"></td></tr><tr><td colspan="2"><strong>Grand Total</strong></td><td class="grand-total">'+gndtotal.toFixed(2)+'</td></tr><tr></tr></tbody></table><div class="create-invoice"><button type="button" class="btn btn-primary create-invoice pull-right" style="margin-top: -10px;" id="create-invoice">Create Invoice</button></div>')
+        
+        $('.extra-charges').html('<table class="table table-bordered text-center extra-charges" style="margin-top: -22px;"><thead><tr><th>Description</th><th>Amount (₹)</th><th><button type="button" onclick="addExtraCharges(this,event)" data-id="1" class="btn btn-default btn-sm add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i></button></th></tr></thead><tbody id="table_row"><tr><td><select class="charges" id="charges1" name="charges1" required><option  data-id="0" value=""></option><option data-id="Freight" value="freight">Freight</option><option data-id="Minimum charges" value="minimumcharges">Minimum charges</option><option data-id="Job Work Charges" value="jobwork">Job Work Charges</option></select></td><td style="width: 116px;"><input type="text" value="" min="0" id="chrg_val1" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr></tbody></table><table class="table table-bordered text-center" style="margin-top: -22px;"><tbody><tr><td colspan="2"><strong>SubTotal</strong></td><td class="sub-extra">0.00</td></tr><tr></tr><tr><td colspan="2"><strong>Round Off</strong></td><td style="width: 116px;"><input type="text" min="0" value="0.00" id="round-off" step=".01" class="form-control round-off" onkeyup="updateGrandTotal(this,'+gndtotal+')"></td></tr><tr><td colspan="2"><strong>Grand Total</strong></td><td class="grand-total">'+gndtotal.toFixed(2)+'</td></tr><tr></tr></tbody></table><div class="create-invoice"><button type="button" class="btn btn-primary create-invoice pull-right" style="margin-top: -10px;" id="create-invoice">Create Invoice</button></div>')
 
             $('#create-invoice').on('click',function(){
                 previewInvoice(orderData)
@@ -362,7 +363,8 @@
             }
         })
         $('.sub-extra').html(result.toFixed(2))
-        var grandTotal = parseFloat($('.tax-total').text())+ parseFloat($('.total-amnt').text()) + parseFloat($('.sub-extra').text());
+        var grandTotal = parseFloat($('.tax-total').text())+ parseFloat($('.total-amnt').text()) + parseFloat($('.sub-extra').text()) + parseFloat($('#round-off').val()) ;
+        console.log(parseFloat($('.tax-total').text()) , parseFloat($('.total-amnt').text()) , parseFloat($('.sub-extra').text()) , parseFloat($('#round-off').val()))
         $('.grand-total').html(grandTotal.toFixed(2))        
     }
 
@@ -382,12 +384,12 @@
         $('.delivery-qnty').css('border-color', '');
         var delvryQnty = {};
         var count = 0 ;
-        $('#company-logo').attr('src',company_details.logo);
-
+        $('#company-logo').attr('src',company_details.logo);        
+        $('#credit-val').text(data[0].credit_limit)
         $('#company_details').html('<h4>'+company_details.name+'</h4>'+company_details.address+'<p>PH : '+company_details.office_phone+', '+company_details.phone+'</br> GST : '+company_details.gstin+'</p>')
 
         $('#bill_to').html('<h4>'+data[0].company_name+'</h4><p>'+bill_to.address+'</br> GSTN :'+data[0].gstin_number+ '</p>')
-       
+        $('#disp_thru').text(data[0].delvry_thru);
         $('.order-details input[type=checkbox]').each(function () {
             if ($(this).prop("checked") == false) {
                 selected.push($(this).attr('id'));           
@@ -503,15 +505,15 @@
             });
             var tableHide = trclass1 && trclass2 && trclass3 =="hidden" ?"hidden":''
             $('.preview-extra-charges').html('<table class="table table-bordered text-center preview-extra-charges" style="margin-top: -22px;"><thead><tr class='+tableHide+'><th colspan="2">Description</th><th>Amount (₹)</th></tr></thead><tbody>'+eTr+'<tr class='+tableHide+'><td colspan="2"><strong>SubTotal</strong></td><td><strong class="preview-sub-extra"></strong></td></tr><tr><td colspan="2"><strong>Round Off</strong></td><td><strong class="preview-round-off" id="preview-round-off"></strong></td></tr><tr></tr><tr><td colspan="2"><strong>Grand Total</strong></td><td><strong class="preview-grand-total"></strong></td></tr><tr></tr></tbody></table>')
-                
-                $('.preview-round-off').text($('#round-off').val())
+                 
+                $('.preview-round-off').text(parseFloat($('#round-off').val()).toFixed(2))
                 $('.preview-total-amnt').text($('.total-amnt').text())
                 $('#preview-qnty-sum').text($('.qnty-sum').text())
                 $('.preview-sub-extra').text($('.sub-extra').text())
                 $('.preview-grand-total').text($('.grand-total').text())
                 
-            $('.invoice_actions').html('<button class="btn btn-default btn-xs downloadIn" id="downloadIn" onclick="downloadInvoice()" >View as PDF</button><button class="btn btn-success btn-xs" id="save-invoice">Save & Send</button><button type="button" class="btn btn-primary btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
-
+            // $('.invoice_actions').html('<button class="btn btn-default btn-xs downloadIn" id="downloadIn" onclick="downloadInvoice()" >View as PDF</button><button class="btn btn-success btn-xs" id="save-invoice">Save</button><button type="button" class="btn btn-primary btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
+            $('.invoice_actions').html('<button class="btn btn-success btn-xs" id="save-invoice">Save</button><button type="button" class="btn btn-primary btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
             $('.amnt-in-words').text(RsPaise($('.grand-total').text()))
             $('#save-invoice').on('click',function(){
 
@@ -547,7 +549,6 @@
         });
        
        // dataPDF.save('storage/app/public/invoices/invoice.pdf', 'F');
-
     }
 
     function updateInvoice(obj){
@@ -617,10 +618,10 @@
             dataType: "json",
 
             success: function (data) {
-                $('.snackbar_span').html("Invoice Send Successfully !");
+                $('.snackbar_span').html("Invoice Created Successfully !");
                 showSnackbar();                
                 $('#erp-invoice').modal("hide")
-                // setTimeout(function(){window.location = 'invoice';}, 1000); 
+                setTimeout(function(){window.location = 'invoice';}, 1000); 
 
             },
             error: function (errorXHR, errorStatus, errorThrown) {
@@ -634,13 +635,15 @@
 
     function updateGrandTotal(obj,gndtotal){
         // $(obj).closest('tr').find('.grand-total').text();
+       var grandTotal = 0 ;
        if($.isNumeric(parseFloat($(obj).val()))) {
-            var grandTotal = parseFloat($(obj).val())+ parseFloat($('.grand-total').text())
+            grandTotal = parseFloat($(obj).val())+ parseFloat($('.total-amnt').text()) + parseFloat($('.tax-total').text()) + parseFloat($('.sub-extra').text()) 
             // alert(parseFloat($('.grand-total').text()))
             $('.grand-total').html(grandTotal.toFixed(2))
        }
        else{
-            $('.grand-total').html(gndtotal.toFixed(2))
+            grandTotal = parseFloat($('.total-amnt').text()) + parseFloat($('.tax-total').text()) + parseFloat($('.sub-extra').text()) 
+            $('.grand-total').html(grandTotal.toFixed(2))
        }    
     }
 
