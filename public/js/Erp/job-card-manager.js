@@ -485,11 +485,11 @@ function generateJobcard(){
                                     var total_qty_sizewise = 0;
                                     var size_text = index2.split("_");
                                     var col = 0;
-                                    single_table_html += '<tr><td>'+size_text[0]+'</td>';
+                                    single_table_html += '<tr><td class="single-size-row">'+size_text[0]+'</td>';
                                     
                                     $.each(quantity_data, function(index3, qty){
                                         total_qty_sizewise += parseInt(qty);
-                                        single_table_html +='<td class="quantity-'+col+'" data-size-value="'+size_text[0]+'">'+parseInt(qty)+'</td><td></td>';
+                                        single_table_html +='<td class="quantity-'+col+' quantity-td" data-size-value="'+size_text[0]+'">'+parseInt(qty)+'</td><td></td>';
                                         /** Column wise total quantity calculation */
                                         sum[col] = qty + (sum[col] || 0);
                                         col++;
@@ -843,7 +843,8 @@ function storeJobcard(formData)
         var single_obj = {
             "erp_id": [],
             "buyer_po": [],
-            "ocn": []
+            "ocn": [],
+            "size": []
               };
         var single_ref_obj = {};
         var erp_id_bject   = {};
@@ -877,6 +878,12 @@ function storeJobcard(formData)
             ocn_array.push(JSON.stringify(ocn_object));
         });
         single_obj['ocn'] = ocn_array;
+
+        //size row
+        $(table).find('tbody tr:gt(3):not(:last-child) td:not(:empty)').each(function (i, item) {
+            
+            
+        });
 
         single_ref_obj[single_ref_name] = single_obj;
         // pushing single templates array into json object
