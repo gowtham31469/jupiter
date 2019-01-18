@@ -121,7 +121,9 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
                                 totaligst   += ((parseInt(tax))/100)*(value.quantity*unit_price);
                             }
                             else{
-                               amount +=(totaltax/100)* (value.quantity*unit_price);
+                               // amount +=(totaltax/100)* (value.quantity*unit_price);
+                               amount +=(parseInt(tax)/100)* (value.quantity*unit_price);
+                               
                             }
                             totalqnty+=value.quantity;
                             subtotal+=(value.quantity*unit_price);
