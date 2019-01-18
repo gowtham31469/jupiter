@@ -30,7 +30,7 @@ function loadTemplatePreview() {
                     }
                 });
             } else {
-                $('.templateDiv').html('<img style="height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
+                $('.templateDiv').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover;margin-top: 122px; font-size: 100px;"></i>')
 
                 $('.descriptionDiv').html('<b>Template Not Found</b>');
                 $('.descriptionDiv').css('margin-top', '0px')

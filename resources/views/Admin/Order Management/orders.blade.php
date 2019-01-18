@@ -722,7 +722,7 @@ background: rgba(0,0,0,0.2);
     <script src="{{ asset('js/Admin/tesco-pi.js') }}"></script>
     <script src="{{ asset('js/Admin/parser.js') }}"></script>
     <script src="{{ asset('js/Admin/tesco-view-orders.js') }}"></script>
-    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script src="{{ asset('js/moment.min.js') }}"></script>
 	<script>
 	$(document).ready (function(){
         $("#success-alert").hide();

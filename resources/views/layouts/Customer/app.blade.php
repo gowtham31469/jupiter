@@ -14,9 +14,9 @@
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
     <link rel="stylesheet" href="{{ asset('DataTables/datatables.css') }}">
     <link rel="stylesheet" href="{{ asset('DataTables/Buttons-1.5.1/css/buttons.dataTables.min.css') }}">
-    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="{{ asset('css/ion-icons.min.css') }}">
       <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet" />
-     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="{{ asset('font-awesome-4.7.0/css/font-awesome.min.css') }}" rel="stylesheet" />
      <link href="{{ asset('css/jqtree.min.css') }}" rel="stylesheet" /> 
    <link rel="stylesheet" href="{{ asset('css/style.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/toastr.css') }}" />
@@ -72,7 +72,7 @@
 <script src="{{ asset('js/bootstrap-select.min.js') }}"></script>
 
 <script src="{{ asset('js/jquery.easy-autocomplete.min.js') }}"></script>
-	{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/i18n/defaults-*.min.js"></script> --}}
+	<!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/i18n/defaults-*.min.js"></script> -->
 <script src="{{ asset('js/toastr.js') }}"></script>
 <script>
     var base_url = "<?php echo  url('/') ?>";
