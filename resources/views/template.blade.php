@@ -46,15 +46,15 @@
                         <tr>
                             <td class="companyDetails">
                                 <p>Buyer</p>
-                                <p><strong>{{$arr[0]['company_name']}}</strong></p>
+                                <p><strong>{{$inv_details[0]['company_name']}}</strong></p>
                                 <p>{{$bill_to->address}}</p>
-                                <p>GSTN : {{$arr[0]['gstin_number']}}</p>
+                                <p>GSTN : {{$inv_details[0]['gstin_number']}}</p>
                             </td>
  							<td style="text-align: right;" class="companyDetails">
                                
-                                <p><strong>Date : </strong>{{$invoiceDate}}</p>
-                                <p><strong>Invoice No :  </strong>{{$invoiceNo}}</p>
-                                <p><strong>Disp thru : </strong>{{$ship_to->address}}</p>
+                                <p><strong>Date : </strong>{{$inv_details[0]['inv_date']}}</p>
+                                <p><strong>Invoice No :  </strong>{{$inv_details[0]['invoice_id']}}</p>
+                                <p><strong>Disp thru : </strong>{{$inv_details[0]['delvry_thru']}}</p>
                             </td>
                         </tr>
                     </table>
@@ -75,7 +75,7 @@
                         $i = 0;
                         $size = '-';
                     @endphp
-                    @foreach($arr as $data)
+                    @foreach($inv_details as $data)
                     <tr>                    
 	                    <td>{{++$i}}</td>
                         <td>{{$data['id']}}</td>
@@ -112,53 +112,13 @@
                 <td style="text-align: center;">
                     <table cellpadding="0" cellspacing="0" border="0.5"><thead><tr><th>Tax (%)</th><th>Base value (INR)</th><th>Amount (INR)</th></tr></thead><tbody>
                    
-                        @foreach($tax_amnt as $key=>$tax)
-	                        @if ($place_of_supply ==1)
-		                        <tr>
-			                        <td>CGST ({{$key/2}})</td>
-			                        <td>{{$tax}}</td>
-			                        <td>{{(($key/2)/100) * $tax}}</td>
-		                        </tr>
-		                        <tr>
-			                        <td>SGST ({{$key/2}})</td>
-			                        <td>{{$tax}}</td>
-			                        <td>{{(($key/2)/100) * $tax}}</td>
-		                        </tr>
-	                        @elseif($place_of_supply==2)
-		                        <tr>
-		                        	<td>IGST ()</td>
-			                        <td></td>
-			                        <td></td>
-		                        </tr>
-		                    @else
-		                        <tr>
-		                        	<td>Tax ()</td>
-			                        <td></td>
-			                        <td></td>
-		                        </tr>
-	                        @endif
-                        @endforeach
-                           	<tr>
-	                        	<td colspan="2"><strong>SubTotal</strong></td>
-	                        	<td><strong>{{$taxTotal}}</strong></td>
-                        	</tr>
-                        @if($eChargesArr)
-                        @foreach($eChargesArr as $objts)
-                            @foreach($objts as $key=>$vals)
-                                <tr>
-                                    <td colspan="2">{{$key}}</td>
-                                    <td>{{$vals}}</td>
-                                </tr>
-                            @endforeach
-                        @endforeach
-                         @endif
                             <tr>
                                 <td colspan="2"><strong>Round Off</strong></td>
-                                <td><strong>{{$roundOff}}</strong></td>
+                                <td><strong>{{$inv_details[0]['round_off_amnt']}}</strong></td>
                             </tr>
                             <tr>
                                 <td colspan="2"><strong>Grand Total</strong></td>
-                                <td><strong>{{$grandTotal}}</strong></td>
+                                <td><strong>{{$inv_details[0]['grand_total']}}</strong></td>
                             </tr>
                         </tbody>
                     </table>
@@ -169,11 +129,11 @@
                     <table>
                         <tr>
                             <td class="companyDetails">
-                                <p><strong>Credit Terms </strong>{{$creditTerms}}</p>
-                                <p><strong>E-Way Bill No </strong>{{$ewayNo}}</p>
+                                <p><strong>Credit Terms </strong>{{$inv_details[0]['credit_limit']}}</p>
+                                <p><strong>E-Way Bill No </strong>{{$eway_no}}</p>
                                 <p></p>
                                 <p><strong>Amount in words</strong>{{$amntInwords}}</p>
-                                <p><strong>Delivery at</strong>{{$creditTerms}}</p>
+                                <p><strong>Delivery at</strong></p>
                             </td>
                         </tr>
                     </table>

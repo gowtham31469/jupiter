@@ -33,7 +33,7 @@
 </style>
 <ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
 <li><a href="{{ url('/erp/invoice') }}" class="">Invoice List</a></li>
-    <li><a href="{{ url('/erp/create-invoice') }}" class="active">Create Invoice</a></li>
+<li><a href="{{ url('/erp/create-invoice') }}" class="active">Create Invoice</a></li>
 </ul>
 @endsection
 @section('content')
@@ -101,14 +101,14 @@
                     
                     </div> 
                     <div class="col-md-4 remarks hidden">
-                        <label>Credit Terms</label>
+                     <!--    <label>Credit Terms</label>
                         <div class='form-group'>
                            <input type="text" class="form-control" name="credit-terms" id="credit-terms" required="">
-                        </div>
-                        <label>E-Way Bill No.</label>
+                        </div> -->
+                       <!--  <label>E-Way Bill No.</label>
                         <div class='form-group'>
                            <input type="text" class="form-control" name="eway-billno" id="eway-billno" required="">
-                        </div>
+                        </div> -->
 
                     </div>
                     <div class="col-md-3">
@@ -175,9 +175,9 @@
                                     <strong>Invoice No </strong>
                                     <span style="padding-left: 3px;"> : </span>
                                     <span style="padding-left: 4px;" class="invoice_number"></span>
-                                    <p><strong>Dispatch</strong>          
+                                    <p><strong>Disp thru</strong>          
                                     <span style="padding-left: 14px;"> : </span>
-                                    <span style="padding-left: 4px;" class="dispatch"></span></p>  
+                                    <span style="padding-left: 4px;" class="disp_thru" id="disp_thru"></span></p>  
 
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-5">
@@ -195,9 +195,9 @@
                             <div class="row">
                                  <div class="col-md-12">
                                     <div class="col-md-4 nopadding remarks hidden">
-                                        <label>Credit Terms</label><span style="padding-left: 8px;">:</span><span class="credit-val" style="padding-left: 20px;">Data</span>
+                                        <label>Credit Terms</label><span style="padding-left: 8px;">:</span><span class="credit-val" id="credit-val" style="padding-left: 20px;">Data</span>
                                         </br>
-                                        <label>E-Way Bill No</label><span style="padding-left: 6px;">:</span><span class="eway-val" style="padding-left: 20px;">Data</span>
+                                        <label>E-Way Bill No</label><span style="padding-left: 6px;">:</span><span class="eway-val" style="padding-left: 20px;"> - </span>
                                         </br>
                                         
                                     </div>
@@ -214,7 +214,7 @@
                                     <div>
                                         <!-- <strong>Delivery At</strong>
                                         <p class="delivery-at"></p> -->
-                                        <label>Delivery At</label><span style="padding-left: 8px;">:</span><span class="delivery-at" style="padding-left: 20px;">Data</span>
+                                        <label>Delivery At</label><span style="padding-left: 8px;">:</span><span class="delivery-at" style="padding-left: 20px;"></span>
                                     </div>
                                     <div class="pull-right" style="padding-right: 55px;">
                                         <span>For Jupiter Garments Accessories</span>
