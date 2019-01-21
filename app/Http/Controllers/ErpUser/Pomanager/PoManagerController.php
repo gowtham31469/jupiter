@@ -286,7 +286,7 @@ class PoManagerController extends Controller
 			   
 					 $price_range =  DB::table('price_range')->select('price_range.*')->where('price_taxation_id',$price{0}->id)->where('volume_from','<=',$value->order_quantity)->where('volume_to','>=',$value->order_quantity)->get();
 					 
-					 DB::table('erp_order_details')->where('erp_order_id',$erp_order_id)
+					 DB::table('erp_order_details')->where('id',$value->id)
 						  		->update([
 								  'rate' => $price_range{0}->price
 								]);
@@ -320,7 +320,7 @@ class PoManagerController extends Controller
 			   
 					 $price_range =  DB::table('price_range')->select('price_range.*')->where('price_taxation_id',$price{0}->id)->where('volume_from','<=',$value->order_quantity)->where('volume_to','>=',$value->order_quantity)->get();
 					 
-					 DB::table('erp_order_details')->where('erp_order_id',$erp_order_id)
+					 DB::table('erp_order_details')->where('id',$value->id)
 						  		->update([
 								  'rate' => $price_range{0}->price
 								]);
