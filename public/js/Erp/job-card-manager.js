@@ -844,7 +844,9 @@ function storeJobcard(formData)
             "erp_id": [],
             "buyer_po": [],
             "ocn": [],
-            "size": []
+            "size": [],
+            "total": [],
+            "excess": []
               };
         var single_ref_obj = {};
         var erp_id_bject   = {};
@@ -879,18 +881,44 @@ function storeJobcard(formData)
         });
         single_obj['ocn'] = ocn_array;
 
-        //size row
-        $(table).find('tbody tr:gt(3):not(:last-child) td:not(:empty)').each(function (i, item) {
+        var size_object_final = [];
+        var total_qty_object_final = [];
+        var excess_object_final = [];
+        // create size, qty and excess json object
+        $(table).find('tbody tr:gt(3):not(:last-child)').each(function (i, item) {
             
-            
-        });
+            var size_text  = $(item).find('.single-size-row').text();
+            var size_array      = [];
+            $(item).find('.quantity-td').each(function (index, row) {
+                size_object = {};
+                size_object = row.innerHTML;
+                size_array.push(JSON.stringify(size_object));
+            });
+            size_object_final[size_text] = size_array;
 
+            $(item).find('.total-quantity-class strong').each(function (index1, total_qty) {
+                total_qty_object = {};
+                total_qty_object = total_qty.innerHTML;
+            });
+            total_qty_object_final[size_text] = total_qty_object;
+
+            $(item).find('.total-excess div input').each(function (index2, excess) {
+                excess_object = {};
+                excess_object = excess.value;
+            });
+            excess_object_final[size_text] = excess_object;
+
+        });
+        single_obj['size'] = size_object_final;
+        single_obj['total'] = total_qty_object_final;
+        single_obj['excess'] = excess_object_final;
+        
         single_ref_obj[single_ref_name] = single_obj;
         // pushing single templates array into json object
         final_json_obj.single.push(single_ref_obj);
     });
 
-    console.log(final_json_obj)
+ console.log(final_json_obj)
 }
 
 
