@@ -48,7 +48,7 @@ class Invoice
                         ->leftjoin('nominated_forwarders','nominated_forwarders.id','customers.nominated_forwarder')
                         ->join('buyers','invoice.buyer_id','buyers.id')
                         ->where('invoice_details.company_id',session()->get('company'))
-                        ->select('invoice.invoice_id','erp_id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','po_no','invoice_file','invoice.id as inv_id','invoice_details.*','invoice.invoice_id','customers.place_of_supply','invoice.round_off_amnt','invoice.grand_total',DB::raw('to_char(invoice.created_at,'."'".$ddmmyy."'".') as "inv_date"'),'gstin_number','invoice.credit_limit','invoice.dispatch_thru as delvry_thru','invoice_details.ocn_no as ocn_number','invoice_details.reference_no as reference_name','invoice_details.delivered_qnty as delvry_qnty')->get();
+                        ->select('invoice.invoice_id','erp_id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','po_no','invoice_file','invoice.id as inv_id','invoice_details.*','invoice.invoice_id','customers.place_of_supply','invoice.round_off_amnt','invoice.grand_total',DB::raw('to_char(invoice.created_at,'."'".$ddmmyy."'".') as "inv_date"'),'gstin_number','invoice.credit_limit','invoice.dispatch_thru as delvry_thru','invoice_details.ocn_no as ocn_number','invoice_details.reference_no as reference_name','invoice_details.delivered_qnty as delvry_qnty','invoice.place_of_supply')->get();
         return $inv_details;
     }
 
@@ -68,5 +68,26 @@ class Invoice
                           ->select('address','country')
                           ->first();
         return $bill_to;
+    }
+
+    public function getTaxDetails($inv_details){
+        $uniqueTaxes = array();
+        foreach($inv_details as $array)
+        {
+            if(!in_array($array['tax'], $uniqueTaxes))
+                $uniqueTaxes[] = $array['tax'];
+        }
+        
+        $txArr = array();
+        foreach ($uniqueTaxes as $value) {
+            $taxSum  = 0;
+           foreach ($inv_details as $vals) {
+                if ($vals->tax==$value) {
+                    $taxSum +=($vals->rate*$vals->delvry_qnty);
+                }
+            } 
+            $txArr[$value] = $taxSum ;
+        }
+        return $txArr;
     }
 }
