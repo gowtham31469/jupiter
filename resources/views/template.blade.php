@@ -84,7 +84,7 @@
 	                    <td>{{$data['ocn_number']}}</td>
 	                    <td>{{$data['reference_name']}}</td>
                         @php
-                            $size = $data['size']==""?'-':$data['size'];
+                            $size = $data['size']=="null"?'-':$data['size'];
                         @endphp
                         <td>{{$size}}</td>
 	                    <td>{{$data['tax']}}</td>
@@ -110,8 +110,56 @@
             <tr class="top">
             <td></td>
                 <td style="text-align: center;">
-                    <table cellpadding="0" cellspacing="0" border="0.5"><thead><tr><th>Tax (%)</th><th>Base value (INR)</th><th>Amount (INR)</th></tr></thead><tbody>
-                   
+                    <table cellpadding="0" cellspacing="0" border="0.5"><thead><tr><th><strong>Tax</strong></th><th><strong>Base value (INR)</strong></th><th><strong>Amount (INR)</strong></th></tr></thead><tbody>                 
+                            @php 
+                                $totalTax = 0;
+                            @endphp
+                            @foreach($uniqueTaxes as $tax=>$amnt)               
+                                @if($inv_details[0]['place_of_supply']==1)
+                                    <tr>
+                                        <td>CGST ({{$tax/2}}%)</td><td>{{$amnt}}</td><td>{{(($tax/2)/100)*$amnt}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>SGST ({{$tax/2}}%)</td><td>{{$amnt}}</td><td>{{(($tax/2)/100)*$amnt}}</td>
+                                    </tr>
+                                @elseif($inv_details[0]['place_of_supply']==2)
+                                     <tr>
+                                      <td>IGST ({{$tax}}%)</td><td>{{$amnt}}</td><td>{{(($tax)/100)*$amnt}}</td>
+                                    </tr> 
+                                @else
+                                    <tr>
+                                        <td>Taxes ({{$tax}}%)</td><td>{{$amnt}}</td><td>{{(($tax)/100)*$amnt}}</td>
+                                    </tr>
+                                        
+                                @endif
+                                
+                                @php 
+                                    $totalTax += ($tax/100)*$amnt;
+                                @endphp
+                            @endforeach 
+                            <tr>
+                                <td colspan="2"><strong>SubTotal</strong></td>
+                                <td>{{$totalTax}}</td>
+                            </tr>
+                            <table cellpadding="0" cellspacing="0" border="0.5"><thead><tr><th colspan="2"><strong>Description</strong></th><th><strong>Amount (INR)</strong></th></tr></thead><tbody> 
+                                   @php 
+                                        $totalExc = 0;
+                                    @endphp
+                                    @foreach($eChargesArr as $key=>$vals)               
+                                    <tr>
+                                        <td colspan="2">{{$vals->ext_chrg_name}}</td>
+                                        <td>{{$vals->amount}}</td>
+                                    </tr>
+                                    @php 
+                                        $totalExc += $vals->amount;
+                                    @endphp
+                                    @endforeach 
+                                    <tr>
+                                        <td colspan="2"><strong>SubTotal</strong></td>
+                                        <td>{{$totalExc}}</td>
+                                    </tr>  
+                                </tbody>
+                            </table>
                             <tr>
                                 <td colspan="2"><strong>Round Off</strong></td>
                                 <td><strong>{{$inv_details[0]['round_off_amnt']}}</strong></td>
@@ -122,6 +170,7 @@
                             </tr>
                         </tbody>
                     </table>
+                    
                 </td>
             </tr>
             <tr class="information">

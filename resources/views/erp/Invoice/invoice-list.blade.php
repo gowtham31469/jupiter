@@ -152,7 +152,7 @@
                 </div>
             </div>       
         <hr />
-         <strong>ORDER DETAILS :</strong>
+        <strong>ORDER DETAILS :</strong>
         <div class="order_details" id="order_details">
 
         </div>
@@ -343,27 +343,27 @@ function showInvoice(obj){
           $('#bill_to').html('<h4>'+data.inv_details[0].company_name+'</h4><p>'+data.bill_to.address+'</br> GSTIN :'+data.inv_details[0].gstin_number+ '</p>')
           var itemName ="";
           $(data.inv_details).each(function(index, value)
-          {
-              var size = (value.size == null)?'-':value.size ;
-
+          {   
+              var size = (value.size == "null")?'-':value.size ;
+              
               // tr += '<tr><td>'+value.erp_id+'</td><td>'+value.buyer_name+'</td><td>'+value.order_no+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_no+'</td><td>'+value.reference_no+'</td><td>'+value.size+'</td><td>'+value.tax+'</td><td>'+value.delivered_qnty+'</td><td>'+value.rate+'</td><td>'+value.delivered_qnty * value.rate+'</td></tr>';
 
               if (itemName==value.item_name) {
                     tr += '<tr class="trClass" id="'+value.id+'">';
-                    tr += '<td>'+value.erp_id+'</td><td>'+value.buyer_name+'</td><td>'+value.order_no+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_no+'</td><td>'+value.reference_no+'</td><td>'+value.size+'</td><td>'+value.tax+'</td><td>'+value.delivered_qnty+'</td><td>'+value.rate+'</td><td>'+value.delivered_qnty * value.rate+'</td>';
+                    tr += '<td>'+value.erp_id+'</td><td>'+value.buyer_name+'</td><td>'+value.order_no+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_no+'</td><td>'+value.reference_no+'</td><td>'+size+'</td><td>'+value.tax+'</td><td>'+value.delivered_qnty+'</td><td>'+value.rate+'</td><td>'+(value.delivered_qnty * value.rate).toFixed(2)+'</td>';
                     tr += '</tr>';
                 }
                 else{
                     var hsnCode = value.hsn_code==null?'-':value.hsn_code;
                     tr += '<tr><td></td><td colspan="13"><strong style="float: left;">ITEM: '+value.item_name+'  HSNCode: '+hsnCode+'</strong></td></tr>';
-                    tr += '<td>'+value.erp_id+'</td><td>'+value.buyer_name+'</td><td>'+value.order_no+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_no+'</td><td>'+value.reference_no+'</td><td>'+value.size+'</td><td>'+value.tax+'</td><td>'+value.delivered_qnty+'</td><td>'+value.rate+'</td><td>'+value.delivered_qnty * value.rate+'</td>';
+                    tr += '<td>'+value.erp_id+'</td><td>'+value.buyer_name+'</td><td>'+value.order_no+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_no+'</td><td>'+value.reference_no+'</td><td>'+size+'</td><td>'+value.tax+'</td><td>'+value.delivered_qnty+'</td><td>'+value.rate+'</td><td style="border-width:1px !important;">'+(value.delivered_qnty * value.rate).toFixed(2)+'</td>';
                     tr += '</tr>';
                 } 
-                totalAmnt+= value.ordered_qnty * value.rate;
+                totalAmnt+= value.delivered_qnty * value.rate;
           });
 
-          tr+= '<tr><td colspan="11"><strong>Total</strong></td><td><strong>'+totalAmnt+'</strong></td></tr>';
-          $('#order_details').html('<table class="table table-bordered table-condensed preview-inv-details" id="preview-inv-details" style="width:100%"><thead><tr><th>ERP ID</th><th>Buyer</th><th>Order No</th><th>PO No</th><th>Style</th><th>OCN</th><th>Ref</th><th>Size</th><th>Tax (%)</th><th>Quantity</th><th>Rate (₹)</th><th>Amount (₹)</th></tr></thead><tbody>'+tr+'</tbody></table>');
+          tr+= '<tr><td colspan="11"><strong>Total</strong></td><td style="border-width:1px !important;"><strong>'+totalAmnt.toFixed(2)+'</strong></td></tr>';
+          $('#order_details').html('<table class="table table-bordered table-condensed preview-inv-details" id="preview-inv-details" style="width:100%"><thead><tr><th>ERP ID</th><th>Buyer</th><th>Order No</th><th>PO No</th><th>Style</th><th>OCN</th><th>Ref</th><th>Size</th><th>Tax (%)</th><th>Quantity</th><th>Rate (₹)</th><th style="border-width:1px !important;">Amount (₹)</th></tr></thead><tbody>'+tr+'</tbody></table>');
 
           var tax_amnt = taxDivision(data.inv_details)
           var tax_tr = "";  
@@ -372,21 +372,22 @@ function showInvoice(obj){
           Object.keys(tax_amnt).forEach(function(key) {
             if (place_of_supply==1){
                   var trClass = tax_amnt[key]!=0?"":"hidden"
-                  tax_tr = '<tr class="'+trClass+'"><td>CGST ('+(key/2)+'% )</td><td class="cgst_'+key+'">'+tax_amnt[key]+'</td><td>'+(((key/2)/100)*tax_amnt[key]).toFixed(2)+'</td></tr><tr class="'+trClass+'"><td>SGST ('+(key/2)+'% )</td><td class="sgst_'+key+'">'+tax_amnt[key]+'</td><td>'+ (((key/2)/100)*tax_amnt[key]).toFixed(2)+'</td></tr>'
+                  tax_tr = '<tr class="'+trClass+'"><td>CGST('+(key/2)+'%)</td><td class="cgst_'+key+'">'+tax_amnt[key]+'</td><td>'+(((key/2)/100)*tax_amnt[key]).toFixed(2)+'</td></tr><tr class="'+trClass+'"><td>SGST('+(key/2)+'%)</td><td class="sgst_'+key+'">'+tax_amnt[key]+'</td><td>'+ (((key/2)/100)*tax_amnt[key]).toFixed(2)+'</td></tr>'
               }
               else if (place_of_supply==2){
                   var trClass = tax_amnt[key]!=0?"":"hidden"
                   // if (tax_amnt[key]!=0) {                
-                      tax_tr = '<tr class="'+trClass+'"><td>IGST ('+key+'% )</td><td class="igst_'+key+'">'+tax_amnt[key]+'</td><td>'+((key/100)*tax_amnt[key]).toFixed(2)+'</td></tr>'
+                      tax_tr = '<tr class="'+trClass+'"><td>IGST('+key+'%)</td><td class="igst_'+key+'">'+tax_amnt[key]+'</td><td>'+((key/100)*tax_amnt[key]).toFixed(2)+'</td></tr>'
               }
               else{
-                  tax_tr = '<tr><td>Taxes ('+key+'% )</td><td>'+tax_amnt[key]+'</td><td>'+ ((key/100)*tax_amnt[key] ).toFixed(2)+'</td></tr>'
+                  tax_tr = '<tr><td>Taxes('+key+'%)</td><td>'+tax_amnt[key]+'</td><td>'+ ((key/100)*tax_amnt[key] ).toFixed(2)+'</td></tr>'
               }
 
               $('.tax-tabl').append(tax_tr);
-              $tT = $.isNumeric(taxSubTotal())?taxSubTotal().toFixed(2):0;
-              $('.tax-tabl').append('<tr><td colspan="2"><strong>SubTotal</strong></td><td class="tax-total"><strong>'+ $tT+'</strong></td></tr><tr></tr>')
+              
           });
+          $tT = $.isNumeric(taxSubTotal())?taxSubTotal().toFixed(2):0;
+              $('.tax-tabl').append('<tr><td colspan="2"><strong>SubTotal</strong></td><td class="tax-total"><strong>'+ $tT+'</strong></td></tr><tr></tr>')
           var taxTr = '';
           var exAmnt = 0 ;
           $(data.extra_charges).each(function(index, value)
@@ -397,7 +398,7 @@ function showInvoice(obj){
 
           var roundOff = data.inv_details[0].round_off_amnt ==null?0:data.inv_details[0].round_off_amnt;
           var rndClass = roundOff==0?"hidden":''
-          $('.inv-extra-charges').html('<table class="table table-bordered text-center inv-extra-charges" style="margin-top: -22px;"><thead><tr><th colspan="2">Description</th><th>Amount (₹)</th></tr></thead><tbody>'+taxTr+'<tr><td colspan="2"><strong>SubTotal</strong></td><td><strong class="preview-sub-extra">'+parseFloat(exAmnt).toFixed(2)+'</strong></td></tr><tr class="'+rndClass+'"><td colspan="2"><strong>Round Off</strong></td><td><strong id="preview-round-off">'+parseFloat(roundOff).toFixed(2)+'</strong></td></tr><tr></tr><tr><td colspan="2"><strong>Grand Total</strong></td><td class="grand-total"><strong>'+parseFloat(data.inv_details[0].grand_total).toFixed(2)+'</strong></td></tr><tr></tr></tbody></table>')
+          $('.inv-extra-charges').html('<table class="table table-bordered text-center inv-extra-charges" style="margin-top: -22px;"><thead><tr><th colspan="2">Description</th><th>Amount (₹)</th></tr></thead><tbody>'+taxTr+'<tr><td colspan="2"><strong>SubTotal</strong></td><td><strong class="preview-sub-extra">'+parseFloat(exAmnt).toFixed(2)+'</strong></td></tr><tr class="'+rndClass+'"><td colspan="2"><strong>Round Off</strong></td><td><strong id="preview-round-off">'+parseFloat(roundOff).toFixed(2)+'</strong></td></tr><tr></tr><tr><td colspan="2" style="border-width: 1px !important;"><strong>Grand Total</strong></td><td class="grand-total" style="border-width: 1px !important;"><strong>'+parseFloat(data.inv_details[0].grand_total).toFixed(2)+'</strong></td></tr><tr></tr></tbody></table>')
           $('.amnt-in-words').text(RsPaise($('.grand-total').text()))
           $('.invoice_actions').html('<button data-dismiss="modal" class=" btn btn-default btn-xs">Close</button><button class="btn btn-primary btn-xs" onclick="editInvoice()">Save & Send</button><button class="btn btn-default btn-xs downloadIn" id="downloadIn" onclick="downloadInvoice()">View as PDF</button>')
         },
@@ -479,8 +480,10 @@ function showInvoice(obj){
 
                 },
                 success: function(data) {
-                  console.log(data)
-                  location.reload();
+                  // console.log(data)
+                  $('.snackbar_span').html("Successfully send Invoice to the Customer !");
+                  showSnackbar();
+                  setTimeout(function(){window.location = 'invoice';}, 1000); 
                 },
                 error: function(data) {
 

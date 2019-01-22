@@ -77,7 +77,8 @@ class InvoiceController extends Controller
             $customer_id = $request->customer_id;
             $po_list   = Erp::where('customer_id',$customer_id)
                             ->join('erp_order_details','erp_order_details.erp_order_id','erp_orders.id')
-                            ->where('erp_orders.status','!=',5)
+                            ->whereIn('erp_orders.status',[3,6])
+                            // ->where('erp_orders.status','!=',5)
                             ->where('erp_order_details.company_id',session()->get('company'))
                             ->join('customers','erp_orders.customer_id','customers.id')
                             ->join('buyers','erp_orders.buyer_id','buyers.id')
@@ -109,6 +110,8 @@ class InvoiceController extends Controller
                             ->leftjoin('freight_terms','freight_terms.id','customers.freight_type')
                             ->where('erp_order_details.pending_orders','!=' , 0)
                             ->where('erp_order_details.company_id',session()->get('company'))
+                            ->whereIn('erp_orders.status',[3,6])
+                            // ->where('erp_orders.status','!=',5)
                             ->select('erp_order_details.id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','erp_orders.po_no','erp_order_details.style_no','erp_order_details.order_quantity','erp_order_details.rate','erp_order_details.size','erp_order_details.reference_name','customers.place_of_supply','erp_order_details.ocn_number','erp_order_details.template_id','erp_orders.erp_id as erp_id','buyers.template_table','buyers.item_master_table','erp_order_details.pending_orders as pending_qnty','erp_orders.po_file','erp_orders.customer_id','customers.gstin_number','erp_orders.id as erpid','credit_limit','customers.freight_type as freight_id','freight_terms.freight_terms as delvry_thru','customers.nominated_forwarder')
                             ->get();
             if ($orderlist[0]->freight_id == 3) {
@@ -322,7 +325,7 @@ class InvoiceController extends Controller
         try{
             $objInv      = new Invoice();
             $inv_id      = $request->inv_id;
-            $amntInwords   = $request->amntInwords;
+            $amntInwords = $request->amntInwords;
             $eway_no     = $request->eway_no;
             $inv_details = $objInv->getInvoiceDetails($inv_id);
             $ship_to     = $objInv->getShippTo($inv_details);
@@ -331,9 +334,11 @@ class InvoiceController extends Controller
                                 ->where('id',session()->get('company'))
                                 ->first();
             $extra_charges  = InvExtraCharges::where('invoice_id',$inv_id)->get();
-                    
+            $uniqueTaxes    = $objInv->getTaxDetails($inv_details);
+            
+            
             $dynView = View::make('template')
-                ->with(['company_details' => $company_details, 'inv_details' => $inv_details, 'ship_to'=>$ship_to,'bill_to'=>$bill_to,'inv_details'=>$inv_details,'eway_no'=> $eway_no,'amntInwords'=>$amntInwords , 'eChargesArr'=>$extra_charges]);
+                ->with(['company_details' => $company_details, 'inv_details' => $inv_details, 'ship_to'=>$ship_to,'bill_to'=>$bill_to,'inv_details'=>$inv_details,'eway_no'=> $eway_no,'amntInwords'=>$amntInwords , 'eChargesArr'=>$extra_charges,'uniqueTaxes'=>$uniqueTaxes]);
             ob_start();
             PDF::SetPrintHeader(false);
             PDF::SetPrintFooter(false);
@@ -352,6 +357,7 @@ class InvoiceController extends Controller
                         $message->attach($attatchment);
                         $message->to($useremail);
                     });
+
             $result    = response()->json(['error'=> false,'message' =>'success'],200);
         } 
         catch (\Exception $e)
