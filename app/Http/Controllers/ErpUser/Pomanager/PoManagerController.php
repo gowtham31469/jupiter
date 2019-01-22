@@ -116,6 +116,7 @@ class PoManagerController extends Controller
 										 ->groupBy('erp_orders.id','customers.company_name','erp_status.status_name')
 										 ->select('erp_orders.*','customers.company_name','erp_status.status_name')
 										 ->get();
+										
 				if(count($erp_order_details) > 0)
 				{
 					foreach($erp_order_details as $erp_order_det)
@@ -140,6 +141,8 @@ class PoManagerController extends Controller
 					$hold_orders_count++;
 				}
 		}
+
+
 		//return $new_orders;
 		return view('erp.Pomanager.poverify',['orders' => $orders_erp,'companies' => $companies,'new_orders' => $new_orders_count,'hold_orders' => $hold_orders_count]);
 	} 

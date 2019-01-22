@@ -133,7 +133,7 @@
         tr+= '<tr><td colspan="8"><strong>Total</strong></td><td class="qnty-sum">'+qnty+'</td><td class="balnc-qnty" id="balnc-qnty">'+pendQnty+'</td><td class="total-qnty" id="total-qnty">'+quantityTotal()+'</td><td></td><td class="total-amnt">'+amnt.toFixed(2)+'</td></tr>';
 
 
-        $('.order-details').html('<div class="col-lg-12 col-md-12 col-sm-12"><div><table class="table text-center table-bordered order-details" id="order-details"><thead><tr><th></th><th>Order No</th><th>PO No</th><th>Style</th><th>OCN No</th><th>Reference</th><th>Size</th><th>Tax (%)</th><th>Order Quantity</th><th>Pending Quantity</th><th>Delivered Quantity</th><th>Rate (₹)</th><th>Amount (₹)</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12"><tbody>'+tr+'</tbody></table></div></div>');
+        $('.order-details').html('<div class="col-lg-12 col-md-12 col-sm-12"><div><table class="table text-center table-bordered order-details" id="order-details"><thead><tr><th></th><th>Order No</th><th>PO No</th><th>Style</th><th>OCN No</th><th>Reference</th><th>Size</th><th>Tax (%)</th><th>Order Quantity</th><th>Pending Quantity</th><th>Delivered Quantity</th><th>Rate (₹)</th><th style="border-width: 1px !important;">Amount (₹)</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12"><tbody>'+tr+'</tbody></table></div></div>');
 
         updateTaxAmount(tax_amnt)
 
@@ -254,9 +254,9 @@
         $('#balnc-qnty').html(balncTotal())
         $(tax_array).each(function(key, vals){
             $('.order-details table tbody tr').each(function(){
-                if(parseInt($(this).find($(".tax-td")).text().split(" ")[0]) == vals){           
+                if(parseFloat($(this).find($(".tax-td")).text().split(" ")[0]) == vals){           
                     val=taxsum[vals] == undefined ? 0 : taxsum[vals];
-                    val+= $(this).find($(".amnt")).text() == "" ? 0 :parseInt($(this).find($(".amnt")).text())
+                    val+= $(this).find($(".amnt")).text() == "" ? 0 :parseFloat($(this).find($(".amnt")).text())
                     taxsum[vals] = val;
                    
                 }
@@ -326,6 +326,7 @@
 
         var tax_tr = "";       
         var tax_table = $('.orders-tax').html('<table class="table text-center table-bordered orders_tax" style="margin-top: -23px;;"><thead><tr><th>Tax</th><th>Base value (₹)</th><th>Amount (₹)</th></tr></thead><tbody class="tax-tabl"></tbody></table>')
+        console.log(tax_amnt)
         Object.keys(tax_amnt).forEach(function(key) {
           if (place_of_supply==1){
                 var trClass = tax_amnt[key]!=0?"":"hidden"
@@ -347,7 +348,7 @@
                 // }
             }
             else{
-                tax_tr = '<tr><td>Taxes ('+key+'% )</td><td>'+tax_amnt[key].toFixed(2)+'</td><td>'+ ((key/100)*tax_amnt[key] ).toFixed(2)+'</td></tr>'
+                tax_tr = '<tr><td>Taxes ('+key+'%)</td><td>'+tax_amnt[key].toFixed(2)+'</td><td>'+ ((key/100)*tax_amnt[key] ).toFixed(2)+'</td></tr>'
             }
             $('.tax-tabl').append(tax_tr);
         });
@@ -456,7 +457,7 @@
             tr+= '<tr><td colspan="7"><strong>Total</strong></td><td class="preview-total-qnty" id="preview-total-qnty"></td><td></td><td class="preview-total-amnt"></td></tr>';
             $('#item_details').html('<table class="table table-bordered table-condensed order-details" id="preview-order-details" style="width:100%"><thead><tr><th>Order No</th><th>PO No</th><th>Style</th><th>OCN</th><th>Ref</th><th>Size</th><th>Tax (%)</th><th>Quantity</th><th>Rate (₹)</th><th>Amount (₹)</th></tr></thead><tbody>'+tr+'</tbody></table>');
             var tax_tr = "";       
-            var tax_table = $('.preview-orders-tax').html('<table class="table table-bordered text-center preview_orders_tax" style="margin-top: -23px;"><thead><tr><th>Tax (%)</th><th>Base value (₹)</th><th>Amount (₹)</th></tr></thead><tbody class="preview-tax-tabl"></tbody></table>')
+            var tax_table = $('.preview-orders-tax').html('<table class="table table-bordered text-center preview_orders_tax" style="margin-top: -23px;"><thead><tr><th>Tax</th><th>Base value (₹)</th><th>Amount (₹)</th></tr></thead><tbody class="preview-tax-tabl"></tbody></table>')
 
             $('.preview-total-qnty').text($('.total-qnty').text())
             $('.preview-balnc-qnty').text($('.balnc-qnty').text())
@@ -468,7 +469,7 @@
             
                 if (place_of_supply==1){
                     if (tax_amnt[key]!=0) {
-                        tax_tr = '<tr><td>CGST ('+(key/2)+')</td><td class="cgst_'+key+'">'+tax_amnt[key]+'</td><td>'+(((key/2)/100)*tax_amnt[key]).toFixed(2)+'</td></tr><tr><td>SGST ('+(key/2)+')</td><td class="sgst_'+key+'">'+tax_amnt[key]+'</td><td>'+ (((key/2)/100)*tax_amnt[key]).toFixed(2)+'</td></tr>'    
+                        tax_tr = '<tr><td>CGST ('+(key/2)+'%)</td><td class="cgst_'+key+'">'+tax_amnt[key]+'</td><td>'+(((key/2)/100)*tax_amnt[key]).toFixed(2)+'</td></tr><tr><td>SGST ('+(key/2)+'%)</td><td class="sgst_'+key+'">'+tax_amnt[key]+'</td><td>'+ (((key/2)/100)*tax_amnt[key]).toFixed(2)+'</td></tr>'    
                     }
                     else{
                         tax_tr = ""; 
@@ -476,14 +477,14 @@
                 }
                 else if (place_of_supply==2){
                     if (tax_amnt[key]!=0) {
-                      tax_tr = '<tr><td>IGST ('+key+')</td><td class="igst_'+key+'">'+tax_amnt[key]+'</td><td>'+((key/100)*tax_amnt[key]).toFixed(2)+'</td></tr>'
+                      tax_tr = '<tr><td>IGST ('+key+'%)</td><td class="igst_'+key+'">'+tax_amnt[key]+'</td><td>'+((key/100)*tax_amnt[key]).toFixed(2)+'</td></tr>'
                     }
                     else{
                         tax_tr = ""; 
                     }
                 }
                 else{
-                    tax_tr = '<tr><td>Taxes ('+key+')</td><td>'+tax_amnt[key]+'</td><td>'+ ((key/100)*tax_amnt[key] ).toFixed(2)+'</td></tr>'
+                    tax_tr = '<tr><td>Taxes ('+key+'%)</td><td>'+tax_amnt[key]+'</td><td>'+ ((key/100)*tax_amnt[key] ).toFixed(2)+'</td></tr>'
                 }
                 $('.preview-tax-tabl').append(tax_tr);
             });
@@ -504,7 +505,7 @@
                 eTr += '<tr class="'+trclass1+'"><td colspan="2">'+eName+'</td><td>'+eAmount+'</td></tr>'
             });
             var tableHide = trclass1 && trclass2 && trclass3 =="hidden" ?"hidden":''
-            $('.preview-extra-charges').html('<table class="table table-bordered text-center preview-extra-charges" style="margin-top: -22px;"><thead><tr class='+tableHide+'><th colspan="2">Description</th><th>Amount (₹)</th></tr></thead><tbody>'+eTr+'<tr class='+tableHide+'><td colspan="2"><strong>SubTotal</strong></td><td><strong class="preview-sub-extra"></strong></td></tr><tr><td colspan="2"><strong>Round Off</strong></td><td><strong class="preview-round-off" id="preview-round-off"></strong></td></tr><tr></tr><tr><td colspan="2"><strong>Grand Total</strong></td><td><strong class="preview-grand-total"></strong></td></tr><tr></tr></tbody></table>')
+            $('.preview-extra-charges').html('<table class="table table-bordered text-center preview-extra-charges" style="margin-top: -22px;"><thead><tr class='+tableHide+'><th colspan="2">Description</th><th>Amount (₹)</th></tr></thead><tbody>'+eTr+'<tr class='+tableHide+'><td colspan="2"><strong>SubTotal</strong></td><td><strong class="preview-sub-extra"></strong></td></tr><tr><td colspan="2"><strong>Round Off</strong></td><td><strong class="preview-round-off" id="preview-round-off"></strong></td></tr><tr></tr><tr><td colspan="2" style="border-width: 1px !important;"><strong>Grand Total</strong></td><td style="border-width: 1px !important;"><strong class="preview-grand-total"></strong></td></tr><tr></tr></tbody></table>')
                  
                 $('.preview-round-off').text(parseFloat($('#round-off').val()).toFixed(2))
                 $('.preview-total-amnt').text($('.total-amnt').text())
