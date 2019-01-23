@@ -23,35 +23,6 @@ var isSubmitting = false;
    }
   }
 
-/** 
- * Validation for numeric values with dot*
- * @param  evt
- * @return {Boolean}
- * @author <praveen>
- */
- function isNumberKey(evt){
-  try{
-       var charCode = (evt.which) ? evt.which : event.keyCode
-
-       if (charCode == 46)
-       {
-           var inputValue = $("#inputfield").val()
-           if (inputValue.indexOf('.') < 1)
-           {
-               return true;
-           }
-           return false;
-       }
-       if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
-       {
-           return false;
-       }
-       return true;
-    } catch (e) {
-     console.log("Error:"+e)
-   }
-  }
-
 /**
   * Function to Orchestra Settings home page
   * @author <praveen>
