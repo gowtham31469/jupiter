@@ -340,7 +340,7 @@ function showInvoice(obj){
           $('#credit-val').text(data.inv_details[0].credit_limit);
           $('#company_details').html('<h4>'+data.company_details.name+'</h4>'+data.company_details.address+'<p>PH : '+data.company_details.office_phone+', '+data.company_details.phone+'</br> <strong>GSTIN : '+data.company_details.gstin+'</strong></p>')
 
-          $('#bill_to').html('<h4>'+data.inv_details[0].company_name+'</h4><p>'+data.bill_to.address+'</br> GSTIN :'+data.inv_details[0].gstin_number+ '</p>')
+          $('#bill_to').html('<p>Buyer</p><h4>'+data.inv_details[0].company_name+'</h4><p>'+data.bill_to.address+'</br> GSTIN :'+data.inv_details[0].gstin_number+ '</p>')
           var itemName ="";
           $(data.inv_details).each(function(index, value)
           {   
@@ -392,7 +392,7 @@ function showInvoice(obj){
           var exAmnt = 0 ;
           $(data.extra_charges).each(function(index, value)
           {
-              taxTr += '<tr><td colspan="2">'+value.ext_chrg_name  +'</td><td>'+value.amount+'</td></tr>';
+              taxTr += '<tr><td colspan="2">'+value.ext_chrg_name  +'</td><td>'+parseFloat(value.amount).toFixed(2)+'</td></tr>';
               exAmnt+=parseFloat(value.amount);
           });
 
