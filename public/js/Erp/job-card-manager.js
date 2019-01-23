@@ -3,9 +3,9 @@
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
+var csrf_token = $('meta[name="csrf-token"]').attr('content');
 $(document).ready(function() {
     var base_url = "<?php echo  url('/') ?>";
-
 	$('input[class="row-checkbox"]').prop('checked', false);
 
 	$('#create_jobcard').trigger("reset");
@@ -30,7 +30,6 @@ $(document).ready(function() {
          	 $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
           	$('#buyerSelectionModalCenter').modal('hide');
 		  
-	 		var csrf_token = $('meta[name="csrf-token"]').attr('content');
 			$.ajax({
 				url: base_url + "/erp/po-manager/set_company_session",
 				type: "Post",
@@ -524,16 +523,16 @@ function generateJobcard(){
                                         meters_div_html +='<div class="col-md-12">\
                                                     <div class="col-md-3">\
                                                         <label for="act_excess_'+template_name[0].replace(' ', '_')+'" >ACT EXCESS % ('+template_name[0]+'):</label>\
-                                                        <span id="act_excess_'+template_name[0].replace(' ', '_')+'"></span>\
+                                                        <span class="act-excess" data-act-excess-ref="'+template_name[0]+'" id="act_excess_'+template_name[0].replace(' ', '_')+'"></span>\
                                                     </div>\
                                                     <div class="col-md-3">\
                                                         <label for="sticker_mtr_'+template_name[0].replace(' ', '_')+'" >MTRS FOR STICKERS ('+template_name[0]+'):</label>\
-                                                        <span id="sticker_mtr_'+template_name[0].replace(' ', '_')+'"></span>\
+                                                        <span class="sticker-mtrs" id="sticker_mtr_'+template_name[0].replace(' ', '_')+'"></span>\
                                                     </div>\
                                                     <div class="col-md-3">\
                                                     <div class="form-group has-feedback form-inline">\
                                                         <label for="settings_'+template_name[0].replace(' ', '_')+'" >SETTINGS ('+template_name[0]+') :</label>\
-                                                        <input type="number" step="0.01" min="1" data-step-error="Max 2 decimal places allowed." data-min-error="Value must be >= 1" class="form-control input-sm" required="" name="settings_'+template_name[0].replace(' ', '_')+'" placeholder="SETTINGS" id="settings_'+template_name[0].replace(' ', '_')+'" onkeyup="return totalMeters()">\
+                                                        <input type="number" step="0.01" min="1" data-step-error="Max 2 decimal places allowed." data-min-error="Value must be >= 1" class="form-control input-sm settings" required="" name="settings_'+template_name[0].replace(' ', '_')+'" placeholder="SETTINGS" id="settings_'+template_name[0].replace(' ', '_')+'" onkeyup="return totalMeters()">\
                                                         <div class="help-block with-errors"></div>\
                                                     </div>\
                                                     </div>\
@@ -829,8 +828,9 @@ function storeJobcard(formData)
         my_object.buyer_po_number = $(row).find ( "#ratio_tr_buyer_po_"+index ).text();
         my_object.ocn_number      = $(row).find ( "#ratio_tr_ocn_"+index ).text();
         my_object.order_quantity  = $(row).find ( "#ratio_tr_qty_"+index ).text();
+        my_object.template_id     = $(row).data ( 'template-id' );
 
-        array_list.push(JSON.stringify(my_object));
+        array_list.push(my_object);
         index++;
       });
       ratio_object[ref_name] = array_list;
@@ -844,32 +844,40 @@ function storeJobcard(formData)
             "erp_id": [],
             "buyer_po": [],
             "ocn": [],
+            "temp_id": [],
             "size": [],
             "total": [],
             "excess": []
               };
         var single_ref_obj = {};
-        var erp_id_bject   = {};
+        var erp_id_object  = {};
         var erp_id_array   = [];
         var po_object      = {};
         var po_array       = [];
         var ocn_object     = {};
         var ocn_array      = [];
+        var temp_id_object = {};
+        var temp_id_array  = [];
         single_ref_name    = $(table).find('tbody tr:eq(0) td:last-child').data('single-ref-name');
         
         // create erp_id array
         $(table).find('tbody tr:eq(0) td:not(:last)').each(function (i, item) {
-            erp_id_bject = {};
-            erp_id_bject = item.innerHTML;
-            erp_id_array.push(JSON.stringify(erp_id_bject));
+            erp_id_object = {};
+            erp_id_object = item.innerHTML;
+            erp_id_array.push(erp_id_object);
+
+            temp_id_object = {};
+            temp_id_object = $(item).data('template-id');
+            temp_id_array.push(temp_id_object);
         });
-        single_obj['erp_id'] = erp_id_array;
+        single_obj['erp_id']  = erp_id_array;
+        single_obj['temp_id'] = temp_id_array;
 
         // create po number array
         $(table).find('tbody tr:eq(1) td').each(function (i, item) {
             po_object = {};
             po_object = item.innerHTML;
-            po_array.push(JSON.stringify(po_object));
+            po_array.push(po_object);
         });
         single_obj['buyer_po'] = po_array;
 
@@ -877,7 +885,7 @@ function storeJobcard(formData)
         $(table).find('tbody tr:eq(2) td').each(function (i, item) {
             ocn_object = {};
             ocn_object = item.innerHTML;
-            ocn_array.push(JSON.stringify(ocn_object));
+            ocn_array.push(ocn_object);
         });
         single_obj['ocn'] = ocn_array;
 
@@ -892,7 +900,7 @@ function storeJobcard(formData)
             $(item).find('.quantity-td').each(function (index, row) {
                 size_object = {};
                 size_object = row.innerHTML;
-                size_array.push(JSON.stringify(size_object));
+                size_array.push(size_object);
             });
             size_object_final[size_text] = size_array;
 
@@ -917,8 +925,112 @@ function storeJobcard(formData)
         // pushing single templates array into json object
         final_json_obj.single.push(single_ref_obj);
     });
+console.log(final_json_obj)
+    var single_ref = [];
+    var act_excess = [];
+    /** [ Create array of act-excess ] */
+    $('.act-excess').each(function (i, item) {
+        act_excess[i] = $(item).text();
+        single_ref[i] = $(item).data('act-excess-ref');
+    });
+    act_excess = act_excess.join(',');
+    single_ref = single_ref.join(',');
 
- console.log(final_json_obj)
+    var sticker_mtr = [];
+    /** [ Create array of sticker-mtrs ] */
+    $('.sticker-mtrs').each(function (i, item) {
+        sticker_mtr[i] = $(item).text();
+
+    });
+    sticker_mtr = sticker_mtr.join(',');
+
+    var settings = [];
+    /** [ Create array of settings ] */
+    $('.settings').each(function (i, item) {
+        settings[i] = $(item).val();
+
+    });
+    settings = settings.join(',');
+
+    var total_mtrs = [];
+    /** [ Create array of total-meters ] */
+    $('.total-meters').each(function (i, item) {
+        total_mtrs[i] = $(item).text();
+
+    });
+    total_mtrs = total_mtrs.join(',');
+    
+    $.ajax({
+        url: base_url + "/erp/store-jobcard-details",
+        type: 'POST',
+        data: {
+            _token: csrf_token,
+            company_id: company_id,
+            workorder_id: workorder_id,
+            created_date: created_date,
+            article: article,
+            material: material,
+            customer_id: customer_id,
+            style_no: style_no,
+            order_type: order_type,
+            buyer_id: buyer_id,
+            reference: reference,
+            disp_mode: disp_mode,
+            order_date: order_date,
+            length: length,
+            repeat_gap: repeat_gap,
+            machine: machine,
+            cus_del_date: cus_del_date,
+            roll_width: roll_width,
+            width: width,
+            film_no: film_no,
+            act_del_date: act_del_date,
+            length_side: length_side,
+            excess: excess,
+            teeth_no: teeth_no,
+            inv_no: inv_no,
+            no_sticker: no_sticker,
+            finish_type: finish_type,
+            print_color:print_color,
+            compiled_by:compiled_by,
+            barcode_read:barcode_read,
+            operator:operator,
+            checker:checker,
+            authorized_by:authorized_by,
+            axicon_verifier:axicon_verifier,
+            approved_by:approved_by,
+            packer:packer,
+            approval_date:approval_date,
+            roll_issued_by:roll_issued_by,
+            cutter:cutter,
+            cartons:cartons,
+            final_json_obj:final_json_obj,
+            single_ref:single_ref,
+            act_excess:act_excess,
+            sticker_mtr:sticker_mtr,
+            settings:settings,
+            total_mtrs:total_mtrs
+        },
+        tryCount: 0,
+        retryLimit: 2,
+        dataType: "json",
+        beforeSend: function () {
+            $(".loader").show();
+        },
+        success: function (data) {
+            console.log(data)
+        },
+        error: function (errorXHR, errorStatus, errorThrown) {
+            this.tryCount++;
+            if (this.tryCount <= this.retryLimit) {
+                $.ajax(this);
+                return;
+            }
+        },
+        complete: function () {
+            $(".loader").hide();
+        }
+    })
 }
 
 

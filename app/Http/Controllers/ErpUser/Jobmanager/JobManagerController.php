@@ -32,7 +32,7 @@ class JobManagerController extends Controller
     }
 
     /**
-     * Show the Po Manager List View.
+     * Show the Jobcard  Manager List View.
      * @author [Gowtham] <[gowtham@wizroots.com]>
      * @return \Illuminate\Http\Response
      */
@@ -362,5 +362,65 @@ class JobManagerController extends Controller
           {
             return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
           }
-    }
+	}
+	
+	/**
+     * To store Jobcard data.
+     * @author [Praveen] <[praveen@wizroots.com]>
+     * @return \Illuminate\Http\Response
+     */
+	public function storeJobcardData(Request $request)
+	{
+		try {
+				$company_id      = $request['company_id'];
+				$workorder_id    = $request['workorder_id'];
+				$created_date    = $request['created_date'];
+				$article         = $request['article'];
+				$material        = $request['material'];
+				$customer_id     = $request['customer_id'];
+				$style_no        = $request['style_no'];
+				$order_type      = $request['order_type'];
+				$buyer_id        = $request['buyer_id'];
+				$reference       = $request['reference'];
+				$disp_mode       = $request['disp_mode'];
+				$order_date      = $request['order_date'];
+				$length          = $request['length'];
+				$repeat_gap      = $request['repeat_gap'];
+				$machine         = $request['machine'];
+				$cus_del_date    = $request['cus_del_date'];
+				$roll_width      = $request['roll_width'];
+				$width           = $request['width'];
+				$film_no         = $request['film_no'];
+				$act_del_date    = $request['act_del_date'];
+				$length_side     = $request['length_side'];
+				$excess          = $request['excess'];
+				$teeth_no        = $request['teeth_no'];
+				$inv_no          = $request['inv_no'];
+				$no_sticker      = $request['no_sticker'];
+				$finish_type     = $request['finish_type'];
+				$print_color     = $request['print_color'];
+				$compiled_by     = $request['compiled_by'];
+				$barcode_read    = $request['barcode_read'];
+				$operator        = $request['operator'];
+				$checker         = $request['checker'];
+				$authorized_by   = $request['authorized_by'];
+				$axicon_verifier = $request['axicon_verifier'];
+				$approved_by     = $request['approved_by'];
+				$packer          = $request['packer'];
+				$approval_date   = $request['approval_date'];
+				$roll_issued_by  = $request['roll_issued_by'];
+				$cutter          = $request['cutter'];
+				$cartons         = $request['cartons'];
+				$final_json_obj  = $request['final_json_obj'];
+				$single_ref      = explode(',', $request['single_ref']);
+				$act_excess 	 = explode(',', $request['act_excess']);
+				$sticker_mtr 	 = explode(',', $request['sticker_mtr']);
+				$settings        = explode(',', $request['settings']);
+				$total_mtrs 	 = explode(',', $request['total_mtrs']);
+		}
+		catch (\Exception $e)
+		{
+		return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+		}
+	}
 }

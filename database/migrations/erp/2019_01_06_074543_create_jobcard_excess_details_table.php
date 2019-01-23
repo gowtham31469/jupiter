@@ -15,7 +15,8 @@ class CreateJobcardExcessDetailsTable extends Migration
     {
         Schema::create('jobcard_excess_details', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('jobcard_main_table_id')->unsigned();   
+            $table->integer('jobcard_main_table_id')->unsigned();  
+            $table->string('ref_name'); 
             $table->double('mtrs_for_stickers');
             $table->double('actual_excess');   
             $table->double('settings');
