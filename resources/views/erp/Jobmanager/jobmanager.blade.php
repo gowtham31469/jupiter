@@ -234,6 +234,7 @@
 								<th>Style Number</th>
 								<th>Reference Number</th>
 								<th>Delivery Date</th>
+								<th>Operations</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -259,6 +260,8 @@
 								@else
 									<td>-</td>
 								@endif
+								<?php $ref_name = str_replace(" ","",$vals->reference_name) ?>
+								<td><a class="artork_download" href="javascript:void(0)" onclick="openmodaltesco('{{$ref_name}}','{{ $loop->iteration }}','{{$vals->template_file}}','{{$vals->style_no}}','{{$vals->buyer_po_number}}','{{$vals->id}}')"><i class="fa fa-file-pdf-o fa-button" data-placement="top" title="" data-original-title="Download Artwork"></i></a></td>
 							</tr>
 							@endforeach
 						</tbody>
@@ -269,6 +272,9 @@
             </div>
         </div>
     </div>
+
+<div id="modaldiv">
+</div>
 <!-- company selection Modal -->
 <div class="modal buyer-selection-modal fade" id="buyerSelectionModalCenter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
      <div class="modal-dialog buyer-selection-modal-dialog" role="document">

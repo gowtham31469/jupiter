@@ -3,7 +3,7 @@
  * 
  * @return barcode
  */
-function openmodaltesco(modal, i,template_file) {
+function openmodaltesco(modal, i,template_file,style_no,buyer_no,id) {
 	$('#modaldiv').html('  <div class="modal fade" id="' + modal + '" role="dialog">\
                                              <div class="modal-dialog">\
                                                <div class="modal-content">\
@@ -36,24 +36,46 @@ function openmodaltesco(modal, i,template_file) {
 
 	$('#' + modal).on('shown.bs.modal', function () {
 		svgDoc = mySVG.contentDocument;
-		genarateArtwork("tesco_svg_modal" + i, modal);
-	});
+		genarateArtwork("tesco_svg_modal" + i, modal,style_no,buyer_no,id);
+});
 
 	//}, false);
 
 }
 
+function genarateArtwork(data, name,style_no,buyer_no,id) {
 
-function genarateArtwork(data, name) {
-	console.log(data);
 	var a = document.getElementById(data);
 	var svgDoc = a.contentDocument;
 	var zone = localStorage.getItem("zone");
+	var name2=name;
 	var name = name + "-sticker";
 	if (name == "TSL1-sticker" || name == "TSL3-sticker") {
 		var svgarr = [];
 		var ajax_count = 0;
-		$('#table_row tr').each(function (key, val) {
+		var b = " ";
+		var position = 3;
+		var ref_name = [name2.slice(0, position), b, name2.slice(position)].join('').trim();
+	
+		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			$.ajax({
+				url: base_url + "/erp/job-manager/get_order_details",
+				type: "Post",
+				dataType: "json",
+				data: {
+					_token: csrf_token,
+					ref_name: ref_name,
+					style_no: style_no,
+					buyer_no: buyer_no,
+					id: id
+				},
+				beforeSend: function() {
+
+				},
+				success: function(data) {
+					
+					
+		$(data.order_details).each(function (key, val) {
 			var svgRoot = svgDoc.documentElement;
 
 			if ((name == "TSL1-sticker" && zone == "CE")) {
@@ -250,17 +272,46 @@ function genarateArtwork(data, name) {
 			}
 			ajax_count++;
 		})
+					if (ajax_count == data.order_details.length) {
+						var svg_fin = svgarr.join(',_');
+						PopupTescoSmall(svg_fin, name);
+					}
+				},
+				error: function(data) {
 
-		if (ajax_count == document.getElementById("table_row").rows.length) {
-			var svg_fin = svgarr.join(',_');
-			PopupTescoSmall(svg_fin, name);
-		}
+				},
+				complete: function() {
+
+				}
+			})
+
+		
+		
 
 
 	} else {
 		var svgarr = [];
 		var ajax_count = 0;
-		$('#table_row tr').each(function (key, val) {
+		var b = " ";
+		var position = 3;
+		var ref_name = [name2.slice(0, position), b, name2.slice(position)].join('').trim();
+		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			$.ajax({
+				url: base_url + "/erp/job-manager/get_order_details",
+				type: "Post",
+				dataType: "json",
+				data: {
+					_token: csrf_token,
+					ref_name: ref_name,
+					style_no: style_no,
+					buyer_no: buyer_no,
+					id: id
+				},
+				beforeSend: function() {
+
+				},
+				success: function(data) {
+					$(data.order_details).each(function (key, val) {
 			var svgRoot = svgDoc.documentElement;
 			if ((name == "TCL1-sticker" && zone == "CE") || (name == "TCL2-sticker" && zone == "CE") || (name == "TSL1-sticker" && zone == "CE") || (name == "THL1-sticker" && zone == "CE")) {
 				svgDoc.getElementById("pieces_in_ratio").innerHTML = $(this).find('.ce_ratio_cpc').val();
@@ -373,11 +424,20 @@ function genarateArtwork(data, name) {
 
 			ajax_count++;
 		})
+			if (ajax_count == data.order_details.length) {
+				var svg_fin = svgarr.join(',_');
+				PopupTesco(svg_fin, name);
+			}
+				},
+				error: function(data) {
 
-		if (ajax_count == document.getElementById("table_row").rows.length) {
-			var svg_fin = svgarr.join(',_');
-			PopupTesco(svg_fin, name);
-		}
+				},
+				complete: function() {
+
+				}
+			});
+		
+		
 
 	}
 

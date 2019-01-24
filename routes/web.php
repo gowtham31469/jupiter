@@ -620,6 +620,7 @@ Route::group(['prefix' => 'erp'], function () {
 	
 	/* Routes for jobcard Manager Module */
 	Route::get('/job-manager', 'ErpUser\Jobmanager\JobManagerController@index')->name('jobManager'); 
+	Route::post('/job-manager/get_order_details', 'ErpUser\Jobmanager\JobManagerController@getOrderDetails'); 
 	Route::get('/get-jobcard-order-details', 'ErpUser\Jobmanager\JobManagerController@getOrderDetailsByIds'); 
 	Route::post('/store-jobcard-details', 'ErpUser\Jobmanager\JobManagerController@storeJobcardData'); 
 
