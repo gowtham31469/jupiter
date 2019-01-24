@@ -29,7 +29,10 @@
         border-right-width: 1px !important; 
     }
 
- 
+    .delivery-at-link a:hover {
+      background-color: blue !important;
+    }
+   
 </style>
 <ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
 <li><a href="{{ url('/erp/invoice') }}" class="">Invoice List</a></li>
@@ -102,7 +105,7 @@
                     </div> 
                     <div class="col-md-7 remarks hidden">
                         <label>Select Delivery Address</label>
-                        <div class="row delivery-at">
+                        <div class="row delivery-address">
                        <!--  <div class="col-md-6">
                            
                         </div> -->
