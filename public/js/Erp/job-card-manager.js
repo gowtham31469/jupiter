@@ -1017,9 +1017,15 @@ console.log(final_json_obj)
         beforeSend: function () {
             $(".loader").show();
         },
-        success: function (data) {
-            console.log(data)
-        },
+        statusCode: {
+            200: function(data) {
+                   console.log(data)
+              },
+            400: function() {
+                $('.snackbar_span').html("Parameter is missing !!!");
+                showSnackbar();
+            },
+       },
         error: function (errorXHR, errorStatus, errorThrown) {
             this.tryCount++;
             if (this.tryCount <= this.retryLimit) {
