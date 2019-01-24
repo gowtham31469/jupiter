@@ -32,6 +32,16 @@
                     $('.po-select').not(this).prop('checked', false);  
                         showOrderList(this)                           
                     });
+
+                    console.log(data.address_list)
+                    if (data.address_list!= 0){
+                        var add = ''
+                        $(data.address_list).each(function(index, value)
+                        {
+                            add += '<div class="col-md-4"><a class="delivery-at-link" style="cursor: pointer;"><div class="card delivery-card delivery-at" data-name =""  data-value ="" id=""><strong>'+value.address+'</strong><p>'+value.email+'</p><p>'+value.pincode+'</p><p>'+value.telephone   +'</p></div></a></div>';
+                        });
+                        $('.delivery-at').html(add)
+                    }
                 }
                 else{
                     $('.snackbar_span').html("No Orders found for this Customer !");
@@ -42,10 +52,8 @@
                     $('.remarks').addClass('hidden')
                     $('.extra-charges').addClass('hidden')
                     $('.orders-tax').addClass('hidden')
-                    $('.create-invoice').addClass('hidden')
-                    
-                    
-                }                
+                    $('.create-invoice').addClass('hidden')                  
+                }
             },
             error: function (errorXHR, errorStatus, errorThrown) {
                
@@ -114,14 +122,14 @@
             var size = (value.size == null)?'-':value.size ;
             if (itemName==value.item_name) {
                 tr += '<tr class="trClass" id="'+value.id+'">';
-                tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" checked/></td><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><input type="text" value="" class="form-control delivery-qnty" style="text-align: center;" required data-id="'+value.id+'" min="1" onkeyup="updateAmount.call(this,'+uniqueTax+')"></td><td class="rate">'+value.rate+'</td><td class="amnt">'+value.pending_qnty * value.rate+'</td>';
+                tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" checked/></td><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><input type="number" id="delivery-qnty" value="" class="form-control delivery-qnty" style="text-align: center;" required data-id="'+value.id+'" min="1" onkeyup="updateAmount.call(this,'+uniqueTax+')"></td><td class="rate">'+value.rate+'</td><td class="amnt">'+value.pending_qnty * value.rate+'</td>';
                 tr += '</tr>';
                 
             }
             else{
                 var hsnCode = value.hsn_code==null?'-':value.hsn_code;
                 tr += '<tr><td></td><td colspan="13"><strong style="float: left;">ITEM: '+value.item_name+'  HSNCode: '+hsnCode+'</strong></td></tr><tr class="trClass" id="'+value.id+'">';
-                tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" checked/></td><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><input type="number" min="1" value="" class="form-control delivery-qnty" style="text-align: center;" required data-id="'+value.id+'" min="1" onkeyup="updateAmount.call(this,'+uniqueTax+')"></td><td class="rate">'+value.rate+'</td><td class="amnt">'+(value.pending_qnty * value.rate).toFixed(2)+'</td>';
+                tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" checked/></td><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><input type="number" min="1" step="1" value="" class="form-control delivery-qnty" id="delivery-qnty" style="text-align: center;" required data-id="'+value.id+'" min="1" onkeyup="updateAmount.call(this,'+uniqueTax+')"></td><td class="rate">'+value.rate+'</td><td class="amnt">'+(value.pending_qnty * value.rate).toFixed(2)+'</td>';
                 tr += '</tr>';
             }
             qnty += value.order_quantity;
@@ -139,7 +147,7 @@
 
         var gndtotal = parseFloat($('.tax-total').text())+ parseFloat($('.total-amnt').text());
         
-        $('.extra-charges').html('<table class="table table-bordered text-center extra-charges" style="margin-top: -22px;"><thead><tr><th>Description</th><th>Amount (₹)</th><th><button type="button" onclick="addExtraCharges(this,event)" data-id="1" class="btn btn-default btn-sm add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i></button></th></tr></thead><tbody id="table_row"><tr class="ext_charges_tr"><td><select class="charges" id="charges1" name="charges1" required><option  data-id="0" value=""></option><option data-id="Freight" value="freight">Freight</option><option data-id="Minimum charges" value="minimumcharges">Minimum charges</option><option data-id="Job Work Charges" value="jobwork">Job Work Charges</option></select></td><td style="width: 116px;"><input type="number" value="" min="0" id="chrg_val1" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr></tbody></table><table class="table table-bordered text-center" style="margin-top: -22px;"><tbody><tr><td colspan="2"><strong>SubTotal</strong></td><td class="sub-extra">0.00</td></tr><tr></tr><tr><td colspan="2"><strong>Round Off</strong></td><td style="width: 116px;"><input type="text" min="0" value="0.00" id="round-off" step=".01" class="form-control round-off" onkeyup="updateGrandTotal(this,'+gndtotal+')"></td></tr><tr><td colspan="2" style="border-width: 1px !important;"><strong>Grand Total</strong></td><td class="grand-total" style="border-width: 1px !important;">'+gndtotal.toFixed(2)+'</td></tr><tr></tr></tbody></table><div class="create-invoice"><button type="button" class="btn btn-primary create-invoice pull-right" style="margin-top: -10px;" id="create-invoice">Create Invoice</button></div>')
+        $('.extra-charges').html('<table class="table table-bordered text-center extra-charges" style="margin-top: -22px;"><thead><tr><th>Description</th><th>Amount (₹)</th><th><button type="button" onclick="addExtraCharges(this,event)" data-id="1" class="btn btn-default btn-sm add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i></button></th></tr></thead><tbody id="table_row"><tr class="ext_charges_tr"><td><select class="charges" id="charges1" name="charges1" required><option  data-id="0" value=""></option><option data-id="Freight" value="freight">Freight</option><option data-id="Minimum charges" value="minimumcharges">Minimum charges</option><option data-id="Job Work Charges" value="jobwork">Job Work Charges</option></select></td><td style="width: 116px;"><input type="number" value="" min="0" id="chrg_val1" class="form-control extra-amnt" onkeyup="updateTotal()"></td></tr></tbody></table><table class="table table-bordered text-center" style="margin-top: -22px;"><tbody><tr><td colspan="2"><strong>SubTotal</strong></td><td class="sub-extra">0.00</td></tr><tr></tr><tr><td colspan="2"><strong>Round Off</strong></td><td style="width: 116px;"><input type="number" min="0" value="0.00" id="round-off" step=".01" class="form-control round-off" onkeyup="updateGrandTotal(this,'+gndtotal+')"></td></tr><tr><td colspan="2" style="border-width: 1px !important;"><strong>Grand Total</strong></td><td class="grand-total" style="border-width: 1px !important;">'+gndtotal.toFixed(2)+'</td></tr><tr></tr></tbody></table><div class="create-invoice"><button type="button" class="btn btn-primary create-invoice pull-right" style="margin-top: -10px;" id="create-invoice">Create Invoice</button></div>')
 
             $('#create-invoice').on('click',function(){
                 previewInvoice(orderData)
@@ -169,6 +177,7 @@
             $('.extra-charges').addClass('hidden')
         }
     }
+
 
     function taxDivision(orderData){
         var taxIndexes = [] ;
@@ -209,7 +218,6 @@
     }
 
     function updateAmount() {
-        // var flg = 0;
         var tax_array= [].slice.call(arguments);
         var amnt  = '' ;
         var result = [];
@@ -219,7 +227,7 @@
         console.log($(this).closest('tr').find('.pending-qnty').text())
         var oldPendQnty = $(this).closest('tr').find('.pending-qnty').attr('data-id');
 
-        if ($.isNumeric($(this).val()) && $(this).val() >0) {
+        if ($.isNumeric($(this).val()) && $(this).val() >0 && (Math.floor($(this).val()) == $(this).val() && $.isNumeric($(this).val())) ) {
             if ($(this).val() == parseInt(oldPendQnty)) {
                 amnt  = parseInt($(this).val()) * $(this).closest('tr').find('.rate').text();
                 $(this).closest('tr').find('.amnt').html(amnt.toFixed(2))
@@ -648,6 +656,7 @@
        else{
             grandTotal = parseFloat($('.total-amnt').text()) + parseFloat($('.tax-total').text()) + parseFloat($('.sub-extra').text()) 
             $('.grand-total').html(grandTotal.toFixed(2))
+            $(obj).val('')
        }    
     }
 
