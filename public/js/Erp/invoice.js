@@ -218,7 +218,6 @@
     }
 
     function updateAmount() {
-        // var flg = 0;
         var tax_array= [].slice.call(arguments);
         var amnt  = '' ;
         var result = [];
@@ -228,7 +227,7 @@
         console.log($(this).closest('tr').find('.pending-qnty').text())
         var oldPendQnty = $(this).closest('tr').find('.pending-qnty').attr('data-id');
 
-        if ($.isNumeric($(this).val()) && $(this).val() >0) {
+        if ($.isNumeric($(this).val()) && $(this).val() >0 && (Math.floor($(this).val()) == $(this).val() && $.isNumeric($(this).val())) ) {
             if ($(this).val() == parseInt(oldPendQnty)) {
                 amnt  = parseInt($(this).val()) * $(this).closest('tr').find('.rate').text();
                 $(this).closest('tr').find('.amnt').html(amnt.toFixed(2))
