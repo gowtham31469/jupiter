@@ -459,7 +459,7 @@ class JobManagerController extends Controller
 						'roll_issued_by'         => $roll_issued_by,
 						'cutter'                 => $cutter,
 						'cartons'                => $cartons,
-						'template_quantity_json' => $final_json_obj,
+						//'template_quantity_json' => $final_json_obj,
 						'created_at'             => Carbon::now('Asia/Kolkata')->toDateTimeString(),
 						'updated_at'             => Carbon::now('Asia/Kolkata')->toDateTimeString()
 					  ]);
