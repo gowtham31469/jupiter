@@ -15,3 +15,4 @@ vendor
 config/tabula\.php
 readme\.md
 public/storage/app/TESCO/purchaseOrder/
+public/storage/app/public/po-files/
