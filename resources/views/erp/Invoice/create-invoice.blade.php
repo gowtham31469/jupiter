@@ -100,20 +100,13 @@
                     <div class="table-responsive order-details hidden">
                     
                     </div> 
-                    <div class="col-md-4 remarks hidden">
-                     <!--    <label>Credit Terms</label>
-                        <div class='form-group'>
-                           <input type="text" class="form-control" name="credit-terms" id="credit-terms" required="">
+                    <div class="col-md-7 remarks hidden">
+                        <label>Select Delivery Address</label>
+                        <div class="row delivery-at">
+                       <!--  <div class="col-md-6">
+                           
                         </div> -->
-                       <!--  <label>E-Way Bill No.</label>
-                        <div class='form-group'>
-                           <input type="text" class="form-control" name="eway-billno" id="eway-billno" required="">
-                        </div> -->
-
-                    </div>
-                    <div class="col-md-3">
-                        
-
+                        </div>
                     </div>
                     <div class="col-md-5">
                         <div class="orders-tax">
