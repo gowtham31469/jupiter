@@ -32,15 +32,14 @@
                     $('.po-select').not(this).prop('checked', false);  
                         showOrderList(this)                           
                     });
-
-                    console.log(data.address_list)
+                    
                     if (data.address_list!= 0){
                         var add = ''
                         $(data.address_list).each(function(index, value)
                         {
-                            add += '<div class="col-md-4"><a class="delivery-at-link" style="cursor: pointer;"><div class="card delivery-card delivery-at" data-name =""  data-value ="" id=""><strong>'+value.address+'</strong><p>'+value.email+'</p><p>'+value.pincode+'</p><p>'+value.telephone   +'</p></div></a></div>';
+                            add += '<div class="col-md-4 delivery-at-link" id="delivery_add_'+value.id+'" onclick="selectDeliveryCard(this,'+value.id+')"><div class="card delivery-card" style="cursor: pointer;color: #636b6f;"><strong class="d_address">'+value.address+'</strong><p class="d_email">'+value.email+'</p><p class="d_pin">'+value.pincode+'</p><p class="d_tel">'+value.telephone+'</p></div></div>';
                         });
-                        $('.delivery-at').html(add)
+                        $('.delivery-address').html(add)
                     }
                 }
                 else{
@@ -691,6 +690,12 @@
           console.log("Error:"+e)
         }
     }
+
+    function selectDeliveryCard(obj,id){
+        $(this).css('background-color','#00b6ff');
+        // $(this).addClass("active");
+    }
+
     function Rs(amount)
     {   
         var words = new Array();
