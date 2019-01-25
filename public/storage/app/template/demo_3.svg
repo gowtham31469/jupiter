@@ -8,7 +8,7 @@
 <text transform="matrix(1 0 0 1 6.9747 56.0928)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:15px;">ORMS TPND: </text>
 <text transform="matrix(1 0 0 1 6.9747 73.9904)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:15px;">ORMS PO No: </text>
 <text id="tpnd" transform="matrix(1 0 0 1 110.3365 56.0928)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:15px;">3456756465677</text>
-<text id="po_number" transform="matrix(1 0 0 1 110.3365 74.0928)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:15px;">4505602</text>
+<text id="po_number" transform="matrix(1 0 0 1 110.3365 74.0928)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:15px;">4785606</text>
 <!--
 <image style="overflow:visible;enable-background:new    ;" width="391" height="178" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAYcAAACyCAYAAACp3gPUAAAACXBIWXMAAC4jAAAuIwF4pT92AAAC
 HElEQVR42u3VMRGAMADAwBQldcLhBGlIQVoHmFDA8C8hS0Z1VjMAeFyjuqtdCwBex6YBAF/mAIA5
@@ -52,10 +52,10 @@ AIA5AGAOAJgDAOYAgDkAYA4AYA4AmAMA5gCAOQBgDgCYAwDmAIA5AGAOAJgDAOYAgDkAYA4AmAMA
 <text transform="matrix(1 0 0 1 7.0916 140.6742)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Supplier Name:</text>
 <text transform="matrix(1 0 0 1 68.9916 140.6742)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px; letter-spacing:18;"> </text>
 <text transform="matrix(1 0 0 1 89.9916 140.6742)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;"> </text>
-<text id="uk_style" transform="matrix(1 0 0 1 110.3395 87.9234)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">64236060</text>
-<text id="ce_style" transform="matrix(1 0 0 1 109.8977 101.6038)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">83371466</text>
+<text id="uk_style" transform="matrix(1 0 0 1 110.3395 87.9234)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">16778482</text>
+<text id="ce_style" transform="matrix(1 0 0 1 109.8977 101.6038)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">32987349</text>
 <text id="eqos" transform="matrix(1 0 0 1 109.688 127.8837)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">9632587410</text>
-<text id="supplier" transform="matrix(1 0 0 1 109.688 140.7752)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">ADIDAS</text>
+<text id="supplier" transform="matrix(1 0 0 1 109.688 140.7752)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">ANZ  PVT LIMITED</text>
 <text id="description" transform="matrix(1 0 0 1 110.6875 113.8827)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">JUPITER PRODUCTS L</text>
 <!-- <text transform="matrix(1 0 0 1 214.69 113.8829)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;" id="size">3-6</text> -->
 <text xmlns="http://www.w3.org/2000/svg" transform="matrix(1 0 0 1 76.6108 162.606)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:140px;opacity: 0.1;" id="watermark">JGA</text>
