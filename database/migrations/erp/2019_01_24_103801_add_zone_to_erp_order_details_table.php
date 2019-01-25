@@ -14,7 +14,7 @@ class AddZoneToErpOrderDetailsTable extends Migration
     public function up()
     {
         Schema::table('erp_order_details', function (Blueprint $table) {
-            $table->string('zone');
+            $table->string('zone')->nullable();
         });
     }
 

@@ -43,9 +43,9 @@
             <tr class="information">
                 <td>
                     <table>
-                        <tr>
+                        <tr> 
                             <td class="companyDetails">
-                                <p>Buyer</p>
+                                <span>Buyer</span>
                                 <p><strong>{{$inv_details[0]['company_name']}}</strong></p>
                                 <p>{{$bill_to->address}}</p>
                                 <p>GSTN : {{$inv_details[0]['gstin_number']}}</p>
@@ -90,7 +90,7 @@
 	                    <td>{{$data['tax']}}</td>
 	                    <td>{{$data['delvry_qnty']}}</td>
 	                    <td>{{$data['rate']}}</td>
-	                    <td>{{$data['delvry_qnty'] * $data['rate']}}</td>
+	                    <td>{{number_format((float)$data['delvry_qnty'] * $data['rate'], 2, '.', '') }}</td>
                     </tr>
 	                    @php 
 	                    	$totalDevlryQnty += $data['delvry_qnty'];
@@ -102,7 +102,7 @@
                     	<td colspan="8">Total</td>
                     	<td>{{$totalDevlryQnty}}</td>
                     	<td></td>
-                    	<td>{{$totalAmnt}}</td>
+                    	<td>{{number_format((float)$totalAmnt, 2, '.', '') }}</td>
                     </tr>
         </tbody>
         </table>
@@ -117,18 +117,18 @@
                             @foreach($uniqueTaxes as $tax=>$amnt)               
                                 @if($inv_details[0]['place_of_supply']==1)
                                     <tr>
-                                        <td>CGST ({{$tax/2}}%)</td><td>{{$amnt}}</td><td>{{(($tax/2)/100)*$amnt}}</td>
+                                        <td>CGST ({{$tax/2}}%)</td><td>{{$amnt}}</td><td>{{number_format((float)(($tax/2)/100)*$amnt, 2, '.', '') }}</td>
                                     </tr>
                                     <tr>
-                                        <td>SGST ({{$tax/2}}%)</td><td>{{$amnt}}</td><td>{{(($tax/2)/100)*$amnt}}</td>
+                                        <td>SGST ({{$tax/2}}%)</td><td>{{$amnt}}</td><td>{{number_format((float)(($tax/2)/100)*$amnt, 2, '.', '') }}</td>
                                     </tr>
                                 @elseif($inv_details[0]['place_of_supply']==2)
                                      <tr>
-                                      <td>IGST ({{$tax}}%)</td><td>{{$amnt}}</td><td>{{(($tax)/100)*$amnt}}</td>
+                                      <td>IGST ({{$tax}}%)</td><td>{{$amnt}}</td><td>{{number_format((float)(($tax)/100)*$amnt, 2, '.', '') }}</td>
                                     </tr> 
                                 @else
                                     <tr>
-                                        <td>Taxes ({{$tax}}%)</td><td>{{$amnt}}</td><td>{{(($tax)/100)*$amnt}}</td>
+                                        <td>Taxes ({{$tax}}%)</td><td>{{$amnt}}</td><td>{{number_format((float)(($tax)/100)*$amnt, 2, '.', '') }}</td>
                                     </tr>
                                         
                                 @endif
@@ -139,8 +139,9 @@
                             @endforeach 
                             <tr>
                                 <td colspan="2"><strong>SubTotal</strong></td>
-                                <td>{{$totalTax}}</td>
+                                <td>{{number_format((float)$totalTax, 2, '.', '')}}</td>
                             </tr>
+                            @if($eChargesArr)
                             <table cellpadding="0" cellspacing="0" border="0.5"><thead><tr><th colspan="2"><strong>Description</strong></th><th><strong>Amount (INR)</strong></th></tr></thead><tbody> 
                                    @php 
                                         $totalExc = 0;
@@ -148,7 +149,7 @@
                                     @foreach($eChargesArr as $key=>$vals)               
                                     <tr>
                                         <td colspan="2">{{$vals->ext_chrg_name}}</td>
-                                        <td>{{$vals->amount}}</td>
+                                        <td>{{number_format((float)$vals->amount, 2, '.', '')}}</td>
                                     </tr>
                                     @php 
                                         $totalExc += $vals->amount;
@@ -156,17 +157,18 @@
                                     @endforeach 
                                     <tr>
                                         <td colspan="2"><strong>SubTotal</strong></td>
-                                        <td>{{$totalExc}}</td>
+                                        <td>{{number_format((float)$totalExc, 2, '.', '')}}</td>
                                     </tr>  
                                 </tbody>
                             </table>
+                            @endif
                             <tr>
                                 <td colspan="2"><strong>Round Off</strong></td>
-                                <td><strong>{{$inv_details[0]['round_off_amnt']}}</strong></td>
+                                <td><strong>{{number_format((float)$inv_details[0]['round_off_amnt'], 2, '.', '') }}</strong></td>
                             </tr>
                             <tr>
                                 <td colspan="2"><strong>Grand Total</strong></td>
-                                <td><strong>{{$inv_details[0]['grand_total']}}</strong></td>
+                                <td><strong>{{number_format((float)$inv_details[0]['grand_total'], 2, '.', '')}}</strong></td>
                             </tr>
                         </tbody>
                     </table>
@@ -181,8 +183,11 @@
                                 <p><strong>Credit Terms </strong>{{$inv_details[0]['credit_limit']}}</p>
                                 <p><strong>E-Way Bill No </strong>{{$eway_no}}</p>
                                 <p></p>
-                                <p><strong>Amount in words</strong>{{$amntInwords}}</p>
-                                <p><strong>Delivery at</strong></p>
+                                <strong>Amount in words </strong><p>{{$amntInwords}}</p>
+                                <strong>Delivery at :</strong>
+                                <div>{{$inv_details[0]['address']}}
+                                <p>{{$inv_details[0]['email']}}</p><p>{{$inv_details[0]['pincode']}}</p>
+                                <p>{{$inv_details[0]['telephone']}}</p></div>
                             </td>
                         </tr>
                     </table>

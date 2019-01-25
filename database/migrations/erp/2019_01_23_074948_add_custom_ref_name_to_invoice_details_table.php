@@ -19,7 +19,7 @@ class AddCustomRefNameToInvoiceDetailsTable extends Migration
 
         Schema::table('invoice_details', function (Blueprint $table) {
            $table->string('hsn_code');
-           $table->string('custom_ref_name');
+           $table->string('custom_ref_name')->nullable();
         });
     }
 
