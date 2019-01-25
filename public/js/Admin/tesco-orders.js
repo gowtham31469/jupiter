@@ -1523,6 +1523,7 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 				svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + $(this).find('.ce_ratio_orms_tpn').val();
 			} else if ((name == "TSL3-sticker" && zone == "CE")) {
 				
+				alert($(this).find('.ce_ratio_orms_tpn').val())
 				svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + $(this).find('.ce_single_orms_tpn').val();
 			} else if ((name == "TSL3-sticker" && zone == "UK")) {
 				svgDoc.getElementById("tpnd").innerHTML = "TPND: " + $(this).find('.uk_single_tpnd').val();
@@ -1897,6 +1898,10 @@ function GenerateDivTesco(data, name) {
 						},
 						success: function (data) {
 							ajax_count++;
+							if (ajax_count == document.getElementById("table_row").rows.length) {
+								var svg_fin = svgarr.join(',_');
+								PopupTescoGenerateSmall(svg_fin, name,svgDoc);
+							}
 						},
 						complete: function () {
 
@@ -1929,6 +1934,10 @@ function GenerateDivTesco(data, name) {
 						success: function (data) {
 							
 							ajax_count++;
+							if (ajax_count == document.getElementById("table_row").rows.length) {
+								var svg_fin = svgarr.join(',_');
+								PopupTescoGenerateSmall(svg_fin, name,svgDoc);
+							}
 						},
 						complete: function () {
 
@@ -2108,10 +2117,6 @@ function GenerateDivTesco(data, name) {
 		})
 
 		
-		if (ajax_count == document.getElementById("table_row").rows.length) {
-			var svg_fin = svgarr.join(',_');
-			PopupTescoGenerateSmall(svg_fin, name,svgDoc);
-		}
 
 	} else {
 		var svgarr = [];
@@ -2158,6 +2163,10 @@ function GenerateDivTesco(data, name) {
 						},
 						success: function (data) {
 							ajax_count++;
+							if (ajax_count == document.getElementById("table_row").rows.length) {
+								var svg_fin = svgarr.join(',_');
+								PopupTescoGenerate(svg_fin, name,svgDoc);
+							}
 						},
 						complete: function () {
 
@@ -2191,6 +2200,10 @@ function GenerateDivTesco(data, name) {
 						},
 						success: function (data) {
 							ajax_count++;
+							if (ajax_count == document.getElementById("table_row").rows.length) {
+								var svg_fin = svgarr.join(',_');
+								PopupTescoGenerate(svg_fin, name,svgDoc);
+							}
 						},
 						complete: function () {
 
@@ -2273,13 +2286,11 @@ function GenerateDivTesco(data, name) {
 			}
 
 
-			if((name == "TCL2-sticker") || (name == "TCL4-sticker"))
-			{
-				ajax_count++;
-			}
-			
+
+			ajax_count++;
 			name_count++;
 		})
+
 		if (ajax_count == document.getElementById("table_row").rows.length) {
 			var svg_fin = svgarr.join(',_');
 			PopupTescoGenerate(svg_fin, name,svgDoc);
