@@ -925,7 +925,7 @@ function storeJobcard(formData)
         // pushing single templates array into json object
         final_json_obj.single.push(single_ref_obj);
     });
-console.log(final_json_obj)
+
     var single_ref = [];
     var act_excess = [];
     /** [ Create array of act-excess ] */
@@ -1004,7 +1004,7 @@ console.log(final_json_obj)
             roll_issued_by:roll_issued_by,
             cutter:cutter,
             cartons:cartons,
-            final_json_obj:final_json_obj,
+            final_json_obj:JSON.stringify(final_json_obj),
             single_ref:single_ref,
             act_excess:act_excess,
             sticker_mtr:sticker_mtr,

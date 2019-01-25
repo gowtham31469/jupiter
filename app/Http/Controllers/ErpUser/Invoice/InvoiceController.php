@@ -238,7 +238,8 @@ class InvoiceController extends Controller
                         'reference_no'  =>  $value['ref_no'],
                         'custom_ref_name'  =>  $value['reference_name'],
                         'ocn_no'        =>  $value['ocn_number'], 
-                        'item_name'     =>  $value['item_name'],                  
+                        'item_name'     =>  $value['item_name'], 
+                        'item'     =>  $value['item_name'],               
                         'company_id'    =>  1,
                     ]);
                     

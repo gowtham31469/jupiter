@@ -96,7 +96,8 @@ class ErpOrders
 					'status' 				=> 1,
 					'template_type'         => $orders->template_type,
 					'custom_ref_name' 		=> $custom_ref_name,
-					'buyer_po_number'  		=> $orders->po_number
+					'buyer_po_number'  		=> $orders->po_number,
+					'zone'					=> $orders->zone,
 				]);
 			}
 		}
