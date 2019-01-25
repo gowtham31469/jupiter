@@ -43,18 +43,18 @@
             <tr class="information">
                 <td>
                     <table>
-                        <tr>
+                        <tr> 
                             <td class="companyDetails">
-                                <p>Buyer</p>
-                                <p><strong>{{$arr[0]['company_name']}}</strong></p>
+                                <span>Buyer</span>
+                                <p><strong>{{$inv_details[0]['company_name']}}</strong></p>
                                 <p>{{$bill_to->address}}</p>
-                                <p>GSTN : {{$arr[0]['gstin_number']}}</p>
+                                <p>GSTN : {{$inv_details[0]['gstin_number']}}</p>
                             </td>
  							<td style="text-align: right;" class="companyDetails">
                                
-                                <p><strong>Date : </strong>{{$invoiceDate}}</p>
-                                <p><strong>Invoice No :  </strong>{{$invoiceNo}}</p>
-                                <p><strong>Disp thru : </strong>{{$ship_to->address}}</p>
+                                <p><strong>Date : </strong>{{$inv_details[0]['inv_date']}}</p>
+                                <p><strong>Invoice No :  </strong>{{$inv_details[0]['invoice_id']}}</p>
+                                <p><strong>Disp thru : </strong>{{$inv_details[0]['delvry_thru']}}</p>
                             </td>
                         </tr>
                     </table>
@@ -75,7 +75,7 @@
                         $i = 0;
                         $size = '-';
                     @endphp
-                    @foreach($arr as $data)
+                    @foreach($inv_details as $data)
                     <tr>                    
 	                    <td>{{++$i}}</td>
                         <td>{{$data['id']}}</td>
@@ -84,13 +84,13 @@
 	                    <td>{{$data['ocn_number']}}</td>
 	                    <td>{{$data['reference_name']}}</td>
                         @php
-                            $size = $data['size']==""?'-':$data['size'];
+                            $size = $data['size']=="null"?'-':$data['size'];
                         @endphp
                         <td>{{$size}}</td>
 	                    <td>{{$data['tax']}}</td>
 	                    <td>{{$data['delvry_qnty']}}</td>
 	                    <td>{{$data['rate']}}</td>
-	                    <td>{{$data['delvry_qnty'] * $data['rate']}}</td>
+	                    <td>{{number_format((float)$data['delvry_qnty'] * $data['rate'], 2, '.', '') }}</td>
                     </tr>
 	                    @php 
 	                    	$totalDevlryQnty += $data['delvry_qnty'];
@@ -102,7 +102,7 @@
                     	<td colspan="8">Total</td>
                     	<td>{{$totalDevlryQnty}}</td>
                     	<td></td>
-                    	<td>{{$totalAmnt}}</td>
+                    	<td>{{number_format((float)$totalAmnt, 2, '.', '') }}</td>
                     </tr>
         </tbody>
         </table>
@@ -110,58 +110,69 @@
             <tr class="top">
             <td></td>
                 <td style="text-align: center;">
-                    <table cellpadding="0" cellspacing="0" border="0.5"><thead><tr><th>Tax (%)</th><th>Base value (INR)</th><th>Amount (INR)</th></tr></thead><tbody>
-                   
-                        @foreach($tax_amnt as $key=>$tax)
-	                        @if ($place_of_supply ==1)
-		                        <tr>
-			                        <td>CGST ({{$key/2}})</td>
-			                        <td>{{$tax}}</td>
-			                        <td>{{(($key/2)/100) * $tax}}</td>
-		                        </tr>
-		                        <tr>
-			                        <td>SGST ({{$key/2}})</td>
-			                        <td>{{$tax}}</td>
-			                        <td>{{(($key/2)/100) * $tax}}</td>
-		                        </tr>
-	                        @elseif($place_of_supply==2)
-		                        <tr>
-		                        	<td>IGST ()</td>
-			                        <td></td>
-			                        <td></td>
-		                        </tr>
-		                    @else
-		                        <tr>
-		                        	<td>Tax ()</td>
-			                        <td></td>
-			                        <td></td>
-		                        </tr>
-	                        @endif
-                        @endforeach
-                           	<tr>
-	                        	<td colspan="2"><strong>SubTotal</strong></td>
-	                        	<td><strong>{{$taxTotal}}</strong></td>
-                        	</tr>
-                        @if($eChargesArr)
-                        @foreach($eChargesArr as $objts)
-                            @foreach($objts as $key=>$vals)
-                                <tr>
-                                    <td colspan="2">{{$key}}</td>
-                                    <td>{{$vals}}</td>
-                                </tr>
-                            @endforeach
-                        @endforeach
-                         @endif
+                    <table cellpadding="0" cellspacing="0" border="0.5"><thead><tr><th><strong>Tax</strong></th><th><strong>Base value (INR)</strong></th><th><strong>Amount (INR)</strong></th></tr></thead><tbody>                 
+                            @php 
+                                $totalTax = 0;
+                            @endphp
+                            @foreach($uniqueTaxes as $tax=>$amnt)               
+                                @if($inv_details[0]['place_of_supply']==1)
+                                    <tr>
+                                        <td>CGST ({{$tax/2}}%)</td><td>{{$amnt}}</td><td>{{number_format((float)(($tax/2)/100)*$amnt, 2, '.', '') }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>SGST ({{$tax/2}}%)</td><td>{{$amnt}}</td><td>{{number_format((float)(($tax/2)/100)*$amnt, 2, '.', '') }}</td>
+                                    </tr>
+                                @elseif($inv_details[0]['place_of_supply']==2)
+                                     <tr>
+                                      <td>IGST ({{$tax}}%)</td><td>{{$amnt}}</td><td>{{number_format((float)(($tax)/100)*$amnt, 2, '.', '') }}</td>
+                                    </tr> 
+                                @else
+                                    <tr>
+                                        <td>Taxes ({{$tax}}%)</td><td>{{$amnt}}</td><td>{{number_format((float)(($tax)/100)*$amnt, 2, '.', '') }}</td>
+                                    </tr>
+                                        
+                                @endif
+                                
+                                @php 
+                                    $totalTax += ($tax/100)*$amnt;
+                                @endphp
+                            @endforeach 
+                            <tr>
+                                <td colspan="2"><strong>SubTotal</strong></td>
+                                <td>{{number_format((float)$totalTax, 2, '.', '')}}</td>
+                            </tr>
+                            @if($eChargesArr)
+                            <table cellpadding="0" cellspacing="0" border="0.5"><thead><tr><th colspan="2"><strong>Description</strong></th><th><strong>Amount (INR)</strong></th></tr></thead><tbody> 
+                                   @php 
+                                        $totalExc = 0;
+                                    @endphp
+                                    @foreach($eChargesArr as $key=>$vals)               
+                                    <tr>
+                                        <td colspan="2">{{$vals->ext_chrg_name}}</td>
+                                        <td>{{number_format((float)$vals->amount, 2, '.', '')}}</td>
+                                    </tr>
+                                    @php 
+                                        $totalExc += $vals->amount;
+                                    @endphp
+                                    @endforeach 
+                                    <tr>
+                                        <td colspan="2"><strong>SubTotal</strong></td>
+                                        <td>{{number_format((float)$totalExc, 2, '.', '')}}</td>
+                                    </tr>  
+                                </tbody>
+                            </table>
+                            @endif
                             <tr>
                                 <td colspan="2"><strong>Round Off</strong></td>
-                                <td><strong>{{$roundOff}}</strong></td>
+                                <td><strong>{{number_format((float)$inv_details[0]['round_off_amnt'], 2, '.', '') }}</strong></td>
                             </tr>
                             <tr>
                                 <td colspan="2"><strong>Grand Total</strong></td>
-                                <td><strong>{{$grandTotal}}</strong></td>
+                                <td><strong>{{number_format((float)$inv_details[0]['grand_total'], 2, '.', '')}}</strong></td>
                             </tr>
                         </tbody>
                     </table>
+                    
                 </td>
             </tr>
             <tr class="information">
@@ -169,11 +180,14 @@
                     <table>
                         <tr>
                             <td class="companyDetails">
-                                <p><strong>Credit Terms </strong>{{$creditTerms}}</p>
-                                <p><strong>E-Way Bill No </strong>{{$ewayNo}}</p>
+                                <p><strong>Credit Terms </strong>{{$inv_details[0]['credit_limit']}}</p>
+                                <p><strong>E-Way Bill No </strong>{{$eway_no}}</p>
                                 <p></p>
-                                <p><strong>Amount in words</strong>{{$amntInwords}}</p>
-                                <p><strong>Delivery at</strong>{{$creditTerms}}</p>
+                                <strong>Amount in words </strong><p>{{$amntInwords}}</p>
+                                <strong>Delivery at :</strong>
+                                <div>{{$inv_details[0]['address']}}
+                                <p>{{$inv_details[0]['email']}}</p><p>{{$inv_details[0]['pincode']}}</p>
+                                <p>{{$inv_details[0]['telephone']}}</p></div>
                             </td>
                         </tr>
                     </table>

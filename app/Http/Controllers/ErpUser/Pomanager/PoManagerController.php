@@ -116,6 +116,7 @@ class PoManagerController extends Controller
 										 ->groupBy('erp_orders.id','customers.company_name','erp_status.status_name')
 										 ->select('erp_orders.*','customers.company_name','erp_status.status_name')
 										 ->get();
+										
 				if(count($erp_order_details) > 0)
 				{
 					foreach($erp_order_details as $erp_order_det)
@@ -140,6 +141,8 @@ class PoManagerController extends Controller
 					$hold_orders_count++;
 				}
 		}
+
+
 		//return $new_orders;
 		return view('erp.Pomanager.poverify',['orders' => $orders_erp,'companies' => $companies,'new_orders' => $new_orders_count,'hold_orders' => $hold_orders_count]);
 	} 
@@ -286,7 +289,7 @@ class PoManagerController extends Controller
 			   
 					 $price_range =  DB::table('price_range')->select('price_range.*')->where('price_taxation_id',$price{0}->id)->where('volume_from','<=',$value->order_quantity)->where('volume_to','>=',$value->order_quantity)->get();
 					 
-					 DB::table('erp_order_details')->where('erp_order_id',$erp_order_id)
+					 DB::table('erp_order_details')->where('id',$value->id)
 						  		->update([
 								  'rate' => $price_range{0}->price
 								]);
@@ -320,7 +323,7 @@ class PoManagerController extends Controller
 			   
 					 $price_range =  DB::table('price_range')->select('price_range.*')->where('price_taxation_id',$price{0}->id)->where('volume_from','<=',$value->order_quantity)->where('volume_to','>=',$value->order_quantity)->get();
 					 
-					 DB::table('erp_order_details')->where('erp_order_id',$erp_order_id)
+					 DB::table('erp_order_details')->where('id',$value->id)
 						  		->update([
 								  'rate' => $price_range{0}->price
 								]);

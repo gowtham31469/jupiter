@@ -598,14 +598,17 @@ Route::group(['prefix' => 'erp'], function () {
 	/* Routes for Invoice Management */
 	 
 	Route::get('/invoice', 'ErpUser\Invoice\InvoiceController@index')->name('invoice'); 
-	Route::get('/create-invoice', 'ErpUser\Invoice\InvoiceController@create')->name('invoice');
-
+	Route::get('/create-invoice', 'ErpUser\Invoice\InvoiceController@create')->name('create-invoice');
+	Route::post('/update-invoice', 'ErpUser\Invoice\InvoiceController@updateInvoice')->name('update-invoice');
+	
 	/* Routes for PO Manager Module */
 
 	Route::get('/erp-po-list', 'ErpUser\Invoice\InvoiceController@erpPOList')->name('erp-po'); 
 	
 	Route::get('/erp-order-list', 'ErpUser\Invoice\InvoiceController@erpOrderList')->name('erp-orders');
-	Route::post('/save-invoice', 'ErpUser\Invoice\InvoiceController@setInvoice')->name('erp-orders');
+	Route::post('/save-invoice', 'ErpUser\Invoice\InvoiceController@setInvoice')->name('save-invoice');
+	Route::get('/get-invoice', 'ErpUser\Invoice\InvoiceController@getInvoice')->name('get-invoice');
+	
 	
 
 
@@ -617,6 +620,12 @@ Route::group(['prefix' => 'erp'], function () {
 	
 	/* Routes for jobcard Manager Module */
 	Route::get('/job-manager', 'ErpUser\Jobmanager\JobManagerController@index')->name('jobManager'); 
+	Route::post('/job-manager/get_order_details', 'ErpUser\Jobmanager\JobManagerController@getOrderDetails'); 
 	Route::get('/get-jobcard-order-details', 'ErpUser\Jobmanager\JobManagerController@getOrderDetailsByIds'); 
+	Route::post('/store-jobcard-details', 'ErpUser\Jobmanager\JobManagerController@storeJobcardData'); 
+	
+	Route::post('job-manager/tesco/print-div-tesco', 'ErpUser\Jobmanager\JobManagerController@printDivTesco');
+	Route::post('job-manager/tesco/print-div-tesco-small', 'ErpUser\Jobmanager\JobManagerController@printDivTescoSmall');
 
+	Route::get('job-manager/tesco/get-tsl-size', 'ErpUser\Jobmanager\JobManagerController@getTescoTSLSizechart');
 });

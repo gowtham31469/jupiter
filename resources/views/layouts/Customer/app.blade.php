@@ -72,7 +72,7 @@
 <script src="{{ asset('js/bootstrap-select.min.js') }}"></script>
 
 <script src="{{ asset('js/jquery.easy-autocomplete.min.js') }}"></script>
-	{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/i18n/defaults-*.min.js"></script> --}}
+	<!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/i18n/defaults-*.min.js"></script> -->
 <script src="{{ asset('js/toastr.js') }}"></script>
 <script>
     var base_url = "<?php echo  url('/') ?>";

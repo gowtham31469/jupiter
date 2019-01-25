@@ -1,5 +1,5 @@
 @extends('layouts.Admin.app') @if (Auth::guard("web")->user()) @section('content')
-<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+ <link rel="stylesheet" type="text/css" href="{{ asset('css/daterangepicker.css') }}" />
 <style type="text/css">
     .bank_details tr {
         display: table-row;
@@ -453,9 +453,12 @@
     window.location = "{{ url('/admin') }}";
 </script>
 @endif @section('jqueryIncludes')
+<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 
+<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
 <script src="{{ asset('js/moment.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/daterangepicker.js') }}"></script>
+<script src="{{ asset('js/html2pdf.bundle.min.js') }}"></script>
 <script src="{{ asset('js/html2pdf.bundle.min.js') }}"></script>
 <script src="{{ asset('js/Admin/order.js') }}"></script>
 <script src="{{ asset('js/Admin/tesco-pi.js') }}"></script>

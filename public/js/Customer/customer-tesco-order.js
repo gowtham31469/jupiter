@@ -28,36 +28,6 @@ function camelize(str) {
   });
 }
 
-/**  
-  * Validation for numeric values with dot
-  * @param   evt 
-  * @return {Boolean} 
-  * @author <praveen>    
-  */
- function isNumberKey(evt){
-  try{
-       var charCode = (evt.which) ? evt.which : event.keyCode
-
-       if (charCode == 46)
-       {
-           var inputValue = $("#inputfield").val()
-           if (inputValue.indexOf('.') < 1)
-           {
-               return true;
-           }
-           return false;
-       }
-       /** [ Checking key stroke values for numeric values ] */
-       if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
-       {
-           return false;
-       }
-       return true;
-    } catch (e) {
-     console.log("Error:"+e)
-   }
-  }
-
 /**
  * This Function is used to show tesco orders page and template selection.
  * @author Praveen
@@ -463,7 +433,7 @@ function tescoOrders(callback) {
                                         }
                                     });
                                 } else {
-                                    $('.templateDiv').html('<img style="height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
+                                    $('.templateDiv').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover;margin-top: 122px; font-size: 100px;"></i>')
 
                                     $('.descriptionDiv').html('<b>Template Not Found</b>');
                                     $('.descriptionDiv').css('margin-top', '0px')
@@ -1122,6 +1092,12 @@ function createOrders(parsedObj = false, oType = false) {
                                 </div>\
                                 </div>\
                                 </div>';
+					 
+					 if(parsedObj[Object.keys(parsedObj)[0]].order_status == "Order Placed")
+					 {
+						$('.approve-btn').show();
+						$('.cancel-btn').show();
+					 }
 
                       $('.main-content').html(html).selectpicker('refresh');
                       /** @type {Date} [Manufactured date Datepicker format & validation] */
@@ -6460,7 +6436,7 @@ function loadTemplatePreview() {
                     }
                 });
             } else {
-                $('.templateDiv').html('<img style="height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
+                $('.templateDiv').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover;margin-top: 122px; font-size: 100px;"></i>')
 
                 $('.descriptionDiv').html('<b>Template Not Found</b>');
                 $('.descriptionDiv').css('margin-top', '0px')

@@ -177,7 +177,7 @@ class ProfomaInvoice
                                   ->leftjoin('payment_terms','customers.payment_terms','=','payment_terms.id')
                                   ->leftjoin('freight_terms','customers.freight_type','=','freight_terms.id')
                                   ->where($table_name.'.id',$id)
-                                  ->select('customers.*',$table_name.'.template_id',$table_name.'.po_number',$table_name.'.uk_style_ref',$table_name.'.ce_style_ref',$table_name.'.zone','payment_terms.payment_terms','freight_terms.freight_terms',$table_name.'.template_type','tesco_item_master.ref_no')
+                                  ->select('customers.*',$table_name.'.template_id',$table_name.'.po_number',$table_name.'.uk_style_ref',$table_name.'.ce_style_ref',$table_name.'.zone','payment_terms.payment_terms','freight_terms.freight_terms',$table_name.'.template_type','tesco_item_master.item_name as ref_no')
                                   ->first();
         if ($customer_details)
         {
@@ -209,7 +209,7 @@ class ProfomaInvoice
                           ->where('price_taxation.buyer_id',$buyer_id)
                           ->where('tesco_template.item_id',$request->template_id)
                           ->where($table_name.'_quanty.'.$qnty_id,$id)
-                          ->select('size',$table_name.'_quanty.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id',$table_name.'.pi_rev_no','order_flag','tesco_template.template_name','pi_status','pi_rev_no')
+                          ->select('size',$table_name.'_quanty.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name','po_number as po_no','zone','tesco_item_master.item_name as ref_no','tesco_template.item_id',$table_name.'.pi_rev_no','order_flag','tesco_template.template_name','pi_status','pi_rev_no')
                           ->get()->toArray();
         if ($item_details){
           foreach ($item_details as $key => $value) {
@@ -258,7 +258,7 @@ class ProfomaInvoice
                                   ->where('ce_style_ref',$item_details[0]->style)
                                   ->where($key.'.pi_status',$item_details[0]->pi_status)
                                   ->where($key.'.order_flag',"newOrder")
-                                  ->select($key.'.id','size',$qunty_tbl.'.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id',$key.'.pi_rev_no','tesco_template.template_name','pi_rev_no')->get()->toArray();
+                                  ->select($key.'.id','size',$qunty_tbl.'.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name','po_number as po_no','zone','tesco_item_master.item_name as ref_no','tesco_template.item_id',$key.'.pi_rev_no','tesco_template.template_name','pi_rev_no')->get()->toArray();
 
                   }
                   else{
@@ -275,7 +275,7 @@ class ProfomaInvoice
                                   ->where($key.'.pi_status',$item_details[0]->pi_status)
                                   ->where('uk_style_ref',$item_details[0]->style)
                                   ->where($key.'.order_flag',"newOrder")
-                                  ->select($key.'.id','size',$qunty_tbl.'.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id',$key.'.pi_rev_no','tesco_template.template_name','pi_rev_no')->get()->toArray();
+                                  ->select($key.'.id','size',$qunty_tbl.'.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name','po_number as po_no','zone','tesco_item_master.item_name as ref_no','tesco_template.item_id',$key.'.pi_rev_no','tesco_template.template_name','pi_rev_no')->get()->toArray();
                   }
                   if ($item_details2) {
                     $item_details = array_merge($item_details,$item_details2);
@@ -407,7 +407,7 @@ class ProfomaInvoice
                                   ->first();
         $data['item_details']    = DB::table('profoma_invoice_item_details')
                                     ->where('profoma_invoice_item_details.pi_id',$pi_details->id)
-                                    ->select('size','quantity','style','material as material_name','unit_cost as unit_price','profoma_invoice_item_details.tax','ref_no','profoma_invoice_item_details.template_id as item_id')
+                                    ->select('size','quantity','style','material as material_name','unit_cost as unit_price','profoma_invoice_item_details.tax','item_name as as ref_no','profoma_invoice_item_details.template_id as item_id')
                                     ->get();
         foreach ($data['item_details'] as $key => $value) {
           $value->style = $pi_details->uvc_style_no;

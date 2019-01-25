@@ -44,7 +44,7 @@ class ErpOrders
 
 			if ($erp_orders) {
 				Erp::where('id',$erp_orders->id)->update(['status'=>1]);
-				$this->insertOrderDetails($qnty_table,$order_details,$orders,$erp_orders);
+				$this->insertOrderDetails($qnty_table,$order_details,$orders,$erp_orders,$buyer_id);
 			}
 			else{
 				$erp_orders =   Erp::create([
@@ -55,12 +55,12 @@ class ErpOrders
 									'status'		   => 1,
 									'order_status_id'  => $order_status_id->id,
 									'order_type'       => $orders->order_flag,
-									'buyer_po_number'  => $orders->po_number
+									
 								]);
 				$erp_id = "ERPID-0".$erp_orders->id;
 				Erp::where('id',$erp_orders->id)->update(['erp_id'=>$erp_id]);
 
-				$this->insertOrderDetails($qnty_table,$order_details,$orders,$erp_orders);
+				$this->insertOrderDetails($qnty_table,$order_details,$orders,$erp_orders,$buyer_id);
 			}
 			$result = response()->json(['error'=> false,'message' =>'success'],200);
 		}
@@ -71,14 +71,15 @@ class ErpOrders
         return $result;
 	}
 
-	function insertOrderDetails($qnty_table,$order_details,$orders,$erp_orders)
+	function insertOrderDetails($qnty_table,$order_details,$orders,$erp_orders,$buyer_id)
 	{
 		if ($order_details)
 		{
 			foreach ($order_details as $key => $vals) {
 
 				$style_no = ($orders->zone == "CE") ? $orders->ce_style_ref : $orders->uk_style_ref ;
-				
+				$custom_ref_name = DB::table('price_taxation')->where('customer_id',$orders->customer_id)->where('buyer_id',$buyer_id)->where('template_id',$orders->template_id)->value('custom_name');
+
 				ErpOrderDetails::create([
 					'erp_order_id'     		=> $erp_orders->id,
 	            	'style_no'         		=> $style_no,
@@ -93,7 +94,10 @@ class ErpOrders
 	            	'reference_name'		=> $orders->item_name,
 	            	'ocn_number'	   		=> $orders->ocn_number,
 					'status' 				=> 1,
-					'template_type'         => $orders->template_type
+					'template_type'         => $orders->template_type,
+					'custom_ref_name' 		=> $custom_ref_name,
+					'buyer_po_number'  		=> $orders->po_number,
+					'zone'					=> $orders->zone,
 				]);
 			}
 		}

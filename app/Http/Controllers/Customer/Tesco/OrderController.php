@@ -99,23 +99,23 @@ class OrderController extends Controller
 	  $customer_role_id = DB::table('customer_profile')->select('*')->where('id',$customer_id)->first();
 	  if($customer_role_id->role_id == 1)
 	  {
-		  $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->select('*',DB::raw("'".$this->tcl1."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->get();
-		  $data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->select('*',DB::raw("'".$this->tcl2."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->get();
-		  $data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->select('*',DB::raw("'".$this->tcl4."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->get();
-		  $data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->select('*',DB::raw("'".$this->thl1."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->get();
-		  $data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->select('*',DB::raw("'".$this->thl3."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->get();
-		  $data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->select('*',DB::raw("'".$this->tsl1."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->get();
-		  $data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->select('*',DB::raw("'".$this->tsl3."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->get();
+		  $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->select('*',DB::raw("'".$this->tcl1."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->get();
+		  $data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->select('*',DB::raw("'".$this->tcl2."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->get();
+		  $data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->select('*',DB::raw("'".$this->tcl4."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->get();
+		  $data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->select('*',DB::raw("'".$this->thl1."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->get();
+		  $data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->select('*',DB::raw("'".$this->thl3."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->get();
+		  $data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->select('*',DB::raw("'".$this->tsl1."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->get();
+		  $data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->select('*',DB::raw("'".$this->tsl3."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->get();
 	  }
 	  else
 	  {
-		  $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->select('*',DB::raw("'".$this->tcl1."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
-		  $data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->select('*',DB::raw("'".$this->tcl2."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
-		  $data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->select('*',DB::raw("'".$this->tcl4."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
-		  $data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->select('*',DB::raw("'".$this->thl1."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
-		  $data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->select('*',DB::raw("'".$this->thl3."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
-		  $data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->select('*',DB::raw("'".$this->tsl1."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
-		  $data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->select('*',DB::raw("'".$this->tsl3."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
+		  $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->select('*',DB::raw("'".$this->tcl1."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->get();
+		  $data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->select('*',DB::raw("'".$this->tcl2."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->get();
+		  $data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->select('*',DB::raw("'".$this->tcl4."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->get();
+		  $data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->select('*',DB::raw("'".$this->thl1."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->get();
+		  $data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->select('*',DB::raw("'".$this->thl3."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->get();
+		  $data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->select('*',DB::raw("'".$this->tsl1."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->get();
+		  $data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->select('*',DB::raw("'".$this->tsl3."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->get();
 	  }
       
       echo json_encode($data);
@@ -291,7 +291,7 @@ class OrderController extends Controller
                    $is_order_count_empty = array_filter($count_TCL1) != NULL?0:1;
 
                     /** [ Check if order already placed for this CE style ] */
-                    $is_exists = TescoTCL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                    $is_exists = TescoTCL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
 
                     if($is_exists)
                     {
@@ -359,7 +359,7 @@ class OrderController extends Controller
                   $is_order_count_empty = array_filter($count_TCL2) != NULL?0:1;
 
                     /** [ Check if order already placed for this CE style ] */
-                    $is_exists = TescoTCL2Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                    $is_exists = TescoTCL2Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -427,7 +427,7 @@ class OrderController extends Controller
                     $is_order_count_empty = array_filter($count_TSL1) != NULL?0:1;
 
                     /** [ Check if order already placed for this CE style ] */
-                    $is_exists = TescoTSL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                    $is_exists = TescoTSL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -498,7 +498,7 @@ class OrderController extends Controller
                   $is_order_count_empty = array_filter($count_THL1) != NULL?0:1;
 
                   /** [ Check if order already placed for this CE style ] */
-                  $is_exists = TescoTHL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                  $is_exists = TescoTHL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -628,7 +628,7 @@ class OrderController extends Controller
                    $is_order_count_empty = array_filter($count_TCL4) != NULL?0:1;
 
                     /** [ Check if order already placed for this CE style ] */
-                    $is_exists = TescoTCL4Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                    $is_exists = TescoTCL4Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -696,7 +696,7 @@ class OrderController extends Controller
                     $is_order_count_empty = array_filter($count_TSL3) != NULL?0:1;
 
                     /** [ Check if order already placed for this CE style ] */
-                    $is_exists = TescoTSL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                    $is_exists = TescoTSL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -767,7 +767,7 @@ class OrderController extends Controller
                   $is_order_count_empty = array_filter($count_THL3) != NULL?0:1;
 
                     /** [ Check if order already placed for this CE style ] */
-                    $is_exists = TescoTHL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                    $is_exists = TescoTHL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -896,7 +896,7 @@ class OrderController extends Controller
                     $is_order_count_empty = array_filter($count_TCL1) != NULL?0:1;
 
                     /** [ Check if order already placed for this UK style ] */
-                    $is_exists = TescoTCL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                    $is_exists = TescoTCL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -964,7 +964,7 @@ class OrderController extends Controller
                     $is_order_count_empty = array_filter($count_TCL2) != NULL?0:1;
 
                     /** [ Check if order already placed for this UK style ] */
-                    $is_exists = TescoTCL2Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                    $is_exists = TescoTCL2Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -1032,7 +1032,7 @@ class OrderController extends Controller
                   $is_order_count_empty = array_filter($count_TSL1) != NULL?0:1;
 
                   /** [ Check if order already placed for this UK style ] */
-                  $is_exists = TescoTSL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                  $is_exists = TescoTSL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -1103,7 +1103,7 @@ class OrderController extends Controller
                   $is_order_count_empty = array_filter($count_THL1) != NULL?0:1;
 
                   /** [ Check if order already placed for this UK style ] */
-                  $is_exists = TescoTHL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                  $is_exists = TescoTHL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -1232,7 +1232,7 @@ class OrderController extends Controller
                       $is_order_count_empty = array_filter($count_TCL4) != NULL?0:1;
 
                       /** [ Check if order already placed for this UK style ] */
-                      $is_exists = TescoTCL4Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                      $is_exists = TescoTCL4Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                       if($is_exists)
                       {
                         /** [ Create array of already exists artworks ] */
@@ -1300,7 +1300,7 @@ class OrderController extends Controller
                       $is_order_count_empty = array_filter($count_TSL3) != NULL?0:1;
 
                       /** [ Check if order already placed for this UK style ] */
-                      $is_exists = TescoTSL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                      $is_exists = TescoTSL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                       if($is_exists)
                       {
                         /** [ Create array of already exists artworks ] */
@@ -1371,7 +1371,7 @@ class OrderController extends Controller
                    $is_order_count_empty = array_filter($count_THL3) != NULL?0:1;
 
                   /** [ Check if order already placed for this UK style ] */
-                   $is_exists = TescoTHL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                   $is_exists = TescoTHL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -1529,7 +1529,7 @@ class OrderController extends Controller
                   if($template['template_name'] == "TCL 1")
                   {
                     /** [ Check if order already placed for this CE style ] */
-                   $is_exists = TescoTCL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                   $is_exists = TescoTCL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -1587,7 +1587,7 @@ class OrderController extends Controller
                   else if($template['template_name'] == "TCL 2")
                   {
                     /** [ Check if order already placed for this CE style ] */
-                   $is_exists = TescoTCL2Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                   $is_exists = TescoTCL2Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -1645,7 +1645,7 @@ class OrderController extends Controller
                   else
                   {
                     /** [ Check if order already placed for this CE style ] */
-                   $is_exists = TescoTSL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                   $is_exists = TescoTSL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -1706,7 +1706,7 @@ class OrderController extends Controller
                    $count_THL1       = explode(',',$request['count_THL1']);
 
                    /** [ Check if order already placed for this CE style ] */
-                   $is_exists = TescoTHL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                   $is_exists = TescoTHL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -1798,7 +1798,7 @@ class OrderController extends Controller
                 if($template['template_name'] == "TCL 4")
                 {
                   /** [ Check if order already placed for this CE style ] */
-                     $is_exists = TescoTCL4Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                     $is_exists = TescoTCL4Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                       if($is_exists)
                       {
                         /** [ Create array of already exists artworks ] */
@@ -1859,7 +1859,7 @@ class OrderController extends Controller
                 else
                 {
                   /** [ Check if order already placed for this CE style ] */
-                  $is_exists = TescoTSL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                  $is_exists = TescoTSL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -1923,7 +1923,7 @@ class OrderController extends Controller
                  $count_THL3       = explode(',',$request['count_THL3']);
 
                  /** [ Check if order already placed for this CE style ] */
-                 $is_exists = TescoTHL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                 $is_exists = TescoTHL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -2021,7 +2021,7 @@ class OrderController extends Controller
                 if($template['template_name'] == "TCL 1")
                 {
                   /** [ Check if order already placed for this UK style ] */
-                  $is_exists = TescoTCL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                  $is_exists = TescoTCL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -2080,7 +2080,7 @@ class OrderController extends Controller
                 else if($template['template_name'] == "TCL 2")
                 {
                   /** [ Check if order already placed for this UK style ] */
-                  $is_exists = TescoTCL2Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                  $is_exists = TescoTCL2Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -2139,7 +2139,7 @@ class OrderController extends Controller
                 else
                 {
                   /** [ Check if order already placed for this UK style ] */
-                  $is_exists = TescoTSL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                  $is_exists = TescoTSL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -2201,7 +2201,7 @@ class OrderController extends Controller
                  $count_THL1       = explode(',',$request['count_THL1']);
 
                  /** [ Check if order already placed for this UK style ] */
-                  $is_exists = TescoTHL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                  $is_exists = TescoTHL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -2296,7 +2296,7 @@ class OrderController extends Controller
                 if($template['template_name'] == "TCL 4")
                 {
                   /** [ Check if order already placed for this UK style ] */
-                  $is_exists = TescoTCL4Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                  $is_exists = TescoTCL4Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -2357,7 +2357,7 @@ class OrderController extends Controller
                 else
                 {
                   /** [ Check if order already placed for this UK style ] */
-                  $is_exists = TescoTSL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                  $is_exists = TescoTSL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -2421,7 +2421,7 @@ class OrderController extends Controller
                  $count_THL3       = explode(',',$request['count_THL3']);
 
                  /** [ Check if order already placed for this UK style ] */
-                  $is_exists = TescoTHL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                  $is_exists = TescoTHL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -2918,7 +2918,7 @@ class OrderController extends Controller
         $result = '';
         $data = [];
         if (in_array("TCL 1", $artwork)) {
-              $tesco_tcl1_orders = DB::table('tesco_tcl1_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*', DB::raw("'".$this->tcl1."'".' as "TemplateName"'),DB::raw("'".$this->tcl1_type."'".' as "type"'))->first();
+              $tesco_tcl1_orders = DB::table('tesco_tcl1_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->where('order_status','!=', 'Order Cancelled')->select('*', DB::raw("'".$this->tcl1."'".' as "TemplateName"'),DB::raw("'".$this->tcl1_type."'".' as "type"'))->first();
             if($tesco_tcl1_orders) {
               $data['tesco_tcl1_orders'] = $tesco_tcl1_orders;
               $data['tesco_tcl1_orders']->order_quantity = DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$tesco_tcl1_orders->id)->select('*')->get();
@@ -2926,7 +2926,7 @@ class OrderController extends Controller
         }
         
         if (in_array("TCL 2", $artwork)) {
-          $tesco_tcl2_orders = DB::table('tesco_tcl2_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw("'".$this->tcl2."'".' as "TemplateName"'),DB::raw("'".$this->tcl2_type."'".' as "type"'))->first();
+          $tesco_tcl2_orders = DB::table('tesco_tcl2_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->where('order_status','!=', 'Order Cancelled')->select('*',DB::raw("'".$this->tcl2."'".' as "TemplateName"'),DB::raw("'".$this->tcl2_type."'".' as "type"'))->first();
           if($tesco_tcl2_orders) {
             $data['tesco_tcl2_orders'] = $tesco_tcl2_orders;
             $data['tesco_tcl2_orders']->order_quantity = DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$tesco_tcl2_orders->id)->select('*')->get();
@@ -2934,7 +2934,7 @@ class OrderController extends Controller
         }
         
         if (in_array("TCL 4", $artwork)) {
-          $tesco_tcl4_orders = DB::table('tesco_tcl4_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw("'".$this->tcl4."'".' as "TemplateName"'),DB::raw("'".$this->tcl4_type."'".' as "type"'))->first();
+          $tesco_tcl4_orders = DB::table('tesco_tcl4_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->where('order_status','!=', 'Order Cancelled')->select('*',DB::raw("'".$this->tcl4."'".' as "TemplateName"'),DB::raw("'".$this->tcl4_type."'".' as "type"'))->first();
           if($tesco_tcl4_orders) {
             $data['tesco_tcl4_orders'] = $tesco_tcl4_orders;
             $data['tesco_tcl4_orders']->order_quantity = DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$tesco_tcl4_orders->id)->select('*')->get();
@@ -2942,7 +2942,7 @@ class OrderController extends Controller
         }
         
         if (in_array("THL 1", $artwork)) {
-          $tesco_thl1_orders = DB::table('tesco_thl1_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw("'".$this->thl1."'".' as "TemplateName"'),DB::raw("'".$this->thl1_type."'".' as "type"'))->first();
+          $tesco_thl1_orders = DB::table('tesco_thl1_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->where('order_status','!=', 'Order Cancelled')->select('*',DB::raw("'".$this->thl1."'".' as "TemplateName"'),DB::raw("'".$this->thl1_type."'".' as "type"'))->first();
           if($tesco_thl1_orders) {
             $data['tesco_thl1_orders'] = $tesco_thl1_orders;
             $data['tesco_thl1_orders']->order_quantity = DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$tesco_thl1_orders->id)->select('*')->get();
@@ -2951,7 +2951,7 @@ class OrderController extends Controller
         
         
         if (in_array("THL 3", $artwork)) {
-          $tesco_thl3_orders = DB::table('tesco_thl3_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw("'".$this->thl3."'".' as "TemplateName"'),DB::raw("'".$this->thl3_type."'".' as "type"'))->first();
+          $tesco_thl3_orders = DB::table('tesco_thl3_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->where('order_status','!=', 'Order Cancelled')->select('*',DB::raw("'".$this->thl3."'".' as "TemplateName"'),DB::raw("'".$this->thl3_type."'".' as "type"'))->first();
           if($tesco_thl3_orders) {
             $data['tesco_thl3_orders'] = $tesco_thl3_orders;
             $data['tesco_thl3_orders']->order_quantity = DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$tesco_thl3_orders->id)->select('*')->get();
@@ -2959,7 +2959,7 @@ class OrderController extends Controller
         }
         
         if (in_array("TSL 1", $artwork)) {
-          $tesco_tsl1_orders = DB::table('tesco_tsl1_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw("'".$this->tsl1."'".' as "TemplateName"'),DB::raw("'".$this->tsl1_type."'".' as "type"'))->first();
+          $tesco_tsl1_orders = DB::table('tesco_tsl1_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->where('order_status','!=', 'Order Cancelled')->select('*',DB::raw("'".$this->tsl1."'".' as "TemplateName"'),DB::raw("'".$this->tsl1_type."'".' as "type"'))->first();
           if($tesco_tsl1_orders) {
             $data['tesco_tsl1_orders'] = $tesco_tsl1_orders;
             $data['tesco_tsl1_orders']->order_quantity = DB::table('tesco_tsl1_orders_quanty')->where('tsl1_order_id',$tesco_tsl1_orders->id)->select('*')->get();
@@ -2967,7 +2967,7 @@ class OrderController extends Controller
         }
         
         if (in_array("TSL 3", $artwork)) {
-          $tesco_tsl3_orders = DB::table('tesco_tsl3_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw("'".$this->tsl3."'".' as "TemplateName"'),DB::raw("'".$this->tsl3_type."'".' as "type"'))->first();
+          $tesco_tsl3_orders = DB::table('tesco_tsl3_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->where('order_status','!=', 'Order Cancelled')->select('*',DB::raw("'".$this->tsl3."'".' as "TemplateName"'),DB::raw("'".$this->tsl3_type."'".' as "type"'))->first();
           if($tesco_tsl3_orders) {
             $data['tesco_tsl3_orders'] = $tesco_tsl3_orders;
             $data['tesco_tsl3_orders']->order_quantity = DB::table('tesco_tsl3_orders_quanty')->where('tsl3_order_id',$tesco_tsl3_orders->id)->select('*')->get();
