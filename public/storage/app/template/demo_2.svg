@@ -1,10 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 113.4 85" style="enable-background:new 0 0 113.4 85;" xml:space="preserve">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 360 226.8" style="enable-background:new 0 0 360 226.8;" xml:space="preserve">
 
-<rect style="fill:#FFFFFF;" width="113.4" height="85"/>
-<rect x="-241.2" y="-321.7" style="fill:none;" width="595.3" height="841.9"/>
-<text text-anchor="middle" transform="matrix(1, 0, 0, 1, 56.5, 64.8)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:8px;" id="description">TST BE 2PK TEE GRN</text>
-<text text-anchor="middle" transform="matrix(1 0 0 1 56.5 71.3)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:8px;" id="description1"/>
-<!-- <text transform="matrix(1 0 0 1 86.5 68.5)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:8px;">3-6</text> -->
+<g>
+	<rect y="0" style="fill:#FFFFFF;" width="360" height="226.8"/>
+</g>
+<text transform="matrix(1 0 0 1 26.4852 33.2706)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:28.5px;">REPLEN-SINGLE</text>
+<text id="season_code" transform="matrix(1.0186 0 0 1 255.8428 33.2707)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:28.5px;">AW18</text>
+<text transform="matrix(1 0 0 1 6.9747 56.0928)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:15px;">ORMS TPND: </text>
+<text transform="matrix(1 0 0 1 6.9747 73.9904)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:15px;">ORMS PO No: </text>
+<text id="tpnd" transform="matrix(1 0 0 1 110.3365 56.0928)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:15px;">2005100218786</text>
+<text id="po_number" transform="matrix(1 0 0 1 110.3365 74.0928)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:15px;">1665635</text>
 <!--
 <image style="overflow:visible;enable-background:new    ;" width="391" height="178" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAYcAAACyCAYAAACp3gPUAAAACXBIWXMAAC4jAAAuIwF4pT92AAAC
 HElEQVR42u3VMRGAMADAwBQldcLhBGlIQVoHmFDA8C8hS0Z1VjMAeFyjuqtdCwBex6YBAF/mAIA5
@@ -16,20 +20,43 @@ mAMA5gCAOQBgDgCYAwDmAIA5AGAOEgBgDgCYAwDmAIA5AGAOAJgDAOYAgDkAYA4AmAMA5gCAOQBg
 DgCYAwDmAADmAIA5AGAOAJgDAOYAgDkAYA4AmAMA5gCAOQBgDgCYAwDmAIA5AGAOAGAOAJgDAOYA
 gDkAYA4AmAMA5gCAOQBgDgCYAwDmAIA5AGAOAJgDAOYAAOYAgDkAYA4AmAMA5gCAOQBgDgCYAwDm
 AIA5AGAOAJgDAOYAgDkAYA4AYA4AmAMA5gCAOQBgDgCYAwDmAIA5AGAOAJgDAOYAgDkAYA4AmAMA
-5gAA5gCAOQBgDgCYAwDmAIA5AGAOAJgDAL xAL 9A8PS2KaBAAAAAElFTkSuQmCC" transform="matrix(0.2356 0 0 0.207 11 7.8346)">
+5gAA5gCAOQBgDgCYAwDmAIA5AGAOAJgDAL xAL 9A8PS2KaBAAAAAElFTkSuQmCC" transform="matrix(0.3625 0 0 0.2548 29.9993 149)">
 </image>
 -->
-    <g width="391" height="178" transform="matrix(0.2356 0 0 0.207 7.8 -8.3654)" id="barcode"><svg xmlns="http://www.w3.org/2000/svg" id="ean-13" width="415.100px" height="328.02px" x="0px" y="0px" viewBox="0 0 463 219" version="1.1" font-size="30px" font-family="frankgothcnbt" style="transform: translate(0px, 0px);"><rect x="0" y="0" width="463" height="219" style="fill:#ffffff;"/><g transform="translate(10, 10)" style="fill:#000000;"><rect x="0" y="0" width="3.28148" height="199"/><rect x="6.56296" y="0" width="3.28148" height="199"/><rect x="13.125919999999999" y="0" width="9.84444" height="199"/><rect x="26.25184" y="0" width="3.28148" height="199"/><rect x="39.37776" y="0" width="3.28148" height="199"/><rect x="45.94072" y="0" width="3.28148" height="199"/><rect x="52.50368" y="0" width="9.84444" height="199"/><rect x="72.19256" y="0" width="9.84444" height="199"/><rect x="85.31848" y="0" width="9.84444" height="199"/><rect x="98.4444" y="0" width="3.28148" height="199"/><rect x="111.57032000000001" y="0" width="3.28148" height="199"/><rect x="118.13328" y="0" width="3.28148" height="199"/><rect x="131.25920000000002" y="0" width="9.84444" height="199"/><rect x="144.38512000000003" y="0" width="3.28148" height="199"/><rect x="157.51104" y="0" width="9.84444" height="199"/><rect x="177.19992000000002" y="0" width="3.28148" height="199"/><rect x="183.76288000000002" y="0" width="3.28148" height="199"/><rect x="190.32584000000003" y="0" width="3.28148" height="199"/><rect x="203.45176000000004" y="0" width="3.28148" height="199"/><rect x="210.01472" y="0" width="3.28148" height="199"/><rect x="216.57768000000002" y="0" width="9.84444" height="199"/><rect x="236.26656000000003" y="0" width="9.84444" height="199"/><rect x="249.39248000000003" y="0" width="3.28148" height="199"/><rect x="255.95544000000004" y="0" width="9.84444" height="199"/><rect x="269.08136" y="0" width="3.28148" height="199"/><rect x="282.20727999999997" y="0" width="9.84444" height="199"/><rect x="301.89616" y="0" width="3.28148" height="199"/><rect x="308.45912" y="0" width="9.84444" height="199"/><rect x="321.58504000000005" y="0" width="3.28148" height="199"/><rect x="334.71096000000006" y="0" width="3.28148" height="199"/><rect x="341.27392000000003" y="0" width="3.28148" height="199"/><rect x="347.83688" y="0" width="9.84444" height="199"/><rect x="367.52576" y="0" width="9.84444" height="199"/><rect x="387.21464" y="0" width="9.84444" height="199"/><rect x="400.34056000000004" y="0" width="3.28148" height="199"/><rect x="406.90352" y="0" width="3.28148" height="199"/><rect x="413.46648000000005" y="0" width="3.28148" height="199"/><rect x="426.5924" y="0" width="9.84444" height="199"/><rect x="439.71832" y="0" width="3.28148" height="199"/></g></svg></g>
-	
-	
-
-<!--
-	<image width="391" height="178" transform="matrix(0.2356 0 0 0.207 9.8 4.3654)" id="barcodeimage" xlink:href="">
-		
-</image>
--->
-
-<text transform="matrix(1 0 0 1 26 53.1)" style="font-family:'Myriad', Myriad Roman, Arial, sans-serif; font-size:8.5px;" id="barcode_number">12345678901231</text>
-<text text-anchor="middle" transform="matrix(1 0 0 1 57 79.05)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:8px;" id="tpnd">ORMS TPN: 0505796700839</text>
-<text xmlns="http://www.w3.org/2000/svg" transform="matrix(1 0 0 1 20.6108 56.606)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:45px;opacity: 0.1;" id="watermark"/>
+    <g width="391" height="178" transform="matrix(0.3625 0 0 0.2548 30 123.001)" id="barcode"><svg id="ean-13" width="412.25px" height="378.02px" x="0px" y="0px" viewBox="0 0 393 190" xmlns="http://www.w3.org/2000/svg" version="1.1" style="transform: translate(0px, 0px);" font-size="50px" font-family="frankgothcnbt"><rect x="0" y="0" width="393" height="190" style="fill:#ffffff;"/><g transform="translate(10, 10)" style="fill:#000000;"><rect x="0" y="0" width="3.926" height="170"/><rect x="7.852" y="0" width="3.926" height="170"/><rect x="23.556" y="0" width="7.852" height="170"/><rect x="35.334" y="0" width="3.926" height="170"/><rect x="43.186" y="0" width="11.778" height="170"/><rect x="62.816" y="0" width="3.926" height="170"/><rect x="74.59400000000001" y="0" width="3.926" height="170"/><rect x="90.298" y="0" width="3.926" height="170"/><rect x="98.14999999999999" y="0" width="11.778" height="170"/><rect x="113.854" y="0" width="7.852" height="170"/><rect x="125.632" y="0" width="7.852" height="170"/><rect x="145.26200000000003" y="0" width="3.926" height="170"/><rect x="153.11400000000003" y="0" width="3.926" height="170"/><rect x="172.74400000000003" y="0" width="3.926" height="170"/><rect x="180.59600000000003" y="0" width="3.926" height="170"/><rect x="188.448" y="0" width="3.926" height="170"/><rect x="196.3" y="0" width="3.926" height="170"/><rect x="204.15200000000002" y="0" width="11.778" height="170"/><rect x="223.782" y="0" width="3.926" height="170"/><rect x="231.63400000000001" y="0" width="11.778" height="170"/><rect x="251.26399999999998" y="0" width="7.852" height="170"/><rect x="266.968" y="0" width="7.852" height="170"/><rect x="278.74600000000004" y="0" width="3.926" height="170"/><rect x="294.45000000000005" y="0" width="3.926" height="170"/><rect x="306.22800000000007" y="0" width="7.852" height="170"/><rect x="318.00600000000003" y="0" width="7.852" height="170"/><rect x="333.71000000000004" y="0" width="7.852" height="170"/><rect x="345.48800000000006" y="0" width="7.852" height="170"/><rect x="361.192" y="0" width="3.926" height="170"/><rect x="369.04400000000004" y="0" width="3.926" height="170"/></g></svg></g>
+<text transform="matrix(1 0 0 1 66.9998 204)" style="font-family:Myriad, Myriad Roman, Arial, sans-serif; font-size:11px;" id="barcode_number">5057753441722</text>
+<text transform="matrix(1 0 0 1 226.4016 52.357)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">Pieces per shroud: </text>
+<text transform="matrix(1 0 0 1 311.402 52.357)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;" id="unit_per_case">1</text>
+<text transform="matrix(1 0 0 1 226.4016 65.1075)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">Dept: </text>
+<text transform="matrix(0.7943 0 0 1 259.2061 65.3951)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:9px;" id="department">KIDSWEAR / BABY TODDLER</text>
+<text transform="matrix(1 0 0 1 226.4451 77.9129)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">Brand: </text>
+<text id="brand" transform="matrix(1 0 0 1 259.4501 77.663)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">F&amp;F ACTIVE</text>
+<text id="rfid" transform="matrix(1 0 0 1 304.4501 90.9124)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">YES</text>
+<text transform="matrix(1 0 0 1 226.4456 90.9126)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">RFID </text>
+<text transform="matrix(1 0 0 1 250.444 90.6628)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">Compliant:</text>
+<text id="tag_at_source" transform="matrix(1 0 0 1 304.451 102.9129)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">YES</text>
+<text transform="matrix(1.0159 0 0 1 226.4464 102.6622)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">Tag At Source:</text>
+<text transform="matrix(1 0 0 1 7.4747 219.8346)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">MANUFACTURED DATE: </text>
+<text transform="matrix(1 0 0 1 116.4167 220.118)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;" id="manufactured_date">NOVEMBER,2019</text>
+<text transform="matrix(1 0 0 1 7.0916 87.9775)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">UK Style Ref:</text>
+<text transform="matrix(1 0 0 1 60.5916 87.9775)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px; letter-spacing:43;"> </text>
+<text transform="matrix(1 0 0 1 106.3916 87.9775)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;"> </text>
+<text transform="matrix(1 0 0 1 47.8128 100.9361)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:8px;">(VPN/OPTION ID): </text>
+<text transform="matrix(1 0 0 1 7.1485 100.6665)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:8px;">CE Style Ref</text>
+<text transform="matrix(1 0 0 1 7.0916 113.8261)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Short Description:</text>
+<text transform="matrix(1 0 0 1 81.3916 113.8261)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px; letter-spacing:5;"> </text>
+<text transform="matrix(1 0 0 1 90.1916 113.8261)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;"> </text>
+<text transform="matrix(1 0 0 1 7.2048 127.7902)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">EQOS Code:</text>
+<text transform="matrix(1 0 0 1 56.0048 127.7902)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px; letter-spacing:21;"> </text>
+<text transform="matrix(1 0 0 1 79.8048 127.7902)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;"> </text>
+<text transform="matrix(1 0 0 1 7.0916 140.6742)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Supplier Name:</text>
+<text transform="matrix(1 0 0 1 68.9916 140.6742)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px; letter-spacing:18;"> </text>
+<text transform="matrix(1 0 0 1 89.9916 140.6742)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;"> </text>
+<text id="uk_style" transform="matrix(1 0 0 1 110.3395 87.9234)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">284-5240</text>
+<text id="ce_style" transform="matrix(1 0 0 1 109.8977 101.6038)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">284-5240</text>
+<text id="eqos" transform="matrix(1 0 0 1 109.688 127.8837)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">TEST271</text>
+<text id="supplier" transform="matrix(1 0 0 1 109.688 140.7752)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">S.P.APPARELS.LTD</text>
+<text id="description" transform="matrix(1 0 0 1 110.6875 113.8827)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">LS INDIGO WESTERN BL L</text>
+<!-- <text transform="matrix(1 0 0 1 214.69 113.8829)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;" id="size">3-6</text> -->
+<text xmlns="http://www.w3.org/2000/svg" transform="matrix(1 0 0 1 76.6108 162.606)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:140px;opacity: 0.1;" id="watermark"/>
 </svg>

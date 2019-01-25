@@ -234,6 +234,7 @@
 								<th>Style Number</th>
 								<th>Reference Number</th>
 								<th>Delivery Date</th>
+								<th>Operations</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -259,6 +260,8 @@
 								@else
 									<td>-</td>
 								@endif
+								<?php $ref_name = str_replace(" ","",$vals->reference_name) ?>
+								<td> <object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal{{$loop->iteration}}" class="center-block tesco_svg{{$loop->iteration}}" data="{{$vals->template_file}}" type="image/svg+xml"></object><a class="artork_download" href="javascript:void(0)" onclick="openmodaltesco('{{$ref_name}}','{{ $loop->iteration }}','{{$vals->template_file}}','{{$vals->style_no}}','{{$vals->buyer_po_number}}','{{$vals->id}}')"><i class="fa fa-file-pdf-o fa-button" data-placement="top" title="" data-original-title="Download Artwork"></i></a></td>
 							</tr>
 							@endforeach
 						</tbody>
@@ -269,6 +272,12 @@
             </div>
         </div>
     </div>
+
+<div id="modaldiv">
+	<div id="svgdiv" style="position:absolute;visibility:hidden">\
+	 <svg id="ean-13"></svg>\
+   </div>
+</div>
 <!-- company selection Modal -->
 <div class="modal buyer-selection-modal fade" id="buyerSelectionModalCenter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
      <div class="modal-dialog buyer-selection-modal-dialog" role="document">

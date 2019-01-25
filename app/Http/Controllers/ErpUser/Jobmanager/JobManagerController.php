@@ -14,6 +14,7 @@ use Session;
 use App\ErpOrders as Erp;
 use App\ErpOrderDetails as ErpOrderDetails;
 use Carbon\Carbon;
+use PDF;
 
 class JobManagerController extends Controller
 {
@@ -93,13 +94,14 @@ class JobManagerController extends Controller
 											->join('customers', 'erp_orders.customer_id', 'customers.id')
 											->join('buyers', 'erp_orders.buyer_id', 'buyers.id')
 											->join('erp_status', 'erp_orders.status', 'erp_status.id')
+						->join('tesco_template', 'tesco_template.item_id', 'erp_order_details.template_id')
 											->where('erp_order_details.template_id', '=', $valuess)
 											->where('erp_orders.status', '=', 3)
 											->where('erp_orders.order_status_id', '=', 4)
 											->whereIn('erp_orders.buyer_id', $buyers)
 											->orderBy('erp_order_details.erp_order_id', 'asc')
-											->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id')
-											->select('erp_orders.*','erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name', 'buyers.id as buyer_id')
+											->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id','tesco_template.template_file')
+											->select('erp_orders.*','erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name', 'buyers.id as buyer_id','tesco_template.template_file')
 											->get();
 					
 					if(count($erp_order_details) > 0)
@@ -120,6 +122,73 @@ class JobManagerController extends Controller
 		{
 		return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
 		}
+	}
+	/**
+     * Get order deatils.
+     * @param order details id
+     * @author Praveen <gowtham@wizroots.com>
+     * @return \Illuminate\Http\Response
+     */
+	public function getOrderDetails(Request $request)
+	{
+		$ref_name = $request['ref_name'];
+		$style_no = $request['style_no'];
+		$buyer_no = $request['buyer_no'];
+		$id = $request['id'];
+		$order_details  = 	DB::table('erp_order_details')
+									->where('erp_order_details.style_no',$style_no)
+									->where('erp_order_details.erp_order_id',$id)
+									->where('erp_order_details.reference_name',$ref_name)
+									->where('erp_order_details.buyer_po_number',$buyer_no)
+									->orderBy('erp_order_details.id', 'desc')
+									->select('*')
+									->get();
+		
+		foreach($order_details as $value)
+		{
+			$order_details_omp  = 	DB::table($value->order_qnty_table_name)
+									->where('id',$value->order_qnty_table_id)
+									->select('*')
+									->get();
+			
+			
+			$order_table = str_replace("_quanty","",$value->order_qnty_table_name);
+			$order_id  = strtolower(str_replace(" ","",$ref_name).'_order_id');
+			
+			$order_omp  = 	DB::table($order_table)
+				->join('tesco_department',$order_table.'.tesco_department_id', 'tesco_department.id')
+				->join('tesco_brand',$order_table.'.tesco_brand_id', 'tesco_brand.id')
+				->join('tesco_suppliers',$order_table.'.tesco_metadata_supplier_id', 'tesco_suppliers.id')
+									->where($order_table.'.id',$order_details_omp{0}->$order_id)
+									->select($order_table.'.*','tesco_department.department','tesco_brand.brand','tesco_suppliers.supplier_name')
+									->get();
+			
+			$value->tpnd=$order_details_omp{0}->tpnd;
+			$value->itf_barcode=$order_details_omp{0}->itf_barcode;
+			$value->units_per_carton=$order_details_omp{0}->units_per_carton;
+			$value->cases_per_carton=$order_details_omp{0}->cases_per_carton;
+			$value->ean_barcode=$order_details_omp{0}->ean_barcode;
+			$value->size=$order_details_omp{0}->size;
+			$value->case_size=$order_details_omp{0}->case_size;
+			$value->orms_tpn=$order_details_omp{0}->orms_tpn;
+			
+			$value->zone=$order_omp{0}->zone;
+			$value->po_number=$order_omp{0}->po_number;
+			$value->uk_style_ref=$order_omp{0}->uk_style_ref;
+			$value->ce_style_ref=$order_omp{0}->ce_style_ref;
+			$value->season_code=$order_omp{0}->season_code;
+			$value->short_description=$order_omp{0}->short_description;
+			$value->eqos_site_code=$order_omp{0}->eqos_site_code;
+			$value->manufacture_date=$order_omp{0}->manufacture_date;
+			$value->department=$order_omp{0}->department;
+			$value->brand=$order_omp{0}->brand;
+			$value->supplier_name=$order_omp{0}->supplier_name;
+			$value->rfid_compliant=$order_omp{0}->rfid_compliant;
+			$value->tag_at_source=$order_omp{0}->tag_at_source;
+			
+		}
+		
+		return response()->json(['error'=> true,'order_details' =>$order_details],200);
 	}
 	/**
      * Get order deatils for job card template creation by selected ids.
@@ -417,6 +486,7 @@ class JobManagerController extends Controller
 				$settings        = explode(',', $request['settings']);
 				$total_mtrs 	 = explode(',', $request['total_mtrs']);
 
+
 				if(isset($company_id) && isset($workorder_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($repeat_gap) && isset($machine) && isset($cus_del_date) && isset($roll_width)  && isset($film_no) && isset($act_del_date) && isset($length_side) && isset($excess) && isset($teeth_no)  && isset($inv_no) && isset($no_sticker) && isset($finish_type)  && isset($print_color) && isset($compiled_by) && isset($barcode_read) && isset($operator) && isset($checker) && isset($authorized_by) && isset($axicon_verifier) && isset($approved_by) && isset($packer) && isset($approval_date) && isset($roll_issued_by)  && isset($cutter) && isset($cartons) && isset($final_json_obj) && isset($single_ref) && isset($act_excess) && isset($sticker_mtr) && isset($settings) && isset($total_mtrs))
 				{
 					$store_jobcard_id = DB::table('jobcard_main_table')->insertGetId([
@@ -459,7 +529,7 @@ class JobManagerController extends Controller
 						'roll_issued_by'         => $roll_issued_by,
 						'cutter'                 => $cutter,
 						'cartons'                => $cartons,
-						'template_quantity_json' => $final_json_obj,
+						//'template_quantity_json' => $final_json_obj,
 						'created_at'             => Carbon::now('Asia/Kolkata')->toDateTimeString(),
 						'updated_at'             => Carbon::now('Asia/Kolkata')->toDateTimeString()
 					  ]);
@@ -495,8 +565,171 @@ class JobManagerController extends Controller
 		}
 		catch (\Exception $e)
 		{
-			$result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+		return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
 		}
-		return $result;
 	}
+	/**
+   * Print Preview For Stickers
+   *
+   * @return pdf
+   */
+  
+    public function printDivTesco(Request $request)
+    {
+		
+		//		 // Custom Header
+		//		PDF::setHeaderCallback(function($pdf) {
+		//				 $image_file= K_PATH_IMAGES.'logo_example.jpg';
+		//				 $pdf->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+		//				// Set font
+		//				$pdf->SetFont('frankgothcnbt');
+		//				// Title
+		//				$pdf->Cell(0, 15, 'Something new right here!!!', 0, false, 'C', 0, '', 0, false, 'M', 'M');
+		//				$html = '<span color="red">red</span> <span color="green">green</span> <span color="blue">blue</span><br /><span color="red">red</span> <span color="green">green</span> <span color="blue">blue</span>';
+		//				$pdf->writeHTMLCell(0, 0, '', '', $html, 'LRTB', 1, 0, true, 'L', true);
+		//
+		//		});
+		//
+		//		// Custom Footer
+		//		PDF::setFooterCallback(function($pdf) {
+		//
+		//				// Position at 15 mm from bottom
+		//				$pdf->SetY(-15);
+		//				// Set font
+		//				$pdf->SetFont('frankgothcnbt');
+		//				// Page number
+		//				$pdf->Cell(0, 10, 'Page '.$pdf->getAliasNumPage().'/'.$pdf->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+		//
+		//		});
+		$svgarr = explode(',_',$request->svg);
+    $name=$request->name;
+        $svg=urldecode($request->svg);
+        define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
+        define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
+        PDF::setImageScale(1.66);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('frankgothcnbt');
+        PDF::AddPage('P', 'A4');
+        //PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+		// set auto page breaks
+		PDF::SetAutoPageBreak(TRUE);
+		$i=0;
+		$j=0;
+		$yy=12.5;
+//		PDF::AddPage('L', array(80,127));
+		foreach($svgarr as $value)
+		{
+			$svg=urldecode($value);
+			file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
+			// PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+			$html = '<img style="width:480px;height:302.36220472px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
+			PDF::writeHTMLCell(129, 82.5, 12.5, $yy, $html, '', 0, 0, false, 'L', false);
+			if($i == 3)
+			{
+				PDF::AddPage('P', 'A4');
+				$yy=92.5;
+				$i = 0;
+			}
+			else
+			{
+				$yy += 85;
+			}
+			//print_r($yy);
+			 $i++;
+			$j++;
+		}
+        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.$name.'.pdf'));
+    } 
+	 /**
+   * Print Preview For Stickers
+   *
+   * @return pdf
+   */
+  
+    public function printDivTescoSmall(Request $request)
+    {
+		$svgarr = explode(',_',$request->svg);
+    	$name=$request->name;
+        $svg=urldecode($request->svg);
+        define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
+        define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
+        PDF::setImageScale(1.66);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('frankgothcnbt');
+        PDF::AddPage('P', 'A4');
+        //PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+		// set auto page breaks
+		PDF::SetAutoPageBreak(TRUE);
+        $i=0;
+		$yy=0;
+		$j=0;
+		PDF::SetXY(10, 50);
+		foreach($svgarr as $value)
+		{
+			$svg=urldecode($value);
+			PDF::SetFillColor(255,255,255);
+			if($i == 3 || $i == 6 || $i == 9 || $i == 12 || $i == 18)
+			{
+				$xx=15;
+				$yy+=50;
+			}
+			else if($i == 0)
+			{
+				$yy=10;
+				$xx=15;
+			}
+			else if($i == 15)
+			{
+				PDF::AddPage();
+				$xx=15;
+				$yy=10;
+			}
+			else 
+			{
+				$xx+=70;
+			}
+			
+			// PDF::ImageSVG('@' . $svg, $x=$xx, $y=$yy, $w=40, $h=30, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+			
+				file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
+			// PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+			$html = '<img style="width:151.18110236px;height:113.38582677px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
+			PDF::writeHTMLCell(42, 32, $xx, $yy, $html, '', 0, 0, false, 'L', false);
+			
+			//print_r($yy);
+			 $i++;
+			$j++;
+		}
+        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.$name.'.pdf'));
+    } 
+	/**
+     * Function to get tesco tsl template UK , CE size chart based on size entered.
+     * @author <Praveen>
+     * @param [string] $[size] [<Size entered>], [string] $[zone] [<zone selected>]
+     * @return equivalent uk,ce size for size entered
+     */
+    public function getTescoTSLSizechart(Request $request)
+    {
+       try {
+             $zone = $request['zone'];
+             $size = $request['size'];
+
+           if($zone == 'UK')
+           {
+               $size = DB::table('tesco_size_chart')->select('uk as size')->where('po_size', 'ilike', $size)->where('is_enabled','=',1)->get();
+           }
+           else
+           {
+               $size = DB::table('tesco_size_chart')->select('ce as size')->where('po_size', 'ilike', $size)->where('is_enabled','=',1)->get();
+           }
+           
+           return response()->json(['size_chart' => $size]);
+       } catch (\Exception $e) {
+           return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+       }
+    }
 }
