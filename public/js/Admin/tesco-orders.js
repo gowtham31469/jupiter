@@ -1083,7 +1083,11 @@ function createOrders(parsedObj = false, oType = false) {
                                 </div>\
                                 </div>\
                                 </div>';
-
+				if(parsedObj[Object.keys(parsedObj)[0]].order_status == "Order Placed")
+				{
+					$('.approve-btn').show();
+					$('.cancel-btn').show();
+				}
 				$('.main-content').html(html).selectpicker('refresh');
 				/** @type {Date} [Manufactured date Datepicker format & validation] */
 				var date = new Date();
