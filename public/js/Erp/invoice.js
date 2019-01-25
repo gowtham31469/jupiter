@@ -32,12 +32,12 @@
                     $('.po-select').not(this).prop('checked', false);  
                         showOrderList(this)                           
                     });
-                    
+
                     if (data.address_list!= 0){
                         var add = ''
                         $(data.address_list).each(function(index, value)
                         {
-                            add += '<div class="col-md-4 delivery-at-link" id="delivery_add_'+value.id+'" onclick="selectDeliveryCard(this,'+value.id+')"><div class="card delivery-card" style="cursor: pointer;color: #636b6f;"><strong class="d_address">'+value.address+'</strong><p class="d_email">'+value.email+'</p><p class="d_pin">'+value.pincode+'</p><p class="d_tel">'+value.telephone+'</p></div></div>';
+                            add += '<div class="col-md-4 delivery-at-link" id="delivery_add_'+value.id+'" ><div class="card delivery-card" onclick="selectDeliveryCard(this,'+value.id+')"  style="cursor: pointer;color: #636b6f;"><strong data-id="'+value.id+'" class="d_address">'+value.address+'</strong><p class="d_email">'+value.email+'</p><p class="d_pin">'+value.pincode+'</p><p class="d_tel">'+value.telephone+'</p></div></div>';
                         });
                         $('.delivery-address').html(add)
                     }
@@ -412,18 +412,26 @@
                delvryQnty[$(this).data("id")] = parseFloat(this.value);
             }
             else if($(this).closest('tr').find('.order-select').prop("checked") == true){
-                $(this).closest('tr').find('.delivery-qnty').focus();
+                $(this).closest('tr').find('.delivery-qnty').focus();               
                 $(this).closest('tr').find('.delivery-qnty').css('border-color', '#F44336');
                 $('.snackbar_span').html("Please provide delivered quantity details");
                 showSnackbar();
             }
            
         })
-        if (jQuery.isEmptyObject(delvryQnty)) {
+        var checkboxes = $('#order-details td input[type="checkbox"]');
+        console.log(checkboxes.filter(':checked').length)
+        console.log(Object.keys(delvryQnty).length)
+        if ((jQuery.isEmptyObject(delvryQnty))) {
+        // if((Object.keys(delvryQnty).length) === (checkboxes.filter(':checked').length)){
            $('.snackbar_span').html("Please provide delivered quantity details");
            showSnackbar();
         }
-        else{
+        else if(($('.delivery-card.active').length == 0)){
+            $('.snackbar_span').html("Please select delivery address");
+            showSnackbar();
+        }
+        else if((Object.keys(delvryQnty).length) === (checkboxes.filter(':checked').length)){
             for(var i=0; i<selected.length;i++){
                var removeIndex = arr.map(function(item) { return item.id; }).indexOf(parseInt(selected[i]));
                var data = arr.splice(removeIndex, 1);
@@ -542,6 +550,7 @@
             });
                 saveInvoice(arr,eChargesArr1)
             })
+            $('.delivery-details').html('<div class="preview-delivery-at">'+$('.delivery-card.active').html()+'</div>')
             $('#erp-invoice').modal("show")
         }
     }
@@ -572,12 +581,13 @@
             if ($(this).prop("checked") == false) {
               selected.push($(this).attr('id'));
               $(this).closest('tr').find('.amnt').text(0);
+              $(this).closest('tr').find('.delivery-qnty').val('')
               $(this).closest('tr').find('.delivery-qnty').removeAttr('required');
               $(this).closest('tr').find('.delivery-qnty').css('border-color', '');              
             }
             else{
-               amt = $(this).closest('tr').find('.pending-qnty').text()*$(this).closest('tr').find('.rate').text()
-                $(this).closest('tr').find('.amnt').text(amt);
+               amt = $(this).closest('tr').find('.pending-qnty').text()*$(this).closest('tr').find('.rate').text();  
+                // $(this).closest('tr').find('.amnt').text(amt);
                 $(this).closest('tr').find('.delivery-qnty').attr('required');
             }
         });
@@ -604,7 +614,7 @@
         var grandTotal = parseFloat($('.grand-total').text()).toFixed(2)
         var invoiceNo = $('#invoice-no').val();
         var invoiceDate = $('#invoice-date').val();
-        console.log(eCharges);
+        var delivery_at = $('.preview-delivery-at').find('.d_address').attr('data-id');
         $.ajax({
             url: "/erp/save-invoice",
             type: 'POST',
@@ -622,7 +632,8 @@
                 grandTotal:grandTotal,
                 invoiceNo:invoiceNo,
                 invoiceDate:invoiceDate,
-                eCharges:eCharges
+                eCharges:eCharges,
+                delivery_at:delivery_at
             },
             tryCount: 0,
             retryLimit: 2,
@@ -692,8 +703,12 @@
     }
 
     function selectDeliveryCard(obj,id){
-        $(this).css('background-color','#00b6ff');
-        // $(this).addClass("active");
+        $('.delivery-card').css('background-color','');
+        $('.delivery-card').removeClass("active");
+        $(obj).addClass("active");
+        $('.delivery-card.active').css('background-color','rgb(200, 206, 210)');
+        $('.delivery-card.active').find('d_address').text()
+        console.log($('.delivery-card.active').html())
     }
 
     function Rs(amount)

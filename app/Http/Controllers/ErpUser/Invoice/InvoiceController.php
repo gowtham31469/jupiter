@@ -163,6 +163,7 @@ class InvoiceController extends Controller
             $grandTotal    = $request->grandTotal;
             $invoiceNo     = $request->invoiceNo;
             $invoiceDate   = $request->invoiceDate;
+            $delivery_at   = $request->delivery_at;
             $eChargesArr   = $request['eCharges'];
             
             $bill_to = DB::table('customer_bill_address')
@@ -185,16 +186,17 @@ class InvoiceController extends Controller
 
             if ($orders) {
                 $invoiceData = Invoices::create([
-                                'customer_id' => $orders[0]['customer_id'],
-                                'buyer_id'    => $orders[0]['buyer_id'],
-                                'po_no'       => $orders[0]['po_no'],
-                                'po_file'     => $orders[0]['po_file'],
-                                'erp_id'      => $orders[0]['erp_id'],
-                                'credit_limit'=> $orders[0]['credit_limit'],
-                                'dispatch_thru'=> $orders[0]['delvry_thru'],
+                                'customer_id'   => $orders[0]['customer_id'],
+                                'buyer_id'      => $orders[0]['buyer_id'],
+                                'po_no'         => $orders[0]['po_no'],
+                                'po_file'       => $orders[0]['po_file'],
+                                'erp_id'        => $orders[0]['erp_id'],
+                                'credit_limit'  => $orders[0]['credit_limit'],
+                                'dispatch_thru' => $orders[0]['delvry_thru'],
                                 'round_off_amnt'=>  $roundOff,
                                 'grand_total'   =>  $grandTotal,
                                 'place_of_supply' =>  $place_of_supply,
+                                'delivery_at'    =>  $delivery_at,
                             ]);
                 
                 $invoice_id =  "INV-00".$invoiceData->id;

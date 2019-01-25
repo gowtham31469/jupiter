@@ -18,7 +18,7 @@ class AddBuyerPoNumberToErpOrderDetailsTable extends Migration
         });
 
         Schema::table('erp_order_details', function (Blueprint $table) {
-             $table->string('buyer_po_number');
+             $table->string('buyer_po_number')->nullable();
         });
     }
 

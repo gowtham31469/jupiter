@@ -210,7 +210,7 @@
                                     <div>
                                         <!-- <strong>Delivery At</strong>
                                         <p class="delivery-at"></p> -->
-                                        <label>Delivery At</label><span style="padding-left: 8px;">:</span><span class="delivery-at" style="padding-left: 20px;"></span>
+                                        <label>Delivery At</label><span style="padding-left: 8px;">:</span><span class="delivery-details" style="padding-left: 20px;"></span>
                                     </div>
                                     <div class="pull-right" style="padding-right: 55px;">
                                         <span>For Jupiter Garments Accessories</span>

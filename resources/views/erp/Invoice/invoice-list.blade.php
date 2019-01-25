@@ -181,7 +181,8 @@
                   <p class="amnt-in-words"></p> 
               </div>
               <div>
-                  <label>Delivery At</label><span style="padding-left: 8px;">:</span><span class="delivery-at" style="padding-left: 20px;"></span>
+                  <label>Delivery At</label><span style="padding-left: 8px;">:</span>
+                  <span class="delivery-at" style="padding-left: 20px;"></span>
               </div>
           </div>
           <div class="col-md-4">
@@ -400,6 +401,8 @@ function showInvoice(obj){
           var rndClass = roundOff==0?"hidden":''
           $('.inv-extra-charges').html('<table class="table table-bordered text-center inv-extra-charges" style="margin-top: -22px;"><thead><tr><th colspan="2">Description</th><th>Amount (₹)</th></tr></thead><tbody>'+taxTr+'<tr><td colspan="2"><strong>SubTotal</strong></td><td><strong class="preview-sub-extra">'+parseFloat(exAmnt).toFixed(2)+'</strong></td></tr><tr class="'+rndClass+'"><td colspan="2"><strong>Round Off</strong></td><td><strong id="preview-round-off">'+parseFloat(roundOff).toFixed(2)+'</strong></td></tr><tr></tr><tr><td colspan="2" style="border-width: 1px !important;"><strong>Grand Total</strong></td><td class="grand-total" style="border-width: 1px !important;"><strong>'+parseFloat(data.inv_details[0].grand_total).toFixed(2)+'</strong></td></tr><tr></tr></tbody></table>')
           $('.amnt-in-words').text(RsPaise($('.grand-total').text()))
+
+          $('.delivery-at').html('<p>'+data.inv_details[0].address+'</p><p>'+data.inv_details[0].email+'</p><p>'+data.inv_details[0].pincode+'</p><p>'+data.inv_details[0].telephone+'</p>')
           $('.invoice_actions').html('<button data-dismiss="modal" class=" btn btn-default btn-xs">Close</button><button class="btn btn-primary btn-xs" onclick="editInvoice()">Save & Send</button><button class="btn btn-default btn-xs downloadIn" id="downloadIn" onclick="downloadInvoice()">View as PDF</button>')
         },
        
