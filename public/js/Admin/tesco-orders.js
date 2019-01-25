@@ -2286,16 +2286,25 @@ function GenerateDivTesco(data, name) {
 			}
 
 
-
-			ajax_count++;
+			if((name == "TCL2-sticker") || (name == "TCL4-sticker"))
+			{
+				ajax_count++;
+			}
 			name_count++;
 		})
+		
+		
+		
+			if((name == "TCL2-sticker") || (name == "TCL4-sticker"))
+			{
+				if (ajax_count == document.getElementById("table_row").rows.length) {
+					var svg_fin = svgarr.join(',_');
+					PopupTescoGenerate(svg_fin, name,svgDoc);
+				}
 
-		if (ajax_count == document.getElementById("table_row").rows.length) {
-			var svg_fin = svgarr.join(',_');
-			PopupTescoGenerate(svg_fin, name,svgDoc);
-		}
+			}
 
+		
 	}
 
 
