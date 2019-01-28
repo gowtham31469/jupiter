@@ -230,7 +230,8 @@
 								<th>ERP ID</th>
 								<th>Customer name</th>
 								<th>Buyer name</th>
-								<th>PO Number</th>
+								<th>Customer PO Number</th>
+								<th>Buyer PO Number</th>
 								<th>Style Number</th>
 								<th>Reference Number</th>
 								<th>Delivery Date</th>
@@ -239,7 +240,7 @@
 						</thead>
 						<tbody>
 							@foreach($orders as $vals)
-							<tr id="{{$vals->id}}" data-refname="{{$vals->reference_name}}">
+							<tr id="{{$vals->id}}" data-refname="{{$vals->reference_name}}" data-buyer-po="{{$vals->buyer_po_number}}">
 								<td class="">
 								
 									<div class="form-check">
@@ -253,6 +254,7 @@
 								<td>{{$vals->company_name}}</td>
 								<td data-buyer-id="{{$vals->buyer_id}}">{{$vals->buyer_name}}</td>
 								<td>{{$vals->po_no}}</td>
+								<td>{{$vals->buyer_po_number}}</td>
 								<td>{{$vals->style_no}}</td>
 								<td>{{$vals->reference_name}}</td>
 								@if ($vals->delivery_date != '')

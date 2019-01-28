@@ -273,11 +273,19 @@ function generateJobcard(){
             }
         });
         ref_array   = ref_array.join(',');
+        buyer_po_array = [];
+        /** [ Create array of buyer po selected ] */
+        $('.row-checkbox', allPages).each(function (i, item) {
+            if ($(this).is(':checked')) {
+                buyer_po_array.push($(this).closest('tr').data('buyer-po')); 
+            }
+        });
+        buyer_po_array   = buyer_po_array.join(',');
         $.ajax({
             url:base_url + "/erp/get-jobcard-order-details",
             dataType:"json",
             method:"get",
-            data:{orders:orders, ref_array:ref_array},
+            data:{orders:orders, ref_array:ref_array, buyer_po_array:buyer_po_array},
             tryCount : 0,
             retryLimit : 2,
             beforeSend: function () {
@@ -891,9 +899,9 @@ function storeJobcard(formData)
         });
         single_obj['ocn'] = ocn_array;
 
-        var size_object_final = [];
-        var total_qty_object_final = [];
-        var excess_object_final = [];
+        var size_object_final = {};
+        var total_qty_object_final = {};
+        var excess_object_final = {};
         // create size, qty and excess json object
         $(table).find('tbody tr:gt(3):not(:last-child)').each(function (i, item) {
             
@@ -919,6 +927,7 @@ function storeJobcard(formData)
             excess_object_final[size_text] = excess_object;
 
         });
+        console.log(size_object_final)
         single_obj['size'] = size_object_final;
         single_obj['total'] = total_qty_object_final;
         single_obj['excess'] = excess_object_final;
@@ -927,6 +936,7 @@ function storeJobcard(formData)
         // pushing single templates array into json object
         final_json_obj['single'] = single_ref_obj;
     });
+    
     var single_ref = [];
     var act_excess = [];
     /** [ Create array of act-excess ] */
@@ -960,6 +970,31 @@ function storeJobcard(formData)
 
     });
     total_mtrs = total_mtrs.join(',');
+
+    erp_orders_ids = [];
+    /** [ Create array of orders selected ] */
+    $('.row-checkbox', allPages).each(function (i, item) {
+        if ($(this).is(':checked')) {
+            erp_orders_ids.push($(this).closest('tr').attr('id')); 
+        }
+    });
+    erp_orders_ids   = erp_orders_ids.join(',');
+    selected_ref_array = [];
+    /** [ Create array of reference selected ] */
+    $('.row-checkbox', allPages).each(function (i, item) {
+        if ($(this).is(':checked')) {
+            selected_ref_array.push($(this).closest('tr').data('refname')); 
+        }
+    });
+    selected_ref_array   = selected_ref_array.join(',');
+    selected_buyer_po_array = [];
+    /** [ Create array of buyer po selected ] */
+    $('.row-checkbox', allPages).each(function (i, item) {
+        if ($(this).is(':checked')) {
+            selected_buyer_po_array.push($(this).closest('tr').data('buyer-po')); 
+        }
+    });
+    selected_buyer_po_array   = selected_buyer_po_array.join(',');
 
     $.ajax({
         url: base_url + "/erp/store-jobcard-details",
@@ -1010,7 +1045,10 @@ function storeJobcard(formData)
             act_excess:act_excess,
             sticker_mtr:sticker_mtr,
             settings:settings,
-            total_mtrs:total_mtrs
+            total_mtrs:total_mtrs,
+            erp_orders_ids:erp_orders_ids,
+            selected_ref_array:selected_ref_array,
+            selected_buyer_po_array:selected_buyer_po_array
         },
         tryCount: 0,
         retryLimit: 2,
@@ -1020,11 +1058,11 @@ function storeJobcard(formData)
         },
         statusCode: {
             200: function(data) {
-                console.log(data)
                 $('.snackbar_span').html("Jobcard Created Successfully");
                 showSnackbar();
-              //  $('#jobcardCreationModalCenter').modal('hide');
-              },
+                $('#jobcardCreationModalCenter').modal('hide');
+                location.reload();
+            },
             400: function() {
                 $('.snackbar_span').html("Parameter is missing !!!");
                 showSnackbar();
