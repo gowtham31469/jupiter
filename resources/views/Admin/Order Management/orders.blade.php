@@ -818,6 +818,13 @@ background: rgba(0,0,0,0.2);
 
 		$(document).ready(function() {
 			/** Clear local storage data **/
+			localStorage.removeItem("artwork_back");
+			localStorage.removeItem("back_flag");
+			localStorage.removeItem("order_type_back");
+			localStorage.removeItem("back_zone");
+			localStorage.removeItem("back_template_id");
+			localStorage.removeItem("style_number_back");
+			localStorage.removeItem("po_num_back");
 			localStorage.removeItem("hang_tag");
 			localStorage.removeItem("special_tag");
 			localStorage.removeItem("main_label");
@@ -943,6 +950,8 @@ background: rgba(0,0,0,0.2);
              })
             
         });
+		
+		
         
 	</script>
 
