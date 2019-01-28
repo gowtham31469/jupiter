@@ -55,7 +55,8 @@ class JobManagerController extends Controller
 			$company_id   = DB::table('company')
 									->select('company.*')
 									->first();
-			
+			// Get Erp status table id for 'Moved To JC Queue' status.
+			$erp_status_id = DB::table('erp_status')->where('status_name', 'ilike', 'Moved To JC Queue')->value('id');
 			
 			if(session()->get('company') == "" && session()->get('company') == null)
 			{
@@ -94,9 +95,10 @@ class JobManagerController extends Controller
 											->join('customers', 'erp_orders.customer_id', 'customers.id')
 											->join('buyers', 'erp_orders.buyer_id', 'buyers.id')
 											->join('erp_status', 'erp_orders.status', 'erp_status.id')
-						->join('tesco_template', 'tesco_template.item_id', 'erp_order_details.template_id')
+						                    ->join('tesco_template', 'tesco_template.item_id', 'erp_order_details.template_id')
 											->where('erp_order_details.template_id', '=', $valuess)
-											->where('erp_orders.status', '=', 3)
+											->where('erp_orders.status', '=', $erp_status_id)
+											->where('erp_order_details.status', '=', $erp_status_id)
 											->where('erp_orders.order_status_id', '=', 4)
 											->whereIn('erp_orders.buyer_id', $buyers)
 											->orderBy('erp_order_details.erp_order_id', 'asc')
@@ -201,6 +203,7 @@ class JobManagerController extends Controller
       try {
 			$erp_orders_ids     = explode(',', $request['orders']);
 			$selected_ref_arrays= explode(',', $request['ref_array']);
+			$buyer_pos          = explode(',', $request['buyer_po_array']);
 			$buyers_array       = array();
 			$customers_array    = array();
 			$company_array      = array();
@@ -230,6 +233,7 @@ class JobManagerController extends Controller
 				$order_detail_id_array = DB::table('erp_order_details')
 									->where('erp_order_details.erp_order_id', $erp_orders_id)
 									->where('erp_order_details.reference_name', $selected_ref_arrays[$row])
+									->where('erp_order_details.buyer_po_number', $buyer_pos[$row])
 									->pluck('erp_order_details.id')->all();
 
 				$order_detail_ids = array_unique(array_merge($order_detail_ids,$order_detail_id_array));
@@ -480,14 +484,14 @@ class JobManagerController extends Controller
 				$cutter          = $request['cutter'];
 				$cartons         = $request['cartons'];
 				$final_json_obj  = $request['final_json_obj'];
-				$single_ref      = explode(',', $request['single_ref']);
-				$act_excess 	 = explode(',', $request['act_excess']);
-				$sticker_mtr 	 = explode(',', $request['sticker_mtr']);
-				$settings        = explode(',', $request['settings']);
-				$total_mtrs 	 = explode(',', $request['total_mtrs']);
+				$erp_orders_ids  = explode(',', $request['erp_orders_ids']);
+			    $selected_ref    = explode(',', $request['selected_ref_array']);
+				$buyer_pos       = explode(',', $request['selected_buyer_po_array']);
 
-				if(isset($company_id) && isset($workorder_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($repeat_gap) && isset($machine) && isset($cus_del_date) && isset($roll_width)  && isset($film_no) && isset($act_del_date) && isset($length_side) && isset($excess) && isset($teeth_no)  && isset($inv_no) && isset($no_sticker) && isset($finish_type)  && isset($print_color) && isset($compiled_by) && isset($barcode_read) && isset($operator) && isset($checker) && isset($authorized_by) && isset($axicon_verifier) && isset($approved_by) && isset($packer) && isset($approval_date) && isset($roll_issued_by)  && isset($cutter) && isset($cartons) && isset($final_json_obj) && isset($single_ref) && isset($act_excess) && isset($sticker_mtr) && isset($settings) && isset($total_mtrs))
+				if(isset($company_id) && isset($workorder_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($repeat_gap) && isset($machine) && isset($cus_del_date) && isset($roll_width)  && isset($film_no) && isset($act_del_date) && isset($length_side) && isset($excess) && isset($teeth_no)  && isset($inv_no) && isset($no_sticker) && isset($finish_type)  && isset($print_color) && isset($compiled_by) && isset($barcode_read) && isset($operator) && isset($checker) && isset($authorized_by) && isset($axicon_verifier) && isset($approved_by) && isset($packer) && isset($approval_date) && isset($roll_issued_by)  && isset($cutter) && isset($cartons) && isset($final_json_obj) )
 				{
+					// Get Erp status table id for 'Jobcard Created' status.
+					$erp_status_id = DB::table('erp_status')->where('status_name', 'ilike', 'Jobcard Created')->value('id');
 					$store_jobcard_id = DB::table('jobcard_main_table')->insertGetId([
 						'work_order_id'          => $workorder_id,
 						'company_id'             => $company_id,
@@ -532,30 +536,69 @@ class JobManagerController extends Controller
 						'created_at'             => Carbon::now('Asia/Kolkata')->toDateTimeString(),
 						'updated_at'             => Carbon::now('Asia/Kolkata')->toDateTimeString()
 					  ]);
+
 					if($store_jobcard_id != '')
 					{
-						$i = 0;
-						foreach($single_ref as $value)
+						if (!empty($request['single_ref'])) 
 						{
-							$store_jobcard_details = DB::table('jobcard_excess_details')->insert([
-								'jobcard_main_table_id'   => $store_jobcard_id,
-								'ref_name'                => $single_ref[$i],
-								'mtrs_for_stickers'       => $sticker_mtr[$i],
-								'actual_excess'           => $act_excess[$i],
-								'settings'                => $settings[$i],
-								'total_mtrs'              => $total_mtrs[$i],
-								'created_at'              => Carbon::now('Asia/Kolkata')->toDateTimeString(),
-					        	'updated_at'              => Carbon::now('Asia/Kolkata')->toDateTimeString()
-							  ]);
-							$i++;
+							
+							$single_ref      = explode(',', $request['single_ref']);
+							$act_excess 	 = explode(',', $request['act_excess']);
+							$sticker_mtr 	 = explode(',', $request['sticker_mtr']);
+							$settings        = explode(',', $request['settings']);
+							$total_mtrs 	 = explode(',', $request['total_mtrs']);
+
+							$i = 0;
+							foreach($single_ref as $value)
+							{
+								$store_jobcard_details = DB::table('jobcard_excess_details')->insert([
+									'jobcard_main_table_id'   => $store_jobcard_id,
+									'ref_name'                => $single_ref[$i],
+									'mtrs_for_stickers'       => $sticker_mtr[$i],
+									'actual_excess'           => $act_excess[$i],
+									'settings'                => $settings[$i],
+									'total_mtrs'              => $total_mtrs[$i],
+									'created_at'              => Carbon::now('Asia/Kolkata')->toDateTimeString(),
+									'updated_at'              => Carbon::now('Asia/Kolkata')->toDateTimeString()
+								]);
+								$i++;
+							}
 						}
-						
+
+						/** Update jobcard created status erp order details table */
+						foreach($erp_orders_ids as $row => $erp_orders_id)
+						{
+							DB::table('erp_order_details')
+							->where('erp_order_details.erp_order_id', $erp_orders_id)
+							->where('erp_order_details.reference_name', 'ilike', $selected_ref[$row])
+							->where('erp_order_details.buyer_po_number', 'ilike', $buyer_pos[$row])
+							->update([
+								'status'  => $erp_status_id
+							]);
+						}
+
+						foreach($erp_orders_ids as $row => $erp_orders_id)
+						{
+							$erp_order_table_status = DB::table('erp_order_details')
+							    ->where('erp_order_details.erp_order_id', $erp_orders_id)
+							    ->pluck('status')->all();
+							
+							if(count(array_unique($erp_order_table_status)) === 1)
+							{
+								DB::table('erp_orders')
+									->where('erp_orders.id', $erp_orders_id)
+									->update([
+										'status'  => $erp_order_table_status[0]
+									]);
+							}
+						}
 						$result = response()->json(['error'=> false,'message' =>'success'],200);
 					}
 					else
 					{
 						$result = response()->json(['error'=> true,'message' =>'Error'],400);
 					}
+					
 				}
 				else
 				{

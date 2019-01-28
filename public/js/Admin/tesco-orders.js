@@ -1523,7 +1523,6 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 				svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + $(this).find('.ce_ratio_orms_tpn').val();
 			} else if ((name == "TSL3-sticker" && zone == "CE")) {
 				
-				alert($(this).find('.ce_ratio_orms_tpn').val())
 				svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + $(this).find('.ce_single_orms_tpn').val();
 			} else if ((name == "TSL3-sticker" && zone == "UK")) {
 				svgDoc.getElementById("tpnd").innerHTML = "TPND: " + $(this).find('.uk_single_tpnd').val();
