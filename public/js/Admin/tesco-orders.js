@@ -1083,11 +1083,14 @@ function createOrders(parsedObj = false, oType = false) {
                                 </div>\
                                 </div>\
                                 </div>';
+				 if(parsedObj != false)
+					 {
 				if(parsedObj[Object.keys(parsedObj)[0]].order_status == "Order Placed")
 				{
 					$('.approve-btn').show();
 					$('.cancel-btn').show();
 				}
+					 }
 				$('.main-content').html(html).selectpicker('refresh');
 				/** @type {Date} [Manufactured date Datepicker format & validation] */
 				var date = new Date();
@@ -2283,16 +2286,25 @@ function GenerateDivTesco(data, name) {
 			}
 
 
-
-			ajax_count++;
+			if((name == "TCL2-sticker") || (name == "TCL4-sticker"))
+			{
+				ajax_count++;
+			}
 			name_count++;
 		})
+		
+		
+		
+			if((name == "TCL2-sticker") || (name == "TCL4-sticker"))
+			{
+				if (ajax_count == document.getElementById("table_row").rows.length) {
+					var svg_fin = svgarr.join(',_');
+					PopupTescoGenerate(svg_fin, name,svgDoc);
+				}
 
-		if (ajax_count == document.getElementById("table_row").rows.length) {
-			var svg_fin = svgarr.join(',_');
-			PopupTescoGenerate(svg_fin, name,svgDoc);
-		}
+			}
 
+		
 	}
 
 
