@@ -304,68 +304,68 @@ function tescoOrders(callback) {
 				$('#jstree').jstree({
 					'core': {
 						'data': [{
-							"id": 1,
+							"id": "1",
 							"text": "Stickers",
-							"parent_id": 0,
+							"parent_id": "0",
 							"children": [{
-								"id": 2,
+								"id": "2",
 								"text": "Carton & Polybag Stickers",
-								"parent_id": 1,
+								"parent_id": "1",
 								"children": [{
-									"id": 3,
+									"id": "3",
 									"text": "CE",
-									"parent_id": 2,
+									"parent_id": "2",
 									"children": [{
 										"id": "5,6,7",
 										"text": "TCL 1 , TCL 2 & TSL 1",
-										"parent_id": 3,
+										"parent_id": "3",
 										"type": "ratio",
 										"zone": "CE"
                                         }, {
 										"id": "8,9",
 										"text": "TCL 4 & TSL 3",
-										"parent_id": 3,
+										"parent_id": "3",
 										"type": "single",
 										"zone": "CE"
                                         }, {
 										"id": "10",
 										"text": "THL 1",
-										"parent_id": 3,
+										"parent_id": "3",
 										"type": "ratio",
 										"zone": "CE"
                                         }, {
 										"id": "11",
 										"text": "THL 3",
-										"parent_id": 3,
+										"parent_id": "3",
 										"type": "single",
 										"zone": "CE"
                                         }]
                                     }, {
-									"id": 4,
+									"id": "4",
 									"text": "UK",
-									"parent_id": 2,
+									"parent_id": "2",
 									"children": [{
 										"id": "12,13,14",
 										"text": "TCL 1 , TCL 2 & TSL 1",
-										"parent_id": 4,
+										"parent_id": "4",
 										"type": "ratio",
 										"zone": "UK"
                                         }, {
 										"id": "15,16",
 										"text": "TCL 4 & TSL 3",
-										"parent_id": 4,
+										"parent_id": "4",
 										"type": "single",
 										"zone": "UK"
                                         }, {
 										"id": "17",
 										"text": "THL 1",
-										"parent_id": 4,
+										"parent_id": "4",
 										"type": "ratio",
 										"zone": "UK"
                                         }, {
 										"id": "18",
 										"text": "THL 3",
-										"parent_id": 4,
+										"parent_id": "4",
 										"type": "single",
 										"zone": "UK"
                                         }]
@@ -503,15 +503,27 @@ function tescoOrders(callback) {
 								formData.append('type', localStorage.getItem("template type"));
 								formData.append('zone', localStorage.getItem("zone"));
 								formData.append('template_name', localStorage.getItem("template_group"));
+								
+								
 								uploadPurchaseOrder(formData, localStorage.getItem("zone"));
 							} else {
 								createOrders();
 							}
+							
+								localStorage.setItem("back_flag","create");
+								localStorage.setItem("back_template_id",$('#jstree').jstree("get_selected"));
+								localStorage.setItem("back_zone",localStorage.getItem("zone"));
+								var order_type_back =$('input[name=radio]:checked').val();
+								localStorage.removeItem("artwork_back");
+								localStorage.setItem("order_type_back",order_type_back);
+								localStorage.removeItem("style_number_back");
+								localStorage.removeItem("po_num_back");
 
 						} else {
 							/**  [ Show validation error message ] **/
 							$('.template-error').html('<span style="color:#F44336">Please select a template in the list.</span>');
 						}
+						
 					}
 				});
 
@@ -522,7 +534,12 @@ function tescoOrders(callback) {
 					} else {
 						e.preventDefault();
 						var po_num = $('#artwork_list').val();
+						var style_number = $('#po_number').val();
 						var artwork = $('#artwork_list').find(':selected').text();
+						localStorage.setItem('style_number_back',style_number)
+						localStorage.setItem('artwork_back',artwork)
+						localStorage.setItem('po_num_back',po_num)
+						localStorage.setItem("back_flag","view");
 						viewOrder(po_num, artwork);
 					}
 				})
@@ -1078,7 +1095,7 @@ function createOrders(parsedObj = false, oType = false) {
                                      <button class="btn btn-xs btn-success approve-btn" type="button" onclick="approveTescoOrder()" data-insert="true" style="display:none;"><i class="fa fa-check" aria-hidden="true" ></i> Approve</button>\
                                         <button class="btn btn-xs btn-warning submit-btn" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button>\
                                         <button class="btn btn-xs btn-danger cancel-btn" type="button" data-toggle="modal" data-target="#cancelOrderModal" style="display:none;"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
-                                        <button class="btn btn-xs btn-danger reload-btn" type="button" onclick = "location.reload()""><i class="fa fa-refresh" aria-hidden="true"></i> Reload</button>\
+                                        <button class="btn btn-xs btn-danger reload-btn" type="button" onclick = "reload_back()""><i class="fa fa-refresh" aria-hidden="true"></i> Reload</button>\
                                     </div>\
                                 </div>\
                                 </div>\
@@ -1522,7 +1539,6 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 			if ((name == "TSL1-sticker" && zone == "CE")) {
 				svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + $(this).find('.ce_ratio_orms_tpn').val();
 			} else if ((name == "TSL3-sticker" && zone == "CE")) {
-				
 				svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + $(this).find('.ce_single_orms_tpn').val();
 			} else if ((name == "TSL3-sticker" && zone == "UK")) {
 				svgDoc.getElementById("tpnd").innerHTML = "TPND: " + $(this).find('.uk_single_tpnd').val();
@@ -7558,4 +7574,78 @@ function dynamicTescoSuppliers(id)
 					$('.count_' + item.template_name.replace(' ', '') ).data("min-error",""); 
 				});
 		}
+}
+
+function reload_back()
+{
+	
+	var back_flag = localStorage.getItem("back_flag");
+	if(back_flag == "view")
+	{
+		tescoOrders(selectStyleNumber)
+	}
+	else
+	{
+		tescoOrders(selectNewOrder)
+	}
+}
+function selectStyleNumber()
+{
+	var style_number = localStorage.getItem('style_number_back')
+	var artwork = localStorage.getItem('artwork_back')
+	var po_num = localStorage.getItem('po_num_back')
+	var po_num = localStorage.getItem('po_num_back')
+	
+	$('#po_number').val(style_number).trigger('change');
+	$('#artwork_list').val(po_num);
+	$('#po_number').selectpicker('refresh');
+	$('#artwork_list').selectpicker('refresh');
+	reOrderTesco()
+}
+function selectNewOrder()
+{
+	var order_type_back = localStorage.getItem('order_type_back')
+	var back_template_id = localStorage.getItem('back_template_id')
+	var back_zone = localStorage.getItem('back_zone')
+	var $radios = $('input:radio[name=radio]');
+    if($radios.is(':checked') === false) {
+        $radios.filter('[value='+order_type_back+']').prop('checked', true);
+    }
+	$('#newOrdertab').addClass('active')
+	$('#viewOrdertab').removeClass('active')
+	$('#newOrder').addClass('active in')
+	$('#viewOrder').removeClass('active')
+	
+	$("#jstree").on("loaded.jstree", function(){
+		$("#jstree li[id='" + back_template_id + "'] a").click();
+	});
+
+//	$('#jstree').jstree(true).refresh_node(back_template_id)
+	
+	
+//	alert(back_template_id)
+//	$("#jstree li[id=" + back_template_id + "] a").click();
+
+	
+	if (back_zone === 'UK' && order_type_back === "1") {
+		$(".po-upload").removeClass("hidden");
+		$('#po_upload').prop('required', true);
+		$(".ce-po-upload").addClass("hidden");
+		$('#ce_orms').prop('required', false);
+		$('#ce_retek').prop('required', false);
+	} else if (back_zone === 'CE' && order_type_back === "1") {
+
+		$(".po-upload").addClass("hidden");
+		$('#po_upload').prop('required', false);
+		$(".ce-po-upload").removeClass("hidden");
+		$('#ce_orms').prop('required', true);
+		$('#ce_retek').prop('required', true);
+	} else {
+		$(".po-upload").addClass("hidden");
+		$('#po_upload').prop('required', false);
+		$(".ce-po-upload").addClass("hidden");
+		$('#ce_orms').prop('required', false);
+		$('#ce_retek').prop('required', false);
+	}
+	reOrderTesco()
 }
