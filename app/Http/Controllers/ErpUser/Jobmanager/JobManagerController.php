@@ -126,7 +126,7 @@ class JobManagerController extends Controller
 	/**
      * Get order deatils.
      * @param order details id
-     * @author Praveen <gowtham@wizroots.com>
+     * @author Gowtham <gowtham@wizroots.com>
      * @return \Illuminate\Http\Response
      */
 	public function getOrderDetails(Request $request)
@@ -486,7 +486,6 @@ class JobManagerController extends Controller
 				$settings        = explode(',', $request['settings']);
 				$total_mtrs 	 = explode(',', $request['total_mtrs']);
 
-
 				if(isset($company_id) && isset($workorder_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($repeat_gap) && isset($machine) && isset($cus_del_date) && isset($roll_width)  && isset($film_no) && isset($act_del_date) && isset($length_side) && isset($excess) && isset($teeth_no)  && isset($inv_no) && isset($no_sticker) && isset($finish_type)  && isset($print_color) && isset($compiled_by) && isset($barcode_read) && isset($operator) && isset($checker) && isset($authorized_by) && isset($axicon_verifier) && isset($approved_by) && isset($packer) && isset($approval_date) && isset($roll_issued_by)  && isset($cutter) && isset($cartons) && isset($final_json_obj) && isset($single_ref) && isset($act_excess) && isset($sticker_mtr) && isset($settings) && isset($total_mtrs))
 				{
 					$store_jobcard_id = DB::table('jobcard_main_table')->insertGetId([
@@ -529,7 +528,7 @@ class JobManagerController extends Controller
 						'roll_issued_by'         => $roll_issued_by,
 						'cutter'                 => $cutter,
 						'cartons'                => $cartons,
-						//'template_quantity_json' => $final_json_obj,
+						'template_quantity_json' => $final_json_obj,
 						'created_at'             => Carbon::now('Asia/Kolkata')->toDateTimeString(),
 						'updated_at'             => Carbon::now('Asia/Kolkata')->toDateTimeString()
 					  ]);
@@ -565,8 +564,9 @@ class JobManagerController extends Controller
 		}
 		catch (\Exception $e)
 		{
-		return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+			$result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
 		}
+		return $result;
 	}
 	/**
    * Print Preview For Stickers
