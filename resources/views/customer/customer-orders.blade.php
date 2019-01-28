@@ -691,6 +691,13 @@ background: rgba(0,0,0,0.2);
 <script type="text/javascript" src="http://canvg.github.io/canvg/canvg.js"></script> 
 <script>
     $(document).ready(function() {
+		localStorage.removeItem("artwork_back");
+		localStorage.removeItem("back_flag");
+		localStorage.removeItem("order_type_back");
+		localStorage.removeItem("back_zone");
+		localStorage.removeItem("back_template_id");
+		localStorage.removeItem("style_number_back");
+		localStorage.removeItem("po_num_back");
         localStorage.removeItem("hang_tag");
         localStorage.removeItem("special_tag");
         localStorage.removeItem("main_label");
