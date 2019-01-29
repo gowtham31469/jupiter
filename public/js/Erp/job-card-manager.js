@@ -91,7 +91,7 @@ $(document).ready(function() {
 			//For Custom Filters
 			this.api().columns().every( function (i) {
 				var column = this;
-				if(i === 1 || i === 2 || i === 4 || i === 5 || i === 6 || i === 7) {
+				if(i === 1 || i === 2 || i === 4 || i === 6 || i === 7 || i === 8) {
 					var select;
 					switch(i) {
 						case 1:
@@ -103,13 +103,13 @@ $(document).ready(function() {
 						case 4:
 							select = $('#po_number_filter')
 							break;
-						case 5:
+						case 6:
 							select = $('#style_number_filter')
 							break;
-						case 6:
+						case 7:
 							select = $('#ref_number_filter')
 							break;
-						case 7:
+						case 8:
 							select = $('#delivery_date_filter')
 							break;
 					}
@@ -273,11 +273,19 @@ function generateJobcard(){
             }
         });
         ref_array   = ref_array.join(',');
+        buyer_po_array = [];
+        /** [ Create array of buyer po selected ] */
+        $('.row-checkbox', allPages).each(function (i, item) {
+            if ($(this).is(':checked')) {
+                buyer_po_array.push($(this).closest('tr').data('buyer-po')); 
+            }
+        });
+        buyer_po_array   = buyer_po_array.join(',');
         $.ajax({
             url:base_url + "/erp/get-jobcard-order-details",
             dataType:"json",
             method:"get",
-            data:{orders:orders, ref_array:ref_array},
+            data:{orders:orders, ref_array:ref_array, buyer_po_array:buyer_po_array},
             tryCount : 0,
             retryLimit : 2,
             beforeSend: function () {
@@ -811,18 +819,18 @@ function storeJobcard(formData)
     var cartons         = $('#cartons').val();
 
     var final_json_obj =   {
-        "ratio": [],
-        "single": []
-          };
+        "ratio": {},
+        "single": {}
+          };  
+    var ratio_object = {};
     /** Create ratio templates json object */
     $('.ratio-list-table').each(function (i, table) {
-     var my_object    = new Object();   
+     var my_object    = new Object();
      var array_list   = [];
-     var ratio_object = {};
-         ref_name     = $(this).data('ratio-ref-table');
+         ref_name     = $(this).data('ratio-ref-table').replace(' ', '_');
 
       $(table).find('tbody tr:not(:last)').each(function (index, row) {
-        my_object = {};
+        my_object = {}; 
         my_object.reference_name  = $(row).find ( "#ratio_tr_refname_"+index ).text();
         my_object.erp_id          = $(row).find ( "#ratio_tr_erp_id_"+index ).text();
         my_object.buyer_po_number = $(row).find ( "#ratio_tr_buyer_po_"+index ).text();
@@ -832,12 +840,15 @@ function storeJobcard(formData)
 
         array_list.push(my_object);
         index++;
+        ratio_object[ref_name] = array_list;
       });
-      ratio_object[ref_name] = array_list;
       // pushing ratio templates array into json object
-      final_json_obj.ratio.push(ratio_object);
+      final_json_obj['ratio'] = ratio_object;
     });
-
+    
+    
+    var single_ref_obj = {};
+    
     /** Create single templates json object */
     $('.single-list-table').each(function (index, table) {
         var single_obj = {
@@ -849,7 +860,6 @@ function storeJobcard(formData)
             "total": [],
             "excess": []
               };
-        var single_ref_obj = {};
         var erp_id_object  = {};
         var erp_id_array   = [];
         var po_object      = {};
@@ -858,7 +868,7 @@ function storeJobcard(formData)
         var ocn_array      = [];
         var temp_id_object = {};
         var temp_id_array  = [];
-        single_ref_name    = $(table).find('tbody tr:eq(0) td:last-child').data('single-ref-name');
+        single_ref_name    = $(table).find('tbody tr:eq(0) td:last-child').data('single-ref-name').replace(' ', '_');
         
         // create erp_id array
         $(table).find('tbody tr:eq(0) td:not(:last)').each(function (i, item) {
@@ -870,9 +880,9 @@ function storeJobcard(formData)
             temp_id_object = $(item).data('template-id');
             temp_id_array.push(temp_id_object);
         });
+        
         single_obj['erp_id']  = erp_id_array;
         single_obj['temp_id'] = temp_id_array;
-
         // create po number array
         $(table).find('tbody tr:eq(1) td').each(function (i, item) {
             po_object = {};
@@ -889,9 +899,9 @@ function storeJobcard(formData)
         });
         single_obj['ocn'] = ocn_array;
 
-        var size_object_final = [];
-        var total_qty_object_final = [];
-        var excess_object_final = [];
+        var size_object_final = {};
+        var total_qty_object_final = {};
+        var excess_object_final = {};
         // create size, qty and excess json object
         $(table).find('tbody tr:gt(3):not(:last-child)').each(function (i, item) {
             
@@ -917,15 +927,16 @@ function storeJobcard(formData)
             excess_object_final[size_text] = excess_object;
 
         });
+        console.log(size_object_final)
         single_obj['size'] = size_object_final;
         single_obj['total'] = total_qty_object_final;
         single_obj['excess'] = excess_object_final;
         
-        single_ref_obj[single_ref_name] = single_obj;
+        single_ref_obj[single_ref_name+'_'+index] = single_obj;
         // pushing single templates array into json object
-        final_json_obj.single.push(single_ref_obj);
+        final_json_obj['single'] = single_ref_obj;
     });
-
+    
     var single_ref = [];
     var act_excess = [];
     /** [ Create array of act-excess ] */
@@ -959,7 +970,32 @@ function storeJobcard(formData)
 
     });
     total_mtrs = total_mtrs.join(',');
-    
+
+    erp_orders_ids = [];
+    /** [ Create array of orders selected ] */
+    $('.row-checkbox', allPages).each(function (i, item) {
+        if ($(this).is(':checked')) {
+            erp_orders_ids.push($(this).closest('tr').attr('id')); 
+        }
+    });
+    erp_orders_ids   = erp_orders_ids.join(',');
+    selected_ref_array = [];
+    /** [ Create array of reference selected ] */
+    $('.row-checkbox', allPages).each(function (i, item) {
+        if ($(this).is(':checked')) {
+            selected_ref_array.push($(this).closest('tr').data('refname')); 
+        }
+    });
+    selected_ref_array   = selected_ref_array.join(',');
+    selected_buyer_po_array = [];
+    /** [ Create array of buyer po selected ] */
+    $('.row-checkbox', allPages).each(function (i, item) {
+        if ($(this).is(':checked')) {
+            selected_buyer_po_array.push($(this).closest('tr').data('buyer-po')); 
+        }
+    });
+    selected_buyer_po_array   = selected_buyer_po_array.join(',');
+
     $.ajax({
         url: base_url + "/erp/store-jobcard-details",
         type: 'POST',
@@ -1009,7 +1045,10 @@ function storeJobcard(formData)
             act_excess:act_excess,
             sticker_mtr:sticker_mtr,
             settings:settings,
-            total_mtrs:total_mtrs
+            total_mtrs:total_mtrs,
+            erp_orders_ids:erp_orders_ids,
+            selected_ref_array:selected_ref_array,
+            selected_buyer_po_array:selected_buyer_po_array
         },
         tryCount: 0,
         retryLimit: 2,
@@ -1019,8 +1058,11 @@ function storeJobcard(formData)
         },
         statusCode: {
             200: function(data) {
-                   console.log(data)
-              },
+                $('.snackbar_span').html("Jobcard Created Successfully");
+                showSnackbar();
+                $('#jobcardCreationModalCenter').modal('hide');
+                location.reload();
+            },
             400: function() {
                 $('.snackbar_span').html("Parameter is missing !!!");
                 showSnackbar();

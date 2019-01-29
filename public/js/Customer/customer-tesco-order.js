@@ -506,6 +506,14 @@ function tescoOrders(callback) {
                             } else {
                                 createOrders();
                             }
+							localStorage.setItem("back_flag","create");
+							localStorage.setItem("back_template_id",$('#jstree').jstree("get_selected"));
+							localStorage.setItem("back_zone",localStorage.getItem("zone"));
+							var order_type_back =$('input[name=radio]:checked').val();
+							localStorage.removeItem("artwork_back");
+							localStorage.setItem("order_type_back",order_type_back);
+							localStorage.removeItem("style_number_back");
+							localStorage.removeItem("po_num_back");
                             
                         }
                         else
@@ -524,7 +532,12 @@ function tescoOrders(callback) {
                     else {
                         e.preventDefault();
                         var po_num = $('#artwork_list').val();
+						var style_number = $('#po_number').val();
                         var artwork  = $('#artwork_list').find(':selected').text();
+						localStorage.setItem('style_number_back',style_number)
+						localStorage.setItem('artwork_back',artwork)
+						localStorage.setItem('po_num_back',po_num)
+						localStorage.setItem("back_flag","view");
                         viewOrder(po_num, artwork);  
                     }
                 })
@@ -1087,18 +1100,22 @@ function createOrders(parsedObj = false, oType = false) {
                                      <button class="btn btn-xs btn-success approve-btn" type="button" onclick="approveTescoOrder()" data-insert="true" style="display:none;"><i class="fa fa-check" aria-hidden="true" ></i> Approve</button>\
                                         <button class="btn btn-xs btn-warning submit-btn" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button>\
                                         <button class="btn btn-xs btn-danger cancel-btn" type="button" data-toggle="modal" data-target="#cancelOrderModal" style="display:none;"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
-                                        <button class="btn btn-xs btn-danger reload-btn" type="button" onclick = "location.reload()""><i class="fa fa-refresh" aria-hidden="true"></i> Reload</button>\
+                                        <button class="btn btn-xs btn-danger reload-btn" type="button" onclick = "reload_back()""><i class="fa fa-refresh" aria-hidden="true"></i> Reload</button>\
                                     </div>\
                                 </div>\
                                 </div>\
                                 </div>';
 					 
-					 if(parsedObj[Object.keys(parsedObj)[0]].order_status == "Order Placed")
+					 if(parsedObj != false)
 					 {
-						$('.approve-btn').show();
-						$('.cancel-btn').show();
-					 }
+						 if(parsedObj[Object.keys(parsedObj)[0]].order_status == "Order Placed")
+						 {
+							$('.approve-btn').show();
+							$('.cancel-btn').show();
+						 }
 
+					 }
+					 
                       $('.main-content').html(html).selectpicker('refresh');
                       /** @type {Date} [Manufactured date Datepicker format & validation] */
                       var date = new Date();
@@ -7043,4 +7060,79 @@ function validateMOQ(obj) {
         /** [ error statements ] */
         console.log("Error:" + e)
     }
+}
+
+
+function reload_back()
+{
+	
+	var back_flag = localStorage.getItem("back_flag");
+	if(back_flag == "view")
+	{
+		tescoOrders(selectStyleNumber)
+	}
+	else
+	{
+		tescoOrders(selectNewOrder)
+	}
+}
+function selectStyleNumber()
+{
+	var style_number = localStorage.getItem('style_number_back')
+	var artwork = localStorage.getItem('artwork_back')
+	var po_num = localStorage.getItem('po_num_back')
+	var po_num = localStorage.getItem('po_num_back')
+	
+	$('#po_number').val(style_number).trigger('change');
+	$('#artwork_list').val(po_num);
+	$('#po_number').selectpicker('refresh');
+	$('#artwork_list').selectpicker('refresh');
+	reOrderTesco()
+}
+function selectNewOrder()
+{
+	var order_type_back = localStorage.getItem('order_type_back')
+	var back_template_id = localStorage.getItem('back_template_id')
+	var back_zone = localStorage.getItem('back_zone')
+	var $radios = $('input:radio[name=radio]');
+    if($radios.is(':checked') === false) {
+        $radios.filter('[value='+order_type_back+']').prop('checked', true);
+    }
+	$('#newOrdertab').addClass('active')
+	$('#viewOrdertab').removeClass('active')
+	$('#newOrder').addClass('active in')
+	$('#viewOrder').removeClass('active')
+	
+	$("#jstree").on("loaded.jstree", function(){
+		$("#jstree li[id='" + back_template_id + "'] a").click();
+	});
+
+//	$('#jstree').jstree(true).refresh_node(back_template_id)
+	
+	
+//	alert(back_template_id)
+//	$("#jstree li[id=" + back_template_id + "] a").click();
+
+	
+	if (back_zone === 'UK' && order_type_back === "1") {
+		$(".po-upload").removeClass("hidden");
+		$('#po_upload').prop('required', true);
+		$(".ce-po-upload").addClass("hidden");
+		$('#ce_orms').prop('required', false);
+		$('#ce_retek').prop('required', false);
+	} else if (back_zone === 'CE' && order_type_back === "1") {
+
+		$(".po-upload").addClass("hidden");
+		$('#po_upload').prop('required', false);
+		$(".ce-po-upload").removeClass("hidden");
+		$('#ce_orms').prop('required', true);
+		$('#ce_retek').prop('required', true);
+	} else {
+		$(".po-upload").addClass("hidden");
+		$('#po_upload').prop('required', false);
+		$(".ce-po-upload").addClass("hidden");
+		$('#ce_orms').prop('required', false);
+		$('#ce_retek').prop('required', false);
+	}
+	reOrderTesco()
 }
