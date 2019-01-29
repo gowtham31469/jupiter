@@ -413,7 +413,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id) {
 				var size = val.size;
 			}
 
-			var description = val.short_description
+			var description = val.short_description;
 			if ((name == "TCL4-sticker") || (name == "TSL3-sticker") || (name == "THL3-sticker")) {
 				if (size != '') {
 					$.ajax({
@@ -468,6 +468,11 @@ function genarateArtwork(data, name,style_no,buyer_no,id) {
 
 				}
 			} else {
+				if (description != '') {
+						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+					} else {
+						svgDoc.getElementById("description").innerHTML = '';
+					}
 				var s = new XMLSerializer();
 				var d = svgRoot;
 				var str = s.serializeToString(d);
