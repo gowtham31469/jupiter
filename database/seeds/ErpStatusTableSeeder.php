@@ -29,6 +29,31 @@ class ErpStatusTableSeeder extends Seeder
 				'status_name' => 'Moved To JC Queue',
           			'status_desc' => 'Moved To JC Queue'
 			]);
+			\App\ErpStatus::create([
+				'id' =>4,
+				'status_name' => 'Cancelled',
+          			'status_desc' => 'Order or Order Item cancelled'
+			]);
+			\App\ErpStatus::create([
+				'id' =>5,
+				'status_name' => 'Invoice Generated',
+          			'status_desc' => 'Invoice Generated and successfully send to the customer'
+			]);
+			\App\ErpStatus::create([
+				'id' =>6,
+				'status_name' => 'Partial Invoice',
+          			'status_desc' => 'Invoice generated Partially'
+			]);
+			\App\ErpStatus::create([
+				'id' =>7,
+				'status_name' => 'Hold',
+          			'status_desc' => 'To Hold Whole Order'
+			]);
+			\App\ErpStatus::create([
+				'id' =>8,
+				'status_name' => 'Jobcard Created',
+          			'status_desc' => 'Jobcard Has Been Created Successfully'
+			]);
 		}
     }
 }
