@@ -2290,7 +2290,7 @@ class OrderManagementCntrl extends Controller
      */
   public function extraQuantity(Request $request)
     {
-          $type         =   $request->type;
+      $type         =   $request->type;
       $id           =   $request->id;
       $type_id      =   explode('_',$type);
       $data['qty']=DB::table($type.'_quanty')->where($type_id[1].'_order_id',$id)->select('*')->get();
@@ -2298,7 +2298,9 @@ class OrderManagementCntrl extends Controller
       $data['template']=DB::table($type)->join('tesco_brand','tesco_brand.id','=',$type.'.tesco_brand_id')
           ->join('tesco_department','tesco_department.id','=',$type.'.tesco_department_id')->join('tesco_suppliers','tesco_suppliers.id','=',$type.'.tesco_metadata_supplier_id')->where($type.'.id',$id)->select($type.'.*','tesco_suppliers.supplier_name','tesco_brand.brand','tesco_department.department')->get();
     
-      $data['template_file']=DB::table('tesco_template')->where('item_id',$data['template']{0}->template_id)->select('*')->get();
+      $data['template_file']=DB::table('tesco_template')->where('item_id',$data['template']{0}->template_id)->select('*')->get();     
+	  $data['moq']=DB::table('price_taxation')->where('template_id',$data['template']{0}->template_id)->where('customer_id',$data['template']{0}->tesco_supplier_id)->where('buyer_id',2)->select('*')->get();
+	  
      
           echo json_encode($data);
     }

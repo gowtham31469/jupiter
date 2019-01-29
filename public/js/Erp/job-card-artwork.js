@@ -382,7 +382,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id) {
 
 				svgDoc.getElementById("tpnd").innerHTML = $(this).find('.uk_single_tpnd').val();
 			} else if ((name == "TCL1-sticker" && zone == "UK") || (name == "TCL2-sticker" && zone == "UK") || (name == "TSL1-sticker" && zone == "UK") || (name == "THL1-sticker" && zone == "UK")) {
-				svgDoc.getElementById("pieces_in_ratio").innerHTML = val.cases_per_carton;
+				svgDoc.getElementById("pieces_in_ratio").innerHTML = val.units_per_carton;
 
 				svgDoc.getElementById("tpnd").innerHTML = val.tpnd;
 			}
@@ -413,7 +413,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id) {
 				var size = val.size;
 			}
 
-			var description = val.short_description
+			var description = val.short_description;
 			if ((name == "TCL4-sticker") || (name == "TSL3-sticker") || (name == "THL3-sticker")) {
 				if (size != '') {
 					$.ajax({
@@ -468,6 +468,11 @@ function genarateArtwork(data, name,style_no,buyer_no,id) {
 
 				}
 			} else {
+				if (description != '') {
+						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+					} else {
+						svgDoc.getElementById("description").innerHTML = '';
+					}
 				var s = new XMLSerializer();
 				var d = svgRoot;
 				var str = s.serializeToString(d);
