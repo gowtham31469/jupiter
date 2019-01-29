@@ -536,7 +536,7 @@ class JobManagerController extends Controller
 						'created_at'             => Carbon::now('Asia/Kolkata')->toDateTimeString(),
 						'updated_at'             => Carbon::now('Asia/Kolkata')->toDateTimeString()
 					  ]);
-
+					/** Store jobcard settings and excess details**/
 					if($store_jobcard_id != '')
 					{
 						if (!empty($request['single_ref'])) 
@@ -576,7 +576,7 @@ class JobManagerController extends Controller
 								'status'  => $erp_status_id
 							]);
 						}
-
+						/** Update jobcard created status erp orders table(iff, all the orders in the order details table have same status. ie, after creating jobcard for all orders) */
 						foreach($erp_orders_ids as $row => $erp_orders_id)
 						{
 							$erp_order_table_status = DB::table('erp_order_details')
