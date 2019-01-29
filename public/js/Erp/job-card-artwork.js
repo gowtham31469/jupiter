@@ -372,7 +372,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id) {
 			if ((name == "TCL1-sticker" && zone == "CE") || (name == "TCL2-sticker" && zone == "CE") || (name == "TSL1-sticker" && zone == "CE") || (name == "THL1-sticker" && zone == "CE")) {
 				svgDoc.getElementById("pieces_in_ratio").innerHTML = val.cases_per_carton;
 
-				svgDoc.getElementById("tpnd").innerHTML = val.tpnd;
+				svgDoc.getElementById("tpnd").innerHTML = val.orms_tpn;
 			} else if ((name == "TCL4-sticker" && zone == "CE") || (name == "THL3-sticker" && zone == "CE")) {
 				svgDoc.getElementById("unit_per_case").innerHTML = val.case_size;
 
@@ -380,7 +380,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id) {
 			} else if ((name == "TCL4-sticker" && zone == "UK") || (name == "THL3-sticker" && zone == "UK")) {
 				svgDoc.getElementById("unit_per_case").innerHTML = val.case_size;
 
-				svgDoc.getElementById("tpnd").innerHTML = val.orms_tpn;
+				svgDoc.getElementById("tpnd").innerHTML = val.tpnd;
 			} else if ((name == "TCL1-sticker" && zone == "UK") || (name == "TCL2-sticker" && zone == "UK") || (name == "TSL1-sticker" && zone == "UK") || (name == "THL1-sticker" && zone == "UK")) {
 				svgDoc.getElementById("pieces_in_ratio").innerHTML = val.units_per_carton;
 
