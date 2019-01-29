@@ -283,7 +283,7 @@ class JobManagerController extends Controller
 								->where('erp_order_details.id', '=', $order_detail_id)
 								->first();
 
-					$erp_id_array[$single_temp_data->reference_name][] = $single_temp_data->erp_id;
+					$erp_id_array[$single_temp_data->reference_name][] = $single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number;
 
 					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number]['ocn_number'] = $single_temp_data->ocn_number;
 					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number]['erp_id'] = $single_temp_data->erp_id;
@@ -382,7 +382,6 @@ class JobManagerController extends Controller
 
 					$template_item['size'][$size] = $qty;
 				}
-				
 				$single_templates[$template] = $template_item;
 
 				/** Split template data array into small chunks (3 elements in each chunks) */
@@ -400,6 +399,7 @@ class JobManagerController extends Controller
 					foreach($size_chunk as $key2 => $value2)
 					{
 						/** check if all the size values are 0 or not
+						 * remove following if condition if client wants zero qty size in final table.
 						*/
 						$is_size_qty_empty = array_filter($value2) != NULL?0:1;
 						if($is_size_qty_empty != 1)
