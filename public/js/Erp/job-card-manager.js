@@ -91,7 +91,7 @@ $(document).ready(function() {
 			//For Custom Filters
 			this.api().columns().every( function (i) {
 				var column = this;
-				if(i === 1 || i === 2 || i === 4 || i === 5 || i === 6 || i === 7) {
+				if(i === 1 || i === 2 || i === 4 || i === 6 || i === 7 || i === 8) {
 					var select;
 					switch(i) {
 						case 1:
@@ -103,13 +103,13 @@ $(document).ready(function() {
 						case 4:
 							select = $('#po_number_filter')
 							break;
-						case 5:
+						case 6:
 							select = $('#style_number_filter')
 							break;
-						case 6:
+						case 7:
 							select = $('#ref_number_filter')
 							break;
-						case 7:
+						case 8:
 							select = $('#delivery_date_filter')
 							break;
 					}

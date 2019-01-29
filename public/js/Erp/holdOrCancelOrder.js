@@ -261,6 +261,78 @@ $(document).on("click", ".getODetails", function () {
 });
 
 var updateOrderItem = function (value, obj) {
+	
+	if(value == 1)
+	{
+		
+		$(obj).parent().parent().find('.label').text('HOLD')
+		$(obj).parent().parent().find('.label').removeClass('label-danger').removeClass('label-success')
+		$(obj).parent().parent().find('.label').addClass('label-warning')
+		$(obj).parent().html('<i id="'+$(obj).attr('id')+'" data-toggle="confirmation" data-placement="left" data-popout="true" data-singleton="true" class="fa fa-pencil filterbtn options updateOItem fa-button holdItems"></i>')
+	}
+	else if(value == 2)
+	{
+		$(obj).parent().parent().find('.label').text('Cancelled')
+		$(obj).parent().parent().find('.label').removeClass('label-warning').removeClass('label-success')
+		$(obj).parent().parent().find('.label').addClass('label-danger')
+		
+		$(obj).parent().html('')
+	}
+	else
+	{
+		
+		$(obj).parent().parent().find('.label').text('Moved To JC Queue')
+		$(obj).parent().parent().find('.label').removeClass('label-danger').removeClass('label-warning')
+		$(obj).parent().parent().find('.label').addClass('label-success')
+		$(obj).parent().html('<i id="'+$(obj).attr('id')+'" data-toggle="confirmation" data-placement="left" data-popout="true" data-singleton="true" class="fa fa-pencil filterbtn options updateOItem fa-button activeItems"></i>')
+	}
+	$('.activeItems').confirmation({
+				rootSelector: '[data-toggle=confirmation]',
+				onConfirm: function (value) {
+					updateOrderItem(value, this);
+				},
+				buttons: [{
+						class: 'btn btn-warning btn-xs',
+						label: 'Hold Order',
+						value: 1
+						},
+					{
+						class: 'btn btn-danger btn-xs',
+						label: 'Cancel Order',
+						value: 2
+						},
+
+					{
+						class: 'btn btn-primary btn-xs',
+						label: 'Back',
+						cancel: true
+						}
+					]
+			});
+
+			$('.holdItems').confirmation({
+				rootSelector: '[data-toggle=confirmation]',
+				onConfirm: function (value) {
+					updateOrderItem(value, this);
+				},
+				buttons: [{
+						class: 'btn btn-warning btn-xs',
+						label: 'Restore Order',
+						value: 3
+						},
+					{
+						class: 'btn btn-danger btn-xs',
+						label: 'Cancel Order',
+						value: 2
+						},
+
+					{
+						class: 'btn btn-primary btn-xs',
+						label: 'Back',
+						cancel: true
+						}
+					]
+			});
 	$.ajax({
 		url: "erp-order-item",
 		type: "put",
