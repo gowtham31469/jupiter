@@ -792,7 +792,7 @@ class JobManagerController extends Controller
 			
 			$order_table = str_replace("_quanty","",$value->order_qnty_table_name);
 			$order_id  = strtolower(str_replace(" ","",$value->reference_name).'_order_id');
-			print_r($val->id);
+			print_r($value->id);
 			$order_omp  = 	DB::table($order_table)
 									->where($order_table.'.id',$order_details_omp{0}->$order_id)
 									->select($order_table.'.*')
