@@ -629,7 +629,8 @@
             updateTaxAmount(tax_amnt)
         }         
         $('.total-amnt').html(totalAmount().toFixed(2))
-        $('#total-qnty').html(quantityTotal()) 
+        $('#total-qnty').html(quantityTotal())
+        $('#balnc-qnty').html(balncTotal())
         updateTotal()      
     }
 
