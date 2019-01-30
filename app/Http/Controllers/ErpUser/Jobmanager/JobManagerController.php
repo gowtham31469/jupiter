@@ -536,7 +536,7 @@ class JobManagerController extends Controller
 						'created_at'             => Carbon::now('Asia/Kolkata')->toDateTimeString(),
 						'updated_at'             => Carbon::now('Asia/Kolkata')->toDateTimeString()
 					  ]);
-
+					/** Store jobcard settings and excess details**/
 					if($store_jobcard_id != '')
 					{
 						if (!empty($request['single_ref'])) 
@@ -576,7 +576,7 @@ class JobManagerController extends Controller
 								'status'  => $erp_status_id
 							]);
 						}
-
+						/** Update jobcard created status erp orders table(iff, all the orders in the order details table have same status. ie, after creating jobcard for all orders) */
 						foreach($erp_orders_ids as $row => $erp_orders_id)
 						{
 							$erp_order_table_status = DB::table('erp_order_details')
@@ -779,7 +779,7 @@ class JobManagerController extends Controller
 	
 	function scriptUpdateBuyerNo()
 	{
-		$order_details = DB::table('erp_order_details')->get();
+		$order_details = DB::table('erp_order_details')->orderBy('erp_order_details.id', 'desc')->get();
 		
 		foreach($order_details as $value)
 		{
@@ -793,20 +793,28 @@ class JobManagerController extends Controller
 			$order_table = str_replace("_quanty","",$value->order_qnty_table_name);
 			$order_id  = strtolower(str_replace(" ","",$value->reference_name).'_order_id');
 			
-			$order_omp  = 	DB::table($order_table)
+			if(count($order_details_omp))
+			{
+				$order_omp  = 	DB::table($order_table)
 									->where($order_table.'.id',$order_details_omp{0}->$order_id)
 									->select($order_table.'.*')
 									->get();
 			
-			 $data['custom_name']=DB::table('price_taxation')->where('template_id',$order_omp{0}->template_id)->where('customer_id',$order_omp{0}->tesco_supplier_id)->where('buyer_id',2)->select('*')->get();
+				 $data['custom_name']=DB::table('price_taxation')->where('template_id',$order_omp{0}->template_id)->where('customer_id',$order_omp{0}->tesco_supplier_id)->where('buyer_id',2)->select('*')->get();
+print_r("hi".$value->id);
+				DB::table('erp_order_details')
+								->where('erp_order_details.id', $value->id)
+								->update([
+									'buyer_po_number'  => $order_omp{0}->po_number,
+									'zone'  => $order_omp{0}->zone,
+									'custom_ref_name'  => $data['custom_name']{0}->custom_name,
+								]);
+			}
+			else
+			{
+				print_r($value->id);
+			}
 			
-			DB::table('erp_order_details')
-							->where('erp_order_details.id', $value->id)
-							->update([
-								'buyer_po_number'  => $order_omp{0}->po_number,
-								'zone'  => $order_omp{0}->zone,
-								'custom_ref_name'  => $data['custom_name']{0}->custom_name,
-							]);
 		}
 	}
 }
