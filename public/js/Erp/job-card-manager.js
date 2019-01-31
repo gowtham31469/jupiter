@@ -927,7 +927,6 @@ function storeJobcard(formData)
             excess_object_final[size_text] = excess_object;
 
         });
-        console.log(size_object_final)
         single_obj['size'] = size_object_final;
         single_obj['total'] = total_qty_object_final;
         single_obj['excess'] = excess_object_final;
@@ -1058,10 +1057,16 @@ function storeJobcard(formData)
         },
         statusCode: {
             200: function(data) {
+                var resp = JSON.stringify(data.responseText);
+                console.log(resp)
                 $('.snackbar_span').html("Jobcard Created Successfully");
                 showSnackbar();
-                $('#jobcardCreationModalCenter').modal('hide');
-                location.reload();
+               // $('#jobcardCreationModalCenter').modal('hide');
+               // location.reload();
+               window.open(
+                base_url+JSON.parse(resp),
+                '_blank' // <- This is what makes it open in a new window.
+              );
             },
             400: function() {
                 $('.snackbar_span').html("Parameter is missing !!!");
