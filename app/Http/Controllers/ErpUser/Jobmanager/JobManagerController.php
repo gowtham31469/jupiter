@@ -777,9 +777,9 @@ class JobManagerController extends Controller
     }
 	
 	
-	function scriptUpdateBuyerNo()
+	public function scriptUpdateBuyerNo()
 	{
-		$order_details = DB::table('erp_order_details')->orderBy('erp_order_details.id', 'desc')->get();
+		$order_details = DB::table('erp_order_details')->get();
 		
 		foreach($order_details as $value)
 		{
@@ -793,28 +793,478 @@ class JobManagerController extends Controller
 			$order_table = str_replace("_quanty","",$value->order_qnty_table_name);
 			$order_id  = strtolower(str_replace(" ","",$value->reference_name).'_order_id');
 			
-			if(count($order_details_omp))
-			{
-				$order_omp  = 	DB::table($order_table)
+			$order_omp  = 	DB::table($order_table)
 									->where($order_table.'.id',$order_details_omp{0}->$order_id)
 									->select($order_table.'.*')
 									->get();
 			
-				 $data['custom_name']=DB::table('price_taxation')->where('template_id',$order_omp{0}->template_id)->where('customer_id',$order_omp{0}->tesco_supplier_id)->where('buyer_id',2)->select('*')->get();
-print_r("hi".$value->id);
-				DB::table('erp_order_details')
-								->where('erp_order_details.id', $value->id)
-								->update([
-									'buyer_po_number'  => $order_omp{0}->po_number,
-									'zone'  => $order_omp{0}->zone,
-									'custom_ref_name'  => $data['custom_name']{0}->custom_name,
-								]);
-			}
-			else
-			{
-				print_r($value->id);
-			}
+			 $data['custom_name']=DB::table('price_taxation')->where('template_id',$order_omp{0}->template_id)->where('customer_id',$order_omp{0}->tesco_supplier_id)->where('buyer_id',2)->select('*')->get();
 			
+			DB::table('erp_order_details')
+							->where('erp_order_details.id', $value->id)
+							->update([
+								'buyer_po_number'  => $order_omp{0}->po_number,
+								'zone'  => $order_omp{0}->zone,
+								'custom_ref_name'  => $data['custom_name']{0}->custom_name,
+							]);
 		}
 	}
+
+	
+    public function generateJCPDFPreview()
+    {
+        // Create new PDF
+		define ('PDF_FONT_NAME_MAIN', 'helvetica');
+		define ('PDF_FONT_NAME_DATA', 'helvetica');
+		PDF::setImageScale(1.66);
+		PDF::setPrintHeader(true);
+		PDF::setPrintFooter(true);
+		PDF::SetFont('helvetica', '5');
+		PDF::AddPage('P', 'A4');
+		// set auto page breaks
+		PDF::SetAutoPageBreak(TRUE);
+		
+		// create some HTML content
+		$html = '<html>
+		<head></head>
+		<style>
+
+		body{
+			font-size: 12px;
+		}
+
+		.ratio-list-table,
+		.single-list-table{
+			 text-align: center !important;
+		}
+
+		.ratio-list-table td,
+		.single-list-table td {
+			 text-align: center !important;
+		}
+
+		td {
+			height: 25px;
+		  }
+
+		th {
+			height: 25px;
+			text-align: center !important;
+		}
+
+		table {
+			table-layout: fixed;
+			width: 100%;
+			border-collapse: collapse;
+		}
+
+		.ratio-list-table, .single-list-table {
+			padding: 10px;
+			border: 1px dashed gray;
+			display: table-cell;
+			text-align: center;
+			vertical-align: middle;
+		}
+		</style>
+		<body>
+		
+			<div class="container">
+				<div class="row">
+				<div class="col-md-12">
+						<table cellspacing="3" cellpadding="3">
+							<tr >
+								<td>
+								<p><strong id="jc_company_name">Jupiter Garments Accessories</strong></p>
+								<p id="company_address">1-J-27-1&amp;3, Jupiter Avenue, Anupparpalayam, Tirupur -641632 </p>
+								</td>
+								<td style="text-align: right;">
+									<img src="images/logo.png" style="height: 62px;margin-top: 30px;"/>
+								</td>
+							</tr>
+						</table>
+				</div>
+				</div>
+				<hr>
+				<div class="row">
+					<div class="col-md-12">
+						<table cellspacing="3" cellpadding="3">
+							<tr>
+								<td>
+									<label for="work_order">WORKORDER :</label>
+									<span id="work_order">JGA-JC-32044331</span>
+								</td>
+								<td style="text-align: right;">
+									<label for="today_date">DATE :</label>
+									<span id="today_date">30-01-2019</span>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label for="article">ARTICLE :</label>
+									<span id="article">Carton &amp; Polybag Stickers</span>
+								</td>
+								<td style="text-align: right;">
+								<label for="material">MATERIAL :</label>
+								<span id="material">Paper</span>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<hr>
+				<div class="row">
+					<div class="col-md-12">
+						<table cellspacing="3" cellpadding="3">
+								<tr>
+									<td>
+									<label for="customer">CUST NAME :</label>
+									<span id="customer" >MS K</span>	
+									</td>
+									<td>
+									<label for="style_no">STYLENUM :</label>
+									<span id="style_no"></span>
+									</td>
+									<td>
+									<label for="order_type">ORDER TYPE :</label>
+									<span id="order_type">Initial</span>
+									</td>
+								</tr>
+								<tr>
+									<td>
+											<label for="buyer">BUYER :</label>
+											<span id="buyer" data-buyer-id="2">Tesco</span>	
+									</td>
+									<td>
+										<label for="reference">REFERENCE :</label>
+										<span id="reference"></span>	
+									</td>
+									<td>
+										<label for="disp_mode">DISP MODE :</label>
+										<span id="disp_mode">Paper</span>
+									</td>
+								</tr>
+						</table>
+					</div>
+				</div>
+				<hr>
+				<div class="row">
+					<div class="col-md-12">
+						<table cellspacing="3" cellpadding="3">
+							<tr>
+								<td>
+									<label for="order_date">ORDER DT :</label>
+									<span id="order_date">29-01-2019</span>
+								</td>
+								<td>
+									<label for="length">LENGTH :</label>
+									<span id="length"></span>	
+								</td>
+								<td>
+									<label for="repeat_gap">REPEAT GAP :</label>
+									<span id="repeat_gap">Paper</span>
+								</td>
+								<td>
+									<label for="machine">MACHINE :</label>
+									<span id="machine">Paper</span>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label for="cus_del_date">CUS D.DT :</label>
+									<span id="cus_del_date">2019-02-02</span>
+								</td>
+								<td>
+									<label for="width">WIDTH :</label>
+									<span id="width"></span>
+								</td>
+								<td>
+									<label for="roll_width">ROLL WIDTH :</label>
+									<span id="roll_width">299</span>
+								</td>
+								<td>
+									<label for="film_no">FILM NO :</label>
+									<span id="film_no">sadsfdg436</span>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label for="act_del_date">ACT D.DT :</label>
+									<span id="act_del_date">2019-02-02</span>
+								</td>
+								<td>
+									<label for="length_side">LENGTH SIDE :</label>
+									<span id="length_side">201</span>
+								</td>
+								<td>
+									<label for="excess">EXCESS % :</label>
+									<span id="excess">201</span>
+								</td>
+								<td>
+									<label for="teeth_no">TEETH NO :</label>
+									<span id="teeth_no">201</span>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label for="inv_no">INV NO :</label>
+									<span id="inv_no">201</span>
+								</td>
+								<td>
+									<label for="no_sticker">NO OF STICKERS :</label>
+									<span id="no_sticker">201</span>
+								</td>
+								<td>
+									<label for="finish_type">FINISH TYPE :</label>
+									<span id="finish_type">201</span>
+								</td>
+								<td></td>
+							</tr>
+							<tr>
+									<td>
+										<label for="print_color">PRINT COLORS :</label>
+										<span id="print_color">FFFFFF</span>
+									</td>
+									<td></td>
+								</tr>
+						</table>
+					</div>
+				</div>
+				<hr>
+				<div class="row">
+					<div class="col-md-12 ratio-list-table-div">
+					<table class="table table-bordered table-responsive ratio-list-table" id="ratio_list_table" border="0.2">
+						<thead>
+							<tr>
+								<th>REF.NO</th>
+								<th>PO.NO</th>
+								<th>ID.NO</th>
+								<th>OCN</th>
+								<th>QNTY</th>
+								<th>P.QNTY</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr class="tr-TCL-1">
+								<td id="ratio_tr_refname_0">TCL 1 RatA</td>
+								<td id="ratio_tr_buyer_po_0">po09876</td>
+								<td id="ratio_tr_erp_id_0">ERPID-0116</td>
+								<td id="ratio_tr_ocn_0">4367899876344</td>
+								<td id="ratio_tr_qty_0">33</td>
+								<td></td>
+							</tr>
+							<tr class="tr-TCL-1">
+								<td id="ratio_tr_refname_1">TCL 1 RatA</td>
+								<td id="ratio_tr_buyer_po_1">767n636</td>
+								<td id="ratio_tr_erp_id_1">ERPID-0117</td>
+								<td id="ratio_tr_ocn_1">43678987863433</td>
+								<td id="ratio_tr_qty_1">33</td>
+								<td></td>
+							</tr>
+							<tr>
+								<th colspan="4" style="background-color:#eee;">Total</th>
+								<td><strong>66</strong></td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12 single-list-table-div">
+					<table class="table table-bordered table-responsive single-list-table" id="single_list_table_0" border="0.2">
+						<tbody id="single_list_table_body">
+							<tr>
+								<th>ID.NO</th>
+								<td colspan="2" class="single-erpid-0">ERPID-0118</td>
+								<td colspan="2" class="single-erpid-1">ERPID-0119</td>
+								<td colspan="2"  class="single-erpid-2">ERPID-0120</td>
+								<td colspan="4" style="background-color:#eee;padding-top:20px;" rowspan="3" ><strong >REFNUM &nbsp;: TCL 4</strong></td>
+							</tr>
+							<tr>
+								<th>B.PO.NO</th>
+								<td colspan="2" class="single-buyer-po-0">opo9876</td>
+								<td colspan="2" class="single-buyer-po-1">piui76n</td>
+								<td colspan="2" class="single-buyer-po-2">po7636344</td>
+							</tr>
+							<tr>
+								<th>OCN</th>
+								<td colspan="2" class="single-ocn-0">323634</td>
+								<td colspan="2" class="single-ocn-1">3467890987634</td>
+								<td colspan="2" class="single-ocn-2">43467863643</td>
+							</tr>
+							<tr>
+								<th>SIZE /PRICE</th>
+								<th>O.QNT</th>
+								<th>P.QNT</th>
+								<th>O.QNT</th>
+								<th>P.QNT</th>
+								<th>O.QNT</th>
+								<th>P.QNT</th>
+								<th>TOTAL</th>
+								<th>EXCESS</th>
+								<th>MTRS</th>
+								<th>STOCK</th>
+							</tr>
+							<tr>
+								<td class="single-size-row">xl</td>
+								<td class="quantity-0 quantity-td">26</td>
+								<td></td>
+								<td class="quantity-1 quantity-td">43</td>
+								<td></td>
+								<td class="quantity-2 quantity-td">0</td>
+								<td></td>
+								<td class="total-quantity-class total-quantity-row-0"><strong>69</strong></td>
+								<td class="total-excess">12.09</td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td class="single-size-row">xxl</td>
+								<td class="quantity-0 quantity-td">22</td>
+								<td></td>
+								<td class="quantity-1 quantity-td">0</td>
+								<td></td>
+								<td class="quantity-2 quantity-td">0</td>
+								<td></td>
+								<td class="total-quantity-class total-quantity-row-1"><strong>22</strong></td>
+								<td class="total-excess">12.89</td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td class="single-size-row">m</td>
+								<td class="quantity-0 quantity-td">0</td>
+								<td></td>
+								<td class="quantity-1 quantity-td">46</td>
+								<td></td>
+								<td class="quantity-2 quantity-td">332</td>
+								<td></td>
+								<td class="total-quantity-class total-quantity-row-2"><strong>378</strong></td>
+								<td class="total-excess">22</td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td class="single-size-row">s</td>
+								<td class="quantity-0 quantity-td">0</td>
+								<td></td>
+								<td class="quantity-1 quantity-td">34</td>
+								<td></td>
+								<td class="quantity-2 quantity-td">22</td>
+								<td></td>
+								<td class="total-quantity-class total-quantity-row-3"><strong>36</strong></td>
+								<td class="total-excess">13</td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<th class=" total-text" data-ref-name="TCL_4" style="background-color:#eee;">TOTAL</th>
+								<td class="total-quantity-col-0"><strong>48</strong></td>
+								<td></td>
+								<td class="total-quantity-col-1"><strong>123</strong></td>
+								<td></td>
+								<td class="total-quantity-col-2"><strong>334</strong></td>
+								<td></td>
+								<td><strong class="total-qty-TCL_4">323</strong></td>
+								<td class="total-excess-col-table-0 total-excess-TCL_4"><strong>168.00</strong></td>
+								<td></td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+					</div>
+				</div>
+				<div class="row meter-calculation-div">
+					<div class="col-md-12">
+						<table cellpadding="0" cellspacing="10">
+								<tr>
+									<td>
+										<label for="act_excess_TSL_3">ACT EXCESS % (<strong>TSL 3</strong>):</label>                                       <span class="act-excess" id="act_excess_TSL_3">32.00</span> 
+									</td>
+									<td>
+										<label for="sticker_mtr_TSL_3">MTRS FOR STICKERS (<strong>TSL 3</strong>):</label>                                 <span class="sticker-mtrs" id="sticker_mtr_TSL_3">7.02</span> 
+									</td>
+									<td>
+										<label for="settings_TSL_3">SETTINGS (<strong>TSL 3</strong>) :</label>                                            <span id="settings_TSL_3"> 12</span> 
+									</td>
+									<td>
+										<label for="total_mtrs_TSL_3">TOTAL MTRS (<strong>TSL 3</strong>):</label>                                         <span id="total_mtrs_TSL_3" class="total-meters">39.02</span> 
+									</td>
+								</tr>
+						</table>
+					</div>
+				</div>
+				<hr>
+				<div class="row">
+					<div class="col-md-12">
+						<table cellspacing="3" cellpadding="3">
+									<tr>
+										<td >
+									    	<label for="compiled_by">COMPILED BY :</label>
+										    <span id="compiled_by"> 12</span> 
+										</td>
+										<td >
+										    <label for="barcode_read">BARCODE READ :</label>
+										    <span id="barcode_read"> 12</span> 
+										</td>
+										<td >
+										    <label for="operator">OPERATOR :</label>
+										    <span id="operator"> 12</span>
+										</td>
+										<td >
+											<label for="checker">CHECKER :</label>
+											<span id="checker"> 12</span>
+										</td>
+									</tr>
+									<tr>
+										<td >
+											<label for="author">  AUTHORIZED BY :</label>
+											<span id="author"> 12</span>
+										</td>
+										<td >
+											<label for="axicon_verifier">  AXICON VERIFIER :</label>
+											<span id="axicon_verifier"> 12</span>
+										</td>
+										<td >
+											<label for="approved_by">  APPROVED BY :</label>
+											<span id="approved_by"> 12</span>
+										</td>
+										<td >
+											<label for="packer">PACKER :</label>
+											<span id="packer"> 12</span>
+										</td>
+									</tr>
+									<tr>
+										<td >
+											<label for="approval_date">  APPROVAL DT :</label>
+											<span id="approval_date"> 12</span>
+										</td>
+										<td >
+											<label for="roll_issued_by">  ROLL ISSUED BY :</label>
+											<span id="roll_issued_by"> 12</span>
+										</td>
+										<td >
+											<label for="cutter">  CUTTER :</label>
+											<span id="cutter"> 12</span>
+										</td>
+										<td >
+											<label for="cartons">CARTONS :</label>
+											<span id="cartons"> 12</span>
+										</td>
+									</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+		</body>
+		</html>';
+		// Output the HTML content
+		PDF::writeHTML($html, true, false, true, false, '');
+		
+		PDF::lastPage();
+		ob_end_clean();
+		PDF::Output('example_006.pdf', 'I');
+    }
+
+
 }

@@ -629,4 +629,5 @@ Route::group(['prefix' => 'erp'], function () {
 
 	Route::get('job-manager/tesco/get-tsl-size', 'ErpUser\Jobmanager\JobManagerController@getTescoTSLSizechart');
 	Route::get('job-manager/tesco/script-update-buyer-no', 'ErpUser\Jobmanager\JobManagerController@scriptUpdateBuyerNo');
+	Route::get('job-manager/jobcard-preview', 'ErpUser\Jobmanager\JobManagerController@generateJCPDFPreview');
 });
