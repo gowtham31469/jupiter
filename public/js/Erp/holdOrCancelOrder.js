@@ -265,6 +265,7 @@ var updateOrderItem = function (value, obj) {
 	if(value == 1)
 	{
 		
+       localStorage.setItem("holdordername", $(obj).parent().parent().find('.label').text());
 		$(obj).parent().parent().find('.label').text('HOLD')
 		$(obj).parent().parent().find('.label').removeClass('label-danger').removeClass('label-success')
 		$(obj).parent().parent().find('.label').addClass('label-warning')
@@ -281,7 +282,7 @@ var updateOrderItem = function (value, obj) {
 	else
 	{
 		
-		$(obj).parent().parent().find('.label').text('Moved To JC Queue')
+		$(obj).parent().parent().find('.label').text(localStorage.getItem("holdordername"))
 		$(obj).parent().parent().find('.label').removeClass('label-danger').removeClass('label-warning')
 		$(obj).parent().parent().find('.label').addClass('label-success')
 		$(obj).parent().html('<i id="'+$(obj).attr('id')+'" data-toggle="confirmation" data-placement="left" data-popout="true" data-singleton="true" class="fa fa-pencil filterbtn options updateOItem fa-button activeItems"></i>')
