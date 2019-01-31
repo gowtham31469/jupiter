@@ -771,7 +771,7 @@ transform: scale(1);
 						<tr id="` + index.id + `">
                           	<td class="">` + i + `</td>
 							  <td class="erp_td">` + index.erp_order_id + `</td>
-							  <td class="po_number_td">` + po_no + `</td>
+							  <td class="po_number_td">` + index.buyer_po_number + `</td>
 							  <td class="style_no_td">` + index.style_no + `</td>
 							  <td class="reference_td">` + index.template_name + `</td>
 							  <td class="size_td">` + size + `</td>
