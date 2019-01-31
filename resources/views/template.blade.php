@@ -4,8 +4,8 @@
 
 <style>
    body{
-   	font-size: 10px;
-   }
+        font-size: 8px;
+    }
 
    .companyDetails{
    	font-size: 8px !important;
@@ -14,6 +14,20 @@
    .tabl-design{
     text-align: center !important;
    }
+   td {
+            height: 15px;
+      }
+
+    th {
+        height: 15px;
+        text-align: center !important;
+    }
+
+    table {
+        table-layout: fixed;
+        width: 100%;
+        border-collapse: collapse;
+    }
    </style>
 </head>
 <body>
@@ -45,13 +59,14 @@
                     <table>
                         <tr> 
                             <td class="companyDetails">
-                                <span>Buyer</span>
+
+                                <p>Buyer</p>
                                 <p><strong>{{$inv_details[0]['company_name']}}</strong></p>
                                 <p>{{$bill_to->address}}</p>
                                 <p>GSTN : {{$inv_details[0]['gstin_number']}}</p>
                             </td>
  							<td style="text-align: right;" class="companyDetails">
-                               
+                                </br>
                                 <p><strong>Date : </strong>{{$inv_details[0]['inv_date']}}</p>
                                 <p><strong>Invoice No :  </strong>{{$inv_details[0]['invoice_id']}}</p>
                                 <p><strong>Disp thru : </strong>{{$inv_details[0]['delvry_thru']}}</p>
@@ -66,6 +81,8 @@
                 </td>
             </tr>
         </table>
+        <hr>
+        <p><strong><u> Order Details: </u></strong></p>
 		<table class="tabl-design" cellpadding="0" cellspacing="0" border="0.2"><thead ><tr><th><strong>Sno</strong></th><th><strong>Order No</strong></th><th><strong>PO No</strong></th><th><strong>Style</strong></th><th><strong>OCN</strong></th><th><strong>Ref</strong></th><th><strong>Size</strong></th><th><strong>Tax (%)</strong></th><th><strong>Quantity</strong></th><th><strong>Rate(INR)</strong></th><th><strong>Amount (INR)</strong></th></tr></thead><tbody>
                     @php 
                     	$totalQnty=0;
@@ -180,36 +197,19 @@
                     <table>
                         <tr>
                             <td class="companyDetails">
-                                <p><strong>Credit Terms </strong>{{$inv_details[0]['credit_limit']}}</p>
-                                <p><strong>E-Way Bill No </strong>{{$eway_no}}</p>
+                                <p><strong>Credit Terms :</strong>{{$inv_details[0]['credit_limit']}}</p>
+                                <p><strong>E-Way Bill No :</strong>{{$eway_no}}</p>
                                 <p></p>
-                                <strong>Amount in words </strong><p>{{$amntInwords}}</p>
+                                <strong>Amount in words :</strong><p>{{$amntInwords}}</p>
                                 <strong>Delivery at :</strong>
-                                <div>{{$inv_details[0]['address']}}
-                                <p>{{$inv_details[0]['email']}}</p><p>{{$inv_details[0]['pincode']}}</p>
-                                <p>{{$inv_details[0]['telephone']}}</p></div>
+                                <p>{{$inv_details[0]['address']}}</p>
+                                <p>{{$inv_details[0]['email']}}</p>
+                                <p>{{$inv_details[0]['pincode']}}</p>
+                                <p>{{$inv_details[0]['telephone']}}</p>
                             </td>
                         </tr>
                     </table>
                 </td>
-              <!--   <td style="text-align: right;">
-                    <table cellpadding="0" cellspacing="0" border="0.5"><thead><tr><th>Tax (%)</th><th>Base value (₹)</th><th>Amount (₹)</th></tr></thead><tbody>
-                        <tr>
-                            <td>
-                                
-                            </td>
-
- 							<td>
-                                
-                            </td>
-                            <td>
-                                
-                            </td>
-
-                        </tr>
-                        </tbody>
-                    </table>
-                </td> -->
             </tr>
             <tr class="payment">
                <td >
