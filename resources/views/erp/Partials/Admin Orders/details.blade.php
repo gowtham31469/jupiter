@@ -162,7 +162,7 @@
 												<td><span class="label label-success">{{$detail->status}}</span></td>
 												<td>
 
-													<i id="{{$detail->id}}" data-toggle="confirmation" data-placement="left" data-popout="true" data-singleton="true" class="fa fa-pencil filterbtn options updateOItem fa-button activeItems"></i>
+													<i id="{{$detail->id}}" data-toggle="confirmation" data-placement="left" data-popout="true" data-holdordername="{{$detail->status}}" data-singleton="true" class="fa fa-pencil filterbtn options updateOItem fa-button activeItems"></i>
 
 												</td>
 
@@ -172,7 +172,7 @@
 												<td> <span class="label label-warning"> HOLD </span></td>
 												<td>
 
-													<i id="{{$detail->id}}" data-toggle="confirmation" data-placement="left" data-popout="true" data-singleton="true" class="fa fa-pencil filterbtn options updateOItem fa-button holdItems"></i>
+													<i id="{{$detail->id}}" data-toggle="confirmation" data-holdordername="{{$detail->status}}" data-placement="left" data-popout="true" data-singleton="true" class="fa fa-pencil filterbtn options updateOItem fa-button holdItems"></i>
 
 												</td>
 												
