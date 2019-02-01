@@ -12,11 +12,6 @@ body{
     text-align: center !important;
 }
 
-.ratio-list-table td,
-.single-list-table td {
-    text-align: center !important;
-}
-
 td {
     height: 25px;
 }
@@ -39,6 +34,7 @@ table {
     text-align: center;
     vertical-align: middle;
 }
+
 </style>
 <body>
     <div class="container">
@@ -47,11 +43,11 @@ table {
                 <table cellspacing="3" cellpadding="3">
                     <tr >
                         <td>
-                        <p><strong id="jc_company_name">Jupiter Garments Accessories</strong></p>
-                        <p id="company_address">1-J-27-1&amp;3, Jupiter Avenue, Anupparpalayam, Tirupur -641632 </p>
+                            <p><strong id="jc_company_name">{{ $company->company }}</strong></p>
+                            <p id="company_address">{{ $company->company_address }}</p>
                         </td>
                         <td style="text-align: right;">
-                            <img src="images/logo.png" style="height: 62px;margin-top: 30px;"/>
+                            <img src="{{ $company->company_logo }}" style="height: 62px;margin-top: 30px;"/>
                         </td>
                     </tr>
                 </table>
@@ -77,8 +73,8 @@ table {
                             <span id="article">{{ $article }}</span>
                         </td>
                         <td style="text-align: right;">
-                        <label for="material">MATERIAL :</label>
-                        <span id="material">{{ $material }}</span>
+                            <label for="material">MATERIAL :</label>
+                            <span id="material">{{ $material }}</span>
                         </td>
                     </tr>
                 </table>
@@ -90,22 +86,22 @@ table {
                 <table cellspacing="3" cellpadding="3">
                         <tr>
                             <td>
-                            <label for="customer">CUST NAME :</label>
-                            <span id="customer" >{{ $customer->customer_name }}</span>	
+                                <label for="customer">CUST NAME :</label>
+                                <span id="customer" >{{ $customer->customer_name }}</span>	
                             </td>
                             <td>
-                            <label for="style_no">STYLENUM :</label>
-                            <span id="style_no">{{ $style_no }}</span>
+                                <label for="style_no">STYLENUM :</label>
+                                <span id="style_no">{{ $style_no }}</span>
                             </td>
                             <td>
-                            <label for="order_type">ORDER TYPE :</label>
-                            <span id="order_type">{{ $order_type }}</span>
+                                <label for="order_type">ORDER TYPE :</label>
+                                <span id="order_type">{{ $order_type }}</span>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                    <label for="buyer">BUYER :</label>
-                                    <span id="buyer" data-buyer-id="2">{{ $buyer->buyer_name }}</span>	
+                                <label for="buyer">BUYER :</label>
+                                <span id="buyer">{{ $buyer->buyer_name }}</span>	
                             </td>
                             <td>
                                 <label for="reference">REFERENCE :</label>
@@ -193,12 +189,12 @@ table {
                         <td></td>
                     </tr>
                     <tr>
-                            <td>
-                                <label for="print_color">PRINT COLORS :</label>
-                                <span id="print_color">{{ $print_color }}</span>
-                            </td>
-                            <td></td>
-                        </tr>
+                        <td>
+                            <label for="print_color">PRINT COLORS :</label>
+                            <span id="print_color">{{ $print_color }}</span>
+                        </td>
+                        <td></td>
+                    </tr>
                 </table>
             </div>
         </div>
@@ -221,7 +217,7 @@ table {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php $ratio_total = 0; ?>
+                                    @php $ratio_total = 0; @endphp
                                     @foreach ($table_data as $key => $value)
                                         <tr>
                                         <td>{{ $value['reference_name'] }}</td>
@@ -230,7 +226,7 @@ table {
                                         <td>{{ $value['ocn_number'] }}</td>
                                         <td>{{ $value['order_quantity'] }}</td>
                                         <td></td>
-                                        <?php $ratio_total = $ratio_total+$value['order_quantity']; ?>
+                                        @php $ratio_total = $ratio_total+$value['order_quantity']; @endphp
                                     </tr>
                                     @endforeach
                                     <tr>
@@ -249,8 +245,8 @@ table {
                       @foreach ($template_type_data as $table => $table_data)
                         <div class="row">
                             <div class="col-md-12 single-list-table-div">
-                            <table class="table table-bordered table-responsive single-list-table" id="single_list_table_0" border="0.2">
-                            <?php $ref_name = explode('_', $table); ?>
+                            <table class="table table-bordered table-responsive single-list-table" border="0.2">
+                            @php $ref_name = explode('_', $table); @endphp
                                 <tbody id="single_list_table_body">
                                     <tr>
                                         <th>ID.NO</th>
@@ -271,7 +267,7 @@ table {
                                             <td colspan="2" >{{ $value }}</td>
                                         @endforeach
                                     </tr>
-                                    <tr>
+                                    <tr class="single-th-row">
                                     @foreach ($table_data['size'] as $size => $quantities)
                                         <th>SIZE /PRICE</th>
                                         @foreach ($quantities as $key => $qty)
@@ -284,28 +280,48 @@ table {
                                         <th>STOCK</th>
                                     @endforeach
                                     </tr>
+                                    @php 
+                                         $single_final_total  = 0; 
+                                         $single_excess_total = 0;
+                                         $sumArray = array();
+                                    @endphp
                                     @foreach ($table_data['size'] as $size => $quantities)
                                         <tr>
                                             <td class="single-size-row"> {{ $size }}</td>
                                             @foreach ($quantities as $key => $qty)
                                                 <td>{{ $qty }}</td>
                                                 <td></td>
+                                                @php 
+                                                    if (array_key_exists($key,$sumArray))
+                                                    {
+                                                        $sumArray[$key] = $qty + $sumArray[$key];
+                                                    }
+                                                    else
+                                                    {
+                                                        $sumArray[$key] = 0;
+                                                        $sumArray[$key] = $qty + $sumArray[$key];
+                                                    }
+                                                @endphp
                                             @endforeach
-                                            <td class="total-quantity-class total-quantity-row-0"><strong>{{ $table_data['total'][$size] }}</strong></td>
+                                            <td><strong>{{ $table_data['total'][$size] }}</strong></td>
                                             <td class="total-excess">{{ $table_data['excess'][$size] }}</td>
                                             <td></td>
                                             <td></td>
+                                            @php 
+                                                $single_final_total  = $single_final_total+$table_data['total'][$size];
+                                                $single_excess_total = $single_excess_total+$table_data['excess'][$size];
+                                            @endphp
                                         </tr>
                                     @endforeach
                                     <tr>
                                     @foreach ($table_data['size'] as $size => $quantities)
-                                        <th class=" total-text" style="background-color:#eee;">TOTAL</th>
+                                        <th class="total-text" style="background-color:#eee;">TOTAL</th>
                                         @foreach ($quantities as $key => $qty)
-                                            <td class="total-quantity-col-0"><strong></strong></td>
+                                            <td><strong>{{ $sumArray[$key] }}</strong></td>
                                             <td></td>
                                         @endforeach
-                                        <td><strong class="total-qty-TCL_4">323</strong></td>
-                                        <td class="total-excess-col-table-0 total-excess-TCL_4"><strong>168.00</strong></td>
+                                        <td><strong>{{ $single_final_total }}</strong></td>
+                                        <td><strong>{{ $single_excess_total }}</strong></td>
                                         <td></td>
                                         <td></td>
                                     @endforeach
