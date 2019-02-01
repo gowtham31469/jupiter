@@ -39,52 +39,9 @@ table {
 <body>
     <div class="container">
         <div class="row">
-        <div class="col-md-12">
-                <table cellspacing="3" cellpadding="3">
-                    <tr >
-                        <td>
-                            <p><strong id="jc_company_name">{{ $company->company }}</strong></p>
-                            <p id="company_address">{{ $company->company_address }}</p>
-                        </td>
-                        <td style="text-align: right;">
-                            <img src="{{ $company->company_logo }}" style="height: 62px;margin-top: 30px;"/>
-                        </td>
-                    </tr>
-                </table>
-        </div>
-        </div>
-        <hr>
-        <div class="row">
             <div class="col-md-12">
-                <table cellspacing="3" cellpadding="3">
-                    <tr>
-                        <td>
-                            <label for="work_order">WORKORDER :</label>
-                            <span id="work_order">{{ $workorder_id }}</span>
-                        </td>
-                        <td style="text-align: right;">
-                            <label for="today_date">DATE :</label>
-                            <span id="today_date">{{ $created_date }}</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for="article">ARTICLE :</label>
-                            <span id="article">{{ $article }}</span>
-                        </td>
-                        <td style="text-align: right;">
-                            <label for="material">MATERIAL :</label>
-                            <span id="material">{{ $material }}</span>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-md-12">
-                <table cellspacing="3" cellpadding="3">
-                        <tr>
+                <table cellspacing="0" cellpadding="2" style="table-layout: fixed;width: 100%;border-collapse: collapse;font-size: 12px;" nobr="true">
+                        <tr nobr="true">
                             <td>
                                 <label for="customer">CUST NAME :</label>
                                 <span id="customer" >{{ $customer->customer_name }}</span>	
@@ -98,7 +55,7 @@ table {
                                 <span id="order_type">{{ $order_type }}</span>
                             </td>
                         </tr>
-                        <tr>
+                        <tr nobr="true">
                             <td>
                                 <label for="buyer">BUYER :</label>
                                 <span id="buyer">{{ $buyer->buyer_name }}</span>	
@@ -118,8 +75,8 @@ table {
         <hr>
         <div class="row">
             <div class="col-md-12">
-                <table cellspacing="3" cellpadding="3">
-                    <tr>
+                <table cellspacing="0" cellpadding="2" style="table-layout: fixed;width: 100%;border-collapse: collapse;font-size: 12px;" nobr="true">
+                    <tr nobr="true">
                         <td>
                             <label for="order_date">ORDER DT :</label>
                             <span id="order_date">{{ $order_date }}</span>
@@ -137,7 +94,7 @@ table {
                             <span id="machine">{{ $machine }}</span>
                         </td>
                     </tr>
-                    <tr>
+                    <tr nobr="true">
                         <td>
                             <label for="cus_del_date">CUS D.DT :</label>
                             <span id="cus_del_date">{{ $cus_del_date }}</span>
@@ -155,7 +112,7 @@ table {
                             <span id="film_no">{{ $film_no }}</span>
                         </td>
                     </tr>
-                    <tr>
+                    <tr nobr="true">
                         <td>
                             <label for="act_del_date">ACT D.DT :</label>
                             <span id="act_del_date">{{ $act_del_date }}</span>
@@ -173,7 +130,7 @@ table {
                             <span id="teeth_no">{{ $teeth_no }}</span>
                         </td>
                     </tr>
-                    <tr>
+                    <tr nobr="true">
                         <td>
                             <label for="inv_no">INV NO :</label>
                             <span id="inv_no">{{ $inv_no }}</span>
@@ -188,7 +145,7 @@ table {
                         </td>
                         <td></td>
                     </tr>
-                    <tr>
+                    <tr nobr="true">
                         <td>
                             <label for="print_color">PRINT COLORS :</label>
                             <span id="print_color">{{ $print_color }}</span>
@@ -205,21 +162,21 @@ table {
                       @foreach ($template_type_data as $table => $table_data)
                         <div class="row">
                             <div class="col-md-12 ratio-list-table-div">
-                            <table class="table table-bordered table-responsive ratio-list-table" id="ratio_list_table" border="0.2">
+                            <table class="table table-bordered table-responsive ratio-list-table" id="ratio_list_table" border="0.2" nobr="true">
                                 <thead>
-                                    <tr>
-                                        <th>REF.NO</th>
-                                        <th>PO.NO</th>
-                                        <th>ID.NO</th>
-                                        <th>OCN</th>
-                                        <th>QNTY</th>
-                                        <th>P.QNTY</th>
+                                    <tr nobr="true">
+                                        <th><strong>REF.NO</strong></th>
+                                        <th><strong>PO.NO</strong></th>
+                                        <th><strong>ID.NO</strong></th>
+                                        <th><strong>OCN</strong></th>
+                                        <th><strong>QNTY</strong></th>
+                                        <th><strong>P.QNTY</strong></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @php $ratio_total = 0; @endphp
                                     @foreach ($table_data as $key => $value)
-                                        <tr>
+                                        <tr nobr="true">
                                         <td>{{ $value['reference_name'] }}</td>
                                         <td>{{ $value['buyer_po_number'] }}</td>
                                         <td>{{ $value['erp_id'] }}</td>
@@ -229,8 +186,8 @@ table {
                                         @php $ratio_total = $ratio_total+$value['order_quantity']; @endphp
                                     </tr>
                                     @endforeach
-                                    <tr>
-                                        <th colspan="4" style="background-color:#eee;">Total</th>
+                                    <tr nobr="true">
+                                        <th colspan="4" style="background-color:#eee;"><strong>Total</strong></th>
                                         <td><strong>{{ $ratio_total }}</strong></td>
                                         <td></td>
                                     </tr>
@@ -245,39 +202,39 @@ table {
                       @foreach ($template_type_data as $table => $table_data)
                         <div class="row">
                             <div class="col-md-12 single-list-table-div">
-                            <table class="table table-bordered table-responsive single-list-table" border="0.2">
+                            <table class="table table-bordered table-responsive single-list-table" border="0.2" nobr="true">
                             @php $ref_name = explode('_', $table); @endphp
                                 <tbody id="single_list_table_body">
-                                    <tr>
-                                        <th>ID.NO</th>
+                                    <tr nobr="true">
+                                        <th><strong>ID.NO</strong></th>
                                         @foreach ($table_data['erp_id'] as $key => $value)
                                             <td colspan="2" >{{ $value }}</td>
                                         @endforeach
                                         <td colspan="4" style="background-color:#eee;padding-top:20px;" rowspan="3" ><strong >REFNUM &nbsp;: {{ $ref_name[0].' '.$ref_name[1] }}</strong></td>
                                     </tr>
-                                    <tr>
-                                        <th>B.PO.NO</th>
+                                    <tr nobr="true">
+                                        <th><strong>B.PO.NO</strong></th>
                                         @foreach ($table_data['buyer_po'] as $key => $value)
                                             <td colspan="2" >{{ $value }}</td>
                                         @endforeach
                                     </tr>
-                                    <tr>
-                                        <th>OCN</th>
+                                    <tr nobr="true">
+                                        <th><strong>OCN</strong></th>
                                         @foreach ($table_data['ocn'] as $key => $value)
                                             <td colspan="2" >{{ $value }}</td>
                                         @endforeach
                                     </tr>
-                                    <tr class="single-th-row">
+                                    <tr class="single-th-row" nobr="true">
                                     @foreach ($table_data['size'] as $size => $quantities)
-                                        <th>SIZE /PRICE</th>
+                                        <th><strong>SIZE /PRICE</strong></th>
                                         @foreach ($quantities as $key => $qty)
-                                            <th>O.QNT</th>
-                                            <th>P.QNT</th>
+                                            <th><strong>O.QNT</strong></th>
+                                            <th><strong>P.QNT</strong></th>
                                         @endforeach
-                                        <th>TOTAL</th>
-                                        <th>EXCESS</th>
-                                        <th>MTRS</th>
-                                        <th>STOCK</th>
+                                        <th><strong>TOTAL</strong></th>
+                                        <th><strong>EXCESS</strong></th>
+                                        <th><strong>MTRS</strong></th>
+                                        <th><strong>STOCK</strong></th>
                                     @endforeach
                                     </tr>
                                     @php 
@@ -286,7 +243,7 @@ table {
                                          $sumArray = array();
                                     @endphp
                                     @foreach ($table_data['size'] as $size => $quantities)
-                                        <tr>
+                                        <tr nobr="true">
                                             <td class="single-size-row"> {{ $size }}</td>
                                             @foreach ($quantities as $key => $qty)
                                                 <td>{{ $qty }}</td>
@@ -313,9 +270,9 @@ table {
                                             @endphp
                                         </tr>
                                     @endforeach
-                                    <tr>
+                                    <tr nobr="true">
                                     @foreach ($table_data['size'] as $size => $quantities)
-                                        <th class="total-text" style="background-color:#eee;">TOTAL</th>
+                                        <th class="total-text" style="background-color:#eee;"><strong>TOTAL</strong></th>
                                         @foreach ($quantities as $key => $qty)
                                             <td><strong>{{ $sumArray[$key] }}</strong></td>
                                             <td></td>
@@ -338,9 +295,9 @@ table {
         @if (!empty(implode(',',$single_ref)))
         <div class="row meter-calculation-div">
             <div class="col-md-12">
-                <table cellpadding="3" cellspacing="3">
+                <table cellpadding="3" cellspacing="3" nobr="true">
                     @foreach ($single_ref as $key => $ref)
-                        <tr>
+                        <tr nobr="true">
                             <td>
                                 <label>ACT EXCESS % (<strong>{{ $ref }}</strong>):</label>
                                 <span>{{ $act_excess[$key] }}</span> 
@@ -354,7 +311,7 @@ table {
                             <td>
                                 <label>TOTAL MTRS (<strong>{{ $ref }}</strong>):</label>                                         <span>{{ $total_mtrs[$key] }}</span> 
                             </td>
-                        </tr>
+                        </tr nobr="true">
                     @endforeach
                 </table>
             </div>
@@ -362,67 +319,6 @@ table {
         @else
         <table cellpadding="3" cellspacing="3"></table>
         @endif
-        <hr>
-        <div class="row">
-            <div class="col-md-12">
-                <table cellspacing="3" cellpadding="3">
-                            <tr>
-                                <td >
-                                    <label for="compiled_by">COMPILED BY :</label>
-                                    <span id="compiled_by">{{ $compiled_by }}</span> 
-                                </td>
-                                <td >
-                                    <label for="barcode_read">BARCODE READ :</label>
-                                    <span id="barcode_read">{{ $barcode_read }}</span> 
-                                </td>
-                                <td >
-                                    <label for="operator">OPERATOR :</label>
-                                    <span id="operator">{{ $operator }}</span>
-                                </td>
-                                <td >
-                                    <label for="checker">CHECKER :</label>
-                                    <span id="checker">{{ $checker }}</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td >
-                                    <label for="author">AUTHORIZED BY :</label>
-                                    <span id="author">{{ $authorized_by }}</span>
-                                </td>
-                                <td >
-                                    <label for="axicon_verifier">AXICON VERIFIER :</label>
-                                    <span id="axicon_verifier">{{ $axicon_verifier }}</span>
-                                </td>
-                                <td >
-                                    <label for="approved_by">APPROVED BY :</label>
-                                    <span id="approved_by">{{ $approved_by }}</span>
-                                </td>
-                                <td >
-                                    <label for="packer">PACKER :</label>
-                                    <span id="packer">{{ $packer }}</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td >
-                                    <label for="approval_date">APPROVAL DT :</label>
-                                    <span id="approval_date">{{ $approval_date }}</span>
-                                </td>
-                                <td >
-                                    <label for="roll_issued_by">ROLL ISSUED BY :</label>
-                                    <span id="roll_issued_by">{{ $roll_issued_by }}</span>
-                                </td>
-                                <td >
-                                    <label for="cutter">CUTTER :</label>
-                                    <span id="cutter">{{ $cutter }}</span>
-                                </td>
-                                <td >
-                                    <label for="cartons">CARTONS :</label>
-                                    <span id="cartons">{{ $cartons }}</span>
-                                </td>
-                            </tr>
-                </table>
-            </div>
-        </div>
     </div>
  </body>
 </html>

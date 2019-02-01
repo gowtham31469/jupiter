@@ -15,6 +15,7 @@ use App\ErpOrders as Erp;
 use App\ErpOrderDetails as ErpOrderDetails;
 use Carbon\Carbon;
 use PDF;
+use App\Classes\JobcardPDFHeaderFooter;
 
 class JobManagerController extends Controller
 {
@@ -604,9 +605,94 @@ class JobManagerController extends Controller
 					$buyer = DB::table('buyers')->select('buyer_name')->where('id', '=', $buyer_id)->first();
 					$customer = DB::table('customers')->select('short_name as customer_name')->where('id', '=', $customer_id)->first();
 					$company = DB::table('company')->select('name as company', 'address as company_address', 'logo as company_logo')->where('id', '=', $company_id)->first();
+					/** [ Creating new object for TescoOrders() class ] */
+				   $pdf = new JobcardPDFHeaderFooter(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+				   $pdf->setData($company, $workorder_id, $created_date, $article, $material, $compiled_by, $barcode_read, $operator, $checker, $authorized_by, $axicon_verifier, $approved_by, $packer, $approval_date, $roll_issued_by, $cutter, $cartons);	
 
+//margins
+$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+// set header and footer fonts
+$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+// set auto page breaks
+$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+// set image scale factor
+$pdf->setImageScale(1.8);
+
+// set font
+$pdf->SetFont('helvetica', '', 8);
+
+// add a page
+$pdf->AddPage('P', 'A4');
+
+// set some text to print
+$view = View::make('erp/Jobmanager/jobcard-pdf-template')
+		->with([
+				'buyer' => $buyer,
+				'customer' => $customer,
+				'company'=>$company,
+				'workorder_id'=>$workorder_id,
+				'created_date'=>Carbon::parse($created_date)->format('d-m-Y'),
+				'article'=> $article,
+				'material'=>$material,
+				'style_no'=>$style_no,
+				'order_type'=>$order_type,
+				'reference'=>$reference,
+				'disp_mode'=>$disp_mode,
+				'order_date'=>Carbon::parse($order_date)->format('d-m-Y'),
+				'length'=>$length,
+				'repeat_gap'=>$repeat_gap,
+				'machine'=>$machine,
+				'cus_del_date'=>Carbon::parse($cus_del_date)->format('d-m-Y'),
+				'roll_width'=>$roll_width,
+				'width'=>$width,
+				'film_no'=>$film_no, 
+				'act_del_date'=>Carbon::parse($act_del_date)->format('d-m-Y'),
+				'length_side'=>$length_side,
+				'excess'=>$excess,
+				'teeth_no'=>$teeth_no,
+				'inv_no'=>$inv_no,
+				'no_sticker'=>$no_sticker,
+				'finish_type'=>$finish_type,
+				'print_color'=>$print_color,
+				'compiled_by'=>$compiled_by,
+				'barcode_read'=>$barcode_read,
+				'operator'=>$operator,
+				'checker'=>$checker,
+				'authorized_by'=>$authorized_by,
+				'axicon_verifier'=>$axicon_verifier,
+				'approved_by'=>$approved_by,
+				'packer'=>$packer,
+				'approval_date'=>Carbon::parse($approval_date)->format('d-m-Y'),
+				'roll_issued_by'=>$roll_issued_by,
+				'cutter'=>$cutter,
+				'cartons'=>$cartons,
+				'final_json_obj'=>json_decode($final_json_obj, true),
+				'single_ref'=>$single_ref,
+				'act_excess'=>$act_excess,
+				'sticker_mtr'=>$sticker_mtr,
+				'settings'=>$settings,
+				'total_mtrs'=>$total_mtrs
+		]);
+		//append content to header
+		$pdf->SetXY(15, 43);
+		$pdf->writeHTML($view->render());
+	// 	$page_start =$pdf->getPage();
+    //     $y_start =$pdf->GetY();
+    //    $pdf->writeHTML('<p>page start='.$page_start.' </p>
+    //     <p>page y='.$y_start.' </p>', false, false, true, false, '');
+
+// ---------------------------------------------------------
+ob_end_clean();
+//Close and output PDF document
+$pdf->Output( public_path('/storage/app/example_006.pdf'), 'F');
+return "/storage/app/example_006.pdf";
+	
 					 // Create new PDF
-						define ('PDF_FONT_NAME_MAIN', 'helvetica');
+					/* 	define ('PDF_FONT_NAME_MAIN', 'helvetica');
 						define ('PDF_FONT_NAME_DATA', 'helvetica');
 						PDF::setImageScale(1.66);
 						PDF::setPrintHeader(true);
@@ -614,7 +700,7 @@ class JobManagerController extends Controller
 						PDF::SetFont('helvetica', '5');
 						PDF::AddPage('P', 'A4');
 						// set auto page breaks
-						PDF::SetAutoPageBreak(TRUE);
+						PDF::SetAutoPageBreak('PDF_MARGIN_BOTTOM', TRUE);
 						
 						$view = View::make('erp/Jobmanager/jobcard-pdf-template')
 						->with([
@@ -672,7 +758,7 @@ class JobManagerController extends Controller
 						ob_end_clean();
 					//	PDF::Output('example_006.pdf', 'FD');
 						PDF::Output( public_path('/storage/app/example_006.pdf'), 'F');
-						return "/storage/app/example_006.pdf";
+						return "/storage/app/example_006.pdf"; */
                         //return url('/storage/app/example_006.pdf');
 					// }
 					// else
