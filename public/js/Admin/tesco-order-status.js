@@ -1395,9 +1395,9 @@ function updateArtwork(obj)
     {
         $("#create_tesco_order_status_form :input").prop("disabled", false);
 		$(".dropdown-toggle").css("background-color", "#fff"); 
-        $('#tesco_po_number').prop('disabled',true);
-        $('#tesco_uk_style').prop('disabled',true);
-        $('#tesco_ce_style').prop('disabled',true);
+        // $('#tesco_po_number').prop('disabled',true);
+        // $('#tesco_uk_style').prop('disabled',true);
+        // $('#tesco_ce_style').prop('disabled',true);
     }
     function enableArtworkEdit(tablename,rowid)
     {
