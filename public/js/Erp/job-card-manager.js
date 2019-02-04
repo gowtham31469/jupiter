@@ -406,7 +406,7 @@ function generateJobcard(){
                         {
                             $.each(data.template_data.ratio, function(key, template){
                                 var total = 0;
-                                ratio_table_html += '<table class="table table-bordered table-responsive ratio-list-table"  style="font-size: 12px;" id="ratio_list_table" data-ratio-ref-table="'+key+'">\
+                                ratio_table_html += '<table class="table table-bordered table-responsive ratio-list-table"  style="font-size: 12px;" id="ratio_list_table" data-ratio-ref-table="'+key+'"  border="0.2">\
                                                         <thead>\
                                                             <tr>\
                                                                 <th>REF.NO</th>\
@@ -455,14 +455,14 @@ function generateJobcard(){
                             var row = 0;
                             var table = 0;
                             $.each(data.template_data.single, function(key, erpid){   
-                                single_table_html += '<table class="table table-bordered table-responsive single-list-table"  style="font-size: 12px;" id="single_list_table_'+table+'">\
+                                single_table_html += '<table class="table table-bordered table-responsive single-list-table"  style="font-size: 12px;" id="single_list_table_'+table+'"  border="0.2">\
                                 <tbody id="single_list_table_body"><tr>\
                                 <th width="80px">ID.NO</th>';
                                 $.each(erpid.order_data, function(index, common_data){
                                     single_table_html += '<td colspan="2" data-template-id="'+common_data.template_id+'" class="single-erpid-'+index+'">'+common_data.erp_id+'</td>';
                                 });
                                 var template_name = key.split("_");
-                                single_table_html += '<td colspan="5" class="highlight_row" rowspan="3" data-single-ref-name ="'+template_name[0]+'">REFNUM  : '+template_name[0]+'</td></tr>\
+                                single_table_html += '<td colspan="4" class="highlight_row" rowspan="3" data-single-ref-name ="'+template_name[0]+'">REFNUM  : '+template_name[0]+'</td></tr>\
                                                             <tr>\
                                                                 <th width="80px">B.PO.NO</th>';
                                 $.each(erpid.order_data, function(index, common_data){
@@ -927,7 +927,6 @@ function storeJobcard(formData)
             excess_object_final[size_text] = excess_object;
 
         });
-        console.log(size_object_final)
         single_obj['size'] = size_object_final;
         single_obj['total'] = total_qty_object_final;
         single_obj['excess'] = excess_object_final;
@@ -1058,10 +1057,16 @@ function storeJobcard(formData)
         },
         statusCode: {
             200: function(data) {
+                var resp = JSON.stringify(data.responseText);
+                console.log(resp)
                 $('.snackbar_span').html("Jobcard Created Successfully");
                 showSnackbar();
-                $('#jobcardCreationModalCenter').modal('hide');
-                location.reload();
+               // $('#jobcardCreationModalCenter').modal('hide');
+               // location.reload();
+               window.open(
+                base_url+JSON.parse(resp),
+                '_blank' // <- This is what makes it open in a new window.
+              );
             },
             400: function() {
                 $('.snackbar_span').html("Parameter is missing !!!");

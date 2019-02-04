@@ -134,3 +134,9 @@ document.getElementById("pwdBtn").onclick = function () {
 		}
 	});
 }
+
+$('.modal').on('hidden.bs.modal', function (e) {
+    $(this).find("input[type=text]").val('').end();
+    $(this).find("input[type=email]").val('').end();
+    
+})

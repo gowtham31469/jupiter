@@ -112,6 +112,7 @@ class InvoiceController extends Controller
                             ->where('erp_order_details.pending_orders','!=' , 0)
                             ->where('erp_order_details.company_id',session()->get('company'))
                             ->whereIn('erp_orders.status',[3,6])
+                            ->whereIn('erp_order_details.status',[3,6])
                             // ->where('erp_orders.status','!=',5)
                             ->select('erp_order_details.id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','erp_orders.po_no','erp_order_details.style_no','erp_order_details.order_quantity','erp_order_details.rate','erp_order_details.size','erp_order_details.custom_ref_name as reference_name','erp_order_details.reference_name as ref_no','customers.place_of_supply','erp_order_details.ocn_number','erp_order_details.template_id','erp_orders.erp_id as erp_id','buyers.template_table','buyers.item_master_table','erp_order_details.pending_orders as pending_qnty','erp_orders.po_file','erp_orders.customer_id','customers.gstin_number','erp_orders.id as erpid','credit_limit','customers.freight_type as freight_id','freight_terms.freight_terms as delvry_thru','customers.nominated_forwarder',DB::raw("0".' as "delvry_qnty"'))
                             ->get();
@@ -344,6 +345,8 @@ class InvoiceController extends Controller
             $dynView = View::make('template')
                 ->with(['company_details' => $company_details, 'inv_details' => $inv_details, 'ship_to'=>$ship_to,'bill_to'=>$bill_to,'inv_details'=>$inv_details,'eway_no'=> $eway_no,'amntInwords'=>$amntInwords , 'eChargesArr'=>$extra_charges,'uniqueTaxes'=>$uniqueTaxes]);
             ob_start();
+            define ('PDF_FONT_NAME_MAIN', 'helvetica');
+            define ('PDF_FONT_NAME_DATA', 'helvetica');
             PDF::SetPrintHeader(false);
             PDF::SetPrintFooter(false);
             PDF::AddPage();
