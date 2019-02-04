@@ -1256,7 +1256,7 @@ function printDivTesco(data,name) {
 			
 					
 
-			var description = $('#tesco_description').val()
+			var description = $('#tesco_description').val().replace(/&/g,'&#038;')
 			if ((name == "TSL3-sticker")) {
 				if (size != '') {
 					$.ajax({
@@ -1412,7 +1412,7 @@ function printDivTesco(data,name) {
 			else
 			{
 				
-				var description = $('#tesco_description').val()
+				var description = $('#tesco_description').val().replace(/&/g,'&#038;')
 				if (description.length > 24) {
 					if (/\S/.test(description.charAt(24))) {
 						//No Space
@@ -1557,7 +1557,7 @@ function printDivTesco(data,name) {
 				var size = $(this).find('.uk_single_size').val();
 			}
 
-			var description = $('#tesco_description').val()
+			var description = $('#tesco_description').val().replace(/&/g,'&#038;')
 			if ((name == "TCL4-sticker") || (name == "TSL3-sticker") || (name == "THL3-sticker")) {
 				if (size != '') {
 					$.ajax({
@@ -2304,7 +2304,7 @@ function dynamicSVGTemplatescard(id,item)
               if(type === "ratio")
               {
                  var tpnd = $('#ce_ratio_orms_tpn_1').val();
-                 var description  = $('#tesco_description').val();
+                 var description  = $('#tesco_description').val().replace(/&/g,'&#038;');
 				 var ce_ratio_itf  = $('#ce_ratio_itf_1').val();
 				 
                  /** [ Dynamically change svg short description ] */
@@ -2389,7 +2389,7 @@ function dynamicSVGTemplatescard(id,item)
               {
                  /**  [ if CE single template ] */
                  var orms_tpn = $('#ce_single_orms_tpn_1').val();
-                 var description  = $('#tesco_description').val();
+                 var description  = $('#tesco_description').val().replace(/&/g,'&#038;');
 				  
 				 var ce_single_ean  = $('#ce_single_ean_1').val();
                  
@@ -2569,7 +2569,7 @@ function dynamicSVGTemplatescard(id,item)
               if(type === "ratio")
               { 
                   var tpnd = $('#uk_ratio_tpnd_1').val();
-                  var description  = $('#tesco_description').val();
+                  var description  = $('#tesco_description').val().replace(/&/g,'&#038;');
 				  var uk_ratio_itf  = $('#uk_ratio_itf_1').val();
 				  
                   /** [ Dynamically change svg UK ratio tpnd number ] */
@@ -2653,7 +2653,7 @@ function dynamicSVGTemplatescard(id,item)
               {
                  /**  [ if UK single template ] */
                  var orms_tpn = $('#uk_single_tpnd_1').val();
-                 var description  = $('#tesco_description').val();
+                 var description  = $('#tesco_description').val().replace(/&/g,'&#038;');
 				 var uk_single_ean  = $('#uk_single_ean_1').val();
                  /** [ Dynamically change svg UK single tpnd number ] */
                  if(orms_tpn != '')
@@ -2966,7 +2966,7 @@ function dynamicSVGTemplatescard(id,item)
                   var pieces_in_ratio = $('#ce_ratio_cpc_1').val();
                   var tpnd = $('#ce_ratio_orms_tpn_1').val();
 				  var ce_ratio_itf  = $('#ce_ratio_itf_1').val();
-                  var description      = $('#tesco_description').val();
+                  var description      = $('#tesco_description').val().replace(/&/g,'&#038;');
                   /** [ Dynamically change svg CE pieces in ratio ] */
                    if(pieces_in_ratio != '')
                    {
@@ -3033,7 +3033,7 @@ function dynamicSVGTemplatescard(id,item)
                  var orms_tpn = $('#ce_single_orms_tpn_1').val();
                  var case_size = $('#ce_single_case_size_1').val();
 				 var ce_single_ean  = $('#ce_single_ean_1').val();
-                 var description      = $('#tesco_description').val();
+                 var description      = $('#tesco_description').val().replace(/&/g,'&#038;');
                  /** [ Dynamically change svg CE single tpnd number ] */
                  if(orms_tpn != '')
                  {
@@ -3154,7 +3154,7 @@ function dynamicSVGTemplatescard(id,item)
                    var pieces_in_ratio = $('#uk_ratio_upc_1').val();
                    var tpnd = $('#uk_ratio_tpnd_1').val();
 				   var uk_ratio_itf  = $('#uk_ratio_itf_1').val();
-                   var description      = $('#tesco_description').val();
+                   var description      = $('#tesco_description').val().replace(/&/g,'&#038;');
 
                    /** [ Dynamically change svg UK pieces in ratio ] */
                    if(pieces_in_ratio != '')
@@ -3221,7 +3221,7 @@ function dynamicSVGTemplatescard(id,item)
                  var orms_tpn = $('#uk_single_tpnd_1').val();
                  var case_size = $('#uk_single_case_size_1').val();
 				 var uk_single_ean  = $('#uk_single_ean_1').val();
-                 var description      = $('#tesco_description').val();
+                 var description      = $('#tesco_description').val().replace(/&/g,'&#038;');
                  /** [ Dynamically change svg Uk single tpnd number ] */
                  if(orms_tpn != '')
                  {

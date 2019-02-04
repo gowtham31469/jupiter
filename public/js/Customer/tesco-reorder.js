@@ -436,7 +436,7 @@ function contentdocument(data, name, zone) {
 	mySVG.addEventListener("load", function () {
 		if (name == "TSL3") {
 			svgDoc1 = mySVG.contentDocument;
-			var description = data.template[0].short_description;
+			var description = data.template[0].short_description.replace(/&/g,'&#038;');
 			var size = data.qty[0].size;
 			$.ajax({
 				url: base_url + "/customer/tesco/get-tsl-size",
@@ -476,7 +476,7 @@ function contentdocument(data, name, zone) {
 			svgDoc1.getElementById("barcode_number").innerHTML = data.qty[0].ean_barcode;
 		} else if (name == "TSL1") {
 			svgDoc1 = mySVG.contentDocument;
-			svgDoc1.getElementById("description").innerHTML = data.template[0].short_description;
+			svgDoc1.getElementById("description").innerHTML = data.template[0].short_description.replace(/&/g,'&#038;');
 			svgDoc1.getElementById("tpnd").innerHTML = tpnd_td;
 			jsbarcodetescotsl(data.qty[0].itf_barcode, 'barcode', svgDoc1)
 			svgDoc1.getElementById("barcode_number").innerHTML = data.qty[0].itf_barcode;
@@ -504,11 +504,11 @@ function contentdocument(data, name, zone) {
 			svgDoc1.getElementById("po_number").innerHTML = data.template[0].po_number;
 			svgDoc1.getElementById("uk_style").innerHTML = data.template[0].uk_style_ref;
 			svgDoc1.getElementById("ce_style").innerHTML = data.template[0].ce_style_ref;
-			svgDoc1.getElementById("description").innerHTML = data.template[0].short_description;
+			svgDoc1.getElementById("description").innerHTML = data.template[0].short_description.replace(/&/g,'&#038;');
 			svgDoc1.getElementById("eqos").innerHTML = data.template[0].eqos_site_code;
 			svgDoc1.getElementById("supplier").innerHTML = data.template[0].supplier_name;
 			svgDoc1.getElementById("manufactured_date").innerHTML = data.template[0].manufacture_date.toUpperCase();
-			var description = data.template[0].short_description;
+			var description = data.template[0].short_description.replace(/&/g,'&#038;');
 			if (name == "TCL4" || name == "THL3") {
 				var size = data.qty[0].size;
 				$.ajax({
