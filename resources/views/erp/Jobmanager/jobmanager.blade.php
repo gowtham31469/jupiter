@@ -647,5 +647,65 @@
 <div id="snackbar"><span class="snackbar_span"></span></div>
 
 @endsection @section('jqueryIncludes')
+<script>
+$(document).ready(function() {
+	/** [ Make companies card active ] */
+	$('div.buyers-card').click(function(){
 
+		  $('div.buyers-card').removeClass("active");
+		  $(this).addClass("active");
+		  $('#hidden-buyer-div').hide();
+
+		  /* Save selected company into localdb */
+	      if ($('.buyers-card.active-buyer.active').length != 0) 
+	      {
+         	var company_id = $('.buyers-card.active-buyer.active').data("value"); 
+		  	var company_name = $('.buyers-card.active-buyer.active').attr("id");
+         	 $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
+          	$('#buyerSelectionModalCenter').modal('hide');
+		  
+			$.ajax({
+				url: base_url + "/erp/po-manager/set_company_session",
+				type: "Post",
+				dataType: "json",
+				data: {
+					_token: csrf_token,
+					company_id: company_id,
+					company_name:company_name
+				},
+				beforeSend: function() {
+					location.reload();
+				},
+				success: function(data) {
+				},
+				error: function(data) {
+
+				},
+				complete: function() {
+
+				}
+			})
+	      }
+	  
+	});
+	
+	/** [ Show already selected(active) buyer on clicking company menu] */
+	$('.company-nav-menu').on('click', function() {
+	    $("#buyerSelectionModalCenter").modal("show");
+	});
+
+	if($('#company_name').val() != null && $('#company_name').val() != "")
+	{
+		$('#'+$('#company_name').val()).addClass('active');
+	}
+	else
+	{
+		$('div.buyers-card').first().addClass("active");
+	}
+   
+    $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
+	
+	$('.company-nav-menu').html($('.company-nav-div').html());
+});
+</script>
 @endsection

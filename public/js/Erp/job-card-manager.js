@@ -4,8 +4,8 @@
  * 
  */
 var csrf_token = $('meta[name="csrf-token"]').attr('content');
+var base_url = "<?php echo  url('/') ?>";
 $(document).ready(function() {
-    var base_url = "<?php echo  url('/') ?>";
 	$('input[class="row-checkbox"]').prop('checked', false);
 
 	$('#create_jobcard').trigger("reset");
@@ -15,70 +15,13 @@ $(document).ready(function() {
  	  $('#create_jobcard').trigger("reset");
 	})
 
-	/** [ Make companies card active ] */
-	$('div.buyers-card').click(function(){
-
-		  $('div.buyers-card').removeClass("active");
-		  $(this).addClass("active");
-		  $('#hidden-buyer-div').hide();
-
-		  /* Save selected buyer into localdb */
-	      if ($('.buyers-card.active-buyer.active').length != 0) 
-	      {
-         	var company_id = $('.buyers-card.active-buyer.active').data("value"); 
-		  	var company_name = $('.buyers-card.active-buyer.active').attr("id");
-         	 $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
-          	$('#buyerSelectionModalCenter').modal('hide');
-		  
-			$.ajax({
-				url: base_url + "/erp/po-manager/set_company_session",
-				type: "Post",
-				dataType: "json",
-				data: {
-					_token: csrf_token,
-					company_id: company_id,
-					company_name:company_name
-				},
-				beforeSend: function() {
-					location.reload();
-				},
-				success: function(data) {
-				},
-				error: function(data) {
-
-				},
-				complete: function() {
-
-				}
-			})
-	      }
-	  
-	});
-	
-	/** [ Show already selected(active) buyer on clicking buyer menu] */
-	$('.company-nav-menu').on('click', function() {
-	    $("#buyerSelectionModalCenter").modal("show");
-	});
-
-	if($('#company_name').val() != null && $('#company_name').val() != "")
-	{
-		$('#'+$('#company_name').val()).addClass('active');
-	}
-	else
-	{
-		$('div.buyers-card').first().addClass("active");
-	}
-   
-    $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
-	
-	$('.company-nav-menu').html($('.company-nav-div').html());
-
 	// Checkbox click functionality
 	$('.approved-order-list tr').click(function (event) {
         if (event.target.type !== 'checkbox') {
             $(':checkbox', this).trigger('click');
         }
     });
+
     /** Datatable filter script**/
 	var listTable = $('#approved-order-list').dataTable({
 		stateSave: true,
@@ -1057,16 +1000,15 @@ function storeJobcard(formData)
         },
         statusCode: {
             200: function(data) {
-                var resp = JSON.stringify(data.responseText);
-                console.log(resp)
+                var resp = JSON.stringify(data.file_path);
                 $('.snackbar_span').html("Jobcard Created Successfully");
                 showSnackbar();
-               // $('#jobcardCreationModalCenter').modal('hide');
-               // location.reload();
-               window.open(
-                base_url+JSON.parse(resp),
-                '_blank' // <- This is what makes it open in a new window.
-              );
+                $('#jobcardCreationModalCenter').modal('hide');
+                // location.reload();
+                window.open(
+                    base_url+JSON.parse(resp),
+                    '_blank' // <- This is what makes it open in a new window.
+                );
             },
             400: function() {
                 $('.snackbar_span').html("Parameter is missing !!!");
