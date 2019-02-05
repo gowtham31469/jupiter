@@ -351,13 +351,13 @@ function showInvoice(obj){
 
               if (itemName==value.item_name) {
                     tr += '<tr class="trClass" id="'+value.id+'">';
-                    tr += '<td>'+value.erp_id+'</td><td>'+value.buyer_name+'</td><td>'+value.order_no+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_no+'</td><td>'+value.reference_no+'</td><td>'+size+'</td><td>'+value.tax+'</td><td>'+value.delivered_qnty+'</td><td>'+value.rate+'</td><td>'+(value.delivered_qnty * value.rate).toFixed(2)+'</td>';
+                    tr += '<td>'+value.erp_id+'</td><td>'+value.buyer_name+'</td><td>'+value.order_no+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_no+'</td><td>'+value.custom_ref_name+'</td><td>'+size+'</td><td>'+value.tax+'</td><td>'+value.delivered_qnty+'</td><td>'+value.rate+'</td><td>'+(value.delivered_qnty * value.rate).toFixed(2)+'</td>';
                     tr += '</tr>';
                 }
                 else{
                     var hsnCode = value.hsn_code==null?'-':value.hsn_code;
                     tr += '<tr><td></td><td colspan="13"><strong style="float: left;">ITEM: '+value.item_name+'  HSNCode: '+hsnCode+'</strong></td></tr>';
-                    tr += '<td>'+value.erp_id+'</td><td>'+value.buyer_name+'</td><td>'+value.order_no+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_no+'</td><td>'+value.reference_no+'</td><td>'+size+'</td><td>'+value.tax+'</td><td>'+value.delivered_qnty+'</td><td>'+value.rate+'</td><td style="border-width:1px !important;">'+(value.delivered_qnty * value.rate).toFixed(2)+'</td>';
+                    tr += '<td>'+value.erp_id+'</td><td>'+value.buyer_name+'</td><td>'+value.order_no+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_no+'</td><td>'+value.custom_ref_name+'</td><td>'+size+'</td><td>'+value.tax+'</td><td>'+value.delivered_qnty+'</td><td>'+value.rate+'</td><td style="border-width:1px !important;">'+(value.delivered_qnty * value.rate).toFixed(2)+'</td>';
                     tr += '</tr>';
                 } 
                 totalAmnt+= value.delivered_qnty * value.rate;
@@ -480,14 +480,33 @@ function showInvoice(obj){
                 },
                 beforeSend: function() {
                     // location.reload();
+                },
+                statusCode: {
+                      200: function(data) {
+                          var resp = JSON.stringify(data);
+                          console.log( base_url+data)
+                          $('.snackbar_span').html("Successfully send Invoice to the Customer !");
+                            showSnackbar();
+                        setTimeout(function(){window.location = 'invoice';}, 1000);
+                      },
+                      400: function() {
+                          $('.snackbar_span').html("Parameter is missing !!!");
+                          showSnackbar();
+                      },
+                 },
+                // success: function(data) {
+                 
+                //   $('.snackbar_span').html("Successfully send Invoice to the Customer !");
+                //   showSnackbar();
+                 
+                //    console.log(base_url+data)
+                //   window.open(
+                //   base_url+data,
+                //   '_blank' // <- This is what makes it open in a new window.
+                //   );
 
-                },
-                success: function(data) {
-                  // console.log(data)
-                  $('.snackbar_span').html("Successfully send Invoice to the Customer !");
-                  showSnackbar();
-                  setTimeout(function(){window.location = 'invoice';}, 1000); 
-                },
+                //   // setTimeout(function(){window.location = 'invoice';}, 1000); 
+                // },
                 error: function(data) {
 
                 },
@@ -498,6 +517,68 @@ function showInvoice(obj){
         }
            
      }
+
+
+    function downloadInvoice(){
+      var eway_no = $('#eway_no').val();
+        var inv_id = $('#inv_no').data('id');
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        var amntInwords = $('.amnt-in-words').text()
+        if (eway_no=="") {
+            $('.snackbar_span').html("Please link E-Way Bill No");
+            showSnackbar();
+        }else{
+             $.ajax({
+                url: base_url + "/erp/download-invoice",
+                type: "post",
+                data: {
+                    _token: csrf_token,
+                    inv_id: inv_id,
+                    eway_no:eway_no,
+                    amntInwords:amntInwords
+                },
+                beforeSend: function() {
+                    // location.reload();
+                },
+                statusCode: {
+                      200: function(data) {
+                          var resp = JSON.stringify(data);
+                          console.log( base_url+data)
+                          $('.snackbar_span').html("Successfully send Invoice to the Customer !");
+                            showSnackbar();
+                        window.open(
+                           base_url+$.trim(data),
+                          '_blank' // <- This is what makes it open in a new window.
+                        );
+                        
+                      },
+                      400: function() {
+                          $('.snackbar_span').html("Parameter is missing !!!");
+                          showSnackbar();
+                      },
+                 },
+                // success: function(data) {
+                 
+                //   $('.snackbar_span').html("Successfully send Invoice to the Customer !");
+                //   showSnackbar();
+                 
+                //    console.log(base_url+data)
+                //   window.open(
+                //   base_url+data,
+                //   '_blank' // <- This is what makes it open in a new window.
+                //   );
+
+                //   // setTimeout(function(){window.location = 'invoice';}, 1000); 
+                // },
+                error: function(data) {
+
+                },
+                complete: function() {
+
+                }
+            })
+        }
+    }
 
 </script>
  @endsection
