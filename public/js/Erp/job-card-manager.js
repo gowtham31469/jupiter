@@ -99,9 +99,6 @@ $(document).ready(function() {
 		$.fn.dataTableExt.afnFiltering.length = 0;
 		listTable.dataTable().fnDraw();
 	});
-	$("#approved-order-list_filter input[type=search]").addClass('form-control');
-	$('.dataTables_length select').addClass('form-control');
-    $("#approved-order-list_filter input[type=search]").attr('placeholder', 'Data Search');
 
     /** Create job card form validation **/
     $('#create_jobcard').validator().on('submit', function (e) {
@@ -116,6 +113,16 @@ $(document).ready(function() {
            storeJobcard(formData);
         }
       })
+    
+    // Datatables for tables
+    $("#approved-order-list_filter input[type=search]").addClass('form-control');
+    $('.dataTables_length select').addClass('form-control');
+    $("#approved-order-list_filter input[type=search]").attr('placeholder', 'Data Search');
+
+    $('#jobcard-list-table').DataTable();
+    $("#jobcard-list-table_filter input").addClass('form-control input-sm');
+    $("#jobcard-list-table_filter input").attr('placeholder', 'Data Search');
+    $('#jobcard-list-table_length select').addClass('form-control input-sm');
 });
 /* End of document.ready() */
 
@@ -225,7 +232,7 @@ function generateJobcard(){
         });
         buyer_po_array   = buyer_po_array.join(',');
         $.ajax({
-            url:base_url + "/erp/get-jobcard-order-details",
+            url:base_url + "/erp/job-manager/get-jobcard-order-details",
             dataType:"json",
             method:"get",
             data:{orders:orders, ref_array:ref_array, buyer_po_array:buyer_po_array},
@@ -939,7 +946,7 @@ function storeJobcard(formData)
     selected_buyer_po_array   = selected_buyer_po_array.join(',');
 
     $.ajax({
-        url: base_url + "/erp/store-jobcard-details",
+        url: base_url + "/erp/job-manager/store-jobcard-details",
         type: 'POST',
         data: {
             _token: csrf_token,
@@ -1003,7 +1010,7 @@ function storeJobcard(formData)
                 var resp = JSON.stringify(data.file_path);
                 $('.snackbar_span').html("Jobcard Created Successfully");
                 showSnackbar();
-                $('#jobcardCreationModalCenter').modal('hide');
+               // $('#jobcardCreationModalCenter').modal('hide');
                 // location.reload();
                 window.open(
                     base_url+JSON.parse(resp),
@@ -1027,5 +1034,43 @@ function storeJobcard(formData)
         }
     })
 }
+
+/**
+   * Function for get jobcard details for editing
+   * @param id
+   * @author <praveen>
+   *
+   */
+  function getJobcardDetails(id)
+  {
+    try{
+         $.ajax({
+             url:base_url + "/erp/job-manager/jobcard-details",
+             dataType:"json",
+             method:"get",
+             data:{id:id},
+             tryCount : 0,
+             retryLimit : 2,
+             beforeSend: function () {
+               $(".loader").show();
+             },
+             success: function(data){
+                 console.log(data)
+             },
+             error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
+              },
+             complete: function () {
+                 $(".loader").hide();
+             }
+         })
+   } catch (e) {
+     console.log("Error:"+e)
+   }
+  }
 
 
