@@ -578,22 +578,22 @@
             $('#erp-invoice').modal("show")
         }
     }
-    function downloadInvoice(){
+    // function downloadInvoice(){
 
-        var myOffscreenEl = document.getElementById("invoice")
-            useWidth      = myOffscreenEl.style.width,
-            useHeight     = myOffscreenEl.style.height;
-            myOffscreenEl.style.backgroundColor = 'white';
-        html2pdf(myOffscreenEl, {
-            margin:       [30, 25, 33, 25],
-            filename    :  'Invoice.pdf',
-            image       :  { type: 'jpeg', quality: 0.98 },
-            html2canvas :  { dpi: 300, letterRendering: true },
-            jsPDF       :  { unit: 'pt', format: 'a4', orientation: 'portrait' }
-        });
+    //     var myOffscreenEl = document.getElementById("invoice")
+    //         useWidth      = myOffscreenEl.style.width,
+    //         useHeight     = myOffscreenEl.style.height;
+    //         myOffscreenEl.style.backgroundColor = 'white';
+    //     html2pdf(myOffscreenEl, {
+    //         margin:       [30, 25, 33, 25],
+    //         filename    :  'Invoice.pdf',
+    //         image       :  { type: 'jpeg', quality: 0.98 },
+    //         html2canvas :  { dpi: 300, letterRendering: true },
+    //         jsPDF       :  { unit: 'pt', format: 'a4', orientation: 'portrait' }
+    //     });
        
-       // dataPDF.save('storage/app/public/invoices/invoice.pdf', 'F');
-    }
+    //    // dataPDF.save('storage/app/public/invoices/invoice.pdf', 'F');
+    // }
 
     function updateInvoice(obj){
         var val = $(obj).val();
