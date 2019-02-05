@@ -32,16 +32,16 @@
                         <tr> 
                             <td class="companyDetails">
 
-                                <p style="font-size: 5px;">Buyer</p>
-                                <p style="font-size: 9px;"><strong>{{$inv_details[0]['company_name']}}</strong></p>
-                                <p>{{$bill_to->address}}</p>
-                                <p>GSTN : {{$inv_details[0]['gstin_number']}}</p>
+                                <span style="font-size: 5px;">Buyer</span><br>
+                                <span style="font-size: 9px;"><strong>{{$inv_details[0]['company_name']}}</strong></span><br>
+                                <span>{{$bill_to->address}}</span><br>
+                                <span>GSTN : {{$inv_details[0]['gstin_number']}}</span>
                             </td>
  							<td style="text-align: right;" class="companyDetails">
-                                <p><strong>TAX INVOICE </strong></p>
-                                <p><strong>Date : </strong>{{$inv_details[0]['inv_date']}}</p>
-                                <p><strong>Invoice No :  </strong>{{$inv_details[0]['invoice_id']}}</p>
-                                <p><strong>Disp thru : </strong>{{$inv_details[0]['delvry_thru']}}</p>
+                                <span><strong>TAX INVOICE </strong></span><br>
+                                <span><strong>Date : </strong>{{$inv_details[0]['inv_date']}}</span><br>
+                                <span><strong>Invoice No :  </strong>{{$inv_details[0]['invoice_id']}}</span><br>
+                                <span><strong>Disp thru : </strong>{{$inv_details[0]['delvry_thru']}}</span>
                             </td>
                         </tr>
                     </table>
@@ -54,7 +54,11 @@
             </tr>
         </table>
         <hr>
-        <p><strong>Order Details:</strong></p>
+        <table>
+                    <tr class="blank_row">
+                        <td rowsopan="1"></td>
+                    </tr>
+                    </table>
 		<table class="tabl-design" cellpadding="0" cellspacing="0" border="0.2"><thead ><tr><th><strong>Sno</strong></th><th><strong>Order No</strong></th><th><strong>PO No</strong></th><th><strong>Style</strong></th><th><strong>OCN</strong></th><th><strong>Ref</strong></th><th><strong>Size</strong></th><th><strong>Tax (%)</strong></th><th><strong>Quantity</strong></th><th><strong>Rate(INR)</strong></th><th><strong>Amount (INR)</strong></th></tr></thead><tbody>
                     @php 
                     	$totalQnty=0;
@@ -99,19 +103,61 @@
             <tr class="top">
             <td> 
                 <table>
+                    <tr class="blank_row">
+                        <td rowsopan="1"></td>
+                    </tr>
+                </table>
+                <table>
+                    <tr class="blank_row">
+                        <td rowsopan="1"></td>
+                    </tr>
+                    </table>
+                <table>
                         <tr>
                             <td>
-                            <div>
-                                <p><strong>Credit Terms :</strong>{{$inv_details[0]['credit_limit']}}</p>
-                                <p><strong>E-Way Bill No :</strong>{{$eway_no}}</p>
-                            </div>
+                                <span><strong>Credit Terms </strong></span>                            
+                            </td>
+                            <td>
+                                <span>: </span><span>{{$inv_details[0]['credit_limit']}}</span>                           
                             </td>
                         </tr>
                          <tr>
                             <td>
-                            <div>                  
-                                <p><strong>Amount in words :</strong></p><p>{{$amntInwords}}</p>
-                            </div>
+                                <span><strong>E-Way Bill No </strong></span>
+                            </td>
+                            <td>
+                                <span>: </span><span>{{$eway_no}}</span>
+                            
+                            </td>
+                        </tr>
+                    </table>
+                    <table>
+                    <tr class="blank_row">
+                        <td rowsopan="1"></td>
+                    </tr>
+                </table>
+                <table>
+                    <tr class="blank_row">
+                        <td rowsopan="1"></td>
+                    </tr>
+                    </table>
+                    <table>
+                    <tr class="blank_row">
+                        <td rowsopan="1"></td>
+                    </tr>
+                </table>
+                <table>
+                    <tr class="blank_row">
+                        <td rowsopan="1"></td>
+                    </tr>
+                    </table>
+                    <table>
+                         <tr>
+                            <td>          
+                                <span><strong>Amount in words :</strong></span>
+                                <br>
+                                <span>{{$amntInwords}}</span>
+                           
                             </td>
                         </tr>
                     </table>
@@ -191,16 +237,22 @@
                     
                 </td>
             </tr>
-
+            <hr>
             <tr class="information">
                 <td>
+                    <table>
+                    <tr class="blank_row">
+                        <td rowsopan="1"></td>
+                    </tr>
+                    </table>
+                   
                     <table>
                         <tr>
                             <td>
                             <div>
-                                <p><strong>Delivery at :</strong></p>
-                                <p>{{$inv_details[0]['address']}},</p>
-                                <p>{{$inv_details[0]['pincode']}}</p>
+                                <span><strong>Delivery at :</strong></span><br>
+                                <span>{{$inv_details[0]['address']}},</span><br>
+                                <span>{{$inv_details[0]['pincode']}}</span>
                             </div>
                             </td>
                         </tr>

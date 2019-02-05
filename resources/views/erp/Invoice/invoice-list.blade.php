@@ -137,7 +137,9 @@
                 <div class="col-lg-4 col-md-4 col-sm-4">
 
                 </div>
-                <div class="col-lg-4 col-md-4 col-sm-4 pull-right" id="ship_to" style="padding-left: 50px; margin-top: 35px;">
+
+                <div class="col-lg-4 col-md-4 col-sm-4 pull-right" id="ship_to" style="padding-left: 50px; ">
+                    <span><strong>TAX INVOICE</strong></span><br>
                     <strong>Date</strong>
                     <span style="padding-left: 37px;"> : <span style="padding-left: 6px;" class="inv_date" id="inv_date"></span>
                     </span><br>
@@ -341,7 +343,7 @@ function showInvoice(obj){
           $('#credit-val').text(data.inv_details[0].credit_limit);
           $('#company_details').html('<h4>'+data.company_details.name+'</h4>'+data.company_details.address+'<p>PH : '+data.company_details.office_phone+', '+data.company_details.phone+'</br> <strong>GSTIN : '+data.company_details.gstin+'</strong></p>')
 
-          $('#bill_to').html('<p>Buyer</p><h4>'+data.inv_details[0].company_name+'</h4><p>'+data.bill_to.address+'</br> GSTIN :'+data.inv_details[0].gstin_number+ '</p>')
+          $('#bill_to').html('<span>Buyer</span><br><h4>'+data.inv_details[0].company_name+'</h4><span>'+data.bill_to.address+'</br> GSTIN :'+data.inv_details[0].gstin_number+ '</span>')
           var itemName ="";
           $(data.inv_details).each(function(index, value)
           {   
