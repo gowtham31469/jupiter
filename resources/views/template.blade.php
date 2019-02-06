@@ -3,14 +3,7 @@
 <head>
 
 <style>
-   body{
-        font-size: 8px;
-    }
 
-   .companyDetails{
-   	font-size: 8px !important;
-   	margin:0px;
-   }
    .tabl-design{
     text-align: center !important;
    }
@@ -33,43 +26,22 @@
 <body>
 
 <table cellpadding="0" cellspacing="0">
-            <tr class="top">
-                <td>
-                    <table>
-                        <tr>
-                            <td class="companyDetails">
-                                <p><strong>{{$company_details->name}}</strong></p>
-                                <p>{{$company_details->address}}</p>
-                                <p>{{$company_details->office_phone}}, {{$company_details->phone}}</p>
-                                <p><strong>GSTIN  : </strong>{{$company_details->gstin}}</p>
-                            </td>
-
- 							<td style="text-align: right;" class="companyDetails">
-                                
-                                <img src="{{$company_details->logo}}" style="height: 62px;margin-top: 30px;"/>
-                            </td>
-
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <hr>
             <tr class="information">
                 <td>
                     <table>
                         <tr> 
                             <td class="companyDetails">
 
-                                <p>Buyer</p>
-                                <p><strong>{{$inv_details[0]['company_name']}}</strong></p>
-                                <p>{{$bill_to->address}}</p>
-                                <p>GSTN : {{$inv_details[0]['gstin_number']}}</p>
+                                <span style="font-size: 5px;">Buyer</span><br>
+                                <span style="font-size: 9px;"><strong>{{$inv_details[0]['company_name']}}</strong></span><br>
+                                <span>{{$bill_to->address}}</span><br>
+                                <span>GSTN : {{$inv_details[0]['gstin_number']}}</span>
                             </td>
  							<td style="text-align: right;" class="companyDetails">
-                                </br>
-                                <p><strong>Date : </strong>{{$inv_details[0]['inv_date']}}</p>
-                                <p><strong>Invoice No :  </strong>{{$inv_details[0]['invoice_id']}}</p>
-                                <p><strong>Disp thru : </strong>{{$inv_details[0]['delvry_thru']}}</p>
+                                <span><strong>TAX INVOICE </strong></span><br>
+                                <span><strong>Date : </strong>{{$inv_details[0]['inv_date']}}</span><br>
+                                <span><strong>Invoice No :  </strong>{{$inv_details[0]['invoice_id']}}</span><br>
+                                <span><strong>Disp thru : </strong>{{$inv_details[0]['delvry_thru']}}</span>
                             </td>
                         </tr>
                     </table>
@@ -82,7 +54,11 @@
             </tr>
         </table>
         <hr>
-        <p><strong><u> Order Details: </u></strong></p>
+        <table>
+                    <tr class="blank_row">
+                        <td rowsopan="1"></td>
+                    </tr>
+                    </table>
 		<table class="tabl-design" cellpadding="0" cellspacing="0" border="0.2"><thead ><tr><th><strong>Sno</strong></th><th><strong>Order No</strong></th><th><strong>PO No</strong></th><th><strong>Style</strong></th><th><strong>OCN</strong></th><th><strong>Ref</strong></th><th><strong>Size</strong></th><th><strong>Tax (%)</strong></th><th><strong>Quantity</strong></th><th><strong>Rate(INR)</strong></th><th><strong>Amount (INR)</strong></th></tr></thead><tbody>
                     @php 
                     	$totalQnty=0;
@@ -116,7 +92,7 @@
                     @endforeach	
 
                     <tr>
-                    	<td colspan="8">Total</td>
+                    	<td colspan="8">Sub Total</td>
                     	<td>{{$totalDevlryQnty}}</td>
                     	<td></td>
                     	<td>{{number_format((float)$totalAmnt, 2, '.', '') }}</td>
@@ -125,9 +101,78 @@
         </table>
         <table cellpadding="0" cellspacing="0">
             <tr class="top">
-            <td></td>
+            <td> 
+                <table>
+                    <tr class="blank_row">
+                        <td rowsopan="1"></td>
+                    </tr>
+                </table>
+                <table>
+                    <tr class="blank_row">
+                        <td rowsopan="1"></td>
+                    </tr>
+                    </table>
+                <table>
+                        <tr>
+                            <td>
+                                <span><strong>Credit Terms </strong></span>                            
+                            </td>
+                            <td>
+                                <span>: </span><span>{{$inv_details[0]['credit_limit']}}</span>                           
+                            </td>
+                        </tr>
+                         <tr>
+                            <td>
+                                <span><strong>E-Way Bill No </strong></span>
+                            </td>
+                            <td>
+                                <span>: </span><span>{{$eway_no}}</span>
+                            
+                            </td>
+                        </tr>
+                    </table>
+                    <table>
+                    <tr class="blank_row">
+                        <td rowsopan="1"></td>
+                    </tr>
+                </table>
+                <table>
+                    <tr class="blank_row">
+                        <td rowsopan="1"></td>
+                    </tr>
+                    </table>
+                    <table>
+                    <tr class="blank_row">
+                        <td rowsopan="1"></td>
+                    </tr>
+                </table>
+                <table>
+                    <tr class="blank_row">
+                        <td rowsopan="1"></td>
+                    </tr>
+                    </table>
+                    <table>
+                         <tr>
+                            <td>          
+                                <span><strong>Amount in words :</strong></span>
+                                <br>
+                                <span>{{$amntInwords}}</span>
+                           
+                            </td>
+                        </tr>
+                    </table>
+                    <!-- <table> -->
+                  <!--       <tr>
+                            <td>
+                            <div>                  
+                                <strong>Amount in words :</strong><p>{{$amntInwords}}</p>
+                            </div>
+                            </td>
+                        </tr>
+                    </table>   -->            
+            </td>
                 <td style="text-align: center;">
-                    <table cellpadding="0" cellspacing="0" border="0.5"><thead><tr><th><strong>Tax</strong></th><th><strong>Base value (INR)</strong></th><th><strong>Amount (INR)</strong></th></tr></thead><tbody>                 
+                    <table class="tabl-design" cellpadding="0" cellspacing="0" border="0.5"><thead><tr><th><strong>Tax</strong></th><th><strong>Base value (INR)</strong></th><th><strong>Amount (INR)</strong></th></tr></thead><tbody>                 
                             @php 
                                 $totalTax = 0;
                             @endphp
@@ -159,7 +204,7 @@
                                 <td>{{number_format((float)$totalTax, 2, '.', '')}}</td>
                             </tr>
                             @if($eChargesArr)
-                            <table cellpadding="0" cellspacing="0" border="0.5"><thead><tr><th colspan="2"><strong>Description</strong></th><th><strong>Amount (INR)</strong></th></tr></thead><tbody> 
+                            <table class="tabl-design" cellpadding="0" cellspacing="0" border="0.5"><thead><tr><th colspan="2"><strong>Description</strong></th><th><strong>Amount (INR)</strong></th></tr></thead><tbody> 
                                    @php 
                                         $totalExc = 0;
                                     @endphp
@@ -184,7 +229,7 @@
                                 <td><strong>{{number_format((float)$inv_details[0]['round_off_amnt'], 2, '.', '') }}</strong></td>
                             </tr>
                             <tr>
-                                <td colspan="2"><strong>Grand Total</strong></td>
+                                <td colspan="2"><strong>Total Amount</strong></td>
                                 <td><strong>{{number_format((float)$inv_details[0]['grand_total'], 2, '.', '')}}</strong></td>
                             </tr>
                         </tbody>
@@ -192,20 +237,23 @@
                     
                 </td>
             </tr>
+            <hr>
             <tr class="information">
                 <td>
                     <table>
+                    <tr class="blank_row">
+                        <td rowsopan="1"></td>
+                    </tr>
+                    </table>
+                   
+                    <table>
                         <tr>
-                            <td class="companyDetails">
-                                <p><strong>Credit Terms :</strong>{{$inv_details[0]['credit_limit']}}</p>
-                                <p><strong>E-Way Bill No :</strong>{{$eway_no}}</p>
-                                <p></p>
-                                <strong>Amount in words :</strong><p>{{$amntInwords}}</p>
-                                <strong>Delivery at :</strong>
-                                <p>{{$inv_details[0]['address']}}</p>
-                                <p>{{$inv_details[0]['email']}}</p>
-                                <p>{{$inv_details[0]['pincode']}}</p>
-                                <p>{{$inv_details[0]['telephone']}}</p>
+                            <td>
+                            <div>
+                                <span><strong>Delivery at :</strong></span><br>
+                                <span>{{$inv_details[0]['address']}},</span><br>
+                                <span>{{$inv_details[0]['pincode']}}</span>
+                            </div>
                             </td>
                         </tr>
                     </table>
@@ -214,31 +262,6 @@
             <tr class="payment">
                <td >
                    
-                </td>
-            </tr>
-        </table>
-
-        <table>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                    <p>For Jupiter Garments Accessories</p>
-                </td>
-            </tr>
-            <tr>
-                <td class="companyDetails">
-                    <p>Recievers Signature </p>
-                </td>
-                <td class="companyDetails">
-                    <p>Prepared By</p>
-                </td>
-                <td class="companyDetails">
-                    <p>Verified By</p>
-                </td>
-                <td class="companyDetails">
-                    <p>Authorized Signatory</p>
                 </td>
             </tr>
         </table>

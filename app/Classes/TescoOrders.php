@@ -656,7 +656,7 @@ class TescoOrders
         }
   }
 
-  public function updateTescoOrders($table_name,$temp_data,$request)
+  public function updateTescoOrders($table_name,$temp_data,$request,$customer_id)
   {
     try
     {
@@ -689,6 +689,7 @@ class TescoOrders
                       ->where('uk_style_ref',$temp_data->uk_style_ref)
                       ->where('ce_style_ref',$temp_data->ce_style_ref)
                       ->where('tesco_supplier_id',$temp_data->tesco_supplier_id)->first();
+
             DB::table($table)->where('po_number',$temp_data->po_number)
                 ->where('uk_style_ref',$temp_data->uk_style_ref)
                 ->where('ce_style_ref',$temp_data->ce_style_ref)
@@ -696,16 +697,17 @@ class TescoOrders
                 ->update([
                     'zone'                 => $request['zone'],
                     'template_type'        => $request['type'],
-                   // 'po_number'            => $request['po_number'],
-                   // 'uk_style_ref'         => $request['uk_style'],
-                   // 'ce_style_ref'         => $request['ce_style'],
+                    'po_number'            => $request['po_number'],
+                    'uk_style_ref'         => $request['uk_style'],
+                    'ce_style_ref'         => $request['ce_style'],
                     'season_code'          => $request['season_code'],
                     'short_description'    => $request['description'],
                     'eqos_site_code'       => $request['eqos'],
                     'manufacture_date'     => $request['manufacture_date'],
                     'tesco_department_id'  => $request['department'],
                     'tesco_brand_id'       => $request['brand'],
-                    //'tesco_supplier_id'    => $request['supplier'],
+                    'tesco_metadata_supplier_id' => $request['supplier'],
+                    'tesco_supplier_id'    => $customer_id,
                     'rfid_compliant'       => $request['rfid'],
                     'tag_at_source'        => $request['tag_at_source'],
                   ]);
@@ -811,9 +813,9 @@ class TescoOrders
                 ->update([
                     'zone'                 => $request['zone'],
                     'template_type'        => $request['type'],
-                   // 'po_number'            => $request['po_number'],
-                   // 'uk_style_ref'         => $request['uk_style'],
-                   // 'ce_style_ref'         => $request['ce_style'],
+                    'po_number'            => $request['po_number'],
+                    'uk_style_ref'         => $request['uk_style'],
+                    'ce_style_ref'         => $request['ce_style'],
                     'season_code'          => $request['season_code'],
                     'short_description'    => $request['description'],
                     'eqos_site_code'       => $request['eqos'],
