@@ -610,7 +610,7 @@ class JobManagerController extends Controller
 
 						/** [ Creating new object for JobcardPDFHeaderFooter() class ] */
 						$pdf = new JobcardPDFHeaderFooter(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-						$pdf->setData($company, $workorder_id, $created_date, $article, $material, $compiled_by, $barcode_read, $operator, $checker, $authorized_by, $axicon_verifier, $approved_by, $packer, $approval_date, $roll_issued_by, $cutter, $cartons);	
+						$pdf->setData($company, $workorder_id, Carbon::parse($created_date)->format('d-m-Y'), $article, $material, $compiled_by, $barcode_read, $operator, $checker, $authorized_by, $axicon_verifier, $approved_by, $packer, Carbon::parse($approval_date)->format('d-m-Y'), $roll_issued_by, $cutter, $cartons);	
 
 						$pdf->SetPrintHeader(true);
 						$pdf->SetPrintFooter(true);  
@@ -947,13 +947,18 @@ class JobManagerController extends Controller
 				else
 				{
 					$jobcard_data  = DB::table('jobcard_main_table')
-										->select('jobcard_main_table.*','customers.company_name',
-										'buyers.buyer_name')
+										->select('jobcard_main_table.*', 'customers.id as customer_id','customers.short_name as customer', 'buyers.buyer_name', 'buyers.id as buyer_id', 'company.name as company', 'company.id as company_id', 'company.address as company_address','company.logo as company_logo')
 										->join('customers', 'jobcard_main_table.customer_id', 'customers.id')
 										->join('company', 'company.id', 'jobcard_main_table.company_id')
 										->join('buyers', 'jobcard_main_table.buyer_id', 'buyers.id')
 										->where('jobcard_main_table.id', '=', $id)
 										->first();
+					$jobcard_data->created_date      =	Carbon::parse($jobcard_data->created_date)->format('d-m-Y');
+					$jobcard_data->order_date        =	Carbon::parse($jobcard_data->order_date)->format('d-m-Y');
+					$jobcard_data->customer_del_date =	Carbon::parse($jobcard_data->customer_del_date)->format('d-m-Y');
+					$jobcard_data->act_del_date      =	Carbon::parse($jobcard_data->act_del_date)->format('d-m-Y');
+					$jobcard_data->approval_date     =	Carbon::parse($jobcard_data->approval_date)->format('d-m-Y');
+
 				    $jobcard_details  = DB::table('jobcard_excess_details')
 										->select('jobcard_excess_details.ref_name', 'jobcard_excess_details.mtrs_for_stickers', 'jobcard_excess_details.actual_excess', 'jobcard_excess_details.settings', 'jobcard_excess_details.total_mtrs')
 										->where('jobcard_excess_details.jobcard_main_table_id', '=', $jobcard_data->id)

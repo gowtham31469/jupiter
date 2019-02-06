@@ -1,4 +1,24 @@
 @extends('layouts.Erp.app')
+<style>
+.highlight_row {
+		background: #eee;
+	}
+	.edit-ratio-list-table tr,
+	.edit-ratio-list-table th,
+	.edit-ratio-list-table td,
+	.edit-single-list-table tr,
+	.edit-single-list-table th,
+	.edit-single-list-table td {
+		border-right-width: 1px !important;
+		border-bottom-width: 1px !important;
+		border-left-width: 1px !important;
+		border-top-width: 1px !important;
+		border-left: 1px solid #DDD !important;
+		border-top: 1px solid #DDD !important;
+		border-right: 1px solid #DDD !important;
+		border-bottom: 1px solid #DDD !important;
+	}
+</style>
 @section('navbar')
 
 <ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
@@ -251,7 +271,7 @@
 								<div class="col-md-3">
 							        <div class="form-group has-feedback form-inline">
 										{!! Form::label('edit_excess', 'EXCESS % :', ['class' => 'form_label']) !!}
-										{!! Form::number('edit_excess',$value = '', array('class' => 'form-control input-sm','placeholder' => 'EXCESS','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'onkeyup' => 'return calculateExcess(this)', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeypress' => 'return isNumberKey(event)')) !!}
+										{!! Form::number('edit_excess',$value = '', array('class' => 'form-control input-sm','placeholder' => 'EXCESS','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'onkeyup' => 'return calculateExcessEdit(this)', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeypress' => 'return isNumberKey(event)')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
@@ -489,13 +509,6 @@ $(document).ready(function() {
 	
 	$('.company-nav-menu').html($('.company-nav-div').html());
 
-    /** Get edit jobcard details on click**/
-       $(document).on('click','.edit-jobcard',function(e){
-           var id = $(this).closest('tr').attr('id');
-           e.preventDefault();
-           /* call getBuyer function from buyers.js*/
-           getJobcardDetails(id);
-       });
 });
 </script>
 @endsection

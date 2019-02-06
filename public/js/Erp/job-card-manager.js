@@ -123,6 +123,27 @@ $(document).ready(function() {
     $("#jobcard-list-table_filter input").addClass('form-control input-sm');
     $("#jobcard-list-table_filter input").attr('placeholder', 'Data Search');
     $('#jobcard-list-table_length select').addClass('form-control input-sm');
+
+    /** Get edit jobcard details on click**/
+    $(document).on('click','.edit-jobcard',function(e){
+        var id = $(this).closest('tr').attr('id');
+        e.preventDefault();
+        /* call getBuyer function from buyers.js*/
+        getJobcardDetails(id);
+    });
+    /** Create job card form validation **/
+    $('#create_jobcard').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented())
+        {
+
+        }
+        else
+        {
+            e.preventDefault();
+            var formData = $('#create_jobcard').serialize();
+            storeJobcard(formData);
+        }
+    })
 });
 /* End of document.ready() */
 
@@ -448,7 +469,7 @@ function generateJobcard(){
                                         total_qty_sizewise += parseInt(qty);
                                         single_table_html +='<td class="quantity-'+col+' quantity-td" data-size-value="'+size_text[0]+'">'+parseInt(qty)+'</td><td></td>';
                                         /** Column wise total quantity calculation */
-                                        sum[col] = qty + (sum[col] || 0);
+                                        sum[col] = parseInt(qty) + (sum[col] || 0);
                                         col++;
                                     });
 
@@ -475,35 +496,36 @@ function generateJobcard(){
                                 single_table_html += ' </tbody>\
                                                 </table>';
                                 table++;
-                                    /** Show actual excess % and meters div only once for each references */
-                                    if(template_name[1] === '0')
-                                    {
-                                        meters_div_html +='<div class="col-md-12">\
-                                                    <div class="col-md-3">\
-                                                        <label for="act_excess_'+template_name[0].replace(' ', '_')+'" >ACT EXCESS % ('+template_name[0]+'):</label>\
-                                                        <span class="act-excess" data-act-excess-ref="'+template_name[0]+'" id="act_excess_'+template_name[0].replace(' ', '_')+'"></span>\
-                                                    </div>\
-                                                    <div class="col-md-3">\
-                                                        <label for="sticker_mtr_'+template_name[0].replace(' ', '_')+'" >MTRS FOR STICKERS ('+template_name[0]+'):</label>\
-                                                        <span class="sticker-mtrs" id="sticker_mtr_'+template_name[0].replace(' ', '_')+'"></span>\
-                                                    </div>\
-                                                    <div class="col-md-3">\
-                                                    <div class="form-group has-feedback form-inline">\
-                                                        <label for="settings_'+template_name[0].replace(' ', '_')+'" >SETTINGS ('+template_name[0]+') :</label>\
-                                                        <input type="number" step="0.01" min="1" data-step-error="Max 2 decimal places allowed." data-min-error="Value must be >= 1" class="form-control input-sm settings" required="" name="settings_'+template_name[0].replace(' ', '_')+'" placeholder="SETTINGS" id="settings_'+template_name[0].replace(' ', '_')+'" onkeyup="return totalMeters()">\
-                                                        <div class="help-block with-errors"></div>\
-                                                    </div>\
-                                                    </div>\
-                                                    <div class="col-md-3">\
-                                                    <label for="total_mtrs_'+template_name[0].replace(' ', '_')+'" >TOTAL MTRS ('+template_name[0]+'):</label>\
-                                                    <span id="total_mtrs_'+template_name[0].replace(' ', '_')+'" class="total-meters"></span>\
-                                                    </div>\
-                                                </div>';
-                                    }
-                                });
+                                /** Show actual excess % and meters div only once for each references */
+                                if(template_name[1] === '0')
+                                {
+                                    meters_div_html +='<div class="col-md-12">\
+                                                <div class="col-md-3">\
+                                                    <label for="act_excess_'+template_name[0].replace(' ', '_')+'" >ACT EXCESS % ('+template_name[0]+'):</label>\
+                                                    <span class="act-excess" data-act-excess-ref="'+template_name[0]+'" id="act_excess_'+template_name[0].replace(' ', '_')+'"></span>\
+                                                </div>\
+                                                <div class="col-md-3">\
+                                                    <label for="sticker_mtr_'+template_name[0].replace(' ', '_')+'" >MTRS FOR STICKERS ('+template_name[0]+'):</label>\
+                                                    <span class="sticker-mtrs" id="sticker_mtr_'+template_name[0].replace(' ', '_')+'"></span>\
+                                                </div>\
+                                                <div class="col-md-3">\
+                                                <div class="form-group has-feedback form-inline">\
+                                                    <label for="settings_'+template_name[0].replace(' ', '_')+'" >SETTINGS ('+template_name[0]+') :</label>\
+                                                    <input type="number" step="0.01" min="1" data-step-error="Max 2 decimal places allowed." data-min-error="Value must be >= 1" class="form-control input-sm settings" required="" name="settings_'+template_name[0].replace(' ', '_')+'" placeholder="SETTINGS" id="settings_'+template_name[0].replace(' ', '_')+'" onkeyup="return totalMeters()">\
+                                                    <div class="help-block with-errors"></div>\
+                                                </div>\
+                                                </div>\
+                                                <div class="col-md-3">\
+                                                <label for="total_mtrs_'+template_name[0].replace(' ', '_')+'" >TOTAL MTRS ('+template_name[0]+'):</label>\
+                                                <span id="total_mtrs_'+template_name[0].replace(' ', '_')+'" class="total-meters"></span>\
+                                                </div>\
+                                            </div>';
+                                }
+                            });
                                 
                             $('.single-list-table-div').html(single_table_html);
                             $('.meter-calculation-div').html(meters_div_html);
+                            /** Only mandatory  for single templates */
                             $('#excess').prop('required', true);
                             $('#repeat_gap').prop('required', true);
                             $('#roll_width').prop('required', true);
@@ -512,7 +534,8 @@ function generateJobcard(){
                         } else {
                             $('.single-list-table-div').html(single_table_html);
                             $('.meter-calculation-div').html(meters_div_html);
-                            /** Toggle mandatory/optional fields */
+                            /** Toggle mandatory/optional fields.
+                             * optional for ratio templates */
                             $('#excess').prop('required', false);
                             $('#repeat_gap').prop('required', false);
                             $('#roll_width').prop('required', false);
@@ -601,6 +624,8 @@ function selectOrders(event)
          $(checkbox).not("[data-buyer-name='"+buyer_name+"']").removeAttr("disabled");
     }
 }
+
+/** ---------------------- Excess calculation functions for create jobcard begins ----------------------**/
 /**
  * Dynamic Excess calculation based on excess value entered.
  * @author <Praveen> [praveen@wizroots.com]
@@ -720,7 +745,7 @@ function totalMeters()
        $('#total_mtrs_'+ref_name).text(total_mtr.toFixed(2));
     });
 }
-
+/** ----------------- Excess calculation functions for create jobcard ends ----------------------**/
 /**
  * Store jobcard
  * @author <Praveen> [praveen@wizroots.com]
@@ -728,45 +753,45 @@ function totalMeters()
  */
 function storeJobcard(formData)
 {
-    var company_id      = $('#jc_company_name').data('company-id');
-    var workorder_id    = $('#work_order').text() === ''?null:$('#work_order').text();
-    var created_date    = $('#today_date').text() === ''?null:$('#today_date').text();
-    var article         = $('#article').text() === ''?null:$('#article').text();
-    var material        = $('#material').text() === ''?null:$('#material').text();
-    var customer_id     = $('#customer').data('customer-id');
-    var style_no        = $('#style_no').text() === ''?null:$('#style_no').text();
-    var order_type      = $('#order_type').text() === ''?null:$('#order_type').text();
-    var buyer_id        = $('#buyer').data('buyer-id');
-    var reference       = $('#reference').text() === ''?null:$('#reference').text();
-    var disp_mode       = $('#disp_mode').val();
-    var order_date      = $('#order_date').text() === ''?null:$('#order_date').text();
-    var length          = $('#length').text() === ''?null:$('#length').text();
-    var repeat_gap      = $('#repeat_gap').val();
-    var machine         = $('#machine').val();
-    var cus_del_date    = $('#cus_del_date').val();
-    var roll_width      = $('#roll_width').val();
-    var width           = $('#width').text() === ''?null:$('#width').text();
-    var film_no         = $('#film_no').val();
-    var act_del_date    = $('#act_del_date').val();
-    var length_side     = $('#length_side').val();
-    var excess          = $('#excess').val();
-    var teeth_no        = $('#teeth_no').val();
-    var inv_no          = $('#inv_no').val();
-    var no_sticker      = $('#no_sticker').val();
-    var finish_type     = $('#finish_type').val();
-    var print_color     = $('#print_color').text() === ''?null:$('#print_color').text();
-    var compiled_by     = $('#compiled_by').val();
-    var barcode_read    = $('#barcode_read').val();
-    var operator        = $('#operator').val();
-    var checker         = $('#checker').val();
-    var authorized_by   = $('#author').val();
-    var axicon_verifier = $('#axicon_verifier').val();
-    var approved_by     = $('#approved_by').val();
-    var packer          = $('#packer').val();
-    var approval_date   = $('#approval_date').val();
-    var roll_issued_by  = $('#roll_issued_by').val();
-    var cutter          = $('#cutter').val();
-    var cartons         = $('#cartons').val();
+    var company_id      = $( '#jc_company_name' ).data('company-id');
+    var workorder_id    = $( '#work_order' ).text() === ''?null:$('#work_order').text();
+    var created_date    = $( '#today_date' ).text() === ''?null:$('#today_date').text();
+    var article         = $( '#article' ).text() === ''?null:$('#article').text();
+    var material        = $( '#material' ).text() === ''?null:$('#material').text();
+    var customer_id     = $( '#customer' ).data('customer-id');
+    var style_no        = $( '#style_no' ).text() === ''?null:$('#style_no').text();
+    var order_type      = $( '#order_type' ).text() === ''?null:$('#order_type').text();
+    var buyer_id        = $( '#buyer' ).data('buyer-id');
+    var reference       = $( '#reference' ).text() === ''?null:$('#reference').text();
+    var disp_mode       = $( '#disp_mode' ).val();
+    var order_date      = $( '#order_date' ).text() === ''?null:$('#order_date').text();
+    var length          = $( '#length' ).text() === ''?null:$('#length').text();
+    var repeat_gap      = $( '#repeat_gap' ).val();
+    var machine         = $( '#machine' ).val();
+    var cus_del_date    = $( '#cus_del_date' ).val();
+    var roll_width      = $( '#roll_width' ).val();
+    var width           = $( '#width' ).text() === ''?null:$('#width').text();
+    var film_no         = $( '#film_no' ).val();
+    var act_del_date    = $( '#act_del_date' ).val();
+    var length_side     = $( '#length_side' ).val();
+    var excess          = $( '#excess' ).val();
+    var teeth_no        = $( '#teeth_no' ).val();
+    var inv_no          = $( '#inv_no' ).val();
+    var no_sticker      = $( '#no_sticker' ).val();
+    var finish_type     = $( '#finish_type' ).val();
+    var print_color     = $( '#print_color' ).text() === ''?null:$('#print_color').text();
+    var compiled_by     = $( '#compiled_by' ).val();
+    var barcode_read    = $( '#barcode_read' ).val();
+    var operator        = $( '#operator' ).val();
+    var checker         = $( '#checker' ).val();
+    var authorized_by   = $( '#author' ).val();
+    var axicon_verifier = $( '#axicon_verifier' ).val();
+    var approved_by     = $( '#approved_by' ).val();
+    var packer          = $( '#packer' ).val();
+    var approval_date   = $( '#approval_date' ).val();
+    var roll_issued_by  = $( '#roll_issued_by' ).val();
+    var cutter          = $( '#cutter' ).val();
+    var cartons         = $( '#cartons' ).val();
 
     var final_json_obj =   {
         "ratio": {},
@@ -1010,8 +1035,8 @@ function storeJobcard(formData)
                 var resp = JSON.stringify(data.file_path);
                 $('.snackbar_span').html("Jobcard Created Successfully");
                 showSnackbar();
-               // $('#jobcardCreationModalCenter').modal('hide');
-                // location.reload();
+                $('#jobcardCreationModalCenter').modal('hide');
+                location.reload();
                 window.open(
                     base_url+JSON.parse(resp),
                     '_blank' // <- This is what makes it open in a new window.
@@ -1035,6 +1060,7 @@ function storeJobcard(formData)
     })
 }
 
+
 /**
    * Function for get jobcard details for editing
    * @param id
@@ -1055,7 +1081,242 @@ function storeJobcard(formData)
                $(".loader").show();
              },
              success: function(data){
-                 console.log(data)
+                 var ratio_table = '';
+                 $.each(JSON.parse(data.jobcard_data.template_quantity_json), function(template_type, template_type_data){
+                    console.log(template_type)
+                    if(template_type === 'ratio')
+                    {
+                        if (!($.isEmptyObject(template_type_data)))
+                        {
+                            $.each(template_type_data, function(table, table_data){
+                                ratio_table += '<table class="table table-bordered table-responsive ratio-list-table"  style="font-size: 12px;" id="ratio_list_table" data-ratio-ref-table="'+table.replace('_', ' ')+'"  border="0.2">\
+                                    <thead style="width:fixed;">\
+                                        <tr>\
+                                            <th><strong>REF.NO</strong></th>\
+                                            <th><strong>PO.NO</strong></th>\
+                                            <th><strong>ID.NO</strong></th>\
+                                            <th><strong>OCN</strong></th>\
+                                            <th><strong>QNTY</strong></th>\
+                                            <th><strong>P.QNTY</strong></th>\
+                                        </tr>\
+                                    </thead>\
+                                    <tbody>';
+                                        var ratio_total = 0;
+                                        $.each(table_data, function(key, value){
+                                            ratio_table += '<tr class="tr-'+table.replace('_', ' ')+'"  data-template-id="'+value["template_id"]+'">\
+                                                                <td id="ratio_tr_refname_'+key+'">'+value["reference_name"]+'</td>\
+                                                                <td id="ratio_tr_buyer_po_'+key+'">'+value["buyer_po_number"]+'</td>\
+                                                                <td id="ratio_tr_erp_id_'+key+'">'+value["erp_id"]+'</td>\
+                                                                <td id="ratio_tr_ocn_'+key+'">'+value["ocn_number"]+'</td>\
+                                                                <td id="ratio_tr_qty_'+key+'">'+value["order_quantity"]+'</td>\
+                                                                <td></td>\
+                                                            </tr>';
+
+                                          ratio_total += parseInt(value["order_quantity"]);
+                                        });
+                                        ratio_table += '<tr nobr="true">\
+                                            <th colspan="4" class="highlight_row"><strong>Total</strong></th>\
+                                            <td><strong>'+ratio_total+'</strong></td>\
+                                            <td></td>\
+                                        </tr>\
+                                    </tbody>\
+                                </table>';
+                            });
+                         $('.edit-ratio-list-table-div').html(ratio_table);
+
+                        }
+                    }
+                    else
+                    {
+                        if (!($.isEmptyObject(template_type_data)))
+                        {
+                            var single_table = '';
+                            var table_row = 0;
+                            $.each(template_type_data, function(table, table_data){
+                                var template = table.split("_");
+                                single_table += '<table class="table table-bordered table-responsive edit-single-list-table" style="font-size: 12px;" id="single_list_table_'+table_row+'" border="0.2">\
+                                        <tbody id="single_list_table_body">\
+                                        <tr>\
+                                            <th width="80px">ID.NO</th>';
+                                            $.each(table_data.erp_id, function(key, value){
+                                                single_table += '<td colspan="2" data-template-id="'+table_data.temp_id[key]+'" class="single-erpid-'+key+'">'+value+'</td>';
+                                            });
+                                            single_table += '<td colspan="4" class="highlight_row" rowspan="3" data-single-ref-name="'+template[0]+' '+template[1]+'">REFNUM &nbsp;: '+template[0]+' '+template[1]+'</td>\
+                                        </tr>\
+                                        <tr>\
+                                            <th width="80px">B.PO.NO</th>';
+                                            $.each(table_data.buyer_po, function(key, value){
+                                                single_table += '<td colspan="2" class="single-buyer-po-'+key+'">'+value+'</td>';
+                                            });
+                                            single_table += '</tr>\
+                                        <tr>\
+                                            <th width="80px">OCN</th>';
+                                            $.each(table_data.ocn, function(key, value){
+                                                single_table += '<td colspan="2" class="single-ocn-'+key+'">'+value+'</td>';
+                                            });
+                                            single_table += '</tr>\
+                                        <tr>\
+                                          <th width="80px"><strong>SIZE /PRICE</strong></th>';
+                                        $.each(table_data.erp_id, function(key, value){
+                                            single_table += '<th><strong>O.QNT</strong></th>\
+                                                             <th><strong>P.QNT</strong></th>';
+                                        });
+                                        single_table += '<th><strong>TOTAL</strong></th>\
+                                                         <th width="180px"><strong>EXCESS</strong></th>\
+                                                         <th><strong>MTRS</strong></th>\
+                                                         <th><strong>STOCK</strong></th></tr>';
+                                                         
+                                        var total_quantity_final = 0;
+                                        var total_excess_final = 0;
+                                        var qty_col_sum = [];
+                                        var row = 0;
+                                        $.each(table_data.size, function(size, quantities){
+                                            var total_qty_sizewise = 0;
+                                            var col = 0;
+                                            single_table += '<tr>\
+                                                <td class="single-size-row">'+size+'</td>';
+                                                $.each(quantities, function(key, qty){
+                                                    single_table += '<td class="quantity-'+key+' quantity-td" data-size-value="'+size+'">'+qty+'</td>\
+                                                            <td></td>';
+                                                    total_qty_sizewise += parseInt(qty);
+                                                    /** Column wise total quantity calculation */
+                                                    qty_col_sum[col] = parseInt(qty) + (qty_col_sum[col] || 0);
+                                                    col++;
+                                                });
+                                                single_table += '<td class="edit-total-quantity-class total-quantity-row-'+row+'"><strong>'+parseInt(total_qty_sizewise)+'</strong></td>\
+                                                <td class="edit-total-excess">\
+                                                    <div class="form-group has-feedback">\
+                                                        <input type="number" step="0.01" data-step-error="Max 2 decimal places allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm edit-total-excess-row-table-'+row+'" required="" id="edit_total_excess_row_table_'+row+'" data-required-error="Mandatory Field." name="edit_total_excess_row_table_'+row+'" "="" placeholder="Excess %" onkeyup="return editTotalExcess()" value="'+table_data.excess[size]+'">\
+                                                        <div class="help-block with-errors"></div>\
+                                                    </div>\
+                                                </td>\
+                                                <td></td>\
+                                                <td></td>\
+                                                </tr>';
+                                          total_quantity_final += parseInt(total_qty_sizewise);
+                                          total_excess_final   += parseFloat(table_data.excess[size]);
+                                          row++;
+                                        });
+                                        single_table += '<tr>\
+                                                            <th class="highlight_row edit-total-text" data-ref-name="'+template[0]+'_'+template[1]+'">TOTAL</th>';
+                                        
+                                        var qty_total_col = 0;
+                                        $.each(table_data.erp_id, function(key, value){
+                                            single_table += '<td class="edit-total-quantity-col-'+qty_total_col+'"><strong>'+qty_col_sum[qty_total_col]+'</strong></td>\
+                                            <td></td>';
+                                            qty_total_col++;
+                                        });
+                                                            
+                                        single_table += '<td><strong class="edit-total-qty-'+template[0]+'_'+template[1]+'">'+parseInt(total_quantity_final)+'</strong></td>\
+                                                <td class="edit-total-excess-col-table-'+table_row+' edit-total-excess-'+template[0]+'_'+template[1]+'">'+parseFloat(total_excess_final).toFixed(2)+'</td>\
+                                                <td></td>\
+                                                <td></td>\
+                                            </tr>\
+                                    </tbody>\
+                                </table>';
+                                table_row++;
+                            });
+                        $('.edit-single-list-table-div').html(single_table);
+                        }
+                    }
+                 });
+                 $('#edit_jc_company_name').text(data.jobcard_data.company);
+                 $('#edit_company_address').text(data.jobcard_data.company_address);
+                 $('#edit_company_logo').attr('src', data.jobcard_data.company_logo);
+                 $('#edit_jc_company_name').attr('data-company-id', data.jobcard_data.company_id);
+                 $('#edit_work_order').text(data.jobcard_data.work_order_id);
+                 $('#edit_today_date').text(data.jobcard_data.created_date);
+                 $('#edit_article').text(data.jobcard_data.article);
+                 $('#edit_material').text(data.jobcard_data.material);
+                 $('#edit_customer').text(data.jobcard_data.customer);
+                 $('#edit_customer').attr('data-customer-id', data.jobcard_data.customer_id);
+                 $('#edit_buyer').text(data.jobcard_data.buyer_name);
+                 $('#edit_buyer').attr('data-buyer-id', data.jobcard_data.buyer_id);
+                 $('#edit_style_no').text(data.jobcard_data.style_number);
+                 $('#edit_reference').text(data.jobcard_data.reference);
+                 $('#edit_order_type').text(data.jobcard_data.order_type);
+                 $('#edit_disp_mode').val(data.jobcard_data.dispatch_mode);
+                 $('#edit_order_date').text(data.jobcard_data.order_date);
+                 $('#edit_length').text(data.jobcard_data.length);
+                 $('#edit_repeat_gap').val(data.jobcard_data.repeat_gap);
+                 $('#edit_machine').val(data.jobcard_data.machine);
+                 $('#edit_cus_del_date').val(data.jobcard_data.customer_del_date);
+                 $('#edit_width').text(data.jobcard_data.width);
+                 $('#edit_roll_width').val(data.jobcard_data.roll_width);
+                 $('#edit_film_no').val(data.jobcard_data.film_no);
+                 $('#edit_act_del_date').val(data.jobcard_data.act_del_date);
+                 $('#edit_length_side').val(data.jobcard_data.length_side);
+                 $('#edit_excess').val(data.jobcard_data.excess_percentage);
+                 $('#edit_teeth_no').val(data.jobcard_data.teeth_no);
+                 $('#edit_inv_no').val(data.jobcard_data.invoice_num);
+                 $('#edit_no_sticker').val(data.jobcard_data.no_of_stickers);
+                 $('#edit_finish_type').val(data.jobcard_data.finish_type);
+                 $('#edit_print_color').text(data.jobcard_data.print_color);
+                 $('#edit_compiled_by').val(data.jobcard_data.compiled_by);
+                 $('#edit_barcode_read').val(data.jobcard_data.barcode_read);
+                 $('#edit_operator').val(data.jobcard_data.operator);
+                 $('#edit_checker').val(data.jobcard_data.checker);
+                 $('#edit_author').val(data.jobcard_data.authorized_by);
+                 $('#edit_axicon_verifier').val(data.jobcard_data.axicon_verifier);
+                 $('#edit_approved_by').val(data.jobcard_data.approved_by);
+                 $('#edit_packer').val(data.jobcard_data.packer);
+                 $('#edit_approval_date').val(data.jobcard_data.approval_date);
+                 $('#edit_roll_issued_by').val(data.jobcard_data.roll_issued_by);
+                 $('#edit_cutter').val(data.jobcard_data.cutter);
+                 $('#edit_cartons').val(data.jobcard_data.cartons);
+
+                // excess, meters and settings calculation values.
+                edit_meters_div_html = '';
+                if(data.jobcard_data.additional_details.length > 0)
+                {
+                    $.each(data.jobcard_data.additional_details, function(key, item){
+                        edit_meters_div_html +='<div class="col-md-12">\
+                                            <div class="col-md-3">\
+                                                <label for="edit_act_excess_'+item.ref_name.replace(' ', '_')+'" >ACT EXCESS % ('+item.ref_name+'):</label>\
+                                                <span class="edit-act-excess" data-act-excess-ref="'+item.ref_name+'" id="edit_act_excess_'+item.ref_name.replace(' ', '_')+'">'+item.actual_excess+'</span>\
+                                            </div>\
+                                            <div class="col-md-3">\
+                                                <label for="edit_sticker_mtr_'+item.ref_name.replace(' ', '_')+'" >MTRS FOR STICKERS ('+item.ref_name+'):</label>\
+                                                <span class="edit-sticker-mtrs" id="edit_sticker_mtr_'+item.ref_name.replace(' ', '_')+'">'+item.mtrs_for_stickers+'</span>\
+                                            </div>\
+                                            <div class="col-md-3">\
+                                            <div class="form-group has-feedback form-inline">\
+                                                <label for="edit_settings_'+item.ref_name.replace(' ', '_')+'" >SETTINGS ('+item.ref_name+') :</label>\
+                                                <input type="number" step="0.01" min="1" data-step-error="Max 2 decimal places allowed." data-min-error="Value must be >= 1" class="form-control input-sm edit-settings" required="" name="edit_settings_'+item.ref_name.replace(' ', '_')+'" placeholder="SETTINGS" id="edit_settings_'+item.ref_name.replace(' ', '_')+'" onkeyup="return totalMetersEdit()" value="'+item.settings+'">\
+                                                <div class="help-block with-errors"></div>\
+                                            </div>\
+                                            </div>\
+                                            <div class="col-md-3">\
+                                            <label for="edit_total_mtrs_'+item.ref_name.replace(' ', '_')+'" >TOTAL MTRS ('+item.ref_name+'):</label>\
+                                            <span id="edit_total_mtrs_'+item.ref_name.replace(' ', '_')+'" class="edit-total-meters">'+item.total_mtrs+'</span>\
+                                            </div>\
+                                        </div>';
+                    });
+                   
+                    $('.edit-meter-calculation-div').html(edit_meters_div_html);
+                    /** Only mandatory for single templates */
+                    $('#edit_excess').prop('required', true);
+                    $('#edit_repeat_gap').prop('required', true);
+                    $('#edit_roll_width').prop('required', true);
+                    $('#edit_length_side').prop('required', true);
+                    $('#edit_no_sticker').prop('required', true);
+                }  
+                else
+                {
+                    edit_meters_div_html = '';
+                    $('.edit-meter-calculation-div').html(edit_meters_div_html);
+                    /** Toggle mandatory/optional fields.
+                     * optional for ratio templates */
+                    $('#edit_excess').prop('required', false);
+                    $('#edit_repeat_gap').prop('required', false);
+                    $('#edit_roll_width').prop('required', false);
+                    $('#edit_length_side').prop('required', false);
+                    $('#edit_no_sticker').prop('required', false);
+                    
+                } 
+                    
+
+                 $('#jobcardUpdationModalCenter').modal('show');
              },
              error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -1072,5 +1333,127 @@ function storeJobcard(formData)
      console.log("Error:"+e)
    }
   }
+
+  /** ---------------------- Excess calculation functions for edit jobcard begins ----------------------**/
+/**
+ * Dynamic Excess calculation based on excess value entered.
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function calculateExcessEdit(evt)
+{
+    let item = $('.edit-total-quantity-class');
+    $.each(item, function(key, value){
+        let total_excess = parseFloat($(value).text() * (evt.value*1/100)).toFixed(2);
+        $('#edit_total_excess_row_table_'+key).val(total_excess);
+        /** refresh excess values fields in single ref table */
+        $('#edit_total_excess_row_table_'+key).trigger('input');
+    });
+    editTotalExcess();
+}
+
+/**
+ * Dynamic Total Excess calculation based on calculated excess value.
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function editTotalExcess()
+{
+    var table = 0;
+    $('.edit-single-list-table').each(function () {
+        var total_excess_final = 0;
+        $(this).find('.edit-total-excess-row-table-'+table).each(function () {
+            var excess = $(this).val();
+            if (!isNaN(excess) && excess.length !== 0) {
+                total_excess_final += parseFloat(excess);
+            }
+        });
+        $('.edit-total-excess-col-table-'+table).html('<strong>'+total_excess_final.toFixed(2)+'</strong>');
+
+        table++;
+    });
+    actualExcessEdit()
+}
+
+/**
+ * Dynamic Actual Excess calculation based on excess value and total quantity.
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function actualExcessEdit()
+{
+    $('.edit-total-text').each(function(){
+        let ref_name              = $(this).data('ref-name');
+        let total_qty             = 0;
+        let total_excess          = 0;
+        let act_excess            = 0;
+
+        $('.edit-total-qty-'+ref_name).each(function(){
+            if (!isNaN(total_qty) && total_qty.length !== 0) {
+                total_qty += parseInt($(this).text());
+            }
+        });
+        $('.edit-total-excess-'+ref_name).each(function(){
+            if (!isNaN(total_excess) && total_excess.length !== 0) {
+                total_excess += parseFloat($(this).text());
+            }
+        });
+        if (!isNaN(total_qty) && !isNaN(total_excess)) {
+            act_excess = parseFloat((total_excess/total_qty)*100).toFixed(2);
+        }
+        $('#edit_act_excess_'+ref_name).text(act_excess)
+    });
+}
+
+/**
+ * Dynamic Mtrs for sticker calculation.
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function mtrsForStickersEdit()
+{
+    var length_side_dimension = $('#edit_length_side').val() === ''?0:$('#edit_length_side').val();
+    $('.edit-total-text').each(function(){
+        let ref_name              = $(this).data('ref-name');
+        let total_qty             = 0;
+        let mtrs                  = 0;
+        let no_of_repeats         = $('#edit_no_sticker').val() === ''?0:$('#edit_no_sticker').val();
+        let repeat_gap            = $('#edit_repeat_gap').val() === ''?0:$('#edit_repeat_gap').val();
+
+        $('.edit-total-qty-'+ref_name).each(function(){
+            if (!isNaN(total_qty) && total_qty.length !== 0) {
+                total_qty += parseInt($(this).text());
+            }
+        });
+
+        if(!isNaN(total_qty) && !isNaN(length_side_dimension) && !isNaN(no_of_repeats) && !isNaN(repeat_gap) && no_of_repeats != 0 && repeat_gap != 0)
+        {
+            mtrs =  parseFloat((parseInt(total_qty)/parseInt(no_of_repeats)) * ((parseInt(length_side_dimension) + parseInt(repeat_gap))/1000)).toFixed(2);
+        }
+        
+        $('#edit_sticker_mtr_'+ref_name).text(mtrs)
+        totalMetersEdit()
+    });
+}
+
+/**
+ * Dynamic Total Meters calculation.
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function totalMetersEdit()
+{
+    $('.edit-total-meters').each(function(){
+       let total_mtrs_id = $(this).attr('id').split("_");
+       let ref_name = total_mtrs_id[3]+'_'+total_mtrs_id[4];
+       let mtrs_for_stickers = $('#edit_sticker_mtr_'+ref_name).text() === ''?0:$('#edit_sticker_mtr_'+ref_name).text();
+       let settings = $('#edit_settings_'+ref_name).val() === ''?0:$('#edit_settings_'+ref_name).val();
+       if (!isNaN(settings) && !isNaN(mtrs_for_stickers)) {
+           var total_mtr = parseFloat(settings) + parseFloat(mtrs_for_stickers);
+        }
+       $('#edit_total_mtrs_'+ref_name).text(total_mtr.toFixed(2));
+    });
+}
+/** ----------------- Excess calculation functions for edit jobcard ends ----------------------**/
 
 
