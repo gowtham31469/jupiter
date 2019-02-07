@@ -114,6 +114,8 @@
                      <h4 class="modal-title jobcard-modal-title" id="jobcardUpdationModalCenter">Edit Jobcard</h4>
                  </div>
 				 {!! Form::open(['id' => 'edit_jobcard','data-toggle' => 'validator','role' => 'form']) !!}
+				 {{-- hidden id for edit functionality --}}
+                 {!! Form::hidden('jobcard_id',$value = null, array('id'=>'jobcard_id','class' => 'form-control input-sm')) !!}
                  <div class="modal-body jobcard-updation-modal-body">
                     <div class="container-fluid">
 						<div class="row">
@@ -204,7 +206,7 @@
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('edit_repeat_gap', 'REPEAT GAP :', ['class' => 'form_label']) !!}
-										{!! Form::number('edit_repeat_gap',$value = '', array('class' => 'form-control input-sm','placeholder' => 'REPEAT GAP','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeyup' => 'return mtrsForStickers()', 'onkeypress' => 'return isNumberKey(event)')) !!}
+										{!! Form::number('edit_repeat_gap',$value = '', array('class' => 'form-control input-sm','placeholder' => 'REPEAT GAP','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeyup' => 'return mtrsForStickersEdit()', 'onkeypress' => 'return isNumberKey(event)')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
