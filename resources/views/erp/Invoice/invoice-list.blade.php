@@ -343,7 +343,7 @@ function showInvoice(obj){
           $('#credit-val').text(data.inv_details[0].credit_limit);
           $('#company_details').html('<h4>'+data.company_details.name+'</h4>'+data.company_details.address+'<p>PH : '+data.company_details.office_phone+', '+data.company_details.phone+'</br> <strong>GSTIN : '+data.company_details.gstin+'</strong></p>')
 
-          $('#bill_to').html('<span>Buyer</span><br><h4>'+data.inv_details[0].company_name+'</h4><span>'+data.bill_to.address+'</br> GSTIN :'+data.inv_details[0].gstin_number+ '</span>')
+          $('#bill_to').html('<span>Buyer</span><br><h4>'+data.inv_details[0].company_name+'</h4><span>'+data.bill_to.address+'</span></br><span> GSTIN :'+data.inv_details[0].gstin_number+ '</span>')
           var itemName ="";
           $(data.inv_details).each(function(index, value)
           {   

@@ -377,7 +377,7 @@ class InvoiceController extends Controller
               // PDF::writeHTML($dynView->render());
             $pdfdata =$pdf->output( public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf'), 'F');
 
-            // Invoices::where('id', $inv_id)->update(['eway_no'=> $eway_no ,'invoice_file'=>'/storage/app/public/invoices/invoices_'.$inv_id.'.pdf']);
+            Invoices::where('id', $inv_id)->update(['eway_no'=> $eway_no ,'invoice_file'=>'/storage/app/public/invoices/invoices_'.$inv_id.'.pdf']);
             $attatchment =  public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf');
             //Mail notiication
             $useremail = "aswathy@wizroots.com";

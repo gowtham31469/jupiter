@@ -33,7 +33,8 @@
                             <td class="companyDetails">
 
                                 <span style="font-size: 5px;">Buyer</span><br>
-                                <span style="font-size: 9px;"><strong>{{$inv_details[0]['company_name']}}</strong></span><br>
+                                <span style="font-size: 9px;"><strong>{{$inv_details[0]['company_name']}}</strong></span>
+                                <br>
                                 <span>{{$bill_to->address}}</span><br>
                                 <span>GSTN : {{$inv_details[0]['gstin_number']}}</span>
                             </td>
@@ -115,15 +116,15 @@
                 <table>
                         <tr>
                             <td>
-                                <span><strong>Credit Terms </strong></span>                            
+                                <span><strong>Credit Terms </strong> <span><strong>: </strong></span><span>{{$inv_details[0]['credit_limit']}}</span> </span>                            
                             </td>
-                            <td>
+                           <!--  <td>
                                 <span>: </span><span>{{$inv_details[0]['credit_limit']}}</span>                           
-                            </td>
+                            </td> -->
                         </tr>
                          <tr>
                             <td>
-                                <span><strong>E-Way Bill No </strong></span>
+                                <span><strong>E-Way Bill No : </strong></span><span>{{$eway_no}}</span>
                             </td>
                             <td>
                                 <span>: </span><span>{{$eway_no}}</span>
