@@ -620,15 +620,16 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::post('/po-manager/set_company_session', 'ErpUser\Pomanager\PoManagerController@setCompanySession'); 
 	
 	/* Routes for jobcard Manager Module */
-	Route::get('/job-manager', 'ErpUser\Jobmanager\JobManagerController@index')->name('jobManager'); 
+	Route::get('job-manager', 'ErpUser\Jobmanager\JobManagerController@index')->name('jobcard-manager'); 
 	Route::post('/job-manager/get_order_details', 'ErpUser\Jobmanager\JobManagerController@getOrderDetails'); 
-	Route::get('/get-jobcard-order-details', 'ErpUser\Jobmanager\JobManagerController@getOrderDetailsByIds'); 
-	Route::post('/store-jobcard-details', 'ErpUser\Jobmanager\JobManagerController@storeJobcardData'); 
+	Route::get('job-manager/get-jobcard-order-details', 'ErpUser\Jobmanager\JobManagerController@getOrderDetailsByIds'); 
+	Route::post('job-manager/store-jobcard-details', 'ErpUser\Jobmanager\JobManagerController@storeJobcardData'); 
 	
 	Route::post('job-manager/tesco/print-div-tesco', 'ErpUser\Jobmanager\JobManagerController@printDivTesco');
 	Route::post('job-manager/tesco/print-div-tesco-small', 'ErpUser\Jobmanager\JobManagerController@printDivTescoSmall');
 
 	Route::get('job-manager/tesco/get-tsl-size', 'ErpUser\Jobmanager\JobManagerController@getTescoTSLSizechart');
 	Route::get('job-manager/tesco/script-update-buyer-no', 'ErpUser\Jobmanager\JobManagerController@scriptUpdateBuyerNo');
-	Route::get('job-manager/jobcard-preview', 'ErpUser\Jobmanager\JobManagerController@generateJCPDFPreview');
+	Route::get('job-manager/jobcards-list', 'ErpUser\Jobmanager\JobManagerController@getJobcards')->name('jobcards-list'); 
+	Route::get('job-manager/jobcard-details', 'ErpUser\Jobmanager\JobManagerController@getJobcardDetailsById'); 
 });
