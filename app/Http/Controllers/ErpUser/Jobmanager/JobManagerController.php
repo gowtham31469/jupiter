@@ -45,9 +45,9 @@ class JobManagerController extends Controller
 			$customer_id = Auth::guard('erpuser')->id();
 			
 			$companies   = 	DB::table('erpuser_company_mapping')
-									->join('company','erpuser_company_mapping.company','company.id', 'company.logo')
+									->join('company','erpuser_company_mapping.company','company.id')
 									->where('erpuser_company_mapping.erp_user',$customer_id)
-									->select('erpuser_company_mapping.*','company.name')
+									->select('erpuser_company_mapping.*','company.name', 'company.logo')
 									->get();
 			$buyers      = 	DB::table('erpuser_buyer')
 									->where('erpuser_buyer.erp_user',$customer_id)
@@ -902,7 +902,7 @@ class JobManagerController extends Controller
 				$companies   = 	DB::table('erpuser_company_mapping')
 										->join('company','erpuser_company_mapping.company','company.id')
 										->where('erpuser_company_mapping.erp_user',$customer_id)
-										->select('erpuser_company_mapping.*','company.name')
+										->select('erpuser_company_mapping.*','company.name', 'company.logo')
 										->get();
 				$company_id   = DB::table('company')
 				->select('company.*')
