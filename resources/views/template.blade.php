@@ -30,7 +30,7 @@
                 <td>
                     <table>
                         <tr> 
-                            <td class="companyDetails">
+                    <!--         <td class="companyDetails">
 
                                 <span style="font-size: 5px;">Buyer</span><br>
                                 <span style="font-size: 9px;"><strong>{{$inv_details[0]['company_name']}}</strong></span>
@@ -40,9 +40,50 @@
                             </td>
  							<td style="text-align: right;" class="companyDetails">
                                 <span><strong>TAX INVOICE </strong></span><br>
-                                <span><strong>Date : </strong>{{$inv_details[0]['inv_date']}}</span><br>
-                                <span><strong>Invoice No :  </strong>{{$inv_details[0]['invoice_id']}}</span><br>
-                                <span><strong>Disp thru : </strong>{{$inv_details[0]['delvry_thru']}}</span>
+                                <span><strong>Date : </strong></span><span>{{$inv_details[0]['inv_date']}}</span><br>
+                                <span><strong>Invoice No :  </strong></span><span>{{$inv_details[0]['invoice_id']}}</span><br>
+                                <span><strong>Disp thru : </strong></span><span>{{$inv_details[0]['delvry_thru']}}</span>
+                            </td> -->
+                            <td width="116">
+                                <span style="font-size: 5px; height: 10px;">Buyer</span><br>
+                                <span style="font-size: 9px;"><strong>{{$inv_details[0]['company_name']}}</strong></span>
+                                <br>
+                                <span>{{$bill_to->address}}</span><br>
+                                <span>GSTN : {{$inv_details[0]['gstin_number']}}</span>
+                            </td>
+                            <td width="150"></td>
+                            <td width="40"></td>
+                            <td width="150">
+                               
+                                <table>
+                                    <tr>
+                                        <td style="height: 10px;">
+                                            <span><strong>TAX INVOICE </strong></span>
+                                        </td>
+                                    </tr>
+                                    <tr class="blank_row">
+                                        <td rowspan="3" width="38">
+                                        <span><strong>Date</strong></span>
+                                        <br>
+                                        <span><strong>Invoice No</strong></span>
+                                        <br>
+                                        <span><strong>Disp thru</strong></span>
+                                        </td>
+                                        <td rowspan="3" width="8">
+                                            <span>:</span><br>
+                                            <span>:</span><br>
+                                            <span>:</span>
+                                        </td>
+                                        <td rowspan="3" width="50">
+                                            <span>{{$inv_details[0]['inv_date']}}</span><br>
+                                            <span>{{$inv_details[0]['invoice_id']}}</span><br>
+                                            <span>{{$inv_details[0]['delvry_thru']}}</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                              <!--   <span><strong>Date : </strong></span><span>{{$inv_details[0]['inv_date']}}</span><br>
+                                <span><strong>Invoice No :  </strong></span><span>{{$inv_details[0]['invoice_id']}}</span><br>
+                                <span><strong>Disp thru : </strong></span><span>{{$inv_details[0]['delvry_thru']}}</span> -->
                             </td>
                         </tr>
                     </table>

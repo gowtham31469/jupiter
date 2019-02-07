@@ -362,14 +362,14 @@ class InvoiceController extends Controller
             $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 
             // set image scale factor
-            $pdf->setImageScale(1.8);
+            $pdf->setImageScale(0.8);
 
             // set font
             $pdf->SetFont('helvetica', '', 8);
 
             // add a page
             $pdf->AddPage('P', 'A4');
-            $pdf->SetXY(15, 43);
+            $pdf->SetXY(13, 26);
             $pdf->writeHTML($dynView->render());
             // PDF::SetPrintHeader(false);
             // PDF::SetPrintFooter(false);
@@ -442,7 +442,7 @@ class InvoiceController extends Controller
 
             // add a page
             $pdf->AddPage('P', 'A4');
-            $pdf->SetXY(12, 26);
+            $pdf->SetXY(13, 26);
             $pdf->writeHTML($dynView->render());
             // PDF::SetPrintHeader(false);
             // PDF::SetPrintFooter(false);
