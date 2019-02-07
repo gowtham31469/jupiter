@@ -1,4 +1,24 @@
 @extends('layouts.Erp.app')
+<style>
+.highlight_row {
+		background: #eee;
+	}
+	.edit-ratio-list-table tr,
+	.edit-ratio-list-table th,
+	.edit-ratio-list-table td,
+	.edit-single-list-table tr,
+	.edit-single-list-table th,
+	.edit-single-list-table td {
+		border-right-width: 1px !important;
+		border-bottom-width: 1px !important;
+		border-left-width: 1px !important;
+		border-top-width: 1px !important;
+		border-left: 1px solid #DDD !important;
+		border-top: 1px solid #DDD !important;
+		border-right: 1px solid #DDD !important;
+		border-bottom: 1px solid #DDD !important;
+	}
+</style>
 @section('navbar')
 
 <ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
@@ -94,6 +114,8 @@
                      <h4 class="modal-title jobcard-modal-title" id="jobcardUpdationModalCenter">Edit Jobcard</h4>
                  </div>
 				 {!! Form::open(['id' => 'edit_jobcard','data-toggle' => 'validator','role' => 'form']) !!}
+				 {{-- hidden id for edit functionality --}}
+                 {!! Form::hidden('jobcard_id',$value = null, array('id'=>'jobcard_id','class' => 'form-control input-sm')) !!}
                  <div class="modal-body jobcard-updation-modal-body">
                     <div class="container-fluid">
 						<div class="row">
@@ -184,7 +206,7 @@
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('edit_repeat_gap', 'REPEAT GAP :', ['class' => 'form_label']) !!}
-										{!! Form::number('edit_repeat_gap',$value = '', array('class' => 'form-control input-sm','placeholder' => 'REPEAT GAP','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeyup' => 'return mtrsForStickers()', 'onkeypress' => 'return isNumberKey(event)')) !!}
+										{!! Form::number('edit_repeat_gap',$value = '', array('class' => 'form-control input-sm','placeholder' => 'REPEAT GAP','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeyup' => 'return mtrsForStickersEdit()', 'onkeypress' => 'return isNumberKey(event)')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
@@ -251,7 +273,7 @@
 								<div class="col-md-3">
 							        <div class="form-group has-feedback form-inline">
 										{!! Form::label('edit_excess', 'EXCESS % :', ['class' => 'form_label']) !!}
-										{!! Form::number('edit_excess',$value = '', array('class' => 'form-control input-sm','placeholder' => 'EXCESS','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'onkeyup' => 'return calculateExcess(this)', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeypress' => 'return isNumberKey(event)')) !!}
+										{!! Form::number('edit_excess',$value = '', array('class' => 'form-control input-sm','placeholder' => 'EXCESS','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'onkeyup' => 'return calculateExcessEdit(this)', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeypress' => 'return isNumberKey(event)')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
@@ -489,13 +511,6 @@ $(document).ready(function() {
 	
 	$('.company-nav-menu').html($('.company-nav-div').html());
 
-    /** Get edit jobcard details on click**/
-       $(document).on('click','.edit-jobcard',function(e){
-           var id = $(this).closest('tr').attr('id');
-           e.preventDefault();
-           /* call getBuyer function from buyers.js*/
-           getJobcardDetails(id);
-       });
 });
 </script>
 @endsection

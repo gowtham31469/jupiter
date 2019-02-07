@@ -60,18 +60,18 @@ class JobcardPDFHeaderFooter extends \TCPDF
         // $this->Image('logo path', x-coordinate, y-coordinate, width, height);
         $this->Image('././././'.$this->company->company_logo, 160, 10, 35, 15);
         // Set font
-        $this->SetFont('helvetica', '', 10);
-        $header = '<table cellspacing="0" cellpadding="0" style="table-layout: fixed;width: 100%;border-collapse: collapse;font-size: 12px;">
+        $this->SetFont('helvetica', '', 8);
+        $header = '<table cellspacing="0" cellpadding="0" style="table-layout: fixed;width: 100%;border-collapse: collapse;">
                         <tr nobr="true">
-                            <td width="200">
-                                <p><strong id="jc_company_name">'.$this->company->company.'</strong></p>
+                            <td width="300">
+                                <p><strong id="jc_company_name" >'.$this->company->company.'</strong></p>
                                 <p id="company_address">'.$this->company->company_address.'</p>
                             </td>
                         </tr>
                     </table>
                     <table>
                     <tr class="blank_row">
-                        <td rowsopan="1"></td>
+                        <td rowspan="1"></td>
                     </tr>
                 </table>';
         // Title
@@ -79,10 +79,10 @@ class JobcardPDFHeaderFooter extends \TCPDF
         $this->writeHTML("<hr>", false, false, true, false, '');
         $header1 = '<table>
                         <tr class="blank_row">
-                            <td rowsopan="1"></td>
+                            <td rowspan="1"></td>
                         </tr>
                     </table>
-                    <table cellspacing="0" cellpadding="2" style="table-layout: fixed;width: 100%;border-collapse: collapse;font-size: 12px;" nobr="true">
+                    <table cellspacing="0" cellpadding="2" style="table-layout: fixed;width: 100%;border-collapse: collapse;" nobr="true">
                         <tr nobr="true">
                             <td>
                                 <label for="work_order">WORKORDER :</label>
@@ -106,7 +106,7 @@ class JobcardPDFHeaderFooter extends \TCPDF
                     </table>
                     <table>
                     <tr class="blank_row">
-                        <td rowsopan="1"></td>
+                        <td rowspan="1"></td>
                     </tr>
                 </table>';
         // Title
@@ -122,14 +122,14 @@ class JobcardPDFHeaderFooter extends \TCPDF
         // Position at 25 mm from bottom
         $this->SetY(-25);
         // Set font
-        $this->SetFont('helvetica', '', 10);
+        $this->SetFont('helvetica', '', 8);
         $this->writeHTML("<hr>", false, false, true, false, '');
-        $header1 = '<table>
-                        <tr class="blank_row">
-                            <td rowsopan="1"></td>
+        $footer = '<table>
+                        <tr class="blank_row" height="10">
+                            <td rowspan="1"></td>
                         </tr>
                     </table>
-                    <table cellspacing="0" cellpadding="2" style="table-layout: fixed;width: 100%;border-collapse: collapse;font-size: 12px;" nobr="true">
+                    <table cellspacing="0" cellpadding="2" style="table-layout: fixed;width: 100%;border-collapse: collapse;" nobr="true">
                             <tr nobr="true">
                                 <td >
                                     <label for="compiled_by">COMPILED BY :</label>
@@ -187,11 +187,11 @@ class JobcardPDFHeaderFooter extends \TCPDF
                 </table>
                 <table>
                     <tr class="blank_row">
-                        <td rowsopan="1"></td>
+                        <td rowspan="1"></td>
                     </tr>
                 </table>';
         // Title
-        $this->writeHTML($header1, false, false, true, false, '');
+        $this->writeHTML($footer, false, false, true, false, '');
     }
 	
 }

@@ -3,10 +3,6 @@
 </head>
 <style>
 
-body{
-    font-size: 12px;
-}
-
 td {
     height: 25px;
 }
@@ -35,7 +31,7 @@ th {
 }
 </style>
  <body>
-    <table cellspacing="0" cellpadding="2" style="table-layout: fixed;width: 100%;border-collapse: collapse;font-size: 12px;" nobr="true">
+    <table cellspacing="0" cellpadding="2" style="table-layout: fixed;width: 100%;border-collapse: collapse;" nobr="true">
             <tr nobr="true">
                 <td>
                     <label for="customer">CUST NAME :</label>
@@ -68,17 +64,17 @@ th {
 
     <table>
         <tr>
-            <td rowsopan="1"></td>
+            <td rowspan="1"></td>
         </tr>
     </table>
     <hr>
     <table>
         <tr>
-            <td rowsopan="1"></td>
+            <td rowspan="1"></td>
         </tr>
     </table>
                 
-    <table cellspacing="0" cellpadding="2" style="table-layout: fixed;width: 100%;border-collapse: collapse;font-size: 12px;" nobr="true">
+    <table cellspacing="0" cellpadding="2" style="table-layout: fixed;width: 100%;border-collapse: collapse;" nobr="true">
         <tr nobr="true">
             <td>
                 <label for="order_date">ORDER DT :</label>
@@ -159,13 +155,13 @@ th {
 
     <table>
         <tr>
-            <td rowsopan="1"></td>
+            <td rowspan="1"></td>
         </tr>
     </table>
     <hr>
     <table>
         <tr>
-            <td rowsopan="1"></td>
+            <td rowspan="1"></td>
         </tr>
     </table>
 
@@ -206,7 +202,7 @@ th {
                     </table>
                     <table>
                         <tr>
-                            <td rowsopan="1"></td>
+                            <td rowspan="1"></td>
                         </tr>
                     </table>
                 @endforeach
@@ -299,7 +295,7 @@ th {
                         </table>
                         <table>
                             <tr>
-                                <td rowsopan="1"></td>
+                                <td rowspan="1"></td>
                             </tr>
                         </table>
                 @endforeach
@@ -308,7 +304,7 @@ th {
     @endforeach
 
     @if (!empty(implode(',',$single_ref)))
-        <table cellspacing="0" cellpadding="2" style="table-layout: fixed;border-collapse: collapse;font-size: 12px;" nobr="true">
+        <table cellspacing="0" cellpadding="2" style="table-layout: fixed;border-collapse: collapse;" nobr="true">
             @foreach ($single_ref as $key => $ref)
                 <tr nobr="true">
                     <td>
@@ -316,7 +312,7 @@ th {
                         <span>{{ $act_excess[$key] }}</span> 
                     </td>
                     <td>
-                        <label>MTRS FOR STICKERS (<strong>{{ $ref }}</strong>):</label>                                 <span>{{ $sticker_mtr[$key] }}</span> 
+                        <label>STKRS MTRS (<strong>{{ $ref }}</strong>):</label>                                 <span>{{ $sticker_mtr[$key] }}</span> 
                     </td>
                     <td>
                         <label>SETTINGS (<strong>{{ $ref }}</strong>) :</label>                                            <span>{{ $settings[$key] }}</span> 
