@@ -181,10 +181,7 @@ class InvoiceController extends Controller
 
             $company_details =  DB::table('company')
                                 ->where('id',session()->get('company'))
-                                ->first();
-                        
-            // $dynView = View::make('template')
-            //     ->with(['company_details' => $company_details, 'arr' => $orders, 'ship_to'=>$ship_to,'bill_to'=>$bill_to ,'tax_amnt'=>$tax_amnt ,'place_of_supply'=>$place_of_supply ,'roundOff'=>$roundOff,'taxTotal'=>$taxTotal, 'creditTerms'=>$creditTerms,'amntInwords'=>$amntInwords,'ewayNo'=>$ewayNo,'grandTotal'=>$grandTotal,'invoiceNo'=>$invoiceNo,'invoiceDate'=>$invoiceDate ,'eChargesArr'=>$eChargesArr]);            
+                                ->first();         
 
             if ($orders) {
                 $invoiceData = Invoices::create([
@@ -213,13 +210,6 @@ class InvoiceController extends Controller
                         }
                     }
                 }
-                // ob_start();
-                // PDF::SetPrintHeader(false);
-                // PDF::SetPrintFooter(false);
-                // PDF::AddPage();
-                // PDF::writeHTML($dynView->render());
-                // $pdfdata = PDF::output( public_path('storage/app/public/invoices/invoices_'.$invoice_id.'.pdf'), 'F');
-                // Invoices::where('id', $invoiceData->id)->update(['invoice_id'=> $invoice_id ,'invoice_file'=>'/storage/app/public/invoices/invoices_'.$invoice_id.'.pdf']);
 
                 Invoices::where('id', $invoiceData->id)->update(['invoice_id'=> $invoice_id ]);
                 foreach ($orders as $key => $value) {
@@ -237,13 +227,12 @@ class InvoiceController extends Controller
                         'rate'          =>  $value['rate'],
                         'tax'           =>  $value['tax'],
                         'hsn_code'      =>  $hsn_code,
-                        // 'hsn_code'      =>  2,
                         'size'          =>  $size,                        
                         'reference_no'  =>  $value['ref_no'],
                         'custom_ref_name'  =>  $value['reference_name'],
                         'ocn_no'        =>  $value['ocn_number'], 
                         'item_name'     =>  $value['item_name'], 
-                        'item'     =>  $value['item_name'],               
+                        'item'          =>  $value['item_name'],               
                         'company_id'    =>  1,
                     ]);
                     
@@ -261,17 +250,6 @@ class InvoiceController extends Controller
                     'erp_order_id'=>$orders[0]['erpid']
                     ]);
                 }
-                // $attatchment =  public_path('storage/app/public/invoices/invoices_'.$invoice_id.'.pdf');
-                //Mail notiication
-                // $useremail = "aswathy@wizroots.com";
-                // $useremail = Auth::guard('erpuser')->email();
-                // Mail::send('mails.invoice', ['title' => 'Invoice','to_email' => $useremail], function ($message) use ($useremail,$attatchment)
-                //         {
-                //             $message->from('admin@jga.com', 'JGA');
-                //             $message->subject('Invoice');
-                //             $message->attach($attatchment);
-                //             $message->to($useremail);
-                //         });
                 $result    = response()->json(['error'=> false,'message' =>'success'],200);
             }
             
@@ -294,29 +272,11 @@ class InvoiceController extends Controller
             $ship_to = $objInv->getShippTo($inv_details);
             $bill_to = $objInv->getBillTo($inv_details);
 
-            // $inv_details = Invoices::where('invoice.id',$inv_id)
-            //                 ->join('invoice_details','invoice_details.invoice_id','invoice.id')
-            //                 ->join('customers','invoice.customer_id','customers.id')
-            //                 ->leftjoin('nominated_forwarders','nominated_forwarders.id','customers.nominated_forwarder')
-            //                 ->join('buyers','invoice.buyer_id','buyers.id')
-            //                 ->where('invoice_details.company_id',session()->get('company'))
-            //                 ->select('invoice.invoice_id','erp_id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','po_no','invoice_file','invoice.id as inv_id','invoice_details.*','invoice.invoice_id','customers.place_of_supply','invoice.round_off_amnt','invoice.grand_total',DB::raw('to_char(invoice.created_at,'."'".$ddmmyy."'".') as "inv_date"'),'gstin_number','invoice.credit_limit','invoice.dispatch_thru as delvry_thru')->get();
             $extra_charges  = InvExtraCharges::where('invoice_id',$inv_id)->get();
 
             $company_details =  DB::table('company')
                                 ->where('id',session()->get('company'))
                                 ->select('company.*')->first();
-
-            // $bill_to = DB::table('customer_bill_address')
-            //               ->where('customer_bill_address.customer_id',$inv_details[0]->customer_id)
-            //               ->where('customer_bill_address.is_billing_address',1)
-            //               ->select('address','country')
-            //               ->first();                 
-            // $ship_to = DB::table('customer_bill_address')
-            //               ->where('customer_bill_address.customer_id',$inv_details[0]->customer_id)
-            //               ->where('customer_bill_address.is_shipping_address',1)
-            //               ->select('address','country')
-            //               ->first();
             
             $result    = response()->json(['error'=> false,'message' =>'success','inv_details'=>$inv_details,'extra_charges'=>$extra_charges ,'company_details'=>$company_details, 'bill_to'=>$bill_to,'ship_to'=>$ship_to],200);
         }
@@ -442,7 +402,7 @@ class InvoiceController extends Controller
 
             // add a page
             $pdf->AddPage('P', 'A4');
-            $pdf->SetXY(13, 26);
+            $pdf->SetXY(13, 30);
             $pdf->writeHTML($dynView->render());
             // PDF::SetPrintHeader(false);
             // PDF::SetPrintFooter(false);

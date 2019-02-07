@@ -480,6 +480,7 @@
                 }
                 value.delvry_qnty = delQnty;
                 pending_qnty = value.pending_qnty - delQnty
+
                 if (itemName==value.item_name) {
                     tr += '<tr class="trClass" id="'+value.id+'">';
                     tr += '<td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+' </td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td class="amnt">'+(delQnty * value.rate).toFixed(2)+'</td>';
@@ -844,16 +845,16 @@ function RsPaise(n) {
         };
         var fraction = Rs(nums[1])
         if (whole == '' && fraction == '') {
-            op = 'Zero only';
+            op = 'Zero Only';
         }
         if (whole == '' && fraction != '') {
-            op = fraction + 'paise only';
+            op = fraction + 'Paise Only';
         }
         if (whole != '' && fraction == '') {
-            op = 'INR : ' + whole + ' only';
+            op = 'INR : ' + whole + ' Only';
         }
         if (whole != '' && fraction != '') {
-            op = 'INR : ' + whole + 'and  ' + fraction + 'paise only';
+            op = 'INR : ' + whole + 'And  ' + fraction + 'Paise Only';
         }
         return (op)
     }

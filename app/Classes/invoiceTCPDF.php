@@ -22,9 +22,9 @@ class invoiceTCPDF extends \TCPDF
     * @public
     */
     public function Header() {
-        $this->SetTopMargin(55);
+        $this->SetTopMargin(45);
         // Position at 5 mm from top
-        $this->SetY(1);
+        $this->SetY(6);
         // Set font
         $this->SetFont('helvetica', '', 8);
         $this->Image('././././'.$this->company->logo, 160, 5, 35, 15);
