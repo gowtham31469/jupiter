@@ -632,7 +632,7 @@ class JobManagerController extends Controller
 						$pdf->setImageScale(1.8);
 
 						// set font
-						$pdf->SetFont('helvetica', '', 10);
+						$pdf->SetFont('helvetica', '', 8);
 
 						// add a page
 						$pdf->AddPage('P', 'A4');
@@ -688,7 +688,7 @@ class JobManagerController extends Controller
 								]);
 
 						//append content to header
-						$pdf->SetXY(15,49);
+						$pdf->SetXY(15,50);
 						$pdf->writeHTML($view->render());
 
 						//Close and output PDF document
@@ -1134,7 +1134,7 @@ class JobManagerController extends Controller
 					$pdf->setImageScale(1.8);
 
 					// set font
-					$pdf->SetFont('helvetica', '', 10);
+					$pdf->SetFont('helvetica', '', 8);
 
 					// add a page
 					$pdf->AddPage('P', 'A4');
@@ -1190,13 +1190,13 @@ class JobManagerController extends Controller
 							]);
 
 					//append content to header
-					$pdf->SetXY(15,49);
+					$pdf->SetXY(15,50);
 					$pdf->writeHTML($view->render());
 
 					//Close and output PDF document
 					ob_end_clean();
 					$file_path =  "/storage/app/public/jobcards/".$workorder_id."."."pdf";
-					
+
 					/** delete already existing file from folder */	
 					File::delete($file_path);
 					

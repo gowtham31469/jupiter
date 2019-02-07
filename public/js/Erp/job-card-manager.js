@@ -503,7 +503,7 @@ function generateJobcard(){
                                                     <span class="act-excess" data-act-excess-ref="'+template_name[0]+'" id="act_excess_'+template_name[0].replace(' ', '_')+'"></span>\
                                                 </div>\
                                                 <div class="col-md-3">\
-                                                    <label for="sticker_mtr_'+template_name[0].replace(' ', '_')+'" >MTRS FOR STICKERS ('+template_name[0]+'):</label>\
+                                                    <label for="sticker_mtr_'+template_name[0].replace(' ', '_')+'" >STKRS MTRS ('+template_name[0]+'):</label>\
                                                     <span class="sticker-mtrs" id="sticker_mtr_'+template_name[0].replace(' ', '_')+'"></span>\
                                                 </div>\
                                                 <div class="col-md-3">\
@@ -1279,7 +1279,7 @@ function storeJobcard()
                                                 <span class="edit-act-excess" data-act-excess-ref="'+item.ref_name+'" id="edit_act_excess_'+item.ref_name.replace(' ', '_')+'">'+item.actual_excess+'</span>\
                                             </div>\
                                             <div class="col-md-3">\
-                                                <label for="edit_sticker_mtr_'+item.ref_name.replace(' ', '_')+'" >MTRS FOR STICKERS ('+item.ref_name+'):</label>\
+                                                <label for="edit_sticker_mtr_'+item.ref_name.replace(' ', '_')+'" >STKRS MTRS ('+item.ref_name+'):</label>\
                                                 <span class="edit-sticker-mtrs" id="edit_sticker_mtr_'+item.ref_name.replace(' ', '_')+'">'+item.mtrs_for_stickers+'</span>\
                                             </div>\
                                             <div class="col-md-3">\
