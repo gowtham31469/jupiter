@@ -19,6 +19,7 @@ use App\InvExtraCharges;
 use PDF;
 use App\Classes\Invoice;
 use Elibyy\TCPDF\Facades\TCPDF;
+use App\Classes\invoiceTCPDF;
 
 class InvoiceController extends Controller
 {
@@ -260,9 +261,9 @@ class InvoiceController extends Controller
                     'erp_order_id'=>$orders[0]['erpid']
                     ]);
                 }
-                $attatchment =  public_path('storage/app/public/invoices/invoices_'.$invoice_id.'.pdf');
+                // $attatchment =  public_path('storage/app/public/invoices/invoices_'.$invoice_id.'.pdf');
                 //Mail notiication
-                $useremail = "aswathy@wizroots.com";
+                // $useremail = "aswathy@wizroots.com";
                 // $useremail = Auth::guard('erpuser')->email();
                 // Mail::send('mails.invoice', ['title' => 'Invoice','to_email' => $useremail], function ($message) use ($useremail,$attatchment)
                 //         {
@@ -305,6 +306,7 @@ class InvoiceController extends Controller
             $company_details =  DB::table('company')
                                 ->where('id',session()->get('company'))
                                 ->select('company.*')->first();
+
             // $bill_to = DB::table('customer_bill_address')
             //               ->where('customer_bill_address.customer_id',$inv_details[0]->customer_id)
             //               ->where('customer_bill_address.is_billing_address',1)
@@ -345,13 +347,36 @@ class InvoiceController extends Controller
             $dynView = View::make('template')
                 ->with(['company_details' => $company_details, 'inv_details' => $inv_details, 'ship_to'=>$ship_to,'bill_to'=>$bill_to,'inv_details'=>$inv_details,'eway_no'=> $eway_no,'amntInwords'=>$amntInwords , 'eChargesArr'=>$extra_charges,'uniqueTaxes'=>$uniqueTaxes]);
             ob_start();
-            define ('PDF_FONT_NAME_MAIN', 'helvetica');
-            define ('PDF_FONT_NAME_DATA', 'helvetica');
-            PDF::SetPrintHeader(false);
-            PDF::SetPrintFooter(false);
-            PDF::AddPage();
-            PDF::writeHTML($dynView->render());
-            $pdfdata = PDF::output( public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf'), 'F');
+            // define ('PDF_FONT_NAME_MAIN', 'helvetica');
+            // define ('PDF_FONT_NAME_DATA', 'helvetica');
+            $pdf = new invoiceTCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+            $pdf->setCompanyData($company_details);
+            //margins
+            $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+            $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+            $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+            // set header and footer fonts
+            $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+            $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+            // set auto page breaks
+            $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+            // set image scale factor
+            $pdf->setImageScale(0.8);
+
+            // set font
+            $pdf->SetFont('helvetica', '', 8);
+
+            // add a page
+            $pdf->AddPage('P', 'A4');
+            $pdf->SetXY(13, 26);
+            $pdf->writeHTML($dynView->render());
+            // PDF::SetPrintHeader(false);
+            // PDF::SetPrintFooter(false);
+            // PDF::AddPage();
+              // PDF::writeHTML($dynView->render());
+            $pdfdata =$pdf->output( public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf'), 'F');
+
             Invoices::where('id', $inv_id)->update(['eway_no'=> $eway_no ,'invoice_file'=>'/storage/app/public/invoices/invoices_'.$inv_id.'.pdf']);
             $attatchment =  public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf');
             //Mail notiication
@@ -366,6 +391,68 @@ class InvoiceController extends Controller
                     });
 
             $result    = response()->json(['error'=> false,'message' =>'success'],200);
+        } 
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+
+    public function downloadInvoice(Request $request)
+    {
+        try{
+            $objInv      = new Invoice();
+            $inv_id      = $request->inv_id;
+            $amntInwords = $request->amntInwords;
+            $eway_no     = $request->eway_no;
+            $inv_details = $objInv->getInvoiceDetails($inv_id);
+            $ship_to     = $objInv->getShippTo($inv_details);
+            $bill_to     = $objInv->getBillTo($inv_details);
+            $company_details =  DB::table('company')
+                                ->where('id',session()->get('company'))
+                                ->first();
+            $extra_charges  = InvExtraCharges::where('invoice_id',$inv_id)->get();
+            $uniqueTaxes    = $objInv->getTaxDetails($inv_details);
+            
+            
+            $dynView = View::make('template')
+                ->with(['company_details' => $company_details, 'inv_details' => $inv_details, 'ship_to'=>$ship_to,'bill_to'=>$bill_to,'inv_details'=>$inv_details,'eway_no'=> $eway_no,'amntInwords'=>$amntInwords , 'eChargesArr'=>$extra_charges,'uniqueTaxes'=>$uniqueTaxes]);
+            ob_start();
+            // define ('PDF_FONT_NAME_MAIN', 'helvetica');
+            // define ('PDF_FONT_NAME_DATA', 'helvetica');
+            $pdf = new invoiceTCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+            $pdf->setCompanyData($company_details);
+            //margins
+            $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+            $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+            $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+            // set header and footer fonts
+            $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+            $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+            // set auto page breaks
+            $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+            // set image scale factor
+            $pdf->setImageScale(0.8);
+
+            // set font
+            $pdf->SetFont('helvetica', '', 8);
+
+            // add a page
+            $pdf->AddPage('P', 'A4');
+            $pdf->SetXY(13, 26);
+            $pdf->writeHTML($dynView->render());
+            // PDF::SetPrintHeader(false);
+            // PDF::SetPrintFooter(false);
+            // PDF::AddPage();
+              // PDF::writeHTML($dynView->render());
+            $pdfdata =$pdf->output( public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf'), 'F');
+
+            // Invoices::where('id', $inv_id)->update(['eway_no'=> $eway_no ,'invoice_file'=>'/storage/app/public/invoices/invoices_'.$inv_id.'.pdf']);
+            $attatchment =  public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf');
+            return "/storage/app/public/invoices/invoices_".$inv_id.".pdf";
         } 
         catch (\Exception $e)
         {

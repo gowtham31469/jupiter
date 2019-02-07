@@ -197,7 +197,9 @@
 
 <ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
 	<li><a href="javascript:void(0)" class="active">Create Jobcard</a></li>
+	<li><a href="{{ route('jobcards-list') }}">Jobcards List</a></li>
 </ul>
+
 
 @endsection @section('content')
 <div class="container-fluid">
@@ -218,58 +220,59 @@
           <div class="clearfix"></div>
                 <div class="main-content">
                     <div class="loader">
-						<div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>
+					    <div class=" fa-3x">
+						  <i class="fa fa-spinner fa-pulse"></i>
+						</div>
 					</div>
                     <div class="col" id="approved-orders-table">
-					<input type="hidden" value="{{ session()->get('company') }}" id="company_id">
-					<input type="hidden" value="{{ session()->get('company_name') }}" id="company_name">
-					<table id="approved-order-list" class="table table-bordered table-responsive table-hover " style="font-size: 12px;">
-						<thead>
-							<tr>
-								<th>Sl. No</th>
-								<th>ERP ID</th>
-								<th>Customer name</th>
-								<th>Buyer name</th>
-								<th>Customer PO Number</th>
-								<th>Buyer PO Number</th>
-								<th>Style Number</th>
-								<th>Reference Number</th>
-								<th>Delivery Date</th>
-								<th>Operations</th>
-							</tr>
-						</thead>
-						<tbody>
-							@foreach($orders as $vals)
-							<tr id="{{$vals->id}}" data-refname="{{$vals->reference_name}}" data-buyer-po="{{$vals->buyer_po_number}}">
-								<td class="">
-								
-									<div class="form-check">
-									<a href="javascript:void(0)">
-										<label>
-											<input class="row-checkbox" type="checkbox" data-customer-name="{{$vals->company_name}}" style="margin-right: 10px;" onchange="return selectOrders(this)" data-buyer-name="{{$vals->buyer_name}}"> <span class="label-text" class="hidden-val">{{ $loop->iteration }}</label>
-									</a>
-									</div>
-								</td>
-								<td>{{$vals->erp_id}}</td>
-								<td>{{$vals->company_name}}</td>
-								<td data-buyer-id="{{$vals->buyer_id}}">{{$vals->buyer_name}}</td>
-								<td>{{$vals->po_no}}</td>
-								<td>{{$vals->buyer_po_number}}</td>
-								<td>{{$vals->style_no}}</td>
-								<td>{{$vals->reference_name}}</td>
-								@if ($vals->delivery_date != '')
-									<td>{{$vals->delivery_date}}</td>
-								@else
-									<td>-</td>
-								@endif
-								<?php $ref_name = str_replace(" ","",$vals->reference_name) ?>
-								<td> <object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal{{$loop->iteration}}" class="center-block tesco_svg{{$loop->iteration}}" data="{{$vals->template_file}}" type="image/svg+xml"></object><a class="artork_download" href="javascript:void(0)" onclick="openmodaltesco('{{$ref_name}}','{{ $loop->iteration }}','{{$vals->template_file}}','{{$vals->style_no}}','{{$vals->buyer_po_number}}','{{$vals->id}}')"><i class="fa fa-file-pdf-o fa-button" data-placement="top" title="" data-original-title="Download Artwork"></i></a></td>
-							</tr>
-							@endforeach
-						</tbody>
-					</table>
-				</div>
-              </div>
+						<input type="hidden" value="{{ session()->get('company') }}" id="company_id">
+						<input type="hidden" value="{{ session()->get('company_name') }}" id="company_name">
+						<table id="approved-order-list" class="table table-bordered table-responsive table-hover " style="font-size: 12px;">
+							<thead>
+								<tr>
+									<th>Sl. No</th>
+									<th>ERP ID</th>
+									<th>Customer name</th>
+									<th>Buyer name</th>
+									<th>Customer PO Number</th>
+									<th>Buyer PO Number</th>
+									<th>Style Number</th>
+									<th>Reference Number</th>
+									<th>Delivery Date</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach($orders as $vals)
+								<tr id="{{$vals->id}}" data-refname="{{$vals->reference_name}}" data-buyer-po="{{$vals->buyer_po_number}}">
+									<td>
+										<div class="form-check">
+										<a href="javascript:void(0)">
+											<label>
+												<input class="row-checkbox" type="checkbox" data-customer-name="{{$vals->company_name}}" style="margin-right: 10px;" onchange="return selectOrders(this)" data-buyer-name="{{$vals->buyer_name}}"> <span class="label-text" class="hidden-val">{{ $loop->iteration }}</label>
+										</a>
+										</div>
+									</td>
+									<td>{{$vals->erp_id}}</td>
+									<td>{{$vals->company_name}}</td>
+									<td data-buyer-id="{{$vals->buyer_id}}">{{$vals->buyer_name}}</td>
+									<td>{{$vals->po_no}}</td>
+									<td>{{$vals->buyer_po_number}}</td>
+									<td>{{$vals->style_no}}</td>
+									<td>{{$vals->reference_name}}</td>
+									@if ($vals->delivery_date != '')
+										<td>{{$vals->delivery_date}}</td>
+									@else
+										<td>-</td>
+									@endif
+									<?php $ref_name = str_replace(" ","",$vals->reference_name) ?>
+									<td> <object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal{{$loop->iteration}}" class="center-block tesco_svg{{$loop->iteration}}" data="{{$vals->template_file}}" type="image/svg+xml"></object><a class="artork_download" href="javascript:void(0)" onclick="openmodaltesco('{{$ref_name}}','{{ $loop->iteration }}','{{$vals->template_file}}','{{$vals->style_no}}','{{$vals->buyer_po_number}}','{{$vals->id}}')"><i class="fa fa-file-pdf-o fa-button preview-pdf" data-placement="left" title="Download Artwork" data-original-title="Download Artwork"></i></a></td>
+								</tr>
+								@endforeach
+							</tbody>
+						</table>
+				     </div>
+                 </div>
                 </div>
             </div>
         </div>
@@ -308,12 +311,12 @@
      </div>
  </div>
 <!-- Job card creation Modal -->
-<div class="modal jobcard-creation-modal fade" id="jobcardCreationModalCenter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal jobcard-creation-modal fade" id="jobcardCreationModalCenter" tabindex="-1" role="dialog" aria-labelledby="jobcardCreationModalCenter">
      <div class="modal-dialog modal-lg jobcard-creation-modal-dialog" role="document">
          <div class="modal-content jobcard-creation-modal-content">
                 <div class="modal-header">
                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                     <h4 class="modal-title jobcard-modal-title" id="myModalLabel">Create Jobcard</h4>
+                     <h4 class="modal-title jobcard-modal-title" id="jobcardCreationModalCenter">Create Jobcard</h4>
                  </div>
 				 {!! Form::open(['id' => 'create_jobcard','data-toggle' => 'validator','role' => 'form']) !!}
                  <div class="modal-body jobcard-creation-modal-body">
@@ -637,7 +640,7 @@
                  </div>
                  <div class="modal-footer jobcard-creation-modal-footer">
                      {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-					 {!! Form::button('Print & Send', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+					 {!! Form::button('Print', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                  </div>
             {!! Form::close() !!}
          </div>
@@ -647,5 +650,79 @@
 <div id="snackbar"><span class="snackbar_span"></span></div>
 
 @endsection @section('jqueryIncludes')
+<script>
+$(document).ready(function() {
+	/** reset all filters  **/
+	$('#erp_id_filter').val('').change();
+	$('#customer_name_filter').val('').change();
+	$('#po_number_filter').val('').change();
+	$('#style_number_filter').val('').change();
+	$('#ref_number_filter').val('').change();
+	$('#delivery_date_filter').val('').change();
+	$('.selectpicker').selectpicker('val', 1);
+	$('.selectpicker').selectpicker('refresh');
 
+	/** [ Toggle bootstrap tooltip ] */
+	$('.preview-pdf').tooltip('show');
+	$('.preview-pdf').tooltip('toggle');
+	
+	/** [ Make companies card active ] */
+	$('div.buyers-card').click(function(){
+
+		  $('div.buyers-card').removeClass("active");
+		  $(this).addClass("active");
+		  $('#hidden-buyer-div').hide();
+
+		  /* Save selected company into localdb */
+	      if ($('.buyers-card.active-buyer.active').length != 0) 
+	      {
+         	var company_id = $('.buyers-card.active-buyer.active').data("value"); 
+		  	var company_name = $('.buyers-card.active-buyer.active').attr("id");
+         	 $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
+          	$('#buyerSelectionModalCenter').modal('hide');
+		  
+			$.ajax({
+				url: base_url + "/erp/po-manager/set_company_session",
+				type: "Post",
+				dataType: "json",
+				data: {
+					_token: csrf_token,
+					company_id: company_id,
+					company_name:company_name
+				},
+				beforeSend: function() {
+					location.reload();
+				},
+				success: function(data) {
+				},
+				error: function(data) {
+
+				},
+				complete: function() {
+
+				}
+			})
+	      }
+	  
+	});
+	
+	/** [ Show already selected(active) buyer on clicking company menu] */
+	$('.company-nav-menu').on('click', function() {
+	    $("#buyerSelectionModalCenter").modal("show");
+	});
+
+	if($('#company_name').val() != null && $('#company_name').val() != "")
+	{
+		$('#'+$('#company_name').val()).addClass('active');
+	}
+	else
+	{
+		$('div.buyers-card').first().addClass("active");
+	}
+   
+    $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
+	
+	$('.company-nav-menu').html($('.company-nav-div').html());
+});
+</script>
 @endsection
