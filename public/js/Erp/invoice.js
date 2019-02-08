@@ -131,6 +131,7 @@
                 tr += '<tr><td></td><td colspan="13"><strong style="float: left;">ITEM: '+value.item_name+'  HSNCode: '+hsnCode+'</strong></td></tr><tr class="trClass" id="'+value.id+'">';
                 tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" checked/></td><td class="order_id">'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><input type="number" min="1" step="1" value="" class="form-control delivery-qnty" id="delivery-qnty" style="text-align: center;" required data-id="'+value.id+'" min="1" onkeyup="updateAmount.call(this,'+uniqueTax+')"></td><td class="rate">'+value.rate+'</td><td class="amnt">'+(value.pending_qnty * value.rate).toFixed(2)+'</td>';
                 tr += '</tr>';
+                 itemName =value.item_name
             }
 
             qnty += value.order_quantity;
@@ -480,6 +481,7 @@
                 }
                 value.delvry_qnty = delQnty;
                 pending_qnty = value.pending_qnty - delQnty
+
                 if (itemName==value.item_name) {
                     tr += '<tr class="trClass" id="'+value.id+'">';
                     tr += '<td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+' </td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td class="amnt">'+(delQnty * value.rate).toFixed(2)+'</td>';
@@ -844,16 +846,16 @@ function RsPaise(n) {
         };
         var fraction = Rs(nums[1])
         if (whole == '' && fraction == '') {
-            op = 'Zero only';
+            op = 'Zero Only';
         }
         if (whole == '' && fraction != '') {
-            op = fraction + 'paise only';
+            op = fraction + 'Paise Only';
         }
         if (whole != '' && fraction == '') {
-            op = 'INR : ' + whole + ' only';
+            op = 'INR : ' + whole + 'Rupees Only';
         }
         if (whole != '' && fraction != '') {
-            op = 'INR : ' + whole + 'and  ' + fraction + 'paise only';
+            op = 'INR : ' + whole + ' Rupees And  ' + fraction + 'Paise Only';
         }
         return (op)
     }
