@@ -119,7 +119,6 @@ class TemplateManagementCntrl extends Controller
 			$ref         = $request['ref'];
 			$company     = $request['company'];
 			$hsncode     = $request['hsncode'];
-			$sapcode     = $request['sapcode'];
             $glcode      = $request['glcode'];
             $gl_text     = $request['gltext'];
             $color       = $request['color'];
@@ -135,7 +134,6 @@ class TemplateManagementCntrl extends Controller
 						   'hsn_code'         => $hsncode,
 						   'gl_code'          => $glcode,
                            'gl_text'          => $gl_text,
-                           'sap_ref'          => $sapcode,
                            'color'            => $color,
                            'dimension_height' => $height,
                            'dimension_width'  => $width,
