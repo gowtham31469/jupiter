@@ -329,7 +329,7 @@
         <hr>
         <table>
              <tr>
-                <td>
+                <td width="200">
                 <div>
                     <span><strong>Delivery at :</strong></span><br>
                     <span>{{$inv_details[0]['address']}},</span><br>
