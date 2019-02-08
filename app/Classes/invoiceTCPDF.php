@@ -22,12 +22,12 @@ class invoiceTCPDF extends \TCPDF
     * @public
     */
     public function Header() {
-        $this->SetTopMargin(55);
+        $this->SetTopMargin(45);
         // Position at 5 mm from top
-        $this->SetY(1);
+        $this->SetY(6);
         // Set font
         $this->SetFont('helvetica', '', 8);
-        $this->Image('././././'.$this->company->logo, 160, 5, 35, 15);
+        $this->Image('././././'.$this->company->logo, 160, 10, 35, 15);
     $header =  ' <table>
                     <tr class="blank_row">
                         <td rowsopan="1"></td>
@@ -37,7 +37,7 @@ class invoiceTCPDF extends \TCPDF
                   <tr nobr="true">
                     <td rowsopan="3">
                         <span style="font-size:9px;"><strong>'.$this->company->name.'</strong></span><br>   
-                        <span>'.$this->company->address.'</span><br>
+                        <span>'.ucwords($this->company->address).'</span><br>
                         <span>'.$this->company->office_phone.'</span><span>,'.$this->company->phone.'</span><br>
                         <span><strong>GSTIN  : </strong>'.$this->company->gstin.'</span>
                         </td>
@@ -70,14 +70,14 @@ class invoiceTCPDF extends \TCPDF
                     </table>
                     <table>
                             <tr>
-                                <td width="116"></td>
+                                <td width="140"></td>
                                 <td width="150"></td>
                                 <td width="150" colspan="2">
                                     <span>For Jupiter Garments Accessories</span>
                                 </td>
                              </tr>
                             <tr>
-                                <td width="100">
+                                <td width="120">
                                     <p>Recievers Signature </p>
                                 </td>
                                 <td width="100">

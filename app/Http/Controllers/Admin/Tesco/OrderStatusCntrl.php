@@ -859,7 +859,7 @@ class OrderStatusCntrl extends Controller
         $order_qnty = (array_sum($count)>0)?0:1 ;
         
         if ($temp_data->order_flag == "newOrder" && $template_name != "THL3" && $template_name != "THL1") {
-           $orderObj->updateTescoAdminOrders($table_name,$temp_data,$request,$customer_ids{0}->customer_id);
+            $orderObj->updateTescoAdminOrders($table_name,$temp_data,$request,$customer_ids{0}->customer_id);
         }
 		DB::table($table_name)->where('id',$template_id)
 						      ->update([
