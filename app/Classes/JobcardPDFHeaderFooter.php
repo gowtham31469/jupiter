@@ -61,8 +61,9 @@ class JobcardPDFHeaderFooter extends \TCPDF
         $this->Image('././././'.$this->company->company_logo, 160, 10, 35, 15);
         // Set font
         $this->SetFont('helvetica', '', 8);
-        $header = '<table cellspacing="0" cellpadding="0" style="table-layout: fixed;width: 100%;border-collapse: collapse;">
+        $header = '<table cellspacing="0" cellpadding="0">
                         <tr nobr="true">
+                        <td width="10"></td>
                             <td width="300">
                                 <p><strong id="jc_company_name" >'.$this->company->company.'</strong></p>
                                 <p id="company_address">'.$this->company->company_address.'</p>
@@ -100,7 +101,7 @@ class JobcardPDFHeaderFooter extends \TCPDF
                             </td>
                             <td style="text-align: right;">
                                 <label for="material">MATERIAL :</label>
-                                <span id="material">'.$this->material.'</span>
+                                <span id="material">'.ucwords($this->material).'</span>
                             </td>
                         </tr>
                     </table>

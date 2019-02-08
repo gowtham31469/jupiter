@@ -87,7 +87,7 @@
                     @foreach($companies as $company)
                      <a class="buyer-card-link" style="cursor: pointer;">
                          <div class="card buyers-card elevation-2dp active-buyer" data-name ="{{$company->name}}"  data-value ="{{$company->company}}" id="{{ strtolower( str_replace(' ','',$company->name)) }}">
-                          {{ $company->name }}
+                          <img src="{{$company->logo}}" class="img-fluid" alt="Responsive image" height="120" class="img-fluid float-none">
                          </div>
                      </a>
                     @endforeach
