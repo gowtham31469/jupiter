@@ -35,7 +35,7 @@ th {
             <tr nobr="true">
                 <td>
                     <label for="customer">CUST NAME :</label>
-                    <span id="customer" >{{ $customer->customer_name }}</span>	
+                    <span id="customer" >{{ ucwords($customer->customer_name) }}</span>	
                 </td>
                 <td>
                     <label for="style_no">STYLENUM :</label>
@@ -57,7 +57,7 @@ th {
                 </td>
                 <td>
                     <label for="disp_mode">DISP MODE :</label>
-                    <span id="disp_mode">{{ $disp_mode }}</span>
+                    <span id="disp_mode">{{ ucwords($disp_mode) }}</span>
                 </td>
             </tr>
     </table>
@@ -147,7 +147,7 @@ th {
         <tr nobr="true">
             <td>
                 <label for="print_color">PRINT COLORS :</label>
-                <span id="print_color">{{ $print_color }}</span>
+                <span id="print_color">{{ ucwords($print_color) }}</span>
             </td>
             <td></td>
         </tr>
