@@ -197,7 +197,9 @@
 
 <ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
 	<li><a href="javascript:void(0)" class="active">Create Jobcard</a></li>
+	<li><a href="{{ route('jobcards-list') }}">Jobcards List</a></li>
 </ul>
+
 
 @endsection @section('content')
 <div class="container-fluid">
@@ -218,58 +220,59 @@
           <div class="clearfix"></div>
                 <div class="main-content">
                     <div class="loader">
-						<div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>
+					    <div class=" fa-3x">
+						  <i class="fa fa-spinner fa-pulse"></i>
+						</div>
 					</div>
                     <div class="col" id="approved-orders-table">
-					<input type="hidden" value="{{ session()->get('company') }}" id="company_id">
-					<input type="hidden" value="{{ session()->get('company_name') }}" id="company_name">
-					<table id="approved-order-list" class="table table-bordered table-responsive table-hover " style="font-size: 12px;">
-						<thead>
-							<tr>
-								<th>Sl. No</th>
-								<th>ERP ID</th>
-								<th>Customer name</th>
-								<th>Buyer name</th>
-								<th>Customer PO Number</th>
-								<th>Buyer PO Number</th>
-								<th>Style Number</th>
-								<th>Reference Number</th>
-								<th>Delivery Date</th>
-								<th>Operations</th>
-							</tr>
-						</thead>
-						<tbody>
-							@foreach($orders as $vals)
-							<tr id="{{$vals->id}}" data-refname="{{$vals->reference_name}}" data-buyer-po="{{$vals->buyer_po_number}}">
-								<td class="">
-								
-									<div class="form-check">
-									<a href="javascript:void(0)">
-										<label>
-											<input class="row-checkbox" type="checkbox" data-customer-name="{{$vals->company_name}}" style="margin-right: 10px;" onchange="return selectOrders(this)" data-buyer-name="{{$vals->buyer_name}}"> <span class="label-text" class="hidden-val">{{ $loop->iteration }}</label>
-									</a>
-									</div>
-								</td>
-								<td>{{$vals->erp_id}}</td>
-								<td>{{$vals->company_name}}</td>
-								<td data-buyer-id="{{$vals->buyer_id}}">{{$vals->buyer_name}}</td>
-								<td>{{$vals->po_no}}</td>
-								<td>{{$vals->buyer_po_number}}</td>
-								<td>{{$vals->style_no}}</td>
-								<td>{{$vals->reference_name}}</td>
-								@if ($vals->delivery_date != '')
-									<td>{{$vals->delivery_date}}</td>
-								@else
-									<td>-</td>
-								@endif
-								<?php $ref_name = str_replace(" ","",$vals->reference_name) ?>
-								<td> <object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal{{$loop->iteration}}" class="center-block tesco_svg{{$loop->iteration}}" data="{{$vals->template_file}}" type="image/svg+xml"></object><a class="artork_download" href="javascript:void(0)" onclick="openmodaltesco('{{$ref_name}}','{{ $loop->iteration }}','{{$vals->template_file}}','{{$vals->style_no}}','{{$vals->buyer_po_number}}','{{$vals->id}}')"><i class="fa fa-file-pdf-o fa-button" data-placement="top" title="" data-original-title="Download Artwork"></i></a></td>
-							</tr>
-							@endforeach
-						</tbody>
-					</table>
-				</div>
-              </div>
+						<input type="hidden" value="{{ session()->get('company') }}" id="company_id">
+						<input type="hidden" value="{{ session()->get('company_name') }}" id="company_name">
+						<table id="approved-order-list" class="table table-bordered table-responsive table-hover " style="font-size: 12px;">
+							<thead>
+								<tr>
+									<th>Sl. No</th>
+									<th>ERP ID</th>
+									<th>Customer name</th>
+									<th>Buyer name</th>
+									<th>Customer PO Number</th>
+									<th>Buyer PO Number</th>
+									<th>Style Number</th>
+									<th>Reference Number</th>
+									<th>Delivery Date</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach($orders as $vals)
+								<tr id="{{$vals->id}}" data-refname="{{$vals->reference_name}}" data-buyer-po="{{$vals->buyer_po_number}}">
+									<td>
+										<div class="form-check">
+										<a href="javascript:void(0)">
+											<label>
+												<input class="row-checkbox" type="checkbox" data-customer-name="{{$vals->company_name}}" style="margin-right: 10px;" onchange="return selectOrders(this)" data-buyer-name="{{$vals->buyer_name}}"> <span class="label-text" class="hidden-val">{{ $loop->iteration }}</label>
+										</a>
+										</div>
+									</td>
+									<td>{{$vals->erp_id}}</td>
+									<td>{{$vals->company_name}}</td>
+									<td data-buyer-id="{{$vals->buyer_id}}">{{$vals->buyer_name}}</td>
+									<td>{{$vals->po_no}}</td>
+									<td>{{$vals->buyer_po_number}}</td>
+									<td>{{$vals->style_no}}</td>
+									<td>{{$vals->reference_name}}</td>
+									@if ($vals->delivery_date != '')
+										<td>{{$vals->delivery_date}}</td>
+									@else
+										<td>-</td>
+									@endif
+									<?php $ref_name = str_replace(" ","",$vals->reference_name) ?>
+									<td> <object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal{{$loop->iteration}}" class="center-block tesco_svg{{$loop->iteration}}" data="{{$vals->template_file}}" type="image/svg+xml"></object><a class="artork_download" href="javascript:void(0)" onclick="openmodaltesco('{{$ref_name}}','{{ $loop->iteration }}','{{$vals->template_file}}','{{$vals->style_no}}','{{$vals->buyer_po_number}}','{{$vals->id}}')"><i class="fa fa-file-pdf-o fa-button preview-pdf" data-placement="left" title="Download Artwork" data-original-title="Download Artwork"></i></a></td>
+								</tr>
+								@endforeach
+							</tbody>
+						</table>
+				     </div>
+                 </div>
                 </div>
             </div>
         </div>
@@ -295,7 +298,7 @@
                     @foreach($companies as $company)
                      <a class="buyer-card-link" style="cursor: pointer;">
                          <div class="card buyers-card elevation-2dp active-buyer" data-name ="{{$company->name}}"  data-value ="{{$company->company}}" id="{{ strtolower( str_replace(' ','',$company->name)) }}">
-                          {{ $company->name }}
+                          <img src="{{$company->logo}}" class="img-fluid" alt="Responsive image" height="120" class="img-fluid float-none">
                          </div>
                      </a>
                     @endforeach
@@ -308,12 +311,12 @@
      </div>
  </div>
 <!-- Job card creation Modal -->
-<div class="modal jobcard-creation-modal fade" id="jobcardCreationModalCenter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal jobcard-creation-modal fade" id="jobcardCreationModalCenter" tabindex="-1" role="dialog" aria-labelledby="jobcardCreationModalCenter">
      <div class="modal-dialog modal-lg jobcard-creation-modal-dialog" role="document">
          <div class="modal-content jobcard-creation-modal-content">
                 <div class="modal-header">
                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                     <h4 class="modal-title jobcard-modal-title" id="myModalLabel">Create Jobcard</h4>
+                     <h4 class="modal-title jobcard-modal-title" id="jobcardCreationModalCenter">Create Jobcard</h4>
                  </div>
 				 {!! Form::open(['id' => 'create_jobcard','data-toggle' => 'validator','role' => 'form']) !!}
                  <div class="modal-body jobcard-creation-modal-body">
@@ -386,7 +389,7 @@
 								<div class="col-md-4">
 									 <div class="form-group has-feedback form-inline">
 										{!! Form::label('disp_mode', 'DISP MODE :', ['class' => 'form_label']) !!}
-										{!! Form::text('disp_mode',$value = '', array('class' => 'form-control input-sm','placeholder' => 'DISPATCH MODE','required','maxlength' => '10')) !!}
+										{!! Form::text('disp_mode',$value = '', array('class' => 'form-control input-sm','placeholder' => 'DISPATCH MODE','required','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									 </div>
 								</div>
@@ -406,14 +409,14 @@
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('repeat_gap', 'REPEAT GAP :', ['class' => 'form_label']) !!}
-										{!! Form::number('repeat_gap',$value = '', array('class' => 'form-control input-sm','placeholder' => 'REPEAT GAP','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeyup' => 'return mtrsForStickers()', 'onkeypress' => 'return isNumberKey(event)')) !!}
+										{!! Form::number('repeat_gap',$value = '', array('class' => 'form-control input-sm','placeholder' => 'REPEAT GAP','required','min' => '1','max' => '999999999', 'data-max-error' => 'Value should be <= 999999999', 'data-min-error' => 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeyup' => 'return mtrsForStickers()', 'onkeypress' => 'return isNumberKey(event)')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('machine', 'MACHINE :', ['class' => 'form_label']) !!}
-										{!! Form::number('machine',$value = '', array('class' => 'form-control input-sm','placeholder' => 'MACHINE','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.', 'onkeypress' => 'return isNumber(event)')) !!}
+										{!! Form::number('machine',$value = '', array('class' => 'form-control input-sm','placeholder' => 'MACHINE','required','min' => '1','max' => '999999999', 'data-max-error' => 'Value should be <= 999999999', 'data-min-error' => 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.', 'onkeypress' => 'return isNumber(event)')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
@@ -438,14 +441,14 @@
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('roll_width', 'ROLL WIDTH :', ['class' => 'form_label']) !!}
-										{!! Form::number('roll_width',$value = '', array('class' => 'form-control input-sm','placeholder' => 'ROLL WIDTH','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeypress' => 'return isNumberKey(event)')) !!}
+										{!! Form::number('roll_width',$value = '', array('class' => 'form-control input-sm','placeholder' => 'ROLL WIDTH','required','min' => '1','max' => '999999999', 'data-max-error' => 'Value should be <= 999999999', 'data-min-error' => 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeypress' => 'return isNumberKey(event)')) !!}
 										<div class="help-block with-errors"></div>
 								    </div>
 								</div>
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('film_no', 'FILM NO :', ['class' => 'form_label']) !!}
-										{!! Form::number('film_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'FILM NO','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.', 'onkeypress' => 'return isNumber(event)')) !!}
+										{!! Form::number('film_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'FILM NO','required','min' => '1','max' => '999999999', 'data-max-error' => 'Value should be <= 999999999', 'data-min-error' => 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.', 'onkeypress' => 'return isNumber(event)')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
@@ -466,21 +469,21 @@
 								<div class="col-md-3">
 								   <div class="form-group has-feedback form-inline">
 										{!! Form::label('length_side', 'LENGTH SIDE :', ['class' => 'form_label']) !!}
-										{!! Form::number('length_side',$value = '', array('class' => 'form-control input-sm','placeholder' => 'LENGTH SIDE','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeyup' => 'return mtrsForStickers()', 'onkeypress' => 'return isNumberKey(event)')) !!}
+										{!! Form::number('length_side',$value = '', array('class' => 'form-control input-sm','placeholder' => 'LENGTH SIDE','required','min' => '1','max' => '999999999', 'data-max-error' => 'Value should be <= 999999999', 'data-min-error' => 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeyup' => 'return mtrsForStickers()', 'onkeypress' => 'return isNumberKey(event)')) !!}
 										<div class="help-block with-errors"></div>
 								   </div>
 								</div>
 								<div class="col-md-3">
 							        <div class="form-group has-feedback form-inline">
 										{!! Form::label('excess', 'EXCESS % :', ['class' => 'form_label']) !!}
-										{!! Form::number('excess',$value = '', array('class' => 'form-control input-sm','placeholder' => 'EXCESS','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'onkeyup' => 'return calculateExcess(this)', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeypress' => 'return isNumberKey(event)')) !!}
+										{!! Form::number('excess',$value = '', array('class' => 'form-control input-sm','placeholder' => 'EXCESS','required','min' => '1','max' => '999999999', 'data-max-error' => 'Value should be <= 999999999', 'data-min-error' => 'Value should be greater than 0', 'onkeyup' => 'return calculateExcess(this)', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeypress' => 'return isNumberKey(event)')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('teeth_no', 'TEETH NO :', ['class' => 'form_label']) !!}
-										{!! Form::number('teeth_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'TEETH NO','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.', 'onkeypress' => 'return isNumber(event)')) !!}
+										{!! Form::number('teeth_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'TEETH NO','required','min' => '1','max' => '999999999', 'data-max-error' => 'Value should be <= 999999999', 'data-min-error' => 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.', 'onkeypress' => 'return isNumber(event)')) !!}
 										<div class="help-block with-errors"></div>
 								    </div>
 								</div>
@@ -489,14 +492,14 @@
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('inv_no', 'INV NO :', ['class' => 'form_label']) !!}
-										{!! Form::text('inv_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'INV NO','required','maxlength' => '10')) !!}
+										{!! Form::text('inv_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'INV NO','required','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('no_sticker', 'NO OF STICKERS :', ['class' => 'form_label']) !!}
-										{!! Form::number('no_sticker',$value = '', array('class' => 'form-control input-sm','placeholder' => 'NO OF STICKERS','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.', 'onkeyup' => 'return mtrsForStickers()', 'onkeypress' => 'return isNumber(event)')) !!}
+										{!! Form::number('no_sticker',$value = '', array('class' => 'form-control input-sm','placeholder' => 'NO OF STICKERS','required','min' => '1','max' => '999999999', 'data-max-error' => 'Value should be <= 999999999', 'data-min-error' => 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.', 'onkeyup' => 'return mtrsForStickers()', 'onkeypress' => 'return isNumber(event)')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
@@ -505,7 +508,7 @@
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('finish_type', 'FINISH TYPE :', ['class' => 'form_label']) !!}
-										{!! Form::number('finish_type',$value = '', array('class' => 'form-control input-sm','placeholder' => 'FINISH TYPE','required','min' => '1','maxlength' => '10', 'data-min-error' => 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.', 'onkeypress' => 'return isNumber(event)')) !!}
+										{!! Form::number('finish_type',$value = '', array('class' => 'form-control input-sm','placeholder' => 'FINISH TYPE','required','min' => '1','max' => '999999999', 'data-max-error' => 'Value should be <= 999999999', 'data-min-error' => 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.', 'onkeypress' => 'return isNumber(event)')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
@@ -537,28 +540,28 @@
 								<div class="col-md-3">
 									<div class="form-group has-feedback form-inline">
 										{!! Form::label('compiled_by', 'COMPILED BY :', ['class' => 'form_label']) !!}
-										{!! Form::text('compiled_by',$value = '', array('class' => 'form-control input-sm','placeholder' => 'COMPILED BY','required','maxlength' => '40')) !!}
+										{!! Form::text('compiled_by',$value = '', array('class' => 'form-control input-sm','placeholder' => 'COMPILED BY','required','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
 									<div class="form-group has-feedback form-inline">
 										{!! Form::label('barcode_read', 'BARCODE READ :', ['class' => 'form_label']) !!}
-										{!! Form::text('barcode_read',$value = '', array('class' => 'form-control input-sm','placeholder' => 'BARCODE READ','required','maxlength' => '40')) !!}
+										{!! Form::text('barcode_read',$value = '', array('class' => 'form-control input-sm','placeholder' => 'BARCODE READ','required','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
 									<div class="form-group has-feedback form-inline">
 										{!! Form::label('operator', 'OPERATOR :', ['class' => 'form_label']) !!}
-										{!! Form::text('operator',$value = '', array('class' => 'form-control input-sm','placeholder' => 'OPERATOR','required','maxlength' => '40')) !!}
+										{!! Form::text('operator',$value = '', array('class' => 'form-control input-sm','placeholder' => 'OPERATOR','required','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
 									<div class="form-group has-feedback form-inline">
 										{!! Form::label('checker', 'CHECKER :', ['class' => 'form_label']) !!}
-										{!! Form::text('checker',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CHECKER','required','maxlength' => '40')) !!}
+										{!! Form::text('checker',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CHECKER','required','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
@@ -569,28 +572,28 @@
 								<div class="col-md-3">
 									<div class="form-group has-feedback form-inline">
 										{!! Form::label('author', 'AUTHORIZED BY :', ['class' => 'form_label']) !!}
-										{!! Form::text('author',$value = '', array('class' => 'form-control input-sm','placeholder' => 'AUTHORIZED BY','required','maxlength' => '40')) !!}
+										{!! Form::text('author',$value = '', array('class' => 'form-control input-sm','placeholder' => 'AUTHORIZED BY','required','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
 									<div class="form-group has-feedback form-inline">
 										{!! Form::label('axicon_verifier', 'AXICON VERIFIER :', ['class' => 'form_label']) !!}
-										{!! Form::text('axicon_verifier',$value = '', array('class' => 'form-control input-sm','placeholder' => 'AXICON VERIFIER','required','maxlength' => '40')) !!}
+										{!! Form::text('axicon_verifier',$value = '', array('class' => 'form-control input-sm','placeholder' => 'AXICON VERIFIER','required','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
 									<div class="form-group has-feedback form-inline">
 										{!! Form::label('approved_by', 'APPROVED BY :', ['class' => 'form_label']) !!}
-										{!! Form::text('approved_by',$value = '', array('class' => 'form-control input-sm','placeholder' => 'APPROVED BY','required','maxlength' => '40')) !!}
+										{!! Form::text('approved_by',$value = '', array('class' => 'form-control input-sm','placeholder' => 'APPROVED BY','required','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
 									<div class="form-group has-feedback form-inline">
 										{!! Form::label('packer', 'PACKER :', ['class' => 'form_label']) !!}
-										{!! Form::text('packer',$value = '', array('class' => 'form-control input-sm','placeholder' => 'PACKER','required','maxlength' => '40')) !!}
+										{!! Form::text('packer',$value = '', array('class' => 'form-control input-sm','placeholder' => 'PACKER','required','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
@@ -613,21 +616,21 @@
 								<div class="col-md-3">
 									<div class="form-group has-feedback form-inline">
 										{!! Form::label('roll_issued_by', 'ROLL ISSUED BY :', ['class' => 'form_label']) !!}
-										{!! Form::text('roll_issued_by',$value = '', array('class' => 'form-control input-sm','placeholder' => 'ROLL ISSUED BY','required','maxlength' => '40')) !!}
+										{!! Form::text('roll_issued_by',$value = '', array('class' => 'form-control input-sm','placeholder' => 'ROLL ISSUED BY','required','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
 									<div class="form-group has-feedback form-inline">
 										{!! Form::label('cutter', 'CUTTER :', ['class' => 'form_label']) !!}
-										{!! Form::text('cutter',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CUTTER','required','maxlength' => '40')) !!}
+										{!! Form::text('cutter',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CUTTER','required','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
 									<div class="form-group has-feedback form-inline">
 										{!! Form::label('cartons', 'CARTONS :', ['class' => 'form_label']) !!}
-										{!! Form::text('cartons',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CARTONS','required','maxlength' => '40')) !!}
+										{!! Form::text('cartons',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CARTONS','required','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
@@ -637,7 +640,7 @@
                  </div>
                  <div class="modal-footer jobcard-creation-modal-footer">
                      {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-					 {!! Form::button('Print & Send', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+					 {!! Form::button('Print', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                  </div>
             {!! Form::close() !!}
          </div>
@@ -647,5 +650,79 @@
 <div id="snackbar"><span class="snackbar_span"></span></div>
 
 @endsection @section('jqueryIncludes')
+<script>
+$(document).ready(function() {
+	/** reset all filters  **/
+	$('#erp_id_filter').val('').change();
+	$('#customer_name_filter').val('').change();
+	$('#po_number_filter').val('').change();
+	$('#style_number_filter').val('').change();
+	$('#ref_number_filter').val('').change();
+	$('#delivery_date_filter').val('').change();
+	$('.selectpicker').selectpicker('val', 1);
+	$('.selectpicker').selectpicker('refresh');
 
+	/** [ Toggle bootstrap tooltip ] */
+	$('.preview-pdf').tooltip('show');
+	$('.preview-pdf').tooltip('toggle');
+	
+	/** [ Make companies card active ] */
+	$('div.buyers-card').click(function(){
+
+		  $('div.buyers-card').removeClass("active");
+		  $(this).addClass("active");
+		  $('#hidden-buyer-div').hide();
+
+		  /* Save selected company into localdb */
+	      if ($('.buyers-card.active-buyer.active').length != 0) 
+	      {
+         	var company_id = $('.buyers-card.active-buyer.active').data("value"); 
+		  	var company_name = $('.buyers-card.active-buyer.active').attr("id");
+         	 $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
+          	$('#buyerSelectionModalCenter').modal('hide');
+		  
+			$.ajax({
+				url: base_url + "/erp/po-manager/set_company_session",
+				type: "Post",
+				dataType: "json",
+				data: {
+					_token: csrf_token,
+					company_id: company_id,
+					company_name:company_name
+				},
+				beforeSend: function() {
+					location.reload();
+				},
+				success: function(data) {
+				},
+				error: function(data) {
+
+				},
+				complete: function() {
+
+				}
+			})
+	      }
+	  
+	});
+	
+	/** [ Show already selected(active) buyer on clicking company menu] */
+	$('.company-nav-menu').on('click', function() {
+	    $("#buyerSelectionModalCenter").modal("show");
+	});
+
+	if($('#company_name').val() != null && $('#company_name').val() != "")
+	{
+		$('#'+$('#company_name').val()).addClass('active');
+	}
+	else
+	{
+		$('div.buyers-card').first().addClass("active");
+	}
+   
+    $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
+	
+	$('.company-nav-menu').html($('.company-nav-div').html());
+});
+</script>
 @endsection

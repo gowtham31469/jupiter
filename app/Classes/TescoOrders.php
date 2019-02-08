@@ -656,7 +656,7 @@ class TescoOrders
         }
   }
 
-  public function updateTescoOrders($table_name,$temp_data,$request)
+  public function updateTescoOrders($table_name,$temp_data,$request,$customer_id)
   {
     try
     {
@@ -689,6 +689,7 @@ class TescoOrders
                       ->where('uk_style_ref',$temp_data->uk_style_ref)
                       ->where('ce_style_ref',$temp_data->ce_style_ref)
                       ->where('tesco_supplier_id',$temp_data->tesco_supplier_id)->first();
+
             DB::table($table)->where('po_number',$temp_data->po_number)
                 ->where('uk_style_ref',$temp_data->uk_style_ref)
                 ->where('ce_style_ref',$temp_data->ce_style_ref)
@@ -696,70 +697,102 @@ class TescoOrders
                 ->update([
                     'zone'                 => $request['zone'],
                     'template_type'        => $request['type'],
-                   // 'po_number'            => $request['po_number'],
-                   // 'uk_style_ref'         => $request['uk_style'],
-                   // 'ce_style_ref'         => $request['ce_style'],
+                    'po_number'            => $request['po_number'],
+                    'uk_style_ref'         => $request['uk_style'],
+                    'ce_style_ref'         => $request['ce_style'],
                     'season_code'          => $request['season_code'],
                     'short_description'    => $request['description'],
                     'eqos_site_code'       => $request['eqos'],
                     'manufacture_date'     => $request['manufacture_date'],
                     'tesco_department_id'  => $request['department'],
                     'tesco_brand_id'       => $request['brand'],
-                    //'tesco_supplier_id'    => $request['supplier'],
+                    'tesco_metadata_supplier_id' => $request['supplier'],
+                    'tesco_supplier_id'    => $customer_id,
                     'rfid_compliant'       => $request['rfid'],
                     'tag_at_source'        => $request['tag_at_source'],
                   ]);
         $i=0;
-        $old_data = DB::table($qunty_tbl)
-                      ->where($qnty_id,$table_data->id)->orderBy('id')->get();
+
+     $old_data = DB::table($qunty_tbl)
+                      ->where($qnty_id,$table_data->id)->delete();
+
         foreach($tpnd as $value)
         {
             if(($template_name == "TCL1" && $zone=="CE") ||($template_name == "TCL2" && $zone=="CE") || ($template_name == "TSL1" && $zone=="CE") || ($template_name == "THL1" && $zone=="CE"))
-            {              
-                DB::table($qunty_tbl)
-                    ->where('id',$old_data[$i]->id)
-                    ->update([
-                      'orms_tpn'           => $value,
-                      'itf_barcode'        => $barcode[$i],
-                      'cases_per_carton'   => $size[$i],
-                      'size'            =>"0"
-                    ]);
+            {
+                // DB::table($qunty_tbl)
+                //     ->where('id',$old_data[$i]->id)
+                //     ->update([
+                //       'orms_tpn'           => $value,
+                //       'itf_barcode'        => $barcode[$i],
+                //       'cases_per_carton'   => $size[$i],
+                //       'size'               => "0"
+                //     ]);
+                  DB::table($qunty_tbl)->insert([
+                    'orms_tpn'           => $value,
+                    'itf_barcode'        => $barcode[$i],
+                     $qnty_id            => $table_data->id,
+                    'cases_per_carton'   => $size[$i],
+                    'size'               => "0"
+                  ]);
             }
             else if(($template_name == "TCL4" && $zone=="CE") || ($template_name == "TSL3" && $zone=="CE") || ($template_name == "THL3" && $zone=="CE"))
             {
-                    
-                DB::table($qunty_tbl)
-                    ->where('id',$old_data[$i]->id)
-                    ->update([
-                      'orms_tpn'           => $value,
-                      'ean_barcode'        => $barcode[$i],
-                      'case_size'         => $size[$i],
-                      'size'            =>$single_size[$i]
+                // DB::table($qunty_tbl)
+                //     ->where('id',$old_data[$i]->id)
+                //     ->update([
+                //       'orms_tpn'           => $value,
+                //       'ean_barcode'        => $barcode[$i],
+                //       'case_size'         => $size[$i],
+                //       'size'            =>$single_size[$i]
+                //     ]);
+
+                    DB::table($qty_table_name)->insert([
+                      'orms_tpn'        => $value,
+                      'ean_barcode'     => $barcode[$i],
+                      'case_size'       => $size[$i],
+                      $qnty_id            => $table_data->id,
+                      'size'            => $single_size[$i]
                     ]);
             }
             else if(($template_name == "TCL4" && $zone=="UK") || ($template_name == "TSL3" && $zone=="UK") || ($template_name == "THL3" && $zone=="UK"))
             {
                 
-                DB::table($qunty_tbl)
-                  ->where('id',$old_data[$i]->id)
-                  ->update([
-                    'tpnd'           => $value,
-                    'ean_barcode'        => $barcode[$i],
-                    'case_size'   => $size[$i],
-                    'size'            =>$single_size[$i]
+                // DB::table($qunty_tbl)
+                //   ->where('id',$old_data[$i]->id)
+                //   ->update([
+                //     'tpnd'           => $value,
+                //     'ean_barcode'        => $barcode[$i],
+                //     'case_size'   => $size[$i],
+                //     'size'            =>$single_size[$i]
+                //   ]);
+
+                   DB::table($qty_table_name)->insert([
+                      'tpnd'           => $value,
+                      'ean_barcode'        => $barcode[$i],
+                      'case_size'   => $size[$i],
+                      'size'            =>$single_size[$i],
+                      $qnty_id            => $table_data->id
                   ]);
             }
             else if(($template_name == "TCL1" && $zone=="UK") ||($template_name == "TCL2" && $zone=="UK") || ($template_name == "TSL1" && $zone=="UK") || ($template_name == "THL1" && $zone=="UK"))
             {
-                
-                DB::table($qunty_tbl)
-                    ->where('id',$old_data[$i]->id)
-                    ->update([
+                // DB::table($qunty_tbl)
+                //     ->where('id',$old_data[$i]->id)
+                //     ->update([
+                //       'tpnd'               => $value,
+                //       'itf_barcode'        => $barcode[$i],
+                //       'units_per_carton'   => $size[$i],
+                //       'size'               => "0"
+                // ]);
+
+                    DB::table($qty_table_name)->insert([
                       'tpnd'               => $value,
                       'itf_barcode'        => $barcode[$i],
                       'units_per_carton'   => $size[$i],
-                      'size'               => "0"
-                ]);
+                      'size'               => "0",
+                      $qnty_id            => $table_data->id
+                  ]);
             }
             $i++;
         }
@@ -782,7 +815,7 @@ class TescoOrders
       $template_id     = $request['edit_id'];
       $template_name   = $request['template_name'];
       $zone            = $request['zone'];
-      
+     
       if ($table_name == "tesco_tcl1_orders" || $table_name == "tesco_tcl2_orders" || $table_name == "tesco_tsl1_orders") {
           $table_array = array('tesco_tcl1_orders','tesco_tcl2_orders','tesco_tsl1_orders');
           $qnty_id_array = array('tesco_tcl1_orders_quanty','tesco_tcl2_orders_quanty','tesco_tsl1_orders_quanty');
@@ -796,6 +829,7 @@ class TescoOrders
           $single_size = explode(',',$request['single_size']);
       }
       unset($template_array[$table_name]);
+
       foreach ($template_array as $table => $qunty_tbl) 
       {
         $qnty_id =  str_replace("_orders","_order_id",str_replace("tesco_","",$table));
@@ -804,16 +838,16 @@ class TescoOrders
                       ->where('uk_style_ref',$temp_data->uk_style_ref)
                       ->where('ce_style_ref',$temp_data->ce_style_ref)
                       ->where('tesco_supplier_id',$temp_data->tesco_supplier_id)->first();
-            print_r($table);
+                   
             DB::table($table)->where('po_number',$temp_data->po_number)
                 ->where('uk_style_ref',$temp_data->uk_style_ref)
                 ->where('ce_style_ref',$temp_data->ce_style_ref)
                 ->update([
                     'zone'                 => $request['zone'],
                     'template_type'        => $request['type'],
-                   // 'po_number'            => $request['po_number'],
-                   // 'uk_style_ref'         => $request['uk_style'],
-                   // 'ce_style_ref'         => $request['ce_style'],
+                    'po_number'            => $request['po_number'],
+                    'uk_style_ref'         => $request['uk_style'],
+                    'ce_style_ref'         => $request['ce_style'],
                     'season_code'          => $request['season_code'],
                     'short_description'    => $request['description'],
                     'eqos_site_code'       => $request['eqos'],
@@ -827,60 +861,88 @@ class TescoOrders
                   ]);
           $i=0;
 
+          // $old_data = DB::table($qunty_tbl)
+                      // ->where($qnty_id,$table_data->id)->orderBy('id')->get();
           $old_data = DB::table($qunty_tbl)
-                      ->where($qnty_id,$table_data->id)->orderBy('id')->get();
-
-
+                      ->where($qnty_id,$table_data->id)->delete();
 
         foreach($tpnd as $value)
         {
             if(($template_name == "TCL1" && $zone=="CE") ||($template_name == "TCL2" && $zone=="CE") || ($template_name == "TSL1" && $zone=="CE") || ($template_name == "THL1" && $zone=="CE"))
             {
-                    
-                
-                DB::table($qunty_tbl)
-                    ->where('id',$old_data[$i]->id)
-                    ->update([
-                      'orms_tpn'           => $value,
-                      'itf_barcode'        => $barcode[$i],
-                      'cases_per_carton'   => $size[$i],
-                      'size'            =>"0"
-                    ]);
+                // DB::table($qunty_tbl)
+                //     ->where('id',$old_data[$i]->id)
+                //     ->update([
+                //       'orms_tpn'           => $value,
+                //       'itf_barcode'        => $barcode[$i],
+                //       'cases_per_carton'   => $size[$i],
+                //       'size'               => "0"
+                //     ]);
+                  DB::table($qunty_tbl)->insert([
+                    'orms_tpn'           => $value,
+                    'itf_barcode'        => $barcode[$i],
+                     $qnty_id            => $table_data->id,
+                    'cases_per_carton'   => $size[$i],
+                    'size'               => "0"
+                  ]);
             }
             else if(($template_name == "TCL4" && $zone=="CE") || ($template_name == "TSL3" && $zone=="CE") || ($template_name == "THL3" && $zone=="CE"))
             {
-                DB::table($qunty_tbl)
-                    ->where('id',$old_data[$i]->id)
-                    ->update([
-                      'orms_tpn'           => $value,
-                      'ean_barcode'        => $barcode[$i],
-                      'case_size'         => $size[$i],
-                      'size'            =>$single_size[$i]
+                // DB::table($qunty_tbl)
+                //     ->where('id',$old_data[$i]->id)
+                //     ->update([
+                //       'orms_tpn'           => $value,
+                //       'ean_barcode'        => $barcode[$i],
+                //       'case_size'         => $size[$i],
+                //       'size'            =>$single_size[$i]
+                //     ]);
+
+                    DB::table($qty_table_name)->insert([
+                      'orms_tpn'        => $value,
+                      'ean_barcode'     => $barcode[$i],
+                      'case_size'       => $size[$i],
+                      $qnty_id            => $table_data->id,
+                      'size'            => $single_size[$i]
                     ]);
             }
             else if(($template_name == "TCL4" && $zone=="UK") || ($template_name == "TSL3" && $zone=="UK") || ($template_name == "THL3" && $zone=="UK"))
             {
                 
-                DB::table($qunty_tbl)
-                  ->where('id',$old_data[$i]->id)
-                  ->update([
-                    'tpnd'           => $value,
-                    'ean_barcode'        => $barcode[$i],
-                    'case_size'   => $size[$i],
-                    'size'            =>$single_size[$i]
+                // DB::table($qunty_tbl)
+                //   ->where('id',$old_data[$i]->id)
+                //   ->update([
+                //     'tpnd'           => $value,
+                //     'ean_barcode'        => $barcode[$i],
+                //     'case_size'   => $size[$i],
+                //     'size'            =>$single_size[$i]
+                //   ]);
+
+                   DB::table($qty_table_name)->insert([
+                      'tpnd'           => $value,
+                      'ean_barcode'        => $barcode[$i],
+                      'case_size'   => $size[$i],
+                      'size'            =>$single_size[$i],
+                      $qnty_id            => $table_data->id
                   ]);
             }
             else if(($template_name == "TCL1" && $zone=="UK") ||($template_name == "TCL2" && $zone=="UK") || ($template_name == "TSL1" && $zone=="UK") || ($template_name == "THL1" && $zone=="UK"))
             {
-                
-                DB::table($qunty_tbl)
-                    ->where('id',$old_data[$i]->id)
-                    ->update([
+                // DB::table($qunty_tbl)
+                //     ->where('id',$old_data[$i]->id)
+                //     ->update([
+                //       'tpnd'               => $value,
+                //       'itf_barcode'        => $barcode[$i],
+                //       'units_per_carton'   => $size[$i],
+                //       'size'               => "0"
+                // ]);
+
+                    DB::table($qty_table_name)->insert([
                       'tpnd'               => $value,
                       'itf_barcode'        => $barcode[$i],
                       'units_per_carton'   => $size[$i],
-                      'size'               => "0"
-                ]);
+                      'size'               => "0",
+                      $qnty_id            => $table_data->id
+                  ]);
             }
             $i++;
         }

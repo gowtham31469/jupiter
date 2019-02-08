@@ -16,6 +16,7 @@ use App\ErpOrderDetails as ErpOrderDetails;
 use Carbon\Carbon;
 use PDF;
 use App\Classes\JobcardPDFHeaderFooter;
+use File;
 
 class JobManagerController extends Controller
 {
@@ -46,7 +47,7 @@ class JobManagerController extends Controller
 			$companies   = 	DB::table('erpuser_company_mapping')
 									->join('company','erpuser_company_mapping.company','company.id')
 									->where('erpuser_company_mapping.erp_user',$customer_id)
-									->select('erpuser_company_mapping.*','company.name')
+									->select('erpuser_company_mapping.*','company.name', 'company.logo')
 									->get();
 			$buyers      = 	DB::table('erpuser_buyer')
 									->where('erpuser_buyer.erp_user',$customer_id)
@@ -440,7 +441,7 @@ class JobManagerController extends Controller
 	/**
      * To store Jobcard data.
      * @author [Praveen] <[praveen@wizroots.com]>
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response , pdf file path
      */
 	public function storeJobcardData(Request $request)
 	{
@@ -489,59 +490,60 @@ class JobManagerController extends Controller
 			    $selected_ref    = explode(',', $request['selected_ref_array']);
 				$buyer_pos       = explode(',', $request['selected_buyer_po_array']);
 
-				if(isset($company_id) && isset($workorder_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($repeat_gap) && isset($machine) && isset($cus_del_date) && isset($roll_width)  && isset($film_no) && isset($act_del_date) && isset($length_side) && isset($excess) && isset($teeth_no)  && isset($inv_no) && isset($no_sticker) && isset($finish_type)  && isset($print_color) && isset($compiled_by) && isset($barcode_read) && isset($operator) && isset($checker) && isset($authorized_by) && isset($axicon_verifier) && isset($approved_by) && isset($packer) && isset($approval_date) && isset($roll_issued_by)  && isset($cutter) && isset($cartons) && isset($final_json_obj) )
+				if(isset($company_id) && isset($workorder_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($machine) && isset($cus_del_date)  && isset($film_no) && isset($act_del_date) && isset($teeth_no)  && isset($inv_no) && isset($finish_type)  && isset($compiled_by) && isset($barcode_read) && isset($operator) && isset($checker) && isset($authorized_by) && isset($axicon_verifier) && isset($approved_by) && isset($packer) && isset($approval_date) && isset($roll_issued_by)  && isset($cutter) && isset($cartons) && isset($final_json_obj) )
 				{
 					// Get Erp status table id for 'Jobcard Created' status.
-					// $erp_status_id = DB::table('erp_status')->where('status_name', 'ilike', 'Jobcard Created')->value('id');
-					// $store_jobcard_id = DB::table('jobcard_main_table')->insertGetId([
-					// 	'work_order_id'          => $workorder_id,
-					// 	'company_id'             => $company_id,
-					// 	'customer_id'            => $customer_id,
-					// 	'buyer_id'               => $buyer_id,
-					// 	'created_date'           => $created_date,
-					// 	'material'               => $material,
-					// 	'article'                => $article,
-					// 	'style_number'           => $style_no,
-					// 	'reference'              => $reference,
-					// 	'order_type'             => $order_type,
-					// 	'dispatch_mode'          => $disp_mode,
-					// 	'order_date'             => $order_date,
-					// 	'length'                 => $length,
-					// 	'repeat_gap'             => $repeat_gap,
-					// 	'machine'                => $machine,
-					// 	'customer_del_date'      => $cus_del_date,
-					// 	'width'                  => $width,
-					// 	'roll_width'             => $roll_width,
-					// 	'film_no'                => $film_no,
-					// 	'act_del_date'           => $act_del_date,
-					// 	'length_side'            => $length_side,
-					// 	'excess_percentage'      => $excess,
-					// 	'teeth_no'               => $teeth_no,
-					// 	'invoice_num'            => $inv_no,
-					// 	'no_of_stickers'         => $no_sticker,
-					// 	'finish_type'            => $finish_type,
-					// 	'print_color'            => $print_color,
-					// 	'compiled_by'            => $compiled_by,
-					// 	'barcode_read'           => $barcode_read,
-					// 	'operator'               => $operator,
-					// 	'checker'                => $checker,
-					// 	'authorized_by'          => $authorized_by,
-					// 	'axicon_verifier'        => $axicon_verifier,
-					// 	'approved_by'            => $approved_by,
-					// 	'packer'                 => $packer,
-					// 	'approval_date'          => $approval_date,
-					// 	'roll_issued_by'         => $roll_issued_by,
-					// 	'cutter'                 => $cutter,
-					// 	'cartons'                => $cartons,
-					// 	'template_quantity_json' => $final_json_obj,
-					// 	'created_at'             => Carbon::now('Asia/Kolkata')->toDateTimeString(),
-					// 	'updated_at'             => Carbon::now('Asia/Kolkata')->toDateTimeString()
-					//   ]);
-					// /** Store jobcard settings and excess details**/
-					// if($store_jobcard_id != '')
-					// {
-					// 	if (!empty($request['single_ref'])) 
-					// 	{
+					$erp_status_id = DB::table('erp_status')->where('status_name', 'ilike', 'Jobcard Created')->value('id');
+					$store_jobcard_id = DB::table('jobcard_main_table')->insertGetId([
+						'work_order_id'          => $workorder_id,
+						'company_id'             => $company_id,
+						'customer_id'            => $customer_id,
+						'buyer_id'               => $buyer_id,
+						'created_date'           => $created_date,
+						'material'               => $material,
+						'article'                => $article,
+						'style_number'           => $style_no,
+						'reference'              => $reference,
+						'order_type'             => $order_type,
+						'dispatch_mode'          => $disp_mode,
+						'order_date'             => $order_date,
+						'length'                 => $length,
+						'repeat_gap'             => $repeat_gap,
+						'machine'                => $machine,
+						'customer_del_date'      => $cus_del_date,
+						'width'                  => $width,
+						'roll_width'             => $roll_width,
+						'film_no'                => $film_no,
+						'act_del_date'           => $act_del_date,
+						'length_side'            => $length_side,
+						'excess_percentage'      => $excess,
+						'teeth_no'               => $teeth_no,
+						'invoice_num'            => $inv_no,
+						'no_of_stickers'         => $no_sticker,
+						'finish_type'            => $finish_type,
+						'print_color'            => $print_color,
+						'compiled_by'            => $compiled_by,
+						'barcode_read'           => $barcode_read,
+						'operator'               => $operator,
+						'checker'                => $checker,
+						'authorized_by'          => $authorized_by,
+						'axicon_verifier'        => $axicon_verifier,
+						'approved_by'            => $approved_by,
+						'packer'                 => $packer,
+						'approval_date'          => $approval_date,
+						'roll_issued_by'         => $roll_issued_by,
+						'cutter'                 => $cutter,
+						'cartons'                => $cartons,
+						'template_quantity_json' => $final_json_obj,
+						'created_at'             => Carbon::now('Asia/Kolkata')->toDateTimeString(),
+						'updated_at'             => Carbon::now('Asia/Kolkata')->toDateTimeString()
+					  ]);
+					
+					/** Store jobcard settings and excess details**/
+					if($store_jobcard_id != '')
+					{
+						if (!empty($request['single_ref'])) 
+						{
 							
 							$single_ref      = explode(',', $request['single_ref']);
 							$act_excess 	 = explode(',', $request['act_excess']);
@@ -549,222 +551,163 @@ class JobManagerController extends Controller
 							$settings        = explode(',', $request['settings']);
 							$total_mtrs 	 = explode(',', $request['total_mtrs']);
 
-					// 		$i = 0;
-					// 		foreach($single_ref as $value)
-					// 		{
-					// 			$store_jobcard_details = DB::table('jobcard_excess_details')->insert([
-					// 				'jobcard_main_table_id'   => $store_jobcard_id,
-					// 				'ref_name'                => $single_ref[$i],
-					// 				'mtrs_for_stickers'       => $sticker_mtr[$i],
-					// 				'actual_excess'           => $act_excess[$i],
-					// 				'settings'                => $settings[$i],
-					// 				'total_mtrs'              => $total_mtrs[$i],
-					// 				'created_at'              => Carbon::now('Asia/Kolkata')->toDateTimeString(),
-					// 				'updated_at'              => Carbon::now('Asia/Kolkata')->toDateTimeString()
-					// 			]);
-					// 			$i++;
-					// 		}
-					// 	}
-						// else
-						// {
-						// 	$single_ref      = '';
-						// 	$act_excess 	 = '';
-						// 	$sticker_mtr 	 = '';
-						// 	$settings        = '';
-						// 	$total_mtrs 	 = '';
-						// }
+							$i = 0;
+							foreach($single_ref as $value)
+							{
+								$store_jobcard_details = DB::table('jobcard_excess_details')->insert([
+									'jobcard_main_table_id'   => $store_jobcard_id,
+									'ref_name'                => $single_ref[$i],
+									'mtrs_for_stickers'       => $sticker_mtr[$i],
+									'actual_excess'           => $act_excess[$i],
+									'settings'                => $settings[$i],
+									'total_mtrs'              => $total_mtrs[$i],
+									'created_at'              => Carbon::now('Asia/Kolkata')->toDateTimeString(),
+									'updated_at'              => Carbon::now('Asia/Kolkata')->toDateTimeString()
+								]);
+								$i++;
+							}
+						}
+						else
+						{
+							$single_ref      = explode(',', $request['single_ref']);
+							$act_excess 	 = explode(',', $request['act_excess']);
+							$sticker_mtr 	 = explode(',', $request['sticker_mtr']);
+							$settings        = explode(',', $request['settings']);
+							$total_mtrs 	 = explode(',', $request['total_mtrs']);
+						}
 
-					// 	/** Update jobcard created status erp order details table */
-					// 	foreach($erp_orders_ids as $row => $erp_orders_id)
-					// 	{
-					// 		DB::table('erp_order_details')
-					// 		->where('erp_order_details.erp_order_id', $erp_orders_id)
-					// 		->where('erp_order_details.reference_name', 'ilike', $selected_ref[$row])
-					// 		->where('erp_order_details.buyer_po_number', 'ilike', $buyer_pos[$row])
-					// 		->update([
-					// 			'status'  => $erp_status_id
-					// 		]);
-					// 	}
-					// 	/** Update jobcard created status erp orders table(iff, all the orders in the order details table have same status. ie, after creating jobcard for all orders) */
-					// 	foreach($erp_orders_ids as $row => $erp_orders_id)
-					// 	{
-					// 		$erp_order_table_status = DB::table('erp_order_details')
-					// 		    ->where('erp_order_details.erp_order_id', $erp_orders_id)
-					// 		    ->pluck('status')->all();
+						/** Update jobcard created status erp order details table */
+						foreach($erp_orders_ids as $row => $erp_orders_id)
+						{
+							DB::table('erp_order_details')
+							->where('erp_order_details.erp_order_id', $erp_orders_id)
+							->where('erp_order_details.reference_name', 'ilike', $selected_ref[$row])
+							->where('erp_order_details.buyer_po_number', 'ilike', $buyer_pos[$row])
+							->update([
+								'status'  => $erp_status_id
+							]);
+						}
+
+						/** Update jobcard created status erp orders table(iff, all the orders in the order details table have same status. ie, after creating jobcard for all orders) */
+						foreach($erp_orders_ids as $row => $erp_orders_id)
+						{
+							$erp_order_table_status = DB::table('erp_order_details')
+							    ->where('erp_order_details.erp_order_id', $erp_orders_id)
+							    ->pluck('status')->all();
 							
-					// 		if(count(array_unique($erp_order_table_status)) === 1)
-					// 		{
-					// 			DB::table('erp_orders')
-					// 				->where('erp_orders.id', $erp_orders_id)
-					// 				->update([
-					// 					'status'  => $erp_order_table_status[0]
-					// 				]);
-					// 		}
-					// 	}
-					//	$result = response()->json(['error'=> false,'message' =>'success'],200);
-					$buyer = DB::table('buyers')->select('buyer_name')->where('id', '=', $buyer_id)->first();
-					$customer = DB::table('customers')->select('short_name as customer_name')->where('id', '=', $customer_id)->first();
-					$company = DB::table('company')->select('name as company', 'address as company_address', 'logo as company_logo')->where('id', '=', $company_id)->first();
-					/** [ Creating new object for TescoOrders() class ] */
-				   $pdf = new JobcardPDFHeaderFooter(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-				   $pdf->setData($company, $workorder_id, $created_date, $article, $material, $compiled_by, $barcode_read, $operator, $checker, $authorized_by, $axicon_verifier, $approved_by, $packer, $approval_date, $roll_issued_by, $cutter, $cartons);	
+							if(count(array_unique($erp_order_table_status)) === 1)
+							{
+								DB::table('erp_orders')
+									->where('erp_orders.id', $erp_orders_id)
+									->update([
+										'status'  => $erp_order_table_status[0]
+									]);
+							}
+						}
 
-//margins
-$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-// set header and footer fonts
-$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-// set auto page breaks
-$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+						$buyer = DB::table('buyers')->select('buyer_name')->where('id', '=', $buyer_id)->first();
+						$customer = DB::table('customers')->select('short_name as customer_name')->where('id', '=', $customer_id)->first();
+						$company = DB::table('company')->select('name as company', 'address as company_address', 'logo as company_logo')->where('id', '=', $company_id)->first();
 
-// set image scale factor
-$pdf->setImageScale(1.8);
+						/** [ Creating new object for JobcardPDFHeaderFooter() class ] */
+						$pdf = new JobcardPDFHeaderFooter(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+						$pdf->setData($company, $workorder_id, Carbon::parse($created_date)->format('d-m-Y'), $article, $material, $compiled_by, $barcode_read, $operator, $checker, $authorized_by, $axicon_verifier, $approved_by, $packer, Carbon::parse($approval_date)->format('d-m-Y'), $roll_issued_by, $cutter, $cartons);	
 
-// set font
-$pdf->SetFont('helvetica', '', 8);
+						$pdf->SetPrintHeader(true);
+						$pdf->SetPrintFooter(true);  
 
-// add a page
-$pdf->AddPage('P', 'A4');
-
-// set some text to print
-$view = View::make('erp/Jobmanager/jobcard-pdf-template')
-		->with([
-				'buyer' => $buyer,
-				'customer' => $customer,
-				'company'=>$company,
-				'workorder_id'=>$workorder_id,
-				'created_date'=>Carbon::parse($created_date)->format('d-m-Y'),
-				'article'=> $article,
-				'material'=>$material,
-				'style_no'=>$style_no,
-				'order_type'=>$order_type,
-				'reference'=>$reference,
-				'disp_mode'=>$disp_mode,
-				'order_date'=>Carbon::parse($order_date)->format('d-m-Y'),
-				'length'=>$length,
-				'repeat_gap'=>$repeat_gap,
-				'machine'=>$machine,
-				'cus_del_date'=>Carbon::parse($cus_del_date)->format('d-m-Y'),
-				'roll_width'=>$roll_width,
-				'width'=>$width,
-				'film_no'=>$film_no, 
-				'act_del_date'=>Carbon::parse($act_del_date)->format('d-m-Y'),
-				'length_side'=>$length_side,
-				'excess'=>$excess,
-				'teeth_no'=>$teeth_no,
-				'inv_no'=>$inv_no,
-				'no_sticker'=>$no_sticker,
-				'finish_type'=>$finish_type,
-				'print_color'=>$print_color,
-				'compiled_by'=>$compiled_by,
-				'barcode_read'=>$barcode_read,
-				'operator'=>$operator,
-				'checker'=>$checker,
-				'authorized_by'=>$authorized_by,
-				'axicon_verifier'=>$axicon_verifier,
-				'approved_by'=>$approved_by,
-				'packer'=>$packer,
-				'approval_date'=>Carbon::parse($approval_date)->format('d-m-Y'),
-				'roll_issued_by'=>$roll_issued_by,
-				'cutter'=>$cutter,
-				'cartons'=>$cartons,
-				'final_json_obj'=>json_decode($final_json_obj, true),
-				'single_ref'=>$single_ref,
-				'act_excess'=>$act_excess,
-				'sticker_mtr'=>$sticker_mtr,
-				'settings'=>$settings,
-				'total_mtrs'=>$total_mtrs
-		]);
-		//append content to header
-		$pdf->SetXY(15, 43);
-		$pdf->writeHTML($view->render());
-	// 	$page_start =$pdf->getPage();
-    //     $y_start =$pdf->GetY();
-    //    $pdf->writeHTML('<p>page start='.$page_start.' </p>
-    //     <p>page y='.$y_start.' </p>', false, false, true, false, '');
-
-// ---------------------------------------------------------
-ob_end_clean();
-//Close and output PDF document
-$pdf->Output( public_path('/storage/app/example_006.pdf'), 'F');
-return "/storage/app/example_006.pdf";
-	
-					 // Create new PDF
-					/* 	define ('PDF_FONT_NAME_MAIN', 'helvetica');
-						define ('PDF_FONT_NAME_DATA', 'helvetica');
-						PDF::setImageScale(1.66);
-						PDF::setPrintHeader(true);
-						PDF::setPrintFooter(true);
-						PDF::SetFont('helvetica', '5');
-						PDF::AddPage('P', 'A4');
+						//margins
+						$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+						$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+						$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+						
+						// set header and footer fonts
+						$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+						$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+						
 						// set auto page breaks
-						PDF::SetAutoPageBreak('PDF_MARGIN_BOTTOM', TRUE);
-						
+						$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+						// set image scale factor
+						$pdf->setImageScale(1.8);
+
+						// set font
+						$pdf->SetFont('helvetica', '', 8);
+
+						// add a page
+						$pdf->AddPage('P', 'A4');
+
+						// set some text to print
 						$view = View::make('erp/Jobmanager/jobcard-pdf-template')
-						->with([
-								'buyer' => $buyer,
-								'customer' => $customer,
-								'company'=>$company,
-								'workorder_id'=>$workorder_id,
-								'created_date'=>Carbon::parse($created_date)->format('d-m-Y'),
-								'article'=> $article,
-								'material'=>$material,
-								'style_no'=>$style_no,
-								'order_type'=>$order_type,
-								'reference'=>$reference,
-								'disp_mode'=>$disp_mode,
-								'order_date'=>Carbon::parse($order_date)->format('d-m-Y'),
-								'length'=>$length,
-								'repeat_gap'=>$repeat_gap,
-								'machine'=>$machine,
-								'cus_del_date'=>Carbon::parse($cus_del_date)->format('d-m-Y'),
-								'roll_width'=>$roll_width,
-								'width'=>$width,
-								'film_no'=>$film_no, 
-								'act_del_date'=>Carbon::parse($act_del_date)->format('d-m-Y'),
-								'length_side'=>$length_side,
-								'excess'=>$excess,
-								'teeth_no'=>$teeth_no,
-								'inv_no'=>$inv_no,
-								'no_sticker'=>$no_sticker,
-								'finish_type'=>$finish_type,
-								'print_color'=>$print_color,
-								'compiled_by'=>$compiled_by,
-								'barcode_read'=>$barcode_read,
-								'operator'=>$operator,
-								'checker'=>$checker,
-								'authorized_by'=>$authorized_by,
-								'axicon_verifier'=>$axicon_verifier,
-								'approved_by'=>$approved_by,
-								'packer'=>$packer,
-								'approval_date'=>Carbon::parse($approval_date)->format('d-m-Y'),
-								'roll_issued_by'=>$roll_issued_by,
-								'cutter'=>$cutter,
-								'cartons'=>$cartons,
-								'final_json_obj'=>json_decode($final_json_obj, true),
-								'single_ref'=>$single_ref,
-								'act_excess'=>$act_excess,
-								'sticker_mtr'=>$sticker_mtr,
-								'settings'=>$settings,
-								'total_mtrs'=>$total_mtrs
-						]);
-				    	PDF::writeHTML($view->render());
-						// Output the HTML content
-					//	PDF::writeHTML($html, true, false, true, false, '');
-						
-						PDF::lastPage();
+								->with([
+										'buyer' 		 => $buyer,
+										'customer' 		 => $customer,
+										'company'		 => $company,
+										'workorder_id'   => $workorder_id,
+										'created_date'   => Carbon::parse($created_date)->format('d-m-Y'),
+										'article'	     => $article,
+										'material'		 => $material,
+										'style_no'		 => $style_no,
+										'order_type'     => $order_type,
+										'reference'		 => $reference,
+										'disp_mode'	     => $disp_mode,
+										'order_date'	 => Carbon::parse($order_date)->format('d-m-Y'),
+										'length'		 => $length,
+										'repeat_gap'	 => $repeat_gap,
+										'machine'		 => $machine,
+										'cus_del_date' 	 => Carbon::parse($cus_del_date)->format('d-m-Y'),
+										'roll_width'	 => $roll_width,
+										'width'	  		 => $width,
+										'film_no'		 => $film_no, 
+										'act_del_date'   => Carbon::parse($act_del_date)->format('d-m-Y'),
+										'length_side'	 => $length_side,
+										'excess'	     => $excess,
+										'teeth_no'		 => $teeth_no,
+										'inv_no'	     => $inv_no,
+										'no_sticker'	 => $no_sticker,
+										'finish_type'	 => $finish_type,
+										'print_color'    => $print_color,
+										'compiled_by'    => $compiled_by,
+										'barcode_read'   => $barcode_read,
+										'operator'       => $operator,
+										'checker'        => $checker,
+										'authorized_by'  => $authorized_by,
+										'axicon_verifier'=> $axicon_verifier,
+										'approved_by'	 => $approved_by,
+										'packer'		 => $packer,
+										'approval_date'  => Carbon::parse($approval_date)->format('d-m-Y'),
+										'roll_issued_by' => $roll_issued_by,
+										'cutter'		 => $cutter,
+										'cartons' 		 => $cartons,
+										'final_json_obj' => json_decode($final_json_obj, true),
+										'single_ref'	 => $single_ref,
+										'act_excess'	 => $act_excess,
+										'sticker_mtr'	 => $sticker_mtr,
+										'settings'		 => $settings,
+										'total_mtrs' 	 => $total_mtrs
+								]);
+
+						//append content to header
+						$pdf->SetXY(15,50);
+						$pdf->writeHTML($view->render());
+
+						//Close and output PDF document
 						ob_end_clean();
-					//	PDF::Output('example_006.pdf', 'FD');
-						PDF::Output( public_path('/storage/app/example_006.pdf'), 'F');
-						return "/storage/app/example_006.pdf"; */
-                        //return url('/storage/app/example_006.pdf');
-					// }
-					// else
-					// {
-					// 	$result = response()->json(['error'=> true,'message' =>'Error'],400);
-					// }
+						$file_path =  "/storage/app/public/jobcards/".$workorder_id."."."pdf";	
+						$pdf->IncludeJS("print();");
+						$pdf->Output( public_path($file_path), 'F');
+
+						DB::table('jobcard_main_table')->where('id', $store_jobcard_id)
+						->update([
+							'file_path'   => $file_path,
+							'updated_at'  => Carbon::now('Asia/Kolkata')->toDateTimeString()
+						]);
+						return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path],200);	
+					}
+					else
+					{
+						return response()->json(['error'=> true,'message' =>'Error'],400);
+					}
 					
 				}
 				else
@@ -776,7 +719,6 @@ return "/storage/app/example_006.pdf";
 		{
 			return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
 		}
-	//	return $result;
 	}
 	/**
    * Print Preview For Stickers
@@ -786,33 +728,8 @@ return "/storage/app/example_006.pdf";
   
     public function printDivTesco(Request $request)
     {
-		
-		//		 // Custom Header
-		//		PDF::setHeaderCallback(function($pdf) {
-		//				 $image_file= K_PATH_IMAGES.'logo_example.jpg';
-		//				 $pdf->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
-		//				// Set font
-		//				$pdf->SetFont('frankgothcnbt');
-		//				// Title
-		//				$pdf->Cell(0, 15, 'Something new right here!!!', 0, false, 'C', 0, '', 0, false, 'M', 'M');
-		//				$html = '<span color="red">red</span> <span color="green">green</span> <span color="blue">blue</span><br /><span color="red">red</span> <span color="green">green</span> <span color="blue">blue</span>';
-		//				$pdf->writeHTMLCell(0, 0, '', '', $html, 'LRTB', 1, 0, true, 'L', true);
-		//
-		//		});
-		//
-		//		// Custom Footer
-		//		PDF::setFooterCallback(function($pdf) {
-		//
-		//				// Position at 15 mm from bottom
-		//				$pdf->SetY(-15);
-		//				// Set font
-		//				$pdf->SetFont('frankgothcnbt');
-		//				// Page number
-		//				$pdf->Cell(0, 10, 'Page '.$pdf->getAliasNumPage().'/'.$pdf->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
-		//
-		//		});
 		$svgarr = explode(',_',$request->svg);
-    $name=$request->name;
+        $name=$request->name;
         $svg=urldecode($request->svg);
         define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
         define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
@@ -821,13 +738,11 @@ return "/storage/app/example_006.pdf";
         PDF::setPrintFooter(false);
         PDF::SetFont('frankgothcnbt');
         PDF::AddPage('P', 'A4');
-        //PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
 		// set auto page breaks
 		PDF::SetAutoPageBreak(TRUE);
 		$i=0;
 		$j=0;
 		$yy=12.5;
-//		PDF::AddPage('L', array(80,127));
 		foreach($svgarr as $value)
 		{
 			$svg=urldecode($value);
@@ -845,9 +760,8 @@ return "/storage/app/example_006.pdf";
 			{
 				$yy += 85;
 			}
-			//print_r($yy);
 			 $i++;
-			$j++;
+			 $j++;
 		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
@@ -870,7 +784,6 @@ return "/storage/app/example_006.pdf";
         PDF::setPrintFooter(false);
         PDF::SetFont('frankgothcnbt');
         PDF::AddPage('P', 'A4');
-        //PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
 		// set auto page breaks
 		PDF::SetAutoPageBreak(TRUE);
         $i=0;
@@ -909,9 +822,8 @@ return "/storage/app/example_006.pdf";
 			$html = '<img style="width:151.18110236px;height:113.38582677px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
 			PDF::writeHTMLCell(42, 32, $xx, $yy, $html, '', 0, 0, false, 'L', false);
 			
-			//print_r($yy);
 			 $i++;
-			$j++;
+			 $j++;
 		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
@@ -977,461 +889,339 @@ return "/storage/app/example_006.pdf";
 		}
 	}
 
-	
-    public function generateJCPDFPreview()
+	/**
+     * Function to get all jobcards list.
+     * @author <Praveen>
+     * @return equivalent list of jobcards
+     */
+    public function getJobcards()
     {
-        // Create new PDF
-		define ('PDF_FONT_NAME_MAIN', 'helvetica');
-		define ('PDF_FONT_NAME_DATA', 'helvetica');
-		PDF::setImageScale(1.66);
-		PDF::setPrintHeader(true);
-		PDF::setPrintFooter(true);
-		PDF::SetFont('helvetica', '5');
-		PDF::AddPage('P', 'A4');
-		// set auto page breaks
-		PDF::SetAutoPageBreak(TRUE);
-		
-		// create some HTML content
-		$html = '<html>
-		<head></head>
-		<style>
+        try {
+				$customer_id = Auth::guard('erpuser')->id();
+				
+				$companies   = 	DB::table('erpuser_company_mapping')
+										->join('company','erpuser_company_mapping.company','company.id')
+										->where('erpuser_company_mapping.erp_user',$customer_id)
+										->select('erpuser_company_mapping.*','company.name', 'company.logo')
+										->get();
+				$company_id   = DB::table('company')
+				->select('company.*')
+				->first();
+				
+				if(session()->get('company') == "" && session()->get('company') == null)
+				{
+					session()->put('company', $company_id->id);
+					session()->put('company_name', strtolower( str_replace(' ','',$company_id->name)) );
+				}
+				$jobcards  = 	DB::table('jobcard_main_table')
+								->select('jobcard_main_table.*','customers.company_name',
+								'buyers.buyer_name')
+								->join('customers', 'jobcard_main_table.customer_id', 'customers.id')
+								->join('buyers', 'jobcard_main_table.buyer_id', 'buyers.id')
+								->where('jobcard_main_table.company_id', '=', session()->get('company'))
+								->get();
 
-		body{
-			font-size: 12px;
+				return view('erp.Jobmanager.jobcards-list', ['jobcards' => $jobcards, 'companies' => $companies]);	
+			} catch (\Exctesteption $e) {
+				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+			}
+	}
+	
+	/**
+     * Function to get jobcard details by id.
+     * @author <Praveen>
+	 * @param  $id
+     * @return equivalent jobcard details
+     */
+    public function getJobcardDetailsById(Request $request)
+    {
+        try {
+				$id = $request['id'];
+
+				$customer_id = Auth::guard('erpuser')->id();
+
+				if(session()->get('company') == "" && session()->get('company') == null && $customer_id == null)
+				{
+					return response()->json(['error'=> true,'message' =>'Not Authorized User'], 401);
+				}
+				else
+				{
+					$jobcard_data  = DB::table('jobcard_main_table')
+										->select('jobcard_main_table.*', 'customers.id as customer_id','customers.short_name as customer', 'buyers.buyer_name', 'buyers.id as buyer_id', 'company.name as company', 'company.id as company_id', 'company.address as company_address','company.logo as company_logo')
+										->join('customers', 'jobcard_main_table.customer_id', 'customers.id')
+										->join('company', 'company.id', 'jobcard_main_table.company_id')
+										->join('buyers', 'jobcard_main_table.buyer_id', 'buyers.id')
+										->where('jobcard_main_table.id', '=', $id)
+										->first();
+					$jobcard_data->created_date      =	Carbon::parse($jobcard_data->created_date)->format('d-m-Y');
+					$jobcard_data->order_date        =	Carbon::parse($jobcard_data->order_date)->format('d-m-Y');
+					$jobcard_data->customer_del_date =	Carbon::parse($jobcard_data->customer_del_date)->format('d-m-Y');
+					$jobcard_data->act_del_date      =	Carbon::parse($jobcard_data->act_del_date)->format('d-m-Y');
+					$jobcard_data->approval_date     =	Carbon::parse($jobcard_data->approval_date)->format('d-m-Y');
+
+				    $jobcard_details  = DB::table('jobcard_excess_details')
+										->select('jobcard_excess_details.ref_name', 'jobcard_excess_details.mtrs_for_stickers', 'jobcard_excess_details.actual_excess', 'jobcard_excess_details.settings', 'jobcard_excess_details.total_mtrs')
+										->where('jobcard_excess_details.jobcard_main_table_id', '=', $jobcard_data->id)
+										->get();
+					$jobcard_data->additional_details = $jobcard_details;					
+					return response()->json(['error'=> false,'message' =>'Success', 'jobcard_data' => $jobcard_data], 200);
+				}
+	
+			} catch (\Exctesteption $e) {
+				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+			}
+	}
+	/**
+     * Function to update jobcard details by id.
+     * @author <Praveen>
+	 * @param  $json_data
+     * @return equivalent pdf file path
+     */
+    public function updateJobcardById(Request $request)
+    {
+		try {
+				$company_id      = $request['company_id'];
+				$workorder_id    = $request['workorder_id'];
+				$created_date    = Carbon::parse($request['created_date'],'Asia/Kolkata')->toDateString();
+				$article         = $request['article'];
+				$material        = $request['material'];
+				$customer_id     = $request['customer_id'];
+				$style_no        = $request['style_no'];
+				$order_type      = $request['order_type'];
+				$buyer_id        = $request['buyer_id'];
+				$reference       = $request['reference'];
+				$disp_mode       = $request['disp_mode'];
+				$order_date      = Carbon::parse($request['order_date'],'Asia/Kolkata')->toDateString();
+				$length          = $request['length'];
+				$repeat_gap      = $request['repeat_gap'];
+				$machine         = $request['machine'];
+				$cus_del_date    = Carbon::parse($request['cus_del_date'],'Asia/Kolkata')->toDateString();
+				$roll_width      = $request['roll_width'];
+				$width           = $request['width'];
+				$film_no         = $request['film_no'];
+				$act_del_date    = Carbon::parse($request['act_del_date'],'Asia/Kolkata')->toDateString();
+				$length_side     = $request['length_side'];
+				$excess          = $request['excess'];
+				$teeth_no        = $request['teeth_no'];
+				$inv_no          = $request['inv_no'];
+				$no_sticker      = $request['no_sticker'];
+				$finish_type     = $request['finish_type'];
+				$print_color     = $request['print_color'];
+				$compiled_by     = $request['compiled_by'];
+				$barcode_read    = $request['barcode_read'];
+				$operator        = $request['operator'];
+				$checker         = $request['checker'];
+				$authorized_by   = $request['authorized_by'];
+				$axicon_verifier = $request['axicon_verifier'];
+				$approved_by     = $request['approved_by'];
+				$packer          = $request['packer'];
+				$approval_date   = Carbon::parse($request['approval_date'],'Asia/Kolkata')->toDateString();
+				$roll_issued_by  = $request['roll_issued_by'];
+				$cutter          = $request['cutter'];
+				$cartons         = $request['cartons'];
+				$final_json_obj  = $request['final_json_obj'];
+				$jobcard_id 	 = $request['jobcard_id'];
+
+				if(isset($company_id) && isset($workorder_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($machine) && isset($cus_del_date)  && isset($film_no) && isset($act_del_date) && isset($teeth_no)  && isset($inv_no) && isset($finish_type)  && isset($compiled_by) && isset($barcode_read) && isset($operator) && isset($checker) && isset($authorized_by) && isset($axicon_verifier) && isset($approved_by) && isset($packer) && isset($approval_date) && isset($roll_issued_by)  && isset($cutter) && isset($cartons) && isset($final_json_obj) && isset($jobcard_id) )
+				{
+					DB::table('jobcard_main_table')->where('id', $jobcard_id)
+					->update([
+						'work_order_id'          => $workorder_id,
+						'company_id'             => $company_id,
+						'customer_id'            => $customer_id,
+						'buyer_id'               => $buyer_id,
+						'created_date'           => $created_date,
+						'material'               => $material,
+						'article'                => $article,
+						'style_number'           => $style_no,
+						'reference'              => $reference,
+						'order_type'             => $order_type,
+						'dispatch_mode'          => $disp_mode,
+						'order_date'             => $order_date,
+						'length'                 => $length,
+						'repeat_gap'             => $repeat_gap,
+						'machine'                => $machine,
+						'customer_del_date'      => $cus_del_date,
+						'width'                  => $width,
+						'roll_width'             => $roll_width,
+						'film_no'                => $film_no,
+						'act_del_date'           => $act_del_date,
+						'length_side'            => $length_side,
+						'excess_percentage'      => $excess,
+						'teeth_no'               => $teeth_no,
+						'invoice_num'            => $inv_no,
+						'no_of_stickers'         => $no_sticker,
+						'finish_type'            => $finish_type,
+						'print_color'            => $print_color,
+						'compiled_by'            => $compiled_by,
+						'barcode_read'           => $barcode_read,
+						'operator'               => $operator,
+						'checker'                => $checker,
+						'authorized_by'          => $authorized_by,
+						'axicon_verifier'        => $axicon_verifier,
+						'approved_by'            => $approved_by,
+						'packer'                 => $packer,
+						'approval_date'          => $approval_date,
+						'roll_issued_by'         => $roll_issued_by,
+						'cutter'                 => $cutter,
+						'cartons'                => $cartons,
+						'template_quantity_json' => $final_json_obj,
+						'updated_at'             => Carbon::now('Asia/Kolkata')->toDateTimeString()
+					]);
+					
+					if (!empty($request['single_ref'])) 
+					{
+						
+						$single_ref      = explode(',', $request['single_ref']);
+						$act_excess 	 = explode(',', $request['act_excess']);
+						$sticker_mtr 	 = explode(',', $request['sticker_mtr']);
+						$settings        = explode(',', $request['settings']);
+						$total_mtrs 	 = explode(',', $request['total_mtrs']);
+
+						// delete data before insertion.
+						DB::table('jobcard_excess_details')->where('jobcard_main_table_id', '=', $jobcard_id)
+							->delete();
+							
+						$i = 0;
+						foreach($single_ref as $value)
+						{
+							$store_jobcard_details = DB::table('jobcard_excess_details')->insert([
+								'jobcard_main_table_id'   => $jobcard_id,
+								'ref_name'                => $single_ref[$i],
+								'mtrs_for_stickers'       => $sticker_mtr[$i],
+								'actual_excess'           => $act_excess[$i],
+								'settings'                => $settings[$i],
+								'total_mtrs'              => $total_mtrs[$i],
+								'created_at'              => Carbon::now('Asia/Kolkata')->toDateTimeString(),
+								'updated_at'              => Carbon::now('Asia/Kolkata')->toDateTimeString()
+							]);
+							$i++;
+						}
+					}
+					else
+					{
+						$single_ref      = explode(',', $request['single_ref']);
+						$act_excess 	 = explode(',', $request['act_excess']);
+						$sticker_mtr 	 = explode(',', $request['sticker_mtr']);
+						$settings        = explode(',', $request['settings']);
+						$total_mtrs 	 = explode(',', $request['total_mtrs']);
+					}
+
+					$buyer = DB::table('buyers')->select('buyer_name')->where('id', '=', $buyer_id)->first();
+					$customer = DB::table('customers')->select('short_name as customer_name')->where('id', '=', $customer_id)->first();
+					$company = DB::table('company')->select('name as company', 'address as company_address', 'logo as company_logo')->where('id', '=', $company_id)->first();
+
+					/** [ Creating new object for JobcardPDFHeaderFooter() class ] */
+					$pdf = new JobcardPDFHeaderFooter(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+					$pdf->setData($company, $workorder_id, Carbon::parse($created_date)->format('d-m-Y'), $article, $material, $compiled_by, $barcode_read, $operator, $checker, $authorized_by, $axicon_verifier, $approved_by, $packer, Carbon::parse($approval_date)->format('d-m-Y'), $roll_issued_by, $cutter, $cartons);	
+
+					$pdf->SetPrintHeader(true);
+					$pdf->SetPrintFooter(true);  
+
+					//margins
+					$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+					$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+					$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+					
+					// set header and footer fonts
+					$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+					$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+					
+					// set auto page breaks
+					$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+					// set image scale factor
+					$pdf->setImageScale(1.8);
+
+					// set font
+					$pdf->SetFont('helvetica', '', 8);
+
+					// add a page
+					$pdf->AddPage('P', 'A4');
+
+					// set some text to print
+					$view = View::make('erp/Jobmanager/jobcard-pdf-template')
+							->with([
+									'buyer' 		 => $buyer,
+									'customer' 		 => $customer,
+									'company'		 => $company,
+									'workorder_id'   => $workorder_id,
+									'created_date'   => Carbon::parse($created_date)->format('d-m-Y'),
+									'article'	     => $article,
+									'material'		 => $material,
+									'style_no'		 => $style_no,
+									'order_type'     => $order_type,
+									'reference'		 => $reference,
+									'disp_mode'	     => $disp_mode,
+									'order_date'	 => Carbon::parse($order_date)->format('d-m-Y'),
+									'length'		 => $length,
+									'repeat_gap'	 => $repeat_gap,
+									'machine'		 => $machine,
+									'cus_del_date' 	 => Carbon::parse($cus_del_date)->format('d-m-Y'),
+									'roll_width'	 => $roll_width,
+									'width'	  		 => $width,
+									'film_no'		 => $film_no, 
+									'act_del_date'   => Carbon::parse($act_del_date)->format('d-m-Y'),
+									'length_side'	 => $length_side,
+									'excess'	     => $excess,
+									'teeth_no'		 => $teeth_no,
+									'inv_no'	     => $inv_no,
+									'no_sticker'	 => $no_sticker,
+									'finish_type'	 => $finish_type,
+									'print_color'    => $print_color,
+									'compiled_by'    => $compiled_by,
+									'barcode_read'   => $barcode_read,
+									'operator'       => $operator,
+									'checker'        => $checker,
+									'authorized_by'  => $authorized_by,
+									'axicon_verifier'=> $axicon_verifier,
+									'approved_by'	 => $approved_by,
+									'packer'		 => $packer,
+									'approval_date'  => Carbon::parse($approval_date)->format('d-m-Y'),
+									'roll_issued_by' => $roll_issued_by,
+									'cutter'		 => $cutter,
+									'cartons' 		 => $cartons,
+									'final_json_obj' => json_decode($final_json_obj, true),
+									'single_ref'	 => $single_ref,
+									'act_excess'	 => $act_excess,
+									'sticker_mtr'	 => $sticker_mtr,
+									'settings'		 => $settings,
+									'total_mtrs' 	 => $total_mtrs
+							]);
+
+					//append content to header
+					$pdf->SetXY(15,50);
+					$pdf->writeHTML($view->render());
+
+					//Close and output PDF document
+					ob_end_clean();
+					$file_path =  "/storage/app/public/jobcards/".$workorder_id."."."pdf";
+
+					/** delete already existing file from folder */	
+					File::delete($file_path);
+					
+					$pdf->IncludeJS("print();");
+					$pdf->Output( public_path($file_path), 'F');
+
+					DB::table('jobcard_main_table')->where('id', $jobcard_id)
+					->update([
+						'file_path'   => $file_path,
+						'updated_at'  => Carbon::now('Asia/Kolkata')->toDateTimeString()
+					]);
+					return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path],200);	
+					
+				}
+				else
+				{
+					return response()->json(['error'=> true,'message' =>'Parameter is Missing'],400);
+				}
 		}
-
-		.ratio-list-table,
-		.single-list-table{
-			 text-align: center !important;
+		catch (\Exception $e)
+		{
+			return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
 		}
-
-		.ratio-list-table td,
-		.single-list-table td {
-			 text-align: center !important;
-		}
-
-		td {
-			height: 25px;
-		  }
-
-		th {
-			height: 25px;
-			text-align: center !important;
-		}
-
-		table {
-			table-layout: fixed;
-			width: 100%;
-			border-collapse: collapse;
-		}
-
-		.ratio-list-table, .single-list-table {
-			padding: 10px;
-			border: 1px dashed gray;
-			display: table-cell;
-			text-align: center;
-			vertical-align: middle;
-		}
-		</style>
-		<body>
-		
-			<div class="container">
-				<div class="row">
-				<div class="col-md-12">
-						<table cellspacing="3" cellpadding="3">
-							<tr >
-								<td>
-								<p><strong id="jc_company_name">Jupiter Garments Accessories</strong></p>
-								<p id="company_address">1-J-27-1&amp;3, Jupiter Avenue, Anupparpalayam, Tirupur -641632 </p>
-								</td>
-								<td style="text-align: right;">
-									<img src="images/logo.png" style="height: 62px;margin-top: 30px;"/>
-								</td>
-							</tr>
-						</table>
-				</div>
-				</div>
-				<hr>
-				<div class="row">
-					<div class="col-md-12">
-						<table cellspacing="3" cellpadding="3">
-							<tr>
-								<td>
-									<label for="work_order">WORKORDER :</label>
-									<span id="work_order">JGA-JC-32044331</span>
-								</td>
-								<td style="text-align: right;">
-									<label for="today_date">DATE :</label>
-									<span id="today_date">30-01-2019</span>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<label for="article">ARTICLE :</label>
-									<span id="article">Carton &amp; Polybag Stickers</span>
-								</td>
-								<td style="text-align: right;">
-								<label for="material">MATERIAL :</label>
-								<span id="material">Paper</span>
-								</td>
-							</tr>
-						</table>
-					</div>
-				</div>
-				<hr>
-				<div class="row">
-					<div class="col-md-12">
-						<table cellspacing="3" cellpadding="3">
-								<tr>
-									<td>
-									<label for="customer">CUST NAME :</label>
-									<span id="customer" >MS K</span>	
-									</td>
-									<td>
-									<label for="style_no">STYLENUM :</label>
-									<span id="style_no"></span>
-									</td>
-									<td>
-									<label for="order_type">ORDER TYPE :</label>
-									<span id="order_type">Initial</span>
-									</td>
-								</tr>
-								<tr>
-									<td>
-											<label for="buyer">BUYER :</label>
-											<span id="buyer" data-buyer-id="2">Tesco</span>	
-									</td>
-									<td>
-										<label for="reference">REFERENCE :</label>
-										<span id="reference"></span>	
-									</td>
-									<td>
-										<label for="disp_mode">DISP MODE :</label>
-										<span id="disp_mode">Paper</span>
-									</td>
-								</tr>
-						</table>
-					</div>
-				</div>
-				<hr>
-				<div class="row">
-					<div class="col-md-12">
-						<table cellspacing="3" cellpadding="3">
-							<tr>
-								<td>
-									<label for="order_date">ORDER DT :</label>
-									<span id="order_date">29-01-2019</span>
-								</td>
-								<td>
-									<label for="length">LENGTH :</label>
-									<span id="length"></span>	
-								</td>
-								<td>
-									<label for="repeat_gap">REPEAT GAP :</label>
-									<span id="repeat_gap">Paper</span>
-								</td>
-								<td>
-									<label for="machine">MACHINE :</label>
-									<span id="machine">Paper</span>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<label for="cus_del_date">CUS D.DT :</label>
-									<span id="cus_del_date">2019-02-02</span>
-								</td>
-								<td>
-									<label for="width">WIDTH :</label>
-									<span id="width"></span>
-								</td>
-								<td>
-									<label for="roll_width">ROLL WIDTH :</label>
-									<span id="roll_width">299</span>
-								</td>
-								<td>
-									<label for="film_no">FILM NO :</label>
-									<span id="film_no">sadsfdg436</span>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<label for="act_del_date">ACT D.DT :</label>
-									<span id="act_del_date">2019-02-02</span>
-								</td>
-								<td>
-									<label for="length_side">LENGTH SIDE :</label>
-									<span id="length_side">201</span>
-								</td>
-								<td>
-									<label for="excess">EXCESS % :</label>
-									<span id="excess">201</span>
-								</td>
-								<td>
-									<label for="teeth_no">TEETH NO :</label>
-									<span id="teeth_no">201</span>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<label for="inv_no">INV NO :</label>
-									<span id="inv_no">201</span>
-								</td>
-								<td>
-									<label for="no_sticker">NO OF STICKERS :</label>
-									<span id="no_sticker">201</span>
-								</td>
-								<td>
-									<label for="finish_type">FINISH TYPE :</label>
-									<span id="finish_type">201</span>
-								</td>
-								<td></td>
-							</tr>
-							<tr>
-									<td>
-										<label for="print_color">PRINT COLORS :</label>
-										<span id="print_color">FFFFFF</span>
-									</td>
-									<td></td>
-								</tr>
-						</table>
-					</div>
-				</div>
-				<hr>
-				<div class="row">
-					<div class="col-md-12 ratio-list-table-div">
-					<table class="table table-bordered table-responsive ratio-list-table" id="ratio_list_table" border="0.2">
-						<thead>
-							<tr>
-								<th>REF.NO</th>
-								<th>PO.NO</th>
-								<th>ID.NO</th>
-								<th>OCN</th>
-								<th>QNTY</th>
-								<th>P.QNTY</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr class="tr-TCL-1">
-								<td id="ratio_tr_refname_0">TCL 1 RatA</td>
-								<td id="ratio_tr_buyer_po_0">po09876</td>
-								<td id="ratio_tr_erp_id_0">ERPID-0116</td>
-								<td id="ratio_tr_ocn_0">4367899876344</td>
-								<td id="ratio_tr_qty_0">33</td>
-								<td></td>
-							</tr>
-							<tr class="tr-TCL-1">
-								<td id="ratio_tr_refname_1">TCL 1 RatA</td>
-								<td id="ratio_tr_buyer_po_1">767n636</td>
-								<td id="ratio_tr_erp_id_1">ERPID-0117</td>
-								<td id="ratio_tr_ocn_1">43678987863433</td>
-								<td id="ratio_tr_qty_1">33</td>
-								<td></td>
-							</tr>
-							<tr>
-								<th colspan="4" style="background-color:#eee;">Total</th>
-								<td><strong>66</strong></td>
-								<td></td>
-							</tr>
-						</tbody>
-					</table>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-12 single-list-table-div">
-					<table class="table table-bordered table-responsive single-list-table" id="single_list_table_0" border="0.2">
-						<tbody id="single_list_table_body">
-							<tr>
-								<th>ID.NO</th>
-								<td colspan="2" class="single-erpid-0">ERPID-0118</td>
-								<td colspan="2" class="single-erpid-1">ERPID-0119</td>
-								<td colspan="2"  class="single-erpid-2">ERPID-0120</td>
-								<td colspan="4" style="background-color:#eee;padding-top:20px;" rowspan="3" ><strong >REFNUM &nbsp;: TCL 4</strong></td>
-							</tr>
-							<tr>
-								<th>B.PO.NO</th>
-								<td colspan="2" class="single-buyer-po-0">opo9876</td>
-								<td colspan="2" class="single-buyer-po-1">piui76n</td>
-								<td colspan="2" class="single-buyer-po-2">po7636344</td>
-							</tr>
-							<tr>
-								<th>OCN</th>
-								<td colspan="2" class="single-ocn-0">323634</td>
-								<td colspan="2" class="single-ocn-1">3467890987634</td>
-								<td colspan="2" class="single-ocn-2">43467863643</td>
-							</tr>
-							<tr>
-								<th>SIZE /PRICE</th>
-								<th>O.QNT</th>
-								<th>P.QNT</th>
-								<th>O.QNT</th>
-								<th>P.QNT</th>
-								<th>O.QNT</th>
-								<th>P.QNT</th>
-								<th>TOTAL</th>
-								<th>EXCESS</th>
-								<th>MTRS</th>
-								<th>STOCK</th>
-							</tr>
-							<tr>
-								<td class="single-size-row">xl</td>
-								<td class="quantity-0 quantity-td">26</td>
-								<td></td>
-								<td class="quantity-1 quantity-td">43</td>
-								<td></td>
-								<td class="quantity-2 quantity-td">0</td>
-								<td></td>
-								<td class="total-quantity-class total-quantity-row-0"><strong>69</strong></td>
-								<td class="total-excess">12.09</td>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td class="single-size-row">xxl</td>
-								<td class="quantity-0 quantity-td">22</td>
-								<td></td>
-								<td class="quantity-1 quantity-td">0</td>
-								<td></td>
-								<td class="quantity-2 quantity-td">0</td>
-								<td></td>
-								<td class="total-quantity-class total-quantity-row-1"><strong>22</strong></td>
-								<td class="total-excess">12.89</td>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td class="single-size-row">m</td>
-								<td class="quantity-0 quantity-td">0</td>
-								<td></td>
-								<td class="quantity-1 quantity-td">46</td>
-								<td></td>
-								<td class="quantity-2 quantity-td">332</td>
-								<td></td>
-								<td class="total-quantity-class total-quantity-row-2"><strong>378</strong></td>
-								<td class="total-excess">22</td>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td class="single-size-row">s</td>
-								<td class="quantity-0 quantity-td">0</td>
-								<td></td>
-								<td class="quantity-1 quantity-td">34</td>
-								<td></td>
-								<td class="quantity-2 quantity-td">22</td>
-								<td></td>
-								<td class="total-quantity-class total-quantity-row-3"><strong>36</strong></td>
-								<td class="total-excess">13</td>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<th class=" total-text" data-ref-name="TCL_4" style="background-color:#eee;">TOTAL</th>
-								<td class="total-quantity-col-0"><strong>48</strong></td>
-								<td></td>
-								<td class="total-quantity-col-1"><strong>123</strong></td>
-								<td></td>
-								<td class="total-quantity-col-2"><strong>334</strong></td>
-								<td></td>
-								<td><strong class="total-qty-TCL_4">323</strong></td>
-								<td class="total-excess-col-table-0 total-excess-TCL_4"><strong>168.00</strong></td>
-								<td></td>
-								<td></td>
-							</tr>
-						</tbody>
-					</table>
-					</div>
-				</div>
-				<div class="row meter-calculation-div">
-					<div class="col-md-12">
-						<table cellpadding="0" cellspacing="10">
-								<tr>
-									<td>
-										<label for="act_excess_TSL_3">ACT EXCESS % (<strong>TSL 3</strong>):</label>                                       <span class="act-excess" id="act_excess_TSL_3">32.00</span> 
-									</td>
-									<td>
-										<label for="sticker_mtr_TSL_3">MTRS FOR STICKERS (<strong>TSL 3</strong>):</label>                                 <span class="sticker-mtrs" id="sticker_mtr_TSL_3">7.02</span> 
-									</td>
-									<td>
-										<label for="settings_TSL_3">SETTINGS (<strong>TSL 3</strong>) :</label>                                            <span id="settings_TSL_3"> 12</span> 
-									</td>
-									<td>
-										<label for="total_mtrs_TSL_3">TOTAL MTRS (<strong>TSL 3</strong>):</label>                                         <span id="total_mtrs_TSL_3" class="total-meters">39.02</span> 
-									</td>
-								</tr>
-						</table>
-					</div>
-				</div>
-				<hr>
-				<div class="row">
-					<div class="col-md-12">
-						<table cellspacing="3" cellpadding="3">
-									<tr>
-										<td >
-									    	<label for="compiled_by">COMPILED BY :</label>
-										    <span id="compiled_by"> 12</span> 
-										</td>
-										<td >
-										    <label for="barcode_read">BARCODE READ :</label>
-										    <span id="barcode_read"> 12</span> 
-										</td>
-										<td >
-										    <label for="operator">OPERATOR :</label>
-										    <span id="operator"> 12</span>
-										</td>
-										<td >
-											<label for="checker">CHECKER :</label>
-											<span id="checker"> 12</span>
-										</td>
-									</tr>
-									<tr>
-										<td >
-											<label for="author">  AUTHORIZED BY :</label>
-											<span id="author"> 12</span>
-										</td>
-										<td >
-											<label for="axicon_verifier">  AXICON VERIFIER :</label>
-											<span id="axicon_verifier"> 12</span>
-										</td>
-										<td >
-											<label for="approved_by">  APPROVED BY :</label>
-											<span id="approved_by"> 12</span>
-										</td>
-										<td >
-											<label for="packer">PACKER :</label>
-											<span id="packer"> 12</span>
-										</td>
-									</tr>
-									<tr>
-										<td >
-											<label for="approval_date">  APPROVAL DT :</label>
-											<span id="approval_date"> 12</span>
-										</td>
-										<td >
-											<label for="roll_issued_by">  ROLL ISSUED BY :</label>
-											<span id="roll_issued_by"> 12</span>
-										</td>
-										<td >
-											<label for="cutter">  CUTTER :</label>
-											<span id="cutter"> 12</span>
-										</td>
-										<td >
-											<label for="cartons">CARTONS :</label>
-											<span id="cartons"> 12</span>
-										</td>
-									</tr>
-						</table>
-					</div>
-				</div>
-			</div>
-		</body>
-		</html>';
-		// Output the HTML content
-		PDF::writeHTML($html, true, false, true, false, '');
-		
-		PDF::lastPage();
-		ob_end_clean();
-		PDF::Output('example_006.pdf', 'I');
-    }
+	}
+	
 
 
 }

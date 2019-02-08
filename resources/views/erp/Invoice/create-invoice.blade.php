@@ -164,7 +164,8 @@
                                 <div class="col-lg-4 col-md-4 col-sm-4">
 
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 pull-right" id="ship_to" style="padding-left: 50px; margin-top: 35px;">
+                                <div class="col-lg-4 col-md-4 col-sm-4 pull-right" id="ship_to" style="padding-left: 50px; margin-top:6px;">
+                                    <span><p><strong>TAX INVOICE </strong></p></span>
                                     <strong>Date</strong>
                                     <span style="padding-left: 37px;"> : <span style="padding-left: 6px;" class="invoice-date"></span>
                                     </span><br>
@@ -258,7 +259,7 @@
                     @foreach($companies as $company)
                      <a class="buyer-card-link" style="cursor: pointer;">
                          <div class="card buyers-card elevation-2dp active-buyer" data-name ="{{$company->name}}"  data-value ="{{$company->company}}" id="{{ strtolower( str_replace(' ','',$company->name)) }}">
-                          {{ $company->name }}
+                          <img src="{{$company->logo}}" class="img-fluid" alt="Responsive image" height="120" class="img-fluid float-none">
                          </div>
                      </a>
                     @endforeach

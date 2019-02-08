@@ -758,9 +758,12 @@ class OrderStatusCntrl extends Controller
             $quantity_details = DB::table($table_name.'_quanty')
                                 ->where($qnty_id,$order_details->id)->orderBy('id')->get();
 			$template_file=DB::table('tesco_template')->where('item_id',$order_details->template_id)->select('*')->get();
+
+            $moq     =    DB::table('price_taxation')->where('template_id',$order_details->template_id)->where('customer_id',$order_details->tesco_supplier_id)->where('buyer_id',2)->value('moq');
+
             if ($order_details && $quantity_details)
             {
-                $result = response()->json(['error'=> false,'message' =>'success','order_details'=>$order_details,'quantity_details'=>$quantity_details,'template_file'=>$template_file],200);
+                $result = response()->json(['error'=> false,'message' =>'success','order_details'=>$order_details,'quantity_details'=>$quantity_details,'template_file'=>$template_file,'moq' => $moq],200);
             }
             else
             {
@@ -856,15 +859,15 @@ class OrderStatusCntrl extends Controller
         $order_qnty = (array_sum($count)>0)?0:1 ;
         
         if ($temp_data->order_flag == "newOrder" && $template_name != "THL3" && $template_name != "THL1") {
-           $orderObj->updateTescoAdminOrders($table_name,$temp_data,$request,$customer_ids{0}->customer_id);
+            $orderObj->updateTescoAdminOrders($table_name,$temp_data,$request,$customer_ids{0}->customer_id);
         }
 		DB::table($table_name)->where('id',$template_id)
 						      ->update([
                                   'zone'                 => $request['zone'],
 								  'template_type'        => $request['type'],
-								 // 'po_number'            => $request['po_number'],
-								 // 'uk_style_ref'         => $request['uk_style'],
-								//  'ce_style_ref'         => $request['ce_style'],
+								 'po_number'            => $request['po_number'],
+								 'uk_style_ref'         => $request['uk_style'],
+								 'ce_style_ref'         => $request['ce_style'],
 								  'season_code'          => $request['season_code'],
 								  'short_description'    => $request['description'],
 								  'eqos_site_code'       => $request['eqos'],

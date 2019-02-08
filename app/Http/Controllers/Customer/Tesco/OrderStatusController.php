@@ -861,9 +861,11 @@ class OrderStatusController extends Controller
             $quantity_details = DB::table($table_name.'_quanty')
                                 ->where($qnty_id,$order_details->id)->orderBy('id')->get();
             $template_file=DB::table('tesco_template')->where('item_id',$order_details->template_id)->select('*')->get();
+
+            $moq     =    DB::table('price_taxation')->where('template_id',$order_details->template_id)->where('customer_id',$order_details->tesco_supplier_id)->where('buyer_id',2)->value('moq');
             if ($order_details && $quantity_details)
             {
-                $result = response()->json(['error'=> false,'message' =>'success','order_details'=>$order_details,'quantity_details'=>$quantity_details,'template_file'=>$template_file],200);
+                $result = response()->json(['error'=> false,'message' =>'success','order_details'=>$order_details,'quantity_details'=>$quantity_details,'template_file'=>$template_file,'moq' => $moq],200);
             }
             else
             {
@@ -941,24 +943,31 @@ class OrderStatusController extends Controller
             $single_size = explode(',',$request['single_size']);
         }
         $temp_data =  DB::table($table_name)->where('id',$template_id)->first();
+        $tesco_main_customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
+        if($tesco_main_customer_id)
+        {
+            $customer_id = $tesco_main_customer_id->customer_id;
+        }
         $order_qnty = (array_sum($count)>0)?0:1 ;
         if ($temp_data->order_flag == "newOrder" && $template_name != "THL3" && $template_name != "THL1") {
-            $orderObj->updateTescoOrders($table_name,$temp_data,$request);
+          $orderObj->updateTescoOrders($table_name,$temp_data,$request,$customer_id);
         }
+
         DB::table($table_name)->where('id',$template_id)
                               ->update([
                                   'zone'                 => $request['zone'],
                                   'template_type'        => $request['type'],
-                                 // 'po_number'            => $request['po_number'],
-                                 // 'uk_style_ref'         => $request['uk_style'],
-                                 // 'ce_style_ref'         => $request['ce_style'],
+                                  'po_number'            => $request['po_number'],
+                                  'uk_style_ref'         => $request['uk_style'],
+                                  'ce_style_ref'         => $request['ce_style'],
                                   'season_code'          => $request['season_code'],
                                   'short_description'    => $request['description'],
                                   'eqos_site_code'       => $request['eqos'],
                                   'manufacture_date'     => $request['manufacture_date'],
                                   'tesco_department_id'  => $request['department'],
                                   'tesco_brand_id'       => $request['brand'],
-                                  //'tesco_supplier_id'    => $request['supplier'],
+                                  'tesco_metadata_supplier_id' => $request['supplier'],
+                                  'tesco_supplier_id'    => $customer_id,
                                   'rfid_compliant'       => $request['rfid'],
                                   'tag_at_source'        => $request['tag_at_source'],
                                   'is_order_count_empty' => $order_qnty
@@ -1075,6 +1084,7 @@ class OrderStatusController extends Controller
             $qty_table_name="tesco_thl3_orders_quanty";
         }
         $template_exists=DB::table($table_name)->where('po_number',$po_number)->where('order_flag','newOrder')->where('id','!=',$template_id)->select('*')->get();
+
         if(count($template_exists) > 0) 
         {
             echo "false";
