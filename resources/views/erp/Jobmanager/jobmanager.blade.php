@@ -232,8 +232,8 @@
 								<tr>
 									<th>Sl. No</th>
 									<th>ERP ID</th>
-									<th>Customer name</th>
-									<th>Buyer name</th>
+									<th>Customer Name</th>
+									<th>Buyer Name</th>
 									<th>Customer PO Number</th>
 									<th>Buyer PO Number</th>
 									<th>Style Number</th>
