@@ -46,7 +46,7 @@
                         <th>Sl. No</th>
                         <th>Invoice ID</th>
                         <th>ERP ID</th>
-                        <th>Customer name</th>
+                        <th>Customer Name</th>
                         <th>PO Number</th>
                         <th>Actions</th>
                     </tr>

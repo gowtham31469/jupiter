@@ -354,7 +354,7 @@
     function updateTaxAmount(tax_amnt){
 
         var tax_tr = "";       
-        var tax_table = $('.orders-tax').html('<table class="table text-center table-bordered orders_tax" style="margin-top: -23px;;"><thead><tr><th>Tax</th><th>Base value (₹)</th><th>Amount (₹)</th></tr></thead><tbody class="tax-tabl"></tbody></table>')
+        var tax_table = $('.orders-tax').html('<table class="table text-center table-bordered orders_tax" style="margin-top: -23px;;"><thead><tr><th>Tax</th><th>Base Value (₹)</th><th>Amount (₹)</th></tr></thead><tbody class="tax-tabl"></tbody></table>')
         Object.keys(tax_amnt).forEach(function(key) {
           if (place_of_supply==1){
                 var trClass = tax_amnt[key]!=0?"":"hidden"
@@ -501,7 +501,7 @@
             tr+= '<tr><td colspan="7"><strong>Total</strong></td><td class="preview-total-qnty" id="preview-total-qnty"></td><td></td><td class="preview-total-amnt"></td></tr>';
             $('#item_details').html('<table class="table table-bordered table-condensed order-details" id="preview-order-details" style="width:100%"><thead><tr><th>Order No</th><th>PO No</th><th>Style</th><th>OCN</th><th>Ref</th><th>Size</th><th>Tax (%)</th><th>Quantity</th><th>Rate (₹)</th><th>Amount (₹)</th></tr></thead><tbody>'+tr+'</tbody></table>');
             var tax_tr = "";       
-            var tax_table = $('.preview-orders-tax').html('<table class="table table-bordered text-center preview_orders_tax" style="margin-top: -23px;"><thead><tr><th>Tax</th><th>Base value (₹)</th><th>Amount (₹)</th></tr></thead><tbody class="preview-tax-tabl"></tbody></table>')
+            var tax_table = $('.preview-orders-tax').html('<table class="table table-bordered text-center preview_orders_tax" style="margin-top: -23px;"><thead><tr><th>Tax</th><th>Base Value (₹)</th><th>Amount (₹)</th></tr></thead><tbody class="preview-tax-tabl"></tbody></table>')
 
             $('.preview-total-qnty').text($('.total-qnty').text())
             $('.preview-balnc-qnty').text($('.balnc-qnty').text())

@@ -52,8 +52,8 @@
                                     <tr>
                                         <th>Sl. No</th>
                                         <th>Jobcard ID</th>
-                                        <th>Customer name</th>
-                                        <th>Buyer name</th>
+                                        <th>Customer Name</th>
+                                        <th>Buyer Name</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
