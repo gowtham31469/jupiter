@@ -24,6 +24,7 @@
         "phpunit/phpunit": "~6.0"
     },
      "repositories": [
+        { "type": "composer", "url": "https://packagist.org" },
         {
             "type": "vcs",
             "url": "git@github.com:tecnickcom/tc-lib-pdf-font.git"

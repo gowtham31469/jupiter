@@ -192,6 +192,36 @@
 		border-bottom: 1px solid #DDD !important;
 	}
 
+	.borderless tbody td, .borderless tbody th {
+	    border: none;
+	    padding: 3px;
+	    text-align: left;
+	}
+
+	.workorder {
+		font-size: 16px;
+		text-align: center;
+		background: #eee;
+		font-weight: bold;
+	    letter-spacing: 2px;	
+	}
+	.jc-hr {
+		margin-top: 3px !important;
+		margin-bottom: 3px !important;
+	}
+
+	.vertical-table th {
+	    font-size: 12px;
+	    background: #eee;
+	    border-top: none !important;
+	    padding: 0px !important;
+	}
+	.vertical-table td{ 
+		font-size: 12px;
+	    border-top: none !important;
+	    padding: 0px !important;
+	}
+
 </style>
 @section('navbar')
 

@@ -5,11 +5,14 @@
 
 td {
     height: 25px;
+    text-align: left !important;
 }
 
 th {
     height: 25px;
-    text-align: center !important;
+    text-align: left !important;
+    font-weight: bold;
+    background-color: #A9A9A9;
 }
 
 .ratio-list-table tr,
@@ -32,133 +35,78 @@ th {
 </style>
  <body>
     <table cellspacing="0" cellpadding="2" style="table-layout: fixed;width: 100%;border-collapse: collapse;" nobr="true">
+        <tbody>
             <tr nobr="true">
-                <td>
-                    <label for="customer">CUST NAME :</label>
-                    <span id="customer" >{{ ucwords($customer->customer_name) }}</span>	
-                </td>
-                <td>
-                    <label for="style_no">STYLENUM :</label>
-                    <span id="style_no">{{ $style_no }}</span>
-                </td>
-                <td>
-                    <label for="order_type">ORDER TYPE :</label>
-                    <span id="order_type">{{ $order_type }}</span>
-                </td>
+                <th>CustName</th>
+                <td id="customer">{{ ucwords($customer->customer_name) }}</td>
+                <th>StyleNum</th>
+                <td id="style_no">{{ $style_no }}</td>
+                <th>OrderType</th>
+                <td id="order_type">{{ $order_type }}</td>
+                <th>Inv No</th>
+                <td id="inv_no">{{ $inv_no }}</td>
             </tr>
             <tr nobr="true">
-                <td>
-                    <label for="buyer">BUYER :</label>
-                    <span id="buyer">{{ $buyer->buyer_name }}</span>	
-                </td>
-                <td>
-                    <label for="reference">REFERENCE :</label>
-                    <span id="reference">{{ $reference }}</span>	
-                </td>
-                <td>
-                    <label for="disp_mode">DISP MODE :</label>
-                    <span id="disp_mode">{{ ucwords($disp_mode) }}</span>
-                </td>
+                <th>Buyer</th>
+                <td id="buyer">{{ $buyer->buyer_name }}</td>
+                <th>Reference</th>
+                <td id="reference">{{ $reference }}</td>
+                <th>DispMode</th>
+                <td id="disp_mode">{{ ucwords($disp_mode) }}</td>
+                <th>Inv Dt</th>
+                 <td id="inv_no">{{ $inv_no }}</td>
             </tr>
+        </tbody>
     </table>
-
     <table>
         <tr>
             <td rowspan="1"></td>
         </tr>
     </table>
-    <hr>
-    <table>
-        <tr>
-            <td rowspan="1"></td>
-        </tr>
-    </table>
-                
+    <BR>      
     <table cellspacing="0" cellpadding="2" style="table-layout: fixed;width: 100%;border-collapse: collapse;" nobr="true">
-        <tr nobr="true">
-            <td>
-                <label for="order_date">ORDER DT :</label>
-                <span id="order_date">{{ $order_date }}</span>
-            </td>
-            <td>
-                <label for="length">LENGTH :</label>
-                <span id="length">{{ $length }}</span>	
-            </td>
-            <td>
-                <label for="repeat_gap">REPEAT GAP :</label>
-                <span id="repeat_gap">{{ $repeat_gap }}</span>
-            </td>
-            <td>
-                <label for="machine">MACHINE :</label>
-                <span id="machine">{{ $machine }}</span>
-            </td>
-        </tr>
-        <tr nobr="true">
-            <td>
-                <label for="cus_del_date">CUS D.DT :</label>
-                <span id="cus_del_date">{{ $cus_del_date }}</span>
-            </td>
-            <td>
-                <label for="width">WIDTH :</label>
-                <span id="width">{{ $width }}</span>
-            </td>
-            <td>
-                <label for="roll_width">ROLL WIDTH :</label>
-                <span id="roll_width">{{ $roll_width }}</span>
-            </td>
-            <td>
-                <label for="film_no">FILM NO :</label>
-                <span id="film_no">{{ $film_no }}</span>
-            </td>
-        </tr>
-        <tr nobr="true">
-            <td>
-                <label for="act_del_date">ACT D.DT :</label>
-                <span id="act_del_date">{{ $act_del_date }}</span>
-            </td>
-            <td>
-                <label for="length_side">LENGTH SIDE :</label>
-                <span id="length_side">{{ $length_side }}</span>
-            </td>
-            <td>
-                <label for="excess">EXCESS % :</label>
-                <span id="excess">{{ $excess }}</span>
-            </td>
-            <td>
-                <label for="teeth_no">TEETH NO :</label>
-                <span id="teeth_no">{{ $teeth_no }}</span>
-            </td>
-        </tr>
-        <tr nobr="true">
-            <td>
-                <label for="inv_no">INV NO :</label>
-                <span id="inv_no">{{ $inv_no }}</span>
-            </td>
-            <td>
-                <label for="no_sticker">NO OF STICKERS :</label>
-                <span id="no_sticker">{{ $no_sticker }}</span>
-            </td>
-            <td>
-                <label for="finish_type">FINISH TYPE :</label>
-                <span id="finish_type">{{ $finish_type }}</span>
-            </td>
-            <td></td>
-        </tr>
-        <tr nobr="true">
-            <td>
-                <label for="print_color">PRINT COLORS :</label>
-                <span id="print_color">{{ ucwords($print_color) }}</span>
-            </td>
-            <td></td>
-        </tr>
+            <tr nobr="true">
+                <th>OrderDt</th>
+                <td id="order_date">{{ $order_date }}</td>
+                <th>Length MM</th>
+                <td id="length">{{ $length }}</td>
+                <th>RepeatGap</th>
+                <td id="repeat_gap">{{ $repeat_gap }}</td>
+                <th>Machine</th>
+                <td id="machine">{{ $machine }}</td>
+            </tr>
+            <tr nobr="true">
+                <th>CusDelDt</th>
+                <td id="cus_del_date">{{ $cus_del_date }}</td>
+                <th>Width MM</th>
+                <td id="width">{{ $width }}</td>
+                <th>RollWidth</th>
+                <td id="roll_width">{{ $roll_width }}</td>
+                <th>FilmNum</th>
+                <td id="film_no">{{ $film_no }}</td>
+            </tr>
+            <tr nobr="true">
+                <th>PrintColors</th>
+                <td id="print_color">{{ ucwords($print_color) }}</td>
+                <th>LengthSideDim</th>
+                <td id="length_side">{{ $length_side }}</td>
+                <th>Excess %</th>
+                <td id="excess">{{ $excess }}</td>
+                <th>TeethNum</th>
+                <td id="teeth_no">{{ $teeth_no }}</td>
+            </tr>
+            <tr nobr="true">
+                <th></th>
+                <td id="print_color"></td>
+                <th>NoOfSticker</th>
+                <td id="no_sticker">{{ $no_sticker }}</td>
+                <th>Material</th>
+                <td id="material">{{ $material }}</td>
+                <th>FinishType</th>
+                <td id="finish_type">{{ $finish_type }}</td>
+            </tr>
     </table>
 
-    <table>
-        <tr>
-            <td rowspan="1"></td>
-        </tr>
-    </table>
-    <hr>
     <table>
         <tr>
             <td rowspan="1"></td>

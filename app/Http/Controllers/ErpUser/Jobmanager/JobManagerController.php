@@ -932,7 +932,7 @@ class JobManagerController extends Controller
      * @author <Praveen>
 	 * @param  $id
      * @return equivalent jobcard details
-     */
+     */  
     public function getJobcardDetailsById(Request $request)
     {
         try {
@@ -1190,7 +1190,7 @@ class JobManagerController extends Controller
 							]);
 
 					//append content to header
-					$pdf->SetXY(15,50);
+					$pdf->SetXY(15,30);
 					$pdf->writeHTML($view->render());
 
 					//Close and output PDF document
