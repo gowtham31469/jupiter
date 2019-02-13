@@ -4,12 +4,12 @@
 <style>
 
 td {
-    height: 25px;
+    height: 12px;
     text-align: left !important;
 }
 
 th {
-    height: 25px;
+    height: 12px;
     text-align: left !important;
     font-weight: bold;
     /*background-color: #D3D3D3;*/
@@ -24,8 +24,7 @@ th {
 }
 
 .single-total td {
-    line-height: 100%;
-    vertical-align: middle !important;
+    height: 12px !important;
 }
 
 .ratio-list-table tr,
@@ -42,7 +41,7 @@ th {
     border-top: 1px solid #DDD !important;
     border-right: 1px solid #DDD !important;
     border-bottom: 1px solid #DDD !important;
-    height: 35px;
+    height: 12px;
     text-align: center !important;
     vertical-align: middle !important;
 }
@@ -167,7 +166,7 @@ th {
             @else
                 @if (!empty($template_type_data))
                     @foreach ($template_type_data as $table => $table_data)
-                        <table cellspacing="0" cellpadding="0" border="0.2"  nobr="true" class="single-list-table" align="center">
+                        <table cellspacing="0" cellpadding="1" border="0.2"  nobr="true" class="single-list-table" align="center">
                         @php $ref_name = explode('_', $table); @endphp
                             <tbody id="single_list_table_body">
                                 <tr nobr="true" class="single-section">
@@ -175,7 +174,7 @@ th {
                                     @foreach ($table_data['erp_id'] as $key => $value)
                                         <td colspan="2" >{{ $value }}</td>
                                     @endforeach
-                                    <td colspan="4" style="line-height:650%;" rowspan="3" ><strong >REFNUM &nbsp;: {{ $ref_name[0].' '.$ref_name[1] }}</strong></td>
+                                    <td colspan="4" style="line-height:400%;" rowspan="3" ><strong >REFNUM &nbsp;: {{ $ref_name[0].' '.$ref_name[1] }}</strong></td>
                                 </tr>
                                 <tr class="single-section" nobr="true">
                                     <th><strong>B.PO.NO</strong></th>
@@ -190,9 +189,9 @@ th {
                                     @endforeach
                                 </tr>
                                 <tr class="single-th-row" nobr="true">
-                                @foreach ($table_data['size'] as $size => $quantities)
-                                    <th><strong>SIZE /PRICE</strong></th>
-                                    @foreach ($quantities as $key => $qty)
+                                    <!-- @php print_r(count($table_data['erp_id'])); @endphp -->
+                                    <th><strong>SIZE</strong></th>
+                                    @foreach ($table_data['erp_id'] as $key => $qty)
                                         <th><strong>O.QNT</strong></th>
                                         <th><strong>P.QNT</strong></th>
                                     @endforeach
@@ -200,7 +199,6 @@ th {
                                     <th><strong>EXCESS</strong></th>
                                     <th><strong>MTRS</strong></th>
                                     <th><strong>STOCK</strong></th>
-                                @endforeach
                                 </tr>
                                 @php 
                                     $single_final_total  = 0; 
@@ -236,7 +234,7 @@ th {
                                     </tr>
                                 @endforeach 
                                 <tr nobr="true" class="single-total">
-                                @foreach ($table_data['size'] as $size => $quantities)
+                                <!-- @foreach ($table_data['size'] as $size => $quantities)
                                     <td><strong>TOTAL</strong></td>
                                     @foreach ($quantities as $key => $qty)
                                         <td><strong>{{ $sumArray[$key] }}</strong></td>
@@ -246,7 +244,17 @@ th {
                                     <td><strong>{{ $single_excess_total }}</strong></td>
                                     <td></td>
                                     <td></td>
-                                @endforeach
+                                @endforeach -->
+
+                                    <td><strong>TOTAL</strong></td>
+                                    @foreach ($sumArray as $key => $qty)
+                                            <td><strong>{{ $qty }}</strong></td>
+                                            <td></td>
+                                    @endforeach
+                                    <td><strong>{{ $single_final_total }}</strong></td>
+                                    <td><strong>{{ $single_excess_total }}</strong></td>
+                                    <td></td>
+                                    <td></td>
                                 </tr>
                             </tbody>
                         </table>
