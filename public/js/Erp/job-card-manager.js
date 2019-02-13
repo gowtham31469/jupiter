@@ -281,10 +281,7 @@ function generateJobcard(){
 
                         data.template_data.article.length > 0?$('#article').text(data.template_data.article):'';
 
-                        $.each(data.template_data.material, function(key, item){
-                            $('#material').text(item)
-                            $('#material').attr('data-material-id', key)
-                        });
+                        $('#material').val(data.template_data.material)
 
                         if(data.template_data.customer)
                         {
@@ -300,20 +297,20 @@ function generateJobcard(){
 
                         if(data.template_data.style_array.length === 1)
                         {
-                            $('#style_no').text(data.template_data.style_array)
+                            $('#style_no').val(data.template_data.style_array)
                         }
                         else
                         {
-                            $('#style_no').text('')
+                            $('#style_no').val('')
                         }
 
                         if(data.template_data.refnum_array.length === 1)
                         {
-                            $('#reference').text(data.template_data.refnum_array)
+                            $('#reference').val(data.template_data.refnum_array)
                         }
                         else
                         {
-                            $('#reference').text('')
+                            $('#reference').val('')
                         }
                         
                         if(data.template_data.ordertype_array.length === 1)
@@ -344,29 +341,38 @@ function generateJobcard(){
 
                         if(data.template_data.length.length === 1)
                         {
-                            $('#length').text(data.template_data.length)
+                            $('#length').val(data.template_data.length)
                         }
                         else
                         {
-                            $('#length').text('')
+                            $('#length').val('')
                         } 
 
                         if(data.template_data.width.length === 1)
                         {
-                            $('#width').text(data.template_data.width)
+                            $('#width').val(data.template_data.width)
                         }
                         else
                         {
-                            $('#width').text('')
+                            $('#width').val('')
                         } 
 
                         if(data.template_data.color.length === 1)
                         {
-                            $('#print_color').text(data.template_data.color)
+                            $('#print_color').val(data.template_data.color)
                         }
                         else
                         {
-                            $('#print_color').text('')
+                            $('#print_color').val('')
+                        }
+
+                        if(data.template_data.cus_del_date.length === 1)
+                        {
+                            $('#cus_del_date').val(data.template_data.cus_del_date)
+                        }
+                        else
+                        {
+                            $('#cus_del_date').val('')
                         }
 
                         /** Show ratio templates dynamic table */
@@ -471,7 +477,7 @@ function generateJobcard(){
                                         col++;
                                     });
 
-                                    single_table_html += '<td class="total-quantity-class total-quantity-row-'+row+'"><strong>'+parseInt(total_qty_sizewise)+'</strong></td><td class="total-excess"><div class="form-group has-feedback"><input type="number" step="0.01" data-step-error="Max 2 decimal places allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm total-excess-row-table-'+table+'" required="" id="total_excess_row_table_'+row+'" data-required-error="Mandatory Field." name="total_excess_row_table_'+row+'"" placeholder="Excess %" onkeyup="return totalExcess()" ><div class="help-block with-errors"></div></div></td><td></td><td></td></tr>';
+                                    single_table_html += '<td class="total-quantity-class total-quantity-row-'+row+'"><strong>'+parseInt(total_qty_sizewise)+'</strong></td><td class="total-excess"><div class="form-group has-feedback"><input type="number" data-step-error="Decimal values not allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm total-excess-row-table-'+table+'" required="" id="total_excess_row_table_'+row+'" data-required-error="Mandatory Field." name="total_excess_row_table_'+row+'"" placeholder="Excess %" onkeyup="return totalExcess()" ><div class="help-block with-errors"></div></div></td><td></td><td></td></tr>';
                                 
                                     total_quantity_final += parseInt(total_qty_sizewise);
                                     row++;
@@ -509,7 +515,7 @@ function generateJobcard(){
                                                 <div class="col-md-3">\
                                                 <div class="form-group has-feedback form-inline">\
                                                     <label for="settings_'+template_name[0].replace(' ', '_')+'" >SETTINGS ('+template_name[0]+') :</label>\
-                                                    <input type="number" step="0.01" min="1" data-step-error="Max 2 decimal places allowed." data-min-error="Value must be >= 1" class="form-control input-sm settings" required="" name="settings_'+template_name[0].replace(' ', '_')+'" placeholder="SETTINGS" id="settings_'+template_name[0].replace(' ', '_')+'" onkeyup="return totalMeters()" max="99999"  data-max-error="Value should be <= 99999">\
+                                                    <input type="number" min="1" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 1" class="form-control input-sm settings" required="" name="settings_'+template_name[0].replace(' ', '_')+'" placeholder="SETTINGS" id="settings_'+template_name[0].replace(' ', '_')+'" onkeyup="return totalMeters()" max="99999"  data-max-error="Value should be <= 99999">\
                                                     <div class="help-block with-errors"></div>\
                                                 </div>\
                                                 </div>\
@@ -523,22 +529,9 @@ function generateJobcard(){
                                 
                             $('.single-list-table-div').html(single_table_html);
                             $('.meter-calculation-div').html(meters_div_html);
-                            /** Only mandatory  for single templates */
-                            $('#excess').prop('required', true);
-                            $('#repeat_gap').prop('required', true);
-                            $('#roll_width').prop('required', true);
-                            $('#length_side').prop('required', true);
-                            $('#no_sticker').prop('required', true);
                         } else {
                             $('.single-list-table-div').html(single_table_html);
                             $('.meter-calculation-div').html(meters_div_html);
-                            /** Toggle mandatory/optional fields.
-                             * optional for ratio templates */
-                            $('#excess').prop('required', false);
-                            $('#repeat_gap').prop('required', false);
-                            $('#roll_width').prop('required', false);
-                            $('#length_side').prop('required', false);
-                            $('#no_sticker').prop('required', false);
                         }
                         
                     }
@@ -633,8 +626,8 @@ function calculateExcess(evt)
 {
     let item = $('.total-quantity-class');
     $.each(item, function(key, value){
-        let total_excess = parseFloat($(value).text() * (evt.value*1/100)).toFixed(2);
-        $('#total_excess_row_table_'+key).val(total_excess);
+        let total_excess = parseFloat($(value).text() * (evt.value*1/100));
+        $('#total_excess_row_table_'+key).val(Math.round(total_excess));
         /** refresh excess values fields in single ref table */
         $('#total_excess_row_table_'+key).trigger('input');
     });
@@ -654,10 +647,10 @@ function totalExcess()
         $(this).find('.total-excess-row-table-'+table).each(function () {
             var excess = $(this).val();
             if (!isNaN(excess) && excess.length !== 0) {
-                total_excess_final += parseFloat(excess);
+                total_excess_final += parseInt(excess);
             }
         });
-        $('.total-excess-col-table-'+table).html('<strong>'+total_excess_final.toFixed(2)+'</strong>');
+        $('.total-excess-col-table-'+table).html('<strong>'+Math.round(total_excess_final)+'</strong>');
 
         table++;
     });
@@ -684,13 +677,13 @@ function actualExcess()
         });
         $('.total-excess-'+ref_name).each(function(){
             if (!isNaN(total_excess) && total_excess.length !== 0) {
-                total_excess += parseFloat($(this).text());
+                total_excess += parseInt($(this).text());
             }
         });
         if (!isNaN(total_qty) && !isNaN(total_excess)) {
-            act_excess = parseFloat((total_excess/total_qty)*100).toFixed(2);
+            act_excess = parseInt((total_excess/total_qty)*100);
         }
-        $('#act_excess_'+ref_name).text(act_excess)
+        $('#act_excess_'+ref_name).text(Math.round(act_excess))
     });
 }
 
@@ -717,10 +710,10 @@ function mtrsForStickers()
 
         if(!isNaN(total_qty) && !isNaN(length_side_dimension) && !isNaN(no_of_repeats) && !isNaN(repeat_gap) && no_of_repeats != 0 && repeat_gap != 0)
         {
-            mtrs =  parseFloat((parseInt(total_qty)/parseInt(no_of_repeats)) * ((parseInt(length_side_dimension) + parseInt(repeat_gap))/1000)).toFixed(2);
+            mtrs =  parseFloat((parseInt(total_qty)/parseInt(no_of_repeats)) * ((parseFloat(length_side_dimension) + parseInt(repeat_gap))/1000)).toFixed(2);
         }
         
-        $('#sticker_mtr_'+ref_name).text(mtrs)
+        $('#sticker_mtr_'+ref_name).text(Math.round(mtrs))
         totalMeters()
     });
 }
@@ -738,9 +731,9 @@ function totalMeters()
        let mtrs_for_stickers = $('#sticker_mtr_'+ref_name).text() === ''?0:$('#sticker_mtr_'+ref_name).text();
        let settings = $('#settings_'+ref_name).val() === ''?0:$('#settings_'+ref_name).val();
        if (!isNaN(settings) && !isNaN(mtrs_for_stickers)) {
-           var total_mtr = parseFloat(settings) + parseFloat(mtrs_for_stickers);
+           var total_mtr = parseInt(settings) + parseInt(mtrs_for_stickers);
         }
-       $('#total_mtrs_'+ref_name).text(total_mtr.toFixed(2));
+       $('#total_mtrs_'+ref_name).text(Math.round(total_mtr));
     });
 }
 /** ----------------- Excess calculation functions for create jobcard ends ----------------------**/
@@ -755,41 +748,41 @@ function storeJobcard()
     var workorder_id    = $( '#work_order' ).text() === ''?null:$('#work_order').text();
     var created_date    = $( '#today_date' ).text() === ''?null:$('#today_date').text();
     var article         = $( '#article' ).text() === ''?null:$('#article').text();
-    var material        = $( '#material' ).text() === ''?null:$('#material').text();
+    var material        = $( '#material' ).val() === ''?null:$('#material').val();
     var customer_id     = $( '#customer' ).data('customer-id');
-    var style_no        = $( '#style_no' ).text() === ''?null:$('#style_no').text();
+    var style_no        = $( '#style_no' ).val() === ''?null:$('#style_no').val();
     var order_type      = $( '#order_type' ).text() === ''?null:$('#order_type').text();
     var buyer_id        = $( '#buyer' ).data('buyer-id');
-    var reference       = $( '#reference' ).text() === ''?null:$('#reference').text();
-    var disp_mode       = $( '#disp_mode' ).val();
+    var reference       = $( '#reference' ).val() === ''?null:$('#reference').val();
+    var disp_mode       = $( '#disp_mode' ).val() === ''?null:$('#disp_mode').val();
     var order_date      = $( '#order_date' ).text() === ''?null:$('#order_date').text();
-    var length          = $( '#length' ).text() === ''?null:$('#length').text();
-    var repeat_gap      = $( '#repeat_gap' ).val();
-    var machine         = $( '#machine' ).val();
-    var cus_del_date    = $( '#cus_del_date' ).val();
-    var roll_width      = $( '#roll_width' ).val();
-    var width           = $( '#width' ).text() === ''?null:$('#width').text();
-    var film_no         = $( '#film_no' ).val();
-    var act_del_date    = $( '#act_del_date' ).val();
-    var length_side     = $( '#length_side' ).val();
-    var excess          = $( '#excess' ).val();
-    var teeth_no        = $( '#teeth_no' ).val();
-    var inv_no          = $( '#inv_no' ).val();
-    var no_sticker      = $( '#no_sticker' ).val();
-    var finish_type     = $( '#finish_type' ).val();
-    var print_color     = $( '#print_color' ).text() === ''?null:$('#print_color').text();
-    var compiled_by     = $( '#compiled_by' ).val();
-    var barcode_read    = $( '#barcode_read' ).val();
-    var operator        = $( '#operator' ).val();
-    var checker         = $( '#checker' ).val();
-    var authorized_by   = $( '#author' ).val();
-    var axicon_verifier = $( '#axicon_verifier' ).val();
-    var approved_by     = $( '#approved_by' ).val();
-    var packer          = $( '#packer' ).val();
-    var approval_date   = $( '#approval_date' ).val();
-    var roll_issued_by  = $( '#roll_issued_by' ).val();
-    var cutter          = $( '#cutter' ).val();
-    var cartons         = $( '#cartons' ).val();
+    var length          = $( '#length' ).val() === ''?null:$('#length').val();
+    var repeat_gap      = $( '#repeat_gap' ).val() === ''?null:$( '#repeat_gap' ).val();
+    var machine         = $( '#machine' ).val() === ''?null:$( '#machine' ).val();
+    var cus_del_date    = $( '#cus_del_date' ).val() === ''?null:$( '#cus_del_date' ).val();
+    var roll_width      = $( '#roll_width' ).val() === ''?null:$( '#roll_width' ).val();
+    var width           = $( '#width' ).val() === ''?null:$('#width').val();
+    var film_no         = $( '#film_no' ).val() === ''?null:$( '#film_no' ).val();
+    var act_del_date    = $( '#act_del_date' ).val() === ''?null:$( '#act_del_date' ).val();
+    var length_side     = $( '#length_side' ).val() === ''?null:$( '#length_side' ).val();
+    var excess          = $( '#excess' ).val() === ''?null:$( '#excess' ).val();
+    var teeth_no        = $( '#teeth_no' ).val() === ''?null:$( '#teeth_no' ).val();
+    var inv_no          = $( '#inv_no' ).val() === ''?null:$( '#inv_no' ).val();
+    var no_sticker      = $( '#no_sticker' ).val() === ''?null:$( '#no_sticker' ).val();
+    var finish_type     = $( '#finish_type' ).val() === ''?null:$( '#finish_type' ).val();
+    var print_color     = $( '#print_color' ).val() === ''?null:$('#print_color').val();
+    var compiled_by     = $( '#compiled_by' ).val() === ''?null:$('#compiled_by').val();
+    var barcode_read    = $( '#barcode_read' ).val() === ''?null:$('#barcode_read').val();
+    var operator        = $( '#operator' ).val() === ''?null:$('#operator').val();
+    var checker         = $( '#checker' ).val() === ''?null:$('#checker').val();
+    var authorized_by   = $( '#author' ).val() === ''?null:$('#author').val();
+    var axicon_verifier = $( '#axicon_verifier' ).val() === ''?null:$('#axicon_verifier').val();
+    var approved_by     = $( '#approved_by' ).val() === ''?null:$('#approved_by').val();
+    var packer          = $( '#packer' ).val() === ''?null:$('#packer').val();
+    var approval_date   = $( '#approval_date' ).val() === ''?null:$('#approval_date').val();
+    var roll_issued_by  = $( '#roll_issued_by' ).val() === ''?null:$('#roll_issued_by').val();
+    var cutter          = $( '#cutter' ).val() === ''?null:$('#cutter').val();
+    var cartons         = $( '#cartons' ).val() === ''?null:$('#cartons').val();
 
     var final_json_obj =   {
         "ratio": {},
@@ -1090,21 +1083,21 @@ function storeJobcard()
                  $('#edit_work_order').text(data.jobcard_data.work_order_id);
                  $('#edit_today_date').text(data.jobcard_data.created_date);
                  $('#edit_article').text(data.jobcard_data.article);
-                 $('#edit_material').text(data.jobcard_data.material);
+                 $('#edit_material').val(data.jobcard_data.material);
                  $('#edit_customer').text(data.jobcard_data.customer);
                  $('#edit_customer').attr('data-customer-id', data.jobcard_data.customer_id);
                  $('#edit_buyer').text(data.jobcard_data.buyer_name);
                  $('#edit_buyer').attr('data-buyer-id', data.jobcard_data.buyer_id);
-                 $('#edit_style_no').text(data.jobcard_data.style_number);
-                 $('#edit_reference').text(data.jobcard_data.reference);
+                 $('#edit_style_no').val(data.jobcard_data.style_number);
+                 $('#edit_reference').val(data.jobcard_data.reference);
                  $('#edit_order_type').text(data.jobcard_data.order_type);
                  $('#edit_disp_mode').val(data.jobcard_data.dispatch_mode);
                  $('#edit_order_date').text(data.jobcard_data.order_date);
-                 $('#edit_length').text(data.jobcard_data.length);
+                 $('#edit_length').val(data.jobcard_data.length);
                  $('#edit_repeat_gap').val(data.jobcard_data.repeat_gap);
                  $('#edit_machine').val(data.jobcard_data.machine);
                  $('#edit_cus_del_date').val(data.jobcard_data.customer_del_date);
-                 $('#edit_width').text(data.jobcard_data.width);
+                 $('#edit_width').val(data.jobcard_data.width);
                  $('#edit_roll_width').val(data.jobcard_data.roll_width);
                  $('#edit_film_no').val(data.jobcard_data.film_no);
                  $('#edit_act_del_date').val(data.jobcard_data.act_del_date);
@@ -1114,7 +1107,7 @@ function storeJobcard()
                  $('#edit_inv_no').val(data.jobcard_data.invoice_num);
                  $('#edit_no_sticker').val(data.jobcard_data.no_of_stickers);
                  $('#edit_finish_type').val(data.jobcard_data.finish_type);
-                 $('#edit_print_color').text(data.jobcard_data.print_color);
+                 $('#edit_print_color').val(data.jobcard_data.print_color);
                  $('#edit_compiled_by').val(data.jobcard_data.compiled_by);
                  $('#edit_barcode_read').val(data.jobcard_data.barcode_read);
                  $('#edit_operator').val(data.jobcard_data.operator);
@@ -1233,7 +1226,7 @@ function storeJobcard()
                                                 single_table += '<td class="edit-total-quantity-class total-quantity-row-'+table_row+'"><strong>'+parseInt(total_qty_sizewise)+'</strong></td>\
                                                 <td class="edit-total-excess">\
                                                     <div class="form-group has-feedback">\
-                                                        <input type="number" step="0.01" data-step-error="Max 2 decimal places allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm edit-total-excess-row-table-'+table_count+'" required="" id="edit_total_excess_row_table_'+table_row+'" data-required-error="Mandatory Field." name="edit_total_excess_row_table_'+table_row+'" "="" placeholder="Excess %" onkeyup="return editTotalExcess()" value="'+table_data.excess[size]+'">\
+                                                        <input type="number" data-step-error="Decimal values not allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm edit-total-excess-row-table-'+table_count+'" required="" id="edit_total_excess_row_table_'+table_row+'" data-required-error="Mandatory Field." name="edit_total_excess_row_table_'+table_row+'" "="" placeholder="Excess %" onkeyup="return editTotalExcess()" value="'+table_data.excess[size]+'">\
                                                         <div class="help-block with-errors"></div>\
                                                     </div>\
                                                 </td>\
@@ -1297,24 +1290,11 @@ function storeJobcard()
                     });
                    
                     $('.edit-meter-calculation-div').html(edit_meters_div_html);
-                    /** Only mandatory for single templates */
-                    $('#edit_excess').prop('required', true);
-                    $('#edit_repeat_gap').prop('required', true);
-                    $('#edit_roll_width').prop('required', true);
-                    $('#edit_length_side').prop('required', true);
-                    $('#edit_no_sticker').prop('required', true);
                 }  
                 else
                 {
                     edit_meters_div_html = '';
                     $('.edit-meter-calculation-div').html(edit_meters_div_html);
-                    /** Toggle mandatory/optional fields.
-                     * optional for ratio templates */
-                    $('#edit_excess').prop('required', false);
-                    $('#edit_repeat_gap').prop('required', false);
-                    $('#edit_roll_width').prop('required', false);
-                    $('#edit_length_side').prop('required', false);
-                    $('#edit_no_sticker').prop('required', false);
                     
                 } 
                     
@@ -1358,7 +1338,7 @@ function calculateExcessEdit(evt)
     let item = $('.edit-total-quantity-class');
     $.each(item, function(key, value){
         let total_excess = parseFloat($(value).text() * (evt.value*1/100)).toFixed(2);
-        $('#edit_total_excess_row_table_'+key).val(total_excess);
+        $('#edit_total_excess_row_table_'+key).val(Math.round(total_excess));
         /** refresh excess values fields in single ref table */
         $('#edit_total_excess_row_table_'+key).trigger('input');
     });
@@ -1378,10 +1358,10 @@ function editTotalExcess()
         $(this).find('.edit-total-excess-row-table-'+table).each(function () {
             var excess = $(this).val();
             if (!isNaN(excess) && excess.length !== 0) {
-                total_excess_final += parseFloat(excess);
+                total_excess_final += parseInt(excess);
             }
         });
-        $('.edit-total-excess-col-table-'+table).html('<strong>'+total_excess_final.toFixed(2)+'</strong>');
+        $('.edit-total-excess-col-table-'+table).html('<strong>'+Math.round(total_excess_final)+'</strong>');
 
         table++;
     });
@@ -1408,13 +1388,13 @@ function actualExcessEdit()
         });
         $('.edit-total-excess-'+ref_name).each(function(){
             if (!isNaN(total_excess) && total_excess.length !== 0) {
-                total_excess += parseFloat($(this).text());
+                total_excess += parseInt($(this).text());
             }
         });
         if (!isNaN(total_qty) && !isNaN(total_excess)) {
-            act_excess = parseFloat((total_excess/total_qty)*100).toFixed(2);
+            act_excess = parseInt((total_excess/total_qty)*100).toFixed(2);
         }
-        $('#edit_act_excess_'+ref_name).text(act_excess)
+        $('#edit_act_excess_'+ref_name).text(Math.round(act_excess));
     });
 }
 
@@ -1441,10 +1421,10 @@ function mtrsForStickersEdit()
 
         if(!isNaN(total_qty) && !isNaN(length_side_dimension) && !isNaN(no_of_repeats) && !isNaN(repeat_gap) && no_of_repeats != 0 && repeat_gap != 0)
         {
-            mtrs =  parseFloat((parseInt(total_qty)/parseInt(no_of_repeats)) * ((parseInt(length_side_dimension) + parseInt(repeat_gap))/1000)).toFixed(2);
+            mtrs =  parseFloat((parseInt(total_qty)/parseInt(no_of_repeats)) * ((parseFloat(length_side_dimension) + parseInt(repeat_gap))/1000)).toFixed(2);
         }
         
-        $('#edit_sticker_mtr_'+ref_name).text(mtrs)
+        $('#edit_sticker_mtr_'+ref_name).text(Math.round(mtrs));
         totalMetersEdit()
     });
 }
@@ -1462,9 +1442,9 @@ function totalMetersEdit()
        let mtrs_for_stickers = $('#edit_sticker_mtr_'+ref_name).text() === ''?0:$('#edit_sticker_mtr_'+ref_name).text();
        let settings = $('#edit_settings_'+ref_name).val() === ''?0:$('#edit_settings_'+ref_name).val();
        if (!isNaN(settings) && !isNaN(mtrs_for_stickers)) {
-           var total_mtr = parseFloat(settings) + parseFloat(mtrs_for_stickers);
+           var total_mtr = parseInt(settings) + parseInt(mtrs_for_stickers);
         }
-       $('#edit_total_mtrs_'+ref_name).text(total_mtr.toFixed(2));
+       $('#edit_total_mtrs_'+ref_name).text(Math.round(total_mtr));
     });
 }
 /** ----------------- Excess calculation functions for edit jobcard ends ----------------------**/
@@ -1480,41 +1460,41 @@ function updateJobcard(formData)
     var workorder_id    = $( '#edit_work_order' ).text() === ''?null:$('#edit_work_order').text();
     var created_date    = $( '#edit_today_date' ).text() === ''?null:$('#edit_today_date').text();
     var article         = $( '#edit_article' ).text() === ''?null:$('#edit_article').text();
-    var material        = $( '#edit_material' ).text() === ''?null:$('#edit_material').text();
+    var material        = $( '#edit_material' ).val() === ''?null:$('#edit_material').val();
     var customer_id     = $( '#edit_customer' ).data('customer-id');
-    var style_no        = $( '#edit_style_no' ).text() === ''?null:$('#edit_style_no').text();
+    var style_no        = $( '#edit_style_no' ).val() === ''?null:$('#edit_style_no').val();
     var order_type      = $( '#edit_order_type' ).text() === ''?null:$('#edit_order_type').text();
     var buyer_id        = $( '#edit_buyer' ).data('buyer-id');
-    var reference       = $( '#edit_reference' ).text() === ''?null:$('#edit_reference').text();
-    var disp_mode       = $( '#edit_disp_mode' ).val();
+    var reference       = $( '#edit_reference' ).val() === ''?null:$('#edit_reference').val();
+    var disp_mode       = $( '#edit_disp_mode' ).val() === ''?null:$('#edit_disp_mode').val();
     var order_date      = $( '#edit_order_date' ).text() === ''?null:$('#edit_order_date').text();
-    var length          = $( '#edit_length' ).text() === ''?null:$('#edit_length').text();
-    var repeat_gap      = $( '#edit_repeat_gap' ).val();
-    var machine         = $( '#edit_machine' ).val();
-    var cus_del_date    = $( '#edit_cus_del_date' ).val();
-    var roll_width      = $( '#edit_roll_width' ).val();
-    var width           = $( '#edit_width' ).text() === ''?null:$('#edit_width').text();
-    var film_no         = $( '#edit_film_no' ).val();
-    var act_del_date    = $( '#edit_act_del_date' ).val();
-    var length_side     = $( '#edit_length_side' ).val();
-    var excess          = $( '#edit_excess' ).val();
-    var teeth_no        = $( '#edit_teeth_no' ).val();
-    var inv_no          = $( '#edit_inv_no' ).val();
-    var no_sticker      = $( '#edit_no_sticker' ).val();
-    var finish_type     = $( '#edit_finish_type' ).val();
-    var print_color     = $( '#edit_print_color' ).text() === ''?null:$('#edit_print_color').text();
-    var compiled_by     = $( '#edit_compiled_by' ).val();
-    var barcode_read    = $( '#edit_barcode_read' ).val();
-    var operator        = $( '#edit_operator' ).val();
-    var checker         = $( '#edit_checker' ).val();
-    var authorized_by   = $( '#edit_author' ).val();
-    var axicon_verifier = $( '#edit_axicon_verifier' ).val();
-    var approved_by     = $( '#edit_approved_by' ).val();
-    var packer          = $( '#edit_packer' ).val();
-    var approval_date   = $( '#edit_approval_date' ).val();
-    var roll_issued_by  = $( '#edit_roll_issued_by' ).val();
-    var cutter          = $( '#edit_cutter' ).val();
-    var cartons         = $( '#edit_cartons' ).val();
+    var length          = $( '#edit_length' ).val() === ''?null:$('#edit_length').val();
+    var repeat_gap      = $( '#edit_repeat_gap' ).val() === ''?null:$( '#edit_repeat_gap' ).val();
+    var machine         = $( '#edit_machine' ).val() === ''?null:$( '#edit_machine' ).val();
+    var cus_del_date    = $( '#edit_cus_del_date' ).val() === ''?null:$( '#edit_cus_del_date' ).val();
+    var roll_width      = $( '#edit_roll_width' ).val() === ''?null:$( '#edit_roll_width' ).val();
+    var width           = $( '#edit_width' ).val() === ''?null:$('#edit_width').val();
+    var film_no         = $( '#edit_film_no' ).val() === ''?null:$( '#edit_film_no' ).val();
+    var act_del_date    = $( '#edit_act_del_date' ).val() === ''?null:$( '#edit_act_del_date' ).val();
+    var length_side     = $( '#edit_length_side' ).val() === ''?null:$( '#edit_length_side' ).val();
+    var excess          = $( '#edit_excess' ).val() === ''?null:$( '#edit_excess' ).val();
+    var teeth_no        = $( '#edit_teeth_no' ).val() === ''?null:$( '#edit_teeth_no' ).val();
+    var inv_no          = $( '#edit_inv_no' ).val() === ''?null:$( '#edit_inv_no' ).val();
+    var no_sticker      = $( '#edit_no_sticker' ).val() === ''?null:$( '#edit_no_sticker' ).val();
+    var finish_type     = $( '#edit_finish_type' ).val() === ''?null:$( '#edit_finish_type' ).val();
+    var print_color     = $( '#edit_print_color' ).val() === ''?null:$('#edit_print_color').val();
+    var compiled_by     = $( '#edit_compiled_by' ).val() === ''?null:$('#edit_compiled_by').val();
+    var barcode_read    = $( '#edit_barcode_read' ).val() === ''?null:$('#edit_barcode_read').val();
+    var operator        = $( '#edit_operator' ).val() === ''?null:$('#edit_operator').val();
+    var checker         = $( '#edit_checker' ).val() === ''?null:$('#edit_checker').val();
+    var authorized_by   = $( '#edit_author' ).val() === ''?null:$('#edit_author').val();
+    var axicon_verifier = $( '#edit_axicon_verifier' ).val() === ''?null:$('#edit_axicon_verifier').val();
+    var approved_by     = $( '#edit_approved_by' ).val() === ''?null:$('#edit_approved_by').val();
+    var packer          = $( '#edit_packer' ).val() === ''?null:$('#edit_packer').val();
+    var approval_date   = $( '#edit_approval_date' ).val() === ''?null:$('#edit_approval_date').val();
+    var roll_issued_by  = $( '#edit_roll_issued_by' ).val() === ''?null:$('#edit_roll_issued_by').val();
+    var cutter          = $( '#edit_cutter' ).val() === ''?null:$('#edit_cutter').val();
+    var cartons         = $( '#edit_cartons' ).val() === ''?null:$('#edit_cartons').val();
     var jobcard_id      = $( '#jobcard_id' ).val();
 
     var final_json_obj =   {
