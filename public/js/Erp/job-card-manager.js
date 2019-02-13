@@ -1734,7 +1734,7 @@ function updateJobcard(formData)
                 $('.snackbar_span').html("Jobcard Updated Successfully");
                 showSnackbar();
                 $('#jobcardUpdationModalCenter').modal('hide');
-                location.reload();
+                //location.reload();
                 window.open(
                     base_url+JSON.parse(resp),
                     '_blank' // <- This is what makes it open in a new window.

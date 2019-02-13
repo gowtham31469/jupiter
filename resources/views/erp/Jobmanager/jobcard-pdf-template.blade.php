@@ -12,7 +12,20 @@ th {
     height: 25px;
     text-align: left !important;
     font-weight: bold;
-    background-color: #A9A9A9;
+    /*background-color: #D3D3D3;*/
+    background-color: #DCDCDC;
+}
+.single-th-row th {
+    background-color: #FFFFFF;
+}
+.single-section td {
+    /*background-color: #D3D3D3;*/
+    background-color:#DCDCDC;
+}
+
+.single-total td {
+    line-height: 100%;
+    vertical-align: middle !important;
 }
 
 .ratio-list-table tr,
@@ -31,10 +44,11 @@ th {
     border-bottom: 1px solid #DDD !important;
     height: 35px;
     text-align: center !important;
+    vertical-align: middle !important;
 }
 </style>
  <body>
-    <table cellspacing="0" cellpadding="2" style="table-layout: fixed;width: 100%;border-collapse: collapse;" nobr="true">
+    <table cellspacing="1" cellpadding="2" style="table-layout: fixed;width: 100%;border-collapse: collapse;" nobr="true">
         <tbody>
             <tr nobr="true">
                 <th>CustName</th>
@@ -54,17 +68,12 @@ th {
                 <th>DispMode</th>
                 <td id="disp_mode">{{ ucwords($disp_mode) }}</td>
                 <th>Inv Dt</th>
-                 <td id="inv_no">{{ $inv_no }}</td>
+                <td id="inv_no">{{ $inv_no }}</td>
             </tr>
         </tbody>
-    </table>
-    <table>
-        <tr>
-            <td rowspan="1"></td>
-        </tr>
-    </table>
-    <BR>      
-    <table cellspacing="0" cellpadding="2" style="table-layout: fixed;width: 100%;border-collapse: collapse;" nobr="true">
+    </table>  
+   
+    <table cellspacing="1" cellpadding="2" style="table-layout: fixed;width: 100%;border-collapse: collapse;" nobr="true">
             <tr nobr="true">
                 <th>OrderDt</th>
                 <td id="order_date">{{ $order_date }}</td>
@@ -142,7 +151,7 @@ th {
                             </tr>
                             @endforeach
                             <tr nobr="true">
-                                <th colspan="4" style="background-color:#eee;"><strong>Total</strong></th>
+                                <th colspan="4" style="background-color:#fff;"><strong>Total</strong></th>
                                 <td><strong>{{ $ratio_total }}</strong></td>
                                 <td></td>
                             </tr>
@@ -158,23 +167,23 @@ th {
             @else
                 @if (!empty($template_type_data))
                     @foreach ($template_type_data as $table => $table_data)
-                        <table cellspacing="0" cellpadding="2" border="0.2"  nobr="true" class="single-list-table">
+                        <table cellspacing="0" cellpadding="0" border="0.2"  nobr="true" class="single-list-table" align="center">
                         @php $ref_name = explode('_', $table); @endphp
                             <tbody id="single_list_table_body">
-                                <tr nobr="true">
+                                <tr nobr="true" class="single-section">
                                     <th><strong>ID.NO</strong></th>
                                     @foreach ($table_data['erp_id'] as $key => $value)
                                         <td colspan="2" >{{ $value }}</td>
                                     @endforeach
-                                    <td colspan="4" style="background-color:#eee;padding-top:20px;" rowspan="3" ><strong >REFNUM &nbsp;: {{ $ref_name[0].' '.$ref_name[1] }}</strong></td>
+                                    <td colspan="4" style="line-height:650%;" rowspan="3" ><strong >REFNUM &nbsp;: {{ $ref_name[0].' '.$ref_name[1] }}</strong></td>
                                 </tr>
-                                <tr nobr="true">
+                                <tr class="single-section" nobr="true">
                                     <th><strong>B.PO.NO</strong></th>
                                     @foreach ($table_data['buyer_po'] as $key => $value)
                                         <td colspan="2" >{{ $value }}</td>
                                     @endforeach
                                 </tr>
-                                <tr nobr="true">
+                                <tr class="single-section" nobr="true">
                                     <th><strong>OCN</strong></th>
                                     @foreach ($table_data['ocn'] as $key => $value)
                                         <td colspan="2" >{{ $value }}</td>
@@ -225,10 +234,10 @@ th {
                                             $single_excess_total = $single_excess_total+$table_data['excess'][$size];
                                         @endphp
                                     </tr>
-                                @endforeach
-                                <tr nobr="true">
+                                @endforeach 
+                                <tr nobr="true" class="single-total">
                                 @foreach ($table_data['size'] as $size => $quantities)
-                                    <th class="total-text" style="background-color:#eee;"><strong>TOTAL</strong></th>
+                                    <td><strong>TOTAL</strong></td>
                                     @foreach ($quantities as $key => $qty)
                                         <td><strong>{{ $sumArray[$key] }}</strong></td>
                                         <td></td>
