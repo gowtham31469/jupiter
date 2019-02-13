@@ -4,16 +4,17 @@
 
 <style>
 
-/*   .tabl-design{
+  /* .tabl-design{
     text-align: center !important;
    }*/
    td {
-            height: 12px;
+            height: 12px;  
       }
 
     th {
-        height: 12px;
-        vertical-align: middle;
+        height: 9px;
+        /*vertical-align: middle;*/
+        /*width: 45px;*/
         /*text-align: center !important;*/
     }
 
@@ -22,17 +23,21 @@
         width: 100%;
         border-collapse: collapse;
     }
+    .thead-design{
+        text-align: center !important;
+    }
 
     .thead-design th{
 
         /*border-right-width: 1px !important;*/
         border-bottom-width: 1px !important;
         /*border-left-width: 1px !important;*/
-        border-top-width: 1px !important;
+         border-top-width: 1px !important;
         /*border-left: 1px solid #DDD !important;*/
         border-top: 1px solid #eee !important;
         /*border-right: 1px solid #DDD !important;*/
         border-bottom: 1px solid #eee !important; 
+
     }
     .tdheight{
          height: 5px !important;
@@ -42,25 +47,22 @@
 <body>
 
         <table cellpadding="0" cellspacing="0">
-            <table>
-            <tr class="blank_row">
-                <td rowsopan="1"></td>
-            </tr>
-           </table>
             <tr class="information">
                 <td>
                     <table>
                         <tr> 
-                            <td width="116">
-                                <span style="font-size: 5px; height: 10px;">Buyer</span><br>
-                                <span style="font-size: 9px;"><strong>{{$inv_details[0]['company_name']}}</strong></span>
-                                <br>
-                                <span>{{$bill_to->address}}</span><br>
-                                <span>GSTN : {{$inv_details[0]['gstin_number']}}</span>
+                            <td width="3"></td>
+                            <td width="210">
+                                <p style="font-size: 5px;line-height: 1px;">Buyer</p>
+                                <p style="font-size: 9px;line-height: 1px;"><strong>{{$inv_details[0]['company_name']}}</strong>
+                                </p>
+                                <p>{{$bill_to->address}}
+                                <br>GSTN : {{$inv_details[0]['gstin_number']}}
+                                </p>
                             </td>
-                            <td width="150"></td>
-                            <td width="40"></td>
-                            <td width="150">
+                            <td width="80"></td>
+                            <td width="20"></td>
+                            <td width="100">
                                
                                 <table>
                                     <tr>
@@ -105,12 +107,12 @@
                 <td rowsopan="1"></td>
             </tr>
         </table>
-        <table>
+<!--         <table>
             <tr class="blank_row">
                 <td rowsopan="1"></td>
             </tr>
-        </table>
-		<table class="tabl-design" cellpadding="0" cellspacing="0" border="0" class="thead-design"><thead><tr><th><strong>Sno</strong></th><th><strong>PO No</strong></th><th><strong>Style</strong></th><th><strong>OCN</strong></th><th><strong>Ref</strong></th><th><strong>Size</strong></th><th><strong>Quantity</strong></th><th><strong>Rate(INR)</strong></th><th><strong>Amount (INR)</strong></th></tr></thead><tbody>
+        </table> -->
+		<table cellpadding="0" cellspacing="0" border="0" class="thead-design" ><thead><tr><th width="25"><strong>Sno</strong></th><th width="60"><strong>PO No</strong></th><th><strong>Style</strong></th><th width="60"><strong>OCN</strong></th><th width="40"><strong>Ref</strong></th><th width="40"><strong>Size</strong></th><th><strong>Quantity</strong></th><th width="40"><strong>Rate(INR)</strong></th><th width="50"><strong>Amount (INR)</strong></th></tr></thead><tbody>
                     @php 
                     	$totalQnty=0;
                     	$totalpendingQnty=0;
@@ -124,43 +126,41 @@
                     @if($itemName == $data['item_name'])
                         
                         <tr>                    
-    	                        <td>{{++$i}}</td>
-                                <!-- <td>{{$data['id']}}</td> -->
-        	                    <td>{{$data['po_no']}}</td>
+    	                        <td width="25">{{++$i}}</td>
+                                <td width="60">{{$data['po_no']}}</td>
         	                    <td>{{$data['style_no']}}</td>
-        	                    <td>{{$data['ocn_number']}}</td>
-        	                    <td>{{$data['reference_name']}}</td>
+        	                    <td width="60">{{$data['ocn_number']}}</td>
+        	                    <td width="40">{{$data['reference_name']}}</td>
                                 @php
                                     $size = $data['size']=="null"?'-':$data['size'];
                                 @endphp
-                                <td>{{$size}}</td>
-        	                    <!-- <td>{{$data['tax']}}</td> -->
+                                <td width="40">{{$size}}</td>
         	                    <td>{{$data['delvry_qnty']}}</td>
-        	                    <td>{{$data['rate']}}</td>
-        	                    <td>{{number_format((float)$data['delvry_qnty'] * $data['rate'], 2, '.', '') }}</td>
+        	                    <td width="40">{{$data['rate']}}</td>
+        	                    <td width="50">{{number_format((float)$data['delvry_qnty'] * $data['rate'], 2, '.', '') }}</td>
                         </tr>
                     @else
                         <tr>
-                            <td class="tdheight"></td>
+                            <td width="25" class="tdheight"></td>
                         </tr>
                         <tr>
-                            <td></td><td colspan="12"><strong style="text-align:left;"><span>ITEM :  </span><span>{{$data['item_name']}}</span><span> HSNCode :</span><span> {{$data['hsn_code']}}</span></strong></td>
+                            <td width="39"></td><td colspan="12"><strong style="text-align:left;"><span>ITEM :  </span><span>{{$data['item_name']}}</span><span> HSNCode :</span><span> {{$data['hsn_code']}}</span></strong></td>
                         </tr>
                         <tr>                    
-                                <td>{{++$i}}</td>
+                                <td width="25">{{++$i}}</td>
                                 <!-- <td>{{$data['id']}}</td> -->
-                                <td>{{$data['po_no']}}</td>
+                                <td width="60">{{$data['po_no']}}</td>
                                 <td>{{$data['style_no']}}</td>
                                 <td width="60">{{$data['ocn_number']}}</td>
-                                <td>{{$data['reference_name']}}</td>
+                                <td width="40">{{$data['reference_name']}}</td>
                                 @php
                                     $size = $data['size']=="null"?'-':$data['size'];
                                 @endphp
-                                <td>{{$size}}</td>
+                                <td width="40">{{$size}}</td>
                                 <!-- <td>{{$data['tax']}}</td> -->
                                 <td>{{$data['delvry_qnty']}}</td>
-                                <td>{{$data['rate']}}</td>
-                                <td>{{number_format((float)$data['delvry_qnty'] * $data['rate'], 2, '.', '') }}</td>
+                                <td width="40">{{$data['rate']}}</td>
+                                <td width="50">{{number_format((float)$data['delvry_qnty'] * $data['rate'], 2, '.', '') }}</td>
                         </tr>
                     @endif
                         @php 
@@ -169,9 +169,9 @@
                             $totalAmnt += ($data['delvry_qnty'] * $data['rate']);
                         @endphp
                     @endforeach	
-                    <tr>
+            <!--         <tr>
                         <td colspan="11"></td>
-                    </tr>
+                    </tr> -->
 <!--                     <tr>
                     	<td colspan="8">Sub Total</td>
                     	<td>{{$totalDevlryQnty}}</td>
@@ -205,12 +205,8 @@
                             <td>
                                 <span><strong>E-Way Bill No : </strong></span><span>{{$eway_no}}</span>
                             </td>
-                            <td>
-                                <span>: </span><span>{{$eway_no}}</span>
-                            
-                            </td>
                         </tr>
-                    </table>
+                </table>
                 </td>
                 
                 <td >
@@ -219,15 +215,15 @@
                         <td rowsopan="1"></td>
                     </tr>
                     </table>
-                    <table>
+             <!--        <table>
                     <tr class="blank_row">
                         <td rowsopan="1"></td>
                     </tr>
-                    </table>
+                    </table> -->
                     <table class="tabl-design" cellpadding="0" cellspacing="0" border="0">                
                             <tr>
-                                <td width="80" style="text-align: left"><strong> Sub Total</strong></td>
-                                <td width="86"><strong>{{$totalDevlryQnty}}</strong></td>
+                                <td width="84"><strong>Sub Total</strong></td>
+                                <td width="78"><strong>{{$totalDevlryQnty}}</strong></td>
                                 <td width="70"><strong>{{number_format((float)$totalAmnt, 2, '.', '') }}</strong></td>
                             </tr>
                             @php 
@@ -236,7 +232,7 @@
                             @foreach($uniqueTaxes as $tax=>$amnt)               
                                 @if($inv_details[0]['place_of_supply']==1)
                                     <tr>
-                                        <td width="169" colspan="2">CGST ({{$tax/2}}%)</td>
+                                        <td width="165.5" colspan="2">CGST ({{$tax/2}}%)</td>
                                         <td width="80" >{{number_format((float)(($tax/2)/100)*$amnt, 2, '.', '') }}</td>
                                     </tr>
                                     <tr>
@@ -245,7 +241,7 @@
                                     </tr>
                                 @elseif($inv_details[0]['place_of_supply']==2)
                                      <tr>
-                                      <td width="169">IGST ({{$tax}}%)</td>
+                                      <td width="165.5">IGST ({{$tax}}%)</td>
                                       <td width="80">{{number_format((float)(($tax)/100)*$amnt, 2, '.', '') }}</td>
                                     </tr> 
                                 @else
@@ -276,7 +272,7 @@
                             @endphp
                             @endforeach 
                             <tr>
-                                <td width="169" colspan="2" ><strong>Round Off</strong></td>
+                                <td width="172.5" colspan="2" ><strong>Round Off</strong></td>
                                 <td width="200"><strong>{{number_format((float)$inv_details[0]['round_off_amnt'], 2, '.', '') }}</strong></td>
                             </tr>
                     </tbody>
@@ -284,7 +280,7 @@
                     @endif
                 </td>
             </tr>
-            <tr class="information">
+     <!--        <tr class="information">
                 <td>
                     <table>
                     <tr class="blank_row">
@@ -292,7 +288,7 @@
                     </tr>
                     </table>
                 </td>
-            </tr>
+            </tr> -->
             <tr class="payment">
                <td >
                    
@@ -312,7 +308,7 @@
                     <br>
                     <span>{{$amntInwords}}</span>               
                 </td>
-                <td colspan="2" width="167">          
+                <td colspan="2" width="164">          
                       <span><strong>Total Amount</strong></span>             
                 </td>
                 <td  width="40">          
@@ -330,11 +326,8 @@
         <table>
              <tr>
                 <td width="200">
-                <div>
-                    <span><strong>Delivery at :</strong></span><br>
-                    <span>{{$inv_details[0]['address']}},</span><br>
-                    <span>{{$inv_details[0]['pincode']}}</span>
-                </div>
+                    <p><strong>Delivery at :</strong></p>
+                    <p>{{$inv_details[0]['address']}},{{$inv_details[0]['pincode']}}</p>
                 </td>
             </tr>
         </table> 
