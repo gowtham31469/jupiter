@@ -58,15 +58,39 @@ class JobcardPDFHeaderFooter extends \TCPDF
         $this->SetY(5);
         // header logo image
         // $this->Image('logo path', x-coordinate, y-coordinate, width, height);
-        $this->Image('././././'.$this->company->company_logo, 160, 10, 35, 15);
+        //$this->Image('././././'.$this->company->company_logo, 160, 10, 35, 15);
         // Set font
         $this->SetFont('helvetica', '', 8);
-        $header = '<table cellspacing="0" cellpadding="0">
+        $header = '<table width="100%" cellspacing="0" cellpadding="0">
                         <tr nobr="true">
-                        <td width="10"></td>
-                            <td width="300">
+                            <td width="35%">
                                 <p><strong id="jc_company_name" >'.$this->company->company.'</strong></p>
                                 <p id="company_address">'.$this->company->company_address.'</p>
+                            </td>
+                            <td width="5%"></td>
+                            <td width="20%" style="line-height:60%;">
+                             <p><h2 style="font-stretch:110%;letter-spacing:+0.254mm;text-align:center; align:middle;">WORKORDER</h2></p>
+                            </td>
+                            <td width="5%"></td>
+                            <td width="35%">
+                            <p>
+                            <table cellspacing="0" cellpadding="0">
+                                <tbody>
+                                    <tr width="100%">
+                                        <th width="30%"><strong>WO No: </strong></th>
+                                        <td width="70%" id="work_order" style="text-align:left;font-weight: bold">'.$this->workorder_id.'</td>
+                                    </tr>
+                                    <tr  width="100%">
+                                        <th  width="30%"><strong>ARTICLE: </strong></th>
+                                        <td width="70%" id="article" style="text-align:left;font-weight: bold">'.$this->article.'</td>
+                                    </tr>
+                                    <tr  width="100%">
+                                        <th  width="30%"><strong>DATE: </strong></th>
+                                        <td width="70%" id="today_date" style="text-align:left;font-weight: bold">'.$this->created_date.'</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </p>
                             </td>
                         </tr>
                     </table>
@@ -77,42 +101,8 @@ class JobcardPDFHeaderFooter extends \TCPDF
                 </table>';
         // Title
         $this->writeHTML($header, false, false, true, false, '');
-        $this->writeHTML("<hr>", false, false, true, false, '');
-        $header1 = '<table>
-                        <tr class="blank_row">
-                            <td rowspan="1"></td>
-                        </tr>
-                    </table>
-                    <table cellspacing="0" cellpadding="2" style="table-layout: fixed;width: 100%;border-collapse: collapse;" nobr="true">
-                        <tr nobr="true">
-                            <td>
-                                <label for="work_order">WORKORDER :</label>
-                                <span id="work_order">'.$this->workorder_id.' (Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages().')</span>
-                            </td>
-                            <td style="text-align: right;">
-                                <label for="today_date">DATE :</label>
-                                <span id="today_date">'.$this->created_date.'</span>
-                            </td>
-                        </tr>
-                        <tr nobr="true">
-                            <td>
-                                <label for="article">ARTICLE :</label>
-                                <span id="article">'.$this->article.'</span>
-                            </td>
-                            <td style="text-align: right;">
-                                <label for="material">MATERIAL :</label>
-                                <span id="material">'.ucwords($this->material).'</span>
-                            </td>
-                        </tr>
-                    </table>
-                    <table>
-                    <tr class="blank_row">
-                        <td rowspan="1"></td>
-                    </tr>
-                </table>';
-        // Title
-        $this->writeHTML($header1, false, false, true, false, '');
-        $this->writeHTML("<hr>", false, false, true, false, '');
+       $this->writeHTML("<hr>", false, false, true, false, '');
+
     }
 
     /**

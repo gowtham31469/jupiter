@@ -210,6 +210,7 @@ class JobManagerController extends Controller
 			$customers_array    = array();
 			$company_array      = array();
 			$order_dt_array     = array();
+			$delivery_dt_array  = array();
 			$style_array        = array();
 			$ordertype_array    = array();
 			$temp_id_array      = array();
@@ -259,6 +260,8 @@ class JobManagerController extends Controller
 				!in_array($order_details->company_id, $company_array)?array_push($company_array,$order_details->company_id):$company_array;
 
 				!in_array($order_details->created_at, $order_dt_array)?array_push($order_dt_array,$order_details->created_at):$order_dt_array;
+				
+				!in_array(Carbon::parse($order_details->delivery_date)->format('d-m-Y'), $delivery_dt_array)?array_push($delivery_dt_array,Carbon::parse($order_details->delivery_date)->format('d-m-Y')):$delivery_dt_array;
 
 				!in_array($order_details->style_no, $style_array)?array_push($style_array,$order_details->style_no):$style_array;
 
@@ -349,7 +352,7 @@ class JobManagerController extends Controller
 				{
 					!in_array($template_details->color, $print_color_array)?array_push($print_color_array,$template_details->color):$print_color_array;
 
-					!in_array($material_array[$template_details->material_id]=$template_details->material, $material_array)?$material_array[$template_details->material_id]=$template_details->material:$material_array;
+					!in_array($template_details->material, $material_array)?array_push($material_array,$template_details->material):$material_array;
 
 					!in_array($template_details->article, $article_array)?array_push($article_array,$template_details->article):$article_array;
 
@@ -414,6 +417,7 @@ class JobManagerController extends Controller
 
 			/** Push all array values into template_data array */
 			$template_data['order_date']       = Carbon::parse(min($order_dt_array))->format('d-m-Y');
+			$template_data['cus_del_date']     = $delivery_dt_array;
 			$template_data['today_date']       = $this->current_date;
 			$template_data['workorder_id']     = $workorder_id;
 			$template_data['company']          = $company;
@@ -490,7 +494,7 @@ class JobManagerController extends Controller
 			    $selected_ref    = explode(',', $request['selected_ref_array']);
 				$buyer_pos       = explode(',', $request['selected_buyer_po_array']);
 
-				if(isset($company_id) && isset($workorder_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($machine) && isset($cus_del_date)  && isset($film_no) && isset($act_del_date) && isset($teeth_no)  && isset($inv_no) && isset($finish_type)  && isset($compiled_by) && isset($barcode_read) && isset($operator) && isset($checker) && isset($authorized_by) && isset($axicon_verifier) && isset($approved_by) && isset($packer) && isset($approval_date) && isset($roll_issued_by)  && isset($cutter) && isset($cartons) && isset($final_json_obj) )
+				if(isset($company_id) && isset($workorder_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($machine) && isset($cus_del_date)  && isset($finish_type)  && isset($compiled_by) && isset($barcode_read) && isset($operator) && isset($checker) && isset($authorized_by) && isset($axicon_verifier) && isset($approved_by) && isset($packer) && isset($approval_date) && isset($roll_issued_by)  && isset($cutter) && isset($cartons) && isset($final_json_obj) && isset($material))
 				{
 					// Get Erp status table id for 'Jobcard Created' status.
 					$erp_status_id = DB::table('erp_status')->where('status_name', 'ilike', 'Jobcard Created')->value('id');
@@ -688,7 +692,7 @@ class JobManagerController extends Controller
 								]);
 
 						//append content to header
-						$pdf->SetXY(15,50);
+						$pdf->SetXY(15,30);
 						$pdf->writeHTML($view->render());
 
 						//Close and output PDF document
@@ -932,7 +936,7 @@ class JobManagerController extends Controller
      * @author <Praveen>
 	 * @param  $id
      * @return equivalent jobcard details
-     */
+     */  
     public function getJobcardDetailsById(Request $request)
     {
         try {
@@ -1022,7 +1026,7 @@ class JobManagerController extends Controller
 				$final_json_obj  = $request['final_json_obj'];
 				$jobcard_id 	 = $request['jobcard_id'];
 
-				if(isset($company_id) && isset($workorder_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($machine) && isset($cus_del_date)  && isset($film_no) && isset($act_del_date) && isset($teeth_no)  && isset($inv_no) && isset($finish_type)  && isset($compiled_by) && isset($barcode_read) && isset($operator) && isset($checker) && isset($authorized_by) && isset($axicon_verifier) && isset($approved_by) && isset($packer) && isset($approval_date) && isset($roll_issued_by)  && isset($cutter) && isset($cartons) && isset($final_json_obj) && isset($jobcard_id) )
+				if(isset($company_id) && isset($workorder_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($machine) && isset($cus_del_date)  && isset($finish_type)  && isset($compiled_by) && isset($barcode_read) && isset($operator) && isset($checker) && isset($authorized_by) && isset($axicon_verifier) && isset($approved_by) && isset($packer) && isset($approval_date) && isset($roll_issued_by)  && isset($cutter) && isset($cartons) && isset($final_json_obj) && isset($jobcard_id) && isset($material))
 				{
 					DB::table('jobcard_main_table')->where('id', $jobcard_id)
 					->update([
@@ -1190,7 +1194,7 @@ class JobManagerController extends Controller
 							]);
 
 					//append content to header
-					$pdf->SetXY(15,50);
+					$pdf->SetXY(15,30);
 					$pdf->writeHTML($view->render());
 
 					//Close and output PDF document
