@@ -68,8 +68,8 @@ class JobcardPDFHeaderFooter extends \TCPDF
                                 <p id="company_address">'.$this->company->company_address.'</p>
                             </td>
                             <td width="5%"></td>
-                            <td width="20%" style="line-height:60%;">
-                             <p><h2 style="font-stretch:110%;letter-spacing:+0.254mm;text-align:center; align:middle;">WORKORDER</h2></p>
+                            <td width="20%" >
+                             <p bgcolor="#DCDCDC" style="font-stretch:110%;letter-spacing:+0.254mm;text-align:center; align:middle;font-size:22px;"><strong>WORKORDER</strong></p>
                             </td>
                             <td width="5%"></td>
                             <td width="35%">
@@ -111,7 +111,7 @@ class JobcardPDFHeaderFooter extends \TCPDF
     */
     public function Footer() {
         // Position at 25 mm from bottom
-        $this->SetY(-25);
+        $this->SetY(-30);
         // Set font
         $this->SetFont('helvetica', '', 8);
         $this->writeHTML("<hr>", false, false, true, false, '');

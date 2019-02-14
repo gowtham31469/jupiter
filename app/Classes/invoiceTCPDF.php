@@ -37,7 +37,7 @@ class invoiceTCPDF extends \TCPDF
                   <tr nobr="true">
                     <td rowsopan="3">
                         <span style="font-size:9px;"><strong>'.$this->company->name.'</strong></span><br>   
-                        <span>'.ucwords($this->company->address).'</span><br>
+                        <span>'.$this->company->address.'</span><br>
                         <span>'.$this->company->office_phone.'</span><span>,'.$this->company->phone.'</span><br>
                         <span><strong>GSTIN  : </strong>'.$this->company->gstin.'</span>
                         </td>
