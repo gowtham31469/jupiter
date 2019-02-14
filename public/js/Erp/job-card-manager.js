@@ -3,8 +3,7 @@
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
-var csrf_token = $('meta[name="csrf-token"]').attr('content');
-var base_url = "<?php echo  url('/') ?>";
+
 $(document).ready(function() {
 	$('input[class="row-checkbox"]').prop('checked', false);
 
@@ -184,26 +183,6 @@ function isNumberKey(evt) {
 	} catch (e) {
 		console.log("Error:" + e)
 	}
-}
-
-/** [showSnackbar function]
- *  @author <Praveen> [praveen@wizroots.com]
- */
-    function showSnackbar() {
-    try {
-        // Get the snackbar DIV
-        let x = document.getElementById("snackbar")
-
-        // Add the "show" class to DIV
-        x.className = "show";
-
-        // After 3 seconds, remove the show class from DIV
-        setTimeout(function() {
-            x.className = x.className.replace("show", "");
-        }, 3000);
-    } catch (e) {
-        console.log("Error:" + e)
-    }
 }
 
 /**
@@ -477,7 +456,7 @@ function generateJobcard(){
                                         col++;
                                     });
 
-                                    single_table_html += '<td class="total-quantity-class total-quantity-row-'+row+'"><strong>'+parseInt(total_qty_sizewise)+'</strong></td><td class="total-excess"><div class="form-group has-feedback"><input type="number" data-step-error="Decimal values not allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm total-excess-row-table-'+table+'" required="" id="total_excess_row_table_'+row+'" data-required-error="Mandatory Field." name="total_excess_row_table_'+row+'"" placeholder="Excess %" onkeyup="return totalExcess()" ><div class="help-block with-errors"></div></div></td><td></td><td></td></tr>';
+                                    single_table_html += '<td class="total-quantity-class total-quantity-row-'+row+'"><strong>'+parseInt(total_qty_sizewise)+'</strong></td><td class="total-excess"><div class="form-group has-feedback"><input type="number" data-step-error="Decimal values not allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm total-excess-row-table-'+table+'" id="total_excess_row_table_'+row+'" data-required-error="Mandatory Field." name="total_excess_row_table_'+row+'"" placeholder="Excess %" onkeyup="return totalExcess()" ><div class="help-block with-errors"></div></div></td><td></td><td></td></tr>';
                                 
                                     total_quantity_final += parseInt(total_qty_sizewise);
                                     row++;
@@ -515,7 +494,7 @@ function generateJobcard(){
                                                 <div class="col-md-3">\
                                                 <div class="form-group has-feedback form-inline">\
                                                     <label for="settings_'+template_name[0].replace(' ', '_')+'" >SETTINGS ('+template_name[0]+') :</label>\
-                                                    <input type="number" min="1" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 1" class="form-control input-sm settings" required="" name="settings_'+template_name[0].replace(' ', '_')+'" placeholder="SETTINGS" id="settings_'+template_name[0].replace(' ', '_')+'" onkeyup="return totalMeters()" max="99999"  data-max-error="Value should be <= 99999">\
+                                                    <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" class="form-control input-sm settings"  name="settings_'+template_name[0].replace(' ', '_')+'" placeholder="SETTINGS" id="settings_'+template_name[0].replace(' ', '_')+'" onkeyup="return totalMeters()" max="99999"  data-max-error="Value should be <= 99999">\
                                                     <div class="help-block with-errors"></div>\
                                                 </div>\
                                                 </div>\
@@ -906,7 +885,7 @@ function storeJobcard()
     var act_excess = [];
     /** [ Create array of act-excess ] */
     $('.act-excess').each(function (i, item) {
-        act_excess[i] = $(item).text();
+        act_excess[i] = $(item).text() === ''?0:$(item).text();
         single_ref[i] = $(item).data('act-excess-ref');
     });
     act_excess = act_excess.join(',');
@@ -915,7 +894,7 @@ function storeJobcard()
     var sticker_mtr = [];
     /** [ Create array of sticker-mtrs ] */
     $('.sticker-mtrs').each(function (i, item) {
-        sticker_mtr[i] = $(item).text();
+        sticker_mtr[i] = $(item).text() === ''?0:$(item).text();
 
     });
     sticker_mtr = sticker_mtr.join(',');
@@ -923,7 +902,7 @@ function storeJobcard()
     var settings = [];
     /** [ Create array of settings ] */
     $('.settings').each(function (i, item) {
-        settings[i] = $(item).val();
+        settings[i] = $(item).val() === ''?0:$(item).val();
 
     });
     settings = settings.join(',');
@@ -931,7 +910,7 @@ function storeJobcard()
     var total_mtrs = [];
     /** [ Create array of total-meters ] */
     $('.total-meters').each(function (i, item) {
-        total_mtrs[i] = $(item).text();
+        total_mtrs[i] = $(item).text() === ''?0:$(item).text();
 
     });
     total_mtrs = total_mtrs.join(',');
@@ -1226,7 +1205,7 @@ function storeJobcard()
                                                 single_table += '<td class="edit-total-quantity-class total-quantity-row-'+table_row+'"><strong>'+parseInt(total_qty_sizewise)+'</strong></td>\
                                                 <td class="edit-total-excess">\
                                                     <div class="form-group has-feedback">\
-                                                        <input type="number" data-step-error="Decimal values not allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm edit-total-excess-row-table-'+table_count+'" required="" id="edit_total_excess_row_table_'+table_row+'" data-required-error="Mandatory Field." name="edit_total_excess_row_table_'+table_row+'" "="" placeholder="Excess %" onkeyup="return editTotalExcess()" value="'+table_data.excess[size]+'">\
+                                                        <input type="number" data-step-error="Decimal values not allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm edit-total-excess-row-table-'+table_count+'"  id="edit_total_excess_row_table_'+table_row+'" data-required-error="Mandatory Field." name="edit_total_excess_row_table_'+table_row+'" "="" placeholder="Excess %" onkeyup="return editTotalExcess()" value="'+table_data.excess[size]+'">\
                                                         <div class="help-block with-errors"></div>\
                                                     </div>\
                                                 </td>\
@@ -1278,7 +1257,7 @@ function storeJobcard()
                                             <div class="col-md-3">\
                                             <div class="form-group has-feedback form-inline">\
                                                 <label for="edit_settings_'+item.ref_name.replace(' ', '_')+'" >SETTINGS ('+item.ref_name+') :</label>\
-                                                <input type="number" step="0.01" min="1" data-step-error="Max 2 decimal places allowed." data-min-error="Value must be >= 1" max="99999" data-max-error="Value should be <= 99999" class="form-control input-sm edit-settings" required="" name="edit_settings_'+item.ref_name.replace(' ', '_')+'" placeholder="SETTINGS" id="edit_settings_'+item.ref_name.replace(' ', '_')+'" onkeyup="return totalMetersEdit()" value="'+item.settings+'" >\
+                                                <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" max="99999" data-max-error="Value should be <= 99999" class="form-control input-sm edit-settings" name="edit_settings_'+item.ref_name.replace(' ', '_')+'" placeholder="SETTINGS" id="edit_settings_'+item.ref_name.replace(' ', '_')+'" onkeyup="return totalMetersEdit()" value="'+item.settings+'" >\
                                                 <div class="help-block with-errors"></div>\
                                             </div>\
                                             </div>\
@@ -1619,7 +1598,7 @@ function updateJobcard(formData)
     var act_excess = [];
     /** [ Create array of act-excess ] */
     $('.edit-act-excess').each(function (i, item) {
-        act_excess[i] = $(item).text();
+        act_excess[i] = $(item).text() === ''?0:$(item).text();
         single_ref[i] = $(item).data('act-excess-ref');
     });
     act_excess = act_excess.join(',');
@@ -1628,7 +1607,7 @@ function updateJobcard(formData)
     var sticker_mtr = [];
     /** [ Create array of sticker-mtrs ] */
     $('.edit-sticker-mtrs').each(function (i, item) {
-        sticker_mtr[i] = $(item).text();
+        sticker_mtr[i] = $(item).text() === ''?0:$(item).text();
 
     });
     sticker_mtr = sticker_mtr.join(',');
@@ -1636,7 +1615,7 @@ function updateJobcard(formData)
     var settings = [];
     /** [ Create array of settings ] */
     $('.edit-settings').each(function (i, item) {
-        settings[i] = $(item).val();
+        settings[i] = $(item).val() === ''?0:$(item).val();
 
     });
     settings = settings.join(',');
@@ -1644,7 +1623,7 @@ function updateJobcard(formData)
     var total_mtrs = [];
     /** [ Create array of total-meters ] */
     $('.edit-total-meters').each(function (i, item) {
-        total_mtrs[i] = $(item).text();
+        total_mtrs[i] = $(item).text() === ''?0:$(item).text();
 
     });
     total_mtrs = total_mtrs.join(',');
@@ -1709,12 +1688,11 @@ function updateJobcard(formData)
         },
         statusCode: {
             200: function(data) {
-                console.log(data)
                 var resp = JSON.stringify(data.file_path);
                 $('.snackbar_span').html("Jobcard Updated Successfully");
                 showSnackbar();
                 $('#jobcardUpdationModalCenter').modal('hide');
-                //location.reload();
+                location.reload();
                 window.open(
                     base_url+JSON.parse(resp),
                     '_blank' // <- This is what makes it open in a new window.
