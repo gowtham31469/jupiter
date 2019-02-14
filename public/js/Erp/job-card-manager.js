@@ -1213,7 +1213,7 @@ function storeJobcard()
                                                 <td></td>\
                                                 </tr>';
                                           total_quantity_final += parseInt(total_qty_sizewise);
-                                          total_excess_final   += parseFloat(table_data.excess[size]);
+                                          total_excess_final   += parseInt(table_data.excess[size]);
                                           table_row++;
                                         });
                                         single_table += '<tr>\
@@ -1227,7 +1227,7 @@ function storeJobcard()
                                         });
                                                             
                                         single_table += '<td><strong class="edit-total-qty-'+template[0]+'_'+template[1]+'">'+parseInt(total_quantity_final)+'</strong></td>\
-                                                <td class="edit-total-excess-col-table-'+table_count+' edit-total-excess-'+template[0]+'_'+template[1]+'">'+parseFloat(total_excess_final).toFixed(2)+'</td>\
+                                                <td class="edit-total-excess-col-table-'+table_count+' edit-total-excess-'+template[0]+'_'+template[1]+'"><strong>'+Math.round(isNaN(total_excess_final) ? '0' : total_excess_final)+'</strong></td>\
                                                 <td></td>\
                                                 <td></td>\
                                             </tr>\
