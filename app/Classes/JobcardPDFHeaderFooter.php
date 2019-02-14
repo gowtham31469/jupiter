@@ -55,25 +55,23 @@ class JobcardPDFHeaderFooter extends \TCPDF
     public function Header() {
         $this->SetTopMargin(50);
         // Position at 5 mm from top
-        $this->SetY(5);
+        $this->SetY(10);
         // header logo image
         // $this->Image('logo path', x-coordinate, y-coordinate, width, height);
         //$this->Image('././././'.$this->company->company_logo, 160, 10, 35, 15);
         // Set font
         $this->SetFont('helvetica', '', 8);
-        $header = '<table width="100%" cellspacing="0" cellpadding="0">
+        $header = '<table width="100%" cellspacing="0" cellpadding="5" border="0">
                         <tr nobr="true">
-                            <td width="35%">
-                                <p><strong id="jc_company_name" >'.$this->company->company.'</strong></p>
+                            <td width="35%" style="border-top:1px solid black;border-left:1px solid black;border-bottom:1px solid black;"><strong id="jc_company_name" >'.$this->company->company.'</strong>
                                 <p id="company_address">'.$this->company->company_address.'</p>
                             </td>
-                            <td width="5%"></td>
-                            <td width="20%" >
-                             <p bgcolor="#DCDCDC" style="font-stretch:110%;letter-spacing:+0.254mm;text-align:center; align:middle;font-size:22px;"><strong>WORKORDER</strong></p>
+                            <td width="5%" style="border-top:1px solid black;border-bottom:1px solid black;"></td>
+                            <td width="20%" style="border-top:1px solid black;border-bottom:1px solid black;">
+                              <strong bgcolor="#DCDCDC" style="letter-spacing:+0.254mm;text-align:center; align:top;font-size:22px;">WORKORDER</strong>
                             </td>
-                            <td width="5%"></td>
-                            <td width="35%">
-                            <p>
+                            <td width="5%" style="border-top:1px solid black;border-bottom:1px solid black;"></td>
+                            <td width="35%" style="border-top:1px solid black;border-right:1px solid black;border-bottom:1px solid black;">
                             <table cellspacing="0" cellpadding="0">
                                 <tbody>
                                     <tr width="100%">
@@ -90,7 +88,6 @@ class JobcardPDFHeaderFooter extends \TCPDF
                                     </tr>
                                 </tbody>
                             </table>
-                            </p>
                             </td>
                         </tr>
                     </table>
@@ -101,7 +98,7 @@ class JobcardPDFHeaderFooter extends \TCPDF
                 </table>';
         // Title
         $this->writeHTML($header, false, false, true, false, '');
-       $this->writeHTML("<hr>", false, false, true, false, '');
+        //$this->writeHTML("<hr>", false, false, true, false, '');
 
     }
 

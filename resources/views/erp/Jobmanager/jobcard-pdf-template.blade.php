@@ -3,6 +3,7 @@
 </head>
 <style>
 
+
 td {
     height: 12px;
     text-align: left !important;
@@ -27,6 +28,10 @@ th {
     height: 12px !important;
 }
 
+.space-td td{
+    height: 2px !important;
+}
+
 .ratio-list-table tr,
 .ratio-list-table th,
 .ratio-list-table td,
@@ -47,71 +52,81 @@ th {
 }
 </style>
  <body>
-    <table cellspacing="1" cellpadding="2" style="table-layout: fixed;width: 100%;border-collapse: collapse;" nobr="true">
+
+    <table cellspacing="0" cellpadding="5" style="table-layout: fixed;width: 100%;border-collapse: collapse;" nobr="true">
         <tbody>
+<!--             <tr >
+                <td colspan="8"  class="space-td" style="border-left:1px solid black;border-right:1px solid black;"></td>
+            </tr> -->
             <tr nobr="true">
-                <th>CustName</th>
-                <td id="customer">{{ ucwords($customer->customer_name) }}</td>
+                <th style="border-left:1px solid black;">CustName</th>
+                <td  id="customer">{{ ucwords($customer->customer_name) }}</td>
                 <th>StyleNum</th>
                 <td id="style_no">{{ $style_no }}</td>
                 <th>OrderType</th>
                 <td id="order_type">{{ $order_type }}</td>
-                <th>Inv No</th>
-                <td id="inv_no">{{ $inv_no }}</td>
+                <th >Inv No</th>
+                <td style="border-right:1px solid black;"id="inv_no">{{ $inv_no }}</td>
             </tr>
             <tr nobr="true">
-                <th>Buyer</th>
-                <td id="buyer">{{ $buyer->buyer_name }}</td>
-                <th>Reference</th>
-                <td id="reference">{{ $reference }}</td>
-                <th>DispMode</th>
-                <td id="disp_mode">{{ ucwords($disp_mode) }}</td>
-                <th>Inv Dt</th>
-                <td id="inv_no">{{ $inv_no }}</td>
+                <th style="border-left:1px solid black;border-bottom:1px solid white;">Buyer</th>
+                <td  style="border-bottom:1px solid white;"id="buyer">{{ $buyer->buyer_name }}</td>
+                <th style="border-bottom:1px solid white;">Reference</th>
+                <td style="border-bottom:1px solid white;" id="reference">{{ $reference }}</td>
+                <th style="border-bottom:1px solid white;">DispMode</th>
+                <td style="border-bottom:1px solid white;" id="disp_mode">{{ ucwords($disp_mode) }}</td>
+                <th style="border-bottom:1px solid white;">Inv Dt</th>
+                <td style="border-right:1px solid black;"id="inv_no">{{ $inv_no }}</td>
             </tr>
         </tbody>
-    </table>  
+    </table>
+
+    <!-- <table>
+        <tr>
+            <td style="border-right:1px solid black;border-left:1px solid black;" rowspan="1"></td>
+        </tr>
+    </table> -->
    
-    <table cellspacing="1" cellpadding="2" style="table-layout: fixed;width: 100%;border-collapse: collapse;" nobr="true">
+    <table cellspacing="0" cellpadding="3" style="table-layout: fixed;width: 100%;border-collapse: collapse;" nobr="true">
             <tr nobr="true">
-                <th>OrderDt</th>
+                <th style="border-left:1px solid black;">OrderDt</th>
                 <td id="order_date">{{ $order_date }}</td>
                 <th>Length MM</th>
                 <td id="length">{{ $length }}</td>
                 <th>RepeatGap</th>
                 <td id="repeat_gap">{{ $repeat_gap }}</td>
                 <th>Machine</th>
-                <td id="machine">{{ $machine }}</td>
+                <td style="border-right:1px solid black;" id="machine">{{ $machine }}</td>
             </tr>
             <tr nobr="true">
-                <th>CusDelDt</th>
+                <th style="border-left:1px solid black;">CusDelDt</th>
                 <td id="cus_del_date">{{ $cus_del_date }}</td>
                 <th>Width MM</th>
                 <td id="width">{{ $width }}</td>
                 <th>RollWidth</th>
                 <td id="roll_width">{{ $roll_width }}</td>
                 <th>FilmNum</th>
-                <td id="film_no">{{ $film_no }}</td>
+                <td style="border-right:1px solid black;" id="film_no">{{ $film_no }}</td>
             </tr>
             <tr nobr="true">
-                <th>PrintColors</th>
+                <th style="border-left:1px solid black;">PrintColors</th>
                 <td id="print_color">{{ ucwords($print_color) }}</td>
                 <th>LengthSideDim</th>
                 <td id="length_side">{{ $length_side }}</td>
                 <th>Excess %</th>
                 <td id="excess">{{ $excess }}</td>
                 <th>TeethNum</th>
-                <td id="teeth_no">{{ $teeth_no }}</td>
+                <td style="border-right:1px solid black;" id="teeth_no">{{ $teeth_no }}</td>
             </tr>
             <tr nobr="true">
-                <th></th>
-                <td id="print_color"></td>
-                <th>NoOfSticker</th>
-                <td id="no_sticker">{{ $no_sticker }}</td>
-                <th>Material</th>
-                <td id="material">{{ $material }}</td>
-                <th>FinishType</th>
-                <td id="finish_type">{{ $finish_type }}</td>
+                <th style="border-left:1px solid black;border-bottom:1px solid black;"></th>
+                <td style="border-bottom:1px solid black;" id="print_color"></td>
+                <th style="border-bottom:1px solid black;">NoOfSticker</th>
+                <td style="border-bottom:1px solid black;" id="no_sticker">{{ $no_sticker }}</td>
+                <th style="border-bottom:1px solid black;">Material</th>
+                <td style="border-bottom:1px solid black;" id="material">{{ $material }}</td>
+                <th style="border-bottom:1px solid black;">FinishType</th>
+                <td style="border-right:1px solid black;border-bottom:1px solid black;" id="finish_type">{{ $finish_type }}</td>
             </tr>
     </table>
 
