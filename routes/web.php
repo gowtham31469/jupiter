@@ -639,4 +639,28 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::put('/settings/update-dispatch-mode-by-id', 'ErpUser\ERPSettings\ERPSettingsController@updateDispatchModeById');
 	Route::put('/settings/make-dispatch-mode-enabled', 'ErpUser\ERPSettings\ERPSettingsController@makeDispatchModeEnabled');
 	Route::put('/settings/make-dispatch-mode-disabled', 'ErpUser\ERPSettings\ERPSettingsController@makeDispatchModeDisabled');
+    
+    //Machine
+	Route::get('/settings/machine', 'ErpUser\ERPSettings\ERPSettingsController@getMachine')->name('erp-machine');
+	Route::post('/settings/add-machine', 'ErpUser\ERPSettings\ERPSettingsController@addMachine');
+	Route::get('/settings/get-machine-by-id', 'ErpUser\ERPSettings\ERPSettingsController@getMachineById');
+	Route::put('/settings/update-machine-by-id', 'ErpUser\ERPSettings\ERPSettingsController@updateMachineById');
+	Route::put('/settings/make-machine-enabled', 'ErpUser\ERPSettings\ERPSettingsController@makeMachineEnabled');
+	Route::put('/settings/make-machine-disabled', 'ErpUser\ERPSettings\ERPSettingsController@makeMachineDisabled');
+    
+    //Teeth Number
+	Route::get('/settings/teethno', 'ErpUser\ERPSettings\ERPSettingsController@getTeethNo')->name('erp-teethno');
+	Route::post('/settings/add-teethno', 'ErpUser\ERPSettings\ERPSettingsController@addTeethNo');
+	Route::get('/settings/get-teethno-by-id', 'ErpUser\ERPSettings\ERPSettingsController@getTeethNoById');
+	Route::put('/settings/update-teethno-by-id', 'ErpUser\ERPSettings\ERPSettingsController@updateTeethNoById');
+	Route::put('/settings/make-teethno-enabled', 'ErpUser\ERPSettings\ERPSettingsController@makeTeethNoEnabled');
+	Route::put('/settings/make-teethno-disabled', 'ErpUser\ERPSettings\ERPSettingsController@makeTeethNoDisabled');
+    
+    //Finish Type
+	Route::get('/settings/finishtype', 'ErpUser\ERPSettings\ERPSettingsController@getFinishtype')->name('erp-finishtype');
+	Route::post('/settings/add-finishtype', 'ErpUser\ERPSettings\ERPSettingsController@addFinishType');
+	Route::get('/settings/get-finishtype-by-id', 'ErpUser\ERPSettings\ERPSettingsController@getFinishTypeById');
+	Route::put('/settings/update-finishtype-by-id', 'ErpUser\ERPSettings\ERPSettingsController@updateFinishTypeById');
+	Route::put('/settings/make-finishtype-enabled', 'ErpUser\ERPSettings\ERPSettingsController@makeFinishTypeEnabled');
+	Route::put('/settings/make-finishtype-disabled', 'ErpUser\ERPSettings\ERPSettingsController@makeFinishTypeDisabled');
 });
