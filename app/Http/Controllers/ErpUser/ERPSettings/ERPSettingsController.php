@@ -165,7 +165,7 @@ class ERPSettingsController extends Controller
         try {
               $id      = $request['id'];
               // Check if this dispatch mode is in use or not 
-              $dispatch_mode = DB::table('jobcard_main_table')->where('dispatch_mode_id','=',$id)->pluck('id')->all();
+              $dispatch_mode = DB::table('jobcard_main_table')->where('dispatch_mode','=',$id)->pluck('id')->all();
 
              if((sizeof($dispatch_mode) > 0))
               {
