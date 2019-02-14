@@ -67,7 +67,7 @@ th {
                 <th>DispMode</th>
                 <td id="disp_mode">{{ ucwords($disp_mode) }}</td>
                 <th>Inv Dt</th>
-                <td id="inv_no">{{ $inv_no }}</td>
+                <td id="invoice_date">{{ $invoice_date }}</td>
             </tr>
         </tbody>
     </table>  
