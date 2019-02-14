@@ -112,7 +112,7 @@
                 <td rowsopan="1"></td>
             </tr>
         </table> -->
-		<table cellpadding="0" cellspacing="0" border="0" class="thead-design" ><thead><tr><th width="25"><strong>Sno</strong></th><th width="60"><strong>PO No</strong></th><th><strong>Style</strong></th><th width="60"><strong>OCN</strong></th><th width="40"><strong>Ref</strong></th><th width="40"><strong>Size</strong></th><th><strong>Quantity</strong></th><th width="40"><strong>Rate(INR)</strong></th><th width="50"><strong>Amount (INR)</strong></th></tr></thead><tbody>
+		<table cellpadding="1" cellspacing="0" border="0" class="thead-design" ><thead><tr><th width="25"><strong>Sno</strong></th><th width="60"><strong>PO No</strong></th><th><strong>Style</strong></th><th width="60"><strong>OCN</strong></th><th width="40"><strong>Ref</strong></th><th width="40"><strong>Size</strong></th><th><strong>Quantity</strong></th><th width="40"><strong>Rate(INR)</strong></th><th width="50"><strong>Amount (INR)</strong></th></tr></thead><tbody>
                     @php 
                     	$totalQnty=0;
                     	$totalpendingQnty=0;
@@ -272,7 +272,7 @@
                             @endphp
                             @endforeach 
                             <tr>
-                                <td width="172.5" colspan="2" ><strong>Round Off</strong></td>
+                                <td width="166" colspan="2" ><strong>Round Off</strong></td>
                                 <td width="200"><strong>{{number_format((float)$inv_details[0]['round_off_amnt'], 2, '.', '') }}</strong></td>
                             </tr>
                     </tbody>
