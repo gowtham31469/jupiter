@@ -76,7 +76,8 @@ th {
                 <th style="border-bottom:1px solid white;">DispMode</th>
                 <td style="border-bottom:1px solid white;" id="disp_mode">{{ ucwords($disp_mode) }}</td>
                 <th style="border-bottom:1px solid white;">Inv Dt</th>
-                <td style="border-right:1px solid black;"id="inv_no">{{ $inv_no }}</td>
+                <td style="border-right:1px solid black;" id="invoice_date">{{ $invoice_date }}</td>
+
             </tr>
         </tbody>
     </table>

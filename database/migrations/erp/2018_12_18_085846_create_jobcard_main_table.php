@@ -36,7 +36,7 @@ class CreateJobcardMainTable extends Migration
             $table->integer('film_no')->nullable();
             $table->date('act_del_date')->nullable();
             $table->integer('length_side')->nullable();
-            $table->double('excess_percentage')->nullable();
+            $table->integer('excess_percentage')->nullable();
             $table->integer('teeth_no')->nullable();
             $table->string('invoice_num')->nullable();
             $table->integer('no_of_stickers')->nullable();

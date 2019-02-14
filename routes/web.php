@@ -610,9 +610,6 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::get('/get-invoice', 'ErpUser\Invoice\InvoiceController@getInvoice')->name('get-invoice');
 	Route::post('/download-invoice', 'ErpUser\Invoice\InvoiceController@downloadInvoice')->name('download-invoice');
 	
-	
-
-
 	Route::get('/po-manager', 'ErpUser\Pomanager\PoManagerController@index')->name('poManager'); 
 	Route::post('/po-manager/order-details', 'ErpUser\Pomanager\PoManagerController@orderDetails');
 	Route::post('/po-manager/submit-po-verify', 'ErpUser\Pomanager\PoManagerController@submitPoVerify'); 
@@ -633,4 +630,13 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::get('job-manager/jobcards-list', 'ErpUser\Jobmanager\JobManagerController@getJobcards')->name('jobcards-list'); 
 	Route::get('job-manager/jobcard-details', 'ErpUser\Jobmanager\JobManagerController@getJobcardDetailsById');  
 	Route::put('job-manager/update-jobcard-details', 'ErpUser\Jobmanager\JobManagerController@updateJobcardById'); 
+
+	/* Routes for ERP-Settings Management */
+	Route::get('/settings', 'ErpUser\ERPSettings\ERPSettingsController@home')->name('erp-settings');
+	Route::get('/settings/dispatch-mode', 'ErpUser\ERPSettings\ERPSettingsController@getDispatchMode')->name('erp-dispatch-mode');
+	Route::post('/settings/add-dispatch-mode', 'ErpUser\ERPSettings\ERPSettingsController@addDispatchMode');
+	Route::get('/settings/get-dispatch-mode-by-id', 'ErpUser\ERPSettings\ERPSettingsController@getDispatchModeById');
+	Route::put('/settings/update-dispatch-mode-by-id', 'ErpUser\ERPSettings\ERPSettingsController@updateDispatchModeById');
+	Route::put('/settings/make-dispatch-mode-enabled', 'ErpUser\ERPSettings\ERPSettingsController@makeDispatchModeEnabled');
+	Route::put('/settings/make-dispatch-mode-disabled', 'ErpUser\ERPSettings\ERPSettingsController@makeDispatchModeDisabled');
 });

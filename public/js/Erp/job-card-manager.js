@@ -3,8 +3,7 @@
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
-var csrf_token = $('meta[name="csrf-token"]').attr('content');
-var base_url = "<?php echo  url('/') ?>";
+
 $(document).ready(function() {
 	$('input[class="row-checkbox"]').prop('checked', false);
 
@@ -12,7 +11,12 @@ $(document).ready(function() {
 
 	/** To refresh modal while hidden **/
 	$('.modal').on('hidden.bs.modal', function (e) {
- 	  $('#create_jobcard').trigger("reset");
+        $('#create_jobcard').trigger("reset");
+        /** [ Refresh  bootstrap selectpicker ] */
+        $('#finish_type').selectpicker('refresh');
+        $('#teeth_no').selectpicker('refresh');
+        $('#machine').selectpicker('refresh');
+        $('#disp_mode').selectpicker('refresh');
 	})
 
 	// Checkbox click functionality
@@ -86,8 +90,23 @@ $(document).ready(function() {
 		$('#delivery_date_filter').val('').change();
 		$.fn.dataTableExt.afnFiltering.length = 0;
 		listTable.dataTable().fnDraw();
-		$('.selectpicker').selectpicker('val', 1);
-        $('.selectpicker').selectpicker('refresh');
+		$('#erp_id_filter').selectpicker('val', 1);
+        $('#erp_id_filter').selectpicker('refresh');
+
+        $('#customer_name_filter').selectpicker('val', 1);
+        $('#customer_name_filter').selectpicker('refresh');
+
+        $('#po_number_filter').selectpicker('val', 1);
+        $('#po_number_filter').selectpicker('refresh');
+
+        $('#style_number_filter').selectpicker('val', 1);
+        $('#style_number_filter').selectpicker('refresh');
+
+        $('#ref_number_filter').selectpicker('val', 1);
+        $('#ref_number_filter').selectpicker('refresh');
+
+        $('#delivery_date_filter').selectpicker('val', 1);
+        $('#delivery_date_filter').selectpicker('refresh');
 	});
 
 	$('.selectpicker').selectpicker();
@@ -184,26 +203,6 @@ function isNumberKey(evt) {
 	} catch (e) {
 		console.log("Error:" + e)
 	}
-}
-
-/** [showSnackbar function]
- *  @author <Praveen> [praveen@wizroots.com]
- */
-    function showSnackbar() {
-    try {
-        // Get the snackbar DIV
-        let x = document.getElementById("snackbar")
-
-        // Add the "show" class to DIV
-        x.className = "show";
-
-        // After 3 seconds, remove the show class from DIV
-        setTimeout(function() {
-            x.className = x.className.replace("show", "");
-        }, 3000);
-    } catch (e) {
-        console.log("Error:" + e)
-    }
 }
 
 /**
@@ -477,7 +476,7 @@ function generateJobcard(){
                                         col++;
                                     });
 
-                                    single_table_html += '<td class="total-quantity-class total-quantity-row-'+row+'"><strong>'+parseInt(total_qty_sizewise)+'</strong></td><td class="total-excess"><div class="form-group has-feedback"><input type="number" data-step-error="Decimal values not allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm total-excess-row-table-'+table+'" required="" id="total_excess_row_table_'+row+'" data-required-error="Mandatory Field." name="total_excess_row_table_'+row+'"" placeholder="Excess %" onkeyup="return totalExcess()" ><div class="help-block with-errors"></div></div></td><td></td><td></td></tr>';
+                                    single_table_html += '<td class="total-quantity-class total-quantity-row-'+row+'"><strong>'+parseInt(total_qty_sizewise)+'</strong></td><td class="total-excess"><div class="form-group has-feedback"><input type="number" data-step-error="Decimal values not allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm total-excess-row-table-'+table+'" id="total_excess_row_table_'+row+'" data-required-error="Mandatory Field." name="total_excess_row_table_'+row+'"" placeholder="Excess %" onkeyup="return totalExcess()" ><div class="help-block with-errors"></div></div></td><td></td><td></td></tr>';
                                 
                                     total_quantity_final += parseInt(total_qty_sizewise);
                                     row++;
@@ -515,7 +514,7 @@ function generateJobcard(){
                                                 <div class="col-md-3">\
                                                 <div class="form-group has-feedback form-inline">\
                                                     <label for="settings_'+template_name[0].replace(' ', '_')+'" >SETTINGS ('+template_name[0]+') :</label>\
-                                                    <input type="number" min="1" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 1" class="form-control input-sm settings" required="" name="settings_'+template_name[0].replace(' ', '_')+'" placeholder="SETTINGS" id="settings_'+template_name[0].replace(' ', '_')+'" onkeyup="return totalMeters()" max="99999"  data-max-error="Value should be <= 99999">\
+                                                    <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" class="form-control input-sm settings"  name="settings_'+template_name[0].replace(' ', '_')+'" placeholder="SETTINGS" id="settings_'+template_name[0].replace(' ', '_')+'" onkeyup="return totalMeters()" max="99999"  data-max-error="Value should be <= 99999">\
                                                     <div class="help-block with-errors"></div>\
                                                 </div>\
                                                 </div>\
@@ -754,22 +753,22 @@ function storeJobcard()
     var order_type      = $( '#order_type' ).text() === ''?null:$('#order_type').text();
     var buyer_id        = $( '#buyer' ).data('buyer-id');
     var reference       = $( '#reference' ).val() === ''?null:$('#reference').val();
-    var disp_mode       = $( '#disp_mode' ).val() === ''?null:$('#disp_mode').val();
+    var disp_mode       = $( '#disp_mode option:selected' ).val() === ''?null:$('#disp_mode option:selected').val();
     var order_date      = $( '#order_date' ).text() === ''?null:$('#order_date').text();
     var length          = $( '#length' ).val() === ''?null:$('#length').val();
     var repeat_gap      = $( '#repeat_gap' ).val() === ''?null:$( '#repeat_gap' ).val();
-    var machine         = $( '#machine' ).val() === ''?null:$( '#machine' ).val();
+    var machine         = $( '#machine option:selected' ).val() === ''?null:$( '#machine option:selected' ).val();
     var cus_del_date    = $( '#cus_del_date' ).val() === ''?null:$( '#cus_del_date' ).val();
     var roll_width      = $( '#roll_width' ).val() === ''?null:$( '#roll_width' ).val();
     var width           = $( '#width' ).val() === ''?null:$('#width').val();
     var film_no         = $( '#film_no' ).val() === ''?null:$( '#film_no' ).val();
-    var act_del_date    = $( '#act_del_date' ).val() === ''?null:$( '#act_del_date' ).val();
+    var invoice_date    = $( '#invoice_date' ).val() === ''?null:$( '#invoice_date' ).val();
     var length_side     = $( '#length_side' ).val() === ''?null:$( '#length_side' ).val();
     var excess          = $( '#excess' ).val() === ''?null:$( '#excess' ).val();
-    var teeth_no        = $( '#teeth_no' ).val() === ''?null:$( '#teeth_no' ).val();
+    var teeth_no        = $( '#teeth_no option:selected' ).val() === ''?null:$( '#teeth_no option:selected' ).val();
     var inv_no          = $( '#inv_no' ).val() === ''?null:$( '#inv_no' ).val();
     var no_sticker      = $( '#no_sticker' ).val() === ''?null:$( '#no_sticker' ).val();
-    var finish_type     = $( '#finish_type' ).val() === ''?null:$( '#finish_type' ).val();
+    var finish_type     = $( '#finish_type option:selected' ).val() === ''?null:$( '#finish_type option:selected' ).val();
     var print_color     = $( '#print_color' ).val() === ''?null:$('#print_color').val();
     var compiled_by     = $( '#compiled_by' ).val() === ''?null:$('#compiled_by').val();
     var barcode_read    = $( '#barcode_read' ).val() === ''?null:$('#barcode_read').val();
@@ -906,7 +905,7 @@ function storeJobcard()
     var act_excess = [];
     /** [ Create array of act-excess ] */
     $('.act-excess').each(function (i, item) {
-        act_excess[i] = $(item).text();
+        act_excess[i] = $(item).text() === ''?0:$(item).text();
         single_ref[i] = $(item).data('act-excess-ref');
     });
     act_excess = act_excess.join(',');
@@ -915,7 +914,7 @@ function storeJobcard()
     var sticker_mtr = [];
     /** [ Create array of sticker-mtrs ] */
     $('.sticker-mtrs').each(function (i, item) {
-        sticker_mtr[i] = $(item).text();
+        sticker_mtr[i] = $(item).text() === ''?0:$(item).text();
 
     });
     sticker_mtr = sticker_mtr.join(',');
@@ -923,7 +922,7 @@ function storeJobcard()
     var settings = [];
     /** [ Create array of settings ] */
     $('.settings').each(function (i, item) {
-        settings[i] = $(item).val();
+        settings[i] = $(item).val() === ''?0:$(item).val();
 
     });
     settings = settings.join(',');
@@ -931,7 +930,7 @@ function storeJobcard()
     var total_mtrs = [];
     /** [ Create array of total-meters ] */
     $('.total-meters').each(function (i, item) {
-        total_mtrs[i] = $(item).text();
+        total_mtrs[i] = $(item).text() === ''?0:$(item).text();
 
     });
     total_mtrs = total_mtrs.join(',');
@@ -985,7 +984,7 @@ function storeJobcard()
             roll_width: roll_width,
             width: width,
             film_no: film_no,
-            act_del_date: act_del_date,
+            invoice_date: invoice_date,
             length_side: length_side,
             excess: excess,
             teeth_no: teeth_no,
@@ -1100,7 +1099,7 @@ function storeJobcard()
                  $('#edit_width').val(data.jobcard_data.width);
                  $('#edit_roll_width').val(data.jobcard_data.roll_width);
                  $('#edit_film_no').val(data.jobcard_data.film_no);
-                 $('#edit_act_del_date').val(data.jobcard_data.act_del_date);
+                 $('#edit_invoice_date').val(data.jobcard_data.invoice_date);
                  $('#edit_length_side').val(data.jobcard_data.length_side);
                  $('#edit_excess').val(data.jobcard_data.excess_percentage);
                  $('#edit_teeth_no').val(data.jobcard_data.teeth_no);
@@ -1121,6 +1120,11 @@ function storeJobcard()
                  $('#edit_cutter').val(data.jobcard_data.cutter);
                  $('#edit_cartons').val(data.jobcard_data.cartons);
 
+                 /** [ Refresh  bootstrap selectpicker ] */
+                 $('#edit_finish_type').selectpicker('refresh');
+                 $('#edit_teeth_no').selectpicker('refresh');
+                 $('#edit_machine').selectpicker('refresh');
+                 $('#edit_disp_mode').selectpicker('refresh');
                  var ratio_table = '';
                  $.each(JSON.parse(data.jobcard_data.template_quantity_json), function(template_type, template_type_data){
                     console.log(template_type)
@@ -1226,7 +1230,7 @@ function storeJobcard()
                                                 single_table += '<td class="edit-total-quantity-class total-quantity-row-'+table_row+'"><strong>'+parseInt(total_qty_sizewise)+'</strong></td>\
                                                 <td class="edit-total-excess">\
                                                     <div class="form-group has-feedback">\
-                                                        <input type="number" data-step-error="Decimal values not allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm edit-total-excess-row-table-'+table_count+'" required="" id="edit_total_excess_row_table_'+table_row+'" data-required-error="Mandatory Field." name="edit_total_excess_row_table_'+table_row+'" "="" placeholder="Excess %" onkeyup="return editTotalExcess()" value="'+table_data.excess[size]+'">\
+                                                        <input type="number" data-step-error="Decimal values not allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm edit-total-excess-row-table-'+table_count+'"  id="edit_total_excess_row_table_'+table_row+'" data-required-error="Mandatory Field." name="edit_total_excess_row_table_'+table_row+'" "="" placeholder="Excess %" onkeyup="return editTotalExcess()" value="'+table_data.excess[size]+'">\
                                                         <div class="help-block with-errors"></div>\
                                                     </div>\
                                                 </td>\
@@ -1234,7 +1238,7 @@ function storeJobcard()
                                                 <td></td>\
                                                 </tr>';
                                           total_quantity_final += parseInt(total_qty_sizewise);
-                                          total_excess_final   += parseFloat(table_data.excess[size]);
+                                          total_excess_final   += parseInt(table_data.excess[size]);
                                           table_row++;
                                         });
                                         single_table += '<tr>\
@@ -1248,7 +1252,7 @@ function storeJobcard()
                                         });
                                                             
                                         single_table += '<td><strong class="edit-total-qty-'+template[0]+'_'+template[1]+'">'+parseInt(total_quantity_final)+'</strong></td>\
-                                                <td class="edit-total-excess-col-table-'+table_count+' edit-total-excess-'+template[0]+'_'+template[1]+'">'+parseFloat(total_excess_final).toFixed(2)+'</td>\
+                                                <td class="edit-total-excess-col-table-'+table_count+' edit-total-excess-'+template[0]+'_'+template[1]+'"><strong>'+Math.round(isNaN(total_excess_final) ? '0' : total_excess_final)+'</strong></td>\
                                                 <td></td>\
                                                 <td></td>\
                                             </tr>\
@@ -1278,7 +1282,7 @@ function storeJobcard()
                                             <div class="col-md-3">\
                                             <div class="form-group has-feedback form-inline">\
                                                 <label for="edit_settings_'+item.ref_name.replace(' ', '_')+'" >SETTINGS ('+item.ref_name+') :</label>\
-                                                <input type="number" step="0.01" min="1" data-step-error="Max 2 decimal places allowed." data-min-error="Value must be >= 1" max="99999" data-max-error="Value should be <= 99999" class="form-control input-sm edit-settings" required="" name="edit_settings_'+item.ref_name.replace(' ', '_')+'" placeholder="SETTINGS" id="edit_settings_'+item.ref_name.replace(' ', '_')+'" onkeyup="return totalMetersEdit()" value="'+item.settings+'" >\
+                                                <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" max="99999" data-max-error="Value should be <= 99999" class="form-control input-sm edit-settings" name="edit_settings_'+item.ref_name.replace(' ', '_')+'" placeholder="SETTINGS" id="edit_settings_'+item.ref_name.replace(' ', '_')+'" onkeyup="return totalMetersEdit()" value="'+item.settings+'" >\
                                                 <div class="help-block with-errors"></div>\
                                             </div>\
                                             </div>\
@@ -1466,22 +1470,22 @@ function updateJobcard(formData)
     var order_type      = $( '#edit_order_type' ).text() === ''?null:$('#edit_order_type').text();
     var buyer_id        = $( '#edit_buyer' ).data('buyer-id');
     var reference       = $( '#edit_reference' ).val() === ''?null:$('#edit_reference').val();
-    var disp_mode       = $( '#edit_disp_mode' ).val() === ''?null:$('#edit_disp_mode').val();
+    var disp_mode       = $( '#edit_disp_mode option:selected' ).val() === ''?null:$('#edit_disp_mode option:selected').val();
     var order_date      = $( '#edit_order_date' ).text() === ''?null:$('#edit_order_date').text();
     var length          = $( '#edit_length' ).val() === ''?null:$('#edit_length').val();
     var repeat_gap      = $( '#edit_repeat_gap' ).val() === ''?null:$( '#edit_repeat_gap' ).val();
-    var machine         = $( '#edit_machine' ).val() === ''?null:$( '#edit_machine' ).val();
+    var machine         = $( '#edit_machine option:selected' ).val() === ''?null:$( '#edit_machine option:selected' ).val();
     var cus_del_date    = $( '#edit_cus_del_date' ).val() === ''?null:$( '#edit_cus_del_date' ).val();
     var roll_width      = $( '#edit_roll_width' ).val() === ''?null:$( '#edit_roll_width' ).val();
     var width           = $( '#edit_width' ).val() === ''?null:$('#edit_width').val();
     var film_no         = $( '#edit_film_no' ).val() === ''?null:$( '#edit_film_no' ).val();
-    var act_del_date    = $( '#edit_act_del_date' ).val() === ''?null:$( '#edit_act_del_date' ).val();
+    var invoice_date    = $( '#edit_invoice_date' ).val() === ''?null:$( '#edit_invoice_date' ).val();
     var length_side     = $( '#edit_length_side' ).val() === ''?null:$( '#edit_length_side' ).val();
     var excess          = $( '#edit_excess' ).val() === ''?null:$( '#edit_excess' ).val();
-    var teeth_no        = $( '#edit_teeth_no' ).val() === ''?null:$( '#edit_teeth_no' ).val();
+    var teeth_no        = $( '#edit_teeth_no option:selected' ).val() === ''?null:$( '#edit_teeth_no option:selected' ).val();
     var inv_no          = $( '#edit_inv_no' ).val() === ''?null:$( '#edit_inv_no' ).val();
     var no_sticker      = $( '#edit_no_sticker' ).val() === ''?null:$( '#edit_no_sticker' ).val();
-    var finish_type     = $( '#edit_finish_type' ).val() === ''?null:$( '#edit_finish_type' ).val();
+    var finish_type     = $( '#edit_finish_type option:selected' ).val() === ''?null:$( '#edit_finish_type option:selected' ).val();
     var print_color     = $( '#edit_print_color' ).val() === ''?null:$('#edit_print_color').val();
     var compiled_by     = $( '#edit_compiled_by' ).val() === ''?null:$('#edit_compiled_by').val();
     var barcode_read    = $( '#edit_barcode_read' ).val() === ''?null:$('#edit_barcode_read').val();
@@ -1619,7 +1623,7 @@ function updateJobcard(formData)
     var act_excess = [];
     /** [ Create array of act-excess ] */
     $('.edit-act-excess').each(function (i, item) {
-        act_excess[i] = $(item).text();
+        act_excess[i] = $(item).text() === ''?0:$(item).text();
         single_ref[i] = $(item).data('act-excess-ref');
     });
     act_excess = act_excess.join(',');
@@ -1628,7 +1632,7 @@ function updateJobcard(formData)
     var sticker_mtr = [];
     /** [ Create array of sticker-mtrs ] */
     $('.edit-sticker-mtrs').each(function (i, item) {
-        sticker_mtr[i] = $(item).text();
+        sticker_mtr[i] = $(item).text() === ''?0:$(item).text();
 
     });
     sticker_mtr = sticker_mtr.join(',');
@@ -1636,7 +1640,7 @@ function updateJobcard(formData)
     var settings = [];
     /** [ Create array of settings ] */
     $('.edit-settings').each(function (i, item) {
-        settings[i] = $(item).val();
+        settings[i] = $(item).val() === ''?0:$(item).val();
 
     });
     settings = settings.join(',');
@@ -1644,7 +1648,7 @@ function updateJobcard(formData)
     var total_mtrs = [];
     /** [ Create array of total-meters ] */
     $('.edit-total-meters').each(function (i, item) {
-        total_mtrs[i] = $(item).text();
+        total_mtrs[i] = $(item).text() === ''?0:$(item).text();
 
     });
     total_mtrs = total_mtrs.join(',');
@@ -1673,7 +1677,7 @@ function updateJobcard(formData)
             roll_width: roll_width,
             width: width,
             film_no: film_no,
-            act_del_date: act_del_date,
+            invoice_date: invoice_date,
             length_side: length_side,
             excess: excess,
             teeth_no: teeth_no,
@@ -1709,12 +1713,11 @@ function updateJobcard(formData)
         },
         statusCode: {
             200: function(data) {
-                console.log(data)
                 var resp = JSON.stringify(data.file_path);
                 $('.snackbar_span').html("Jobcard Updated Successfully");
                 showSnackbar();
                 $('#jobcardUpdationModalCenter').modal('hide');
-                //location.reload();
+                location.reload();
                 window.open(
                     base_url+JSON.parse(resp),
                     '_blank' // <- This is what makes it open in a new window.
