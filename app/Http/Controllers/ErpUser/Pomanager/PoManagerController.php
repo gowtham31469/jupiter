@@ -208,13 +208,14 @@ class PoManagerController extends Controller
 							->join('customers','erp_orders.customer_id','customers.id')
                             ->select('erp_orders.*','customers.company_name')
                             ->get();
-			   
+			
 		   foreach($orderlist as $value)
 		   {
 			  $price =  DB::table('price_taxation')->select('price_taxation.*')->where('customer_id',$customer_id)->where('buyer_id',$buyer_id)->where('template_id',$value->template_id)->first();
-			   
+			   	
 			   if (empty($price)) {
 				  $value->price = 0;
+				 
 			   }
 			   else
 			   {
@@ -229,8 +230,6 @@ class PoManagerController extends Controller
 						$value->price = $price_range->price;
 				   }
 			   }
-
-			  
 		   }
 			   
            $result      = response()->json(['error'=> false,'message' =>'success','orderlist'=>$orderlist,'orders'=>$orders],200);
