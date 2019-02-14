@@ -111,7 +111,7 @@ class JobcardPDFHeaderFooter extends \TCPDF
     */
     public function Footer() {
         // Position at 25 mm from bottom
-        $this->SetY(-25);
+        $this->SetY(-30);
         // Set font
         $this->SetFont('helvetica', '', 8);
         $this->writeHTML("<hr>", false, false, true, false, '');
