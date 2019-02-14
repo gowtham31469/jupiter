@@ -32,6 +32,22 @@
     .delivery-at-link a:hover {
       background-color: blue !important;
     }
+
+    /* Style the active class (and buttons on mouse-over) */
+/*    .delivery-card.active {
+      border: solid;
+      border-color: #273339;
+    }*/
+/*    .delivery-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+        transition: transform 0.7s;
+        }
+    .delivery-card.active:hover {
+        transform: scale(1.00);
+        transition: transform 0.7s;
+        
+    }*/
    
 </style>
 <ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
@@ -104,7 +120,7 @@
                     
                     </div> 
                     <div class="col-md-7 remarks hidden">
-                        <label>Select Delivery Address</label>
+                        <label>Delivery Address</label>
                         <div class="row delivery-address">
                        <!--  <div class="col-md-6">
                            
@@ -170,10 +186,10 @@
                                     <span style="padding-left: 37px;"> : <span style="padding-left: 6px;" class="invoice-date"></span>
                                     </span><br>
                                     <strong>Invoice No </strong>
-                                    <span style="padding-left: 3px;"> : </span>
+                                    <span style="padding-left: 2px;"> : </span>
                                     <span style="padding-left: 4px;" class="invoice_number"></span>
                                     <p><strong>Disp thru</strong>          
-                                    <span style="padding-left: 14px;"> : </span>
+                                    <span style="padding-left: 10px;"> : </span>
                                     <span style="padding-left: 4px;" class="disp_thru" id="disp_thru"></span></p>  
 
                                 </div>

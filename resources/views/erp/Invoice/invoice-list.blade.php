@@ -144,10 +144,10 @@
                     <span style="padding-left: 37px;"> : <span style="padding-left: 6px;" class="inv_date" id="inv_date"></span>
                     </span><br>
                     <strong>Invoice No </strong>
-                    <span style="padding-left: 3px;"> : </span>
+                    <span style="padding-left: 2px;"> : </span>
                     <span style="padding-left: 4px;" class="inv_no" id="inv_no" data-id=""></span>
                     <p><strong>Disp thru</strong>          
-                    <span style="padding-left: 10px;"> : </span>
+                    <span style="padding-left: 11px;"> : </span>
                     <span style="padding-left: 4px;" class="disp_thru" id="disp_thru"></span></p>  
                 </div>
                 <div class="col-lg-5 col-md-5 col-sm-5">

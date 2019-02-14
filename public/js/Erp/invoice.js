@@ -32,12 +32,11 @@
                     $('.po-select').not(this).prop('checked', false);  
                         showOrderList(this)                           
                     });
-
                     if (data.address_list!= 0){
                         var add = ''
                         $(data.address_list).each(function(index, value)
                         {
-                            add += '<div class="col-md-4 delivery-at-link" id="delivery_add_'+value.id+'" ><div class="card delivery-card" onclick="selectDeliveryCard(this,'+value.id+')"  style="cursor: pointer;color: #636b6f;"><strong data-id="'+value.id+'" class="d_address">'+value.address+'</strong><p class="d_email">'+value.email+'</p><p class="d_pin">'+value.pincode+'</p><p class="d_tel">'+value.telephone+'</p></div></div>';
+                            add += '<div class="col-md-4 delivery-at-link" id="delivery_add_'+value.id+'" ><div class="card delivery-card active" onclick="selectDeliveryCard(this,'+value.id+')"  style="color: #636b6f;"><span data-id="'+value.id+'" class="d_address">'+value.address+'</span><p class="d_pin">'+value.pincode+'</p></div></div>';
                         });
                         $('.delivery-address').html(add)
                     }
@@ -121,7 +120,7 @@
             var size = (value.size == null)?'-':value.size ;
             if (itemName==value.item_name) {
                 tr += '<tr class="trClass" id="'+value.id+'">';
-                tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" checked/></td><td class="order_id">'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><input type="number" id="delivery-qnty" value="" class="form-control delivery-qnty" style="text-align: center;" required data-id="'+value.id+'" min="1" onkeyup="updateAmount.call(this,'+uniqueTax+')"></td><td class="rate">'+value.rate+'</td><td class="amnt">'+value.pending_qnty * value.rate+'</td>';
+                tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" checked/></td><td class="order_id">'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><input type="number" id="delivery-qnty" value="" class="form-control delivery-qnty" style="text-align: center;" required data-id="'+value.id+'" min="1" onkeyup="updateAmount.call(this,'+uniqueTax+')"></td><td class="rate">'+value.rate+'</td><td class="amnt">'+(value.pending_qnty * value.rate).toFixed(2)+'</td>';
                 tr += '</tr>';
                 
             }
@@ -492,6 +491,7 @@
                     tr += '<tr><td></td><td colspan="13"><strong style="float: left;">ITEM: '+value.item_name+'  HSNCode: '+hsnCode+'</strong></td></tr>';
                     tr += '<tr class="trClass" id="'+value.id+'"><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+' </td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td class="amnt">'+(delQnty * value.rate).toFixed(2)+'</td>';
                     tr += '</tr>';
+                    itemName =value.item_name
                 }               
                 qnty += value.order_quantity;
                 pendingQnty += pending_qnty
@@ -737,10 +737,10 @@
     }
 
     function selectDeliveryCard(obj,id){
-        $('.delivery-card').css('background-color','');
+        // $('.delivery-card').css('border-color','');
         $('.delivery-card').removeClass("active");
         $(obj).addClass("active");
-        $('.delivery-card.active').css('background-color','rgb(200, 206, 210)');
+        $('.delivery-card.active').css('border-color','#273339');
         $('.delivery-card.active').find('d_address').text()
         console.log($('.delivery-card.active').html())
     }

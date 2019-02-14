@@ -37,6 +37,7 @@ class Invoice
             session()->put('company', $company_id->id);
             session()->put('company_name', strtolower( str_replace(' ','',$company_id->name)) );
         }
+    
         return $companies;
 	}
 

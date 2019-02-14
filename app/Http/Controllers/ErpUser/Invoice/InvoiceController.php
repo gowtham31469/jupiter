@@ -41,6 +41,7 @@ class InvoiceController extends Controller
      */
     public function index()
     {
+        
         $objInv     = new Invoice();
         $companies  = $objInv->setCompany();
         $invoices   = Invoices::join('customers','invoice.customer_id','customers.id')
