@@ -1271,7 +1271,6 @@ class JobManagerController extends Controller
 									->where('id',$value->order_qnty_table_id)
 									->select('*')
 									->get();
-			return $order_details_data;
 			$order_table = str_replace("_quanty","",$value->order_qnty_table_name);
 			$order_id  = strtolower(str_replace(" ","",$value->reference_name).'_order_id');
 			
@@ -1279,7 +1278,7 @@ class JobManagerController extends Controller
 									->where($order_table.'.id',$order_details_data{0}->$order_id)
 									->select($order_table.'.*')
 									->get();
-			
+			dd($order_data);
 			DB::table('erp_order_details')
 							->where('erp_order_details.id', $value->id)
 							->update([
