@@ -3,6 +3,10 @@
   * @author <Praveen>
   */
 var isSubmitting = false;
+  /**
+  * Get Dispatch modes list.
+  * @author <Praveen>
+  */
  function dispatchMode() {
     try{
          $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
@@ -490,7 +494,7 @@ var isSubmitting = false;
   }
 
  /**
-   * Function for get tesco brands details for editing
+   * Function for get dispatch modes details for editing
    * @param id
    * @author <Praveen>
    *
@@ -541,7 +545,7 @@ var isSubmitting = false;
   }
 
     /**
-   * Function for get tesco brands details for editing
+   * Function for get machines details for editing
    * @param id
    * @author <gowtham>
    *
@@ -1084,7 +1088,7 @@ var isSubmitting = false;
  }
 
 /**
-* Makes a Dispatch Mode Diabled
+* Makes a Dispatch Mode Disabled
 * @param id
 * @author <Praveen>
 */
@@ -1137,7 +1141,7 @@ function makeDispatchModeDisabled(id)
  }
 
 /**
-* Makes a Dispatch Mode Diabled
+* Makes a machine Disabled
 * @param id
 * @author <gowtham>
 */
@@ -1189,7 +1193,7 @@ function makeMachineDisabled(id)
   }
  }
 /**
-* Makes a Teeth No Diabled
+* Makes a Teeth No Disabled
 * @param id
 * @author <gowtham>
 */
@@ -1241,7 +1245,7 @@ function makeTeethNoDisabled(id)
   }
  }
 /**
-* Makes a Finish type Diabled
+* Makes a Finish type Disabled
 * @param id
 * @author <gowtham>
 */

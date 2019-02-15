@@ -132,7 +132,7 @@
                                 <td width="40">{{$size}}</td>
         	                    <td>{{$data['delvry_qnty']}}</td>
         	                    <td width="40">{{$data['rate']}}</td>
-        	                    <td width="42">{{number_format((float)$data['delvry_qnty'] * $data['rate'], 2, '.', '') }}</td>
+        	                    <td width="42" style="text-align:right;">{{number_format((float)$data['delvry_qnty'] * $data['rate'], 2, '.', '') }}</td>
                         </tr>
                     @else
                         <tr>
