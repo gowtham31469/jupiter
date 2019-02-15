@@ -899,15 +899,14 @@ class JobManagerController extends Controller
 									->select($order_table.'.*')
 									->get();
 			
-			//  $data['custom_name']=DB::table('price_taxation')->where('template_id',$order_omp{0}->template_id)->where('customer_id',$order_omp{0}->tesco_supplier_id)->where('buyer_id',2)->select('*')->get();
+			 $data['custom_name']=DB::table('price_taxation')->where('template_id',$order_omp{0}->template_id)->where('customer_id',$order_omp{0}->tesco_supplier_id)->where('buyer_id',2)->select('*')->get();
 			
 			DB::table('erp_order_details')
 							->where('erp_order_details.id', $value->id)
 							->update([
 								'buyer_po_number'  => $order_omp{0}->po_number,
 								'zone'  => $order_omp{0}->zone,
-								'custom_ref_name'  => $data['custom_name']{0}->custom_name,
-								'order_type'       => $order_omp{0}->order_flag
+								'custom_ref_name'  => $data['custom_name']{0}->custom_name
 							]);
 		}
 	}
@@ -1268,18 +1267,17 @@ class JobManagerController extends Controller
 			$order_details_data  = 	DB::table($value->order_qnty_table_name)
 									->where('id',$value->order_qnty_table_id)
 									->select('*')
-									->first();
+									->get();
 			$order_table = str_replace("_quanty","",$value->order_qnty_table_name);
-			$order_id  = strtolower(str_replace(" ","",$value->reference_name).'_order_id');
-			
+			$order_id    = strtolower(str_replace(" ","",$value->reference_name).'_order_id');
 			$order_data  = 	DB::table($order_table)
-									->where($order_table.'.id',$order_details_data->$order_id)
+									->where($order_table.'.id',$order_details_data{0}->$order_id)
 									->select($order_table.'.*')
-									->first();
+									->get();
 			DB::table('erp_order_details')
 							->where('erp_order_details.id', $value->id)
 							->update([
-								'order_type'       => $order_data->order_flag
+								'order_type' => $order_data{0}->order_flag
 							]);
 		}
 	}
