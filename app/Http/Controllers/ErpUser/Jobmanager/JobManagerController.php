@@ -1285,7 +1285,7 @@ class JobManagerController extends Controller
 			//}
 			DB::table('erp_order_details')
 							->where('erp_order_details.id', $value->id)
-							->whereNotIn('erp_order_details.order_type',["reOrder", "repeatOrder"])
+							->where('erp_order_details.order_type', 'ilike', NULL)
 							->update([
 								'order_type' => $order_type
 							]);
