@@ -376,15 +376,15 @@ function showInvoice(obj){
           Object.keys(tax_amnt).forEach(function(key) {
             if (place_of_supply==1){
                   var trClass = tax_amnt[key]!=0?"":"hidden"
-                  tax_tr = '<tr class="'+trClass+'"><td>CGST('+(key/2)+'%)</td><td class="cgst_'+key+'">'+tax_amnt[key]+'</td><td>'+(((key/2)/100)*tax_amnt[key]).toFixed(2)+'</td></tr><tr class="'+trClass+'"><td>SGST('+(key/2)+'%)</td><td class="sgst_'+key+'">'+tax_amnt[key]+'</td><td>'+ (((key/2)/100)*tax_amnt[key]).toFixed(2)+'</td></tr>'
+                  tax_tr = '<tr class="'+trClass+'"><td>CGST('+(key/2)+'%)</td><td class="cgst_'+key+'">'+tax_amnt[key].toFixed(2)+'</td><td>'+(((key/2)/100)*tax_amnt[key]).toFixed(2)+'</td></tr><tr class="'+trClass+'"><td>SGST('+(key/2)+'%)</td><td class="sgst_'+key+'">'+tax_amnt[key].toFixed(2)+'</td><td>'+ (((key/2)/100)*tax_amnt[key]).toFixed(2)+'</td></tr>'
               }
               else if (place_of_supply==2){
                   var trClass = tax_amnt[key]!=0?"":"hidden"
                   // if (tax_amnt[key]!=0) {                
-                      tax_tr = '<tr class="'+trClass+'"><td>IGST('+key+'%)</td><td class="igst_'+key+'">'+tax_amnt[key]+'</td><td>'+((key/100)*tax_amnt[key]).toFixed(2)+'</td></tr>'
+                      tax_tr = '<tr class="'+trClass+'"><td>IGST('+key+'%)</td><td class="igst_'+key+'">'+tax_amnt[key].toFixed(2)+'</td><td>'+((key/100)*tax_amnt[key]).toFixed(2)+'</td></tr>'
               }
               else{
-                  tax_tr = '<tr><td>Taxes('+key+'%)</td><td>'+tax_amnt[key]+'</td><td>'+ ((key/100)*tax_amnt[key] ).toFixed(2)+'</td></tr>'
+                  tax_tr = '<tr><td>Taxes('+key+'%)</td><td>'+tax_amnt[key].toFixed(2)+'</td><td>'+ ((key/100)*tax_amnt[key] ).toFixed(2)+'</td></tr>'
               }
 
               $('.tax-tabl').append(tax_tr);
