@@ -195,7 +195,7 @@
 								<div class="col-md-4">
 									 <div class="form-group has-feedback form-inline">
 										{!! Form::label('edit_disp_mode', 'DISP MODE :', ['class' => 'form_label']) !!}
-										{!! Form::text('edit_disp_mode',$value = '', array('class' => 'form-control input-sm','placeholder' => 'DISPATCH MODE','required','maxlength' => '20')) !!}
+										{{ Form::select('edit_disp_mode',(['' => '-- Select Dispatch Mode --']+ $disp_modes),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'edit_disp_mode','required')) }}
 										<div class="help-block with-errors"></div>
 									 </div>
 								</div>
@@ -225,7 +225,7 @@
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('edit_machine', 'MACHINE :', ['class' => 'form_label']) !!}
-										{!! Form::number('edit_machine',$value = '', array('class' => 'form-control input-sm','placeholder' => 'MACHINE','required','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error' => 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.', 'onkeypress' => 'return isNumber(event)')) !!}
+										{{ Form::select('edit_machine',(['' => '-- Select Machine --']+ $machines),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'edit_machine','required')) }}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
@@ -268,9 +268,9 @@
 							<div class="col-md-12">
 								<div class="col-md-3">
 								   <div class="form-group has-feedback form-inline">
-									{!! Form::label('edit_act_del_date', 'ACT D.DT :', ['class' => 'form_label']) !!}
-									<div class="input-group edit_act_del_date date datepicker" data-provide="datepicker" id="datePicker1">
-										<input value="" id="edit_act_del_date" name="edit_act_del_date" type="text" class="form-control input-sm " placeholder="ACT D.DT">
+									{!! Form::label('edit_invoice_date', 'INVOICE DATE :', ['class' => 'form_label']) !!}
+									<div class="input-group edit_invoice_date date datepicker" data-provide="datepicker" id="datePicker1">
+										<input value="" id="edit_invoice_date" name="edit_invoice_date" type="text" class="form-control input-sm " placeholder="INVOICE DATE">
 										<div class="input-group-addon input-sm">
 										<span class="glyphicon glyphicon-th"> </span >
 									</div >
@@ -295,7 +295,7 @@
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('edit_teeth_no', 'TEETH NO :', ['class' => 'form_label']) !!}
-										{!! Form::number('edit_teeth_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'TEETH NO','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error' => 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.', 'onkeypress' => 'return isNumber(event)')) !!}
+										{{ Form::select('edit_teeth_no',(['' => '-- Select Teeth No --']+ $teeth_nos),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'edit_teeth_no','required')) }}
 										<div class="help-block with-errors"></div>
 								    </div>
 								</div>
@@ -320,7 +320,7 @@
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('edit_finish_type', 'FINISH TYPE :', ['class' => 'form_label']) !!}
-										{!! Form::number('edit_finish_type',$value = '', array('class' => 'form-control input-sm','placeholder' => 'FINISH TYPE','required','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error' => 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.', 'onkeypress' => 'return isNumber(event)')) !!}
+										{{ Form::select('edit_finish_type',(['' => '-- Select Finish Type --']+ $finish_types),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'edit_finish_type','required')) }}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>

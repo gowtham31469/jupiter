@@ -934,10 +934,7 @@ class OrderStatusCntrl extends Controller
 			}
 			$i++;
 		}
-		
-		
-		echo $customer_name{0}->company_name;	
-			  
+		echo $customer_name{0}->company_name;		  
     }
 	
 	/**

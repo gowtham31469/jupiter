@@ -107,12 +107,7 @@
                 <td rowsopan="1"></td>
             </tr>
         </table>
-<!--         <table>
-            <tr class="blank_row">
-                <td rowsopan="1"></td>
-            </tr>
-        </table> -->
-		<table cellpadding="1" cellspacing="0" border="0" class="thead-design" ><thead><tr><th width="25"><strong>Sno</strong></th><th width="60"><strong>PO No</strong></th><th><strong>Style</strong></th><th width="60"><strong>OCN</strong></th><th width="40"><strong>Ref</strong></th><th width="40"><strong>Size</strong></th><th><strong>Quantity</strong></th><th width="40"><strong>Rate(INR)</strong></th><th width="50"><strong>Amount (INR)</strong></th></tr></thead><tbody>
+		<table  align="center" width="100%" cellpadding="1" cellspacing="0" border="0" class="thead-design" ><thead><tr><th width="25"><strong>Sno</strong></th><th width="60"><strong>PO No</strong></th><th><strong>Style</strong></th><th width="60"><strong>OCN</strong></th><th width="40"><strong>Ref</strong></th><th width="40"><strong>Size</strong></th><th><strong>Quantity</strong></th><th width="40"><strong>Rate(INR)</strong></th><th width="42"><strong>Amount(INR)</strong></th></tr></thead><tbody>
                     @php 
                     	$totalQnty=0;
                     	$totalpendingQnty=0;
@@ -137,7 +132,7 @@
                                 <td width="40">{{$size}}</td>
         	                    <td>{{$data['delvry_qnty']}}</td>
         	                    <td width="40">{{$data['rate']}}</td>
-        	                    <td width="50">{{number_format((float)$data['delvry_qnty'] * $data['rate'], 2, '.', '') }}</td>
+        	                    <td width="42">{{number_format((float)$data['delvry_qnty'] * $data['rate'], 2, '.', '') }}</td>
                         </tr>
                     @else
                         <tr>
@@ -160,7 +155,7 @@
                                 <!-- <td>{{$data['tax']}}</td> -->
                                 <td>{{$data['delvry_qnty']}}</td>
                                 <td width="40">{{$data['rate']}}</td>
-                                <td width="50">{{number_format((float)$data['delvry_qnty'] * $data['rate'], 2, '.', '') }}</td>
+                                <td width="42" style="text-align:right;">{{number_format((float)$data['delvry_qnty'] * $data['rate'], 2, '.', '') }}</td>
                         </tr>
                     @endif
                         @php 
@@ -197,14 +192,11 @@
                 <table>
                         <tr>
                             <td>
-                                <span><strong>Credit Terms </strong> <span><strong>: </strong></span><span>{{$inv_details[0]['credit_limit']}}</span> </span>                            
+                                <p><strong>Credit Terms </strong><span><strong>: </strong></span>
+                                <span>{{$inv_details[0]['credit_limit']}}</span> </p>  
+                                <p><strong>E-Way Bill No : </strong><span>{{$eway_no}}</span></p>                         
                             </td>
 
-                        </tr>
-                         <tr>
-                            <td>
-                                <span><strong>E-Way Bill No : </strong></span><span>{{$eway_no}}</span>
-                            </td>
                         </tr>
                 </table>
                 </td>
@@ -215,16 +207,11 @@
                         <td rowsopan="1"></td>
                     </tr>
                     </table>
-             <!--        <table>
-                    <tr class="blank_row">
-                        <td rowsopan="1"></td>
-                    </tr>
-                    </table> -->
                     <table class="tabl-design" cellpadding="0" cellspacing="0" border="0">                
                             <tr>
-                                <td width="84"><strong>Sub Total</strong></td>
+                                <td width="81"><strong>Sub Total</strong></td>
                                 <td width="78"><strong>{{$totalDevlryQnty}}</strong></td>
-                                <td width="70"><strong>{{number_format((float)$totalAmnt, 2, '.', '') }}</strong></td>
+                                <td width="30" style="text-align:right;"><strong>{{number_format((float)$totalAmnt, 2, '.', '') }}</strong></td>
                             </tr>
                             @php 
                                 $totalTax = 0;
@@ -232,7 +219,7 @@
                             @foreach($uniqueTaxes as $tax=>$amnt)               
                                 @if($inv_details[0]['place_of_supply']==1)
                                     <tr>
-                                        <td width="165.5" colspan="2">CGST ({{$tax/2}}%)</td>
+                                        <td width="169" colspan="2">CGST ({{$tax/2}}%)</td>
                                         <td width="80" >{{number_format((float)(($tax/2)/100)*$amnt, 2, '.', '') }}</td>
                                     </tr>
                                     <tr>
@@ -272,7 +259,7 @@
                             @endphp
                             @endforeach 
                             <tr>
-                                <td width="166" colspan="2" ><strong>Round Off</strong></td>
+                                <td width="176" colspan="2" ><strong>Round Off</strong></td>
                                 <td width="200"><strong>{{number_format((float)$inv_details[0]['round_off_amnt'], 2, '.', '') }}</strong></td>
                             </tr>
                     </tbody>
@@ -304,11 +291,10 @@
         <table>
              <tr>
                  <td width="198">          
-                    <span><strong>Amount in words :</strong></span>
-                    <br>
-                    <span>{{$amntInwords}}</span>               
+                    <p><strong>Amount in words :</strong></p>
+                    <p>{{$amntInwords}}</p>               
                 </td>
-                <td colspan="2" width="164">          
+                <td colspan="2" width="168">          
                       <span><strong>Total Amount</strong></span>             
                 </td>
                 <td  width="40">          

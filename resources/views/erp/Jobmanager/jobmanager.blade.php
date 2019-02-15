@@ -428,7 +428,7 @@
 								<div class="col-md-4">
 									 <div class="form-group has-feedback form-inline">
 										{!! Form::label('disp_mode', 'DISP MODE :', ['class' => 'form_label']) !!}
-										{!! Form::text('disp_mode',$value = '', array('class' => 'form-control input-sm','placeholder' => 'DISPATCH MODE','required','maxlength' => '20')) !!}
+										{{ Form::select('disp_mode',(['' => '-- Select Dispatch Mode --']+ $disp_modes),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'disp_mode','required')) }}
 										<div class="help-block with-errors"></div>
 									 </div>
 								</div>
@@ -458,7 +458,7 @@
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('machine', 'MACHINE :', ['class' => 'form_label']) !!}
-										{!! Form::number('machine',$value = '', array('class' => 'form-control input-sm','placeholder' => 'MACHINE','required','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error' => 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.', 'onkeypress' => 'return isNumber(event)')) !!}
+										{{ Form::select('machine',(['' => '-- Select Machine --']+ $machines),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'machine','required')) }}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
@@ -501,9 +501,9 @@
 							<div class="col-md-12">
 								<div class="col-md-3">
 								   <div class="form-group has-feedback form-inline">
-									{!! Form::label('act_del_date', 'ACT D.DT :', ['class' => 'form_label']) !!}
-									<div class="input-group act_del_date date datepicker" data-provide="datepicker" id="datePicker1">
-										<input value="" id="act_del_date" name="act_del_date" type="text" class="form-control input-sm " placeholder="ACT D.DT">
+									{!! Form::label('invoice_date', 'INVOICE DATE :', ['class' => 'form_label']) !!}
+									<div class="input-group invoice_date date datepicker" data-provide="datepicker" id="datePicker1">
+										<input value="" id="invoice_date" name="invoice_date" type="text" class="form-control input-sm " placeholder="INVOICE DATE">
 										<div class="input-group-addon input-sm">
 										<span class="glyphicon glyphicon-th"> </span >
 									</div >
@@ -528,7 +528,7 @@
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('teeth_no', 'TEETH NO :', ['class' => 'form_label']) !!}
-										{!! Form::number('teeth_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'TEETH NO','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error' => 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.', 'onkeypress' => 'return isNumber(event)')) !!}
+										{{ Form::select('teeth_no',(['' => '-- Select Teeth No --']+ $teeth_nos),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'teeth_no','required')) }}
 										<div class="help-block with-errors"></div>
 								    </div>
 								</div>
@@ -553,7 +553,7 @@
 								<div class="col-md-3">
 								    <div class="form-group has-feedback form-inline">
 										{!! Form::label('finish_type', 'FINISH TYPE :', ['class' => 'form_label']) !!}
-										{!! Form::number('finish_type',$value = '', array('class' => 'form-control input-sm','placeholder' => 'FINISH TYPE','required','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error' => 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.', 'onkeypress' => 'return isNumber(event)')) !!}
+										{{ Form::select('finish_type',(['' => '-- Select Finish Type --']+ $finish_types),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'finish_type','required')) }}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
@@ -707,8 +707,30 @@ $(document).ready(function() {
 	$('#style_number_filter').val('').change();
 	$('#ref_number_filter').val('').change();
 	$('#delivery_date_filter').val('').change();
-	$('.selectpicker').selectpicker('val', 1);
-	$('.selectpicker').selectpicker('refresh');
+
+	/** [ Refresh  bootstrap selectpicker ] */
+	$('#erp_id_filter').selectpicker('val', 1);
+	$('#erp_id_filter').selectpicker('refresh');
+
+	$('#customer_name_filter').selectpicker('val', 1);
+	$('#customer_name_filter').selectpicker('refresh');
+
+	$('#po_number_filter').selectpicker('val', 1);
+	$('#po_number_filter').selectpicker('refresh');
+
+	$('#style_number_filter').selectpicker('val', 1);
+	$('#style_number_filter').selectpicker('refresh');
+
+	$('#ref_number_filter').selectpicker('val', 1);
+	$('#ref_number_filter').selectpicker('refresh');
+
+	$('#delivery_date_filter').selectpicker('val', 1);
+	$('#delivery_date_filter').selectpicker('refresh');
+
+	$('#finish_type').selectpicker('refresh');
+	$('#teeth_no').selectpicker('refresh');
+	$('#machine').selectpicker('refresh');
+	$('#disp_mode').selectpicker('refresh');
 
 	/** [ Toggle bootstrap tooltip ] */
 	$('.preview-pdf').tooltip('show');

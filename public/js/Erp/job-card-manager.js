@@ -11,7 +11,12 @@ $(document).ready(function() {
 
 	/** To refresh modal while hidden **/
 	$('.modal').on('hidden.bs.modal', function (e) {
- 	  $('#create_jobcard').trigger("reset");
+        $('#create_jobcard').trigger("reset");
+        /** [ Refresh  bootstrap selectpicker ] */
+        $('#finish_type').selectpicker('refresh');
+        $('#teeth_no').selectpicker('refresh');
+        $('#machine').selectpicker('refresh');
+        $('#disp_mode').selectpicker('refresh');
 	})
 
 	// Checkbox click functionality
@@ -85,8 +90,23 @@ $(document).ready(function() {
 		$('#delivery_date_filter').val('').change();
 		$.fn.dataTableExt.afnFiltering.length = 0;
 		listTable.dataTable().fnDraw();
-		$('.selectpicker').selectpicker('val', 1);
-        $('.selectpicker').selectpicker('refresh');
+		$('#erp_id_filter').selectpicker('val', 1);
+        $('#erp_id_filter').selectpicker('refresh');
+
+        $('#customer_name_filter').selectpicker('val', 1);
+        $('#customer_name_filter').selectpicker('refresh');
+
+        $('#po_number_filter').selectpicker('val', 1);
+        $('#po_number_filter').selectpicker('refresh');
+
+        $('#style_number_filter').selectpicker('val', 1);
+        $('#style_number_filter').selectpicker('refresh');
+
+        $('#ref_number_filter').selectpicker('val', 1);
+        $('#ref_number_filter').selectpicker('refresh');
+
+        $('#delivery_date_filter').selectpicker('val', 1);
+        $('#delivery_date_filter').selectpicker('refresh');
 	});
 
 	$('.selectpicker').selectpicker();
@@ -733,22 +753,22 @@ function storeJobcard()
     var order_type      = $( '#order_type' ).text() === ''?null:$('#order_type').text();
     var buyer_id        = $( '#buyer' ).data('buyer-id');
     var reference       = $( '#reference' ).val() === ''?null:$('#reference').val();
-    var disp_mode       = $( '#disp_mode' ).val() === ''?null:$('#disp_mode').val();
+    var disp_mode       = $( '#disp_mode option:selected' ).val() === ''?null:$('#disp_mode option:selected').val();
     var order_date      = $( '#order_date' ).text() === ''?null:$('#order_date').text();
     var length          = $( '#length' ).val() === ''?null:$('#length').val();
     var repeat_gap      = $( '#repeat_gap' ).val() === ''?null:$( '#repeat_gap' ).val();
-    var machine         = $( '#machine' ).val() === ''?null:$( '#machine' ).val();
+    var machine         = $( '#machine option:selected' ).val() === ''?null:$( '#machine option:selected' ).val();
     var cus_del_date    = $( '#cus_del_date' ).val() === ''?null:$( '#cus_del_date' ).val();
     var roll_width      = $( '#roll_width' ).val() === ''?null:$( '#roll_width' ).val();
     var width           = $( '#width' ).val() === ''?null:$('#width').val();
     var film_no         = $( '#film_no' ).val() === ''?null:$( '#film_no' ).val();
-    var act_del_date    = $( '#act_del_date' ).val() === ''?null:$( '#act_del_date' ).val();
+    var invoice_date    = $( '#invoice_date' ).val() === ''?null:$( '#invoice_date' ).val();
     var length_side     = $( '#length_side' ).val() === ''?null:$( '#length_side' ).val();
     var excess          = $( '#excess' ).val() === ''?null:$( '#excess' ).val();
-    var teeth_no        = $( '#teeth_no' ).val() === ''?null:$( '#teeth_no' ).val();
+    var teeth_no        = $( '#teeth_no option:selected' ).val() === ''?null:$( '#teeth_no option:selected' ).val();
     var inv_no          = $( '#inv_no' ).val() === ''?null:$( '#inv_no' ).val();
     var no_sticker      = $( '#no_sticker' ).val() === ''?null:$( '#no_sticker' ).val();
-    var finish_type     = $( '#finish_type' ).val() === ''?null:$( '#finish_type' ).val();
+    var finish_type     = $( '#finish_type option:selected' ).val() === ''?null:$( '#finish_type option:selected' ).val();
     var print_color     = $( '#print_color' ).val() === ''?null:$('#print_color').val();
     var compiled_by     = $( '#compiled_by' ).val() === ''?null:$('#compiled_by').val();
     var barcode_read    = $( '#barcode_read' ).val() === ''?null:$('#barcode_read').val();
@@ -964,7 +984,7 @@ function storeJobcard()
             roll_width: roll_width,
             width: width,
             film_no: film_no,
-            act_del_date: act_del_date,
+            invoice_date: invoice_date,
             length_side: length_side,
             excess: excess,
             teeth_no: teeth_no,
@@ -1079,7 +1099,7 @@ function storeJobcard()
                  $('#edit_width').val(data.jobcard_data.width);
                  $('#edit_roll_width').val(data.jobcard_data.roll_width);
                  $('#edit_film_no').val(data.jobcard_data.film_no);
-                 $('#edit_act_del_date').val(data.jobcard_data.act_del_date);
+                 $('#edit_invoice_date').val(data.jobcard_data.invoice_date);
                  $('#edit_length_side').val(data.jobcard_data.length_side);
                  $('#edit_excess').val(data.jobcard_data.excess_percentage);
                  $('#edit_teeth_no').val(data.jobcard_data.teeth_no);
@@ -1100,6 +1120,11 @@ function storeJobcard()
                  $('#edit_cutter').val(data.jobcard_data.cutter);
                  $('#edit_cartons').val(data.jobcard_data.cartons);
 
+                 /** [ Refresh  bootstrap selectpicker ] */
+                 $('#edit_finish_type').selectpicker('refresh');
+                 $('#edit_teeth_no').selectpicker('refresh');
+                 $('#edit_machine').selectpicker('refresh');
+                 $('#edit_disp_mode').selectpicker('refresh');
                  var ratio_table = '';
                  $.each(JSON.parse(data.jobcard_data.template_quantity_json), function(template_type, template_type_data){
                     console.log(template_type)
@@ -1445,22 +1470,22 @@ function updateJobcard(formData)
     var order_type      = $( '#edit_order_type' ).text() === ''?null:$('#edit_order_type').text();
     var buyer_id        = $( '#edit_buyer' ).data('buyer-id');
     var reference       = $( '#edit_reference' ).val() === ''?null:$('#edit_reference').val();
-    var disp_mode       = $( '#edit_disp_mode' ).val() === ''?null:$('#edit_disp_mode').val();
+    var disp_mode       = $( '#edit_disp_mode option:selected' ).val() === ''?null:$('#edit_disp_mode option:selected').val();
     var order_date      = $( '#edit_order_date' ).text() === ''?null:$('#edit_order_date').text();
     var length          = $( '#edit_length' ).val() === ''?null:$('#edit_length').val();
     var repeat_gap      = $( '#edit_repeat_gap' ).val() === ''?null:$( '#edit_repeat_gap' ).val();
-    var machine         = $( '#edit_machine' ).val() === ''?null:$( '#edit_machine' ).val();
+    var machine         = $( '#edit_machine option:selected' ).val() === ''?null:$( '#edit_machine option:selected' ).val();
     var cus_del_date    = $( '#edit_cus_del_date' ).val() === ''?null:$( '#edit_cus_del_date' ).val();
     var roll_width      = $( '#edit_roll_width' ).val() === ''?null:$( '#edit_roll_width' ).val();
     var width           = $( '#edit_width' ).val() === ''?null:$('#edit_width').val();
     var film_no         = $( '#edit_film_no' ).val() === ''?null:$( '#edit_film_no' ).val();
-    var act_del_date    = $( '#edit_act_del_date' ).val() === ''?null:$( '#edit_act_del_date' ).val();
+    var invoice_date    = $( '#edit_invoice_date' ).val() === ''?null:$( '#edit_invoice_date' ).val();
     var length_side     = $( '#edit_length_side' ).val() === ''?null:$( '#edit_length_side' ).val();
     var excess          = $( '#edit_excess' ).val() === ''?null:$( '#edit_excess' ).val();
-    var teeth_no        = $( '#edit_teeth_no' ).val() === ''?null:$( '#edit_teeth_no' ).val();
+    var teeth_no        = $( '#edit_teeth_no option:selected' ).val() === ''?null:$( '#edit_teeth_no option:selected' ).val();
     var inv_no          = $( '#edit_inv_no' ).val() === ''?null:$( '#edit_inv_no' ).val();
     var no_sticker      = $( '#edit_no_sticker' ).val() === ''?null:$( '#edit_no_sticker' ).val();
-    var finish_type     = $( '#edit_finish_type' ).val() === ''?null:$( '#edit_finish_type' ).val();
+    var finish_type     = $( '#edit_finish_type option:selected' ).val() === ''?null:$( '#edit_finish_type option:selected' ).val();
     var print_color     = $( '#edit_print_color' ).val() === ''?null:$('#edit_print_color').val();
     var compiled_by     = $( '#edit_compiled_by' ).val() === ''?null:$('#edit_compiled_by').val();
     var barcode_read    = $( '#edit_barcode_read' ).val() === ''?null:$('#edit_barcode_read').val();
@@ -1652,7 +1677,7 @@ function updateJobcard(formData)
             roll_width: roll_width,
             width: width,
             film_no: film_no,
-            act_del_date: act_del_date,
+            invoice_date: invoice_date,
             length_side: length_side,
             excess: excess,
             teeth_no: teeth_no,
