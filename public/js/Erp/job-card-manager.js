@@ -233,6 +233,7 @@ function generateJobcard(){
             }
         });
         orders   = orders.join(',');
+
         ref_array = [];
         /** [ Create array of reference selected ] */
         $('.row-checkbox', allPages).each(function (i, item) {
@@ -241,6 +242,7 @@ function generateJobcard(){
             }
         });
         ref_array   = ref_array.join(',');
+
         buyer_po_array = [];
         /** [ Create array of buyer po selected ] */
         $('.row-checkbox', allPages).each(function (i, item) {
@@ -249,11 +251,21 @@ function generateJobcard(){
             }
         });
         buyer_po_array   = buyer_po_array.join(',');
+
+        order_type_array = [];
+        /** [ Create array of order type selected ] */
+        $('.row-checkbox', allPages).each(function (i, item) {
+            if ($(this).is(':checked')) {
+                order_type_array.push($(this).closest('tr').data('order-type')); 
+            }
+        });
+        order_type_array   = order_type_array.join(',');
+
         $.ajax({
             url:base_url + "/erp/job-manager/get-jobcard-order-details",
             dataType:"json",
             method:"get",
-            data:{orders:orders, ref_array:ref_array, buyer_po_array:buyer_po_array},
+            data:{orders:orders, ref_array:ref_array, buyer_po_array:buyer_po_array,order_type_array:order_type_array},
             tryCount : 0,
             retryLimit : 2,
             beforeSend: function () {
@@ -625,7 +637,7 @@ function calculateExcess(evt)
 {
     let item = $('.total-quantity-class');
     $.each(item, function(key, value){
-        let total_excess = parseFloat($(value).text() * (evt.value*1/100));
+        let total_excess = parseFloat($(value).text() * (evt.value*1/100)).toFixed(2);
         $('#total_excess_row_table_'+key).val(Math.round(total_excess));
         /** refresh excess values fields in single ref table */
         $('#total_excess_row_table_'+key).trigger('input');
@@ -680,7 +692,7 @@ function actualExcess()
             }
         });
         if (!isNaN(total_qty) && !isNaN(total_excess)) {
-            act_excess = parseInt((total_excess/total_qty)*100);
+            act_excess = parseFloat((total_excess/total_qty)*100).toFixed(2);
         }
         $('#act_excess_'+ref_name).text(Math.round(act_excess))
     });
@@ -943,6 +955,7 @@ function storeJobcard()
         }
     });
     erp_orders_ids   = erp_orders_ids.join(',');
+
     selected_ref_array = [];
     /** [ Create array of reference selected ] */
     $('.row-checkbox', allPages).each(function (i, item) {
@@ -951,6 +964,7 @@ function storeJobcard()
         }
     });
     selected_ref_array   = selected_ref_array.join(',');
+
     selected_buyer_po_array = [];
     /** [ Create array of buyer po selected ] */
     $('.row-checkbox', allPages).each(function (i, item) {
@@ -959,6 +973,15 @@ function storeJobcard()
         }
     });
     selected_buyer_po_array   = selected_buyer_po_array.join(',');
+
+    order_type_array = [];
+    /** [ Create array of order type selected ] */
+    $('.row-checkbox', allPages).each(function (i, item) {
+        if ($(this).is(':checked')) {
+            order_type_array.push($(this).closest('tr').data('order-type')); 
+        }
+    });
+    order_type_array   = order_type_array.join(',');
 
     $.ajax({
         url: base_url + "/erp/job-manager/store-jobcard-details",
@@ -1012,7 +1035,8 @@ function storeJobcard()
             total_mtrs:total_mtrs,
             erp_orders_ids:erp_orders_ids,
             selected_ref_array:selected_ref_array,
-            selected_buyer_po_array:selected_buyer_po_array
+            selected_buyer_po_array:selected_buyer_po_array,
+            order_type_array:order_type_array
         },
         tryCount: 0,
         retryLimit: 2,
@@ -1396,7 +1420,7 @@ function actualExcessEdit()
             }
         });
         if (!isNaN(total_qty) && !isNaN(total_excess)) {
-            act_excess = parseInt((total_excess/total_qty)*100).toFixed(2);
+            act_excess = parseFloat((total_excess/total_qty)*100).toFixed(2);
         }
         $('#edit_act_excess_'+ref_name).text(Math.round(act_excess));
     });

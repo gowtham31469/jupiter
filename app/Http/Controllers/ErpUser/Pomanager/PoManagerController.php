@@ -332,7 +332,7 @@ class PoManagerController extends Controller
 				
 				Mail::send('mails.error-report-po',['po'=> $po,'style_no'=>$style_no,'reference'=> $reference,'qty'=>$qty,'price'=> $price,'po_complete'=>$po_complete,'comment'=>$comment,'commenttext'=>$commenttext,'purchase_order_number'=>$purchase_order_number,'customer_name'=>$customer_name,'erp_order_id'=>$erp_order_id], function ($message) use ($to_email)
 				{
-					$message->from('praveen@wizroots.com');
+					$message->from('admin@jga.com');
 					$message->subject('Jupiter Garments Accessories - Error Report');
 					$message->to($to_email->email_address);
 				});  
@@ -358,7 +358,7 @@ class PoManagerController extends Controller
 			   
 				Mail::send('mails.error-report-po',['po'=> $po,'style_no'=>$style_no,'reference'=> $reference,'qty'=>$qty,'price'=> $price,'po_complete'=>$po_complete,'comment'=>$comment,'commenttext'=>$commenttext,'purchase_order_number'=>$purchase_order_number,'customer_name'=>$customer_name,'erp_order_id'=>$erp_order_id], function ($message) use ($to_email)
 				{
-					$message->from('praveen@wizroots.com');
+					$message->from('admin@jga.com');
 					$message->subject('Jupiter Garments Accessories - Error Report');
 					$message->to($to_email->email_address);
 				});  
