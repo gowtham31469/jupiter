@@ -626,11 +626,11 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::post('job-manager/tesco/print-div-tesco-small', 'ErpUser\Jobmanager\JobManagerController@printDivTescoSmall');
 
 	Route::get('job-manager/tesco/get-tsl-size', 'ErpUser\Jobmanager\JobManagerController@getTescoTSLSizechart');
-	Route::get('job-manager/tesco/script-update-buyer-no', 'ErpUser\Jobmanager\JobManagerController@scriptUpdateBuyerNo');
+	Route::get('job-manager/script-update-buyer-no', 'ErpUser\Jobmanager\JobManagerController@scriptUpdateBuyerNo');
 	Route::get('job-manager/jobcards-list', 'ErpUser\Jobmanager\JobManagerController@getJobcards')->name('jobcards-list'); 
 	Route::get('job-manager/jobcard-details', 'ErpUser\Jobmanager\JobManagerController@getJobcardDetailsById');  
 	Route::put('job-manager/update-jobcard-details', 'ErpUser\Jobmanager\JobManagerController@updateJobcardById'); 
-	Route::get('job-manager/tesco/script-update-order-type', 'ErpUser\Jobmanager\JobManagerController@scriptUpdateOrderType');
+	Route::get('job-manager/script-update-order-type', 'ErpUser\Jobmanager\JobManagerController@scriptUpdateOrderType');
 
 	/* Routes for ERP-Settings Management */
 	Route::get('/settings', 'ErpUser\ERPSettings\ERPSettingsController@home')->name('erp-settings');
