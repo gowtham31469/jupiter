@@ -899,7 +899,7 @@ class JobManagerController extends Controller
 									->select($order_table.'.*')
 									->get();
 			
-			 $data['custom_name']=DB::table('price_taxation')->where('template_id',$order_omp{0}->template_id)->where('customer_id',$order_omp{0}->tesco_supplier_id)->where('buyer_id',2)->select('*')->get();
+			//  $data['custom_name']=DB::table('price_taxation')->where('template_id',$order_omp{0}->template_id)->where('customer_id',$order_omp{0}->tesco_supplier_id)->where('buyer_id',2)->select('*')->get();
 			
 			DB::table('erp_order_details')
 							->where('erp_order_details.id', $value->id)
@@ -1253,6 +1253,38 @@ class JobManagerController extends Controller
 		catch (\Exception $e)
 		{
 			return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+		}
+	}
+	/**
+     * Function to update ordertype value for existing data in erp_order_details table.
+     * @author <Praveen>
+     */
+	public function scriptUpdateOrderType()
+	{
+		$order_details = DB::table('erp_order_details')->get();
+		
+		foreach($order_details as $value)
+		{
+			
+			
+			$order_details_data  = 	DB::table($value->order_qnty_table_name)
+									->where('id',$value->order_qnty_table_id)
+									->select('*')
+									->get();
+			
+			$order_table = str_replace("_quanty","",$value->order_qnty_table_name);
+			$order_id  = strtolower(str_replace(" ","",$value->reference_name).'_order_id');
+			
+			$order_data  = 	DB::table($order_table)
+									->where($order_table.'.id',$order_details_data{0}->$order_id)
+									->select($order_table.'.*')
+									->get();
+			
+			DB::table('erp_order_details')
+							->where('erp_order_details.id', $value->id)
+							->update([
+								'order_type'       => $order_data{0}->order_flag
+							]);
 		}
 	}
 	
