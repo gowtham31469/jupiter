@@ -1265,24 +1265,21 @@ class JobManagerController extends Controller
 		
 		foreach($order_details as $value)
 		{
-			
-			
 			$order_details_data  = 	DB::table($value->order_qnty_table_name)
 									->where('id',$value->order_qnty_table_id)
 									->select('*')
-									->get();
+									->first();
 			$order_table = str_replace("_quanty","",$value->order_qnty_table_name);
 			$order_id  = strtolower(str_replace(" ","",$value->reference_name).'_order_id');
 			
 			$order_data  = 	DB::table($order_table)
-									->where($order_table.'.id',$order_details_data{0}->$order_id)
+									->where($order_table.'.id',$order_details_data->$order_id)
 									->select($order_table.'.*')
-									->get();
-			dd($order_data);
+									->first();
 			DB::table('erp_order_details')
 							->where('erp_order_details.id', $value->id)
 							->update([
-								'order_type'       => $order_data{0}->order_flag
+								'order_type'       => $order_data->order_flag
 							]);
 		}
 	}
