@@ -209,9 +209,9 @@
                     </table>
                     <table class="tabl-design" cellpadding="0" cellspacing="0" border="0">                
                             <tr>
-                                <td width="81"><strong>Sub Total</strong></td>
-                                <td width="78"><strong>{{$totalDevlryQnty}}</strong></td>
-                                <td width="30" style="text-align:right;"><strong>{{number_format((float)$totalAmnt, 2, '.', '') }}</strong></td>
+                                <td width="80"><strong>Sub Total</strong></td>
+                                <td width="55" style="text-align:left;"><strong>{{$totalDevlryQnty}}</strong></td>
+                                <td width="55" style="text-align:right;"><strong>{{number_format((float)$totalAmnt, 2, '.', '') }}</strong></td>
                             </tr>
                             @php 
                                 $totalTax = 0;
@@ -219,17 +219,17 @@
                             @foreach($uniqueTaxes as $tax=>$amnt)               
                                 @if($inv_details[0]['place_of_supply']==1)
                                     <tr>
-                                        <td width="169" colspan="2">CGST ({{$tax/2}}%)</td>
-                                        <td width="80" >{{number_format((float)(($tax/2)/100)*$amnt, 2, '.', '') }}</td>
+                                        <td width="140" colspan="2">CGST ({{$tax/2}}%)</td>
+                                        <td width="50" style="text-align: right;">{{number_format((float)(($tax/2)/100)*$amnt, 2, '.', '') }}</td>
                                     </tr>
                                     <tr>
                                         <td colspan="2">SGST ({{$tax/2}}%)</td>
-                                        <td>{{number_format((float)(($tax/2)/100)*$amnt, 2, '.', '') }}</td>
+                                        <td style="text-align: right;">{{number_format((float)(($tax/2)/100)*$amnt, 2, '.', '') }}</td>
                                     </tr>
                                 @elseif($inv_details[0]['place_of_supply']==2)
                                      <tr>
                                       <td width="165.5">IGST ({{$tax}}%)</td>
-                                      <td width="80">{{number_format((float)(($tax)/100)*$amnt, 2, '.', '') }}</td>
+                                      <td width="80" style="text-align: right;">{{number_format((float)(($tax)/100)*$amnt, 2, '.', '') }}</td>
                                     </tr> 
                                 @else
                                     <tr>
@@ -251,16 +251,16 @@
                             @endphp
                             @foreach($eChargesArr as $key=>$vals)               
                             <tr>
-                                <td width="166" colspan="2">{{$vals->ext_chrg_name}}</td>
-                                <td width="82">{{number_format((float)$vals->amount, 2, '.', '')}}</td>
+                                <td width="140" colspan="2">{{$vals->ext_chrg_name}}</td>
+                                <td width="50" style="text-align: right;">{{number_format((float)$vals->amount, 2, '.', '')}}</td>
                             </tr>
                             @php 
                                 $totalExc += $vals->amount;
                             @endphp
                             @endforeach 
                             <tr>
-                                <td width="176" colspan="2" ><strong>Round Off</strong></td>
-                                <td width="200"><strong>{{number_format((float)$inv_details[0]['round_off_amnt'], 2, '.', '') }}</strong></td>
+                                <td width="139" colspan="2" ><strong>Round Off</strong></td>
+                                <td width="50" style="text-align: right;"><strong>{{number_format((float)$inv_details[0]['round_off_amnt'], 2, '.', '') }}</strong></td>
                             </tr>
                     </tbody>
                     </table>
@@ -290,15 +290,15 @@
         </table>
         <table>
              <tr>
-                 <td width="198">          
+                 <td width="200">          
                     <p><strong>Amount in words :</strong></p>
                     <p>{{$amntInwords}}</p>               
                 </td>
-                <td colspan="2" width="168">          
+                <td colspan="2" width="140">          
                       <span><strong>Total Amount</strong></span>             
                 </td>
-                <td  width="40">          
-                    <span><strong>{{number_format((float)$inv_details[0]['grand_total'], 2, '.', '')}}</strong></span>
+                <td  width="60" style="text-align: right;">          
+                    <span ><strong>{{number_format((float)$inv_details[0]['grand_total'], 2, '.', '')}}</strong></span>
                 </td>
 
             </tr>
