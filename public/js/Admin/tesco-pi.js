@@ -110,11 +110,11 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
                             if (data.data.bank_details.template_type == "single")
                             {
                                 size = value.size ;
-                                tr += '<tr><td>'+ ++i +'</td><td>'+value.style+'</td><td>'+value.po_no+'</td><td>'+value.ref_no+'</td><td>'+size+'</td><td>'+value.quantity+'</td><td>'+unit_price+'</td><td>'+tax+'</td><td>'+amnt.toFixed(2)+'</td></tr>'
+                                tr += '<tr><td>'+ ++i +'</td><td>'+value.style+'</td><td>'+value.po_no+'</td><td>'+value.ref_no+'</td><td>'+size+'</td><td>'+value.quantity+'</td><td>'+unit_price+'</td><td>'+tax+'</td><td style="text-align: right;">'+amnt.toFixed(2)+'</td></tr>'
                             }
                             else
                             {
-                                tr += '<tr><td>'+ ++i +'</td><td>'+value.style+'</td><td>'+value.po_no+'</td><td>'+value.ref_no+'</td><td>'+value.quantity+'</td><td>'+unit_price+'</td><td>'+tax+'</td><td>'+amnt.toFixed(2)+'</td></tr>'
+                                tr += '<tr><td>'+ ++i +'</td><td>'+value.style+'</td><td>'+value.po_no+'</td><td>'+value.ref_no+'</td><td>'+value.quantity+'</td><td>'+unit_price+'</td><td>'+tax+'</td><td style="text-align: right;">'+amnt.toFixed(2)+'</td></tr>'
                             }
                             
                             totaltax+=parseInt(tax);
