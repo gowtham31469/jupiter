@@ -1269,20 +1269,20 @@ class JobManagerController extends Controller
 									->select('*')
 									->get();
 			
-			// if($order_details_data)
-			// {
-			// 	$order_table = str_replace("_quanty","",$value->order_qnty_table_name);
-			// 	$order_id    = strtolower(str_replace(" ","",$value->reference_name).'_order_id');
-			// 	$order_data  = 	DB::table($order_table)
-			// 							->where($order_table.'.id',$order_details_data{0}->$order_id)
-			// 							->select($order_table.'.*')
-			// 							->get();
-			// 	$order_type = $order_data{0}->order_flag;
-			// }
-			// else
-			// {
+			if($order_details_data)
+			{
+				$order_table = str_replace("_quanty","",$value->order_qnty_table_name);
+				$order_id    = strtolower(str_replace(" ","",$value->reference_name).'_order_id');
+				$order_data  = 	DB::table($order_table)
+										->where($order_table.'.id',$order_details_data{0}->$order_id)
+										->select($order_table.'.*')
+										->get();
+				$order_type = $order_data{0}->order_flag;
+			}
+			else
+			{
 				$order_type = 'newOrder';
-			//}
+			}
 			DB::table('erp_order_details')
 							->where('erp_order_details.id', $value->id)
 							->update([
