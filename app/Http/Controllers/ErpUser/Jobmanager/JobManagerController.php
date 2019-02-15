@@ -1271,7 +1271,7 @@ class JobManagerController extends Controller
 									->where('id',$value->order_qnty_table_id)
 									->select('*')
 									->get();
-			
+			return $order_details_data;
 			$order_table = str_replace("_quanty","",$value->order_qnty_table_name);
 			$order_id  = strtolower(str_replace(" ","",$value->reference_name).'_order_id');
 			
