@@ -5526,6 +5526,11 @@ function afterOrderSubmitted(data,po_number,stl_no) {
 	var order_date = data.ordered_date.date;
 	var delivery_date_req = data.delivery_date_required;
 	var last_insertions_length = Object.keys(data.last_insertions).length;
+
+	// Handle po upload modal button issue after page reloading
+	$('.po-submit-btn').text('Save');
+	$('.po-submit-btn').attr('data-dismiss', '')
+	$('.upload-later').show();
 	/** Show snackbar if order placed **/
 	if (last_insertions_length > 0) {
 		/** Make form as readonly */
@@ -5721,7 +5726,7 @@ function afterOrderSubmitted(data,po_number,stl_no) {
 
 		$('#order-exists-alert').html(html_content);
 
-		/** [ Show only alertbox if data already exits ] */
+		/** [ Show only alertbox if data already exists ] */
 		if (last_insertions_length === 0) {
 			$('.po-modal-content').hide();
 			$('.close-btn').attr('data-dismiss', 'modal')
