@@ -1151,7 +1151,6 @@ function storeJobcard()
                  $('#edit_disp_mode').selectpicker('refresh');
                  var ratio_table = '';
                  $.each(JSON.parse(data.jobcard_data.template_quantity_json), function(template_type, template_type_data){
-                    console.log(template_type)
                     if(template_type === 'ratio')
                     {
                         if (!($.isEmptyObject(template_type_data)))
