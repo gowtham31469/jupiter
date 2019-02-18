@@ -1223,7 +1223,7 @@ class JobManagerController extends Controller
 								]);
 
 					//append content to header
-					$pdf->SetXY(13.4,26.3);
+					$pdf->SetXY(13.4,25.5);
 					$pdf->writeHTML($view->render());
 
 					//Close and output PDF document

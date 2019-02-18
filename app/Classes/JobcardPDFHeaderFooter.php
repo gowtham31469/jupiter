@@ -63,8 +63,8 @@ class JobcardPDFHeaderFooter extends \TCPDF
         $this->SetFont('helvetica', '', 8);
         $header = '<table width="100%" cellspacing="0" cellpadding="5" border="0">
                         <tr nobr="true">
-                            <td width="35%" style="border-top:1px solid black;border-left:1px solid black;border-bottom:1px solid black;"><strong id="jc_company_name" >'.$this->company->company.'</strong>
-                                <p id="company_address">'.$this->company->company_address.'</p>
+                            <td width="35%" style="border-top:1px solid black;border-left:1px solid black;border-bottom:1px solid black;font-size:18px;"><strong id="jc_company_name" >'.$this->company->company.'</strong>
+                                <span>'.$this->company->company_address.'</span>
                             </td>
                             <td width="5%" style="border-top:1px solid black;border-bottom:1px solid black;"></td>
                             <td width="20%" style="border-top:1px solid black;border-bottom:1px solid black;">
@@ -75,15 +75,18 @@ class JobcardPDFHeaderFooter extends \TCPDF
                             <table cellspacing="0" cellpadding="0">
                                 <tbody>
                                     <tr width="100%">
-                                        <th width="30%"><strong>WO No: </strong></th>
+                                        <th width="25%"><strong>WO No</strong></th>
+                                        <td width="5%"><strong>:</strong></td>
                                         <td width="70%" id="work_order" style="text-align:left;font-weight: bold">'.$this->workorder_id.'</td>
                                     </tr>
                                     <tr  width="100%">
-                                        <th  width="30%"><strong>ARTICLE: </strong></th>
+                                        <th  width="25%"><strong>ARTICLE</strong></th>
+                                        <td  width="5%"><strong>:</strong></td>
                                         <td width="70%" id="article" style="text-align:left;font-weight: bold">'.$this->article.'</td>
                                     </tr>
                                     <tr  width="100%">
-                                        <th  width="30%"><strong>DATE: </strong></th>
+                                        <th  width="25%"><strong>DATE</strong></th>
+                                        <td  width="5%"><strong>:</strong></td>
                                         <td width="70%" id="today_date" style="text-align:left;font-weight: bold">'.$this->created_date.'</td>
                                     </tr>
                                 </tbody>
@@ -111,66 +114,57 @@ class JobcardPDFHeaderFooter extends \TCPDF
         $this->SetY(-30);
         // Set font
         $this->SetFont('helvetica', '', 8);
-        $this->writeHTML("<hr>", false, false, true, false, '');
-        $footer = '<table>
+        // $this->writeHTML("<hr>", false, false, true, false, '');
+        $footer = '<style>
+
+                    td {
+                        height: 12px;
+                        text-align: left !important;
+                    }
+
+                    th {
+                        height: 12px;
+                        text-align: left !important;
+                        font-weight: bold;
+                        /*background-color: #D3D3D3;*/
+                        background-color: #DCDCDC;
+                    }
+                    </style>
+                    <table>
                         <tr class="blank_row" height="10">
                             <td rowspan="1"></td>
                         </tr>
                     </table>
-                    <table cellspacing="0" cellpadding="2" style="table-layout: fixed;width: 100%;border-collapse: collapse;" nobr="true">
+                    <table cellspacing="0" cellpadding="5" style="table-layout: fixed;width: 100%;border-collapse: collapse;" nobr="true">
                             <tr nobr="true">
-                                <td >
-                                    <label for="compiled_by">COMPILED BY :</label>
-                                    <span id="compiled_by">'.$this->compiled_by.'</span> 
-                                </td>
-                                <td >
-                                    <label for="barcode_read">BARCODE READ :</label>
-                                    <span id="barcode_read">'.$this->barcode_read.'</span> 
-                                </td>
-                                <td >
-                                    <label for="operator">OPERATOR :</label>
-                                    <span id="operator">'.$this->operator.'</span>
-                                </td>
-                                <td >
-                                    <label for="checker">CHECKER :</label>
-                                    <span id="checker">'.$this->checker.'</span>
-                                </td>
+                                <th style="border-left:1px solid black;border-top:1px solid black;">CompiledBy</th>
+                                <td  id="customer" style="border-top:1px solid black;">'.$this->compiled_by.'</td>
+                                <th style="border-top:1px solid black;">BarcodeRead</th>
+                                <td id="style_no" style="border-top:1px solid black;">'.$this->barcode_read.'</td>
+                                <th style="border-top:1px solid black;">Operator</th>
+                                <td  id="order_type" style="border-top:1px solid black;">'.$this->operator.'</td>
+                                <th  style="border-top:1px solid black;">Checker</th>
+                                <td  style="border-right:1px solid black;border-top:1px solid black;">'.$this->checker.'</td>
                             </tr>
                             <tr nobr="true">
-                                <td >
-                                    <label for="author">AUTHORIZED BY :</label>
-                                    <span id="author">'.$this->authorized_by.'</span>
-                                </td>
-                                <td >
-                                    <label for="axicon_verifier">AXICON VERIFIER :</label>
-                                    <span id="axicon_verifier">'.$this->axicon_verifier.'</span>
-                                </td>
-                                <td >
-                                    <label for="approved_by">APPROVED BY :</label>
-                                    <span id="approved_by">'.$this->approved_by.'</span>
-                                </td>
-                                <td >
-                                    <label for="packer">PACKER :</label>
-                                    <span id="packer">'.$this->packer.'</span>
-                                </td>
+                                <th style="border-left:1px solid black;">AuthorizedBy</th>
+                                <td>'.$this->authorized_by.'</td>
+                                <th>AxiconVerifier</th>
+                                <td>'.$this->axicon_verifier.'</td>
+                                <th>ApprovedBy</th>
+                                <td>'.$this->approved_by.'</td>
+                                <th>Packer</th>
+                                <td style="border-right:1px solid black;">'.$this->packer.'</td>
                             </tr>
                             <tr nobr="true">
-                                <td >
-                                    <label for="approval_date">APPROVAL DT :</label>
-                                    <span id="approval_date">'.$this->approval_date.'</span>
-                                </td>
-                                <td >
-                                    <label for="roll_issued_by">ROLL ISSUED BY :</label>
-                                    <span id="roll_issued_by">'.$this->roll_issued_by.'</span>
-                                </td>
-                                <td >
-                                    <label for="cutter">CUTTER :</label>
-                                    <span id="cutter">'.$this->cutter.'</span>
-                                </td>
-                                <td >
-                                    <label for="cartons">CARTONS :</label>
-                                    <span id="cartons">'.$this->cartons.'</span>
-                                </td>
+                                <th  style="border-left:1px solid black;border-bottom:1px solid black;">ApprovalDt</th>
+                                <td  style="border-bottom:1px solid black;">'.$this->approval_date.'</td>
+                                <th  style="border-bottom:1px solid black;">RollIssuedBy</th>
+                                <td  style="border-bottom:1px solid black;">'.$this->roll_issued_by.'</td>
+                                <th style="border-bottom:1px solid black;">Cutter</th>
+                                <td style="border-bottom:1px solid black;">'.$this->cutter.'</td>
+                                <th style="border-bottom:1px solid black;">Cartons</th>
+                                <td style="border-right:1px solid black;border-bottom:1px solid black;" >'.$this->cartons.'</td>
                             </tr>
                 </table>
                 <table>
@@ -181,5 +175,5 @@ class JobcardPDFHeaderFooter extends \TCPDF
         // Title
         $this->writeHTML($footer, false, false, true, false, '');
     }
-	
+    
 }
