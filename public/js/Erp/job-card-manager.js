@@ -28,7 +28,6 @@ $(document).ready(function() {
 
     /** Datatable filter script**/
 	var listTable = $('#approved-order-list').dataTable({
-		stateSave: true,
 		/** Table column filter functionality **/
 		initComplete: function () {
 			$('.main-content > #approved-orders-table > .dataTables_wrapper > .row > .col-sm-6 > #approved-order-list_filter:first').append(' <button class="filterbtn" type="button" onClick="showFilter()" title="Filter" data-placement="bottom"><i class="fa fa-filter" aria-hidden="true"></i></button>');
@@ -78,6 +77,7 @@ $(document).ready(function() {
 			});
 		}
     } );
+    
 	/** Get an array of the TR nodes that are used in the table's body */
 	allPages = listTable.fnGetNodes();
 
@@ -524,7 +524,7 @@ function generateJobcard(){
                                                     <span class="sticker-mtrs" id="sticker_mtr_'+template_name[0].replace(' ', '_')+'"></span>\
                                                 </div>\
                                                 <div class="col-md-3">\
-                                                <div class="form-group has-feedback form-inline">\
+                                                <div class="form-group has-feedback">\
                                                     <label for="settings_'+template_name[0].replace(' ', '_')+'" >SETTINGS ('+template_name[0]+') :</label>\
                                                     <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" class="form-control input-sm settings"  name="settings_'+template_name[0].replace(' ', '_')+'" placeholder="SETTINGS" id="settings_'+template_name[0].replace(' ', '_')+'" onkeyup="return totalMeters()" max="99999"  data-max-error="Value should be <= 99999">\
                                                     <div class="help-block with-errors"></div>\
@@ -1303,7 +1303,7 @@ function storeJobcard()
                                                 <span class="edit-sticker-mtrs" id="edit_sticker_mtr_'+item.ref_name.replace(' ', '_')+'">'+item.mtrs_for_stickers+'</span>\
                                             </div>\
                                             <div class="col-md-3">\
-                                            <div class="form-group has-feedback form-inline">\
+                                            <div class="form-group has-feedback">\
                                                 <label for="edit_settings_'+item.ref_name.replace(' ', '_')+'" >SETTINGS ('+item.ref_name+') :</label>\
                                                 <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" max="99999" data-max-error="Value should be <= 99999" class="form-control input-sm edit-settings" name="edit_settings_'+item.ref_name.replace(' ', '_')+'" placeholder="SETTINGS" id="edit_settings_'+item.ref_name.replace(' ', '_')+'" onkeyup="return totalMetersEdit()" value="'+item.settings+'" >\
                                                 <div class="help-block with-errors"></div>\
