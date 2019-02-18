@@ -362,21 +362,21 @@
 								<div class="col-md-3">
 									<div class="form-group has-feedback form-inline">
 										{!! Form::label('edit_barcode_read', 'BARCODE READ :', ['class' => 'form_label']) !!}
-										{!! Form::text('edit_barcode_read',$value = '', array('class' => 'form-control input-sm','placeholder' => 'BARCODE READ','required','maxlength' => '20')) !!}
+										{!! Form::text('edit_barcode_read',$value = '', array('class' => 'form-control input-sm','placeholder' => 'BARCODE READ','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
 									<div class="form-group has-feedback form-inline">
 										{!! Form::label('edit_operator', 'OPERATOR :', ['class' => 'form_label']) !!}
-										{!! Form::text('edit_operator',$value = '', array('class' => 'form-control input-sm','placeholder' => 'OPERATOR','required','maxlength' => '20')) !!}
+										{!! Form::text('edit_operator',$value = '', array('class' => 'form-control input-sm','placeholder' => 'OPERATOR','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
 									<div class="form-group has-feedback form-inline">
 										{!! Form::label('edit_checker', 'CHECKER :', ['class' => 'form_label']) !!}
-										{!! Form::text('edit_checker',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CHECKER','required','maxlength' => '20')) !!}
+										{!! Form::text('edit_checker',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CHECKER','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
@@ -387,28 +387,28 @@
 								<div class="col-md-3">
 									<div class="form-group has-feedback form-inline">
 										{!! Form::label('edit_author', 'AUTHORIZED BY :', ['class' => 'form_label']) !!}
-										{!! Form::text('edit_author',$value = '', array('class' => 'form-control input-sm','placeholder' => 'AUTHORIZED BY','required','maxlength' => '20')) !!}
+										{!! Form::text('edit_author',$value = '', array('class' => 'form-control input-sm','placeholder' => 'AUTHORIZED BY','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
 									<div class="form-group has-feedback form-inline">
 										{!! Form::label('edit_axicon_verifier', 'AXICON VERIFIER :', ['class' => 'form_label']) !!}
-										{!! Form::text('edit_axicon_verifier',$value = '', array('class' => 'form-control input-sm','placeholder' => 'AXICON VERIFIER','required','maxlength' => '20')) !!}
+										{!! Form::text('edit_axicon_verifier',$value = '', array('class' => 'form-control input-sm','placeholder' => 'AXICON VERIFIER','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
 									<div class="form-group has-feedback form-inline">
 										{!! Form::label('edit_approved_by', 'APPROVED BY :', ['class' => 'form_label']) !!}
-										{!! Form::text('edit_approved_by',$value = '', array('class' => 'form-control input-sm','placeholder' => 'APPROVED BY','required','maxlength' => '20')) !!}
+										{!! Form::text('edit_approved_by',$value = '', array('class' => 'form-control input-sm','placeholder' => 'APPROVED BY','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
 									<div class="form-group has-feedback form-inline">
 										{!! Form::label('edit_packer', 'PACKER :', ['class' => 'form_label']) !!}
-										{!! Form::text('edit_packer',$value = '', array('class' => 'form-control input-sm','placeholder' => 'PACKER','required','maxlength' => '20')) !!}
+										{!! Form::text('edit_packer',$value = '', array('class' => 'form-control input-sm','placeholder' => 'PACKER','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
@@ -420,7 +420,7 @@
 									<div class="form-group has-feedback form-inline">
 										{!! Form::label('edit_approval_date', 'APPROVAL DT :', ['class' => 'form_label']) !!}
 										<div class="input-group edit_approval_date date datepicker" data-provide="datepicker" id="datePicker1">
-											<input value="" id="edit_approval_date" name="edit_approval_date" type="text" class="form-control input-sm " required="" placeholder="APPROVAL DT">
+											<input value="" id="edit_approval_date" name="edit_approval_date" type="text" class="form-control input-sm "  placeholder="APPROVAL DT">
 											<div class="input-group-addon input-sm">
 											 <span class="glyphicon glyphicon-th"> </span >
 										    </div >
@@ -431,21 +431,21 @@
 								<div class="col-md-3">
 									<div class="form-group has-feedback form-inline">
 										{!! Form::label('edit_roll_issued_by', 'ROLL ISSUED BY :', ['class' => 'form_label']) !!}
-										{!! Form::text('edit_roll_issued_by',$value = '', array('class' => 'form-control input-sm','placeholder' => 'ROLL ISSUED BY','required','maxlength' => '20')) !!}
+										{!! Form::text('edit_roll_issued_by',$value = '', array('class' => 'form-control input-sm','placeholder' => 'ROLL ISSUED BY','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
 									<div class="form-group has-feedback form-inline">
 										{!! Form::label('edit_cutter', 'CUTTER :', ['class' => 'form_label']) !!}
-										{!! Form::text('edit_cutter',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CUTTER','required','maxlength' => '20')) !!}
+										{!! Form::text('edit_cutter',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CUTTER','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
 									<div class="form-group has-feedback form-inline">
 										{!! Form::label('edit_cartons', 'CARTONS :', ['class' => 'form_label']) !!}
-										{!! Form::text('edit_cartons',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CARTONS','required','maxlength' => '20')) !!}
+										{!! Form::text('edit_cartons',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CARTONS','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
