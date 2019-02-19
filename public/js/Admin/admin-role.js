@@ -2,45 +2,6 @@
  * @author <praveen>
  */
 
-
-/**
-* Validation for numeric values
-* @param  evt  
-* @return {Boolean} 
-* @author <praveen>
-*/
-function isNumber(evt) {
-try{
-  evt = (evt) ? evt : window.event;
-  var charCode = (evt.which) ? evt.which : evt.keyCode;
-  if (charCode > 31 && (charCode < 48 || charCode > 57))
-  {
-      return false;
-  }
-    return true;
-} catch (e) {
- console.log("Error:"+e)
-}
-}
-
-/**
-* showSnackbar function
-* @author    <praveen>
-*/
-function showSnackbar() {
-try{
-  /** [ Get the snackbar DIV ] */
-  var x = document.getElementById("snackbar")
-
-  /** [ Add the "show" class to DIV ] */
-  x.className = "show";
-
-  /** [  After 3 seconds, remove the show class from DIV ] */
-  setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
-  } catch (e) {
-   console.log("Error:"+e)
- }
-}
 /**
 * Function to show all admin list
 * @author <praveen>
