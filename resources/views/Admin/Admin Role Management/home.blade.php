@@ -9,7 +9,7 @@
               <div class="main-sub-menu">
                 <div class="action-group pull-right sub-menu-button">
                   <a href="#" data-target="#addAdminModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                    <i class="ion-plus"></i> Add Admin</a>
+                    <i class="fa fa-plus"></i> Add Admin</a>
                 </div>
               </div>
           <div class="clearfix"></div>
