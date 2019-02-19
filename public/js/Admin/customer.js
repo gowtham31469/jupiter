@@ -687,7 +687,7 @@ function addCustomer()
                     },
                    208: function() {
                         isSubmitting = false;
-                        $('.snackbar_span').html("This action can't be completed because some customers linked to this comapany.");
+                        $('.snackbar_span').html("This action can't be completed because some customers linked to this company.");
                         showSnackbar();
                    }
                },
