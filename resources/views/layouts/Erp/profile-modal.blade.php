@@ -20,7 +20,7 @@
 										{!! Form::label('profile_name', 'User Name : *', ['class' => 'form_label']) !!}
 									</div>
 									<div class="col-md-8">
-										{!! Form::text('profile_name',$value = Auth::guard("erpuser")->user()->name, array('class' => 'form-control input-sm', 'placeholder' => 'User Name')) !!}
+										{!! Form::text('profile_name',$value = Auth::guard("erpuser")->user()->name, array('class' => 'form-control input-sm', 'placeholder' => 'User Name', 'style' => 'text-transform: capitalize;')) !!}
 									</div>
 								</div>
 							</div>

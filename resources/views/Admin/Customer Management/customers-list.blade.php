@@ -109,14 +109,14 @@
                           <div class="col-md-6">
                               <div class="form-group has-feedback">
                                   {!! Form::label('short_name', 'Short Name', ['class' => 'form_label']) !!}
-                                  {!! Form::text('short_name',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Short Name','required','data-minlength' => '3','maxlength' => '40')) !!}
+                                  {!! Form::text('short_name',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Short Name','required','data-minlength' => '3','maxlength' => '40', 'style' => 'text-transform: capitalize;')) !!}
                                   <div class="help-block with-errors"></div>
                               </div>
                           </div>
                           <div class="col-md-6">
                               <div class="form-group has-feedback">
                                   {!! Form::label('company_name', 'Company Name', ['class' => 'form_label']) !!}
-                                  {!! Form::text('company_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Company Name','required','data-minlength' => '3','maxlength' => '40')) !!}
+                                  {!! Form::text('company_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Company Name','required','data-minlength' => '3','maxlength' => '40', 'style' => 'text-transform: capitalize;')) !!}
                                   <div class="help-block with-errors"></div>
                               </div>
                           </div>
@@ -290,7 +290,7 @@
                                       <div id="billaddress0" class="panel">
                                         <div class="form-group has-feedback">
                                           {!! Form::label('address0', 'Address', ['class' => 'form_label']) !!}
-                                          {!! Form::textarea('address0',$value = '', array('class' => 'form-control address','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3,'onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
+                                          {!! Form::textarea('address0',$value = '', array('class' => 'form-control address','placeholder' => 'Address','required','style'=>'resize:none; text-transform: capitalize;','rows'=>3)) !!}
                                           <div class="help-block with-errors"></div>
                                         </div>
                                         <div class="form-group has-feedback">
@@ -380,14 +380,14 @@
                   <div class="col-md-6">
                       <div class="form-group has-feedback">
                           {!! Form::label('edit_short_name', 'Short Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('edit_short_name',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Short Name','required','data-minlength' => '3','maxlength' => '40')) !!}
+                          {!! Form::text('edit_short_name',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Short Name','required','data-minlength' => '3','maxlength' => '40', 'style' => 'text-transform: capitalize;')) !!}
                           <div class="help-block with-errors"></div>
                       </div>
                   </div>
                   <div class="col-md-6">
                       <div class="form-group has-feedback">
                           {!! Form::label('edit_company_name', 'Company Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('edit_company_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Company Name','required','data-minlength' => '3','maxlength' => '40')) !!}
+                          {!! Form::text('edit_company_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Company Name','required','data-minlength' => '3','maxlength' => '40', 'style' => 'text-transform: capitalize;')) !!}
                           <div class="help-block with-errors"></div>
                       </div>
                   </div>
@@ -658,7 +658,6 @@
       $('a,i').tooltip().eq(0).tooltip('show').tooltip('disable').one('mouseout', function() {
         $(this).tooltip('enable');
       });
-
       /* Show logo on left side */
       $('.logo').html('Customers')
       $('#add_customer_form').trigger("reset");
