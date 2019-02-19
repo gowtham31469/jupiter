@@ -203,7 +203,7 @@
     try{
          
           var id                  =  $('#customer_edit_id').val();
-          var customer_name       =  $('#customer_name').val();
+          var customer_name       =  toTitleCase($('#customer_name').val());
           var customer_email      =  $('#customer_email').val();
           var customer_role       =  $('#customer_role').val();
           var customer_company    =  $('#customer_company').val(); 
@@ -275,7 +275,7 @@ var csrf_token          =  $('meta[name="csrf-token"]').attr('content');
 function addCustomer()
 {
   try{
-          var customer_name       =  $('#customer_add_name').val();
+          var customer_name       =  toTitleCase($('#customer_add_name').val());
           var customer_email      =  $('#customer_add_email').val();
           var customer_role       =  $('#customer_add_role').val();
           var customer_company    =  $('#customer_add_company').val();

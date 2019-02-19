@@ -125,11 +125,11 @@ function admin()
 function addAdmin()
 {
 try{
-      var name                   = $('#name').val();
+      var name                   = toTitleCase($('#name').val());
       var email                  = $('#email').val();
       var password               = $('#password').val();
       var phone                  = $('#phone').val();
-      var address                = $('#address').val();
+      var address                = toTitleCase($('#address').val().replace(/,/g, ", "));
       var csrf_token             = $('meta[name="csrf-token"]').attr('content');
 
       $.ajax({

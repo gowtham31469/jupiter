@@ -19,7 +19,7 @@
 									<div class="col-md-4">
 										{!! Form::label('profile_name', 'User Name : *', ['class' => 'form_label']) !!}
 									</div>
-									<div class="col-md-8">
+									<div class="col-md-8">https://aeroindia.gov.in/Aero-India#
 										{!! Form::text('profile_name',$value = Auth::guard("erpuser")->user()->name, array('class' => 'form-control input-sm', 'placeholder' => 'User Name', 'style' => 'text-transform: capitalize;')) !!}
 									</div>
 								</div>

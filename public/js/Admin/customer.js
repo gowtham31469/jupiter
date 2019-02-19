@@ -1,6 +1,7 @@
 /* Company management script(in Customer management module)
  * @author <praveen>
  */
+
 /**
  * To show all customers list
  * @author <praveen>
@@ -138,7 +139,7 @@ function addCustomer()
 {
   try{
         var factory_code        =  $('#factory_code').val();
-        var company_name        =  $('#company_name').val();
+        var company_name        =  toTitleCase($('#company_name').val());
         var courier_choice      =  $('#courier_choice').val();
         var tin_number          =  $('#tin_number').val();
         var gstin_number        =  $('#gstin_number').val();
@@ -152,7 +153,7 @@ function addCustomer()
         var delivery_date_req   =  $('#delivery_date_required').is(':checked')?1:0;
         var freight             =  $("#freight option:selected").val();
         var day_count           =  $('#day_count').val();
-        var short_name          =  $('#short_name').val();
+        var short_name          =  toTitleCase($('#short_name').val());
         var sap_code            =  $('#sap_code').val();
 
         if($('#freight option:selected').text() === "Nominated Forwarded")
@@ -184,7 +185,7 @@ function addCustomer()
         /** [ Create array of contact person for multiple contact details ] */
         $('.contact_person').each(function(i, item)
         {
-            contact_person[i]    = $(item).val();
+            contact_person[i]    = toTitleCase($(item).val());
             
         });
 
@@ -219,7 +220,7 @@ function addCustomer()
         /** [Create array of multiple address for address ] */
         $('.address').each(function(i, item)
         {
-            address[i]    = $(item).val();
+            address[i]    = toTitleCase($(item).val().replace(/,/g, ", "));
             
         });
 
@@ -1163,7 +1164,7 @@ function addCustomer()
           }
           var id                  =  $('#customer_edit_id').val();
           var factory_code        =  $('#edit_factory_code').val();
-          var company_name        =  $('#edit_company_name').val();
+          var company_name        =  toTitleCase($('#edit_company_name').val());
           var courier_choice      =  $('#edit_courier_choice').val();
           var tin_number          =  $('#edit_tin_number').val();
           var gstin_number        =  $('#edit_gstin_number').val();
@@ -1177,7 +1178,7 @@ function addCustomer()
           var delivery_date_req   =  $('#edit_delivery_date_required').is(':checked')?1:0;
           var freight             =  $("#edit_freight option:selected").val();
           var day_count           =  $('#edit_day_count').val();
-          var short_name          =  $('#edit_short_name').val();
+          var short_name          =  toTitleCase($('#edit_short_name').val());
           var sap_code            =  $('#edit_sap_code').val();
 
           var contact_person  = [];
@@ -1198,7 +1199,7 @@ function addCustomer()
           /** [ Create array of contact person for multiple contact details ] */
           $('.edit_contact_person').each(function(i, item)
           {
-              contact_person[i]    = $(item).val();
+              contact_person[i]    = toTitleCase($(item).val());
               
           });
 
@@ -1233,7 +1234,7 @@ function addCustomer()
           /** [ Create array of multiple address for address ] */
           $('.edit_address').each(function(i, item)
           {
-              address[i]    = $(item).val();
+              address[i]    = toTitleCase($(item).val().replace(/,/g, ", "));
               
           });
 
