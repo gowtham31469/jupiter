@@ -288,7 +288,7 @@ class CustomerManagementController extends Controller
                       {
                           CustomerBillAddress::create([
                               'customer_id'            => $insert_Id,
-                              'address'                => $value,
+                              'address'                => preg_replace('/\s*,\s*/', ', ', $value),
                               'country'                => $country[$j],
                               'email'                  => $address_email[$j],
                               'telephone'              => $telephone[$j],
@@ -690,7 +690,7 @@ class CustomerManagementController extends Controller
                           {
                               CustomerBillAddress::create([
                                   'customer_id'         => $id,
-                                  'address'             => $value,
+                                  'address'             => preg_replace('/\s*,\s*/', ', ', $value),
                                   'country'             => $country[$j],
                                   'email'               => $address_email[$j],
                                   'telephone'           => $telephone[$j],
