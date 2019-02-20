@@ -15,7 +15,7 @@ class AddDeliveryAtToInvoiceTable extends Migration
     {
         Schema::table('invoice', function (Blueprint $table) {
             $table->integer('delivery_at')->unsigned();
-            $table->foreign('delivery_at')->references('id')->on('customer_bill_address');
+            $table->foreign('delivery_at')->references('id')->on('invoice_address');
         });
     }
 

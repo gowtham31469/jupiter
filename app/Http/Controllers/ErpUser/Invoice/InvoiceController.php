@@ -18,6 +18,7 @@ use App\InvoiceDetails;
 use App\InvExtraCharges;
 use PDF;
 use App\Classes\Invoice;
+use App\InvoiceAddress;
 use Elibyy\TCPDF\Facades\TCPDF;
 use App\Classes\invoiceTCPDF;
 
@@ -135,6 +136,7 @@ class InvoiceController extends Controller
                           ->select('address','country')
                           ->first();
 
+
             foreach ($orderlist as $key => $value){
                $details = DB::table($value->template_table)
                             ->where($value->template_table.'.item_id',$value->template_id)
@@ -173,13 +175,47 @@ class InvoiceController extends Controller
             $bill_to = DB::table('customer_bill_address')
                           ->where('customer_bill_address.customer_id',$orders[0]['customer_id'])
                           ->where('customer_bill_address.is_billing_address',1)
-                          ->select('address','country')
+                          ->select('*')
                            ->first();                 
             $ship_to = DB::table('customer_bill_address')
                           ->where('customer_bill_address.customer_id',$orders[0]['customer_id'])
                           ->where('customer_bill_address.is_shipping_address',1)
-                          ->select('address','country')
+                          ->select('*')
                           ->first();
+                        
+            if($bill_to->id == $ship_to->id){
+                $invAdd     =   InvoiceAddress::create([
+                                    'customer_id'  => $bill_to->customer_id,
+                                    'address'      => $bill_to->address,
+                                    'country'      => $bill_to->country,
+                                    'email'        => $bill_to->email,
+                                    'telephone'    => $bill_to->telephone,
+                                    'fax'          => $bill_to->fax
+                                ]);
+                $delivery_at =  $invAdd->id;
+                $billTo      =  $invAdd->id;
+
+            }
+            else{
+                $billAdd   =   InvoiceAddress::create([
+                                    'customer_id'  => $bill_to->customer_id,
+                                    'address'      => $bill_to->address,
+                                    'country'      => $bill_to->country,
+                                    'email'        => $bill_to->email,
+                                    'telephone'    => $bill_to->telephone,
+                                    'fax'          => $bill_to->fax
+                                 ]);
+                $deliveryAdd =   InvoiceAddress::create([
+                                    'customer_id'  => $ship_to->customer_id,
+                                    'address'      => $ship_to->address,
+                                    'country'      => $ship_to->country,
+                                    'email'        => $ship_to->email,
+                                    'telephone'    => $ship_to->telephone,
+                                    'fax'          => $ship_to->fax
+                                 ]); 
+                $delivery_at =  $deliveryAdd->id;
+                $billTo_id    =  $billAdd->id;   
+            }            
 
             $company_details =  DB::table('company')
                                 ->where('id',session()->get('company'))
@@ -187,17 +223,18 @@ class InvoiceController extends Controller
 
             if ($orders) {
                 $invoiceData = Invoices::create([
-                                'customer_id'   => $orders[0]['customer_id'],
-                                'buyer_id'      => $orders[0]['buyer_id'],
-                                'po_no'         => $orders[0]['po_no'],
-                                'po_file'       => $orders[0]['po_file'],
-                                'erp_id'        => $orders[0]['erp_id'],
-                                'credit_limit'  => $orders[0]['credit_limit'],
-                                'dispatch_thru' => $orders[0]['delvry_thru'],
-                                'round_off_amnt'=>  $roundOff,
-                                'grand_total'   =>  $grandTotal,
-                                'place_of_supply' =>  $place_of_supply,
+                                'customer_id'    => $orders[0]['customer_id'],
+                                'buyer_id'       => $orders[0]['buyer_id'],
+                                'po_no'          => $orders[0]['po_no'],
+                                'po_file'        => $orders[0]['po_file'],
+                                'erp_id'         => $orders[0]['erp_id'],
+                                'credit_limit'   => $orders[0]['credit_limit'],
+                                'dispatch_thru'  => $orders[0]['delvry_thru'],
+                                'round_off_amnt' =>  $roundOff,
+                                'grand_total'    =>  $grandTotal,
+                                'place_of_supply'=>  $place_of_supply,
                                 'delivery_at'    =>  $delivery_at,
+                                'bill_to'        =>  $billTo_id,
                             ]);
                 
                 $invoice_id =  "INV-00".$invoiceData->id;

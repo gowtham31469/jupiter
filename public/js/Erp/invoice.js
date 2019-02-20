@@ -661,8 +661,6 @@
             type: 'POST',
             data: {
                 _token: csrf_token,
-                finalData:finalData,
-                htmlData:htmlData,
                 tax_amnt:tax_amnt,
                 place_of_supply:place_of_supply,
                 roundOff:roundOff,
@@ -674,13 +672,17 @@
                 invoiceNo:invoiceNo,
                 invoiceDate:invoiceDate,
                 eCharges:eCharges,
-                delivery_at:delivery_at
+                delivery_at:delivery_at,
+                finalData:finalData
+            //    htmlData:htmlData,
+                
             },
             tryCount: 0,
             retryLimit: 2,
             dataType: "json",
 
             success: function (data) {
+                console.log("result",data)
                 $('.snackbar_span').html("Invoice Created Successfully !");
                 showSnackbar();                
                 $('#erp-invoice').modal("hide")
