@@ -42,7 +42,7 @@
                 var table = '<div class="col" id="customer-table"><table id="customers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Company Name</th><th></th><th>Default Contact</th><th>Billing Address</th><th>Shipping Address</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                 $.each(data.customers, function(i, item){
                  var index = i+1;
-                 table += '<tr id="'+item.id+'"><td rowspan="3">'+index+'</td><td rowspan="3"><a href="#" title="view more" class="view-more" data-placement="left" data-backdrop="static" data-keyboard="false">'+item.company_name+'</a></td><td><i class="fa fa-user" aria-hidden="true"></i></td><td>'+item.contact_person+'</td>';
+                 table += '<tr id="'+item.id+'"><td rowspan="3">'+index+'</td><td rowspan="3"><a href="#" title="view more" class="view-more" data-placement="bottom" data-backdrop="static" data-keyboard="false">'+item.company_name+'</a></td><td><i class="fa fa-user" aria-hidden="true"></i></td><td>'+item.contact_person+'</td>';
                                   
                     if(item.bill_address != "-")
                     {

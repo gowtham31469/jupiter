@@ -32,7 +32,7 @@
                         @foreach ($customers as $value)
                           <tr id="{{$value->id}}">
                             <td rowspan="3">{{ $loop->iteration }}</td>
-                            <td rowspan="3"><a href="#" title="view more" class="view-more" data-placement="left"  data-backdrop="static" data-keyboard="false">{{ $value->company_name }}</a></td>
+                            <td rowspan="3"><a href="#" title="view more" class="view-more" data-placement="bottom"  data-backdrop="static" data-keyboard="false">{{ $value->company_name }}</a></td>
                             <td><i class="fa fa-user" aria-hidden="true"></i></td>
                             <td>{{ $value->contact_person }}</td>
                             <td >
