@@ -1,6 +1,7 @@
 /* Company management script(in Customer management module)
  * @author <praveen>
  */
+
 /**
  * To show all customers list
  * @author <praveen>
@@ -138,7 +139,7 @@ function addCustomer()
 {
   try{
         var factory_code        =  $('#factory_code').val();
-        var company_name        =  $('#company_name').val();
+        var company_name        =  toTitleCase($('#company_name').val());
         var courier_choice      =  $('#courier_choice').val();
         var tin_number          =  $('#tin_number').val();
         var gstin_number        =  $('#gstin_number').val();
@@ -152,7 +153,7 @@ function addCustomer()
         var delivery_date_req   =  $('#delivery_date_required').is(':checked')?1:0;
         var freight             =  $("#freight option:selected").val();
         var day_count           =  $('#day_count').val();
-        var short_name          =  $('#short_name').val();
+        var short_name          =  toTitleCase($('#short_name').val());
         var sap_code            =  $('#sap_code').val();
 
         if($('#freight option:selected').text() === "Nominated Forwarded")
@@ -184,7 +185,7 @@ function addCustomer()
         /** [ Create array of contact person for multiple contact details ] */
         $('.contact_person').each(function(i, item)
         {
-            contact_person[i]    = $(item).val();
+            contact_person[i]    = toTitleCase($(item).val());
             
         });
 
@@ -219,7 +220,7 @@ function addCustomer()
         /** [Create array of multiple address for address ] */
         $('.address').each(function(i, item)
         {
-            address[i]    = $(item).val();
+            address[i]    = toTitleCase($(item).val().replace(/,/g, ", "));
             
         });
 
@@ -362,29 +363,6 @@ function addCustomer()
    }
  }
 
- /**  
-  * Validation for numeric values
-  * @param   evt 
-  * @return {Boolean}
-  * @author <praveen>
-  */
- function isNumber(evt) {
-  try{
-        evt = (evt) ? evt : window.event;
-        var charCode = (evt.which) ? evt.which : evt.keyCode; 
-
-        /** [ Checking key stroke values for numeric values ] */
-        if (charCode > 31 && (charCode < 48 || charCode > 57))
-        {
-            return false;
-        }
-          return true;
-    } catch (e) {
-     console.log("Error:"+e)
-   }
-  }
- 
-
 /** Dynamically add/remove contact person & Billing Address in Customer Management jquery begins**/
  /**
   * Adds a contact person forms dynamically on button click.
@@ -464,7 +442,7 @@ function addCustomer()
          var a = []
          var id = $(rem).attr("data-id");
          var val = parseInt(id) + 1;
-         $('#addbilladdress').append('<div id="billaddress_' + val + '" class="addbilladdress"><i class="fa fa-trash delete-user edit-delete" style="position: absolute;float: right;right: 16px;padding: 11px 15px;cursor:pointer" onclick="removeAddress(this)" title="Delete"></i><div type="button" class="accordion button-bottom active"><h4>Address 1</h4></div><div id="billaddress' + val + '" class="panel" style="display: block;"><div class="form-group has-feedback"><label for="address' + val + '" class="form_label">Address</label><textarea class="form-control  address" required="" placeholder="Address" style="resize:none;" rows="3" name="address' + val + '" cols="50" id="address' + val + '" onkeyup = "$(this).val($(this).val().toLowerCase());"></textarea><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="pincode' + val + '" class="form_label">Pincode</label><input class="form-control input-sm pincode" placeholder="Pincode" required="" data-minlength="6" maxlength="6" onkeypress="return isNumber(event)" name="pincode' + val + '" value="" id="pincode' + val + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="country' + val + '" class="form_label">Country</label><input class="form-control input-sm country" placeholder="Country" required="" name="country' + val + '" value="" id="country' + val + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="telephone' + val + '" class="form_label">Phone</label><div class="input-group"><span class="input-group-addon input-sm " id="basic-addon1">+91</span><input class="form-control input-sm telephone" placeholder="Phone" required="" data-minlength="10" maxlength="10" onkeypress="return isNumber(event)" name="telephone' + val + '" value="" id="telephone' + val + '" type="text"></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="fax' + val + '" class="form_label">Fax</label><input class="form-control input-sm fax" placeholder="Fax" onkeypress="return isNumber(event)" name="fax' + val + '" value="" id="fax' + val + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="address_email' + val + '" class="form_label">Email</label><div class="input-group"><span class="input-group-addon input-sm" id="basic-addon1">@</span><input class="form-control input-sm address_email" placeholder="Email" required="" name="address_email' + val + '" value="" id="address_email' + val + '" type="email" onkeyup = "$(this).val($(this).val().toLowerCase());"></div><div class="help-block with-errors"></div></div><div class="form-check form-group has-feedback" style="margin-top: 25px;"><label class="form-check-label"><input class="form-check-input default_address" type="checkbox" value="" name="default1" id="default_address' + val + '"> Make as default billing address</label><div class="help-block with-errors"></div></div><div class="form-check form-group has-feedback" ><label class="form-check-label"><input class="form-check-input shipping_address" type="checkbox" value="" name="defaultShip1" id="shipping_address' + val + '"> Make as default shipping address</label><div class="help-block with-errors"></div></div></div></div>')
+         $('#addbilladdress').append('<div id="billaddress_' + val + '" class="addbilladdress"><i class="fa fa-trash delete-user edit-delete" style="position: absolute;float: right;right: 16px;padding: 11px 15px;cursor:pointer" onclick="removeAddress(this)" title="Delete"></i><div type="button" class="accordion button-bottom active"><h4>Address 1</h4></div><div id="billaddress' + val + '" class="panel" style="display: block;"><div class="form-group has-feedback"><label for="address' + val + '" class="form_label">Address</label><textarea class="form-control  address" required="" placeholder="Address" style="resize:none; text-transform: capitalize;" rows="3" name="address' + val + '" cols="50" id="address' + val + '"></textarea><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="pincode' + val + '" class="form_label">Pincode</label><input class="form-control input-sm pincode" placeholder="Pincode" required="" data-minlength="6" maxlength="6" onkeypress="return isNumber(event)" name="pincode' + val + '" value="" id="pincode' + val + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="country' + val + '" class="form_label">Country</label><input class="form-control input-sm country" placeholder="Country" required="" name="country' + val + '" value="" id="country' + val + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="telephone' + val + '" class="form_label">Phone</label><div class="input-group"><span class="input-group-addon input-sm " id="basic-addon1">+91</span><input class="form-control input-sm telephone" placeholder="Phone" required="" data-minlength="10" maxlength="10" onkeypress="return isNumber(event)" name="telephone' + val + '" value="" id="telephone' + val + '" type="text"></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="fax' + val + '" class="form_label">Fax</label><input class="form-control input-sm fax" placeholder="Fax" onkeypress="return isNumber(event)" name="fax' + val + '" value="" id="fax' + val + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="address_email' + val + '" class="form_label">Email</label><div class="input-group"><span class="input-group-addon input-sm" id="basic-addon1">@</span><input class="form-control input-sm address_email" placeholder="Email" required="" name="address_email' + val + '" value="" id="address_email' + val + '" type="email" onkeyup = "$(this).val($(this).val().toLowerCase());"></div><div class="help-block with-errors"></div></div><div class="form-check form-group has-feedback" style="margin-top: 25px;"><label class="form-check-label"><input class="form-check-input default_address" type="checkbox" value="" name="default1" id="default_address' + val + '"> Make as default billing address</label><div class="help-block with-errors"></div></div><div class="form-check form-group has-feedback" ><label class="form-check-label"><input class="form-check-input shipping_address" type="checkbox" value="" name="defaultShip1" id="shipping_address' + val + '"> Make as default shipping address</label><div class="help-block with-errors"></div></div></div></div>')
          $('#add_customer_form').validator('update');
          autopopulateCountry(val);
          
@@ -709,7 +687,7 @@ function addCustomer()
                     },
                    208: function() {
                         isSubmitting = false;
-                        $('.snackbar_span').html("This action can't be completed because some customers linked to this comapany.");
+                        $('.snackbar_span').html("This action can't be completed because some customers linked to this company.");
                         showSnackbar();
                    }
                },
@@ -845,7 +823,7 @@ function addCustomer()
                     {
                       address_html += '<i class="fa fa-trash delete-user edit-delete" style="position: absolute;float: right;right: 16px;padding: 11px 15px;cursor:pointer" onclick="editRemoveAddress(this)" title="Delete"></i>';
                     }
-                    address_html += '<div type="button" class="accordion button-bottom active"><h4>Address 1</h4></div><div id="editbilladdress' + key + '" class="panel" style="display: block;"><div class="form-group has-feedback"><label for="edit_address' + key + '" class="form_label">Address</label><textarea class="form-control edit_address" required="" placeholder="Address" style="resize:none;" rows="3" name="edit_address' + key + '" cols="50" id="edit_address' + key + '" onkeyup = "$(this).val($(this).val().toLowerCase());">'+value.address+'</textarea><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_pincode' + key + '" class="form_label">Pincode</label><input class="form-control input-sm edit_pincode" placeholder="Pincode" required="" data-minlength="6" maxlength="6" onkeypress="return isNumber(event)" name="edit_pincode' + key + '" value="'+value.pincode+'" id="edit_pincode' + key + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_country' + key + '" class="form_label">Country</label><input class="form-control input-sm edit_country" placeholder="Country" required="" name="edit_country' + key + '" value="'+value.country+'" id="edit_country' + key + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_telephone' + key + '" class="form_label">Phone</label><div class="input-group"><span class="input-group-addon input-sm " id="editbasic-addon1">+91</span><input class="form-control input-sm edit_telephone" placeholder="Phone" required="" data-minlength="10" maxlength="10" onkeypress="return isNumber(event)" name="edit_telephone' + key + '" value="'+value.telephone+'" id="edit_telephone' + key + '" type="text"></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_fax' + key + '" class="form_label">Fax</label><input class="form-control input-sm edit_fax" placeholder="Fax" onkeypress="return isNumber(event)" name="edit_fax' + key + '" value="'+value.fax+'" id="edit_fax' + key + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_address_email' + key + '" class="form_label">Email</label><div class="input-group"><span class="input-group-addon input-sm" id="edit-basic-addon1">@</span><input class="form-control input-sm edit_address_email" placeholder="Email" required="" name="edit_address_email' + key + '" value="'+value.email+'" id="edit_address_email' + key + '" type="email" onkeyup = "$(this).val($(this).val().toLowerCase());"></div><div class="help-block with-errors"></div></div><div class="form-check form-group has-feedback" style="margin-top: 25px;"><label class="form-check-label"><input class="form-check-input edit_default_address" type="checkbox" value="" name="default1" id="edit_default_address' + key + '"> Make as default billing address</label><div class="help-block with-errors"></div></div><div class="form-check form-group has-feedback"><label class="form-check-label"><input class="form-check-input edit_shipping_address" type="checkbox" value="" name="defaultShip1" id="edit_shipping_address' + key + '"> Make as default shipping address</label><div class="help-block with-errors"></div></div></div></div>';
+                    address_html += '<div type="button" class="accordion button-bottom active"><h4>Address 1</h4></div><div id="editbilladdress' + key + '" class="panel" style="display: block;"><div class="form-group has-feedback"><label for="edit_address' + key + '" class="form_label">Address</label><textarea class="form-control edit_address" required="" placeholder="Address" style="resize:none; text-transform: capitalize;" rows="3" name="edit_address' + key + '" cols="50" id="edit_address' + key + '">'+value.address+'</textarea><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_pincode' + key + '" class="form_label">Pincode</label><input class="form-control input-sm edit_pincode" placeholder="Pincode" required="" data-minlength="6" maxlength="6" onkeypress="return isNumber(event)" name="edit_pincode' + key + '" value="'+value.pincode+'" id="edit_pincode' + key + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_country' + key + '" class="form_label">Country</label><input class="form-control input-sm edit_country" placeholder="Country" required="" name="edit_country' + key + '" value="'+value.country+'" id="edit_country' + key + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_telephone' + key + '" class="form_label">Phone</label><div class="input-group"><span class="input-group-addon input-sm " id="editbasic-addon1">+91</span><input class="form-control input-sm edit_telephone" placeholder="Phone" required="" data-minlength="10" maxlength="10" onkeypress="return isNumber(event)" name="edit_telephone' + key + '" value="'+value.telephone+'" id="edit_telephone' + key + '" type="text"></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_fax' + key + '" class="form_label">Fax</label><input class="form-control input-sm edit_fax" placeholder="Fax" onkeypress="return isNumber(event)" name="edit_fax' + key + '" value="'+value.fax+'" id="edit_fax' + key + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_address_email' + key + '" class="form_label">Email</label><div class="input-group"><span class="input-group-addon input-sm" id="edit-basic-addon1">@</span><input class="form-control input-sm edit_address_email" placeholder="Email" required="" name="edit_address_email' + key + '" value="'+value.email+'" id="edit_address_email' + key + '" type="email" onkeyup = "$(this).val($(this).val().toLowerCase());"></div><div class="help-block with-errors"></div></div><div class="form-check form-group has-feedback" style="margin-top: 25px;"><label class="form-check-label"><input class="form-check-input edit_default_address" type="checkbox" value="" name="default1" id="edit_default_address' + key + '"> Make as default billing address</label><div class="help-block with-errors"></div></div><div class="form-check form-group has-feedback"><label class="form-check-label"><input class="form-check-input edit_shipping_address" type="checkbox" value="" name="defaultShip1" id="edit_shipping_address' + key + '"> Make as default shipping address</label><div class="help-block with-errors"></div></div></div></div>';
                       
                       $('#editbilladdress').append(address_html);
 
@@ -1093,7 +1071,7 @@ function addCustomer()
          var a = []
          var id = $(rem).attr("data-id");
          var val = parseInt(id) + 1;
-         $('#editbilladdress').append('<div id="editbilladdress_' + val + '" class="editbilladdress"><i class="fa fa-trash delete-user edit-delete" style="position: absolute;float: right;right: 16px;padding: 11px 15px;cursor:pointer" onclick="editRemoveAddress(this)" title="Delete"></i><div type="button" class="accordion button-bottom active"><h4>Address 1</h4></div><div id="editbilladdress' + val + '" class="panel" style="display: block;"><div class="form-group has-feedback"><label for="edit_address' + val + '" class="form_label">Address</label><textarea class="form-control edit_address" required="" placeholder="Address" style="resize:none;" rows="3" name="edit_address' + val + '" cols="50" id="edit_address' + val + '" onkeyup = "$(this).val($(this).val().toLowerCase());"></textarea><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_pincode' + val + '" class="form_label">Pincode</label><input class="form-control input-sm edit_pincode" placeholder="Pincode" required="" data-minlength="6" maxlength="6" onkeypress="return isNumber(event)" name="edit_pincode' + val + '" value="" id="edit_pincode' + val + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_country' + val + '" class="form_label">Country</label><input class="form-control input-sm edit_country" placeholder="Country" required="" name="edit_country' + val + '" value="" id="edit_country' + val + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_telephone' + val + '" class="form_label">Phone</label><div class="input-group"><span class="input-group-addon input-sm " id="basic-addon1">+91</span><input class="form-control input-sm edit_telephone" placeholder="Phone" required="" data-minlength="10" maxlength="10" onkeypress="return isNumber(event)" name="edit_telephone' + val + '" value="" id="edit_telephone' + val + '" type="text"></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_fax' + val + '" class="form_label">Fax</label><input class="form-control input-sm edit_fax" placeholder="Fax" onkeypress="return isNumber(event)" name="edit_fax' + val + '" value="" id="edit_fax' + val + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_address_email' + val + '" class="form_label">Email</label><div class="input-group"><span class="input-group-addon input-sm" id="editbasic-addon1">@</span><input class="form-control input-sm edit_address_email" placeholder="Email" required="" name="edit_address_email' + val + '" value="" id="edit_address_email' + val + '" type="email" onkeyup = "$(this).val($(this).val().toLowerCase());"></div><div class="help-block with-errors"></div></div><div class="form-check form-group has-feedback" style="margin-top: 25px;"><label class="form-check-label"><input class="form-check-input edit_default_address" type="checkbox" value="" name="default1" id="edit_default_address' + val + '"> Make as default billing address</label><div class="help-block with-errors"></div></div><div class="form-check form-group has-feedback"><label class="form-check-label"><input class="form-check-input edit_shipping_address" type="checkbox" value="" name="defaultShip1" id="edit_shipping_address' + val + '"> Make as default shipping address</label><div class="help-block with-errors"></div></div></div></div>')
+         $('#editbilladdress').append('<div id="editbilladdress_' + val + '" class="editbilladdress"><i class="fa fa-trash delete-user edit-delete" style="position: absolute;float: right;right: 16px;padding: 11px 15px;cursor:pointer" onclick="editRemoveAddress(this)" title="Delete"></i><div type="button" class="accordion button-bottom active"><h4>Address 1</h4></div><div id="editbilladdress' + val + '" class="panel" style="display: block;"><div class="form-group has-feedback"><label for="edit_address' + val + '" class="form_label">Address</label><textarea class="form-control edit_address" required="" placeholder="Address" style="resize:none; text-transform: capitalize;" rows="3" name="edit_address' + val + '" cols="50" id="edit_address' + val + '"></textarea><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_pincode' + val + '" class="form_label">Pincode</label><input class="form-control input-sm edit_pincode" placeholder="Pincode" required="" data-minlength="6" maxlength="6" onkeypress="return isNumber(event)" name="edit_pincode' + val + '" value="" id="edit_pincode' + val + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_country' + val + '" class="form_label">Country</label><input class="form-control input-sm edit_country" placeholder="Country" required="" name="edit_country' + val + '" value="" id="edit_country' + val + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_telephone' + val + '" class="form_label">Phone</label><div class="input-group"><span class="input-group-addon input-sm " id="basic-addon1">+91</span><input class="form-control input-sm edit_telephone" placeholder="Phone" required="" data-minlength="10" maxlength="10" onkeypress="return isNumber(event)" name="edit_telephone' + val + '" value="" id="edit_telephone' + val + '" type="text"></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_fax' + val + '" class="form_label">Fax</label><input class="form-control input-sm edit_fax" placeholder="Fax" onkeypress="return isNumber(event)" name="edit_fax' + val + '" value="" id="edit_fax' + val + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_address_email' + val + '" class="form_label">Email</label><div class="input-group"><span class="input-group-addon input-sm" id="editbasic-addon1">@</span><input class="form-control input-sm edit_address_email" placeholder="Email" required="" name="edit_address_email' + val + '" value="" id="edit_address_email' + val + '" type="email" onkeyup = "$(this).val($(this).val().toLowerCase());"></div><div class="help-block with-errors"></div></div><div class="form-check form-group has-feedback" style="margin-top: 25px;"><label class="form-check-label"><input class="form-check-input edit_default_address" type="checkbox" value="" name="default1" id="edit_default_address' + val + '"> Make as default billing address</label><div class="help-block with-errors"></div></div><div class="form-check form-group has-feedback"><label class="form-check-label"><input class="form-check-input edit_shipping_address" type="checkbox" value="" name="defaultShip1" id="edit_shipping_address' + val + '"> Make as default shipping address</label><div class="help-block with-errors"></div></div></div></div>')
          $('#edit_customer_form').validator('update');
          editAutopopulateCountry(val);
          
@@ -1163,7 +1141,7 @@ function addCustomer()
           }
           var id                  =  $('#customer_edit_id').val();
           var factory_code        =  $('#edit_factory_code').val();
-          var company_name        =  $('#edit_company_name').val();
+          var company_name        =  toTitleCase($('#edit_company_name').val());
           var courier_choice      =  $('#edit_courier_choice').val();
           var tin_number          =  $('#edit_tin_number').val();
           var gstin_number        =  $('#edit_gstin_number').val();
@@ -1177,7 +1155,7 @@ function addCustomer()
           var delivery_date_req   =  $('#edit_delivery_date_required').is(':checked')?1:0;
           var freight             =  $("#edit_freight option:selected").val();
           var day_count           =  $('#edit_day_count').val();
-          var short_name          =  $('#edit_short_name').val();
+          var short_name          =  toTitleCase($('#edit_short_name').val());
           var sap_code            =  $('#edit_sap_code').val();
 
           var contact_person  = [];
@@ -1198,7 +1176,7 @@ function addCustomer()
           /** [ Create array of contact person for multiple contact details ] */
           $('.edit_contact_person').each(function(i, item)
           {
-              contact_person[i]    = $(item).val();
+              contact_person[i]    = toTitleCase($(item).val());
               
           });
 
@@ -1233,7 +1211,7 @@ function addCustomer()
           /** [ Create array of multiple address for address ] */
           $('.edit_address').each(function(i, item)
           {
-              address[i]    = $(item).val();
+              address[i]    = toTitleCase($(item).val().replace(/,/g, ", "));
               
           });
 
@@ -1373,25 +1351,6 @@ function addCustomer()
            console.log("Error:"+e)
       }
    }
-
-   /**
-    * showSnackbar function
-    * @author    <praveen>
-    */
-  function showSnackbar() {
-    try{
-      /** [ Get the snackbar DIV ] */
-      var x = document.getElementById("snackbar")
-
-      /** [ Add the "show" class to DIV ] */
-      x.className = "show";
-
-      /** [  After 3 seconds, remove the show class from DIV ] */
-      setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
-      } catch (e) {
-       console.log("Error:"+e)
-     }
-  }
 
   /**
   * Get customer details for view more functionality.

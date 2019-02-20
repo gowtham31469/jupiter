@@ -74,7 +74,7 @@ class AdminProfileController extends Controller
                  ->update([
                    'name'      => $input['name'],
                    'email'     => $input['email'],
-                   'address'   => $input['address'],
+                   'address'   => preg_replace('/\s*,\s*/', ', ', $input['address']),
                    'phone'     => $input['phone'],
                 ]);
 

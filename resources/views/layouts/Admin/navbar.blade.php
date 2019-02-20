@@ -174,7 +174,7 @@
                    <div id="admin_profile_result"></div>
                      <div class="form-group has-feedback">
                        {!! Form::label('admin_profile_name', 'Name', ['class' => 'form_label']) !!}
-                       {!! Form::text('admin_profile_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required','maxlength' => '25')) !!}
+                       {!! Form::text('admin_profile_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required','maxlength' => '25', 'style' => 'text-transform: capitalize;')) !!}
                        <div class="help-block with-errors"></div>
                      </div>
                      <div class="form-group has-feedback">
@@ -195,7 +195,7 @@
                      </div>
                      <div class="form-group has-feedback">
                        {!! Form::label('admin_profile_address', 'Address', ['class' => 'form_label']) !!}
-                       {!! Form::textarea('admin_profile_address',$value = '', array('class' => 'form-control','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3,'onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
+                       {!! Form::textarea('admin_profile_address',$value = '', array('class' => 'form-control','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3, 'style' => 'text-transform: capitalize;')) !!}
                        <div class="help-block with-errors"></div>
                      </div>
                  </div>
