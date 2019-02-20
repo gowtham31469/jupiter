@@ -8,7 +8,7 @@
               </div>
               <div class="main-sub-menu">
                 <div class="action-group pull-right sub-menu-button">
-                  <a href="#" data-target="#addMerchandiserModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i>Add Merchandiser</a>
+                  <a href="#" data-target="#addMerchandiserModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i>Add Merchandiser</a>
                 </div>
               </div>
           <div class="clearfix"></div>

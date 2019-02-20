@@ -274,7 +274,7 @@
 							</thead>
 							<tbody>
 								@foreach($orders as $vals)
-								<tr id="{{$vals->id}}" data-refname="{{$vals->reference_name}}" data-buyer-po="{{$vals->buyer_po_number}}">
+								<tr id="{{$vals->id}}" data-refname="{{$vals->reference_name}}" data-buyer-po="{{$vals->buyer_po_number}}" data-order-type="{{$vals->order_type}}">
 									<td>
 										<div class="form-check">
 										<a href="javascript:void(0)">
@@ -386,7 +386,7 @@
 								<div class="col-md-4">
 								</div>
 								<div class="col-md-4">
-								    <div class="form-group has-feedback form-inline">
+								    <div class="form-group has-feedback">
 										{!! Form::label('material', 'MATERIAL :', ['class' => 'form_label']) !!}
 										{!! Form::text('material',$value = '', array('class' => 'form-control input-sm','placeholder' => 'MATERIAL','required','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
@@ -402,7 +402,7 @@
 								    <span id="customer"></span>	
 								</div>
 								<div class="col-md-4">
-									<div class="form-group has-feedback form-inline">
+									<div class="form-group has-feedback">
 										{!! Form::label('style_no', 'STYLENUM :', ['class' => 'form_label']) !!}
 										{!! Form::text('style_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'STYLENUM', 'maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
@@ -419,14 +419,14 @@
 								    <span id="buyer"></span>	
 								</div>
 								<div class="col-md-4">
-									<div class="form-group has-feedback form-inline">
+									<div class="form-group has-feedback">
 										{!! Form::label('reference', 'REFERENCE :', ['class' => 'form_label']) !!}
 										{!! Form::text('reference',$value = '', array('class' => 'form-control input-sm','placeholder' => 'REFERENCE', 'maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									 </div>	
 								</div>
 								<div class="col-md-4">
-									 <div class="form-group has-feedback form-inline">
+									 <div class="form-group has-feedback">
 										{!! Form::label('disp_mode', 'DISP MODE :', ['class' => 'form_label']) !!}
 										{{ Form::select('disp_mode',(['' => '-- Select Dispatch Mode --']+ $disp_modes),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'disp_mode','required')) }}
 										<div class="help-block with-errors"></div>
@@ -442,21 +442,21 @@
 								    <span id="order_date"></span>
 								</div>
 								<div class="col-md-3">
-									<div class="form-group has-feedback form-inline">
+									<div class="form-group has-feedback">
 									{!! Form::label('length', 'LENGTH :', ['class' => 'form_label']) !!}
 									{!! Form::number('length',$value = '', array('class' => 'form-control input-sm','placeholder' => 'LENGTH', 'min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error' => 'Value should be greater than 0', 'onkeypress' => 'return isNumberKey(event)', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.')) !!}
 									<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
-								    <div class="form-group has-feedback form-inline">
+								    <div class="form-group has-feedback">
 										{!! Form::label('repeat_gap', 'REPEAT GAP :', ['class' => 'form_label']) !!}
 										{!! Form::number('repeat_gap',$value = '', array('class' => 'form-control input-sm','placeholder' => 'REPEAT GAP', 'min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error' => 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeyup' => 'return mtrsForStickers()', 'onkeypress' => 'return isNumberKey(event)')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
-								    <div class="form-group has-feedback form-inline">
+								    <div class="form-group has-feedback">
 										{!! Form::label('machine', 'MACHINE :', ['class' => 'form_label']) !!}
 										{{ Form::select('machine',(['' => '-- Select Machine --']+ $machines),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'machine','required')) }}
 										<div class="help-block with-errors"></div>
@@ -465,7 +465,7 @@
 							</div>
 							<div class="col-md-12">
 								<div class="col-md-3">
-								   <div class="form-group has-feedback form-inline">
+								   <div class="form-group has-feedback">
 									{!! Form::label('cus_del_date', 'CUS D.DT :', ['class' => 'form_label']) !!}
 									<div class="input-group cus_del_date date datepicker" data-provide="datepicker" id="datePicker1">
 										<input value="" id="cus_del_date" name="cus_del_date" type="text" class="form-control input-sm " required="" placeholder="CUS D.DT">
@@ -477,21 +477,21 @@
 								  </div>
 								</div>
 								<div class="col-md-3">
-									<div class="form-group has-feedback form-inline">
+									<div class="form-group has-feedback">
 									{!! Form::label('width', 'WIDTH :', ['class' => 'form_label']) !!}
 									{!! Form::number('width',$value = '', array('class' => 'form-control input-sm','placeholder' => 'WIDTH', 'min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error' => 'Value should be greater than 0', 'onkeypress' => 'return isNumberKey(event)', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.')) !!}
 									<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
-								    <div class="form-group has-feedback form-inline">
+								    <div class="form-group has-feedback">
 										{!! Form::label('roll_width', 'ROLL WIDTH :', ['class' => 'form_label']) !!}
 										{!! Form::number('roll_width',$value = '', array('class' => 'form-control input-sm','placeholder' => 'ROLL WIDTH','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error' => 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeypress' => 'return isNumberKey(event)')) !!}
 										<div class="help-block with-errors"></div>
 								    </div>
 								</div>
 								<div class="col-md-3">
-								    <div class="form-group has-feedback form-inline">
+								    <div class="form-group has-feedback">
 										{!! Form::label('film_no', 'FILM NO :', ['class' => 'form_label']) !!}
 										{!! Form::number('film_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'FILM NO','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error' => 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.', 'onkeypress' => 'return isNumber(event)')) !!}
 										<div class="help-block with-errors"></div>
@@ -500,7 +500,7 @@
 							</div>
 							<div class="col-md-12">
 								<div class="col-md-3">
-								   <div class="form-group has-feedback form-inline">
+								   <div class="form-group has-feedback">
 									{!! Form::label('invoice_date', 'INVOICE DATE :', ['class' => 'form_label']) !!}
 									<div class="input-group invoice_date date datepicker" data-provide="datepicker" id="datePicker1">
 										<input value="" id="invoice_date" name="invoice_date" type="text" class="form-control input-sm " placeholder="INVOICE DATE">
@@ -512,21 +512,21 @@
 								  </div>
 								</div>
 								<div class="col-md-3">
-								   <div class="form-group has-feedback form-inline">
+								   <div class="form-group has-feedback">
 										{!! Form::label('length_side', 'LENGTH SIDE :', ['class' => 'form_label']) !!}
 										{!! Form::number('length_side',$value = '', array('class' => 'form-control input-sm','placeholder' => 'LENGTH SIDE','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error' => 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeyup' => 'return mtrsForStickers()', 'onkeypress' => 'return isNumberKey(event)')) !!}
 										<div class="help-block with-errors"></div>
 								   </div>
 								</div>
 								<div class="col-md-3">
-							        <div class="form-group has-feedback form-inline">
+							        <div class="form-group has-feedback">
 										{!! Form::label('excess', 'EXCESS % :', ['class' => 'form_label']) !!}
 										{!! Form::number('excess',$value = '', array('class' => 'form-control input-sm','placeholder' => 'EXCESS','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error' => 'Value should be greater than 0', 'onkeyup' => 'return calculateExcess(this)', 'data-step-error' => 'Decimal values not allowed.', 'onkeypress' => 'return isNumberKey(event)')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
-								    <div class="form-group has-feedback form-inline">
+								    <div class="form-group has-feedback">
 										{!! Form::label('teeth_no', 'TEETH NO :', ['class' => 'form_label']) !!}
 										{{ Form::select('teeth_no',(['' => '-- Select Teeth No --']+ $teeth_nos),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'teeth_no','required')) }}
 										<div class="help-block with-errors"></div>
@@ -535,14 +535,14 @@
 							</div>
 							<div class="col-md-12">
 								<div class="col-md-3">
-								    <div class="form-group has-feedback form-inline">
+								    <div class="form-group has-feedback">
 										{!! Form::label('inv_no', 'INV NO :', ['class' => 'form_label']) !!}
 										{!! Form::text('inv_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'INV NO','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
-								    <div class="form-group has-feedback form-inline">
+								    <div class="form-group has-feedback">
 										{!! Form::label('no_sticker', 'NO OF STICKERS :', ['class' => 'form_label']) !!}
 										{!! Form::number('no_sticker',$value = '', array('class' => 'form-control input-sm','placeholder' => 'NO OF STICKERS','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error' => 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.', 'onkeyup' => 'return mtrsForStickers()', 'onkeypress' => 'return isNumber(event)')) !!}
 										<div class="help-block with-errors"></div>
@@ -551,7 +551,7 @@
 								<div class="col-md-3">
 								</div>
 								<div class="col-md-3">
-								    <div class="form-group has-feedback form-inline">
+								    <div class="form-group has-feedback">
 										{!! Form::label('finish_type', 'FINISH TYPE :', ['class' => 'form_label']) !!}
 										{{ Form::select('finish_type',(['' => '-- Select Finish Type --']+ $finish_types),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'finish_type','required')) }}
 										<div class="help-block with-errors"></div>
@@ -560,7 +560,7 @@
 							</div>
 							<div class="col-md-12">
 							   <div class="col-md-3">
-									<div class="form-group has-feedback form-inline">
+									<div class="form-group has-feedback">
 										{!! Form::label('print_color', 'PRINT COLORS :', ['class' => 'form_label']) !!}
 										{!! Form::text('print_color',$value = '', array('class' => 'form-control input-sm','placeholder' => 'STYLENUM', 'maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
@@ -586,30 +586,31 @@
 						<div class="row">
 							<div class="col-md-12">
 								<div class="col-md-3">
-									<div class="form-group has-feedback form-inline">
+									<div class="form-group has-feedback">
+									    @php $login_user = Auth::guard('erpuser')->user()->name; @endphp
 										{!! Form::label('compiled_by', 'COMPILED BY :', ['class' => 'form_label']) !!}
-										{!! Form::text('compiled_by',$value = '', array('class' => 'form-control input-sm','placeholder' => 'COMPILED BY','required','maxlength' => '20')) !!}
+										{!! Form::text('compiled_by',$value = $login_user, array('class' => 'form-control input-sm','placeholder' => 'COMPILED BY','required','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
-									<div class="form-group has-feedback form-inline">
+									<div class="form-group has-feedback">
 										{!! Form::label('barcode_read', 'BARCODE READ :', ['class' => 'form_label']) !!}
-										{!! Form::text('barcode_read',$value = '', array('class' => 'form-control input-sm','placeholder' => 'BARCODE READ','required','maxlength' => '20')) !!}
+										{!! Form::text('barcode_read',$value = '', array('class' => 'form-control input-sm','placeholder' => 'BARCODE READ','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
-									<div class="form-group has-feedback form-inline">
+									<div class="form-group has-feedback">
 										{!! Form::label('operator', 'OPERATOR :', ['class' => 'form_label']) !!}
-										{!! Form::text('operator',$value = '', array('class' => 'form-control input-sm','placeholder' => 'OPERATOR','required','maxlength' => '20')) !!}
+										{!! Form::text('operator',$value = '', array('class' => 'form-control input-sm','placeholder' => 'OPERATOR','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
-									<div class="form-group has-feedback form-inline">
+									<div class="form-group has-feedback">
 										{!! Form::label('checker', 'CHECKER :', ['class' => 'form_label']) !!}
-										{!! Form::text('checker',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CHECKER','required','maxlength' => '20')) !!}
+										{!! Form::text('checker',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CHECKER','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
@@ -618,30 +619,30 @@
 						<div class="row">
 							<div class="col-md-12">
 								<div class="col-md-3">
-									<div class="form-group has-feedback form-inline">
+									<div class="form-group has-feedback">
 										{!! Form::label('author', 'AUTHORIZED BY :', ['class' => 'form_label']) !!}
-										{!! Form::text('author',$value = '', array('class' => 'form-control input-sm','placeholder' => 'AUTHORIZED BY','required','maxlength' => '20')) !!}
+										{!! Form::text('author',$value = '', array('class' => 'form-control input-sm','placeholder' => 'AUTHORIZED BY','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
-									<div class="form-group has-feedback form-inline">
+									<div class="form-group has-feedback">
 										{!! Form::label('axicon_verifier', 'AXICON VERIFIER :', ['class' => 'form_label']) !!}
-										{!! Form::text('axicon_verifier',$value = '', array('class' => 'form-control input-sm','placeholder' => 'AXICON VERIFIER','required','maxlength' => '20')) !!}
+										{!! Form::text('axicon_verifier',$value = '', array('class' => 'form-control input-sm','placeholder' => 'AXICON VERIFIER','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
-									<div class="form-group has-feedback form-inline">
+									<div class="form-group has-feedback">
 										{!! Form::label('approved_by', 'APPROVED BY :', ['class' => 'form_label']) !!}
-										{!! Form::text('approved_by',$value = '', array('class' => 'form-control input-sm','placeholder' => 'APPROVED BY','required','maxlength' => '20')) !!}
+										{!! Form::text('approved_by',$value = '', array('class' => 'form-control input-sm','placeholder' => 'APPROVED BY','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
-									<div class="form-group has-feedback form-inline">
+									<div class="form-group has-feedback">
 										{!! Form::label('packer', 'PACKER :', ['class' => 'form_label']) !!}
-										{!! Form::text('packer',$value = '', array('class' => 'form-control input-sm','placeholder' => 'PACKER','required','maxlength' => '20')) !!}
+										{!! Form::text('packer',$value = '', array('class' => 'form-control input-sm','placeholder' => 'PACKER','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
@@ -650,10 +651,10 @@
 						<div class="row">
 							<div class="col-md-12">
 								<div class="col-md-3">
-									<div class="form-group has-feedback form-inline">
+									<div class="form-group has-feedback">
 										{!! Form::label('approval_date', 'APPROVAL DT :', ['class' => 'form_label']) !!}
 										<div class="input-group approval_date date datepicker" data-provide="datepicker" id="datePicker1">
-											<input value="" id="approval_date" name="approval_date" type="text" class="form-control input-sm " required="" placeholder="APPROVAL DT">
+											<input value="" id="approval_date" name="approval_date" type="text" class="form-control input-sm "  placeholder="APPROVAL DT">
 											<div class="input-group-addon input-sm">
 											 <span class="glyphicon glyphicon-th"> </span >
 										    </div >
@@ -662,23 +663,23 @@
 									</div>
 								</div>
 								<div class="col-md-3">
-									<div class="form-group has-feedback form-inline">
+									<div class="form-group has-feedback">
 										{!! Form::label('roll_issued_by', 'ROLL ISSUED BY :', ['class' => 'form_label']) !!}
-										{!! Form::text('roll_issued_by',$value = '', array('class' => 'form-control input-sm','placeholder' => 'ROLL ISSUED BY','required','maxlength' => '20')) !!}
+										{!! Form::text('roll_issued_by',$value = '', array('class' => 'form-control input-sm','placeholder' => 'ROLL ISSUED BY','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
-									<div class="form-group has-feedback form-inline">
+									<div class="form-group has-feedback">
 										{!! Form::label('cutter', 'CUTTER :', ['class' => 'form_label']) !!}
-										{!! Form::text('cutter',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CUTTER','required','maxlength' => '20')) !!}
+										{!! Form::text('cutter',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CUTTER','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
 								<div class="col-md-3">
-									<div class="form-group has-feedback form-inline">
+									<div class="form-group has-feedback">
 										{!! Form::label('cartons', 'CARTONS :', ['class' => 'form_label']) !!}
-										{!! Form::text('cartons',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CARTONS','required','maxlength' => '20')) !!}
+										{!! Form::text('cartons',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CARTONS','maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>

@@ -53,8 +53,7 @@ class ErpOrders
 				                    'po_no'            => $orders->purchase_order_no,
 				                    'po_file'          => $orders->po_file,
 									'status'		   => 1,
-									'order_status_id'  => $order_status_id->id,
-									'order_type'       => $orders->order_flag,
+									'order_status_id'  => $order_status_id->id
 									
 								]);
 				$erp_id = "ERPID-0".$erp_orders->id;
@@ -98,6 +97,7 @@ class ErpOrders
 					'custom_ref_name' 		=> $custom_ref_name,
 					'buyer_po_number'  		=> $orders->po_number,
 					'zone'					=> $orders->zone,
+					'order_type'            => $orders->order_flag
 				]);
 			}
 		}

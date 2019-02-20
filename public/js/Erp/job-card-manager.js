@@ -28,7 +28,6 @@ $(document).ready(function() {
 
     /** Datatable filter script**/
 	var listTable = $('#approved-order-list').dataTable({
-		stateSave: true,
 		/** Table column filter functionality **/
 		initComplete: function () {
 			$('.main-content > #approved-orders-table > .dataTables_wrapper > .row > .col-sm-6 > #approved-order-list_filter:first').append(' <button class="filterbtn" type="button" onClick="showFilter()" title="Filter" data-placement="bottom"><i class="fa fa-filter" aria-hidden="true"></i></button>');
@@ -78,6 +77,7 @@ $(document).ready(function() {
 			});
 		}
     } );
+    
 	/** Get an array of the TR nodes that are used in the table's body */
 	allPages = listTable.fnGetNodes();
 
@@ -233,6 +233,7 @@ function generateJobcard(){
             }
         });
         orders   = orders.join(',');
+
         ref_array = [];
         /** [ Create array of reference selected ] */
         $('.row-checkbox', allPages).each(function (i, item) {
@@ -241,6 +242,7 @@ function generateJobcard(){
             }
         });
         ref_array   = ref_array.join(',');
+
         buyer_po_array = [];
         /** [ Create array of buyer po selected ] */
         $('.row-checkbox', allPages).each(function (i, item) {
@@ -249,11 +251,21 @@ function generateJobcard(){
             }
         });
         buyer_po_array   = buyer_po_array.join(',');
+
+        order_type_array = [];
+        /** [ Create array of order type selected ] */
+        $('.row-checkbox', allPages).each(function (i, item) {
+            if ($(this).is(':checked')) {
+                order_type_array.push($(this).closest('tr').data('order-type')); 
+            }
+        });
+        order_type_array   = order_type_array.join(',');
+
         $.ajax({
             url:base_url + "/erp/job-manager/get-jobcard-order-details",
             dataType:"json",
             method:"get",
-            data:{orders:orders, ref_array:ref_array, buyer_po_array:buyer_po_array},
+            data:{orders:orders, ref_array:ref_array, buyer_po_array:buyer_po_array,order_type_array:order_type_array},
             tryCount : 0,
             retryLimit : 2,
             beforeSend: function () {
@@ -512,7 +524,7 @@ function generateJobcard(){
                                                     <span class="sticker-mtrs" id="sticker_mtr_'+template_name[0].replace(' ', '_')+'"></span>\
                                                 </div>\
                                                 <div class="col-md-3">\
-                                                <div class="form-group has-feedback form-inline">\
+                                                <div class="form-group has-feedback">\
                                                     <label for="settings_'+template_name[0].replace(' ', '_')+'" >SETTINGS ('+template_name[0]+') :</label>\
                                                     <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" class="form-control input-sm settings"  name="settings_'+template_name[0].replace(' ', '_')+'" placeholder="SETTINGS" id="settings_'+template_name[0].replace(' ', '_')+'" onkeyup="return totalMeters()" max="99999"  data-max-error="Value should be <= 99999">\
                                                     <div class="help-block with-errors"></div>\
@@ -625,7 +637,7 @@ function calculateExcess(evt)
 {
     let item = $('.total-quantity-class');
     $.each(item, function(key, value){
-        let total_excess = parseFloat($(value).text() * (evt.value*1/100));
+        let total_excess = parseFloat($(value).text() * (evt.value*1/100)).toFixed(2);
         $('#total_excess_row_table_'+key).val(Math.round(total_excess));
         /** refresh excess values fields in single ref table */
         $('#total_excess_row_table_'+key).trigger('input');
@@ -680,7 +692,7 @@ function actualExcess()
             }
         });
         if (!isNaN(total_qty) && !isNaN(total_excess)) {
-            act_excess = parseInt((total_excess/total_qty)*100);
+            act_excess = parseFloat((total_excess/total_qty)*100).toFixed(2);
         }
         $('#act_excess_'+ref_name).text(Math.round(act_excess))
     });
@@ -943,6 +955,7 @@ function storeJobcard()
         }
     });
     erp_orders_ids   = erp_orders_ids.join(',');
+
     selected_ref_array = [];
     /** [ Create array of reference selected ] */
     $('.row-checkbox', allPages).each(function (i, item) {
@@ -951,6 +964,7 @@ function storeJobcard()
         }
     });
     selected_ref_array   = selected_ref_array.join(',');
+
     selected_buyer_po_array = [];
     /** [ Create array of buyer po selected ] */
     $('.row-checkbox', allPages).each(function (i, item) {
@@ -959,6 +973,15 @@ function storeJobcard()
         }
     });
     selected_buyer_po_array   = selected_buyer_po_array.join(',');
+
+    order_type_array = [];
+    /** [ Create array of order type selected ] */
+    $('.row-checkbox', allPages).each(function (i, item) {
+        if ($(this).is(':checked')) {
+            order_type_array.push($(this).closest('tr').data('order-type')); 
+        }
+    });
+    order_type_array   = order_type_array.join(',');
 
     $.ajax({
         url: base_url + "/erp/job-manager/store-jobcard-details",
@@ -1012,7 +1035,8 @@ function storeJobcard()
             total_mtrs:total_mtrs,
             erp_orders_ids:erp_orders_ids,
             selected_ref_array:selected_ref_array,
-            selected_buyer_po_array:selected_buyer_po_array
+            selected_buyer_po_array:selected_buyer_po_array,
+            order_type_array:order_type_array
         },
         tryCount: 0,
         retryLimit: 2,
@@ -1127,7 +1151,6 @@ function storeJobcard()
                  $('#edit_disp_mode').selectpicker('refresh');
                  var ratio_table = '';
                  $.each(JSON.parse(data.jobcard_data.template_quantity_json), function(template_type, template_type_data){
-                    console.log(template_type)
                     if(template_type === 'ratio')
                     {
                         if (!($.isEmptyObject(template_type_data)))
@@ -1280,7 +1303,7 @@ function storeJobcard()
                                                 <span class="edit-sticker-mtrs" id="edit_sticker_mtr_'+item.ref_name.replace(' ', '_')+'">'+item.mtrs_for_stickers+'</span>\
                                             </div>\
                                             <div class="col-md-3">\
-                                            <div class="form-group has-feedback form-inline">\
+                                            <div class="form-group has-feedback">\
                                                 <label for="edit_settings_'+item.ref_name.replace(' ', '_')+'" >SETTINGS ('+item.ref_name+') :</label>\
                                                 <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" max="99999" data-max-error="Value should be <= 99999" class="form-control input-sm edit-settings" name="edit_settings_'+item.ref_name.replace(' ', '_')+'" placeholder="SETTINGS" id="edit_settings_'+item.ref_name.replace(' ', '_')+'" onkeyup="return totalMetersEdit()" value="'+item.settings+'" >\
                                                 <div class="help-block with-errors"></div>\
@@ -1396,7 +1419,7 @@ function actualExcessEdit()
             }
         });
         if (!isNaN(total_qty) && !isNaN(total_excess)) {
-            act_excess = parseInt((total_excess/total_qty)*100).toFixed(2);
+            act_excess = parseFloat((total_excess/total_qty)*100).toFixed(2);
         }
         $('#edit_act_excess_'+ref_name).text(Math.round(act_excess));
     });
