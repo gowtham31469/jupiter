@@ -269,10 +269,10 @@ $('#admin_profile_form').validator().on('submit', function(e) {
 function editAdmin() {              
     try {
         var id      = $('#admin_profile_id').val();
-        var name    = $('#admin_profile_name').val();
+        var name    = toTitleCase($('#admin_profile_name').val());
         var phone   = $('#admin_profile_phone').val();
         var email   = $('#admin_profile_email').val();
-        var address = $('#admin_profile_address').val();
+        var address = toTitleCase($('#admin_profile_address').val().replace(/,/g, ", "));
 
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
@@ -407,6 +407,17 @@ function updateAdminPassword() {
     } catch (e) {
         console.log("Error:" + e)
     }
+}
+
+ /**
+  * Function to  title case conversion
+  * @param {*} str 
+  * @author <praveen>
+  */
+function toTitleCase(str) {
+  return str.replace(/(?:^|\s)\w/g, function(match) {
+      return match.toUpperCase();
+  });
 }
 </script>
 @yield('jqueryIncludes')

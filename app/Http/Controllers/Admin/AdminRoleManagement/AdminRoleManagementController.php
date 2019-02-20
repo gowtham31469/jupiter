@@ -82,7 +82,7 @@ class AdminRoleManagementController extends Controller
                 $name                  = $request['name'];
                 $email                 = $request['email'];
                 $phone                 = $request['phone'];
-                $address               = $request['address'];
+                $address               = preg_replace('/\s*,\s*/', ', ', $request['address']);
                 $password              = Hash::make($request['p']);
                 $email_exists = User::where('email',$email)->select('id')->get();
                 if(count($email_exists) > 0)
@@ -98,8 +98,8 @@ class AdminRoleManagementController extends Controller
                                 'name'    	             => $name,
                                 'email'                  => $email,
                                 'password'               => $password,
-                                'address'  				 => $address,
-                                'phone'    				 => $phone,
+                                'address'  				       => $address,
+                                'phone'    				       => $phone,
                                 'is_active'              => 0,
                                 'user_role_id'           => 3,
                                 'user_id'                => $user_id

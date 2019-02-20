@@ -23,7 +23,7 @@
 
 <ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
 	<li><a href="{{ route('jobcard-manager') }}">Create Jobcard</a></li>
-	<li><a href="javascript:void(0)"  class="active">Jobcards List</a></li>
+	<li><a href="{{ route('jobcards-list') }}"  class="active">Jobcards List</a></li>
 </ul>
 
 @endsection @section('content')

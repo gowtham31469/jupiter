@@ -115,7 +115,7 @@
 					<div class="col-md-2">
 						<div class="form-group has-feedback">
 							{!! Form::label('user_name', 'User Name', ['class' => 'form_label']) !!}
-							{!! Form::text('user_name',$value = '', array('class' => 'form-control input-sm','id' => 'user_name','placeholder' => 'User Name', 'required')) !!}
+							{!! Form::text('user_name',$value = '', array('class' => 'form-control input-sm','id' => 'user_name','placeholder' => 'User Name', 'required', 'style' => 'text-transform: capitalize;')) !!}
 							<div class="help-block with-errors"></div>
 
 						</div>
@@ -191,7 +191,7 @@
 					<div class="col-md-2">
 						<div class="form-group has-feedback">
 							{!! Form::label('edit_user_name', 'User Name', ['class' => 'form_label']) !!}
-							{!! Form::text('edit_user_name', $value = '', array('class' => 'form-control input-sm','id' => 'edit_user_name','placeholder' => 'User Name', 'required')) !!}
+							{!! Form::text('edit_user_name', $value = '', array('class' => 'form-control input-sm','id' => 'edit_user_name','placeholder' => 'User Name', 'required', 'style' => 'text-transform: capitalize;')) !!}
 							<div class="help-block with-errors"></div>
 
 						</div>

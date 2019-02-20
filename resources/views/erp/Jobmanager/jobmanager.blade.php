@@ -226,7 +226,7 @@
 @section('navbar')
 
 <ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
-	<li><a href="javascript:void(0)" class="active">Create Jobcard</a></li>
+	<li><a href="{{ route('jobcard-manager') }}" class="active">Create Jobcard</a></li>
 	<li><a href="{{ route('jobcards-list') }}">Jobcards List</a></li>
 </ul>
 

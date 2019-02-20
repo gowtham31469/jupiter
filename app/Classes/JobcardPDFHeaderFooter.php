@@ -131,11 +131,14 @@ class JobcardPDFHeaderFooter extends \TCPDF
                     }
                     </style>
                     <table>
-                        <tr class="blank_row" height="10">
+                        <tr class="blank_row">
+                            <td rowspan="1"></td>
+                        </tr>
+                        <tr class="blank_row">
                             <td rowspan="1"></td>
                         </tr>
                     </table>
-                    <table cellspacing="0" cellpadding="5" style="table-layout: fixed;width: 100%;border-collapse: collapse;" nobr="true">
+                    <table cellspacing="0" cellpadding="3" style="table-layout: fixed;width: 100%;border-collapse: collapse;" nobr="true">
                             <tr nobr="true">
                                 <th style="border-left:1px solid black;border-top:1px solid black;">CompiledBy</th>
                                 <td  id="customer" style="border-top:1px solid black;">'.$this->compiled_by.'</td>
