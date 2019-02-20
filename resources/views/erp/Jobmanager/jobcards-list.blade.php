@@ -44,6 +44,8 @@
                             <i class="fa fa-spinner fa-pulse"></i>
                         </div>
 					</div>
+					<div class="filter-window-jobcard-list"><h5><strong>Jobcard List Filter</strong></h5> <div class="row"> <div class="col-md-4"><select class="selectpicker" id="jobcard_id_filter"> <option disabled selected>SELECT A JOBCARD ID</option></select></div><div class="col-md-4"><select class="selectpicker" id="customer_name_filter"> <option disabled selected>SELECT A CUSTOMER</option></select></div><div class="col-md-4"><select class="selectpicker" id="buyer_filter"> <option disabled selected>SELECT A BUYER</option></select></div></div><div class="filter-actions-erp"><button class="btn btn-primary input-sm pull-right" id="reset">Clear Filter</button><button id="close_filter" class="btn btn-default input-sm pull-right" onclick="showFilter()">Close</button><div class="clearfix"></div></div></div>
+					<br>
                     <div class="col" id="jobcard-lists-table">
                         <input type="hidden" value="{{ session()->get('company') }}" id="company_id">
                         <input type="hidden" value="{{ session()->get('company_name') }}" id="company_name">
