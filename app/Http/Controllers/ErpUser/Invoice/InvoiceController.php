@@ -116,7 +116,7 @@ class InvoiceController extends Controller
                             ->whereIn('erp_orders.status',[3,6])
                             ->whereIn('erp_order_details.status',[3,6])
                             // ->where('erp_orders.status','!=',5)
-                            ->select('erp_order_details.id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','erp_orders.po_no','erp_order_details.style_no','erp_order_details.order_quantity','erp_order_details.rate','erp_order_details.size','erp_order_details.custom_ref_name as reference_name','erp_order_details.reference_name as ref_no','customers.place_of_supply','erp_order_details.ocn_number','erp_order_details.template_id','erp_orders.erp_id as erp_id','buyers.template_table','buyers.item_master_table','erp_order_details.pending_orders as pending_qnty','erp_orders.po_file','erp_orders.customer_id','customers.gstin_number','erp_orders.id as erpid','credit_limit','customers.freight_type as freight_id','freight_terms.freight_terms as delvry_thru','customers.nominated_forwarder',DB::raw("0".' as "delvry_qnty"'))
+                            ->select('erp_order_details.id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','erp_orders.po_no','erp_order_details.style_no','erp_order_details.order_quantity','erp_order_details.rate','erp_order_details.size','erp_order_details.custom_ref_name as reference_name','erp_order_details.reference_name as ref_no','customers.place_of_supply','erp_order_details.ocn_number','erp_order_details.template_id','erp_orders.erp_id as erp_id','buyers.template_table','buyers.item_master_table','erp_order_details.pending_orders as pending_qnty','erp_orders.po_file','erp_orders.customer_id','customers.gstin_number','erp_orders.id as erpid','credit_limit','customers.freight_type as freight_id','freight_terms.freight_terms as delvry_thru','customers.nominated_forwarder','erp_order_details.buyer_po_number',DB::raw("0".' as "delvry_qnty"'))
                             ->get();
             if ($orderlist[0]->freight_id == 3) {
                 $orderlist[0]->delvry_thru  = DB::table('nominated_forwarder')->where('id',$orderlist[0]->nominated_forwarder)->value('forwarder');       
@@ -153,7 +153,8 @@ class InvoiceController extends Controller
     }
 
     public function setInvoice(Request $request){
-        try {
+        try 
+        {
             $orders        =  $request['finalData'];
             $htmlData      =  $request->htmlData;
             $tax_amnt      =  $request->tax_amnt;
@@ -233,8 +234,9 @@ class InvoiceController extends Controller
                         'custom_ref_name'  =>  $value['reference_name'],
                         'ocn_no'        =>  $value['ocn_number'], 
                         'item_name'     =>  $value['item_name'], 
-                        'item'          =>  $value['item_name'],               
-                        'company_id'    =>  1,
+                        'item'          =>  $value['item_name'], 
+                        'buyer_po_number' =>  $value['buyer_po_number'],          
+                        'company_id'    =>  session()->get('company'),
                     ]);
                     
                     ErpOrderDetails::where('id',$value['id'])
@@ -330,7 +332,7 @@ class InvoiceController extends Controller
 
             // add a page
             $pdf->AddPage('P', 'A4');
-            $pdf->SetXY(11, 30);
+            $pdf->SetXY(5.3, 24);
             $pdf->writeHTML($dynView->render());
             // PDF::SetPrintHeader(false);
             // PDF::SetPrintFooter(false);
@@ -403,7 +405,7 @@ class InvoiceController extends Controller
 
             // add a page
             $pdf->AddPage('P', 'A4');
-            $pdf->SetXY(12, 30);
+            $pdf->SetXY(5.3, 24);
             $pdf->writeHTML($dynView->render());
             // PDF::SetPrintHeader(false);
             // PDF::SetPrintFooter(false);
