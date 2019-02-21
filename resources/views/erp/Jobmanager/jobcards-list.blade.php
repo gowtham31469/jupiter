@@ -66,7 +66,7 @@
 						</div>
 					</div>
 						<div class="filter-actions-erp">
-							{!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm pull-right','type' => 'submit', 'style' => 'margin-top: 0.5em;'] ) !!}
+							{!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm pull-right','type' => 'submit', 'style' => 'margin-top: 0.5em;margin-right: 15px;'] ) !!}
 							<div class="clearfix"></div>
 						</div>
 					{!! Form::close() !!}

@@ -137,7 +137,11 @@ $(document).ready(function() {
     $('.dataTables_length select').addClass('form-control');
     $("#approved-order-list_filter input[type=search]").attr('placeholder', 'Data Search');
 
-    $('#jobcard-list-table').DataTable();
+    $('#jobcard-list-table').DataTable({
+        "paging": false,
+        "searching": false,
+        "bInfo" : false
+    });
     $("#jobcard-list-table_filter input").addClass('form-control input-sm');
     $("#jobcard-list-table_filter input").attr('placeholder', 'Data Search');
     $('#jobcard-list-table_length select').addClass('form-control input-sm');
