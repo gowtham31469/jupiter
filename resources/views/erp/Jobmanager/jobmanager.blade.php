@@ -249,7 +249,7 @@
               </div>
           <div class="clearfix"></div>
                 <div class="main-content">
-                    <div class="loader">
+                    <div class="loader"  style="display:none;">
 					    <div class=" fa-3x">
 						  <i class="fa fa-spinner fa-pulse"></i>
 						</div>
