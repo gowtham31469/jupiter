@@ -46,7 +46,7 @@
 					</div>
 					<div class="filter-window-jobcard-list">
 					{!! Form::open(['id' => 'jobcard_filter_form','data-toggle' => 'validator','role' => 'form']) !!}
-					<h5><strong>Jobcard List Filter</strong></h5>
+					<h5 style="margin-left:15px;"><strong>Jobcard List Filter</strong></h5>
 					<div class="col-xs-6 col-sm-4">
 					    <div class="form-group has-feedback">
 							{{ Form::select('buyer_filter', (['' => 'SELECT A BUYER']+ $buyers), '', array('class' => 'form-control input-sm selectpicker', 'data-width' => '100%','data-live-search'=>'true', 'id' => 'buyer_filter', 'required', 'onchange' => 'getCustomersList(this)')) }}
