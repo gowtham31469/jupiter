@@ -53,6 +53,8 @@ class InvoiceController extends Controller
                             ->distinct('invoice.id')
                             ->get();
         return view('erp.Invoice.invoice-list',['invoices'=>$invoices,'companies' => $companies]);
+
+        
 	}
      /**
      * Show the application dashboard.

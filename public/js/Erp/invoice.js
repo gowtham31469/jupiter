@@ -24,9 +24,14 @@
                 {
                     $(data.po_list).each(function(index, value)
                     {
-                        html += '<tr><td><input name="po_select" value="'+value.id +'" id="'+value.id +'" class="po-select" type="checkbox" /></td><td>'+value.erp_id +'</td><td>'+value.po_no+'</td><td>'+value.buyer_name+'</td></tr>';
+                        html += '<tr><td><input name="po_select" value="'+value.id +'" id="'+value.id +'" class="po-select" type="checkbox" /></td><td width="150">'+value.erp_id +'</td><td width="90">'+value.po_no+'</td><td width="100">'+value.buyer_name+'</td></tr>';
                     });
-                    $('.dynamic-table').html('<form id="po-list-form"><table class="table table-fixed"><thead><tr><th></th><th style="padding-left: 30px;">ERP ID</th><th style="padding-left: 20px;">PO Number</th><th style="padding-left: 10px;">Buyer</th></tr></thead><tbody>'+html+'</tbody></table></form>');
+                    // $('.dynamic-table').html('<form id="po-list-form"><table class="table table-fixed"><thead><tr><th></th><th style="padding-left: 30px;">ERP ID</th><th style="padding-left: 20px;">PO Number</th><th style="padding-left: 10px;">Buyer</th></tr></thead><tbody>'+html+'</tbody></table></form>');
+
+                    $('.dynamic-table').html('<form id="po-list-form"><table class="table table-bordered table-erp-list"><thead><tr><th style="border-bottom:1px white;border-right:1px white;"></th><th width="100" style="border-bottom:1px black;border-top:1px black;">ERP ID</th><th width="100" style="border-bottom:1px black;border-top:1px black;">PO Number</th><th width="100" style="border-bottom:1px black;border-top:1px black;">Buyer</th></tr></thead><tbody><tr><td width="500" colspan="4"><div><table>'+html+'</table></div></td></tr></tbody></table></form>');
+
+                   
+
                     $('.po-list').removeClass('hidden')
                     $('.dynamic-table tbody').on('change', 'input[type="checkbox"]', function(){
                     $('.po-select').not(this).prop('checked', false);  

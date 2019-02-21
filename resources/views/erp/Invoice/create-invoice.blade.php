@@ -12,23 +12,30 @@
        padding: 0 !important;
        margin: 0 !important;
     }
-    .table-fixed {
-      width: 100%;
+    .table-erp-list {
+      /*width: 100%;*/
       /*background-color: #f3f3f3;*/
     }
-    .table-fixed tbody {
-      height: 130px;
-      overflow-y: auto;
-      width: 100%;
+    .table-erp-list tbody div{
+        overflow:scroll;
+        height:100px;
+        align-content: center;
     }
-    .table-fixed thead, .table-fixed tbody {
+    .table-erp-list thead {
       display: block;
     }
-
-    table.table-bordered th:last-child, table.table-bordered td:last-child {
-        border-right-width: 1px !important; 
+    
+    .invoice-card {
+        box-shadow: 0px 0px 0px !important;
     }
-
+/*    .table-erp-list tbody {
+      display: block;
+    }*/
+/*   
+/*table.table-bordered th:last-child, table.table-bordered td:last-child {*/*/
+        /*border-right-width: 1px !important; */
+    }
+/**/
     .delivery-at-link a:hover {
       background-color: blue !important;
     }
@@ -48,11 +55,14 @@
         transition: transform 0.7s;
         
     }*/
+    .table-erp-list{
+
+    }
    
 </style>
 <ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
-<li><a href="{{ url('/erp/invoice') }}" class="">Invoice List</a></li>
 <li><a href="{{ url('/erp/create-invoice') }}" class="active">Create Invoice</a></li>
+<li><a href="{{ url('/erp/invoice') }}" class="">Invoice List</a></li>
 </ul>
 @endsection
 @section('content')
@@ -71,7 +81,7 @@
             <!-- <div class="card"> -->
                <form id="invoice_form">
                <h4 class="text-center">Invoice Details</h4>
-                <div class="col-xs-2">
+        <!--    <div class="col-xs-2">
                     <label for="invoice-no" style="padding-top: 12px;margin-left: -12px;">No</label>
                 </div>
                 <div class="col-xs-2">
@@ -85,37 +95,60 @@
                     <div class="col-xs-2">
                         <input type="text" class="form-control invoice-date" id="invoice-date" name="invoice-date" style="margin-left: -412px;width: 136px;;" name="invoice-date" id="invoice-date" value ="{{ now('Asia/Kolkata')->format('d-m-Y') }}" readonly="">
                     </div>
-                </div>
-                <div class="row">
-                <div class="col-xs-2">
-                    <label for="customer" style="padding-top: 12px;">Customer</label>     
-                </div>
-                <div class="col-xs-3" style="margin-left:-135px;padding-top: 5px;">
-                    <select class="selectpicker" data-show-subtext="true" data-live-search="true" id="customer" name="customer" required="" onchange="dynamicTable()">
-                        <option value="">Select Customers</option> 
-                        @foreach($customers as $vals)
-                            <option title="{{$vals->company_name}}" value="{{$vals->id}}">{{$vals->company_name}}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-                </div>
-                <div class="row po-list hidden">
-                <div class="col-xs-2">
-                    <label for="erp-orders" style="padding-top: 12px;">Orders</label>
-                    
-                </div>
-                <!-- <div class="panel"> -->
-                <div class="dynamic-table pull-left" style="margin-left:-120px; width:285px;margin-top: 6px;border-radius: 5px;">
-                </div>
-                </div>
-                <br>
-                <br>
+                </div> -->
+                <!--           <div class="col-xs-2">
+                            <label for="customer" style="padding-top: 12px;">Customer</label>     
+                        </div>
+                        <div class="col-xs-3" style="margin-left:-135px;padding-top: 5px;">
+                            <select class="selectpicker" data-show-subtext="true" data-live-search="true" id="customer" name="customer" required="" onchange="dynamicTable()">
+                                <option value="">Select Customers</option> 
+                                @foreach($customers as $vals)
+                                    <option title="{{$vals->company_name}}" value="{{$vals->id}}">{{$vals->company_name}}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div> -->
+                    <!--     <div class="row po-list hidden">
+                        <div class="col-xs-2">
+                            <label for="erp-orders" style="padding-top: 12px;">Orders</label>
+                            
+                        </div> -->
+                        <!-- <div class="panel"> -->
+                     <!--    <div class="dynamic-table pull-left" style="margin-left:-120px; width:285px;margin-top: 6px;border-radius: 5px;">
+                        </div>
+                        </div> -->
+
+                <div class="card invoice-card">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="invoice-no">No</label>
+                            <input type="text" class="form-control" name="invoice-no" id="invoice-no" value="{{$invID}}">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="invoice-date">Date</label>
+                            <input type="text" class="form-control invoice-date" id="invoice-date" name="invoice-date" name="invoice-date" id="invoice-date" value ="{{ now('Asia/Kolkata')->format('d-m-Y') }}" readonly="">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="invoice-no">Customer</label>
+                            <select class="selectpicker" data-show-subtext="true" data-live-search="true" id="customer" name="customer" required="" onchange="dynamicTable()">
+                                <option value="">Select Customers</option> 
+                                @foreach($customers as $vals)
+                                    <option title="{{$vals->company_name}}" value="{{$vals->id}}">{{$vals->company_name}}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3 po-list hidden">
+                            <label for="invoice-no">Orders</label>
+                            <span class="dynamic-table">
+                            </span>
+                        </div>
+                    </div>
+                </div>              
                 <div class="row">
                     <div class="order-heading hidden"> 
                         <u><strong style="margin-left: 16px;">ORDER DETAILS :</strong></u>
                     </div>                     
-                    
                     <div class="table-responsive order-details hidden">
                     
                     </div> 

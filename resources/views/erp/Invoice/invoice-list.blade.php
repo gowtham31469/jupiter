@@ -20,8 +20,8 @@
     }*/
 </style>
 <ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
+<li><a href="{{ url('/erp/create-invoice') }}" class="">Create Invoice</a></li>
 <li><a href="{{ url('/erp/invoice') }}" class="active">Invoice List</a></li>
-    <li><a href="{{ url('/erp/create-invoice') }}" class="">Create Invoice</a></li>
 </ul>
 
 @endsection
