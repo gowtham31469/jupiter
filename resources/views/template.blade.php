@@ -60,8 +60,8 @@
                             <td width="150" style="font-size: 9px; border-left:1px solid black;border-right:1px solid black;"><span ><strong>{{$inv_details[0]['company_name']}}</strong></span></td>
                         </tr>
                         <tr>
-                            <td width="180"><p>{{$bill_to->address}}</p></td>
-                            <td width="150"  style="border-left:1px solid black"><p>{{$inv_details[0]['address']}} ,{{$inv_details[0]['pincode']}}</p></td>
+                            <td width="180"><p>{{$bill_to->address}} , {{$bill_to->pincode}}</p></td>
+                            <td width="150"  style="border-left:1px solid black"><p>{{$ship_to->address}} ,{{$ship_to->pincode}}</p></td>
                             <td width="54" style="border-left:1px solid black"><span> Date</span><p> Invoice No</p></td>
                             <td width="54" style="border-left:1px solid black;"><span> {{$inv_details[0]['inv_date']}}</span><p> {{$inv_details[0]['invoice_id']}}</p></td>
                         </tr>
@@ -112,7 +112,7 @@
                     @if($itemName == $data['item_name'])
                         
                         <tr>                    
-                                <td  width="25">{{++$i}}</td>
+                                <td style="text-align:left;" width="25">{{++$i}}</td>
                                 <td width="60">{{$data['po_no']}}</td>
                                 <td width="62">{{$data['style_no']}}</td>
                                 <td width="60">{{$data['buyer_po_number']}}</td>
@@ -135,7 +135,7 @@
                             <td style="text-align:right;" width="185" colspan="3"><strong><span> HSNCode :</span><span> {{$data['hsn_code']}}</span></strong></td>
                         </tr>
                         <tr>                    
-                                <td  width="25">{{++$i}}</td>
+                                <td style="text-align:left;" width="25">{{++$i}}</td>
                                 <!-- <td>{{$data['id']}}</td> -->
                                 <td width="60">{{$data['po_no']}}</td>
                                 <td width="62">{{$data['style_no']}}</td>
@@ -289,7 +289,7 @@
                     <tr>
                         <td width="408">
                             <span>Delivery at :</span><br>
-                            <span>{{$inv_details[0]['address']}},{{$inv_details[0]['pincode']}}</span>
+                            <span>{{$ship_to->address}},{{$ship_to->pincode}}</span>
                         </td>
                     </tr>
                     </table>
