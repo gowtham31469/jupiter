@@ -631,6 +631,9 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::get('job-manager/jobcard-details', 'ErpUser\Jobmanager\JobManagerController@getJobcardDetailsById');  
 	Route::put('job-manager/update-jobcard-details', 'ErpUser\Jobmanager\JobManagerController@updateJobcardById'); 
 	Route::get('job-manager/script-update-order-type', 'ErpUser\Jobmanager\JobManagerController@scriptUpdateOrderType');
+	Route::get('job-manager/get-customers-list', 'ErpUser\Jobmanager\JobManagerController@getCustomersListByBuyerId'); 
+	Route::get('job-manager/get-jobcard-id-list', 'ErpUser\Jobmanager\JobManagerController@getJobcardIdListByBuyerCustomerId'); 
+	Route::get('job-manager/get-jobcards-list', 'ErpUser\Jobmanager\JobManagerController@getJobcardsListByBuyerCustomerJobcardId'); 
 
 	/* Routes for ERP-Settings Management */
 	Route::get('/settings', 'ErpUser\ERPSettings\ERPSettingsController@home')->name('erp-settings');

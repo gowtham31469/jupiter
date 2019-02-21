@@ -161,6 +161,19 @@ $(document).ready(function() {
             updateJobcard();
         }
     })
+
+    /** Filter jobcard list form validation **/
+    $('#jobcard_filter_form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented())
+        {
+
+        }
+        else
+        {
+            e.preventDefault();
+            getJobcardsList();
+        }
+    })
 });
 /* End of document.ready() */
 
@@ -169,7 +182,7 @@ $(document).ready(function() {
  *  @author <Praveen> [praveen@wizroots.com]
  */
 function showFilter() {
-    $('.filter-window-erp').toggle();
+    $('.filter-window-jobcard').toggle();
 }
 
 /**
@@ -1699,7 +1712,6 @@ function updateJobcard(formData)
                 $('.snackbar_span').html("Jobcard Updated Successfully");
                 showSnackbar();
                 $('#jobcardUpdationModalCenter').modal('hide');
-                location.reload();
                 window.open(
                     base_url+JSON.parse(resp),
                     '_blank' // <- This is what makes it open in a new window.
@@ -1723,3 +1735,194 @@ function updateJobcard(formData)
     })
 }
 
+/**
+ * Get customers list based on buyer selection
+ * @param buyer_id
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function getCustomersList(evt)
+{
+    try {
+        let selected_buyer_id = evt.value;
+        if (selected_buyer_id != '') 
+        {
+            $.ajax({
+                url: base_url + "/erp/job-manager/get-customers-list",
+                type: 'GET',
+                data: {
+                    selected_buyer_id: selected_buyer_id
+                },
+                tryCount: 0,
+                retryLimit: 2,
+                dataType: "json",
+                beforeSend: function () {
+                    $(".loader").show();
+                },
+                statusCode: {
+                    200: function(data) {
+                        var html = '<option value="">SELECT A CUSTOMER</option>';
+                        /** [ customers list selectpicker value populating ] */
+                        $.each(data.customers_list, function (key, item) {
+                            html += '<option value="' + key + '">' + item + '</option>';
+                        });
+                        $('#customer_filter').html(html);
+                        $('#customer_filter').selectpicker('refresh');
+                    },
+                    400: function() {
+                        $('.snackbar_span').html("Parameter is missing !!!");
+                        showSnackbar();
+                    },
+               },
+                error: function (errorXHR, errorStatus, errorThrown) {
+                    this.tryCount++;
+                    if (this.tryCount <= this.retryLimit) {
+                        $.ajax(this);
+                        return;
+                    }
+                },
+                complete: function () {
+                    $(".loader").hide();
+                }
+            })
+        }
+        else
+        {
+            $('#customer_filter').html('<option value="">SELECT A CUSTOMER</option>');
+            $('#customer_filter').selectpicker('refresh');
+            $('#jobcard_id_filter').html('<option value="">SELECT A JOBCARD ID</option>');
+            $('#jobcard_id_filter').selectpicker('refresh');
+        }
+    } catch (e) {
+        console.log("Error:"+e)
+    }
+}
+
+/**
+ * Get jobcard id list based on buyer and customer selection
+ * @param buyer_id, customer_id
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function getJobcardIDList(evt)
+{
+    try {
+        let selected_customer_id = evt.value;
+        let selected_buyer_id    = $('#buyer_filter option:selected').val();
+        if (selected_customer_id != '') 
+        {
+            $.ajax({
+                url: base_url + "/erp/job-manager/get-jobcard-id-list",
+                type: 'GET',
+                data: {
+                    selected_customer_id: selected_customer_id,
+                    selected_buyer_id:selected_buyer_id
+                },
+                tryCount: 0,
+                retryLimit: 2,
+                dataType: "json",
+                beforeSend: function () {
+                    $(".loader").show();
+                },
+                statusCode: {
+                    200: function(data) {
+                        var html = '<option value="">SELECT A JOBCARD ID</option>';
+                        /** [ jobcard id list selectpicker value populating ] */
+                        $.each(data.jobcard_id_list, function (key, item) {
+                            html += '<option value="' + key + '">' + item + '</option>';
+                        });
+                        $('#jobcard_id_filter').html(html);
+                        $('#jobcard_id_filter').selectpicker('refresh');
+                    },
+                    400: function() {
+                        $('.snackbar_span').html("Parameter is missing !!!");
+                        showSnackbar();
+                    },
+               },
+                error: function (errorXHR, errorStatus, errorThrown) {
+                    this.tryCount++;
+                    if (this.tryCount <= this.retryLimit) {
+                        $.ajax(this);
+                        return;
+                    }
+                },
+                complete: function () {
+                    $(".loader").hide();
+                }
+            })
+        }
+        else
+        {
+            $('#jobcard_id_filter').html('<option value="">SELECT A JOBCARD ID</option>');
+            $('#jobcard_id_filter').selectpicker('refresh');
+        }
+    } catch (e) {
+        console.log("Error:"+e)
+    }
+}
+/**
+ * Get jobcard list based on buyer,customer and jobcard id selection
+ * @param buyer_id, customer_id and jobcard_id
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+
+function getJobcardsList()
+{
+    try {
+        let selected_buyer_id    = $('#buyer_filter option:selected').val();
+        let selected_customer_id = $('#customer_filter option:selected').val();
+        let selected_jobcard_id  = $('#jobcard_id_filter option:selected').val();
+        if (selected_customer_id != '') 
+        {
+            $.ajax({
+                url: base_url + "/erp/job-manager/get-jobcards-list",
+                type: 'GET',
+                data: {
+                    selected_customer_id: selected_customer_id,
+                    selected_buyer_id:selected_buyer_id,
+                    selected_jobcard_id:selected_jobcard_id
+                },
+                tryCount: 0,
+                retryLimit: 2,
+                dataType: "json",
+                beforeSend: function () {
+                    $(".loader").show();
+                },
+                statusCode: {
+                    200: function(data) {
+                        var html = '<tr id="'+data.jobcards_list.jobcard_id+'">\
+                        <td>1</td>\
+                        <td>'+data.jobcards_list.work_order_id+'</td>\
+                        <td>'+data.jobcards_list.company_name+'</td>\
+                        <td>'+data.jobcards_list.buyer_name+'</td>\
+                        <td><a href="#"><i class="fa fa-pencil fa-button edit-jobcard filterbtn options" title="Edit Jobcard" data-placement="left"></i></a></td>\
+                        </tr>';
+                        $('#jobcard_list_table_body').html(html);            
+                    },
+                    400: function() {
+                        $('.snackbar_span').html("Parameter is missing !!!");
+                        showSnackbar();
+                    },
+               },
+                error: function (errorXHR, errorStatus, errorThrown) {
+                    this.tryCount++;
+                    if (this.tryCount <= this.retryLimit) {
+                        $.ajax(this);
+                        return;
+                    }
+                },
+                complete: function () {
+                    $(".loader").hide();
+                }
+            })
+        }
+        else
+        {
+            $('#jobcard_id_filter').html('<option value="">SELECT A JOBCARD ID</option>');
+            $('#jobcard_id_filter').selectpicker('refresh');
+        }
+    } catch (e) {
+        console.log("Error:"+e)
+    }
+}
