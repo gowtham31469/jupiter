@@ -23,13 +23,13 @@
 
 <ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
 	<li><a href="{{ route('jobcard-manager') }}">Create Jobcard</a></li>
-	<li><a href="javascript:void(0)"  class="active">Jobcards List</a></li>
+	<li><a href="{{ route('jobcards-list') }}"  class="active">Jobcards List</a></li>
 </ul>
 
 @endsection @section('content')
 <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-12 col-md-12" style="padding-top: 25px;">
+            <div class="col-xs-12 col-sm-12" style="padding-top: 25px;">
               <div class="top-content">
               </div>
               <div class="main-sub-menu">
@@ -39,11 +39,39 @@
               </div>
              <div class="clearfix"></div>
                 <div class="main-content">
-                    <div class="loader">
+                    <div class="loader" style="display:none;">
 						<div class=" fa-3x">
                             <i class="fa fa-spinner fa-pulse"></i>
                         </div>
 					</div>
+					<div class="filter-window-jobcard-list">
+					{!! Form::open(['id' => 'jobcard_filter_form','data-toggle' => 'validator','role' => 'form']) !!}
+					<h5 style="margin-left:15px;"><strong>Jobcard List Filter</strong></h5>
+					<div class="col-xs-6 col-sm-4">
+					    <div class="form-group has-feedback">
+							{{ Form::select('buyer_filter', (['' => 'SELECT A BUYER']+ $buyers), '', array('class' => 'form-control input-sm selectpicker', 'data-width' => '100%','data-live-search'=>'true', 'id' => 'buyer_filter', 'required', 'onchange' => 'getCustomersList(this)')) }}
+						    <div class="help-block with-errors"></div>
+					    </div>
+					</div>
+					<div class="col-xs-6 col-sm-4">
+						<div class="form-group has-feedback">
+							{{ Form::select('customer_filter', (['' => 'SELECT A CUSTOMER']), '', array('class' => 'form-control input-sm selectpicker', 'data-width' => '100%','data-live-search'=>'true', 'id' => 'customer_filter', 'required', 'onchange' => 'getJobcardIDList(this)')) }}
+						    <div class="help-block with-errors"></div>
+					    </div>
+					</div>
+					<div class="col-xs-6 col-sm-4">
+						<div class="form-group has-feedback">
+							{{ Form::select('jobcard_id_filter',(['' => 'SELECT A JOBCARD ID']),'',array('class' => 'form-control input-sm selectpicker', 'data-width' => '100%','data-live-search'=>'true','id' => 'jobcard_id_filter','required')) }}
+							<div class="help-block with-errors"></div>
+						</div>
+					</div>
+						<div class="filter-actions-erp">
+							{!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm pull-right','type' => 'submit', 'style' => 'margin-top: 0.5em;margin-right: 15px;'] ) !!}
+							<div class="clearfix"></div>
+						</div>
+					{!! Form::close() !!}
+					</div>
+					<br>
                     <div class="col" id="jobcard-lists-table">
                         <input type="hidden" value="{{ session()->get('company') }}" id="company_id">
                         <input type="hidden" value="{{ session()->get('company_name') }}" id="company_name">
@@ -57,16 +85,7 @@
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @foreach($jobcards as $jobcard)
-                                    <tr id="{{$jobcard->id}}">
-                                        <td>{{$loop->iteration}}</td>
-                                        <td>{{$jobcard->work_order_id}}</td>
-                                        <td>{{$jobcard->company_name}}</td>
-                                        <td>{{$jobcard->buyer_name}}</td>
-                                        <td><a href="#"><i class="fa fa-pencil fa-button edit-jobcard filterbtn options" title="Edit Jobcard" data-placement="left"></i></a></td>
-                                    </tr>
-                                    @endforeach
+                                <tbody id="jobcard_list_table_body">
                                 </tbody>
                             </table>
 				    </div>
@@ -471,6 +490,12 @@ $(document).ready(function() {
     /** [ Toggle bootstrap tooltip ] */
 	$('.edit-jobcard').tooltip('show')
 	$('.edit-jobcard').tooltip('toggle')
+
+	/** [ Refresh  bootstrap selectpicker and fprm ] */
+	$('#jobcard_filter_form').trigger("reset");
+	$('#buyer_filter').selectpicker('refresh');
+
+
 	/** [ Make companies card active ] */
 	$('div.buyers-card').click(function(){
 

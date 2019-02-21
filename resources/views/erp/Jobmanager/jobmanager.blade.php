@@ -226,7 +226,7 @@
 @section('navbar')
 
 <ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
-	<li><a href="javascript:void(0)" class="active">Create Jobcard</a></li>
+	<li><a href="{{ route('jobcard-manager') }}" class="active">Create Jobcard</a></li>
 	<li><a href="{{ route('jobcards-list') }}">Jobcards List</a></li>
 </ul>
 
@@ -249,7 +249,7 @@
               </div>
           <div class="clearfix"></div>
                 <div class="main-content">
-                    <div class="loader">
+                    <div class="loader"  style="display:none;">
 					    <div class=" fa-3x">
 						  <i class="fa fa-spinner fa-pulse"></i>
 						</div>

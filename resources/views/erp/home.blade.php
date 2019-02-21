@@ -37,7 +37,7 @@
             </div>
             <div class="case-wrapper" title="Item" draggable="false">
 				<?php if(in_array('INVOICE MANAGER', $roles) || Auth::guard('erpuser')->user()->is_admin) { ?>
-						<a href="{{ url('/erp/invoice') }}">
+						<a href="{{ url('/erp/create-invoice') }}">
 				<?php } ?>
                 			
                 <div class="app-icon" style="background-color: #2196F3; position: relative; left: 0px; top: 0px; opacity: 1; transform: rotate(0deg);" title="Item"><i class="fa fa-file-text-o" title="Item" style=""></i></div>
