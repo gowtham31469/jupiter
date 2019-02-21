@@ -24,7 +24,7 @@
     .table-erp-list thead {
       display: block;
     }
-    
+
     .invoice-card {
         box-shadow: 0px 0px 0px !important;
     }
@@ -333,15 +333,23 @@
 
 <script>    
 $(document).ready(function(){
-$('body').on('focus',".invoice-date", function(){
-    
-    $(this).datepicker({
-        autoclose: true,
-        format:'dd-mm-yyyy'
-    });
-});
 
-/** [ Make companies card active ] */
+    // disable mousewheel on a input number field when in focus
+    // (to prevent Cromium browsers change the value when scrolling)
+
+    $(document).on("wheel", "input[type=number]", function (e) {
+        $(this).blur();
+    });
+
+    $('body').on('focus',".invoice-date", function(){
+        
+        $(this).datepicker({
+            autoclose: true,
+            format:'dd-mm-yyyy'
+        });
+    });
+
+    /** [ Make companies card active ] */
     $('div.buyers-card').click(function(){
     
       $('div.buyers-card').removeClass("active");
