@@ -2124,7 +2124,7 @@ function updateArtwork(obj)
                     
                     if((TemplateName == "TCL1" && zone=="CE") ||(TemplateName == "TCL2" && zone=="CE") || (TemplateName == "TSL1" && zone=="CE") || (TemplateName == "THL1" && zone=="CE"))
                     {
-                        var qty="Cases per carton";
+                        var qty="Cases Per Carton";
                         var barcode_tr="ITF Barcode";
                         var tpnd_tr="ORMS TPND";
                         var th_tr="";
@@ -2145,7 +2145,7 @@ function updateArtwork(obj)
                     }
                     else if((TemplateName == "TCL1" && zone=="UK") ||(TemplateName == "TCL2" && zone=="UK") || (TemplateName == "TSL1" && zone=="UK") || (TemplateName == "THL1" && zone=="UK"))
                     {
-                        var qty="Units per carton";
+                        var qty="Units Per Carton";
                         var barcode_tr="ITF Barcode";
                         var tpnd_tr="TPND";
                         var th_tr="";
