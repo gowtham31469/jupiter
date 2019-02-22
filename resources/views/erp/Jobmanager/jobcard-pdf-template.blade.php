@@ -2,8 +2,6 @@
 <head>
 </head>
 <style>
-
-
 td {
     height: 12px;
     text-align: left !important;
@@ -13,14 +11,12 @@ th {
     height: 12px;
     text-align: left !important;
     font-weight: bold;
-    /*background-color: #D3D3D3;*/
     background-color: #DCDCDC;
 }
 .single-th-row th {
     background-color: #FFFFFF;
 }
 .single-section td {
-    /*background-color: #D3D3D3;*/
     background-color:#DCDCDC;
 }
 
@@ -56,79 +52,70 @@ th {
 
     <table cellspacing="0" cellpadding="5" style="table-layout: fixed;width: 100%;border-collapse: collapse;" nobr="true">
         <tbody>
-<!--             <tr >
-                <td colspan="8"  class="space-td" style="border-left:1px solid black;border-right:1px solid black;"></td>
-            </tr> -->
             <tr nobr="true">
-                <th style="border-left:1px solid black;">CustName</th>
+                <th style="border-left:1px solid #6f7072;">CustName</th>
                 <td  id="customer">{{ ucwords($customer->customer_name) }}</td>
                 <th>StyleNum</th>
                 <td id="style_no">{{ $style_no }}</td>
                 <th width="10%">OrderType</th>
                 <td width="15%" id="order_type">{{ $order_type }}</td>
                 <th width="10%">Inv No</th>
-                <td width="15%" style="border-right:1px solid black;"id="inv_no">{{ $inv_no }}</td>
+                <td width="15%" style="border-right:1px solid #6f7072;"id="inv_no">{{ $inv_no }}</td>
             </tr>
             <tr nobr="true">
-                <th style="border-left:1px solid black;border-bottom:1px solid white;">Buyer</th>
+                <th style="border-left:1px solid #6f7072;border-bottom:1px solid white;">Buyer</th>
                 <td  style="border-bottom:1px solid white;"id="buyer">{{ $buyer->buyer_name }}</td>
                 <th style="border-bottom:1px solid white;">Reference</th>
                 <td style="border-bottom:1px solid white;" id="reference">{{ $reference }}</td>
                 <th width="10%" style="border-bottom:1px solid white;">DispMode</th>
                 <td width="15%" style="border-bottom:1px solid white;" id="disp_mode">{{ ucwords($disp_mode) }}</td>
                 <th width="10%" style="border-bottom:1px solid white;">Inv Dt</th>
-                <td width="15%" style="border-right:1px solid black;" id="invoice_date">{{ $invoice_date }}</td>
+                <td width="15%" style="border-right:1px solid #6f7072;" id="invoice_date">{{ $invoice_date }}</td>
 
             </tr>
         </tbody>
     </table>
-
-    <!-- <table>
-        <tr>
-            <td style="border-right:1px solid black;border-left:1px solid black;" rowspan="1"></td>
-        </tr>
-    </table> -->
    
     <table cellspacing="0" cellpadding="3" style="table-layout: fixed;width: 100%;border-collapse: collapse;" nobr="true">
             <tr nobr="true">
-                <th  style="border-left:1px solid black;">OrderDt</th>
+                <th  style="border-left:1px solid #6f7072;">OrderDt</th>
                 <td  id="order_date">{{ $order_date }}</td>
                 <th >Length MM</th>
                 <td  id="length">{{ $length }}</td>
                 <th width="10%">RepeatGap</th>
                 <td width="15%" id="repeat_gap">{{ $repeat_gap }}</td>
                 <th width="10%">Machine</th>
-                <td width="15%" style="border-right:1px solid black;" id="machine">{{ $machine }}</td>
+                <td width="15%" style="border-right:1px solid #6f7072;" id="machine">{{ $machine }}</td>
             </tr>
             <tr nobr="true">
-                <th  style="border-left:1px solid black;">CusDelDt</th>
+                <th  style="border-left:1px solid #6f7072;">CusDelDt</th>
                 <td  id="cus_del_date">{{ $cus_del_date }}</td>
                 <th >Width MM</th>
                 <td  id="width">{{ $width }}</td>
                 <th width="10%">RollWidth</th>
                 <td width="15%" id="roll_width">{{ $roll_width }}</td>
                 <th width="10%">FilmNum</th>
-                <td width="15%" style="border-right:1px solid black;" id="film_no">{{ $film_no }}</td>
+                <td width="15%" style="border-right:1px solid #6f7072;" id="film_no">{{ $film_no }}</td>
             </tr>
             <tr nobr="true">
-                <th  style="border-left:1px solid black;">PrintColors</th>
+                <th  style="border-left:1px solid #6f7072;">PrintColors</th>
                 <td  id="print_color">{{ ucwords($print_color) }}</td>
                 <th >LengthSideDim</th>
                 <td  id="length_side">{{ $length_side }}</td>
                 <th width="10%">Excess %</th>
                 <td width="15%" id="excess">{{ $excess }}</td>
                 <th width="10%">TeethNum</th>
-                <td width="15%" style="border-right:1px solid black;" id="teeth_no">{{ $teeth_no }}</td>
+                <td width="15%" style="border-right:1px solid #6f7072;" id="teeth_no">{{ $teeth_no }}</td>
             </tr>
             <tr nobr="true">
-                <th  style="border-left:1px solid black;border-bottom:1px solid black;"></th>
-                <td  style="border-bottom:1px solid black;" id="print_color"></td>
-                <th  style="border-bottom:1px solid black;">NoOfSticker</th>
-                <td  style="border-bottom:1px solid black;" id="no_sticker">{{ $no_sticker }}</td>
-                <th width="10%" style="border-bottom:1px solid black;">Material</th>
-                <td width="15%" style="border-bottom:1px solid black;" id="material">{{ $material }}</td>
-                <th width="10%" style="border-bottom:1px solid black;">FinishType</th>
-                <td width="15%" style="border-right:1px solid black;border-bottom:1px solid black;" id="finish_type">{{ $finish_type }}</td>
+                <th  style="border-left:1px solid #6f7072;border-bottom:1px solid #6f7072;"></th>
+                <td  style="border-bottom:1px solid #6f7072;" id="print_color"></td>
+                <th  style="border-bottom:1px solid #6f7072;">NoOfSticker</th>
+                <td  style="border-bottom:1px solid #6f7072;" id="no_sticker">{{ $no_sticker }}</td>
+                <th width="10%" style="border-bottom:1px solid #6f7072;">Material</th>
+                <td width="15%" style="border-bottom:1px solid #6f7072;" id="material">{{ $material }}</td>
+                <th width="10%" style="border-bottom:1px solid #6f7072;">FinishType</th>
+                <td width="15%" style="border-right:1px solid #6f7072;border-bottom:1px solid #6f7072;" id="finish_type">{{ $finish_type }}</td>
             </tr>
     </table>
 
@@ -206,7 +193,6 @@ th {
                                     @endforeach
                                 </tr>
                                 <tr class="single-th-row" nobr="true">
-                                    <!-- @php print_r(count($table_data['erp_id'])); @endphp -->
                                     <th nobr="true"><strong>SIZE</strong></th>
                                     @foreach ($table_data['erp_id'] as $key => $qty)
                                         <th nobr="true"><strong>O.QNT</strong></th>
@@ -251,18 +237,6 @@ th {
                                     </tr>
                                 @endforeach 
                                 <tr nobr="true" class="single-total">
-                                <!-- @foreach ($table_data['size'] as $size => $quantities)
-                                    <td><strong>TOTAL</strong></td>
-                                    @foreach ($quantities as $key => $qty)
-                                        <td><strong>{{ $sumArray[$key] }}</strong></td>
-                                        <td></td>
-                                    @endforeach
-                                    <td><strong>{{ $single_final_total }}</strong></td>
-                                    <td><strong>{{ $single_excess_total }}</strong></td>
-                                    <td></td>
-                                    <td></td>
-                                @endforeach -->
-
                                     <td nobr="true"><strong>TOTAL</strong></td>
                                     @foreach ($sumArray as $key => $qty)
                                             <td><strong>{{ $qty }}</strong></td>

@@ -63,15 +63,15 @@ class JobcardPDFHeaderFooter extends \TCPDF
         $this->SetFont('helvetica', '', 8);
         $header = '<table width="100%" cellspacing="0" cellpadding="5" border="0">
                         <tr nobr="true">
-                            <td width="35%" style="border-top:1px solid black;border-left:1px solid black;border-bottom:1px solid black;font-size:18px;"><strong id="jc_company_name" >'.$this->company->company.'</strong>
+                            <td width="35%" style="border-top:1px solid #6f7072;border-left:1px solid #6f7072;border-bottom:1px solid #6f7072;font-size:18px;"><strong id="jc_company_name" >'.$this->company->company.'</strong>
                                 <span>'.$this->company->company_address.'</span>
                             </td>
-                            <td width="5%" style="border-top:1px solid black;border-bottom:1px solid black;"></td>
-                            <td width="20%" style="border-top:1px solid black;border-bottom:1px solid black;">
+                            <td width="5%" style="border-top:1px solid #6f7072;border-bottom:1px solid #6f7072;"></td>
+                            <td width="20%" style="border-top:1px solid #6f7072;border-bottom:1px solid #6f7072;">
                               <strong bgcolor="#DCDCDC" style="letter-spacing:+0.254mm;text-align:center; align:top;font-size:22px;">WORKORDER</strong>
                             </td>
-                            <td width="5%" style="border-top:1px solid black;border-bottom:1px solid black;"></td>
-                            <td width="35%" style="border-top:1px solid black;border-right:1px solid black;border-bottom:1px solid black;">
+                            <td width="5%" style="border-top:1px solid #6f7072;border-bottom:1px solid #6f7072;"></td>
+                            <td width="35%" style="border-top:1px solid #6f7072;border-right:1px solid #6f7072;border-bottom:1px solid #6f7072;">
                             <table cellspacing="0" cellpadding="0">
                                 <tbody>
                                     <tr width="100%">
@@ -101,7 +101,6 @@ class JobcardPDFHeaderFooter extends \TCPDF
                 </table>';
         // Title
         $this->writeHTML($header, false, false, true, false, '');
-        //$this->writeHTML("<hr>", false, false, true, false, '');
 
     }
 
@@ -114,7 +113,7 @@ class JobcardPDFHeaderFooter extends \TCPDF
         $this->SetY(-30);
         // Set font
         $this->SetFont('helvetica', '', 8);
-        // $this->writeHTML("<hr>", false, false, true, false, '');
+        
         $footer = '<style>
 
                     td {
@@ -140,34 +139,34 @@ class JobcardPDFHeaderFooter extends \TCPDF
                     </table>
                     <table cellspacing="0" cellpadding="3" style="table-layout: fixed;width: 100%;border-collapse: collapse;" nobr="true">
                             <tr nobr="true">
-                                <th style="border-left:1px solid black;border-top:1px solid black;">CompiledBy</th>
-                                <td  id="customer" style="border-top:1px solid black;">'.$this->compiled_by.'</td>
-                                <th style="border-top:1px solid black;">BarcodeRead</th>
-                                <td id="style_no" style="border-top:1px solid black;">'.$this->barcode_read.'</td>
-                                <th style="border-top:1px solid black;">Operator</th>
-                                <td  id="order_type" style="border-top:1px solid black;">'.$this->operator.'</td>
-                                <th  style="border-top:1px solid black;">Checker</th>
-                                <td  style="border-right:1px solid black;border-top:1px solid black;">'.$this->checker.'</td>
+                                <th style="border:1px solid #6f7072;">CompiledBy</th>
+                                <td  id="customer" style="border:1px solid #6f7072;">'.$this->compiled_by.'</td>
+                                <th style="border:1px solid #6f7072;">BarcodeRead</th>
+                                <td id="style_no" style="border:1px solid #6f7072;">'.$this->barcode_read.'</td>
+                                <th style="border:1px solid #6f7072;">Operator</th>
+                                <td  id="order_type" style="border:1px solid #6f7072;">'.$this->operator.'</td>
+                                <th  style="border:1px solid #6f7072;">Checker</th>
+                                <td  style="border:1px solid #6f7072;">'.$this->checker.'</td>
                             </tr>
                             <tr nobr="true">
-                                <th style="border-left:1px solid black;">AuthorizedBy</th>
-                                <td>'.$this->authorized_by.'</td>
-                                <th>AxiconVerifier</th>
-                                <td>'.$this->axicon_verifier.'</td>
-                                <th>ApprovedBy</th>
-                                <td>'.$this->approved_by.'</td>
-                                <th>Packer</th>
-                                <td style="border-right:1px solid black;">'.$this->packer.'</td>
+                                <th style="border:1px solid #6f7072;">AuthorizedBy</th>
+                                <td style="border:1px solid #6f7072;">'.$this->authorized_by.'</td>
+                                <th style="border:1px solid #6f7072;">AxiconVerifier</th>
+                                <td style="border:1px solid #6f7072;">'.$this->axicon_verifier.'</td>
+                                <th style="border:1px solid #6f7072;">ApprovedBy</th>
+                                <td style="border:1px solid #6f7072;">'.$this->approved_by.'</td>
+                                <th style="border:1px solid #6f7072;">Packer</th>
+                                <td style="border:1px solid #6f7072;">'.$this->packer.'</td>
                             </tr>
                             <tr nobr="true">
-                                <th  style="border-left:1px solid black;border-bottom:1px solid black;">ApprovalDt</th>
-                                <td  style="border-bottom:1px solid black;">'.$this->approval_date.'</td>
-                                <th  style="border-bottom:1px solid black;">RollIssuedBy</th>
-                                <td  style="border-bottom:1px solid black;">'.$this->roll_issued_by.'</td>
-                                <th style="border-bottom:1px solid black;">Cutter</th>
-                                <td style="border-bottom:1px solid black;">'.$this->cutter.'</td>
-                                <th style="border-bottom:1px solid black;">Cartons</th>
-                                <td style="border-right:1px solid black;border-bottom:1px solid black;" >'.$this->cartons.'</td>
+                                <th  style="border:1px solid #6f7072;">ApprovalDt</th>
+                                <td  style="border:1px solid #6f7072;">'.$this->approval_date.'</td>
+                                <th  style="border:1px solid #6f7072;">RollIssuedBy</th>
+                                <td  style="border:1px solid #6f7072;">'.$this->roll_issued_by.'</td>
+                                <th style="border:1px solid #6f7072;">Cutter</th>
+                                <td style="border:1px solid #6f7072;">'.$this->cutter.'</td>
+                                <th style="border:1px solid #6f7072;">Cartons</th>
+                                <td style="border:1px solid #6f7072;" >'.$this->cartons.'</td>
                             </tr>
                 </table>
                 <table>
