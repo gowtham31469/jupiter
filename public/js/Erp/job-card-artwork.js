@@ -3,13 +3,13 @@
  * 
  * @return barcode
  */
-function openmodaltesco(modal, i,template_file,style_no,buyer_no,id) {
+function openmodaltesco(modal, i,template_file,style_no,buyer_no,id,order_type) {
 	
-		genarateArtwork("tesco_svg_modal" + i, modal,style_no,buyer_no,id);
+		genarateArtwork("tesco_svg_modal" + i, modal,style_no,buyer_no,id,order_type);
 
 }
 
-function genarateArtwork(data, name,style_no,buyer_no,id) {
+function genarateArtwork(data, name,style_no,buyer_no,id,order_type) {
 
 	var a = document.getElementById(data);
 	var svgDoc = a.contentDocument;
@@ -33,7 +33,8 @@ function genarateArtwork(data, name,style_no,buyer_no,id) {
 					ref_name: ref_name,
 					style_no: style_no,
 					buyer_no: buyer_no,
-					id: id
+					id: id,
+					order_type:order_type
 				},
 				beforeSend: function() {
 

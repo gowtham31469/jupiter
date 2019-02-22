@@ -156,11 +156,13 @@ class JobManagerController extends Controller
 		$style_no = $request['style_no'];
 		$buyer_no = $request['buyer_no'];
 		$id = $request['id'];
+		$order_type = $request['order_type'];
 		$order_details  = 	DB::table('erp_order_details')
 									->where('erp_order_details.style_no',$style_no)
 									->where('erp_order_details.erp_order_id',$id)
 									->where('erp_order_details.reference_name',$ref_name)
 									->where('erp_order_details.buyer_po_number',$buyer_no)
+									->where('erp_order_details.order_type',$order_type)
 									->orderBy('erp_order_details.id', 'desc')
 									->select('*')
 									->get();
