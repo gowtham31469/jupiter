@@ -270,8 +270,7 @@ class JobManagerController extends Controller
 
 			foreach($order_detail_ids as $key => $order_detail_id)
 			{
-				$order_details = DB::table('erp_orders')
-									->select('erp_orders.*', 'erp_order_details.*')
+				$order_details = Erp::select('erp_orders.*', 'erp_order_details.*')
 									->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
 									->where('erp_order_details.id', '=', $order_detail_id)
 									->first();
@@ -306,7 +305,7 @@ class JobManagerController extends Controller
 				}
 				else
 				{
-					$single_temp_data = DB::table('erp_orders')->select('erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_orders.id as erp_table_id', 'erp_order_details.size', 'erp_order_details.order_quantity', 'erp_order_details.reference_name', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number', 'erp_order_details.order_type', 'erp_order_details.created_at')
+					$single_temp_data = Erp::select('erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_orders.id as erp_table_id', 'erp_order_details.size', 'erp_order_details.order_quantity', 'erp_order_details.reference_name', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number', 'erp_order_details.order_type', 'erp_order_details.created_at')
 								->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
 								->where('erp_order_details.id', '=', $order_detail_id)
 								->first();

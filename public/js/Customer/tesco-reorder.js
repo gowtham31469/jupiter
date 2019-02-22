@@ -264,7 +264,7 @@ function extraQuantityTesco(type, id, name, zone, po_number, liid) {
 		success: function (data) {
 
 			if ((name == "TCL1" && zone == "CE") || (name == "TCL2" && zone == "CE") || (name == "TSL1" && zone == "CE") || (name == "THL1" && zone == "CE")) {
-				var qty = "Cases per carton";
+				var qty = "Cases Per Carton";
 				var barcode_tr = "ITF Barcode";
 				var tpnd_tr = "ORMS TPND";
 				var th_tr = "";
@@ -279,7 +279,7 @@ function extraQuantityTesco(type, id, name, zone, po_number, liid) {
 				var tpnd_tr = "TPND";
 				var th_tr = "<th>Size</th>";
 			} else if ((name == "TCL1" && zone == "UK") || (name == "TCL2" && zone == "UK") || (name == "TSL1" && zone == "UK") || (name == "THL1" && zone == "UK")) {
-				var qty = "Units per carton";
+				var qty = "Units Per Carton";
 				var barcode_tr = "ITF Barcode";
 				var tpnd_tr = "TPND";
 				var th_tr = "";
