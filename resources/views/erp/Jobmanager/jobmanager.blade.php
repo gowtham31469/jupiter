@@ -296,7 +296,7 @@
 										<td>-</td>
 									@endif
 									<?php $ref_name = str_replace(" ","",$vals->reference_name) ?>
-									<td> <object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal{{$loop->iteration}}" class="center-block tesco_svg{{$loop->iteration}}" data="{{$vals->template_file}}" type="image/svg+xml"></object><a class="artork_download" href="javascript:void(0)" onclick="openmodaltesco('{{$ref_name}}','{{ $loop->iteration }}','{{$vals->template_file}}','{{$vals->style_no}}','{{$vals->buyer_po_number}}','{{$vals->id}}','{{$vals->order_type}}')"><i class="fa fa-file-pdf-o fa-button preview-pdf" data-placement="left" title="Download Artwork" data-original-title="Download Artwork"></i></a></td>
+									<td> <object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal{{$loop->iteration}}" class="center-block tesco_svg{{$loop->iteration}}" data="{{$vals->template_file}}" type="image/svg+xml"></object><a class="artork_download" href="javascript:void(0)" onclick="openmodaltesco('{{$ref_name}}','{{ $loop->iteration }}','{{$vals->template_file}}','{{$vals->style_no}}','{{$vals->buyer_po_number}}','{{$vals->id}}','{{$vals->order_type}}','{{$vals->created_at}}')"><i class="fa fa-file-pdf-o fa-button preview-pdf" data-placement="left" title="Download Artwork" data-original-title="Download Artwork"></i></a></td>
 								</tr>
 								@endforeach
 							</tbody>

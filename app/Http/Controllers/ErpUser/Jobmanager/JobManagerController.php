@@ -113,8 +113,8 @@ class JobManagerController extends Controller
 											->where('erp_orders.order_status_id', '=', 4)
 											->whereIn('erp_orders.buyer_id', $buyers)
 											->orderBy('erp_order_details.erp_order_id', 'asc')
-											->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id','tesco_template.template_file', 'erp_order_details.order_type')
-											->select('erp_orders.*','erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name', 'buyers.id as buyer_id','tesco_template.template_file', 'erp_order_details.order_type')
+											->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id','tesco_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at')
+											->select('erp_orders.*','erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name', 'buyers.id as buyer_id','tesco_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at')
 											->get();
 					
 					if(count($erp_order_details) > 0)
@@ -157,12 +157,14 @@ class JobManagerController extends Controller
 		$buyer_no = $request['buyer_no'];
 		$id = $request['id'];
 		$order_type = $request['order_type'];
+		$created_at = $request['created_at'];
 		$order_details  = 	DB::table('erp_order_details')
 									->where('erp_order_details.style_no',$style_no)
 									->where('erp_order_details.erp_order_id',$id)
 									->where('erp_order_details.reference_name',$ref_name)
 									->where('erp_order_details.buyer_po_number',$buyer_no)
 									->where('erp_order_details.order_type',$order_type)
+									->where('erp_order_details.created_at',$created_at)
 									->orderBy('erp_order_details.id', 'desc')
 									->select('*')
 									->get();
