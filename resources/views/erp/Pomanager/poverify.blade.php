@@ -293,6 +293,7 @@ transform: scale(1);
 
 <ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
 	<li><a href="#" class="active">Po Verify</a></li>
+	<li><a href="{{ route('po-orders-list') }}">Orders List</a></li>
 </ul>
 
 @endsection @section('content')
@@ -318,6 +319,7 @@ transform: scale(1);
 						<th>PO Number</th>
 						<th>Partial</th>
 						<th>Status</th>
+						<th>Created date</th>
 						<th>Actions</th>
 					</tr>
 				</thead>
@@ -335,6 +337,7 @@ transform: scale(1);
 						@else
 						<td><span class="label label-info">{{$vals->status_name}}</span></td>
 						@endif
+						<td>{{$vals->po_created_date}}</td>
 						<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick="view_order_details('{{ $vals->id }}','{{ $vals->po_no }}','{{ $vals->buyer_id }}','{{ $vals->customer_id }}','{{ $vals->po_file }}')"><i class="fa fa-eye action-button-view"  title="" data-original-title="view Details"></i></a></td>
 					</tr>
 					@endforeach
@@ -440,7 +443,7 @@ transform: scale(1);
 						</div>
 
 						<div class="row">
-						<div class="col-md-4 first-padding">Refernce Number</div>
+						<div class="col-md-4 first-padding">Reference Number</div>
 						<div class="col-md-4 text-center"><input type="radio" name='ref-number-radio'  value="ok"></div>
 						<div class="col-md-4 text-center"><input type="radio" name='ref-number-radio'  value="not-ok"></div>
 						</div>

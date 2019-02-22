@@ -54,9 +54,18 @@ class JobManagerController extends Controller
 									->pluck('erpuser_buyer.buyer')
 									->all();
 
-			$company_id   = DB::table('company')
-									->select('company.*')
-									->first();
+			if($companies)
+			{
+				$company_id   = DB::table('company')
+								->select('company.*')
+								->where('company.id', '=', $companies{0}->company)
+								->first();
+			}
+			else
+			{
+				return view('erp.home');
+			}
+
 			// Get Erp status table id for 'Moved To JC Queue' status.
 			$erp_status_id = DB::table('erp_status')->where('status_name', 'ilike', 'Moved To JC Queue')->value('id');
 			
@@ -262,7 +271,7 @@ class JobManagerController extends Controller
 									->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
 									->where('erp_order_details.id', '=', $order_detail_id)
 									->first();
-
+				
 				!in_array($order_details->buyer_id, $buyers_array)?array_push($buyers_array,$order_details->buyer_id):$buyers_array;
 
 				!in_array($order_details->customer_id, $customers_array)?array_push($customers_array,$order_details->customer_id):$customers_array;
@@ -285,7 +294,7 @@ class JobManagerController extends Controller
 				/** Create separate ratio/single templates array  */
 				if($order_details->template_type == "ratio")
 				{
-					$ratio_templates[$order_details->reference_name][] = DB::table('erp_order_details')->select('erp_order_details.order_quantity', $order_details->order_qnty_table_name.'.ratio_pack_type', $order_details->order_qnty_table_name.'.id as qty_table_id',  'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number', 'erp_order_details.order_type')
+					$ratio_templates[$order_details->reference_name][] = DB::table('erp_order_details')->select('erp_order_details.order_quantity', $order_details->order_qnty_table_name.'.ratio_pack_type', $order_details->order_qnty_table_name.'.id as qty_table_id',  'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number', 'erp_order_details.order_type', 'erp_order_details.created_at')
 						->join($order_details->order_qnty_table_name, 'erp_order_details.order_qnty_table_id', $order_details->order_qnty_table_name.'.id')
 						->join('erp_orders', 'erp_order_details.erp_order_id', 'erp_orders.id')
 						->where('erp_order_details.id', '=', $order_detail_id)
@@ -293,18 +302,23 @@ class JobManagerController extends Controller
 				}
 				else
 				{
-					$single_temp_data = DB::table('erp_orders')->select('erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_orders.id as erp_table_id', 'erp_order_details.size', 'erp_order_details.order_quantity', 'erp_order_details.reference_name', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number', 'erp_order_details.order_type')
+					$single_temp_data = DB::table('erp_orders')->select('erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_orders.id as erp_table_id', 'erp_order_details.size', 'erp_order_details.order_quantity', 'erp_order_details.reference_name', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number', 'erp_order_details.order_type', 'erp_order_details.created_at')
 								->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
 								->where('erp_order_details.id', '=', $order_detail_id)
 								->first();
+					
+					// to differnciate reorder and repeatorder having same values
+					$created_time = str_replace(':','', Carbon::parse($single_temp_data->created_at, 'Asia/Kolkata')->toTimeString());
+					$created_dt   = str_replace('-','', Carbon::parse($single_temp_data->created_at, 'Asia/Kolkata')->toDateString());
+					$created_at_key = $created_dt.$created_time;
 
-					$erp_id_array[$single_temp_data->reference_name][] = $single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type;
+					$erp_id_array[$single_temp_data->reference_name][] = $single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$created_at_key;
 
-					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type]['ocn_number'] = $single_temp_data->ocn_number;
-					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type]['erp_id'] = $single_temp_data->erp_id;
-					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type]['buyer_po_number'] = $single_temp_data->buyer_po_number;
-					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type]['template_id'] = $single_temp_data->template_id;
-					$single_templates[$single_temp_data->reference_name]['size'][$single_temp_data->size][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type]= $single_temp_data->order_quantity;
+					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$created_at_key]['ocn_number'] = $single_temp_data->ocn_number;
+					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$created_at_key]['erp_id'] = $single_temp_data->erp_id;
+					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$created_at_key]['buyer_po_number'] = $single_temp_data->buyer_po_number;
+					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$created_at_key]['template_id'] = $single_temp_data->template_id;
+					$single_templates[$single_temp_data->reference_name]['size'][$single_temp_data->size][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$created_at_key]= $single_temp_data->order_quantity;
 				}
 			}
 
@@ -930,32 +944,40 @@ class JobManagerController extends Controller
 				$companies   = 	DB::table('erpuser_company_mapping')
 										->join('company','erpuser_company_mapping.company','company.id')
 										->where('erpuser_company_mapping.erp_user',$customer_id)
-										->select('erpuser_company_mapping.*','company.name', 'company.logo')
+										->select('erpuser_company_mapping.*','company.name', 'company.logo','company.id')
 										->get();
-				$company_id   = DB::table('company')
-				->select('company.*')
-				->first();
+				if($companies)
+				{
+					$company_id   = DB::table('company')
+									->select('company.*')
+									->where('company.id', '=', $companies{0}->company)
+									->first();
+				}
+				else
+				{
+					return view('erp.home');
+				}
+				
 				
 				if(session()->get('company') == "" && session()->get('company') == null)
 				{
 					session()->put('company', $company_id->id);
 					session()->put('company_name', strtolower( str_replace(' ','',$company_id->name)) );
 				}
-				$jobcards  = 	DB::table('jobcard_main_table')
-								->select('jobcard_main_table.*','customers.company_name',
-								'buyers.buyer_name')
-								->join('customers', 'jobcard_main_table.customer_id', 'customers.id')
-								->join('buyers', 'jobcard_main_table.buyer_id', 'buyers.id')
-								->where('jobcard_main_table.company_id', '=', session()->get('company'))
-								->get();
 				/**
 				 * Dropdown values
 				 */
+				$buyers  = 	DB::table('buyers')
+								->join('jobcard_main_table', 'jobcard_main_table.buyer_id', 'buyers.id')
+								->where('jobcard_main_table.company_id', '=', session()->get('company'))
+								->pluck('buyers.buyer_name','buyers.id')
+								->all();
+				
 				$erp_dispatch_mode = DB::table('erp_dispatch_mode')->where('is_enabled','=',true)->pluck('disp_mode','id')->all();
 				$erp_finish_type   = DB::table('erp_finish_type')->where('is_enabled','=',true)->pluck('finish_type','id')->all();
 				$erp_machines      = DB::table('erp_machines')->where('is_enabled','=',true)->pluck('machine','id')->all();
 				$erp_teeth_no      = DB::table('erp_teeth_no')->where('is_enabled','=',true)->pluck('teeth_no','id')->all();
-				return view('erp.Jobmanager.jobcards-list', ['jobcards' => $jobcards, 'companies' => $companies, 'disp_modes' => $erp_dispatch_mode, 'finish_types' => $erp_finish_type, 'machines' => $erp_machines, 'teeth_nos' => $erp_teeth_no]);	
+				return view('erp.Jobmanager.jobcards-list', ['buyers' => $buyers, 'companies' => $companies, 'disp_modes' => $erp_dispatch_mode, 'finish_types' => $erp_finish_type, 'machines' => $erp_machines, 'teeth_nos' => $erp_teeth_no]);	
 			} catch (\Exctesteption $e) {
 				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
 			}
@@ -974,9 +996,9 @@ class JobManagerController extends Controller
 
 				$customer_id = Auth::guard('erpuser')->id();
 
-				if(session()->get('company') == "" && session()->get('company') == null && $customer_id == null)
+				if(session()->get('company') == "" || session()->get('company') == null || $customer_id == null)
 				{
-					return response()->json(['error'=> true,'message' =>'Not Authorized User'], 401);
+					return view('erp.home');
 				}
 				else
 				{
@@ -1301,6 +1323,124 @@ class JobManagerController extends Controller
 								'order_type' => $order_type
 							]);
 		}
+	}
+
+
+	/**
+     * Function to get customers list by  buyer id.
+     * @author <Praveen>
+	 * @param  $buyer_id
+     * @return equivalent customer list
+     */  
+    public function getCustomersListByBuyerId(Request $request)
+    {
+        try {
+				$buyer_id = $request['selected_buyer_id'];
+
+				if(session()->get('company') == "" || session()->get('company') == null)
+				{
+					return view('erp.home');
+				}
+
+				if($buyer_id == null)
+				{
+					return response()->json(['error'=> true,'message' =>'Parameter Missing'], 400);
+				}
+				else
+				{
+					$customers_list  = 	DB::table('customers')
+										->join('jobcard_main_table', 'jobcard_main_table.customer_id', 'customers.id')
+										->where('jobcard_main_table.company_id', '=', session()->get('company'))
+										->where('jobcard_main_table.buyer_id', '=', $buyer_id)
+										->pluck('customers.company_name','customers.id')
+										->all();
+					return response()->json(['error'=> false,'message' =>'Success', 'customers_list' => $customers_list], 200);
+				}
+				    
+	
+			} catch (\Exctesteption $e) {
+				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+			}
+	}
+
+	/**
+     * Function to get jobcard id list by  buyer id and customer id.
+     * @author <Praveen>
+	 * @param  $buyer_id, $customer_id
+     * @return equivalent jobcard ids list
+     */  
+    public function getJobcardIdListByBuyerCustomerId(Request $request)
+    {
+        try {
+				$buyer_id    = $request['selected_buyer_id'];
+				$customer_id = $request['selected_customer_id'];
+
+				if(session()->get('company') == "" || session()->get('company') == null)
+				{
+					return view('erp.home');
+				}
+
+				if($buyer_id == null || $customer_id == null)
+				{
+					return response()->json(['error'=> true,'message' =>'Parameter Missing'], 400);
+				}
+				else
+				{
+					$jobcard_id_list  = DB::table('jobcard_main_table')
+											->where('jobcard_main_table.company_id', '=', session()->get('company'))
+											->where('jobcard_main_table.buyer_id', '=', $buyer_id)
+											->where('jobcard_main_table.customer_id', '=', $customer_id)
+											->pluck('jobcard_main_table.work_order_id','jobcard_main_table.id')
+											->all();
+					return response()->json(['error'=> false,'message' =>'Success', 'jobcard_id_list' => $jobcard_id_list], 200);
+				}
+				    
+	
+			} catch (\Exctesteption $e) {
+				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+			}
+	}
+
+	/**
+     * Function to get jobcards list by  buyer id, customer id and jobcard id.
+     * @author <Praveen>
+	 * @param  $buyer_id, $customer_id, $jobcard_id
+     * @return equivalent jobcard list
+     */  
+    public function getJobcardsListByBuyerCustomerJobcardId(Request $request)
+    {
+        try {
+				$buyer_id    = $request['selected_buyer_id'];
+				$customer_id = $request['selected_customer_id'];
+				$jobcard_id  = $request['selected_jobcard_id'];
+
+				if(session()->get('company') == "" || session()->get('company') == null)
+				{
+					return view('erp.home');
+				}
+
+				if($buyer_id == null || $customer_id == null || $jobcard_id == null)
+				{
+					return response()->json(['error'=> true,'message' =>'Parameter Missing'], 400);
+				}
+				else
+				{
+					$jobcards_list  = DB::table('jobcard_main_table')
+											->join('customers', 'jobcard_main_table.customer_id', 'customers.id')
+											->join('buyers', 'jobcard_main_table.buyer_id', 'buyers.id')
+											->where('jobcard_main_table.company_id', '=', session()->get('company'))
+											->where('jobcard_main_table.buyer_id', '=', $buyer_id)
+											->where('jobcard_main_table.customer_id', '=', $customer_id)
+											->where('jobcard_main_table.id', '=', $jobcard_id)
+											->select('jobcard_main_table.id as jobcard_id', 'jobcard_main_table.work_order_id', 'customers.company_name', 'buyers.buyer_name')
+											->first();
+					return response()->json(['error'=> false,'message' =>'Success', 'jobcards_list' => $jobcards_list], 200);
+				}
+				    
+	
+			} catch (\Exctesteption $e) {
+				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+			}
 	}
 	
 
