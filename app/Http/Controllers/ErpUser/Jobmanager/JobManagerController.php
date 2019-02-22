@@ -228,6 +228,7 @@ class JobManagerController extends Controller
 			$selected_ref_arrays= explode(',', $request['ref_array']);
 			$buyer_pos          = explode(',', $request['buyer_po_array']);
 			$order_type         = explode(',', $request['order_type_array']);
+			$created_at         = explode(',', $request['created_at_array']);
 			$buyers_array       = array();
 			$customers_array    = array();
 			$company_array      = array();
@@ -260,6 +261,7 @@ class JobManagerController extends Controller
 									->where('erp_order_details.reference_name', $selected_ref_arrays[$row])
 									->where('erp_order_details.buyer_po_number', $buyer_pos[$row])
 									->where('erp_order_details.order_type', $order_type[$row])
+									->where('erp_order_details.created_at', $created_at[$row])
 									->pluck('erp_order_details.id')->all();
 
 				$order_detail_ids = array_unique(array_merge($order_detail_ids,$order_detail_id_array));
@@ -522,6 +524,7 @@ class JobManagerController extends Controller
 			    $selected_ref    = explode(',', $request['selected_ref_array']);
 				$buyer_pos       = explode(',', $request['selected_buyer_po_array']);
 				$order_types     = explode(',', $request['order_type_array']);
+				$created_at      = explode(',', $request['created_at_array']);
 
 				if(isset($company_id) && isset($workorder_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($machine) && isset($cus_del_date)  && isset($finish_type)  && isset($compiled_by) && isset($final_json_obj) && isset($material))
 				{
@@ -617,6 +620,7 @@ class JobManagerController extends Controller
 							->where('erp_order_details.reference_name', 'ilike', $selected_ref[$row])
 							->where('erp_order_details.buyer_po_number', 'ilike', $buyer_pos[$row])
 							->where('erp_order_details.order_type', 'ilike', $order_types[$row])
+							->where('erp_order_details.created_at', '=', $created_at[$row])
 							->update([
 								'status'  => $erp_status_id
 							]);
