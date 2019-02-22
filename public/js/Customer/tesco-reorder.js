@@ -319,7 +319,7 @@ function extraQuantityTesco(type, id, name, zone, po_number, liid) {
 					var moq = 1;
 				}
 
-				tr += '<tr><td class="tpnd">' + tpnd_td + '</td><td class="barcode">' + barcode_td + '</td><td class="size">' + unit_qty + '</td>' + th_td + '<td> <div class="form-group has-feedback has-success"><input min="'+moq+'"  onInput="checkLength(4,this)" type="number"  class="form-control  input-sm tot_qty_table" value="" required placeholder="Quantity" data-min-error="Min Order Qnty should be >= '+moq+'."><div class="help-block with-errors"></div></div></td></tr>';
+				tr += '<tr><td class="tpnd">' + tpnd_td + '</td><td class="barcode">' + barcode_td + '</td><td class="size">' + unit_qty + '</td>' + th_td + '<td> <div class="form-group has-feedback has-success"><input min="'+moq+'"  onInput="checkLength(4,this)" type="number"  class="form-control  input-sm tot_qty_table" value="" required placeholder="Quantity" data-min-error="Quantity Should be >= '+moq+'."><div class="help-block with-errors"></div></div></td></tr>';
 			});
 			$('.quantity').html('<form id="qty_table"><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px"> <thead> <tr> <th>' + tpnd_tr + '</th><th>' + barcode_tr + '</th> <th>' + qty + '</th> ' + th_tr + '<th>Quantity</th> </tr></thead> <tbody style="font-size: 11px">' + tr + '</tbody></table><div class="po_div"></div><button style="margin-left: 10px;" class="btn btn-primary submitbutton pull-right">Submit</button><button type="button" class="btn btn-danger remove pull-right">Close</button><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></form>')
 

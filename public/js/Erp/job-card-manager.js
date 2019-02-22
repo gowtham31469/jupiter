@@ -140,7 +140,8 @@ $(document).ready(function() {
     $('#jobcard-list-table').DataTable({
         "paging": false,
         "searching": false,
-        "bInfo" : false
+        "bInfo" : false,
+        "ordering": false
     });
     $("#jobcard-list-table_filter input").addClass('form-control input-sm');
     $("#jobcard-list-table_filter input").attr('placeholder', 'Data Search');

@@ -7462,7 +7462,7 @@ function checkMOQ(obj) {
 				moq = i[temp_name];
 			})
 			$(obj).attr("min",moq); 
-			$(obj).data("min-error","Min Order Qnty should be >= "+moq); 
+			$(obj).data("min-error","Quantity Should be >= "+moq); 
 		}
 	} catch (e) {
 		/** [error statements] */
@@ -7529,7 +7529,7 @@ function dynamicTescoSuppliers(id)
 									moq = i[temp_name];
 								})
 								$('.count_' + item.template_name.replace(' ', '') ).attr("min",moq); 
-								$('.count_' + item.template_name.replace(' ', '') ).data("min-error","Min Order Qnty should be >= "+moq); 
+								$('.count_' + item.template_name.replace(' ', '') ).data("min-error","Quantity Should be >= "+moq); 
 							}
 						});
 						 

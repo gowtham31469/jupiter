@@ -100,6 +100,7 @@ class PoManagerController extends Controller
 		
 		 $orders_erp = array();
 		
+		
 		 foreach($new_orders as $key => $values)
 		 {
 			foreach($values as $valuess)
@@ -113,22 +114,31 @@ class PoManagerController extends Controller
 										 ->whereIn('erp_orders.buyer_id', $buyers)
 										 ->where('erp_orders.status',1)
 										 ->orWhere('erp_orders.status',2)
-										 ->groupBy('erp_orders.id','customers.company_name','erp_status.status_name')
-										 ->select('erp_orders.*','customers.company_name','erp_status.status_name')
+										 ->groupBy('erp_orders.id','customers.company_name','erp_status.status_name','erp_order_details.created_at')
+										 ->select('erp_orders.*','customers.company_name','erp_status.status_name','erp_order_details.created_at as po_created_date')
 										 ->get();
 										
 				if(count($erp_order_details) > 0)
 				{
 					foreach($erp_order_details as $erp_order_det)
 					{
-						$orders_erp[$erp_order_det->id] = $erp_order_det;
-						
+						if (array_key_exists($erp_order_det->id,$orders_erp))
+						{
+							if($orders_erp[$erp_order_det->id]['po_created_date'] < $erp_order_det['po_created_date'])
+							{
+								$orders_erp[$erp_order_det->id]['po_created_date']=$erp_order_det['po_created_date'];
+							}
+						}
+						else
+						{
+							$orders_erp[$erp_order_det->id] = $erp_order_det;
+						}
 					}
-					
 				}
 			}
 			 
 		 }
+		//print_r($date);
 		foreach($orders_erp as $orders_erp_count)
 		{
 			
@@ -146,6 +156,93 @@ class PoManagerController extends Controller
 		//return $new_orders;
 		return view('erp.Pomanager.poverify',['orders' => $orders_erp,'companies' => $companies,'new_orders' => $new_orders_count,'hold_orders' => $hold_orders_count]);
 	} 
+	
+	public function poOrdersList()
+	{
+		
+		$customer_id = Auth::guard('erpuser')->id();
+		
+		$companies   = 	DB::table('erpuser_company_mapping')
+								->join('company','erpuser_company_mapping.company','company.id')
+								->where('erpuser_company_mapping.erp_user',$customer_id)
+								->select('erpuser_company_mapping.*','company.name', 'company.logo')
+								->get();
+		
+		return view('erp.Pomanager.po-orders-list',['companies' => $companies]);
+	}
+	
+	public function getOrderDetails(Request $request)
+	{
+		  try {
+            $id = $request->erp_id; 
+			  
+			$data   = 	DB::table('erp_orders')
+								->where('erp_orders.id',$id)
+								->select('erp_orders.*')
+								->get();
+			  
+			if(count($data) > 0)
+			{
+					$buyer_id = $data{0}->buyer_id;
+					$customer_id = $data{0}->customer_id;
+
+
+				   $arr_template =  DB::table('buyers')
+									 ->where('id',$buyer_id)
+									 ->first();
+
+					$orderlist   = ErpOrderDetails::join($arr_template->template_table,'erp_order_details.template_id',$arr_template->template_table.'.item_id')
+									->join('erp_status','erp_order_details.status','erp_status.id')
+									->where('erp_order_details.erp_order_id',$id)
+									->select('erp_order_details.*',$arr_template->template_table.'.template_name','erp_status.status_name')
+									->get();
+
+						$orders   = Erp::where('erp_orders.id',$id)
+									->join('customers','erp_orders.customer_id','customers.id')
+									->select('erp_orders.*','customers.company_name')
+									->get();
+
+				   foreach($orderlist as $value)
+				   {
+					  $price =  DB::table('price_taxation')->select('price_taxation.*')->where('customer_id',$customer_id)->where('buyer_id',$buyer_id)->where('template_id',$value->template_id)->first();
+
+					   if (empty($price)) {
+						  $value->price = 0;
+					   }
+					   else
+					   {
+						  $price_range =  DB::table('price_range')->select('price_range.*')->where('price_taxation_id',$price->id)->where('volume_from','<=',$value->order_quantity)->where('volume_to','>=',$value->order_quantity)->first();
+
+						   if(empty($price_range))
+						   {
+							   $value->price = 0;	 
+						   }
+						   else
+						   {
+								$value->price = $price_range->price;
+						   }
+					   }
+
+
+				   }
+				
+				   $result      = response()->json(['error'=> false,'message' =>'success','orderlist'=>$orderlist,'orders'=>$orders],200);
+			}
+		    else
+		    {
+					$result      = response()->json(['error'=> false,'message' =>'empty'],200);
+		    }
+			  
+		
+			   
+           
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+	}
 	
 	public function setCompanySession(Request $request)
 	{
@@ -290,7 +387,8 @@ class PoManagerController extends Controller
 					 
 					 DB::table('erp_order_details')->where('id',$value->id)
 						  		->update([
-								  'rate' => $price_range{0}->price
+								  'rate' => $price_range{0}->price,
+								  'po_verified_date'=>now()
 								]);
 				 }
 				
@@ -324,7 +422,8 @@ class PoManagerController extends Controller
 					 
 					 DB::table('erp_order_details')->where('id',$value->id)
 						  		->update([
-								  'rate' => $price_range{0}->price
+								  'rate' => $price_range{0}->price,
+								  'po_verified_date'=>now()
 								]);
 				 }
 				
