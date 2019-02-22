@@ -2,7 +2,7 @@
 
 <ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
 	<li><a href="{{ route('poManager') }}">Po Verify</a></li>
-	<li><a href="#" class="active">Orders List</a></li>
+	<li><a href="" class="active">Orders List</a></li>
 </ul>
 
 @endsection @section('content')
