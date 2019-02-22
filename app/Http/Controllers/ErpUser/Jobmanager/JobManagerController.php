@@ -58,7 +58,7 @@ class JobManagerController extends Controller
 			{
 				$company_id   = DB::table('company')
 								->select('company.*')
-								->where('company.id', '=', $companies{0}->id)
+								->where('company.id', '=', $companies{0}->company)
 								->first();
 			}
 			else
@@ -271,7 +271,7 @@ class JobManagerController extends Controller
 									->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
 									->where('erp_order_details.id', '=', $order_detail_id)
 									->first();
-
+				
 				!in_array($order_details->buyer_id, $buyers_array)?array_push($buyers_array,$order_details->buyer_id):$buyers_array;
 
 				!in_array($order_details->customer_id, $customers_array)?array_push($customers_array,$order_details->customer_id):$customers_array;
@@ -294,7 +294,7 @@ class JobManagerController extends Controller
 				/** Create separate ratio/single templates array  */
 				if($order_details->template_type == "ratio")
 				{
-					$ratio_templates[$order_details->reference_name][] = DB::table('erp_order_details')->select('erp_order_details.order_quantity', $order_details->order_qnty_table_name.'.ratio_pack_type', $order_details->order_qnty_table_name.'.id as qty_table_id',  'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number', 'erp_order_details.order_type')
+					$ratio_templates[$order_details->reference_name][] = DB::table('erp_order_details')->select('erp_order_details.order_quantity', $order_details->order_qnty_table_name.'.ratio_pack_type', $order_details->order_qnty_table_name.'.id as qty_table_id',  'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number', 'erp_order_details.order_type', 'erp_order_details.created_at')
 						->join($order_details->order_qnty_table_name, 'erp_order_details.order_qnty_table_id', $order_details->order_qnty_table_name.'.id')
 						->join('erp_orders', 'erp_order_details.erp_order_id', 'erp_orders.id')
 						->where('erp_order_details.id', '=', $order_detail_id)
@@ -302,18 +302,23 @@ class JobManagerController extends Controller
 				}
 				else
 				{
-					$single_temp_data = DB::table('erp_orders')->select('erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_orders.id as erp_table_id', 'erp_order_details.size', 'erp_order_details.order_quantity', 'erp_order_details.reference_name', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number', 'erp_order_details.order_type')
+					$single_temp_data = DB::table('erp_orders')->select('erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_orders.id as erp_table_id', 'erp_order_details.size', 'erp_order_details.order_quantity', 'erp_order_details.reference_name', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number', 'erp_order_details.order_type', 'erp_order_details.created_at')
 								->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
 								->where('erp_order_details.id', '=', $order_detail_id)
 								->first();
+					
+					// to differnciate reorder and repeatorder having same values
+					$created_time = str_replace(':','', Carbon::parse($single_temp_data->created_at, 'Asia/Kolkata')->toTimeString());
+					$created_dt   = str_replace('-','', Carbon::parse($single_temp_data->created_at, 'Asia/Kolkata')->toDateString());
+					$created_at_key = $created_dt.$created_time;
 
-					$erp_id_array[$single_temp_data->reference_name][] = $single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type;
+					$erp_id_array[$single_temp_data->reference_name][] = $single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$created_at_key;
 
-					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type]['ocn_number'] = $single_temp_data->ocn_number;
-					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type]['erp_id'] = $single_temp_data->erp_id;
-					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type]['buyer_po_number'] = $single_temp_data->buyer_po_number;
-					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type]['template_id'] = $single_temp_data->template_id;
-					$single_templates[$single_temp_data->reference_name]['size'][$single_temp_data->size][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type]= $single_temp_data->order_quantity;
+					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$created_at_key]['ocn_number'] = $single_temp_data->ocn_number;
+					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$created_at_key]['erp_id'] = $single_temp_data->erp_id;
+					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$created_at_key]['buyer_po_number'] = $single_temp_data->buyer_po_number;
+					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$created_at_key]['template_id'] = $single_temp_data->template_id;
+					$single_templates[$single_temp_data->reference_name]['size'][$single_temp_data->size][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$created_at_key]= $single_temp_data->order_quantity;
 				}
 			}
 
@@ -945,7 +950,7 @@ class JobManagerController extends Controller
 				{
 					$company_id   = DB::table('company')
 									->select('company.*')
-									->where('company.id', '=', $companies{0}->id)
+									->where('company.id', '=', $companies{0}->company)
 									->first();
 				}
 				else
