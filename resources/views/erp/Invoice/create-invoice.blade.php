@@ -359,36 +359,34 @@ $(document).ready(function(){
       /* Save selected buyer into localdb */
       if ($('.buyers-card.active-buyer.active').length != 0) 
       {
-          var company_id = $('.buyers-card.active-buyer.active').data("value"); 
-          var company_name = $('.buyers-card.active-buyer.active').attr("id");
-          $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
-          $('#buyerSelectionModalCenter').modal('show');
-          
-          var csrf_token = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                url: base_url + "/erp/po-manager/set_company_session",
-                type: "Post",
-                dataType: "json",
-                data: {
-                    _token: csrf_token,
-                    company_id: company_id,
-                    company_name:company_name
-                },
-                beforeSend: function() {
-                    location.reload();
+        var company_id = $('.buyers-card.active-buyer.active').data("value"); 
+        var company_name = $('.buyers-card.active-buyer.active').attr("id");
+        $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
+        $('#buyerSelectionModalCenter').modal('show');  
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+            url: base_url + "/erp/po-manager/set_company_session",
+            type: "Post",
+            dataType: "json",
+            data: {
+                _token: csrf_token,
+                company_id: company_id,
+                company_name:company_name
+            },
+            beforeSend: function() {
+                location.reload();
 
-                },
-                success: function(data) {
-                },
-                error: function(data) {
+            },
+            success: function(data) {
+            },
+            error: function(data) {
 
-                },
-                complete: function() {
+            },
+            complete: function() {
 
-                }
-            })
+            }
+        })
       }
-      
     });
     
     /** [ Show already selected(active) buyer on clicking buyer menu] */
