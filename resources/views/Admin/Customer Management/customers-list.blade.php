@@ -8,7 +8,7 @@
               </div>
                 <div class="main-sub-menu">
                   <div class="action-group pull-right sub-menu-button">
-                    <a href="#" data-target="#addCustomerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Company</a>
+                    <a href="#" data-target="#addCustomerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Company</a>
                   </div>
                 </div>
                <div class="clearfix"></div>
@@ -32,7 +32,7 @@
                         @foreach ($customers as $value)
                           <tr id="{{$value->id}}">
                             <td rowspan="3">{{ $loop->iteration }}</td>
-                            <td rowspan="3"><a href="#" title="view more" class="view-more" data-placement="left"  data-backdrop="static" data-keyboard="false">{{ $value->company_name }}</a></td>
+                            <td rowspan="3"><a href="#" title="view more" class="view-more" data-placement="bottom"  data-backdrop="static" data-keyboard="false">{{ $value->company_name }}</a></td>
                             <td><i class="fa fa-user" aria-hidden="true"></i></td>
                             <td>{{ $value->contact_person }}</td>
                             <td >
@@ -60,7 +60,7 @@
                               <td rowspan="3"><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Active" id="make_active" data-placement="left"></i></a>
                             @endif
                                  <a href="#">
-                                  <i class="fa fa-pencil filterbtn options edit-customer fa-button" title="Edit" data-placement="left"></i>
+                                  <i class="fa fa-pencil filterbtn options edit-company fa-button" title="Edit" data-placement="left"></i>
                                  </a>
                                </td>
                           </tr>
@@ -109,14 +109,14 @@
                           <div class="col-md-6">
                               <div class="form-group has-feedback">
                                   {!! Form::label('short_name', 'Short Name', ['class' => 'form_label']) !!}
-                                  {!! Form::text('short_name',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Short Name','required','data-minlength' => '3','maxlength' => '40')) !!}
+                                  {!! Form::text('short_name',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Short Name','required','data-minlength' => '3','maxlength' => '40', 'style' => 'text-transform: capitalize;')) !!}
                                   <div class="help-block with-errors"></div>
                               </div>
                           </div>
                           <div class="col-md-6">
                               <div class="form-group has-feedback">
                                   {!! Form::label('company_name', 'Company Name', ['class' => 'form_label']) !!}
-                                  {!! Form::text('company_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Company Name','required','data-minlength' => '3','maxlength' => '40')) !!}
+                                  {!! Form::text('company_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Company Name','required','data-minlength' => '3','maxlength' => '40', 'style' => 'text-transform: capitalize;')) !!}
                                   <div class="help-block with-errors"></div>
                               </div>
                           </div>
@@ -280,7 +280,7 @@
                               </div>
                               <div class="clearfix"></div>
                               <div class="form-group">
-                                  <button type="button" onclick="addContact(this,event)" data-id="0" class='btn btn-primary'><i class="ion ion-plus"></i> Contact Person</button>
+                                  <button type="button" onclick="addContact(this,event)" data-id="0" class='btn btn-primary'><i class="fa fa-plus"></i> Contact Person</button>
                               </div>
                             </div>
                             <div class="col-md-6" style="border-left: 1px solid #ecf0f1;">
@@ -290,7 +290,7 @@
                                       <div id="billaddress0" class="panel">
                                         <div class="form-group has-feedback">
                                           {!! Form::label('address0', 'Address', ['class' => 'form_label']) !!}
-                                          {!! Form::textarea('address0',$value = '', array('class' => 'form-control address','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3,'onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
+                                          {!! Form::textarea('address0',$value = '', array('class' => 'form-control address','placeholder' => 'Address','required','style'=>'resize:none; text-transform: capitalize;','rows'=>3)) !!}
                                           <div class="help-block with-errors"></div>
                                         </div>
                                         <div class="form-group has-feedback">
@@ -343,7 +343,7 @@
                               </div>
                               <div class="clearfix"></div>
                               <div class="form-group">
-                                  <button type="button" onclick="addAddress(this,event)" data-id="0" class='btn btn-primary'><i class="ion ion-plus"></i> Address</button>
+                                  <button type="button" onclick="addAddress(this,event)" data-id="0" class='btn btn-primary'><i class="fa fa-plus"></i> Address</button>
                               </div>
                             </div>
                           </div>
@@ -380,14 +380,14 @@
                   <div class="col-md-6">
                       <div class="form-group has-feedback">
                           {!! Form::label('edit_short_name', 'Short Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('edit_short_name',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Short Name','required','data-minlength' => '3','maxlength' => '40')) !!}
+                          {!! Form::text('edit_short_name',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Short Name','required','data-minlength' => '3','maxlength' => '40', 'style' => 'text-transform: capitalize;')) !!}
                           <div class="help-block with-errors"></div>
                       </div>
                   </div>
                   <div class="col-md-6">
                       <div class="form-group has-feedback">
                           {!! Form::label('edit_company_name', 'Company Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('edit_company_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Company Name','required','data-minlength' => '3','maxlength' => '40')) !!}
+                          {!! Form::text('edit_company_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Company Name','required','data-minlength' => '3','maxlength' => '40', 'style' => 'text-transform: capitalize;')) !!}
                           <div class="help-block with-errors"></div>
                       </div>
                   </div>
@@ -519,7 +519,7 @@
                   </div>
                   <div class="clearfix"></div>
                   <div class="form-group">
-                      <button type="button" id="edit_contact" onclick="editAddContact(this,event)" data-id="1" class='btn btn-primary'><i class="ion ion-plus"></i> Contact Person</button>
+                      <button type="button" id="edit_contact" onclick="editAddContact(this,event)" data-id="1" class='btn btn-primary'><i class="fa fa-plus"></i> Contact Person</button>
                   </div>
                 </div>
                 <div class="col-md-6" style="border-left: 1px solid #ecf0f1;">
@@ -528,7 +528,7 @@
                   </div>
                   <div class="clearfix"></div>
                   <div class="form-group">
-                      <button type="button" id="edit_address" onclick="editAddAddress(this,event)" data-id="1" class='btn btn-primary'><i class="ion ion-plus"></i> Address</button>
+                      <button type="button" id="edit_address" onclick="editAddAddress(this,event)" data-id="1" class='btn btn-primary'><i class="fa fa-plus"></i> Address</button>
                   </div>
                 </div>
               </div>
@@ -653,6 +653,11 @@
     <script src="{{ asset('js/Admin/customer.js') }}"></script>
     <script>
     $( document ).ready(function() {
+
+      // toggle tooltip
+      $('a,i').tooltip().eq(0).tooltip('show').tooltip('disable').one('mouseout', function() {
+        $(this).tooltip('enable');
+      });
       /* Show logo on left side */
       $('.logo').html('Customers')
       $('#add_customer_form').trigger("reset");
@@ -669,12 +674,6 @@
       $('#buyer').val('0').selectpicker('refresh');
       $('#edit_customers_metadata').val('0').selectpicker('refresh');
       $('#customers_metadata').val('0').selectpicker('refresh');
-      $('.edit-customer').tooltip('show')
-      $('.edit-customer').tooltip('toggle')
-      $('.status').tooltip('show')
-      $('.status').tooltip('toggle')
-      $('.view-more').tooltip('show')
-      $('.view-more').tooltip('toggle')
       $('.dataTables_length select').addClass('form-control');
       $('div.freight_charge_div').hide()
       $('.forwarder_div').hide(); 
@@ -773,7 +772,7 @@
     });
 
     /** Get edit customer details on click and populate details on edit form **/
-     $(document).on('click','.edit-customer',function(e){
+     $(document).on('click','.edit-company',function(e){
          var id = $(this).closest('tr').attr('id');
          e.preventDefault();
          /* call getCustomer function from customer.js*/

@@ -81,7 +81,7 @@ class BuyerManagementController extends Controller
                 $name      = $request['name'];
                 $email     = $request['email'];
                 $phone     = $request['phone'];
-                $address   = $request['address'];
+                $address   = preg_replace('/\s*,\s*/', ', ', $request['address']);
 
                 $image = $request->file('image');
                 $image_rules = array(
@@ -212,7 +212,7 @@ class BuyerManagementController extends Controller
                      'buyer_name'          => $input['name'],
                      'buyer_email'         => $input['email'],
                      'buyer_phone'         => $input['phone'],
-                     'buyer_address'       => $input['address'],
+                     'buyer_address'       => preg_replace('/\s*,\s*/', ', ', $input['address']),
                      'logo'                => $destination_path_insert
                   ]);
 
@@ -256,7 +256,7 @@ class BuyerManagementController extends Controller
                 $name                  = $request['name'];
                 $email                 = $request['email'];
                 $phone                 = $request['phone'];
-                $address               = $request['address'];
+                $address               = preg_replace('/\s*,\s*/', ', ', $request['address']);
                 $password              = Hash::make($request['p']);
                 $merchandiser_buyer    = $request['merchandiser_buyer'];
                 $email_exists = Merchandiser::where('email',$email)->select('id')->get();
@@ -331,7 +331,7 @@ class BuyerManagementController extends Controller
                    ->update([
                      'merchandiser_name'      => $input['name'],
                      'email'                  => $input['email'],
-                     'merchandiser_address'   => $input['address'],
+                     'merchandiser_address'   => preg_replace('/\s*,\s*/', ', ', $input['address']),
                      'merchandiser_phone'     => $input['phone'],
                      'buyer_id'               => $input['buyer'],
                   ]);

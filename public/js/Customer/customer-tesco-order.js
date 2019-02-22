@@ -4848,6 +4848,10 @@ try{
     var delivery_date_req = data.delivery_date_required;
     var last_insertions_length = Object.keys(data.last_insertions).length;
 
+    // Handle po upload modal button issue after page reloading
+	$('.po-submit-btn').text('Save');
+	$('.po-submit-btn').attr('data-dismiss', '')
+	$('.upload-later').show();
     /** Show snackbar if order placed **/
     if (last_insertions_length > 0) {
         /** Make form as readonly */

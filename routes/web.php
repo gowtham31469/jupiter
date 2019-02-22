@@ -610,9 +610,6 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::get('/get-invoice', 'ErpUser\Invoice\InvoiceController@getInvoice')->name('get-invoice');
 	Route::post('/download-invoice', 'ErpUser\Invoice\InvoiceController@downloadInvoice')->name('download-invoice');
 	
-	
-
-
 	Route::get('/po-manager', 'ErpUser\Pomanager\PoManagerController@index')->name('poManager'); 
 	
 	Route::get('/po-orders-list', 'ErpUser\Pomanager\PoManagerController@poOrdersList')->name('po-orders-list');	
@@ -635,8 +632,45 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::post('job-manager/tesco/print-div-tesco-small', 'ErpUser\Jobmanager\JobManagerController@printDivTescoSmall');
 
 	Route::get('job-manager/tesco/get-tsl-size', 'ErpUser\Jobmanager\JobManagerController@getTescoTSLSizechart');
-	Route::get('job-manager/tesco/script-update-buyer-no', 'ErpUser\Jobmanager\JobManagerController@scriptUpdateBuyerNo');
+	Route::get('job-manager/script-update-buyer-no', 'ErpUser\Jobmanager\JobManagerController@scriptUpdateBuyerNo');
 	Route::get('job-manager/jobcards-list', 'ErpUser\Jobmanager\JobManagerController@getJobcards')->name('jobcards-list'); 
 	Route::get('job-manager/jobcard-details', 'ErpUser\Jobmanager\JobManagerController@getJobcardDetailsById');  
 	Route::put('job-manager/update-jobcard-details', 'ErpUser\Jobmanager\JobManagerController@updateJobcardById'); 
+	Route::get('job-manager/script-update-order-type', 'ErpUser\Jobmanager\JobManagerController@scriptUpdateOrderType');
+	Route::get('job-manager/get-customers-list', 'ErpUser\Jobmanager\JobManagerController@getCustomersListByBuyerId'); 
+	Route::get('job-manager/get-jobcard-id-list', 'ErpUser\Jobmanager\JobManagerController@getJobcardIdListByBuyerCustomerId'); 
+	Route::get('job-manager/get-jobcards-list', 'ErpUser\Jobmanager\JobManagerController@getJobcardsListByBuyerCustomerJobcardId'); 
+
+	/* Routes for ERP-Settings Management */
+	Route::get('/settings', 'ErpUser\ERPSettings\ERPSettingsController@home')->name('erp-settings');
+	Route::get('/settings/dispatch-mode', 'ErpUser\ERPSettings\ERPSettingsController@getDispatchMode')->name('erp-dispatch-mode');
+	Route::post('/settings/add-dispatch-mode', 'ErpUser\ERPSettings\ERPSettingsController@addDispatchMode');
+	Route::get('/settings/get-dispatch-mode-by-id', 'ErpUser\ERPSettings\ERPSettingsController@getDispatchModeById');
+	Route::put('/settings/update-dispatch-mode-by-id', 'ErpUser\ERPSettings\ERPSettingsController@updateDispatchModeById');
+	Route::put('/settings/make-dispatch-mode-enabled', 'ErpUser\ERPSettings\ERPSettingsController@makeDispatchModeEnabled');
+	Route::put('/settings/make-dispatch-mode-disabled', 'ErpUser\ERPSettings\ERPSettingsController@makeDispatchModeDisabled');
+    
+    //Machine
+	Route::get('/settings/machine', 'ErpUser\ERPSettings\ERPSettingsController@getMachine')->name('erp-machine');
+	Route::post('/settings/add-machine', 'ErpUser\ERPSettings\ERPSettingsController@addMachine');
+	Route::get('/settings/get-machine-by-id', 'ErpUser\ERPSettings\ERPSettingsController@getMachineById');
+	Route::put('/settings/update-machine-by-id', 'ErpUser\ERPSettings\ERPSettingsController@updateMachineById');
+	Route::put('/settings/make-machine-enabled', 'ErpUser\ERPSettings\ERPSettingsController@makeMachineEnabled');
+	Route::put('/settings/make-machine-disabled', 'ErpUser\ERPSettings\ERPSettingsController@makeMachineDisabled');
+    
+    //Teeth Number
+	Route::get('/settings/teethno', 'ErpUser\ERPSettings\ERPSettingsController@getTeethNo')->name('erp-teethno');
+	Route::post('/settings/add-teethno', 'ErpUser\ERPSettings\ERPSettingsController@addTeethNo');
+	Route::get('/settings/get-teethno-by-id', 'ErpUser\ERPSettings\ERPSettingsController@getTeethNoById');
+	Route::put('/settings/update-teethno-by-id', 'ErpUser\ERPSettings\ERPSettingsController@updateTeethNoById');
+	Route::put('/settings/make-teethno-enabled', 'ErpUser\ERPSettings\ERPSettingsController@makeTeethNoEnabled');
+	Route::put('/settings/make-teethno-disabled', 'ErpUser\ERPSettings\ERPSettingsController@makeTeethNoDisabled');
+    
+    //Finish Type
+	Route::get('/settings/finishtype', 'ErpUser\ERPSettings\ERPSettingsController@getFinishtype')->name('erp-finishtype');
+	Route::post('/settings/add-finishtype', 'ErpUser\ERPSettings\ERPSettingsController@addFinishType');
+	Route::get('/settings/get-finishtype-by-id', 'ErpUser\ERPSettings\ERPSettingsController@getFinishTypeById');
+	Route::put('/settings/update-finishtype-by-id', 'ErpUser\ERPSettings\ERPSettingsController@updateFinishTypeById');
+	Route::put('/settings/make-finishtype-enabled', 'ErpUser\ERPSettings\ERPSettingsController@makeFinishTypeEnabled');
+	Route::put('/settings/make-finishtype-disabled', 'ErpUser\ERPSettings\ERPSettingsController@makeFinishTypeDisabled');
 });

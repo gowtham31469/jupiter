@@ -315,7 +315,7 @@ transform: scale(1);
 					<tr>
 						<th>Sl. No</th>
 						<th>ERP ID</th>
-						<th>Customer name</th>
+						<th>Customer Name</th>
 						<th>PO Number</th>
 						<th>Partial</th>
 						<th>Status</th>
@@ -489,10 +489,10 @@ transform: scale(1);
 <div class="zoom">
 <a class="zoom-fab zoom-btn-large" id="zoomBtn"><i class="fa fa-bars"></i></a>
 <ul class="zoom-menu">
-<li data-toggle="tooltip" data-placement="bottom" title="Hold order: {{$hold_orders}}" class="zoom-fab zoom-btn-sm zoom-btn-report scale-transition scale-out">
+<li data-toggle="tooltip" data-placement="bottom" title="Hold Order: {{$hold_orders}}" class="zoom-fab zoom-btn-sm zoom-btn-report scale-transition scale-out">
 <i class="fa fa-edit"></i>
 </li>
-<li data-toggle="tooltip" data-placement="bottom" title="New order: {{$new_orders}}" class="zoom-fab zoom-btn-sm zoom-btn-report scale-transition scale-out">
+<li data-toggle="tooltip" data-placement="bottom" title="New Order: {{$new_orders}}" class="zoom-fab zoom-btn-sm zoom-btn-report scale-transition scale-out">
 <i class="fa fa-bell"></i>
 </li>
 </ul>

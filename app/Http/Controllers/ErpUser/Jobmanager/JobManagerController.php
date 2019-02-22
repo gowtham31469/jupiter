@@ -54,9 +54,18 @@ class JobManagerController extends Controller
 									->pluck('erpuser_buyer.buyer')
 									->all();
 
-			$company_id   = DB::table('company')
-									->select('company.*')
-									->first();
+			if($companies)
+			{
+				$company_id   = DB::table('company')
+								->select('company.*')
+								->where('company.id', '=', $companies{0}->company)
+								->first();
+			}
+			else
+			{
+				return view('erp.home');
+			}
+
 			// Get Erp status table id for 'Moved To JC Queue' status.
 			$erp_status_id = DB::table('erp_status')->where('status_name', 'ilike', 'Moved To JC Queue')->value('id');
 			
@@ -104,8 +113,8 @@ class JobManagerController extends Controller
 											->where('erp_orders.order_status_id', '=', 4)
 											->whereIn('erp_orders.buyer_id', $buyers)
 											->orderBy('erp_order_details.erp_order_id', 'asc')
-											->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id','tesco_template.template_file')
-											->select('erp_orders.*','erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name', 'buyers.id as buyer_id','tesco_template.template_file')
+											->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id','tesco_template.template_file', 'erp_order_details.order_type')
+											->select('erp_orders.*','erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name', 'buyers.id as buyer_id','tesco_template.template_file', 'erp_order_details.order_type')
 											->get();
 					
 					if(count($erp_order_details) > 0)
@@ -119,8 +128,16 @@ class JobManagerController extends Controller
 				}
 				
 			}
+			/**
+			 * Dropdown values
+			 */
+			$erp_dispatch_mode = DB::table('erp_dispatch_mode')->where('is_enabled','=',true)->pluck('disp_mode','id')->all();
+			$erp_finish_type = DB::table('erp_finish_type')->where('is_enabled','=',true)->pluck('finish_type','id')->all();
+			$erp_machines = DB::table('erp_machines')->where('is_enabled','=',true)->pluck('machine','id')->all();
+			$erp_teeth_no = DB::table('erp_teeth_no')->where('is_enabled','=',true)->pluck('teeth_no','id')->all();
+
 			asort($orders_erp);
-			return view('erp.Jobmanager.jobmanager', ['orders' => $orders_erp, 'companies' => $companies]);
+			return view('erp.Jobmanager.jobmanager', ['orders' => $orders_erp, 'companies' => $companies, 'disp_modes' => $erp_dispatch_mode, 'finish_types' => $erp_finish_type, 'machines' => $erp_machines, 'teeth_nos' => $erp_teeth_no]);
 		}
 		catch (\Exception $e)
 		{
@@ -206,10 +223,12 @@ class JobManagerController extends Controller
 			$erp_orders_ids     = explode(',', $request['orders']);
 			$selected_ref_arrays= explode(',', $request['ref_array']);
 			$buyer_pos          = explode(',', $request['buyer_po_array']);
+			$order_type         = explode(',', $request['order_type_array']);
 			$buyers_array       = array();
 			$customers_array    = array();
 			$company_array      = array();
 			$order_dt_array     = array();
+			$delivery_dt_array  = array();
 			$style_array        = array();
 			$ordertype_array    = array();
 			$temp_id_array      = array();
@@ -236,6 +255,7 @@ class JobManagerController extends Controller
 									->where('erp_order_details.erp_order_id', $erp_orders_id)
 									->where('erp_order_details.reference_name', $selected_ref_arrays[$row])
 									->where('erp_order_details.buyer_po_number', $buyer_pos[$row])
+									->where('erp_order_details.order_type', $order_type[$row])
 									->pluck('erp_order_details.id')->all();
 
 				$order_detail_ids = array_unique(array_merge($order_detail_ids,$order_detail_id_array));
@@ -251,7 +271,7 @@ class JobManagerController extends Controller
 									->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
 									->where('erp_order_details.id', '=', $order_detail_id)
 									->first();
-
+				
 				!in_array($order_details->buyer_id, $buyers_array)?array_push($buyers_array,$order_details->buyer_id):$buyers_array;
 
 				!in_array($order_details->customer_id, $customers_array)?array_push($customers_array,$order_details->customer_id):$customers_array;
@@ -259,6 +279,8 @@ class JobManagerController extends Controller
 				!in_array($order_details->company_id, $company_array)?array_push($company_array,$order_details->company_id):$company_array;
 
 				!in_array($order_details->created_at, $order_dt_array)?array_push($order_dt_array,$order_details->created_at):$order_dt_array;
+				
+				!in_array(Carbon::parse($order_details->delivery_date)->format('d-m-Y'), $delivery_dt_array)?array_push($delivery_dt_array,Carbon::parse($order_details->delivery_date)->format('d-m-Y')):$delivery_dt_array;
 
 				!in_array($order_details->style_no, $style_array)?array_push($style_array,$order_details->style_no):$style_array;
 
@@ -272,7 +294,7 @@ class JobManagerController extends Controller
 				/** Create separate ratio/single templates array  */
 				if($order_details->template_type == "ratio")
 				{
-					$ratio_templates[$order_details->reference_name][] = DB::table('erp_order_details')->select('erp_order_details.order_quantity', $order_details->order_qnty_table_name.'.ratio_pack_type', $order_details->order_qnty_table_name.'.id as qty_table_id',  'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number')
+					$ratio_templates[$order_details->reference_name][] = DB::table('erp_order_details')->select('erp_order_details.order_quantity', $order_details->order_qnty_table_name.'.ratio_pack_type', $order_details->order_qnty_table_name.'.id as qty_table_id',  'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number', 'erp_order_details.order_type', 'erp_order_details.created_at')
 						->join($order_details->order_qnty_table_name, 'erp_order_details.order_qnty_table_id', $order_details->order_qnty_table_name.'.id')
 						->join('erp_orders', 'erp_order_details.erp_order_id', 'erp_orders.id')
 						->where('erp_order_details.id', '=', $order_detail_id)
@@ -280,18 +302,23 @@ class JobManagerController extends Controller
 				}
 				else
 				{
-					$single_temp_data = DB::table('erp_orders')->select('erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_orders.id as erp_table_id', 'erp_order_details.size', 'erp_order_details.order_quantity', 'erp_order_details.reference_name', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number')
+					$single_temp_data = DB::table('erp_orders')->select('erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_orders.id as erp_table_id', 'erp_order_details.size', 'erp_order_details.order_quantity', 'erp_order_details.reference_name', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number', 'erp_order_details.order_type', 'erp_order_details.created_at')
 								->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
 								->where('erp_order_details.id', '=', $order_detail_id)
 								->first();
+					
+					// to differnciate reorder and repeatorder having same values
+					$created_time = str_replace(':','', Carbon::parse($single_temp_data->created_at, 'Asia/Kolkata')->toTimeString());
+					$created_dt   = str_replace('-','', Carbon::parse($single_temp_data->created_at, 'Asia/Kolkata')->toDateString());
+					$created_at_key = $created_dt.$created_time;
 
-					$erp_id_array[$single_temp_data->reference_name][] = $single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number;
+					$erp_id_array[$single_temp_data->reference_name][] = $single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$created_at_key;
 
-					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number]['ocn_number'] = $single_temp_data->ocn_number;
-					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number]['erp_id'] = $single_temp_data->erp_id;
-					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number]['buyer_po_number'] = $single_temp_data->buyer_po_number;
-					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number]['template_id'] = $single_temp_data->template_id;
-					$single_templates[$single_temp_data->reference_name]['size'][$single_temp_data->size][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number]= $single_temp_data->order_quantity;
+					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$created_at_key]['ocn_number'] = $single_temp_data->ocn_number;
+					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$created_at_key]['erp_id'] = $single_temp_data->erp_id;
+					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$created_at_key]['buyer_po_number'] = $single_temp_data->buyer_po_number;
+					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$created_at_key]['template_id'] = $single_temp_data->template_id;
+					$single_templates[$single_temp_data->reference_name]['size'][$single_temp_data->size][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$created_at_key]= $single_temp_data->order_quantity;
 				}
 			}
 
@@ -349,7 +376,7 @@ class JobManagerController extends Controller
 				{
 					!in_array($template_details->color, $print_color_array)?array_push($print_color_array,$template_details->color):$print_color_array;
 
-					!in_array($material_array[$template_details->material_id]=$template_details->material, $material_array)?$material_array[$template_details->material_id]=$template_details->material:$material_array;
+					!in_array($template_details->material, $material_array)?array_push($material_array,$template_details->material):$material_array;
 
 					!in_array($template_details->article, $article_array)?array_push($article_array,$template_details->article):$article_array;
 
@@ -366,6 +393,7 @@ class JobManagerController extends Controller
 			/** Different size breakup value handling */
 			foreach($single_templates as $template => $template_item)
 			{
+				ksort($template_item['order_data']);
 				$po_count = sizeof($template_item['order_data']);
 
 				foreach($template_item['size'] as $size => $qty)
@@ -414,6 +442,7 @@ class JobManagerController extends Controller
 
 			/** Push all array values into template_data array */
 			$template_data['order_date']       = Carbon::parse(min($order_dt_array))->format('d-m-Y');
+			$template_data['cus_del_date']     = $delivery_dt_array;
 			$template_data['today_date']       = $this->current_date;
 			$template_data['workorder_id']     = $workorder_id;
 			$template_data['company']          = $company;
@@ -448,7 +477,7 @@ class JobManagerController extends Controller
 		try {
 				$company_id      = $request['company_id'];
 				$workorder_id    = $request['workorder_id'];
-				$created_date    = Carbon::parse($request['created_date'],'Asia/Kolkata')->toDateString();
+				$created_date    = $request['created_date'] == ''?NULL:Carbon::parse($request['created_date'],'Asia/Kolkata')->toDateString();
 				$article         = $request['article'];
 				$material        = $request['material'];
 				$customer_id     = $request['customer_id'];
@@ -457,15 +486,15 @@ class JobManagerController extends Controller
 				$buyer_id        = $request['buyer_id'];
 				$reference       = $request['reference'];
 				$disp_mode       = $request['disp_mode'];
-				$order_date      = Carbon::parse($request['order_date'],'Asia/Kolkata')->toDateString();
+				$order_date      = $request['order_date'] == ''?NULL:Carbon::parse($request['order_date'],'Asia/Kolkata')->toDateString();
 				$length          = $request['length'];
 				$repeat_gap      = $request['repeat_gap'];
 				$machine         = $request['machine'];
-				$cus_del_date    = Carbon::parse($request['cus_del_date'],'Asia/Kolkata')->toDateString();
+				$cus_del_date    = $request['cus_del_date'] == ''?NULL:Carbon::parse($request['cus_del_date'],'Asia/Kolkata')->toDateString();
 				$roll_width      = $request['roll_width'];
 				$width           = $request['width'];
 				$film_no         = $request['film_no'];
-				$act_del_date    = Carbon::parse($request['act_del_date'],'Asia/Kolkata')->toDateString();
+				$invoice_date    = $request['invoice_date'] == ''?NULL:Carbon::parse($request['invoice_date'],'Asia/Kolkata')->toDateString();
 				$length_side     = $request['length_side'];
 				$excess          = $request['excess'];
 				$teeth_no        = $request['teeth_no'];
@@ -481,7 +510,7 @@ class JobManagerController extends Controller
 				$axicon_verifier = $request['axicon_verifier'];
 				$approved_by     = $request['approved_by'];
 				$packer          = $request['packer'];
-				$approval_date   = Carbon::parse($request['approval_date'],'Asia/Kolkata')->toDateString();
+				$approval_date   = $request['approval_date'] == ''?NULL:Carbon::parse($request['approval_date'],'Asia/Kolkata')->toDateString();
 				$roll_issued_by  = $request['roll_issued_by'];
 				$cutter          = $request['cutter'];
 				$cartons         = $request['cartons'];
@@ -489,8 +518,9 @@ class JobManagerController extends Controller
 				$erp_orders_ids  = explode(',', $request['erp_orders_ids']);
 			    $selected_ref    = explode(',', $request['selected_ref_array']);
 				$buyer_pos       = explode(',', $request['selected_buyer_po_array']);
+				$order_types     = explode(',', $request['order_type_array']);
 
-				if(isset($company_id) && isset($workorder_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($machine) && isset($cus_del_date)  && isset($film_no) && isset($act_del_date) && isset($teeth_no)  && isset($inv_no) && isset($finish_type)  && isset($compiled_by) && isset($barcode_read) && isset($operator) && isset($checker) && isset($authorized_by) && isset($axicon_verifier) && isset($approved_by) && isset($packer) && isset($approval_date) && isset($roll_issued_by)  && isset($cutter) && isset($cartons) && isset($final_json_obj) )
+				if(isset($company_id) && isset($workorder_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($machine) && isset($cus_del_date)  && isset($finish_type)  && isset($compiled_by) && isset($final_json_obj) && isset($material))
 				{
 					// Get Erp status table id for 'Jobcard Created' status.
 					$erp_status_id = DB::table('erp_status')->where('status_name', 'ilike', 'Jobcard Created')->value('id');
@@ -514,7 +544,7 @@ class JobManagerController extends Controller
 						'width'                  => $width,
 						'roll_width'             => $roll_width,
 						'film_no'                => $film_no,
-						'act_del_date'           => $act_del_date,
+						'invoice_date'           => $invoice_date,
 						'length_side'            => $length_side,
 						'excess_percentage'      => $excess,
 						'teeth_no'               => $teeth_no,
@@ -583,6 +613,7 @@ class JobManagerController extends Controller
 							->where('erp_order_details.erp_order_id', $erp_orders_id)
 							->where('erp_order_details.reference_name', 'ilike', $selected_ref[$row])
 							->where('erp_order_details.buyer_po_number', 'ilike', $buyer_pos[$row])
+							->where('erp_order_details.order_type', 'ilike', $order_types[$row])
 							->update([
 								'status'  => $erp_status_id
 							]);
@@ -605,13 +636,24 @@ class JobManagerController extends Controller
 							}
 						}
 
-						$buyer = DB::table('buyers')->select('buyer_name')->where('id', '=', $buyer_id)->first();
+						$buyer    = DB::table('buyers')->select('buyer_name')->where('id', '=', $buyer_id)->first();
 						$customer = DB::table('customers')->select('short_name as customer_name')->where('id', '=', $customer_id)->first();
-						$company = DB::table('company')->select('name as company', 'address as company_address', 'logo as company_logo')->where('id', '=', $company_id)->first();
+						$company  = DB::table('company')->select('name as company', 'address as company_address', 'logo as company_logo')->where('id', '=', $company_id)->first();
+
+						$erp_dispatch_mode = DB::table('erp_dispatch_mode')->where('id','=', $disp_mode)->value('disp_mode');
+						$erp_finish_type   = DB::table('erp_finish_type')->where('id','=', $finish_type)->value('finish_type');
+						$erp_machine       = DB::table('erp_machines')->where('id','=', $machine)->value('machine');
+						$erp_teeth_no 	   = DB::table('erp_teeth_no')->where('id','=', $teeth_no)->value('teeth_no');
 
 						/** [ Creating new object for JobcardPDFHeaderFooter() class ] */
+						$format_approval_date  = $approval_date == ''?NULL:Carbon::parse($approval_date)->format('d-m-Y');
+						$formated_inv_date     = $invoice_date == ''?NULL:Carbon::parse($invoice_date)->format('d-m-Y');
+						$formated_created_date = $created_date == ''?NULL:Carbon::parse($created_date)->format('d-m-Y');
+						$formated_order_date   = $order_date == ''?NULL:Carbon::parse($order_date)->format('d-m-Y');
+						$formated_cus_del_date = $cus_del_date == ''?NULL:Carbon::parse($cus_del_date)->format('d-m-Y');
+						
 						$pdf = new JobcardPDFHeaderFooter(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-						$pdf->setData($company, $workorder_id, Carbon::parse($created_date)->format('d-m-Y'), $article, $material, $compiled_by, $barcode_read, $operator, $checker, $authorized_by, $axicon_verifier, $approved_by, $packer, Carbon::parse($approval_date)->format('d-m-Y'), $roll_issued_by, $cutter, $cartons);	
+						$pdf->setData($company, $workorder_id, $formated_created_date, $article, $material, $compiled_by, $barcode_read, $operator, $checker, $authorized_by, $axicon_verifier, $approved_by, $packer, $format_approval_date, $roll_issued_by, $cutter, $cartons);	
 
 						$pdf->SetPrintHeader(true);
 						$pdf->SetPrintFooter(true);  
@@ -644,28 +686,28 @@ class JobManagerController extends Controller
 										'customer' 		 => $customer,
 										'company'		 => $company,
 										'workorder_id'   => $workorder_id,
-										'created_date'   => Carbon::parse($created_date)->format('d-m-Y'),
+										'created_date'   => $formated_created_date,
 										'article'	     => $article,
 										'material'		 => $material,
 										'style_no'		 => $style_no,
 										'order_type'     => $order_type,
 										'reference'		 => $reference,
-										'disp_mode'	     => $disp_mode,
-										'order_date'	 => Carbon::parse($order_date)->format('d-m-Y'),
+										'disp_mode'	     => $erp_dispatch_mode,
+										'order_date'	 => $formated_order_date,
 										'length'		 => $length,
 										'repeat_gap'	 => $repeat_gap,
-										'machine'		 => $machine,
-										'cus_del_date' 	 => Carbon::parse($cus_del_date)->format('d-m-Y'),
+										'machine'		 => $erp_machine,
+										'cus_del_date' 	 => $formated_cus_del_date,
 										'roll_width'	 => $roll_width,
 										'width'	  		 => $width,
 										'film_no'		 => $film_no, 
-										'act_del_date'   => Carbon::parse($act_del_date)->format('d-m-Y'),
+										'invoice_date'   => $formated_inv_date,
 										'length_side'	 => $length_side,
 										'excess'	     => $excess,
-										'teeth_no'		 => $teeth_no,
+										'teeth_no'		 => $erp_teeth_no,
 										'inv_no'	     => $inv_no,
 										'no_sticker'	 => $no_sticker,
-										'finish_type'	 => $finish_type,
+										'finish_type'	 => $erp_finish_type,
 										'print_color'    => $print_color,
 										'compiled_by'    => $compiled_by,
 										'barcode_read'   => $barcode_read,
@@ -675,7 +717,7 @@ class JobManagerController extends Controller
 										'axicon_verifier'=> $axicon_verifier,
 										'approved_by'	 => $approved_by,
 										'packer'		 => $packer,
-										'approval_date'  => Carbon::parse($approval_date)->format('d-m-Y'),
+										'approval_date'  => $format_approval_date,
 										'roll_issued_by' => $roll_issued_by,
 										'cutter'		 => $cutter,
 										'cartons' 		 => $cartons,
@@ -688,7 +730,7 @@ class JobManagerController extends Controller
 								]);
 
 						//append content to header
-						$pdf->SetXY(15,50);
+						$pdf->SetXY(13.4,26.3);
 						$pdf->writeHTML($view->render());
 
 						//Close and output PDF document
@@ -850,7 +892,7 @@ class JobManagerController extends Controller
            }
            
            return response()->json(['size_chart' => $size]);
-       } catch (\Exctesteption $e) {
+       } catch (\Exception $e) {
            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
        }
     }
@@ -884,7 +926,7 @@ class JobManagerController extends Controller
 							->update([
 								'buyer_po_number'  => $order_omp{0}->po_number,
 								'zone'  => $order_omp{0}->zone,
-								'custom_ref_name'  => $data['custom_name']{0}->custom_name,
+								'custom_ref_name'  => $data['custom_name']{0}->custom_name
 							]);
 		}
 	}
@@ -902,26 +944,40 @@ class JobManagerController extends Controller
 				$companies   = 	DB::table('erpuser_company_mapping')
 										->join('company','erpuser_company_mapping.company','company.id')
 										->where('erpuser_company_mapping.erp_user',$customer_id)
-										->select('erpuser_company_mapping.*','company.name', 'company.logo')
+										->select('erpuser_company_mapping.*','company.name', 'company.logo','company.id')
 										->get();
-				$company_id   = DB::table('company')
-				->select('company.*')
-				->first();
+				if($companies)
+				{
+					$company_id   = DB::table('company')
+									->select('company.*')
+									->where('company.id', '=', $companies{0}->company)
+									->first();
+				}
+				else
+				{
+					return view('erp.home');
+				}
+				
 				
 				if(session()->get('company') == "" && session()->get('company') == null)
 				{
 					session()->put('company', $company_id->id);
 					session()->put('company_name', strtolower( str_replace(' ','',$company_id->name)) );
 				}
-				$jobcards  = 	DB::table('jobcard_main_table')
-								->select('jobcard_main_table.*','customers.company_name',
-								'buyers.buyer_name')
-								->join('customers', 'jobcard_main_table.customer_id', 'customers.id')
-								->join('buyers', 'jobcard_main_table.buyer_id', 'buyers.id')
+				/**
+				 * Dropdown values
+				 */
+				$buyers  = 	DB::table('buyers')
+								->join('jobcard_main_table', 'jobcard_main_table.buyer_id', 'buyers.id')
 								->where('jobcard_main_table.company_id', '=', session()->get('company'))
-								->get();
-
-				return view('erp.Jobmanager.jobcards-list', ['jobcards' => $jobcards, 'companies' => $companies]);	
+								->pluck('buyers.buyer_name','buyers.id')
+								->all();
+				
+				$erp_dispatch_mode = DB::table('erp_dispatch_mode')->where('is_enabled','=',true)->pluck('disp_mode','id')->all();
+				$erp_finish_type   = DB::table('erp_finish_type')->where('is_enabled','=',true)->pluck('finish_type','id')->all();
+				$erp_machines      = DB::table('erp_machines')->where('is_enabled','=',true)->pluck('machine','id')->all();
+				$erp_teeth_no      = DB::table('erp_teeth_no')->where('is_enabled','=',true)->pluck('teeth_no','id')->all();
+				return view('erp.Jobmanager.jobcards-list', ['buyers' => $buyers, 'companies' => $companies, 'disp_modes' => $erp_dispatch_mode, 'finish_types' => $erp_finish_type, 'machines' => $erp_machines, 'teeth_nos' => $erp_teeth_no]);	
 			} catch (\Exctesteption $e) {
 				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
 			}
@@ -932,7 +988,7 @@ class JobManagerController extends Controller
      * @author <Praveen>
 	 * @param  $id
      * @return equivalent jobcard details
-     */
+     */  
     public function getJobcardDetailsById(Request $request)
     {
         try {
@@ -940,9 +996,9 @@ class JobManagerController extends Controller
 
 				$customer_id = Auth::guard('erpuser')->id();
 
-				if(session()->get('company') == "" && session()->get('company') == null && $customer_id == null)
+				if(session()->get('company') == "" || session()->get('company') == null || $customer_id == null)
 				{
-					return response()->json(['error'=> true,'message' =>'Not Authorized User'], 401);
+					return view('erp.home');
 				}
 				else
 				{
@@ -953,11 +1009,11 @@ class JobManagerController extends Controller
 										->join('buyers', 'jobcard_main_table.buyer_id', 'buyers.id')
 										->where('jobcard_main_table.id', '=', $id)
 										->first();
-					$jobcard_data->created_date      =	Carbon::parse($jobcard_data->created_date)->format('d-m-Y');
-					$jobcard_data->order_date        =	Carbon::parse($jobcard_data->order_date)->format('d-m-Y');
-					$jobcard_data->customer_del_date =	Carbon::parse($jobcard_data->customer_del_date)->format('d-m-Y');
-					$jobcard_data->act_del_date      =	Carbon::parse($jobcard_data->act_del_date)->format('d-m-Y');
-					$jobcard_data->approval_date     =	Carbon::parse($jobcard_data->approval_date)->format('d-m-Y');
+					$jobcard_data->created_date      =	$jobcard_data->created_date == ''?NULL:Carbon::parse($jobcard_data->created_date)->format('d-m-Y');
+					$jobcard_data->order_date        =	$jobcard_data->order_date == ''?NULL:Carbon::parse($jobcard_data->order_date)->format('d-m-Y');
+					$jobcard_data->customer_del_date =	$jobcard_data->customer_del_date == ''?NULL:Carbon::parse($jobcard_data->customer_del_date)->format('d-m-Y');
+					$jobcard_data->invoice_date      =	$jobcard_data->invoice_date == ''?NULL:Carbon::parse($jobcard_data->invoice_date)->format('d-m-Y');
+					$jobcard_data->approval_date     =	$jobcard_data->approval_date == ''?NULL:Carbon::parse($jobcard_data->approval_date)->format('d-m-Y');
 
 				    $jobcard_details  = DB::table('jobcard_excess_details')
 										->select('jobcard_excess_details.ref_name', 'jobcard_excess_details.mtrs_for_stickers', 'jobcard_excess_details.actual_excess', 'jobcard_excess_details.settings', 'jobcard_excess_details.total_mtrs')
@@ -982,7 +1038,7 @@ class JobManagerController extends Controller
 		try {
 				$company_id      = $request['company_id'];
 				$workorder_id    = $request['workorder_id'];
-				$created_date    = Carbon::parse($request['created_date'],'Asia/Kolkata')->toDateString();
+				$created_date    = $request['created_date'] == ''?NULL:Carbon::parse($request['created_date'],'Asia/Kolkata')->toDateString();
 				$article         = $request['article'];
 				$material        = $request['material'];
 				$customer_id     = $request['customer_id'];
@@ -991,15 +1047,15 @@ class JobManagerController extends Controller
 				$buyer_id        = $request['buyer_id'];
 				$reference       = $request['reference'];
 				$disp_mode       = $request['disp_mode'];
-				$order_date      = Carbon::parse($request['order_date'],'Asia/Kolkata')->toDateString();
+				$order_date      = $request['order_date'] == ''?NULL:Carbon::parse($request['order_date'],'Asia/Kolkata')->toDateString();
 				$length          = $request['length'];
 				$repeat_gap      = $request['repeat_gap'];
 				$machine         = $request['machine'];
-				$cus_del_date    = Carbon::parse($request['cus_del_date'],'Asia/Kolkata')->toDateString();
+				$cus_del_date    = $request['cus_del_date'] == ''?NULL:Carbon::parse($request['cus_del_date'],'Asia/Kolkata')->toDateString();
 				$roll_width      = $request['roll_width'];
 				$width           = $request['width'];
 				$film_no         = $request['film_no'];
-				$act_del_date    = Carbon::parse($request['act_del_date'],'Asia/Kolkata')->toDateString();
+				$invoice_date    = $request['invoice_date'] == ''?NULL:Carbon::parse($request['invoice_date'],'Asia/Kolkata')->toDateString();
 				$length_side     = $request['length_side'];
 				$excess          = $request['excess'];
 				$teeth_no        = $request['teeth_no'];
@@ -1015,14 +1071,14 @@ class JobManagerController extends Controller
 				$axicon_verifier = $request['axicon_verifier'];
 				$approved_by     = $request['approved_by'];
 				$packer          = $request['packer'];
-				$approval_date   = Carbon::parse($request['approval_date'],'Asia/Kolkata')->toDateString();
+				$approval_date   = $request['approval_date'] == ''?NULL:Carbon::parse($request['approval_date'],'Asia/Kolkata')->toDateString();
 				$roll_issued_by  = $request['roll_issued_by'];
 				$cutter          = $request['cutter'];
 				$cartons         = $request['cartons'];
 				$final_json_obj  = $request['final_json_obj'];
 				$jobcard_id 	 = $request['jobcard_id'];
 
-				if(isset($company_id) && isset($workorder_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($machine) && isset($cus_del_date)  && isset($film_no) && isset($act_del_date) && isset($teeth_no)  && isset($inv_no) && isset($finish_type)  && isset($compiled_by) && isset($barcode_read) && isset($operator) && isset($checker) && isset($authorized_by) && isset($axicon_verifier) && isset($approved_by) && isset($packer) && isset($approval_date) && isset($roll_issued_by)  && isset($cutter) && isset($cartons) && isset($final_json_obj) && isset($jobcard_id) )
+				if(isset($company_id) && isset($workorder_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($machine) && isset($cus_del_date)  && isset($finish_type)  && isset($compiled_by) && isset($final_json_obj) && isset($jobcard_id) && isset($material))
 				{
 					DB::table('jobcard_main_table')->where('id', $jobcard_id)
 					->update([
@@ -1045,7 +1101,7 @@ class JobManagerController extends Controller
 						'width'                  => $width,
 						'roll_width'             => $roll_width,
 						'film_no'                => $film_no,
-						'act_del_date'           => $act_del_date,
+						'invoice_date'           => $invoice_date,
 						'length_side'            => $length_side,
 						'excess_percentage'      => $excess,
 						'teeth_no'               => $teeth_no,
@@ -1107,13 +1163,24 @@ class JobManagerController extends Controller
 						$total_mtrs 	 = explode(',', $request['total_mtrs']);
 					}
 
-					$buyer = DB::table('buyers')->select('buyer_name')->where('id', '=', $buyer_id)->first();
+					$buyer    = DB::table('buyers')->select('buyer_name')->where('id', '=', $buyer_id)->first();
 					$customer = DB::table('customers')->select('short_name as customer_name')->where('id', '=', $customer_id)->first();
-					$company = DB::table('company')->select('name as company', 'address as company_address', 'logo as company_logo')->where('id', '=', $company_id)->first();
+					$company  = DB::table('company')->select('name as company', 'address as company_address', 'logo as company_logo')->where('id', '=', $company_id)->first();
+
+					$erp_dispatch_mode = DB::table('erp_dispatch_mode')->where('id','=', $disp_mode)->value('disp_mode');
+					$erp_finish_type   = DB::table('erp_finish_type')->where('id','=', $finish_type)->value('finish_type');
+					$erp_machine       = DB::table('erp_machines')->where('id','=', $machine)->value('machine');
+					$erp_teeth_no      = DB::table('erp_teeth_no')->where('id','=', $teeth_no)->value('teeth_no');
 
 					/** [ Creating new object for JobcardPDFHeaderFooter() class ] */
+					$format_approval_date  = $approval_date == ''?NULL:Carbon::parse($approval_date)->format('d-m-Y');
+					$formated_inv_date     = $invoice_date == ''?NULL:Carbon::parse($invoice_date)->format('d-m-Y');
+					$formated_created_date = $created_date == ''?NULL:Carbon::parse($created_date)->format('d-m-Y');
+					$formated_order_date   = $order_date == ''?NULL:Carbon::parse($order_date)->format('d-m-Y');
+					$formated_cus_del_date = $cus_del_date == ''?NULL:Carbon::parse($cus_del_date)->format('d-m-Y');
+
 					$pdf = new JobcardPDFHeaderFooter(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-					$pdf->setData($company, $workorder_id, Carbon::parse($created_date)->format('d-m-Y'), $article, $material, $compiled_by, $barcode_read, $operator, $checker, $authorized_by, $axicon_verifier, $approved_by, $packer, Carbon::parse($approval_date)->format('d-m-Y'), $roll_issued_by, $cutter, $cartons);	
+					$pdf->setData($company, $workorder_id, $formated_created_date, $article, $material, $compiled_by, $barcode_read, $operator, $checker, $authorized_by, $axicon_verifier, $approved_by, $packer, $format_approval_date, $roll_issued_by, $cutter, $cartons);	
 
 					$pdf->SetPrintHeader(true);
 					$pdf->SetPrintFooter(true);  
@@ -1141,56 +1208,56 @@ class JobManagerController extends Controller
 
 					// set some text to print
 					$view = View::make('erp/Jobmanager/jobcard-pdf-template')
-							->with([
-									'buyer' 		 => $buyer,
-									'customer' 		 => $customer,
-									'company'		 => $company,
-									'workorder_id'   => $workorder_id,
-									'created_date'   => Carbon::parse($created_date)->format('d-m-Y'),
-									'article'	     => $article,
-									'material'		 => $material,
-									'style_no'		 => $style_no,
-									'order_type'     => $order_type,
-									'reference'		 => $reference,
-									'disp_mode'	     => $disp_mode,
-									'order_date'	 => Carbon::parse($order_date)->format('d-m-Y'),
-									'length'		 => $length,
-									'repeat_gap'	 => $repeat_gap,
-									'machine'		 => $machine,
-									'cus_del_date' 	 => Carbon::parse($cus_del_date)->format('d-m-Y'),
-									'roll_width'	 => $roll_width,
-									'width'	  		 => $width,
-									'film_no'		 => $film_no, 
-									'act_del_date'   => Carbon::parse($act_del_date)->format('d-m-Y'),
-									'length_side'	 => $length_side,
-									'excess'	     => $excess,
-									'teeth_no'		 => $teeth_no,
-									'inv_no'	     => $inv_no,
-									'no_sticker'	 => $no_sticker,
-									'finish_type'	 => $finish_type,
-									'print_color'    => $print_color,
-									'compiled_by'    => $compiled_by,
-									'barcode_read'   => $barcode_read,
-									'operator'       => $operator,
-									'checker'        => $checker,
-									'authorized_by'  => $authorized_by,
-									'axicon_verifier'=> $axicon_verifier,
-									'approved_by'	 => $approved_by,
-									'packer'		 => $packer,
-									'approval_date'  => Carbon::parse($approval_date)->format('d-m-Y'),
-									'roll_issued_by' => $roll_issued_by,
-									'cutter'		 => $cutter,
-									'cartons' 		 => $cartons,
-									'final_json_obj' => json_decode($final_json_obj, true),
-									'single_ref'	 => $single_ref,
-									'act_excess'	 => $act_excess,
-									'sticker_mtr'	 => $sticker_mtr,
-									'settings'		 => $settings,
-									'total_mtrs' 	 => $total_mtrs
-							]);
+								->with([
+										'buyer' 		 => $buyer,
+										'customer' 		 => $customer,
+										'company'		 => $company,
+										'workorder_id'   => $workorder_id,
+										'created_date'   => $formated_created_date,
+										'article'	     => $article,
+										'material'		 => $material,
+										'style_no'		 => $style_no,
+										'order_type'     => $order_type,
+										'reference'		 => $reference,
+										'disp_mode'	     => $erp_dispatch_mode,
+										'order_date'	 => $formated_order_date,
+										'length'		 => $length,
+										'repeat_gap'	 => $repeat_gap,
+										'machine'		 => $erp_machine,
+										'cus_del_date' 	 => $formated_cus_del_date,
+										'roll_width'	 => $roll_width,
+										'width'	  		 => $width,
+										'film_no'		 => $film_no, 
+										'invoice_date'   => $formated_inv_date,
+										'length_side'	 => $length_side,
+										'excess'	     => $excess,
+										'teeth_no'		 => $erp_teeth_no,
+										'inv_no'	     => $inv_no,
+										'no_sticker'	 => $no_sticker,
+										'finish_type'	 => $erp_finish_type,
+										'print_color'    => $print_color,
+										'compiled_by'    => $compiled_by,
+										'barcode_read'   => $barcode_read,
+										'operator'       => $operator,
+										'checker'        => $checker,
+										'authorized_by'  => $authorized_by,
+										'axicon_verifier'=> $axicon_verifier,
+										'approved_by'	 => $approved_by,
+										'packer'		 => $packer,
+										'approval_date'  => $format_approval_date,
+										'roll_issued_by' => $roll_issued_by,
+										'cutter'		 => $cutter,
+										'cartons' 		 => $cartons,
+										'final_json_obj' => json_decode($final_json_obj, true),
+										'single_ref'	 => $single_ref,
+										'act_excess'	 => $act_excess,
+										'sticker_mtr'	 => $sticker_mtr,
+										'settings'		 => $settings,
+										'total_mtrs' 	 => $total_mtrs
+								]);
 
 					//append content to header
-					$pdf->SetXY(15,50);
+					$pdf->SetXY(13.4,25.5);
 					$pdf->writeHTML($view->render());
 
 					//Close and output PDF document
@@ -1220,6 +1287,160 @@ class JobManagerController extends Controller
 		{
 			return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
 		}
+	}
+	/**
+     * Function to update ordertype value for existing data in erp_order_details table.
+     * @author <Praveen>
+     */
+	public function scriptUpdateOrderType()
+	{
+		$order_details = DB::table('erp_order_details')->get();
+		
+		foreach($order_details as $value)
+		{
+			$order_details_data  = 	DB::table($value->order_qnty_table_name)
+									->where('id',$value->order_qnty_table_id)
+									->select('*')
+									->get();
+			
+			if($order_details_data)
+			{
+				$order_table = str_replace("_quanty","",$value->order_qnty_table_name);
+				$order_id    = strtolower(str_replace(" ","",$value->reference_name).'_order_id');
+				$order_data  = 	DB::table($order_table)
+										->where($order_table.'.id',$order_details_data{0}->$order_id)
+										->select($order_table.'.*')
+										->get();
+				$order_type = $order_data{0}->order_flag;
+			}
+			else
+			{
+				$order_type = 'newOrder';
+			}
+			DB::table('erp_order_details')
+							->where('erp_order_details.id', $value->id)
+							->update([
+								'order_type' => $order_type
+							]);
+		}
+	}
+
+
+	/**
+     * Function to get customers list by  buyer id.
+     * @author <Praveen>
+	 * @param  $buyer_id
+     * @return equivalent customer list
+     */  
+    public function getCustomersListByBuyerId(Request $request)
+    {
+        try {
+				$buyer_id = $request['selected_buyer_id'];
+
+				if(session()->get('company') == "" || session()->get('company') == null)
+				{
+					return view('erp.home');
+				}
+
+				if($buyer_id == null)
+				{
+					return response()->json(['error'=> true,'message' =>'Parameter Missing'], 400);
+				}
+				else
+				{
+					$customers_list  = 	DB::table('customers')
+										->join('jobcard_main_table', 'jobcard_main_table.customer_id', 'customers.id')
+										->where('jobcard_main_table.company_id', '=', session()->get('company'))
+										->where('jobcard_main_table.buyer_id', '=', $buyer_id)
+										->pluck('customers.company_name','customers.id')
+										->all();
+					return response()->json(['error'=> false,'message' =>'Success', 'customers_list' => $customers_list], 200);
+				}
+				    
+	
+			} catch (\Exctesteption $e) {
+				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+			}
+	}
+
+	/**
+     * Function to get jobcard id list by  buyer id and customer id.
+     * @author <Praveen>
+	 * @param  $buyer_id, $customer_id
+     * @return equivalent jobcard ids list
+     */  
+    public function getJobcardIdListByBuyerCustomerId(Request $request)
+    {
+        try {
+				$buyer_id    = $request['selected_buyer_id'];
+				$customer_id = $request['selected_customer_id'];
+
+				if(session()->get('company') == "" || session()->get('company') == null)
+				{
+					return view('erp.home');
+				}
+
+				if($buyer_id == null || $customer_id == null)
+				{
+					return response()->json(['error'=> true,'message' =>'Parameter Missing'], 400);
+				}
+				else
+				{
+					$jobcard_id_list  = DB::table('jobcard_main_table')
+											->where('jobcard_main_table.company_id', '=', session()->get('company'))
+											->where('jobcard_main_table.buyer_id', '=', $buyer_id)
+											->where('jobcard_main_table.customer_id', '=', $customer_id)
+											->pluck('jobcard_main_table.work_order_id','jobcard_main_table.id')
+											->all();
+					return response()->json(['error'=> false,'message' =>'Success', 'jobcard_id_list' => $jobcard_id_list], 200);
+				}
+				    
+	
+			} catch (\Exctesteption $e) {
+				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+			}
+	}
+
+	/**
+     * Function to get jobcards list by  buyer id, customer id and jobcard id.
+     * @author <Praveen>
+	 * @param  $buyer_id, $customer_id, $jobcard_id
+     * @return equivalent jobcard list
+     */  
+    public function getJobcardsListByBuyerCustomerJobcardId(Request $request)
+    {
+        try {
+				$buyer_id    = $request['selected_buyer_id'];
+				$customer_id = $request['selected_customer_id'];
+				$jobcard_id  = $request['selected_jobcard_id'];
+
+				if(session()->get('company') == "" || session()->get('company') == null)
+				{
+					return view('erp.home');
+				}
+
+				if($buyer_id == null || $customer_id == null || $jobcard_id == null)
+				{
+					return response()->json(['error'=> true,'message' =>'Parameter Missing'], 400);
+				}
+				else
+				{
+					$jobcards_list  = DB::table('jobcard_main_table')
+											->join('customers', 'jobcard_main_table.customer_id', 'customers.id')
+											->join('buyers', 'jobcard_main_table.buyer_id', 'buyers.id')
+											->where('jobcard_main_table.company_id', '=', session()->get('company'))
+											->where('jobcard_main_table.buyer_id', '=', $buyer_id)
+											->where('jobcard_main_table.customer_id', '=', $customer_id)
+											->where('jobcard_main_table.id', '=', $jobcard_id)
+											->select('jobcard_main_table.id as jobcard_id', 'jobcard_main_table.work_order_id', 'customers.company_name', 'buyers.buyer_name')
+											->first();
+					return response()->json(['error'=> false,'message' =>'Success', 'jobcards_list' => $jobcards_list], 200);
+				}
+				    
+	
+			} catch (\Exctesteption $e) {
+				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+			}
 	}
 	
 

@@ -30,7 +30,7 @@
 			</div>
 			<div class="main-sub-menu">
 				<div class="action-group pull-right sub-menu-button">
-					<a href="#" data-target="#addModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add User</a>
+					<a href="#" data-target="#addModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add User</a>
 				</div>
 			</div>
 			<div class="clearfix"></div>
@@ -115,7 +115,7 @@
 					<div class="col-md-2">
 						<div class="form-group has-feedback">
 							{!! Form::label('user_name', 'User Name', ['class' => 'form_label']) !!}
-							{!! Form::text('user_name',$value = '', array('class' => 'form-control input-sm','id' => 'user_name','placeholder' => 'User Name', 'required')) !!}
+							{!! Form::text('user_name',$value = '', array('class' => 'form-control input-sm','id' => 'user_name','placeholder' => 'User Name', 'required', 'style' => 'text-transform: capitalize;')) !!}
 							<div class="help-block with-errors"></div>
 
 						</div>
@@ -191,7 +191,7 @@
 					<div class="col-md-2">
 						<div class="form-group has-feedback">
 							{!! Form::label('edit_user_name', 'User Name', ['class' => 'form_label']) !!}
-							{!! Form::text('edit_user_name', $value = '', array('class' => 'form-control input-sm','id' => 'edit_user_name','placeholder' => 'User Name', 'required')) !!}
+							{!! Form::text('edit_user_name', $value = '', array('class' => 'form-control input-sm','id' => 'edit_user_name','placeholder' => 'User Name', 'required', 'style' => 'text-transform: capitalize;')) !!}
 							<div class="help-block with-errors"></div>
 
 						</div>

@@ -305,13 +305,14 @@ class PoManagerController extends Controller
 							->join('customers','erp_orders.customer_id','customers.id')
                             ->select('erp_orders.*','customers.company_name')
                             ->get();
-			   
+			
 		   foreach($orderlist as $value)
 		   {
 			  $price =  DB::table('price_taxation')->select('price_taxation.*')->where('customer_id',$customer_id)->where('buyer_id',$buyer_id)->where('template_id',$value->template_id)->first();
-			   
+			   	
 			   if (empty($price)) {
 				  $value->price = 0;
+				 
 			   }
 			   else
 			   {
@@ -326,8 +327,6 @@ class PoManagerController extends Controller
 						$value->price = $price_range->price;
 				   }
 			   }
-
-			  
 		   }
 			   
            $result      = response()->json(['error'=> false,'message' =>'success','orderlist'=>$orderlist,'orders'=>$orders],200);
@@ -432,7 +431,7 @@ class PoManagerController extends Controller
 				
 				Mail::send('mails.error-report-po',['po'=> $po,'style_no'=>$style_no,'reference'=> $reference,'qty'=>$qty,'price'=> $price,'po_complete'=>$po_complete,'comment'=>$comment,'commenttext'=>$commenttext,'purchase_order_number'=>$purchase_order_number,'customer_name'=>$customer_name,'erp_order_id'=>$erp_order_id], function ($message) use ($to_email)
 				{
-					$message->from('praveen@wizroots.com');
+					$message->from('admin@jga.com');
 					$message->subject('Jupiter Garments Accessories - Error Report');
 					$message->to($to_email->email_address);
 				});  
@@ -458,7 +457,7 @@ class PoManagerController extends Controller
 			   
 				Mail::send('mails.error-report-po',['po'=> $po,'style_no'=>$style_no,'reference'=> $reference,'qty'=>$qty,'price'=> $price,'po_complete'=>$po_complete,'comment'=>$comment,'commenttext'=>$commenttext,'purchase_order_number'=>$purchase_order_number,'customer_name'=>$customer_name,'erp_order_id'=>$erp_order_id], function ($message) use ($to_email)
 				{
-					$message->from('praveen@wizroots.com');
+					$message->from('admin@jga.com');
 					$message->subject('Jupiter Garments Accessories - Error Report');
 					$message->to($to_email->email_address);
 				});  

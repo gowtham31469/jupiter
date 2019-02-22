@@ -27,13 +27,13 @@
         <div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
         <div class="col-md-4">
             <div class="card">
-                <h4>Approved orders</h4>
+                <h4>Approved Orders</h4>
                 <span class="numbers approved-count">{{$approved_orders}}</span><i onclick="showApprovedOrders()" class="fa fa-arrow-right" aria-hidden="true" style="cursor:pointer;float: right;margin-top: 50px;color: #717171;font-size: 18px;"></i>
             </div>
         </div>
         <div class="col-md-4">
             <div class="card">
-                <h4>Approval pending Orders</h4>
+                <h4>Approval Pending Orders</h4>
                 <span class="numbers pending-count">{{$app_pending_orders}}</span><i onclick="showPendingOrders()" class="fa fa-arrow-right" aria-hidden="true" style="cursor:pointer;float: right;margin-top: 50px;color: #717171;font-size: 18px;"></i>
             </div>
         </div>
@@ -154,7 +154,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Approval pending Orders</h4>
+                    <h4 class="modal-title" id="myModalLabel">Approval Pending Orders</h4>
                 </div>
                 <div class="modal-body">
                 </div>

@@ -336,7 +336,7 @@ $('#edit_customer_form').validator().on('submit', function(e) {
 function editCustomer() {              
     try {
         var id      = $('#customer_edit_id').val();
-        var name    = $('#customer_name').val();
+        var name    = toTitleCase($('#customer_name').val());
         var email   = $('#customer_email').val();
         var title   = $('#customer_title').val();
 
@@ -393,6 +393,17 @@ function editCustomer() {
     } catch (e) {
         console.log("Error:" + e)
     }
+}
+
+ /**
+  * Function to  title case conversion
+  * @param {*} str 
+  * @author <praveen>
+  */
+function toTitleCase(str) {
+  return str.replace(/(?:^|\s)\w/g, function(match) {
+      return match.toUpperCase();
+  });
 }
 </script>
     @yield('jqueryIncludes')

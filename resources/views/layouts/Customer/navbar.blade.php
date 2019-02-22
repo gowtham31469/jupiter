@@ -155,7 +155,7 @@
                   <div class="col-md-6">
                       <div class="form-group has-feedback">
                           {!! Form::label('customer_name', 'Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('customer_name',$value = '', array('class' => 'form-control input-sm','id' => 'customer_name','placeholder' => 'Name','required')) !!}
+                          {!! Form::text('customer_name',$value = '', array('class' => 'form-control input-sm','id' => 'customer_name','placeholder' => 'Name','required', 'style' => 'text-transform: capitalize;')) !!}
                           <div class="help-block with-errors"></div>
                       </div>
                   </div>

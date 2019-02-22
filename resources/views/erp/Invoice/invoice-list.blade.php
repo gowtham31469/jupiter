@@ -20,8 +20,8 @@
     }*/
 </style>
 <ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
+<li><a href="{{ url('/erp/create-invoice') }}" class="">Create Invoice</a></li>
 <li><a href="{{ url('/erp/invoice') }}" class="active">Invoice List</a></li>
-    <li><a href="{{ url('/erp/create-invoice') }}" class="">Create Invoice</a></li>
 </ul>
 
 @endsection
@@ -46,7 +46,7 @@
                         <th>Sl. No</th>
                         <th>Invoice ID</th>
                         <th>ERP ID</th>
-                        <th>Customer name</th>
+                        <th>Customer Name</th>
                         <th>PO Number</th>
                         <th>Actions</th>
                     </tr>
@@ -144,10 +144,10 @@
                     <span style="padding-left: 37px;"> : <span style="padding-left: 6px;" class="inv_date" id="inv_date"></span>
                     </span><br>
                     <strong>Invoice No </strong>
-                    <span style="padding-left: 3px;"> : </span>
+                    <span style="padding-left: 2px;"> : </span>
                     <span style="padding-left: 4px;" class="inv_no" id="inv_no" data-id=""></span>
                     <p><strong>Disp thru</strong>          
-                    <span style="padding-left: 10px;"> : </span>
+                    <span style="padding-left: 11px;"> : </span>
                     <span style="padding-left: 4px;" class="disp_thru" id="disp_thru"></span></p>  
                 </div>
                 <div class="col-lg-5 col-md-5 col-sm-5">
@@ -376,15 +376,15 @@ function showInvoice(obj){
           Object.keys(tax_amnt).forEach(function(key) {
             if (place_of_supply==1){
                   var trClass = tax_amnt[key]!=0?"":"hidden"
-                  tax_tr = '<tr class="'+trClass+'"><td>CGST('+(key/2)+'%)</td><td class="cgst_'+key+'">'+tax_amnt[key]+'</td><td>'+(((key/2)/100)*tax_amnt[key]).toFixed(2)+'</td></tr><tr class="'+trClass+'"><td>SGST('+(key/2)+'%)</td><td class="sgst_'+key+'">'+tax_amnt[key]+'</td><td>'+ (((key/2)/100)*tax_amnt[key]).toFixed(2)+'</td></tr>'
+                  tax_tr = '<tr class="'+trClass+'"><td>CGST('+(key/2)+'%)</td><td class="cgst_'+key+'">'+tax_amnt[key].toFixed(2)+'</td><td>'+(((key/2)/100)*tax_amnt[key]).toFixed(2)+'</td></tr><tr class="'+trClass+'"><td>SGST('+(key/2)+'%)</td><td class="sgst_'+key+'">'+tax_amnt[key].toFixed(2)+'</td><td>'+ (((key/2)/100)*tax_amnt[key]).toFixed(2)+'</td></tr>'
               }
               else if (place_of_supply==2){
                   var trClass = tax_amnt[key]!=0?"":"hidden"
                   // if (tax_amnt[key]!=0) {                
-                      tax_tr = '<tr class="'+trClass+'"><td>IGST('+key+'%)</td><td class="igst_'+key+'">'+tax_amnt[key]+'</td><td>'+((key/100)*tax_amnt[key]).toFixed(2)+'</td></tr>'
+                      tax_tr = '<tr class="'+trClass+'"><td>IGST('+key+'%)</td><td class="igst_'+key+'">'+tax_amnt[key].toFixed(2)+'</td><td>'+((key/100)*tax_amnt[key]).toFixed(2)+'</td></tr>'
               }
               else{
-                  tax_tr = '<tr><td>Taxes('+key+'%)</td><td>'+tax_amnt[key]+'</td><td>'+ ((key/100)*tax_amnt[key] ).toFixed(2)+'</td></tr>'
+                  tax_tr = '<tr><td>Taxes('+key+'%)</td><td>'+tax_amnt[key].toFixed(2)+'</td><td>'+ ((key/100)*tax_amnt[key] ).toFixed(2)+'</td></tr>'
               }
 
               $('.tax-tabl').append(tax_tr);
@@ -405,7 +405,7 @@ function showInvoice(obj){
           $('.inv-extra-charges').html('<table class="table table-bordered text-center inv-extra-charges" style="margin-top: -22px;"><thead><tr><th colspan="2">Description</th><th>Amount (₹)</th></tr></thead><tbody>'+taxTr+'<tr><td colspan="2"><strong>SubTotal</strong></td><td><strong class="preview-sub-extra">'+parseFloat(exAmnt).toFixed(2)+'</strong></td></tr><tr class="'+rndClass+'"><td colspan="2"><strong>Round Off</strong></td><td><strong id="preview-round-off">'+parseFloat(roundOff).toFixed(2)+'</strong></td></tr><tr></tr><tr><td colspan="2" style="border-width: 1px !important;"><strong>Grand Total</strong></td><td class="grand-total" style="border-width: 1px !important;"><strong>'+parseFloat(data.inv_details[0].grand_total).toFixed(2)+'</strong></td></tr><tr></tr></tbody></table>')
           $('.amnt-in-words').text(RsPaise($('.grand-total').text()))
 
-          $('.delivery-at').html('<p>'+data.inv_details[0].address+'</p><p>'+data.inv_details[0].email+'</p><p>'+data.inv_details[0].pincode+'</p><p>'+data.inv_details[0].telephone+'</p>')
+          $('.delivery-at').html('<p>'+data.ship_to.address+'</p>')
           $('.invoice_actions').html('<button data-dismiss="modal" class=" btn btn-default btn-xs">Close</button><button class="btn btn-primary btn-xs" onclick="editInvoice()">Save & Send</button><button class="btn btn-default btn-xs downloadIn" id="downloadIn" onclick="downloadInvoice()">View as PDF</button>')
         },
        

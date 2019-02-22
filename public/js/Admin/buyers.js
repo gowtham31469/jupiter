@@ -90,10 +90,10 @@
  function addBuyer()
  {
     try{
-         var name       = $('#buyer_name').val();
+         var name       = toTitleCase($('#buyer_name').val());
          var email      = $('#buyer_email').val();
          var phone      = $('#buyer_phone').val();
-         var address    = $('#buyer_address').val();
+         var address    = toTitleCase($('#buyer_address').val().replace(/,/g, ", "));
          var csrf_token = $('meta[name="csrf-token"]').attr('content');
          var image      = $('#image')[0].files[0];
          var form_data = new FormData();
@@ -241,10 +241,10 @@
  {
   try{
        var id         = $('#buyer_edit_id').val();
-       var name       = $('#edit_buyer_name').val();
+       var name       = toTitleCase($('#edit_buyer_name').val());
        var phone      = $('#edit_buyer_phone').val();
        var email      = $('#edit_buyer_email').val();
-       var address    = $('#edit_buyer_address').val();
+       var address    = toTitleCase($('#edit_buyer_address').val().replace(/,/g, ", "));
        var csrf_token = $('meta[name="csrf-token"]').attr('content');
        var edit_image = $('#edit_image')[0].files[0];
        var form_data  = new FormData();
@@ -401,11 +401,11 @@
   function addMerchandiser()
   {
     try{
-          var name                   = $('#merchandiser_name').val();
+          var name                   = toTitleCase($('#merchandiser_name').val());
           var email                  = $('#merchandiser_email').val();
           var password               = $('#merchandiser_password').val();
           var phone                  = $('#merchandiser_phone').val();
-          var address                = $('#merchandiser_address').val();
+          var address                = toTitleCase($('#merchandiser_address').val().replace(/,/g, ", "));
           var merchandiser_buyer     = $('#merchandiser_buyer').val();
           var csrf_token             = $('meta[name="csrf-token"]').attr('content');
 
@@ -536,10 +536,10 @@
    {
     try{
          var id         = $('#merchandiser_edit_id').val();
-         var name       = $('#edit_merchandiser_name').val();
+         var name       = toTitleCase($('#edit_merchandiser_name').val());
          var phone      = $('#edit_merchandiser_phone').val();
          var email      = $('#edit_merchandiser_email').val();
-         var address    = $('#edit_merchandiser_address').val();
+         var address    = toTitleCase($('#edit_merchandiser_address').val().replace(/,/g, ", "));
          var buyer      = $('#edit_merchandiser_buyer').val();
 
          var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -611,25 +611,6 @@
     } catch (e) {
      console.log("Error:"+e)
    }
-  }
-
-  /**
-    * showSnackbar function
-    * @author    <praveen>
-    */
-  function showSnackbar() {
-    try{
-      /** [ Get the snackbar DIV ] */
-      var x = document.getElementById("snackbar")
-
-      /** [ Add the "show" class to DIV ] */
-      x.className = "show";
-
-      /** [  After 3 seconds, remove the show class from DIV ] */
-      setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
-      } catch (e) {
-       console.log("Error:"+e)
-     }
   }
 
   /**

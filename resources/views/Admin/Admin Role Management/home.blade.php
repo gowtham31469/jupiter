@@ -9,7 +9,7 @@
               <div class="main-sub-menu">
                 <div class="action-group pull-right sub-menu-button">
                   <a href="#" data-target="#addAdminModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                    <i class="ion-plus"></i> Add Admin</a>
+                    <i class="fa fa-plus"></i> Add Admin</a>
                 </div>
               </div>
           <div class="clearfix"></div>
@@ -69,7 +69,7 @@
                       <div id="add_admin_result"></div>
                         <div class="form-group has-feedback">
                           {!! Form::label('name', 'Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required','maxlength' => '25')) !!}
+                          {!! Form::text('name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required','maxlength' => '25', 'style' => 'text-transform: capitalize;')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
@@ -99,7 +99,7 @@
                         </div>
                         <div class="form-group has-feedback">
                           {!! Form::label('address', 'Address', ['class' => 'form_label']) !!}
-                          {!! Form::textarea('address',$value = '', array('class' => 'form-control ','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3,'onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
+                          {!! Form::textarea('address',$value = '', array('class' => 'form-control ','placeholder' => 'Address','required','style'=>'resize:none; text-transform: capitalize;','rows'=>3)) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                     </div>

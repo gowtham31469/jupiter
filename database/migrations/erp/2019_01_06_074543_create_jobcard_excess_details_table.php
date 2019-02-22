@@ -17,10 +17,10 @@ class CreateJobcardExcessDetailsTable extends Migration
             $table->increments('id');
             $table->integer('jobcard_main_table_id')->unsigned();  
             $table->string('ref_name'); 
-            $table->double('mtrs_for_stickers');
-            $table->double('actual_excess');   
-            $table->double('settings');
-            $table->double('total_mtrs');
+            $table->integer('mtrs_for_stickers')->nullable();
+            $table->integer('actual_excess')->nullable();   
+            $table->integer('settings')->nullable();
+            $table->integer('total_mtrs')->nullable();
             $table->timestamps();
             $table->foreign('jobcard_main_table_id')->references('id')->on('jobcard_main_table')->onDelete('cascade');
         });
