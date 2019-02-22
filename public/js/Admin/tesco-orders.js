@@ -7609,13 +7609,6 @@ function selectNewOrder()
 	$("#jstree").on("loaded.jstree", function(){
 		$("#jstree li[id='" + back_template_id + "'] a").click();
 	});
-
-//	$('#jstree').jstree(true).refresh_node(back_template_id)
-	
-	
-//	alert(back_template_id)
-//	$("#jstree li[id=" + back_template_id + "] a").click();
-
 	
 	if (back_zone === 'UK' && order_type_back === "1") {
 		$(".po-upload").removeClass("hidden");
