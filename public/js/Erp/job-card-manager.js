@@ -2264,7 +2264,7 @@ if (name == "TSL1-sticker" || name == "TSL3-sticker") {
     })
                 if (ajax_count == data.order_details.length) {
                     var svg_fin = svgarr.join(',_');
-                    PDFTescoSmallPreview(svg_fin, name);
+                    PDFTescoSmallPreview(svg_fin, name,zone,style_no,buyer_no,id,created_at);
                 }
             },
             error: function(data) {
@@ -2508,7 +2508,7 @@ if (name == "TSL1-sticker" || name == "TSL3-sticker") {
     })
         if (ajax_count == data.order_details.length) {
             var svg_fin = svgarr.join(',_');
-            PDFTescoPreview(svg_fin, name);
+            PDFTescoPreview(svg_fin, name,zone,style_no,buyer_no,id,created_at);
         }
             },
             error: function(data) {
@@ -2533,14 +2533,40 @@ if (name == "TSL1-sticker" || name == "TSL3-sticker") {
 * @return Pdf
 */
 
-function PDFTescoPreview(data, name) {
+function PDFTescoPreview(data, name,zone,style_no,buyer_no,id,created_at) {
+	if(name == "TCL1-sticker")
+	{
+		var db = "tesco_tcl1_orders";
+	}
+	else if(name == "TCL2-sticker")
+	{
+		var db = "tesco_tcl2_orders";
+	}
+	else if(name == "TCL4-sticker")
+	{
+		var db = "tesco_tcl4_orders";
+	}
+	else if(name == "THL1-sticker")
+	{
+		var db = "tesco_thl1_orders";
+	}
+	else if(name == "THL3-sticker")
+	{
+		var db = "tesco_thl3_orders";
+	}
 $.ajax({
     url: base_url + "/erp/job-manager/tesco/print-div-tesco",
     type: "post",
     data: {
-        _token: csrf_token,
-        svg: data,
-        name: name
+       _token: csrf_token,
+		svg: data,
+		name:name,
+		zone:zone,
+		style:style_no,
+		tesco_po_number:buyer_no,
+		id:id,
+		created_at:created_at,
+		db:db
     },
     tryCount: 0,
     retryLimit: 2,
@@ -2569,14 +2595,42 @@ $.ajax({
 * @return Pdf
 */
 
-function PDFTescoSmallPreview(data, name) {
+function PDFTescoSmallPreview(data, name,zone,style_no,buyer_no,id,created_at) {
+	
+	if(name == "TCL1-sticker")
+	{
+		var db = "tesco_tcl1_orders";
+	}
+	else if(name == "TCL2-sticker")
+	{
+		var db = "tesco_tcl2_orders";
+	}
+	else if(name == "TCL4-sticker")
+	{
+		var db = "tesco_tcl4_orders";
+	}
+	else if(name == "THL1-sticker")
+	{
+		var db = "tesco_thl1_orders";
+	}
+	else if(name == "THL3-sticker")
+	{
+		var db = "tesco_thl3_orders";
+	}
+	
 $.ajax({
     url: base_url + "/erp/job-manager/tesco/print-div-tesco-small",
     type: "post",
     data: {
-        _token: csrf_token,
-        svg: data,
-        name: name
+       _token: csrf_token,
+		svg: data,
+		name:name,
+		zone:zone,
+		style:style_no,
+		tesco_po_number:buyer_no,
+		id:id,
+		created_at:created_at,
+		db:db
     },
     tryCount: 0,
     retryLimit: 2,
