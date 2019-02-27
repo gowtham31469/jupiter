@@ -16,6 +16,7 @@ use App\ErpOrderDetails as ErpOrderDetails;
 use Carbon\Carbon;
 use PDF;
 use App\Classes\JobcardPDFHeaderFooter;
+use App\Classes\FPDF_Merge;
 use File;
 
 class JobManagerController extends Controller
@@ -1017,7 +1018,10 @@ class JobManagerController extends Controller
 					
 				}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-        print_r(url('/storage/app/template/'.$name.'.pdf'));
+        
+				$file_path =  "/storage/app/template/".$name."."."pdf";	
+				
+				return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$name.'.pdf')],200);	
     } 
 	 /**
    * Print Preview For Stickers
@@ -1258,8 +1262,40 @@ class JobManagerController extends Controller
 
 		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-        print_r(url('/storage/app/template/'.$name.'.pdf'));
-    } 
+				$file_path =  "/storage/app/template/".$name."."."pdf";	
+				
+				return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$name.'.pdf')],200);	
+				
+		} 
+		/**
+     * Function to Merge Jobcard pdf and artwork
+     * @author <Praveen>
+     * @param array PDF files
+     * @return filepath
+     */
+		public function pdfMerge(Request $request)
+		{
+			try {
+						$path = explode(',',$request['path']);
+						$merge = new FPDF_Merge();
+						foreach($path as $value)
+						{
+							if($value != null && $value != "")
+							{
+								$merge->add(public_path($value));
+							}
+							
+						}
+						$file_path =  $path[0];	
+
+						$merge->output(public_path($file_path) , 'F');
+						
+						return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path],200);	
+				} catch (\Exception $e) {
+					return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+			}
+				
+		}
 	/**
      * Function to get tesco tsl template UK , CE size chart based on size entered.
      * @author <Praveen>

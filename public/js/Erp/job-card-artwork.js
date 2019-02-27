@@ -570,7 +570,7 @@ function PopupTesco(data, name,zone,style_no,buyer_no,id,created_at) {
 			//			url = data;
 
 			var element = document.createElement('a');
-			element.setAttribute('href', data);
+			element.setAttribute('href', data.url);
 			element.setAttribute('download', name);
 
 			element.style.display = 'none';
@@ -642,7 +642,7 @@ function PopupTescoSmall(data, name,zone,style_no,buyer_no,id,created_at) {
 		success: function (data) {
 
 			var element = document.createElement('a');
-			element.setAttribute('href', data);
+			element.setAttribute('href', data.url);
 			element.setAttribute('download', name);
 
 			element.style.display = 'none';
