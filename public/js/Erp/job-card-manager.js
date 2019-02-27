@@ -140,7 +140,8 @@ $(document).ready(function() {
     $('#jobcard-list-table').DataTable({
         "paging": false,
         "searching": false,
-        "bInfo" : false
+        "bInfo" : false,
+        "ordering": false
     });
     $("#jobcard-list-table_filter input").addClass('form-control input-sm');
     $("#jobcard-list-table_filter input").attr('placeholder', 'Data Search');
@@ -237,11 +238,20 @@ function generateJobcard(){
         });
         order_type_array   = order_type_array.join(',');
 
+        created_at_array = [];
+        /** [ Create array of created_at selected ] */
+        $('.row-checkbox', allPages).each(function (i, item) {
+            if ($(this).is(':checked')) {
+                created_at_array.push($(this).closest('tr').data('created-at')); 
+            }
+        });
+        created_at_array   = created_at_array.join(',');
+
         $.ajax({
             url:base_url + "/erp/job-manager/get-jobcard-order-details",
             dataType:"json",
             method:"get",
-            data:{orders:orders, ref_array:ref_array, buyer_po_array:buyer_po_array,order_type_array:order_type_array},
+            data:{orders:orders, ref_array:ref_array, buyer_po_array:buyer_po_array,order_type_array:order_type_array,created_at_array:created_at_array},
             tryCount : 0,
             retryLimit : 2,
             beforeSend: function () {
@@ -959,6 +969,15 @@ function storeJobcard()
     });
     order_type_array   = order_type_array.join(',');
 
+    created_at_array = [];
+    /** [ Create array of created_at selected ] */
+    $('.row-checkbox', allPages).each(function (i, item) {
+        if ($(this).is(':checked')) {
+            created_at_array.push($(this).closest('tr').data('created-at')); 
+        }
+    });
+    created_at_array   = created_at_array.join(',');
+
     $.ajax({
         url: base_url + "/erp/job-manager/store-jobcard-details",
         type: 'POST',
@@ -1012,7 +1031,8 @@ function storeJobcard()
             erp_orders_ids:erp_orders_ids,
             selected_ref_array:selected_ref_array,
             selected_buyer_po_array:selected_buyer_po_array,
-            order_type_array:order_type_array
+            order_type_array:order_type_array,
+            created_at_array:created_at_array
         },
         tryCount: 0,
         retryLimit: 2,

@@ -102,7 +102,7 @@ class JobManagerController extends Controller
 			{
 				foreach($values as $valuess)
 				{
-					$erp_order_details = DB::table('erp_orders')->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
+					$erp_order_details = Erp::join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
 											->join('customers', 'erp_orders.customer_id', 'customers.id')
 											->join('buyers', 'erp_orders.buyer_id', 'buyers.id')
 											->join('erp_status', 'erp_orders.status', 'erp_status.id')
@@ -113,8 +113,8 @@ class JobManagerController extends Controller
 											->where('erp_orders.order_status_id', '=', 4)
 											->whereIn('erp_orders.buyer_id', $buyers)
 											->orderBy('erp_order_details.erp_order_id', 'asc')
-											->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id','tesco_template.template_file', 'erp_order_details.order_type')
-											->select('erp_orders.*','erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name', 'buyers.id as buyer_id','tesco_template.template_file', 'erp_order_details.order_type')
+											->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id','tesco_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at')
+											->select('erp_orders.*','erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name', 'buyers.id as buyer_id','tesco_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at')
 											->get();
 					
 					if(count($erp_order_details) > 0)
@@ -156,11 +156,15 @@ class JobManagerController extends Controller
 		$style_no = $request['style_no'];
 		$buyer_no = $request['buyer_no'];
 		$id = $request['id'];
+		$order_type = $request['order_type'];
+		$created_at = $request['created_at'];
 		$order_details  = 	DB::table('erp_order_details')
 									->where('erp_order_details.style_no',$style_no)
 									->where('erp_order_details.erp_order_id',$id)
 									->where('erp_order_details.reference_name',$ref_name)
 									->where('erp_order_details.buyer_po_number',$buyer_no)
+									->where('erp_order_details.order_type',$order_type)
+									->where('erp_order_details.created_at',$created_at)
 									->orderBy('erp_order_details.id', 'desc')
 									->select('*')
 									->get();
@@ -224,6 +228,7 @@ class JobManagerController extends Controller
 			$selected_ref_arrays= explode(',', $request['ref_array']);
 			$buyer_pos          = explode(',', $request['buyer_po_array']);
 			$order_type         = explode(',', $request['order_type_array']);
+			$created_at         = explode(',', $request['created_at_array']);
 			$buyers_array       = array();
 			$customers_array    = array();
 			$company_array      = array();
@@ -256,6 +261,7 @@ class JobManagerController extends Controller
 									->where('erp_order_details.reference_name', $selected_ref_arrays[$row])
 									->where('erp_order_details.buyer_po_number', $buyer_pos[$row])
 									->where('erp_order_details.order_type', $order_type[$row])
+									->where('erp_order_details.created_at', $created_at[$row])
 									->pluck('erp_order_details.id')->all();
 
 				$order_detail_ids = array_unique(array_merge($order_detail_ids,$order_detail_id_array));
@@ -266,8 +272,7 @@ class JobManagerController extends Controller
 
 			foreach($order_detail_ids as $key => $order_detail_id)
 			{
-				$order_details = DB::table('erp_orders')
-									->select('erp_orders.*', 'erp_order_details.*')
+				$order_details = Erp::select('erp_orders.*', 'erp_order_details.*')
 									->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
 									->where('erp_order_details.id', '=', $order_detail_id)
 									->first();
@@ -302,7 +307,7 @@ class JobManagerController extends Controller
 				}
 				else
 				{
-					$single_temp_data = DB::table('erp_orders')->select('erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_orders.id as erp_table_id', 'erp_order_details.size', 'erp_order_details.order_quantity', 'erp_order_details.reference_name', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number', 'erp_order_details.order_type', 'erp_order_details.created_at')
+					$single_temp_data = Erp::select('erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_orders.id as erp_table_id', 'erp_order_details.size', 'erp_order_details.order_quantity', 'erp_order_details.reference_name', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number', 'erp_order_details.order_type', 'erp_order_details.created_at')
 								->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
 								->where('erp_order_details.id', '=', $order_detail_id)
 								->first();
@@ -519,6 +524,7 @@ class JobManagerController extends Controller
 			    $selected_ref    = explode(',', $request['selected_ref_array']);
 				$buyer_pos       = explode(',', $request['selected_buyer_po_array']);
 				$order_types     = explode(',', $request['order_type_array']);
+				$created_at      = explode(',', $request['created_at_array']);
 
 				if(isset($company_id) && isset($workorder_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($machine) && isset($cus_del_date)  && isset($finish_type)  && isset($compiled_by) && isset($final_json_obj) && isset($material))
 				{
@@ -614,6 +620,7 @@ class JobManagerController extends Controller
 							->where('erp_order_details.reference_name', 'ilike', $selected_ref[$row])
 							->where('erp_order_details.buyer_po_number', 'ilike', $buyer_pos[$row])
 							->where('erp_order_details.order_type', 'ilike', $order_types[$row])
+							->where('erp_order_details.created_at', '=', $created_at[$row])
 							->update([
 								'status'  => $erp_status_id
 							]);
