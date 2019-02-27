@@ -176,8 +176,7 @@ class PoManagerController extends Controller
 		  try {
             $id = $request->erp_id; 
 			  
-			$data   = 	DB::table('erp_orders')
-								->where('erp_orders.id',$id)
+			$data   = 	Erp::where('erp_orders.id',$id)
 								->select('erp_orders.*')
 								->get();
 			  

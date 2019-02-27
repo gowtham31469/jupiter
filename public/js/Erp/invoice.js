@@ -691,7 +691,7 @@
                 $('.snackbar_span').html("Invoice Created Successfully !");
                 showSnackbar();                
                 $('#erp-invoice').modal("hide")
-                setTimeout(function(){window.location = 'invoice';}, 1000); 
+                setTimeout(function(){window.location = 'invoice';}, 2000); 
 
             },
             error: function (errorXHR, errorStatus, errorThrown) {
