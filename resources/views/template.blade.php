@@ -197,8 +197,8 @@
                         <td width="111" style="border-bottom:1px solid black;">
                             <table class="tabl-design" cellpadding="1" cellspacing="0" border="0">             
                                     <tr>
-                                        <td width="104"><strong>Sub Total</strong></td>
-                                        <td width="58" style="text-align:left;"><strong>{{$totalDevlryQnty}}</strong></td>
+                                        <td width="101"><strong>Sub Total</strong></td>
+                                        <td width="61" style="text-align:left;"><strong>{{$totalDevlryQnty}}</strong></td>
                                         <td width="50" style="text-align:right;"><strong>{{number_format((float)$totalAmnt, 2, '.', '') }}</strong></td>
                                     </tr>
                                     @php 
@@ -239,7 +239,7 @@
                                     @endphp
                                     @foreach($eChargesArr as $key=>$vals)               
                                     <tr>
-                                        <td width="140" colspan="2">{{$vals->ext_chrg_name}}</td>
+                                        <td width="162" colspan="2">{{$vals->ext_chrg_name}}</td>
                                         <td width="50" style="text-align: right;">{{number_format((float)$vals->amount, 2, '.', '')}}</td>
                                     </tr>
                                     @php 

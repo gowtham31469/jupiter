@@ -313,7 +313,5 @@
 			console.log("Error:" + e)
 		}
 	}
-
 </script>
-
 @endsection

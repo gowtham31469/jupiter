@@ -607,6 +607,7 @@ Route::group(['prefix' => 'erp'], function () {
 	
 	Route::get('/erp-order-list', 'ErpUser\Invoice\InvoiceController@erpOrderList')->name('erp-orders');
 	Route::post('/save-invoice', 'ErpUser\Invoice\InvoiceController@setInvoice')->name('save-invoice');
+	Route::get('/get-invoice-details', 'ErpUser\Invoice\InvoiceController@getInvoiceDetails')->name('get-invoice-details');
 	Route::get('/get-invoice', 'ErpUser\Invoice\InvoiceController@getInvoice')->name('get-invoice');
 	Route::post('/download-invoice', 'ErpUser\Invoice\InvoiceController@downloadInvoice')->name('download-invoice');
 	
