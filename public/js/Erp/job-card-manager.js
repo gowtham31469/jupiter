@@ -1039,35 +1039,30 @@ function storeJobcard()
         dataType: "json",
         beforeSend: function () {
             $(".loader").show();
-            /** [ Create array of order type selected ] */
-            $('.row-checkbox', allPages).each(function (i, item) {
-                if ($(this).is(':checked')) {
-                    refname = $(this).closest('tr').data('refname'); 
-                    id = $(this).closest('tr').attr('id');
-                    buyer_po_no = $(this).closest('tr').data('buyer-po');
-                    order_type = $(this).closest('tr').data('order-type');
-                    created_at = $(this).closest('tr').data('created-at');
-                    style_no = $(this).closest('tr').data('style-no');
-                    template_file = $(this).closest('tr').data('template-file');
-                    loop = $(this).closest('tr').data('iteration');
-                    modal_name = refname.replace(' ', '');
-
-                    openmodaltesco(modal_name, loop,template_file,style_no,buyer_po_no,id,order_type,created_at)
-                }
-            });
-            
         },
         statusCode: {
             200: function(data) {
-                var resp = JSON.stringify(data.file_path);
-                $('.snackbar_span').html("Jobcard Created Successfully");
-                showSnackbar();
-                $('#jobcardCreationModalCenter').modal('hide');
-                location.reload();
-                window.open(
-                    base_url+JSON.parse(resp),
-                    '_blank' // <- This is what makes it open in a new window.
-                );
+
+                /** [ Store file path into localstorage ] */
+                localStorage.setItem('file_path',data.file_path)
+             
+                $('.row-checkbox', allPages).each(function (i, item) {
+                  
+                    if ($(this).is(':checked')) {
+                        refname       = $(this).closest('tr').data('refname'); 
+                        id            = $(this).closest('tr').attr('id');
+                        buyer_po_no   = $(this).closest('tr').data('buyer-po');
+                        order_type    = $(this).closest('tr').data('order-type');
+                        created_at    = $(this).closest('tr').data('created-at');
+                        style_no      = $(this).closest('tr').data('style-no');
+                        template_file = $(this).closest('tr').data('template-file');
+                        loop          = $(this).closest('tr').data('iteration');
+                        modal_name    = refname.replace(' ', '');
+
+                        openmodaltescopreview(modal_name, loop,template_file,style_no,buyer_po_no,id,order_type,created_at);
+                    }
+                });
+              
             },
             400: function() {
                 $('.snackbar_span').html("Parameter is missing !!!");
@@ -1086,7 +1081,63 @@ function storeJobcard()
         }
     })
 }
+/**
+ * Check if loop execution completed or not
+ * @author praveen
+ */
+var operationsCompleted = 0;
+function operation() {
+    ++operationsCompleted;
+    if (operationsCompleted === $('[class="row-checkbox"]:checked').length) after_forloop(); 
+}
 
+/**
+ * Call after loop execution completed
+ * @author praveen
+ */
+function after_forloop()
+{
+    $.ajax({
+        url: base_url + "/erp/job-manager/pdf-merge",
+        type: 'post',
+        data: {
+            _token: csrf_token,
+            path:localStorage.getItem('file_path')
+        },
+        tryCount: 0,
+        retryLimit: 2,
+        dataType: "json",
+        beforeSend: function () {
+            $(".loader").show();
+        },
+        statusCode: {
+            200: function(data) {     
+                var resp = JSON.stringify(data.file_path);
+                $('.snackbar_span').html("Jobcard Created Successfully");
+                showSnackbar();
+                $('#jobcardCreationModalCenter').modal('hide');
+                location.reload();
+                window.open(
+                    base_url+JSON.parse(resp),
+                    '_blank' // <- This is what makes it open in a new window.
+                );   
+            },
+            400: function() {
+              
+            },
+       },
+        error: function (errorXHR, errorStatus, errorThrown) {
+            this.tryCount++;
+            if (this.tryCount <= this.retryLimit) {
+                $.ajax(this);
+                return;
+            }
+        },
+        complete: function () {
+            $(".loader").hide();
+        }
+    })
+}
 
 /**
    * Function for get jobcard details for editing
@@ -1973,7 +2024,7 @@ function getJobcardsList()
  * 
  * @return barcode
  */
-function openmodaltesco(modal, loop,template_file,style_no,buyer_no,id,order_type,created_at) {
+function openmodaltescopreview(modal, loop,template_file,style_no,buyer_no,id,order_type,created_at) {
 	
     genarateArtworkPreview("tesco_svg_modal" + loop, modal,style_no,buyer_no,id,order_type,created_at);
 
@@ -2213,7 +2264,7 @@ if (name == "TSL1-sticker" || name == "TSL3-sticker") {
     })
                 if (ajax_count == data.order_details.length) {
                     var svg_fin = svgarr.join(',_');
-                    PDFTescoSmall(svg_fin, name);
+                    PDFTescoSmallPreview(svg_fin, name);
                 }
             },
             error: function(data) {
@@ -2457,7 +2508,7 @@ if (name == "TSL1-sticker" || name == "TSL3-sticker") {
     })
         if (ajax_count == data.order_details.length) {
             var svg_fin = svgarr.join(',_');
-            PDFTesco(svg_fin, name);
+            PDFTescoPreview(svg_fin, name);
         }
             },
             error: function(data) {
@@ -2482,7 +2533,7 @@ if (name == "TSL1-sticker" || name == "TSL3-sticker") {
 * @return Pdf
 */
 
-function PDFTesco(data, name) {
+function PDFTescoPreview(data, name) {
 $.ajax({
     url: base_url + "/erp/job-manager/tesco/print-div-tesco",
     type: "post",
@@ -2495,16 +2546,12 @@ $.ajax({
     retryLimit: 2,
     async: false,
     success: function (data) {
-        var element = document.createElement('a');
-			element.setAttribute('href', data);
-			element.setAttribute('download', name);
 
-			element.style.display = 'none';
-			document.body.appendChild(element);
+        
 
-			element.click();
-
-			document.body.removeChild(element);
+        localStorage.setItem('file_path',localStorage.getItem('file_path')+','+data.file_path)
+        operation()
+        //return data;
 
     },
     error: function (errorXHR, errorStatus, errorThrown) {
@@ -2522,7 +2569,7 @@ $.ajax({
 * @return Pdf
 */
 
-function PDFTescoSmall(data, name) {
+function PDFTescoSmallPreview(data, name) {
 $.ajax({
     url: base_url + "/erp/job-manager/tesco/print-div-tesco-small",
     type: "post",
@@ -2535,17 +2582,9 @@ $.ajax({
     retryLimit: 2,
     async: false,
     success: function (data) {
-
-        var element = document.createElement('a');
-			element.setAttribute('href', data);
-			element.setAttribute('download', name);
-
-			element.style.display = 'none';
-			document.body.appendChild(element);
-
-			element.click();
-
-			document.body.removeChild(element);
+        localStorage.setItem('file_path',localStorage.getItem('file_path')+','+data.file_path)
+        operation()
+        //return data;
 
     },
     error: function (errorXHR, errorStatus, errorThrown) {

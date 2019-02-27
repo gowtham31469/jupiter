@@ -702,6 +702,7 @@
 @endsection @section('jqueryIncludes')
 <script>
 $(document).ready(function() {
+	localStorage.removeItem('file_path')
 	/** reset all filters  **/
 	$('#erp_id_filter').val('').change();
 	$('#customer_name_filter').val('').change();
