@@ -274,7 +274,7 @@
 							</thead>
 							<tbody>
 								@foreach($orders as $vals)
-								<tr id="{{$vals->id}}" data-refname="{{$vals->reference_name}}" data-buyer-po="{{$vals->buyer_po_number}}" data-order-type="{{$vals->order_type}}">
+								<tr id="{{$vals->id}}" data-refname="{{$vals->reference_name}}" data-buyer-po="{{$vals->buyer_po_number}}" data-order-type="{{$vals->order_type}}" data-created-at="{{$vals->created_at}}">
 									<td>
 										<div class="form-check">
 										<a href="javascript:void(0)">

@@ -740,7 +740,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                     <th rowspan="2">Line No.</th>\
                                                     <th rowspan="2">TPND</th>\
                                                     <th rowspan="2">ITF Barcode</th>\
-                                                    <th rowspan="2">Units per carton</th>';
+                                                    <th rowspan="2">Units Per Carton</th>';
 						$.each(data.templates, function (i, item) {
 							html += '<th colspan="1">' + item.template_name + '</th>';
 						});
@@ -890,7 +890,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                         <th rowspan="2">Line No.</th>\
                                                         <th rowspan="2">ORMS TPN</th>\
                                                         <th rowspan="2">ITF Barcode</th>\
-                                                        <th rowspan="2">Cases per carton</th>';
+                                                        <th rowspan="2">Cases Per Carton</th>';
 						$.each(data.templates, function (i, item) {
 							html += '<th colspan="1">' + item.template_name + '</th>';
 						});
@@ -7609,13 +7609,6 @@ function selectNewOrder()
 	$("#jstree").on("loaded.jstree", function(){
 		$("#jstree li[id='" + back_template_id + "'] a").click();
 	});
-
-//	$('#jstree').jstree(true).refresh_node(back_template_id)
-	
-	
-//	alert(back_template_id)
-//	$("#jstree li[id=" + back_template_id + "] a").click();
-
 	
 	if (back_zone === 'UK' && order_type_back === "1") {
 		$(".po-upload").removeClass("hidden");

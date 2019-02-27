@@ -755,7 +755,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                     <th rowspan="2">Line No.</th>\
                                                     <th rowspan="2">TPND</th>\
                                                     <th rowspan="2">ITF Barcode</th>\
-                                                    <th rowspan="2">Units per carton</th>';
+                                                    <th rowspan="2">Units Per Carton</th>';
                              $.each(data.templates, function(i, item){
                                html += '<th colspan="1">'+item.template_name+'</th>';
                              });
@@ -910,7 +910,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                         <th rowspan="2">Line No.</th>\
                                                         <th rowspan="2">ORMS TPN</th>\
                                                         <th rowspan="2">ITF Barcode</th>\
-                                                        <th rowspan="2">Cases per carton</th>';
+                                                        <th rowspan="2">Cases Per Carton</th>';
                              $.each(data.templates, function(i, item){
                                html += '<th colspan="1">'+item.template_name+'</th>';
                              });
