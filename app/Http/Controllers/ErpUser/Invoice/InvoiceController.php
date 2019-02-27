@@ -383,7 +383,7 @@ class InvoiceController extends Controller
             $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
             $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
             // set auto page breaks
-            $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+            $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_TOP);
 
             // set image scale factor
             $pdf->setImageScale(0.8);
