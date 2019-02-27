@@ -80,6 +80,7 @@ class invoiceTCPDF extends \TCPDF
         // Set font
         $this->SetFont('helvetica', '', 8);
         // $this->writeHTML("<hr>", false, false, true, false, '');
+        
         $footer = ' <table>
                     <tr class="blank_row">
                         <td rowsopan="1"></td>
