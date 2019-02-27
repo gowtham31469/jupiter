@@ -157,6 +157,7 @@ class InvoiceController extends Controller
     }
 
     public function setInvoice(Request $request){
+        ini_set('max_input_vars', 5000);
         try 
         {
             $orders        =  $request['finalData'];
@@ -173,7 +174,7 @@ class InvoiceController extends Controller
             $invoiceDate   = $request->invoiceDate;
             $delivery_at   = $request->delivery_at;
             $eChargesArr   = $request['eCharges'];
-            
+            ini_set('max_execution_time', 1000);
             $bill_to = DB::table('customer_bill_address')
                           ->where('customer_bill_address.customer_id',$orders[0]['customer_id'])
                           ->where('customer_bill_address.is_billing_address',1)
@@ -184,7 +185,7 @@ class InvoiceController extends Controller
                           ->where('customer_bill_address.is_shipping_address',1)
                           ->select('*')
                           ->first();
-                        
+                      
             if($bill_to->id == $ship_to->id){
                 $invAdd     =   InvoiceAddress::create([
                                     'customer_id'  => $bill_to->customer_id,
@@ -296,6 +297,27 @@ class InvoiceController extends Controller
             }
             
         }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+
+    public function getInvoiceDetails(Request $request)
+    {
+        try
+        {
+            $inv_id   = $request->invoice_id;
+            $invoice_details  = DB::table('invoice')->where('invoice_id',$inv_id)->get();
+            if ($invoice_details) {
+                $result    = response()->json(['error'=> false,'message' =>'success','invoice_details'=>$invoice_details],200);
+            }
+            else{
+                $result    = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+        } 
         catch (\Exception $e)
         {
             $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
@@ -434,7 +456,7 @@ class InvoiceController extends Controller
             $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
             $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
             // set auto page breaks
-            $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+            $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_TOP);
 
             // set image scale factor
             $pdf->setImageScale(0.8);

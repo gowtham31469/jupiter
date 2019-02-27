@@ -70,7 +70,26 @@
                 </tbody>
             </table>
         </div>
-    </div>
+
+   <!--        <div class="loader">
+          <div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>
+        </div>
+        <div class="col" id="customer-table">
+          <input type="hidden" value="{{ session()->get('company') }}" id="company_id">
+          <input type="hidden" value="{{ session()->get('company_name') }}" id="company_name">
+          <form id="get_invoice_details" data-toggle="validator" class=" container-fluid" role="form" style='border-bottom: 1px solid #cecece;
+        padding-bottom: 10px;
+        margin-bottom: 20px;'>
+            <label for="order_type" class="form_label row" style="display: block;">Search Invoice Id</label>
+            <div class="form-group row has-feedback">
+              <input type="text" onkeypress="return isNumber(event)" required id="invoice_id" class="invoice_id form-control col-md-2" style="width: auto; margin-right: 10px;">
+
+              <button class="btn btn-primary btn-block col-md-1" style="width: auto;"><span class="glyphicon glyphicon-search"></span></button>
+            </div>
+            <div class="help-block with-errors"></div>
+          </form>
+        </div>
+    </div> -->
 </div>
     <!-- company selection Modal -->
 <div class="modal buyer-selection-modal fade" id="buyerSelectionModalCenter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -245,7 +264,50 @@
 <script src="{{ asset('js/Erp/invoice.js') }}"></script>
 <script src="{{ asset('js/html2pdf.bundle.min.js') }}"></script>
 <script>  
-$(document).ready(function(){    
+$(document).ready(function(){  
+
+  $('[data-toggle="tooltip"]').tooltip({});
+    $('#zoomBtn').click(function() {
+      $('.zoom-btn-sm').toggleClass('scale-out');
+    });
+
+    $('#get_invoice_details').validator().on('submit', function(e) {
+        if (e.isDefaultPrevented()) {
+
+        } 
+        else {
+          e.preventDefault();
+          getInvoiceDetails()
+        }
+    })
+
+    function getInvoiceDetails() {
+      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      $.ajax({
+        url: base_url + "/erp/get-invoice-details",
+        type: "get",
+        dataType: "json",
+        data: {
+          _token: csrf_token,
+          invoice_id: $('#invoice_id').val()
+        },
+        beforeSend: function() {
+          //location.reload();
+        },
+        success: function(data) {
+          console.log(data)
+        },
+        error: function(data) {
+
+        },
+        complete: function() {
+
+        }
+      })
+    }
+
+
+
     var table = $('#invoice-list-table').DataTable();
 /** [ Make companies card active ] */
     $('div.buyers-card').click(function(){
@@ -353,7 +415,7 @@ function showInvoice(obj){
 
               if (itemName==value.item_name) {
                     tr += '<tr class="trClass" id="'+value.id+'">';
-                    tr += '<td>'+value.erp_id+'</td><td>'+value.buyer_name+'</td><td>'+value.order_no+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_no+'</td><td>'+value.custom_ref_name+'</td><td>'+size+'</td><td>'+value.tax+'</td><td>'+value.delivered_qnty+'</td><td>'+value.rate+'</td><td>'+(value.delivered_qnty * value.rate).toFixed(2)+'</td>';
+                    tr += '<td>'+value.erp_id+'</td><td>'+value.buyer_name+'</td><td>'+value.order_no+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_no+'</td><td>'+value.custom_ref_name+'</td><td>'+size+'</td><td>'+value.tax+'</td><td>'+value.delivered_qnty+'</td><td>'+value.rate+'</td><td style="border-width: 1px !important;">'+(value.delivered_qnty * value.rate).toFixed(2)+'</td>';
                     tr += '</tr>';
                 }
                 else{
