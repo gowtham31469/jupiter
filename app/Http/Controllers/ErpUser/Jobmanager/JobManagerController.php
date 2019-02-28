@@ -1022,7 +1022,7 @@ class JobManagerController extends Controller
 				PDF::Output( public_path('/storage/app/template/'.$random.'-'.$name.'.pdf'), 'F');
 				$file_path =  "/storage/app/template/".$random.'-'.$name."."."pdf";	
 				
-				return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$name.'.pdf')],200);	
+				return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$random.'-'.$name.'.pdf')],200);	
     } 
 	 /**
    * Print Preview For Stickers
@@ -1264,7 +1264,7 @@ class JobManagerController extends Controller
 		PDF::Output( public_path('/storage/app/template/'.$random.'-'.$name.'.pdf'), 'F');
 		$file_path =  "/storage/app/template/".$random.'-'.$name."."."pdf";	
 		
-		return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$name.'.pdf')],200);	
+		return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$random.'-'.$name.'.pdf')],200);	
 				
 		} 
 		/**
