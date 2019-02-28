@@ -258,29 +258,5 @@ th {
                 @endif  
             @endif
     @endforeach
-
-    @if (!empty(implode(',',$single_ref)))
-        <table cellspacing="0" cellpadding="2" style="table-layout: fixed;border-collapse: collapse;" nobr="true">
-            @foreach ($single_ref as $key => $ref)
-                <tr nobr="true">
-                    <td>
-                        <label>ACT EXCESS % (<strong>{{ $ref }}</strong>):</label>
-                        <span>{{ $act_excess[$key] }}</span> 
-                    </td>
-                    <td>
-                        <label>STKRS MTRS (<strong>{{ $ref }}</strong>):</label>                                 <span>{{ $sticker_mtr[$key] }}</span> 
-                    </td>
-                    <td>
-                        <label>SETTINGS (<strong>{{ $ref }}</strong>) :</label>                                            <span>{{ $settings[$key] }}</span> 
-                    </td>
-                    <td>
-                        <label>TOTAL MTRS (<strong>{{ $ref }}</strong>):</label>                                         <span>{{ $total_mtrs[$key] }}</span> 
-                    </td>
-                </tr>
-            @endforeach
-        </table>
-    @else
-    <table cellpadding="0" cellspacing="2"></table>
-    @endif
  </body>
 </html>
