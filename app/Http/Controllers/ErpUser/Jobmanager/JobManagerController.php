@@ -69,6 +69,9 @@ class JobManagerController extends Controller
 
 			// Get Erp status table id for 'Moved To JC Queue' status.
 			$erp_status_id = DB::table('erp_status')->where('status_name', 'ilike', 'Moved To JC Queue')->value('id');
+		 
+			// Get order status table id for 'Order Approved' status.
+			$order_status_id = DB::table('orders_status')->where('status_name', 'ilike', 'Order Approved')->value('id');
 			
 			if(session()->get('company') == "" && session()->get('company') == null)
 			{
@@ -111,7 +114,7 @@ class JobManagerController extends Controller
 											->where('erp_order_details.template_id', '=', $valuess)
 											->where('erp_orders.status', '=', $erp_status_id)
 											->where('erp_order_details.status', '=', $erp_status_id)
-											->where('erp_orders.order_status_id', '=', 4)
+											->where('erp_orders.order_status_id', '=', $order_status_id)
 											->whereIn('erp_orders.buyer_id', $buyers)
 											->orderBy('erp_order_details.erp_order_id', 'asc')
 											->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id','tesco_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at')
