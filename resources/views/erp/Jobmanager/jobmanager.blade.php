@@ -576,7 +576,8 @@
 							<div class="col-md-12 ratio-list-table-div">
 							</div>
 						</div>
-						
+						<div class="order-details-div">
+						</div>
 						<div class="row">
 							<div class="col-md-12 single-list-table-div">
 							</div>

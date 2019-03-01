@@ -1598,6 +1598,7 @@ function updateArtwork(obj)
 			});
 			single_size = single_size.join(',');
 		}
+        
 	if(barcode_checks == 0)
 	{
 		$.ajax({

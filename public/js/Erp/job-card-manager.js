@@ -372,6 +372,13 @@ function generateJobcard(){
                             $('#cus_del_date').val('')
                         }
 
+                        /** append erp_details_ids  as hidden */
+                        var hidden_html = '';
+                        $.each(data.template_data.order_detail_ids, function(index, erp_details_id){
+                            hidden_html += '<div hidden class="erp-details-id">'+erp_details_id+'</div>'
+                        });
+                        $('.order-details-div').html(hidden_html);
+
                         /** Show ratio templates dynamic table */
                         var ratio_table_html = '';
                         if(data.template_data.ratio.length != 0)
@@ -783,7 +790,8 @@ function storeJobcard()
 
     var final_json_obj =   {
         "ratio": {},
-        "single": {}
+        "single": {},
+        "erp_order_detail_ids" : []
           };  
     var ratio_object = {};
     /** Create ratio templates json object */
@@ -898,6 +906,14 @@ function storeJobcard()
         // pushing single templates array into json object
         final_json_obj['single'] = single_ref_obj;
     });
+
+    var erp_order_ids_array = [];
+    /** [ Create array of erp-details-id ] */
+    $('.erp-details-id').each(function (i, item) {
+        erp_order_ids_array.push($(item).text());
+    });
+    // pushing erp_order_ids array into json object
+    final_json_obj['erp_order_detail_ids'] = erp_order_ids_array;
     
     var single_ref = [];
     var act_excess = [];
@@ -1214,6 +1230,7 @@ function after_forloop()
                  $('#edit_machine').selectpicker('refresh');
                  $('#edit_disp_mode').selectpicker('refresh');
                  var ratio_table = '';
+                 var edit_hidden_html = '';
                  $.each(JSON.parse(data.jobcard_data.template_quantity_json), function(template_type, template_type_data){
                     if(template_type === 'ratio')
                     {
@@ -1257,7 +1274,7 @@ function after_forloop()
 
                         }
                     }
-                    else
+                    else if(template_type === 'single')
                     {
                         if (!($.isEmptyObject(template_type_data)))
                         {
@@ -1350,6 +1367,15 @@ function after_forloop()
                         $('.edit-single-list-table-div').html(single_table);
                         }
                     }
+                    else
+                    {
+                        /** append erp_details_ids  as hidden */
+                        $.each(template_type_data, function(index, erp_details_id){
+                            edit_hidden_html += '<div hidden class="edit-erp-details-id">'+erp_details_id+'</div>'
+                        });
+                        $('.edit-order-details-div').html(edit_hidden_html);
+                    }
+                    
                  });
 
                 // excess, meters and settings calculation values.
@@ -1590,7 +1616,8 @@ function updateJobcard(formData)
 
     var final_json_obj =   {
         "ratio": {},
-        "single": {}
+        "single": {},
+        "erp_order_detail_ids" : []
           };  
     var ratio_object = {};
     /** Create ratio templates json object */
@@ -1706,6 +1733,15 @@ function updateJobcard(formData)
         final_json_obj['single'] = single_ref_obj;
     });
     
+    var erp_order_ids_array = [];
+    /** [ Create array of erp-details-id ] */
+    $('.edit-erp-details-id').each(function (i, item) {
+        erp_order_ids_array.push($(item).text());
+    });
+
+    // pushing erp_order_ids array into json object
+    final_json_obj['erp_order_detail_ids'] = erp_order_ids_array;
+
     var single_ref = [];
     var act_excess = [];
     /** [ Create array of act-excess ] */

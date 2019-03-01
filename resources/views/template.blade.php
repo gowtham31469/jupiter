@@ -51,17 +51,17 @@
                 <td>
                     <table cellpadding="1" cellspacing="0">
                         <tr>
-                            <td width="180" style="font-size: 5px; border-right:1px solid black;"><span> Buyer</span></td>
-                            <td width="150" style="font-size: 5px; border-left:1px solid black;border-right:1px solid black;"><span> Ship To</span></td>
+                            <td width="170" style="font-size: 5px; border-right:1px solid black;"><span> Buyer</span></td>
+                            <td width="160" style="font-size: 5px; border-left:1px solid black;border-right:1px solid black;"><span> Ship To</span></td>
                             <td width="108" style="border-bottom:1px solid black;" align="center" rowspan="2"><span><strong>TAX INVOICE </strong></span></td>
                         </tr>
                         <tr>
-                            <td width="180" style="font-size: 9px; "><span ><strong>{{$inv_details[0]['company_name']}}</strong></span></td>
-                            <td width="150" style="font-size: 9px; border-left:1px solid black;border-right:1px solid black;"><span ><strong>{{$inv_details[0]['company_name']}}</strong></span></td>
+                            <td width="170" style="font-size: 9px; "><span ><strong>{{$inv_details[0]['company_name']}}</strong></span></td>
+                            <td width="160" style="font-size: 9px; border-left:1px solid black;border-right:1px solid black;"><span ><strong>{{$inv_details[0]['company_name']}}</strong></span></td>
                         </tr>
                         <tr>
-                            <td width="180"><p>{{$bill_to->address}} , {{$bill_to->pincode}}</p></td>
-                            <td width="150"  style="border-left:1px solid black"><p>{{$ship_to->address}} ,{{$ship_to->pincode}}</p></td>
+                            <td width="170"><p>{{$bill_to->address}},{{$bill_to->pincode}}</p></td>
+                            <td width="160"  style="border-left:1px solid black"><p>{{$ship_to->address}},{{$ship_to->pincode}}</p></td>
                             <td width="54" style="border-left:1px solid black"><span> Date</span><p> Invoice No</p></td>
                             <td width="54" style="border-left:1px solid black;"><span> {{$inv_details[0]['inv_date']}}</span><p> {{$inv_details[0]['invoice_id']}}</p></td>
                         </tr>
@@ -72,8 +72,8 @@
                             <td></td>
                         </tr>
                         <tr>
-                            <td width="180" style="line-height: 1px; border-right:1px solid black;border-bottom:1px solid black;"><span>GSTN : {{$inv_details[0]['gstin_number']}}</span></td>
-                            <td width="150" style="line-height: 1px; border-left:1px solid black;border-bottom:1px solid black;"><span>GSTN : {{$inv_details[0]['gstin_number']}}</span></td>
+                            <td width="170" style="line-height: 1px; border-right:1px solid black;border-bottom:1px solid black;"><span>GSTIN : {{$inv_details[0]['gstin_number']}}</span></td>
+                            <td width="160" style="line-height: 1px; border-left:1px solid black;border-bottom:1px solid black;"><span>GSTIN : {{$inv_details[0]['gstin_number']}}</span></td>
                             <td width="54" style="line-height: 1px;  border-left:1px solid black;border-bottom:1px solid black;"><br><span> Disp thru</span></td>
                             <td width="54" style="line-height: 1px;  border-left:1px solid black;border-bottom:1px solid black;"><span> {{$inv_details[0]['delvry_thru']}}</span></td>
                         </tr>

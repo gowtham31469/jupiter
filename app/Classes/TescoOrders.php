@@ -656,6 +656,13 @@ class TescoOrders
         }
   }
 
+  /**
+   * method to update the related customer tesco order tables 
+   * @param  [table name]
+   * @param  [existing order deatils]
+   * @param  [$request]
+   * @param  [customer id]
+   */
   public function updateTescoOrders($table_name,$temp_data,$request,$customer_id)
   {
     try
@@ -804,6 +811,13 @@ class TescoOrders
     }
   }
 
+  /**
+   * method to update the related admin tesco order tables 
+   * @param  [table name]
+   * @param  [existing order deatils]
+   * @param  [$request]
+   * @param  [customer id]
+   */
   public function updateTescoAdminOrders($table_name,$temp_data,$request,$customer_id)
   {
     try
@@ -897,7 +911,7 @@ class TescoOrders
                 //       'size'            =>$single_size[$i]
                 //     ]);
 
-                    DB::table($qty_table_name)->insert([
+                    DB::table($qunty_tbl)->insert([
                       'orms_tpn'        => $value,
                       'ean_barcode'     => $barcode[$i],
                       'case_size'       => $size[$i],
@@ -917,7 +931,7 @@ class TescoOrders
                 //     'size'            =>$single_size[$i]
                 //   ]);
 
-                   DB::table($qty_table_name)->insert([
+                   DB::table($qunty_tbl)->insert([
                       'tpnd'           => $value,
                       'ean_barcode'        => $barcode[$i],
                       'case_size'   => $size[$i],
@@ -936,7 +950,7 @@ class TescoOrders
                 //       'size'               => "0"
                 // ]);
 
-                    DB::table($qty_table_name)->insert([
+                    DB::table($qunty_tbl)->insert([
                       'tpnd'               => $value,
                       'itf_barcode'        => $barcode[$i],
                       'units_per_carton'   => $size[$i],
