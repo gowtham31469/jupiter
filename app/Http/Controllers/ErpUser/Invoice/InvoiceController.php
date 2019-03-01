@@ -35,10 +35,8 @@ class InvoiceController extends Controller
    
     }
 
-    /**
-     * Show the application dashboard.
-     * @author [Praveen] <[praveen@wizroots.com]>
-     * @return \Illuminate\Http\Response
+    /** 
+     * @return invoice list view
      */
     public function index()
     {
@@ -53,13 +51,10 @@ class InvoiceController extends Controller
                             ->distinct('invoice.id')
                             ->get();
         return view('erp.Invoice.invoice-list',['invoices'=>$invoices,'companies' => $companies]);
-
-        
 	}
-     /**
-     * Show the application dashboard.
-     * @author [Praveen] <[praveen@wizroots.com]>
-     * @return \Illuminate\Http\Response
+
+    /**
+     * @return create invoice view
      */
     public function create(){
         $objInv     = new Invoice();
@@ -101,7 +96,8 @@ class InvoiceController extends Controller
 
     /**
      * method to get the orders list for an ERP ID
-     * @param Request $request [description]
+     * @param Request
+     * @return \Illuminate\Http\Response
      */
     public function erpOrderList(Request $request)
     {
@@ -156,7 +152,13 @@ class InvoiceController extends Controller
         return $result;
     }
 
-    public function setInvoice(Request $request){
+    /** 
+     * method to set the invoice details of selected orders of an ERP-ID 
+     * @param Request
+     * @return \Illuminate\Http\Response
+     */
+    public function setInvoice(Request $request)
+    {
         ini_set('max_input_vars', 5000);
         try 
         {
@@ -304,7 +306,11 @@ class InvoiceController extends Controller
         return $result;
     }
 
-
+    /**
+     * method to get the details of a particular Invoice ID
+     * @param  Request
+     * @return \Illuminate\Http\Response
+     */
     public function getInvoiceDetails(Request $request)
     {
         try
@@ -350,7 +356,12 @@ class InvoiceController extends Controller
         }
         return $result;
     }
-
+    
+    /**
+     * method to update the e-way bill number for an invoice ID
+     * @param  Request [eway bill number]
+     * @return \Illuminate\Http\Response
+     */
     public function updateInvoice(Request $request)
     {
         try{
@@ -404,8 +415,8 @@ class InvoiceController extends Controller
             Invoices::where('id', $inv_id)->update(['eway_no'=> $eway_no ,'invoice_file'=>'/storage/app/public/invoices/invoices_'.$inv_id.'.pdf']);
             $attatchment =  public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf');
             //Mail notiication
-            $useremail = "aswathy@wizroots.com";
-            // $useremail = Auth::guard('erpuser')->user()->email;
+            // $useremail = "aswathy@wizroots.com";
+            $useremail = $inv_details[0]->email;
             Mail::send('mails.invoice', ['title' => 'Invoice','to_email' => $useremail], function ($message) use ($useremail,$attatchment)
                     {
                         $message->from('admin@jga.com', 'JGA');
@@ -423,7 +434,11 @@ class InvoiceController extends Controller
         return $result;
     }
 
-
+    /**
+     * method to generate PDF view of customer invoice
+     * @param  Request [invoice details]
+     * @return pdf file path
+     */
     public function downloadInvoice(Request $request)
     {
         try{
@@ -444,8 +459,7 @@ class InvoiceController extends Controller
             $dynView = View::make('template')
                 ->with(['company_details' => $company_details, 'inv_details' => $inv_details, 'ship_to'=>$ship_to,'bill_to'=>$bill_to,'inv_details'=>$inv_details,'eway_no'=> $eway_no,'amntInwords'=>$amntInwords , 'eChargesArr'=>$extra_charges,'uniqueTaxes'=>$uniqueTaxes]);
             ob_start();
-            // define ('PDF_FONT_NAME_MAIN', 'helvetica');
-            // define ('PDF_FONT_NAME_DATA', 'helvetica');
+
             $pdf = new invoiceTCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
             $pdf->setCompanyData($company_details);
             //margins
@@ -468,13 +482,9 @@ class InvoiceController extends Controller
             $pdf->AddPage('P', 'A4');
             $pdf->SetXY(5.3, 24);
             $pdf->writeHTML($dynView->render());
-            // PDF::SetPrintHeader(false);
-            // PDF::SetPrintFooter(false);
-            // PDF::AddPage();
-              // PDF::writeHTML($dynView->render());
+     
             $pdfdata =$pdf->output( public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf'), 'F');
 
-            // Invoices::where('id', $inv_id)->update(['eway_no'=> $eway_no ,'invoice_file'=>'/storage/app/public/invoices/invoices_'.$inv_id.'.pdf']);
             $attatchment =  public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf');
             return "/storage/app/public/invoices/invoices_".$inv_id.".pdf";
         } 
