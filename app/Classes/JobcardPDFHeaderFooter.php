@@ -33,7 +33,7 @@ class JobcardPDFHeaderFooter extends \TCPDF
     public $sticker_mtr;
     public $settings;
     public $total_mtrs;
-    protected $last_page_flag = false;
+    public $last_page_flag = false;
 
 
      
@@ -76,7 +76,7 @@ class JobcardPDFHeaderFooter extends \TCPDF
     * @public
     */
     public function Header() {
-        $this->SetTopMargin(50);
+        $this->SetTopMargin(30);
         // Position at 5 mm from top
         $this->SetY(10);
         // header logo image

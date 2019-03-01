@@ -33,8 +33,8 @@ class JobManagerController extends Controller
 		// get the current time
 		$this->current_date = Carbon::now('Asia/Kolkata')->format('d-m-Y');
    
-    }
-
+		}
+		
     /**
      * Show the Jobcard  Manager List View.
      * @author [Gowtham] <[gowtham@wizroots.com]>
@@ -678,8 +678,18 @@ class JobManagerController extends Controller
 						$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
 						$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 						
-						// set auto page breaks
-						$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+						// /** Handle Page break */
+						// if ($pdf->last_page_flag)
+						// {
+								// set auto page breaks
+						    $pdf->SetAutoPageBreak(TRUE, 40);
+		
+						// }
+						// else 
+						// {
+						// 	  $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+						// }
+						
 
 						// set image scale factor
 						$pdf->setImageScale(1.8);
@@ -1620,8 +1630,17 @@ class JobManagerController extends Controller
 					$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
 					$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 					
-					// set auto page breaks
-					$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+					// /** Handle Page break */
+					// if ($pdf->last_page_flag)
+					// {
+							// set auto page breaks
+							$pdf->SetAutoPageBreak(TRUE, 40);
+	
+					// }
+					// else 
+					// {
+					// 		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+					// }
 
 					// set image scale factor
 					$pdf->setImageScale(1.8);
