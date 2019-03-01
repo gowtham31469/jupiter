@@ -55,7 +55,6 @@ class PoManagerController extends Controller
 								->select('company.*')
 								->first();
 		
-		
 		if(session()->get('company') == "" && session()->get('company') == null)
 		{
 			session()->put('company', $company_id->id);
@@ -357,7 +356,8 @@ class PoManagerController extends Controller
 			$erp_order_id = $request->erp_order_id;
 			   $purchase_order_number = $request->purchase_order_number;
 			   $customer_name = $request->customer_name;
-			   
+			// Get Erp status table id for 'Jobcard Created' and 'Cancelled' status.
+	    $erp_status_ids = DB::table('erp_status')->whereIn('status_name',['Jobcard Created', 'Cancelled'] )->pluck('id')->all();   
 			if($count == 0)
 			{
 				$data 		=   DB::table('erp_orders')->where('id',$erp_order_id)
@@ -367,7 +367,7 @@ class PoManagerController extends Controller
 								]);
 				
 				$data_erp		=   ErpOrderDetails::where('erp_order_id',$erp_order_id)
-									->where('status','!=',4)
+									->whereNotIn('status',$erp_status_ids)
 									->update([
 									  'status' => 3
 									]);
@@ -403,7 +403,7 @@ class PoManagerController extends Controller
 								]);
 				
 				$data_erp		=   ErpOrderDetails::where('erp_order_id',$erp_order_id)
-									->where('status','!=',4)
+									->whereNotIn('status',$erp_status_ids)
 									->update([
 									  'status' => 3
 									]);
@@ -446,7 +446,7 @@ class PoManagerController extends Controller
 								]);
 				
 				$data_erp		=   ErpOrderDetails::where('status','!=',3)
-							    	->where('status','!=',4)
+							    	->whereNotIn('status',$erp_status_ids)
 									->where('erp_order_id',$erp_order_id)
 									->update([
 									  'status' => 2
