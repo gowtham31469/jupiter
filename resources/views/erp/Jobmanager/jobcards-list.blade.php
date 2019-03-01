@@ -361,7 +361,8 @@
 							<div class="col-md-12 edit-ratio-list-table-div">
 							</div>
 						</div>
-						
+						<div class="edit-order-details-div">
+						</div>
 						<div class="row">
 							<div class="col-md-12 edit-single-list-table-div">
 							</div>
