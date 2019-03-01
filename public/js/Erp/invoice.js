@@ -8,6 +8,11 @@
     var bill_to = '';
     var company_details = '';
     var eChargesArr = []
+
+    /** 
+     * method to show the list of all the ERP ID's of selected customer
+     * @return table view
+     */
     function dynamicTable() {
         var customer_id  = $("#customer option:selected").val();
         var html = "";
@@ -28,7 +33,7 @@
                     });
                     // $('.dynamic-table').html('<form id="po-list-form"><table class="table table-fixed"><thead><tr><th></th><th style="padding-left: 30px;">ERP ID</th><th style="padding-left: 20px;">PO Number</th><th style="padding-left: 10px;">Buyer</th></tr></thead><tbody>'+html+'</tbody></table></form>');
 
-                    $('.dynamic-table').html('<form id="po-list-form"><table class="table table-bordered table-erp-list"><thead><tr><th style="border-bottom:1px white;border-right:1px white;"></th><th width="100" style="border-bottom:1px black;border-top:1px black;">ERP ID</th><th width="100" style="border-bottom:1px black;border-top:1px black;">PO Number</th><th width="100" style="border-bottom:1px black;border-top:1px black;">Buyer</th></tr></thead><tbody><tr><td width="500" colspan="4"><div><table>'+html+'</table></div></td></tr></tbody></table></form>');
+                    $('.dynamic-table').html('<form id="po-list-form"><table class="table table-bordered table-erp-list"><thead><tr><th style="border-bottom:1px white;border-right:1px white;"></th><th width="100" style="border-bottom:1px black;border-top:1px black;">ERP ID</th><th width="100" style="border-bottom:1px black;border-top:1px black;">PO Number</th><th width="100" style="border-bottom:1px black;border-top:1px black;border-width: 1px !important;">Buyer</th></tr></thead><tbody><tr><td width="500" colspan="4"><div><table>'+html+'</table></div></td></tr></tbody></table></form>');
 
                    
 
@@ -66,6 +71,12 @@
             }
         })	    
 	}
+
+    /**
+     * method to get the order list of selected ERP ID
+     * @param  {[erp id]}
+     * @return {[json data]}
+     */
     function showOrderList(obj) {
         var erp_id = $(obj).val()
         var table  = $(obj).attr('data-id')
@@ -104,6 +115,13 @@
             }
         })
     }
+
+    /**
+     * method to show all the order details of an ERP ID
+     * @param  {order details}
+     * @param  {[order details]}
+     * @return {[table view of all order details of an ERP ID]}
+     */
     function createInvoice(orderData,taxData){
         
         $('.order-details').html('');
@@ -191,7 +209,11 @@
         }
     }
 
-
+    /**
+     * method to calculate the tax details for the orders
+     * @param  {order details}
+     * @return {[unique tax array for that order details]}
+     */
     function taxDivision(orderData){
         var taxIndexes = [] ;
         var taxlist = orderData.map(a => a.tax);
@@ -218,6 +240,11 @@
         return tax_amnt;
     }
 
+    /**
+     * method to calculate the tax details for the orders (preview window)
+     * @param  {order details}
+     * @return {[unique tax array for that order details]}
+     */
     function previewTaxDiv(newData){
         var taxIndexes = [] ;
         var taxlist = newData.map(a => a.tax);
@@ -237,6 +264,10 @@
         return tax_amnt;
     }
 
+    /**
+     * method to update the total amount of individual orders based on delivery quantity
+     * @return {[updated amount the respective html field]}
+     */
     function updateAmount() {
         
         var tax_array= [].slice.call(arguments);
@@ -303,10 +334,15 @@
                 }
             });
         });
-        console.log("Out",order_data)
+        // console.log("Out",order_data)
         updateTaxAmount(taxsum)
         updateTotal()
     }
+
+    /**
+     * method to calculate the total amount of the orders based on quantity details
+     * @return {[total amount]}
+     */
     function totalAmount(){
         var result = [];
         $('.order-details tr').each(function(){
@@ -317,6 +353,10 @@
         }); 
         return result[12];
     }
+    /**
+     * method to calculate the balance quantity
+     * @return {[pending quantity]}
+     */
     function balncTotal(){
        var pendingQnty = [];
         $('.order-details tr').each(function(){
@@ -327,6 +367,10 @@
         });
         return pendingQnty[9] ;
     }
+    /**
+     * method to calculate the total quantity
+     * @return {[total quantity]}
+     */
     function quantityTotal(){
         
         var sum=0;
@@ -337,7 +381,11 @@
               }
         })
         return sum;
-    }   
+    } 
+    /**
+     * method to calculate the total tax amount
+     * @return {[total tax amount]}
+     */
     function taxSubTotal(){
         var taxamnt = [];
         $('.orders_tax tr').each(function(){
@@ -348,6 +396,7 @@
         });
         return taxamnt[2] ;
     }
+
     function previewTaxTotal(){
         var taxamnt = [];
         $('.preview_orders_tax tr').each(function(){
@@ -361,7 +410,12 @@
         });
         return taxamnt[2] ;
     }
-    
+
+    /**
+     * method to update the tax amount based quantity changes
+     * @param  {[tax array]}
+     * @return {[updated tax details]}
+     */
     function updateTaxAmount(tax_amnt){
 
         var tax_tr = "";       
@@ -395,6 +449,10 @@
         $('.tax-tabl').append('<tr><td colspan="2"><strong>SubTotal</strong></td><td class="tax-total">'+ $tT+'</td></tr><tr></tr>')
     }
 
+    /** 
+     * method to calculate the grand total
+     * @return {[grand total]}
+     */
     function updateTotal(){
         var result = 0;
         $('.extra-amnt').each(function(i, obj){
@@ -407,10 +465,15 @@
         })
         $('.sub-extra').html(result.toFixed(2))
         var grandTotal = parseFloat($('.tax-total').text())+ parseFloat($('.total-amnt').text()) + parseFloat($('.sub-extra').text()) + parseFloat($('#round-off').val()) ;
-        console.log(parseFloat($('.tax-total').text()) , parseFloat($('.total-amnt').text()) , parseFloat($('.sub-extra').text()) , parseFloat($('#round-off').val()))
+        // console.log(parseFloat($('.tax-total').text()) , parseFloat($('.total-amnt').text()) , parseFloat($('.sub-extra').text()) , parseFloat($('#round-off').val()))
         $('.grand-total').html(grandTotal.toFixed(2))        
     }
 
+    /**
+     * method to show the preview of created invoice
+     * @param  {order details}
+     * @return {[invoice preview modal]}
+     */
     function previewInvoice(data){
         var selected = [];
         var tr = "";
@@ -429,9 +492,9 @@
         var count = 0 ;
         $('#company-logo').attr('src',company_details.logo);        
         $('#credit-val').text(data[0].credit_limit)
-        $('#company_details').html('<h4>'+company_details.name+'</h4>'+company_details.address+'<p>PH : '+company_details.office_phone+', '+company_details.phone+'</br> GST : '+company_details.gstin+'</p>')
+        $('#company_details').html('<h4>'+company_details.name+'</h4>'+company_details.address+'<p>PH : '+company_details.office_phone+', '+company_details.phone+'</br> GSTIN : '+company_details.gstin+'</p>')
 
-        $('#bill_to').html('<p>Buyer</p><h4>'+data[0].company_name+'</h4><p>'+bill_to.address+'</br> GSTN :'+data[0].gstin_number+ '</p>')
+        $('#bill_to').html('<p>Buyer</p><h4>'+data[0].company_name+'</h4><p>'+bill_to.address+'</br> GSTIN :'+data[0].gstin_number+ '</p>')
         $('#disp_thru').text(data[0].delvry_thru);
         $('.order-details input[type=checkbox]').each(function () {
             if ($(this).prop("checked") == false) {
@@ -452,8 +515,8 @@
            
         })
         var checkboxes = $('#order-details td input[type="checkbox"]');
-        console.log(checkboxes.filter(':checked').length)
-        console.log(Object.keys(delvryQnty).length)
+        // console.log(checkboxes.filter(':checked').length)
+        // console.log(Object.keys(delvryQnty).length)
         if ((jQuery.isEmptyObject(delvryQnty))) {
         // if((Object.keys(delvryQnty).length) === (checkboxes.filter(':checked').length)){
            $('.snackbar_span').html("Please provide delivered quantity details");
@@ -495,13 +558,13 @@
 
                 if (itemName==value.item_name) {
                     tr += '<tr class="trClass" id="'+value.id+'">';
-                    tr += '<td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+' </td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td class="amnt">'+(delQnty * value.rate).toFixed(2)+'</td>';
+                    tr += '<td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+' </td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td style="border-width: 1px !important;" class="amnt">'+(delQnty * value.rate).toFixed(2)+'</td>';
                     tr += '</tr>';
                 }
                 else{
                     var hsnCode = value.hsn_code==null?'-':value.hsn_code;
                     tr += '<tr><td></td><td colspan="13"><strong style="float: left;">ITEM: '+value.item_name+'  HSNCode: '+hsnCode+'</strong></td></tr>';
-                    tr += '<tr class="trClass" id="'+value.id+'"><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+' </td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td class="amnt">'+(delQnty * value.rate).toFixed(2)+'</td>';
+                    tr += '<tr class="trClass" id="'+value.id+'"><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+' </td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td class="amnt" style="border-width: 1px !important;">'+(delQnty * value.rate).toFixed(2)+'</td>';
                     tr += '</tr>';
                     itemName =value.item_name
                 }               
@@ -510,10 +573,10 @@
                 amnt += (delQnty*value.rate);
 
             });
-            tr+= '<tr><td colspan="7"><strong>Total</strong></td><td class="preview-total-qnty" id="preview-total-qnty"></td><td></td><td class="preview-total-amnt"></td></tr>';
+            tr+= '<tr><td colspan="7"><strong>Total</strong></td><td class="preview-total-qnty" id="preview-total-qnty"></td><td></td><td style="border-width: 1px !important;" class="preview-total-amnt"></td></tr>';
             $('#item_details').html('<table class="table table-bordered table-condensed order-details" id="preview-order-details" style="width:100%"><thead><tr><th>Order No</th><th>PO No</th><th>Style</th><th>OCN</th><th>Ref</th><th>Size</th><th>Tax (%)</th><th>Quantity</th><th>Rate (₹)</th><th>Amount (₹)</th></tr></thead><tbody>'+tr+'</tbody></table>');
             var tax_tr = "";       
-            var tax_table = $('.preview-orders-tax').html('<table class="table table-bordered text-center preview_orders_tax" style="margin-top: -23px;"><thead><tr><th>Tax</th><th>Base Value (₹)</th><th>Amount (₹)</th></tr></thead><tbody class="preview-tax-tabl"></tbody></table>')
+            var tax_table = $('.preview-orders-tax').html('<table class="table table-bordered text-center preview_orders_tax" style="margin-top: -23px;margin-left: 2px;"><thead><tr><th>Tax</th><th>Base Value (₹)</th><th>Amount (₹)</th></tr></thead><tbody class="preview-tax-tabl"></tbody></table>')
 
             $('.preview-total-qnty').text($('.total-qnty').text())
             $('.preview-balnc-qnty').text($('.balnc-qnty').text())
@@ -525,7 +588,7 @@
             
                 if (place_of_supply==1){
                     if (tax_amnt[key]!=0) {
-                        tax_tr = '<tr><td>CGST ('+(key/2)+'%)</td><td class="cgst_'+key+'">'+tax_amnt[key]+'</td><td>'+(((key/2)/100)*tax_amnt[key]).toFixed(2)+'</td></tr><tr><td>SGST ('+(key/2)+'%)</td><td class="sgst_'+key+'">'+tax_amnt[key]+'</td><td>'+ (((key/2)/100)*tax_amnt[key]).toFixed(2)+'</td></tr>'    
+                        tax_tr = '<tr><td>CGST ('+(key/2)+'%)</td><td class="cgst_'+key+'">'+tax_amnt[key].toFixed(2)+'</td><td>'+(((key/2)/100)*tax_amnt[key]).toFixed(2)+'</td></tr><tr><td>SGST ('+(key/2)+'%)</td><td class="sgst_'+key+'">'+tax_amnt[key].toFixed(2)+'</td><td>'+ (((key/2)/100)*tax_amnt[key]).toFixed(2)+'</td></tr>'    
                     }
                     else{
                         tax_tr = ""; 
@@ -533,7 +596,7 @@
                 }
                 else if (place_of_supply==2){
                     if (tax_amnt[key]!=0) {
-                      tax_tr = '<tr><td>IGST ('+key+'%)</td><td class="igst_'+key+'">'+tax_amnt[key]+'</td><td>'+((key/100)*tax_amnt[key]).toFixed(2)+'</td></tr>'
+                      tax_tr = '<tr><td>IGST ('+key+'%)</td><td class="igst_'+key+'">'+tax_amnt[key].toFixed(2)+'</td><td>'+((key/100)*tax_amnt[key]).toFixed(2)+'</td></tr>'
                     }
                     else{
                         tax_tr = ""; 
@@ -561,7 +624,7 @@
                 eTr += '<tr class="'+trclass1+'"><td colspan="2">'+eName+'</td><td>'+parseFloat(eAmount).toFixed(2)+'</td></tr>'
             });
             var tableHide = trclass1 && trclass2 && trclass3 =="hidden" ?"hidden":''
-            $('.preview-extra-charges').html('<table class="table table-bordered text-center preview-extra-charges" style="margin-top: -22px;"><thead><tr class='+tableHide+'><th colspan="2">Description</th><th>Amount (₹)</th></tr></thead><tbody>'+eTr+'<tr class='+tableHide+'><td colspan="2"><strong>SubTotal</strong></td><td><strong class="preview-sub-extra"></strong></td></tr><tr><td colspan="2"><strong>Round Off</strong></td><td><strong class="preview-round-off" id="preview-round-off"></strong></td></tr><tr></tr><tr><td colspan="2" style="border-width: 1px !important;"><strong>Grand Total</strong></td><td style="border-width: 1px !important;"><strong class="preview-grand-total"></strong></td></tr><tr></tr></tbody></table>')
+            $('.preview-extra-charges').html('<table class="table table-bordered text-center preview-extra-charges" style="margin-top: -22px;margin-left: 2px;"><thead><tr class='+tableHide+'><th colspan="2">Description</th><th>Amount (₹)</th></tr></thead><tbody>'+eTr+'<tr class='+tableHide+'><td colspan="2"><strong>SubTotal</strong></td><td><strong class="preview-sub-extra"></strong></td></tr><tr><td colspan="2"><strong>Round Off</strong></td><td><strong class="preview-round-off" id="preview-round-off"></strong></td></tr><tr></tr><tr><td colspan="2" style="border-width: 1px !important;"><strong>Grand Total</strong></td><td style="border-width: 1px !important;"><strong class="preview-grand-total"></strong></td></tr><tr></tr></tbody></table>')
                  
                 $('.preview-round-off').text(parseFloat($('#round-off').val()).toFixed(2))
                 $('.preview-total-amnt').text($('.total-amnt').text())
@@ -592,28 +655,17 @@
             $('#erp-invoice').modal("show")
         }
     }
-    // function downloadInvoice(){
 
-    //     var myOffscreenEl = document.getElementById("invoice")
-    //         useWidth      = myOffscreenEl.style.width,
-    //         useHeight     = myOffscreenEl.style.height;
-    //         myOffscreenEl.style.backgroundColor = 'white';
-    //     html2pdf(myOffscreenEl, {
-    //         margin:       [30, 25, 33, 25],
-    //         filename    :  'Invoice.pdf',
-    //         image       :  { type: 'jpeg', quality: 0.98 },
-    //         html2canvas :  { dpi: 300, letterRendering: true },
-    //         jsPDF       :  { unit: 'pt', format: 'a4', orientation: 'portrait' }
-    //     });
-       
-    //    // dataPDF.save('storage/app/public/invoices/invoice.pdf', 'F');
-    // }
-
+    /**
+     * method to update the invoice based on order selection (checkbox)
+     * @param  {[order details]}
+     * @return {[updated invoice details]}
+     */
     function updateInvoice(obj){
         var val = $(obj).val();
         var i = order_data.length;        
         var arr = [].concat(order_data);
-        console.log("arr",arr)
+        // console.log("arr",arr)
         var selected = [];
         $('.order-details input[type=checkbox]').each(function () {
             var amt =0;
@@ -648,6 +700,11 @@
         updateTotal()      
     }
 
+    /**
+     * method to save the invoice details into DB
+     * @param  {[order details]}
+     * @param  {[extra charges]}
+     */
     function saveInvoice(finalData,eCharges){
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         var myOffscreenEl = document.getElementById("invoice");
@@ -687,7 +744,7 @@
             dataType: "json",
 
             success: function (data) {
-                console.log("result",data)
+                // console.log("result",data)
                 $('.snackbar_span').html("Invoice Created Successfully !");
                 showSnackbar();                
                 $('#erp-invoice').modal("hide")
@@ -703,6 +760,12 @@
         })
     }
 
+    /**
+     * method to update grand total based on extra charges
+     * @param  {order details}
+     * @param  {[old grand total]}
+     * @return {[updated grand total amount]}
+     */
     function updateGrandTotal(obj,gndtotal){
         // $(obj).closest('tr').find('.grand-total').text();
        var grandTotal = 0 ;
@@ -718,6 +781,10 @@
        }    
     }
 
+    /**
+     * method to add rows for adding extra charges
+     * 
+     */
     function addExtraCharges(rem, e){
         e.preventDefault();
         var id = $(rem).attr("data-id");
@@ -736,6 +803,10 @@
             $('.delete-row').tooltip('toggle')
         }        
     }
+    /**
+     * method to remove the row of extra charges
+     * @return {[updated extra charges table]}
+     */
     function removeRow(rem,event)
     {
         try{            

@@ -32,6 +32,7 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
             /** [Show response status based on HTTP status code] */
             200: function(data)
             {
+       
                if ((jQuery.isEmptyObject(data.data.company_details)) || (jQuery.isEmptyObject(data.data.bank_details)) || (jQuery.isEmptyObject(data.data.ship_to)) || (jQuery.isEmptyObject(data.data.bill_to)))
                {
                     $('.snackbar_span').html("Customer Profile isn't complete");
