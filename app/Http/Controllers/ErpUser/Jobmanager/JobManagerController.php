@@ -33,8 +33,8 @@ class JobManagerController extends Controller
 		// get the current time
 		$this->current_date = Carbon::now('Asia/Kolkata')->format('d-m-Y');
    
-    }
-
+		}
+		
     /**
      * Show the Jobcard  Manager List View.
      * @author [Gowtham] <[gowtham@wizroots.com]>
@@ -467,6 +467,7 @@ class JobManagerController extends Controller
 			$template_data['width']            = $width_array;
 			$template_data['ratio']            = $ratio_templates;
 			$template_data['single']           = $final_chunk;
+			$template_data['order_detail_ids'] = $order_detail_ids;
 
 			return response()->json(['error'=> false,'message' =>'Success', 'template_data' => $template_data],200);
   
@@ -525,10 +526,12 @@ class JobManagerController extends Controller
 				$cartons         = $request['cartons'];
 				$final_json_obj  = $request['final_json_obj'];
 				$erp_orders_ids  = explode(',', $request['erp_orders_ids']);
-			    $selected_ref    = explode(',', $request['selected_ref_array']);
+			  $selected_ref    = explode(',', $request['selected_ref_array']);
 				$buyer_pos       = explode(',', $request['selected_buyer_po_array']);
 				$order_types     = explode(',', $request['order_type_array']);
 				$created_at      = explode(',', $request['created_at_array']);
+
+				$current_timestamp = Carbon::now('Asia/Kolkata')->toDateTimeString();
 
 				if(isset($company_id) && isset($workorder_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($machine) && isset($cus_del_date)  && isset($finish_type)  && isset($compiled_by) && isset($final_json_obj) && isset($material))
 				{
@@ -575,8 +578,8 @@ class JobManagerController extends Controller
 						'cutter'                 => $cutter,
 						'cartons'                => $cartons,
 						'template_quantity_json' => $final_json_obj,
-						'created_at'             => Carbon::now('Asia/Kolkata')->toDateTimeString(),
-						'updated_at'             => Carbon::now('Asia/Kolkata')->toDateTimeString()
+						'created_at'             => $current_timestamp,
+						'updated_at'             => $current_timestamp
 					  ]);
 					
 					/** Store jobcard settings and excess details**/
@@ -601,8 +604,8 @@ class JobManagerController extends Controller
 									'actual_excess'           => $act_excess[$i],
 									'settings'                => $settings[$i],
 									'total_mtrs'              => $total_mtrs[$i],
-									'created_at'              => Carbon::now('Asia/Kolkata')->toDateTimeString(),
-									'updated_at'              => Carbon::now('Asia/Kolkata')->toDateTimeString()
+									'created_at'              => $current_timestamp,
+									'updated_at'              => $current_timestamp
 								]);
 								$i++;
 							}
@@ -678,8 +681,18 @@ class JobManagerController extends Controller
 						$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
 						$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 						
-						// set auto page breaks
-						$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+						// /** Handle Page break */
+						// if ($pdf->last_page_flag)
+						// {
+								// set auto page breaks
+						    $pdf->SetAutoPageBreak(TRUE, 40);
+		
+						// }
+						// else 
+						// {
+						// 	  $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+						// }
+						
 
 						// set image scale factor
 						$pdf->setImageScale(1.8);
@@ -753,7 +766,7 @@ class JobManagerController extends Controller
 						DB::table('jobcard_main_table')->where('id', $store_jobcard_id)
 						->update([
 							'file_path'   => $file_path,
-							'updated_at'  => Carbon::now('Asia/Kolkata')->toDateTimeString()
+							'updated_at'  => $current_timestamp
 						]);
 						return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path],200);	
 					}
@@ -1439,7 +1452,7 @@ class JobManagerController extends Controller
 					$jobcard_data->order_date        =	$jobcard_data->order_date == ''?NULL:Carbon::parse($jobcard_data->order_date)->format('d-m-Y');
 					$jobcard_data->customer_del_date =	$jobcard_data->customer_del_date == ''?NULL:Carbon::parse($jobcard_data->customer_del_date)->format('d-m-Y');
 					$jobcard_data->invoice_date      =	$jobcard_data->invoice_date == ''?NULL:Carbon::parse($jobcard_data->invoice_date)->format('d-m-Y');
-					$jobcard_data->approval_date     =	$jobcard_data->approval_date == ''?NULL:Carbon::parse($jobcard_data->approval_date)->format('d-m-Y');
+					$jobcard_data->approval_date     =	$jobcard_data->approval_date == ''?NULL:Carbon::parse($jobcard_data->approval_adate)->format('d-m-Y');
 
 				    $jobcard_details  = DB::table('jobcard_excess_details')
 										->select('jobcard_excess_details.ref_name', 'jobcard_excess_details.mtrs_for_stickers', 'jobcard_excess_details.actual_excess', 'jobcard_excess_details.settings', 'jobcard_excess_details.total_mtrs')
@@ -1503,6 +1516,8 @@ class JobManagerController extends Controller
 				$cartons         = $request['cartons'];
 				$final_json_obj  = $request['final_json_obj'];
 				$jobcard_id 	 = $request['jobcard_id'];
+				
+				$current_timestamp = Carbon::now('Asia/Kolkata')->toDateTimeString();
 
 				if(isset($company_id) && isset($workorder_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($machine) && isset($cus_del_date)  && isset($finish_type)  && isset($compiled_by) && isset($final_json_obj) && isset($jobcard_id) && isset($material))
 				{
@@ -1548,7 +1563,7 @@ class JobManagerController extends Controller
 						'cutter'                 => $cutter,
 						'cartons'                => $cartons,
 						'template_quantity_json' => $final_json_obj,
-						'updated_at'             => Carbon::now('Asia/Kolkata')->toDateTimeString()
+						'updated_at'             => $current_timestamp
 					]);
 					
 					if (!empty($request['single_ref'])) 
@@ -1574,8 +1589,8 @@ class JobManagerController extends Controller
 								'actual_excess'           => $act_excess[$i],
 								'settings'                => $settings[$i],
 								'total_mtrs'              => $total_mtrs[$i],
-								'created_at'              => Carbon::now('Asia/Kolkata')->toDateTimeString(),
-								'updated_at'              => Carbon::now('Asia/Kolkata')->toDateTimeString()
+								'created_at'              => $current_timestamp,
+								'updated_at'              => $current_timestamp
 							]);
 							$i++;
 						}
@@ -1620,8 +1635,17 @@ class JobManagerController extends Controller
 					$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
 					$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 					
-					// set auto page breaks
-					$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+					// /** Handle Page break */
+					// if ($pdf->last_page_flag)
+					// {
+							// set auto page breaks
+							$pdf->SetAutoPageBreak(TRUE, 40);
+	
+					// }
+					// else 
+					// {
+					// 		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+					// }
 
 					// set image scale factor
 					$pdf->setImageScale(1.8);
@@ -1699,7 +1723,7 @@ class JobManagerController extends Controller
 					DB::table('jobcard_main_table')->where('id', $jobcard_id)
 					->update([
 						'file_path'   => $file_path,
-						'updated_at'  => Carbon::now('Asia/Kolkata')->toDateTimeString()
+						'updated_at'  => $current_timestamp
 					]);
 					return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path],200);	
 					

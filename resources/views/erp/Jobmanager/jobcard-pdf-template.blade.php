@@ -167,7 +167,7 @@ th {
                     </table>
                 @endforeach
                 @endif
-            @else
+            @elseif ($template_type == 'single')
                 @if (!empty($template_type_data))
                     @foreach ($template_type_data as $table => $table_data)
                         <table cellspacing="0" cellpadding="1" border="0.2"  nobr="true" class="single-list-table" align="center">
