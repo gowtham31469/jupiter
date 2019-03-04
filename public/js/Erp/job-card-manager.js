@@ -202,6 +202,9 @@ function generateJobcard(){
     }
     else
     {
+        // remove file_path from local-storage
+        localStorage.removeItem('file_path');
+        
         orders = [];
         /** [ Create array of orders selected ] */
         $('.row-checkbox', allPages).each(function (i, item) {
@@ -791,7 +794,7 @@ function storeJobcard()
     var final_json_obj =   {
         "ratio": {},
         "single": {},
-        "erp_order_detail_ids" : []
+        "erp_order_details" : []
           };  
     var ratio_object = {};
     /** Create ratio templates json object */
@@ -906,14 +909,6 @@ function storeJobcard()
         // pushing single templates array into json object
         final_json_obj['single'] = single_ref_obj;
     });
-
-    var erp_order_ids_array = [];
-    /** [ Create array of erp-details-id ] */
-    $('.erp-details-id').each(function (i, item) {
-        erp_order_ids_array.push($(item).text());
-    });
-    // pushing erp_order_ids array into json object
-    final_json_obj['erp_order_detail_ids'] = erp_order_ids_array;
     
     var single_ref = [];
     var act_excess = [];
@@ -956,6 +951,7 @@ function storeJobcard()
             erp_orders_ids.push($(this).closest('tr').attr('id')); 
         }
     });
+
     erp_orders_ids   = erp_orders_ids.join(',');
 
     selected_ref_array = [];
@@ -993,6 +989,27 @@ function storeJobcard()
         }
     });
     created_at_array   = created_at_array.join(',');
+    
+    jsonArray = [];
+    /** [ Create json object of selected orders ] */
+    $('.row-checkbox', allPages).each(function (i, item) {
+        erp_order_details_obj = {};
+        
+        if ($(this).is(':checked')) {
+            erp_order_details_obj.created_at = $(this).closest('tr').data('created-at'); 
+            erp_order_details_obj.order_type = $(this).closest('tr').data('order-type'); 
+            erp_order_details_obj.buyer_po   = $(this).closest('tr').data('buyer-po'); 
+            erp_order_details_obj.refname    = $(this).closest('tr').data('refname'); 
+            erp_order_details_obj.erp_id     = $(this).closest('tr').attr('id');
+            erp_order_details_obj.style_no   = $(this).closest('tr').data('style-no');
+            erp_order_details_obj.temp_file  = $(this).closest('tr').data('template-file');
+
+            jsonArray.push(erp_order_details_obj);
+        }
+    });
+
+    // pushing created_at array into json object
+    final_json_obj['erp_order_details'] = jsonArray;
 
     $.ajax({
         url: base_url + "/erp/job-manager/store-jobcard-details",
@@ -1062,6 +1079,7 @@ function storeJobcard()
                 /** [ Store file path into localstorage ] */
                 localStorage.setItem('file_path',data.file_path)
              
+                var isEdit        = false;
                 $('.row-checkbox', allPages).each(function (i, item) {
                   
                     if ($(this).is(':checked')) {
@@ -1071,11 +1089,10 @@ function storeJobcard()
                         order_type    = $(this).closest('tr').data('order-type');
                         created_at    = $(this).closest('tr').data('created-at');
                         style_no      = $(this).closest('tr').data('style-no');
-                        template_file = $(this).closest('tr').data('template-file');
                         loop          = $(this).closest('tr').data('iteration');
                         modal_name    = refname.replace(' ', '');
 
-                        openmodaltescopreview(modal_name, loop,template_file,style_no,buyer_po_no,id,order_type,created_at);
+                        openmodaltescopreview(modal_name, loop, style_no, buyer_po_no, id, order_type, created_at, isEdit);
                     }
                 });
               
@@ -1083,63 +1100,6 @@ function storeJobcard()
             400: function() {
                 $('.snackbar_span').html("Parameter is missing !!!");
                 showSnackbar();
-            },
-       },
-        error: function (errorXHR, errorStatus, errorThrown) {
-            this.tryCount++;
-            if (this.tryCount <= this.retryLimit) {
-                $.ajax(this);
-                return;
-            }
-        },
-        complete: function () {
-            $(".loader").hide();
-        }
-    })
-}
-/**
- * Check if loop execution completed or not
- * @author praveen
- */
-var operationsCompleted = 0;
-function operation() {
-    ++operationsCompleted;
-    if (operationsCompleted === $('[class="row-checkbox"]:checked').length) after_forloop(); 
-}
-
-/**
- * Call after loop execution completed
- * @author praveen
- */
-function after_forloop()
-{
-    $.ajax({
-        url: base_url + "/erp/job-manager/pdf-merge",
-        type: 'post',
-        data: {
-            _token: csrf_token,
-            path:localStorage.getItem('file_path')
-        },
-        tryCount: 0,
-        retryLimit: 2,
-        dataType: "json",
-        beforeSend: function () {
-            $(".loader").show();
-        },
-        statusCode: {
-            200: function(data) {     
-                var resp = JSON.stringify(data.file_path);
-                $('.snackbar_span').html("Jobcard Created Successfully");
-                showSnackbar();
-                $('#jobcardCreationModalCenter').modal('hide');
-                location.reload();
-                window.open(
-                    base_url+JSON.parse(resp),
-                    '_blank' // <- This is what makes it open in a new window.
-                );   
-            },
-            400: function() {
-              
             },
        },
         error: function (errorXHR, errorStatus, errorThrown) {
@@ -1173,6 +1133,8 @@ function after_forloop()
              retryLimit : 2,
              beforeSend: function () {
                $(".loader").show();
+               // remove file_path from local-storage
+               localStorage.removeItem('file_path');
              },
              success: function(data){
                  $('.edit-ratio-list-table-div').html('');
@@ -1230,7 +1192,6 @@ function after_forloop()
                  $('#edit_machine').selectpicker('refresh');
                  $('#edit_disp_mode').selectpicker('refresh');
                  var ratio_table = '';
-                 var edit_hidden_html = '';
                  $.each(JSON.parse(data.jobcard_data.template_quantity_json), function(template_type, template_type_data){
                     if(template_type === 'ratio')
                     {
@@ -1367,14 +1328,6 @@ function after_forloop()
                         $('.edit-single-list-table-div').html(single_table);
                         }
                     }
-                    else
-                    {
-                        /** append erp_details_ids  as hidden */
-                        $.each(template_type_data, function(index, erp_details_id){
-                            edit_hidden_html += '<div hidden class="edit-erp-details-id">'+erp_details_id+'</div>'
-                        });
-                        $('.edit-order-details-div').html(edit_hidden_html);
-                    }
                     
                  });
 
@@ -1414,6 +1367,28 @@ function after_forloop()
                     $('.edit-meter-calculation-div').html(edit_meters_div_html);
                     
                 } 
+                
+                var erp_details_div_html = '';
+                $.each(JSON.parse(data.jobcard_data.template_quantity_json), function(index, artwork_data){ 
+                 if(index != "ratio" && index != "single")
+                 {
+                    if(index === "erp_order_details")
+                    {
+                        if(artwork_data.length > 0)
+                        {
+                            var incr = 0;
+                            // hidden erp_order_details data.
+                            $.each(artwork_data, function(index, erp_data){
+                                erp_details_div_html += '<div hidden class="edit-erp-details" data-erp-id="'+erp_data.erp_id+'" data-ref-name="'+erp_data.refname+'" data-order-type="'+erp_data.order_type+'" data-buyer-po="'+erp_data.buyer_po+'" data-created-at="'+erp_data.created_at+'"  data-style-no="'+erp_data.style_no+'" data-template-file="'+erp_data.temp_file+'"></div><object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal'+incr+'" class="center-block tesco_svg'+incr+'" data="'+erp_data.temp_file+'" type="image/svg+xml"></object>'
+                                incr++;
+                            });
+                            
+                            $('.edit-order-details-div').html(erp_details_div_html);
+                        }
+                    }
+                    
+                 }
+                });
                     
                 /** [ Backdrop for bootstrap modal ] */
                 $('#jobcardUpdationModalCenter').modal({
@@ -1617,8 +1592,8 @@ function updateJobcard(formData)
     var final_json_obj =   {
         "ratio": {},
         "single": {},
-        "erp_order_detail_ids" : []
-          };  
+        "erp_order_details" : []
+          };   
     var ratio_object = {};
     /** Create ratio templates json object */
     $('.edit-ratio-list-table').each(function (i, table) {
@@ -1732,15 +1707,6 @@ function updateJobcard(formData)
         // pushing single templates array into json object
         final_json_obj['single'] = single_ref_obj;
     });
-    
-    var erp_order_ids_array = [];
-    /** [ Create array of erp-details-id ] */
-    $('.edit-erp-details-id').each(function (i, item) {
-        erp_order_ids_array.push($(item).text());
-    });
-
-    // pushing erp_order_ids array into json object
-    final_json_obj['erp_order_detail_ids'] = erp_order_ids_array;
 
     var single_ref = [];
     var act_excess = [];
@@ -1775,6 +1741,24 @@ function updateJobcard(formData)
 
     });
     total_mtrs = total_mtrs.join(',');
+
+    jsonArray = [];
+    /** [ Create json object of jobcard-craeted orders ] */
+    $('.edit-erp-details').each(function (i, item) {
+        erp_order_details_obj = {};
+        erp_order_details_obj.created_at = $(this).attr('data-created-at'); 
+        erp_order_details_obj.order_type = $(this).attr('data-order-type'); 
+        erp_order_details_obj.buyer_po   = $(this).attr('data-buyer-po'); 
+        erp_order_details_obj.refname    = $(this).attr('data-ref-name'); 
+        erp_order_details_obj.erp_id     = $(this).attr('data-erp-id');
+        erp_order_details_obj.style_no   = $(this).attr('data-style-no');
+        erp_order_details_obj.temp_file  = $(this).attr('data-template-file');
+
+        jsonArray.push(erp_order_details_obj);
+    });
+
+    // pushing created_at array into json object
+    final_json_obj['erp_order_details'] = jsonArray;
 
     $.ajax({
         url: base_url + "/erp/job-manager/update-jobcard-details",
@@ -1836,14 +1820,22 @@ function updateJobcard(formData)
         },
         statusCode: {
             200: function(data) {
-                var resp = JSON.stringify(data.file_path);
-                $('.snackbar_span').html("Jobcard Updated Successfully");
-                showSnackbar();
-                $('#jobcardUpdationModalCenter').modal('hide');
-                window.open(
-                    base_url+JSON.parse(resp),
-                    '_blank' // <- This is what makes it open in a new window.
-                );
+                /** [ Store file path into localstorage ] */
+                localStorage.setItem('file_path',data.file_path)
+                var loop = 0;
+                var isEdit = true;
+                $('.edit-erp-details').each(function (i, item) {
+                    created_at = $(this).attr('data-created-at'); 
+                    order_type = $(this).attr('data-order-type'); 
+                    buyer_po_no= $(this).attr('data-buyer-po'); 
+                    refname    = $(this).attr('data-ref-name'); 
+                    id         = $(this).attr('data-erp-id');
+                    style_no   = $(this).attr('data-style-no');
+                    modal_name = refname.replace(' ', '');
+
+                    openmodaltescopreview(modal_name, loop, style_no, buyer_po_no, id, order_type, created_at, isEdit);
+                    loop++;
+                });
             },
             400: function() {
                 $('.snackbar_span').html("Parameter is missing !!!");
@@ -2060,20 +2052,20 @@ function getJobcardsList()
  * 
  * @return barcode
  */
-function openmodaltescopreview(modal, loop,template_file,style_no,buyer_no,id,order_type,created_at) {
+function openmodaltescopreview(modal, loop, style_no,buyer_no, id, order_type, created_at, isEdit) 
+{
 	
-    genarateArtworkPreview("tesco_svg_modal" + loop, modal,style_no,buyer_no,id,order_type,created_at);
+    genarateArtworkPreview("tesco_svg_modal" + loop, modal,style_no,buyer_no,id,order_type,created_at, isEdit);
 
 }
 
-function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,created_at) {
-
-var a = document.getElementById(data);
-var svgDoc = a.contentDocument;
-var zone = localStorage.getItem("zone");
-var name2=name;
-var name = name + "-sticker";
-if (name == "TSL1-sticker" || name == "TSL3-sticker") {
+function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,created_at, isEdit) 
+{
+    var a = document.getElementById(data);
+    var svgDoc = a.contentDocument;
+    var name2=name;
+    var name = name + "-sticker";
+    if (name == "TSL1-sticker" || name == "TSL3-sticker") {
     var svgarr = [];
     var ajax_count = 0;
     var b = " ";
@@ -2098,142 +2090,173 @@ if (name == "TSL1-sticker" || name == "TSL3-sticker") {
 
             },
             success: function(data) {
-                
-                
-    $(data.order_details).each(function (key, val) {
-        var svgRoot = svgDoc.documentElement;
-        var zone=val.zone;
+                $(data.order_details).each(function (key, val) {
+                    var svgRoot = svgDoc.documentElement;
+                    var zone=val.zone;
+                    localStorage.setItem("zone", zone);
 
-        if ((name == "TSL1-sticker" && zone == "CE")) {
-            svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + val.orms_tpn;
-        } else if ((name == "TSL3-sticker" && zone == "CE")) {
-            svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + val.orms_tpn;
-        } else if ((name == "TSL3-sticker" && zone == "UK")) {
-            svgDoc.getElementById("tpnd").innerHTML = "TPND: " + val.tpnd;
-        } else if ((name == "TSL1-sticker" && zone == "UK")) {
-            svgDoc.getElementById("tpnd").innerHTML = "TPND: " + val.tpnd;
-        }
+                    if ((name == "TSL1-sticker" && zone == "CE")) {
+                        svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + val.orms_tpn;
+                    } else if ((name == "TSL3-sticker" && zone == "CE")) {
+                        svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + val.orms_tpn;
+                    } else if ((name == "TSL3-sticker" && zone == "UK")) {
+                        svgDoc.getElementById("tpnd").innerHTML = "TPND: " + val.tpnd;
+                    } else if ((name == "TSL1-sticker" && zone == "UK")) {
+                        svgDoc.getElementById("tpnd").innerHTML = "TPND: " + val.tpnd;
+                    }
 
-
-
-        if ((name == "TSL3-sticker")) {
-            if (zone == "CE") {
-                var barcode_change = val.ean_barcode
-            } else {
-                var barcode_change = val.ean_barcode
-            }
-            jsbarcodetescotslean(barcode_change, 'barcode', svgDoc)
-            svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
-        } else {
-            if (zone == "CE") {
-                var barcode_change = val.itf_barcode
-            } else {
-                var barcode_change = val.itf_barcode
-            }
-            jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
-            svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
-
-        }
-
-        if (zone == "CE") {
-            var size = val.size;
-        } else {
-            var size = val.size;
-        }
-
-        var description = val.short_description.replace(/&/g,'&#038;');
-        if ((name == "TSL3-sticker")) {
-            if (size != '') {
-                $.ajax({
-                    url: base_url + "/erp/job-manager/tesco/get-tsl-size",
-                    type: 'GET',
-                    async: false,
-                    data: {
-                        size: size,
-                        zone: zone
-                    },
-                    tryCount: 0,
-                    retryLimit: 2,
-                    success: function (data) {
-                            /** [ Dynamically change svg short description ] */
-                        if (description != '' && data.size_chart.length != 0) {
-                            var str = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
-
-                            
-                            if (str.length > 24) {
-                                if (/\S/.test(str.charAt(24))) {
-                                    //No Space
-                                    if (str.indexOf(" ") == "-1") {
-                                        svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
-                                        svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
-                                    } else {
-                                        svgDoc.getElementById("description").innerHTML = str.substr(0, str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
-                                        svgDoc.getElementById("description1").innerHTML = str.substr(str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
-                                    }
-
-                                } else {
-                                    //Space
-                                    svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
-                                    svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
-                                }
-                                svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
-                            } else {
-                                svgDoc.getElementById("description").innerHTML = str.toUpperCase();
-                                svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
-                                svgDoc.getElementById("description1").innerHTML = "";
-                            }
-                        } else if (data.size_chart.length != 0) {
-                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
-                            svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
-                            svgDoc.getElementById("description1").innerHTML = '';
-                        } else if (description != '') {
-                            if (description.length > 24) {
-                                if (/\S/.test(description.charAt(24))) {
-                                    //No Space
-                                    if (description.indexOf(" ") == "-1") {
-                                        svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
-                                        svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
-                                    } else {
-                                        svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
-                                        svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
-                                    }
-
-                                } else {
-                                    //Space
-                                    svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
-                                    svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
-                                }
-                                svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
-                            } else {
-                                svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
-                                svgDoc.getElementById("description").innerHTML = description.toUpperCase();
-                                svgDoc.getElementById("description1").innerHTML = "";
-                            }
+                    if ((name == "TSL3-sticker")) {
+                        if (zone == "CE") {
+                            var barcode_change = val.ean_barcode
                         } else {
-                            svgDoc.getElementById("description").innerHTML = '';
-                            svgDoc.getElementById("description1").innerHTML = '';
+                            var barcode_change = val.ean_barcode
                         }
-                        var s = new XMLSerializer();
-                        var d = svgRoot;
-                        var str = s.serializeToString(d);
-                        var svg = encodeURI(str)
-                        svgarr.push(svg)
-                    },
-                    error: function (errorXHR, errorStatus, errorThrown) {
-                        this.tryCount++;
-                        if (this.tryCount <= this.retryLimit) {
-                            $.ajax(this);
-                            return;
+                        jsbarcodetescotslean(barcode_change, 'barcode', svgDoc)
+                        svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+                    } else {
+                        if (zone == "CE") {
+                            var barcode_change = val.itf_barcode
+                        } else {
+                            var barcode_change = val.itf_barcode
                         }
-                    },
-                    complete: function () {
+                        jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
+                        svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
 
                     }
-                })
-            } else {
-                /** [ Dynamically change svg short description ] */
-                if (description != '') {
-                    
+
+                    if (zone == "CE") {
+                        var size = val.size;
+                    } else {
+                        var size = val.size;
+                    }
+
+                    var description = val.short_description.replace(/&/g,'&#038;');
+                    if ((name == "TSL3-sticker")) {
+                        if (size != '') {
+                            $.ajax({
+                                url: base_url + "/erp/job-manager/tesco/get-tsl-size",
+                                type: 'GET',
+                                async: false,
+                                data: {
+                                    size: size,
+                                    zone: zone
+                                },
+                                tryCount: 0,
+                                retryLimit: 2,
+                                success: function (data) {
+                                        /** [ Dynamically change svg short description ] */
+                                    if (description != '' && data.size_chart.length != 0) {
+                                        var str = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+
+                                        
+                                        if (str.length > 24) {
+                                            if (/\S/.test(str.charAt(24))) {
+                                                //No Space
+                                                if (str.indexOf(" ") == "-1") {
+                                                    svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+                                                    svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+                                                } else {
+                                                    svgDoc.getElementById("description").innerHTML = str.substr(0, str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+                                                    svgDoc.getElementById("description1").innerHTML = str.substr(str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+                                                }
+
+                                            } else {
+                                                //Space
+                                                svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+                                                svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+                                            }
+                                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+                                        } else {
+                                            svgDoc.getElementById("description").innerHTML = str.toUpperCase();
+                                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+                                            svgDoc.getElementById("description1").innerHTML = "";
+                                        }
+                                    } else if (data.size_chart.length != 0) {
+                                        svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+                                        svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
+                                        svgDoc.getElementById("description1").innerHTML = '';
+                                    } else if (description != '') {
+                                        if (description.length > 24) {
+                                            if (/\S/.test(description.charAt(24))) {
+                                                //No Space
+                                                if (description.indexOf(" ") == "-1") {
+                                                    svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+                                                    svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+                                                } else {
+                                                    svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+                                                    svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+                                                }
+
+                                            } else {
+                                                //Space
+                                                svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+                                                svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+                                            }
+                                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+                                        } else {
+                                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+                                            svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                                            svgDoc.getElementById("description1").innerHTML = "";
+                                        }
+                                    } else {
+                                        svgDoc.getElementById("description").innerHTML = '';
+                                        svgDoc.getElementById("description1").innerHTML = '';
+                                    }
+                                    var s = new XMLSerializer();
+                                    var d = svgRoot;
+                                    var str = s.serializeToString(d);
+                                    var svg = encodeURI(str)
+                                    svgarr.push(svg)
+                                },
+                                error: function (errorXHR, errorStatus, errorThrown) {
+                                    this.tryCount++;
+                                    if (this.tryCount <= this.retryLimit) {
+                                        $.ajax(this);
+                                        return;
+                                    }
+                                },
+                                complete: function () {
+
+                                }
+                            })
+                        } else {
+                            /** [ Dynamically change svg short description ] */
+                            if (description != '') {
+                                
+                                    if (description.length > 24) {
+                                        if (/\S/.test(description.charAt(24))) {
+                                            //No Space
+                                            if (description.indexOf(" ") == "-1") {
+                                                svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+                                                svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+                                            } else {
+                                                svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+                                                svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+                                            }
+
+                                        } else {
+                                            //Space
+                                            svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+                                            svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+                                        }
+                                        svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+                                    } else {
+                                        svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                                        svgDoc.getElementById("description1").innerHTML = "";
+                                        svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+                                    }
+                            } else {
+                                svgDoc.getElementById("description").innerHTML = '';
+                            }
+                            var s = new XMLSerializer();
+                            var d = svgRoot;
+                            var str = s.serializeToString(d);
+                            var svg = encodeURI(str)
+                            svgarr.push(svg)
+
+                        }
+                    } else {
+                        var description =val.short_description.replace(/&/g,'&#038;');
                         if (description.length > 24) {
                             if (/\S/.test(description.charAt(24))) {
                                 //No Space
@@ -2256,51 +2279,18 @@ if (name == "TSL1-sticker" || name == "TSL3-sticker") {
                             svgDoc.getElementById("description1").innerHTML = "";
                             svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
                         }
-                } else {
-                    svgDoc.getElementById("description").innerHTML = '';
-                }
-                var s = new XMLSerializer();
-                var d = svgRoot;
-                var str = s.serializeToString(d);
-                var svg = encodeURI(str)
-                svgarr.push(svg)
-
-            }
-        } else {
-            var description =val.short_description.replace(/&/g,'&#038;');
-            if (description.length > 24) {
-                if (/\S/.test(description.charAt(24))) {
-                    //No Space
-                    if (description.indexOf(" ") == "-1") {
-                        svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
-                        svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
-                    } else {
-                        svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
-                        svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+                        var s = new XMLSerializer();
+                        var d = svgRoot;
+                        var str = s.serializeToString(d);
+                        var svg = encodeURI(str)
+                        svgarr.push(svg)
                     }
-
-                } else {
-                    //Space
-                    svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
-                    svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
-                }
-                svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
-            } else {
-                svgDoc.getElementById("description").innerHTML = description.toUpperCase();
-                svgDoc.getElementById("description1").innerHTML = "";
-                svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
-            }
-            var s = new XMLSerializer();
-            var d = svgRoot;
-            var str = s.serializeToString(d);
-            var svg = encodeURI(str)
-            svgarr.push(svg)
-        }
-        ajax_count++;
-    })
+                    ajax_count++;
+                })
                 if (ajax_count == data.order_details.length) {
                     var svg_fin = svgarr.join(',_');
-                    PDFTescoSmallPreview(svg_fin, name,zone,style_no,buyer_no,id,created_at);
+                    var zone = localStorage.getItem("zone");
+                    PDFTescoSmallPreview(svg_fin, name,zone,style_no,buyer_no,id,created_at, isEdit);
                 }
             },
             error: function(data) {
@@ -2337,215 +2327,213 @@ if (name == "TSL1-sticker" || name == "TSL3-sticker") {
             success: function(data) {
                 $(data.order_details).each(function (key, val) {
                     var zone=val.zone;
-        var svgRoot = svgDoc.documentElement;
-                    
-    if (val.supplier_name != '') {
-        svgDoc.getElementById("supplier").innerHTML = val.supplier_name.toUpperCase().replace('&', '&amp;');
-     } else {
-         svgDoc.getElementById("supplier").innerHTML = "";
-     }
-                    
-    if (val.po_number != '') {
-        svgDoc.getElementById("po_number").innerHTML = val.po_number.toUpperCase();
-    } else {
-        svgDoc.getElementById("po_number").innerHTML = '';
-    }
+                    localStorage.setItem("zone", zone);
+                    var svgRoot = svgDoc.documentElement;
+                                
+                if (val.supplier_name != '') {
+                    svgDoc.getElementById("supplier").innerHTML = val.supplier_name.toUpperCase().replace('&', '&amp;');
+                } else {
+                    svgDoc.getElementById("supplier").innerHTML = "";
+                }
+                                
+                if (val.po_number != '') {
+                    svgDoc.getElementById("po_number").innerHTML = val.po_number.toUpperCase();
+                } else {
+                    svgDoc.getElementById("po_number").innerHTML = '';
+                }
 
-    /** [ Dynamically change svg CE style reference number ] */
-    if (val.ce_style_ref != '') {
-        svgDoc.getElementById("ce_style").innerHTML = val.ce_style_ref.toUpperCase();
-    } else {
-        svgDoc.getElementById("ce_style").innerHTML = '';
-    }
-    /** [ Dynamically change svg UK style reference number ] */
-    if (val.uk_style_ref != '') {
-        svgDoc.getElementById("uk_style").innerHTML = val.uk_style_ref.toUpperCase();
-    } else {
-        svgDoc.getElementById("uk_style").innerHTML = '';
-    }
-    /** [ Dynamically change svg EQOS code ] */
-    if (val.eqos_site_code != '') {
-        svgDoc.getElementById("eqos").innerHTML = val.eqos_site_code.toUpperCase();
-    } else {
-        svgDoc.getElementById("eqos").innerHTML = '';
-    }
-    
+                /** [ Dynamically change svg CE style reference number ] */
+                if (val.ce_style_ref != '') {
+                    svgDoc.getElementById("ce_style").innerHTML = val.ce_style_ref.toUpperCase();
+                } else {
+                    svgDoc.getElementById("ce_style").innerHTML = '';
+                }
+                /** [ Dynamically change svg UK style reference number ] */
+                if (val.uk_style_ref != '') {
+                    svgDoc.getElementById("uk_style").innerHTML = val.uk_style_ref.toUpperCase();
+                } else {
+                    svgDoc.getElementById("uk_style").innerHTML = '';
+                }
+                /** [ Dynamically change svg EQOS code ] */
+                if (val.eqos_site_code != '') {
+                    svgDoc.getElementById("eqos").innerHTML = val.eqos_site_code.toUpperCase();
+                } else {
+                    svgDoc.getElementById("eqos").innerHTML = '';
+                }
                 
-                    /** [ Dynamically change  svg department ] */
-    if (val.department != '') {
-        /** [Give font-size for department] */
-        if (val.department.length < 17) {
-            svgDoc.getElementById("department").setAttribute("style", "font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;");
-        } else {
-            svgDoc.getElementById("department").setAttribute("style", "font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:9px;");
-        }
-        /** [ Dynamically change svg department] */
-        svgDoc.getElementById("department").innerHTML = val.department.toUpperCase().replace('&', '&amp;');
-    } else {
-        svgDoc.getElementById("department").innerHTML = '';
-    }
-    /** [ Dynamically change svg brand ] */
-    if (val.brand != '') {
-        /** [Give font-size for brand] */
-        if (val.brand.length < 17) {
-            svgDoc.getElementById("brand").setAttribute("style", "font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;");
-        } else {
-            svgDoc.getElementById("brand").setAttribute("style", "font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:9px;");
-        }
-        svgDoc.getElementById("brand").innerHTML = val.brand.toUpperCase().replace('&', '&amp;');
-    } else {
-        svgDoc.getElementById("brand").innerHTML = '';
-    }
-                    
-                                    
-    var tag_at_source = val.tag_at_source == 0 ? "no" : "yes";
-    var rfid = val.rfid_compliant == 0 ? "no" : "yes";
-                    
-    /** [ Dynamically svg RFID ] */
-    if (rfid != '') {
-        svgDoc.getElementById("rfid").innerHTML = rfid.toUpperCase();
-    } else {
-        svgDoc.getElementById("rfid").innerHTML = '';
-    }
-    /** [ Dynamically change svg tag at source ] */
-    if (tag_at_source != '') {
-        svgDoc.getElementById("tag_at_source").innerHTML = tag_at_source.toUpperCase();
-    } else {
-        svgDoc.getElementById("tag_at_source").innerHTML = '';
-    }
-    /** [ Dynamically change svg tag at source ] */
-    if (val.season_code != '') {
-        svgDoc.getElementById("season_code").innerHTML = val.season_code.toUpperCase();
-    } else {
-        svgDoc.getElementById("season_code").innerHTML = '';
-    }
-    /** [ Dynamically change svg manufacture date ] */
-    if (val.manufacture_date != '') {
-        svgDoc.getElementById("manufactured_date").innerHTML = val.manufacture_date.toUpperCase();
-    } else {
-        svgDoc.getElementById("manufactured_date").innerHTML = '';
-    }
-                    
-        if ((name == "TCL1-sticker" && zone == "CE") || (name == "TCL2-sticker" && zone == "CE") || (name == "TSL1-sticker" && zone == "CE") || (name == "THL1-sticker" && zone == "CE")) {
-            svgDoc.getElementById("pieces_in_ratio").innerHTML = val.cases_per_carton;
+                            
+                                /** [ Dynamically change  svg department ] */
+                if (val.department != '') {
+                    /** [Give font-size for department] */
+                    if (val.department.length < 17) {
+                        svgDoc.getElementById("department").setAttribute("style", "font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;");
+                    } else {
+                        svgDoc.getElementById("department").setAttribute("style", "font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:9px;");
+                    }
+                    /** [ Dynamically change svg department] */
+                    svgDoc.getElementById("department").innerHTML = val.department.toUpperCase().replace('&', '&amp;');
+                } else {
+                    svgDoc.getElementById("department").innerHTML = '';
+                }
+                /** [ Dynamically change svg brand ] */
+                if (val.brand != '') {
+                    /** [Give font-size for brand] */
+                    if (val.brand.length < 17) {
+                        svgDoc.getElementById("brand").setAttribute("style", "font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;");
+                    } else {
+                        svgDoc.getElementById("brand").setAttribute("style", "font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:9px;");
+                    }
+                    svgDoc.getElementById("brand").innerHTML = val.brand.toUpperCase().replace('&', '&amp;');
+                } else {
+                    svgDoc.getElementById("brand").innerHTML = '';
+                }
+                                
+                                                
+                var tag_at_source = val.tag_at_source == 0 ? "no" : "yes";
+                var rfid = val.rfid_compliant == 0 ? "no" : "yes";
+                                
+                /** [ Dynamically svg RFID ] */
+                if (rfid != '') {
+                    svgDoc.getElementById("rfid").innerHTML = rfid.toUpperCase();
+                } else {
+                    svgDoc.getElementById("rfid").innerHTML = '';
+                }
+                /** [ Dynamically change svg tag at source ] */
+                if (tag_at_source != '') {
+                    svgDoc.getElementById("tag_at_source").innerHTML = tag_at_source.toUpperCase();
+                } else {
+                    svgDoc.getElementById("tag_at_source").innerHTML = '';
+                }
+                /** [ Dynamically change svg tag at source ] */
+                if (val.season_code != '') {
+                    svgDoc.getElementById("season_code").innerHTML = val.season_code.toUpperCase();
+                } else {
+                    svgDoc.getElementById("season_code").innerHTML = '';
+                }
+                /** [ Dynamically change svg manufacture date ] */
+                if (val.manufacture_date != '') {
+                    svgDoc.getElementById("manufactured_date").innerHTML = val.manufacture_date.toUpperCase();
+                } else {
+                    svgDoc.getElementById("manufactured_date").innerHTML = '';
+                }
+                                
+                    if ((name == "TCL1-sticker" && zone == "CE") || (name == "TCL2-sticker" && zone == "CE") || (name == "TSL1-sticker" && zone == "CE") || (name == "THL1-sticker" && zone == "CE")) {
+                        svgDoc.getElementById("pieces_in_ratio").innerHTML = val.cases_per_carton;
 
-            svgDoc.getElementById("tpnd").innerHTML = val.orms_tpn;
-        } else if ((name == "TCL4-sticker" && zone == "CE") || (name == "THL3-sticker" && zone == "CE")) {
-            svgDoc.getElementById("unit_per_case").innerHTML = val.case_size;
+                        svgDoc.getElementById("tpnd").innerHTML = val.orms_tpn;
+                    } else if ((name == "TCL4-sticker" && zone == "CE") || (name == "THL3-sticker" && zone == "CE")) {
+                        svgDoc.getElementById("unit_per_case").innerHTML = val.case_size;
 
-            svgDoc.getElementById("tpnd").innerHTML =val.orms_tpn;
-        } else if ((name == "TCL4-sticker" && zone == "UK") || (name == "THL3-sticker" && zone == "UK")) {
-            svgDoc.getElementById("unit_per_case").innerHTML = val.case_size;
+                        svgDoc.getElementById("tpnd").innerHTML =val.orms_tpn;
+                    } else if ((name == "TCL4-sticker" && zone == "UK") || (name == "THL3-sticker" && zone == "UK")) {
+                        svgDoc.getElementById("unit_per_case").innerHTML = val.case_size;
 
-            svgDoc.getElementById("tpnd").innerHTML = val.tpnd;
-        } else if ((name == "TCL1-sticker" && zone == "UK") || (name == "TCL2-sticker" && zone == "UK") || (name == "TSL1-sticker" && zone == "UK") || (name == "THL1-sticker" && zone == "UK")) {
-            svgDoc.getElementById("pieces_in_ratio").innerHTML = val.units_per_carton;
+                        svgDoc.getElementById("tpnd").innerHTML = val.tpnd;
+                    } else if ((name == "TCL1-sticker" && zone == "UK") || (name == "TCL2-sticker" && zone == "UK") || (name == "TSL1-sticker" && zone == "UK") || (name == "THL1-sticker" && zone == "UK")) {
+                        svgDoc.getElementById("pieces_in_ratio").innerHTML = val.units_per_carton;
 
-            svgDoc.getElementById("tpnd").innerHTML = val.tpnd;
-        }
-        if ((name == "THL3-sticker")) {
+                        svgDoc.getElementById("tpnd").innerHTML = val.tpnd;
+                    }
+                    if ((name == "THL3-sticker")) {
 
-            if (zone == "CE") {
-                var barcode_change = val.ean_barcode
-            } else {
-                var barcode_change = val.ean_barcode
-            }
-            jsbarcodetescoean(barcode_change, 'barcode', svgDoc)
-            svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
-        } else if ((name == "TCL1-sticker") || (name == "THL1-sticker")) {
-
-            if (zone == "CE") {
-                var barcode_change = val.itf_barcode
-            } else {
-                var barcode_change = val.itf_barcode
-            }
-            jsbarcodetesco(barcode_change, 'barcode', svgDoc)
-            svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
-
-        }
-
-        if (zone == "CE") {
-            var size = val.size;
-        } else {
-            var size = val.size;
-        }
-
-        var description = val.short_description.replace(/&/g,'&#038;');
-        if ((name == "TCL4-sticker") || (name == "TSL3-sticker") || (name == "THL3-sticker")) {
-            if (size != '') {
-                $.ajax({
-                    url: base_url + "/erp/job-manager/tesco/get-tsl-size",
-                    type: 'GET',
-                    async: false,
-                    data: {
-                        size: size,
-                        zone: zone
-                    },
-                    tryCount: 0,
-                    retryLimit: 2,
-                    success: function (data) {
-                        /** [ Dynamically change svg short description ] */
-                        if (description != '' && data.size_chart.length != 0) {
-                            svgDoc.getElementById("description").innerHTML = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
-                        } else if (data.size_chart.length != 0) {
-                            svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
-                        } else if (description != '') {
-                            svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                        if (zone == "CE") {
+                            var barcode_change = val.ean_barcode
                         } else {
-                            svgDoc.getElementById("description").innerHTML = '';
+                            var barcode_change = val.ean_barcode
                         }
+                        jsbarcodetescoean(barcode_change, 'barcode', svgDoc)
+                        svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+                    } else if ((name == "TCL1-sticker") || (name == "THL1-sticker")) {
+
+                        if (zone == "CE") {
+                            var barcode_change = val.itf_barcode
+                        } else {
+                            var barcode_change = val.itf_barcode
+                        }
+                        jsbarcodetesco(barcode_change, 'barcode', svgDoc)
+                        svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+
+                    }
+
+                    if (zone == "CE") {
+                        var size = val.size;
+                    } else {
+                        var size = val.size;
+                    }
+
+                    var description = val.short_description.replace(/&/g,'&#038;');
+                    if ((name == "TCL4-sticker") || (name == "TSL3-sticker") || (name == "THL3-sticker")) {
+                        if (size != '') {
+                            $.ajax({
+                                url: base_url + "/erp/job-manager/tesco/get-tsl-size",
+                                type: 'GET',
+                                async: false,
+                                data: {
+                                    size: size,
+                                    zone: zone
+                                },
+                                tryCount: 0,
+                                retryLimit: 2,
+                                success: function (data) {
+                                    /** [ Dynamically change svg short description ] */
+                                    if (description != '' && data.size_chart.length != 0) {
+                                        svgDoc.getElementById("description").innerHTML = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+                                    } else if (data.size_chart.length != 0) {
+                                        svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
+                                    } else if (description != '') {
+                                        svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                                    } else {
+                                        svgDoc.getElementById("description").innerHTML = '';
+                                    }
+                                    var s = new XMLSerializer();
+                                    var d = svgRoot;
+                                    var str = s.serializeToString(d);
+                                    svgarr.push(str)
+                                },
+                                error: function (errorXHR, errorStatus, errorThrown) {
+                                    this.tryCount++;
+                                    if (this.tryCount <= this.retryLimit) {
+                                        $.ajax(this);
+                                        return;
+                                    }
+                                },
+                                complete: function () {
+
+                                }
+                            })
+                        } else {
+                            /** [ Dynamically change svg short description ] */
+                            if (description != '') {
+                                svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                            } else {
+                                svgDoc.getElementById("description").innerHTML = '';
+                            }
+                            var s = new XMLSerializer();
+                            var d = svgRoot;
+                            var str = s.serializeToString(d);
+
+                            svgarr.push(str)
+
+                        }
+                    } else {
+                        if (description != '') {
+                                svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                            } else {
+                                svgDoc.getElementById("description").innerHTML = '';
+                            }
                         var s = new XMLSerializer();
                         var d = svgRoot;
                         var str = s.serializeToString(d);
+
                         svgarr.push(str)
-                    },
-                    error: function (errorXHR, errorStatus, errorThrown) {
-                        this.tryCount++;
-                        if (this.tryCount <= this.retryLimit) {
-                            $.ajax(this);
-                            return;
-                        }
-                    },
-                    complete: function () {
-
                     }
+                    ajax_count++;
                 })
-            } else {
-                /** [ Dynamically change svg short description ] */
-                if (description != '') {
-                    svgDoc.getElementById("description").innerHTML = description.toUpperCase();
-                } else {
-                    svgDoc.getElementById("description").innerHTML = '';
+                if (ajax_count == data.order_details.length) {
+                    var svg_fin = svgarr.join(',_');
+                    var zone = localStorage.getItem("zone");
+                    PDFTescoPreview(svg_fin, name,zone,style_no,buyer_no,id,created_at, isEdit);
                 }
-                var s = new XMLSerializer();
-                var d = svgRoot;
-                var str = s.serializeToString(d);
-
-                svgarr.push(str)
-
-            }
-        } else {
-            if (description != '') {
-                    svgDoc.getElementById("description").innerHTML = description.toUpperCase();
-                } else {
-                    svgDoc.getElementById("description").innerHTML = '';
-                }
-            var s = new XMLSerializer();
-            var d = svgRoot;
-            var str = s.serializeToString(d);
-
-            svgarr.push(str)
-        }
-
-
-
-
-        ajax_count++;
-    })
-        if (ajax_count == data.order_details.length) {
-            var svg_fin = svgarr.join(',_');
-            PDFTescoPreview(svg_fin, name,zone,style_no,buyer_no,id,created_at);
-        }
             },
             error: function(data) {
 
@@ -2555,12 +2543,13 @@ if (name == "TSL1-sticker" || name == "TSL3-sticker") {
             }
         });
     
-    
-
 }
 
 
 }
+ 
+/** Get order details for artwork attachment ( while edit jobcard functionality ) */
+
 
 
 /**
@@ -2569,7 +2558,7 @@ if (name == "TSL1-sticker" || name == "TSL3-sticker") {
 * @return Pdf
 */
 
-function PDFTescoPreview(data, name,zone,style_no,buyer_no,id,created_at) {
+function PDFTescoPreview(data, name,zone,style_no,buyer_no,id,created_at, isEdit) {
 	if(name == "TCL1-sticker")
 	{
 		var db = "tesco_tcl1_orders";
@@ -2609,11 +2598,17 @@ $.ajax({
     async: false,
     success: function (data) {
 
-        
+        localStorage.setItem('file_path',localStorage.getItem('file_path')+','+data.file_path);
 
-        localStorage.setItem('file_path',localStorage.getItem('file_path')+','+data.file_path)
-        operation()
-        //return data;
+        // differentiate between edit and create functionality
+        if(isEdit === false)
+        {
+            operation()
+        }
+        else
+        {
+            operationEdit()
+        }
 
     },
     error: function (errorXHR, errorStatus, errorThrown) {
@@ -2631,7 +2626,7 @@ $.ajax({
 * @return Pdf
 */
 
-function PDFTescoSmallPreview(data, name,zone,style_no,buyer_no,id,created_at) {
+function PDFTescoSmallPreview(data, name,zone,style_no,buyer_no,id,created_at, isEdit) {
 	
 	if(name == "TCL1-sticker")
 	{
@@ -2672,9 +2667,17 @@ $.ajax({
     retryLimit: 2,
     async: false,
     success: function (data) {
-        localStorage.setItem('file_path',localStorage.getItem('file_path')+','+data.file_path)
-        operation()
-        //return data;
+        localStorage.setItem('file_path',localStorage.getItem('file_path')+','+data.file_path);
+        
+        // differentiate between edit and create functionality
+        if(isEdit === false)
+        {
+            operation()
+        }
+        else
+        {
+            operationEdit()
+        }
 
     },
     error: function (errorXHR, errorStatus, errorThrown) {
@@ -2930,4 +2933,71 @@ img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 canvasTmp.remove();
 
 svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+/**
+ * Check if loop execution completed or not (for create jobcard)
+ * @author praveen
+ */
+var operationsCompleted = 0;
+function operation() {
+    ++operationsCompleted;
+    if (operationsCompleted === $('[class="row-checkbox"]:checked').length) after_forloop(); 
+}
+
+/**
+ * Check if loop execution completed or not(for edit jobcard)
+ * @author praveen
+ */
+var isOperationsCompleted = 0;
+function operationEdit() {
+    ++isOperationsCompleted;
+    if (isOperationsCompleted === $('.edit-erp-details').length) after_forloop(); 
+}
+
+/**
+ * Call after loop execution completed
+ * @author praveen
+ */
+function after_forloop()
+{
+    $.ajax({
+        url: base_url + "/erp/job-manager/pdf-merge",
+        type: 'post',
+        data: {
+            _token: csrf_token,
+            path:localStorage.getItem('file_path')
+        },
+        tryCount: 0,
+        retryLimit: 2,
+        dataType: "json",
+        beforeSend: function () {
+            $(".loader").show();
+        },
+        statusCode: {
+            200: function(data) {     
+                var resp = JSON.stringify(data.file_path);
+                $('.snackbar_span').html("Jobcard Created Successfully");
+                showSnackbar();
+                $('#jobcardCreationModalCenter').modal('hide');
+                location.reload();
+                window.open(
+                    base_url+JSON.parse(resp),
+                    '_blank' // <- This is what makes it open in a new window.
+                );   
+            },
+            400: function() {
+              
+            },
+       },
+        error: function (errorXHR, errorStatus, errorThrown) {
+            this.tryCount++;
+            if (this.tryCount <= this.retryLimit) {
+                $.ajax(this);
+                return;
+            }
+        },
+        complete: function () {
+            $(".loader").hide();
+        }
+    })
 }

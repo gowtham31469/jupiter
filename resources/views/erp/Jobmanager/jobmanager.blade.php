@@ -275,7 +275,7 @@
 							<tbody>
 								@foreach($orders as $vals)
 								@php $ref_name = str_replace(" ","",$vals->reference_name) @endphp
-								<tr id="{{$vals->id}}" data-refname="{{ $vals->reference_name }}" data-buyer-po="{{ $vals->buyer_po_number }}" data-order-type="{{ $vals->order_type }}" data-created-at="{{ $vals->created_at }}" data-style-no="{{ $vals->style_no }}" data-template-file="{{ $vals->template_file }}" data-iteration="{{ $loop->iteration }}">
+								<tr id="{{$vals->id}}" data-refname="{{ $vals->reference_name }}" data-buyer-po="{{ $vals->buyer_po_number }}" data-order-type="{{ $vals->order_type }}" data-created-at="{{ $vals->created_at }}" data-style-no="{{ $vals->style_no }}" data-template-file="{{ $vals->template_file }}" data-iteration="{{ $loop->iteration }}" data-zone="{{ $vals->zone }}">
 									<td>
 										<div class="form-check">
 										<a href="javascript:void(0)">
@@ -308,7 +308,7 @@
             </div>
         </div>
     </div>
-
+{{-- Hidden div for svg rendering --}}
 <div id="modaldiv">
 	<div id="svgdiv" style="position:absolute;visibility:hidden">\
 	 <svg id="ean-13"></svg>\
