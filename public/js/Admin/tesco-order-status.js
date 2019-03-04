@@ -1137,7 +1137,7 @@ $(".update-po-file").click(function () {
 
 function updateArtwork(obj)
 {
-	$('#tesco_po_number').prop('disabled',true);
+    $('#tesco_po_number').prop('disabled',true);
 	$('#order_type').prop('disabled',true);
 	$('#tesco_uk_style').prop('disabled',true);
 	$('#tesco_ce_style').prop('disabled',true);
@@ -1324,7 +1324,7 @@ function updateArtwork(obj)
 							tr +='<tr><td class="tpnd"><div class="form-group has-feedback"> <input disabled type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="os_tpnd_'+i+'" data-minlength="'+tpn_len+'" maxlength="'+tpn_len+'" data-required-error="Mandatory Field." data-minlength-error="Enter '+tpn_len+' digits."  name="os_tpnd_'+i+'" onkeypress="return isNumber(event)" value="'+tpnd+'" placeholder="'+tpn_th+'" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td class="barcode"><div class="form-group has-feedback"> <input  disabled type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="'+maxlength+'" maxlength="'+maxlength+'" data-required-error="Mandatory Field." data-minlength-error="Enter '+maxlength+' digits." id="os_barcode_'+i+'" onkeyup="dynamicSVGTemplates()" name="os_barcode_'+i+'" onkeypress="return isNumber(event)" value="'+barcode_td+'" placeholder="Enter ITF Barcode"><label class="barcode_error hidden" style="color:red;margin-left: -55px;position: absolute;">Enter Valid Barcode</label><div class="help-block with-errors"></div></div></td><td class="size"><div class="form-group has-feedback"> <input disabled type="text" maxlength="'+unit_len+'" class="form-control input-sm ce_ratio_cpc" required="" id="os_case_qty_'+i+'" name="os_case_qty_'+i+'" onkeypress="return isNumber(event)" value="'+unit_qty+'" placeholder="Enter '+qty+'" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>'+th_td+'<td> <div class="form-group has-feedback has-success"> <input disabled min="'+moq+'" onInput="checkLength(4,this)" type="number" class="form-control  input-sm tot_qty_table" value="'+value.count+'" required placeholder="Quantity" data-min-error="Quantity Should be >= '+moq+'."> <div class="help-block with-errors"></div></div></td></tr>';
 						i++;
 					})
-					 $('.edit-qty-table-div').html('<hr><h4 class="text-center">Order Quantity - '+TemplateName+'</h4><button type="button" onclick=addRowOs(this,"'+TemplateName+'","'+data.order_details.zone+'","'+moq+'") data-id="1" id="add_row" class="btn btn-default add-row-btn disabled"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px;margin-top: 15px;"> <thead> <tr> <th>'+tpnd_tr+'</th><th>'+barcode_tr+'</th> <th>'+qty+'</th>'+th_tr+' <th>Quantity</th> <th>Actions</th></tr></thead> <tbody style="font-size: 11px">'+tr+'</tbody></table>') 
+					 $('.edit-qty-table-div').html('<hr><h4 class="text-center">Order Quantity - '+TemplateName+'</h4><button type="button" onclick=addRowOs(this,"'+TemplateName+'","'+data.order_details.zone+'","'+moq+'") data-id="1" id="add_row" class="btn btn-default add-row-btn" disabled><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px;margin-top: 15px;"> <thead> <tr> <th>'+tpnd_tr+'</th><th>'+barcode_tr+'</th> <th>'+qty+'</th>'+th_tr+' <th>Quantity</th> <th>Actions</th></tr></thead> <tbody style="font-size: 11px">'+tr+'</tbody></table>') 
 					// $('.edit-qty-table-div').html('<hr><h4 class="text-center">Order Quantity - '+TemplateName+'</h4><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px;margin-top: 15px;"> <thead> <tr> <th>'+tpnd_tr+'</th><th>'+barcode_tr+'</th> <th>'+qty+'</th>'+th_tr+' <th>Quantity</th> </tr></thead> <tbody style="font-size: 11px">'+tr+'</tbody></table>') 
 
 					$('#edit_template_name').val(TemplateName)
@@ -1412,7 +1412,9 @@ function updateArtwork(obj)
         // $('#tesco_po_number').prop('disabled',true);
         // $('#tesco_uk_style').prop('disabled',true);
         // $('#tesco_ce_style').prop('disabled',true);
-        $('#add_row').removeClass('disabled');
+         // $('#add_row').removeClass('disabled');
+        $('#add_row').removeAttr('disabled');
+        
     }
     function enableArtworkEdit(tablename,rowid)
     {
