@@ -126,12 +126,12 @@ class InvoiceController extends Controller
             $bill_to = DB::table('customer_bill_address')
                           ->where('customer_bill_address.customer_id',$orderlist[0]->customer_id)
                           ->where('customer_bill_address.is_billing_address',1)
-                          ->select('address','country')
+                          ->select('*')
                           ->first();                 
             $ship_to = DB::table('customer_bill_address')
                           ->where('customer_bill_address.customer_id',$orderlist[0]->customer_id)
                           ->where('customer_bill_address.is_shipping_address',1)
-                          ->select('address','country')
+                          ->select('*')
                           ->first();
 
 
@@ -195,7 +195,8 @@ class InvoiceController extends Controller
                                     'country'      => $bill_to->country,
                                     'email'        => $bill_to->email,
                                     'telephone'    => $bill_to->telephone,
-                                    'fax'          => $bill_to->fax
+                                    'fax'          => $bill_to->fax,
+                                    'pincode'      => $bill_to->pincode,
                                 ]);
                 $delivery_at =  $invAdd->id;
                 $billTo_id      =  $invAdd->id;
@@ -208,7 +209,8 @@ class InvoiceController extends Controller
                                     'country'      => $bill_to->country,
                                     'email'        => $bill_to->email,
                                     'telephone'    => $bill_to->telephone,
-                                    'fax'          => $bill_to->fax
+                                    'fax'          => $bill_to->fax,
+                                    'pincode'      => $bill_to->pincode,
                                  ]);
                 $deliveryAdd =   InvoiceAddress::create([
                                     'customer_id'  => $ship_to->customer_id,
@@ -216,7 +218,8 @@ class InvoiceController extends Controller
                                     'country'      => $ship_to->country,
                                     'email'        => $ship_to->email,
                                     'telephone'    => $ship_to->telephone,
-                                    'fax'          => $ship_to->fax
+                                    'fax'          => $ship_to->fax,
+                                    'pincode'      => $ship_to->pincode,
                                  ]); 
                 $delivery_at =  $deliveryAdd->id;
                 $billTo_id    =  $billAdd->id;   
@@ -316,7 +319,18 @@ class InvoiceController extends Controller
         try
         {
             $inv_id   = $request->invoice_id;
-            $invoice_details  = DB::table('invoice')->where('invoice_id',$inv_id)->get();
+            // $invoice_details  = DB::table('invoice')
+            //                     ->join('cu')
+            //                     ->where('invoice_id',$inv_id)->get();
+
+            $invoice_details  =      Invoices::join('customers','invoice.customer_id','customers.id')
+                                // ->join('invoice_details','invoice_details.invoice_id','invoice.id')
+                                ->join('buyers','invoice.buyer_id','buyers.id')
+                                // ->where('invoice_details.company_id',session()->get('company'))
+                                ->where('invoice_id',$inv_id)
+                                ->select('invoice.invoice_id','erp_id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','po_no','invoice_file','invoice.id')
+                                ->distinct('invoice.id')
+                                ->get();
             if ($invoice_details) {
                 $result    = response()->json(['error'=> false,'message' =>'success','invoice_details'=>$invoice_details],200);
             }
@@ -456,32 +470,64 @@ class InvoiceController extends Controller
             $uniqueTaxes    = $objInv->getTaxDetails($inv_details);
             
             
-            $dynView = View::make('template')
+                $dynView = View::make('template')
                 ->with(['company_details' => $company_details, 'inv_details' => $inv_details, 'ship_to'=>$ship_to,'bill_to'=>$bill_to,'inv_details'=>$inv_details,'eway_no'=> $eway_no,'amntInwords'=>$amntInwords , 'eChargesArr'=>$extra_charges,'uniqueTaxes'=>$uniqueTaxes]);
-            ob_start();
+                ob_start();
+                $pdf = new invoiceTCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+                $pdf->setCompanyData($company_details);
+                //margins
+                $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+                $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+                $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+                // set header and footer fonts
+                $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+                $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+                // set auto page breaks
+                $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_TOP);
 
-            $pdf = new invoiceTCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-            $pdf->setCompanyData($company_details);
-            //margins
-            $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-            $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-            $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-            // set header and footer fonts
-            $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-            $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-            // set auto page breaks
-            $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_TOP);
+                // set image scale factor
+                $pdf->setImageScale(0.8);
 
-            // set image scale factor
-            $pdf->setImageScale(0.8);
+                // set font
+                $pdf->SetFont('helvetica', '', 8);
 
-            // set font
-            $pdf->SetFont('helvetica', '', 8);
+                // add a page
+                // $pdf->AddPage('P', 'A4');
+                // $pdf->SetXY(5.3, 24);
+                // for ($i=0; $i <3 ; $i++) { 
+                //     $pdf->AddPage('P', 'A4');
+                //     $pdf->SetXY(5.3, 24);
+                //      // $pdf->Cell(10, -20, 'Customer Copy ', 0, false, 'C', 0, '', 0, false, 'T', 'M');
+                //     $pdf->writeHTML($dynView->render());
+                    
+                // }
 
-            // add a page
-            $pdf->AddPage('P', 'A4');
-            $pdf->SetXY(5.3, 24);
-            $pdf->writeHTML($dynView->render());
+                $invoice = array(1, 2, 3);
+                foreach($invoice as $value){
+                    switch($value){
+                         case 1: 
+                            $copy="text for invoice 1";
+                            $pdf->AddPage('P', 'A4');
+                            $pdf->SetXY(5.3, 24);
+                            // $pdf->Cell(10, -20, $copy, 0, false, 'C', 0, '', 0, false, 'T', 'M');
+                            $pdf->writeHTML($dynView->render()); 
+                         break;
+                         case 2: 
+                            $copy="text for invoice 2";
+                            $pdf->AddPage('P', 'A4');
+                            $pdf->SetXY(5.3, 24);
+                            // $pdf->Cell(10, -20, $copy, 0, false, 'C', 0, '', 0, false, 'T', 'M');
+                            $pdf->writeHTML($dynView->render());  
+                         break;
+                         case 3: 
+                            $copy="text for invoice 3";
+                            $pdf->AddPage('P', 'A4');
+                            $pdf->SetXY(5.3, 24);
+                            // $pdf->Cell(10, -20,$copy, 0, false, 'C', 0, '', 0, false, 'T', 'M');
+                            $pdf->writeHTML($dynView->render());         
+                         break;      
+                    }
+                }
      
             $pdfdata =$pdf->output( public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf'), 'F');
 

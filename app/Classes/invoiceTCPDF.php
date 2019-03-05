@@ -33,28 +33,28 @@ class invoiceTCPDF extends \TCPDF
         // Set font
         $this->SetFont('helvetica', '', 8);
         $this->Image('././././'.$this->company->logo, 160, 10, 30, 10);
-    $header =  ' <table>
-                    <tr class="blank_row">
-                        <td rowsopan="1"></td>
-                    </tr>
-                </table>
-                <table>
-                  <tr nobr="true">
-                    <td width="440" rowsopan="3" style="border-bottom:1px solid black;">
-                        <span style="font-size:9px;"><strong>'.$this->company->name.'</strong></span><br>   
-                        <span>'.$this->company->address.'</span><br>
-                        <span>'.$this->company->office_phone.'</span><span>,'.$this->company->phone.'</span><br>
-                        <span><strong>GSTIN  : </strong>'.$this->company->gstin.'</span>
-                        </td>
-                    </tr>
-              
-                </table>
-                 <table>
-                    <tr class="blank_row">
-                        <td rowsopan="1"></td>
-                    </tr>
-                </table>';
-        $this->writeHTML($header, false, false, true, false, '');        
+        $header =  '<table>
+                        <tr class="blank_row">
+                            <td rowsopan="1"></td>
+                        </tr>
+                    </table>
+                    <table>
+                      <tr nobr="true">
+                        <td width="440" rowsopan="3" style="border-bottom:1px solid black;">
+                            <span style="font-size:9px;"><strong>'.$this->company->name.'</strong></span><br>   
+                            <span>'.$this->company->address.'</span><br>
+                            <span>'.$this->company->office_phone.'</span><span>,'.$this->company->phone.'</span><br>
+                            <span><strong>GSTIN  : </strong>'.$this->company->gstin.'</span>
+                            </td>
+                        </tr>
+                  
+                    </table>
+                    <table>
+                        <tr class="blank_row">
+                            <td rowsopan="1"></td>
+                        </tr>
+                    </table>';
+        $this->writeHTML($header, false, false, true, false, '');       
         $this->writeHTMLCell($w='', $h='', $x='', $y='', $this->header, $border=0, $ln=0, $fill=0, $reseth=true, $align='L', $autopadding=true);
 
         $this->SetLineStyle( array('width'=>0.40,'color'=> array(0,0,0)));
@@ -87,43 +87,43 @@ class invoiceTCPDF extends \TCPDF
                     </tr>
                     </table>
                     <table>
-                            <tr>
-                                <td width="180" style="border-top:1px solid black;"></td>
-                                <td width="140" style="border-top:1px solid black;"></td>
-                                <td width="120" colspan="2" style="border-top:1px solid black;">
-                                </td>
-                             </tr>
-                            <tr>
-                                <td width="148.5" ></td>
-                                <td width="140" ></td>
-                                <td width="120" colspan="2" >
-                                    <span>For Jupiter Garments Accessories</span>
-                                </td>
-                             </tr>
-                            <tr>
-                                <td width="2" >
-                                    
-                                </td>
-                                <td width="116.5">
-                                    <p>Recievers Signature </p>
-                                </td>
-                                <td width="100">
-                                    <p>Prepared By</p>
-                                </td>
-                                <td width="100">
-                                    <p>Verified By</p>
-                                </td>
-                                <td width="90" >
-                                    <p>Authorized Signatory</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td width="148.5" ></td>
-                                <td width="140"></td>
-                                <td width="120" colspan="2">
-                                </td>
-                             </tr>
-                        </table>
+                        <tr>
+                            <td width="180" style="border-top:1px solid black;"></td>
+                            <td width="140" style="border-top:1px solid black;"></td>
+                            <td width="120" colspan="2" style="border-top:1px solid black;">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="148.5" ></td>
+                            <td width="140" ></td>
+                            <td width="120" colspan="2" >
+                                <span>For Jupiter Garments Accessories</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="2" >
+                                
+                            </td>
+                            <td width="116.5">
+                                <p>Recievers Signature </p>
+                            </td>
+                            <td width="100">
+                                <p>Prepared By</p>
+                            </td>
+                            <td width="100">
+                                <p>Verified By</p>
+                            </td>
+                            <td width="90" >
+                                <p>Authorized Signatory</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="148.5" ></td>
+                            <td width="140"></td>
+                            <td width="120" colspan="2">
+                            </td>
+                        </tr>
+                    </table>
                     <table>
                         <tr class="blank_row">
                             <td rowsopan="1"></td>
@@ -131,7 +131,5 @@ class invoiceTCPDF extends \TCPDF
                     </table>';
         // Title
         $this->writeHTML($footer, false, false, true, false, '');
-
     }
-	
 }
