@@ -34,7 +34,7 @@
       </div>
      <div class="clearfix"></div>
     <div class="main-content">
-        <div class="loader">
+       <!--  <div class="loader">
             <div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>
         </div>
         <div class="col" id="customer-table">
@@ -63,15 +63,15 @@
                         @if($vals->invoice_file=="" || $vals->invoice_file=="null")
                           <td align="center"><a href="javascript:void(0)" data-backdrop="static" data-keyboard="false"><i class="fa fa-pencil filterbtn options edit-user fa-button" title="Link E-way No" data-placement="left"></i></a></td>
                         @else
-                            <td align="center"><a class="pi_generation" target="_blank" href="javascript:void(0)" data-id="{{$vals->invoice_file}}"  onclick="showInvoice(this)"><i class="fa fa-print action-button-view" data-placement="top" title="View & Print" data-original-title="view Details"></i></a></td>
+                          <td align="center"><a class="pi_generation" target="_blank" href="javascript:void(0)" data-id="{{$vals->invoice_file}}"  onclick="showInvoice(this)"><i class="fa fa-print action-button-view" data-placement="top" title="View & Print" data-original-title="view Details"></i></a></td>
                         @endif
                     </tr>
                 @endforeach    
                 </tbody>
             </table>
-        </div>
+        </div> -->
 
-   <!--        <div class="loader">
+          <div class="loader">
           <div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>
         </div>
         <div class="col" id="customer-table">
@@ -82,14 +82,20 @@
         margin-bottom: 20px;'>
             <label for="order_type" class="form_label row" style="display: block;">Search Invoice Id</label>
             <div class="form-group row has-feedback">
-              <input type="text" onkeypress="return isNumber(event)" required id="invoice_id" class="invoice_id form-control col-md-2" style="width: auto; margin-right: 10px;">
+              <input type="text" onkeypress="return isNumber(event)" placeholder="Enter Invoice Id" required id="invoice_id" class="invoice_id form-control col-md-2" style="width: auto; margin-right: 10px;">
 
               <button class="btn btn-primary btn-block col-md-1" style="width: auto;"><span class="glyphicon glyphicon-search"></span></button>
             </div>
             <div class="help-block with-errors"></div>
           </form>
         </div>
-    </div> -->
+    </div>
+    <div class="div-table hidden">
+
+    </div>
+    <div class="error-div hidden">
+      <p style="font-size:14px;">No Results Found!</p>
+    </div>
 </div>
     <!-- company selection Modal -->
 <div class="modal buyer-selection-modal fade" id="buyerSelectionModalCenter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -296,6 +302,60 @@ $(document).ready(function(){
         },
         success: function(data) {
           console.log(data)
+          $('.div-table').html(`<table id="invoice-details-table" class="table table-striped table-responsive">
+            <thead>
+              <tr>
+                <th>Sl. No</th>
+                <th>Invoice ID</th>
+                <th>ERP ID</th>
+                <th>Customer Name</th>
+                <th>PO Number</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>`);
+          var i = 1;
+          if (data.invoice_details.length != 0) {
+            $('.div-table').removeClass('hidden')
+            $(data.invoice_details).each(function(key, index) {
+
+              $('#invoice-details-table tbody').append(`
+            <tr id="` + index.id + `">
+                            <td class="">` + i + `</td>
+                <td class="invoice_id">` + index.invoice_id + `</td>
+                <td class="erp_id">` + index.erp_id + `</td>
+                <td class="company_name">` + index.company_name + `</td>
+                <td class="po_no">` + index.po_no + `</td>`)
+
+              if (index.invoice_file== "null" || index.invoice_file=="") {
+                var td = `<td align="center"><a href="javascript:void(0)" data-backdrop="static" data-keyboard="false" onclick="getInvoice(` + index.id + `)"><i class="fa fa-pencil filterbtn options edit-invoice fa-button" title="Link E-way No" data-placement="left"></i></a></td>`
+              }
+              else{
+                var td = `<td align="center"><a class="pi_generation" target="_blank" href="javascript:void(0)" data-id="` + index.invoice_file + `"  onclick="showInvoice(this)"><i class="fa fa-print action-button-view" data-placement="top" title="View & Print" data-original-title="view Details"></i></a></td>`
+              }
+               $('#invoice-details-table tbody tr').append(td+'</tr>')
+              i++;
+            })
+
+            $('.error-div').addClass('hidden')
+            // var ref = $('#invoice-details-table').DataTable();
+            var ref = $('#invoice-list-table').DataTable({
+                "paging": false,
+                "searching": false,
+                "bInfo" : false,
+                "ordering": false
+            });
+            $("#invoice-details-table_filter input[type=search]").addClass('form-control');
+            $('.dataTables_length select').addClass('form-control');
+            $("#invoice-details-table_filter input[type=search]").attr('placeholder', 'Data Search');
+
+          }
+          else {
+            $('.div-table').addClass('hidden')
+            $('.error-div').removeClass('hidden')
+          }
         },
         error: function(data) {
 
@@ -376,18 +436,13 @@ function showInvoice(obj){
  var invoice_link = base_url+$(obj).attr('data-id')
  $('.pi_generation').attr("href",invoice_link);
 }
-  /* Get User Details */
-  $(function() {
-    $(document).on("click", ".edit-user", function() {
-      $('#editModal').modal('show');
-      var id = $(this).closest('tr').attr('id')
-      var inv_id = $(this).closest('tr').find('.inv-id').text()
-     
+  /* Get Invoice Details */
+  function getInvoice(invId){
       $.ajax({
         url: base_url + "/erp/get-invoice",
         type: "get",
         data: {
-          id: id
+          id: invId
         },
         beforeSend: function() {
           $(".loader").show();
@@ -397,7 +452,7 @@ function showInvoice(obj){
           var totalAmnt = 0;
 
           $('#inv_no').text(data.inv_details[0].invoice_id)
-          $('#inv_no').attr('data-id',id);
+          $('#inv_no').attr('data-id',invId);
           $('#customer_name').val(data.inv_details[0].company_name)
           $('#inv_date').text(data.inv_details[0].inv_date)
           $('#company-logo').attr('src',data.company_details.logo);
@@ -476,8 +531,110 @@ function showInvoice(obj){
           $('#editModal').modal('show');
         }
       });
-    });
-  });
+  }
+
+
+  // $(function() {
+  //   $(document).on("click", ".edit-user", function() {
+  //     $('#editModal').modal('show');
+  //     var id = $(this).closest('tr').attr('id')
+  //     var inv_id = $(this).closest('tr').find('.inv-id').text()
+     
+  //     $.ajax({
+  //       url: base_url + "/erp/get-invoice",
+  //       type: "get",
+  //       data: {
+  //         id: id
+  //       },
+  //       beforeSend: function() {
+  //         $(".loader").show();
+  //       },
+  //       success: function(data) {
+  //         var tr = '';
+  //         var totalAmnt = 0;
+
+  //         $('#inv_no').text(data.inv_details[0].invoice_id)
+  //         $('#inv_no').attr('data-id',id);
+  //         $('#customer_name').val(data.inv_details[0].company_name)
+  //         $('#inv_date').text(data.inv_details[0].inv_date)
+  //         $('#company-logo').attr('src',data.company_details.logo);
+  //         $('#disp_thru').text(data.inv_details[0].delvry_thru);
+  //         $('#credit-val').text(data.inv_details[0].credit_limit);
+  //         $('#company_details').html('<h4>'+data.company_details.name+'</h4>'+data.company_details.address+'<p>PH : '+data.company_details.office_phone+', '+data.company_details.phone+'</br> <strong>GSTIN : '+data.company_details.gstin+'</strong></p>')
+
+  //         $('#bill_to').html('<span>Buyer</span><br><h4>'+data.inv_details[0].company_name+'</h4><span>'+data.bill_to.address+'</span></br><span> GSTIN :'+data.inv_details[0].gstin_number+ '</span>')
+  //         var itemName ="";
+  //         $(data.inv_details).each(function(index, value)
+  //         {   
+  //             var size = (value.size == "null")?'-':value.size ;
+              
+  //             // tr += '<tr><td>'+value.erp_id+'</td><td>'+value.buyer_name+'</td><td>'+value.order_no+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_no+'</td><td>'+value.reference_no+'</td><td>'+value.size+'</td><td>'+value.tax+'</td><td>'+value.delivered_qnty+'</td><td>'+value.rate+'</td><td>'+value.delivered_qnty * value.rate+'</td></tr>';
+
+  //             if (itemName==value.item_name) {
+  //                   tr += '<tr class="trClass" id="'+value.id+'">';
+  //                   tr += '<td>'+value.erp_id+'</td><td>'+value.buyer_name+'</td><td>'+value.order_no+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_no+'</td><td>'+value.custom_ref_name+'</td><td>'+size+'</td><td>'+value.tax+'</td><td>'+value.delivered_qnty+'</td><td>'+value.rate+'</td><td style="border-width: 1px !important;">'+(value.delivered_qnty * value.rate).toFixed(2)+'</td>';
+  //                   tr += '</tr>';
+  //               }
+  //               else{
+  //                   var hsnCode = value.hsn_code==null?'-':value.hsn_code;
+  //                   tr += '<tr><td></td><td colspan="13"><strong style="float: left;">ITEM: '+value.item_name+'  HSNCode: '+hsnCode+'</strong></td></tr>';
+  //                   tr += '<td>'+value.erp_id+'</td><td>'+value.buyer_name+'</td><td>'+value.order_no+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_no+'</td><td>'+value.custom_ref_name+'</td><td>'+size+'</td><td>'+value.tax+'</td><td>'+value.delivered_qnty+'</td><td>'+value.rate+'</td><td style="border-width:1px !important;">'+(value.delivered_qnty * value.rate).toFixed(2)+'</td>';
+  //                   tr += '</tr>';
+  //                   itemName =value.item_name;
+  //               } 
+  //               totalAmnt+= value.delivered_qnty * value.rate;
+  //         });
+
+  //         tr+= '<tr><td colspan="11"><strong>Total</strong></td><td style="border-width:1px !important;"><strong>'+totalAmnt.toFixed(2)+'</strong></td></tr>';
+  //         $('#order_details').html('<table class="table table-bordered table-condensed preview-inv-details" id="preview-inv-details" style="width:100%"><thead><tr><th>ERP ID</th><th>Buyer</th><th>Order No</th><th>PO No</th><th>Style</th><th>OCN</th><th>Ref</th><th>Size</th><th>Tax (%)</th><th>Quantity</th><th>Rate (₹)</th><th style="border-width:1px !important;">Amount (₹)</th></tr></thead><tbody>'+tr+'</tbody></table>');
+
+  //         var tax_amnt = taxDivision(data.inv_details)
+  //         var tax_tr = "";  
+  //         var place_of_supply = data.inv_details[0].place_of_supply     
+  //         var tax_table = $('.inv-tax').html('<table class="table text-center table-bordered orders_tax" style="margin-top: -23px;;"><thead><tr><th>Tax</th><th style="padding-left: 2px;">Base value (₹)</th><th>Amount (₹)</th></tr></thead><tbody class="tax-tabl"></tbody></table>')
+  //         Object.keys(tax_amnt).forEach(function(key) {
+  //           if (place_of_supply==1){
+  //                 var trClass = tax_amnt[key]!=0?"":"hidden"
+  //                 tax_tr = '<tr class="'+trClass+'"><td>CGST('+(key/2)+'%)</td><td class="cgst_'+key+'">'+tax_amnt[key].toFixed(2)+'</td><td>'+(((key/2)/100)*tax_amnt[key]).toFixed(2)+'</td></tr><tr class="'+trClass+'"><td>SGST('+(key/2)+'%)</td><td class="sgst_'+key+'">'+tax_amnt[key].toFixed(2)+'</td><td>'+ (((key/2)/100)*tax_amnt[key]).toFixed(2)+'</td></tr>'
+  //             }
+  //             else if (place_of_supply==2){
+  //                 var trClass = tax_amnt[key]!=0?"":"hidden"
+  //                 // if (tax_amnt[key]!=0) {                
+  //                     tax_tr = '<tr class="'+trClass+'"><td>IGST('+key+'%)</td><td class="igst_'+key+'">'+tax_amnt[key].toFixed(2)+'</td><td>'+((key/100)*tax_amnt[key]).toFixed(2)+'</td></tr>'
+  //             }
+  //             else{
+  //                 tax_tr = '<tr><td>Taxes('+key+'%)</td><td>'+tax_amnt[key].toFixed(2)+'</td><td>'+ ((key/100)*tax_amnt[key] ).toFixed(2)+'</td></tr>'
+  //             }
+
+  //             $('.tax-tabl').append(tax_tr);
+              
+  //         });
+  //         $tT = $.isNumeric(taxSubTotal())?taxSubTotal().toFixed(2):0;
+  //             $('.tax-tabl').append('<tr><td colspan="2"><strong>SubTotal</strong></td><td class="tax-total"><strong>'+ $tT+'</strong></td></tr><tr></tr>')
+  //         var taxTr = '';
+  //         var exAmnt = 0 ;
+  //         $(data.extra_charges).each(function(index, value)
+  //         {
+  //             taxTr += '<tr><td colspan="2">'+value.ext_chrg_name  +'</td><td>'+parseFloat(value.amount).toFixed(2)+'</td></tr>';
+  //             exAmnt+=parseFloat(value.amount);
+  //         });
+
+  //         var roundOff = data.inv_details[0].round_off_amnt ==null?0:data.inv_details[0].round_off_amnt;
+  //         var rndClass = roundOff==0?"hidden":''
+  //         $('.inv-extra-charges').html('<table class="table table-bordered text-center inv-extra-charges" style="margin-top: -22px;"><thead><tr><th colspan="2">Description</th><th>Amount (₹)</th></tr></thead><tbody>'+taxTr+'<tr><td colspan="2"><strong>SubTotal</strong></td><td><strong class="preview-sub-extra">'+parseFloat(exAmnt).toFixed(2)+'</strong></td></tr><tr class="'+rndClass+'"><td colspan="2"><strong>Round Off</strong></td><td><strong id="preview-round-off">'+parseFloat(roundOff).toFixed(2)+'</strong></td></tr><tr></tr><tr><td colspan="2" style="border-width: 1px !important;"><strong>Grand Total</strong></td><td class="grand-total" style="border-width: 1px !important;"><strong>'+parseFloat(data.inv_details[0].grand_total).toFixed(2)+'</strong></td></tr><tr></tr></tbody></table>')
+  //         $('.amnt-in-words').text(RsPaise($('.grand-total').text()))
+
+  //         $('.delivery-at').html('<p>'+data.ship_to.address+'</p>')
+  //         $('.invoice_actions').html('<button data-dismiss="modal" class=" btn btn-default btn-xs">Close</button><button class="btn btn-primary btn-xs" onclick="editInvoice()">Save & Send</button><button class="btn btn-default btn-xs downloadIn" id="downloadIn" onclick="downloadInvoice()">View as PDF</button>')
+  //       },
+       
+  //       complete: function() {
+  //         $(".loader").hide();
+  //         $('#editModal').modal('show');
+  //       }
+  //     });
+  //   });
+  // });
 
     function taxDivision(orderData){
         var taxIndexes = [] ;

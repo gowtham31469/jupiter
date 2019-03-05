@@ -881,13 +881,22 @@ function tescoStatusTable(data,path)
                     if (zone=="CE")
                     {
                         style_no = value.ce_style_ref
-
-                        tr += '<td align="center" data-id="'+value.tableID+'" data-table="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>'+span_style+''+style_no+'</a></td>';
+                        if (value["PO Status"]=="PO Uploaded") {
+                            tr += '<td align="center" data-id="'+value.tableID+'" data-table="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'">'+span_style+''+style_no+'</td>';
+                        }
+                        else{
+                            tr += '<td align="center" data-id="'+value.tableID+'" data-table="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>'+span_style+''+style_no+'</a></td>';
+                        }
                     }
                     else
                     {
                         style_no = value.uk_style_ref
-                        tr += '<td align="center" data-id="'+value.tableID+'" data-table="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>'+span_style+''+style_no+'</a></td>';
+                        if (value["PO Status"]=="PO Uploaded") {
+                            tr += '<td align="center" data-id="'+value.tableID+'" data-table="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'">'+span_style+''+style_no+'</td>';
+                        }
+                        else{
+                            tr += '<td align="center" data-id="'+value.tableID+'" data-table="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>'+span_style+''+style_no+'</a></td>';
+                        }
                     }
                 }
                 else if (key == "Actions")
