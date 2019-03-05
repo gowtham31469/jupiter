@@ -13,7 +13,6 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at) 
 
 	var a = document.getElementById(data);
 	var svgDoc = a.contentDocument;
-	var zone = localStorage.getItem("zone");
 	var name2=name;
 	var name = name + "-sticker";
 	if (name == "TSL1-sticker" || name == "TSL3-sticker") {
@@ -46,6 +45,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at) 
 		$(data.order_details).each(function (key, val) {
 			var svgRoot = svgDoc.documentElement;
 			var zone=val.zone;
+			localStorage.setItem("zone", zone);
 
 			if ((name == "TSL1-sticker" && zone == "CE")) {
 				svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + val.orms_tpn;
@@ -243,6 +243,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at) 
 		})
 					if (ajax_count == data.order_details.length) {
 						var svg_fin = svgarr.join(',_');
+						var zone = localStorage.getItem("zone");
 						PopupTescoSmall(svg_fin, name,zone,style_no,buyer_no,id,created_at);
 					}
 				},
@@ -284,6 +285,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at) 
 				success: function(data) {
 					$(data.order_details).each(function (key, val) {
 						var zone=val.zone;
+						localStorage.setItem("zone", zone);
 			var svgRoot = svgDoc.documentElement;
 						
 		if (val.supplier_name != '') {
@@ -491,6 +493,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at) 
 		})
 			if (ajax_count == data.order_details.length) {
 				var svg_fin = svgarr.join(',_');
+				var zone = localStorage.getItem("zone");
 				PopupTesco(svg_fin, name,zone,style_no,buyer_no,id,created_at);
 			}
 				},
