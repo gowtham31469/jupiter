@@ -4,7 +4,7 @@
 @section('navbar') 
 
 <ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
-    <li><a href="#" class="active">User Management</a></li>
+    <li><a href="{{route('erp-users')}}" class="active">User Management</a></li>
     <li><a href="{{route('erp.admin.orders.show')}}">Order Management</a></li>
 </ul>
 

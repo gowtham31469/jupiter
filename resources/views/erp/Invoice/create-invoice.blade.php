@@ -168,6 +168,11 @@
                             
                         </div>
                     </div>
+                    <div class="bottom-bar hidden">
+                        <div class="modal-footer">
+                            <div class="create-invoice"><button type="button" class="btn btn-xs btn-success save-btn create-invoice pull-right" id="create-invoice">Create Invoice</button></div>
+                        </div>
+                    </div>
                 </div>                    
             </form>
         </div>
