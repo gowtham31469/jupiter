@@ -35,53 +35,48 @@ class PoManagerController extends Controller
      */
     public function index()
     {
-		$customer_id = Auth::guard('erpuser')->id();
-		$new_orders_count=0;
-		$hold_orders_count=0;
-		
-				$buyers =   DB::table('erpuser_buyer')
-                                    ->where('erpuser_buyer.erp_user',$customer_id)
-                                    ->pluck('erpuser_buyer.buyer')
-                                    ->all();
-
-		
-		$companies   = 	DB::table('erpuser_company_mapping')
-								->join('company','erpuser_company_mapping.company','company.id')
-								->where('erpuser_company_mapping.erp_user',$customer_id)
-								->select('erpuser_company_mapping.*','company.name', 'company.logo')
-								->get();
-		
-		$company_id   = DB::table('company')
-								->select('company.*')
-								->first();
-		
-		if(session()->get('company') == "" && session()->get('company') == null)
-		{
-			session()->put('company', $company_id->id);
-			session()->put('company_name', strtolower( str_replace(' ','',$company_id->name)) );
-		}
-		
-		if($customer_id != 1)
-		{
-			$templates   = 		DB::table('erpusers_template_mapping')
-								->join('buyers','erpusers_template_mapping.buyer','buyers.id')
-							    ->where('erpusers_template_mapping.company',session()->get('company'))
-								->where('erpusers_template_mapping.erp_user',$customer_id)
-								->select('erpusers_template_mapping.*','buyers.template_table','buyers.item_master_table','buyers.id as buyer_id')
-								->get();
-		}
-		else
-		{
-			$templates   = 		DB::table('erpusers_template_mapping')
-								->join('buyers','erpusers_template_mapping.buyer','buyers.id')
-								->where('erpusers_template_mapping.company',session()->get('company'))
-								->select('erpusers_template_mapping.*','buyers.template_table','buyers.item_master_table','buyers.id as buyer_id')
-								->get();
-		}
-		
-		
-		//return $templates;
-		
+			$customer_id = Auth::guard('erpuser')->id();
+			$new_orders_count=0;
+			$hold_orders_count=0;
+			
+			$buyers = DB::table('erpuser_buyer')
+								->where('erpuser_buyer.erp_user',$customer_id)
+								->pluck('erpuser_buyer.buyer')
+								->all();
+			
+			$companies = 	DB::table('erpuser_company_mapping')
+										->join('company','erpuser_company_mapping.company','company.id')
+										->where('erpuser_company_mapping.erp_user',$customer_id)
+										->select('erpuser_company_mapping.*','company.name', 'company.logo')
+										->get();
+			
+			$company_id = DB::table('company')
+										->select('company.*')
+										->first();
+			
+			if(session()->get('company') === "" && session()->get('company') === null)
+			{
+				session()->put('company', $company_id->id);
+				session()->put('company_name', strtolower( str_replace(' ','',$company_id->name)) );
+			}
+			
+			if($customer_id != 1)
+			{
+				$templates   = 		DB::table('erpusers_template_mapping')
+									->join('buyers','erpusers_template_mapping.buyer','buyers.id')
+										->where('erpusers_template_mapping.company',session()->get('company'))
+									->where('erpusers_template_mapping.erp_user',$customer_id)
+									->select('erpusers_template_mapping.*','buyers.template_table','buyers.item_master_table','buyers.id as buyer_id')
+									->get();
+			}
+			else
+			{
+				$templates   = 		DB::table('erpusers_template_mapping')
+									->join('buyers','erpusers_template_mapping.buyer','buyers.id')
+									->where('erpusers_template_mapping.company',session()->get('company'))
+									->select('erpusers_template_mapping.*','buyers.template_table','buyers.item_master_table','buyers.id as buyer_id')
+									->get();
+			}
 		
 		 $new_orders = array();
 		 $i=1;
@@ -137,7 +132,7 @@ class PoManagerController extends Controller
 			}
 			 
 		 }
-		//print_r($date);
+
 		foreach($orders_erp as $orders_erp_count)
 		{
 			
@@ -151,8 +146,6 @@ class PoManagerController extends Controller
 				}
 		}
 
-
-		//return $new_orders;
 		return view('erp.Pomanager.poverify',['orders' => $orders_erp,'companies' => $companies,'new_orders' => $new_orders_count,'hold_orders' => $hold_orders_count]);
 	} 
 	
@@ -242,20 +235,35 @@ class PoManagerController extends Controller
         return $result;
 	}
 	
+	/**
+	 * setCompanySession function
+	 * 
+	 * Store company data into session.
+	 * @param Request $request
+	 * @return void
+	 */
 	public function setCompanySession(Request $request)
 	{
 		$company_id = $request->company_id;
 		$company_name = $request->company_name;
-		session()->put('company', $company_id);
-		session()->put('company_name', $company_name);
-//		session()->save();
+
+		if (session()->has('company') && session()->has('company_name')) {
+			// delete existing company session 
+			session()->forget('company');
+			session()->forget('company_name');
+
+			// update company session data
+			session()->put('company', $company_id);
+			session()->put('company_name', $company_name);
+		}
+		else 
+		{
+			// create company session data
+			session(['company' => $company_id, 'company_name' => $company_name]);
+		}
 		
-		
-//		print_r(session()->get('company'));
-		
-		print_r("dasdasdasd");
-		$result      = response()->json(['error'=> false,'message' =>'success'],200);
-		return $result;
+		return response()->json(['error'=> false,'message' =>'success'],200);
+		 
 	}
 	
 	/**
