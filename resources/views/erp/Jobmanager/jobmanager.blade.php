@@ -765,9 +765,11 @@ $(document).ready(function() {
 					company_name:company_name
 				},
 				beforeSend: function() {
-					location.reload();
+					
+				//	location.reload();
 				},
 				success: function(data) {
+					location.reload();
 				},
 				error: function(data) {
 
