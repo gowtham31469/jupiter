@@ -534,10 +534,12 @@ transform: scale(1);
 					company_name: company_name
 				},
 				beforeSend: function() {
-					location.reload();
+					
 
 				},
-				success: function(data) {},
+				success: function(data) {
+					location.reload();
+				},
 				error: function(data) {
 
 				},

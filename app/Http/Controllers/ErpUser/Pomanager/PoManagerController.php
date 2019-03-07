@@ -248,6 +248,12 @@ class PoManagerController extends Controller
 		$company_name = $request->company_name;
 		session()->put('company', $company_id);
 		session()->put('company_name', $company_name);
+//		session()->save();
+		
+		
+//		print_r(session()->get('company'));
+		
+		print_r("dasdasdasd");
 		$result      = response()->json(['error'=> false,'message' =>'success'],200);
 		return $result;
 	}
