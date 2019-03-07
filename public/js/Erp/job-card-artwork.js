@@ -602,25 +602,13 @@ function PopupTesco(data, name,zone,style_no,buyer_no,id,created_at) {
 function PopupTescoSmall(data, name,zone,style_no,buyer_no,id,created_at) {
 	
 		
-	if(name == "TCL1-sticker")
+	if(name == "TSL1-sticker")
 	{
-		var db = "tesco_tcl1_orders";
+		var db = "tesco_tsl1_orders";
 	}
-	else if(name == "TCL2-sticker")
+	else if(name == "TSL3-sticker")
 	{
-		var db = "tesco_tcl2_orders";
-	}
-	else if(name == "TCL4-sticker")
-	{
-		var db = "tesco_tcl4_orders";
-	}
-	else if(name == "THL1-sticker")
-	{
-		var db = "tesco_thl1_orders";
-	}
-	else if(name == "THL3-sticker")
-	{
-		var db = "tesco_thl3_orders";
+		var db = "tesco_tsl3_orders";
 	}
 	
 	var url = "";
