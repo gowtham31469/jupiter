@@ -486,8 +486,8 @@ function tescoOrders(callback) {
 								formData.append('type', localStorage.getItem("template type"));
 								formData.append('zone', localStorage.getItem("zone"));
 								formData.append('template_name', localStorage.getItem("template_group"));
-								
-								
+
+
 								uploadPurchaseOrder(formData, localStorage.getItem("zone"));
 							} else {
 								createOrders();
