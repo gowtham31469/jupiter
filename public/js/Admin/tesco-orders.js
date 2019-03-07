@@ -482,12 +482,16 @@ function tescoOrders(callback) {
 							//invoke uploadPurchaseOrder method with the form data.
 							//If not, go with manual upload by invoking createOrders() method.
 							if ($('input[type="radio"].order_type:checked').val() == 1) {
-								var formData = new FormData($(this)[0]);
+								var formData = new FormData();
+								var purchase_order = $('#po_upload').prop('files')[0];
+								var ce_orms_purchase_order = $('#ce_orms').prop('files')[0];
+								var ce_retek_purchase_order = $('#ce_retek').prop('files')[0];
+								formData.append('purchase_order', purchase_order);
+								formData.append('ce_orms_purchase_order', ce_orms_purchase_order);
+								formData.append('ce_retek_purchase_order', ce_retek_purchase_order);
 								formData.append('type', localStorage.getItem("template type"));
 								formData.append('zone', localStorage.getItem("zone"));
 								formData.append('template_name', localStorage.getItem("template_group"));
-								formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
-
 								uploadPurchaseOrder(formData, localStorage.getItem("zone"));
 							} else {
 								createOrders();
