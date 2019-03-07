@@ -874,7 +874,7 @@ function tescoStatusTable(data,path)
                     }
                     if (order_flag == "repeatOrder")
                     {
-                        span_style = '<span title="Reorder" class="batch-reorder">R</span>'
+                        span_style = '<span title="Repeat Order" class="batch-reorder">R</span>'
                     }
                     var zone = value.Zone
                     var style_no = "";
@@ -1651,7 +1651,7 @@ function updateArtwork(obj)
                     }
                     if (order_type == "repeatOrder")
                     {
-                        span_style = '<span title="Reorder" class="batch-reorder">R</span>'
+                        span_style = '<span title="Repeat Order" class="batch-reorder">R</span>'
                     }
 					if (order_type == "newOrder")
                     {
