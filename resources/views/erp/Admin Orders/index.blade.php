@@ -4,7 +4,7 @@
 
 <ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
 	<li><a href="{{route('erp-users')}}">User Management</a></li>
-	<li><a href="#" class="active">Order Management</a></li>
+	<li><a href="{{route('erp.admin.orders.show')}}" class="active">Order Management</a></li>  
 </ul>
 
 @endsection
@@ -13,7 +13,7 @@
 
 <style>
 
-	#addModal .modal-dialog, #editModal .modal-dialog {
+#addModal .modal-dialog, #editModal .modal-dialog {
   width: 100%;
   height: 100%;
   margin: 0;

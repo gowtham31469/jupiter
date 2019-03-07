@@ -110,7 +110,7 @@
 
 												<div class="row">
 													<div class="col-md-offset-4 col-md-8 text-center">
-														<label>{!! substr($order->po_file, strrpos($order->po_file, '/') + 1); !!}</label>
+														<!-- <label>{!! substr($order->po_file, strrpos($order->po_file, '/') + 1); !!}</label> -->
 													</div>
 												</div>
 											</div>
