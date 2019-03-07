@@ -34,7 +34,7 @@ class PoManagerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    { 
 			$customer_id = Auth::guard('erpuser')->id();
 			$new_orders_count=0;
 			$hold_orders_count=0;
