@@ -439,6 +439,12 @@
             </div>
         </div>
     </div>
+{{-- Hidden div for svg rendering --}}
+<div id="modaldiv">
+	<div id="svgdiv" style="position:absolute;visibility:hidden">\
+	 <svg id="ean-13"></svg>\
+   </div>
+</div>
     @endsection @else
     <script type="text/javascript">
         window.location = "{{ url('/customer') }}";

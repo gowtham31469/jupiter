@@ -88,19 +88,79 @@ class OrderManagementController extends Controller
     {
         switch($request->val){
 			case 1:
+				
+				$erp_order = \App\ErpOrderDetails::where('id', $request->id)->get();
+				$erp_order_id = $erp_order{0}->erp_order_id;
+				
 				\App\ErpOrderDetails::where('id', $request->id)->delete();
-				$message = response()->json(['message' => "Order Item Changed to Hold Status"], 200);
+				
+				$erp_order_details = \App\ErpOrderDetails::where('erp_order_id', $erp_order_id)->get();
+				
+				if(count($erp_order_details) == 0)
+				{
+					\App\ErpOrders::where('id', $erp_order_id)->delete();
+					$status="hold-change";
+				}
+				else
+				{
+					$status="no-change";
+				}
+				$message = response()->json(['message' => "Order Item Changed to Hold Status",'status' => $status], 200);
 				break;
 			case 2:
 				\App\ErpOrderDetails::where('id', $request->id)->restore();
+				
+				$erp_order = \App\ErpOrderDetails::where('id', $request->id)->get();
+				$erp_order_id = $erp_order{0}->erp_order_id;
+				
+				$erp_order_details = \App\ErpOrderDetails::where('erp_order_id', $erp_order_id)->get();
+				
+				if(count($erp_order_details) != 0)
+				{
+					\App\ErpOrders::where('id', $erp_order_id)->restore();
+				}
+				
 				\App\ErpOrderDetails::where('id', $request->id)->update([
 					'status'	=> 4
 				]);
-				$message = response()->json(['message' => "Order Item Cancelled successfully"], 200);
+				
+				$erp_cancel_count = \App\ErpOrderDetails::where('erp_order_id', $erp_order_id)->where('status', 4)->get();
+				
+				$erp_count = \App\ErpOrderDetails::where('erp_order_id', $erp_order_id)->get();
+				
+				if(count($erp_cancel_count) == count($erp_count))
+				{
+					\App\ErpOrders::where('id', $erp_order_id)->update([
+						'status'	=> 4
+					]);
+					$status="delete-change";
+				}
+				else
+				{
+					$status="no-change";
+				}
+				
+				$message = response()->json(['message' => "Order Item Cancelled successfully",'status' => $status], 200);
 				break;
 			case 3:
 				\App\ErpOrderDetails::where('id', $request->id)->restore();
-				$message = response()->json(['message' => "Order Item Restored successfully"], 200);
+				
+				$erp_order = \App\ErpOrderDetails::where('id', $request->id)->get();
+				$erp_order_id = $erp_order{0}->erp_order_id;
+				$erp_order_details = \App\ErpOrderDetails::where('erp_order_id', $erp_order_id)->get();
+				
+				if(count($erp_order_details) != 0)
+				{
+					\App\ErpOrders::where('id', $erp_order_id)->restore();
+					
+					$status="restore-change";
+				}
+				else
+				{
+					$status="no-change";
+				}
+				
+				$message = response()->json(['message' => "Order Item Restored successfully",'status' => $status], 200);
 				break;
 			default:
 				$message = response()->json(['message' => "Something Went Wrong"], 500);
@@ -120,6 +180,7 @@ class OrderManagementController extends Controller
 		switch($request->status){
 			case "Hold":
 				\App\ErpOrders::where('id', $request->id)->delete();
+				\App\ErpOrderDetails::where('erp_order_id', $request->id)->delete();
 				$message = "Order Changed to Hold Status successfully";
 				break;
 			case "Cancel":
@@ -127,10 +188,15 @@ class OrderManagementController extends Controller
 				\App\ErpOrders::where('id', $request->id)->update([
 					'status'	=> 4
 				]);
+				\App\ErpOrderDetails::where('erp_order_id', $request->id)->restore();
+				\App\ErpOrderDetails::where('erp_order_id', $request->id)->update([
+					'status'	=> 4
+				]);
 				$message = "Order Cancelled successfully";
 				break;
 			case "Restore":
 				\App\ErpOrders::where('id', $request->id)->restore();
+				\App\ErpOrderDetails::where('erp_order_id', $request->id)->restore();
 				$message = "Order Restored successfully";
 				break;
 			default:
