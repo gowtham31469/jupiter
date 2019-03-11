@@ -30,19 +30,30 @@ class ErpOrders
 			$this->created_at = Carbon::now('Asia/Kolkata')->toDateTimeString();
             $orders     	= DB::table($table_name)->where($table_name.'.id',$row_id)
             					->join('tesco_item_master',$table_name.'.template_id','=','tesco_item_master.id')
-                                ->select('order_id','po_number','uk_style_ref','ce_style_ref','season_code','short_description','eqos_site_code','manufacture_date','tesco_department_id','tesco_brand_id','tesco_supplier_id as customer_id','rfid_compliant','tag_at_source','zone','template_type','pi_status','po_status','po_file','purchase_order_no','order_status','template_id','delivery_date','order_placed_by','pi_rev_no','edit_permission','cancel_ord_flag','order_created_at','order_approved_at','order_cancelled_at','ocn_number','po_uploaded_at','tesco_item_master.company_id','tesco_item_master.item_name','ocn_number','order_flag')->first();
+                                ->select('order_id','po_number','uk_style_ref','ce_style_ref','season_code','short_description','eqos_site_code','manufacture_date','tesco_department_id','tesco_brand_id','tesco_supplier_id as customer_id','rfid_compliant','tag_at_source','zone','template_type','pi_status','po_status','po_file','purchase_order_no','order_status','template_id','delivery_date','order_placed_by','pi_rev_no','edit_permission','cancel_ord_flag','order_created_at','order_approved_at','order_cancelled_at','ocn_number','po_uploaded_at','tesco_item_master.company_id','tesco_item_master.item_name','ocn_number','order_flag','pi_id','pi_file')->first();
             $order_details  = DB::table($qnty_table)->where($qnty_id,$row_id)
             				->get();
-			$order_status = $orders->order_status;
+			$order_status   = $orders->order_status;
+
+			$customer_data  = DB::table('customers')->where('id',$orders->customer_id)->first();
+
+			if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
+				$po_no     = $orders->pi_id;
+				$po_file   = $orders->pi_file;
+			}
+			else if($customer_data->po_required== 1){
+				$po_no     = $orders->purchase_order_no;
+				$po_file   = $orders->po_file;
+			}
 
 			$order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', $order_status)->first();
 			
-			if ($orders->purchase_order_no == "" && $orders->po_file == "" && $orders->po_file=="") {
+			// if ($orders->purchase_order_no == "" && $orders->po_file == "" && $orders->po_file=="") {
 				
-			}
-			else{
-				$erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$orders->customer_id)->where('po_no',$orders->purchase_order_no)->first();
-			}			
+			// }
+			// else{
+				$erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$orders->customer_id)->where('po_no',$po_no)->first();
+			// }			
 
 			if ($erp_orders) {
 				Erp::where('id',$erp_orders->id)->update(['status'=>1]);
@@ -52,8 +63,8 @@ class ErpOrders
 				$erp_orders =   Erp::create([
 									'buyer_id'         => $buyer_id,
 				                    'customer_id'      => $orders->customer_id,
-				                    'po_no'            => $orders->purchase_order_no,
-				                    'po_file'          => $orders->po_file,
+				                    'po_no'            => $po_no,
+				                    'po_file'          => $po_file,
 									'status'		   => 1,
 									'order_status_id'  => $order_status_id->id,
 									'created_at'       => $this->created_at
