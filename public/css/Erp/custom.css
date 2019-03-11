@@ -76,3 +76,108 @@ input[type=number]::-webkit-outer-spin-button {
     margin: 0;
 }
 
+/** ERP Settings Sidebar style **/ 
+.erp-sidebar-main {
+    position: fixed;
+    top: 40px;
+    bottom: 0;
+    left: 0;
+    z-index: 997;
+    display: block;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 200px;
+    /* Scrollable contents if viewport is shorter than content. */
+    background-color: #ffffff;
+    border-right: 1px solid #eee;
+}
+
+ul.erp-sidebar {
+    padding-left: 0px;
+}
+
+ul.erp-sidebar li > a {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+    color: #333;
+    cursor: pointer;
+    padding-right: 40px;
+    padding-left: 20px;
+}
+
+ul.erp-sidebar li > a.active {
+    background: #00b6ff !important;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+ul.erp-sidebar li > a.active:hover {
+    color: #333;
+    background: #dddddd;
+}
+
+ul.erp-sidebar li {
+    list-style-type: none;
+
+}
+
+ul.erp-sidebar > li > a:focus,
+ul.erp-sidebar > li > a:hover {
+    text-decoration: none;
+    background-color: #eee;
+}
+
+
+/** Filter design CSS for jobcard **/
+.filter-window-jobcard {
+    z-index: 10;
+    display: none;
+    background-color: #f9f9f9;
+    width: 100%;
+    padding: 10px 15px;
+    margin: 0;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.filter-window-jobcard-list {
+    z-index: 10;
+    display: block;
+    background-color: #f9f9f9;
+    width: 100%;
+    padding: 10px 15px;
+    margin: 0;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+
+.filterbtn-erp {
+    background-color: #fff;
+    color: #263238;
+    font-size: 14px;
+    text-align: center;
+    padding: 5.6px 11px 8px 10px;
+    border: 1px solid #cccccc;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    display: inline-block;
+    line-height: 0px;
+    outline: none;
+}
+
+.filterbtn-erp:hover {
+    background: #eee;
+}
+
+.filter-actions-erp {
+    margin-top: 20px;
+}
+
+.filter-actions-erp button {
+    margin-left: 10px;
+}
+
+

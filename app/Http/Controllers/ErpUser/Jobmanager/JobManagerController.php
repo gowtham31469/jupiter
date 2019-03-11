@@ -16,6 +16,7 @@ use App\ErpOrderDetails as ErpOrderDetails;
 use Carbon\Carbon;
 use PDF;
 use App\Classes\JobcardPDFHeaderFooter;
+use App\Classes\FPDF_Merge;
 use File;
 
 class JobManagerController extends Controller
@@ -32,8 +33,8 @@ class JobManagerController extends Controller
 		// get the current time
 		$this->current_date = Carbon::now('Asia/Kolkata')->format('d-m-Y');
    
-    }
-
+		}
+		
     /**
      * Show the Jobcard  Manager List View.
      * @author [Gowtham] <[gowtham@wizroots.com]>
@@ -45,20 +46,32 @@ class JobManagerController extends Controller
 			$customer_id = Auth::guard('erpuser')->id();
 			
 			$companies   = 	DB::table('erpuser_company_mapping')
-									->join('company','erpuser_company_mapping.company','company.id', 'company.logo')
+									->join('company','erpuser_company_mapping.company','company.id')
 									->where('erpuser_company_mapping.erp_user',$customer_id)
-									->select('erpuser_company_mapping.*','company.name')
+									->select('erpuser_company_mapping.*','company.name', 'company.logo')
 									->get();
 			$buyers      = 	DB::table('erpuser_buyer')
 									->where('erpuser_buyer.erp_user',$customer_id)
 									->pluck('erpuser_buyer.buyer')
 									->all();
 
-			$company_id   = DB::table('company')
-									->select('company.*')
-									->first();
+			if($companies)
+			{
+				$company_id   = DB::table('company')
+								->select('company.*')
+								->where('company.id', '=', $companies{0}->company)
+								->first();
+			}
+			else
+			{
+				return view('erp.home');
+			}
+
 			// Get Erp status table id for 'Moved To JC Queue' status.
 			$erp_status_id = DB::table('erp_status')->where('status_name', 'ilike', 'Moved To JC Queue')->value('id');
+		 
+			// Get order status table id for 'Order Approved' status.
+			$order_status_id = DB::table('orders_status')->where('status_name', 'ilike', 'Order Approved')->value('id');
 			
 			if(session()->get('company') == "" && session()->get('company') == null)
 			{
@@ -93,7 +106,7 @@ class JobManagerController extends Controller
 			{
 				foreach($values as $valuess)
 				{
-					$erp_order_details = DB::table('erp_orders')->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
+					$erp_order_details = Erp::join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
 											->join('customers', 'erp_orders.customer_id', 'customers.id')
 											->join('buyers', 'erp_orders.buyer_id', 'buyers.id')
 											->join('erp_status', 'erp_orders.status', 'erp_status.id')
@@ -101,11 +114,11 @@ class JobManagerController extends Controller
 											->where('erp_order_details.template_id', '=', $valuess)
 											->where('erp_orders.status', '=', $erp_status_id)
 											->where('erp_order_details.status', '=', $erp_status_id)
-											->where('erp_orders.order_status_id', '=', 4)
+											->where('erp_orders.order_status_id', '=', $order_status_id)
 											->whereIn('erp_orders.buyer_id', $buyers)
 											->orderBy('erp_order_details.erp_order_id', 'asc')
-											->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id','tesco_template.template_file')
-											->select('erp_orders.*','erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name', 'buyers.id as buyer_id','tesco_template.template_file')
+											->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id','tesco_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at')
+											->select('erp_orders.*','erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name', 'buyers.id as buyer_id','tesco_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at')
 											->get();
 					
 					if(count($erp_order_details) > 0)
@@ -119,8 +132,16 @@ class JobManagerController extends Controller
 				}
 				
 			}
+			/**
+			 * Dropdown values
+			 */
+			$erp_dispatch_mode = DB::table('erp_dispatch_mode')->where('is_enabled','=',true)->pluck('disp_mode','id')->all();
+			$erp_finish_type = DB::table('erp_finish_type')->where('is_enabled','=',true)->pluck('finish_type','id')->all();
+			$erp_machines = DB::table('erp_machines')->where('is_enabled','=',true)->pluck('machine','id')->all();
+			$erp_teeth_no = DB::table('erp_teeth_no')->where('is_enabled','=',true)->pluck('teeth_no','id')->all();
+
 			asort($orders_erp);
-			return view('erp.Jobmanager.jobmanager', ['orders' => $orders_erp, 'companies' => $companies]);
+			return view('erp.Jobmanager.jobmanager', ['orders' => $orders_erp, 'companies' => $companies, 'disp_modes' => $erp_dispatch_mode, 'finish_types' => $erp_finish_type, 'machines' => $erp_machines, 'teeth_nos' => $erp_teeth_no]);
 		}
 		catch (\Exception $e)
 		{
@@ -139,11 +160,15 @@ class JobManagerController extends Controller
 		$style_no = $request['style_no'];
 		$buyer_no = $request['buyer_no'];
 		$id = $request['id'];
+		$order_type = $request['order_type'];
+		$created_at = $request['created_at'];
 		$order_details  = 	DB::table('erp_order_details')
 									->where('erp_order_details.style_no',$style_no)
 									->where('erp_order_details.erp_order_id',$id)
 									->where('erp_order_details.reference_name',$ref_name)
 									->where('erp_order_details.buyer_po_number',$buyer_no)
+									->where('erp_order_details.order_type',$order_type)
+									->where('erp_order_details.created_at',$created_at)
 									->orderBy('erp_order_details.id', 'desc')
 									->select('*')
 									->get();
@@ -206,10 +231,13 @@ class JobManagerController extends Controller
 			$erp_orders_ids     = explode(',', $request['orders']);
 			$selected_ref_arrays= explode(',', $request['ref_array']);
 			$buyer_pos          = explode(',', $request['buyer_po_array']);
+			$order_type         = explode(',', $request['order_type_array']);
+			$created_at         = explode(',', $request['created_at_array']);
 			$buyers_array       = array();
 			$customers_array    = array();
 			$company_array      = array();
 			$order_dt_array     = array();
+			$delivery_dt_array  = array();
 			$style_array        = array();
 			$ordertype_array    = array();
 			$temp_id_array      = array();
@@ -236,6 +264,8 @@ class JobManagerController extends Controller
 									->where('erp_order_details.erp_order_id', $erp_orders_id)
 									->where('erp_order_details.reference_name', $selected_ref_arrays[$row])
 									->where('erp_order_details.buyer_po_number', $buyer_pos[$row])
+									->where('erp_order_details.order_type', $order_type[$row])
+									->where('erp_order_details.created_at', $created_at[$row])
 									->pluck('erp_order_details.id')->all();
 
 				$order_detail_ids = array_unique(array_merge($order_detail_ids,$order_detail_id_array));
@@ -246,12 +276,11 @@ class JobManagerController extends Controller
 
 			foreach($order_detail_ids as $key => $order_detail_id)
 			{
-				$order_details = DB::table('erp_orders')
-									->select('erp_orders.*', 'erp_order_details.*')
+				$order_details = Erp::select('erp_orders.*', 'erp_order_details.*')
 									->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
 									->where('erp_order_details.id', '=', $order_detail_id)
 									->first();
-
+				
 				!in_array($order_details->buyer_id, $buyers_array)?array_push($buyers_array,$order_details->buyer_id):$buyers_array;
 
 				!in_array($order_details->customer_id, $customers_array)?array_push($customers_array,$order_details->customer_id):$customers_array;
@@ -259,6 +288,8 @@ class JobManagerController extends Controller
 				!in_array($order_details->company_id, $company_array)?array_push($company_array,$order_details->company_id):$company_array;
 
 				!in_array($order_details->created_at, $order_dt_array)?array_push($order_dt_array,$order_details->created_at):$order_dt_array;
+				
+				!in_array(Carbon::parse($order_details->delivery_date)->format('d-m-Y'), $delivery_dt_array)?array_push($delivery_dt_array,Carbon::parse($order_details->delivery_date)->format('d-m-Y')):$delivery_dt_array;
 
 				!in_array($order_details->style_no, $style_array)?array_push($style_array,$order_details->style_no):$style_array;
 
@@ -272,7 +303,7 @@ class JobManagerController extends Controller
 				/** Create separate ratio/single templates array  */
 				if($order_details->template_type == "ratio")
 				{
-					$ratio_templates[$order_details->reference_name][] = DB::table('erp_order_details')->select('erp_order_details.order_quantity', $order_details->order_qnty_table_name.'.ratio_pack_type', $order_details->order_qnty_table_name.'.id as qty_table_id',  'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number')
+					$ratio_templates[$order_details->reference_name][] = DB::table('erp_order_details')->select('erp_order_details.order_quantity', $order_details->order_qnty_table_name.'.ratio_pack_type', $order_details->order_qnty_table_name.'.id as qty_table_id',  'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number', 'erp_order_details.order_type', 'erp_order_details.created_at')
 						->join($order_details->order_qnty_table_name, 'erp_order_details.order_qnty_table_id', $order_details->order_qnty_table_name.'.id')
 						->join('erp_orders', 'erp_order_details.erp_order_id', 'erp_orders.id')
 						->where('erp_order_details.id', '=', $order_detail_id)
@@ -280,18 +311,23 @@ class JobManagerController extends Controller
 				}
 				else
 				{
-					$single_temp_data = DB::table('erp_orders')->select('erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_orders.id as erp_table_id', 'erp_order_details.size', 'erp_order_details.order_quantity', 'erp_order_details.reference_name', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number')
+					$single_temp_data = Erp::select('erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_orders.id as erp_table_id', 'erp_order_details.size', 'erp_order_details.order_quantity', 'erp_order_details.reference_name', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number', 'erp_order_details.order_type', 'erp_order_details.created_at')
 								->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
 								->where('erp_order_details.id', '=', $order_detail_id)
 								->first();
+					
+					// to differnciate reorder and repeatorder having same values
+					$created_time = str_replace(':','', Carbon::parse($single_temp_data->created_at, 'Asia/Kolkata')->toTimeString());
+					$created_dt   = str_replace('-','', Carbon::parse($single_temp_data->created_at, 'Asia/Kolkata')->toDateString());
+					$created_at_key = $created_dt.$created_time;
 
-					$erp_id_array[$single_temp_data->reference_name][] = $single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number;
+					$erp_id_array[$single_temp_data->reference_name][] = $single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$created_at_key;
 
-					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number]['ocn_number'] = $single_temp_data->ocn_number;
-					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number]['erp_id'] = $single_temp_data->erp_id;
-					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number]['buyer_po_number'] = $single_temp_data->buyer_po_number;
-					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number]['template_id'] = $single_temp_data->template_id;
-					$single_templates[$single_temp_data->reference_name]['size'][$single_temp_data->size][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number]= $single_temp_data->order_quantity;
+					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$created_at_key]['ocn_number'] = $single_temp_data->ocn_number;
+					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$created_at_key]['erp_id'] = $single_temp_data->erp_id;
+					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$created_at_key]['buyer_po_number'] = $single_temp_data->buyer_po_number;
+					$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$created_at_key]['template_id'] = $single_temp_data->template_id;
+					$single_templates[$single_temp_data->reference_name]['size'][$single_temp_data->size][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$created_at_key]= $single_temp_data->order_quantity;
 				}
 			}
 
@@ -349,7 +385,7 @@ class JobManagerController extends Controller
 				{
 					!in_array($template_details->color, $print_color_array)?array_push($print_color_array,$template_details->color):$print_color_array;
 
-					!in_array($material_array[$template_details->material_id]=$template_details->material, $material_array)?$material_array[$template_details->material_id]=$template_details->material:$material_array;
+					!in_array($template_details->material, $material_array)?array_push($material_array,$template_details->material):$material_array;
 
 					!in_array($template_details->article, $article_array)?array_push($article_array,$template_details->article):$article_array;
 
@@ -366,6 +402,7 @@ class JobManagerController extends Controller
 			/** Different size breakup value handling */
 			foreach($single_templates as $template => $template_item)
 			{
+				ksort($template_item['order_data']);
 				$po_count = sizeof($template_item['order_data']);
 
 				foreach($template_item['size'] as $size => $qty)
@@ -414,6 +451,7 @@ class JobManagerController extends Controller
 
 			/** Push all array values into template_data array */
 			$template_data['order_date']       = Carbon::parse(min($order_dt_array))->format('d-m-Y');
+			$template_data['cus_del_date']     = $delivery_dt_array;
 			$template_data['today_date']       = $this->current_date;
 			$template_data['workorder_id']     = $workorder_id;
 			$template_data['company']          = $company;
@@ -423,12 +461,13 @@ class JobManagerController extends Controller
 			$template_data['style_array']      = $style_array;
 			$template_data['refnum_array']     = $distinct_ref_array;
 			$template_data['color']            = $print_color_array;
-			$template_data['material']		   = $material_array;
+			$template_data['material']		     = $material_array;
 			$template_data['article']          = $article_array;
-			$template_data['length']   		   = $length_array;
+			$template_data['length']   		     = $length_array;
 			$template_data['width']            = $width_array;
 			$template_data['ratio']            = $ratio_templates;
 			$template_data['single']           = $final_chunk;
+			$template_data['order_detail_ids'] = $order_detail_ids;
 
 			return response()->json(['error'=> false,'message' =>'Success', 'template_data' => $template_data],200);
   
@@ -448,7 +487,7 @@ class JobManagerController extends Controller
 		try {
 				$company_id      = $request['company_id'];
 				$workorder_id    = $request['workorder_id'];
-				$created_date    = Carbon::parse($request['created_date'],'Asia/Kolkata')->toDateString();
+				$created_date    = $request['created_date'] == ''?NULL:Carbon::parse($request['created_date'],'Asia/Kolkata')->toDateString();
 				$article         = $request['article'];
 				$material        = $request['material'];
 				$customer_id     = $request['customer_id'];
@@ -457,15 +496,15 @@ class JobManagerController extends Controller
 				$buyer_id        = $request['buyer_id'];
 				$reference       = $request['reference'];
 				$disp_mode       = $request['disp_mode'];
-				$order_date      = Carbon::parse($request['order_date'],'Asia/Kolkata')->toDateString();
+				$order_date      = $request['order_date'] == ''?NULL:Carbon::parse($request['order_date'],'Asia/Kolkata')->toDateString();
 				$length          = $request['length'];
 				$repeat_gap      = $request['repeat_gap'];
 				$machine         = $request['machine'];
-				$cus_del_date    = Carbon::parse($request['cus_del_date'],'Asia/Kolkata')->toDateString();
+				$cus_del_date    = $request['cus_del_date'] == ''?NULL:Carbon::parse($request['cus_del_date'],'Asia/Kolkata')->toDateString();
 				$roll_width      = $request['roll_width'];
 				$width           = $request['width'];
 				$film_no         = $request['film_no'];
-				$act_del_date    = Carbon::parse($request['act_del_date'],'Asia/Kolkata')->toDateString();
+				$invoice_date    = $request['invoice_date'] == ''?NULL:Carbon::parse($request['invoice_date'],'Asia/Kolkata')->toDateString();
 				$length_side     = $request['length_side'];
 				$excess          = $request['excess'];
 				$teeth_no        = $request['teeth_no'];
@@ -481,16 +520,20 @@ class JobManagerController extends Controller
 				$axicon_verifier = $request['axicon_verifier'];
 				$approved_by     = $request['approved_by'];
 				$packer          = $request['packer'];
-				$approval_date   = Carbon::parse($request['approval_date'],'Asia/Kolkata')->toDateString();
+				$approval_date   = $request['approval_date'] == ''?NULL:Carbon::parse($request['approval_date'],'Asia/Kolkata')->toDateString();
 				$roll_issued_by  = $request['roll_issued_by'];
 				$cutter          = $request['cutter'];
 				$cartons         = $request['cartons'];
 				$final_json_obj  = $request['final_json_obj'];
 				$erp_orders_ids  = explode(',', $request['erp_orders_ids']);
-			    $selected_ref    = explode(',', $request['selected_ref_array']);
+			  $selected_ref    = explode(',', $request['selected_ref_array']);
 				$buyer_pos       = explode(',', $request['selected_buyer_po_array']);
+				$order_types     = explode(',', $request['order_type_array']);
+				$created_at      = explode(',', $request['created_at_array']);
 
-				if(isset($company_id) && isset($workorder_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($repeat_gap) && isset($machine) && isset($cus_del_date) && isset($roll_width)  && isset($film_no) && isset($act_del_date) && isset($length_side) && isset($excess) && isset($teeth_no)  && isset($inv_no) && isset($no_sticker) && isset($finish_type)  && isset($print_color) && isset($compiled_by) && isset($barcode_read) && isset($operator) && isset($checker) && isset($authorized_by) && isset($axicon_verifier) && isset($approved_by) && isset($packer) && isset($approval_date) && isset($roll_issued_by)  && isset($cutter) && isset($cartons) && isset($final_json_obj) )
+				$current_timestamp = Carbon::now('Asia/Kolkata')->toDateTimeString();
+
+				if(isset($company_id) && isset($workorder_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($machine) && isset($cus_del_date)  && isset($finish_type)  && isset($compiled_by) && isset($final_json_obj) && isset($material))
 				{
 					// Get Erp status table id for 'Jobcard Created' status.
 					$erp_status_id = DB::table('erp_status')->where('status_name', 'ilike', 'Jobcard Created')->value('id');
@@ -514,7 +557,7 @@ class JobManagerController extends Controller
 						'width'                  => $width,
 						'roll_width'             => $roll_width,
 						'film_no'                => $film_no,
-						'act_del_date'           => $act_del_date,
+						'invoice_date'           => $invoice_date,
 						'length_side'            => $length_side,
 						'excess_percentage'      => $excess,
 						'teeth_no'               => $teeth_no,
@@ -535,8 +578,8 @@ class JobManagerController extends Controller
 						'cutter'                 => $cutter,
 						'cartons'                => $cartons,
 						'template_quantity_json' => $final_json_obj,
-						'created_at'             => Carbon::now('Asia/Kolkata')->toDateTimeString(),
-						'updated_at'             => Carbon::now('Asia/Kolkata')->toDateTimeString()
+						'created_at'             => $current_timestamp,
+						'updated_at'             => $current_timestamp
 					  ]);
 					
 					/** Store jobcard settings and excess details**/
@@ -561,8 +604,8 @@ class JobManagerController extends Controller
 									'actual_excess'           => $act_excess[$i],
 									'settings'                => $settings[$i],
 									'total_mtrs'              => $total_mtrs[$i],
-									'created_at'              => Carbon::now('Asia/Kolkata')->toDateTimeString(),
-									'updated_at'              => Carbon::now('Asia/Kolkata')->toDateTimeString()
+									'created_at'              => $current_timestamp,
+									'updated_at'              => $current_timestamp
 								]);
 								$i++;
 							}
@@ -583,6 +626,8 @@ class JobManagerController extends Controller
 							->where('erp_order_details.erp_order_id', $erp_orders_id)
 							->where('erp_order_details.reference_name', 'ilike', $selected_ref[$row])
 							->where('erp_order_details.buyer_po_number', 'ilike', $buyer_pos[$row])
+							->where('erp_order_details.order_type', 'ilike', $order_types[$row])
+							->where('erp_order_details.created_at', '=', $created_at[$row])
 							->update([
 								'status'  => $erp_status_id
 							]);
@@ -605,13 +650,24 @@ class JobManagerController extends Controller
 							}
 						}
 
-						$buyer = DB::table('buyers')->select('buyer_name')->where('id', '=', $buyer_id)->first();
+						$buyer    = DB::table('buyers')->select('buyer_name')->where('id', '=', $buyer_id)->first();
 						$customer = DB::table('customers')->select('short_name as customer_name')->where('id', '=', $customer_id)->first();
-						$company = DB::table('company')->select('name as company', 'address as company_address', 'logo as company_logo')->where('id', '=', $company_id)->first();
+						$company  = DB::table('company')->select('name as company', 'address as company_address', 'logo as company_logo')->where('id', '=', $company_id)->first();
+
+						$erp_dispatch_mode = DB::table('erp_dispatch_mode')->where('id','=', $disp_mode)->value('disp_mode');
+						$erp_finish_type   = DB::table('erp_finish_type')->where('id','=', $finish_type)->value('finish_type');
+						$erp_machine       = DB::table('erp_machines')->where('id','=', $machine)->value('machine');
+						$erp_teeth_no 	   = DB::table('erp_teeth_no')->where('id','=', $teeth_no)->value('teeth_no');
 
 						/** [ Creating new object for JobcardPDFHeaderFooter() class ] */
+						$format_approval_date  = $approval_date == ''?NULL:Carbon::parse($approval_date)->format('d-m-Y');
+						$formated_inv_date     = $invoice_date == ''?NULL:Carbon::parse($invoice_date)->format('d-m-Y');
+						$formated_created_date = $created_date == ''?NULL:Carbon::parse($created_date)->format('d-m-Y');
+						$formated_order_date   = $order_date == ''?NULL:Carbon::parse($order_date)->format('d-m-Y');
+						$formated_cus_del_date = $cus_del_date == ''?NULL:Carbon::parse($cus_del_date)->format('d-m-Y');
+						
 						$pdf = new JobcardPDFHeaderFooter(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-						$pdf->setData($company, $workorder_id, Carbon::parse($created_date)->format('d-m-Y'), $article, $material, $compiled_by, $barcode_read, $operator, $checker, $authorized_by, $axicon_verifier, $approved_by, $packer, Carbon::parse($approval_date)->format('d-m-Y'), $roll_issued_by, $cutter, $cartons);	
+						$pdf->setData($company, $workorder_id, $formated_created_date, $article, $material, $compiled_by, $barcode_read, $operator, $checker, $authorized_by, $axicon_verifier, $approved_by, $packer, $format_approval_date, $roll_issued_by, $cutter, $cartons, $single_ref, $act_excess, $sticker_mtr, $settings, $total_mtrs);		
 
 						$pdf->SetPrintHeader(true);
 						$pdf->SetPrintFooter(true);  
@@ -625,14 +681,24 @@ class JobManagerController extends Controller
 						$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
 						$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 						
-						// set auto page breaks
-						$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+						// /** Handle Page break */
+						// if ($pdf->last_page_flag)
+						// {
+								// set auto page breaks
+						    $pdf->SetAutoPageBreak(TRUE, 40);
+		
+						// }
+						// else 
+						// {
+						// 	  $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+						// }
+						
 
 						// set image scale factor
 						$pdf->setImageScale(1.8);
 
 						// set font
-						$pdf->SetFont('helvetica', '', 10);
+						$pdf->SetFont('helvetica', '', 8);
 
 						// add a page
 						$pdf->AddPage('P', 'A4');
@@ -640,32 +706,32 @@ class JobManagerController extends Controller
 						// set some text to print
 						$view = View::make('erp/Jobmanager/jobcard-pdf-template')
 								->with([
-										'buyer' 		 => $buyer,
-										'customer' 		 => $customer,
-										'company'		 => $company,
+										'buyer' 		     => $buyer,
+										'customer' 		   => $customer,
+										'company'		     => $company,
 										'workorder_id'   => $workorder_id,
-										'created_date'   => Carbon::parse($created_date)->format('d-m-Y'),
-										'article'	     => $article,
-										'material'		 => $material,
-										'style_no'		 => $style_no,
+										'created_date'   => $formated_created_date,
+										'article'	       => $article,
+										'material'		   => $material,
+										'style_no'		   => $style_no,
 										'order_type'     => $order_type,
-										'reference'		 => $reference,
-										'disp_mode'	     => $disp_mode,
-										'order_date'	 => Carbon::parse($order_date)->format('d-m-Y'),
-										'length'		 => $length,
-										'repeat_gap'	 => $repeat_gap,
-										'machine'		 => $machine,
-										'cus_del_date' 	 => Carbon::parse($cus_del_date)->format('d-m-Y'),
-										'roll_width'	 => $roll_width,
-										'width'	  		 => $width,
-										'film_no'		 => $film_no, 
-										'act_del_date'   => Carbon::parse($act_del_date)->format('d-m-Y'),
-										'length_side'	 => $length_side,
-										'excess'	     => $excess,
-										'teeth_no'		 => $teeth_no,
-										'inv_no'	     => $inv_no,
-										'no_sticker'	 => $no_sticker,
-										'finish_type'	 => $finish_type,
+										'reference'		   => $reference,
+										'disp_mode'	     => $erp_dispatch_mode,
+										'order_date'	   => $formated_order_date,
+										'length'		     => $length,
+										'repeat_gap'	   => $repeat_gap,
+										'machine'		     => $erp_machine,
+										'cus_del_date' 	 => $formated_cus_del_date,
+										'roll_width'	   => $roll_width,
+										'width'	  		   => $width,
+										'film_no'		     => $film_no, 
+										'invoice_date'   => $formated_inv_date,
+										'length_side'	   => $length_side,
+										'excess'	       => $excess,
+										'teeth_no'		   => $erp_teeth_no,
+										'inv_no'	       => $inv_no,
+										'no_sticker'	   => $no_sticker,
+										'finish_type'	   => $erp_finish_type,
 										'print_color'    => $print_color,
 										'compiled_by'    => $compiled_by,
 										'barcode_read'   => $barcode_read,
@@ -673,22 +739,22 @@ class JobManagerController extends Controller
 										'checker'        => $checker,
 										'authorized_by'  => $authorized_by,
 										'axicon_verifier'=> $axicon_verifier,
-										'approved_by'	 => $approved_by,
-										'packer'		 => $packer,
-										'approval_date'  => Carbon::parse($approval_date)->format('d-m-Y'),
+										'approved_by'	   => $approved_by,
+										'packer'		     => $packer,
+										'approval_date'  => $format_approval_date,
 										'roll_issued_by' => $roll_issued_by,
-										'cutter'		 => $cutter,
-										'cartons' 		 => $cartons,
+										'cutter'		     => $cutter,
+										'cartons' 		   => $cartons,
 										'final_json_obj' => json_decode($final_json_obj, true),
-										'single_ref'	 => $single_ref,
-										'act_excess'	 => $act_excess,
-										'sticker_mtr'	 => $sticker_mtr,
-										'settings'		 => $settings,
-										'total_mtrs' 	 => $total_mtrs
+										'single_ref'	   => $single_ref,
+										'act_excess'	   => $act_excess,
+										'sticker_mtr'	   => $sticker_mtr,
+										'settings'		   => $settings,
+										'total_mtrs' 	   => $total_mtrs
 								]);
 
 						//append content to header
-						$pdf->SetXY(15,49);
+						$pdf->SetXY(13.4,26.3);
 						$pdf->writeHTML($view->render());
 
 						//Close and output PDF document
@@ -700,7 +766,7 @@ class JobManagerController extends Controller
 						DB::table('jobcard_main_table')->where('id', $store_jobcard_id)
 						->update([
 							'file_path'   => $file_path,
-							'updated_at'  => Carbon::now('Asia/Kolkata')->toDateTimeString()
+							'updated_at'  => $current_timestamp
 						]);
 						return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path],200);	
 					}
@@ -728,43 +794,248 @@ class JobManagerController extends Controller
   
     public function printDivTesco(Request $request)
     {
-		$svgarr = explode(',_',$request->svg);
-        $name=$request->name;
-        $svg=urldecode($request->svg);
-        define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
-        define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
-        PDF::setImageScale(1.66);
-        PDF::setPrintHeader(false);
-        PDF::setPrintFooter(false);
-        PDF::SetFont('frankgothcnbt');
-        PDF::AddPage('P', 'A4');
-		// set auto page breaks
-		PDF::SetAutoPageBreak(TRUE);
-		$i=0;
-		$j=0;
-		$yy=12.5;
-		foreach($svgarr as $value)
-		{
-			$svg=urldecode($value);
-			file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
-			// PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
-			$html = '<img style="width:480px;height:302.36220472px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
-			PDF::writeHTMLCell(129, 82.5, 12.5, $yy, $html, '', 0, 0, false, 'L', false);
-			if($i == 3)
-			{
-				PDF::AddPage('P', 'A4');
-				$yy=92.5;
-				$i = 0;
-			}
-			else
-			{
-				$yy += 85;
-			}
-			 $i++;
-			 $j++;
-		}
-        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-        print_r(url('/storage/app/template/'.$name.'.pdf'));
+		 $company_id = $request->id;
+		 $customer = DB::table("erp_orders")
+			 			->join('customers', 'erp_orders.customer_id', 'customers.id')
+						->select('customers.short_name')
+						->where('erp_orders.id',$company_id)
+						->get();
+		 $customer_name = $customer{0}->short_name;
+		 $this->customer_name = $customer_name;
+		
+		 $this->created_date = $request->created_at;
+		
+		 $this->template_name = $request->name;
+		 $this->template_zone = $request->zone;
+		  if($request->name == "TCL1-sticker")
+		  {
+			  $this->template_desc = "RATIO STICKER";
+		  }
+		  else if($request->name == "TCL2-sticker")
+	      {
+			   $this->template_desc = "RATIO BD STICKER"; 
+		  }
+		  else if($request->name == "TCL4-sticker")
+	      {
+			   $this->template_desc =  "SINGLES BD STICKER";
+		  }
+		  else if($request->name == "THL1-sticker")
+	      {
+			    $this->template_desc = "RATIO STICKER";
+		  }
+		  else if($request->name == "THL3-sticker")
+	      {
+			   $this->template_desc = "SINGLES RATIO BD STICKER";
+		  }
+		  $this->tesco_po_number = $request->tesco_po_number;
+		  $this->style = $request->style;
+		  
+			// Custom Header
+		  PDF::setHeaderCallback(function($pdf) {
+			$pdf->SetY(0);
+		  $name=str_replace("-sticker", "", $this->template_name);
+		  $zone=$this->template_zone;
+			$tesco_po_number=$this->tesco_po_number;
+			$style=$this->style;
+			$tesco_description=$this->template_desc;
+			$date=date_create($this->created_date);
+			$created_date =  date_format($date,"d.m.Y");
+			$image_file= K_PATH_IMAGES.'logo_example.jpg';
+			$svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188.244mm" height="50.1333mm" viewBox="0 0 1024 264" version="1.2" baseProfile="tiny">
+					<title>Qt Svg Document</title>
+					<desc>Generated with Qt</desc>
+					<defs>
+					</defs>
+					<g fill="none" stroke="black" stroke-width="1" fill-rule="evenodd" stroke-linecap="square" stroke-linejoin="bevel">
+					<g fill="#ffffff" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1024,0 L1024,264 L0,264 L0,0"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1024,0 L1024,264 L0,264 L0,0"/>
+					</g>
+					<g fill="#000000" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal" style="&#10;    /* border-radius: 27px; */&#10;">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,65 L666,65 L666,66 L499,66 L499,65"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,65 L500,65 L500,144 L499,144 L499,65"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,65 L821,65 L821,66 L665,66 L665,65"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,65 L969,65 L969,66 L820,66 L820,65"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M968,65 L969,65 L969,105 L968,105 L968,65"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M968,104 L969,104 L969,144 L968,144 L968,104"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,182 L821,182 L821,183 L499,183 L499,182"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,143 L500,143 L500,183 L499,183 L499,143"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,182 L969,182 L969,183 L820,183 L820,182"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M968,143 L969,143 L969,183 L968,183 L968,143"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,143 L666,143 L666,144 L499,144 L499,143"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,65 L666,65 L666,144 L665,144 L665,65"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,104 L821,104 L821,105 L665,105 L665,104"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,65 L666,65 L666,105 L665,105 L665,65"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,65 L821,65 L821,105 L820,105 L820,65"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L969,104 L969,105 L820,105 L820,104"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,65 L821,65 L821,105 L820,105 L820,65"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,104 L821,104 L821,105 L665,105 L665,104"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,104 L666,104 L666,143 L665,143 L665,104"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L821,104 L821,143 L820,143 L820,104"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L969,104 L969,105 L820,105 L820,104"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L969,143 L969,144 L820,144 L820,143"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L821,104 L821,144 L820,144 L820,104"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,143 L821,143 L821,144 L499,144 L499,143"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L821,143 L821,183 L820,183 L820,143"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L969,143 L969,144 L820,144 L820,143"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L821,143 L821,183 L820,183 L820,143"/>
+					</g>
+					<g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,212 L1016,212 L1016,213 L8,213 L8,212"/>
+					</g>
+					<g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,213 L1016,213 L1016,214 L8,214 L8,213"/>
+					</g>
+					<g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,212 L8,214 L9,213 L9,212 L8,212"/>
+					</g>
+					<g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1015,213 L1015,214 L1016,214 L1016,212 L1015,213"/>
+					</g>
+					<g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,216 L1016,216 L1016,217 L8,217 L8,216"/>
+					</g>
+					<g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,217 L1016,217 L1016,218 L8,218 L8,217"/>
+					</g>
+					<g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,216 L8,218 L9,217 L9,216 L8,216"/>
+					</g>
+					<g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1015,217 L1015,218 L1016,218 L1016,216 L1015,217"/>
+					</g>
+					<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="56cm" height="37cm" version="1.1">
+							<image xlink:href="'.public_path('/images/jupiter.jpg').'" x="174" y="66" height="65px" width="116px" style=""/>
+					</svg>
+					<g xmlns="http://www.w3.org/2000/svg" fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="35" font-style="normal" font-weight="700">
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="50" y="176" font-family="Times New Roman" font-size="30" font-weight="700" font-style="normal">Jupiter Garments Accessories</text>
+
+					</g>
+					<g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="507" y="127" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">PO NO : '.$tesco_po_number.'</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">STYLE : '.$style.'</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REF : '.$name.' - '.$zone.'</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DATE : '.$created_date.'</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Size: 127x80mm</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="505" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DESCRIPTION : '.$tesco_description.'</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REV.NO :</text>
+					</g>
+					</g>
+					</svg>';
+					$pdf->ImageSVG('@' . $svg, '', '', '', '', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			});
+							
+					// Custom Footer
+			PDF::setFooterCallback(function($pdf) {
+					$tesco_po_number=$this->tesco_po_number;
+					$customer_name=$this->customer_name;
+					// Position at 15 mm from bottom
+					$pdf->SetY(-50);
+					$pdf->SetX(9.5);
+					// Set font
+					//$pdf->SetFont('frankgothcnbt');
+					// Page number
+					$svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188mm" height="65.2667mm" viewBox="0 0 1360 168" version="1.2" baseProfile="tiny">
+					<title>Qt Svg Document</title>
+					<desc>Generated with Qt</desc>
+					<defs>
+					</defs>
+					<g fill="none" stroke="black" stroke-width="1" fill-rule="evenodd" stroke-linecap="square" stroke-linejoin="bevel">
+					<g fill="#ffffff" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1360,0 L1360,168 L0,168 L0,0"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1360,0 L1360,168 L0,168 L0,0"/>
+					</g>
+					<g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,52 L1352,52 L1352,53 L8,53 L8,52"/>
+					</g>
+					<g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,53 L1352,53 L1352,54 L8,54 L8,53"/>
+					</g>
+					<g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,52 L8,54 L9,53 L9,52 L8,52"/>
+					</g>
+					<g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1351,53 L1351,54 L1352,54 L1352,52 L1351,53"/>
+					</g>
+					<g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,56 L1352,56 L1352,57 L8,57 L8,56"/>
+					</g>
+					<g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,57 L1352,57 L1352,58 L8,58 L8,57"/>
+					</g>
+					<g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,56 L8,58 L9,57 L9,56 L8,56"/>
+					</g>
+					<g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1351,57 L1351,58 L1352,58 L1352,56 L1351,57"/>
+					</g>
+					<g fill="#000000" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M385,79 L386,79 L386,157 L385,157 L385,79"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M764,79 L765,79 L765,157 L764,157 L764,79"/>
+					</g>
+					<g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">CUSTOMER : '.$customer_name.'</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="152" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">PO No : '.$tesco_po_number.'</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="405" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">APPROVED BY : </text>
+					</g>
+					<g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="700" font-style="normal">
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="405" y="152" font-family="Times New Roman" font-size="23" font-weight="700" font-style="normal">PREPARED BY:</text>
+					</g>
+					<g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="784" y="103" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">COMMENTS IF ANY :</text>
+					</g>
+					</g>
+					</svg>';
+					
+					 $pdf->ImageSVG('@' . $svg, '', '', '', '', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+			});
+		
+		
+				$svgarr = explode(',_',$request->svg);
+				$name=$request->name;
+		        $svg=urldecode($request->svg);
+				PDF::setImageScale(1);
+				PDF::SetFont('frankgothcnbt');
+				PDF::AddPage();
+				$i=0;
+				$yy=60;
+				$j=1;
+				PDF::SetXY(10, 50);
+				foreach($svgarr as $value)
+				{
+					$svg=urldecode($value);
+					PDF::SetFillColor(255,255,255);
+					if($i == 2)
+					{
+						$yy=60;
+						PDF::AddPage();
+						$i = 0;
+					}
+					else if($i == 0)
+					{
+						$yy=60;
+					}
+					else
+					{
+						$yy += 100;
+					}
+					$j++;
+			
+					
+					$svg=urldecode($value);
+					file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
+					$html = '<img style="width:480px;height:302.36220472px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
+					PDF::writeHTMLCell(127, 80, 15, $yy+1, $html, '', 0, 0, false, 'L', false);
+				
+					$i++;
+					
+				}
+				$random = number_format(Carbon::now()->timestamp * rand(),0,'','');
+				PDF::Output( public_path('/storage/app/template/'.$random.'-'.$name.'.pdf'), 'F');
+				$file_path =  "/storage/app/template/".$random.'-'.$name."."."pdf";	
+				
+				return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$random.'-'.$name.'.pdf')],200);	
     } 
 	 /**
    * Print Preview For Stickers
@@ -774,60 +1045,270 @@ class JobManagerController extends Controller
   
     public function printDivTescoSmall(Request $request)
     {
+		 $company_id = $request->id;
+		 $customer = DB::table("erp_orders")
+			 			->join('customers', 'erp_orders.customer_id', 'customers.id')
+						->select('customers.short_name')
+						->where('erp_orders.id',$company_id)
+						->get();
+		 $customer_name = $customer{0}->short_name;
+		 $this->customer_name = $customer_name;
+		
+		 $this->created_date = $request->created_at;
+		
+		 $this->template_name = $request->name;
+		 $this->template_zone = $request->zone;
+		
+		  if($request->name == "TSL1-sticker")
+		  {
+			  $this->template_desc = "RATIO POLYBAG STICKER";
+		  }
+		  else if($request->name == "TSL3-sticker")
+	      {
+			   $this->template_desc = "SINGLE POLYBAG STICKER "; 
+		  }
+		  $this->tesco_po_number = $request->tesco_po_number;
+		  $this->style = $request->style;
+		  $this->tesco_description = $request->tesco_description;
+		  
+			// Custom Header
+		  PDF::setHeaderCallback(function($pdf) {
+		  $name=str_replace("-sticker", "", $this->template_name);
+		  $zone=$this->template_zone;
+			$tesco_po_number=$this->tesco_po_number;
+			$style=$this->style;
+			$tesco_description=$this->template_desc;
+			$date=date_create($this->created_date);
+			$created_date =  date_format($date,"d.m.Y");
+			$image_file= K_PATH_IMAGES.'logo_example.jpg';
+			$svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188.244mm" height="50.1333mm" viewBox="0 0 1024 264" version="1.2" baseProfile="tiny">
+					<title>Qt Svg Document</title>
+					<desc>Generated with Qt</desc>
+					<defs>
+					</defs>
+					<g fill="none" stroke="black" stroke-width="1" fill-rule="evenodd" stroke-linecap="square" stroke-linejoin="bevel">
+					<g fill="#ffffff" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1024,0 L1024,264 L0,264 L0,0"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1024,0 L1024,264 L0,264 L0,0"/>
+					</g>
+					<g fill="#000000" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal" style="&#10;    /* border-radius: 27px; */&#10;">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,65 L666,65 L666,66 L499,66 L499,65"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,65 L500,65 L500,144 L499,144 L499,65"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,65 L821,65 L821,66 L665,66 L665,65"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,65 L969,65 L969,66 L820,66 L820,65"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M968,65 L969,65 L969,105 L968,105 L968,65"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M968,104 L969,104 L969,144 L968,144 L968,104"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,182 L821,182 L821,183 L499,183 L499,182"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,143 L500,143 L500,183 L499,183 L499,143"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,182 L969,182 L969,183 L820,183 L820,182"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M968,143 L969,143 L969,183 L968,183 L968,143"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,143 L666,143 L666,144 L499,144 L499,143"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,65 L666,65 L666,144 L665,144 L665,65"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,104 L821,104 L821,105 L665,105 L665,104"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,65 L666,65 L666,105 L665,105 L665,65"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,65 L821,65 L821,105 L820,105 L820,65"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L969,104 L969,105 L820,105 L820,104"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,65 L821,65 L821,105 L820,105 L820,65"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,104 L821,104 L821,105 L665,105 L665,104"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,104 L666,104 L666,143 L665,143 L665,104"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L821,104 L821,143 L820,143 L820,104"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L969,104 L969,105 L820,105 L820,104"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L969,143 L969,144 L820,144 L820,143"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L821,104 L821,144 L820,144 L820,104"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,143 L821,143 L821,144 L499,144 L499,143"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L821,143 L821,183 L820,183 L820,143"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L969,143 L969,144 L820,144 L820,143"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L821,143 L821,183 L820,183 L820,143"/>
+					</g>
+					<g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,212 L1016,212 L1016,213 L8,213 L8,212"/>
+					</g>
+					<g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,213 L1016,213 L1016,214 L8,214 L8,213"/>
+					</g>
+					<g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,212 L8,214 L9,213 L9,212 L8,212"/>
+					</g>
+					<g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1015,213 L1015,214 L1016,214 L1016,212 L1015,213"/>
+					</g>
+					<g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,216 L1016,216 L1016,217 L8,217 L8,216"/>
+					</g>
+					<g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,217 L1016,217 L1016,218 L8,218 L8,217"/>
+					</g>
+					<g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,216 L8,218 L9,217 L9,216 L8,216"/>
+					</g>
+					<g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1015,217 L1015,218 L1016,218 L1016,216 L1015,217"/>
+					</g>
+					<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="56cm" height="37cm" version="1.1">
+							<image xlink:href="'.public_path('/images/jupiter.jpg').'" x="174" y="66" height="65px" width="116px" style=""/>
+					</svg>
+					<g xmlns="http://www.w3.org/2000/svg" fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="35" font-style="normal" font-weight="700">
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="50" y="176" font-family="Times New Roman" font-size="30" font-weight="700" font-style="normal">Jupiter Garments Accessories</text>
+
+					</g>
+					<g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="507" y="127" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">PO NO : '.$tesco_po_number.'</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">STYLE : '.$style.'</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REF : '.$name.' - '.$zone.'</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DATE : '.$created_date.'</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">SIZE: 40x30mm</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="505" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DESCRIPTION : '.$tesco_description.'</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REV.NO:</text>
+					</g>
+					</g>
+					</svg>';
+					$pdf->ImageSVG('@' . $svg, '', '', '', '', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			});
+							
+			// Custom Footer
+			PDF::setFooterCallback(function($pdf) {
+			$tesco_po_number=$this->tesco_po_number;
+			$customer_name=$this->customer_name;
+			// Position at 15 mm from bottom
+			$pdf->SetY(-50);
+			$pdf->SetX(9.5);
+			// Set font
+			//$pdf->SetFont('frankgothcnbt');
+			// Page number
+			$svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188mm" height="65.2667mm" viewBox="0 0 1360 168" version="1.2" baseProfile="tiny">
+					<title>Qt Svg Document</title>
+					<desc>Generated with Qt</desc>
+					<defs>
+					</defs>
+					<g fill="none" stroke="black" stroke-width="1" fill-rule="evenodd" stroke-linecap="square" stroke-linejoin="bevel">
+					<g fill="#ffffff" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1360,0 L1360,168 L0,168 L0,0"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1360,0 L1360,168 L0,168 L0,0"/>
+					</g>
+					<g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,52 L1352,52 L1352,53 L8,53 L8,52"/>
+					</g>
+					<g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,53 L1352,53 L1352,54 L8,54 L8,53"/>
+					</g>
+					<g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,52 L8,54 L9,53 L9,52 L8,52"/>
+					</g>
+					<g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1351,53 L1351,54 L1352,54 L1352,52 L1351,53"/>
+					</g>
+					<g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,56 L1352,56 L1352,57 L8,57 L8,56"/>
+					</g>
+					<g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,57 L1352,57 L1352,58 L8,58 L8,57"/>
+					</g>
+					<g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,56 L8,58 L9,57 L9,56 L8,56"/>
+					</g>
+					<g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1351,57 L1351,58 L1352,58 L1352,56 L1351,57"/>
+					</g>
+					<g fill="#000000" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M385,79 L386,79 L386,157 L385,157 L385,79"/>
+					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M764,79 L765,79 L765,157 L764,157 L764,79"/>
+					</g>
+					<g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">CUSTOMER : '.$customer_name.'</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="152" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">PO NO : '.$tesco_po_number.'</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="405" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">APPROVED BY : </text>
+					</g>
+					<g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="700" font-style="normal">
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="405" y="152" font-family="Times New Roman" font-size="23" font-weight="700" font-style="normal">PREPARED BY:</text>
+					</g>
+					<g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="784" y="103" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">COMMENTS IF ANY :</text>
+					</g>
+					</g>
+					</svg>';
+					
+					 $pdf->ImageSVG('@' . $svg, '', '', '', '', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+		});
 		$svgarr = explode(',_',$request->svg);
-    	$name=$request->name;
-        $svg=urldecode($request->svg);
-        define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
-        define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
-        PDF::setImageScale(1.66);
-        PDF::setPrintHeader(false);
-        PDF::setPrintFooter(false);
-        PDF::SetFont('frankgothcnbt');
-        PDF::AddPage('P', 'A4');
-		// set auto page breaks
-		PDF::SetAutoPageBreak(TRUE);
-        $i=0;
+		$name=$request->name;
+    $svg=urldecode($request->svg);
+    PDF::setImageScale(1);
+    PDF::SetFont('frankgothcnbt');	
+		PDF::AddPage();
+		$i=0;
 		$yy=0;
-		$j=0;
+		$j=1;
 		PDF::SetXY(10, 50);
 		foreach($svgarr as $value)
 		{
 			$svg=urldecode($value);
 			PDF::SetFillColor(255,255,255);
-			if($i == 3 || $i == 6 || $i == 9 || $i == 12 || $i == 18)
+			if($i == 3 || $i == 6 || $i == 9 || $i == 15 || $i == 18)
 			{
 				$xx=15;
 				$yy+=50;
 			}
 			else if($i == 0)
 			{
-				$yy=10;
+				$yy=50;
 				$xx=15;
 			}
-			else if($i == 15)
+			else if($i == 12)
 			{
 				PDF::AddPage();
 				$xx=15;
-				$yy=10;
+				$yy=50;
 			}
 			else 
 			{
 				$xx+=70;
 			}
+			$j++;
 			
-			// PDF::ImageSVG('@' . $svg, $x=$xx, $y=$yy, $w=40, $h=30, $link='', $align='', $palign='', $border=1, $fitonpage=false);
 			
-				file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
-			// PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+			file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
 			$html = '<img style="width:151.18110236px;height:113.38582677px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
 			PDF::writeHTMLCell(42, 32, $xx, $yy, $html, '', 0, 0, false, 'L', false);
-			
-			 $i++;
-			 $j++;
+			$i++;
+
 		}
-        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-        print_r(url('/storage/app/template/'.$name.'.pdf'));
-    } 
+		$random = number_format(Carbon::now()->timestamp * rand(),0,'','');
+		PDF::Output( public_path('/storage/app/template/'.$random.'-'.$name.'.pdf'), 'F');
+		$file_path =  "/storage/app/template/".$random.'-'.$name."."."pdf";	
+		
+		return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$random.'-'.$name.'.pdf')],200);	
+				
+		} 
+		/**
+     * Function to Merge Jobcard pdf and artwork
+     * @author <Praveen>
+     * @param array PDF files
+     * @return filepath
+     */
+		public function pdfMerge(Request $request)
+		{
+			try {
+						$path = explode(',',$request['path']);
+						$merge = new FPDF_Merge();
+						foreach($path as $value)
+						{
+							if($value != null && $value != "")
+							{
+								$merge->add(public_path($value));
+							}
+							
+						}
+						$file_path =  $path[0];	
+
+						$merge->output(public_path($file_path) , 'F');
+						
+						return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path],200);	
+				} catch (\Exception $e) {
+					return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+			}
+				
+		}
 	/**
      * Function to get tesco tsl template UK , CE size chart based on size entered.
      * @author <Praveen>
@@ -850,7 +1331,7 @@ class JobManagerController extends Controller
            }
            
            return response()->json(['size_chart' => $size]);
-       } catch (\Exctesteption $e) {
+       } catch (\Exception $e) {
            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
        }
     }
@@ -884,7 +1365,7 @@ class JobManagerController extends Controller
 							->update([
 								'buyer_po_number'  => $order_omp{0}->po_number,
 								'zone'  => $order_omp{0}->zone,
-								'custom_ref_name'  => $data['custom_name']{0}->custom_name,
+								'custom_ref_name'  => $data['custom_name']{0}->custom_name
 							]);
 		}
 	}
@@ -902,26 +1383,40 @@ class JobManagerController extends Controller
 				$companies   = 	DB::table('erpuser_company_mapping')
 										->join('company','erpuser_company_mapping.company','company.id')
 										->where('erpuser_company_mapping.erp_user',$customer_id)
-										->select('erpuser_company_mapping.*','company.name')
+										->select('erpuser_company_mapping.*','company.name', 'company.logo','company.id')
 										->get();
-				$company_id   = DB::table('company')
-				->select('company.*')
-				->first();
+				if($companies)
+				{
+					$company_id   = DB::table('company')
+									->select('company.*')
+									->where('company.id', '=', $companies{0}->company)
+									->first();
+				}
+				else
+				{
+					return view('erp.home');
+				}
+				
 				
 				if(session()->get('company') == "" && session()->get('company') == null)
 				{
 					session()->put('company', $company_id->id);
 					session()->put('company_name', strtolower( str_replace(' ','',$company_id->name)) );
 				}
-				$jobcards  = 	DB::table('jobcard_main_table')
-								->select('jobcard_main_table.*','customers.company_name',
-								'buyers.buyer_name')
-								->join('customers', 'jobcard_main_table.customer_id', 'customers.id')
-								->join('buyers', 'jobcard_main_table.buyer_id', 'buyers.id')
+				/**
+				 * Dropdown values
+				 */
+				$buyers  = 	DB::table('buyers')
+								->join('jobcard_main_table', 'jobcard_main_table.buyer_id', 'buyers.id')
 								->where('jobcard_main_table.company_id', '=', session()->get('company'))
-								->get();
-
-				return view('erp.Jobmanager.jobcards-list', ['jobcards' => $jobcards, 'companies' => $companies]);	
+								->pluck('buyers.buyer_name','buyers.id')
+								->all();
+				
+				$erp_dispatch_mode = DB::table('erp_dispatch_mode')->where('is_enabled','=',true)->pluck('disp_mode','id')->all();
+				$erp_finish_type   = DB::table('erp_finish_type')->where('is_enabled','=',true)->pluck('finish_type','id')->all();
+				$erp_machines      = DB::table('erp_machines')->where('is_enabled','=',true)->pluck('machine','id')->all();
+				$erp_teeth_no      = DB::table('erp_teeth_no')->where('is_enabled','=',true)->pluck('teeth_no','id')->all();
+				return view('erp.Jobmanager.jobcards-list', ['buyers' => $buyers, 'companies' => $companies, 'disp_modes' => $erp_dispatch_mode, 'finish_types' => $erp_finish_type, 'machines' => $erp_machines, 'teeth_nos' => $erp_teeth_no]);	
 			} catch (\Exctesteption $e) {
 				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
 			}
@@ -932,7 +1427,7 @@ class JobManagerController extends Controller
      * @author <Praveen>
 	 * @param  $id
      * @return equivalent jobcard details
-     */
+     */  
     public function getJobcardDetailsById(Request $request)
     {
         try {
@@ -940,9 +1435,9 @@ class JobManagerController extends Controller
 
 				$customer_id = Auth::guard('erpuser')->id();
 
-				if(session()->get('company') == "" && session()->get('company') == null && $customer_id == null)
+				if(session()->get('company') == "" || session()->get('company') == null || $customer_id == null)
 				{
-					return response()->json(['error'=> true,'message' =>'Not Authorized User'], 401);
+					return view('erp.home');
 				}
 				else
 				{
@@ -953,11 +1448,11 @@ class JobManagerController extends Controller
 										->join('buyers', 'jobcard_main_table.buyer_id', 'buyers.id')
 										->where('jobcard_main_table.id', '=', $id)
 										->first();
-					$jobcard_data->created_date      =	Carbon::parse($jobcard_data->created_date)->format('d-m-Y');
-					$jobcard_data->order_date        =	Carbon::parse($jobcard_data->order_date)->format('d-m-Y');
-					$jobcard_data->customer_del_date =	Carbon::parse($jobcard_data->customer_del_date)->format('d-m-Y');
-					$jobcard_data->act_del_date      =	Carbon::parse($jobcard_data->act_del_date)->format('d-m-Y');
-					$jobcard_data->approval_date     =	Carbon::parse($jobcard_data->approval_date)->format('d-m-Y');
+					$jobcard_data->created_date      =	$jobcard_data->created_date == ''?NULL:Carbon::parse($jobcard_data->created_date)->format('d-m-Y');
+					$jobcard_data->order_date        =	$jobcard_data->order_date == ''?NULL:Carbon::parse($jobcard_data->order_date)->format('d-m-Y');
+					$jobcard_data->customer_del_date =	$jobcard_data->customer_del_date == ''?NULL:Carbon::parse($jobcard_data->customer_del_date)->format('d-m-Y');
+					$jobcard_data->invoice_date      =	$jobcard_data->invoice_date == ''?NULL:Carbon::parse($jobcard_data->invoice_date)->format('d-m-Y');
+					$jobcard_data->approval_date     =	$jobcard_data->approval_date == ''?NULL:Carbon::parse($jobcard_data->approval_date)->format('d-m-Y');
 
 				    $jobcard_details  = DB::table('jobcard_excess_details')
 										->select('jobcard_excess_details.ref_name', 'jobcard_excess_details.mtrs_for_stickers', 'jobcard_excess_details.actual_excess', 'jobcard_excess_details.settings', 'jobcard_excess_details.total_mtrs')
@@ -982,7 +1477,7 @@ class JobManagerController extends Controller
 		try {
 				$company_id      = $request['company_id'];
 				$workorder_id    = $request['workorder_id'];
-				$created_date    = Carbon::parse($request['created_date'],'Asia/Kolkata')->toDateString();
+				$created_date    = $request['created_date'] == ''?NULL:Carbon::parse($request['created_date'],'Asia/Kolkata')->toDateString();
 				$article         = $request['article'];
 				$material        = $request['material'];
 				$customer_id     = $request['customer_id'];
@@ -991,15 +1486,15 @@ class JobManagerController extends Controller
 				$buyer_id        = $request['buyer_id'];
 				$reference       = $request['reference'];
 				$disp_mode       = $request['disp_mode'];
-				$order_date      = Carbon::parse($request['order_date'],'Asia/Kolkata')->toDateString();
+				$order_date      = $request['order_date'] == ''?NULL:Carbon::parse($request['order_date'],'Asia/Kolkata')->toDateString();
 				$length          = $request['length'];
 				$repeat_gap      = $request['repeat_gap'];
 				$machine         = $request['machine'];
-				$cus_del_date    = Carbon::parse($request['cus_del_date'],'Asia/Kolkata')->toDateString();
+				$cus_del_date    = $request['cus_del_date'] == ''?NULL:Carbon::parse($request['cus_del_date'],'Asia/Kolkata')->toDateString();
 				$roll_width      = $request['roll_width'];
 				$width           = $request['width'];
 				$film_no         = $request['film_no'];
-				$act_del_date    = Carbon::parse($request['act_del_date'],'Asia/Kolkata')->toDateString();
+				$invoice_date    = $request['invoice_date'] == ''?NULL:Carbon::parse($request['invoice_date'],'Asia/Kolkata')->toDateString();
 				$length_side     = $request['length_side'];
 				$excess          = $request['excess'];
 				$teeth_no        = $request['teeth_no'];
@@ -1015,14 +1510,16 @@ class JobManagerController extends Controller
 				$axicon_verifier = $request['axicon_verifier'];
 				$approved_by     = $request['approved_by'];
 				$packer          = $request['packer'];
-				$approval_date   = Carbon::parse($request['approval_date'],'Asia/Kolkata')->toDateString();
+				$approval_date   = $request['approval_date'] == ''?NULL:Carbon::parse($request['approval_date'],'Asia/Kolkata')->toDateString();
 				$roll_issued_by  = $request['roll_issued_by'];
 				$cutter          = $request['cutter'];
 				$cartons         = $request['cartons'];
 				$final_json_obj  = $request['final_json_obj'];
 				$jobcard_id 	 = $request['jobcard_id'];
+				
+				$current_timestamp = Carbon::now('Asia/Kolkata')->toDateTimeString();
 
-				if(isset($company_id) && isset($workorder_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($repeat_gap) && isset($machine) && isset($cus_del_date) && isset($roll_width)  && isset($film_no) && isset($act_del_date) && isset($length_side) && isset($excess) && isset($teeth_no)  && isset($inv_no) && isset($no_sticker) && isset($finish_type)  && isset($print_color) && isset($compiled_by) && isset($barcode_read) && isset($operator) && isset($checker) && isset($authorized_by) && isset($axicon_verifier) && isset($approved_by) && isset($packer) && isset($approval_date) && isset($roll_issued_by)  && isset($cutter) && isset($cartons) && isset($final_json_obj) && isset($jobcard_id) )
+				if(isset($company_id) && isset($workorder_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($machine) && isset($cus_del_date)  && isset($finish_type)  && isset($compiled_by) && isset($final_json_obj) && isset($jobcard_id) && isset($material))
 				{
 					DB::table('jobcard_main_table')->where('id', $jobcard_id)
 					->update([
@@ -1045,7 +1542,7 @@ class JobManagerController extends Controller
 						'width'                  => $width,
 						'roll_width'             => $roll_width,
 						'film_no'                => $film_no,
-						'act_del_date'           => $act_del_date,
+						'invoice_date'           => $invoice_date,
 						'length_side'            => $length_side,
 						'excess_percentage'      => $excess,
 						'teeth_no'               => $teeth_no,
@@ -1066,7 +1563,7 @@ class JobManagerController extends Controller
 						'cutter'                 => $cutter,
 						'cartons'                => $cartons,
 						'template_quantity_json' => $final_json_obj,
-						'updated_at'             => Carbon::now('Asia/Kolkata')->toDateTimeString()
+						'updated_at'             => $current_timestamp
 					]);
 					
 					if (!empty($request['single_ref'])) 
@@ -1092,8 +1589,8 @@ class JobManagerController extends Controller
 								'actual_excess'           => $act_excess[$i],
 								'settings'                => $settings[$i],
 								'total_mtrs'              => $total_mtrs[$i],
-								'created_at'              => Carbon::now('Asia/Kolkata')->toDateTimeString(),
-								'updated_at'              => Carbon::now('Asia/Kolkata')->toDateTimeString()
+								'created_at'              => $current_timestamp,
+								'updated_at'              => $current_timestamp
 							]);
 							$i++;
 						}
@@ -1107,13 +1604,24 @@ class JobManagerController extends Controller
 						$total_mtrs 	 = explode(',', $request['total_mtrs']);
 					}
 
-					$buyer = DB::table('buyers')->select('buyer_name')->where('id', '=', $buyer_id)->first();
+					$buyer    = DB::table('buyers')->select('buyer_name')->where('id', '=', $buyer_id)->first();
 					$customer = DB::table('customers')->select('short_name as customer_name')->where('id', '=', $customer_id)->first();
-					$company = DB::table('company')->select('name as company', 'address as company_address', 'logo as company_logo')->where('id', '=', $company_id)->first();
+					$company  = DB::table('company')->select('name as company', 'address as company_address', 'logo as company_logo')->where('id', '=', $company_id)->first();
+
+					$erp_dispatch_mode = DB::table('erp_dispatch_mode')->where('id','=', $disp_mode)->value('disp_mode');
+					$erp_finish_type   = DB::table('erp_finish_type')->where('id','=', $finish_type)->value('finish_type');
+					$erp_machine       = DB::table('erp_machines')->where('id','=', $machine)->value('machine');
+					$erp_teeth_no      = DB::table('erp_teeth_no')->where('id','=', $teeth_no)->value('teeth_no');
 
 					/** [ Creating new object for JobcardPDFHeaderFooter() class ] */
+					$format_approval_date  = $approval_date == ''?NULL:Carbon::parse($approval_date)->format('d-m-Y');
+					$formated_inv_date     = $invoice_date == ''?NULL:Carbon::parse($invoice_date)->format('d-m-Y');
+					$formated_created_date = $created_date == ''?NULL:Carbon::parse($created_date)->format('d-m-Y');
+					$formated_order_date   = $order_date == ''?NULL:Carbon::parse($order_date)->format('d-m-Y');
+					$formated_cus_del_date = $cus_del_date == ''?NULL:Carbon::parse($cus_del_date)->format('d-m-Y');
+					
 					$pdf = new JobcardPDFHeaderFooter(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-					$pdf->setData($company, $workorder_id, Carbon::parse($created_date)->format('d-m-Y'), $article, $material, $compiled_by, $barcode_read, $operator, $checker, $authorized_by, $axicon_verifier, $approved_by, $packer, Carbon::parse($approval_date)->format('d-m-Y'), $roll_issued_by, $cutter, $cartons);	
+					$pdf->setData($company, $workorder_id, $formated_created_date, $article, $material, $compiled_by, $barcode_read, $operator, $checker, $authorized_by, $axicon_verifier, $approved_by, $packer, $format_approval_date, $roll_issued_by, $cutter, $cartons, $single_ref, $act_excess, $sticker_mtr, $settings, $total_mtrs);	
 
 					$pdf->SetPrintHeader(true);
 					$pdf->SetPrintFooter(true);  
@@ -1127,76 +1635,85 @@ class JobManagerController extends Controller
 					$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
 					$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 					
-					// set auto page breaks
-					$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+					// /** Handle Page break */
+					// if ($pdf->last_page_flag)
+					// {
+							// set auto page breaks
+							$pdf->SetAutoPageBreak(TRUE, 40);
+	
+					// }
+					// else 
+					// {
+					// 		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+					// }
 
 					// set image scale factor
 					$pdf->setImageScale(1.8);
 
 					// set font
-					$pdf->SetFont('helvetica', '', 10);
+					$pdf->SetFont('helvetica', '', 8);
 
 					// add a page
 					$pdf->AddPage('P', 'A4');
 
 					// set some text to print
 					$view = View::make('erp/Jobmanager/jobcard-pdf-template')
-							->with([
-									'buyer' 		 => $buyer,
-									'customer' 		 => $customer,
-									'company'		 => $company,
-									'workorder_id'   => $workorder_id,
-									'created_date'   => Carbon::parse($created_date)->format('d-m-Y'),
-									'article'	     => $article,
-									'material'		 => $material,
-									'style_no'		 => $style_no,
-									'order_type'     => $order_type,
-									'reference'		 => $reference,
-									'disp_mode'	     => $disp_mode,
-									'order_date'	 => Carbon::parse($order_date)->format('d-m-Y'),
-									'length'		 => $length,
-									'repeat_gap'	 => $repeat_gap,
-									'machine'		 => $machine,
-									'cus_del_date' 	 => Carbon::parse($cus_del_date)->format('d-m-Y'),
-									'roll_width'	 => $roll_width,
-									'width'	  		 => $width,
-									'film_no'		 => $film_no, 
-									'act_del_date'   => Carbon::parse($act_del_date)->format('d-m-Y'),
-									'length_side'	 => $length_side,
-									'excess'	     => $excess,
-									'teeth_no'		 => $teeth_no,
-									'inv_no'	     => $inv_no,
-									'no_sticker'	 => $no_sticker,
-									'finish_type'	 => $finish_type,
-									'print_color'    => $print_color,
-									'compiled_by'    => $compiled_by,
-									'barcode_read'   => $barcode_read,
-									'operator'       => $operator,
-									'checker'        => $checker,
-									'authorized_by'  => $authorized_by,
-									'axicon_verifier'=> $axicon_verifier,
-									'approved_by'	 => $approved_by,
-									'packer'		 => $packer,
-									'approval_date'  => Carbon::parse($approval_date)->format('d-m-Y'),
-									'roll_issued_by' => $roll_issued_by,
-									'cutter'		 => $cutter,
-									'cartons' 		 => $cartons,
-									'final_json_obj' => json_decode($final_json_obj, true),
-									'single_ref'	 => $single_ref,
-									'act_excess'	 => $act_excess,
-									'sticker_mtr'	 => $sticker_mtr,
-									'settings'		 => $settings,
-									'total_mtrs' 	 => $total_mtrs
-							]);
+								->with([
+										'buyer' 		     => $buyer,
+										'customer' 		   => $customer,
+										'company'		     => $company,
+										'workorder_id'   => $workorder_id,
+										'created_date'   => $formated_created_date,
+										'article'	       => $article,
+										'material'		   => $material,
+										'style_no'		   => $style_no,
+										'order_type'     => $order_type,
+										'reference'		   => $reference,
+										'disp_mode'	     => $erp_dispatch_mode,
+										'order_date'	   => $formated_order_date,
+										'length'		     => $length,
+										'repeat_gap'	   => $repeat_gap,
+										'machine'		     => $erp_machine,
+										'cus_del_date' 	 => $formated_cus_del_date,
+										'roll_width'	   => $roll_width,
+										'width'	  		   => $width,
+										'film_no'		     => $film_no, 
+										'invoice_date'   => $formated_inv_date,
+										'length_side'	   => $length_side,
+										'excess'	       => $excess,
+										'teeth_no'		   => $erp_teeth_no,
+										'inv_no'	       => $inv_no,
+										'no_sticker'	   => $no_sticker,
+										'finish_type'	   => $erp_finish_type,
+										'print_color'    => $print_color,
+										'compiled_by'    => $compiled_by,
+										'barcode_read'   => $barcode_read,
+										'operator'       => $operator,
+										'checker'        => $checker,
+										'authorized_by'  => $authorized_by,
+										'axicon_verifier'=> $axicon_verifier,
+										'approved_by'	   => $approved_by,
+										'packer'		     => $packer,
+										'approval_date'  => $format_approval_date,
+										'roll_issued_by' => $roll_issued_by,
+										'cutter'		     => $cutter,
+										'cartons' 		   => $cartons,
+										'final_json_obj' => json_decode($final_json_obj, true),
+										'single_ref'	   => $single_ref,
+										'act_excess'	   => $act_excess,
+										'sticker_mtr'	   => $sticker_mtr,
+										'settings'		   => $settings,
+										'total_mtrs' 	   => $total_mtrs
+								]);
 
 					//append content to header
-					$pdf->SetXY(15,49);
+					$pdf->SetXY(13.4,25.5);
 					$pdf->writeHTML($view->render());
 
 					//Close and output PDF document
 					ob_end_clean();
 					$file_path =  "/storage/app/public/jobcards/".$workorder_id."."."pdf";
-					
+
 					/** delete already existing file from folder */	
 					File::delete($file_path);
 					
@@ -1206,7 +1723,7 @@ class JobManagerController extends Controller
 					DB::table('jobcard_main_table')->where('id', $jobcard_id)
 					->update([
 						'file_path'   => $file_path,
-						'updated_at'  => Carbon::now('Asia/Kolkata')->toDateTimeString()
+						'updated_at'  => $current_timestamp
 					]);
 					return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path],200);	
 					
@@ -1220,6 +1737,160 @@ class JobManagerController extends Controller
 		{
 			return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
 		}
+	}
+	/**
+     * Function to update ordertype value for existing data in erp_order_details table.
+     * @author <Praveen>
+     */
+	public function scriptUpdateOrderType()
+	{
+		$order_details = DB::table('erp_order_details')->get();
+		
+		foreach($order_details as $value)
+		{
+			$order_details_data  = 	DB::table($value->order_qnty_table_name)
+									->where('id',$value->order_qnty_table_id)
+									->select('*')
+									->get();
+			
+			if($order_details_data)
+			{
+				$order_table = str_replace("_quanty","",$value->order_qnty_table_name);
+				$order_id    = strtolower(str_replace(" ","",$value->reference_name).'_order_id');
+				$order_data  = 	DB::table($order_table)
+										->where($order_table.'.id',$order_details_data{0}->$order_id)
+										->select($order_table.'.*')
+										->get();
+				$order_type = $order_data{0}->order_flag;
+			}
+			else
+			{
+				$order_type = 'newOrder';
+			}
+			DB::table('erp_order_details')
+							->where('erp_order_details.id', $value->id)
+							->update([
+								'order_type' => $order_type
+							]);
+		}
+	}
+
+
+	/**
+     * Function to get customers list by  buyer id.
+     * @author <Praveen>
+	 * @param  $buyer_id
+     * @return equivalent customer list
+     */  
+    public function getCustomersListByBuyerId(Request $request)
+    {
+        try {
+				$buyer_id = $request['selected_buyer_id'];
+
+				if(session()->get('company') == "" || session()->get('company') == null)
+				{
+					return view('erp.home');
+				}
+
+				if($buyer_id == null)
+				{
+					return response()->json(['error'=> true,'message' =>'Parameter Missing'], 400);
+				}
+				else
+				{
+					$customers_list  = 	DB::table('customers')
+										->join('jobcard_main_table', 'jobcard_main_table.customer_id', 'customers.id')
+										->where('jobcard_main_table.company_id', '=', session()->get('company'))
+										->where('jobcard_main_table.buyer_id', '=', $buyer_id)
+										->pluck('customers.company_name','customers.id')
+										->all();
+					return response()->json(['error'=> false,'message' =>'Success', 'customers_list' => $customers_list], 200);
+				}
+				    
+	
+			} catch (\Exctesteption $e) {
+				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+			}
+	}
+
+	/**
+     * Function to get jobcard id list by  buyer id and customer id.
+     * @author <Praveen>
+	 * @param  $buyer_id, $customer_id
+     * @return equivalent jobcard ids list
+     */  
+    public function getJobcardIdListByBuyerCustomerId(Request $request)
+    {
+        try {
+				$buyer_id    = $request['selected_buyer_id'];
+				$customer_id = $request['selected_customer_id'];
+
+				if(session()->get('company') == "" || session()->get('company') == null)
+				{
+					return view('erp.home');
+				}
+
+				if($buyer_id == null || $customer_id == null)
+				{
+					return response()->json(['error'=> true,'message' =>'Parameter Missing'], 400);
+				}
+				else
+				{
+					$jobcard_id_list  = DB::table('jobcard_main_table')
+											->where('jobcard_main_table.company_id', '=', session()->get('company'))
+											->where('jobcard_main_table.buyer_id', '=', $buyer_id)
+											->where('jobcard_main_table.customer_id', '=', $customer_id)
+											->pluck('jobcard_main_table.work_order_id','jobcard_main_table.id')
+											->all();
+					return response()->json(['error'=> false,'message' =>'Success', 'jobcard_id_list' => $jobcard_id_list], 200);
+				}
+				    
+	
+			} catch (\Exctesteption $e) {
+				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+			}
+	}
+
+	/**
+     * Function to get jobcards list by  buyer id, customer id and jobcard id.
+     * @author <Praveen>
+	 * @param  $buyer_id, $customer_id, $jobcard_id
+     * @return equivalent jobcard list
+     */  
+    public function getJobcardsListByBuyerCustomerJobcardId(Request $request)
+    {
+        try {
+				$buyer_id    = $request['selected_buyer_id'];
+				$customer_id = $request['selected_customer_id'];
+				$jobcard_id  = $request['selected_jobcard_id'];
+
+				if(session()->get('company') == "" || session()->get('company') == null)
+				{
+					return view('erp.home');
+				}
+
+				if($buyer_id == null || $customer_id == null || $jobcard_id == null)
+				{
+					return response()->json(['error'=> true,'message' =>'Parameter Missing'], 400);
+				}
+				else
+				{
+					$jobcards_list  = DB::table('jobcard_main_table')
+											->join('customers', 'jobcard_main_table.customer_id', 'customers.id')
+											->join('buyers', 'jobcard_main_table.buyer_id', 'buyers.id')
+											->where('jobcard_main_table.company_id', '=', session()->get('company'))
+											->where('jobcard_main_table.buyer_id', '=', $buyer_id)
+											->where('jobcard_main_table.customer_id', '=', $customer_id)
+											->where('jobcard_main_table.id', '=', $jobcard_id)
+											->select('jobcard_main_table.id as jobcard_id', 'jobcard_main_table.work_order_id', 'customers.company_name', 'buyers.buyer_name')
+											->first();
+					return response()->json(['error'=> false,'message' =>'Success', 'jobcards_list' => $jobcards_list], 200);
+				}
+				    
+	
+			} catch (\Exctesteption $e) {
+				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+			}
 	}
 	
 

@@ -28,8 +28,16 @@ class JobcardPDFHeaderFooter extends \TCPDF
     public $roll_issued_by;
     public $cutter;
     public $cartons;
+    public $single_ref;
+    public $act_excess;
+    public $sticker_mtr;
+    public $settings;
+    public $total_mtrs;
+    public $last_page_flag = false;
+
+
      
-    public function setData($company, $workorder_id, $created_date, $article, $material, $compiled_by, $barcode_read, $operator, $checker, $authorized_by, $axicon_verifier, $approved_by, $packer, $approval_date, $roll_issued_by, $cutter, $cartons){
+    public function setData($company, $workorder_id, $created_date, $article, $material, $compiled_by, $barcode_read, $operator, $checker, $authorized_by, $axicon_verifier, $approved_by, $packer, $approval_date, $roll_issued_by, $cutter, $cartons, $single_ref, $act_excess, $sticker_mtr, $settings, $total_mtrs){
         $this->company         = $company;
         $this->workorder_id    = $workorder_id;
         $this->created_date    = $created_date;
@@ -47,71 +55,76 @@ class JobcardPDFHeaderFooter extends \TCPDF
         $this->roll_issued_by  = $roll_issued_by;
         $this->cutter          = $cutter;
         $this->cartons         = $cartons;
+        $this->single_ref      = $single_ref;
+        $this->act_excess      = $act_excess;
+        $this->sticker_mtr     = $sticker_mtr;
+        $this->settings        = $settings;
+        $this->total_mtrs      = $total_mtrs;
+    }
+
+    /**
+     * Function to check last page , TCPDF method
+     *
+     * @return void
+     */
+    public function Close() {
+      $this->last_page_flag = true;
+      parent::Close();
     }
     /**
     * Overwrite Header() method.
     * @public
     */
     public function Header() {
-        $this->SetTopMargin(50);
+        $this->SetTopMargin(30);
         // Position at 5 mm from top
-        $this->SetY(5);
+        $this->SetY(10);
         // header logo image
         // $this->Image('logo path', x-coordinate, y-coordinate, width, height);
-        $this->Image('././././'.$this->company->company_logo, 160, 10, 35, 15);
+        //$this->Image('././././'.$this->company->company_logo, 160, 10, 35, 15);
         // Set font
-        $this->SetFont('helvetica', '', 10);
-        $header = '<table cellspacing="0" cellpadding="0" style="table-layout: fixed;width: 100%;border-collapse: collapse;font-size: 12px;">
+        $this->SetFont('helvetica', '', 8);
+        $header = '<table width="100%" cellspacing="0" cellpadding="5" border="0">
                         <tr nobr="true">
-                            <td width="200">
-                                <p><strong id="jc_company_name">'.$this->company->company.'</strong></p>
-                                <p id="company_address">'.$this->company->company_address.'</p>
+                            <td width="35%" style="border-top:1px solid #6f7072;border-left:1px solid #6f7072;border-bottom:1px solid #6f7072;font-size:18px;"><strong id="jc_company_name" >'.$this->company->company.'</strong>
+                                <span>'.$this->company->company_address.'</span>
+                            </td>
+                            <td width="5%" style="border-top:1px solid #6f7072;border-bottom:1px solid #6f7072;"></td>
+                            <td width="20%" style="border-top:1px solid #6f7072;border-bottom:1px solid #6f7072;">
+                              <strong bgcolor="#DCDCDC" style="letter-spacing:+0.254mm;text-align:center; align:top;font-size:22px;">WORKORDER</strong>
+                            </td>
+                            <td width="5%" style="border-top:1px solid #6f7072;border-bottom:1px solid #6f7072;"></td>
+                            <td width="35%" style="border-top:1px solid #6f7072;border-right:1px solid #6f7072;border-bottom:1px solid #6f7072;">
+                            <table cellspacing="0" cellpadding="0">
+                                <tbody>
+                                    <tr width="100%">
+                                        <th width="25%"><strong>WO No</strong></th>
+                                        <td width="5%"><strong>:</strong></td>
+                                        <td width="70%" id="work_order" style="text-align:left;font-weight: bold">'.$this->workorder_id.'</td>
+                                    </tr>
+                                    <tr  width="100%">
+                                        <th  width="25%"><strong>ARTICLE</strong></th>
+                                        <td  width="5%"><strong>:</strong></td>
+                                        <td width="70%" id="article" style="text-align:left;font-weight: bold">'.$this->article.'</td>
+                                    </tr>
+                                    <tr  width="100%">
+                                        <th  width="25%"><strong>DATE</strong></th>
+                                        <td  width="5%"><strong>:</strong></td>
+                                        <td width="70%" id="today_date" style="text-align:left;font-weight: bold">'.$this->created_date.'</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                             </td>
                         </tr>
                     </table>
                     <table>
                     <tr class="blank_row">
-                        <td rowsopan="1"></td>
+                        <td rowspan="1"></td>
                     </tr>
                 </table>';
         // Title
         $this->writeHTML($header, false, false, true, false, '');
-        $this->writeHTML("<hr>", false, false, true, false, '');
-        $header1 = '<table>
-                        <tr class="blank_row">
-                            <td rowsopan="1"></td>
-                        </tr>
-                    </table>
-                    <table cellspacing="0" cellpadding="2" style="table-layout: fixed;width: 100%;border-collapse: collapse;font-size: 12px;" nobr="true">
-                        <tr nobr="true">
-                            <td>
-                                <label for="work_order">WORKORDER :</label>
-                                <span id="work_order">'.$this->workorder_id.' (Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages().')</span>
-                            </td>
-                            <td style="text-align: right;">
-                                <label for="today_date">DATE :</label>
-                                <span id="today_date">'.$this->created_date.'</span>
-                            </td>
-                        </tr>
-                        <tr nobr="true">
-                            <td>
-                                <label for="article">ARTICLE :</label>
-                                <span id="article">'.$this->article.'</span>
-                            </td>
-                            <td style="text-align: right;">
-                                <label for="material">MATERIAL :</label>
-                                <span id="material">'.$this->material.'</span>
-                            </td>
-                        </tr>
-                    </table>
-                    <table>
-                    <tr class="blank_row">
-                        <td rowsopan="1"></td>
-                    </tr>
-                </table>';
-        // Title
-        $this->writeHTML($header1, false, false, true, false, '');
-        $this->writeHTML("<hr>", false, false, true, false, '');
+
     }
 
     /**
@@ -119,79 +132,119 @@ class JobcardPDFHeaderFooter extends \TCPDF
     * @public
     */
     public function Footer() {
-        // Position at 25 mm from bottom
-        $this->SetY(-25);
+
+        // check if single artwork is combined with ratio artwork
+        if (!empty(implode(',',$this->single_ref)))
+        {
+            // Position at 40 mm from bottom
+            $this->SetY(-40);
+        }
+        else 
+        {
+            // Position at 32 mm from bottom
+            $this->SetY(-32);
+        }
         // Set font
-        $this->SetFont('helvetica', '', 10);
-        $this->writeHTML("<hr>", false, false, true, false, '');
-        $header1 = '<table>
+        $this->SetFont('helvetica', '', 8);
+
+        if (!empty(implode(',',$this->single_ref)))
+        {
+            $footer = '<table cellspacing="0" cellpadding="2" style="table-layout: fixed;border-collapse: collapse;" nobr="true">';
+                            foreach ($this->single_ref as $key => $ref)
+                            {
+                                $footer .= '<tr nobr="true">
+                                    <td>
+                                        <label>ACT EXCESS % (<strong>'.$ref.'</strong>):</label>
+                                        <span>'.$this->act_excess[$key].'</span> 
+                                    </td>
+                                    <td>
+                                        <label>STKRS MTRS (<strong>'.$ref.'</strong>):</label>
+                                        <span>'.$this->sticker_mtr[$key].'</span> 
+                                    </td>
+                                    <td>
+                                        <label>SETTINGS (<strong>'.$ref.'</strong>) :</label>
+                                        <span>'.$this->settings[$key].'</span> 
+                                    </td>
+                                    <td>
+                                        <label>TOTAL MTRS (<strong>'.$ref.'</strong>):</label> 
+                                        <span>'.$this->total_mtrs[$key].'</span> 
+                                    </td>
+                                </tr>';
+                            }
+            $footer .= '</table>';
+        }
+        else
+        {
+            $footer = '<table cellpadding="0" cellspacing="2"></table>';
+        }
+        
+        $footer .= '<style>
+                    td {
+                        height: 12px;
+                        text-align: left !important;
+                    }
+
+                    th {
+                        height: 12px;
+                        text-align: left !important;
+                        background-color: #DCDCDC;
+                    }
+                    </style>
+                    <table>
                         <tr class="blank_row">
-                            <td rowsopan="1"></td>
+                            <td rowspan="1"></td>
                         </tr>
                     </table>
-                    <table cellspacing="0" cellpadding="2" style="table-layout: fixed;width: 100%;border-collapse: collapse;font-size: 12px;" nobr="true">
+                    <table cellspacing="0" cellpadding="3" style="table-layout: fixed;width: 100%;border-collapse: collapse;" nobr="true">
                             <tr nobr="true">
-                                <td >
-                                    <label for="compiled_by">COMPILED BY :</label>
-                                    <span id="compiled_by">'.$this->compiled_by.'</span> 
-                                </td>
-                                <td >
-                                    <label for="barcode_read">BARCODE READ :</label>
-                                    <span id="barcode_read">'.$this->barcode_read.'</span> 
-                                </td>
-                                <td >
-                                    <label for="operator">OPERATOR :</label>
-                                    <span id="operator">'.$this->operator.'</span>
-                                </td>
-                                <td >
-                                    <label for="checker">CHECKER :</label>
-                                    <span id="checker">'.$this->checker.'</span>
-                                </td>
+                                <th style="border:1px solid #6f7072;" width="11.5%"><strong>CompiledBy</strong></th>
+                                <td  id="customer" style="border:1px solid #6f7072;" width="21.7%">'.$this->compiled_by.'</td>
+                                <th style="border:1px solid #6f7072;" width="11.5%"><strong>BarcodeRead</strong></th>
+                                <td id="style_no" style="border:1px solid #6f7072;" width="21.7%">'.$this->barcode_read.'</td>
+                                <th style="border:1px solid #6f7072;" width="11.5%"><strong>Operator</strong></th>
+                                <td  id="order_type" style="border:1px solid #6f7072;" width="21.7%">'.$this->operator.'</td>
                             </tr>
                             <tr nobr="true">
-                                <td >
-                                    <label for="author">AUTHORIZED BY :</label>
-                                    <span id="author">'.$this->authorized_by.'</span>
-                                </td>
-                                <td >
-                                    <label for="axicon_verifier">AXICON VERIFIER :</label>
-                                    <span id="axicon_verifier">'.$this->axicon_verifier.'</span>
-                                </td>
-                                <td >
-                                    <label for="approved_by">APPROVED BY :</label>
-                                    <span id="approved_by">'.$this->approved_by.'</span>
-                                </td>
-                                <td >
-                                    <label for="packer">PACKER :</label>
-                                    <span id="packer">'.$this->packer.'</span>
-                                </td>
+                                <th  style="border:1px solid #6f7072;" width="11.5%"><strong>Checker</strong></th>
+                                <td  style="border:1px solid #6f7072;" width="21.7%">'.$this->checker.'</td>
+                                <th style="border:1px solid #6f7072;" width="11.5%"><strong>AuthorizedBy</strong></th>
+                                <td style="border:1px solid #6f7072;" width="21.7%">'.$this->authorized_by.'</td>
+                                <th style="border:1px solid #6f7072;" width="11.5%"><strong>AxiconVerifier</strong></th>
+                                <td style="border:1px solid #6f7072;" width="21.7%">'.$this->axicon_verifier.'</td>
                             </tr>
                             <tr nobr="true">
-                                <td >
-                                    <label for="approval_date">APPROVAL DT :</label>
-                                    <span id="approval_date">'.$this->approval_date.'</span>
-                                </td>
-                                <td >
-                                    <label for="roll_issued_by">ROLL ISSUED BY :</label>
-                                    <span id="roll_issued_by">'.$this->roll_issued_by.'</span>
-                                </td>
-                                <td >
-                                    <label for="cutter">CUTTER :</label>
-                                    <span id="cutter">'.$this->cutter.'</span>
-                                </td>
-                                <td >
-                                    <label for="cartons">CARTONS :</label>
-                                    <span id="cartons">'.$this->cartons.'</span>
-                                </td>
+                                <th style="border:1px solid #6f7072;" width="11.5%"><strong>ApprovedBy</strong></th>
+                                <td style="border:1px solid #6f7072;" width="21.7%">'.$this->approved_by.'</td>
+                                <th style="border:1px solid #6f7072;" width="11.5%"><strong>Packer</strong></th>
+                                <td style="border:1px solid #6f7072;" width="21.7%">'.$this->packer.'</td>
+                                <th  style="border:1px solid #6f7072;" width="11.5%"><strong>ApprovalDt</strong></th>
+                                <td  style="border:1px solid #6f7072;" width="21.7%">'.$this->approval_date.'</td>
+                            </tr>
+                            <tr nobr="true">
+                                <th  style="border:1px solid #6f7072;" width="11.5%"><strong>RollIssuedBy</strong></th>
+                                <td  style="border:1px solid #6f7072;" width="21.7%">'.$this->roll_issued_by.'</td>
+                                <th style="border:1px solid #6f7072;" width="11.5%"><strong>Cutter</strong></th>
+                                <td style="border:1px solid #6f7072;" width="21.7%">'.$this->cutter.'</td>
+                                <th style="border:1px solid #6f7072;" width="11.5%"><strong>Cartons</strong></th>
+                                <td style="border:1px solid #6f7072;" width="21.7%" >'.$this->cartons.'</td>
                             </tr>
                 </table>
                 <table>
                     <tr class="blank_row">
-                        <td rowsopan="1"></td>
+                        <td rowspan="1"></td>
                     </tr>
                 </table>';
-        // Title
-        $this->writeHTML($header1, false, false, true, false, '');
+        /** Add footer in last page */
+        if ($this->last_page_flag)
+        {
+            $this->writeHTML($footer, false, false, true, false, '');
+            $this->Cell(0, 0, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+
+        }
+        else 
+        {
+            $this->Cell(0, 70, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+        }
     }
-	
+    
 }

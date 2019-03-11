@@ -498,7 +498,13 @@ function tescoOrders(callback) {
                             //invoke uploadPurchaseOrder method with the form data.
                             //If not, go with manual upload by invoking createOrders() method.
                             if($('input[type="radio"].order_type:checked').val() == 1) {
-                                var formData = new FormData($(this)[0]);
+                                var formData = new FormData();
+                                var purchase_order = $('#po_upload').prop('files')[0];
+                                var ce_orms_purchase_order = $('#ce_orms').prop('files')[0];
+                                var ce_retek_purchase_order = $('#ce_retek').prop('files')[0];
+                                formData.append('purchase_order', purchase_order);
+                                formData.append('ce_orms_purchase_order', ce_orms_purchase_order);
+                                formData.append('ce_retek_purchase_order', ce_retek_purchase_order);
                                 formData.append('type', localStorage.getItem("template type"));
                                 formData.append('zone', localStorage.getItem("zone"));
                                 formData.append('template_name', localStorage.getItem("template_group"));
@@ -755,7 +761,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                     <th rowspan="2">Line No.</th>\
                                                     <th rowspan="2">TPND</th>\
                                                     <th rowspan="2">ITF Barcode</th>\
-                                                    <th rowspan="2">Units per carton</th>';
+                                                    <th rowspan="2">Units Per Carton</th>';
                              $.each(data.templates, function(i, item){
                                html += '<th colspan="1">'+item.template_name+'</th>';
                              });
@@ -910,7 +916,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                         <th rowspan="2">Line No.</th>\
                                                         <th rowspan="2">ORMS TPN</th>\
                                                         <th rowspan="2">ITF Barcode</th>\
-                                                        <th rowspan="2">Cases per carton</th>';
+                                                        <th rowspan="2">Cases Per Carton</th>';
                              $.each(data.templates, function(i, item){
                                html += '<th colspan="1">'+item.template_name+'</th>';
                              });
@@ -2027,14 +2033,15 @@ try{
  */
 function  uploadPurchaseOrder(formData, zone) {
     try {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
+        // $.ajaxSetup({
+        //     headers: {
+        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //     }
+        // });
          $.ajax({
                  url: base_url + "/customer/tesco/po-upload",
                  type: 'POST',
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                  data: formData,
                  dataType:'JSON',
                  async: true,
@@ -4848,6 +4855,10 @@ try{
     var delivery_date_req = data.delivery_date_required;
     var last_insertions_length = Object.keys(data.last_insertions).length;
 
+    // Handle po upload modal button issue after page reloading
+	$('.po-submit-btn').text('Save');
+	$('.po-submit-btn').attr('data-dismiss', '')
+	$('.upload-later').show();
     /** Show snackbar if order placed **/
     if (last_insertions_length > 0) {
         /** Make form as readonly */
@@ -6669,7 +6680,7 @@ function mapStoredValues(oDetails) {
                 moq = i[temp_name];
             })
             $('.count_' + item.template_name.replace(' ', '') ).attr("min",moq); 
-            $('.count_' + item.template_name.replace(' ', '') ).data("min-error","Min Order Qnty should be >= "+moq); 
+            $('.count_' + item.template_name.replace(' ', '') ).data("min-error","Quantity Should be >= "+moq); 
         }
     });
                
@@ -7003,7 +7014,7 @@ function checkMOQ(obj) {
                 moq = i[temp_name];
             })
             $(obj).attr("min",moq); 
-            $(obj).data("min-error","Min Order Qnty should be >= "+moq); 
+            $(obj).data("min-error","Quantity Should be >= "+moq); 
         }
     } catch (e) {
         /** [error statements] */

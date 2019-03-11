@@ -292,7 +292,8 @@ transform: scale(1);
 @section('navbar')
 
 <ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
-	<li><a href="#" class="active">Po Verify</a></li>
+	<li><a href="" class="active">Po Verify</a></li>
+	<li><a href="{{ route('po-orders-list') }}">Orders List</a></li>
 </ul>
 
 @endsection @section('content')
@@ -314,10 +315,11 @@ transform: scale(1);
 					<tr>
 						<th>Sl. No</th>
 						<th>ERP ID</th>
-						<th>Customer name</th>
+						<th>Customer Name</th>
 						<th>PO Number</th>
 						<th>Partial</th>
 						<th>Status</th>
+						<th>Created date</th>
 						<th>Actions</th>
 					</tr>
 				</thead>
@@ -335,6 +337,7 @@ transform: scale(1);
 						@else
 						<td><span class="label label-info">{{$vals->status_name}}</span></td>
 						@endif
+						<td>{{$vals->po_created_date}}</td>
 						<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick="view_order_details('{{ $vals->id }}','{{ $vals->po_no }}','{{ $vals->buyer_id }}','{{ $vals->customer_id }}','{{ $vals->po_file }}')"><i class="fa fa-eye action-button-view"  title="" data-original-title="view Details"></i></a></td>
 					</tr>
 					@endforeach
@@ -360,7 +363,7 @@ transform: scale(1);
 				@foreach($companies as $company)
 				<a class="buyer-card-link" style="cursor: pointer;">
                          <div class="card buyers-card elevation-2dp active-buyer" data-name ="{{$company->name}}"  data-value ="{{$company->company}}" id="{{ strtolower( str_replace(' ','',$company->name)) }}">
-                          {{ $company->name }}
+                          <img src="{{$company->logo}}" class="img-fluid" alt="Responsive image" height="120" class="img-fluid float-none">
                          </div>
                      </a> @endforeach
 			</div>
@@ -440,7 +443,7 @@ transform: scale(1);
 						</div>
 
 						<div class="row">
-						<div class="col-md-4 first-padding">Refernce Number</div>
+						<div class="col-md-4 first-padding">Reference Number</div>
 						<div class="col-md-4 text-center"><input type="radio" name='ref-number-radio'  value="ok"></div>
 						<div class="col-md-4 text-center"><input type="radio" name='ref-number-radio'  value="not-ok"></div>
 						</div>
@@ -475,7 +478,7 @@ transform: scale(1);
 			<div class="modal-footer buyer-selection-modal-footer">
 				
 				{!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-				<button class="btn btn-primary btn-submit btn-sm" onclick="submit()">Submit</button>
+				<button class="btn btn-primary btn-submit btn-sm" onclick="submit()" type="button" id="submit_button">Submit</button>
 				<a href="" download onclick="change_po_updated_status()" class="po_file btn btn-default pull-left"><i class="fa fa-download" title="" data-original-title="Download Pdf"></i> Download Pdf</a>
 			</div>
 
@@ -483,13 +486,13 @@ transform: scale(1);
 	</div>
 </div>
 
-<div class="zoom">
+<div class="zoom hidden">
 <a class="zoom-fab zoom-btn-large" id="zoomBtn"><i class="fa fa-bars"></i></a>
 <ul class="zoom-menu">
-<li data-toggle="tooltip" data-placement="bottom" title="Hold order: {{$hold_orders}}" class="zoom-fab zoom-btn-sm zoom-btn-report scale-transition scale-out">
+<li data-toggle="tooltip" data-placement="bottom" title="Hold Order: {{$hold_orders}}" class="zoom-fab zoom-btn-sm zoom-btn-report scale-transition scale-out">
 <i class="fa fa-edit"></i>
 </li>
-<li data-toggle="tooltip" data-placement="bottom" title="New order: {{$new_orders}}" class="zoom-fab zoom-btn-sm zoom-btn-report scale-transition scale-out">
+<li data-toggle="tooltip" data-placement="bottom" title="New Order: {{$new_orders}}" class="zoom-fab zoom-btn-sm zoom-btn-report scale-transition scale-out">
 <i class="fa fa-bell"></i>
 </li>
 </ul>
@@ -531,10 +534,12 @@ transform: scale(1);
 					company_name: company_name
 				},
 				beforeSend: function() {
-					location.reload();
+					
 
 				},
-				success: function(data) {},
+				success: function(data) {
+					location.reload();
+				},
 				error: function(data) {
 
 				},
@@ -746,6 +751,7 @@ transform: scale(1);
 
 			},
 			success: function(data) {
+				$('#submit_button').prop("disabled", true);
 				$('#order-details-table tbody').html("");
 
 				var i = 1;
@@ -810,6 +816,13 @@ transform: scale(1);
 		$('.btn-submit').prop("disabled", false);
 	}
 
+	$('input[type="radio"]').click(function(){
+		if ($('input[type=radio]:checked').length == 6)
+		{
+		 	$('#submit_button').prop("disabled", false);
+		}
+	});
+	
 	function change_po_updated_status() {
 		var id = $('#erp_order_id').val()
 		$('.new-po-upload').addClass('hidden')

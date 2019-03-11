@@ -9,7 +9,7 @@
               <div class="main-sub-menu">
                 <div class="action-group pull-right sub-menu-button">
                   <a href="#" data-target="#addBuyerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                    <i class="ion-plus"></i> Add Buyer</a>
+                    <i class="fa fa-plus"></i> Add Buyer</a>
                 </div>
               </div>
           <div class="clearfix"></div>
@@ -83,7 +83,7 @@
                       <div id="buyer_result"></div>
                         <div class="form-group has-feedback">
                           {!! Form::label('buyer_name', 'Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('buyer_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required','data-minlength' => '3','maxlength' => '40')) !!}
+                          {!! Form::text('buyer_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required','data-minlength' => '3','maxlength' => '40', 'style' => 'text-transform: capitalize;')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
@@ -104,7 +104,7 @@
                         </div>
                         <div class="form-group has-feedback">
                           {!! Form::label('buyer_address', 'Address', ['class' => 'form_label']) !!}
-                          {!! Form::textarea('buyer_address',$value = '', array('class' => 'form-control ','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3,'onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
+                          {!! Form::textarea('buyer_address',$value = '', array('class' => 'form-control ','placeholder' => 'Address','required','style'=>'resize:none; text-transform: capitalize;','rows'=>3)) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                          <div class="form-group has-feedback">
@@ -137,7 +137,7 @@
                      {!! Form::hidden('buyer_edit_id',$value = null, array('id'=>'buyer_edit_id','class' => 'form-control input-sm')) !!}
                        <div class="form-group has-feedback">
                          {!! Form::label('edit_buyer_name', 'Name', ['class' => 'form_label']) !!}
-                         {!! Form::text('edit_buyer_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required','data-minlength' => '3','maxlength' => '40')) !!}
+                         {!! Form::text('edit_buyer_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required','data-minlength' => '3','maxlength' => '40', 'style' => 'text-transform: capitalize;')) !!}
                          <div class="help-block with-errors"></div>
                        </div>
                        <div class="form-group has-feedback">
@@ -158,7 +158,7 @@
                        </div>
                        <div class="form-group has-feedback">
                          {!! Form::label('edit_buyer_address', 'Address', ['class' => 'form_label']) !!}
-                         {!! Form::textarea('edit_buyer_address',$value = '', array('class' => 'form-control','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3,'onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
+                         {!! Form::textarea('edit_buyer_address',$value = '', array('class' => 'form-control','placeholder' => 'Address','required','style'=>'resize:none; text-transform: capitalize;','rows'=>3)) !!}
                          <div class="help-block with-errors"></div>
                        </div>
                        <div class="form-group has-feedback">

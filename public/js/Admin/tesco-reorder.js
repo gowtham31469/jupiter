@@ -298,7 +298,7 @@ function extraQuantityTesco(type,id,name,zone,po_number,liid)
 			
 			if((name == "TCL1" && zone=="CE") ||(name == "TCL2" && zone=="CE") || (name == "TSL1" && zone=="CE") || (name == "THL1" && zone=="CE"))
 			{
-				var qty="Cases per carton";
+				var qty="Cases Per Carton";
 				var barcode_tr="ITF Barcode";
 				var tpnd_tr="ORMS TPND";
 				var th_tr="";
@@ -319,7 +319,7 @@ function extraQuantityTesco(type,id,name,zone,po_number,liid)
 			}
 			else if((name == "TCL1" && zone=="UK") ||(name == "TCL2" && zone=="UK") || (name == "TSL1" && zone=="UK") || (name == "THL1" && zone=="UK"))
 			{
-				var qty="Units per carton";
+				var qty="Units Per Carton";
 				var barcode_tr="ITF Barcode";
 				var tpnd_tr="TPND";
 				var th_tr="";
@@ -356,8 +356,17 @@ function extraQuantityTesco(type,id,name,zone,po_number,liid)
 						var tpnd_td=index.tpnd;
 						var th_td="";
 					}
+				
+				if(data.moq.length > 0)
+				{
+					var moq = data.moq[0].moq;
+				}
+				else
+				{
+					var moq = 1;
+				}
 
-				 tr += '<tr><td class="tpnd">' + tpnd_td + '</td><td class="barcode">' + barcode_td + '</td><td class="size">' + unit_qty + '</td>'+th_td+'<td> <div class="form-group has-feedback has-success"><input min="'+data.moq[0].moq+'" onInput="checkLength(4,this)" type="number" class="form-control  input-sm tot_qty_table" value="" required placeholder="Quantity" data-min-error="Min Order Qnty should be >= '+data.moq[0].moq+'."><div class="help-block with-errors"></div></div></td></tr>';
+				 tr += '<tr><td class="tpnd">' + tpnd_td + '</td><td class="barcode">' + barcode_td + '</td><td class="size">' + unit_qty + '</td>'+th_td+'<td> <div class="form-group has-feedback has-success"><input min="'+moq+'" onInput="checkLength(4,this)" type="number" class="form-control  input-sm tot_qty_table" value="" required placeholder="Quantity" data-min-error="Quantity Should be >= '+moq+'."><div class="help-block with-errors"></div></div></td></tr>';
 			});
 			$('.quantity').html('<form id="qty_table"><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px"> <thead> <tr> <th>'+tpnd_tr+'</th><th>'+barcode_tr+'</th> <th>'+qty+'</th> '+th_tr+'<th>Quantity</th> </tr></thead> <tbody style="font-size: 11px">'+tr+'</tbody></table><div class="po_div"></div><button style="margin-left: 10px;" class="btn btn-primary submitbutton pull-right">Submit</button><button type="button" class="btn btn-danger remove pull-right">Close</button><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></form>')
 			

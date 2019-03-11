@@ -32,6 +32,7 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
             /** [Show response status based on HTTP status code] */
             200: function(data)
             {
+       
                if ((jQuery.isEmptyObject(data.data.company_details)) || (jQuery.isEmptyObject(data.data.bank_details)) || (jQuery.isEmptyObject(data.data.ship_to)) || (jQuery.isEmptyObject(data.data.bill_to)))
                {
                     $('.snackbar_span').html("Customer Profile isn't complete");
@@ -52,10 +53,10 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
                       $('.rev').addClass('hidden')
                     }
 
-                    $('#company_details').html('<strong style="font-size:11px;">'+data.data.company_details.name+'</strong><br/>'+data.data.company_details.address+'<br/>PH : '+data.data.company_details.office_phone+', '+data.data.company_details.phone+'<br/>GST : '+data.data.company_details.gstin)
-                    $('#bill_to').html('<h4>Billing Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.bill_to.address+'</br> GSTN :'+data.data.bank_details.gstin_number+ '</p>')
+                    $('#company_details').html('<strong style="font-size:11px;">'+data.data.company_details.name+'</strong><br/>'+data.data.company_details.address+'<br/>PH : '+data.data.company_details.office_phone+', '+data.data.company_details.phone+'<br/>GSTIN : '+data.data.company_details.gstin)
+                    $('#bill_to').html('<h4>Billing Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.bill_to.address+'</br> GSTIN :'+data.data.bank_details.gstin_number+ '</p>')
                     $('#ship_to').html('<h4>Shipping Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.ship_to.address+'</p>')
-                    $('#bank_details').html(' <strong>BANK DETAILS: </strong><table class="table table-condensed" style="width:50%;"><tr><td>Bank</td><td>'+data.data.company_details.bank+'</td></tr><tr><td>A/C No</td><td>'+data.data.company_details.account_no+'</td></tr><tr><td>A/C NAME</td><td>'+data.data.company_details.account_holder+'</td></tr><tr><td>IFSC CODE</td><td>'+data.data.company_details.ifsc_code+'</td></tr></table>')
+                    $('#bank_details').html(' <strong>BANK DETAILS: </strong><table class="table table-condensed" style="width:50%;"><tr><td>BANK</td><td>'+data.data.company_details.bank+'</td></tr><tr><td>A/C No</td><td>'+data.data.company_details.account_no+'</td></tr><tr><td>A/C NAME</td><td>'+data.data.company_details.account_holder+'</td></tr><tr><td>IFSC CODE</td><td>'+data.data.company_details.ifsc_code+'</td></tr></table>')
                
                
                     var i = 0;
@@ -110,11 +111,11 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
                             if (data.data.bank_details.template_type == "single")
                             {
                                 size = value.size ;
-                                tr += '<tr><td>'+ ++i +'</td><td>'+value.style+'</td><td>'+value.po_no+'</td><td>'+value.ref_no+'</td><td>'+size+'</td><td>'+value.quantity+'</td><td>'+unit_price+'</td><td>'+tax+'</td><td>'+amnt.toFixed(2)+'</td></tr>'
+                                tr += '<tr><td>'+ ++i +'</td><td>'+value.style+'</td><td>'+value.po_no+'</td><td>'+value.ref_no+'</td><td>'+size+'</td><td>'+value.quantity+'</td><td>'+unit_price+'</td><td>'+tax+'</td><td style="text-align: right;">'+amnt.toFixed(2)+'</td></tr>'
                             }
                             else
                             {
-                                tr += '<tr><td>'+ ++i +'</td><td>'+value.style+'</td><td>'+value.po_no+'</td><td>'+value.ref_no+'</td><td>'+value.quantity+'</td><td>'+unit_price+'</td><td>'+tax+'</td><td>'+amnt.toFixed(2)+'</td></tr>'
+                                tr += '<tr><td>'+ ++i +'</td><td>'+value.style+'</td><td>'+value.po_no+'</td><td>'+value.ref_no+'</td><td>'+value.quantity+'</td><td>'+unit_price+'</td><td>'+tax+'</td><td style="text-align: right;">'+amnt.toFixed(2)+'</td></tr>'
                             }
                             
                             totaltax+=parseInt(tax);

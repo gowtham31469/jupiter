@@ -19,6 +19,7 @@ use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Config;
 use App\Classes\TescoOrders;
+use App\Classes\PiTCPDF;
 use Carbon\Carbon;
 
 class OrderStatusCntrl extends Controller
@@ -240,6 +241,7 @@ class OrderStatusCntrl extends Controller
             // {
                 $data      = $pi_obj->getTescoPIDetails($request);
             // }
+            
             $result    = response()->json(['error'=> false,'message' =>'success','data'=>$data],200);
         }
         catch (\Exception $e)
@@ -251,7 +253,7 @@ class OrderStatusCntrl extends Controller
     /**
      * method to approve the profoma invoice
      * @param  Request $request [description]
-     * @return [type]           [description]
+     * @return \Illuminate\Http\Response
      */
     public function approveTescoPI(Request $request)
     {
@@ -693,6 +695,11 @@ class OrderStatusCntrl extends Controller
         return $result;
     }
 
+    /**
+     * method to get the po file
+     * @param  table name & ID
+     * @return [po file]
+     */
     public function getPOFile(Request $request)
     {
         try 
@@ -859,7 +866,7 @@ class OrderStatusCntrl extends Controller
         $order_qnty = (array_sum($count)>0)?0:1 ;
         
         if ($temp_data->order_flag == "newOrder" && $template_name != "THL3" && $template_name != "THL1") {
-           $orderObj->updateTescoAdminOrders($table_name,$temp_data,$request,$customer_ids{0}->customer_id);
+            $orderObj->updateTescoAdminOrders($table_name,$temp_data,$request,$customer_ids{0}->customer_id);
         }
 		DB::table($table_name)->where('id',$template_id)
 						      ->update([
@@ -934,10 +941,7 @@ class OrderStatusCntrl extends Controller
 			}
 			$i++;
 		}
-		
-		
-		echo $customer_name{0}->company_name;	
-			  
+		echo $customer_name{0}->company_name;		  
     }
 	
 	/**
@@ -992,11 +996,11 @@ class OrderStatusCntrl extends Controller
 		
 		if($zone == "CE")
 		{
-			$template_exists=DB::table($table_name)->where('po_number',$po_number)->where('ce_style_ref',$ce_style)->where('order_flag','!=','reOrder')->where('id','!=',$template_id)->select('*')->get();
+			$template_exists=DB::table($table_name)->where('po_number',$po_number)->where('ce_style_ref',$ce_style)->whereNotIn('order_flag',['reOrder','newOrder'])->where('id','!=',$template_id)->select('*')->get();
 		}
 		else
 		{
-			$template_exists=DB::table($table_name)->where('po_number',$po_number)->where('uk_style_ref',$uk_style)->where('order_flag','!=','reOrder')->where('id','!=',$template_id)->select('*')->get();
+			$template_exists=DB::table($table_name)->where('po_number',$po_number)->where('uk_style_ref',$uk_style)->whereNotIn('order_flag',['reOrder','newOrder'])->where('id','!=',$template_id)->select('*')->get();
 		}
 		
 		if(count($template_exists) > 0) 

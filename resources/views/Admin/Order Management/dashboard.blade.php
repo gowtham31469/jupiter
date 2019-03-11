@@ -103,27 +103,27 @@
 		</div>
 		<div class="col-md-4">
 			<div class="card">
-				<h4>New orders</h4>
+				<h4>New Orders</h4>
 				<span class="numbers new_order_count"><?php echo $new_orders; ?></span><i onclick="new_orders_modal()" class="fa fa-arrow-right" aria-hidden="true" style="cursor:pointer;float: right;margin-top: 50px;color: #717171;font-size: 18px;"></i>
 			</div>
 		</div>
 		<div class="col-md-4">
 			<div class="card">
-				<h4>Approved orders</h4>
+				<h4>Approved Orders</h4>
 				<span class="numbers app_pipo_count"><?php echo $approved_orders; ?></span>
 				
 				<div class="dropdown">
 					<i style="cursor: pointer;float: right; color: #717171;font-size: 18px;"class="fa fa-arrow-right dropdown-toggle" data-toggle="dropdown" aria-hidden="true"></i>
 					  <ul class="dropdown-menu pull-right" style="margin-top: 21px;right: 10px;">
-						<li><a href="#"  onclick="aowp_modal()">Approved orders without PI/PO</a></li>
-						<li><a href="#"  onclick="app_orders_modal()">Approved orders</a></li>
+						<li><a href="#"  onclick="aowp_modal()">Approved Orders Without PI/PO</a></li>
+						<li><a href="#"  onclick="app_orders_modal()">Approved Orders</a></li>
 					  </ul>
 					</div>
 			</div>
 		</div>
 		<div class="col-md-4">
 			<div class="card">
-				<h4>Pending orders</h4>
+				<h4>Pending Orders</h4>
 				<span class="numbers pen_order_count"><?php echo $pending_orders; ?></span><i onclick="pen_orders_modal()" class="fa fa-arrow-right" aria-hidden="true" style="cursor:pointer;float: right;margin-top: 50px;color: #717171;font-size: 18px;"></i>
 			</div>
 		</div>
@@ -333,7 +333,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="myModalLabel">Approved orders without PI/PO
+					<h4 class="modal-title" id="myModalLabel">Approved Orders Without PI/PO
 </h4>
 				</div>
 				<form id="frm-example-aowp" action="#" method="POST">
@@ -349,7 +349,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="myModalLabel">Approved orders</h4>
+					<h4 class="modal-title" id="myModalLabel">Approved Orders</h4>
 				</div>
 				<form id="frm-example-app" action="#" method="POST">
 				<div class="modal-body">
@@ -364,7 +364,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="myModalLabel">Pending orders</h4>
+					<h4 class="modal-title" id="myModalLabel">Pending Orders</h4>
 				</div>
 				<form id="frm-example-pen" action="#" method="POST">
 				<div class="modal-body">

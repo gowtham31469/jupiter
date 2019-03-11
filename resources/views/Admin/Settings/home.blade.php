@@ -1140,14 +1140,14 @@
                       <div class="col-md-6">
                         <div class="form-group has-feedback">
                           {!! Form::label('cm', 'Centimeters', ['class' => 'form_label']) !!}
-                          {!! Form::text('cm',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Centimeters','required','onkeypress' => 'return isNumberKey(event)')) !!}
+                          {!! Form::text('cm',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Centimeters','required','onkeypress' => 'return isNumber(event)')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group has-feedback">
                           {!! Form::label('inch', 'Inches', ['class' => 'form_label']) !!}
-                          {!! Form::text('inch',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Inches','required','onkeypress' => 'return isNumberKey(event)')) !!}
+                          {!! Form::text('inch',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Inches','required','onkeypress' => 'return isNumber(event)')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                       </div>
@@ -1184,14 +1184,14 @@
                       <div class="col-md-6">
                         <div class="form-group has-feedback">
                           {!! Form::label('edit_cm', 'Centimeters', ['class' => 'form_label']) !!}
-                          {!! Form::text('edit_cm',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Centimeters','required','onkeypress' => 'return isNumberKey(event)')) !!}
+                          {!! Form::text('edit_cm',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Centimeters','required','onkeypress' => 'return isNumber(event)')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group has-feedback">
                           {!! Form::label('edit_inch', 'Inches', ['class' => 'form_label']) !!}
-                          {!! Form::text('edit_inch',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Inches','required','onkeypress' => 'return isNumberKey(event)')) !!}
+                          {!! Form::text('edit_inch',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Inches','required','onkeypress' => 'return isNumber(event)')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                       </div>
@@ -1481,7 +1481,7 @@
                         </div>
                         <div class="form-group has-feedback">
                           {!! Form::label('supplier_code', 'Customer Code', ['class' => 'form_label']) !!}
-                          {!! Form::text('supplier_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Customer Code','required','onkeypress' => 'return isNumberKey(event)', 'maxlength' => '15')) !!}
+                          {!! Form::text('supplier_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Customer Code','required','onkeypress' => 'return isNumber(event)', 'maxlength' => '15')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -1619,7 +1619,7 @@
                         </div>
                         <div class="form-group has-feedback">
                           {!! Form::label('tax', 'Tax (%)', ['class' => 'form_label']) !!}
-                          {!! Form::text('tax',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tax In %','required','onkeypress' => 'return isNumberKey(event)')) !!}
+                          {!! Form::text('tax',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tax In %','required','onkeypress' => 'return isNumber(event)')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
@@ -1656,7 +1656,7 @@
                         </div>
                         <div class="form-group has-feedback">
                           {!! Form::label('edit_tax', 'Tax (%)', ['class' => 'form_label']) !!}
-                          {!! Form::text('edit_tax',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tax In %','required','onkeypress' => 'return isNumberKey(event)')) !!}
+                          {!! Form::text('edit_tax',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tax In %','required','onkeypress' => 'return isNumber(event)')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">

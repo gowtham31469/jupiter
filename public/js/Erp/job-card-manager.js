@@ -3,8 +3,7 @@
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
-var csrf_token = $('meta[name="csrf-token"]').attr('content');
-var base_url = "<?php echo  url('/') ?>";
+
 $(document).ready(function() {
 	$('input[class="row-checkbox"]').prop('checked', false);
 
@@ -12,7 +11,12 @@ $(document).ready(function() {
 
 	/** To refresh modal while hidden **/
 	$('.modal').on('hidden.bs.modal', function (e) {
- 	  $('#create_jobcard').trigger("reset");
+        $('#create_jobcard').trigger("reset");
+        /** [ Refresh  bootstrap selectpicker ] */
+        $('#finish_type').selectpicker('refresh');
+        $('#teeth_no').selectpicker('refresh');
+        $('#machine').selectpicker('refresh');
+        $('#disp_mode').selectpicker('refresh');
 	})
 
 	// Checkbox click functionality
@@ -24,12 +28,11 @@ $(document).ready(function() {
 
     /** Datatable filter script**/
 	var listTable = $('#approved-order-list').dataTable({
-		stateSave: true,
 		/** Table column filter functionality **/
 		initComplete: function () {
-			$('.main-content > #approved-orders-table > .dataTables_wrapper > .row > .col-sm-6 > #approved-order-list_filter:first').append(' <button class="filterbtn" type="button" onClick="showFilter()" title="Filter" data-placement="bottom"><i class="fa fa-filter" aria-hidden="true"></i></button>');
+			$('.main-content > #approved-orders-table > .dataTables_wrapper > .row > .col-sm-6 > #approved-order-list_filter:first').append(' <button class="filterbtn-erp" type="button" onClick="showFilter()" title="Filter" data-placement="bottom"><i class="fa fa-filter" aria-hidden="true"></i></button>');
 			$('.main-content > #approved-orders-table > .dataTables_wrapper > .row > .col-sm-6 > #approved-order-list_filter:first .dataTables_filter').css('display', 'inline-block');
-			$('.main-content > #approved-orders-table > .dataTables_wrapper > .row > .col-sm-12:first').prepend('<div class="filter-window"><h5><strong>Jobcard Filter</strong></h5> <div class="row"> <div class="col-md-2"><select class="selectpicker" id="erp_id_filter"> <option disabled selected>SELECT AN ERP ID</option></select></div><div class="col-md-2"><select class="selectpicker" id="customer_name_filter"> <option disabled selected>SELECT A CUSTOMER</option></select></div><div class="col-md-2"><select class="selectpicker" id="po_number_filter"> <option disabled selected>SELECT A PO NUMBER</option></select></div><div class="col-md-2"><select class="selectpicker" id="style_number_filter"> <option disabled selected>SELECT A STYLE NUMBER</option></select></div><div class="col-md-2"><select class="selectpicker" id="ref_number_filter"> <option disabled selected>SELECT A REFERENCE</option></select></div><div class="col-md-2"><select class="selectpicker" id="delivery_date_filter"> <option disabled selected>SELECT A DELIVERY DATE</option></select></div></div><div class="filter-actions"><button class="btn btn-primary input-sm pull-right" id="reset">Clear Filter</button><button id="close_filter" class="btn btn-default input-sm pull-right" onclick="showFilter()">Close</button><div class="clearfix"></div></div></div>');
+			$('.main-content > #approved-orders-table > .dataTables_wrapper > .row > .col-sm-12:first').prepend('<div class="filter-window-jobcard"><h5><strong>Jobcard Filter</strong></h5> <div class="row"> <div class="col-md-2"><select class="selectpicker" id="erp_id_filter" data-live-search="true"> <option disabled selected>SELECT AN ERP ID</option></select></div><div class="col-md-2"><select class="selectpicker" id="customer_name_filter"  data-live-search="true"> <option disabled selected>SELECT A CUSTOMER</option></select></div><div class="col-md-2"><select class="selectpicker" id="po_number_filter"  data-live-search="true"> <option disabled selected>SELECT A PO NUMBER</option></select></div><div class="col-md-2"><select class="selectpicker" id="style_number_filter"  data-live-search="true"> <option disabled selected>SELECT A STYLE NUMBER</option></select></div><div class="col-md-2"><select class="selectpicker" id="ref_number_filter"  data-live-search="true"> <option disabled selected>SELECT A REFERENCE</option></select></div><div class="col-md-2"><select class="selectpicker" id="delivery_date_filter"  data-live-search="true"> <option disabled selected>SELECT A DELIVERY DATE</option></select></div></div><div class="filter-actions-erp"><button class="btn btn-primary input-sm pull-right" id="reset">Clear Filter</button><button id="close_filter" class="btn btn-default input-sm pull-right" onclick="showFilter()">Close</button><div class="clearfix"></div></div></div>');
 
 			//For Custom Filters
 			this.api().columns().every( function (i) {
@@ -74,6 +77,7 @@ $(document).ready(function() {
 			});
 		}
     } );
+    
 	/** Get an array of the TR nodes that are used in the table's body */
 	allPages = listTable.fnGetNodes();
 
@@ -86,8 +90,23 @@ $(document).ready(function() {
 		$('#delivery_date_filter').val('').change();
 		$.fn.dataTableExt.afnFiltering.length = 0;
 		listTable.dataTable().fnDraw();
-		$('.selectpicker').selectpicker('val', 1);
-        $('.selectpicker').selectpicker('refresh');
+		$('#erp_id_filter').selectpicker('val', 1);
+        $('#erp_id_filter').selectpicker('refresh');
+
+        $('#customer_name_filter').selectpicker('val', 1);
+        $('#customer_name_filter').selectpicker('refresh');
+
+        $('#po_number_filter').selectpicker('val', 1);
+        $('#po_number_filter').selectpicker('refresh');
+
+        $('#style_number_filter').selectpicker('val', 1);
+        $('#style_number_filter').selectpicker('refresh');
+
+        $('#ref_number_filter').selectpicker('val', 1);
+        $('#ref_number_filter').selectpicker('refresh');
+
+        $('#delivery_date_filter').selectpicker('val', 1);
+        $('#delivery_date_filter').selectpicker('refresh');
 	});
 
 	$('.selectpicker').selectpicker();
@@ -118,7 +137,12 @@ $(document).ready(function() {
     $('.dataTables_length select').addClass('form-control');
     $("#approved-order-list_filter input[type=search]").attr('placeholder', 'Data Search');
 
-    $('#jobcard-list-table').DataTable();
+    $('#jobcard-list-table').DataTable({
+        "paging": false,
+        "searching": false,
+        "bInfo" : false,
+        "ordering": false
+    });
     $("#jobcard-list-table_filter input").addClass('form-control input-sm');
     $("#jobcard-list-table_filter input").attr('placeholder', 'Data Search');
     $('#jobcard-list-table_length select').addClass('form-control input-sm');
@@ -142,76 +166,28 @@ $(document).ready(function() {
             updateJobcard();
         }
     })
+
+    /** Filter jobcard list form validation **/
+    $('#jobcard_filter_form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented())
+        {
+
+        }
+        else
+        {
+            e.preventDefault();
+            getJobcardsList();
+        }
+    })
 });
 /* End of document.ready() */
-
-/**
- * method to check the input value is a number or not
- * @param  input data
- * @return {Boolean}
- */
-function isNumber(evt) {
-	try {
-		evt = (evt) ? evt : window.event;
-		var charCode = (evt.which) ? evt.which : evt.keyCode;
-		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-			return false;
-		}
-		return true;
-	} catch (e) {
-		console.log("Error:" + e)
-	}
-}
-
-/**  
- * Validation for numeric values with dot
- * @param   evt 
- * @return {Boolean} 
- * @author <praveen>    
- */
-function isNumberKey(evt) {
-	try {
-		var charCode = (evt.which) ? evt.which : event.keyCode
-
-		if (charCode == 46) {
-			return true;
-		}
-		/** [ Checking key stroke values for numeric values ] */
-		if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
-			return false;
-		}
-		return true;
-	} catch (e) {
-		console.log("Error:" + e)
-	}
-}
-
-/** [showSnackbar function]
- *  @author <Praveen> [praveen@wizroots.com]
- */
-    function showSnackbar() {
-    try {
-        // Get the snackbar DIV
-        let x = document.getElementById("snackbar")
-
-        // Add the "show" class to DIV
-        x.className = "show";
-
-        // After 3 seconds, remove the show class from DIV
-        setTimeout(function() {
-            x.className = x.className.replace("show", "");
-        }, 3000);
-    } catch (e) {
-        console.log("Error:" + e)
-    }
-}
 
 /**
  * Toggle show filter window
  *  @author <Praveen> [praveen@wizroots.com]
  */
 function showFilter() {
-    $('.filter-window').toggle();
+    $('.filter-window-jobcard').toggle();
 }
 
 /**
@@ -226,6 +202,9 @@ function generateJobcard(){
     }
     else
     {
+        // remove file_path from local-storage
+        localStorage.removeItem('file_path');
+        
         orders = [];
         /** [ Create array of orders selected ] */
         $('.row-checkbox', allPages).each(function (i, item) {
@@ -234,6 +213,7 @@ function generateJobcard(){
             }
         });
         orders   = orders.join(',');
+
         ref_array = [];
         /** [ Create array of reference selected ] */
         $('.row-checkbox', allPages).each(function (i, item) {
@@ -242,6 +222,7 @@ function generateJobcard(){
             }
         });
         ref_array   = ref_array.join(',');
+
         buyer_po_array = [];
         /** [ Create array of buyer po selected ] */
         $('.row-checkbox', allPages).each(function (i, item) {
@@ -250,11 +231,30 @@ function generateJobcard(){
             }
         });
         buyer_po_array   = buyer_po_array.join(',');
+
+        order_type_array = [];
+        /** [ Create array of order type selected ] */
+        $('.row-checkbox', allPages).each(function (i, item) {
+            if ($(this).is(':checked')) {
+                order_type_array.push($(this).closest('tr').data('order-type')); 
+            }
+        });
+        order_type_array   = order_type_array.join(',');
+
+        created_at_array = [];
+        /** [ Create array of created_at selected ] */
+        $('.row-checkbox', allPages).each(function (i, item) {
+            if ($(this).is(':checked')) {
+                created_at_array.push($(this).closest('tr').data('created-at')); 
+            }
+        });
+        created_at_array   = created_at_array.join(',');
+
         $.ajax({
             url:base_url + "/erp/job-manager/get-jobcard-order-details",
             dataType:"json",
             method:"get",
-            data:{orders:orders, ref_array:ref_array, buyer_po_array:buyer_po_array},
+            data:{orders:orders, ref_array:ref_array, buyer_po_array:buyer_po_array,order_type_array:order_type_array,created_at_array:created_at_array},
             tryCount : 0,
             retryLimit : 2,
             beforeSend: function () {
@@ -281,10 +281,7 @@ function generateJobcard(){
 
                         data.template_data.article.length > 0?$('#article').text(data.template_data.article):'';
 
-                        $.each(data.template_data.material, function(key, item){
-                            $('#material').text(item)
-                            $('#material').attr('data-material-id', key)
-                        });
+                        $('#material').val(data.template_data.material)
 
                         if(data.template_data.customer)
                         {
@@ -300,20 +297,20 @@ function generateJobcard(){
 
                         if(data.template_data.style_array.length === 1)
                         {
-                            $('#style_no').text(data.template_data.style_array)
+                            $('#style_no').val(data.template_data.style_array)
                         }
                         else
                         {
-                            $('#style_no').text('')
+                            $('#style_no').val('')
                         }
 
                         if(data.template_data.refnum_array.length === 1)
                         {
-                            $('#reference').text(data.template_data.refnum_array)
+                            $('#reference').val(data.template_data.refnum_array)
                         }
                         else
                         {
-                            $('#reference').text('')
+                            $('#reference').val('')
                         }
                         
                         if(data.template_data.ordertype_array.length === 1)
@@ -344,30 +341,46 @@ function generateJobcard(){
 
                         if(data.template_data.length.length === 1)
                         {
-                            $('#length').text(data.template_data.length)
+                            $('#length').val(data.template_data.length)
                         }
                         else
                         {
-                            $('#length').text('')
+                            $('#length').val('')
                         } 
 
                         if(data.template_data.width.length === 1)
                         {
-                            $('#width').text(data.template_data.width)
+                            $('#width').val(data.template_data.width)
                         }
                         else
                         {
-                            $('#width').text('')
+                            $('#width').val('')
                         } 
 
                         if(data.template_data.color.length === 1)
                         {
-                            $('#print_color').text(data.template_data.color)
+                            $('#print_color').val(data.template_data.color)
                         }
                         else
                         {
-                            $('#print_color').text('')
+                            $('#print_color').val('')
                         }
+
+                        if(data.template_data.cus_del_date.length === 1)
+                        {
+                            $('#cus_del_date').val(data.template_data.cus_del_date)
+                        }
+                        else
+                        {
+                            $('#cus_del_date').val('')
+                        }
+
+                        /** append erp_details_ids  as hidden */
+                        var hidden_html = '';
+                        $.each(data.template_data.order_detail_ids, function(index, erp_details_id){
+                            hidden_html += '<div hidden class="erp-details-id">'+erp_details_id+'</div>'
+                        });
+                        $('.order-details-div').html(hidden_html);
 
                         /** Show ratio templates dynamic table */
                         var ratio_table_html = '';
@@ -471,7 +484,7 @@ function generateJobcard(){
                                         col++;
                                     });
 
-                                    single_table_html += '<td class="total-quantity-class total-quantity-row-'+row+'"><strong>'+parseInt(total_qty_sizewise)+'</strong></td><td class="total-excess"><div class="form-group has-feedback"><input type="number" step="0.01" data-step-error="Max 2 decimal places allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm total-excess-row-table-'+table+'" required="" id="total_excess_row_table_'+row+'" data-required-error="Mandatory Field." name="total_excess_row_table_'+row+'"" placeholder="Excess %" onkeyup="return totalExcess()" ><div class="help-block with-errors"></div></div></td><td></td><td></td></tr>';
+                                    single_table_html += '<td class="total-quantity-class total-quantity-row-'+row+'"><strong>'+parseInt(total_qty_sizewise)+'</strong></td><td class="total-excess"><div class="form-group has-feedback"><input type="number" data-step-error="Decimal values not allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm total-excess-row-table-'+table+'" id="total_excess_row_table_'+row+'" data-required-error="Mandatory Field." name="total_excess_row_table_'+row+'"" placeholder="Excess %" onkeyup="return totalExcess()" ><div class="help-block with-errors"></div></div></td><td></td><td></td></tr>';
                                 
                                     total_quantity_final += parseInt(total_qty_sizewise);
                                     row++;
@@ -503,13 +516,13 @@ function generateJobcard(){
                                                     <span class="act-excess" data-act-excess-ref="'+template_name[0]+'" id="act_excess_'+template_name[0].replace(' ', '_')+'"></span>\
                                                 </div>\
                                                 <div class="col-md-3">\
-                                                    <label for="sticker_mtr_'+template_name[0].replace(' ', '_')+'" >MTRS FOR STICKERS ('+template_name[0]+'):</label>\
+                                                    <label for="sticker_mtr_'+template_name[0].replace(' ', '_')+'" >STKRS MTRS ('+template_name[0]+'):</label>\
                                                     <span class="sticker-mtrs" id="sticker_mtr_'+template_name[0].replace(' ', '_')+'"></span>\
                                                 </div>\
                                                 <div class="col-md-3">\
-                                                <div class="form-group has-feedback form-inline">\
+                                                <div class="form-group has-feedback">\
                                                     <label for="settings_'+template_name[0].replace(' ', '_')+'" >SETTINGS ('+template_name[0]+') :</label>\
-                                                    <input type="number" step="0.01" min="1" data-step-error="Max 2 decimal places allowed." data-min-error="Value must be >= 1" class="form-control input-sm settings" required="" name="settings_'+template_name[0].replace(' ', '_')+'" placeholder="SETTINGS" id="settings_'+template_name[0].replace(' ', '_')+'" onkeyup="return totalMeters()">\
+                                                    <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" class="form-control input-sm settings"  name="settings_'+template_name[0].replace(' ', '_')+'" placeholder="SETTINGS" id="settings_'+template_name[0].replace(' ', '_')+'" onkeyup="return totalMeters()" max="99999"  data-max-error="Value should be <= 99999">\
                                                     <div class="help-block with-errors"></div>\
                                                 </div>\
                                                 </div>\
@@ -523,22 +536,9 @@ function generateJobcard(){
                                 
                             $('.single-list-table-div').html(single_table_html);
                             $('.meter-calculation-div').html(meters_div_html);
-                            /** Only mandatory  for single templates */
-                            $('#excess').prop('required', true);
-                            $('#repeat_gap').prop('required', true);
-                            $('#roll_width').prop('required', true);
-                            $('#length_side').prop('required', true);
-                            $('#no_sticker').prop('required', true);
                         } else {
                             $('.single-list-table-div').html(single_table_html);
                             $('.meter-calculation-div').html(meters_div_html);
-                            /** Toggle mandatory/optional fields.
-                             * optional for ratio templates */
-                            $('#excess').prop('required', false);
-                            $('#repeat_gap').prop('required', false);
-                            $('#roll_width').prop('required', false);
-                            $('#length_side').prop('required', false);
-                            $('#no_sticker').prop('required', false);
                         }
                         
                     }
@@ -634,7 +634,7 @@ function calculateExcess(evt)
     let item = $('.total-quantity-class');
     $.each(item, function(key, value){
         let total_excess = parseFloat($(value).text() * (evt.value*1/100)).toFixed(2);
-        $('#total_excess_row_table_'+key).val(total_excess);
+        $('#total_excess_row_table_'+key).val(Math.round(total_excess));
         /** refresh excess values fields in single ref table */
         $('#total_excess_row_table_'+key).trigger('input');
     });
@@ -654,10 +654,10 @@ function totalExcess()
         $(this).find('.total-excess-row-table-'+table).each(function () {
             var excess = $(this).val();
             if (!isNaN(excess) && excess.length !== 0) {
-                total_excess_final += parseFloat(excess);
+                total_excess_final += parseInt(excess);
             }
         });
-        $('.total-excess-col-table-'+table).html('<strong>'+total_excess_final.toFixed(2)+'</strong>');
+        $('.total-excess-col-table-'+table).html('<strong>'+Math.round(total_excess_final)+'</strong>');
 
         table++;
     });
@@ -684,13 +684,13 @@ function actualExcess()
         });
         $('.total-excess-'+ref_name).each(function(){
             if (!isNaN(total_excess) && total_excess.length !== 0) {
-                total_excess += parseFloat($(this).text());
+                total_excess += parseInt($(this).text());
             }
         });
         if (!isNaN(total_qty) && !isNaN(total_excess)) {
             act_excess = parseFloat((total_excess/total_qty)*100).toFixed(2);
         }
-        $('#act_excess_'+ref_name).text(act_excess)
+        $('#act_excess_'+ref_name).text(Math.round(act_excess))
     });
 }
 
@@ -717,10 +717,10 @@ function mtrsForStickers()
 
         if(!isNaN(total_qty) && !isNaN(length_side_dimension) && !isNaN(no_of_repeats) && !isNaN(repeat_gap) && no_of_repeats != 0 && repeat_gap != 0)
         {
-            mtrs =  parseFloat((parseInt(total_qty)/parseInt(no_of_repeats)) * ((parseInt(length_side_dimension) + parseInt(repeat_gap))/1000)).toFixed(2);
+            mtrs =  parseFloat((parseInt(total_qty)/parseInt(no_of_repeats)) * ((parseFloat(length_side_dimension) + parseInt(repeat_gap))/1000)).toFixed(2);
         }
         
-        $('#sticker_mtr_'+ref_name).text(mtrs)
+        $('#sticker_mtr_'+ref_name).text(Math.round(mtrs))
         totalMeters()
     });
 }
@@ -738,9 +738,9 @@ function totalMeters()
        let mtrs_for_stickers = $('#sticker_mtr_'+ref_name).text() === ''?0:$('#sticker_mtr_'+ref_name).text();
        let settings = $('#settings_'+ref_name).val() === ''?0:$('#settings_'+ref_name).val();
        if (!isNaN(settings) && !isNaN(mtrs_for_stickers)) {
-           var total_mtr = parseFloat(settings) + parseFloat(mtrs_for_stickers);
+           var total_mtr = parseInt(settings) + parseInt(mtrs_for_stickers);
         }
-       $('#total_mtrs_'+ref_name).text(total_mtr.toFixed(2));
+       $('#total_mtrs_'+ref_name).text(Math.round(total_mtr));
     });
 }
 /** ----------------- Excess calculation functions for create jobcard ends ----------------------**/
@@ -755,45 +755,46 @@ function storeJobcard()
     var workorder_id    = $( '#work_order' ).text() === ''?null:$('#work_order').text();
     var created_date    = $( '#today_date' ).text() === ''?null:$('#today_date').text();
     var article         = $( '#article' ).text() === ''?null:$('#article').text();
-    var material        = $( '#material' ).text() === ''?null:$('#material').text();
+    var material        = $( '#material' ).val() === ''?null:$('#material').val();
     var customer_id     = $( '#customer' ).data('customer-id');
-    var style_no        = $( '#style_no' ).text() === ''?null:$('#style_no').text();
+    var style_no        = $( '#style_no' ).val() === ''?null:$('#style_no').val();
     var order_type      = $( '#order_type' ).text() === ''?null:$('#order_type').text();
     var buyer_id        = $( '#buyer' ).data('buyer-id');
-    var reference       = $( '#reference' ).text() === ''?null:$('#reference').text();
-    var disp_mode       = $( '#disp_mode' ).val();
+    var reference       = $( '#reference' ).val() === ''?null:$('#reference').val();
+    var disp_mode       = $( '#disp_mode option:selected' ).val() === ''?null:$('#disp_mode option:selected').val();
     var order_date      = $( '#order_date' ).text() === ''?null:$('#order_date').text();
-    var length          = $( '#length' ).text() === ''?null:$('#length').text();
-    var repeat_gap      = $( '#repeat_gap' ).val();
-    var machine         = $( '#machine' ).val();
-    var cus_del_date    = $( '#cus_del_date' ).val();
-    var roll_width      = $( '#roll_width' ).val();
-    var width           = $( '#width' ).text() === ''?null:$('#width').text();
-    var film_no         = $( '#film_no' ).val();
-    var act_del_date    = $( '#act_del_date' ).val();
-    var length_side     = $( '#length_side' ).val();
-    var excess          = $( '#excess' ).val();
-    var teeth_no        = $( '#teeth_no' ).val();
-    var inv_no          = $( '#inv_no' ).val();
-    var no_sticker      = $( '#no_sticker' ).val();
-    var finish_type     = $( '#finish_type' ).val();
-    var print_color     = $( '#print_color' ).text() === ''?null:$('#print_color').text();
-    var compiled_by     = $( '#compiled_by' ).val();
-    var barcode_read    = $( '#barcode_read' ).val();
-    var operator        = $( '#operator' ).val();
-    var checker         = $( '#checker' ).val();
-    var authorized_by   = $( '#author' ).val();
-    var axicon_verifier = $( '#axicon_verifier' ).val();
-    var approved_by     = $( '#approved_by' ).val();
-    var packer          = $( '#packer' ).val();
-    var approval_date   = $( '#approval_date' ).val();
-    var roll_issued_by  = $( '#roll_issued_by' ).val();
-    var cutter          = $( '#cutter' ).val();
-    var cartons         = $( '#cartons' ).val();
+    var length          = $( '#length' ).val() === ''?null:$('#length').val();
+    var repeat_gap      = $( '#repeat_gap' ).val() === ''?null:$( '#repeat_gap' ).val();
+    var machine         = $( '#machine option:selected' ).val() === ''?null:$( '#machine option:selected' ).val();
+    var cus_del_date    = $( '#cus_del_date' ).val() === ''?null:$( '#cus_del_date' ).val();
+    var roll_width      = $( '#roll_width' ).val() === ''?null:$( '#roll_width' ).val();
+    var width           = $( '#width' ).val() === ''?null:$('#width').val();
+    var film_no         = $( '#film_no' ).val() === ''?null:$( '#film_no' ).val();
+    var invoice_date    = $( '#invoice_date' ).val() === ''?null:$( '#invoice_date' ).val();
+    var length_side     = $( '#length_side' ).val() === ''?null:$( '#length_side' ).val();
+    var excess          = $( '#excess' ).val() === ''?null:$( '#excess' ).val();
+    var teeth_no        = $( '#teeth_no option:selected' ).val() === ''?null:$( '#teeth_no option:selected' ).val();
+    var inv_no          = $( '#inv_no' ).val() === ''?null:$( '#inv_no' ).val();
+    var no_sticker      = $( '#no_sticker' ).val() === ''?null:$( '#no_sticker' ).val();
+    var finish_type     = $( '#finish_type option:selected' ).val() === ''?null:$( '#finish_type option:selected' ).val();
+    var print_color     = $( '#print_color' ).val() === ''?null:$('#print_color').val();
+    var compiled_by     = $( '#compiled_by' ).val() === ''?null:$('#compiled_by').val();
+    var barcode_read    = $( '#barcode_read' ).val() === ''?null:$('#barcode_read').val();
+    var operator        = $( '#operator' ).val() === ''?null:$('#operator').val();
+    var checker         = $( '#checker' ).val() === ''?null:$('#checker').val();
+    var authorized_by   = $( '#author' ).val() === ''?null:$('#author').val();
+    var axicon_verifier = $( '#axicon_verifier' ).val() === ''?null:$('#axicon_verifier').val();
+    var approved_by     = $( '#approved_by' ).val() === ''?null:$('#approved_by').val();
+    var packer          = $( '#packer' ).val() === ''?null:$('#packer').val();
+    var approval_date   = $( '#approval_date' ).val() === ''?null:$('#approval_date').val();
+    var roll_issued_by  = $( '#roll_issued_by' ).val() === ''?null:$('#roll_issued_by').val();
+    var cutter          = $( '#cutter' ).val() === ''?null:$('#cutter').val();
+    var cartons         = $( '#cartons' ).val() === ''?null:$('#cartons').val();
 
     var final_json_obj =   {
         "ratio": {},
-        "single": {}
+        "single": {},
+        "erp_order_details" : []
           };  
     var ratio_object = {};
     /** Create ratio templates json object */
@@ -913,7 +914,7 @@ function storeJobcard()
     var act_excess = [];
     /** [ Create array of act-excess ] */
     $('.act-excess').each(function (i, item) {
-        act_excess[i] = $(item).text();
+        act_excess[i] = $(item).text() === ''?0:$(item).text();
         single_ref[i] = $(item).data('act-excess-ref');
     });
     act_excess = act_excess.join(',');
@@ -922,7 +923,7 @@ function storeJobcard()
     var sticker_mtr = [];
     /** [ Create array of sticker-mtrs ] */
     $('.sticker-mtrs').each(function (i, item) {
-        sticker_mtr[i] = $(item).text();
+        sticker_mtr[i] = $(item).text() === ''?0:$(item).text();
 
     });
     sticker_mtr = sticker_mtr.join(',');
@@ -930,7 +931,7 @@ function storeJobcard()
     var settings = [];
     /** [ Create array of settings ] */
     $('.settings').each(function (i, item) {
-        settings[i] = $(item).val();
+        settings[i] = $(item).val() === ''?0:$(item).val();
 
     });
     settings = settings.join(',');
@@ -938,7 +939,7 @@ function storeJobcard()
     var total_mtrs = [];
     /** [ Create array of total-meters ] */
     $('.total-meters').each(function (i, item) {
-        total_mtrs[i] = $(item).text();
+        total_mtrs[i] = $(item).text() === ''?0:$(item).text();
 
     });
     total_mtrs = total_mtrs.join(',');
@@ -950,7 +951,9 @@ function storeJobcard()
             erp_orders_ids.push($(this).closest('tr').attr('id')); 
         }
     });
+
     erp_orders_ids   = erp_orders_ids.join(',');
+
     selected_ref_array = [];
     /** [ Create array of reference selected ] */
     $('.row-checkbox', allPages).each(function (i, item) {
@@ -959,6 +962,7 @@ function storeJobcard()
         }
     });
     selected_ref_array   = selected_ref_array.join(',');
+
     selected_buyer_po_array = [];
     /** [ Create array of buyer po selected ] */
     $('.row-checkbox', allPages).each(function (i, item) {
@@ -967,6 +971,45 @@ function storeJobcard()
         }
     });
     selected_buyer_po_array   = selected_buyer_po_array.join(',');
+
+    order_type_array = [];
+    /** [ Create array of order type selected ] */
+    $('.row-checkbox', allPages).each(function (i, item) {
+        if ($(this).is(':checked')) {
+            order_type_array.push($(this).closest('tr').data('order-type')); 
+        }
+    });
+    order_type_array   = order_type_array.join(',');
+
+    created_at_array = [];
+    /** [ Create array of created_at selected ] */
+    $('.row-checkbox', allPages).each(function (i, item) {
+        if ($(this).is(':checked')) {
+            created_at_array.push($(this).closest('tr').data('created-at')); 
+        }
+    });
+    created_at_array   = created_at_array.join(',');
+    
+    jsonArray = [];
+    /** [ Create json object of selected orders ] */
+    $('.row-checkbox', allPages).each(function (i, item) {
+        erp_order_details_obj = {};
+        
+        if ($(this).is(':checked')) {
+            erp_order_details_obj.created_at = $(this).closest('tr').data('created-at'); 
+            erp_order_details_obj.order_type = $(this).closest('tr').data('order-type'); 
+            erp_order_details_obj.buyer_po   = $(this).closest('tr').data('buyer-po'); 
+            erp_order_details_obj.refname    = $(this).closest('tr').data('refname'); 
+            erp_order_details_obj.erp_id     = $(this).closest('tr').attr('id');
+            erp_order_details_obj.style_no   = $(this).closest('tr').data('style-no');
+            erp_order_details_obj.temp_file  = $(this).closest('tr').data('template-file');
+
+            jsonArray.push(erp_order_details_obj);
+        }
+    });
+
+    // pushing created_at array into json object
+    final_json_obj['erp_order_details'] = jsonArray;
 
     $.ajax({
         url: base_url + "/erp/job-manager/store-jobcard-details",
@@ -992,7 +1035,7 @@ function storeJobcard()
             roll_width: roll_width,
             width: width,
             film_no: film_no,
-            act_del_date: act_del_date,
+            invoice_date: invoice_date,
             length_side: length_side,
             excess: excess,
             teeth_no: teeth_no,
@@ -1020,7 +1063,9 @@ function storeJobcard()
             total_mtrs:total_mtrs,
             erp_orders_ids:erp_orders_ids,
             selected_ref_array:selected_ref_array,
-            selected_buyer_po_array:selected_buyer_po_array
+            selected_buyer_po_array:selected_buyer_po_array,
+            order_type_array:order_type_array,
+            created_at_array:created_at_array
         },
         tryCount: 0,
         retryLimit: 2,
@@ -1030,15 +1075,27 @@ function storeJobcard()
         },
         statusCode: {
             200: function(data) {
-                var resp = JSON.stringify(data.file_path);
-                $('.snackbar_span').html("Jobcard Created Successfully");
-                showSnackbar();
-                $('#jobcardCreationModalCenter').modal('hide');
-                location.reload();
-                window.open(
-                    base_url+JSON.parse(resp),
-                    '_blank' // <- This is what makes it open in a new window.
-                );
+
+                /** [ Store file path into localstorage ] */
+                localStorage.setItem('file_path',data.file_path)
+             
+                var isEdit        = false;
+                $('.row-checkbox', allPages).each(function (i, item) {
+                  
+                    if ($(this).is(':checked')) {
+                        refname       = $(this).closest('tr').data('refname'); 
+                        id            = $(this).closest('tr').attr('id');
+                        buyer_po_no   = $(this).closest('tr').data('buyer-po');
+                        order_type    = $(this).closest('tr').data('order-type');
+                        created_at    = $(this).closest('tr').data('created-at');
+                        style_no      = $(this).closest('tr').data('style-no');
+                        loop          = $(this).closest('tr').data('iteration');
+                        modal_name    = refname.replace(' ', '');
+
+                        openmodaltescopreview(modal_name, loop, style_no, buyer_po_no, id, order_type, created_at, isEdit);
+                    }
+                });
+              
             },
             400: function() {
                 $('.snackbar_span').html("Parameter is missing !!!");
@@ -1058,7 +1115,6 @@ function storeJobcard()
     })
 }
 
-
 /**
    * Function for get jobcard details for editing
    * @param id
@@ -1077,6 +1133,8 @@ function storeJobcard()
              retryLimit : 2,
              beforeSend: function () {
                $(".loader").show();
+               // remove file_path from local-storage
+               localStorage.removeItem('file_path');
              },
              success: function(data){
                  $('.edit-ratio-list-table-div').html('');
@@ -1090,31 +1148,31 @@ function storeJobcard()
                  $('#edit_work_order').text(data.jobcard_data.work_order_id);
                  $('#edit_today_date').text(data.jobcard_data.created_date);
                  $('#edit_article').text(data.jobcard_data.article);
-                 $('#edit_material').text(data.jobcard_data.material);
+                 $('#edit_material').val(data.jobcard_data.material);
                  $('#edit_customer').text(data.jobcard_data.customer);
                  $('#edit_customer').attr('data-customer-id', data.jobcard_data.customer_id);
                  $('#edit_buyer').text(data.jobcard_data.buyer_name);
                  $('#edit_buyer').attr('data-buyer-id', data.jobcard_data.buyer_id);
-                 $('#edit_style_no').text(data.jobcard_data.style_number);
-                 $('#edit_reference').text(data.jobcard_data.reference);
+                 $('#edit_style_no').val(data.jobcard_data.style_number);
+                 $('#edit_reference').val(data.jobcard_data.reference);
                  $('#edit_order_type').text(data.jobcard_data.order_type);
                  $('#edit_disp_mode').val(data.jobcard_data.dispatch_mode);
                  $('#edit_order_date').text(data.jobcard_data.order_date);
-                 $('#edit_length').text(data.jobcard_data.length);
+                 $('#edit_length').val(data.jobcard_data.length);
                  $('#edit_repeat_gap').val(data.jobcard_data.repeat_gap);
                  $('#edit_machine').val(data.jobcard_data.machine);
                  $('#edit_cus_del_date').val(data.jobcard_data.customer_del_date);
-                 $('#edit_width').text(data.jobcard_data.width);
+                 $('#edit_width').val(data.jobcard_data.width);
                  $('#edit_roll_width').val(data.jobcard_data.roll_width);
                  $('#edit_film_no').val(data.jobcard_data.film_no);
-                 $('#edit_act_del_date').val(data.jobcard_data.act_del_date);
+                 $('#edit_invoice_date').val(data.jobcard_data.invoice_date);
                  $('#edit_length_side').val(data.jobcard_data.length_side);
                  $('#edit_excess').val(data.jobcard_data.excess_percentage);
                  $('#edit_teeth_no').val(data.jobcard_data.teeth_no);
                  $('#edit_inv_no').val(data.jobcard_data.invoice_num);
                  $('#edit_no_sticker').val(data.jobcard_data.no_of_stickers);
                  $('#edit_finish_type').val(data.jobcard_data.finish_type);
-                 $('#edit_print_color').text(data.jobcard_data.print_color);
+                 $('#edit_print_color').val(data.jobcard_data.print_color);
                  $('#edit_compiled_by').val(data.jobcard_data.compiled_by);
                  $('#edit_barcode_read').val(data.jobcard_data.barcode_read);
                  $('#edit_operator').val(data.jobcard_data.operator);
@@ -1128,9 +1186,13 @@ function storeJobcard()
                  $('#edit_cutter').val(data.jobcard_data.cutter);
                  $('#edit_cartons').val(data.jobcard_data.cartons);
 
+                 /** [ Refresh  bootstrap selectpicker ] */
+                 $('#edit_finish_type').selectpicker('refresh');
+                 $('#edit_teeth_no').selectpicker('refresh');
+                 $('#edit_machine').selectpicker('refresh');
+                 $('#edit_disp_mode').selectpicker('refresh');
                  var ratio_table = '';
                  $.each(JSON.parse(data.jobcard_data.template_quantity_json), function(template_type, template_type_data){
-                    console.log(template_type)
                     if(template_type === 'ratio')
                     {
                         if (!($.isEmptyObject(template_type_data)))
@@ -1173,7 +1235,7 @@ function storeJobcard()
 
                         }
                     }
-                    else
+                    else if(template_type === 'single')
                     {
                         if (!($.isEmptyObject(template_type_data)))
                         {
@@ -1233,7 +1295,7 @@ function storeJobcard()
                                                 single_table += '<td class="edit-total-quantity-class total-quantity-row-'+table_row+'"><strong>'+parseInt(total_qty_sizewise)+'</strong></td>\
                                                 <td class="edit-total-excess">\
                                                     <div class="form-group has-feedback">\
-                                                        <input type="number" step="0.01" data-step-error="Max 2 decimal places allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm edit-total-excess-row-table-'+table_count+'" required="" id="edit_total_excess_row_table_'+table_row+'" data-required-error="Mandatory Field." name="edit_total_excess_row_table_'+table_row+'" "="" placeholder="Excess %" onkeyup="return editTotalExcess()" value="'+table_data.excess[size]+'">\
+                                                        <input type="number" data-step-error="Decimal values not allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm edit-total-excess-row-table-'+table_count+'"  id="edit_total_excess_row_table_'+table_row+'" data-required-error="Mandatory Field." name="edit_total_excess_row_table_'+table_row+'" "="" placeholder="Excess %" onkeyup="return editTotalExcess()" value="'+table_data.excess[size]+'">\
                                                         <div class="help-block with-errors"></div>\
                                                     </div>\
                                                 </td>\
@@ -1241,7 +1303,7 @@ function storeJobcard()
                                                 <td></td>\
                                                 </tr>';
                                           total_quantity_final += parseInt(total_qty_sizewise);
-                                          total_excess_final   += parseFloat(table_data.excess[size]);
+                                          total_excess_final   += parseInt(table_data.excess[size]);
                                           table_row++;
                                         });
                                         single_table += '<tr>\
@@ -1255,7 +1317,7 @@ function storeJobcard()
                                         });
                                                             
                                         single_table += '<td><strong class="edit-total-qty-'+template[0]+'_'+template[1]+'">'+parseInt(total_quantity_final)+'</strong></td>\
-                                                <td class="edit-total-excess-col-table-'+table_count+' edit-total-excess-'+template[0]+'_'+template[1]+'">'+parseFloat(total_excess_final).toFixed(2)+'</td>\
+                                                <td class="edit-total-excess-col-table-'+table_count+' edit-total-excess-'+template[0]+'_'+template[1]+'"><strong>'+Math.round(isNaN(total_excess_final) ? '0' : total_excess_final)+'</strong></td>\
                                                 <td></td>\
                                                 <td></td>\
                                             </tr>\
@@ -1266,6 +1328,7 @@ function storeJobcard()
                         $('.edit-single-list-table-div').html(single_table);
                         }
                     }
+                    
                  });
 
                 // excess, meters and settings calculation values.
@@ -1279,13 +1342,13 @@ function storeJobcard()
                                                 <span class="edit-act-excess" data-act-excess-ref="'+item.ref_name+'" id="edit_act_excess_'+item.ref_name.replace(' ', '_')+'">'+item.actual_excess+'</span>\
                                             </div>\
                                             <div class="col-md-3">\
-                                                <label for="edit_sticker_mtr_'+item.ref_name.replace(' ', '_')+'" >MTRS FOR STICKERS ('+item.ref_name+'):</label>\
+                                                <label for="edit_sticker_mtr_'+item.ref_name.replace(' ', '_')+'" >STKRS MTRS ('+item.ref_name+'):</label>\
                                                 <span class="edit-sticker-mtrs" id="edit_sticker_mtr_'+item.ref_name.replace(' ', '_')+'">'+item.mtrs_for_stickers+'</span>\
                                             </div>\
                                             <div class="col-md-3">\
-                                            <div class="form-group has-feedback form-inline">\
+                                            <div class="form-group has-feedback">\
                                                 <label for="edit_settings_'+item.ref_name.replace(' ', '_')+'" >SETTINGS ('+item.ref_name+') :</label>\
-                                                <input type="number" step="0.01" min="1" data-step-error="Max 2 decimal places allowed." data-min-error="Value must be >= 1" class="form-control input-sm edit-settings" required="" name="edit_settings_'+item.ref_name.replace(' ', '_')+'" placeholder="SETTINGS" id="edit_settings_'+item.ref_name.replace(' ', '_')+'" onkeyup="return totalMetersEdit()" value="'+item.settings+'">\
+                                                <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" max="99999" data-max-error="Value should be <= 99999" class="form-control input-sm edit-settings" name="edit_settings_'+item.ref_name.replace(' ', '_')+'" placeholder="SETTINGS" id="edit_settings_'+item.ref_name.replace(' ', '_')+'" onkeyup="return totalMetersEdit()" value="'+item.settings+'" >\
                                                 <div class="help-block with-errors"></div>\
                                             </div>\
                                             </div>\
@@ -1297,26 +1360,35 @@ function storeJobcard()
                     });
                    
                     $('.edit-meter-calculation-div').html(edit_meters_div_html);
-                    /** Only mandatory for single templates */
-                    $('#edit_excess').prop('required', true);
-                    $('#edit_repeat_gap').prop('required', true);
-                    $('#edit_roll_width').prop('required', true);
-                    $('#edit_length_side').prop('required', true);
-                    $('#edit_no_sticker').prop('required', true);
                 }  
                 else
                 {
                     edit_meters_div_html = '';
                     $('.edit-meter-calculation-div').html(edit_meters_div_html);
-                    /** Toggle mandatory/optional fields.
-                     * optional for ratio templates */
-                    $('#edit_excess').prop('required', false);
-                    $('#edit_repeat_gap').prop('required', false);
-                    $('#edit_roll_width').prop('required', false);
-                    $('#edit_length_side').prop('required', false);
-                    $('#edit_no_sticker').prop('required', false);
                     
                 } 
+                
+                var erp_details_div_html = '';
+                $.each(JSON.parse(data.jobcard_data.template_quantity_json), function(index, artwork_data){ 
+                 if(index != "ratio" && index != "single")
+                 {
+                    if(index === "erp_order_details")
+                    {
+                        if(artwork_data.length > 0)
+                        {
+                            var incr = 0;
+                            // hidden erp_order_details data.
+                            $.each(artwork_data, function(index, erp_data){
+                                erp_details_div_html += '<div hidden class="edit-erp-details" data-erp-id="'+erp_data.erp_id+'" data-ref-name="'+erp_data.refname+'" data-order-type="'+erp_data.order_type+'" data-buyer-po="'+erp_data.buyer_po+'" data-created-at="'+erp_data.created_at+'"  data-style-no="'+erp_data.style_no+'" data-template-file="'+erp_data.temp_file+'"></div><object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal'+incr+'" class="center-block tesco_svg'+incr+'" data="'+erp_data.temp_file+'" type="image/svg+xml"></object>'
+                                incr++;
+                            });
+                            
+                            $('.edit-order-details-div').html(erp_details_div_html);
+                        }
+                    }
+                    
+                 }
+                });
                     
                 /** [ Backdrop for bootstrap modal ] */
                 $('#jobcardUpdationModalCenter').modal({
@@ -1325,7 +1397,7 @@ function storeJobcard()
                 })
 
                 /** [ Validate create_jobcard form using bootstrap validator ] */
-                $('#edit_jobcard').validator('validate');
+                $('#edit_jobcard').validator('update');
                 $('#jobcardUpdationModalCenter').modal('show');
                 $('.datepicker').datepicker({
                     format: 'dd-mm-yyyy'
@@ -1358,7 +1430,7 @@ function calculateExcessEdit(evt)
     let item = $('.edit-total-quantity-class');
     $.each(item, function(key, value){
         let total_excess = parseFloat($(value).text() * (evt.value*1/100)).toFixed(2);
-        $('#edit_total_excess_row_table_'+key).val(total_excess);
+        $('#edit_total_excess_row_table_'+key).val(Math.round(total_excess));
         /** refresh excess values fields in single ref table */
         $('#edit_total_excess_row_table_'+key).trigger('input');
     });
@@ -1378,10 +1450,10 @@ function editTotalExcess()
         $(this).find('.edit-total-excess-row-table-'+table).each(function () {
             var excess = $(this).val();
             if (!isNaN(excess) && excess.length !== 0) {
-                total_excess_final += parseFloat(excess);
+                total_excess_final += parseInt(excess);
             }
         });
-        $('.edit-total-excess-col-table-'+table).html('<strong>'+total_excess_final.toFixed(2)+'</strong>');
+        $('.edit-total-excess-col-table-'+table).html('<strong>'+Math.round(total_excess_final)+'</strong>');
 
         table++;
     });
@@ -1408,13 +1480,13 @@ function actualExcessEdit()
         });
         $('.edit-total-excess-'+ref_name).each(function(){
             if (!isNaN(total_excess) && total_excess.length !== 0) {
-                total_excess += parseFloat($(this).text());
+                total_excess += parseInt($(this).text());
             }
         });
         if (!isNaN(total_qty) && !isNaN(total_excess)) {
             act_excess = parseFloat((total_excess/total_qty)*100).toFixed(2);
         }
-        $('#edit_act_excess_'+ref_name).text(act_excess)
+        $('#edit_act_excess_'+ref_name).text(Math.round(act_excess));
     });
 }
 
@@ -1441,10 +1513,10 @@ function mtrsForStickersEdit()
 
         if(!isNaN(total_qty) && !isNaN(length_side_dimension) && !isNaN(no_of_repeats) && !isNaN(repeat_gap) && no_of_repeats != 0 && repeat_gap != 0)
         {
-            mtrs =  parseFloat((parseInt(total_qty)/parseInt(no_of_repeats)) * ((parseInt(length_side_dimension) + parseInt(repeat_gap))/1000)).toFixed(2);
+            mtrs =  parseFloat((parseInt(total_qty)/parseInt(no_of_repeats)) * ((parseFloat(length_side_dimension) + parseInt(repeat_gap))/1000)).toFixed(2);
         }
         
-        $('#edit_sticker_mtr_'+ref_name).text(mtrs)
+        $('#edit_sticker_mtr_'+ref_name).text(Math.round(mtrs));
         totalMetersEdit()
     });
 }
@@ -1462,9 +1534,9 @@ function totalMetersEdit()
        let mtrs_for_stickers = $('#edit_sticker_mtr_'+ref_name).text() === ''?0:$('#edit_sticker_mtr_'+ref_name).text();
        let settings = $('#edit_settings_'+ref_name).val() === ''?0:$('#edit_settings_'+ref_name).val();
        if (!isNaN(settings) && !isNaN(mtrs_for_stickers)) {
-           var total_mtr = parseFloat(settings) + parseFloat(mtrs_for_stickers);
+           var total_mtr = parseInt(settings) + parseInt(mtrs_for_stickers);
         }
-       $('#edit_total_mtrs_'+ref_name).text(total_mtr.toFixed(2));
+       $('#edit_total_mtrs_'+ref_name).text(Math.round(total_mtr));
     });
 }
 /** ----------------- Excess calculation functions for edit jobcard ends ----------------------**/
@@ -1480,47 +1552,48 @@ function updateJobcard(formData)
     var workorder_id    = $( '#edit_work_order' ).text() === ''?null:$('#edit_work_order').text();
     var created_date    = $( '#edit_today_date' ).text() === ''?null:$('#edit_today_date').text();
     var article         = $( '#edit_article' ).text() === ''?null:$('#edit_article').text();
-    var material        = $( '#edit_material' ).text() === ''?null:$('#edit_material').text();
+    var material        = $( '#edit_material' ).val() === ''?null:$('#edit_material').val();
     var customer_id     = $( '#edit_customer' ).data('customer-id');
-    var style_no        = $( '#edit_style_no' ).text() === ''?null:$('#edit_style_no').text();
+    var style_no        = $( '#edit_style_no' ).val() === ''?null:$('#edit_style_no').val();
     var order_type      = $( '#edit_order_type' ).text() === ''?null:$('#edit_order_type').text();
     var buyer_id        = $( '#edit_buyer' ).data('buyer-id');
-    var reference       = $( '#edit_reference' ).text() === ''?null:$('#edit_reference').text();
-    var disp_mode       = $( '#edit_disp_mode' ).val();
+    var reference       = $( '#edit_reference' ).val() === ''?null:$('#edit_reference').val();
+    var disp_mode       = $( '#edit_disp_mode option:selected' ).val() === ''?null:$('#edit_disp_mode option:selected').val();
     var order_date      = $( '#edit_order_date' ).text() === ''?null:$('#edit_order_date').text();
-    var length          = $( '#edit_length' ).text() === ''?null:$('#edit_length').text();
-    var repeat_gap      = $( '#edit_repeat_gap' ).val();
-    var machine         = $( '#edit_machine' ).val();
-    var cus_del_date    = $( '#edit_cus_del_date' ).val();
-    var roll_width      = $( '#edit_roll_width' ).val();
-    var width           = $( '#edit_width' ).text() === ''?null:$('#edit_width').text();
-    var film_no         = $( '#edit_film_no' ).val();
-    var act_del_date    = $( '#edit_act_del_date' ).val();
-    var length_side     = $( '#edit_length_side' ).val();
-    var excess          = $( '#edit_excess' ).val();
-    var teeth_no        = $( '#edit_teeth_no' ).val();
-    var inv_no          = $( '#edit_inv_no' ).val();
-    var no_sticker      = $( '#edit_no_sticker' ).val();
-    var finish_type     = $( '#edit_finish_type' ).val();
-    var print_color     = $( '#edit_print_color' ).text() === ''?null:$('#edit_print_color').text();
-    var compiled_by     = $( '#edit_compiled_by' ).val();
-    var barcode_read    = $( '#edit_barcode_read' ).val();
-    var operator        = $( '#edit_operator' ).val();
-    var checker         = $( '#edit_checker' ).val();
-    var authorized_by   = $( '#edit_author' ).val();
-    var axicon_verifier = $( '#edit_axicon_verifier' ).val();
-    var approved_by     = $( '#edit_approved_by' ).val();
-    var packer          = $( '#edit_packer' ).val();
-    var approval_date   = $( '#edit_approval_date' ).val();
-    var roll_issued_by  = $( '#edit_roll_issued_by' ).val();
-    var cutter          = $( '#edit_cutter' ).val();
-    var cartons         = $( '#edit_cartons' ).val();
+    var length          = $( '#edit_length' ).val() === ''?null:$('#edit_length').val();
+    var repeat_gap      = $( '#edit_repeat_gap' ).val() === ''?null:$( '#edit_repeat_gap' ).val();
+    var machine         = $( '#edit_machine option:selected' ).val() === ''?null:$( '#edit_machine option:selected' ).val();
+    var cus_del_date    = $( '#edit_cus_del_date' ).val() === ''?null:$( '#edit_cus_del_date' ).val();
+    var roll_width      = $( '#edit_roll_width' ).val() === ''?null:$( '#edit_roll_width' ).val();
+    var width           = $( '#edit_width' ).val() === ''?null:$('#edit_width').val();
+    var film_no         = $( '#edit_film_no' ).val() === ''?null:$( '#edit_film_no' ).val();
+    var invoice_date    = $( '#edit_invoice_date' ).val() === ''?null:$( '#edit_invoice_date' ).val();
+    var length_side     = $( '#edit_length_side' ).val() === ''?null:$( '#edit_length_side' ).val();
+    var excess          = $( '#edit_excess' ).val() === ''?null:$( '#edit_excess' ).val();
+    var teeth_no        = $( '#edit_teeth_no option:selected' ).val() === ''?null:$( '#edit_teeth_no option:selected' ).val();
+    var inv_no          = $( '#edit_inv_no' ).val() === ''?null:$( '#edit_inv_no' ).val();
+    var no_sticker      = $( '#edit_no_sticker' ).val() === ''?null:$( '#edit_no_sticker' ).val();
+    var finish_type     = $( '#edit_finish_type option:selected' ).val() === ''?null:$( '#edit_finish_type option:selected' ).val();
+    var print_color     = $( '#edit_print_color' ).val() === ''?null:$('#edit_print_color').val();
+    var compiled_by     = $( '#edit_compiled_by' ).val() === ''?null:$('#edit_compiled_by').val();
+    var barcode_read    = $( '#edit_barcode_read' ).val() === ''?null:$('#edit_barcode_read').val();
+    var operator        = $( '#edit_operator' ).val() === ''?null:$('#edit_operator').val();
+    var checker         = $( '#edit_checker' ).val() === ''?null:$('#edit_checker').val();
+    var authorized_by   = $( '#edit_author' ).val() === ''?null:$('#edit_author').val();
+    var axicon_verifier = $( '#edit_axicon_verifier' ).val() === ''?null:$('#edit_axicon_verifier').val();
+    var approved_by     = $( '#edit_approved_by' ).val() === ''?null:$('#edit_approved_by').val();
+    var packer          = $( '#edit_packer' ).val() === ''?null:$('#edit_packer').val();
+    var approval_date   = $( '#edit_approval_date' ).val() === ''?null:$('#edit_approval_date').val();
+    var roll_issued_by  = $( '#edit_roll_issued_by' ).val() === ''?null:$('#edit_roll_issued_by').val();
+    var cutter          = $( '#edit_cutter' ).val() === ''?null:$('#edit_cutter').val();
+    var cartons         = $( '#edit_cartons' ).val() === ''?null:$('#edit_cartons').val();
     var jobcard_id      = $( '#jobcard_id' ).val();
 
     var final_json_obj =   {
         "ratio": {},
-        "single": {}
-          };  
+        "single": {},
+        "erp_order_details" : []
+          };   
     var ratio_object = {};
     /** Create ratio templates json object */
     $('.edit-ratio-list-table').each(function (i, table) {
@@ -1634,12 +1707,12 @@ function updateJobcard(formData)
         // pushing single templates array into json object
         final_json_obj['single'] = single_ref_obj;
     });
-    
+
     var single_ref = [];
     var act_excess = [];
     /** [ Create array of act-excess ] */
     $('.edit-act-excess').each(function (i, item) {
-        act_excess[i] = $(item).text();
+        act_excess[i] = $(item).text() === ''?0:$(item).text();
         single_ref[i] = $(item).data('act-excess-ref');
     });
     act_excess = act_excess.join(',');
@@ -1648,7 +1721,7 @@ function updateJobcard(formData)
     var sticker_mtr = [];
     /** [ Create array of sticker-mtrs ] */
     $('.edit-sticker-mtrs').each(function (i, item) {
-        sticker_mtr[i] = $(item).text();
+        sticker_mtr[i] = $(item).text() === ''?0:$(item).text();
 
     });
     sticker_mtr = sticker_mtr.join(',');
@@ -1656,7 +1729,7 @@ function updateJobcard(formData)
     var settings = [];
     /** [ Create array of settings ] */
     $('.edit-settings').each(function (i, item) {
-        settings[i] = $(item).val();
+        settings[i] = $(item).val() === ''?0:$(item).val();
 
     });
     settings = settings.join(',');
@@ -1664,10 +1737,28 @@ function updateJobcard(formData)
     var total_mtrs = [];
     /** [ Create array of total-meters ] */
     $('.edit-total-meters').each(function (i, item) {
-        total_mtrs[i] = $(item).text();
+        total_mtrs[i] = $(item).text() === ''?0:$(item).text();
 
     });
     total_mtrs = total_mtrs.join(',');
+
+    jsonArray = [];
+    /** [ Create json object of jobcard-craeted orders ] */
+    $('.edit-erp-details').each(function (i, item) {
+        erp_order_details_obj = {};
+        erp_order_details_obj.created_at = $(this).attr('data-created-at'); 
+        erp_order_details_obj.order_type = $(this).attr('data-order-type'); 
+        erp_order_details_obj.buyer_po   = $(this).attr('data-buyer-po'); 
+        erp_order_details_obj.refname    = $(this).attr('data-ref-name'); 
+        erp_order_details_obj.erp_id     = $(this).attr('data-erp-id');
+        erp_order_details_obj.style_no   = $(this).attr('data-style-no');
+        erp_order_details_obj.temp_file  = $(this).attr('data-template-file');
+
+        jsonArray.push(erp_order_details_obj);
+    });
+
+    // pushing created_at array into json object
+    final_json_obj['erp_order_details'] = jsonArray;
 
     $.ajax({
         url: base_url + "/erp/job-manager/update-jobcard-details",
@@ -1693,7 +1784,7 @@ function updateJobcard(formData)
             roll_width: roll_width,
             width: width,
             film_no: film_no,
-            act_del_date: act_del_date,
+            invoice_date: invoice_date,
             length_side: length_side,
             excess: excess,
             teeth_no: teeth_no,
@@ -1729,16 +1820,22 @@ function updateJobcard(formData)
         },
         statusCode: {
             200: function(data) {
-                console.log(data)
-                var resp = JSON.stringify(data.file_path);
-                $('.snackbar_span').html("Jobcard Updated Successfully");
-                showSnackbar();
-                $('#jobcardUpdationModalCenter').modal('hide');
-                location.reload();
-                window.open(
-                    base_url+JSON.parse(resp),
-                    '_blank' // <- This is what makes it open in a new window.
-                );
+                /** [ Store file path into localstorage ] */
+                localStorage.setItem('file_path',data.file_path)
+                var loop = 0;
+                var isEdit = true;
+                $('.edit-erp-details').each(function (i, item) {
+                    created_at = $(this).attr('data-created-at'); 
+                    order_type = $(this).attr('data-order-type'); 
+                    buyer_po_no= $(this).attr('data-buyer-po'); 
+                    refname    = $(this).attr('data-ref-name'); 
+                    id         = $(this).attr('data-erp-id');
+                    style_no   = $(this).attr('data-style-no');
+                    modal_name = refname.replace(' ', '');
+
+                    openmodaltescopreview(modal_name, loop, style_no, buyer_po_no, id, order_type, created_at, isEdit);
+                    loop++;
+                });
             },
             400: function() {
                 $('.snackbar_span').html("Parameter is missing !!!");
@@ -1758,3 +1855,1149 @@ function updateJobcard(formData)
     })
 }
 
+/**
+ * Get customers list based on buyer selection
+ * @param buyer_id
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function getCustomersList(evt)
+{
+    try {
+        let selected_buyer_id = evt.value;
+        if (selected_buyer_id != '') 
+        {
+            $.ajax({
+                url: base_url + "/erp/job-manager/get-customers-list",
+                type: 'GET',
+                data: {
+                    selected_buyer_id: selected_buyer_id
+                },
+                tryCount: 0,
+                retryLimit: 2,
+                dataType: "json",
+                beforeSend: function () {
+                    $(".loader").show();
+                },
+                statusCode: {
+                    200: function(data) {
+                        var html = '<option value="">SELECT A CUSTOMER</option>';
+                        /** [ customers list selectpicker value populating ] */
+                        $.each(data.customers_list, function (key, item) {
+                            html += '<option value="' + key + '">' + item + '</option>';
+                        });
+                        $('#customer_filter').html(html);
+                        $('#customer_filter').selectpicker('refresh');
+                    },
+                    400: function() {
+                        $('.snackbar_span').html("Parameter is missing !!!");
+                        showSnackbar();
+                    },
+               },
+                error: function (errorXHR, errorStatus, errorThrown) {
+                    this.tryCount++;
+                    if (this.tryCount <= this.retryLimit) {
+                        $.ajax(this);
+                        return;
+                    }
+                },
+                complete: function () {
+                    $(".loader").hide();
+                }
+            })
+        }
+        else
+        {
+            $('#customer_filter').html('<option value="">SELECT A CUSTOMER</option>');
+            $('#customer_filter').selectpicker('refresh');
+            $('#jobcard_id_filter').html('<option value="">SELECT A JOBCARD ID</option>');
+            $('#jobcard_id_filter').selectpicker('refresh');
+        }
+    } catch (e) {
+        console.log("Error:"+e)
+    }
+}
+
+/**
+ * Get jobcard id list based on buyer and customer selection
+ * @param buyer_id, customer_id
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function getJobcardIDList(evt)
+{
+    try {
+        let selected_customer_id = evt.value;
+        let selected_buyer_id    = $('#buyer_filter option:selected').val();
+        if (selected_customer_id != '') 
+        {
+            $.ajax({
+                url: base_url + "/erp/job-manager/get-jobcard-id-list",
+                type: 'GET',
+                data: {
+                    selected_customer_id: selected_customer_id,
+                    selected_buyer_id:selected_buyer_id
+                },
+                tryCount: 0,
+                retryLimit: 2,
+                dataType: "json",
+                beforeSend: function () {
+                    $(".loader").show();
+                },
+                statusCode: {
+                    200: function(data) {
+                        var html = '<option value="">SELECT A JOBCARD ID</option>';
+                        /** [ jobcard id list selectpicker value populating ] */
+                        $.each(data.jobcard_id_list, function (key, item) {
+                            html += '<option value="' + key + '">' + item + '</option>';
+                        });
+                        $('#jobcard_id_filter').html(html);
+                        $('#jobcard_id_filter').selectpicker('refresh');
+                    },
+                    400: function() {
+                        $('.snackbar_span').html("Parameter is missing !!!");
+                        showSnackbar();
+                    },
+               },
+                error: function (errorXHR, errorStatus, errorThrown) {
+                    this.tryCount++;
+                    if (this.tryCount <= this.retryLimit) {
+                        $.ajax(this);
+                        return;
+                    }
+                },
+                complete: function () {
+                    $(".loader").hide();
+                }
+            })
+        }
+        else
+        {
+            $('#jobcard_id_filter').html('<option value="">SELECT A JOBCARD ID</option>');
+            $('#jobcard_id_filter').selectpicker('refresh');
+        }
+    } catch (e) {
+        console.log("Error:"+e)
+    }
+}
+/**
+ * Get jobcard list based on buyer,customer and jobcard id selection
+ * @param buyer_id, customer_id and jobcard_id
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+
+function getJobcardsList()
+{
+    try {
+        let selected_buyer_id    = $('#buyer_filter option:selected').val();
+        let selected_customer_id = $('#customer_filter option:selected').val();
+        let selected_jobcard_id  = $('#jobcard_id_filter option:selected').val();
+        if (selected_customer_id != '') 
+        {
+            $.ajax({
+                url: base_url + "/erp/job-manager/get-jobcards-list",
+                type: 'GET',
+                data: {
+                    selected_customer_id: selected_customer_id,
+                    selected_buyer_id:selected_buyer_id,
+                    selected_jobcard_id:selected_jobcard_id
+                },
+                tryCount: 0,
+                retryLimit: 2,
+                dataType: "json",
+                beforeSend: function () {
+                    $(".loader").show();
+                },
+                statusCode: {
+                    200: function(data) {
+                        var html = '<tr id="'+data.jobcards_list.jobcard_id+'">\
+                        <td>1</td>\
+                        <td>'+data.jobcards_list.work_order_id+'</td>\
+                        <td>'+data.jobcards_list.company_name+'</td>\
+                        <td>'+data.jobcards_list.buyer_name+'</td>\
+                        <td><a href="#"><i class="fa fa-pencil fa-button edit-jobcard filterbtn options" title="Edit Jobcard" data-placement="left"></i></a></td>\
+                        </tr>';
+                        $('#jobcard_list_table_body').html(html);            
+                    },
+                    400: function() {
+                        $('.snackbar_span').html("Parameter is missing !!!");
+                        showSnackbar();
+                    },
+               },
+                error: function (errorXHR, errorStatus, errorThrown) {
+                    this.tryCount++;
+                    if (this.tryCount <= this.retryLimit) {
+                        $.ajax(this);
+                        return;
+                    }
+                },
+                complete: function () {
+                    $(".loader").hide();
+                }
+            })
+        }
+        else
+        {
+            $('#jobcard_id_filter').html('<option value="">SELECT A JOBCARD ID</option>');
+            $('#jobcard_id_filter').selectpicker('refresh');
+        }
+    } catch (e) {
+        console.log("Error:"+e)
+    }
+}
+
+/**
+ * This Function is used to invoke JSBarcode.
+ * 
+ * @return barcode
+ */
+function openmodaltescopreview(modal, loop, style_no,buyer_no, id, order_type, created_at, isEdit) 
+{
+	
+    genarateArtworkPreview("tesco_svg_modal" + loop, modal,style_no,buyer_no,id,order_type,created_at, isEdit);
+
+}
+
+function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,created_at, isEdit) 
+{
+    var a = document.getElementById(data);
+    var svgDoc = a.contentDocument;
+    var name2=name;
+    var name = name + "-sticker";
+    if (name == "TSL1-sticker" || name == "TSL3-sticker") {
+    var svgarr = [];
+    var ajax_count = 0;
+    var b = " ";
+    var position = 3;
+    var ref_name = [name2.slice(0, position), b, name2.slice(position)].join('').trim();
+
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+            url: base_url + "/erp/job-manager/get_order_details",
+            type: "Post",
+            dataType: "json",
+            data: {
+                _token: csrf_token,
+                ref_name: ref_name,
+                style_no: style_no,
+                buyer_no: buyer_no,
+                id: id,
+                created_at: created_at,
+                order_type:order_type
+            },
+            beforeSend: function() {
+
+            },
+            success: function(data) {
+                $(data.order_details).each(function (key, val) {
+                    var svgRoot = svgDoc.documentElement;
+                    var zone=val.zone;
+                    localStorage.setItem("zone", zone);
+
+                    if ((name == "TSL1-sticker" && zone == "CE")) {
+                        svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + val.orms_tpn;
+                    } else if ((name == "TSL3-sticker" && zone == "CE")) {
+                        svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + val.orms_tpn;
+                    } else if ((name == "TSL3-sticker" && zone == "UK")) {
+                        svgDoc.getElementById("tpnd").innerHTML = "TPND: " + val.tpnd;
+                    } else if ((name == "TSL1-sticker" && zone == "UK")) {
+                        svgDoc.getElementById("tpnd").innerHTML = "TPND: " + val.tpnd;
+                    }
+
+                    if ((name == "TSL3-sticker")) {
+                        if (zone == "CE") {
+                            var barcode_change = val.ean_barcode
+                        } else {
+                            var barcode_change = val.ean_barcode
+                        }
+                        jsbarcodetescotslean(barcode_change, 'barcode', svgDoc)
+                        svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+                    } else {
+                        if (zone == "CE") {
+                            var barcode_change = val.itf_barcode
+                        } else {
+                            var barcode_change = val.itf_barcode
+                        }
+                        jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
+                        svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+
+                    }
+
+                    if (zone == "CE") {
+                        var size = val.size;
+                    } else {
+                        var size = val.size;
+                    }
+
+                    var description = val.short_description.replace(/&/g,'&#038;');
+                    if ((name == "TSL3-sticker")) {
+                        if (size != '') {
+                            $.ajax({
+                                url: base_url + "/erp/job-manager/tesco/get-tsl-size",
+                                type: 'GET',
+                                async: false,
+                                data: {
+                                    size: size,
+                                    zone: zone
+                                },
+                                tryCount: 0,
+                                retryLimit: 2,
+                                success: function (data) {
+                                        /** [ Dynamically change svg short description ] */
+                                    if (description != '' && data.size_chart.length != 0) {
+                                        var str = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+
+                                        
+                                        if (str.length > 24) {
+                                            if (/\S/.test(str.charAt(24))) {
+                                                //No Space
+                                                if (str.indexOf(" ") == "-1") {
+                                                    svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+                                                    svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+                                                } else {
+                                                    svgDoc.getElementById("description").innerHTML = str.substr(0, str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+                                                    svgDoc.getElementById("description1").innerHTML = str.substr(str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+                                                }
+
+                                            } else {
+                                                //Space
+                                                svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+                                                svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+                                            }
+                                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+                                        } else {
+                                            svgDoc.getElementById("description").innerHTML = str.toUpperCase();
+                                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+                                            svgDoc.getElementById("description1").innerHTML = "";
+                                        }
+                                    } else if (data.size_chart.length != 0) {
+                                        svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+                                        svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
+                                        svgDoc.getElementById("description1").innerHTML = '';
+                                    } else if (description != '') {
+                                        if (description.length > 24) {
+                                            if (/\S/.test(description.charAt(24))) {
+                                                //No Space
+                                                if (description.indexOf(" ") == "-1") {
+                                                    svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+                                                    svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+                                                } else {
+                                                    svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+                                                    svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+                                                }
+
+                                            } else {
+                                                //Space
+                                                svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+                                                svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+                                            }
+                                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+                                        } else {
+                                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+                                            svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                                            svgDoc.getElementById("description1").innerHTML = "";
+                                        }
+                                    } else {
+                                        svgDoc.getElementById("description").innerHTML = '';
+                                        svgDoc.getElementById("description1").innerHTML = '';
+                                    }
+                                    var s = new XMLSerializer();
+                                    var d = svgRoot;
+                                    var str = s.serializeToString(d);
+                                    var svg = encodeURI(str)
+                                    svgarr.push(svg)
+                                },
+                                error: function (errorXHR, errorStatus, errorThrown) {
+                                    this.tryCount++;
+                                    if (this.tryCount <= this.retryLimit) {
+                                        $.ajax(this);
+                                        return;
+                                    }
+                                },
+                                complete: function () {
+
+                                }
+                            })
+                        } else {
+                            /** [ Dynamically change svg short description ] */
+                            if (description != '') {
+                                
+                                    if (description.length > 24) {
+                                        if (/\S/.test(description.charAt(24))) {
+                                            //No Space
+                                            if (description.indexOf(" ") == "-1") {
+                                                svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+                                                svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+                                            } else {
+                                                svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+                                                svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+                                            }
+
+                                        } else {
+                                            //Space
+                                            svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+                                            svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+                                        }
+                                        svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+                                    } else {
+                                        svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                                        svgDoc.getElementById("description1").innerHTML = "";
+                                        svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+                                    }
+                            } else {
+                                svgDoc.getElementById("description").innerHTML = '';
+                            }
+                            var s = new XMLSerializer();
+                            var d = svgRoot;
+                            var str = s.serializeToString(d);
+                            var svg = encodeURI(str)
+                            svgarr.push(svg)
+
+                        }
+                    } else {
+                        var description =val.short_description.replace(/&/g,'&#038;');
+                        if (description.length > 24) {
+                            if (/\S/.test(description.charAt(24))) {
+                                //No Space
+                                if (description.indexOf(" ") == "-1") {
+                                    svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+                                    svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+                                } else {
+                                    svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+                                    svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+                                }
+
+                            } else {
+                                //Space
+                                svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+                                svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+                            }
+                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+                        } else {
+                            svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                            svgDoc.getElementById("description1").innerHTML = "";
+                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+                        }
+                        var s = new XMLSerializer();
+                        var d = svgRoot;
+                        var str = s.serializeToString(d);
+                        var svg = encodeURI(str)
+                        svgarr.push(svg)
+                    }
+                    ajax_count++;
+                })
+                if (ajax_count == data.order_details.length) {
+                    var svg_fin = svgarr.join(',_');
+                    var zone = localStorage.getItem("zone");
+                    PDFTescoSmallPreview(svg_fin, name,zone,style_no,buyer_no,id,created_at, isEdit);
+                }
+            },
+            error: function(data) {
+
+            },
+            complete: function() {
+
+            }
+        })
+
+} else {
+    var svgarr = [];
+    var ajax_count = 0;
+    var b = " ";
+    var position = 3;
+    var ref_name = [name2.slice(0, position), b, name2.slice(position)].join('').trim();
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+            url: base_url + "/erp/job-manager/get_order_details",
+            type: "Post",
+            dataType: "json",
+            data: {
+                _token: csrf_token,
+                ref_name: ref_name,
+                style_no: style_no,
+                buyer_no: buyer_no,
+                id: id,
+                created_at: created_at,
+                order_type:order_type
+            },
+            beforeSend: function() {
+
+            },
+            success: function(data) {
+                $(data.order_details).each(function (key, val) {
+                    var zone=val.zone;
+                    localStorage.setItem("zone", zone);
+                    var svgRoot = svgDoc.documentElement;
+                                
+                if (val.supplier_name != '') {
+                    svgDoc.getElementById("supplier").innerHTML = val.supplier_name.toUpperCase().replace('&', '&amp;');
+                } else {
+                    svgDoc.getElementById("supplier").innerHTML = "";
+                }
+                                
+                if (val.po_number != '') {
+                    svgDoc.getElementById("po_number").innerHTML = val.po_number.toUpperCase();
+                } else {
+                    svgDoc.getElementById("po_number").innerHTML = '';
+                }
+
+                /** [ Dynamically change svg CE style reference number ] */
+                if (val.ce_style_ref != '') {
+                    svgDoc.getElementById("ce_style").innerHTML = val.ce_style_ref.toUpperCase();
+                } else {
+                    svgDoc.getElementById("ce_style").innerHTML = '';
+                }
+                /** [ Dynamically change svg UK style reference number ] */
+                if (val.uk_style_ref != '') {
+                    svgDoc.getElementById("uk_style").innerHTML = val.uk_style_ref.toUpperCase();
+                } else {
+                    svgDoc.getElementById("uk_style").innerHTML = '';
+                }
+                /** [ Dynamically change svg EQOS code ] */
+                if (val.eqos_site_code != '') {
+                    svgDoc.getElementById("eqos").innerHTML = val.eqos_site_code.toUpperCase();
+                } else {
+                    svgDoc.getElementById("eqos").innerHTML = '';
+                }
+                
+                            
+                                /** [ Dynamically change  svg department ] */
+                if (val.department != '') {
+                    /** [Give font-size for department] */
+                    if (val.department.length < 17) {
+                        svgDoc.getElementById("department").setAttribute("style", "font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;");
+                    } else {
+                        svgDoc.getElementById("department").setAttribute("style", "font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:9px;");
+                    }
+                    /** [ Dynamically change svg department] */
+                    svgDoc.getElementById("department").innerHTML = val.department.toUpperCase().replace('&', '&amp;');
+                } else {
+                    svgDoc.getElementById("department").innerHTML = '';
+                }
+                /** [ Dynamically change svg brand ] */
+                if (val.brand != '') {
+                    /** [Give font-size for brand] */
+                    if (val.brand.length < 17) {
+                        svgDoc.getElementById("brand").setAttribute("style", "font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;");
+                    } else {
+                        svgDoc.getElementById("brand").setAttribute("style", "font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:9px;");
+                    }
+                    svgDoc.getElementById("brand").innerHTML = val.brand.toUpperCase().replace('&', '&amp;');
+                } else {
+                    svgDoc.getElementById("brand").innerHTML = '';
+                }
+                                
+                                                
+                var tag_at_source = val.tag_at_source == 0 ? "no" : "yes";
+                var rfid = val.rfid_compliant == 0 ? "no" : "yes";
+                                
+                /** [ Dynamically svg RFID ] */
+                if (rfid != '') {
+                    svgDoc.getElementById("rfid").innerHTML = rfid.toUpperCase();
+                } else {
+                    svgDoc.getElementById("rfid").innerHTML = '';
+                }
+                /** [ Dynamically change svg tag at source ] */
+                if (tag_at_source != '') {
+                    svgDoc.getElementById("tag_at_source").innerHTML = tag_at_source.toUpperCase();
+                } else {
+                    svgDoc.getElementById("tag_at_source").innerHTML = '';
+                }
+                /** [ Dynamically change svg tag at source ] */
+                if (val.season_code != '') {
+                    svgDoc.getElementById("season_code").innerHTML = val.season_code.toUpperCase();
+                } else {
+                    svgDoc.getElementById("season_code").innerHTML = '';
+                }
+                /** [ Dynamically change svg manufacture date ] */
+                if (val.manufacture_date != '') {
+                    svgDoc.getElementById("manufactured_date").innerHTML = val.manufacture_date.toUpperCase();
+                } else {
+                    svgDoc.getElementById("manufactured_date").innerHTML = '';
+                }
+                                
+                    if ((name == "TCL1-sticker" && zone == "CE") || (name == "TCL2-sticker" && zone == "CE") || (name == "TSL1-sticker" && zone == "CE") || (name == "THL1-sticker" && zone == "CE")) {
+                        svgDoc.getElementById("pieces_in_ratio").innerHTML = val.cases_per_carton;
+
+                        svgDoc.getElementById("tpnd").innerHTML = val.orms_tpn;
+                    } else if ((name == "TCL4-sticker" && zone == "CE") || (name == "THL3-sticker" && zone == "CE")) {
+                        svgDoc.getElementById("unit_per_case").innerHTML = val.case_size;
+
+                        svgDoc.getElementById("tpnd").innerHTML =val.orms_tpn;
+                    } else if ((name == "TCL4-sticker" && zone == "UK") || (name == "THL3-sticker" && zone == "UK")) {
+                        svgDoc.getElementById("unit_per_case").innerHTML = val.case_size;
+
+                        svgDoc.getElementById("tpnd").innerHTML = val.tpnd;
+                    } else if ((name == "TCL1-sticker" && zone == "UK") || (name == "TCL2-sticker" && zone == "UK") || (name == "TSL1-sticker" && zone == "UK") || (name == "THL1-sticker" && zone == "UK")) {
+                        svgDoc.getElementById("pieces_in_ratio").innerHTML = val.units_per_carton;
+
+                        svgDoc.getElementById("tpnd").innerHTML = val.tpnd;
+                    }
+                    if ((name == "THL3-sticker")) {
+
+                        if (zone == "CE") {
+                            var barcode_change = val.ean_barcode
+                        } else {
+                            var barcode_change = val.ean_barcode
+                        }
+                        jsbarcodetescoean(barcode_change, 'barcode', svgDoc)
+                        svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+                    } else if ((name == "TCL1-sticker") || (name == "THL1-sticker")) {
+
+                        if (zone == "CE") {
+                            var barcode_change = val.itf_barcode
+                        } else {
+                            var barcode_change = val.itf_barcode
+                        }
+                        jsbarcodetesco(barcode_change, 'barcode', svgDoc)
+                        svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+
+                    }
+
+                    if (zone == "CE") {
+                        var size = val.size;
+                    } else {
+                        var size = val.size;
+                    }
+
+                    var description = val.short_description.replace(/&/g,'&#038;');
+                    if ((name == "TCL4-sticker") || (name == "TSL3-sticker") || (name == "THL3-sticker")) {
+                        if (size != '') {
+                            $.ajax({
+                                url: base_url + "/erp/job-manager/tesco/get-tsl-size",
+                                type: 'GET',
+                                async: false,
+                                data: {
+                                    size: size,
+                                    zone: zone
+                                },
+                                tryCount: 0,
+                                retryLimit: 2,
+                                success: function (data) {
+                                    /** [ Dynamically change svg short description ] */
+                                    if (description != '' && data.size_chart.length != 0) {
+                                        svgDoc.getElementById("description").innerHTML = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+                                    } else if (data.size_chart.length != 0) {
+                                        svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
+                                    } else if (description != '') {
+                                        svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                                    } else {
+                                        svgDoc.getElementById("description").innerHTML = '';
+                                    }
+                                    var s = new XMLSerializer();
+                                    var d = svgRoot;
+                                    var str = s.serializeToString(d);
+                                    svgarr.push(str)
+                                },
+                                error: function (errorXHR, errorStatus, errorThrown) {
+                                    this.tryCount++;
+                                    if (this.tryCount <= this.retryLimit) {
+                                        $.ajax(this);
+                                        return;
+                                    }
+                                },
+                                complete: function () {
+
+                                }
+                            })
+                        } else {
+                            /** [ Dynamically change svg short description ] */
+                            if (description != '') {
+                                svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                            } else {
+                                svgDoc.getElementById("description").innerHTML = '';
+                            }
+                            var s = new XMLSerializer();
+                            var d = svgRoot;
+                            var str = s.serializeToString(d);
+
+                            svgarr.push(str)
+
+                        }
+                    } else {
+                        if (description != '') {
+                                svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                            } else {
+                                svgDoc.getElementById("description").innerHTML = '';
+                            }
+                        var s = new XMLSerializer();
+                        var d = svgRoot;
+                        var str = s.serializeToString(d);
+
+                        svgarr.push(str)
+                    }
+                    ajax_count++;
+                })
+                if (ajax_count == data.order_details.length) {
+                    var svg_fin = svgarr.join(',_');
+                    var zone = localStorage.getItem("zone");
+                    PDFTescoPreview(svg_fin, name,zone,style_no,buyer_no,id,created_at, isEdit);
+                }
+            },
+            error: function(data) {
+
+            },
+            complete: function() {
+
+            }
+        });
+    
+}
+
+
+}
+ 
+/** Get order details for artwork attachment ( while edit jobcard functionality ) */
+
+
+
+/**
+* This Function is Sub Function of #printDivTesco.
+*  For print preview of stickers
+* @return Pdf
+*/
+
+function PDFTescoPreview(data, name,zone,style_no,buyer_no,id,created_at, isEdit) {
+	if(name == "TCL1-sticker")
+	{
+		var db = "tesco_tcl1_orders";
+	}
+	else if(name == "TCL2-sticker")
+	{
+		var db = "tesco_tcl2_orders";
+	}
+	else if(name == "TCL4-sticker")
+	{
+		var db = "tesco_tcl4_orders";
+	}
+	else if(name == "THL1-sticker")
+	{
+		var db = "tesco_thl1_orders";
+	}
+	else if(name == "THL3-sticker")
+	{
+		var db = "tesco_thl3_orders";
+	}
+$.ajax({
+    url: base_url + "/erp/job-manager/tesco/print-div-tesco",
+    type: "post",
+    data: {
+       _token: csrf_token,
+		svg: data,
+		name:name,
+		zone:zone,
+		style:style_no,
+		tesco_po_number:buyer_no,
+		id:id,
+		created_at:created_at,
+		db:db
+    },
+    tryCount: 0,
+    retryLimit: 2,
+    async: false,
+    success: function (data) {
+
+        localStorage.setItem('file_path',localStorage.getItem('file_path')+','+data.file_path);
+
+        // differentiate between edit and create functionality
+        if(isEdit === false)
+        {
+            operation()
+        }
+        else
+        {
+            operationEdit()
+        }
+
+    },
+    error: function (errorXHR, errorStatus, errorThrown) {
+        this.tryCount++;
+        if (this.tryCount <= this.retryLimit) {
+            $.ajax(this);
+            return;
+        }
+    },
+})
+}
+/**
+* This Function is Sub Function of #printDivTesco.
+*  For print preview of small stickers
+* @return Pdf
+*/
+
+function PDFTescoSmallPreview(data, name,zone,style_no,buyer_no,id,created_at, isEdit) {
+	
+	if(name == "TCL1-sticker")
+	{
+		var db = "tesco_tcl1_orders";
+	}
+	else if(name == "TCL2-sticker")
+	{
+		var db = "tesco_tcl2_orders";
+	}
+	else if(name == "TCL4-sticker")
+	{
+		var db = "tesco_tcl4_orders";
+	}
+	else if(name == "THL1-sticker")
+	{
+		var db = "tesco_thl1_orders";
+	}
+	else if(name == "THL3-sticker")
+	{
+		var db = "tesco_thl3_orders";
+	}
+	
+$.ajax({
+    url: base_url + "/erp/job-manager/tesco/print-div-tesco-small",
+    type: "post",
+    data: {
+       _token: csrf_token,
+		svg: data,
+		name:name,
+		zone:zone,
+		style:style_no,
+		tesco_po_number:buyer_no,
+		id:id,
+		created_at:created_at,
+		db:db
+    },
+    tryCount: 0,
+    retryLimit: 2,
+    async: false,
+    success: function (data) {
+        localStorage.setItem('file_path',localStorage.getItem('file_path')+','+data.file_path);
+        
+        // differentiate between edit and create functionality
+        if(isEdit === false)
+        {
+            operation()
+        }
+        else
+        {
+            operationEdit()
+        }
+
+    },
+    error: function (errorXHR, errorStatus, errorThrown) {
+        this.tryCount++;
+        if (this.tryCount <= this.retryLimit) {
+            $.ajax(this);
+            return;
+        }
+    },
+})
+}
+
+
+/**
+* This Function is used to invoke JSBarcode.
+* 
+* @return barcode
+*/
+function jsbarcodetesco(code, id, svgDoc) {
+
+JsBarcode("#ean-13", code, {
+    format: "ITF14",
+    width: 3.28148,
+    height: 202,
+    fontSize: 30,
+    flat: true,
+    displayValue: false
+});
+var svg = document.getElementById('svgdiv').querySelector('svg'),
+    canvas = document.createElement('canvas'),
+    body = document.getElementsByTagName('body')[0],
+    canvasTmp,
+    svg_xml,
+    ctx,
+    img;
+// if our "svg" doesn't have 'xmlns' attribute we must add it
+//    svg.setAttribute('width', '188.931023622px');
+svg.setAttribute('font-size', '30px');
+svg.setAttribute('font-family', 'frankgothcnbt');
+
+svg.setAttribute('width', '408.900px');
+svg.setAttribute('height', '328.02px');
+
+
+
+//svg.removeAttribute('version');
+//svg.removeAttribute('viewBox');
+//	svg.removeAttribute('x');
+//	svg.removeAttribute('y');
+//svg.setAttribute('viewBox','0 ,0 ,463 ,222');
+
+canvas.id = 'canvas';
+canvas.width = svg.getBoundingClientRect().width;
+canvas.height = svg.getBoundingClientRect().height;
+
+body.appendChild(canvas);
+canvasTmp = document.getElementById('canvas');
+
+/* Time to play ;) */
+
+// https://developer.mozilla.org/en/XMLSerializer
+svg_xml = (new XMLSerializer()).serializeToString(svg);
+ctx = canvasTmp.getContext('2d');
+
+// JavaScript (HTML) image
+img = new Image();
+
+img.onload = function () {
+    ctx.drawImage(img, 0, 0);
+};
+
+// img.src - contains base64 URI from svg
+// https://developer.mozilla.org/en/DOM/window.btoa
+img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+
+
+//remove temporary canvas
+canvasTmp.remove();
+svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+
+/**
+* This Function is used to invoke Ean 13 JSBarcode.
+* 
+* @return barcode
+*/
+function jsbarcodetescoean(code, id, svgDoc) {
+JsBarcode("#ean-13", code, {
+    format: "ean13",
+    width: 3.9260,
+    height: 170,
+    fontSize: 30,
+    flat: true,
+    displayValue: false
+});
+var svg = document.getElementById('svgdiv').querySelector('svg'),
+    canvas = document.createElement('canvas'),
+    body = document.getElementsByTagName('body')[0],
+    canvasTmp,
+    svg_xml,
+    ctx,
+    img;
+// if our "svg" doesn't have 'xmlns' attribute we must add it
+//    svg.setAttribute('width', '188.931023622px');
+svg.setAttribute('font-size', '50px');
+svg.setAttribute('font-family', 'frankgothcnbt');
+
+svg.setAttribute('width', '412.25px');
+svg.setAttribute('height', '378.02px');
+
+canvas.id = 'canvas';
+canvas.width = svg.getBoundingClientRect().width;
+canvas.height = svg.getBoundingClientRect().height;
+
+body.appendChild(canvas);
+canvasTmp = document.getElementById('canvas');
+
+/* Time to play ;) */
+
+// https://developer.mozilla.org/en/XMLSerializer
+svg_xml = (new XMLSerializer()).serializeToString(svg);
+ctx = canvasTmp.getContext('2d');
+
+// JavaScript (HTML) image
+img = new Image();
+
+img.onload = function () {
+    ctx.drawImage(img, 0, 0);
+};
+
+// img.src - contains base64 URI from svg
+// https://developer.mozilla.org/en/DOM/window.btoa
+img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+
+//remove temporary canvas
+canvasTmp.remove();
+
+svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+/**
+* This Function is used to invoke Ean 13 JSBarcode.
+* 
+* @return barcode
+*/
+function jsbarcodetescotslean(code, id, svgDoc) {
+JsBarcode("#ean-13", code, {
+    format: "ean13",
+    width: 3.9260,
+    height: 167,
+    fontSize: 30,
+    flat: true,
+    displayValue: false
+});
+var svg = document.getElementById('svgdiv').querySelector('svg'),
+    canvas = document.createElement('canvas'),
+    body = document.getElementsByTagName('body')[0],
+    canvasTmp,
+    svg_xml,
+    ctx,
+    img;
+// if our "svg" doesn't have 'xmlns' attribute we must add it
+//    svg.setAttribute('width', '188.931023622px');
+svg.setAttribute('font-size', '50px');
+svg.setAttribute('font-family', 'frankgothcnbt');
+
+svg.setAttribute('width', '419.075px');
+svg.setAttribute('height', '275.02px');
+
+canvas.id = 'canvas';
+canvas.width = svg.getBoundingClientRect().width;
+canvas.height = svg.getBoundingClientRect().height;
+
+body.appendChild(canvas);
+canvasTmp = document.getElementById('canvas');
+
+/* Time to play ;) */
+
+// https://developer.mozilla.org/en/XMLSerializer
+svg_xml = (new XMLSerializer()).serializeToString(svg);
+ctx = canvasTmp.getContext('2d');
+
+// JavaScript (HTML) image
+img = new Image();
+
+img.onload = function () {
+    ctx.drawImage(img, 0, 0);
+};
+
+// img.src - contains base64 URI from svg
+// https://developer.mozilla.org/en/DOM/window.btoa
+img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+
+//remove temporary canvas
+canvasTmp.remove();
+
+svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+
+/**
+* This Function is used to invoke JSBarcode.
+* 
+* @return barcode 
+*/
+
+
+function jsbarcodetescotsl(code, id, svgDoc) {
+JsBarcode("#ean-13", code, {
+    format: "ITF14",
+    width: 3.28148,
+    height: 199,
+    fontSize: 30,
+    flat: true,
+    displayValue: false
+});
+var svg = document.getElementById('svgdiv').querySelector('svg'),
+    canvas = document.createElement('canvas'),
+    body = document.getElementsByTagName('body')[0],
+    canvasTmp,
+    svg_xml,
+    ctx,
+    img;
+// if our "svg" doesn't have 'xmlns' attribute we must add it
+//    svg.setAttribute('width', '188.931023622px');
+svg.setAttribute('font-size', '30px');
+svg.setAttribute('font-family', 'frankgothcnbt');
+
+svg.setAttribute('width', '415.100px');
+svg.setAttribute('height', '328.02px');
+
+canvas.id = 'canvas';
+canvas.width = svg.getBoundingClientRect().width;
+canvas.height = svg.getBoundingClientRect().height;
+body.appendChild(canvas);
+canvasTmp = document.getElementById('canvas');
+/* Time to play ;) */
+// https://developer.mozilla.org/en/XMLSerializer
+svg_xml = (new XMLSerializer()).serializeToString(svg);
+ctx = canvasTmp.getContext('2d');
+// JavaScript (HTML) image
+img = new Image();
+img.onload = function () {
+    ctx.drawImage(img, 0, 0);
+};
+
+// img.src - contains base64 URI from svg
+// https://developer.mozilla.org/en/DOM/window.btoa
+img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+//remove temporary canvas
+canvasTmp.remove();
+
+svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+/**
+ * Check if loop execution completed or not (for create jobcard)
+ * @author praveen
+ */
+var operationsCompleted = 0;
+function operation() {
+    ++operationsCompleted;
+    if (operationsCompleted === $('[class="row-checkbox"]:checked').length) after_forloop(); 
+}
+
+/**
+ * Check if loop execution completed or not(for edit jobcard)
+ * @author praveen
+ */
+var isOperationsCompleted = 0;
+function operationEdit() {
+    ++isOperationsCompleted;
+    if (isOperationsCompleted === $('.edit-erp-details').length) after_forloop(); 
+}
+
+/**
+ * Call after loop execution completed
+ * @author praveen
+ */
+function after_forloop()
+{
+    $.ajax({
+        url: base_url + "/erp/job-manager/pdf-merge",
+        type: 'post',
+        data: {
+            _token: csrf_token,
+            path:localStorage.getItem('file_path')
+        },
+        tryCount: 0,
+        retryLimit: 2,
+        dataType: "json",
+        beforeSend: function () {
+            $(".loader").show();
+        },
+        statusCode: {
+            200: function(data) {     
+                var resp = JSON.stringify(data.file_path);
+                $('.snackbar_span').html("Jobcard Created Successfully");
+                showSnackbar();
+                $('#jobcardCreationModalCenter').modal('hide');
+                location.reload();
+                window.open(
+                    base_url+JSON.parse(resp),
+                    '_blank' // <- This is what makes it open in a new window.
+                );   
+            },
+            400: function() {
+              
+            },
+       },
+        error: function (errorXHR, errorStatus, errorThrown) {
+            this.tryCount++;
+            if (this.tryCount <= this.retryLimit) {
+                $.ajax(this);
+                return;
+            }
+        },
+        complete: function () {
+            $(".loader").hide();
+        }
+    })
+}
