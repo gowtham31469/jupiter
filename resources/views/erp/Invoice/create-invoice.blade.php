@@ -160,7 +160,7 @@
                         </div> -->
                         </div>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-5" style="margin-bottom: 3rem;">
                         <div class="orders-tax">
                             
                         </div>
@@ -169,9 +169,7 @@
                         </div>
                     </div>
                     <div class="bottom-bar hidden">
-                        <div class="modal-footer">
-                            <div class="create-invoice"><button type="button" class="btn btn-xs btn-success save-btn create-invoice pull-right" id="create-invoice">Create Invoice</button></div>
-                        </div>
+                        
                     </div>
                 </div>                    
             </form>

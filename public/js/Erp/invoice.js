@@ -178,12 +178,14 @@
         var gndtotal = parseFloat($('.tax-total').text())+ parseFloat($('.total-amnt').text());
         
         $('.extra-charges').html('<table class="table table-bordered text-center extra-charges" style="margin-top: -22px;"><thead><tr><th>Description</th><th>Amount (₹)</th><th><button type="button" onclick="addExtraCharges(this,event)" data-id="1" class="btn btn-default btn-sm add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i></button></th></tr></thead><tbody id="table_row"><tr class="ext_charges_tr"><td><select class="charges" id="charges1" name="charges1" required><option  data-id="0" value=""></option><option data-id="Freight" value="freight">Freight</option><option data-id="Minimum charges" value="minimumcharges">Minimum charges</option><option data-id="Job Work Charges" value="jobwork">Job Work Charges</option></select></td><td style="width: 116px;"><input type="number" value="" min="0" id="chrg_val1" class="form-control extra-amnt" onkeyup="updateTotal()"></td><td></td></tr></tbody></table><table class="table table-bordered text-center" style="margin-top: -22px;"><tbody><tr><td colspan="2"><strong>SubTotal</strong></td><td class="sub-extra">0.00</td></tr><tr></tr><tr hidden ><td colspan="2"><strong>Round Off</strong></td><td style="width: 116px;"><input type="number" min="0" value="0.00" id="round-off" step=".01" class="form-control round-off" onkeyup="updateGrandTotal(this,'+gndtotal+')"></td></tr><tr><td colspan="2" style="border-width: 1px !important;"><strong>Grand Total</strong></td><td class="grand-total" style="border-width: 1px !important;">'+gndtotal.toFixed(2)+'</td></tr><tr></tr></tbody></table>')
+        $('.bottom-bar').html('<div class="modal-footer"><div class="create-invoice"><button class="btn btn-xs btn-success save-btn create-invoice pull-right" id="create-invoice">Create Invoice</button></div></div>')
 
-            $('#create-invoice').on('click',function(){
-                var roundoff = Math.round($('.grand-total').text()) - $('.grand-total').text()
-                $('.grand-total').text((parseFloat($('.grand-total').text())+roundoff).toFixed(2))
-                $('#round-off').val(roundoff);
+           $('#create-invoice').on('click',function(){
+            // function createInvoicePreview(){
+                 $('#round-off').closest('tr').removeAttr('hidden')
                 previewInvoice(orderData)
+            // }
+                
             })
         $('.order-details tbody').on('change', 'input[type="checkbox"]', function(){
             updateInvoice(this)                           
@@ -198,7 +200,7 @@
             $('.remarks').removeClass('hidden')
             $('.create-invoice').removeClass('hidden')
             $('.orders-tax').removeClass('hidden')
-            $('.extra-charges').removeClass('hidden')
+            $('.preview-extra-charges').removeClass('hidden')
             $('.bottom-bar').removeClass('hidden')
         }
         else{
@@ -471,7 +473,11 @@
         $('.sub-extra').html(result.toFixed(2))
         var grandTotal = parseFloat($('.tax-total').text())+ parseFloat($('.total-amnt').text()) + parseFloat($('.sub-extra').text()) + parseFloat($('#round-off').val()) ;
         // console.log(parseFloat($('.tax-total').text()) , parseFloat($('.total-amnt').text()) , parseFloat($('.sub-extra').text()) , parseFloat($('#round-off').val()))
-        $('.grand-total').html(grandTotal.toFixed(2))        
+        $('.grand-total').html(grandTotal.toFixed(2)) 
+
+        var roundoff = Math.round($('.grand-total').text()) - $('.grand-total').text()
+        $('.grand-total').text((parseFloat($('.grand-total').text())+roundoff).toFixed(2))
+        $('#round-off').val(roundoff.toFixed(2));      
     }
 
     /**

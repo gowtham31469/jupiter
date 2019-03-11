@@ -266,7 +266,7 @@
                     <table cellpadding="1" cellspacing="0">
                     <tr>
                         <td width="308" style="border-bottom:1px solid black;">
-                            <span>Amount in words :</span><br>
+                            <span>AMOUNT IN WORDS :</span><br>
                             <span>{{$amntInwords}}</span>
                         </td>
                         <td width="80" style="border-bottom:1px solid black;">

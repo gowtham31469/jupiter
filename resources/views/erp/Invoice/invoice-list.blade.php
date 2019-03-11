@@ -82,7 +82,7 @@
         margin-bottom: 20px;'>
             <label for="order_type" class="form_label row" style="display: block;">Search Invoice Id</label>
             <div class="form-group row has-feedback">
-              <input type="text" onkeypress="return isNumber(event)" placeholder="Enter Invoice Id" required id="invoice_id" class="invoice_id form-control col-md-2" style="width: auto; margin-right: 10px;">
+              <input type="text" placeholder="Enter Invoice Id" required id="invoice_id" class="invoice_id form-control col-md-2" style="width: auto; margin-right: 10px;">
 
               <button class="btn btn-primary btn-block col-md-1" style="width: auto;"><span class="glyphicon glyphicon-search"></span></button>
             </div>
