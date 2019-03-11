@@ -267,7 +267,7 @@ class OrderStatusCntrl extends Controller
             $sub_total  =   0 ;
             $pi_obj     =   new ProfomaInvoice();
             $data       =   $pi_obj->getTescoPIDetails($request);
-            $attatchment =  $pi_obj->getAttachment($data);
+            // $attatchment =  $pi_obj->getAttachment($data);
             // return $attatchment;
             $erpOrders  =   [];
             $erp_obj    =   new ErpOrders();
@@ -302,7 +302,7 @@ class OrderStatusCntrl extends Controller
                     'template_type'    => $data['bank_details']->template_type,
                     'revision_no'      => $data['item_details'][0]->pi_rev_no,
                     'rep_order_id'     => $rep_order_id,
-                     'pi_file'         => $attatchment
+                     // 'pi_file'         => $attatchment
                     
                 ]);
                 foreach ($data['item_details'] as $key => $value)
@@ -360,7 +360,7 @@ class OrderStatusCntrl extends Controller
                                             ->update([
                                                'pi_status' => "PI Approved",
                                                'pi_id' => $pi_details->id,
-                                               'pi_file' => $attatchment,
+                                               // 'pi_file' => $attatchment,
                                                'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                                             ]);
                     }
@@ -380,14 +380,14 @@ class OrderStatusCntrl extends Controller
                                             ->update([
                                                'pi_status' => "PI Approved",
                                                'pi_id' => $pi_details->id,
-                                               'pi_file' => $attatchment,   
+                                               // 'pi_file' => $attatchment,   
                                                'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                                             ]);
                     }
                     $erpOrders['tableName'] = $table;
                     $erpOrders['id']        = $tableID;
                     $erpOrders['buyer_id']  = $buyer_id;
-                    // $erp_obj->updateTescoErpOrders($erpOrders);
+                    $erp_obj->updateTescoErpOrders($erpOrders);
                 }
             }
             else{
@@ -396,10 +396,10 @@ class OrderStatusCntrl extends Controller
                                     ->update([
                                        'pi_status' => "PI Approved",
                                        'pi_id' => $pi_details->id,
-                                       'pi_file' => $attatchment, 
+                                       // 'pi_file' => $attatchment, 
                                        'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                                     ]);                                    
-                // $erp_obj->updateTescoErpOrders($request);
+                $erp_obj->updateTescoErpOrders($request);
             }
             if ($approved_data)
             {
