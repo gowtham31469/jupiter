@@ -497,12 +497,6 @@ $(document).ready(function() {
 	$('.edit-jobcard').tooltip('show')
 	$('.edit-jobcard').tooltip('toggle')
 
-	$('#edit_finish_type').selectpicker('refresh');
-	$('#edit_teeth_no').selectpicker('refresh');
-	$('#edit_machine').selectpicker('refresh');
-	$('#edit_disp_mode').selectpicker('refresh');
-
-	$('#edit_jobcard').validator('update');
 	/** [ Refresh  bootstrap selectpicker and fprm ] */
 	$('#jobcard_filter_form').trigger("reset");
 	$('#buyer_filter').selectpicker('refresh');

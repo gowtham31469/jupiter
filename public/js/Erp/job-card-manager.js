@@ -7,7 +7,7 @@
 $(document).ready(function() {
 	$('input[class="row-checkbox"]').prop('checked', false);
 
-	$('#create_jobcard').trigger("reset");
+    $('#create_jobcard').trigger("reset");
 
 	/** To refresh modal while hidden **/
 	$('.modal').on('hidden.bs.modal', function (e) {
@@ -1399,7 +1399,7 @@ function storeJobcard()
                 })
 
                 /** [ Validate edit_jobcard form using bootstrap validator ] */
-                $('#edit_jobcard').validator('update');
+                $('#edit_jobcard').validator('validate');
                 $('#jobcardUpdationModalCenter').modal('show');
                 $('.datepicker').datepicker({
                     format: 'dd-mm-yyyy'
