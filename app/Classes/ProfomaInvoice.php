@@ -9,8 +9,10 @@ use App\Customer;
 use App\CustomerBillAddress;
 use DB;
 use Auth;
+use View;
 use App\RolePermissionMdl;
 use Carbon\Carbon;
+use App\Classes\PiTCPDF;
 
 class ProfomaInvoice
 {
@@ -420,5 +422,39 @@ class ProfomaInvoice
         }
         return $data;
 
+    }
+
+
+    public function getAttachment($data){
+      $dynView = View::make('Admin.Order Management.pi-pdf-template')
+                ->with(['company_details' => $data['company_details'], 'bank_details' => $data['bank_details'], 'ship_to'=>$data['ship_to'],'bill_to'=>$data['bill_to'],'item_details'=>$data['item_details'],'price_list'=> $data['price_list']]);
+      ob_start();
+      $pdf = new PiTCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+      $pdf->setCompanyData($data['company_details']);
+      //margins
+      $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+      $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+      $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+      // set header and footer fonts
+      $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+      $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+      // set auto page breaks
+      $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_TOP);
+
+      // set image scale factor
+      $pdf->setImageScale(0.8);
+
+      // set font
+      $pdf->SetFont('helvetica', '', 8);
+
+      // add a page
+      $pdf->AddPage('P', 'A4');
+      $pdf->SetXY(12, 35);
+      $pdf->writeHTML($dynView->render());
+
+      $pdfdata =$pdf->output( public_path('storage/app/public/invoices/profoma_invoices.pdf'), 'F');
+
+      $attatchment =  public_path('storage/app/public/invoices/profoma_invoices.pdf');
+      return "/storage/app/public/invoices/profoma_invoices_".$data['item_details']['id'].".pdf";
     }
 }
