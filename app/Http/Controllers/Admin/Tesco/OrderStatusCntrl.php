@@ -391,7 +391,7 @@ class OrderStatusCntrl extends Controller
                 }
             }
             else{
-                $approved_data   = DB::table($table_name)
+                    $approved_data   = DB::table($table_name)
                                     ->where('id',$row_id)
                                     ->update([
                                        'pi_status' => "PI Approved",
