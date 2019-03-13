@@ -387,11 +387,11 @@ class OrderStatusCntrl extends Controller
                     $erpOrders['tableName'] = $table;
                     $erpOrders['id']        = $tableID;
                     $erpOrders['buyer_id']  = $buyer_id;
-                    $erp_obj->updateTescoErpOrders($erpOrders);
+                    // $erp_obj->updateTescoErpOrders($erpOrders);
                 }
             }
             else{
-                $approved_data   = DB::table($table_name)
+                    $approved_data   = DB::table($table_name)
                                     ->where('id',$row_id)
                                     ->update([
                                        'pi_status' => "PI Approved",
@@ -399,7 +399,7 @@ class OrderStatusCntrl extends Controller
                                        // 'pi_file' => $attatchment, 
                                        'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                                     ]);                                    
-                $erp_obj->updateTescoErpOrders($request);
+                // $erp_obj->updateTescoErpOrders($request);
             }
             if ($approved_data)
             {
