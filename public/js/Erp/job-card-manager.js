@@ -7,7 +7,7 @@
 $(document).ready(function() {
 	$('input[class="row-checkbox"]').prop('checked', false);
 
-	$('#create_jobcard').trigger("reset");
+    $('#create_jobcard').trigger("reset");
 
 	/** To refresh modal while hidden **/
 	$('.modal').on('hidden.bs.modal', function (e) {
@@ -1069,9 +1069,11 @@ function storeJobcard()
         },
         tryCount: 0,
         retryLimit: 2,
+        async: false,
         dataType: "json",
         beforeSend: function () {
             $(".loader").show();
+            $('#jc_print_btn').prop('disabled', true);
         },
         statusCode: {
             200: function(data) {
@@ -1396,8 +1398,8 @@ function storeJobcard()
                     keyboard: false
                 })
 
-                /** [ Validate create_jobcard form using bootstrap validator ] */
-                $('#edit_jobcard').validator('update');
+                /** [ Validate edit_jobcard form using bootstrap validator ] */
+                $('#edit_jobcard').validator('validate');
                 $('#jobcardUpdationModalCenter').modal('show');
                 $('.datepicker').datepicker({
                     format: 'dd-mm-yyyy'
@@ -1815,8 +1817,11 @@ function updateJobcard(formData)
         tryCount: 0,
         retryLimit: 2,
         dataType: "json",
+        async: false,
         beforeSend: function () {
             $(".loader").show();
+            $('#jc_print_btn').prop('disabled', true);
+            
         },
         statusCode: {
             200: function(data) {
@@ -2077,6 +2082,7 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
             url: base_url + "/erp/job-manager/get_order_details",
             type: "Post",
             dataType: "json",
+            async: false,
             data: {
                 _token: csrf_token,
                 ref_name: ref_name,
@@ -2312,6 +2318,7 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
             url: base_url + "/erp/job-manager/get_order_details",
             type: "Post",
             dataType: "json",
+            async: false,
             data: {
                 _token: csrf_token,
                 ref_name: ref_name,
@@ -2969,6 +2976,7 @@ function after_forloop()
         },
         tryCount: 0,
         retryLimit: 2,
+        async: false,
         dataType: "json",
         beforeSend: function () {
             $(".loader").show();
@@ -2978,7 +2986,7 @@ function after_forloop()
                 var resp = JSON.stringify(data.file_path);
                 $('.snackbar_span').html("Jobcard Created Successfully");
                 showSnackbar();
-                $('#jobcardCreationModalCenter').modal('hide');
+                $('.modal').modal('hide');
                 location.reload();
                 window.open(
                     base_url+JSON.parse(resp),

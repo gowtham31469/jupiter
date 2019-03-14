@@ -480,7 +480,7 @@
                  </div>
                  <div class="modal-footer edit-jobcard-creation-modal-footer">
                      {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-					 {!! Form::button('Print', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+					 {!! Form::button('Print', ['class' => 'btn btn-primary btn-sm','type' => 'submit', 'id' => 'jc_print_btn'] ) !!}
                  </div>
             {!! Form::close() !!}
          </div>

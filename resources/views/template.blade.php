@@ -80,9 +80,8 @@
                     </table>
                 </td>
             </tr>
-
         </table>
-        
+       
         <table cellpadding="0" cellspacing="0">
             <tr>
                  <td>
@@ -286,7 +285,7 @@
                     <table cellpadding="1" cellspacing="0">
                     <tr>
                         <td width="408">
-                            <p>Delivery at :</p>
+                            <p>Delivery At :</p>
                             <p>{{$ship_to->address}},{{$ship_to->pincode}}</p>
                         </td>
                     </tr>

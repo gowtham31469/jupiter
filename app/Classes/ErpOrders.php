@@ -91,28 +91,34 @@ class ErpOrders
 
 				$style_no = ($orders->zone == "CE") ? $orders->ce_style_ref : $orders->uk_style_ref ;
 				$custom_ref_name = DB::table('price_taxation')->where('customer_id',$orders->customer_id)->where('buyer_id',$buyer_id)->where('template_id',$orders->template_id)->value('custom_name');
-
-				ErpOrderDetails::create([
-					'erp_order_id'     		=> $erp_orders->id,
-	            	'style_no'         		=> $style_no,
-	           		'order_quantity'   		=> $vals->count,
-	           		'pending_orders'		=> $vals->count,
-	            	'size'         	   		=> $vals->size,
-	            	'delivery_date'	   		=> $orders->delivery_date,
-	            	'order_qnty_table_name' => $qnty_table,
-	            	'order_qnty_table_id' 	=> $vals->id,
-	            	'template_id'			=> $orders->template_id,
-	            	'company_id'			=> $orders->company_id,
-	            	'reference_name'		=> $orders->item_name,
-	            	'ocn_number'	   		=> $orders->ocn_number,
-					'status' 				=> 1,
-					'template_type'         => $orders->template_type,
-					'custom_ref_name' 		=> $custom_ref_name,
-					'buyer_po_number'  		=> $orders->po_number,
-					'zone'					=> $orders->zone,
-					'order_type'            => $orders->order_flag,
-					'created_at'            => $this->created_at
-				]);
+				$dataExists = DB::table('erp_order_details')->where('order_qnty_table_name',$qnty_table)->where('order_qnty_table_id',$vals->id)->first();
+				
+				if(!empty($dataExists)){
+					
+				}
+				else{
+					ErpOrderDetails::create([
+						'erp_order_id'     		=> $erp_orders->id,
+		            	'style_no'         		=> $style_no,
+		           		'order_quantity'   		=> $vals->count,
+		           		'pending_orders'		=> $vals->count,
+		            	'size'         	   		=> $vals->size,
+		            	'delivery_date'	   		=> $orders->delivery_date,
+		            	'order_qnty_table_name' => $qnty_table,
+		            	'order_qnty_table_id' 	=> $vals->id,
+		            	'template_id'			=> $orders->template_id,
+		            	'company_id'			=> $orders->company_id,
+		            	'reference_name'		=> $orders->item_name,
+		            	'ocn_number'	   		=> $orders->ocn_number,
+						'status' 				=> 1,
+						'template_type'         => $orders->template_type,
+						'custom_ref_name' 		=> $custom_ref_name,
+						'buyer_po_number'  		=> $orders->po_number,
+						'zone'					=> $orders->zone,
+						'order_type'            => $orders->order_flag,
+						'created_at'            => $this->created_at
+					]);
+				}				
 			}
 		}
 	}
