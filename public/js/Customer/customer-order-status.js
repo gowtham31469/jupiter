@@ -1793,7 +1793,7 @@ function tescoStatusTable(data,path)
                     {
                         style_no = value.uk_style_ref;
                     }
-                    if (value["Artwork Status"]!="Order Cancelled"){
+                    if (value["Artwork Status"]!="Order Cancelled" && value["PO Status"]!="PO Uploaded"){
                       tr += '<td align="center" data-id="'+value.tableID+'" data-table1="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>'+span_style+''+style_no+'</a></td>';
                     }
                     else{
