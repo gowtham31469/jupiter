@@ -1829,11 +1829,12 @@ function tescoStatusTable(data,path)
                   {  
                     if (pi_required==1 && po_required ==1)
                     {
-                        tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateTescoPI("'+value.tableID+'","'+value.tableName+'","'+action_status+'","'+style_no+'","'+value.template_id+'","'+value.BuyerPO+'","'+value.TemplateName.replace(/ /g, "")+'","'+order_flag+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="javascript:void(0)" onclick=tescoPOUpload(this,"'+value.tableID+'","'+po_file+'","'+value.tableName+'") class="po-style" ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" '+style_po+'></i></a><object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal'+index+'" class="center-block tesco_svg'+index+'" data="'+value.template_file+'" type="image/svg+xml"></object><a href="javascript:void(0)" class="po-style" onclick=openmodaltesco("'+value.tableID+'","'+index+'","'+value.TemplateName.replace(/ /g, "")+'","'+zone+'","'+style_no+'","'+value.BuyerPO+'","'+orderDate+'") ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Download Artwork"></i></a></td>';
+                        tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateTescoPI("'+value.tableID+'","'+value.tableName+'","'+action_status+'","'+style_no+'","'+value.template_id+'","'+value.BuyerPO+'","'+value.TemplateName.replace(/ /g, "")+'","'+order_flag+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="javascript:void(0)" onclick=tescoPOUpload(this,"'+value.tableID+'","'+po_file+'","'+value.tableName+'") class="po-style" ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" '+style_po+'></i></a><object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal'+index+'" class="center-block tesco_svg'+index+'" data="'+value.template_file+'" type="image/svg+xml"></object><a href="javascript:void(0)" class="po-style" onclick=openmodaltesco("'+value.tableID+'","'+index+'","'+value.TemplateName.replace(/ /g, "")+'","'+zone+'","'+style_no+'","'+value.BuyerPO+'","'+orderDate+'") ></a></td>';
                     }
                     else if (po_required ==1 && pi_required ==0)
                     {
-                        tr += '<td align="center"><a href="javascript:void(0)" class="po-style" onclick=tescoPOUpload(this,"'+value.tableID+'","'+po_file+'","'+value.tableName+'") ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" '+style_po+'></i></a><object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal'+index+'" class="center-block tesco_svg'+index+'" data="'+value.template_file+'" type="image/svg+xml"></object><a href="javascript:void(0)" class="po-style" onclick=openmodaltesco("'+value.tableID+'","'+index+'","'+value.TemplateName.replace(/ /g, "")+'","'+zone+'","'+style_no+'","'+value.BuyerPO+'","'+orderDate+'") ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Download Artwork"></i></a></td>';
+                        tr += '<td align="center"><a href="javascript:void(0)" class="po-style" onclick=tescoPOUpload(this,"'+value.tableID+'","'+po_file+'","'+value.tableName+'") ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" '+style_po+'></i></a><object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal'+index+'" class="center-block tesco_svg'+index+'" data="'+value.template_file+'" type="image/svg+xml"></object><a href="javascript:void(0)" class="po-style" onclick=openmodaltesco("'+value.tableID+'","'+index+'","'+value.TemplateName.replace(/ /g, "")+'","'+zone+'","'+style_no+'","'+value.BuyerPO+'","'+orderDate+'") ></a></td>';
+                        // <i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Download Artwork"></i>
                     }
                     else if (pi_required ==1 && po_required ==0)
                     {
@@ -2039,7 +2040,9 @@ function tescoPOUpload(obj,id,po_file,tableName)
     { 
         $('#po_upload').addClass('hidden') 
         $('.upload-po').addClass('hidden') 
-        $('#po_file').removeClass('hidden') 
+        $('#po_file').removeClass('hidden')
+        $('.update-po-file').addClass('hidden') 
+        
     } 
     var po_link = base_url+po_file 
     $('#po_link').attr("href",po_link); 
