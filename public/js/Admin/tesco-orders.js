@@ -488,9 +488,9 @@ function tescoOrders(callback) {
 							    formData.append("files[]", $('#ce_orms')[0].files[0]);
 							    formData.append("files[]", $('#ce_retek')[0].files[0]);
 								
-								formData.append('purchase_order', purchase_order);
-								formData.append('ce_orms_purchase_order', ce_orms_purchase_order);
-								formData.append('ce_retek_purchase_order', ce_retek_purchase_order);
+							    formData.append('purchase_order', purchase_order);
+//								formData.append('ce_orms_purchase_order', ce_orms_purchase_order);
+//								formData.append('ce_retek_purchase_order', ce_retek_purchase_order);
 								formData.append('type', localStorage.getItem("template type"));
 								formData.append('zone', localStorage.getItem("zone"));
 								formData.append('template_name', localStorage.getItem("template_group"));
