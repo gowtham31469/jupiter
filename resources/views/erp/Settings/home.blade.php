@@ -5,7 +5,7 @@
 <div class="col-sm-12 col-md-12 main">
 	<div class="main-content">
 		<div class="erp-sidebar-main style">
-          <h4>Settings</h4>
+          <h4 style="margin-left:10px">Settings</h4>
           <ul class="erp-sidebar meta-data-list">
             <li id="1" onclick="dispatchMode()"><a class="li-setting dispatchmodeli active">Dispatch Mode</a></li>
             <li id="2" onclick="machines()"><a class="li-setting machineli">Machine</a></li>

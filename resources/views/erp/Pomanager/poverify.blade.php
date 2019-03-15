@@ -319,7 +319,7 @@ transform: scale(1);
 						<th>PO Number</th>
 						<th>Partial</th>
 						<th>Status</th>
-						<th>Created date</th>
+						<th>Created Date</th>
 						<th>Actions</th>
 					</tr>
 				</thead>
