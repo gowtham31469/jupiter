@@ -482,6 +482,7 @@ function tescoOrders(callback) {
 							//invoke uploadPurchaseOrder method with the form data.
 							//If not, go with manual upload by invoking createOrders() method.
 							if ($('input[type="radio"].order_type:checked').val() == 1) {
+								var csrf_token = $('meta[name="csrf-token"]').attr('content');
 								var formData = new FormData();
 								var purchase_order = $('#po_upload').prop('files')[0];
 								var ce_orms_purchase_order = $('#ce_orms').prop('files')[0];
@@ -491,6 +492,7 @@ function tescoOrders(callback) {
 								formData.append('ce_retek_purchase_order', ce_retek_purchase_order);
 								formData.append('type', localStorage.getItem("template type"));
 								formData.append('zone', localStorage.getItem("zone"));
+								formData.append('_token', csrf_token);
 								formData.append('template_name', localStorage.getItem("template_group"));
 								$.ajax({
 										url: base_url + "/admin/tesco/po-upload",
@@ -499,7 +501,6 @@ function tescoOrders(callback) {
 											var myXhr = $.ajaxSettings.xhr();
 											return myXhr;
 										},
-										headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
 										enctype: 'multipart/form-data',
 										data: formData,
 										dataType: 'JSON',
