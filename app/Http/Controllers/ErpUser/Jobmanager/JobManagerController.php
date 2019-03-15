@@ -18,6 +18,7 @@ use PDF;
 use App\Classes\JobcardPDFHeaderFooter;
 use App\Classes\FPDF_Merge;
 use File;
+use Config;
 
 class JobManagerController extends Controller
 {
@@ -1892,7 +1893,205 @@ class JobManagerController extends Controller
 				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
 			}
 	}
+	 public function generateDivTesco(Request $request)
+    {
+		    $svgarr = explode(',_',$request->svg);
+        $name=$request->name;
+        $svg=urldecode($request->svg);
+        define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
+        define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('frankgothcnbt');
+		PDF::SetAutoPageBreak(TRUE);
+		$i=0;
+		foreach($svgarr as $value)
+		{
+			 PDF::SetMargins(0, 0, 0, false);
+			 PDF::AddPage('L', array(80,127));
+			 $svg=urldecode($value);
+			 PDF::setImageScale(1.66);
+			 PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=127, $h=80, $link='', $align='', $palign='', $border=0, $fitonpage=true);
+			if($name != "TCL2-sticker" && $name != "TCL4-sticker")
+			{
+				 if($name != "THL3-sticker")
+				 {
+					 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				 }
+				else
+				{
+					 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 0, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				}
+			}
+			
+			 $i++;
+		}
+        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.$name.'.pdf'));
+		
+		
+		
+//		$svgarr = explode(',_',$request->svg);
+//		$name=$request->name;
+//        $svg=urldecode($request->svg);
+//        define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
+//        define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
+//        PDF::setPrintHeader(false);
+//        PDF::setPrintFooter(false);
+//        PDF::SetFont('frankgothcnbt');
+//		PDF::SetAutoPageBreak(TRUE);
+//		$j=0;
+//		foreach($svgarr as $value)
+//		{
+//			PDF::SetMargins(0, 0, 0, false);
+//			PDF::setImageScale(1);
+//			PDF::AddPage('L', array(80,127));
+//			$svg=urldecode($value);
+//			file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
+//			$html = '<img style="width:480px;height:302.36220472px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
+//			PDF::writeHTMLCell(129, 82.5, -1,0, $html, '', 0, 0, false, 'L', false);
+//			$j++;
+//		}
+//		PDF::deletePage(1);
+//        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+//        print_r(url('/storage/app/template/'.$name.'.pdf'));
+    } 
 	
+	
+		 /**
+   * Print Preview For Stickers
+   *
+   * @return pdf
+   */
+  
+    public function generateDivTescoSmall(Request $request)
+    {
+		$svgarr = explode(',_',$request->svg);
+    	$name=$request->name;
+        $svg=urldecode($request->svg);
+        define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
+        define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
+        PDF::setImageScale(1.66);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('frankgothcnbt');
+		PDF::SetFont('myriad');
+		PDF::SetAutoPageBreak(TRUE);
+		$i=0;
+		foreach($svgarr as $value)
+		{
+			 PDF::AddPage('L', array(30,80));
+			 PDF::SetMargins(0, 0, 0, false);
+			
+			 $svg=urldecode($value);
+			
+			
+			
+			 PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=40, $h=30, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			 PDF::ImageSVG('@' . $svg, $x=40, $y=0, $w=40, $h=30, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			
+			 if($name == "TSL3-sticker")
+			 {
+				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 0.9, 2, 36.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+			
+				PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 40.9, 2, 36.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+			 }
+			 else
+			 {
+//				 $img = Image::make(public_path('/storage/app/template/barcode_'.$i.'.png'));
+//
+//				// now you are able to resize the instance
+//				$img->resize(150, 50);
+//
+//				// finally we save the image as a new file
+//				$img->save(public_path('/storage/app/template/barcode_RESIZE.png'));
+				 
+				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -1.1, 2,41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+			
+				PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 38.7, 2, 41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+			 }
+			
+			
+			
+			
+//			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -1.7, 2, 42, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+//			
+//			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 39.7, 2, 42, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+//			
+			$i++;
+		}
+        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.$name.'.pdf'));
+    } 
+	
+	 /**
+     * This Function is used to generate barcode using java.
+     *
+     * @return path of barcode
+     */
+  	public function generateBarcodeTsl1(Request $request)
+    {
+		$name=$request['name'];
+		$type=$request['type'];
+		$barcode=$request['barcode'];
+		
+		$tabula       = Config::get('tabula.bar_jar');
+		
+		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 33 13');
+        $info    = json_encode($info, true);
+		return $info;
+    }
+	/**
+     * This Function is used to generate barcode using java.
+     *
+     * @return path of barcode
+     */
+  	public function generateBarcodeTsl3(Request $request)
+    {
+		$name=$request['name'];
+		$type=$request['type'];
+		$barcode=$request['barcode'];
+		
+		$tabula       = Config::get('tabula.bar_jar');
+		
+		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 33 13');
+        $info    = json_encode($info, true);
+		return $info;
+    }
+	/**
+     * This Function is used to generate barcode using java.
+     *
+     * @return path of barcode
+     */
+  	public function generateBarcodeEanBig(Request $request)
+    {
+		$name=$request['name'];
+		$type=$request['type'];
+		$barcode=$request['barcode'];
+		
+		$tabula       = Config::get('tabula.bar_jar_big');
+		
+		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 50 16');
+        $info    = json_encode($info, true);
+		return $info;
+    }
+	/**
+     * This Function is used to generate barcode using java.
+     *
+     * @return path of barcode
+     */
+  	public function generateBarcodeItfBig(Request $request)
+    {
+		$name=$request['name'];
+		$type=$request['type'];
+		$barcode=$request['barcode'];
+		
+		$tabula       = Config::get('tabula.bar_jar_big');
+		
+		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 50 16');
+        $info    = json_encode($info, true);
+		return $info;
+    }
 
 
 }
