@@ -32,7 +32,15 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
             /** [Show response status based on HTTP status code] */
             200: function(data)
             {
-       
+                 // var resp = JSON.stringify(data);
+                 //          console.log( base_url+data.responseText)
+                 //          $('.snackbar_span').html("Successfully send Invoice to the Customer !");
+                 //            showSnackbar();
+                 //        window.open(
+                 //           base_url+$.trim(data.responseText),
+                 //          '_blank' // <- This is what makes it open in a new window.
+                 //        );      
+                
                if ((jQuery.isEmptyObject(data.data.company_details)) || (jQuery.isEmptyObject(data.data.bank_details)) || (jQuery.isEmptyObject(data.data.ship_to)) || (jQuery.isEmptyObject(data.data.bill_to)))
                {
                     $('.snackbar_span').html("Customer Profile isn't complete");
@@ -40,6 +48,7 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
                }
                else
                {
+                       
                     $('.advnc').text(data.data.bank_details.payment_terms)
                     $('.freight').text(data.data.bank_details.freight_terms)
                     $('.pi_number').text(data.data.company_details.pi_number)

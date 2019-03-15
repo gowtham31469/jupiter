@@ -80,9 +80,8 @@
                     </table>
                 </td>
             </tr>
-
         </table>
-        
+       
         <table cellpadding="0" cellspacing="0">
             <tr>
                  <td>
@@ -266,7 +265,7 @@
                     <table cellpadding="1" cellspacing="0">
                     <tr>
                         <td width="308" style="border-bottom:1px solid black;">
-                            <span>Amount in words :</span><br>
+                            <span>AMOUNT IN WORDS :</span><br>
                             <span>{{$amntInwords}}</span>
                         </td>
                         <td width="80" style="border-bottom:1px solid black;">
@@ -286,7 +285,7 @@
                     <table cellpadding="1" cellspacing="0">
                     <tr>
                         <td width="408">
-                            <p>Delivery at :</p>
+                            <p>Delivery At :</p>
                             <p>{{$ship_to->address}},{{$ship_to->pincode}}</p>
                         </td>
                     </tr>
