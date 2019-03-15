@@ -202,7 +202,7 @@ class OrderStatusCntrl extends Controller
                         ]);
             if ($po_status == "PO Uploaded") {
                 
-                return $erp_obj->updateTescoErpOrders($request);
+                $erp_obj->updateTescoErpOrders($request);
             }
             if ($data)
             {

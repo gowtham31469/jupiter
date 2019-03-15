@@ -247,7 +247,7 @@ class OrderStatusController extends Controller
                                 ]);
             if ($po_status == "PO Uploaded") {
                 
-                return $erp_obj->updateTescoErpOrders($request);
+               $erp_obj->updateTescoErpOrders($request);
             }
 
             $result = response()->json(['error'=> false,'message' =>'success'],200);
