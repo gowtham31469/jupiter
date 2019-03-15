@@ -495,6 +495,10 @@ function tescoOrders(callback) {
 								$.ajax({
 										url: base_url + "/admin/tesco/po-upload",
 										type: 'POST',
+										xhr: function() {
+											var myXhr = $.ajaxSettings.xhr();
+											return myXhr;
+										},
 										headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
 										enctype: 'multipart/form-data',
 										data: formData,
