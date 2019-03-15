@@ -624,6 +624,9 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::post('/po-manager/change_po_updated_status', 'ErpUser\Pomanager\PoManagerController@changePoUpdatedStatus'); 
 	Route::post('/po-manager/set_company_session', 'ErpUser\Pomanager\PoManagerController@setCompanySession'); 
 	
+	/* Routes for Print Manager Module */
+	Route::get('/print-manager', 'ErpUser\Printmanager\PrintManagerController@index'); 
+	
 	/* Routes for jobcard Manager Module */
 	Route::get('job-manager', 'ErpUser\Jobmanager\JobManagerController@index')->name('jobcard-manager'); 
 	Route::post('/job-manager/get_order_details', 'ErpUser\Jobmanager\JobManagerController@getOrderDetails'); 
@@ -632,6 +635,18 @@ Route::group(['prefix' => 'erp'], function () {
 	
 	Route::post('job-manager/tesco/print-div-tesco', 'ErpUser\Jobmanager\JobManagerController@printDivTesco');
 	Route::post('job-manager/tesco/print-div-tesco-small', 'ErpUser\Jobmanager\JobManagerController@printDivTescoSmall');
+	
+	
+	Route::post('job-manager/tesco/generate-div-tesco', 'ErpUser\Jobmanager\JobManagerController@generateDivTesco');
+	Route::post('job-manager/tesco/generate-div-tesco-small', 'ErpUser\Jobmanager\JobManagerController@generateDivTescoSmall');
+	
+	
+	Route::post('job-manager/generatebarcodetsl1', 'ErpUser\Jobmanager\JobManagerController@generateBarcodeTsl1');
+	Route::post('job-manager/generatebarcodetsl3', 'ErpUser\Jobmanager\JobManagerController@generateBarcodeTsl3');
+
+	Route::post('job-manager/generatebarcodeeanbig', 'ErpUser\Jobmanager\JobManagerController@generateBarcodeEanBig');
+	Route::post('job-manager/generatebarcodeitfbig', 'ErpUser\Jobmanager\JobManagerController@generateBarcodeItfBig');
+	
 
 	Route::get('job-manager/tesco/get-tsl-size', 'ErpUser\Jobmanager\JobManagerController@getTescoTSLSizechart');
 	Route::get('job-manager/script-update-buyer-no', 'ErpUser\Jobmanager\JobManagerController@scriptUpdateBuyerNo');

@@ -91,6 +91,7 @@
 	<script src="{{ asset('js/Erp/userProfile.js') }}"></script>
 	<script src="{{ asset('js/Erp/job-card-manager.js') }}"></script>
 	<script src="{{ asset('js/Erp/job-card-artwork.js') }}"></script>
+	<script src="{{ asset('js/Erp/print-manager.js') }}"></script>
 	<script src="{{ asset('js/Erp/erp-settings.js') }}"></script>
 	<script>
 		var base_url = "<?php echo  url('/') ?>";
