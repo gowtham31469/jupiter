@@ -182,7 +182,7 @@
 
            $('#create-invoice').on('click',function(){
             // function createInvoicePreview(){
-                 $('#round-off').closest('tr').removeAttr('hidden')
+                
                 previewInvoice(orderData)
             // }
                 
@@ -471,13 +471,14 @@
             }
         })
         $('.sub-extra').html(result.toFixed(2))
-        var grandTotal = parseFloat($('.tax-total').text())+ parseFloat($('.total-amnt').text()) + parseFloat($('.sub-extra').text()) + parseFloat($('#round-off').val()) ;
+        // console.log($('.tax-total').text(),"tax")
+        var grandTotal = parseFloat($('.tax-total').text())+ parseFloat($('.total-amnt').text()) + parseFloat($('.sub-extra').text()) ;
         // console.log(parseFloat($('.tax-total').text()) , parseFloat($('.total-amnt').text()) , parseFloat($('.sub-extra').text()) , parseFloat($('#round-off').val()))
         $('.grand-total').html(grandTotal.toFixed(2)) 
-
-        var roundoff = Math.round($('.grand-total').text()) - $('.grand-total').text()
-        $('.grand-total').text((parseFloat($('.grand-total').text())+roundoff).toFixed(2))
-        $('#round-off').val(roundoff.toFixed(2));      
+        var roundoff = Math.round(grandTotal) - grandTotal
+        $('.grand-total').text((parseFloat(grandTotal)+roundoff).toFixed(2))
+        $('#round-off').val(roundoff.toFixed(2));
+        $('#round-off').closest('tr').removeAttr('hidden')     
     }
 
     /**
