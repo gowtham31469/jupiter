@@ -246,7 +246,7 @@ class OrderManagementCntrl extends Controller
         } else if($request->zone === 'CE') {
           //handle the order using createOrderForCE method
 			
-			print_r("hai")
+			print_r("hai");
             //return $this->createOrderForCE($request);
         } else {
            return response()->json(['error' => 'Unknown Template Zone'], 400);
