@@ -482,13 +482,11 @@ function tescoOrders(callback) {
 							//invoke uploadPurchaseOrder method with the form data.
 							//If not, go with manual upload by invoking createOrders() method.
 							if ($('input[type="radio"].order_type:checked').val() == 1) {
-								var csrf_token = $('meta[name="csrf-token"]').attr('content');
 								var formData = new FormData();
 								var purchase_order = $('#po_upload').prop('files')[0];
 								var ce_orms_purchase_order = $('#ce_orms')[0].files[0];
 								var ce_retek_purchase_order = $('#ce_retek')[0].files[0];
 								formData.append('purchase_order', purchase_order);
-								formData.append('_token', csrf_token);
 								formData.append('ce_orms_purchase_order', ce_orms_purchase_order);
 								formData.append('ce_retek_purchase_order', ce_retek_purchase_order);
 								formData.append('type', localStorage.getItem("template type"));
@@ -2799,35 +2797,55 @@ function uploadPurchaseOrder(formData, zone) {
 		// 		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		// 	}
 		// });
-	
-		var request = new XMLHttpRequest();
-		request.onreadystatechange = function(){
-			if(request.status == 200){
-				if (zone === 'UK') {
+		$.ajax({
+			url: base_url + "/admin/tesco/po-upload",
+			type: 'POST',
+			headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+			data: formData,
+			dataType: 'JSON',
+			async: true,
+			cache: false,
+			contentType: false,
+			processData: false,
+			beforeSend: function () {
+				$(".loader").show();
+			},
+			statusCode: {
+				200: function (data) {
+					if (zone === 'UK') {
 						//Call the parse method which resides on parser.js
-					parseUKPurchaseOrder(data, createOrders);
-				} else {
-					//Call the parse method which resides on parser.js
-					parseCEPurchaseOrder(data, createOrders);
+						parseUKPurchaseOrder(data, createOrders);
+					} else {
+						//Call the parse method which resides on parser.js
+						parseCEPurchaseOrder(data, createOrders);
+					}
+
+				},
+				422: function (data) {
+					$('.snackbar_span').html("File Mismatch!! Please check the file.");
+					showSnackbar();
+				},
+				400: function () {
+					$('.snackbar_span').html("Sorry!! You seem to have uploaded an invalid file. Please check the file or Try Manual Mode");
+					showSnackbar();
 				}
-			}else if(request.status == 422){
-				$('.snackbar_span').html("File Mismatch!! Please check the file.");
-				showSnackbar();
-			}else if(request.status == 400){
-				$('.snackbar_span').html("Sorry!! You seem to have uploaded an invalid file. Please check the file or Try Manual Mode");
-				showSnackbar();
+			},
+			error: function (errorXHR, errorStatus, errorThrown) {},
+			complete: function () {
+				/** [To make top menu active] */
+				$(function () {
+					var url = window.location;
+					$('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+					$('.dynamic-menu a').filter(function () {
+						return this.href == url;
+					}).parent('li').addClass('current-page').find('a').addClass('active');
+				});
+				$(".loader").hide();
 			}
-		};
+		})
 
-		request.upload.addEventListener('progress', function(e){
-			_progress.style.width = Math.ceil(e.loaded/e.total) * 100 + '%';
-		}, false);
-
-		request.open('POST', base_url + "/admin/tesco/po-upload");
-		request.send(formData);
-
-		} catch (e) {
-			// error statements
+	} catch (e) {
+		// error statements
 		console.log("Error:" + e)
 	}
 }
