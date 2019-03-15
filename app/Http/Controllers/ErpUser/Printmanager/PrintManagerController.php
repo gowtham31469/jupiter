@@ -49,7 +49,7 @@ class PrintManagerController extends Controller
 										->select('company.*')
 										->first();
 			
-			if(session()->get('company') === "" && session()->get('company') === null)
+			if(session()->get('company') == "" && session()->get('company') == null)
 			{
 				session()->put('company', $company_id->id);
 				session()->put('company_name', strtolower( str_replace(' ','',$company_id->name)) );
