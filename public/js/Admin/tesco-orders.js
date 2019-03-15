@@ -482,7 +482,6 @@ function tescoOrders(callback) {
 							//invoke uploadPurchaseOrder method with the form data.
 							//If not, go with manual upload by invoking createOrders() method.
 							if ($('input[type="radio"].order_type:checked').val() == 1) {
-								var csrf_token = $('meta[name="csrf-token"]').attr('content');
 								var formData = new FormData();
 								var purchase_order = $('#po_upload').prop('files')[0];
 								var ce_orms_purchase_order = $('#ce_orms').prop('files')[0];
@@ -492,58 +491,8 @@ function tescoOrders(callback) {
 								formData.append('ce_retek_purchase_order', ce_retek_purchase_order);
 								formData.append('type', localStorage.getItem("template type"));
 								formData.append('zone', localStorage.getItem("zone"));
-								formData.append('_token', csrf_token);
 								formData.append('template_name', localStorage.getItem("template_group"));
-								$.ajax({
-										url: base_url + "/admin/tesco/po-upload",
-										type: 'POST',
-										xhr: function() {
-											var myXhr = $.ajaxSettings.xhr();
-											return myXhr;
-										},
-										enctype: 'multipart/form-data',
-										data: formData,
-										dataType: 'JSON',
-										async: true,
-										cache: false,
-										contentType: false,
-										processData: false,
-										beforeSend: function () {
-											$(".loader").show();
-										},
-										statusCode: {
-											200: function (data) {
-												if (zone === 'UK') {
-													//Call the parse method which resides on parser.js
-													parseUKPurchaseOrder(data, createOrders);
-												} else {
-													//Call the parse method which resides on parser.js
-													parseCEPurchaseOrder(data, createOrders);
-												}
-
-											},
-											422: function (data) {
-												$('.snackbar_span').html("File Mismatch!! Please check the file.");
-												showSnackbar();
-											},
-											400: function () {
-												$('.snackbar_span').html("Sorry!! You seem to have uploaded an invalid file. Please check the file or Try Manual Mode");
-												showSnackbar();
-											}
-										},
-										error: function (errorXHR, errorStatus, errorThrown) {},
-										complete: function () {
-											/** [To make top menu active] */
-											$(function () {
-												var url = window.location;
-												$('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
-												$('.dynamic-menu a').filter(function () {
-													return this.href == url;
-												}).parent('li').addClass('current-page').find('a').addClass('active');
-											});
-											$(".loader").hide();
-										}
-								})
+								uploadPurchaseOrder(formData, localStorage.getItem("zone"));
 							} else {
 								createOrders();
 							}
@@ -2848,7 +2797,52 @@ function uploadPurchaseOrder(formData, zone) {
 		// 		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		// 	}
 		// });
-		
+		$.ajax({
+			url: base_url + "/admin/tesco/po-upload",
+			type: 'POST',
+			headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+			data: formData,
+			dataType: 'JSON',
+			async: true,
+			cache: false,
+			contentType: false,
+			processData: false,
+			beforeSend: function () {
+				$(".loader").show();
+			},
+			statusCode: {
+				200: function (data) {
+					if (zone === 'UK') {
+						//Call the parse method which resides on parser.js
+						parseUKPurchaseOrder(data, createOrders);
+					} else {
+						//Call the parse method which resides on parser.js
+						parseCEPurchaseOrder(data, createOrders);
+					}
+
+				},
+				422: function (data) {
+					$('.snackbar_span').html("File Mismatch!! Please check the file.");
+					showSnackbar();
+				},
+				400: function () {
+					$('.snackbar_span').html("Sorry!! You seem to have uploaded an invalid file. Please check the file or Try Manual Mode");
+					showSnackbar();
+				}
+			},
+			error: function (errorXHR, errorStatus, errorThrown) {},
+			complete: function () {
+				/** [To make top menu active] */
+				$(function () {
+					var url = window.location;
+					$('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+					$('.dynamic-menu a').filter(function () {
+						return this.href == url;
+					}).parent('li').addClass('current-page').find('a').addClass('active');
+				});
+				$(".loader").hide();
+			}
+		})
 
 	} catch (e) {
 		// error statements
