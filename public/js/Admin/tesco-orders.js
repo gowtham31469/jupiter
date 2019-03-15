@@ -484,8 +484,8 @@ function tescoOrders(callback) {
 							if ($('input[type="radio"].order_type:checked').val() == 1) {
 								var formData = new FormData();
 								var purchase_order = $('#po_upload').prop('files')[0];
-								var ce_orms_purchase_order = $('#ce_orms')[0].files;
-								var ce_retek_purchase_order = $('#ce_retek')[0].files;
+								var ce_orms_purchase_order = $('#ce_orms').files[0];
+								var ce_retek_purchase_order = $('#ce_retek').files[0];
 								formData.append('purchase_order', purchase_order);
 								formData.append('ce_orms_purchase_order', ce_orms_purchase_order);
 								formData.append('ce_retek_purchase_order', ce_retek_purchase_order);
