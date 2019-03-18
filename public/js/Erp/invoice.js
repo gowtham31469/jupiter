@@ -8,8 +8,7 @@
     var bill_to = '';
     var company_details = '';
     var eChargesArr = []
-
-    /** 
+     /** 
      * method to show the list of all the ERP ID's of selected customer
      * @return table view
      */
@@ -182,7 +181,7 @@
 
            $('#create-invoice').on('click',function(){
             // function createInvoicePreview(){
-                 $('#round-off').closest('tr').removeAttr('hidden')
+                
                 previewInvoice(orderData)
             // }
                 
@@ -320,7 +319,7 @@
                 $(this).closest('tr').find('.amnt').text(0)
             }
             else{
-                $(this).closest('tr').find('.amnt').html(amnt)
+                $(this).closest('tr').find('.amnt').html(amnt.toFixed(2))
             }          
             $(this).closest('tr').find('.pending-qnty').html(oldPendQnty)
             $(this).val('')
@@ -471,13 +470,14 @@
             }
         })
         $('.sub-extra').html(result.toFixed(2))
-        var grandTotal = parseFloat($('.tax-total').text())+ parseFloat($('.total-amnt').text()) + parseFloat($('.sub-extra').text()) + parseFloat($('#round-off').val()) ;
+        // console.log($('.tax-total').text(),"tax")
+        var grandTotal = parseFloat($('.tax-total').text())+ parseFloat($('.total-amnt').text()) + parseFloat($('.sub-extra').text()) ;
         // console.log(parseFloat($('.tax-total').text()) , parseFloat($('.total-amnt').text()) , parseFloat($('.sub-extra').text()) , parseFloat($('#round-off').val()))
         $('.grand-total').html(grandTotal.toFixed(2)) 
-
-        var roundoff = Math.round($('.grand-total').text()) - $('.grand-total').text()
-        $('.grand-total').text((parseFloat($('.grand-total').text())+roundoff).toFixed(2))
-        $('#round-off').val(roundoff.toFixed(2));      
+        var roundoff = Math.round(grandTotal) - grandTotal
+        $('.grand-total').text((parseFloat(grandTotal)+roundoff).toFixed(2))
+        $('#round-off').val(roundoff.toFixed(2));
+        $('#round-off').closest('tr').removeAttr('hidden')     
     }
 
     /**
@@ -956,3 +956,7 @@ function RsPaise(n) {
         return (op)
     }
 }
+
+ // $('.delivery-qnty').bind("cut copy paste",function(e) {
+ //     e.preventDefault();
+ // });

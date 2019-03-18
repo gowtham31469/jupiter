@@ -337,6 +337,10 @@
 <script>    
 $(document).ready(function(){
 
+    //disabled right click functionality
+   $("body").on("contextmenu",function(e){
+       return false;
+    }); 
     // disable mousewheel on a input number field when in focus
     // (to prevent Cromium browsers change the value when scrolling)
 

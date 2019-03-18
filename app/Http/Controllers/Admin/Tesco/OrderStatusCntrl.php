@@ -387,7 +387,10 @@ class OrderStatusCntrl extends Controller
                     $erpOrders['tableName'] = $table;
                     $erpOrders['id']        = $tableID;
                     $erpOrders['buyer_id']  = $buyer_id;
-                    // $erp_obj->updateTescoErpOrders($erpOrders);
+                    // $customer_data  = DB::table('customers')->where('id',$data['bank_details']->id)->first();
+                    // if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
+                    //     $erp_obj->updateTescoErpOrders($request);
+                    // } 
                 }
             }
             else{
@@ -398,8 +401,13 @@ class OrderStatusCntrl extends Controller
                                        'pi_id' => $pi_details->id,
                                        // 'pi_file' => $attatchment, 
                                        'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
-                                    ]);                                    
-                // $erp_obj->updateTescoErpOrders($request);
+                                    ]);
+                   
+                // $customer_data  = DB::table('customers')->where('id',$data['bank_details']->id)->first();
+
+                // if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
+                //     $erp_obj->updateTescoErpOrders($request);
+                // }                                
             }
             if ($approved_data)
             {
