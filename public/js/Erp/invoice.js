@@ -8,8 +8,7 @@
     var bill_to = '';
     var company_details = '';
     var eChargesArr = []
-
-    /** 
+     /** 
      * method to show the list of all the ERP ID's of selected customer
      * @return table view
      */
@@ -320,7 +319,7 @@
                 $(this).closest('tr').find('.amnt').text(0)
             }
             else{
-                $(this).closest('tr').find('.amnt').html(amnt)
+                $(this).closest('tr').find('.amnt').html(amnt.toFixed(2))
             }          
             $(this).closest('tr').find('.pending-qnty').html(oldPendQnty)
             $(this).val('')
@@ -957,3 +956,7 @@ function RsPaise(n) {
         return (op)
     }
 }
+
+ // $('.delivery-qnty').bind("cut copy paste",function(e) {
+ //     e.preventDefault();
+ // });
