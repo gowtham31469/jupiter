@@ -90,10 +90,6 @@ class PrintManagerController extends Controller
 		 $orders_erp = array();
 		
 		
-		 print_r($new_orders);
-		
-		return $new_orders;
-		
 		 foreach($new_orders as $key => $values)
 		 {
 			foreach($values as $valuess)
