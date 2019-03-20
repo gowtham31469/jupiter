@@ -267,8 +267,8 @@ class OrderStatusCntrl extends Controller
             $sub_total  =   0 ;
             $pi_obj     =   new ProfomaInvoice();
             $data       =   $pi_obj->getTescoPIDetails($request);
-            // $attatchment =  $pi_obj->getAttachment($data);
-            // return $attatchment;
+            $attatchment =  $pi_obj->getAttachment($data,$request);
+            // return $data;
             $erpOrders  =   [];
             $erp_obj    =   new ErpOrders();
 
@@ -302,7 +302,7 @@ class OrderStatusCntrl extends Controller
                     'template_type'    => $data['bank_details']->template_type,
                     'revision_no'      => $data['item_details'][0]->pi_rev_no,
                     'rep_order_id'     => $rep_order_id,
-                     // 'pi_file'         => $attatchment
+                     'pi_file'         => $attatchment
                     
                 ]);
                 foreach ($data['item_details'] as $key => $value)
@@ -360,7 +360,7 @@ class OrderStatusCntrl extends Controller
                                             ->update([
                                                'pi_status' => "PI Approved",
                                                'pi_id' => $pi_details->id,
-                                               // 'pi_file' => $attatchment,
+                                               'pi_file' => $attatchment,
                                                'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                                             ]);
                     }
@@ -380,17 +380,17 @@ class OrderStatusCntrl extends Controller
                                             ->update([
                                                'pi_status' => "PI Approved",
                                                'pi_id' => $pi_details->id,
-                                               // 'pi_file' => $attatchment,   
+                                               'pi_file' => $attatchment,   
                                                'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                                             ]);
                     }
                     $erpOrders['tableName'] = $table;
                     $erpOrders['id']        = $tableID;
                     $erpOrders['buyer_id']  = $buyer_id;
-                    // $customer_data  = DB::table('customers')->where('id',$data['bank_details']->id)->first();
-                    // if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
-                    //     $erp_obj->updateTescoErpOrders($request);
-                    // } 
+                    $customer_data  = DB::table('customers')->where('id',$data['bank_details']->id)->first();
+                    if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
+                        $erp_obj->updateTescoErpOrders($erpOrders);
+                    } 
                 }
             }
             else{
@@ -399,15 +399,17 @@ class OrderStatusCntrl extends Controller
                                     ->update([
                                        'pi_status' => "PI Approved",
                                        'pi_id' => $pi_details->id,
-                                       // 'pi_file' => $attatchment, 
+                                       'pi_file' => $attatchment, 
                                        'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                                     ]);
-                   
-                // $customer_data  = DB::table('customers')->where('id',$data['bank_details']->id)->first();
+                $erpOrders['tableName'] = $table_name;
+                $erpOrders['id']        = $row_id;
+                $erpOrders['buyer_id']  = $buyer_id;   
+                $customer_data  = DB::table('customers')->where('id',$data['bank_details']->id)->first();
 
-                // if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
-                //     $erp_obj->updateTescoErpOrders($request);
-                // }                                
+                if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
+                    $erp_obj->updateTescoErpOrders($erpOrders);
+                }                                
             }
             if ($approved_data)
             {
@@ -451,17 +453,17 @@ class OrderStatusCntrl extends Controller
                   $template_array = array_combine($table_array, $qnty_id_array);
                 }
             }
-            if ($table_name == "tesco_tcl1_orders" || $table_name == "tesco_tcl2_orders" || $table_name == "tesco_tsl1_orders") {
-              $table_array = array('tesco_tcl1_orders','tesco_tcl2_orders','tesco_tsl1_orders');
-              $qnty_id_array = array('tesco_tcl1_orders_quanty','tesco_tcl2_orders_quanty','tesco_tsl1_orders_quanty');
-              $template_array = array_combine($table_array, $qnty_id_array);
+            // if ($table_name == "tesco_tcl1_orders" || $table_name == "tesco_tcl2_orders" || $table_name == "tesco_tsl1_orders") {
+            //   $table_array = array('tesco_tcl1_orders','tesco_tcl2_orders','tesco_tsl1_orders');
+            //   $qnty_id_array = array('tesco_tcl1_orders_quanty','tesco_tcl2_orders_quanty','tesco_tsl1_orders_quanty');
+            //   $template_array = array_combine($table_array, $qnty_id_array);
 
-            }
-            if ($table_name == "tesco_tcl4_orders" || $table_name == "tesco_tsl3_orders") {
-              $table_array = array('tesco_tcl4_orders','tesco_tsl3_orders');
-              $qnty_id_array = array('tesco_tcl4_orders_quanty','tesco_tsl3_orders_quanty');
-              $template_array = array_combine($table_array, $qnty_id_array);
-            }
+            // }
+            // if ($table_name == "tesco_tcl4_orders" || $table_name == "tesco_tsl3_orders") {
+            //   $table_array = array('tesco_tcl4_orders','tesco_tsl3_orders');
+            //   $qnty_id_array = array('tesco_tcl4_orders_quanty','tesco_tsl3_orders_quanty');
+            //   $template_array = array_combine($table_array, $qnty_id_array);
+            // }
             if (!empty($template_array)) {
                 foreach ($template_array as $table => $value) {
 
@@ -1144,5 +1146,22 @@ class OrderStatusCntrl extends Controller
            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
        }
        return $result;
+   }
+
+   public function downloadTescoPI(Request $request)
+   {
+        try {
+            // $pi_obj     =   new ProfomaInvoice();
+            // $data       =   $pi_obj->getTescoPIDetails($request);
+            // $attatchment =  $pi_obj->getAttachment($data,$request);
+            $id         =  $request['id'];
+            $table_name =  $request['tableName'];            
+            $result     =  DB::table($table_name)->where('id',$id)->value('pi_file');   
+        }  
+        catch (\Exception $e)
+        {
+           $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
    }
 }

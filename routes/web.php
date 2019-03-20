@@ -506,6 +506,9 @@ Route::post('admin/tesco/update-po', 'Admin\Tesco\OrderStatusCntrl@updateArtwork
 Route::post('admin/tesco/copy-po', 'Admin\Tesco\OrderStatusCntrl@copyArtworkPO');
 Route::post('admin/tesco/get-po-file', 'Admin\Tesco\OrderStatusCntrl@getPOFile');
 
+Route::post('admin/tesco/download-tesco-pi', 'Admin\Tesco\OrderStatusCntrl@downloadTescoPI');
+
+
 
 Route::post('admin/tesco/update-delivery-date', 'Admin\Tesco\OrderStatusCntrl@updateDeliveryDate');
 
@@ -650,6 +653,10 @@ Route::group(['prefix' => 'erp'], function () {
 
 	Route::get('job-manager/tesco/get-tsl-size', 'ErpUser\Jobmanager\JobManagerController@getTescoTSLSizechart');
 	Route::get('job-manager/script-update-buyer-no', 'ErpUser\Jobmanager\JobManagerController@scriptUpdateBuyerNo');
+
+	Route::get('job-manager/script-check-orders', 'ErpUser\Jobmanager\JobManagerController@scriptCheckOrder');
+
+
 	Route::get('job-manager/jobcards-list', 'ErpUser\Jobmanager\JobManagerController@getJobcards')->name('jobcards-list'); 
 	Route::get('job-manager/jobcard-details', 'ErpUser\Jobmanager\JobManagerController@getJobcardDetailsById');  
 	Route::put('job-manager/update-jobcard-details', 'ErpUser\Jobmanager\JobManagerController@updateJobcardById'); 
