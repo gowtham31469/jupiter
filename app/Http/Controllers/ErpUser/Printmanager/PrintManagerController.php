@@ -107,7 +107,8 @@ class PrintManagerController extends Controller
 										 ->select('erp_orders.*','customers.company_name','erp_status.status_name','erp_order_details.created_at as po_created_date','erp_order_details.template_id','erp_order_details.buyer_po_number','erp_order_details.order_type','erp_order_details.style_no','erp_order_details.zone','erp_order_details.reference_name','tesco_template.template_file')
 										 ->get();
 				
-				print_r($erp_order_details);
+				print_r($valuess.',');
+				print_r($buyers);
 										
 				if(count($erp_order_details) > 0)
 				{
