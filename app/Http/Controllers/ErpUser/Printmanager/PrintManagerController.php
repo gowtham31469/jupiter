@@ -128,9 +128,11 @@ class PrintManagerController extends Controller
 			 
 		 }
 		
-		asort($orders_erp);
-
-		return view('erp.Printmanager.print-manager',['orders' => $orders_erp,'companies' => $companies]);
+		 return $orders_erp;
+		
+//		asort($orders_erp);
+//
+//		return view('erp.Printmanager.print-manager',['orders' => $orders_erp,'companies' => $companies]);
 	}
 	
 	
