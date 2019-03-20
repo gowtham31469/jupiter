@@ -96,7 +96,7 @@ class PrintManagerController extends Controller
 			{
 				$buyer_id = explode("-",$key);
 				
-				$erp_order_details = Erp::join('erp_order_details1','erp_order_details.erp_order_id','erp_orders.id')
+				$erp_order_details = Erp::join('erp_order_details','erp_order_details.erp_order_id','erp_orders.id')
 										 ->join('customers','erp_orders.customer_id','customers.id')
 										 ->join('erp_status','erp_orders.status','erp_status.id')->join('tesco_template', 'tesco_template.item_id', 'erp_order_details.template_id')
 										 ->where('erp_order_details.template_id',$valuess)
