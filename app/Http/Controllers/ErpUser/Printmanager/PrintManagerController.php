@@ -90,6 +90,10 @@ class PrintManagerController extends Controller
 		 $orders_erp = array();
 		
 		
+		 print_r($new_orders);
+		
+		return $new_orders;
+		
 		 foreach($new_orders as $key => $values)
 		 {
 			foreach($values as $valuess)
@@ -128,11 +132,9 @@ class PrintManagerController extends Controller
 			 
 		 }
 		
-		 return $orders_erp;
-		
-//		asort($orders_erp);
-//
-//		return view('erp.Printmanager.print-manager',['orders' => $orders_erp,'companies' => $companies]);
+		asort($orders_erp);
+
+		return view('erp.Printmanager.print-manager',['orders' => $orders_erp,'companies' => $companies]);
 	}
 	
 	
