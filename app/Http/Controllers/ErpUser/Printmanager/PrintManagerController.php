@@ -87,6 +87,8 @@ class PrintManagerController extends Controller
 			 $i++;
 		 }
 		
+		print_r($new_orders);
+		return $new_orders;
 		 $orders_erp = array();
 		
 		
