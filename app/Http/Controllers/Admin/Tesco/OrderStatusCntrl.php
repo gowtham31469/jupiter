@@ -451,17 +451,17 @@ class OrderStatusCntrl extends Controller
                   $template_array = array_combine($table_array, $qnty_id_array);
                 }
             }
-            if ($table_name == "tesco_tcl1_orders" || $table_name == "tesco_tcl2_orders" || $table_name == "tesco_tsl1_orders") {
-              $table_array = array('tesco_tcl1_orders','tesco_tcl2_orders','tesco_tsl1_orders');
-              $qnty_id_array = array('tesco_tcl1_orders_quanty','tesco_tcl2_orders_quanty','tesco_tsl1_orders_quanty');
-              $template_array = array_combine($table_array, $qnty_id_array);
+            // if ($table_name == "tesco_tcl1_orders" || $table_name == "tesco_tcl2_orders" || $table_name == "tesco_tsl1_orders") {
+            //   $table_array = array('tesco_tcl1_orders','tesco_tcl2_orders','tesco_tsl1_orders');
+            //   $qnty_id_array = array('tesco_tcl1_orders_quanty','tesco_tcl2_orders_quanty','tesco_tsl1_orders_quanty');
+            //   $template_array = array_combine($table_array, $qnty_id_array);
 
-            }
-            if ($table_name == "tesco_tcl4_orders" || $table_name == "tesco_tsl3_orders") {
-              $table_array = array('tesco_tcl4_orders','tesco_tsl3_orders');
-              $qnty_id_array = array('tesco_tcl4_orders_quanty','tesco_tsl3_orders_quanty');
-              $template_array = array_combine($table_array, $qnty_id_array);
-            }
+            // }
+            // if ($table_name == "tesco_tcl4_orders" || $table_name == "tesco_tsl3_orders") {
+            //   $table_array = array('tesco_tcl4_orders','tesco_tsl3_orders');
+            //   $qnty_id_array = array('tesco_tcl4_orders_quanty','tesco_tsl3_orders_quanty');
+            //   $template_array = array_combine($table_array, $qnty_id_array);
+            // }
             if (!empty($template_array)) {
                 foreach ($template_array as $table => $value) {
 
