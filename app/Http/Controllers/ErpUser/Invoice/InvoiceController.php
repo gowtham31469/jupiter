@@ -257,6 +257,8 @@ class InvoiceController extends Controller
                         }
                     }
                 }
+                $par_count = 0;
+                $ful_count = 0;
 
                 Invoices::where('id', $invoiceData->id)->update(['invoice_id'=> $invoice_id ]);
                 foreach ($orders as $key => $value) {
@@ -264,6 +266,12 @@ class InvoiceController extends Controller
                     $size = $value['size'] == ""?"null":$value['size'];
                     $hsn_code = $value['hsn_code']==""?0: $value['hsn_code'];
                     $status = $pendingQnty==0?5:6;
+                    if ($status==5) {
+                        $par_count++;
+                    }
+                    else{
+                        $ful_count++;
+                    }
                     InvoiceDetails::create([
                         'invoice_id'    =>  $invoiceData->id,
                         'order_no'      =>  $value['id'],
@@ -289,15 +297,16 @@ class InvoiceController extends Controller
                             'delivered_quantity' => ( $value['order_quantity'] - $pendingQnty ),
                             'pending_orders'     => $pendingQnty,
                             'status'             => $status
-                            ]);
-                    Erp::where('erp_id',$orders[0]['erp_id'])
-                        ->update(['status'=>$status]);
+                            ]);                  
 
-                  ErpOrdersInvoice::create([
-                    'invoice_id'=>$invoiceData->id,
-                    'erp_order_id'=>$orders[0]['erpid']
+                    ErpOrdersInvoice::create([
+                        'invoice_id'=>$invoiceData->id,
+                        'erp_order_id'=>$orders[0]['erpid']
                     ]);
                 }
+                $erpStatus = ($par_count !=0 && $ful_count!=0) ? 6:$status;
+                Erp::where('erp_id',$orders[0]['erp_id'])
+                        ->update(['status'=>$erpStatus]);
                 $result    = response()->json(['error'=> false,'message' =>'success'],200);
             }
             
@@ -423,7 +432,7 @@ class InvoiceController extends Controller
             // PDF::SetPrintHeader(false);
             // PDF::SetPrintFooter(false);
             // PDF::AddPage();
-              // PDF::writeHTML($dynView->render());
+            // PDF::writeHTML($dynView->render());
             $pdfdata =$pdf->output( public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf'), 'F');
 
             Invoices::where('id', $inv_id)->update(['eway_no'=> $eway_no ,'invoice_file'=>'/storage/app/public/invoices/invoices_'.$inv_id.'.pdf']);

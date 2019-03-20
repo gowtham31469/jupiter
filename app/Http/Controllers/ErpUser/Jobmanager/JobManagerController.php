@@ -2094,4 +2094,24 @@ class JobManagerController extends Controller
     }
 
 
+    public function scriptCheckOrder(){
+    	$erpOrderDetails = DB::table('erp_order_details')->select('order_qnty_table_name','order_qnty_table_id')->get();
+    	$count = 0 ; 
+    	foreach ($erpOrderDetails as $value) {
+    		$orderData = DB::table($value->order_qnty_table_name)->where('id',$value->order_qnty_table_id)->first();
+    		
+    		if(!empty($orderData)){
+    			echo "\n";
+    			echo "Exists";
+    			echo $orderData->id;
+    			echo $value->order_qnty_table_name;
+    		}
+    		else{
+    			echo "Not exists\n";
+    			echo $value->order_qnty_table_id;
+    			echo $value->order_qnty_table_name;
+    		}
+    	}
+    }
+
 }

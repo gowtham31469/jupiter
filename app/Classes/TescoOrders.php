@@ -875,11 +875,12 @@ class TescoOrders
                   ]);
           $i=0;
 
-          // $old_data = DB::table($qunty_tbl)
-                      // ->where($qnty_id,$table_data->id)->orderBy('id')->get();
+          $qnty_data = DB::table($qunty_tbl)
+                      ->where($qnty_id,$table_data->id)->orderBy('id')->select('count')->get();
+
           $old_data = DB::table($qunty_tbl)
                       ->where($qnty_id,$table_data->id)->delete();
-
+         $i=0;              
         foreach($tpnd as $value)
         {
             if(($template_name == "TCL1" && $zone=="CE") ||($template_name == "TCL2" && $zone=="CE") || ($template_name == "TSL1" && $zone=="CE") || ($template_name == "THL1" && $zone=="CE"))
@@ -897,6 +898,7 @@ class TescoOrders
                     'itf_barcode'        => $barcode[$i],
                      $qnty_id            => $table_data->id,
                     'cases_per_carton'   => $size[$i],
+                    'count'              => $qnty_data[$i]->count,
                     'size'               => "0"
                   ]);
             }
@@ -915,7 +917,8 @@ class TescoOrders
                       'orms_tpn'        => $value,
                       'ean_barcode'     => $barcode[$i],
                       'case_size'       => $size[$i],
-                      $qnty_id            => $table_data->id,
+                       $qnty_id            => $table_data->id,
+                      'count'             => $qnty_data[$i]->count,
                       'size'            => $single_size[$i]
                     ]);
             }
@@ -936,6 +939,7 @@ class TescoOrders
                       'ean_barcode'        => $barcode[$i],
                       'case_size'   => $size[$i],
                       'size'            =>$single_size[$i],
+                      'count'             => $qnty_data[$i]->count,
                       $qnty_id            => $table_data->id
                   ]);
             }
@@ -954,6 +958,7 @@ class TescoOrders
                       'tpnd'               => $value,
                       'itf_barcode'        => $barcode[$i],
                       'units_per_carton'   => $size[$i],
+                      'count'             => $qnty_data[$i]->count,
                       'size'               => "0",
                       $qnty_id            => $table_data->id
                   ]);
