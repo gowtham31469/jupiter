@@ -449,6 +449,7 @@ function showInvoice(obj){
           $(".loader").show();
         },
         success: function(data) {
+          console.log(data)
           var tr = '';
           var totalAmnt = 0;
 
