@@ -202,6 +202,8 @@ function generateJobcard(){
     }
     else
     {
+        // enable print button (for old version browsers)
+        $('#jc_print_btn').prop('disabled', false);
         // remove file_path from local-storage
         localStorage.removeItem('file_path');
         
