@@ -62,20 +62,20 @@
                         <tr>
                             <td width="170"><p>{{$bill_to->address}},{{$bill_to->pincode}}</p></td>
                             <td width="160"  style="border-left:1px solid black"><p>{{$ship_to->address}},{{$ship_to->pincode}}</p></td>
-                            <td width="54" style="border-left:1px solid black"><span> Date</span><p> Invoice No</p></td>
-                            <td width="54" style="border-left:1px solid black;"><span> {{$inv_details[0]['inv_date']}}</span><p> {{$inv_details[0]['invoice_id']}}</p></td>
+                            <td width="40" style="border-left:1px solid black"><span> Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span><p> Invoice No&nbsp;:</p></td>
+                            <td width="68"><span> {{$inv_details[0]['inv_date']}}</span><p> {{$inv_details[0]['invoice_id']}}</p></td>
                         </tr>
                         <tr>
                             <td></td>
                             <td style="border-left:1px solid black"></td>
-                            <td style="border-left:1px solid black;border-right:1px solid black"></td>
+                            <td style="border-left:1px solid black;"></td>
                             <td></td>
                         </tr>
                         <tr>
                             <td width="170" style="line-height: 1px; border-right:1px solid black;border-bottom:1px solid black;"><span>GSTIN : {{$inv_details[0]['gstin_number']}}</span></td>
                             <td width="160" style="line-height: 1px; border-left:1px solid black;border-bottom:1px solid black;"><span>GSTIN : {{$inv_details[0]['gstin_number']}}</span></td>
-                            <td width="54" style="line-height: 1px;  border-left:1px solid black;border-bottom:1px solid black;"><br><span> Disp thru</span></td>
-                            <td width="54" style="line-height: 1px;  border-left:1px solid black;border-bottom:1px solid black;"><span> {{$inv_details[0]['delvry_thru']}}</span></td>
+                            <td width="40" style="line-height: 1px;  border-left:1px solid black;border-bottom:1px solid black;"><br><span> Disp thru&nbsp;&nbsp;&nbsp; :</span></td>
+                            <td width="68" style="line-height: 1px; border-bottom:1px solid black;"><span> {{$inv_details[0]['delvry_thru']}}</span></td>
                         </tr>
                     </table>
                 </td>

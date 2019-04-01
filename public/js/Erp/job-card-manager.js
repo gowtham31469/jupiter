@@ -561,6 +561,8 @@ function generateJobcard(){
                     $('.datepicker').datepicker({
                         format: 'dd-mm-yyyy'
                     });
+                    // enable print button (for old version browsers)
+                    $('#jc_print_btn').prop('disabled', false);
                 },
                 406: function(data) {
                      $('.snackbar_span').html(data.responseJSON.message);
