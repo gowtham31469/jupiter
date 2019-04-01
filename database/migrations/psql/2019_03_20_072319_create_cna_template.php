@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateC&aTemplate extends Migration
+class CreateCnaTemplate extends Migration
 {
     /**
      * Run the migrations.
