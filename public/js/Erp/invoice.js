@@ -180,10 +180,7 @@
         $('.bottom-bar').html('<div class="modal-footer"><div class="create-invoice"><button class="btn btn-xs btn-success save-btn create-invoice pull-right" id="create-invoice">Create Invoice</button></div></div>')
 
            $('#create-invoice').on('click',function(){
-            // function createInvoicePreview(){
-                
-                previewInvoice(orderData)
-            // }
+             previewInvoice(orderData)
                 
             })
         $('.order-details tbody').on('change', 'input[type="checkbox"]', function(){
@@ -231,7 +228,6 @@
             var sub_amnt = 0;
             taxIndexes[vals] = $.map(orderData, function(obj, index) {
                 if(obj.tax == vals) {
-                    console.log("obj",obj)
                     if (obj.delvry_qnty == 0) {
                         sub_amnt += obj.pending_qnty*obj.rate;
                     }
@@ -293,7 +289,6 @@
                    value.delvry_qnty = delVal;
                 }
             });
-            console.log("In",order_data)
             if ($(this).val() == parseInt(oldPendQnty)) {
                 amnt  = parseInt($(this).val()) * $(this).closest('tr').find('.rate').text();
                 $(this).closest('tr').find('.amnt').html(amnt.toFixed(2))
@@ -340,7 +335,6 @@
                 }
             });
         });
-        // console.log("Out",order_data)
         updateTaxAmount(taxsum)
         updateTotal()
     }
@@ -410,7 +404,6 @@
                 if(index == 2){
                 if(!taxamnt[index]) taxamnt[index] = 0;
                 taxamnt[index] += parseFloat($(val).text());
-                // console.log($(val).text())
             }
             });
         });
@@ -429,22 +422,16 @@
         Object.keys(tax_amnt).forEach(function(key) {
           if (place_of_supply==1){
                 var trClass = tax_amnt[key]!=0?"":"hidden"
-                // if (tax_amnt[key]!=0) {
+                
                     tax_tr = '<tr class="'+trClass+'"><td>CGST ('+(key/2)+'% )</td><td class="cgst_'+key+'">'+tax_amnt[key].toFixed(2)+'</td><td>'+(((key/2)/100)*tax_amnt[key]).toFixed(2)+'</td></tr><tr class="'+trClass+'"><td>SGST ('+(key/2)+'% )</td><td class="sgst_'+key+'">'+tax_amnt[key].toFixed(2)+'</td><td>'+ (((key/2)/100)*tax_amnt[key]).toFixed(2)+'</td></tr>'
-                // }
-                // else{
-                //     tax_tr = "";
-                // }
+                
             }
             
             else if (place_of_supply==2){
                 var trClass = tax_amnt[key]!=0?"":"hidden"
-                // if (tax_amnt[key]!=0) {                
+                              
                     tax_tr = '<tr class="'+trClass+'"><td>IGST ('+key+'% )</td><td class="igst_'+key+'">'+tax_amnt[key].toFixed(2)+'</td><td>'+((key/100)*tax_amnt[key]).toFixed(2)+'</td></tr>'
-                // }
-                // else{
-                //     tax_tr = "";
-                // }
+                
             }
             else{
                 tax_tr = '<tr><td>Taxes ('+key+'%)</td><td>'+tax_amnt[key].toFixed(2)+'</td><td>'+ ((key/100)*tax_amnt[key] ).toFixed(2)+'</td></tr>'
@@ -470,9 +457,7 @@
             }
         })
         $('.sub-extra').html(result.toFixed(2))
-        // console.log($('.tax-total').text(),"tax")
         var grandTotal = parseFloat($('.tax-total').text())+ parseFloat($('.total-amnt').text()) + parseFloat($('.sub-extra').text()) ;
-        // console.log(parseFloat($('.tax-total').text()) , parseFloat($('.total-amnt').text()) , parseFloat($('.sub-extra').text()) , parseFloat($('#round-off').val()))
         $('.grand-total').html(grandTotal.toFixed(2)) 
         var roundoff = Math.round(grandTotal) - grandTotal
         $('.grand-total').text((parseFloat(grandTotal)+roundoff).toFixed(2))
@@ -526,10 +511,7 @@
            
         })
         var checkboxes = $('#order-details td input[type="checkbox"]');
-        // console.log(checkboxes.filter(':checked').length)
-        // console.log(Object.keys(delvryQnty).length)
         if ((jQuery.isEmptyObject(delvryQnty))) {
-        // if((Object.keys(delvryQnty).length) === (checkboxes.filter(':checked').length)){
            $('.snackbar_span').html("Please provide delivered quantity details");
            showSnackbar();
         }
@@ -643,7 +625,6 @@
                 $('.preview-sub-extra').text($('.sub-extra').text())
                 $('.preview-grand-total').text($('.grand-total').text())
                 
-            // $('.invoice_actions').html('<button class="btn btn-default btn-xs downloadIn" id="downloadIn" onclick="downloadInvoice()" >View as PDF</button><button class="btn btn-success btn-xs" id="save-invoice">Save</button><button type="button" class="btn btn-primary btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
             $('.invoice_actions').html('<button class="btn btn-success btn-xs" id="save-invoice">Save</button><button type="button" class="btn btn-primary btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
             $('.amnt-in-words').text(RsPaise($('.grand-total').text()))
             $('#save-invoice').on('click',function(){
@@ -652,8 +633,6 @@
 
             $(document).find('#table_row').find('tr').each(function()
             {
-                var eName = $(this).find("select option:selected").attr('data-id');
-                var eAmount = $(this).find('.extra-amnt').val();
                 var obj = {}
                 if ($(this).find("select option:selected").attr('data-id') != "0") {
                     obj[$(this).find("select option:selected").attr('data-id')] = $(this).find('.extra-amnt').val()
@@ -676,7 +655,6 @@
         var val = $(obj).val();
         var i = order_data.length;        
         var arr = [].concat(order_data);
-        // console.log("arr",arr)
         var selected = [];
         $('.order-details input[type=checkbox]').each(function () {
             var amt =0;
@@ -690,7 +668,6 @@
               $(this).closest('tr').find('.delivery-qnty').css('border-color', '');              
             }
             else{
-               // amt = $(this).closest('tr').find('.pending-qnty').text()*$(this).closest('tr').find('.rate').text();
                amt =   $(this).closest('tr').find('.delivery-qnty').val() == "" ? $(this).closest('tr').find('.pending-qnty').text()*$(this).closest('tr').find('.rate').text() : $(this).closest('tr').find('.delivery-qnty').val()*$(this).closest('tr').find('.rate').text()
                 $(this).closest('tr').find('.amnt').text(amt.toFixed(2));
                 $(this).closest('tr').find('.delivery-qnty').attr('required');
@@ -719,7 +696,6 @@
     function saveInvoice(finalData,eCharges){
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         var myOffscreenEl = document.getElementById("invoice");
-        var htmlData =  myOffscreenEl.innerHTML;
         var roundOff = $('#round-off').val();
         var taxTotal = $('.tax-total').text();
         var creditTerms = $('#credit-terms').val();
@@ -747,7 +723,6 @@
                 eCharges:eCharges,
                 delivery_at:delivery_at,
                 finalData:finalData
-            //    htmlData:htmlData,
                 
             },
             tryCount: 0,
@@ -755,7 +730,6 @@
             dataType: "json",
 
             success: function (data) {
-                // console.log("result",data)
                 $('.snackbar_span').html("Invoice Created Successfully !");
                 showSnackbar();                
                 $('#erp-invoice').modal("hide")
@@ -778,11 +752,9 @@
      * @return {[updated grand total amount]}
      */
     function updateGrandTotal(obj,gndtotal){
-        // $(obj).closest('tr').find('.grand-total').text();
        var grandTotal = 0 ;
        if($.isNumeric(parseFloat($(obj).val()))) {
             grandTotal = parseFloat($(obj).val())+ parseFloat($('.total-amnt').text()) + parseFloat($('.tax-total').text()) + parseFloat($('.sub-extra').text()) 
-            // alert(parseFloat($('.grand-total').text()))
             $('.grand-total').html(grandTotal.toFixed(2))
        }
        else{
@@ -833,12 +805,10 @@
     }
 
     function selectDeliveryCard(obj,id){
-        // $('.delivery-card').css('border-color','');
         $('.delivery-card').removeClass("active");
         $(obj).addClass("active");
         $('.delivery-card.active').css('border-color','#273339');
         $('.delivery-card.active').find('d_address').text()
-        console.log($('.delivery-card.active').html())
     }
 
     function Rs(amount)
