@@ -778,7 +778,7 @@ class OrderStatusCntrl extends Controller
         {
             $row_id     =   $request->id;
             $table_name =   $request->table_name;
-            $order_details       =   DB::table($table_name)->where('id',$row_id)
+            $order_details  =   DB::table($table_name)->where('id',$row_id)
                             ->select('*')->first();
             $qnty_id         =  str_replace("_orders","_order_id",str_replace("tesco_","",$table_name));
             $quantity_details = DB::table($table_name.'_quanty')
@@ -786,6 +786,12 @@ class OrderStatusCntrl extends Controller
 			$template_file=DB::table('tesco_template')->where('item_id',$order_details->template_id)->select('*')->get();
 
             $moq     =    DB::table('price_taxation')->where('template_id',$order_details->template_id)->where('customer_id',$order_details->tesco_supplier_id)->where('buyer_id',2)->value('moq');
+
+            foreach($quantity_details as $quantity)
+            {
+               $quantity_id = $quantity->id;
+               $erp_order_details = DB::table('erp_order_details')->where('order_qnty_table_name',$order_details->template_id)->select('*')->get();
+            }
 
             if ($order_details && $quantity_details)
             {
