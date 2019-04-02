@@ -37,11 +37,10 @@
                    
 
                     $('.po-list').removeClass('hidden')
-                   	$('.dynamic-table tbody').on('change', 'input[type="checkbox"]', function (event) {
-    					event.stopImmediatePropagation();
-    					//$('.po-select').not(this).prop('checked', false);  
-    					showOrderList(this)
-    				});
+                    $('.dynamic-table tbody').on('change', 'input[type="checkbox"]', function(){
+                    $('.po-select').not(this).prop('checked', false);  
+                        showOrderList(this)                           
+                    });
                     if (data.address_list!= 0){
                         var add = ''
                         $(data.address_list).each(function(index, value)
@@ -79,54 +78,43 @@
      * @return {[json data]}
      */
     function showOrderList(obj) {
-        var erp_id = [];
-    	$("input:checkbox[name=po_select]:checked").each(function () {
-    		erp_id.push($(this).val());
-    	});
+        var erp_id = $(obj).val()
+        var table  = $(obj).attr('data-id')
+        $.ajax({
+            url: "/erp/erp-order-list",
+            type: 'GET',
+            data: {
+                erp_id:erp_id
+            },
+            tryCount: 0,
+            retryLimit: 2,
+            dataType: "json",
 
-    	if (erp_id.length > 0) {
-    		var table = $(obj).attr('data-id')
-    		$.ajax({
-    			url: "/erp/erp-order-list",
-    			type: 'GET',
-    			data: {
-    				erp_id: erp_id
-    			},
-    			tryCount: 0,
-    			retryLimit: 2,
-    			dataType: "json",
+            success: function (data) {
 
-    			success: function (data) {
-
-    				if (data.orderlist.length != 0) {
-    					order_data = data.orderlist;
-    					ship_to = data.ship_to;
-    					bill_to = data.bill_to;
-    					company_details = data.company_details;
-    					createInvoice(order_data, order_data)
-    				} else {
-    					$('.order-details').addClass('hidden')
-    					$('.remarks').addClass('hidden')
-    					$('.extra-charges').addClass('hidden')
-    					$('.bottom-bar').addClass('hidden')
-    					$('.orders-tax').addClass('hidden')
-    				}
-    			},
-    			error: function (errorXHR, errorStatus, errorThrown) {
-
-    			},
-    			complete: function () {
-
-    			}
-    		})
-    	} else {
-    		$('.order-details').addClass('hidden')
-			$('.order-heading').addClass('hidden')
-    		$('.remarks').addClass('hidden')
-    		$('.extra-charges').addClass('hidden')
-    		$('.bottom-bar').addClass('hidden')
-    		$('.orders-tax').addClass('hidden')
-    	}
+                if(data.orderlist.length != 0)
+                {                       
+                    order_data = data.orderlist;
+                    ship_to =  data.ship_to;
+                    bill_to = data.bill_to;
+                    company_details = data.company_details;
+                    createInvoice(order_data,order_data)                                       
+                }
+                else{
+                    $('.order-details').addClass('hidden')
+                    $('.remarks').addClass('hidden')
+                    $('.extra-charges').addClass('hidden')
+                    $('.bottom-bar').addClass('hidden')
+                    $('.orders-tax').addClass('hidden')
+                }
+            },
+            error: function (errorXHR, errorStatus, errorThrown) {
+               
+            },
+            complete: function () {
+            
+            }
+        })
     }
 
     /**
@@ -182,7 +170,7 @@
         tr+= '<tr><td colspan="8"><strong>Total</strong></td><td class="qnty-sum">'+qnty+'</td><td class="balnc-qnty" id="balnc-qnty">'+pendQnty+'</td><td class="total-qnty" id="total-qnty">'+quantityTotal()+'</td><td></td><td class="total-amnt" style="border-width: 1px !important;">'+amnt.toFixed(2)+'</td></tr>';
 
 
-        $('.order-details').html('<div class="col-lg-12 col-md-12 col-sm-12"><div><table class="table text-center table-bordered order-details" id="order-details"><thead><tr><th><input name="select_all" id="select-all" type="checkbox" checked/></th><th>Order No</th><th>PO No</th><th>Style</th><th>OCN No</th><th>Reference</th><th>Size</th><th>Tax (%)</th><th>Order Quantity</th><th>Pending Quantity</th><th>Delivered Quantity</th><th>Rate (₹)</th><th style="border-width: 1px !important;">Amount (₹)</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12"><tbody>'+tr+'</tbody></table></div></div>');
+        $('.order-details').html('<div class="col-lg-12 col-md-12 col-sm-12"><div><table class="table text-center table-bordered order-details" id="order-details"><thead><tr><th></th><th>Order No</th><th>PO No</th><th>Style</th><th>OCN No</th><th>Reference</th><th>Size</th><th>Tax (%)</th><th>Order Quantity</th><th>Pending Quantity</th><th>Delivered Quantity</th><th>Rate (₹)</th><th style="border-width: 1px !important;">Amount (₹)</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12"><tbody>'+tr+'</tbody></table></div></div>');
 
         updateTaxAmount(tax_amnt)
 
@@ -198,23 +186,6 @@
         $('.order-details tbody').on('change', 'input[type="checkbox"]', function(){
             updateInvoice(this)                           
         });
-		
-		$('#select-all').click(function(event) {   
-			$('input:checkbox[name=order_select]').prop('checked', this.checked); 
-		});
-		
-		 $(".order-select").click(function () {
-			if ($(this).is(":checked")){
-			  var isAllChecked = 0;
-			  $(".order-select").each(function(){
-				if(!this.checked)
-				   isAllChecked = 1;
-			  })              
-			  if(isAllChecked == 0){ $("#select-all").prop("checked", true); }     
-			}else {
-			  $("#select-all").prop("checked", false);
-			}
-		  });
 
         var checkboxes = $('.dynamic-table td input[type="checkbox"]');
         $(document).find('.charges').selectpicker();                  
