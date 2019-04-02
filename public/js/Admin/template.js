@@ -23,11 +23,12 @@ function template_list() {
 	var buyer = localStorage.getItem("buyer");
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
-		url: base_url + "/admin/" + buyer + "/template-management/template-list",
+		url: base_url + "/admin/template-management/template-hierarchy",
 		type: "Post",
 		dataType: "json",
 		data: {
-			_token: csrf_token
+			_token: csrf_token,
+			buyer:buyer
 		},
 		beforeSend: function () {
 			$(".loader").show();
@@ -227,7 +228,7 @@ function template_list() {
 					}
 				});
 
-			} else {
+			} else if (buyer == "orchestra")  {
 				$('#tree1').jstree({
 					'core': {
 						'data': data
@@ -359,6 +360,142 @@ function template_list() {
 					}
 				});
 			}
+			else  {
+				$('#tree1').jstree({
+					'core': {
+						'data': data
+					},
+					"types": {
+						"default": {
+							"icon": "fa fa-folder"
+						}
+					},
+					"plugins": ["types", "search"]
+				});
+				$('#expand').bind("click", function () {
+					$('#tree1').jstree("open_all");
+				});
+				$('#collapse').bind("click", function () {
+					$('#tree1').jstree("close_all");
+				});
+				var to = false;
+				$('#tree1_q').keyup(function () {
+					if (to) {
+						clearTimeout(to);
+					}
+					to = setTimeout(function () {
+						var v = $('#tree1_q').val();
+						$('#tree1').jstree(true).search(v);
+					}, 250);
+				});
+
+				$('#tree1').on('activate_node.jstree', function (e, data) {
+					if (data.instance.is_leaf(data.node)) {
+						var template_id = data.node.id;
+						var csrf_token = $('meta[name="csrf-token"]').attr('content');
+						$.ajax({
+							url: base_url + "/admin/template-management/template-view",
+							type: "Post",
+							dataType: "json",
+							data: {
+								template_id: template_id,
+								_token: csrf_token,
+								buyer:buyer
+							},
+							beforeSend: function () {
+								$(".loader").show();
+								$(".loader").css('margin-top', '12%');
+							},
+							success: function (data) {
+								$.ajax({
+									url: base_url + "/admin/template-management/get-company-list",
+									type: "get",
+									dataType: "json",
+									data: {
+										buyer:buyer
+									},
+									beforeSend: function () {
+										$(".loader").show();
+									},
+									statusCode: {
+										200: function (companydata) {
+											var company  = "";
+											var temp_id  = data[0].id;
+											var gl_text  = data[0].gl_text === null?'':data[0].gl_text;
+											var color    = data[0].color === null?'':data[0].color;
+											var hsn_code = data[0].hsn_code === null?'':data[0].hsn_code;
+											$.each(companydata.company, function (index1, value1) {
+												company += "<option value=" + value1.id + ">" + value1.name + "</option>";
+											});
+											var tax = "";
+											$.each(companydata.tax, function (index2, value2) {
+												tax += "<option value=" + value2.tax + ">" + value2.tax + "</option>";
+											});
+											var material = "";
+											$.each(companydata.material, function (index3, value3) {
+												material += "<option value=" + value3.id + ">" + value3.material_name_employee + "</option>";
+											});
+											if (data.length > 0) {
+												if (data[0].template_file != "") {
+													if (data.length > 1) {
+														$('.viewDiv').html("");
+														$.each(data, function (index, value) {
+															$('.viewDiv').append('<div class="row"><object style="display:inline-block" id="svg2" class="center-block svg2" data="' + value.template_file + '" type="image/svg+xml"></object></div>')
+														});
+													} else {
+														$('.viewDiv').html('<div class="row"><object id="svg2" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object></div>')
+													}
+
+													$('.descriptionDiv').html('<div class="col-md-12"><div class="row" style="margin-top:15px;"><form role="form" id = "update_orch_template_data_form" data-toggle= "validator"> <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="ref_' + temp_id + '">Reference No :</label> <input class="form-control input-sm " placeholder="Enter Reference No" type="text" value="' + data[0].template_name + '" name="ref_' + temp_id + '" id="ref_' + temp_id + '" required disabled> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="company_' + temp_id + '">Company Name</label> <select class="form-control input-sm " name="company_' + temp_id + '" id="company_' + temp_id + '" style="width: 100%;" required=""><option value="">Select a company</option>' + company + '</select> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="tax_' + temp_id + '">Taxation Value (%):</label> <select class="form-control input-sm " name="tax_' + temp_id + '" id="tax_' + temp_id + '" style="width: 100%;" required=""><option value="">Select a taxation value</option>' + tax + '</select> <div class="help-block with-errors"></div></div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="material_' + temp_id + '">Material :</label> <select class="form-control input-sm " name="material_' + temp_id + '" id="material_' + temp_id + '" style="width: 100%;" required=""><option value="">Select a material</option>'+ material +'</select> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for=gl_text_' + temp_id + '">GL Text :</label> <input class="form-control input-sm" placeholder="GL Text" required type="text" value="' + gl_text + '" name="gl_text_' + temp_id + '" id="gl_text_' + temp_id + '" maxlength = "25"> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for=gl_code_' + temp_id + '">GL Code :</label> <input class="form-control input-sm" placeholder="GL Code" required type="number" min="1" value="' + data[0].gl_code + '" name="gl_code_' + temp_id + '" id="gl_code_' + temp_id + '" maxlength = "15" onkeypress = "return isNumber(event)"> <div class="help-block with-errors"></div></div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="color_' + temp_id + '">Color :</label> <input class="form-control input-sm " placeholder="Color" required type="text" value="' + color + '" name="color_' + temp_id + '" id="color_' + temp_id + '" maxlength = "10"> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="hsn_code_' + temp_id + '">HSN Code :</label> <input class="form-control input-sm" placeholder="HSN Code" required type="number" min="1" value="' + hsn_code + '" name="hsn_code_' + temp_id + '" id="hsn_code_' + temp_id + '" maxlength = "10" > <div class="help-block with-errors"></div></div> <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for=dimension_height_' + temp_id + '">Height (mm):</label> <input class="form-control input-sm" placeholder="Height in mm" required type="number" min="1" value="' + data[0].dimension_height + '" name="dimension_height_' + temp_id + '" id="dimension_height_' + temp_id + '" maxlength = "5" > <div class="help-block with-errors"></div></div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for=dimension_width_' + temp_id + '">Width (mm):</label> <input class="form-control input-sm" placeholder="Width in mm" required type="number" min="1" value="' + data[0].dimension_width + '" name="dimension_width_' + temp_id + '" id="dimension_width_' + temp_id + '" maxlength = "5" > <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4"> </div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4"> </div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4"> </div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4"> <button class="btn btn-primary btn-sm pull-right" type="submit" id="' + temp_id + '" >Save</button></div><div class="clearfix"></div></form></div></div></div></div></div>')
+													$('.descriptionDiv').css('margin-top', '20px')
+													$('.viewDiv').css('margin-top', '0px')
+													/* Template details edit form */
+														$('#update_orch_template_data_form').validator().on('submit', function (e) {
+													        if (e.isDefaultPrevented())
+													        {
+
+													        }
+													        else
+													        {
+													           e.preventDefault();
+													           saveTescoTax(temp_id);
+													        }
+												      })
+
+												} else {
+													$('.viewDiv').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
+
+													$('.descriptionDiv').html('<b>Template Not Found</b>');
+													$('.descriptionDiv').css('margin-top', '0px')
+													$('.viewDiv').css('margin-top', '140px')
+												}
+											} else {
+												$('.viewDiv').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
+												$('.descriptionDiv').html('<b>Template Not Found</b>');
+												$('.descriptionDiv').css('margin-top', '0px')
+												$('.viewDiv').css('margin-top', '140px')
+											}
+											$('#company_' + data[0].id).val(data[0].company_id)
+											$('#tax_' + temp_id).val(data[0].tax)
+											$('#material_' + temp_id).val(data[0].material_id)
+
+										}
+									},
+									error: function (errorXHR, errorStatus, errorThrown) {},
+									complete: function () {}
+								})
+							},
+							error: function (data) {
+
+							},
+							complete: function () {
+								$(".loader").hide();
+								$(".loader").css('margin-top', '0%');
+							}
+						})
+					}
+				});
+			}
 		},
 		error: function (data) {
 
@@ -384,7 +521,7 @@ function saveTescoTax(temp_id) {
 	var gltext = $('#gl_text_' + temp_id).val();
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
-		url: base_url + "/admin/" + buyer + "/template-management/save-taxation",
+		url: base_url + "/admin/template-management/save-taxation",
 		type: "POST",
 		dataType: "json",
 		data: {
@@ -399,7 +536,8 @@ function saveTescoTax(temp_id) {
 			height:height,
 			width:width,
 			_token: csrf_token,
-			gltext:gltext
+			gltext:gltext,
+			buyer:buyer
 		},
 		beforeSend: function () {
 			$(".loader").show();
@@ -419,55 +557,55 @@ function saveTescoTax(temp_id) {
 		}
 	});
 }
-function saveOrchestraTax(temp_id) {
-	var tax = $('#tax_' + temp_id).val();
-	var ref = $('#ref_' + temp_id).val();
-	var company = $('#company_' + temp_id).val();
-	var hsncode = $('#hsn_code_' + temp_id).val();
-	var glcode = $('#gl_code_' + temp_id).val();
-	var color = $('#color_' + temp_id).val();
-	var material = $('#material_' + temp_id).val();
-	var height = $('#dimension_height_' + temp_id).val();
-	var width = $('#dimension_width_' + temp_id).val();
-	var buyer = localStorage.getItem("buyer");
-	var gltext = $('#gl_text_' + temp_id).val();
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
-	$.ajax({
-		url: base_url + "/admin/" + buyer + "/template-management/save-taxation",
-		type: "POST",
-		dataType: "json",
-		data: {
-			template_id: temp_id,
-			tax: tax,
-			ref: ref,
-			company: company,
-			hsncode:hsncode,
-			glcode:glcode,
-			color:color,
-			material_id:material,
-			height:height,
-			width:width,
-			_token: csrf_token,
-			gltext:gltext
-		},
-		beforeSend: function () {
-			$(".loader").show();
-			$(".loader").css('margin-top', '12%');
-		},
-		success: function (data) {
-			$('.snackbar_span').html('Saved Successfully');
-			showSnackbar();
-		},
-		error: function (data) {
-			$('.snackbar_span').html('Unable to save. Try again!!');
-			showSnackbar();
-		},
-		complete: function () {
-			$(".loader").hide();
-			$(".loader").css('margin-top', '0%');
-		}
-	});
-}
+//function saveOrchestraTax(temp_id) {
+//	var tax = $('#tax_' + temp_id).val();
+//	var ref = $('#ref_' + temp_id).val();
+//	var company = $('#company_' + temp_id).val();
+//	var hsncode = $('#hsn_code_' + temp_id).val();
+//	var glcode = $('#gl_code_' + temp_id).val();
+//	var color = $('#color_' + temp_id).val();
+//	var material = $('#material_' + temp_id).val();
+//	var height = $('#dimension_height_' + temp_id).val();
+//	var width = $('#dimension_width_' + temp_id).val();
+//	var buyer = localStorage.getItem("buyer");
+//	var gltext = $('#gl_text_' + temp_id).val();
+//	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+//	$.ajax({
+//		url: base_url + "/admin/" + buyer + "/template-management/save-taxation",
+//		type: "POST",
+//		dataType: "json",
+//		data: {
+//			template_id: temp_id,
+//			tax: tax,
+//			ref: ref,
+//			company: company,
+//			hsncode:hsncode,
+//			glcode:glcode,
+//			color:color,
+//			material_id:material,
+//			height:height,
+//			width:width,
+//			_token: csrf_token,
+//			gltext:gltext
+//		},
+//		beforeSend: function () {
+//			$(".loader").show();
+//			$(".loader").css('margin-top', '12%');
+//		},
+//		success: function (data) {
+//			$('.snackbar_span').html('Saved Successfully');
+//			showSnackbar();
+//		},
+//		error: function (data) {
+//			$('.snackbar_span').html('Unable to save. Try again!!');
+//			showSnackbar();
+//		},
+//		complete: function () {
+//			$(".loader").hide();
+//			$(".loader").css('margin-top', '0%');
+//		}
+//	});
+//}
 
 	function showMoreDetails(id)
 	{

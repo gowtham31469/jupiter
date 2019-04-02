@@ -80,7 +80,14 @@ Route::get('admin/template-management', 'Admin\TemplateManagement\TemplateContro
 Route::get('admin/tesco/template-details', 'Admin\TemplateManagement\TemplateController@getTemplateNotes');
 Route::post('admin/tesco/update-notes', 'Admin\TemplateManagement\TemplateController@setTemplateNotes');
 
-//Route::get('admin/template-management/template-list', 'Admin\TemplateManagement\TemplateController@templateList');
+Route::post('admin/template-management/template-hierarchy', 'Admin\TemplateManagement\TemplateController@templateHierarchy');
+
+
+Route::post('admin/template-management/save-taxation', 'Admin\TemplateManagement\TemplateController@saveTax');
+
+Route::post('admin/template-management/template-view', 'Admin\TemplateManagement\TemplateController@templateView');
+Route::get('admin/template-management/get-company-list', 'Admin\TemplateManagement\TemplateController@getCompanyList');
+
 Route::post('admin/orchestra/template-management/template-view', 'Admin\Orchestra\TemplateManagementCntrl@templateView');
 
 Route::post('/admin/template-management/base64_to_jpeg', 'Admin\TemplateManagement\TemplateController@base64ToJpeg');

@@ -104,7 +104,7 @@ class InvoiceController extends Controller
         try {
             $customer_id = Auth::guard('erpuser')->id(); 
             $erp_id      = $request->erp_id;
-            $orderlist   = ErpOrderDetails::where('erp_order_id',$erp_id)
+            $orderlist   = ErpOrderDetails::whereIn('erp_order_id',$erp_id)
                             ->join('company','erp_order_details.company_id','company.id')
                             ->join('erp_orders','erp_orders.id','erp_order_details.erp_order_id')
                             ->join('customers','erp_orders.customer_id','customers.id')
@@ -116,6 +116,7 @@ class InvoiceController extends Controller
                             ->whereIn('erp_order_details.status',[3,6,8])
                             // ->where('erp_orders.status','!=',5)
                             ->select('erp_order_details.id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','erp_orders.po_no','erp_order_details.style_no','erp_order_details.order_quantity','erp_order_details.rate','erp_order_details.size','erp_order_details.custom_ref_name as reference_name','erp_order_details.reference_name as ref_no','customers.place_of_supply','erp_order_details.ocn_number','erp_order_details.template_id','erp_orders.erp_id as erp_id','buyers.template_table','buyers.item_master_table','erp_order_details.pending_orders as pending_qnty','erp_orders.po_file','erp_orders.customer_id','customers.gstin_number','erp_orders.id as erpid','credit_limit','customers.freight_type as freight_id','freight_terms.freight_terms as delvry_thru','customers.nominated_forwarder','erp_order_details.buyer_po_number',DB::raw("0".' as "delvry_qnty"'))
+							->orderBy('erp_order_details.id', 'asc')
                             ->get();
             if ($orderlist[0]->freight_id == 3) {
                 $orderlist[0]->delvry_thru  = DB::table('nominated_forwarder')->where('id',$orderlist[0]->nominated_forwarder)->value('forwarder');       
