@@ -48,7 +48,7 @@
      <input type="hidden" value="{{ session()->get('company_name') }}" id="company_name">
         <div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
         <div class="col-md-12">
-               <form id="invoice_form">
+               <form  role="form" data-toggle="validator"  id="invoice_form">
                <h4 class="text-center">Invoice Details</h4>
                 <div class="filter-window-jobcard-list" style="padding-bottom: 30px;">
                     <div class="row">

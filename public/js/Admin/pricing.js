@@ -38,11 +38,12 @@ function price_template_list() {
     });
 
     $.ajax({
-        url: base_url + "/admin/" + buyer + "/template-management/template-list",
+        url: base_url + "/admin/template-management/template-hierarchy",
         type: "Post",
         dataType: "json",
         data: {
-            _token: csrf_token
+            _token: csrf_token,
+			buyer:buyer
         },
         beforeSend: function () {
             $(".loader").show();
@@ -84,10 +85,12 @@ function price_template_list() {
                     var csrf_token = $('meta[name="csrf-token"]').attr('content');
                     if(buyer === 'tesco') {
                         var url = base_url + "/admin/" + buyer + "/customer-management/template-view";
-                    } else {
+                    } else if(buyer === 'orchestra') {
                         var url =  base_url + "/admin/" + buyer + "/template-management/template-view";
-                    }
-                                        $.ajax({
+                    } else{
+						var url =  base_url + "/admin/template-management/template-view";
+					}
+                     $.ajax({
                         url: url,
                         type: "Post",
                         dataType: "json",

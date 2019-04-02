@@ -88,7 +88,8 @@
                 } 
                 else 
                 {
-                    $('#'+localStorage.getItem("buyer")).addClass('active');
+                   var id_buyer = localStorage.getItem("buyer").replace("&", "\\&");
+                    $('#'+id_buyer).addClass('active');
                     $("#buyerSelectionModalCenter").modal("show");
                 }
             });
