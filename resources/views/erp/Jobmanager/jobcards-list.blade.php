@@ -493,11 +493,17 @@
 @endsection @section('jqueryIncludes')
 <script>
 $(document).ready(function() {
+	// disable mousewheel on a input number field when in focus
+    // (to prevent Cromium browsers change the value when scrolling)
+
+    $(document).on("wheel", "input[type=number]", function (e) {
+        $(this).blur();
+    });
     /** [ Toggle bootstrap tooltip ] */
 	$('.edit-jobcard').tooltip('show')
 	$('.edit-jobcard').tooltip('toggle')
 
-	/** [ Refresh  bootstrap selectpicker and fprm ] */
+	/** [ Refresh  bootstrap selectpicker and form ] */
 	$('#jobcard_filter_form').trigger("reset");
 	$('#buyer_filter').selectpicker('refresh');
 

@@ -53,7 +53,7 @@
                         <tr>
                             <td width="170" style="font-size: 5px; border-right:1px solid black;"><span> Buyer</span></td>
                             <td width="160" style="font-size: 5px; border-left:1px solid black;border-right:1px solid black;"><span> Ship To</span></td>
-                            <td width="108" style="border-bottom:1px solid black;" align="center" rowspan="2"><span><strong>TAX INVOICE </strong></span></td>
+                            <td width="108" style="border-bottom:1px solid black;" align="center" rowspan="2"><span style="line-height: -15px; font-size: 10px;"><strong>TAX INVOICE </strong></span></td>
                         </tr>
                         <tr>
                             <td width="170" style="font-size: 9px; "><span ><strong>{{$inv_details[0]['company_name']}}</strong></span></td>
