@@ -25,38 +25,8 @@
       display: block;
     }
 
-    .invoice-card {
-        box-shadow: 0px 0px 0px !important;
-    }
-/*    .table-erp-list tbody {
-      display: block;
-    }*/
-/*   
-/*table.table-bordered th:last-child, table.table-bordered td:last-child {*/*/
-        /*border-right-width: 1px !important; */
-    }
-/**/
     .delivery-at-link a:hover {
       background-color: blue !important;
-    }
-
-    /* Style the active class (and buttons on mouse-over) */
-/*    .delivery-card.active {
-      border: solid;
-      border-color: #273339;
-    }*/
-/*    .delivery-card:hover {
-        transform: scale(1.05);
-        box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
-        transition: transform 0.7s;
-        }
-    .delivery-card.active:hover {
-        transform: scale(1.00);
-        transition: transform 0.7s;
-        
-    }*/
-    .table-erp-list{
-
     }
    
 </style>
@@ -78,54 +48,16 @@
      <input type="hidden" value="{{ session()->get('company_name') }}" id="company_name">
         <div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
         <div class="col-md-12">
-            <!-- <div class="card"> -->
                <form id="invoice_form">
                <h4 class="text-center">Invoice Details</h4>
-        <!--    <div class="col-xs-2">
-                    <label for="invoice-no" style="padding-top: 12px;margin-left: -12px;">No</label>
-                </div>
-                <div class="col-xs-2">
-                    <input type="text" class="form-control" name="invoice-no" id="invoice-no" style="margin-left: -145px;width: 91px;" value="{{$invID}}">
-                </div>
-                <div class="row">
-                    <div class="col-xs-2">
-                    <label for="invoice-date" style="padding-top: 8px;margin-left: -240px;">Date</label>
-                   
-                    </div>
-                    <div class="col-xs-2">
-                        <input type="text" class="form-control invoice-date" id="invoice-date" name="invoice-date" style="margin-left: -412px;width: 136px;;" name="invoice-date" id="invoice-date" value ="{{ now('Asia/Kolkata')->format('d-m-Y') }}" readonly="">
-                    </div>
-                </div> -->
-                <!--           <div class="col-xs-2">
-                            <label for="customer" style="padding-top: 12px;">Customer</label>     
-                        </div>
-                        <div class="col-xs-3" style="margin-left:-135px;padding-top: 5px;">
-                            <select class="selectpicker" data-show-subtext="true" data-live-search="true" id="customer" name="customer" required="" onchange="dynamicTable()">
-                                <option value="">Select Customers</option> 
-                                @foreach($customers as $vals)
-                                    <option title="{{$vals->company_name}}" value="{{$vals->id}}">{{$vals->company_name}}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div> -->
-                    <!--     <div class="row po-list hidden">
-                        <div class="col-xs-2">
-                            <label for="erp-orders" style="padding-top: 12px;">Orders</label>
-                            
-                        </div> -->
-                        <!-- <div class="panel"> -->
-                     <!--    <div class="dynamic-table pull-left" style="margin-left:-120px; width:285px;margin-top: 6px;border-radius: 5px;">
-                        </div>
-                        </div> -->
-
-                <div class="card invoice-card">
+                <div class="filter-window-jobcard-list" style="padding-bottom: 30px;">
                     <div class="row">
                         <div class="col-md-3">
-                            <label for="invoice-no">No</label>
+                            <label for="invoice-no">Invoice No </label>
                             <input type="text" class="form-control" name="invoice-no" id="invoice-no" value="{{$invID}}">
                         </div>
                         <div class="col-md-3">
-                            <label for="invoice-date">Date</label>
+                            <label for="invoice-date">Date </label>
                             <input type="text" class="form-control invoice-date" id="invoice-date" name="invoice-date" name="invoice-date" id="invoice-date" value ="{{ now('Asia/Kolkata')->format('d-m-Y') }}" readonly="">
                         </div>
                         <div class="col-md-3">
@@ -144,7 +76,8 @@
                             </span>
                         </div>
                     </div>
-                </div>              
+                </div>          
+                <br>    
                 <div class="row">
                     <div class="order-heading hidden"> 
                         <u><strong style="margin-left: 16px;">ORDER DETAILS :</strong></u>
@@ -336,7 +269,9 @@
 
 <script>    
 $(document).ready(function(){
-
+    /** [ Refresh  bootstrap selectpicker and form ] */
+    $('#invoice_form').trigger("reset");
+	$('#customer').selectpicker('refresh');
     //disabled right click functionality
    $("body").on("contextmenu",function(e){
        return false;
