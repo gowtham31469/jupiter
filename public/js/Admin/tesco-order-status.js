@@ -880,24 +880,13 @@ function tescoStatusTable(data,path)
                     var style_no = "";
                     if (zone=="CE")
                     {
-                        style_no = value.ce_style_ref
-                        // if (value["PO Status"]=="PO Uploaded") {
-                        //     tr += '<td align="center" data-id="'+value.tableID+'" data-table="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'">'+span_style+''+style_no+'</td>';
-                        // }
-                        // else{
-                            tr += '<td align="center" data-id="'+value.tableID+'" data-table="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>'+span_style+''+style_no+'</a></td>';
-                       // }
+                        style_no = value.ce_style_ref;
                     }
                     else
                     {
-                        style_no = value.uk_style_ref
-                        // if (value["PO Status"]=="PO Uploaded") {
-                        //     tr += '<td align="center" data-id="'+value.tableID+'" data-table="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'">'+span_style+''+style_no+'</td>';
-                        // }
-                        // else{
-                            tr += '<td align="center" data-id="'+value.tableID+'" data-table="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>'+span_style+''+style_no+'</a></td>';
-                        //}
+                        style_no = value.uk_style_ref;
                     }
+                    tr += '<td align="center" data-id="'+value.tableID+'" data-table="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>'+span_style+''+style_no+'</a></td>';
                 }
                 else if (key == "Actions")
                 {
@@ -1191,6 +1180,7 @@ function updateArtwork(obj)
             /** [Show response status based on HTTP status code] */
             200: function(data)
             {
+                
                 if (data.order_details!=0)
                 {
 					$('#tesco_po_number').val(data.order_details.po_number);
@@ -1344,7 +1334,7 @@ function updateArtwork(obj)
 					$('.osorderdetails').text(" Order Details - "+TemplateName)
 					$('.osartwork').text(" Artwork - "+TemplateName)   
 					
-					$('.osfooter').html('<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm" id="submit" type="submit">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit" style="width: 55px;margin-left: 10px;" onclick ="editArtwork()" type="button">Edit</button><button class="btn btn-success  pull-right input-sm hidden" id="enable_edit" style="width: 82px;margin-left: 10px;" type="button" onclick =enableArtworkEdit("'+table_name+'","'+id+'")>Enable Edit</button><button class="btn btn-danger pull-right input-sm hidden" id="disable_edit" style="width: 82px;margin-left: 10px;" type="button" onclick =disableArtworkEdit("'+table_name+'","'+id+'")>Disable Edit</button><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
+					$('.osfooter').html('<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm" id="submit" type="submit">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit" style="width: 55px;margin-left: 10px;" onclick ="editArtwork()" type="button">Edit</button><button class="btn btn-success  pull-right input-sm hidden" id="enable_edit" style="width: 82px;margin-left: 10px;" type="button" onclick =enableArtworkEdit("'+table_name+'","'+id+'")>Enable Edit</button><button class="btn btn-danger pull-right input-sm hidden" id="disable_edit" style="width: 82px;margin-left: 10px;" type="button" onclick =disableArtworkEdit("'+table_name+'","'+id+'")>Disable Edit</button><span class="error-msg-span" style="color:#F44336"></span><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
 					if (data.order_details.edit_permission == 1){
                         $('#enable_edit').addClass('hidden')
                         $('#disable_edit').removeClass('hidden')
@@ -1375,6 +1365,19 @@ function updateArtwork(obj)
 							dynamicSVGTemplatescard(svgDoc1,TemplateName,data.order_details.zone,data.order_details.template_type)
 						}, false);
 					
+                }
+
+                // erp_details array null , if order is not moved to erp tables
+                // only editable, if order status is "Hold For JC Queue" OR "Moved To ERP"
+                if(data.erp_details[0] != null)
+                {
+                    if(data.erp_details[0].status_name !== 'Hold For JC Queue' && data.erp_details[0].status_name !== 'Moved To ERP')
+                    {
+                        $('#enable_edit').remove();
+                        $('#edit').remove();
+                        $('#submit').remove();
+                        $('.error-msg-span').html('ERP Order Status : <strong>'+data.erp_details[0].status_name + '</strong>. You are not allowed to edit this order.')
+                    }
                 }
                        
             },
@@ -1478,31 +1481,31 @@ function updateArtwork(obj)
     }
     function setEditOrderStatus()
     {
-		var tpnd         = [];
-        var barcode      = [];
-        var size 		 = [];
-        var count        = [];
-		var single_size        = [];
-		var barcode_checks=0;
-		var po_number         =  $('#tesco_po_number').val();
-		var uk_style          =  $('#tesco_uk_style').val();
-		var ce_style          =  $('#tesco_ce_style').val();
-		var season_code       =  $('#tesco_season_code').val();
-		var description       =  $('#tesco_description').val().replace(/&/g,'&#038;');
-		var eqos              =  $('#tesco_eqos').val();
-		var manufacture_date  =  $('#tesco_manufacture_date').val();
-		var csrf_token        =  $('meta[name="csrf-token"]').attr('content');
-		var department        =  $("#tesco_department option:selected").val();
-		var brand             =  $("#tesco_brand option:selected").val();
-		var supplier          =  $("#tesco_supplier option:selected").val();
-		var rfid              =  $("#tesco_rfid option:selected").val() === "yes"?1:0;
-		var tag_at_source     =  $("#tesco_tag_at_source option:selected").val() === "yes"?1:0;
-		var zone              =  $('#edit_zone').val()
-		var type              =  $('#edit_template_type').val()
-		var template_name     =  $('#edit_template_name').val()
-	    var edit_id           =  $('#edit_id').val() 
-		var order_type        =  $('#order_type').val()
-        var tesco_ocn         =  $('#tesco_ocn').val()
+		var tpnd              = [];
+        var barcode           = [];
+        var size 		      = [];
+        var count             = [];
+		var single_size       = [];
+		var barcode_checks    = 0;
+		var po_number         = $('#tesco_po_number').val();
+		var uk_style          = $('#tesco_uk_style').val();
+		var ce_style          = $('#tesco_ce_style').val();
+		var season_code       = $('#tesco_season_code').val();
+		var description       = $('#tesco_description').val().replace(/&/g,'&#038;');
+		var eqos              = $('#tesco_eqos').val();
+		var manufacture_date  = $('#tesco_manufacture_date').val();
+		var csrf_token        = $('meta[name="csrf-token"]').attr('content');
+		var department        = $("#tesco_department option:selected").val();
+		var brand             = $("#tesco_brand option:selected").val();
+		var supplier          = $("#tesco_supplier option:selected").val();
+		var rfid              = $("#tesco_rfid option:selected").val() === "yes"?1:0;
+		var tag_at_source     = $("#tesco_tag_at_source option:selected").val() === "yes"?1:0;
+		var zone              = $('#edit_zone').val()
+		var type              = $('#edit_template_type').val()
+		var template_name     = $('#edit_template_name').val()
+	    var edit_id           = $('#edit_id').val() 
+		var order_type        = $('#order_type').val()
+        var tesco_ocn         = $('#tesco_ocn').val()
 		
 
         /** [ Create array of ce ratio orms tpn ] */
