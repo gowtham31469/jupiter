@@ -884,18 +884,22 @@ class OrderStatusCntrl extends Controller
 			$qty_table_name="tesco_thl3_orders_quanty";
 			$foreign_key="thl3_order_id";
 			$single_size = explode(',',$request['single_size']);
-		}
-		
-			
-		$customer_ids=DB::table('customer_metadata')->where('customer_metadata_id',$request['supplier'])->select('*')->get();
+        }
+        
+        // get quantity_table ids.
+        $quantity_table_ids = DB::table($qty_table_name)->select('id')->where($foreign_key,$template_id)->get();
+        
+        $temp_data =  DB::table($table_name)->where('id',$template_id)->first();
+		$customer_ids = DB::table('customer_metadata')->where('customer_metadata_id',$request['supplier'])->select('*')->get();
 		
 		$customer_name=DB::table('customers')->where('id',$customer_ids{0}->customer_id)->select('*')->get();
-		$temp_data =  DB::table($table_name)->where('id',$template_id)->first();
+		
         $order_qnty = (array_sum($count)>0)?0:1 ;
 
-        if ($temp_data->order_flag == "newOrder" && $template_name != "THL3" && $template_name != "THL1") {
-            $orderObj->updateTescoAdminOrders($table_name,$temp_data,$request,$customer_ids{0}->customer_id);
-        }
+        // if ($temp_data->order_flag == "newOrder" && $template_name != "THL3" && $template_name != "THL1") {
+        //     $orderObj->updateTescoAdminOrders($table_name, $temp_data, $request, $customer_ids{0}->customer_id);
+        // }
+
 		DB::table($table_name)->where('id',$template_id)
 						      ->update([
                                   'zone'                 => $request['zone'],
@@ -922,18 +926,17 @@ class OrderStatusCntrl extends Controller
 		{
 			if(($template_name == "TCL1" && $zone=="CE") ||($template_name == "TCL2" && $zone=="CE") || ($template_name == "TSL1" && $zone=="CE") || ($template_name == "THL1" && $zone=="CE"))
 			{					
-					DB::table($qty_table_name)->insert([
-					  'orms_tpn'           => $value,
-					  'itf_barcode'        => $barcode[$i],
-					   $foreign_key        => $template_id,
-					  'cases_per_carton'   => $size[$i],
-					  'count'         	   => $count[$i],
-					  'size'  			   => "0"
-					]);
+                DB::table($qty_table_name)->insert([
+                    'orms_tpn'           => $value,
+                    'itf_barcode'        => $barcode[$i],
+                    $foreign_key        => $template_id,
+                    'cases_per_carton'   => $size[$i],
+                    'count'         	   => $count[$i],
+                    'size'  			   => "0"
+                ]);
 			}
 			else if(($template_name == "TCL4" && $zone=="CE") || ($template_name == "TSL3" && $zone=="CE") || ($template_name == "THL3" && $zone=="CE"))
 			{
-					
 				DB::table($qty_table_name)->insert([
 					  'orms_tpn'         => $value,
 					  'ean_barcode'      => $barcode[$i],
@@ -945,7 +948,6 @@ class OrderStatusCntrl extends Controller
 			}
 			else if(($template_name == "TCL4" && $zone=="UK") || ($template_name == "TSL3" && $zone=="UK") || ($template_name == "THL3" && $zone=="UK"))
 			{
-				
 				DB::table($qty_table_name)->insert([
 				  'tpnd'            => $value,
 				  'ean_barcode'     => $barcode[$i],
@@ -957,7 +959,6 @@ class OrderStatusCntrl extends Controller
 			}
 			else if(($template_name == "TCL1" && $zone=="UK") ||($template_name == "TCL2" && $zone=="UK") || ($template_name == "TSL1" && $zone=="UK") || ($template_name == "THL1" && $zone=="UK"))
 			{
-				
 				DB::table($qty_table_name)->insert([
 					  'tpnd'           	   => $value,
 					  'itf_barcode'        => $barcode[$i],
@@ -969,9 +970,6 @@ class OrderStatusCntrl extends Controller
 			}
 			$i++;
         }
-        
-        // get quantity_table ids.
-        $quantity_table_ids = DB::table($qty_table_name)->select('id')->where($foreign_key,$template_id)->get();
 
         // fetch erp_order_details table details for each quantity_table ids.
         foreach($quantity_table_ids as $quantity_table_id)
@@ -984,6 +982,7 @@ class OrderStatusCntrl extends Controller
         {
             $erp_details_status =  $erp_order_details[0]->status_name;
             $erp_order_id =  $erp_order_details[0]->erp_order_id;
+
             // delete from erp_order_details table
             foreach($erp_order_details as $erp_order_detail){
                 DB::table('erp_order_details')->where('id',$erp_order_detail->id)->delete();
@@ -999,10 +998,14 @@ class OrderStatusCntrl extends Controller
             $data_array['erp_order_id'] = $erp_order_id;
 
             // pass $table_name, $template_id, $erp_details_status and $erp_order_id
-            $edit_erp_obj->updateTescoErpOrderDetails($data_array);
+            $result = $edit_erp_obj->updateTescoErpOrderDetails($data_array);
+        }
+        else
+        {
+            $result = response()->json(['error'=> false,'message' =>'success'],200);
         }
         
-		echo $customer_name{0}->company_name;		  
+		return $result;	  
     }
 	
 	/**

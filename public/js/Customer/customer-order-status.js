@@ -1793,12 +1793,8 @@ function tescoStatusTable(data,path)
                     {
                         style_no = value.uk_style_ref;
                     }
-                    if (value["Artwork Status"]!="Order Cancelled" && value["PO Status"]!="PO Uploaded"){
-                      tr += '<td align="center" data-id="'+value.tableID+'" data-table1="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>'+span_style+''+style_no+'</a></td>';
-                    }
-                    else{
-                      tr += '<td align="center" data-id="'+value.tableID+'" data-table1="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'">'+span_style+''+style_no+'</td>';
-                    }
+                    
+                    tr += '<td align="center" data-id="'+value.tableID+'" data-table1="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>'+span_style+''+style_no+'</a></td>';
                     
                 }
                 else if (key == "Actions")
@@ -2240,7 +2236,7 @@ function updateArtwork(obj)
                     $('.osorderdetails').text(" Order Details - "+TemplateName)
                     $('.osartwork').text(" Artwork - "+TemplateName)
                     if (data.order_details.edit_permission == 1){
-                        $('.osfooter').html('<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm hidden" id="submit" type="submit">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit" style="width: 55px;margin-left: 10px;" onclick ="editArtwork()" type="button">Edit</button><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
+                        $('.osfooter').html('<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm hidden" id="submit" type="submit">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit" style="width: 55px;margin-left: 10px;" onclick ="editArtwork()" type="button">Edit</button><span class="error-msg-span" style="color:#F44336"></span><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
                     }
                     else{
                          $('.osfooter').html('<button class="btn btn-danger pull-right remove input-sm" id="close" type="button">Close</button>')
@@ -2270,6 +2266,18 @@ function updateArtwork(obj)
                             dynamicSVGTemplatescard(svgDoc1,TemplateName,data.order_details.zone,data.order_details.template_type)
                         }, false);
                     
+                }
+
+                // erp_details array null , if order is not moved to erp tables
+                // only editable, if order status is "Hold For JC Queue" OR "Moved To ERP"
+                if(data.erp_details[0] != null)
+                {
+                    if(data.erp_details[0].status_name !== 'Hold For JC Queue' && data.erp_details[0].status_name !== 'Moved To ERP')
+                    {
+                        $('#edit').remove();
+                        $('#submit').remove();
+                        $('.error-msg-span').html('ERP Order Status : <strong>'+data.erp_details[0].status_name + '</strong>. You are not allowed to edit this order.')
+                    }
                 }
                        
             },
