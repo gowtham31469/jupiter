@@ -1334,7 +1334,7 @@ function updateArtwork(obj)
 					$('.osorderdetails').text(" Order Details - "+TemplateName)
 					$('.osartwork').text(" Artwork - "+TemplateName)   
 					
-					$('.osfooter').html('<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm" id="submit" type="submit">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit" style="width: 55px;margin-left: 10px;" onclick ="editArtwork()" type="button">Edit</button><button class="btn btn-success  pull-right input-sm hidden" id="enable_edit" style="width: 82px;margin-left: 10px;" type="button" onclick =enableArtworkEdit("'+table_name+'","'+id+'")>Enable Edit</button><button class="btn btn-danger pull-right input-sm hidden" id="disable_edit" style="width: 82px;margin-left: 10px;" type="button" onclick =disableArtworkEdit("'+table_name+'","'+id+'")>Disable Edit</button><span class="error-msg-span" style="color:#F44336"></span><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
+					$('.osfooter').html('<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm" id="submit" type="submit">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit" style="width: 55px;margin-left: 10px;" onclick ="editArtwork()" type="button">Edit</button><button class="btn btn-success  pull-right input-sm hidden" id="enable_edit" style="width: 82px;margin-left: 10px;" type="button" onclick =enableArtworkEdit("'+table_name+'","'+id+'")>Enable Edit</button><button class="btn btn-danger pull-right input-sm hidden" id="disable_edit" style="width: 82px;margin-left: 10px;" type="button" onclick =disableArtworkEdit("'+table_name+'","'+id+'")>Disable Edit</button><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
 					if (data.order_details.edit_permission == 1){
                         $('#enable_edit').addClass('hidden')
                         $('#disable_edit').removeClass('hidden')
@@ -1355,7 +1355,9 @@ function updateArtwork(obj)
 					
 					
 					$('.remove').click(function() {
-						$('.left-panel').removeClass('active');
+                        $('.left-panel').removeClass('active');
+                        $('#error_msg_alert').html('');
+                        $('#error_msg_alert').addClass('hidden');
 					})
 					
 					  var mySVG1 = document.getElementById("svg_tesco_os");
@@ -1376,7 +1378,9 @@ function updateArtwork(obj)
                         $('#enable_edit').remove();
                         $('#edit').remove();
                         $('#submit').remove();
-                        $('.error-msg-span').html('ERP Order Status : <strong>'+data.erp_details[0].status_name + '</strong>. You are not allowed to edit this order.')
+                        
+                        $('#error_msg_alert').html('<strong>ERP Order Status : '+data.erp_details[0].status_name + '. You are not allowed to edit this order.</strong>')
+                        $('#error_msg_alert').removeClass('hidden')
                     }
                 }
                        
@@ -1616,71 +1620,57 @@ function updateArtwork(obj)
 	if(barcode_checks == 0)
 	{
 		$.ajax({
-			 url: base_url + "/admin/tesco/edit-check-exist-po",
-			 type: 'post',
-			 data: { _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,zone:zone,edit_id:edit_id,template_name:template_name},
-			 success: function (data) {
-				if($.trim(data) == "true")
-				{
-					$('#po_already_error').addClass('hidden')
-					$.ajax({
-						 url: base_url + "/admin/tesco/set-tesco-order-status",
-						 type: 'post',
-						 data: { _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,barcode:barcode,size:size,count:count,edit_id:edit_id,template_name:template_name,single_size:single_size,tesco_ocn:tesco_ocn},
-						 success: function (data) {
-							 $('#snackbar').css('background-color','#00b6ff');
-							 $('.snackbar_span').html('Order updated Successfully');
-							 showSnackbar();
-                             $('.left-panel').removeClass('active');
-							 
-							location.reload()
-						 },
-						 error: function (data) {
-                            
-						 },
-						 complete: function () {
+            url: base_url + "/admin/tesco/set-tesco-order-status",
+            type: 'post',
+            data: { _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,barcode:barcode,size:size,count:count,edit_id:edit_id,template_name:template_name,single_size:single_size,tesco_ocn:tesco_ocn},
+            statusCode:
+            {
+                /** [Show response status based on HTTP status code] */
+                200: function(data)
+                {
+                    $('#snackbar').css('background-color','#00b6ff');
+                    $('.snackbar_span').html('Order updated Successfully');
+                    showSnackbar();
+                    $('.left-panel').removeClass('active');
+                    location.reload()
+                },
+                409: function(data)
+                {
+                    $('#error_msg_alert').html('<strong>Order with same PO number and Style number already exists.</strong>')
+                    $('#error_msg_alert').removeClass('hidden')
+                }
+            },
+            error: function (data) {
+               
+            },
+            complete: function () {
 
-						 }
-					 })
-
-					
-					td_row.find('td:nth-child(2)').text(po_number);
-					
-					if (order_type == "reOrder")
-                    {
-                        span_style = '<span title="Additional Quantity" class="batch-additional">A</span>'
-                    }
-                    if (order_type == "repeatOrder")
-                    {
-                        span_style = '<span title="Repeat Order" class="batch-reorder">R</span>'
-                    }
-					if (order_type == "newOrder")
-                    {
-                        span_style = ''
-                    }
-					
-					if(zone == "CE")
-					{
-						td_row.find('td:nth-child(1) a').html(span_style + ce_style);
-					}
-					else
-					{
-						td_row.find('td:nth-child(1) a').html(span_style + uk_style);
-					}
-
-				}
-				else
-				{
-					$('#po_already_error').removeClass('hidden')
-				}
-			 },
-			 error: function (data) {
-				console.log(data);
-			 },
-			 complete: function () {
-
-			 }
-		})
+            }
+        })
+       
+    //    td_row.find('td:nth-child(2)').text(po_number);
+       
+    //    if (order_type == "reOrder")
+    //    {
+    //        span_style = '<span title="Additional Quantity" class="batch-additional">A</span>'
+    //    }
+    //    if (order_type == "repeatOrder")
+    //    {
+    //        span_style = '<span title="Repeat Order" class="batch-reorder">R</span>'
+    //    }
+    //    if (order_type == "newOrder")
+    //    {
+    //        span_style = ''
+    //    }
+       
+    //    if(zone == "CE")
+    //    {
+    //        td_row.find('td:nth-child(1) a').html(span_style + ce_style);
+    //    }
+    //    else
+    //    {
+    //        td_row.find('td:nth-child(1) a').html(span_style + uk_style);
+    //    }
 	}
 	 
 	

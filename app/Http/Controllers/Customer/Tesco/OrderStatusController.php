@@ -964,9 +964,9 @@ class OrderStatusController extends Controller
         }
         $order_qnty = (array_sum($count)>0)?0:1 ;
 
-        // if ($temp_data->order_flag == "newOrder" && $template_name != "THL3" && $template_name != "THL1") {
-        //   $orderObj->updateTescoOrders($table_name,$temp_data,$request,$customer_id);
-        // }
+        if ($temp_data->order_flag == "newOrder" && $template_name != "THL3" && $template_name != "THL1") {
+          $orderObj->updateTescoOrders($table_name,$temp_data,$request,$customer_id);
+        }
 
         DB::table($table_name)->where('id',$template_id)
                               ->update([
