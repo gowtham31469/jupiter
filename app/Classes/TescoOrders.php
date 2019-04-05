@@ -812,6 +812,9 @@ class TescoOrders
       }
       unset($template_array[$table_name]);
 
+      /* update tesco_templates quantity table.
+       * ie, Update all references in the combination. While editing TSL1 details, Also update TCL1 and TCL2 details.
+       */
       foreach ($template_array as $table => $qunty_tbl) 
       {
           $qnty_id =  str_replace("_orders","_order_id",str_replace("tesco_","",$table));

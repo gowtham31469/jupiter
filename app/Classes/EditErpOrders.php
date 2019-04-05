@@ -17,6 +17,14 @@ use App\ErpOrderDetails;
 class EditErpOrders
 {
 	private $updated_at;
+
+	/**
+	 * updateTescoErpOrderDetails Function
+	 *
+	 * @param [type] $data_array
+	 * @return void
+	 * @author Praveen <praveen@wizroots.com>
+	 */
 	public function updateTescoErpOrderDetails($data_array)
 	{
 		try
@@ -28,7 +36,7 @@ class EditErpOrders
             $erp_order_id		 = $data_array['erp_order_id'];
             $qnty_table     = $table_name.'_quanty' ;
 			$qnty_id        =  str_replace("_orders","_order_id",str_replace("tesco_","",$table_name));
-			// Get Erp status table id for 'Moved To JC Queue' status.
+			// Get Erp status table id for  status name.
             $erp_status_id = DB::table('erp_status')->where('status_name', 'ilike', $erp_details_status)->value('id');
             
 			$this->updated_at = Carbon::now('Asia/Kolkata')->toDateTimeString();
@@ -50,8 +58,10 @@ class EditErpOrders
 				$po_file   = $orders->po_file;
 			}
 
+			// get order_status table id for the status name.
 			$order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', $order_status)->first();
-
+			
+			// update customer id in erp_orders table
             Erp::where('id',$erp_order_id)->update(['customer_id' => $orders->customer_id]);
 
             $this->updateOrderDetails($qnty_table, $order_details, $orders, $erp_order_id, $buyer_id, $erp_status_id);
@@ -65,6 +75,18 @@ class EditErpOrders
         return $result;
 	}
 
+	/**
+	 * updateOrderDetails Function to update erp_order_details table while editing from order status page 
+	 *
+	 * @param [type] $qnty_table
+	 * @param [type] $order_details
+	 * @param [type] $orders
+	 * @param [type] $erp_order_id
+	 * @param [type] $buyer_id
+	 * @param [type] $erp_status_id
+	 * @return void
+	 * @author Praveen <praveen@wizroots.com>
+	 */
 	function updateOrderDetails($qnty_table, $order_details, $orders, $erp_order_id, $buyer_id, $erp_status_id)
 	{
 		if ($order_details)

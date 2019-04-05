@@ -810,10 +810,13 @@ class OrderStatusCntrl extends Controller
         }
         return $result;
     }
-	/**
+    
+    /**
      * Edit the tesco orders
-     * 
-     * @return boolean values
+     * ie, Update all references in the combination. While editing TSL1 details, Also update TCL1 and TCL2 details.
+     *
+     * @param Request $request
+     * @return void
      */
     public function setTescoOrderStatus(Request $request)
     {
@@ -821,7 +824,7 @@ class OrderStatusCntrl extends Controller
         $edit_erp_obj    = new EditErpOrders();
         $tpnd         	 = explode(',', $request['tpnd']);
 		$barcode         = explode(',', $request['barcode']);
-		$case_size			 = explode(',', $request['size']);
+		$case_size		 = explode(',', $request['size']);
 		$count			 = explode(',', $request['count']);
 		$template_id     = $request['edit_id'];
 		$template_name   = $request['template_name'];
@@ -1023,7 +1026,7 @@ class OrderStatusCntrl extends Controller
                 $data_array['erp_details_status'] = $erp_details_status;
                 $data_array['erp_order_id'] = $erp_order_id;
 
-                // pass $table_name, $buyer_id,  $template_id, $erp_details_status and $erp_order_id array
+                // update erp_order_details and erp_orders table 
                 $result = $edit_erp_obj->updateTescoErpOrderDetails($data_array);
             }
             else
