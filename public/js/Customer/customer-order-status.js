@@ -2280,6 +2280,11 @@ function updateArtwork(obj)
                         $('#submit').remove();
                         $('#error_msg_alert').html('<strong>ERP Order Status : '+data.erp_details[0].status_name + '. You are not allowed to edit this order.</strong>')
                         $('#error_msg_alert').removeClass('hidden')
+                        // window.setTimeout(function() {
+                        //     $("#error_msg_alert").fadeTo(500, 0).slideUp(500, function(){
+                        //         $(this).remove(); 
+                        //     });
+                        // }, 2000);
                     }
                 }
                        
@@ -2474,6 +2479,11 @@ function setEditOrderStatus()
                {
                    $('#error_msg_alert').html('<strong>Order with same PO number and Style number already exists.</strong>')
                    $('#error_msg_alert').removeClass('hidden')
+                //    window.setTimeout(function() {
+                //     $("#error_msg_alert").fadeTo(500, 0).slideUp(500, function(){
+                //         $(this).remove(); 
+                //     });
+                // }, 2000);
                }
             },
             error: function (data) {
