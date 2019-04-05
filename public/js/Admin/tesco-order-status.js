@@ -1483,139 +1483,139 @@ function updateArtwork(obj)
             }
         })
     }
-    function setEditOrderStatus()
+function setEditOrderStatus()
+{
+    var tpnd              = [];
+    var barcode           = [];
+    var size 		      = [];
+    var count             = [];
+    var single_size       = [];
+    var barcode_checks    = 0;
+    var po_number         = $('#tesco_po_number').val();
+    var uk_style          = $('#tesco_uk_style').val();
+    var ce_style          = $('#tesco_ce_style').val();
+    var season_code       = $('#tesco_season_code').val();
+    var description       = $('#tesco_description').val().replace(/&/g,'&#038;');
+    var eqos              = $('#tesco_eqos').val();
+    var manufacture_date  = $('#tesco_manufacture_date').val();
+    var csrf_token        = $('meta[name="csrf-token"]').attr('content');
+    var department        = $("#tesco_department option:selected").val();
+    var brand             = $("#tesco_brand option:selected").val();
+    var supplier          = $("#tesco_supplier option:selected").val();
+    var rfid              = $("#tesco_rfid option:selected").val() === "yes"?1:0;
+    var tag_at_source     = $("#tesco_tag_at_source option:selected").val() === "yes"?1:0;
+    var zone              = $('#edit_zone').val()
+    var type              = $('#edit_template_type').val()
+    var template_name     = $('#edit_template_name').val()
+    var edit_id           = $('#edit_id').val() 
+    var order_type        = $('#order_type').val()
+    var tesco_ocn         = $('#tesco_ocn').val()
+    
+
+    /** [ Create array of ce ratio orms tpn ] */
+    $('.ce_ratio_orms_tpn').each(function(i, item)
     {
-		var tpnd              = [];
-        var barcode           = [];
-        var size 		      = [];
-        var count             = [];
-		var single_size       = [];
-		var barcode_checks    = 0;
-		var po_number         = $('#tesco_po_number').val();
-		var uk_style          = $('#tesco_uk_style').val();
-		var ce_style          = $('#tesco_ce_style').val();
-		var season_code       = $('#tesco_season_code').val();
-		var description       = $('#tesco_description').val().replace(/&/g,'&#038;');
-		var eqos              = $('#tesco_eqos').val();
-		var manufacture_date  = $('#tesco_manufacture_date').val();
-		var csrf_token        = $('meta[name="csrf-token"]').attr('content');
-		var department        = $("#tesco_department option:selected").val();
-		var brand             = $("#tesco_brand option:selected").val();
-		var supplier          = $("#tesco_supplier option:selected").val();
-		var rfid              = $("#tesco_rfid option:selected").val() === "yes"?1:0;
-		var tag_at_source     = $("#tesco_tag_at_source option:selected").val() === "yes"?1:0;
-		var zone              = $('#edit_zone').val()
-		var type              = $('#edit_template_type').val()
-		var template_name     = $('#edit_template_name').val()
-	    var edit_id           = $('#edit_id').val() 
-		var order_type        = $('#order_type').val()
-        var tesco_ocn         = $('#tesco_ocn').val()
-		
-
-        /** [ Create array of ce ratio orms tpn ] */
-        $('.ce_ratio_orms_tpn').each(function(i, item)
+        tpnd[i]    = $(item).val();
+        
+    });
+    tpnd   = tpnd.join(',');
+    /** [ Create array of ce ratio itf barcode ] */
+    $('.ce_ratio_itf').each(function(i, item)
+    {
+        if((template_name == "TCL1" && zone=="CE") ||(template_name == "TCL2" && zone=="CE") || (template_name == "TSL1" && zone=="CE") || (template_name == "THL1" && zone=="CE"))
         {
-            tpnd[i]    = $(item).val();
-            
-        });
-        tpnd   = tpnd.join(',');
-        /** [ Create array of ce ratio itf barcode ] */
-        $('.ce_ratio_itf').each(function(i, item)
+            var barcodecheck = checkjsbarcodeitf($(item).val());
+            if(barcodecheck == "false")
+            {
+
+                barcode_checks++;
+
+                $(this).parent().find('.barcode_error').removeClass('hidden')
+            }
+            else
+            {
+                $(this).parent().find('.barcode_error').addClass('hidden')
+            }
+        }
+        else if((template_name == "TCL4" && zone=="CE") || (template_name == "TSL3" && zone=="CE") || (template_name == "THL3" && zone=="CE"))
         {
-			if((template_name == "TCL1" && zone=="CE") ||(template_name == "TCL2" && zone=="CE") || (template_name == "TSL1" && zone=="CE") || (template_name == "THL1" && zone=="CE"))
-			{
-				var barcodecheck = checkjsbarcodeitf($(item).val());
-				if(barcodecheck == "false")
-				{
+            var barcodecheck = checkjsbarcodeean($(item).val());
+            if(barcodecheck == "false")
+            {
 
-					barcode_checks++;
+                barcode_checks++;
 
-					$(this).parent().find('.barcode_error').removeClass('hidden')
-				}
-				else
-				{
-					$(this).parent().find('.barcode_error').addClass('hidden')
-				}
-			}
-			else if((template_name == "TCL4" && zone=="CE") || (template_name == "TSL3" && zone=="CE") || (template_name == "THL3" && zone=="CE"))
-			{
-				var barcodecheck = checkjsbarcodeean($(item).val());
-				if(barcodecheck == "false")
-				{
-
-					barcode_checks++;
-
-					$(this).parent().find('.barcode_error').removeClass('hidden')
-				}
-				else
-				{
-					$(this).parent().find('.barcode_error').addClass('hidden')
-				}
-			}
-			else if((template_name == "TCL4" && zone=="UK") || (template_name == "TSL3" && zone=="UK") || (template_name == "THL3" && zone=="UK"))
-			{
-				var barcodecheck = checkjsbarcodeean($(item).val());
-				if(barcodecheck == "false")
-				{
-
-					barcode_checks++;
-
-					$(this).parent().find('.barcode_error').removeClass('hidden')
-				}
-				else
-				{
-					$(this).parent().find('.barcode_error').addClass('hidden')
-				}
-			}
-			else if((template_name == "TCL1" && zone=="UK") ||(template_name == "TCL2" && zone=="UK") || (template_name == "TSL1" && zone=="UK") || (template_name == "THL1" && zone=="UK"))
-			{
-				var barcodecheck = checkjsbarcodeitf($(item).val());
-				if(barcodecheck == "false")
-				{
-
-					barcode_checks++;
-
-					$(this).parent().find('.barcode_error').removeClass('hidden')
-				}
-				else
-				{
-					$(this).parent().find('.barcode_error').addClass('hidden')
-				}
-			}
-			
-            barcode[i]    = $(item).val();
-        });
-        barcode = barcode.join(',');
-        /** [ Create array of ce ratio case per carton ] */
-        $('.ce_ratio_cpc').each(function(i, item)
+                $(this).parent().find('.barcode_error').removeClass('hidden')
+            }
+            else
+            {
+                $(this).parent().find('.barcode_error').addClass('hidden')
+            }
+        }
+        else if((template_name == "TCL4" && zone=="UK") || (template_name == "TSL3" && zone=="UK") || (template_name == "THL3" && zone=="UK"))
         {
-            size[i]    = $(item).val();
-            
-        });
-        size = size.join(',');
+            var barcodecheck = checkjsbarcodeean($(item).val());
+            if(barcodecheck == "false")
+            {
+
+                barcode_checks++;
+
+                $(this).parent().find('.barcode_error').removeClass('hidden')
+            }
+            else
+            {
+                $(this).parent().find('.barcode_error').addClass('hidden')
+            }
+        }
+        else if((template_name == "TCL1" && zone=="UK") ||(template_name == "TCL2" && zone=="UK") || (template_name == "TSL1" && zone=="UK") || (template_name == "THL1" && zone=="UK"))
+        {
+            var barcodecheck = checkjsbarcodeitf($(item).val());
+            if(barcodecheck == "false")
+            {
+
+                barcode_checks++;
+
+                $(this).parent().find('.barcode_error').removeClass('hidden')
+            }
+            else
+            {
+                $(this).parent().find('.barcode_error').addClass('hidden')
+            }
+        }
+        
+        barcode[i]    = $(item).val();
+    });
+    barcode = barcode.join(',');
+    /** [ Create array of ce ratio case per carton ] */
+    $('.ce_ratio_cpc').each(function(i, item)
+    {
+        size[i]    = $(item).val();
+        
+    });
+    size = size.join(',');
+    /** [ Create array of ce ratio tcl1 count ] */
+    $('.tot_qty_table').each(function(i, item)
+    {
+        count[i]    = $(item).val() === ''?0:$(item).val();
+        
+    });
+    count = count.join(',');
+
+
+    if((template_name == "TCL1") ||(template_name == "TCL2") || (template_name == "TSL1") || (template_name == "THL1"))
+    {
+        single_size="";
+    }
+    else if((template_name == "TCL4") || (template_name == "TSL3") || (template_name == "THL3"))
+    {
         /** [ Create array of ce ratio tcl1 count ] */
-        $('.tot_qty_table').each(function(i, item)
+        $('.ce_single_size').each(function(i, item)
         {
-            count[i]    = $(item).val() === ''?0:$(item).val();
-            
-        });
-        count = count.join(',');
-	
-	
-		if((template_name == "TCL1") ||(template_name == "TCL2") || (template_name == "TSL1") || (template_name == "THL1"))
-		{
-			single_size="";
-		}
-		else if((template_name == "TCL4") || (template_name == "TSL3") || (template_name == "THL3"))
-		{
-			/** [ Create array of ce ratio tcl1 count ] */
-			$('.ce_single_size').each(function(i, item)
-			{
-				single_size[i]    = $(item).val();
+            single_size[i]    = $(item).val();
 
-			});
-			single_size = single_size.join(',');
-		}
+        });
+        single_size = single_size.join(',');
+    }
         
 	if(barcode_checks == 0)
 	{
@@ -1648,34 +1648,18 @@ function updateArtwork(obj)
             }
         })
        
-    //    td_row.find('td:nth-child(2)').text(po_number);
-       
-    //    if (order_type == "reOrder")
-    //    {
-    //        span_style = '<span title="Additional Quantity" class="batch-additional">A</span>'
-    //    }
-    //    if (order_type == "repeatOrder")
-    //    {
-    //        span_style = '<span title="Repeat Order" class="batch-reorder">R</span>'
-    //    }
-    //    if (order_type == "newOrder")
-    //    {
-    //        span_style = ''
-    //    }
-       
-    //    if(zone == "CE")
-    //    {
-    //        td_row.find('td:nth-child(1) a').html(span_style + ce_style);
-    //    }
-    //    else
-    //    {
-    //        td_row.find('td:nth-child(1) a').html(span_style + uk_style);
-    //    }
 	}
 	 
 	
 }
 
+/**
+ * Dynamically add rows
+ * @param {*} obj 
+ * @param {*} TemplateName 
+ * @param {*} zone 
+ * @param {*} moq 
+ */
 function addRowOs(obj,TemplateName,zone,moq)
 {
 	var maxlength =$('#os_barcode_1').attr('maxlength')

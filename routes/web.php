@@ -213,7 +213,6 @@ Route::group(['middleware' => 'customer_auth'], function()
 	Route::post('customer/tesco/get-po-file', 'Customer\Tesco\OrderStatusController@getPOFile');
 	Route::post('customer/tesco/update-delivery-date', 'Customer\Tesco\OrderStatusController@updateDeliveryDate');
 	Route::post('customer/tesco/set-tesco-order-status', 'Customer\Tesco\OrderStatusController@setTescoOrderStatus');
-	Route::post('customer/tesco/edit-check-exist-po', 'Customer\Tesco\OrderStatusController@editCheckExistPo');
 	Route::post('customer/tesco/set-po-file', 'Customer\Tesco\OrderStatusController@setCustomerPOFile');
 	Route::post('customer/tesco/get_order_details', 'Customer\Tesco\OrderStatusController@getOrderDetails');
 	Route::post('customer/tesco/order-management/orders', 'Customer\Tesco\OrderController@Orders');
@@ -523,8 +522,6 @@ Route::post('admin/tesco/set-tesco-order-status', 'Admin\Tesco\OrderStatusCntrl@
 
 Route::post('admin/tesco/enable-artwork-edit', 'Admin\Tesco\OrderStatusCntrl@enableArtworkEdit');
 Route::post('admin/tesco/disable-artwork-edit', 'Admin\Tesco\OrderStatusCntrl@disableArtworkEdit');
-
-Route::post('admin/tesco/edit-check-exist-po', 'Admin\Tesco\OrderStatusCntrl@editCheckExistPo');
 
 Route::post('admin/tesco/edit-check-exist-po-repeat', 'Admin\Tesco\OrderStatusCntrl@editCheckExistPoRepeat');
 

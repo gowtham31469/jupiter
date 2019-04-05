@@ -274,7 +274,7 @@
     <div class="left-panel col-md-12" style="display: none;">
         <div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
         <div class="div-max">
-            
+            <div class="alert alert-warning hidden" id="error_msg_alert" role="alert"></div>  
                 <form method="POST" id="create_tesco_order_status_form" data-toggle="validator" role="form" novalidate="true">
                     <div class="col-md-4">
                 <h4 class="text-center osorderdetails">Order Details</h4>
@@ -287,7 +287,6 @@
                          <div class="form-group has-feedback">
                             <label for="tesco_uk_style">PO Number.</label>
                             <input type="text" maxlength="9" class="form-control" name="tesco_po_number" id="tesco_po_number" required="" onkeyup="dynamicSVGTemplates()">
-                             <label style="color:red" id="po_already_error" class="hidden">PO Number already exists</label>
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">

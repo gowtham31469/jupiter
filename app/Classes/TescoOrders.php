@@ -668,9 +668,10 @@ class TescoOrders
   {
     try
     {
+      $edit_erp_obj    = new EditErpOrders();
       $tpnd            = explode(',',$request['tpnd']);
       $barcode         = explode(',',$request['barcode']);
-      $size            = explode(',',$request['size']);
+      $case_size       = explode(',',$request['size']);
       $count           = explode(',',$request['count']);
       $template_id     = $request['edit_id'];
       $template_name   = $request['template_name'];
@@ -689,6 +690,10 @@ class TescoOrders
           $single_size = explode(',',$request['single_size']);
       }
       unset($template_array[$table_name]);
+
+      /* update tesco_templates quantity table.
+       * ie, Update all references in the combination. While editing TSL1 details, Also update TCL1 and TCL2 details.
+       */
       foreach ($template_array as $table => $qunty_tbl) 
       {
         $qnty_id =  str_replace("_orders","_order_id",str_replace("tesco_","",$table));
@@ -731,7 +736,7 @@ class TescoOrders
                     'orms_tpn'           => $value,
                     'itf_barcode'        => $barcode[$i],
                      $qnty_id            => $table_data->id,
-                    'cases_per_carton'   => $size[$i],
+                    'cases_per_carton'   => $case_size[$i],
                     'count'              => $count[$i],
                     'size'               => "0"
                   ]);
@@ -741,7 +746,7 @@ class TescoOrders
                     DB::table($qunty_tbl)->insert([
                       'orms_tpn'        => $value,
                       'ean_barcode'     => $barcode[$i],
-                      'case_size'       => $size[$i],
+                      'case_size'       => $case_size[$i],
                       $qnty_id          => $table_data->id,
                       'count'           => $count[$i],
                       'size'            => $single_size[$i]
@@ -752,7 +757,7 @@ class TescoOrders
                    DB::table($qunty_tbl)->insert([
                       'tpnd'           => $value,
                       'ean_barcode'    => $barcode[$i],
-                      'case_size'      => $size[$i],
+                      'case_size'      => $case_size[$i],
                       'size'           =>$single_size[$i],
                       $qnty_id         => $table_data->id
                   ]);
@@ -762,7 +767,7 @@ class TescoOrders
                     DB::table($qunty_tbl)->insert([
                       'tpnd'               => $value,
                       'itf_barcode'        => $barcode[$i],
-                      'units_per_carton'   => $size[$i],
+                      'units_per_carton'   => $case_size[$i],
                       'size'               => "0",
                       'count'              => $count[$i],
                       $qnty_id             => $table_data->id

@@ -829,7 +829,6 @@ class OrderStatusCntrl extends Controller
 		$template_id     = $request['edit_id'];
 		$template_name   = $request['template_name'];
 		$zone            = $request['zone'];
-        
 
 		if($template_name == "TCL1")
 		{
@@ -895,9 +894,7 @@ class OrderStatusCntrl extends Controller
         
         $temp_data =  DB::table($table_name)->where('id',$template_id)->first();
 
-        $customer_ids = DB::table('customer_metadata')->where('customer_metadata_id',$request['supplier'])->select('*')->get();
-		
-		$customer_name=DB::table('customers')->where('id',$customer_ids{0}->customer_id)->select('*')->get();
+        $customer_id = DB::table('customer_metadata')->where('customer_metadata_id',$request['supplier'])->select('*')->first();
 		
         $order_qnty = (array_sum($count)>0)?0:1 ;
         
@@ -926,7 +923,7 @@ class OrderStatusCntrl extends Controller
         else
         {
             if ($temp_data->order_flag == "newOrder" && $template_name != "THL3" && $template_name != "THL1") {
-                $orderObj->updateTescoAdminOrders($table_name, $temp_data, $request, $customer_ids{0}->customer_id);
+                $orderObj->updateTescoAdminOrders($table_name, $temp_data, $request, $customer_id->customer_id);
              } 
              DB::table($table_name)->where('id',$template_id)
                                    ->update([
@@ -941,7 +938,7 @@ class OrderStatusCntrl extends Controller
                                        'manufacture_date'     => $request['manufacture_date'],
                                        'tesco_department_id'  => $request['department'],
                                        'tesco_brand_id'       => $request['brand'],
-                                       'tesco_supplier_id'    => $customer_ids{0}->customer_id,
+                                       'tesco_supplier_id'    => $customer_id->customer_id,
                                        'tesco_metadata_supplier_id'    => $request['supplier'],
                                        'rfid_compliant'       => $request['rfid'],
                                        'tag_at_source'        => $request['tag_at_source'],
@@ -1034,7 +1031,6 @@ class OrderStatusCntrl extends Controller
                 $result = response()->json(['error'=> false,'message' =>'success'],200);
             }
         }
-		
         
 		return $result;	  
     }
