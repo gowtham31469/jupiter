@@ -1376,6 +1376,7 @@ function updateArtwork(obj)
                     if(data.erp_details[0].status_name !== 'Hold For JC Queue' && data.erp_details[0].status_name !== 'Moved To ERP')
                     {
                         $('#enable_edit').remove();
+                        $('#disable_edit').remove();
                         $('#edit').remove();
                         $('#submit').remove();
                         
