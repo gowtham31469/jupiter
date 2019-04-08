@@ -96,6 +96,7 @@ function price_template_list() {
                         dataType: "json",
                         data: {
                             template_id: template_id,
+							buyer:buyer,
                             _token: csrf_token
                         },
                         beforeSend: function () {
@@ -106,10 +107,22 @@ function price_template_list() {
                         success: function (data) {
 
                             if (data.length > 0) {
-                                $('.viewDiv').html('<object id="svg2" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
-                                $('.descriptionDiv').html('<label>Template Name : </label><p>' + data[0].template_name + '</p><label>Reference Number : </label><p>' + data[0].ref_no + '</p><label>Company Name : </label><p>' + data[0].company_name + '</p>')
-                                $('.descriptionDiv').css('margin-top', '20px')
-                                $('.viewDiv').css('margin-top', '0px');
+								
+								if(data[0].template_file != "")
+								{
+									$('.viewDiv').html('<object id="svg2" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
+									$('.descriptionDiv').html('<label>Template Name : </label><p>' + data[0].template_name + '</p><label>Reference Number : </label><p>' + data[0].ref_no + '</p><label>Company Name : </label><p>' + data[0].company_name + '</p>')
+									$('.descriptionDiv').css('margin-top', '20px')
+									$('.viewDiv').css('margin-top', '0px');
+								}
+								else
+								{
+									$('.viewDiv').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover;margin-top: 122px; font-size: 100px;"></i>')
+									$('.descriptionDiv').html('<b>Template Not Found</b>');
+									$('.descriptionDiv').css('margin-top', '0px')
+									$('.viewDiv').css('margin-top', '140px');
+								}
+                               
                             } else {
                                 $('.viewDiv').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover;margin-top: 122px; font-size: 100px;"></i>')
                                 $('.descriptionDiv').html('<b>Template Not Found</b>');

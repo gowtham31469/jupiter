@@ -11,8 +11,7 @@ class OSTINItemMasterTableSeeder extends Seeder
      */
     public function run()
     {
-         \App\OSTINItemMaster::create([
-				'id' =>1,
+        \App\OSTINItemMaster::create([
 				'company_id' => 1,
 				'parent_id' => 0,
 				'item_name' => "Labels",
@@ -20,7 +19,6 @@ class OSTINItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 			]);
 		\App\OSTINItemMaster::create([
-				'id' =>2,
 				'company_id' => 1,
 				'parent_id' => 0,
 				'item_name' => "Stickers",
@@ -28,7 +26,6 @@ class OSTINItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);	
 		\App\OSTINItemMaster::create([
-				'id' =>3,
 				'company_id' => 1,
 				'parent_id' => 0,
 				'item_name' => "Printed Boards",
@@ -36,7 +33,6 @@ class OSTINItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\OSTINItemMaster::create([
-				'id' =>4,
 				'company_id' => 1,
 				'parent_id' => 1,
 				'item_name' => "Printed Label",
@@ -44,7 +40,6 @@ class OSTINItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\OSTINItemMaster::create([
-				'id' =>5,
 				'company_id' => 1,
 				'parent_id' => 1,
 				'item_name' => "Woven Label",
@@ -52,7 +47,6 @@ class OSTINItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\OSTINItemMaster::create([
-				'id' =>6,
 				'company_id' => 1,
 				'parent_id' => 1,
 				'item_name' => "Heat Transfers",
@@ -60,7 +54,6 @@ class OSTINItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\OSTINItemMaster::create([
-				'id' =>7,
 				'company_id' => 1,
 				'parent_id' => 1,
 				'item_name' => "Cotton",
@@ -68,7 +61,6 @@ class OSTINItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\OSTINItemMaster::create([
-				'id' =>8,
 				'company_id' => 1,
 				'parent_id' => 1,
 				'item_name' => "Others",
@@ -76,7 +68,6 @@ class OSTINItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\OSTINItemMaster::create([
-				'id' =>9,
 				'company_id' => 1,
 				'parent_id' => 2,
 				'item_name' => "Barcode Sticker",
@@ -84,7 +75,6 @@ class OSTINItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\OSTINItemMaster::create([
-				'id' =>10,
 				'company_id' => 1,
 				'parent_id' => 2,
 				'item_name' => "Hanger Sticker",
@@ -92,7 +82,6 @@ class OSTINItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\OSTINItemMaster::create([
-				'id' =>11,
 				'company_id' => 1,
 				'parent_id' => 2,
 				'item_name' => "Price Sticker",
@@ -100,7 +89,6 @@ class OSTINItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\OSTINItemMaster::create([
-				'id' =>12,
 				'company_id' => 1,
 				'parent_id' => 2,
 				'item_name' => "Fab Friendly Sticker",
@@ -108,7 +96,6 @@ class OSTINItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\OSTINItemMaster::create([
-				'id' =>13,
 				'company_id' => 1,
 				'parent_id' => 2,
 				'item_name' => "Carton & Polybag Sticker",
@@ -116,7 +103,6 @@ class OSTINItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\OSTINItemMaster::create([
-				'id' =>14,
 				'company_id' => 1,
 				'parent_id' => 2,
 				'item_name' => "Others",
@@ -124,7 +110,6 @@ class OSTINItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\OSTINItemMaster::create([
-				'id' =>15,
 				'company_id' => 2,
 				'parent_id' => 2,
 				'item_name' => "Size Sticker",
@@ -132,7 +117,6 @@ class OSTINItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\OSTINItemMaster::create([
-				'id' =>16,
 				'company_id' => 2,
 				'parent_id' => 2,
 				'item_name' => "CMYK Sticker",
@@ -140,7 +124,6 @@ class OSTINItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\OSTINItemMaster::create([
-				'id' =>17,
 				'company_id' => 2,
 				'parent_id' => 2,
 				'item_name' => "Barcode Sticker",
@@ -148,7 +131,6 @@ class OSTINItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\OSTINItemMaster::create([
-				'id' =>18,
 				'company_id' => 2,
 				'parent_id' => 2,
 				'item_name' => "Others",
@@ -156,7 +138,6 @@ class OSTINItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\OSTINItemMaster::create([
-				'id' =>19,
 				'company_id' => 2,
 				'parent_id' => 3,
 				'item_name' => "Tag",
@@ -164,7 +145,6 @@ class OSTINItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\OSTINItemMaster::create([
-				'id' =>20,
 				'company_id' => 2,
 				'parent_id' => 3,
 				'item_name' => "Insert Card",
@@ -172,7 +152,6 @@ class OSTINItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\OSTINItemMaster::create([
-				'id' =>21,
 				'company_id' => 2,
 				'parent_id' => 3,
 				'item_name' => "Photo card",
@@ -180,7 +159,6 @@ class OSTINItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\OSTINItemMaster::create([
-				'id' =>22,
 				'company_id' => 2,
 				'parent_id' => 3,
 				'item_name' => "Cascade/Wrapband",
@@ -188,7 +166,6 @@ class OSTINItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\OSTINItemMaster::create([
-				'id' =>23,
 				'company_id' => 2,
 				'parent_id' => 3,
 				'item_name' => "Inner Box",
@@ -196,7 +173,6 @@ class OSTINItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\OSTINItemMaster::create([
-				'id' =>24,
 				'company_id' => 2,
 				'parent_id' => 3,
 				'item_name' => "Rider Card",
@@ -204,7 +180,6 @@ class OSTINItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\OSTINItemMaster::create([
-				'id' =>25,
 				'company_id' => 2,
 				'parent_id' => 3,
 				'item_name' => "Others",

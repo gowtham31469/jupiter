@@ -169,7 +169,7 @@ class JobManagerController extends Controller
 									->where('erp_order_details.reference_name',$ref_name)
 									->where('erp_order_details.buyer_po_number',$buyer_no)
 									->where('erp_order_details.order_type',$order_type)
-									->where('erp_order_details.created_at',$created_at)
+									//->where('erp_order_details.created_at',$created_at)
 									->orderBy('erp_order_details.id', 'desc')
 									->select('*')
 									->get();

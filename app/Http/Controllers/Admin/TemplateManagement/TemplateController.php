@@ -154,6 +154,56 @@ class TemplateController extends Controller
         return $result;
          
     } 
+	public function addTemplate(Request $request) {
+        try {
+			$buyer 		 = $request['buyer'];
+            $taxation    = $request['tax'];
+            $ref         = $request['ref'];
+            $company     = $request['company'];
+            $hsncode     = $request['hsncode'];
+            $glcode      = $request['glcode'];
+            $color       = $request['color'];
+            $material_id = $request['material_id'];
+            $height      = $request['height'];
+            $width       = $request['width'];
+            $gltext      = $request['gltext'];
+            $parent_id   = $request['template_id'];
+			
+			
+			
+			$item_id = DB::table($buyer.'_item_master')
+                        ->insertGetId([
+							   'company_id' => $company,
+							   'parent_id' => $parent_id,
+							   'item_name'    => $ref,
+							   'tag_name'    => $ref,
+							   'ref_no' => $ref
+                        ]);
+			
+		    $template_id = DB::table($buyer.'_template')->insertGetId([
+							  'item_id'          => $item_id,
+							  'tax'              => $taxation,
+							  'template_name'    => $ref,
+							  'hsn_code'         => $hsncode,
+							  'gl_code'          => $glcode,
+							  'gl_text'          => $gltext,
+							  'color'            => $color,
+							  'dimension_height' => $height,
+							  'dimension_width'  => $width,
+							  'material_id'      => $material_id,
+							  'hierarchy_id'     => $parent_id,
+						  ]);
+			
+			
+            $result = response()->json(['error'=> false,'message' =>'success'],200);
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+         
+    } 
 	
 	/**
      * [getCompany to get company and orchestra taxcode ]

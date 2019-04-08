@@ -32,9 +32,6 @@
             <li id="2" onclick="tescoDepartment()"><a>Departments</a></li>
             <li id="3" onclick="tescoSuppliers()"><a>Customers</a></li>
             <li id="4"  onclick="tescoSizeChart()"><a>Size Chart</a></li>
-            <li id="5"  onclick="taxCode()"><a>Tax Code</a></li>
-            <li id="6"  onclick="tescoMaterialMasters()"><a>Material Master</a></li>
-            <li id="7"  onclick="tescoErrorReportEmail()"><a>Error Report Email</a></li>
           </ul>
         </div>
         <div class="content">
