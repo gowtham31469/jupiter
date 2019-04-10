@@ -1254,7 +1254,7 @@ function updateArtwork(obj)
 					}
 					else if((TemplateName == "TCL1" && zone=="UK") ||(TemplateName == "TCL2" && zone=="UK") || (TemplateName == "TSL1" && zone=="UK") || (TemplateName == "THL1" && zone=="UK"))
 					{
-						var qty="Units per carton";
+						var qty="Units Per Carton";
 						var barcode_tr="ITF Barcode";
 						var tpnd_tr="TPND";
 						var th_tr="";
@@ -1323,8 +1323,7 @@ function updateArtwork(obj)
 							tr +='<tr><td class="tpnd"><div class="form-group has-feedback"> <input disabled type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="os_tpnd_'+i+'" data-minlength="'+tpn_len+'" maxlength="'+tpn_len+'" data-required-error="Mandatory Field." data-minlength-error="Enter '+tpn_len+' digits."  name="os_tpnd_'+i+'" onkeypress="return isNumber(event)" value="'+tpnd+'" placeholder="'+tpn_th+'" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td class="barcode"><div class="form-group has-feedback"> <input  disabled type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="'+maxlength+'" maxlength="'+maxlength+'" data-required-error="Mandatory Field." data-minlength-error="Enter '+maxlength+' digits." id="os_barcode_'+i+'" onkeyup="dynamicSVGTemplates()" name="os_barcode_'+i+'" onkeypress="return isNumber(event)" value="'+barcode_td+'" placeholder="Enter ITF Barcode"><label class="barcode_error hidden" style="color:red;margin-left: -55px;position: absolute;">Enter Valid Barcode</label><div class="help-block with-errors"></div></div></td><td class="size"><div class="form-group has-feedback"> <input disabled type="text" maxlength="'+unit_len+'" class="form-control input-sm ce_ratio_cpc" required="" id="os_case_qty_'+i+'" name="os_case_qty_'+i+'" onkeypress="return isNumber(event)" value="'+unit_qty+'" placeholder="Enter '+qty+'" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>'+th_td+'<td> <div class="form-group has-feedback has-success"> <input disabled min="'+moq+'" onInput="checkLength(6,this)" type="number" class="form-control  input-sm tot_qty_table" value="'+value.count+'" required placeholder="Quantity" data-min-error="Quantity Should be >= '+moq+'."> <div class="help-block with-errors"></div></div></td></tr>';
 						i++;
 					})
-					 $('.edit-qty-table-div').html('<hr><h4 class="text-center">Order Quantity - '+TemplateName+'</h4><button type="button" onclick=addRowOs(this,"'+TemplateName+'","'+data.order_details.zone+'","'+moq+'") data-id="1" id="add_row" class="btn btn-default add-row-btn" disabled><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px;margin-top: 15px;"> <thead> <tr> <th>'+tpnd_tr+'</th><th>'+barcode_tr+'</th> <th>'+qty+'</th>'+th_tr+' <th>Quantity</th> <th>Actions</th></tr></thead> <tbody style="font-size: 11px">'+tr+'</tbody></table>') 
-					// $('.edit-qty-table-div').html('<hr><h4 class="text-center">Order Quantity - '+TemplateName+'</h4><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px;margin-top: 15px;"> <thead> <tr> <th>'+tpnd_tr+'</th><th>'+barcode_tr+'</th> <th>'+qty+'</th>'+th_tr+' <th>Quantity</th> </tr></thead> <tbody style="font-size: 11px">'+tr+'</tbody></table>') 
+					 $('.edit-qty-table-div').html('<hr><h4 class="text-center">Order Quantity - '+TemplateName+'</h4><button type="button" onclick=addRowOs(this,"'+TemplateName+'","'+data.order_details.zone+'","'+moq+'") data-id="1" id="add_row" class="btn btn-default add-row-btn" disabled><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px;margin-top: 15px;"> <thead> <tr> <th width="180">'+tpnd_tr+'</th><th width="180">'+barcode_tr+'</th> <th>'+qty+'</th>'+th_tr+' <th>Quantity</th> <th>Actions</th></tr></thead> <tbody style="font-size: 11px">'+tr+'</tbody></table>') 
 
 					$('#edit_template_name').val(TemplateName)
 					$('#edit_zone').val(data.order_details.zone)
@@ -1334,7 +1333,7 @@ function updateArtwork(obj)
 					$('.osorderdetails').text(" Order Details - "+TemplateName)
 					$('.osartwork').text(" Artwork - "+TemplateName)   
 					
-					$('.osfooter').html('<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm" id="submit" type="submit">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit" style="width: 55px;margin-left: 10px;" onclick ="editArtwork()" type="button">Edit</button><button class="btn btn-success  pull-right input-sm hidden" id="enable_edit" style="width: 82px;margin-left: 10px;" type="button" onclick =enableArtworkEdit("'+table_name+'","'+id+'")>Enable Edit</button><button class="btn btn-danger pull-right input-sm hidden" id="disable_edit" style="width: 82px;margin-left: 10px;" type="button" onclick =disableArtworkEdit("'+table_name+'","'+id+'")>Disable Edit</button><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
+					$('.osfooter').html('<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm" id="submit" type="submit">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit" style="width: 55px;margin-left: 10px;" onclick ="editArtwork()" type="button">Edit</button><button class="btn btn-success  pull-right input-sm hidden" id="enable_edit" style="width: 82px;margin-left: 10px;" type="button" onclick =enableArtworkEdit("'+table_name+'","'+id+'")>Enable Edit</button><button class="btn btn-danger pull-right input-sm hidden" id="disable_edit" style="width: 82px;margin-left: 10px;" type="button" onclick =disableArtworkEdit("'+table_name+'","'+id+'")>Disable Edit</button><span id="error_msg_alert" style="color:red;"></span><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
 					if (data.order_details.edit_permission == 1){
                         $('#enable_edit').addClass('hidden')
                         $('#disable_edit').removeClass('hidden')
@@ -1356,8 +1355,6 @@ function updateArtwork(obj)
 					
 					$('.remove').click(function() {
                         $('.left-panel').removeClass('active');
-                        $('#error_msg_alert').html('');
-                        $('#error_msg_alert').addClass('hidden');
 					})
 					
 					  var mySVG1 = document.getElementById("svg_tesco_os");
@@ -1380,14 +1377,7 @@ function updateArtwork(obj)
                         $('#edit').remove();
                         $('#submit').remove();
                         
-                        $('#error_msg_alert').html('<strong>ERP Order Status : '+data.erp_details[0].status_name + '. You are not allowed to edit this order.</strong>')
-                        
-                        $('#error_msg_alert').removeClass('hidden')
-                        // window.setTimeout(function() {
-                        //     $("#error_msg_alert").fadeTo(500, 0).slideUp(500, function(){
-                        //         $(this).remove(); 
-                        //     });
-                        // }, 2000);
+                        $('#error_msg_alert').html('ERP Order Status : <strong>'+data.erp_details[0].status_name + '</strong>. You are not allowed to edit this order.')
                     }
                 }
                        
@@ -1644,12 +1634,6 @@ function setEditOrderStatus()
                 409: function(data)
                 {
                     $('#error_msg_alert').html('<strong>Order with same PO number and Style number already exists.</strong>')
-                    $('#error_msg_alert').removeClass('hidden')
-                    // window.setTimeout(function() {
-                    //     $("#error_msg_alert").fadeTo(500, 0).slideUp(500, function(){
-                    //         $(this).remove(); 
-                    //     });
-                    // }, 2000);
                 }
             },
             error: function (data) {

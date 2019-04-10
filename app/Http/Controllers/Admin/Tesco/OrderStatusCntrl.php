@@ -916,7 +916,8 @@ class OrderStatusCntrl extends Controller
                       ->first();
         }
         
-        if($table_data)
+        // check order already exists , except for reOrder
+        if($table_data && $temp_data->order_flag != "reOrder")
         {
             $result =  response()->json(['error'=> true,'message' =>'Order Already Exists.'],409);
         }
