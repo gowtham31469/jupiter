@@ -363,6 +363,35 @@ class OrderController extends Controller
     }    
 	
 	 /**
+	 * Show the Order dashboard.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	
+    public function nonArtworkOrders()
+    {
+        $module_var = new Modules();
+        $is_allowed = $module_var->permittedModules();
+        if($is_allowed)
+        {
+            $get_main_module = $module_var->getMainModules();
+            $get_sub_module = $module_var->getSubModules(9);
+            View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
+                return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
+            });
+            
+            $buyers = DB::table('buyers')->select('*')->where('artwork_flag','=',1)->where('is_active','=',1)->get();
+            $buyer_count = count($buyers);
+            return view('Admin/Order Management/non-art-orders',['buyers' => $buyers,'buyer_count' => $buyer_count]);
+        }
+        else
+        {
+             return redirect('/admin/dashboard');
+        }
+
+    }   
+	
+	 /**
 	 * Show the Order Status dashboard.
 	 *
 	 * @return \Illuminate\Http\Response

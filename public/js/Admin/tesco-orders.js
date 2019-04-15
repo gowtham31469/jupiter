@@ -2312,6 +2312,27 @@ function GenerateDivTesco(data, name) {
 
 }
 
+function nonArtworkOrders()
+{
+	$.ajax({
+		url: base_url + "/admin/order-management/non-artwork-orders",
+		type: "get",
+		tryCount: 0,
+		retryLimit: 2,
+		async: false,
+		success: function (data) {
+
+		},
+		error: function (errorXHR, errorStatus, errorThrown) {
+			this.tryCount++;
+			if (this.tryCount <= this.retryLimit) {
+				$.ajax(this);
+				return;
+			}
+		},
+	})
+}
+
 /**
  * This Function is Sub Function of #printDivTesco.
  *  For print preview of stickers
