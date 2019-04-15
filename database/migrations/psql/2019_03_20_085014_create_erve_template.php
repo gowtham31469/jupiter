@@ -19,9 +19,9 @@ class CreateErveTemplate extends Migration
 	    $table->integer('material_id')->unsigned();
 	    $table->integer('hierarchy_id');
 	    $table->string('template_name');
-	    $table->string('template_description');
-	    $table->string('template_file');
-	    $table->smallInteger('disney');
+	    $table->string('template_description')->nullable();
+	    $table->string('template_file')->nullable();
+	    $table->smallInteger('disney')->nullable();
 	    $table->integer('tax');
 	    $table->string('gl_code');
 	    $table->string('hsn_code');

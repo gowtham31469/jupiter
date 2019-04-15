@@ -2238,7 +2238,7 @@ function updateArtwork(obj)
                         $('.osfooter').html('<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm hidden" id="submit" type="submit">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit" style="width: 55px;margin-left: 10px;" onclick ="editArtwork()" type="button">Edit</button><span id="error_msg_alert" style="color:red;"></span><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
                     }
                     else{
-                         $('.osfooter').html('<button class="btn btn-danger pull-right remove input-sm" id="close" type="button">Close</button>')
+                         $('.osfooter').html('<span id="error_msg_alert" style="color:red;"></span><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
                     }
 
                    

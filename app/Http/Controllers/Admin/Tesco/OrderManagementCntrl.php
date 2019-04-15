@@ -3003,7 +3003,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
 		  	//	$newTasks->ocn_number =$ocn_number;
-		  		$newTasks->manufacture_date =$manufacture_date;
+		  	//	$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";

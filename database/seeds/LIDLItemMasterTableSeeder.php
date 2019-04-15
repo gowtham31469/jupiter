@@ -11,8 +11,8 @@ class LIDLItemMasterTableSeeder extends Seeder
      */
     public function run()
     {
-         \App\LIDLItemMaster::create([
-				'id' =>1,
+         
+        \App\LIDLItemMaster::create([
 				'company_id' => 1,
 				'parent_id' => 0,
 				'item_name' => "Labels",
@@ -20,7 +20,6 @@ class LIDLItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 			]);
 		\App\LIDLItemMaster::create([
-				'id' =>2,
 				'company_id' => 1,
 				'parent_id' => 0,
 				'item_name' => "Stickers",
@@ -28,7 +27,6 @@ class LIDLItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);	
 		\App\LIDLItemMaster::create([
-				'id' =>3,
 				'company_id' => 1,
 				'parent_id' => 0,
 				'item_name' => "Printed Boards",
@@ -36,7 +34,6 @@ class LIDLItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\LIDLItemMaster::create([
-				'id' =>4,
 				'company_id' => 1,
 				'parent_id' => 1,
 				'item_name' => "Printed Label",
@@ -44,7 +41,6 @@ class LIDLItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\LIDLItemMaster::create([
-				'id' =>5,
 				'company_id' => 1,
 				'parent_id' => 1,
 				'item_name' => "Woven Label",
@@ -52,7 +48,6 @@ class LIDLItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\LIDLItemMaster::create([
-				'id' =>6,
 				'company_id' => 1,
 				'parent_id' => 1,
 				'item_name' => "Heat Transfers",
@@ -60,7 +55,6 @@ class LIDLItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\LIDLItemMaster::create([
-				'id' =>7,
 				'company_id' => 1,
 				'parent_id' => 1,
 				'item_name' => "Cotton",
@@ -68,7 +62,6 @@ class LIDLItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\LIDLItemMaster::create([
-				'id' =>8,
 				'company_id' => 1,
 				'parent_id' => 1,
 				'item_name' => "Others",
@@ -76,7 +69,6 @@ class LIDLItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\LIDLItemMaster::create([
-				'id' =>9,
 				'company_id' => 1,
 				'parent_id' => 2,
 				'item_name' => "Barcode Sticker",
@@ -84,7 +76,6 @@ class LIDLItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\LIDLItemMaster::create([
-				'id' =>10,
 				'company_id' => 1,
 				'parent_id' => 2,
 				'item_name' => "Hanger Sticker",
@@ -92,7 +83,6 @@ class LIDLItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\LIDLItemMaster::create([
-				'id' =>11,
 				'company_id' => 1,
 				'parent_id' => 2,
 				'item_name' => "Price Sticker",
@@ -100,7 +90,6 @@ class LIDLItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\LIDLItemMaster::create([
-				'id' =>12,
 				'company_id' => 1,
 				'parent_id' => 2,
 				'item_name' => "Fab Friendly Sticker",
@@ -108,7 +97,6 @@ class LIDLItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\LIDLItemMaster::create([
-				'id' =>13,
 				'company_id' => 1,
 				'parent_id' => 2,
 				'item_name' => "Carton & Polybag Sticker",
@@ -116,7 +104,6 @@ class LIDLItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\LIDLItemMaster::create([
-				'id' =>14,
 				'company_id' => 1,
 				'parent_id' => 2,
 				'item_name' => "Others",
@@ -124,7 +111,6 @@ class LIDLItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\LIDLItemMaster::create([
-				'id' =>15,
 				'company_id' => 2,
 				'parent_id' => 2,
 				'item_name' => "Size Sticker",
@@ -132,7 +118,6 @@ class LIDLItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\LIDLItemMaster::create([
-				'id' =>16,
 				'company_id' => 2,
 				'parent_id' => 2,
 				'item_name' => "CMYK Sticker",
@@ -140,7 +125,6 @@ class LIDLItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\LIDLItemMaster::create([
-				'id' =>17,
 				'company_id' => 2,
 				'parent_id' => 2,
 				'item_name' => "Barcode Sticker",
@@ -148,7 +132,6 @@ class LIDLItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\LIDLItemMaster::create([
-				'id' =>18,
 				'company_id' => 2,
 				'parent_id' => 2,
 				'item_name' => "Others",
@@ -156,7 +139,6 @@ class LIDLItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\LIDLItemMaster::create([
-				'id' =>19,
 				'company_id' => 2,
 				'parent_id' => 3,
 				'item_name' => "Tag",
@@ -164,7 +146,6 @@ class LIDLItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\LIDLItemMaster::create([
-				'id' =>20,
 				'company_id' => 2,
 				'parent_id' => 3,
 				'item_name' => "Insert Card",
@@ -172,7 +153,6 @@ class LIDLItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\LIDLItemMaster::create([
-				'id' =>21,
 				'company_id' => 2,
 				'parent_id' => 3,
 				'item_name' => "Photo card",
@@ -180,7 +160,6 @@ class LIDLItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\LIDLItemMaster::create([
-				'id' =>22,
 				'company_id' => 2,
 				'parent_id' => 3,
 				'item_name' => "Cascade/Wrapband",
@@ -188,7 +167,6 @@ class LIDLItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\LIDLItemMaster::create([
-				'id' =>23,
 				'company_id' => 2,
 				'parent_id' => 3,
 				'item_name' => "Inner Box",
@@ -196,7 +174,6 @@ class LIDLItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\LIDLItemMaster::create([
-				'id' =>24,
 				'company_id' => 2,
 				'parent_id' => 3,
 				'item_name' => "Rider Card",
@@ -204,7 +181,6 @@ class LIDLItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\LIDLItemMaster::create([
-				'id' =>25,
 				'company_id' => 2,
 				'parent_id' => 3,
 				'item_name' => "Others",
