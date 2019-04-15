@@ -2225,8 +2225,7 @@ function updateArtwork(obj)
                         i++;
                     })
 
-                    $('.edit-qty-table-div').html('<hr><h4 class="text-center">Order Quantity - '+TemplateName+'</h4><button type="button" onclick=addRowOs(this,"'+TemplateName+'","'+data.order_details.zone+'","'+moq+'") data-id="1" id="add_row" class="btn btn-default add-row-btn" disabled><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px;margin-top: 15px;"> <thead> <tr> <th>'+tpnd_tr+'</th><th>'+barcode_tr+'</th> <th>'+qty+'</th>'+th_tr+' <th>Quantity</th> <th>Actions</th></tr></thead> <tbody style="font-size: 11px">'+tr+'</tbody></table>') 
-                     // $('.edit-qty-table-div').html('<hr><h4 class="text-center">Order Quantity - '+TemplateName+'</h4><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px;margin-top: 15px;"> <thead> <tr> <th>'+tpnd_tr+'</th><th>'+barcode_tr+'</th> <th>'+qty+'</th>'+th_tr+' <th>Quantity</th></tr></thead> <tbody style="font-size: 11px">'+tr+'</tbody></table>') 
+                    $('.edit-qty-table-div').html('<hr><h4 class="text-center">Order Quantity - '+TemplateName+'</h4><button type="button" onclick=addRowOs(this,"'+TemplateName+'","'+data.order_details.zone+'","'+moq+'") data-id="1" id="add_row" class="btn btn-default add-row-btn" disabled><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px;margin-top: 15px;"> <thead> <tr> <th width="180">'+tpnd_tr+'</th><th width="180">'+barcode_tr+'</th> <th>'+qty+'</th>'+th_tr+' <th>Quantity</th> <th>Actions</th></tr></thead> <tbody style="font-size: 11px">'+tr+'</tbody></table>') 
                     
                     $('#edit_template_name').val(TemplateName)
                     $('#edit_zone').val(data.order_details.zone)
@@ -2236,10 +2235,10 @@ function updateArtwork(obj)
                     $('.osorderdetails').text(" Order Details - "+TemplateName)
                     $('.osartwork').text(" Artwork - "+TemplateName)
                     if (data.order_details.edit_permission == 1){
-                        $('.osfooter').html('<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm hidden" id="submit" type="submit">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit" style="width: 55px;margin-left: 10px;" onclick ="editArtwork()" type="button">Edit</button><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
+                        $('.osfooter').html('<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm hidden" id="submit" type="submit">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit" style="width: 55px;margin-left: 10px;" onclick ="editArtwork()" type="button">Edit</button><span id="error_msg_alert" style="color:red;"></span><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
                     }
                     else{
-                         $('.osfooter').html('<button class="btn btn-danger pull-right remove input-sm" id="close" type="button">Close</button>')
+                         $('.osfooter').html('<span id="error_msg_alert" style="color:red;"></span><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
                     }
 
                    
@@ -2257,8 +2256,6 @@ function updateArtwork(obj)
                     
                     $('.remove').click(function() {
                         $('.left-panel').removeClass('active');
-                        $('#error_msg_alert').html('');
-                        $('#error_msg_alert').addClass('hidden');
                     })
                     
                       var mySVG1 = document.getElementById("svg_tesco_os");
@@ -2278,13 +2275,7 @@ function updateArtwork(obj)
                     {
                         $('#edit').remove();
                         $('#submit').remove();
-                        $('#error_msg_alert').html('<strong>ERP Order Status : '+data.erp_details[0].status_name + '. You are not allowed to edit this order.</strong>')
-                        $('#error_msg_alert').removeClass('hidden')
-                        // window.setTimeout(function() {
-                        //     $("#error_msg_alert").fadeTo(500, 0).slideUp(500, function(){
-                        //         $(this).remove(); 
-                        //     });
-                        // }, 2000);
+                        $('#error_msg_alert').html('ERP Order Status : <strong>'+data.erp_details[0].status_name + '</strong>. You are not allowed to edit this order.')
                     }
                 }
                        
@@ -2478,12 +2469,6 @@ function setEditOrderStatus()
                409: function(data)
                {
                    $('#error_msg_alert').html('<strong>Order with same PO number and Style number already exists.</strong>')
-                   $('#error_msg_alert').removeClass('hidden')
-                //    window.setTimeout(function() {
-                //     $("#error_msg_alert").fadeTo(500, 0).slideUp(500, function(){
-                //         $(this).remove(); 
-                //     });
-                // }, 2000);
                }
             },
             error: function (data) {
@@ -2536,7 +2521,7 @@ function addRowOs(obj,TemplateName,zone,moq)
     }
     else if((TemplateName == "TCL1" && zone=="UK") ||(TemplateName == "TCL2" && zone=="UK") || (TemplateName == "TSL1" && zone=="UK") || (TemplateName == "THL1" && zone=="UK"))
     {
-        var qty="Units per carton";
+        var qty="Units Per Carton";
         var th_td="";
         var tpn_th="Enter TPND";
         var tpn_len="9";

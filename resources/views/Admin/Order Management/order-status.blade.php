@@ -276,8 +276,7 @@
     </div>
     <div class="left-panel col-md-12" style="display: none;">
         <div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
-        <div class="div-max">        
-            <div class="alert alert-warning hidden" id="error_msg_alert" role="alert"></div>   
+        <div class="div-max">          
 			<form method="POST" id="create_tesco_order_status_form" data-toggle="validator" role="form" novalidate="true">
 				<div class="col-md-4">
             <h4 class="text-center osorderdetails">Order Details</h4>
