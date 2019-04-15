@@ -10,9 +10,7 @@ class WWItemMasterTableSeeder extends Seeder
      * @return void
      */
     public function run()
-    {
-         \App\WWItemMaster::create([
-				'id' =>1,
+    {  \App\WWItemMaster::create([
 				'company_id' => 1,
 				'parent_id' => 0,
 				'item_name' => "Labels",
@@ -20,7 +18,6 @@ class WWItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 			]);
 		\App\WWItemMaster::create([
-				'id' =>2,
 				'company_id' => 1,
 				'parent_id' => 0,
 				'item_name' => "Stickers",
@@ -28,7 +25,6 @@ class WWItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);	
 		\App\WWItemMaster::create([
-				'id' =>3,
 				'company_id' => 1,
 				'parent_id' => 0,
 				'item_name' => "Printed Boards",
@@ -36,7 +32,6 @@ class WWItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\WWItemMaster::create([
-				'id' =>4,
 				'company_id' => 1,
 				'parent_id' => 1,
 				'item_name' => "Printed Label",
@@ -44,7 +39,6 @@ class WWItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\WWItemMaster::create([
-				'id' =>5,
 				'company_id' => 1,
 				'parent_id' => 1,
 				'item_name' => "Woven Label",
@@ -52,7 +46,6 @@ class WWItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\WWItemMaster::create([
-				'id' =>6,
 				'company_id' => 1,
 				'parent_id' => 1,
 				'item_name' => "Heat Transfers",
@@ -60,7 +53,6 @@ class WWItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\WWItemMaster::create([
-				'id' =>7,
 				'company_id' => 1,
 				'parent_id' => 1,
 				'item_name' => "Cotton",
@@ -68,7 +60,6 @@ class WWItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\WWItemMaster::create([
-				'id' =>8,
 				'company_id' => 1,
 				'parent_id' => 1,
 				'item_name' => "Others",
@@ -76,7 +67,6 @@ class WWItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\WWItemMaster::create([
-				'id' =>9,
 				'company_id' => 1,
 				'parent_id' => 2,
 				'item_name' => "Barcode Sticker",
@@ -84,7 +74,6 @@ class WWItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\WWItemMaster::create([
-				'id' =>10,
 				'company_id' => 1,
 				'parent_id' => 2,
 				'item_name' => "Hanger Sticker",
@@ -92,7 +81,6 @@ class WWItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\WWItemMaster::create([
-				'id' =>11,
 				'company_id' => 1,
 				'parent_id' => 2,
 				'item_name' => "Price Sticker",
@@ -100,7 +88,6 @@ class WWItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\WWItemMaster::create([
-				'id' =>12,
 				'company_id' => 1,
 				'parent_id' => 2,
 				'item_name' => "Fab Friendly Sticker",
@@ -108,7 +95,6 @@ class WWItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\WWItemMaster::create([
-				'id' =>13,
 				'company_id' => 1,
 				'parent_id' => 2,
 				'item_name' => "Carton & Polybag Sticker",
@@ -116,7 +102,6 @@ class WWItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\WWItemMaster::create([
-				'id' =>14,
 				'company_id' => 1,
 				'parent_id' => 2,
 				'item_name' => "Others",
@@ -124,7 +109,6 @@ class WWItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\WWItemMaster::create([
-				'id' =>15,
 				'company_id' => 2,
 				'parent_id' => 2,
 				'item_name' => "Size Sticker",
@@ -132,7 +116,6 @@ class WWItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\WWItemMaster::create([
-				'id' =>16,
 				'company_id' => 2,
 				'parent_id' => 2,
 				'item_name' => "CMYK Sticker",
@@ -140,7 +123,6 @@ class WWItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\WWItemMaster::create([
-				'id' =>17,
 				'company_id' => 2,
 				'parent_id' => 2,
 				'item_name' => "Barcode Sticker",
@@ -148,7 +130,6 @@ class WWItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\WWItemMaster::create([
-				'id' =>18,
 				'company_id' => 2,
 				'parent_id' => 2,
 				'item_name' => "Others",
@@ -156,7 +137,6 @@ class WWItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\WWItemMaster::create([
-				'id' =>19,
 				'company_id' => 2,
 				'parent_id' => 3,
 				'item_name' => "Tag",
@@ -164,7 +144,6 @@ class WWItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\WWItemMaster::create([
-				'id' =>20,
 				'company_id' => 2,
 				'parent_id' => 3,
 				'item_name' => "Insert Card",
@@ -172,7 +151,6 @@ class WWItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\WWItemMaster::create([
-				'id' =>21,
 				'company_id' => 2,
 				'parent_id' => 3,
 				'item_name' => "Photo card",
@@ -180,7 +158,6 @@ class WWItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\WWItemMaster::create([
-				'id' =>22,
 				'company_id' => 2,
 				'parent_id' => 3,
 				'item_name' => "Cascade/Wrapband",
@@ -188,7 +165,6 @@ class WWItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\WWItemMaster::create([
-				'id' =>23,
 				'company_id' => 2,
 				'parent_id' => 3,
 				'item_name' => "Inner Box",
@@ -196,7 +172,6 @@ class WWItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\WWItemMaster::create([
-				'id' =>24,
 				'company_id' => 2,
 				'parent_id' => 3,
 				'item_name' => "Rider Card",
@@ -204,7 +179,6 @@ class WWItemMasterTableSeeder extends Seeder
 				'tag_name' => "",
 		]);
 		\App\WWItemMaster::create([
-				'id' =>25,
 				'company_id' => 2,
 				'parent_id' => 3,
 				'item_name' => "Others",

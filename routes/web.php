@@ -65,6 +65,7 @@ Route::post('admin/order-management/viewedaowp_all', 'Admin\OrderManagement\Dash
 
 Route::get('admin/order-management/orders', 'Admin\OrderManagement\OrderController@orders');
 Route::get('admin/order-management/order-status', 'Admin\OrderManagement\OrderController@orderStatus');
+Route::get('admin/order-management/non-artwork-orders', 'Admin\OrderManagement\OrderController@nonArtworkOrders');
 Route::get('admin/order-management/reorder', 'Admin\OrderManagement\OrderController@reorder');
 Route::post('admin/orchestra/order-management/compositions-details', 'Admin\Orchestra\OrderManagementCntrl@compositionDetails');
 
@@ -84,6 +85,8 @@ Route::post('admin/template-management/template-hierarchy', 'Admin\TemplateManag
 
 
 Route::post('admin/template-management/save-taxation', 'Admin\TemplateManagement\TemplateController@saveTax');
+
+Route::post('admin/template-management/add-template', 'Admin\TemplateManagement\TemplateController@addTemplate');
 
 Route::post('admin/template-management/template-view', 'Admin\TemplateManagement\TemplateController@templateView');
 Route::get('admin/template-management/get-company-list', 'Admin\TemplateManagement\TemplateController@getCompanyList');
@@ -497,6 +500,9 @@ Route::get('admin/tesco/get-tesco-error-report-email-details', 'Admin\Settings\T
 Route::put('admin/tesco/update-tesco-error-report-email', 'Admin\Settings\Tesco\TescoSettings@updateTescoErrorReportEmailById');
 Route::put('admin/tesco/make-error-report-email-enabled', 'Admin\Settings\Tesco\TescoSettings@makeErrorReportEmailEnabled');
 Route::put('admin/tesco/make-error-report-email-disabled', 'Admin\Settings\Tesco\TescoSettings@makeErrorReportEmailDisabled');
+
+
+Route::get('admin/common-settings', 'Admin\Settings\SettingsController@index');
 
 /** Tesco order-status**/
 Route::post('admin/tesco/tesco-orders', 'Admin\Tesco\OrderStatusCntrl@index');

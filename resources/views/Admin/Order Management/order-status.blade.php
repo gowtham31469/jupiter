@@ -512,7 +512,8 @@
            } 
            else 
            {
-               $('#'+localStorage.getItem("buyer")).addClass('active');
+               var id_buyer = localStorage.getItem("buyer").replace("&", "\\&");
+               $('#'+id_buyer).addClass('active');
                $("#buyerSelectionModalCenter").modal("show");
            }
        });
@@ -544,9 +545,13 @@
            var buyer = localStorage.getItem("buyer");
            if (buyer === 'orchestra') {
                orderStatus();
-           } else {
+           } else if (buyer === 'tesco')  {
                tescoOrderStatus();
            }
+		   else {
+				 localStorage.removeItem("buyer")
+				 $("#buyerSelectionModalCenter").modal("show");
+			}
        }
 
        /** To refresh modal while hidden **/

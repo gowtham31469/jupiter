@@ -57,7 +57,7 @@ class OrchestraSettings extends Controller
             // For getting care category 
             $category = DB::table('orchestra_care_category')->pluck('category_name','id')->all();
 
-            $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->get();
+            $buyers = DB::table('buyers')->select('*')->where('artwork_flag','=',1)->where('is_active','=',1)->get();
             $company = DB::table('company')->pluck('name','id')->all();
             $buyer_count = count($buyers);
             return view('Admin/Settings/home')->with(['buyers' => $buyers, 'category' => $category,'buyer_count' => $buyer_count, 'company' => $company]);
