@@ -131,7 +131,6 @@ function tescoOrderStatus() {
                                             if (value1.purchase_order_no != "" && value1.purchase_order_no != null) {
                                                 if (old_po != value1.purchase_order_no) {
                                                     options += "<option>" + value1.purchase_order_no + "</option>";
-                                                    // console.log(old_po)
                                                 }
                                                 old_po = value1.purchase_order_no
                                                 coun++;
@@ -518,7 +517,6 @@ function tescoOrderStatus() {
                                     }
                                 },
                                 error: function (data) {
-                                    // console.log(data);
                                 },
                                 complete: function () {
                                     $(".loader").hide();
@@ -640,7 +638,6 @@ function tescoOrderStatus() {
             }
         },
         error: function (data) {
-            // console.log(data);
         },
         complete: function () {
             $(".loader").hide();
@@ -813,7 +810,6 @@ function tescoStatusTable(data, path) {
                     }
                     var pi_required = value['pi_required'];
                     var po_required = value['po_required'];
-                    console.log(value["Artwork Status"])
                     if (value["Artwork Status"] != "Order Cancelled" && value['is_order_count_empty'] == 0) {
                         if (pi_required == 1 && po_required == 1) {
                             tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateTescoPI("' + value.tableID + '","' + value.tableName + '","' + action_status + '","' + style_no + '","' + value.template_id + '","' + value.BuyerPO + '","' + value.TemplateName.replace(/ /g, "") + '","' + order_flag + '")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="javascript:void(0)" onclick=tescoPOUpload(this,"' + value.tableID + '","' + po_file + '","' + value.tableName + '") class="po-style" ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" ' + style_po + '></i></a></td>';
@@ -900,7 +896,6 @@ function updateDeliveryDate(obj, tableID, tableName, count) {
                 }
             },
             error: function (data) {
-                // console.log(data);
             },
             complete: function () {
                 $(".loader").hide();
@@ -965,7 +960,6 @@ function tescoSetPO(obj, id, tableName, po_file) {
                 }
             },
             error: function (data) {
-                // console.log(data);
             },
             complete: function () {
                 $(".loader").hide();
@@ -1241,7 +1235,6 @@ function updateArtwork(obj) {
             }
         },
         error: function (data) {
-            // console.log(data);
         },
         complete: function () {
             $(".loader").hide();
@@ -1323,7 +1316,6 @@ function disableArtworkEdit(tablename, rowid) {
             $('#disable_edit').addClass('hidden')
         },
         error: function (data) {
-            // console.log(data);
         },
         complete: function () {
 
@@ -2350,7 +2342,6 @@ function jsbarcodetesco(code, id, svgDoc) {
     img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
     // img.src - contains base64 URI from svg
-    // console.log(img.src);
 
     //remove temporary canvas
     canvasTmp.remove();
@@ -2412,7 +2403,6 @@ function jsbarcodetescoean(code, id, svgDoc) {
     img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
     // img.src - contains base64 URI from svg
-    // console.log(img.src);
 
     //remove temporary canvas
     canvasTmp.remove();
@@ -2632,7 +2622,6 @@ function disableArtworkEdit(tablename, rowid) {
             $('#disable_edit').addClass('hidden')
         },
         error: function (data) {
-            // console.log(data);
         },
         complete: function () {}
     })
