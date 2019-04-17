@@ -25,7 +25,7 @@ use App\Classes\EditErpOrders;
 
 class OrderStatusController extends Controller
 {
-
+    private $ratio_pack_type;
     /**
      * Create a new controller instance.
      *
@@ -35,6 +35,7 @@ class OrderStatusController extends Controller
     {
 
        $this->middleware('customer_auth');
+       $this->ratio_pack_type = ['RatA', 'RatB', 'RatC', 'RatD', 'RatE', 'RatF', 'RatG', 'RatH', 'RatI', 'RatJ', 'RatK', 'RatL', 'RatM', 'RatN', 'RatO', 'RatP', 'RatQ', 'RatR', 'RatS', 'RatT', 'RatU', 'RatV', 'RatW', 'RatX', 'RatY', 'RatZ'];
     }
     /**
      * method to show the tesco order status page
@@ -1030,7 +1031,8 @@ class OrderStatusController extends Controller
                         $foreign_key         => $template_id,
                         'cases_per_carton'   => $case_size[$i],
                         'count'              => $count[$i],
-                        'size'               => "0"
+                        'size'               => null,
+                        'ratio_pack_type'    => $this->ratio_pack_type[$i] 
                         ]);
                 }
                 else if(($template_name == "TCL4" && $zone=="CE") || ($template_name == "TSL3" && $zone=="CE") || ($template_name == "THL3" && $zone=="CE"))
@@ -1063,7 +1065,8 @@ class OrderStatusController extends Controller
                         $foreign_key        => $template_id,
                         'units_per_carton'   => $case_size[$i],
                         'count'              => $count[$i],
-                        'size'               => "0"
+                        'size'               => null,
+                        'ratio_pack_type'    => $this->ratio_pack_type[$i]
                     ]);
                 }
                 $i++;

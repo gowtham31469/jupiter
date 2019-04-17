@@ -25,6 +25,7 @@ class TescoOrders
 {
 
   private $current_date;
+  private $ratio_pack_type;
   /**
    * Create a new controller instance.
    *
@@ -34,6 +35,7 @@ class TescoOrders
   {
       // get the current time
       $this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
+      $this->ratio_pack_type = ['RatA', 'RatB', 'RatC', 'RatD', 'RatE', 'RatF', 'RatG', 'RatH', 'RatI', 'RatJ', 'RatK', 'RatL', 'RatM', 'RatN', 'RatO', 'RatP', 'RatQ', 'RatR', 'RatS', 'RatT', 'RatU', 'RatV', 'RatW', 'RatX', 'RatY', 'RatZ'];
   }
 
 	/**
@@ -738,7 +740,8 @@ class TescoOrders
                      $qnty_id            => $table_data->id,
                     'cases_per_carton'   => $case_size[$i],
                     'count'              => $count[$i],
-                    'size'               => "0"
+                    'size'               => null,
+                    'ratio_pack_type'    => $this->ratio_pack_type[$i]
                   ]);
             }
             else if(($template_name == "TCL4" && $zone=="CE") || ($template_name == "TSL3" && $zone=="CE") || ($template_name == "THL3" && $zone=="CE"))
@@ -768,9 +771,10 @@ class TescoOrders
                       'tpnd'               => $value,
                       'itf_barcode'        => $barcode[$i],
                       'units_per_carton'   => $case_size[$i],
-                      'size'               => "0",
+                      'size'               => null,
                       'count'              => $count[$i],
-                      $qnty_id             => $table_data->id
+                      $qnty_id             => $table_data->id,
+                      'ratio_pack_type'    => $this->ratio_pack_type[$i]
                   ]);
             }
             $i++;
@@ -870,8 +874,9 @@ class TescoOrders
                     'itf_barcode'        => $barcode[$i],
                     $qnty_id             => $table_data->id,
                     'cases_per_carton'   => $case_size[$i],
-                    'size'               => "0",
-                    'count'              => $quantity
+                    'size'               => null,
+                    'count'              => $quantity,
+                    'ratio_pack_type'    => $this->ratio_pack_type[$i]
                   ]);
             }
             else if(($template_name == "TCL4" && $zone=="CE") || ($template_name == "TSL3" && $zone=="CE"))
@@ -902,14 +907,14 @@ class TescoOrders
                       'tpnd'               => $value,
                       'itf_barcode'        => $barcode[$i],
                       'units_per_carton'   => $case_size[$i],
-                      'size'               => "0",
+                      'size'               => null,
                       $qnty_id             => $table_data->id,
-                      'count'              => $quantity
+                      'count'              => $quantity,
+                      'ratio_pack_type'    => $this->ratio_pack_type[$i]
                   ]);
             }
             $i++;
         }
-
 
         // fetch erp_order_details table details for each quantity_table ids.
         foreach($quantity_data as $quantity_table_id)

@@ -2093,7 +2093,6 @@ function updateArtwork(obj)
             {
                 if (data.order_details!=0)
                 {   
-                    console.log(data.order_details)
                     $('#tesco_po_number').val(data.order_details.po_number);
                     $('#tesco_uk_style').val(data.order_details.uk_style_ref);
                     $('#tesco_ce_style').val(data.order_details.ce_style_ref);
