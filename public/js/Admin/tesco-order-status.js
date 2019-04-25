@@ -726,12 +726,8 @@ function tescoStatusTable(data, path) {
 
                 if (key == "PO Number" && value['po_required'] == 1 && value['is_order_count_empty'] == 0) {
                     var po_file = value['po_file'];
-                    if (value[key] == "" || value[key] == null) {
-                        tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" onkeypress="return AvoidSpace(event)" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" placeholder="Enter PO" maxlength="11"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"' + value.tableID + '","' + value.tableName + '","' + po_file + '")><span class="glyphicon glyphicon-ok"></span></button></span></div></div></td>';
-                    } else {
-                        tr += '<td class="text-center">' + value[key] + '</td>';
-
-                    }
+                    let customer_po_number = value[key] === null?'':value[key];
+                    tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" onkeypress="return AvoidSpace(event)" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" placeholder="Enter PO" maxlength="11" value="'+customer_po_number+'"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"' + value.tableID + '","' + value.tableName + '","' + po_file + '")><span class="glyphicon glyphicon-ok"></span></button></span></div></div></td>';
                 } else if (key == "OrderDate") {
                     if (value['is_order_count_empty'] == 0) {
                         var orderDate = moment(value[key]).format('DD-MM-YYYY');
@@ -936,13 +932,13 @@ function tescoSetPO(obj, id, tableName, po_file) {
                 /** [Show response status based on HTTP status code] */
                 200: function (data) {
                     $('#snackbar').css('background-color', '#00b6ff');
-                    $('.snackbar_span').html('Purchase Order Number added Successfully');
-                    $(obj).closest('tr').find('.tesco-po').val(po_number);
-                    $(obj).closest('tr').find('.po-span').addClass('hidden');
+                    $('.snackbar_span').html(data.message);
+                    //$(obj).closest('tr').find('.tesco-po').val(po_number);
+                   // $(obj).closest('tr').find('.po-span').addClass('hidden');
                     $ponumber = $(obj).closest('tr').find('.tesco-po').val();
-                    $div = $(obj).closest('tr').find('.text-center');
-                    $(obj).closest('tr').find('.tesco-po').parent().parent().remove();
-                    $div.text($ponumber)
+                    // $div = $(obj).closest('tr').find('.text-center');
+                    // $(obj).closest('tr').find('.tesco-po').parent().parent().remove();
+                    // $div.text($ponumber)
                     if ($(obj).closest('tr').find('.po_class').text() == "PO Pending" && po_file != "null") {
                         $(obj).closest('tr').find('.po_class').html("PO Uploaded")
                         $(obj).closest('tr').find('.po_class').removeClass("label-POPending").addClass('label-POUploaded');
@@ -954,8 +950,14 @@ function tescoSetPO(obj, id, tableName, po_file) {
                     }
 
                 },
+                403: function (data) {
+                    $('#snackbar').css('background-color', '#00b6ff');
+                    $('.snackbar_span').html(data.responseJSON.message);
+                    showSnackbar();
+                },
                 400: function () {
-                    $('.snackbar_span').html('Something went wrong');
+                    $('#snackbar').css('background-color', '#00b6ff');
+                    $('.snackbar_span').html(data.responseJSON.message);
                     showSnackbar();
                 }
             },

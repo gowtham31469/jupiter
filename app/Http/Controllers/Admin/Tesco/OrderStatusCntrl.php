@@ -119,7 +119,7 @@ class OrderStatusCntrl extends Controller
 	}
     /**
      * method to set the PO number for an order
-     * @param Request $request [description]
+     * @param Request $request
      */
 	public function setPONumber(Request $request)
 	{
@@ -129,10 +129,30 @@ class OrderStatusCntrl extends Controller
             $erp_obj        = new ErpOrders();
             $po_number      = $request->po_number;
 			$template_id    = $request->id;
-            $table_name     = $request->tableName;            
+            $table_name     = $request->tableName; 
+
             $po_details     = DB::table($table_name)->where('id',$template_id)
-                                ->select('po_file')->first();
-                        
+                                ->select('po_file', 'id')->first();
+                                
+            $qnty_id         =  str_replace("_orders","_order_id",str_replace("tesco_","",$table_name));
+            $quantity_details = DB::table($table_name.'_quanty')
+                                ->where($qnty_id,$po_details->id)->orderBy('id')->get();
+            // fetch erp_order_details table status
+            foreach($quantity_details as $quantity)
+            {
+                $quantity_id = $quantity->id;
+                $erp_order_details[] = DB::table('erp_order_details')->where('order_qnty_table_name','ilike', $table_name.'_quanty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $quantity_id)->select('erp_order_details.id','erp_status.status_name')->first();
+            }
+            
+            if($erp_order_details[0] != null)
+            {
+                if($erp_order_details{0}->status_name != 'Hold For JC Queue' &&  $erp_order_details{0}->status_name != 'Moved To ERP' )
+                {
+                    return response()->json(['error'=> false,'message' =>'Order status is '.$erp_order_details{0}->status_name. '. PO number edit is not allowed.'],403);
+                }
+                
+            }
+            
             if ($po_details->po_file =="" || $po_details->po_file=="null")
             {
                 $po_status = "PO Pending";
@@ -142,25 +162,22 @@ class OrderStatusCntrl extends Controller
                 $po_status = "PO Uploaded";
             }
 
-			$data 		=   DB::table($table_name)->where('id',$template_id)
-						      ->update([
-                                  'purchase_order_no' => $po_number,
-                                  'po_status' => $po_status,
-                                  'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
+            $data 		=   DB::table($table_name)->where('id',$template_id)
+                            ->update([
+                                'purchase_order_no' => $po_number,
+                                'po_status' => $po_status,
+                                'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                                 ]);
             if ($po_status == "PO Uploaded") {
-                
-               $erp_obj->updateTescoErpOrders($request);
+             $erp_obj->updateTescoErpOrders($request);
             }
 
-            $result = response()->json(['error'=> false,'message' =>'success'],200);
-       
+            return response()->json(['error'=> false,'message' =>'Purchase Order Number added Successfully'],200);
 		}
         catch (\Exception $e)
         {
-            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
-        return $result;
 	}
 
      /**
