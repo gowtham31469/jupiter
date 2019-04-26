@@ -218,6 +218,7 @@ Route::group(['middleware' => 'customer_auth'], function()
 	Route::post('customer/tesco/set-tesco-order-status', 'Customer\Tesco\OrderStatusController@setTescoOrderStatus');
 	Route::post('customer/tesco/set-po-file', 'Customer\Tesco\OrderStatusController@setCustomerPOFile');
 	Route::post('customer/tesco/get_order_details', 'Customer\Tesco\OrderStatusController@getOrderDetails');
+	Route::get('customer/tesco/get-erp-status', 'Customer\Tesco\OrderStatusController@checkERPStatus');
 	Route::post('customer/tesco/order-management/orders', 'Customer\Tesco\OrderController@Orders');
 	Route::get('customer/tesco/templates-details', 'Customer\Tesco\OrderController@getTescoTemplateDetails');
 	Route::post('customer/tesco/template-view', 'Customer\Tesco\OrderController@templateView');
@@ -241,7 +242,8 @@ Route::group(['middleware' => 'customer_auth'], function()
     /** customer profile related routes */
     Route::put('customer/update-customer-password', 'Customer\CustomerProfile\CustomerProfileController@updateCustomerPassword');
     Route::get('customer/get-profile-details', 'Customer\CustomerProfile\CustomerProfileController@getCustomerDetailsById');
-    Route::put('customer/update-customer-profile-details', 'Customer\CustomerProfile\CustomerProfileController@updateCustomerDetailsById');
+	Route::put('customer/update-customer-profile-details', 'Customer\CustomerProfile\CustomerProfileController@updateCustomerDetailsById');
+	
 });
 
 
@@ -530,8 +532,10 @@ Route::post('admin/tesco/enable-artwork-edit', 'Admin\Tesco\OrderStatusCntrl@ena
 Route::post('admin/tesco/disable-artwork-edit', 'Admin\Tesco\OrderStatusCntrl@disableArtworkEdit');
 
 Route::post('admin/tesco/edit-check-exist-po-repeat', 'Admin\Tesco\OrderStatusCntrl@editCheckExistPoRepeat');
+Route::get('admin/tesco/get-erp-status', 'Admin\Tesco\OrderStatusCntrl@checkERPStatus');
 
 Route::get('customer/reorder', 'Customer\HomeController@reorder');
+
 
 //Customer Reorder
 

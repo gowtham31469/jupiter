@@ -72,7 +72,7 @@ class ErpOrders
 				// }
 				// else 
 				// {
-					Erp::where('id',$erp_orders->id)->update(['status'=>1]);
+					Erp::where('id',$erp_orders->id)->update(['status'=>1, 'po_file' => $po_file]);
 					$status = 1;
 				//}
 			    $this->insertOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders->id);

@@ -22,6 +22,7 @@ use App\Classes\TescoOrders;
 use App\Classes\PiTCPDF;
 use Carbon\Carbon;
 use App\Classes\EditErpOrders;
+use App\Classes\ERPOrderStatusCheck;
 
 class OrderStatusCntrl extends Controller
 {
@@ -134,7 +135,7 @@ class OrderStatusCntrl extends Controller
             $po_details     = DB::table($table_name)->where('id',$template_id)
                                 ->select('po_file', 'id')->first();
                                 
-            $qnty_id         =  str_replace("_orders","_order_id",str_replace("tesco_","",$table_name));
+            $qnty_id        =  str_replace("_orders","_order_id",str_replace("tesco_","",$table_name));
             $quantity_details = DB::table($table_name.'_quanty')
                                 ->where($qnty_id,$po_details->id)->orderBy('id')->get();
             // fetch erp_order_details table status
@@ -202,7 +203,27 @@ class OrderStatusCntrl extends Controller
             $po_file->move($path,$filename);
             $destination_path_insert=$destination_path.$filename;
 
-            $po_details = DB::table($table_name)->where('id',$row_id)->select('purchase_order_no')->first();
+            $po_details = DB::table($table_name)->where('id',$row_id)->select('purchase_order_no', 'id')->first();
+
+            $qnty_id   =  str_replace("_orders","_order_id",str_replace("tesco_","",$table_name));
+            $quantity_details = DB::table($table_name.'_quanty')
+                                ->where($qnty_id,$po_details->id)->orderBy('id')->get();
+            
+            // fetch erp_order_details table status
+            foreach($quantity_details as $quantity)
+            {
+                $quantity_id = $quantity->id;
+                $erp_order_details[] = DB::table('erp_order_details')->where('order_qnty_table_name','ilike', $table_name.'_quanty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $quantity_id)->select('erp_order_details.id','erp_status.status_name')->first();
+            }
+
+            if($erp_order_details[0] != null)
+            {
+                if($erp_order_details{0}->status_name != 'Hold For JC Queue' &&  $erp_order_details{0}->status_name != 'Moved To ERP' )
+                {
+                    return response()->json(['error'=> false,'message' =>'Order status is '.$erp_order_details{0}->status_name. '. PO file upload is not allowed.'],403);
+                }
+                
+            }
             
             if ($po_details->purchase_order_no == "" || $po_details->purchase_order_no=="null")
             {
@@ -220,23 +241,21 @@ class OrderStatusCntrl extends Controller
 
                         ]);
             if ($po_status == "PO Uploaded") {
-                
                 $erp_obj->updateTescoErpOrders($request);
             }
             if ($data)
             {
-               $result = response()->json(['error'=> false,'message' =>'success','po_file'=>$destination_path_insert],200);
+               return response()->json(['error'=> false,'message' =>'success','po_file'=>$destination_path_insert],200);
             }
             else
             {
-                $result = response()->json(['error'=> true,'message' =>'Error'],400);
+                return response()->json(['error'=> true,'message' =>'Error'],400);
             }    
         }
         catch (Exception $e)
         {
-            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         } 
-        return $result;
     }
 
     /**
@@ -1257,4 +1276,24 @@ class OrderStatusCntrl extends Controller
         }
         return $result;
    }
+
+   /**
+     * method to get erp status of this order
+     * @param  Request $request [description]
+     * @return ERP_Status          [description]
+     * @author Praveen <praveen@wizroots.com>
+     */
+    public function checkERPStatus(Request $request)
+    {
+        try
+        {   
+            $class_obj = new ERPOrderStatusCheck();
+            $result = $class_obj->ERPStatus($request);
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
 }

@@ -2026,26 +2026,64 @@ function tescoSetPO(obj,id,tableName,po_file)
 function tescoPOUpload(obj,id,po_file,tableName)
 {
     var csrf_token = $('meta[name="csrf-token"]').attr('content'); 
-    if (po_file== "null") 
-    { 
-        $('#po_upload').removeClass('hidden') 
-        $('.upload-po').removeClass('hidden') 
-        $('#po_file').addClass('hidden') 
-    } 
-    else 
-    { 
-        $('#po_upload').addClass('hidden') 
-        $('.upload-po').addClass('hidden') 
-        $('#po_file').removeClass('hidden')
-        $('.update-po-file').addClass('hidden') 
-        
-    } 
-    var po_link = base_url+po_file 
-    $('#po_link').attr("href",po_link); 
-    $('#id').val(id); 
-    $('#tableName').val(tableName);
-    $('#buyer_id').val(localStorage.getItem("buyer_id"));
-    $('#po-file-upload').modal('show') 
+    $.ajax({
+        url: base_url + "/customer/tesco/get-erp-status",
+        type: 'get',
+        data: {
+            table_name: tableName,
+            id: id,
+            _token: csrf_token
+        },
+        beforeSend: function () {
+             $(".loader").show();
+        },
+        success: function (data) {
+            // erp_details array null , if order is not moved to erp tables
+            // only editable, if order status is "Hold For JC Queue" OR "Moved To ERP"
+            if (data.erp_details[0] != null) {
+                if (data.erp_details[0].status_name !== 'Hold For JC Queue' && data.erp_details[0].status_name !== 'Moved To ERP') {
+                    $('.update-po-file').hide();
+
+                    $('#error_msg_span').html('ERP Order Status : <strong>' + data.erp_details[0].status_name + '</strong>. You are not permitted to upload any more po files for this order.')
+                }
+                else{
+                    $('.update-po-file').show();
+                    $('#error_msg_span').html('');
+                }
+            }
+            else
+            {
+                $('.update-po-file').show();
+                $('#error_msg_span').html('');
+            }
+        },
+        error: function (data) {
+
+        },
+        complete: function () {
+            $(".loader").hide();
+            if (po_file== "null") 
+            { 
+                $('#po_upload').removeClass('hidden') 
+                $('.upload-po').removeClass('hidden') 
+                $('#po_file').addClass('hidden') 
+            } 
+            else 
+            { 
+                $('#po_upload').addClass('hidden') 
+                $('.upload-po').addClass('hidden') 
+                $('#po_file').removeClass('hidden')
+                $('.update-po-file').addClass('hidden') 
+                
+            } 
+            var po_link = base_url+po_file 
+            $('#po_link').attr("href",po_link); 
+            $('#id').val(id); 
+            $('#tableName').val(tableName);
+            $('#buyer_id').val(localStorage.getItem("buyer_id"));
+            $('#po-file-upload').modal('show') 
+        }
+    })
 }
 
 $(".update-po-file").click(function () {
