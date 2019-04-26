@@ -139,7 +139,7 @@ class OrderStatusCntrl extends Controller
             $data_array['id'] = $request->id;
             $data_array['table_name'] = $table_name;
             $class_obj = new ERPOrderStatusCheck();
-          return  $erp_order_details = $class_obj->ERPStatus($data_array);
+            $erp_order_details = $class_obj->ERPStatus($data_array);
             
             if($erp_order_details[0] != null)
             {
