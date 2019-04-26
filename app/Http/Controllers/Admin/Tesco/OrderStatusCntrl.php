@@ -169,7 +169,7 @@ class OrderStatusCntrl extends Controller
                                 'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                                 ]);
             if ($po_status == "PO Uploaded") {
-             $erp_obj->updateTescoErpOrders($request);
+               $erp_obj->updateTescoErpOrders($request);
             }
 
             return response()->json(['error'=> false,'message' =>'Purchase Order Number added Successfully'],200);

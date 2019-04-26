@@ -75,7 +75,7 @@ class ErpOrders
 					Erp::where('id',$erp_orders->id)->update(['status'=>1]);
 					$status = 1;
 				//}
-				$this->insertOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status);
+			    $this->insertOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders->id);
 			}
 			else
 			{
@@ -92,7 +92,7 @@ class ErpOrders
 				Erp::where('id',$erp_orders->id)->update(['erp_id'=>$erp_id]);
 				$status = 1;
 
-				$this->insertOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status);
+				$this->insertOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders->id);
 			}
 			$result = response()->json(['error'=> false,'message' =>'success'],200);
 		}
@@ -103,7 +103,7 @@ class ErpOrders
         return $result;
 	}
 
-	function insertOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status)
+	function insertOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders_id)
 	{
 		if ($order_details)
 		{
@@ -111,34 +111,39 @@ class ErpOrders
 
 				$style_no = ($orders->zone == "CE") ? $orders->ce_style_ref : $orders->uk_style_ref ;
 				$custom_ref_name = DB::table('price_taxation')->where('customer_id',$orders->customer_id)->where('buyer_id',$buyer_id)->where('template_id',$orders->template_id)->value('custom_name');
-				$dataExists = DB::table('erp_order_details')->where('order_qnty_table_name',$qnty_table)->where('order_qnty_table_id',$vals->id)->first();
+
+				$dataExists = DB::table('erp_order_details')->where('order_qnty_table_name',$qnty_table)->where('order_qnty_table_id',$vals->id)->where('erp_order_id',$erp_orders_id)->first();
 
 				if(!empty($dataExists)){
 					//$erp_status_id = $dataExists->status;
-					DB::table('erp_order_details')->where('id',$dataExists->id)->delete();
+					//DB::table('erp_order_details')->where('id',$dataExists->id)->delete();
+				}
+				else 
+				{
+					DB::table('erp_order_details')->where('order_qnty_table_name',$qnty_table)->where('order_qnty_table_id',$vals->id)->delete();
+					ErpOrderDetails::create([
+						'erp_order_id'     		=> $erp_orders->id,
+						'style_no'         		=> $style_no,
+						'order_quantity'   		=> $vals->count,
+						'pending_orders'		=> $vals->count,
+						'size'         	   		=> $vals->size,
+						'delivery_date'	   		=> $orders->delivery_date,
+						'order_qnty_table_name' => $qnty_table,
+						'order_qnty_table_id' 	=> $vals->id,
+						'template_id'			=> $orders->template_id,
+						'company_id'			=> $orders->company_id,
+						'reference_name'		=> $orders->item_name,
+						'ocn_number'	   		=> $orders->ocn_number,
+						'status' 				=> $status,
+						'template_type'         => $orders->template_type,
+						'custom_ref_name' 		=> $custom_ref_name,
+						'buyer_po_number'  		=> $orders->po_number,
+						'zone'					=> $orders->zone,
+						'order_type'            => $orders->order_flag,
+						'created_at'            => $this->created_at
+					]);
 				}
 				
-				 ErpOrderDetails::create([
-					'erp_order_id'     		=> $erp_orders->id,
-					'style_no'         		=> $style_no,
-					'order_quantity'   		=> $vals->count,
-					'pending_orders'		=> $vals->count,
-					'size'         	   		=> $vals->size,
-					'delivery_date'	   		=> $orders->delivery_date,
-					'order_qnty_table_name' => $qnty_table,
-					'order_qnty_table_id' 	=> $vals->id,
-					'template_id'			=> $orders->template_id,
-					'company_id'			=> $orders->company_id,
-					'reference_name'		=> $orders->item_name,
-					'ocn_number'	   		=> $orders->ocn_number,
-					'status' 				=> $status,
-					'template_type'         => $orders->template_type,
-					'custom_ref_name' 		=> $custom_ref_name,
-					'buyer_po_number'  		=> $orders->po_number,
-					'zone'					=> $orders->zone,
-					'order_type'            => $orders->order_flag,
-					'created_at'            => $this->created_at
-				]);
 			}
 		}
 	}
