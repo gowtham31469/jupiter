@@ -133,17 +133,13 @@ class OrderStatusCntrl extends Controller
             $table_name     = $request->tableName; 
 
             $po_details     = DB::table($table_name)->where('id',$template_id)
-                                ->select('po_file', 'id')->first();
+                                ->select('po_file')->first();
                                 
-            $qnty_id        =  str_replace("_orders","_order_id",str_replace("tesco_","",$table_name));
-            $quantity_details = DB::table($table_name.'_quanty')
-                                ->where($qnty_id,$po_details->id)->orderBy('id')->get();
-            // fetch erp_order_details table status
-            foreach($quantity_details as $quantity)
-            {
-                $quantity_id = $quantity->id;
-                $erp_order_details[] = DB::table('erp_order_details')->where('order_qnty_table_name','ilike', $table_name.'_quanty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $quantity_id)->select('erp_order_details.id','erp_status.status_name')->first();
-            }
+            $data_array = [];
+            $data_array['id'] = $request->id;
+            $data_array['table_name'] = $table_name;
+            $class_obj = new ERPOrderStatusCheck();
+          return  $erp_order_details = $class_obj->ERPStatus($data_array);
             
             if($erp_order_details[0] != null)
             {
@@ -203,18 +199,13 @@ class OrderStatusCntrl extends Controller
             $po_file->move($path,$filename);
             $destination_path_insert=$destination_path.$filename;
 
-            $po_details = DB::table($table_name)->where('id',$row_id)->select('purchase_order_no', 'id')->first();
+            $po_details = DB::table($table_name)->where('id',$row_id)->select('purchase_order_no')->first();
 
-            $qnty_id   =  str_replace("_orders","_order_id",str_replace("tesco_","",$table_name));
-            $quantity_details = DB::table($table_name.'_quanty')
-                                ->where($qnty_id,$po_details->id)->orderBy('id')->get();
-            
-            // fetch erp_order_details table status
-            foreach($quantity_details as $quantity)
-            {
-                $quantity_id = $quantity->id;
-                $erp_order_details[] = DB::table('erp_order_details')->where('order_qnty_table_name','ilike', $table_name.'_quanty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $quantity_id)->select('erp_order_details.id','erp_status.status_name')->first();
-            }
+            $data_array = [];
+            $data_array['id'] = $row_id;
+            $data_array['table_name'] = $table_name;
+            $class_obj = new ERPOrderStatusCheck();
+            $erp_order_details = $class_obj->ERPStatus($data_array);
 
             if($erp_order_details[0] != null)
             {
@@ -1287,8 +1278,13 @@ class OrderStatusCntrl extends Controller
     {
         try
         {   
+            $data_array = [];
+            $data_array['id'] = $request->id;
+            $data_array['table_name'] = $request->table_name;
             $class_obj = new ERPOrderStatusCheck();
-            $result = $class_obj->ERPStatus($request);
+            $erp_order_details = $class_obj->ERPStatus($data_array);
+            
+            $result = response()->json(['error'=> false,'message' =>'success','erp_details' => $erp_order_details],200);
         }
         catch (\Exception $e)
         {
