@@ -788,7 +788,7 @@ class OrderStatusController extends Controller
                 DB::table($value[0])->where('id',$value[1])
                    ->update([
                         'purchase_order_no' => $po,
-                        'po_status' => $po_status,
+                        'po_status' => "PO Pending",
                         'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                   ]);
             }
