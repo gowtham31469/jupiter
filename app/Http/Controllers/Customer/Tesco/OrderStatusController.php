@@ -728,6 +728,7 @@ class OrderStatusController extends Controller
     {
         try
         {
+            $erp_obj    = new ErpOrders();
             $id        =  explode(',',$request->id);
             $po        =  $request->po;          
             $po_file = $request->file('po_file');
@@ -741,24 +742,22 @@ class OrderStatusController extends Controller
             foreach($id as $val)
             {
                 $value    =  explode('-',$val);
-                $po_details = DB::table($value[0])->where('id',$value[1])->select('purchase_order_no')->first();
-            
-                if ($po_details->purchase_order_no =="" || $po_details->purchase_order_no=="null")
-                {
-                    $po_status = "PO Pending";
-                }
-                else
-                {
-                    $po_status = "PO Uploaded";
-                }
                 
                 DB::table($value[0])->where('id',$value[1])
                    ->update([
                         'purchase_order_no' => $po,
                         'po_file' => $destination_path_insert,
-                        'po_status' => $po_status,
+                        'po_status' => "PO Uploaded",
                         'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                   ]);
+
+                /** @var array [Pass array of values to updateTescoErpOrders function] */
+                $data_array = [];   
+                $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
+                $data_array['tableName'] = $value[0];
+                $data_array['buyer_id'] = $tesco_buyer_id->id;
+                $data_array['id'] = $value[1];
+                $updated_erp_table = $erp_obj->updateTescoErpOrders($data_array);
             }
             $result = response()->json(['error'=> false,'message' =>'success'],200); 
            
@@ -786,16 +785,6 @@ class OrderStatusController extends Controller
             {
                 $value    =  explode('-',$val);
             
-                $po_details = DB::table($value[0])->where('id',$value[1])->select('purchase_order_no')->first();
-            
-                if ($po_details->purchase_order_no =="" || $po_details->purchase_order_no=="null")
-                {
-                    $po_status = "PO Pending";
-                }
-                else
-                {
-                    $po_status = "PO Uploaded";
-                }
                 DB::table($value[0])->where('id',$value[1])
                    ->update([
                         'purchase_order_no' => $po,
@@ -1009,7 +998,7 @@ class OrderStatusController extends Controller
         else
         {
             if ($temp_data->order_flag == "newOrder" && $template_name != "THL3" && $template_name != "THL1") {
-                $orderObj->updateTescoAdminOrders($table_name, $temp_data, $request, $customer_id);
+                $orderObj->updateTescoOrders($table_name, $temp_data, $request, $customer_id);
               }
             
             DB::table($table_name)->where('id',$template_id)
