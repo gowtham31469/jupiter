@@ -121,7 +121,7 @@
                             <label style='color:red' id='new_po_file_error' class='hidden'>Please upload Po File</label>
                             <label for="exampleInputFile">PO File</label>
                             <input type="file" id="new_po_file">
-                            <p class="help-block">Example block-level help text here.</p>
+                            <p class="help-block"></p>
                         </div>
                     </div>
                 </div>
@@ -260,7 +260,7 @@
                             <label style='color:red' id='new_po_file_error_status' class='hidden'>Please upload Po File</label>
                             <br><label >PO File</label>
                             <input type="file" accept="application/pdf" id="new_po_file_status">
-                            <p class="help-block">Example block-level help text here.</p>
+                            <p class="help-block"></p>
                         </div>
                     </div>
                 </div>

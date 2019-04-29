@@ -472,7 +472,7 @@ background: rgba(0,0,0,0.2);
 							<div class="form-group">
 								<label for="exampleInputFile">PO File</label>
 								<input type="file" id="new_po_file">
-								<p class="help-block">Example block-level help text here.</p>
+								<p class="help-block"></p>
 							</div>
 							
 						</div>
