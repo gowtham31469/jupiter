@@ -699,7 +699,7 @@ class TescoOrders
       foreach ($template_array as $table => $qunty_tbl) 
       {
           $qnty_id =  str_replace("_orders","_order_id",str_replace("tesco_","",$table));
-
+          $erp_order_details = array();
           $table_data = DB::table($table)->where('po_number',$temp_data->po_number)
                         ->where('uk_style_ref',$temp_data->uk_style_ref)
                         ->where('ce_style_ref',$temp_data->ce_style_ref)
@@ -728,8 +728,8 @@ class TescoOrders
        // get quantity_table ids.
        $quantity_data = DB::table($qunty_tbl)
                        ->where($qnty_id,$table_data->id)
-                       ->select('count','id')->get();  
-              
+                       ->select('count','id')->get(); 
+        
        $old_data = DB::table($qunty_tbl)
                       ->where($qnty_id,$table_data->id)->delete();
         
@@ -793,8 +793,8 @@ class TescoOrders
         {
             $quantity_id = $quantity_table_id->id;
             $erp_order_details[] = DB::table('erp_order_details')->where('order_qnty_table_name','ilike', $qunty_tbl)->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $quantity_id)->select('erp_order_details.id','erp_status.status_name', 'erp_order_details.erp_order_id')->first();
-        }
-    
+        } 
+
         if(!is_null($erp_order_details[0]))
         {
             $erp_details_status =  $erp_order_details[0]->status_name;
