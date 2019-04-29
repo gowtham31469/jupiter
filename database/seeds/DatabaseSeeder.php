@@ -20,6 +20,14 @@ class DatabaseSeeder extends Seeder
 			ErpStatusTableSeeder::class,
 			AddCancelStatusToErpStatusTableSeeder::class,
 			AddHoldOrderStatusToErpStatusTabbleSeeder::class,
+			BuyersTableSeeder::class,
+			CnAItemMasterTableSeeder::class,
+			WWItemMasterTableSeeder::class,
+			GerberItemMasterTableSeeder::class,
+			PrimarkItemMasterTableSeeder::class,
+			LIDLItemMasterTableSeeder::class,
+			ERVEItemMasterTableSeeder::class,
+			OSTINItemMasterTableSeeder::class,
 		]);
     }
 }

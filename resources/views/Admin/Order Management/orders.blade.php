@@ -472,7 +472,7 @@ background: rgba(0,0,0,0.2);
 							<div class="form-group">
 								<label for="exampleInputFile">PO File</label>
 								<input type="file" id="new_po_file">
-								<p class="help-block">Example block-level help text here.</p>
+								<p class="help-block"></p>
 							</div>
 							
 						</div>
@@ -870,7 +870,7 @@ background: rgba(0,0,0,0.2);
                     if (buyer === 'orchestra') 
                     {
                         orders();
-                    } else {
+                    } else if (buyer === 'tesco')  {
                         tescoOrders(reOrderTesco);
                     }
                 } else {
@@ -889,7 +889,8 @@ background: rgba(0,0,0,0.2);
                 } 
                 else 
                 {
-                    $('#'+localStorage.getItem("buyer")).addClass('active');
+                    var id_buyer = localStorage.getItem("buyer").replace("&", "\\&");
+                    $('#'+id_buyer).addClass('active');
                     $("#buyerSelectionModalCenter").modal("show");
                 }
             });
@@ -922,9 +923,13 @@ background: rgba(0,0,0,0.2);
                 if (buyer === 'orchestra') 
                 {
                     orders();
-                } else {
+                }  else if (buyer === 'tesco')  {
                     tescoOrders(reOrderTesco);
                 }
+				else{
+					localStorage.removeItem("buyer")
+					 $("#buyerSelectionModalCenter").modal("show");
+				}
             }
 
             /** To refresh modal while hidden **/
@@ -943,7 +948,7 @@ background: rgba(0,0,0,0.2);
                     if (buyer === 'orchestra') 
                     {
                         orders();
-                    } else {
+                    } else if (buyer === 'tesco')  {
                        tescoOrders(reOrderTesco);
                     }
               }

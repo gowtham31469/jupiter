@@ -77,6 +77,169 @@ class TemplateController extends Controller
              return redirect('/admin/dashboard');
         }
 
+    }  
+	
+	public function templateHierarchy(Request $request)
+    {
+	    $buyer = $request->buyer;
+        $treeviewData= DB::table($buyer."_item_master")->select('id','item_name as text','parent_id')->get()->toArray();
+         
+        if($treeviewData){
+                $childs = array();
+                foreach($treeviewData as &$item) 
+                {
+                $childs[$item->parent_id][] = &$item;
+                unset($item);
+                }
+                foreach($treeviewData as &$item) 
+                {
+                    if (isset($childs[$item->id]))
+                    {
+                        $item->children = $childs[$item->id];
+                        unset($item);
+                    }
+                }
+                $tree = $childs[0];
+                $treefinalData=json_encode($tree);
+                return $treefinalData;
+       } 
+
+    } 
+	
+	public function saveTax(Request $request) {
+        try {
+			$buyer 		 = $request['buyer'];
+            $template_id = $request['template_id'];
+            $taxation    = $request['tax'];
+            $ref         = $request['ref'];
+            $company     = $request['company'];
+            $hsncode     = $request['hsncode'];
+            $glcode      = $request['glcode'];
+            $color       = $request['color'];
+            $material_id = $request['material_id'];
+            $height      = $request['height'];
+            $width       = $request['width'];
+            $gltext      = $request['gltext'];
+            DB::table($buyer.'_template')
+                        ->where('id',$template_id)
+                        ->update([
+                          'tax'              => $taxation,
+                          'template_name'    => $ref,
+                          'hsn_code'         => $hsncode,
+                          'gl_code'          => $glcode,
+                          'gl_text'          => $gltext,
+                          'color'            => $color,
+                          'dimension_height' => $height,
+                          'dimension_width'  => $width,
+                          'material_id'      => $material_id
+                          ]);
+			
+			$items = DB::table($buyer."_template")
+                                ->select('*')
+                                ->where('id',$template_id)
+                                ->get();
+			$item_id = $items{0}->item_id;
+			DB::table($buyer.'_item_master')
+                        ->where('id',$item_id)
+                        ->update([
+            						   'company_id' => $company,
+            						   'ref_no' => $ref
+                        ]);
+            $result = response()->json(['error'=> false,'message' =>'success'],200);
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+         
+    } 
+	public function addTemplate(Request $request) {
+        try {
+			$buyer 		 = $request['buyer'];
+            $taxation    = $request['tax'];
+            $ref         = $request['ref'];
+            $company     = $request['company'];
+            $hsncode     = $request['hsncode'];
+            $glcode      = $request['glcode'];
+            $color       = $request['color'];
+            $material_id = $request['material_id'];
+            $height      = $request['height'];
+            $width       = $request['width'];
+            $gltext      = $request['gltext'];
+            $parent_id   = $request['template_id'];
+			
+			
+			
+			$item_id = DB::table($buyer.'_item_master')
+                        ->insertGetId([
+							   'company_id' => $company,
+							   'parent_id' => $parent_id,
+							   'item_name'    => $ref,
+							   'tag_name'    => $ref,
+							   'ref_no' => $ref
+                        ]);
+			
+		    $template_id = DB::table($buyer.'_template')->insertGetId([
+							  'item_id'          => $item_id,
+							  'tax'              => $taxation,
+							  'template_name'    => $ref,
+							  'hsn_code'         => $hsncode,
+							  'gl_code'          => $glcode,
+							  'gl_text'          => $gltext,
+							  'color'            => $color,
+							  'dimension_height' => $height,
+							  'dimension_width'  => $width,
+							  'material_id'      => $material_id,
+							  'hierarchy_id'     => $parent_id,
+						  ]);
+			
+			
+            $result = response()->json(['error'=> false,'message' =>'success'],200);
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+         
+    } 
+	
+	/**
+     * [getCompany to get company and orchestra taxcode ]
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function getCompanyList(Request $request)
+    {
+        $items = array();
+         $items['company'] = DB::table("company")
+                                ->select('*')
+                                ->get();
+         $items['tax'] = DB::table("tax_code")
+                                ->select('tax')
+                                ->distinct()
+                                ->get();
+         $items['material'] = DB::table("raw_material_master")
+                                ->select('id','material_name_employee')
+                                ->where('is_enabled','=',true)
+                                ->get();
+         return json_encode($items);
+    }  
+	/**
+		To Show Template When Click Tree Node
+	*/
+    public function templateView(Request $request)
+    {
+         $template_id = $request['template_id'];
+		 $buyer = $request['buyer'];
+         $treeviewData= DB::table($buyer."_template")
+                                ->select($buyer.'_template.*',$buyer.'_item_master.ref_no',$buyer.'_item_master.company_id','company.name as company_name')
+                                ->join($buyer.'_item_master',$buyer.'_item_master.id','=',$buyer.'_template.item_id')
+                                ->join('company','company.id','=',$buyer.'_item_master.company_id')
+                                ->where('item_id',$template_id)
+                                ->get();
+         return json_encode($treeviewData);
     } 
 
     /**

@@ -1695,14 +1695,9 @@ function tescoStatusTable(data,path)
                 if (key =="PO Number" && value['po_required']==1 && value['is_order_count_empty'] == 0) 
                 {
                     var po_file     = value['po_file'];
-                    if (value[key]== "" || value[key]==null)
-                    {
-                        tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" onkeypress="return AvoidSpace(event)" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" placeholder="Enter PO" maxlength="11"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"'+value.tableID+'","'+value.tableName+'","'+po_file+'")><span class="glyphicon glyphicon-ok"></span></button></span></div></div></td>';
-                    }
-                    else
-                    {
-                        tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" value="'+value[key]+'" readonly></div></div></td>';
-                    }
+                    
+                    let customer_po_number = value[key] === null?'':value[key];
+                    tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" onkeypress="return AvoidSpace(event)" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" placeholder="Enter PO" maxlength="11" value="'+customer_po_number+'"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"'+value.tableID+'","'+value.tableName+'","'+po_file+'")><span class="fa fa-check"></span></button></span></div></div></td>';
                 }
                 else if (key == "OrderDate")
                 {
@@ -1793,12 +1788,8 @@ function tescoStatusTable(data,path)
                     {
                         style_no = value.uk_style_ref;
                     }
-                    if (value["Artwork Status"]!="Order Cancelled" && value["PO Status"]!="PO Uploaded"){
-                      tr += '<td align="center" data-id="'+value.tableID+'" data-table1="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>'+span_style+''+style_no+'</a></td>';
-                    }
-                    else{
-                      tr += '<td align="center" data-id="'+value.tableID+'" data-table1="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'">'+span_style+''+style_no+'</td>';
-                    }
+                    
+                    tr += '<td align="center" data-id="'+value.tableID+'" data-table1="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>'+span_style+''+style_no+'</a></td>';
                     
                 }
                 else if (key == "Actions")
@@ -1981,10 +1972,10 @@ function tescoSetPO(obj,id,tableName,po_file)
             200: function(data)
             {
                $('#snackbar').css('background-color','#00b6ff');
-               $('.snackbar_span').html('Purchase Order Number added Successfully');
-               $(obj).closest('tr').find('.tesco-po').val(po_number);
-               $(obj).closest('tr').find('.po-span').addClass('hidden');
-               $(obj).closest('tr').find('.tesco-po').attr('readonly', true);
+               $('.snackbar_span').html(data.message);
+            //    $(obj).closest('tr').find('.tesco-po').val(po_number);
+            //    $(obj).closest('tr').find('.po-span').addClass('hidden');
+            //    $(obj).closest('tr').find('.tesco-po').attr('readonly', true);
                
                if ($(obj).closest('tr').find('.po_class').text() =="PO Pending" && po_file!="null")
                {
@@ -1999,10 +1990,15 @@ function tescoSetPO(obj,id,tableName,po_file)
                }   
                          
             },
-            400: function()
-            {
-               $('.snackbar_span').html('Something went wrong');
-               showSnackbar();
+            403: function (data) {
+                $('#snackbar').css('background-color', '#00b6ff');
+                $('.snackbar_span').html(data.responseJSON.message);
+                showSnackbar();
+            },
+            400: function () {
+                $('#snackbar').css('background-color', '#00b6ff');
+                $('.snackbar_span').html(data.responseJSON.message);
+                showSnackbar();
             }
         },
         error: function (data){
@@ -2030,26 +2026,64 @@ function tescoSetPO(obj,id,tableName,po_file)
 function tescoPOUpload(obj,id,po_file,tableName)
 {
     var csrf_token = $('meta[name="csrf-token"]').attr('content'); 
-    if (po_file== "null") 
-    { 
-        $('#po_upload').removeClass('hidden') 
-        $('.upload-po').removeClass('hidden') 
-        $('#po_file').addClass('hidden') 
-    } 
-    else 
-    { 
-        $('#po_upload').addClass('hidden') 
-        $('.upload-po').addClass('hidden') 
-        $('#po_file').removeClass('hidden')
-        $('.update-po-file').addClass('hidden') 
-        
-    } 
-    var po_link = base_url+po_file 
-    $('#po_link').attr("href",po_link); 
-    $('#id').val(id); 
-    $('#tableName').val(tableName);
-    $('#buyer_id').val(localStorage.getItem("buyer_id"));
-    $('#po-file-upload').modal('show') 
+    $.ajax({
+        url: base_url + "/customer/tesco/get-erp-status",
+        type: 'get',
+        data: {
+            table_name: tableName,
+            id: id,
+            _token: csrf_token
+        },
+        beforeSend: function () {
+             $(".loader").show();
+        },
+        success: function (data) {
+            // erp_details array null , if order is not moved to erp tables
+            // only editable, if order status is "Hold For JC Queue" OR "Moved To ERP"
+            if (data.erp_details[0] != null) {
+                if (data.erp_details[0].status_name !== 'Hold For JC Queue' && data.erp_details[0].status_name !== 'Moved To ERP') {
+                    $('.update-po-file').hide();
+
+                    $('#error_msg_span').html('ERP Order Status : <strong>' + data.erp_details[0].status_name + '</strong>. You are not permitted to upload any more po files for this order.')
+                }
+                else{
+                    $('.update-po-file').show();
+                    $('#error_msg_span').html('');
+                }
+            }
+            else
+            {
+                $('.update-po-file').show();
+                $('#error_msg_span').html('');
+            }
+        },
+        error: function (data) {
+
+        },
+        complete: function () {
+            $(".loader").hide();
+            if (po_file== "null") 
+            { 
+                $('#po_upload').removeClass('hidden') 
+                $('.upload-po').removeClass('hidden') 
+                $('#po_file').addClass('hidden') 
+            } 
+            else 
+            { 
+                $('#po_upload').addClass('hidden') 
+                $('.upload-po').addClass('hidden') 
+                $('#po_file').removeClass('hidden')
+                $('.update-po-file').addClass('hidden') 
+                
+            } 
+            var po_link = base_url+po_file 
+            $('#po_link').attr("href",po_link); 
+            $('#id').val(id); 
+            $('#tableName').val(tableName);
+            $('#buyer_id').val(localStorage.getItem("buyer_id"));
+            $('#po-file-upload').modal('show') 
+        }
+    })
 }
 
 $(".update-po-file").click(function () {
@@ -2097,7 +2131,6 @@ function updateArtwork(obj)
             {
                 if (data.order_details!=0)
                 {   
-                    console.log(data.order_details)
                     $('#tesco_po_number').val(data.order_details.po_number);
                     $('#tesco_uk_style').val(data.order_details.uk_style_ref);
                     $('#tesco_ce_style').val(data.order_details.ce_style_ref);
@@ -2229,8 +2262,7 @@ function updateArtwork(obj)
                         i++;
                     })
 
-                    $('.edit-qty-table-div').html('<hr><h4 class="text-center">Order Quantity - '+TemplateName+'</h4><button type="button" onclick=addRowOs(this,"'+TemplateName+'","'+data.order_details.zone+'","'+moq+'") data-id="1" id="add_row" class="btn btn-default add-row-btn" disabled><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px;margin-top: 15px;"> <thead> <tr> <th>'+tpnd_tr+'</th><th>'+barcode_tr+'</th> <th>'+qty+'</th>'+th_tr+' <th>Quantity</th> <th>Actions</th></tr></thead> <tbody style="font-size: 11px">'+tr+'</tbody></table>') 
-                     // $('.edit-qty-table-div').html('<hr><h4 class="text-center">Order Quantity - '+TemplateName+'</h4><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px;margin-top: 15px;"> <thead> <tr> <th>'+tpnd_tr+'</th><th>'+barcode_tr+'</th> <th>'+qty+'</th>'+th_tr+' <th>Quantity</th></tr></thead> <tbody style="font-size: 11px">'+tr+'</tbody></table>') 
+                    $('.edit-qty-table-div').html('<hr><h4 class="text-center">Order Quantity - '+TemplateName+'</h4><button type="button" onclick=addRowOs(this,"'+TemplateName+'","'+data.order_details.zone+'","'+moq+'") data-id="1" id="add_row" class="btn btn-default add-row-btn" disabled><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px;margin-top: 15px;"> <thead> <tr> <th width="180">'+tpnd_tr+'</th><th width="180">'+barcode_tr+'</th> <th>'+qty+'</th>'+th_tr+' <th>Quantity</th> <th>Actions</th></tr></thead> <tbody style="font-size: 11px">'+tr+'</tbody></table>') 
                     
                     $('#edit_template_name').val(TemplateName)
                     $('#edit_zone').val(data.order_details.zone)
@@ -2240,10 +2272,10 @@ function updateArtwork(obj)
                     $('.osorderdetails').text(" Order Details - "+TemplateName)
                     $('.osartwork').text(" Artwork - "+TemplateName)
                     if (data.order_details.edit_permission == 1){
-                        $('.osfooter').html('<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm hidden" id="submit" type="submit">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit" style="width: 55px;margin-left: 10px;" onclick ="editArtwork()" type="button">Edit</button><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
+                        $('.osfooter').html('<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm hidden" id="submit" type="submit">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit" style="width: 55px;margin-left: 10px;" onclick ="editArtwork()" type="button">Edit</button><span id="error_msg_alert" style="color:red;"></span><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
                     }
                     else{
-                         $('.osfooter').html('<button class="btn btn-danger pull-right remove input-sm" id="close" type="button">Close</button>')
+                         $('.osfooter').html('<span id="error_msg_alert" style="color:red;"></span><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
                     }
 
                    
@@ -2270,6 +2302,18 @@ function updateArtwork(obj)
                             dynamicSVGTemplatescard(svgDoc1,TemplateName,data.order_details.zone,data.order_details.template_type)
                         }, false);
                     
+                }
+
+                // erp_details array null , if order is not moved to erp tables
+                // only editable, if order status is "Hold For JC Queue" OR "Moved To ERP"
+                if(data.erp_details[0] != null)
+                {
+                    if(data.erp_details[0].status_name !== 'Hold For JC Queue' && data.erp_details[0].status_name !== 'Moved To ERP')
+                    {
+                        $('#edit').remove();
+                        $('#submit').remove();
+                        $('#error_msg_alert').html('ERP Order Status : <strong>'+data.erp_details[0].status_name + '</strong>. You are not allowed to edit this order.')
+                    }
                 }
                        
             },
@@ -2310,197 +2354,178 @@ function updateArtwork(obj)
 function setEditOrderStatus()
 {
             
-        var tpnd         = [];
-        var barcode      = [];
-        var size         = [];
-        var count        = [];
-        var single_size        = [];
-        var barcode_checks=0;
+    var tpnd         = [];
+    var barcode      = [];
+    var size         = [];
+    var count        = [];
+    var single_size        = [];
+    var barcode_checks=0;
+
+    var po_number         =  $('#tesco_po_number').val();
+    var uk_style          =  $('#tesco_uk_style').val();
+    var ce_style          =  $('#tesco_ce_style').val();
+    var season_code       =  $('#tesco_season_code').val();
+    var description       =  $('#tesco_description').val().replace(/&/g,'&#038;');
+    var eqos              =  $('#tesco_eqos').val();
+    var manufacture_date  =  $('#tesco_manufacture_date').val();
+    var csrf_token        =  $('meta[name="csrf-token"]').attr('content');
+    var department        =  $("#tesco_department option:selected").val();
+    var brand             =  $("#tesco_brand option:selected").val();
+    var supplier          =  $("#tesco_supplier option:selected").val();
+    var rfid              =  $("#tesco_rfid option:selected").val() === "yes"?1:0;
+    var tag_at_source     =  $("#tesco_tag_at_source option:selected").val() === "yes"?1:0;
+    var zone              =  $('#edit_zone').val()
+    var type              =  $('#edit_template_type').val()
+    var template_name     =  $('#edit_template_name').val()
+    var edit_id           =  $('#edit_id').val()
     
-        var po_number         =  $('#tesco_po_number').val();
-        var uk_style          =  $('#tesco_uk_style').val();
-        var ce_style          =  $('#tesco_ce_style').val();
-        var season_code       =  $('#tesco_season_code').val();
-        var description       =  $('#tesco_description').val().replace(/&/g,'&#038;');
-        var eqos              =  $('#tesco_eqos').val();
-        var manufacture_date  =  $('#tesco_manufacture_date').val();
-        var csrf_token        =  $('meta[name="csrf-token"]').attr('content');
-        var department        =  $("#tesco_department option:selected").val();
-        var brand             =  $("#tesco_brand option:selected").val();
-        var supplier          =  $("#tesco_supplier option:selected").val();
-        var rfid              =  $("#tesco_rfid option:selected").val() === "yes"?1:0;
-        var tag_at_source     =  $("#tesco_tag_at_source option:selected").val() === "yes"?1:0;
-        var zone              =  $('#edit_zone').val()
-        var type              =  $('#edit_template_type').val()
-        var template_name     =  $('#edit_template_name').val()
-        var edit_id           =  $('#edit_id').val()
+    
+    
+
+    /** [ Create array of ce ratio orms tpn ] */
+    $('.ce_ratio_orms_tpn').each(function(i, item)
+    {
+        tpnd[i]    = $(item).val();
         
+    });
+    tpnd   = tpnd.join(',');
+    /** [ Create array of ce ratio itf barcode ] */
+    $('.ce_ratio_itf').each(function(i, item)
+    {
+        if((template_name == "TCL1" && zone=="CE") ||(template_name == "TCL2" && zone=="CE") || (template_name == "TSL1" && zone=="CE") || (template_name == "THL1" && zone=="CE"))
+        {
+            var barcodecheck = checkjsbarcodeitf($(item).val());
+            if(barcodecheck == "false")
+            {
+
+                barcode_checks++;
+
+                $(this).parent().find('.barcode_error').removeClass('hidden')
+            }
+            else
+            {
+                $(this).parent().find('.barcode_error').addClass('hidden')
+            }
+        }
+        else if((template_name == "TCL4" && zone=="CE") || (template_name == "TSL3" && zone=="CE") || (template_name == "THL3" && zone=="CE"))
+        {
+            var barcodecheck = checkjsbarcodeean($(item).val());
+            if(barcodecheck == "false")
+            {
+
+                barcode_checks++;
+
+                $(this).parent().find('.barcode_error').removeClass('hidden')
+            }
+            else
+            {
+                $(this).parent().find('.barcode_error').addClass('hidden')
+            }
+        }
+        else if((template_name == "TCL4" && zone=="UK") || (template_name == "TSL3" && zone=="UK") || (template_name == "THL3" && zone=="UK"))
+        {
+            var barcodecheck = checkjsbarcodeean($(item).val());
+            if(barcodecheck == "false")
+            {
+
+                barcode_checks++;
+
+                $(this).parent().find('.barcode_error').removeClass('hidden')
+            }
+            else
+            {
+                $(this).parent().find('.barcode_error').addClass('hidden')
+            }
+        }
+        else if((template_name == "TCL1" && zone=="UK") ||(template_name == "TCL2" && zone=="UK") || (template_name == "TSL1" && zone=="UK") || (template_name == "THL1" && zone=="UK"))
+        {
+            var barcodecheck = checkjsbarcodeitf($(item).val());
+            if(barcodecheck == "false")
+            {
+
+                barcode_checks++;
+
+                $(this).parent().find('.barcode_error').removeClass('hidden')
+            }
+            else
+            {
+                $(this).parent().find('.barcode_error').addClass('hidden')
+            }
+        }
         
+        barcode[i]    = $(item).val();
+    });
+    barcode = barcode.join(',');
+    /** [ Create array of ce ratio case per carton ] */
+    $('.ce_ratio_cpc').each(function(i, item)
+    {
+        size[i]    = $(item).val();
         
+    });
+    size = size.join(',');
+    /** [ Create array of ce ratio tcl1 count ] */
+    $('.tot_qty_table').each(function(i, item)
+    {
+        count[i]    = $(item).val() === ''?0:$(item).val();
+        
+    });
+    count = count.join(',');
 
-        /** [ Create array of ce ratio orms tpn ] */
-        $('.ce_ratio_orms_tpn').each(function(i, item)
-        {
-            tpnd[i]    = $(item).val();
-            
-        });
-        tpnd   = tpnd.join(',');
-        /** [ Create array of ce ratio itf barcode ] */
-        $('.ce_ratio_itf').each(function(i, item)
-        {
-            if((template_name == "TCL1" && zone=="CE") ||(template_name == "TCL2" && zone=="CE") || (template_name == "TSL1" && zone=="CE") || (template_name == "THL1" && zone=="CE"))
-            {
-                var barcodecheck = checkjsbarcodeitf($(item).val());
-                if(barcodecheck == "false")
-                {
 
-                    barcode_checks++;
-
-                    $(this).parent().find('.barcode_error').removeClass('hidden')
-                }
-                else
-                {
-                    $(this).parent().find('.barcode_error').addClass('hidden')
-                }
-            }
-            else if((template_name == "TCL4" && zone=="CE") || (template_name == "TSL3" && zone=="CE") || (template_name == "THL3" && zone=="CE"))
-            {
-                var barcodecheck = checkjsbarcodeean($(item).val());
-                if(barcodecheck == "false")
-                {
-
-                    barcode_checks++;
-
-                    $(this).parent().find('.barcode_error').removeClass('hidden')
-                }
-                else
-                {
-                    $(this).parent().find('.barcode_error').addClass('hidden')
-                }
-            }
-            else if((template_name == "TCL4" && zone=="UK") || (template_name == "TSL3" && zone=="UK") || (template_name == "THL3" && zone=="UK"))
-            {
-                var barcodecheck = checkjsbarcodeean($(item).val());
-                if(barcodecheck == "false")
-                {
-
-                    barcode_checks++;
-
-                    $(this).parent().find('.barcode_error').removeClass('hidden')
-                }
-                else
-                {
-                    $(this).parent().find('.barcode_error').addClass('hidden')
-                }
-            }
-            else if((template_name == "TCL1" && zone=="UK") ||(template_name == "TCL2" && zone=="UK") || (template_name == "TSL1" && zone=="UK") || (template_name == "THL1" && zone=="UK"))
-            {
-                var barcodecheck = checkjsbarcodeitf($(item).val());
-                if(barcodecheck == "false")
-                {
-
-                    barcode_checks++;
-
-                    $(this).parent().find('.barcode_error').removeClass('hidden')
-                }
-                else
-                {
-                    $(this).parent().find('.barcode_error').addClass('hidden')
-                }
-            }
-            
-            barcode[i]    = $(item).val();
-        });
-        barcode = barcode.join(',');
-        /** [ Create array of ce ratio case per carton ] */
-        $('.ce_ratio_cpc').each(function(i, item)
-        {
-            size[i]    = $(item).val();
-            
-        });
-        size = size.join(',');
+    if((template_name == "TCL1") ||(template_name == "TCL2") || (template_name == "TSL1") || (template_name == "THL1"))
+    {
+        single_size="";
+    }
+    else if((template_name == "TCL4") || (template_name == "TSL3") || (template_name == "THL3"))
+    {
         /** [ Create array of ce ratio tcl1 count ] */
-        $('.tot_qty_table').each(function(i, item)
+        $('.ce_single_size').each(function(i, item)
         {
-            count[i]    = $(item).val() === ''?0:$(item).val();
-            
-        });
-        count = count.join(',');
-    
-    
-        if((template_name == "TCL1") ||(template_name == "TCL2") || (template_name == "TSL1") || (template_name == "THL1"))
-        {
-            single_size="";
-        }
-        else if((template_name == "TCL4") || (template_name == "TSL3") || (template_name == "THL3"))
-        {
-            /** [ Create array of ce ratio tcl1 count ] */
-            $('.ce_single_size').each(function(i, item)
-            {
-                single_size[i]    = $(item).val();
+            single_size[i]    = $(item).val();
 
-            });
-            single_size = single_size.join(',');
-        }
+        });
+        single_size = single_size.join(',');
+    }
     if(barcode_checks == 0)
     {
         $.ajax({
-             url: base_url + "/customer/tesco/edit-check-exist-po",
-             type: 'post',
-             data: { _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,zone:zone,edit_id:edit_id,template_name:template_name},
-             success: function (data) {
-               
-                if($.trim(data) == "true")
-                {
-                    $('#po_already_error').addClass('hidden')
-                    $.ajax({
-                         url: base_url + "/customer/tesco/set-tesco-order-status",
-                         type: 'post',
-                         data: { _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,barcode:barcode,size:size,count:count,edit_id:edit_id,template_name:template_name,single_size:single_size},
-                         success: function (data) {
-                             $('.left-panel').removeClass('active');  
-							  $('#snackbar').css('background-color','#00b6ff');
-							 $('.snackbar_span').html('Order updated Successfully');
-							 showSnackbar();
-                            location.reload()
-                         },
-                         error: function (data) {
-                            console.log(data);
-                         },
-                         complete: function () {
+            url: base_url + "/customer/tesco/set-tesco-order-status",
+            type: 'post',
+            data: { _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,barcode:barcode,size:size,count:count,edit_id:edit_id,template_name:template_name,single_size:single_size},
+            statusCode:
+            {
+               /** [Show response status based on HTTP status code] */
+               200: function(data)
+               {
+                   $('#snackbar').css('background-color','#00b6ff');
+                   $('.snackbar_span').html('Order updated Successfully');
+                   showSnackbar();
+                   $('.left-panel').removeClass('active');
+                   location.reload()
+               },
+               409: function(data)
+               {
+                   $('#error_msg_alert').html('<strong>Order with same PO number and Style number already exists.</strong>')
+               }
+            },
+            error: function (data) {
+               console.log(data);
+            },
+            complete: function () {
 
-                         }
-                     })
-
-                    // td_row.find('td:nth-child(6)').text($("#tesco_supplier option:selected").text());
-                    // td_row.find('td:nth-child(2)').text(po_number);
-                    // if(zone == "CE")
-                    // {
-                    //     td_row.find('td:nth-child(1) a').text(ce_style);
-                    // }
-                    // else
-                    // {
-                    //     td_row.find('td:nth-child(1) a').text(uk_style);
-                    // }
-
-                }
-                else
-                {
-                    $('#po_already_error').removeClass('hidden')
-                }
-             },
-             error: function (data) {
-                console.log(data);
-             },
-             complete: function () {
-
-             }
+            }
         })
     }
-     
     
 }
 
+/**
+ * Dynamically Add rows
+ * @param {*} obj 
+ * @param {*} TemplateName 
+ * @param {*} zone 
+ * @param {*} moq 
+ */
 function addRowOs(obj,TemplateName,zone,moq)
 {
     var maxlength =$('#os_barcode_1').attr('maxlength')
@@ -2533,7 +2558,7 @@ function addRowOs(obj,TemplateName,zone,moq)
     }
     else if((TemplateName == "TCL1" && zone=="UK") ||(TemplateName == "TCL2" && zone=="UK") || (TemplateName == "TSL1" && zone=="UK") || (TemplateName == "THL1" && zone=="UK"))
     {
-        var qty="Units per carton";
+        var qty="Units Per Carton";
         var th_td="";
         var tpn_th="Enter TPND";
         var tpn_len="9";
@@ -2545,6 +2570,10 @@ function addRowOs(obj,TemplateName,zone,moq)
     $('#create_tesco_order_status_form').validator('update'); 
 }
 
+/**
+ * Delete rows
+ * @param {*} obj 
+ */
 function removeRowOs(obj)
 {
      $(obj).parent().parent().parent().remove();

@@ -38,11 +38,12 @@ function price_template_list() {
     });
 
     $.ajax({
-        url: base_url + "/admin/" + buyer + "/template-management/template-list",
+        url: base_url + "/admin/template-management/template-hierarchy",
         type: "Post",
         dataType: "json",
         data: {
-            _token: csrf_token
+            _token: csrf_token,
+			buyer:buyer
         },
         beforeSend: function () {
             $(".loader").show();
@@ -84,15 +85,18 @@ function price_template_list() {
                     var csrf_token = $('meta[name="csrf-token"]').attr('content');
                     if(buyer === 'tesco') {
                         var url = base_url + "/admin/" + buyer + "/customer-management/template-view";
-                    } else {
+                    } else if(buyer === 'orchestra') {
                         var url =  base_url + "/admin/" + buyer + "/template-management/template-view";
-                    }
-                                        $.ajax({
+                    } else{
+						var url =  base_url + "/admin/template-management/template-view";
+					}
+                     $.ajax({
                         url: url,
                         type: "Post",
                         dataType: "json",
                         data: {
                             template_id: template_id,
+							buyer:buyer,
                             _token: csrf_token
                         },
                         beforeSend: function () {
@@ -103,10 +107,22 @@ function price_template_list() {
                         success: function (data) {
 
                             if (data.length > 0) {
-                                $('.viewDiv').html('<object id="svg2" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
-                                $('.descriptionDiv').html('<label>Template Name : </label><p>' + data[0].template_name + '</p><label>Reference Number : </label><p>' + data[0].ref_no + '</p><label>Company Name : </label><p>' + data[0].company_name + '</p>')
-                                $('.descriptionDiv').css('margin-top', '20px')
-                                $('.viewDiv').css('margin-top', '0px');
+								
+								if(data[0].template_file != "")
+								{
+									$('.viewDiv').html('<object id="svg2" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
+									$('.descriptionDiv').html('<label>Template Name : </label><p>' + data[0].template_name + '</p><label>Reference Number : </label><p>' + data[0].ref_no + '</p><label>Company Name : </label><p>' + data[0].company_name + '</p>')
+									$('.descriptionDiv').css('margin-top', '20px')
+									$('.viewDiv').css('margin-top', '0px');
+								}
+								else
+								{
+									$('.viewDiv').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover;margin-top: 122px; font-size: 100px;"></i>')
+									$('.descriptionDiv').html('<b>Template Not Found</b>');
+									$('.descriptionDiv').css('margin-top', '0px')
+									$('.viewDiv').css('margin-top', '140px');
+								}
+                               
                             } else {
                                 $('.viewDiv').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover;margin-top: 122px; font-size: 100px;"></i>')
                                 $('.descriptionDiv').html('<b>Template Not Found</b>');

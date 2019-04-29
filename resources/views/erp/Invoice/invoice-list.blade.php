@@ -34,12 +34,33 @@
       </div>
      <div class="clearfix"></div>
     <div class="main-content">
-       <!--  <div class="loader">
-            <div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>
+       <input type="hidden" value="{{ session()->get('company') }}" id="company_id">
+       <input type="hidden" value="{{ session()->get('company_name') }}" id="company_name">
+          <div class="loader">
+          <div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>
         </div>
-        <div class="col" id="customer-table">
-            <input type="hidden" value="{{ session()->get('company') }}" id="company_id">
-            <input type="hidden" value="{{ session()->get('company_name') }}" id="company_name">
+        <div class="col filter-window-jobcard-list" id="search-invoice-table-div">
+          <form id="get_invoice_details" data-toggle="validator" class=" container-fluid" role="form" style='padding-bottom: 10px;'>
+            <h5><strong>Search Invoice</strong></h5>
+            <div class="col-xs-6 col-sm-4">
+              <div class="form-group row has-feedback">
+                <input type="text" placeholder="Enter Invoice Id" required id="invoice_id" class="invoice_id form-control col-md-2" style="width: auto; margin-right: 10px;">
+
+                <button class="btn btn-primary btn-block col-md-1" style="width: auto;"><span class="glyphicon glyphicon-search"></span></button>
+              </div>
+              <div class="help-block with-errors"></div>
+            </div>
+          </form>
+          {{-- Show search results for invoice number --}}
+        <div class="div-table hidden"></div>
+        <div class="error-div hidden">
+          <p style="font-size:14px;">No Results Found!</p>
+        </div>
+        </div>
+        
+    </div>
+    <br>
+    <div class="col" id="invoice-list-table-div">
             <table id="invoice-list-table" class="table table-hover table-bordered table-responsive">
                 <thead>
                     <tr>
@@ -61,7 +82,7 @@
                         <td>{{$vals->company_name}}</td>
                         <td>{{$vals->po_no}}</td>
                         @if($vals->invoice_file=="" || $vals->invoice_file=="null")
-                          <td align="center"><a href="javascript:void(0)" data-backdrop="static" data-keyboard="false"><i class="fa fa-pencil filterbtn options edit-user fa-button" title="Link E-way No" data-placement="left"></i></a></td>
+                          <td align="center"><a href="javascript:void(0)" data-backdrop="static" data-keyboard="false" onclick="getInvoice({{$vals->id}})"><i class="fa fa-pencil filterbtn options edit-invoice fa-button" title="Link E-way No" data-placement="left"></i></a></td>
                         @else
                           <td align="center"><a class="pi_generation" target="_blank" href="javascript:void(0)" data-id="{{$vals->invoice_file}}"  onclick="showInvoice(this)"><i class="fa fa-print action-button-view" data-placement="top" title="View & Print" data-original-title="view Details"></i></a></td>
                         @endif
@@ -69,33 +90,7 @@
                 @endforeach    
                 </tbody>
             </table>
-        </div> -->
-
-          <div class="loader">
-          <div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>
         </div>
-        <div class="col" id="customer-table">
-          <input type="hidden" value="{{ session()->get('company') }}" id="company_id">
-          <input type="hidden" value="{{ session()->get('company_name') }}" id="company_name">
-          <form id="get_invoice_details" data-toggle="validator" class=" container-fluid" role="form" style='border-bottom: 1px solid #cecece;
-        padding-bottom: 10px;
-        margin-bottom: 20px;'>
-            <label for="order_type" class="form_label row" style="display: block;">Search Invoice Id</label>
-            <div class="form-group row has-feedback">
-              <input type="text" placeholder="Enter Invoice Id" required id="invoice_id" class="invoice_id form-control col-md-2" style="width: auto; margin-right: 10px;">
-
-              <button class="btn btn-primary btn-block col-md-1" style="width: auto;"><span class="glyphicon glyphicon-search"></span></button>
-            </div>
-            <div class="help-block with-errors"></div>
-          </form>
-        </div>
-    </div>
-    <div class="div-table hidden">
-
-    </div>
-    <div class="error-div hidden">
-      <p style="font-size:14px;">No Results Found!</p>
-    </div>
 </div>
     <!-- company selection Modal -->
 <div class="modal buyer-selection-modal fade" id="buyerSelectionModalCenter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -271,7 +266,9 @@
 <script src="{{ asset('js/html2pdf.bundle.min.js') }}"></script>
 <script>  
 $(document).ready(function(){  
-
+/** [ Refresh  bootstrap selectpicker and form ] */
+	$('#invoice_id').val('');
+	$('#buyer_filter').selectpicker('refresh');
   $('[data-toggle="tooltip"]').tooltip({});
     $('#zoomBtn').click(function() {
       $('.zoom-btn-sm').toggleClass('scale-out');
@@ -302,7 +299,7 @@ $(document).ready(function(){
         },
         success: function(data) {
           console.log(data)
-          $('.div-table').html(`<table id="invoice-details-table" class="table table-striped table-responsive">
+          $('.div-table').html(`<table id="invoice-details-table" class="table table-bordered table-responsive ">
             <thead>
               <tr>
                 <th>Sl. No</th>
@@ -323,7 +320,7 @@ $(document).ready(function(){
 
               $('#invoice-details-table tbody').append(`
             <tr id="` + index.id + `">
-                            <td class="">` + i + `</td>
+                <td class="">` + i + `</td>
                 <td class="invoice_id">` + index.invoice_id + `</td>
                 <td class="erp_id">` + index.erp_id + `</td>
                 <td class="company_name">` + index.company_name + `</td>
@@ -340,17 +337,6 @@ $(document).ready(function(){
             })
 
             $('.error-div').addClass('hidden')
-            // var ref = $('#invoice-details-table').DataTable();
-            var ref = $('#invoice-list-table').DataTable({
-                "paging": false,
-                "searching": false,
-                "bInfo" : false,
-                "ordering": false
-            });
-            $("#invoice-details-table_filter input[type=search]").addClass('form-control');
-            $('.dataTables_length select').addClass('form-control');
-            $("#invoice-details-table_filter input[type=search]").attr('placeholder', 'Data Search');
-
           }
           else {
             $('.div-table').addClass('hidden')
@@ -369,7 +355,7 @@ $(document).ready(function(){
 
 
     var table = $('#invoice-list-table').DataTable();
-/** [ Make companies card active ] */
+    /** [ Make companies card active ] */
     $('div.buyers-card').click(function(){
     
       $('div.buyers-card').removeClass("active");
@@ -718,19 +704,6 @@ function showInvoice(obj){
                           showSnackbar();
                       },
                  },
-                // success: function(data) {
-                 
-                //   $('.snackbar_span').html("Successfully send Invoice to the Customer !");
-                //   showSnackbar();
-                 
-                //    console.log(base_url+data)
-                //   window.open(
-                //   base_url+data,
-                //   '_blank' // <- This is what makes it open in a new window.
-                //   );
-
-                //   // setTimeout(function(){window.location = 'invoice';}, 1000); 
-                // },
                 error: function(data) {
 
                 },
@@ -768,7 +741,7 @@ function showInvoice(obj){
                       200: function(data) {
                           var resp = JSON.stringify(data);
                           console.log( base_url+data)
-                          $('.snackbar_span').html("Successfully send Invoice to the Customer !");
+                          $('.snackbar_span').html("Invoice has been successfully sent to the customer.");
                             showSnackbar();
                         window.open(
                            base_url+$.trim(data),
@@ -781,19 +754,6 @@ function showInvoice(obj){
                           showSnackbar();
                       },
                  },
-                // success: function(data) {
-                 
-                //   $('.snackbar_span').html("Successfully send Invoice to the Customer !");
-                //   showSnackbar();
-                 
-                //    console.log(base_url+data)
-                //   window.open(
-                //   base_url+data,
-                //   '_blank' // <- This is what makes it open in a new window.
-                //   );
-
-                //   // setTimeout(function(){window.location = 'invoice';}, 1000); 
-                // },
                 error: function(data) {
 
                 },

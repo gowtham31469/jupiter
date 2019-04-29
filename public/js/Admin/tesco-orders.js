@@ -2312,6 +2312,27 @@ function GenerateDivTesco(data, name) {
 
 }
 
+function nonArtworkOrders()
+{
+	$.ajax({
+		url: base_url + "/admin/order-management/non-artwork-orders",
+		type: "get",
+		tryCount: 0,
+		retryLimit: 2,
+		async: false,
+		success: function (data) {
+
+		},
+		error: function (errorXHR, errorStatus, errorThrown) {
+			this.tryCount++;
+			if (this.tryCount <= this.retryLimit) {
+				$.ajax(this);
+				return;
+			}
+		},
+	})
+}
+
 /**
  * This Function is Sub Function of #printDivTesco.
  *  For print preview of stickers
@@ -7467,7 +7488,7 @@ function checkMOQ(obj) {
 				moq = i[temp_name];
 			})
 			$(obj).attr("min",moq); 
-			$(obj).data("min-error","Quantity Should be >= "+moq); 
+			$(obj).data("min-error","Qty should be >= "+moq); 
 		}
 	} catch (e) {
 		/** [error statements] */
@@ -7534,7 +7555,7 @@ function dynamicTescoSuppliers(id)
 									moq = i[temp_name];
 								})
 								$('.count_' + item.template_name.replace(' ', '') ).attr("min",moq); 
-								$('.count_' + item.template_name.replace(' ', '') ).data("min-error","Quantity Should be >= "+moq); 
+								$('.count_' + item.template_name.replace(' ', '') ).data("min-error","Qty should be >= "+moq); 
 							}
 						});
 						 

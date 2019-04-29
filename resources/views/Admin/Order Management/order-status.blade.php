@@ -56,6 +56,8 @@
                     <div class="po_file hidden text-center" id="po_file">
                         <a href="javascript:void(0)" target="_blank" id="po_link"><i class="fa fa-file-pdf-o fa-4x" style="color: #ff151599;"></i></a>
                         <br>
+                        <span id="error_msg_span" style="color:red;"></span>
+                        <br>
                         <button type="button" class="btn btn-primary btn-xs update-po-file" style="margin-top: 10px;">Update PO File</button>
                     </div>
                     <div class="po_upload" id="po_upload">
@@ -120,7 +122,7 @@
                             <label style='color:red' id='new_po_file_error' class='hidden'>Please upload Po File</label>
                             <label for="exampleInputFile">PO File</label>
                             <input type="file" id="new_po_file">
-                            <p class="help-block">Example block-level help text here.</p>
+                            <p class="help-block"></p>
                         </div>
                     </div>
                 </div>
@@ -261,7 +263,7 @@
                             <label style='color:red' id='new_po_file_error_status' class='hidden'>Please upload Po File</label>
                             <br><label >PO File</label>
                             <input type="file" accept="application/pdf" id="new_po_file_status">
-                            <p class="help-block">Example block-level help text here.</p>
+                            <p class="help-block"></p>
                         </div>
                     </div>
                 </div>
@@ -276,7 +278,7 @@
     </div>
     <div class="left-panel col-md-12" style="display: none;">
         <div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
-        <div class="div-max">           
+        <div class="div-max">          
 			<form method="POST" id="create_tesco_order_status_form" data-toggle="validator" role="form" novalidate="true">
 				<div class="col-md-4">
             <h4 class="text-center osorderdetails">Order Details</h4>
@@ -290,7 +292,6 @@
 				<div class="form-group has-feedback">
                     <label for="tesco_uk_style">PO Number.</label>
                     <input type="text" maxlength="9" class="form-control" name="tesco_po_number" id="tesco_po_number" required="" onkeyup="dynamicSVGTemplates()">
-					 <label style="color:red" id="po_already_error" class="hidden">PO Number already exists</label>
                     <div class="help-block with-errors"></div>
                 </div>
                 <div class="form-group has-feedback">
@@ -513,7 +514,8 @@
            } 
            else 
            {
-               $('#'+localStorage.getItem("buyer")).addClass('active');
+               var id_buyer = localStorage.getItem("buyer").replace("&", "\\&");
+               $('#'+id_buyer).addClass('active');
                $("#buyerSelectionModalCenter").modal("show");
            }
        });
@@ -545,9 +547,13 @@
            var buyer = localStorage.getItem("buyer");
            if (buyer === 'orchestra') {
                orderStatus();
-           } else {
+           } else if (buyer === 'tesco')  {
                tescoOrderStatus();
            }
+		   else {
+				 localStorage.removeItem("buyer")
+				 $("#buyerSelectionModalCenter").modal("show");
+			}
        }
 
        /** To refresh modal while hidden **/
