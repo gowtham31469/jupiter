@@ -3146,699 +3146,699 @@ class OrderController extends Controller
      *
      * @return json value
      */
-  public function setTescoReorder(Request $request)
-    {
-            $type         =   $request->type;
-            $id           =   $request->id;
-            $counts       =   explode(',',$request->counts);
-            if($type == "tesco_tcl1_orders")
-            {
-                $tasks = TescoTCL1Orders::find($id);
-                $newTasks = $tasks->replicate();
-                $newTasks->save();
+  // public function setTescoReorder(Request $request)
+  //   {
+  //           $type         =   $request->type;
+  //           $id           =   $request->id;
+  //           $counts       =   explode(',',$request->counts);
+  //           if($type == "tesco_tcl1_orders")
+  //           {
+  //               $tasks = TescoTCL1Orders::find($id);
+  //               $newTasks = $tasks->replicate();
+  //               $newTasks->save();
                 
-                $factory=DB::table('tesco_tcl1_orders')->join('customers','customers.id','=','tesco_tcl1_orders.tesco_supplier_id')->where('tesco_tcl1_orders.id',$id)->select('*')->get();
+  //               $factory=DB::table('tesco_tcl1_orders')->join('customers','customers.id','=','tesco_tcl1_orders.tesco_supplier_id')->where('tesco_tcl1_orders.id',$id)->select('*')->get();
                 
-                $pi_required=$factory{0}->pi_required;
-                if($pi_required == 1)
-                {
-                    $pi_status="PI Approval Pending";
-                    if($factory{0}->po_required == 1)
-                    {
-                        $po_status="PO Pending";
-                    }
-                    else
-                    {
-                        $po_status="";
-                    }
+  //               $pi_required=$factory{0}->pi_required;
+  //               if($pi_required == 1)
+  //               {
+  //                   $pi_status="PI Approval Pending";
+  //                   if($factory{0}->po_required == 1)
+  //                   {
+  //                       $po_status="PO Pending";
+  //                   }
+  //                   else
+  //                   {
+  //                       $po_status="";
+  //                   }
 
-                }
-                else
-                {
-                    $po_status="PO Pending";
-                    $pi_status="";
-                }
-                $newTasks->po_status = $po_status;
-                $newTasks->pi_status = $pi_status;
-                $newTasks->purchase_order_no = "";
-                $newTasks->po_file = "";
-                $newTasks->order_flag = "reOrder";
-                $newTasks->save();
+  //               }
+  //               else
+  //               {
+  //                   $po_status="PO Pending";
+  //                   $pi_status="";
+  //               }
+  //               $newTasks->po_status = $po_status;
+  //               $newTasks->pi_status = $pi_status;
+  //               $newTasks->purchase_order_no = "";
+  //               $newTasks->po_file = "";
+  //               $newTasks->order_flag = "reOrder";
+  //               $newTasks->save();
                 
-                $data['tesco']=DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$id)->select('*')->get();
-                $i=0;
-                foreach($data['tesco'] as $value)
-                {
-                    $tasks = TescoTCL1OrdersQuantity::find($value->id);
-                    $newTask = $tasks->replicate();
-                    $newTask->save();
-                    $newTask->tcl1_order_id = $newTasks->id;
-                    $newTask->count = $counts[$i];
-                    $newTask->save();
-                    $i++;
-                }
-            }
-            if($type == "tesco_tcl2_orders")
-            {
-                $tasks = TescoTCL2Orders::find($id);
-                $newTasks = $tasks->replicate();
-                $newTasks->save();
+  //               $data['tesco']=DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$id)->select('*')->get();
+  //               $i=0;
+  //               foreach($data['tesco'] as $value)
+  //               {
+  //                   $tasks = TescoTCL1OrdersQuantity::find($value->id);
+  //                   $newTask = $tasks->replicate();
+  //                   $newTask->save();
+  //                   $newTask->tcl1_order_id = $newTasks->id;
+  //                   $newTask->count = $counts[$i];
+  //                   $newTask->save();
+  //                   $i++;
+  //               }
+  //           }
+  //           if($type == "tesco_tcl2_orders")
+  //           {
+  //               $tasks = TescoTCL2Orders::find($id);
+  //               $newTasks = $tasks->replicate();
+  //               $newTasks->save();
                 
-                $factory=DB::table('tesco_tcl2_orders')->join('customers','customers.id','=','tesco_tcl2_orders.tesco_supplier_id')->where('tesco_tcl2_orders.id',$id)->select('*')->get();
+  //               $factory=DB::table('tesco_tcl2_orders')->join('customers','customers.id','=','tesco_tcl2_orders.tesco_supplier_id')->where('tesco_tcl2_orders.id',$id)->select('*')->get();
                 
-                $pi_required=$factory{0}->pi_required;
-                if($pi_required == 1)
-                {
-                    $pi_status="PI Approval Pending";
-                    if($factory{0}->po_required == 1)
-                    {
-                        $po_status="PO Pending";
-                    }
-                    else
-                    {
-                        $po_status="";
-                    }
+  //               $pi_required=$factory{0}->pi_required;
+  //               if($pi_required == 1)
+  //               {
+  //                   $pi_status="PI Approval Pending";
+  //                   if($factory{0}->po_required == 1)
+  //                   {
+  //                       $po_status="PO Pending";
+  //                   }
+  //                   else
+  //                   {
+  //                       $po_status="";
+  //                   }
 
-                }
-                else
-                {
-                    $po_status="PO Pending";
-                    $pi_status="";
-                }
-                $newTasks->po_status = $po_status;
-                $newTasks->pi_status = $pi_status;
-                $newTasks->purchase_order_no = "";
-                $newTasks->po_file = "";
-                $newTasks->order_flag = "reOrder";
-                $newTasks->save();
+  //               }
+  //               else
+  //               {
+  //                   $po_status="PO Pending";
+  //                   $pi_status="";
+  //               }
+  //               $newTasks->po_status = $po_status;
+  //               $newTasks->pi_status = $pi_status;
+  //               $newTasks->purchase_order_no = "";
+  //               $newTasks->po_file = "";
+  //               $newTasks->order_flag = "reOrder";
+  //               $newTasks->save();
                 
-                $data['tesco']=DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$id)->select('*')->get();
-                $i=0;
-                foreach($data['tesco'] as $value)
-                {
-                    $tasks = TescoTCL2OrdersQuantity::find($value->id);
-                    $newTask = $tasks->replicate();
-                    $newTask->save();
-                    $newTask->tcl2_order_id = $newTasks->id;
-                    $newTask->count = $counts[$i];
-                    $newTask->save();
-                    $i++;
-                }
-            }
-            if($type == "tesco_tcl4_orders")
-            {
-                $tasks = TescoTCL4Orders::find($id);
-                $newTasks = $tasks->replicate();
-                $newTasks->save();
+  //               $data['tesco']=DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$id)->select('*')->get();
+  //               $i=0;
+  //               foreach($data['tesco'] as $value)
+  //               {
+  //                   $tasks = TescoTCL2OrdersQuantity::find($value->id);
+  //                   $newTask = $tasks->replicate();
+  //                   $newTask->save();
+  //                   $newTask->tcl2_order_id = $newTasks->id;
+  //                   $newTask->count = $counts[$i];
+  //                   $newTask->save();
+  //                   $i++;
+  //               }
+  //           }
+  //           if($type == "tesco_tcl4_orders")
+  //           {
+  //               $tasks = TescoTCL4Orders::find($id);
+  //               $newTasks = $tasks->replicate();
+  //               $newTasks->save();
                 
-                $factory=DB::table('tesco_tcl4_orders')->join('customers','customers.id','=','tesco_tcl4_orders.tesco_supplier_id')->where('tesco_tcl4_orders.id',$id)->select('*')->get();
+  //               $factory=DB::table('tesco_tcl4_orders')->join('customers','customers.id','=','tesco_tcl4_orders.tesco_supplier_id')->where('tesco_tcl4_orders.id',$id)->select('*')->get();
                 
-                $pi_required=$factory{0}->pi_required;
-                if($pi_required == 1)
-                {
-                    $pi_status="PI Approval Pending";
-                    if($factory{0}->po_required == 1)
-                    {
-                        $po_status="PO Pending";
-                    }
-                    else
-                    {
-                        $po_status="";
-                    }
+  //               $pi_required=$factory{0}->pi_required;
+  //               if($pi_required == 1)
+  //               {
+  //                   $pi_status="PI Approval Pending";
+  //                   if($factory{0}->po_required == 1)
+  //                   {
+  //                       $po_status="PO Pending";
+  //                   }
+  //                   else
+  //                   {
+  //                       $po_status="";
+  //                   }
 
-                }
-                else
-                {
-                    $po_status="PO Pending";
-                    $pi_status="";
-                }
-                $newTasks->po_status = $po_status;
-                $newTasks->pi_status = $pi_status;
-                $newTasks->purchase_order_no = "";
-                $newTasks->po_file = "";
-                $newTasks->order_flag = "reOrder";
-                $newTasks->save();
+  //               }
+  //               else
+  //               {
+  //                   $po_status="PO Pending";
+  //                   $pi_status="";
+  //               }
+  //               $newTasks->po_status = $po_status;
+  //               $newTasks->pi_status = $pi_status;
+  //               $newTasks->purchase_order_no = "";
+  //               $newTasks->po_file = "";
+  //               $newTasks->order_flag = "reOrder";
+  //               $newTasks->save();
                 
-                $data['tesco']=DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$id)->select('*')->get();
-                $i=0;
-                foreach($data['tesco'] as $value)
-                {
-                    $tasks = TescoTCL4OrdersQuantity::find($value->id);
-                    $newTask = $tasks->replicate();
-                    $newTask->save();
-                    $newTask->tcl4_order_id = $newTasks->id;
-                    $newTask->count = $counts[$i];
-                    $newTask->save();
-                    $i++;
-                }
-            }
-            if($type == "tesco_thl1_orders")
-            {
-                $tasks = TescoTHL1Orders::find($id);
-                $newTasks = $tasks->replicate();
-                $newTasks->save();
+  //               $data['tesco']=DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$id)->select('*')->get();
+  //               $i=0;
+  //               foreach($data['tesco'] as $value)
+  //               {
+  //                   $tasks = TescoTCL4OrdersQuantity::find($value->id);
+  //                   $newTask = $tasks->replicate();
+  //                   $newTask->save();
+  //                   $newTask->tcl4_order_id = $newTasks->id;
+  //                   $newTask->count = $counts[$i];
+  //                   $newTask->save();
+  //                   $i++;
+  //               }
+  //           }
+  //           if($type == "tesco_thl1_orders")
+  //           {
+  //               $tasks = TescoTHL1Orders::find($id);
+  //               $newTasks = $tasks->replicate();
+  //               $newTasks->save();
                 
                 
-                $factory=DB::table('tesco_thl1_orders')->join('customers','customers.id','=','tesco_thl1_orders.tesco_supplier_id')->where('tesco_thl1_orders.id',$id)->select('*')->get();
+  //               $factory=DB::table('tesco_thl1_orders')->join('customers','customers.id','=','tesco_thl1_orders.tesco_supplier_id')->where('tesco_thl1_orders.id',$id)->select('*')->get();
                 
-                $pi_required=$factory{0}->pi_required;
-                if($pi_required == 1)
-                {
-                    $pi_status="PI Approval Pending";
-                    if($factory{0}->po_required == 1)
-                    {
-                        $po_status="PO Pending";
-                    }
-                    else
-                    {
-                        $po_status="";
-                    }
+  //               $pi_required=$factory{0}->pi_required;
+  //               if($pi_required == 1)
+  //               {
+  //                   $pi_status="PI Approval Pending";
+  //                   if($factory{0}->po_required == 1)
+  //                   {
+  //                       $po_status="PO Pending";
+  //                   }
+  //                   else
+  //                   {
+  //                       $po_status="";
+  //                   }
 
-                }
-                else
-                {
-                    $po_status="PO Pending";
-                    $pi_status="";
-                }
-                $newTasks->po_status = $po_status;
-                $newTasks->pi_status = $pi_status;
-                $newTasks->purchase_order_no = "";
-                $newTasks->po_file = "";
-                $newTasks->order_flag = "reOrder";
-                $newTasks->save();
+  //               }
+  //               else
+  //               {
+  //                   $po_status="PO Pending";
+  //                   $pi_status="";
+  //               }
+  //               $newTasks->po_status = $po_status;
+  //               $newTasks->pi_status = $pi_status;
+  //               $newTasks->purchase_order_no = "";
+  //               $newTasks->po_file = "";
+  //               $newTasks->order_flag = "reOrder";
+  //               $newTasks->save();
                 
-                $data['tesco']=DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$id)->select('*')->get();
-                $i=0;
-                foreach($data['tesco'] as $value)
-                {
-                    $tasks = TescoTHL1OrdersQuantity::find($value->id);
-                    $newTask = $tasks->replicate();
-                    $newTask->save();
-                    $newTask->thl1_order_id = $newTasks->id;
-                    $newTask->count = $counts[$i];
-                    $newTask->save();
-                    $i++;
-                }
-            }
-            if($type == "tesco_thl3_orders")
-            {
-                $tasks = TescoTHL3Orders::find($id);
-                $newTasks = $tasks->replicate();
-                $newTasks->save();
+  //               $data['tesco']=DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$id)->select('*')->get();
+  //               $i=0;
+  //               foreach($data['tesco'] as $value)
+  //               {
+  //                   $tasks = TescoTHL1OrdersQuantity::find($value->id);
+  //                   $newTask = $tasks->replicate();
+  //                   $newTask->save();
+  //                   $newTask->thl1_order_id = $newTasks->id;
+  //                   $newTask->count = $counts[$i];
+  //                   $newTask->save();
+  //                   $i++;
+  //               }
+  //           }
+  //           if($type == "tesco_thl3_orders")
+  //           {
+  //               $tasks = TescoTHL3Orders::find($id);
+  //               $newTasks = $tasks->replicate();
+  //               $newTasks->save();
                 
                 
-                $factory=DB::table('tesco_thl3_orders')->join('customers','customers.id','=','tesco_thl3_orders.tesco_supplier_id')->where('tesco_thl3_orders.id',$id)->select('*')->get();
+  //               $factory=DB::table('tesco_thl3_orders')->join('customers','customers.id','=','tesco_thl3_orders.tesco_supplier_id')->where('tesco_thl3_orders.id',$id)->select('*')->get();
                 
-                $pi_required=$factory{0}->pi_required;
-                if($pi_required == 1)
-                {
-                    $pi_status="PI Approval Pending";
-                    if($factory{0}->po_required == 1)
-                    {
-                        $po_status="PO Pending";
-                    }
-                    else
-                    {
-                        $po_status="";
-                    }
+  //               $pi_required=$factory{0}->pi_required;
+  //               if($pi_required == 1)
+  //               {
+  //                   $pi_status="PI Approval Pending";
+  //                   if($factory{0}->po_required == 1)
+  //                   {
+  //                       $po_status="PO Pending";
+  //                   }
+  //                   else
+  //                   {
+  //                       $po_status="";
+  //                   }
 
-                }
-                else
-                {
-                    $po_status="PO Pending";
-                    $pi_status="";
-                }
-                $newTasks->po_status = $po_status;
-                $newTasks->pi_status = $pi_status;
-                $newTasks->purchase_order_no = "";
-                $newTasks->po_file = "";
-                $newTasks->order_flag = "reOrder";
-                $newTasks->save();
+  //               }
+  //               else
+  //               {
+  //                   $po_status="PO Pending";
+  //                   $pi_status="";
+  //               }
+  //               $newTasks->po_status = $po_status;
+  //               $newTasks->pi_status = $pi_status;
+  //               $newTasks->purchase_order_no = "";
+  //               $newTasks->po_file = "";
+  //               $newTasks->order_flag = "reOrder";
+  //               $newTasks->save();
                 
-                $data['tesco']=DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$id)->select('*')->get();
-                $i=0;
-                foreach($data['tesco'] as $value)
-                {
-                    $tasks = TescoTHL3OrdersQuantity::find($value->id);
-                    $newTask = $tasks->replicate();
-                    $newTask->save();
-                    $newTask->thl3_order_id = $newTasks->id;
-                    $newTask->count = $counts[$i];
-                    $newTask->save();
-                    $i++;
-                }
-            }
-            if($type == "tesco_tsl1_orders")
-            {
-                $tasks = TescoTSL1Orders::find($id);
-                $newTasks = $tasks->replicate();
-                $newTasks->save();
+  //               $data['tesco']=DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$id)->select('*')->get();
+  //               $i=0;
+  //               foreach($data['tesco'] as $value)
+  //               {
+  //                   $tasks = TescoTHL3OrdersQuantity::find($value->id);
+  //                   $newTask = $tasks->replicate();
+  //                   $newTask->save();
+  //                   $newTask->thl3_order_id = $newTasks->id;
+  //                   $newTask->count = $counts[$i];
+  //                   $newTask->save();
+  //                   $i++;
+  //               }
+  //           }
+  //           if($type == "tesco_tsl1_orders")
+  //           {
+  //               $tasks = TescoTSL1Orders::find($id);
+  //               $newTasks = $tasks->replicate();
+  //               $newTasks->save();
                 
                 
-                $factory=DB::table('tesco_tsl1_orders')->join('customers','customers.id','=','tesco_tsl1_orders.tesco_supplier_id')->where('tesco_tsl1_orders.id',$id)->select('*')->get();
+  //               $factory=DB::table('tesco_tsl1_orders')->join('customers','customers.id','=','tesco_tsl1_orders.tesco_supplier_id')->where('tesco_tsl1_orders.id',$id)->select('*')->get();
                 
-                $pi_required=$factory{0}->pi_required;
-                if($pi_required == 1)
-                {
-                    $pi_status="PI Approval Pending";
-                    if($factory{0}->po_required == 1)
-                    {
-                        $po_status="PO Pending";
-                    }
-                    else
-                    {
-                        $po_status="";
-                    }
+  //               $pi_required=$factory{0}->pi_required;
+  //               if($pi_required == 1)
+  //               {
+  //                   $pi_status="PI Approval Pending";
+  //                   if($factory{0}->po_required == 1)
+  //                   {
+  //                       $po_status="PO Pending";
+  //                   }
+  //                   else
+  //                   {
+  //                       $po_status="";
+  //                   }
 
-                }
-                else
-                {
-                    $po_status="PO Pending";
-                    $pi_status="";
-                }
-                $newTasks->po_status = $po_status;
-                $newTasks->pi_status = $pi_status;
-                $newTasks->purchase_order_no = "";
-                $newTasks->po_file = "";
-                $newTasks->order_flag = "reOrder";
-                $newTasks->save();
+  //               }
+  //               else
+  //               {
+  //                   $po_status="PO Pending";
+  //                   $pi_status="";
+  //               }
+  //               $newTasks->po_status = $po_status;
+  //               $newTasks->pi_status = $pi_status;
+  //               $newTasks->purchase_order_no = "";
+  //               $newTasks->po_file = "";
+  //               $newTasks->order_flag = "reOrder";
+  //               $newTasks->save();
                 
-                $data['tesco']=DB::table('tesco_tsl1_orders_quanty')->where('tsl1_order_id',$id)->select('*')->get();
-                $i=0;
-                foreach($data['tesco'] as $value)
-                {
-                    $tasks = TescoTSL1OrdersQuantity::find($value->id);
-                    $newTask = $tasks->replicate();
-                    $newTask->save();
-                    $newTask->tsl1_order_id = $newTasks->id;
-                    $newTask->count = $counts[$i];
-                    $newTask->save();
-                    $i++;
-                }
-            }
-            if($type == "tesco_tsl3_orders")
-            {
-                $tasks = TescoTSL3Orders::find($id);
-                $newTasks = $tasks->replicate();
-                $newTasks->save();
+  //               $data['tesco']=DB::table('tesco_tsl1_orders_quanty')->where('tsl1_order_id',$id)->select('*')->get();
+  //               $i=0;
+  //               foreach($data['tesco'] as $value)
+  //               {
+  //                   $tasks = TescoTSL1OrdersQuantity::find($value->id);
+  //                   $newTask = $tasks->replicate();
+  //                   $newTask->save();
+  //                   $newTask->tsl1_order_id = $newTasks->id;
+  //                   $newTask->count = $counts[$i];
+  //                   $newTask->save();
+  //                   $i++;
+  //               }
+  //           }
+  //           if($type == "tesco_tsl3_orders")
+  //           {
+  //               $tasks = TescoTSL3Orders::find($id);
+  //               $newTasks = $tasks->replicate();
+  //               $newTasks->save();
                 
-                $factory=DB::table('tesco_tsl3_orders')->join('customers','customers.id','=','tesco_tsl3_orders.tesco_supplier_id')->where('tesco_tsl3_orders.id',$id)->select('*')->get();
+  //               $factory=DB::table('tesco_tsl3_orders')->join('customers','customers.id','=','tesco_tsl3_orders.tesco_supplier_id')->where('tesco_tsl3_orders.id',$id)->select('*')->get();
                 
-                $pi_required=$factory{0}->pi_required;
-                if($pi_required == 1)
-                {
-                    $pi_status="PI Approval Pending";
-                    if($factory{0}->po_required == 1)
-                    {
-                        $po_status="PO Pending";
-                    }
-                    else
-                    {
-                        $po_status="";
-                    }
+  //               $pi_required=$factory{0}->pi_required;
+  //               if($pi_required == 1)
+  //               {
+  //                   $pi_status="PI Approval Pending";
+  //                   if($factory{0}->po_required == 1)
+  //                   {
+  //                       $po_status="PO Pending";
+  //                   }
+  //                   else
+  //                   {
+  //                       $po_status="";
+  //                   }
 
-                }
-                else
-                {
-                    $po_status="PO Pending";
-                    $pi_status="";
-                }
-                $newTasks->po_status = $po_status;
-                $newTasks->pi_status = $pi_status;
-                $newTasks->purchase_order_no = "";
-                $newTasks->po_file = "";
-                $newTasks->order_flag = "reOrder";
-                $newTasks->save();
+  //               }
+  //               else
+  //               {
+  //                   $po_status="PO Pending";
+  //                   $pi_status="";
+  //               }
+  //               $newTasks->po_status = $po_status;
+  //               $newTasks->pi_status = $pi_status;
+  //               $newTasks->purchase_order_no = "";
+  //               $newTasks->po_file = "";
+  //               $newTasks->order_flag = "reOrder";
+  //               $newTasks->save();
                 
-                $data['tesco']=DB::table('tesco_tsl3_orders_quanty')->where('tsl3_order_id',$id)->select('*')->get();
-                $i=0;
-                foreach($data['tesco'] as $value)
-                {
-                    $tasks = TescoTSL3OrdersQuantity::find($value->id);
-                    $newTask = $tasks->replicate();
-                    $newTask->save();
-                    $newTask->tsl3_order_id = $newTasks->id;
-                    $newTask->count = $counts[$i];
-                    $newTask->save();
-                    $i++;
-                }
-            }   
-            echo true;
-    }
+  //               $data['tesco']=DB::table('tesco_tsl3_orders_quanty')->where('tsl3_order_id',$id)->select('*')->get();
+  //               $i=0;
+  //               foreach($data['tesco'] as $value)
+  //               {
+  //                   $tasks = TescoTSL3OrdersQuantity::find($value->id);
+  //                   $newTask = $tasks->replicate();
+  //                   $newTask->save();
+  //                   $newTask->tsl3_order_id = $newTasks->id;
+  //                   $newTask->count = $counts[$i];
+  //                   $newTask->save();
+  //                   $i++;
+  //               }
+  //           }   
+  //           echo true;
+  //   }
   /**
      * This Function is used to set the tesco repeat order.
      *
      * @return json value
      */
-  public function setTescoRepeatorder(Request $request)
-  {
-      $type         =   $request->type;
-      $id           =   $request->id;
-      $po           =   $request->po;
-      $counts       =   explode(',',$request->counts);
-      if($type == "tesco_tcl1_orders")
-      {
-        $tasks = TescoTCL1Orders::find($id);
-        $newTasks = $tasks->replicate();
-        $newTasks->save();
+  // public function setTescoRepeatorder(Request $request)
+  // {
+  //     $type         =   $request->type;
+  //     $id           =   $request->id;
+  //     $po           =   $request->po;
+  //     $counts       =   explode(',',$request->counts);
+  //     if($type == "tesco_tcl1_orders")
+  //     {
+  //       $tasks = TescoTCL1Orders::find($id);
+  //       $newTasks = $tasks->replicate();
+  //       $newTasks->save();
         
-        $factory=DB::table('tesco_tcl1_orders')->join('customers','customers.id','=','tesco_tcl1_orders.tesco_supplier_id')->where('tesco_tcl1_orders.id',$id)->select('*')->get();
+  //       $factory=DB::table('tesco_tcl1_orders')->join('customers','customers.id','=','tesco_tcl1_orders.tesco_supplier_id')->where('tesco_tcl1_orders.id',$id)->select('*')->get();
         
-        $pi_required=$factory{0}->pi_required;
-                if($pi_required == 1)
-                {
-                  $pi_status="PI Approval Pending";
-                  if($factory{0}->po_required == 1)
-                  {
-                    $po_status="PO Pending";
-                  }
-                  else
-                  {
-                    $po_status="";
-                  }
-                }
-                else
-                {
-                    $po_status="PO Pending";
-                    $pi_status="";
-                }
-                $newTasks->po_status = $po_status;
-                $newTasks->pi_status = $pi_status;
-                $newTasks->po_number =$po;
-                $newTasks->purchase_order_no = "";
-                $newTasks->po_file = "";
-                $newTasks->order_flag = "repeatOrder";
-                $newTasks->save();
+  //       $pi_required=$factory{0}->pi_required;
+  //               if($pi_required == 1)
+  //               {
+  //                 $pi_status="PI Approval Pending";
+  //                 if($factory{0}->po_required == 1)
+  //                 {
+  //                   $po_status="PO Pending";
+  //                 }
+  //                 else
+  //                 {
+  //                   $po_status="";
+  //                 }
+  //               }
+  //               else
+  //               {
+  //                   $po_status="PO Pending";
+  //                   $pi_status="";
+  //               }
+  //               $newTasks->po_status = $po_status;
+  //               $newTasks->pi_status = $pi_status;
+  //               $newTasks->po_number =$po;
+  //               $newTasks->purchase_order_no = "";
+  //               $newTasks->po_file = "";
+  //               $newTasks->order_flag = "repeatOrder";
+  //               $newTasks->save();
                 
                 
-                $data['tesco']=DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$id)->select('*')->get();
-                $i=0;
-                foreach($data['tesco'] as $value)
-                {
-                    $tasks = TescoTCL1OrdersQuantity::find($value->id);
-                    $newTask = $tasks->replicate();
-                    $newTask->save();
-                    $newTask->tcl1_order_id = $newTasks->id;
-                    $newTask->count = $counts[$i];
-                    $newTask->save();
-                    $i++;
-                }
-            }
-            if($type == "tesco_tcl2_orders")
-            {
-                $tasks = TescoTCL2Orders::find($id);
-                $newTasks = $tasks->replicate();
-                $newTasks->save();
+  //               $data['tesco']=DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$id)->select('*')->get();
+  //               $i=0;
+  //               foreach($data['tesco'] as $value)
+  //               {
+  //                   $tasks = TescoTCL1OrdersQuantity::find($value->id);
+  //                   $newTask = $tasks->replicate();
+  //                   $newTask->save();
+  //                   $newTask->tcl1_order_id = $newTasks->id;
+  //                   $newTask->count = $counts[$i];
+  //                   $newTask->save();
+  //                   $i++;
+  //               }
+  //           }
+  //           if($type == "tesco_tcl2_orders")
+  //           {
+  //               $tasks = TescoTCL2Orders::find($id);
+  //               $newTasks = $tasks->replicate();
+  //               $newTasks->save();
                 
-                $factory=DB::table('tesco_tcl2_orders')->join('customers','customers.id','=','tesco_tcl2_orders.tesco_supplier_id')->where('tesco_tcl2_orders.id',$id)->select('*')->get();
+  //               $factory=DB::table('tesco_tcl2_orders')->join('customers','customers.id','=','tesco_tcl2_orders.tesco_supplier_id')->where('tesco_tcl2_orders.id',$id)->select('*')->get();
                 
-                $pi_required=$factory{0}->pi_required;
-                if($pi_required == 1)
-                {
-                    $pi_status="PI Approval Pending";
-                    if($factory{0}->po_required == 1)
-                    {
-                        $po_status="PO Pending";
-                    }
-                    else
-                    {
-                        $po_status="";
-                    }
+  //               $pi_required=$factory{0}->pi_required;
+  //               if($pi_required == 1)
+  //               {
+  //                   $pi_status="PI Approval Pending";
+  //                   if($factory{0}->po_required == 1)
+  //                   {
+  //                       $po_status="PO Pending";
+  //                   }
+  //                   else
+  //                   {
+  //                       $po_status="";
+  //                   }
 
-                }
-                else
-                {
-                    $po_status="PO Pending";
-                    $pi_status="";
-                }
-                $newTasks->po_status = $po_status;
-                $newTasks->pi_status = $pi_status;
-                $newTasks->po_number =$po;
-                $newTasks->purchase_order_no = "";
-                $newTasks->po_file = "";
-                $newTasks->order_flag = "repeatOrder";
-                $newTasks->save();
+  //               }
+  //               else
+  //               {
+  //                   $po_status="PO Pending";
+  //                   $pi_status="";
+  //               }
+  //               $newTasks->po_status = $po_status;
+  //               $newTasks->pi_status = $pi_status;
+  //               $newTasks->po_number =$po;
+  //               $newTasks->purchase_order_no = "";
+  //               $newTasks->po_file = "";
+  //               $newTasks->order_flag = "repeatOrder";
+  //               $newTasks->save();
                 
-                $data['tesco']=DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$id)->select('*')->get();
-                $i=0;
-                foreach($data['tesco'] as $value)
-                {
-                    $tasks = TescoTCL2OrdersQuantity::find($value->id);
-                    $newTask = $tasks->replicate();
-                    $newTask->save();
-                    $newTask->tcl2_order_id = $newTasks->id;
-                    $newTask->count = $counts[$i];
-                    $newTask->save();
-                    $i++;
-                }
-            }
-            if($type == "tesco_tcl4_orders")
-            {
-                $tasks = TescoTCL4Orders::find($id);
-                $newTasks = $tasks->replicate();
-                $newTasks->save();
+  //               $data['tesco']=DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$id)->select('*')->get();
+  //               $i=0;
+  //               foreach($data['tesco'] as $value)
+  //               {
+  //                   $tasks = TescoTCL2OrdersQuantity::find($value->id);
+  //                   $newTask = $tasks->replicate();
+  //                   $newTask->save();
+  //                   $newTask->tcl2_order_id = $newTasks->id;
+  //                   $newTask->count = $counts[$i];
+  //                   $newTask->save();
+  //                   $i++;
+  //               }
+  //           }
+  //           if($type == "tesco_tcl4_orders")
+  //           {
+  //               $tasks = TescoTCL4Orders::find($id);
+  //               $newTasks = $tasks->replicate();
+  //               $newTasks->save();
                 
                 
-                $factory=DB::table('tesco_tcl4_orders')->join('customers','customers.id','=','tesco_tcl4_orders.tesco_supplier_id')->where('tesco_tcl4_orders.id',$id)->select('*')->get();
+  //               $factory=DB::table('tesco_tcl4_orders')->join('customers','customers.id','=','tesco_tcl4_orders.tesco_supplier_id')->where('tesco_tcl4_orders.id',$id)->select('*')->get();
                 
-                $pi_required=$factory{0}->pi_required;
-                if($pi_required == 1)
-                {
-                    $pi_status="PI Approval Pending";
-                    if($factory{0}->po_required == 1)
-                    {
-                        $po_status="PO Pending";
-                    }
-                    else
-                    {
-                        $po_status="";
-                    }
+  //               $pi_required=$factory{0}->pi_required;
+  //               if($pi_required == 1)
+  //               {
+  //                   $pi_status="PI Approval Pending";
+  //                   if($factory{0}->po_required == 1)
+  //                   {
+  //                       $po_status="PO Pending";
+  //                   }
+  //                   else
+  //                   {
+  //                       $po_status="";
+  //                   }
 
-                }
-                else
-                {
-                    $po_status="PO Pending";
-                    $pi_status="";
-                }
-                $newTasks->po_status = $po_status;
-                $newTasks->pi_status = $pi_status;
-                $newTasks->po_number =$po;
-                $newTasks->purchase_order_no = "";
-                $newTasks->po_file = "";
-                $newTasks->order_flag = "repeatOrder";
-                $newTasks->save();
+  //               }
+  //               else
+  //               {
+  //                   $po_status="PO Pending";
+  //                   $pi_status="";
+  //               }
+  //               $newTasks->po_status = $po_status;
+  //               $newTasks->pi_status = $pi_status;
+  //               $newTasks->po_number =$po;
+  //               $newTasks->purchase_order_no = "";
+  //               $newTasks->po_file = "";
+  //               $newTasks->order_flag = "repeatOrder";
+  //               $newTasks->save();
                 
-                $data['tesco']=DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$id)->select('*')->get();
-                $i=0;
-                foreach($data['tesco'] as $value)
-                {
-                    $tasks = TescoTCL4OrdersQuantity::find($value->id);
-                    $newTask = $tasks->replicate();
-                    $newTask->save();
-                    $newTask->tcl4_order_id = $newTasks->id;
-                    $newTask->count = $counts[$i];
-                    $newTask->save();
-                    $i++;
-                }
-            }
-            if($type == "tesco_thl1_orders")
-            {
-                $tasks = TescoTHL1Orders::find($id);
-                $newTasks = $tasks->replicate();
-                $newTasks->save();
+  //               $data['tesco']=DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$id)->select('*')->get();
+  //               $i=0;
+  //               foreach($data['tesco'] as $value)
+  //               {
+  //                   $tasks = TescoTCL4OrdersQuantity::find($value->id);
+  //                   $newTask = $tasks->replicate();
+  //                   $newTask->save();
+  //                   $newTask->tcl4_order_id = $newTasks->id;
+  //                   $newTask->count = $counts[$i];
+  //                   $newTask->save();
+  //                   $i++;
+  //               }
+  //           }
+  //           if($type == "tesco_thl1_orders")
+  //           {
+  //               $tasks = TescoTHL1Orders::find($id);
+  //               $newTasks = $tasks->replicate();
+  //               $newTasks->save();
                 
                 
-                $factory=DB::table('tesco_thl1_orders')->join('customers','customers.id','=','tesco_thl1_orders.tesco_supplier_id')->where('tesco_thl1_orders.id',$id)->select('*')->get();
+  //               $factory=DB::table('tesco_thl1_orders')->join('customers','customers.id','=','tesco_thl1_orders.tesco_supplier_id')->where('tesco_thl1_orders.id',$id)->select('*')->get();
                 
-                $pi_required=$factory{0}->pi_required;
-                if($pi_required == 1)
-                {
-                    $pi_status="PI Approval Pending";
-                    if($factory{0}->po_required == 1)
-                    {
-                        $po_status="PO Pending";
-                    }
-                    else
-                    {
-                        $po_status="";
-                    }
+  //               $pi_required=$factory{0}->pi_required;
+  //               if($pi_required == 1)
+  //               {
+  //                   $pi_status="PI Approval Pending";
+  //                   if($factory{0}->po_required == 1)
+  //                   {
+  //                       $po_status="PO Pending";
+  //                   }
+  //                   else
+  //                   {
+  //                       $po_status="";
+  //                   }
 
-                }
-                else
-                {
-                    $po_status="PO Pending";
-                    $pi_status="";
-                }
-                $newTasks->po_status = $po_status;
-                $newTasks->pi_status = $pi_status;
-                $newTasks->po_number =$po;
-                $newTasks->purchase_order_no = "";
-                $newTasks->po_file = "";
-                $newTasks->order_flag = "repeatOrder";
-                $newTasks->save();
+  //               }
+  //               else
+  //               {
+  //                   $po_status="PO Pending";
+  //                   $pi_status="";
+  //               }
+  //               $newTasks->po_status = $po_status;
+  //               $newTasks->pi_status = $pi_status;
+  //               $newTasks->po_number =$po;
+  //               $newTasks->purchase_order_no = "";
+  //               $newTasks->po_file = "";
+  //               $newTasks->order_flag = "repeatOrder";
+  //               $newTasks->save();
                 
-                $data['tesco']=DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$id)->select('*')->get();
-                $i=0;
-                foreach($data['tesco'] as $value)
-                {
-                    $tasks = TescoTHL1OrdersQuantity::find($value->id);
-                    $newTask = $tasks->replicate();
-                    $newTask->save();
-                    $newTask->thl1_order_id = $newTasks->id;
-                    $newTask->count = $counts[$i];
-                    $newTask->save();
-                    $i++;
-                }
-            }
-            if($type == "tesco_thl3_orders")
-            {
-                $tasks = TescoTHL3Orders::find($id);
-                $newTasks = $tasks->replicate();
-                $newTasks->save();
+  //               $data['tesco']=DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$id)->select('*')->get();
+  //               $i=0;
+  //               foreach($data['tesco'] as $value)
+  //               {
+  //                   $tasks = TescoTHL1OrdersQuantity::find($value->id);
+  //                   $newTask = $tasks->replicate();
+  //                   $newTask->save();
+  //                   $newTask->thl1_order_id = $newTasks->id;
+  //                   $newTask->count = $counts[$i];
+  //                   $newTask->save();
+  //                   $i++;
+  //               }
+  //           }
+  //           if($type == "tesco_thl3_orders")
+  //           {
+  //               $tasks = TescoTHL3Orders::find($id);
+  //               $newTasks = $tasks->replicate();
+  //               $newTasks->save();
                 
                 
-                $factory=DB::table('tesco_thl3_orders')->join('customers','customers.id','=','tesco_thl3_orders.tesco_supplier_id')->where('tesco_thl3_orders.id',$id)->select('*')->get();
+  //               $factory=DB::table('tesco_thl3_orders')->join('customers','customers.id','=','tesco_thl3_orders.tesco_supplier_id')->where('tesco_thl3_orders.id',$id)->select('*')->get();
                 
-                $pi_required=$factory{0}->pi_required;
-                if($pi_required == 1)
-                {
-                    $pi_status="PI Approval Pending";
-                    if($factory{0}->po_required == 1)
-                    {
-                        $po_status="PO Pending";
-                    }
-                    else
-                    {
-                        $po_status="";
-                    }
+  //               $pi_required=$factory{0}->pi_required;
+  //               if($pi_required == 1)
+  //               {
+  //                   $pi_status="PI Approval Pending";
+  //                   if($factory{0}->po_required == 1)
+  //                   {
+  //                       $po_status="PO Pending";
+  //                   }
+  //                   else
+  //                   {
+  //                       $po_status="";
+  //                   }
 
-                }
-                else
-                {
-                    $po_status="PO Pending";
-                    $pi_status="";
-                }
-                $newTasks->po_status = $po_status;
-                $newTasks->pi_status = $pi_status;
-                $newTasks->po_number =$po;
-                $newTasks->purchase_order_no = "";
-                $newTasks->po_file = "";
-                $newTasks->order_flag = "repeatOrder";
-                $newTasks->save();
+  //               }
+  //               else
+  //               {
+  //                   $po_status="PO Pending";
+  //                   $pi_status="";
+  //               }
+  //               $newTasks->po_status = $po_status;
+  //               $newTasks->pi_status = $pi_status;
+  //               $newTasks->po_number =$po;
+  //               $newTasks->purchase_order_no = "";
+  //               $newTasks->po_file = "";
+  //               $newTasks->order_flag = "repeatOrder";
+  //               $newTasks->save();
                 
-                $data['tesco']=DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$id)->select('*')->get();
-                $i=0;
-                foreach($data['tesco'] as $value)
-                {
-                    $tasks = TescoTHL3OrdersQuantity::find($value->id);
-                    $newTask = $tasks->replicate();
-                    $newTask->save();
-                    $newTask->thl3_order_id = $newTasks->id;
-                    $newTask->count = $counts[$i];
-                    $newTask->save();
-                    $i++;
-                }
-            }
-            if($type == "tesco_tsl1_orders")
-            {
-                $tasks = TescoTSL1Orders::find($id);
-                $newTasks = $tasks->replicate();
-                $newTasks->save();
+  //               $data['tesco']=DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$id)->select('*')->get();
+  //               $i=0;
+  //               foreach($data['tesco'] as $value)
+  //               {
+  //                   $tasks = TescoTHL3OrdersQuantity::find($value->id);
+  //                   $newTask = $tasks->replicate();
+  //                   $newTask->save();
+  //                   $newTask->thl3_order_id = $newTasks->id;
+  //                   $newTask->count = $counts[$i];
+  //                   $newTask->save();
+  //                   $i++;
+  //               }
+  //           }
+  //           if($type == "tesco_tsl1_orders")
+  //           {
+  //               $tasks = TescoTSL1Orders::find($id);
+  //               $newTasks = $tasks->replicate();
+  //               $newTasks->save();
                 
                 
-                $factory=DB::table('tesco_tsl1_orders')->join('customers','customers.id','=','tesco_tsl1_orders.tesco_supplier_id')->where('tesco_tsl1_orders.id',$id)->select('*')->get();
+  //               $factory=DB::table('tesco_tsl1_orders')->join('customers','customers.id','=','tesco_tsl1_orders.tesco_supplier_id')->where('tesco_tsl1_orders.id',$id)->select('*')->get();
                 
-                $pi_required=$factory{0}->pi_required;
-                if($pi_required == 1)
-                {
-                    $pi_status="PI Approval Pending";
-                    if($factory{0}->po_required == 1)
-                    {
-                        $po_status="PO Pending";
-                    }
-                    else
-                    {
-                        $po_status="";
-                    }
+  //               $pi_required=$factory{0}->pi_required;
+  //               if($pi_required == 1)
+  //               {
+  //                   $pi_status="PI Approval Pending";
+  //                   if($factory{0}->po_required == 1)
+  //                   {
+  //                       $po_status="PO Pending";
+  //                   }
+  //                   else
+  //                   {
+  //                       $po_status="";
+  //                   }
 
-                }
-                else
-                {
-                    $po_status="PO Pending";
-                    $pi_status="";
-                }
-                $newTasks->po_status = $po_status;
-                $newTasks->pi_status = $pi_status;
-                $newTasks->po_number =$po;
-                $newTasks->purchase_order_no = "";
-                $newTasks->po_file = "";
-                $newTasks->order_flag = "repeatOrder";
-                $newTasks->save();
+  //               }
+  //               else
+  //               {
+  //                   $po_status="PO Pending";
+  //                   $pi_status="";
+  //               }
+  //               $newTasks->po_status = $po_status;
+  //               $newTasks->pi_status = $pi_status;
+  //               $newTasks->po_number =$po;
+  //               $newTasks->purchase_order_no = "";
+  //               $newTasks->po_file = "";
+  //               $newTasks->order_flag = "repeatOrder";
+  //               $newTasks->save();
                 
-                $data['tesco']=DB::table('tesco_tsl1_orders_quanty')->where('tsl1_order_id',$id)->select('*')->get();
-                $i=0;
-                foreach($data['tesco'] as $value)
-                {
-                    $tasks = TescoTSL1OrdersQuantity::find($value->id);
-                    $newTask = $tasks->replicate();
-                    $newTask->save();
-                    $newTask->tsl1_order_id = $newTasks->id;
-                    $newTask->count = $counts[$i];
-                    $newTask->save();
-                    $i++;
-                }
-            }
-            if($type == "tesco_tsl3_orders")
-            {
-                $tasks = TescoTSL3Orders::find($id);
-                $newTasks = $tasks->replicate();
-                $newTasks->save();
+  //               $data['tesco']=DB::table('tesco_tsl1_orders_quanty')->where('tsl1_order_id',$id)->select('*')->get();
+  //               $i=0;
+  //               foreach($data['tesco'] as $value)
+  //               {
+  //                   $tasks = TescoTSL1OrdersQuantity::find($value->id);
+  //                   $newTask = $tasks->replicate();
+  //                   $newTask->save();
+  //                   $newTask->tsl1_order_id = $newTasks->id;
+  //                   $newTask->count = $counts[$i];
+  //                   $newTask->save();
+  //                   $i++;
+  //               }
+  //           }
+  //           if($type == "tesco_tsl3_orders")
+  //           {
+  //               $tasks = TescoTSL3Orders::find($id);
+  //               $newTasks = $tasks->replicate();
+  //               $newTasks->save();
                 
                 
-                $factory=DB::table('tesco_tsl3_orders')->join('customers','customers.id','=','tesco_tsl3_orders.tesco_supplier_id')->where('tesco_tsl3_orders.id',$id)->select('*')->get();
+  //               $factory=DB::table('tesco_tsl3_orders')->join('customers','customers.id','=','tesco_tsl3_orders.tesco_supplier_id')->where('tesco_tsl3_orders.id',$id)->select('*')->get();
                 
-                $pi_required=$factory{0}->pi_required;
-                if($pi_required == 1)
-                {
-                    $pi_status="PI Approval Pending";
-                    if($factory{0}->po_required == 1)
-                    {
-                        $po_status="PO Pending";
-                    }
-                    else
-                    {
-                        $po_status="";
-                    }
+  //               $pi_required=$factory{0}->pi_required;
+  //               if($pi_required == 1)
+  //               {
+  //                   $pi_status="PI Approval Pending";
+  //                   if($factory{0}->po_required == 1)
+  //                   {
+  //                       $po_status="PO Pending";
+  //                   }
+  //                   else
+  //                   {
+  //                       $po_status="";
+  //                   }
 
-                }
-                else
-                {
-                    $po_status="PO Pending";
-                    $pi_status="";
-                }
-                $newTasks->po_status = $po_status;
-                $newTasks->pi_status = $pi_status;
-                $newTasks->po_number =$po;
-                $newTasks->purchase_order_no = "";
-                $newTasks->po_file = "";
-                $newTasks->order_flag = "repeatOrder";
-                $newTasks->save();
+  //               }
+  //               else
+  //               {
+  //                   $po_status="PO Pending";
+  //                   $pi_status="";
+  //               }
+  //               $newTasks->po_status = $po_status;
+  //               $newTasks->pi_status = $pi_status;
+  //               $newTasks->po_number =$po;
+  //               $newTasks->purchase_order_no = "";
+  //               $newTasks->po_file = "";
+  //               $newTasks->order_flag = "repeatOrder";
+  //               $newTasks->save();
                 
-                $data['tesco']=DB::table('tesco_tsl3_orders_quanty')->where('tsl3_order_id',$id)->select('*')->get();
-                $i=0;
-                foreach($data['tesco'] as $value)
-                {
-                    $tasks = TescoTSL3OrdersQuantity::find($value->id);
-                    $newTask = $tasks->replicate();
-                    $newTask->save();
-                    $newTask->tsl3_order_id = $newTasks->id;
-                    $newTask->count = $counts[$i];
-                    $newTask->save();
-                    $i++;
-                }
-            }   
-            echo true;
-    }
+  //               $data['tesco']=DB::table('tesco_tsl3_orders_quanty')->where('tsl3_order_id',$id)->select('*')->get();
+  //               $i=0;
+  //               foreach($data['tesco'] as $value)
+  //               {
+  //                   $tasks = TescoTSL3OrdersQuantity::find($value->id);
+  //                   $newTask = $tasks->replicate();
+  //                   $newTask->save();
+  //                   $newTask->tsl3_order_id = $newTasks->id;
+  //                   $newTask->count = $counts[$i];
+  //                   $newTask->save();
+  //                   $i++;
+  //               }
+  //           }   
+  //           echo true;
+  //   }
     /**
          * Approve tesco order
          * @param \Illuminate\Http\Request
