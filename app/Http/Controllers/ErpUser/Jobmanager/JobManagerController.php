@@ -273,7 +273,7 @@ class JobManagerController extends Controller
 			}
  			sort($order_detail_ids);
 
-			$workorder_id = substr(number_format(Carbon::now()->timestamp * rand(),0,'',''),0,8);
+			$workorder_id = substr(number_format(Carbon::now('Asia/Kolkata')->timestamp * rand(),0,'',''),0,8);
 
 			foreach($order_detail_ids as $key => $order_detail_id)
 			{
@@ -1032,7 +1032,7 @@ class JobManagerController extends Controller
 					$i++;
 					
 				}
-				$random = number_format(Carbon::now()->timestamp * rand(),0,'','');
+				$random = number_format(Carbon::now('Asia/Kolkata')->timestamp * rand(),0,'','');
 				PDF::Output( public_path('/storage/app/template/'.$random.'-'.$name.'.pdf'), 'F');
 				$file_path =  "/storage/app/template/".$random.'-'.$name."."."pdf";	
 				
@@ -1274,7 +1274,7 @@ class JobManagerController extends Controller
 			$i++;
 
 		}
-		$random = number_format(Carbon::now()->timestamp * rand(),0,'','');
+		$random = number_format(Carbon::now('Asia/Kolkata')->timestamp * rand(),0,'','');
 		PDF::Output( public_path('/storage/app/template/'.$random.'-'.$name.'.pdf'), 'F');
 		$file_path =  "/storage/app/template/".$random.'-'.$name."."."pdf";	
 		

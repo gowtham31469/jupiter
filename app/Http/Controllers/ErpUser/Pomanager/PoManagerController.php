@@ -357,19 +357,19 @@ class PoManagerController extends Controller
 	public function submitPoVerify(Request $request)
     {
 		   try {
-            $po = $request->po; 
-			$style_no = $request->style_no;
-			$reference = $request->reference;
-		    $qty = $request->qty;
-		    $price = $request->price;
-		    $po_complete = $request->po_complete;
-		    $comment = $request->comment;
-			$commenttext = $request->commenttext;
-			$count = $request->count_i;
-			$count_j = $request->count_j;
-			$erp_order_id = $request->erp_order_id;
-			   $purchase_order_number = $request->purchase_order_number;
-			   $customer_name = $request->customer_name;
+						$po = $request->po; 
+						$style_no = $request->style_no;
+						$reference = $request->reference;
+						$qty = $request->qty;
+						$price = $request->price;
+						$po_complete = $request->po_complete;
+						$comment = $request->comment;
+						$commenttext = $request->commenttext;
+						$count = $request->count_i;
+						$count_j = $request->count_j;
+						$erp_order_id = $request->erp_order_id;
+						$purchase_order_number = $request->purchase_order_number;
+						$customer_name = $request->customer_name;
 			// Get Erp status table id for 'Jobcard Created' and 'Cancelled' status.
 	    $erp_status_ids = DB::table('erp_status')->whereIn('status_name',['Jobcard Created', 'Cancelled'] )->pluck('id')->all();   
 			if($count == 0)
@@ -401,7 +401,7 @@ class PoManagerController extends Controller
 					 DB::table('erp_order_details')->where('id',$value->id)
 						  		->update([
 								  'rate' => $price_range{0}->price,
-								  'po_verified_date'=>now()
+								  'po_verified_date'=>now('Asia/Kolkata')
 								]);
 				 }
 				
@@ -436,7 +436,7 @@ class PoManagerController extends Controller
 					 DB::table('erp_order_details')->where('id',$value->id)
 						  		->update([
 								  'rate' => $price_range{0}->price,
-								  'po_verified_date'=>now()
+								  'po_verified_date'=>now('Asia/Kolkata')
 								]);
 				 }
 				
