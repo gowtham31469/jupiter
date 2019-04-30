@@ -144,7 +144,7 @@ class ErpOrders
 					]);
 				}
 
-				// to delete broken rows from erp orders table
+				// remove erp_orders table row , if no FK relation exists in erp_order_details table
 				DB::table('erp_orders')->select('erp_orders.id')->whereNotIn('erp_orders.id', function($rightjoin) {                                                                                         $rightjoin->select('erp_orders.id')                                                                   ->from('erp_orders')                                                                        ->rightjoin('erp_order_details', 'erp_orders.id', 'erp_order_details.erp_order_id')                                                                                ->groupBy('erp_orders.id');                                                         })->delete();
 			}
 		}
