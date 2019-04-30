@@ -860,6 +860,7 @@ class OrderStatusController extends Controller
         {
             $row_id     =   $request->id;
             $table_name =   $request->table_name;
+            $erp_order_details = array();
             $order_details       =   DB::table($table_name)->where('id',$row_id)
                             ->select('*')->first();
             $qnty_id         =  str_replace("_orders","_order_id",str_replace("tesco_","",$table_name));
