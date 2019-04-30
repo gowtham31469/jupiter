@@ -113,7 +113,7 @@ class JobManagerController extends Controller
 											->join('erp_status', 'erp_orders.status', 'erp_status.id')
 						                    ->join('tesco_template', 'tesco_template.item_id', 'erp_order_details.template_id')
 											->where('erp_order_details.template_id', '=', $valuess)
-											->where('erp_orders.status', '=', $erp_status_id)
+											// ->where('erp_orders.status', '=', $erp_status_id)
 											->where('erp_order_details.status', '=', $erp_status_id)
 											->where('erp_orders.order_status_id', '=', $order_status_id)
 											->whereIn('erp_orders.buyer_id', $buyers)
