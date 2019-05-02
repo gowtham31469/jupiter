@@ -54,6 +54,8 @@
                     <div class="po_file hidden text-center" id="po_file">
                         <a href="javascript:void(0)" target="_blank" id="po_link"><i class="fa fa-file-pdf-o fa-4x" style="color: #ff151599;"></i></a>
                         <br>
+                        <span id="error_msg_span" style="color:red;"></span>
+                        <br>
                         <button type="button" class="btn btn-primary btn-xs update-po-file" style="margin-top: 10px;">Update PO File</button>
                     </div>
                     <div class="po_upload" id="po_upload">
@@ -119,7 +121,7 @@
                             <label style='color:red' id='new_po_file_error' class='hidden'>Please upload Po File</label>
                             <label for="exampleInputFile">PO File</label>
                             <input type="file" id="new_po_file">
-                            <p class="help-block">Example block-level help text here.</p>
+                            <p class="help-block"></p>
                         </div>
                     </div>
                 </div>
@@ -258,7 +260,7 @@
                             <label style='color:red' id='new_po_file_error_status' class='hidden'>Please upload Po File</label>
                             <br><label >PO File</label>
                             <input type="file" accept="application/pdf" id="new_po_file_status">
-                            <p class="help-block">Example block-level help text here.</p>
+                            <p class="help-block"></p>
                         </div>
                     </div>
                 </div>

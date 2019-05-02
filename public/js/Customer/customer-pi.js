@@ -51,7 +51,7 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
                     
 
                     $('#company_details').html('<strong style="font-size:11px;">'+data.data.company_details.name+'</strong><br/>'+data.data.company_details.address+'<br/>PH : '+data.data.company_details.office_phone+', '+data.data.company_details.phone+'<br/>GST : '+data.data.company_details.gstin)
-                    $('#bill_to').html('<h4>Billing Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.bill_to.address+'</br> GSTN :'+data.data.bank_details.gstin_number+ '</p>')
+                    $('#bill_to').html('<h4>Billing Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.bill_to.address+'</br> GSTIN :'+data.data.bank_details.gstin_number+ '</p>')
                     $('#ship_to').html('<h4>Shipping Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.ship_to.address+'</p>')
                     $('#bank_details').html(' <strong>BANK DETAILS: </strong><table class="table table-condensed" style="width:50%;"><tr><td>Bank</td><td>'+data.data.company_details.bank+'</td></tr><tr><td>A/C No</td><td>'+data.data.company_details.account_no+'</td></tr><tr><td>A/C NAME</td><td>'+data.data.company_details.account_holder+'</td></tr><tr><td>IFSC CODE</td><td>'+data.data.company_details.ifsc_code+'</td></tr></table>')
                
@@ -148,7 +148,7 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
                             $('#item_details').html(tr)
                             if (pi_status=="true")
                             {
-                                $('.pi_actions').html('<button class="btn btn-default btn-xs downloadPi" id="downloadPi" >Download</button><button type="button" class="btn btn-default btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
+                                $('.pi_actions').html('<button class="btn btn-default btn-xs downloadPi" id="downloadPi" onclick=downloadPi("'+template_id+'","'+id+'","'+tableName+'","tesco")>Download</button><button type="button" class="btn btn-default btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
                             }
                             else
                             {
@@ -159,22 +159,22 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
                             $('#profoma-invoice').modal("show")
 
                             //Download Pi using JSPDF
-                            $('.downloadPi').click(function () {
-                                var myOffscreenEl = document.getElementById("proforma-invoice"),
-                                    useWidth      = myOffscreenEl.style.width,
-                                    useHeight     = myOffscreenEl.style.height;
-                                    myOffscreenEl.style.backgroundColor = 'white';
-                                var opt = {
-                                  // margin:       [20, 15, 23, 15],
-                                  margin:       [28, 23, 31, 23],
-                                  filename:     'Proforma-Invoice.pdf',
-                                  image:        { type: 'jpeg', quality: 0.98 },
-                                  html2canvas:  { dpi: 300, letterRendering: true },
-                                  jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' },
+                            // $('.downloadPi').click(function () {
+                            //     var myOffscreenEl = document.getElementById("proforma-invoice"),
+                            //         useWidth      = myOffscreenEl.style.width,
+                            //         useHeight     = myOffscreenEl.style.height;
+                            //         myOffscreenEl.style.backgroundColor = 'white';
+                            //     var opt = {
+                            //       // margin:       [20, 15, 23, 15],
+                            //       margin:       [28, 23, 31, 23],
+                            //       filename:     'Proforma-Invoice.pdf',
+                            //       image:        { type: 'jpeg', quality: 0.98 },
+                            //       html2canvas:  { dpi: 300, letterRendering: true },
+                            //       jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' },
                                  
-                                }
-                                html2pdf(myOffscreenEl,opt);
-                            });
+                            //     }
+                            //     html2pdf(myOffscreenEl,opt);
+                            // });
                            
                         } else {
                             $('.snackbar_span').html('Price details should be within a range !!');
@@ -246,12 +246,7 @@ function tescoApprovePI(template_id,id,table_name,billamnt)
                // var attrbs = attrbs.replace("false", "true");
                $('#'+table_name+'_'+id+' .pi_generation').attr('onclick', attrbs);
                showSnackbar();
-               // if($(location).attr('href') === base_url + "customer/create-order"){
-               //      alert()
-               //  }
-               // else{
-               //    location.reload();  
-               //  }
+               location.reload();
             },
             400: function()
             {
@@ -435,4 +430,55 @@ function RsPaise(n) {
         }
         return (op)
     }
+}
+
+function downloadPi(template_id,id,table_name){
+
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    var buyer_id = localStorage.getItem("buyer_id");
+    var amntText = $('#bilamnt').text();
+    $.ajax({
+        url: base_url + "/customer/tesco/download-tesco-pi",
+        type: "Post",
+        dataType: "json",
+        data: {
+            _token: csrf_token,
+            tableName: table_name,
+            buyer_id:buyer_id,
+            template_id:template_id,
+            id:id,
+            amntText:amntText
+        },
+        beforeSend: function () {
+            $(".loader").show();
+            $(".loader").css('margin-top', '12%');
+        },
+        statusCode:
+        { 
+            200: function(data)
+            {
+                var resp = JSON.stringify(data);
+                    console.log( base_url+data.responseText)
+                    $('.snackbar_span').html("Successfully send Invoice to the Customer !");
+                    showSnackbar();
+                window.open(
+                    base_url+$.trim(data.responseText),
+                    '_blank' // <- This is what makes it open in a new window.
+                );            
+            },
+            400: function()
+            {
+               $('.snackbar_span').html('Something went wrong!');
+               $('#profoma-invoice').modal("hide")
+               showSnackbar();
+            }
+        },
+        error: function (data){
+            console.log(data);
+        },
+        complete: function () {
+            $(".loader").hide();
+            $(".loader").css('margin-top', '0%');
+        }
+    })
 }

@@ -131,7 +131,6 @@ function tescoOrderStatus() {
                                             if (value1.purchase_order_no != "" && value1.purchase_order_no != null) {
                                                 if (old_po != value1.purchase_order_no) {
                                                     options += "<option>" + value1.purchase_order_no + "</option>";
-                                                    // console.log(old_po)
                                                 }
                                                 old_po = value1.purchase_order_no
                                                 coun++;
@@ -518,7 +517,6 @@ function tescoOrderStatus() {
                                     }
                                 },
                                 error: function (data) {
-                                    // console.log(data);
                                 },
                                 complete: function () {
                                     $(".loader").hide();
@@ -640,7 +638,6 @@ function tescoOrderStatus() {
             }
         },
         error: function (data) {
-            // console.log(data);
         },
         complete: function () {
             $(".loader").hide();
@@ -729,12 +726,8 @@ function tescoStatusTable(data, path) {
 
                 if (key == "PO Number" && value['po_required'] == 1 && value['is_order_count_empty'] == 0) {
                     var po_file = value['po_file'];
-                    if (value[key] == "" || value[key] == null) {
-                        tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" onkeypress="return AvoidSpace(event)" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" placeholder="Enter PO" maxlength="11"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"' + value.tableID + '","' + value.tableName + '","' + po_file + '")><span class="glyphicon glyphicon-ok"></span></button></span></div></div></td>';
-                    } else {
-                        tr += '<td class="text-center">' + value[key] + '</td>';
-
-                    }
+                    let customer_po_number = value[key] === null?'':value[key];
+                    tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" onkeypress="return AvoidSpace(event)" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" placeholder="Enter PO" maxlength="11" value="'+customer_po_number+'"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"' + value.tableID + '","' + value.tableName + '","' + po_file + '")><span class="fa fa-check"></span></button></span></div></div></td>';
                 } else if (key == "OrderDate") {
                     if (value['is_order_count_empty'] == 0) {
                         var orderDate = moment(value[key]).format('DD-MM-YYYY');
@@ -813,7 +806,6 @@ function tescoStatusTable(data, path) {
                     }
                     var pi_required = value['pi_required'];
                     var po_required = value['po_required'];
-                    console.log(value["Artwork Status"])
                     if (value["Artwork Status"] != "Order Cancelled" && value['is_order_count_empty'] == 0) {
                         if (pi_required == 1 && po_required == 1) {
                             tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateTescoPI("' + value.tableID + '","' + value.tableName + '","' + action_status + '","' + style_no + '","' + value.template_id + '","' + value.BuyerPO + '","' + value.TemplateName.replace(/ /g, "") + '","' + order_flag + '")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="javascript:void(0)" onclick=tescoPOUpload(this,"' + value.tableID + '","' + po_file + '","' + value.tableName + '") class="po-style" ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" ' + style_po + '></i></a></td>';
@@ -900,7 +892,6 @@ function updateDeliveryDate(obj, tableID, tableName, count) {
                 }
             },
             error: function (data) {
-                // console.log(data);
             },
             complete: function () {
                 $(".loader").hide();
@@ -941,13 +932,13 @@ function tescoSetPO(obj, id, tableName, po_file) {
                 /** [Show response status based on HTTP status code] */
                 200: function (data) {
                     $('#snackbar').css('background-color', '#00b6ff');
-                    $('.snackbar_span').html('Purchase Order Number added Successfully');
-                    $(obj).closest('tr').find('.tesco-po').val(po_number);
-                    $(obj).closest('tr').find('.po-span').addClass('hidden');
+                    $('.snackbar_span').html(data.message);
+                    //$(obj).closest('tr').find('.tesco-po').val(po_number);
+                   // $(obj).closest('tr').find('.po-span').addClass('hidden');
                     $ponumber = $(obj).closest('tr').find('.tesco-po').val();
-                    $div = $(obj).closest('tr').find('.text-center');
-                    $(obj).closest('tr').find('.tesco-po').parent().parent().remove();
-                    $div.text($ponumber)
+                    // $div = $(obj).closest('tr').find('.text-center');
+                    // $(obj).closest('tr').find('.tesco-po').parent().parent().remove();
+                    // $div.text($ponumber)
                     if ($(obj).closest('tr').find('.po_class').text() == "PO Pending" && po_file != "null") {
                         $(obj).closest('tr').find('.po_class').html("PO Uploaded")
                         $(obj).closest('tr').find('.po_class').removeClass("label-POPending").addClass('label-POUploaded');
@@ -959,13 +950,18 @@ function tescoSetPO(obj, id, tableName, po_file) {
                     }
 
                 },
+                403: function (data) {
+                    $('#snackbar').css('background-color', '#00b6ff');
+                    $('.snackbar_span').html(data.responseJSON.message);
+                    showSnackbar();
+                },
                 400: function () {
-                    $('.snackbar_span').html('Something went wrong');
+                    $('#snackbar').css('background-color', '#00b6ff');
+                    $('.snackbar_span').html(data.responseJSON.message);
                     showSnackbar();
                 }
             },
             error: function (data) {
-                // console.log(data);
             },
             complete: function () {
                 $(".loader").hide();
@@ -986,22 +982,59 @@ function tescoSetPO(obj, id, tableName, po_file) {
  */
 function tescoPOUpload(obj, id, po_file, tableName) {
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    if (po_file == "null") {
-        $('#po_upload').removeClass('hidden')
-        $('.upload-po').removeClass('hidden')
-        $('#po_file').addClass('hidden')
-    } else {
-        $('#po_upload').addClass('hidden')
-        $('.upload-po').addClass('hidden')
-        $('#po_file').removeClass('hidden')
-    }
-    var po_link = base_url + po_file
-    $('#po_link').attr("href", po_link);
-    $('#rowID').val(id);
-    $('#tableName').val(tableName);
-    $('#buyer_id').val(localStorage.getItem("buyer_id"));
-    $('#po-file-upload').modal('show')
+    $.ajax({
+        url: base_url + "/admin/tesco/get-erp-status",
+        type: 'get',
+        data: {
+            table_name: tableName,
+            id: id,
+            _token: csrf_token
+        },
+        beforeSend: function () {
+             $(".loader").show();
+        },
+        success: function (data) {
+            // erp_details array null , if order is not moved to erp tables
+            // only editable, if order status is "Hold For JC Queue" OR "Moved To ERP"
+            if (data.erp_details[0] != null) {
+                if (data.erp_details[0].status_name !== 'Hold For JC Queue' && data.erp_details[0].status_name !== 'Moved To ERP') {
+                    $('.update-po-file').hide();
 
+                    $('#error_msg_span').html('ERP Order Status : <strong>' + data.erp_details[0].status_name + '</strong>. You are not permitted to upload any more po files for this order.')
+                }
+                else{
+                    $('.update-po-file').show();
+                    $('#error_msg_span').html('');
+                }
+            }
+            else
+            {
+                $('.update-po-file').show();
+                $('#error_msg_span').html('');
+            }
+        },
+        error: function (data) {
+
+        },
+        complete: function () {
+            $(".loader").hide();
+            if (po_file == "null") {
+                $('#po_upload').removeClass('hidden')
+                $('.upload-po').removeClass('hidden')
+                $('#po_file').addClass('hidden')
+            } else {
+                $('#po_upload').addClass('hidden')
+                $('.upload-po').addClass('hidden')
+                $('#po_file').removeClass('hidden')
+            }
+            var po_link = base_url + po_file
+            $('#po_link').attr("href", po_link);
+            $('#rowID').val(id);
+            $('#tableName').val(tableName);
+            $('#buyer_id').val(localStorage.getItem("buyer_id"));
+            $('#po-file-upload').modal('show')
+        }
+    })
 }
 
 $(".update-po-file").click(function () {
@@ -1241,7 +1274,6 @@ function updateArtwork(obj) {
             }
         },
         error: function (data) {
-            // console.log(data);
         },
         complete: function () {
             $(".loader").hide();
@@ -1323,7 +1355,6 @@ function disableArtworkEdit(tablename, rowid) {
             $('#disable_edit').addClass('hidden')
         },
         error: function (data) {
-            // console.log(data);
         },
         complete: function () {
 
@@ -2350,7 +2381,6 @@ function jsbarcodetesco(code, id, svgDoc) {
     img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
     // img.src - contains base64 URI from svg
-    // console.log(img.src);
 
     //remove temporary canvas
     canvasTmp.remove();
@@ -2412,7 +2442,6 @@ function jsbarcodetescoean(code, id, svgDoc) {
     img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
     // img.src - contains base64 URI from svg
-    // console.log(img.src);
 
     //remove temporary canvas
     canvasTmp.remove();
@@ -2632,7 +2661,6 @@ function disableArtworkEdit(tablename, rowid) {
             $('#disable_edit').addClass('hidden')
         },
         error: function (data) {
-            // console.log(data);
         },
         complete: function () {}
     })

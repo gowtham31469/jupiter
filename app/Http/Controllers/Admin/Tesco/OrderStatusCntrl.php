@@ -22,10 +22,11 @@ use App\Classes\TescoOrders;
 use App\Classes\PiTCPDF;
 use Carbon\Carbon;
 use App\Classes\EditErpOrders;
+use App\Classes\ERPOrderStatusCheck;
 
 class OrderStatusCntrl extends Controller
 {
-
+    private $ratio_pack_type;
 	/**
      * Create a new controller instance.
      *
@@ -34,6 +35,7 @@ class OrderStatusCntrl extends Controller
     public function __construct()
     {
        $this->middleware('auth');
+       $this->ratio_pack_type = ['RatA', 'RatB', 'RatC', 'RatD', 'RatE', 'RatF', 'RatG', 'RatH', 'RatI', 'RatJ', 'RatK', 'RatL', 'RatM', 'RatN', 'RatO', 'RatP', 'RatQ', 'RatR', 'RatS', 'RatT', 'RatU', 'RatV', 'RatW', 'RatX', 'RatY', 'RatZ'];
     }
     /**
      * method to show the tesco order status page
@@ -118,7 +120,7 @@ class OrderStatusCntrl extends Controller
 	}
     /**
      * method to set the PO number for an order
-     * @param Request $request [description]
+     * @param Request $request
      */
 	public function setPONumber(Request $request)
 	{
@@ -128,10 +130,26 @@ class OrderStatusCntrl extends Controller
             $erp_obj        = new ErpOrders();
             $po_number      = $request->po_number;
 			$template_id    = $request->id;
-            $table_name     = $request->tableName;            
+            $table_name     = $request->tableName; 
+
             $po_details     = DB::table($table_name)->where('id',$template_id)
                                 ->select('po_file')->first();
-                        
+                                
+            $data_array = [];
+            $data_array['id'] = $request->id;
+            $data_array['table_name'] = $table_name;
+            $class_obj = new ERPOrderStatusCheck();
+            $erp_order_details = $class_obj->ERPStatus($data_array);
+            
+            if($erp_order_details[0] != null)
+            {
+                if($erp_order_details{0}->status_name != 'Hold For JC Queue' &&  $erp_order_details{0}->status_name != 'Moved To ERP' )
+                {
+                    return response()->json(['error'=> false,'message' =>'Order status is '.$erp_order_details{0}->status_name. '. PO number edit is not allowed.'],403);
+                }
+                
+            }
+            
             if ($po_details->po_file =="" || $po_details->po_file=="null")
             {
                 $po_status = "PO Pending";
@@ -141,25 +159,22 @@ class OrderStatusCntrl extends Controller
                 $po_status = "PO Uploaded";
             }
 
-			$data 		=   DB::table($table_name)->where('id',$template_id)
-						      ->update([
-                                  'purchase_order_no' => $po_number,
-                                  'po_status' => $po_status,
-                                  'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
+            $data 		=   DB::table($table_name)->where('id',$template_id)
+                            ->update([
+                                'purchase_order_no' => $po_number,
+                                'po_status' => $po_status,
+                                'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                                 ]);
             if ($po_status == "PO Uploaded") {
-                
                $erp_obj->updateTescoErpOrders($request);
             }
 
-            $result = response()->json(['error'=> false,'message' =>'success'],200);
-       
+            return response()->json(['error'=> false,'message' =>'Purchase Order Number added Successfully'],200);
 		}
         catch (\Exception $e)
         {
-            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
-        return $result;
 	}
 
      /**
@@ -185,6 +200,21 @@ class OrderStatusCntrl extends Controller
             $destination_path_insert=$destination_path.$filename;
 
             $po_details = DB::table($table_name)->where('id',$row_id)->select('purchase_order_no')->first();
+
+            $data_array = [];
+            $data_array['id'] = $row_id;
+            $data_array['table_name'] = $table_name;
+            $class_obj = new ERPOrderStatusCheck();
+            $erp_order_details = $class_obj->ERPStatus($data_array);
+
+            if($erp_order_details[0] != null)
+            {
+                if($erp_order_details{0}->status_name != 'Hold For JC Queue' &&  $erp_order_details{0}->status_name != 'Moved To ERP' )
+                {
+                    return response()->json(['error'=> false,'message' =>'Order status is '.$erp_order_details{0}->status_name. '. PO file upload is not allowed.'],403);
+                }
+                
+            }
             
             if ($po_details->purchase_order_no == "" || $po_details->purchase_order_no=="null")
             {
@@ -202,23 +232,21 @@ class OrderStatusCntrl extends Controller
 
                         ]);
             if ($po_status == "PO Uploaded") {
-                
                 $erp_obj->updateTescoErpOrders($request);
             }
             if ($data)
             {
-               $result = response()->json(['error'=> false,'message' =>'success','po_file'=>$destination_path_insert],200);
+               return response()->json(['error'=> false,'message' =>'success','po_file'=>$destination_path_insert],200);
             }
             else
             {
-                $result = response()->json(['error'=> true,'message' =>'Error'],400);
+                return response()->json(['error'=> true,'message' =>'Error'],400);
             }    
         }
         catch (Exception $e)
         {
-            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         } 
-        return $result;
     }
 
     /**
@@ -269,7 +297,7 @@ class OrderStatusCntrl extends Controller
             $pi_obj     =   new ProfomaInvoice();
             $data       =   $pi_obj->getTescoPIDetails($request);
             $attatchment =  $pi_obj->getAttachment($data,$request);
-            // return $data;
+            
             $erpOrders  =   [];
             $erp_obj    =   new ErpOrders();
 
@@ -631,6 +659,7 @@ class OrderStatusCntrl extends Controller
     {
         try
         {
+            $erp_obj    = new ErpOrders();
             $id        =  explode(',',$request->id);
             $po        =  $request->po;          
             $po_file = $request->file('po_file');
@@ -644,24 +673,22 @@ class OrderStatusCntrl extends Controller
             foreach($id as $val)
             {
                 $value    =  explode('-',$val);
-                $po_details = DB::table($value[0])->where('id',$value[1])->select('purchase_order_no')->first();
-            
-                if ($po_details->purchase_order_no =="" || $po_details->purchase_order_no=="null")
-                {
-                    $po_status = "PO Pending";
-                }
-                else
-                {
-                    $po_status = "PO Uploaded";
-                }
                 
                 DB::table($value[0])->where('id',$value[1])
                    ->update([
                         'purchase_order_no' => $po,
                         'po_file' => $destination_path_insert,
-                        'po_status' => $po_status,
+                        'po_status' => "PO Uploaded",
                         'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                   ]);
+
+                /** @var array [Pass array of values to updateTescoErpOrders function] */
+                $data_array = [];   
+                $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
+                $data_array['tableName'] = $value[0];
+                $data_array['buyer_id'] = $tesco_buyer_id->id;
+                $data_array['id'] = $value[1];
+                $updated_erp_table = $erp_obj->updateTescoErpOrders($data_array);
             }
             $result = response()->json(['error'=> false,'message' =>'success'],200); 
            
@@ -682,27 +709,18 @@ class OrderStatusCntrl extends Controller
     {
         try
         {
+            $erp_obj   =   new ErpOrders();
             $id        =   explode(',',$request->id);
             $po        =   $request->po;
             
             foreach($id as $val)
             {
                 $value    =  explode('-',$val);
-            
-                $po_details = DB::table($value[0])->where('id',$value[1])->select('purchase_order_no')->first();
-            
-                if ($po_details->purchase_order_no =="" || $po_details->purchase_order_no=="null")
-                {
-                    $po_status = "PO Pending";
-                }
-                else
-                {
-                    $po_status = "PO Uploaded";
-                }
+                
                 DB::table($value[0])->where('id',$value[1])
                    ->update([
                         'purchase_order_no' => $po,
-                        'po_status' => $po_status,
+                        'po_status' => "PO Pending",
                         'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                   ]);
             }
@@ -779,6 +797,7 @@ class OrderStatusCntrl extends Controller
         {
             $row_id     =   $request->id;
             $table_name =   $request->table_name;
+            $erp_order_details = array();
             $order_details  =   DB::table($table_name)->where('id',$row_id)
                             ->select('*')->first();
             $qnty_id         =  str_replace("_orders","_order_id",str_replace("tesco_","",$table_name));
@@ -924,7 +943,7 @@ class OrderStatusCntrl extends Controller
         else
         {
             if ($temp_data->order_flag == "newOrder" && $template_name != "THL3" && $template_name != "THL1") {
-                $orderObj->updateTescoAdminOrders($table_name, $temp_data, $request, $customer_id->customer_id);
+                $orderObj->updateTescoOrders($table_name, $temp_data, $request, $customer_id->customer_id);
              } 
              DB::table($table_name)->where('id',$template_id)
                                    ->update([
@@ -959,7 +978,8 @@ class OrderStatusCntrl extends Controller
                          $foreign_key        => $template_id,
                          'cases_per_carton'  => $case_size[$i],
                          'count'         	 => $count[$i],
-                         'size'  			 => "0"
+                         'size'  			 => null,
+                         'ratio_pack_type'   => $this->ratio_pack_type[$i]
                      ]);
                  }
                  else if(($template_name == "TCL4" && $zone=="CE") || ($template_name == "TSL3" && $zone=="CE") || ($template_name == "THL3" && $zone=="CE"))
@@ -992,7 +1012,8 @@ class OrderStatusCntrl extends Controller
                          $foreign_key         => $template_id,
                          'units_per_carton'   => $case_size[$i],
                          'count'         	  => $count[$i],
-                         'size'  			  => "0"
+                         'size'  			  => null,
+                         'ratio_pack_type'   => $this->ratio_pack_type[$i]
                      ]);
                  }
                  $i++;
@@ -1237,4 +1258,29 @@ class OrderStatusCntrl extends Controller
         }
         return $result;
    }
+
+   /**
+     * method to get erp status of this order
+     * @param  Request $request [description]
+     * @return ERP_Status          [description]
+     * @author Praveen <praveen@wizroots.com>
+     */
+    public function checkERPStatus(Request $request)
+    {
+        try
+        {   
+            $data_array = [];
+            $data_array['id'] = $request->id;
+            $data_array['table_name'] = $request->table_name;
+            $class_obj = new ERPOrderStatusCheck();
+            $erp_order_details = $class_obj->ERPStatus($data_array);
+            
+            $result = response()->json(['error'=> false,'message' =>'success','erp_details' => $erp_order_details],200);
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
 }
