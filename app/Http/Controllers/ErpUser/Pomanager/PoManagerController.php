@@ -371,7 +371,7 @@ class PoManagerController extends Controller
 						$purchase_order_number = $request->purchase_order_number;
 						$customer_name = $request->customer_name;
 			// Get Erp status table id for 'Jobcard Created' and 'Cancelled' status.
-	    $erp_status_ids = DB::table('erp_status')->whereIn('status_name',['Jobcard Created', 'Cancelled'] )->pluck('id')->all();   
+	    $erp_status_ids = DB::table('erp_status')->whereIn('status_name',['Jobcard Created', 'Cancelled', 'Moved To JC Queue', 'Invoice Generated','Partial Invoice'] )->pluck('id')->all();   
 			if($count == 0)
 			{
 				$data 		=   DB::table('erp_orders')->where('id',$erp_order_id)
@@ -459,8 +459,7 @@ class PoManagerController extends Controller
 								  'partial_status' => $count_j
 								]);
 				
-				$data_erp		=   ErpOrderDetails::where('status','!=',3)
-							    	->whereNotIn('status',$erp_status_ids)
+				$data_erp		=   ErpOrderDetails::whereNotIn('status',$erp_status_ids)
 									->where('erp_order_id',$erp_order_id)
 									->update([
 									  'status' => 2
