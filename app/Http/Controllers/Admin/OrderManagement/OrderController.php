@@ -381,8 +381,11 @@ class OrderController extends Controller
             });
             
             $buyers = DB::table('buyers')->select('*')->where('artwork_flag','=',1)->where('is_active','=',1)->get();
+			
+			$orders = DB::table('non_artwork_orders')->select('*')->get();
+			
             $buyer_count = count($buyers);
-            return view('Admin/Order Management/non-art-orders',['buyers' => $buyers,'buyer_count' => $buyer_count]);
+            return view('Admin/Order Management/non-art-orders',['buyers' => $buyers,'buyer_count' => $buyer_count,'orders' => $orders]);
         }
         else
         {

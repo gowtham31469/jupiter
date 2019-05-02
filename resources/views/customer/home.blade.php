@@ -176,7 +176,7 @@
                 </div>
                <!--  <div class="modal-footer ">
                          {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                </div -->>
+                </div -->
             </div>
         </div>
     </div>
