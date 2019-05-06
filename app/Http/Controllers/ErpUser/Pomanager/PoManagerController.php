@@ -459,8 +459,8 @@ class PoManagerController extends Controller
 								  'partial_status' => $count_j
 								]);
 				
-				$data_erp		=   ErpOrderDetails::whereNotIn('status',$erp_status_ids)
-									->where('erp_order_id',$erp_order_id)
+				$data_erp		=   ErpOrderDetails::where('erp_order_id',$erp_order_id)
+									->whereNotIn('status',$erp_status_ids)
 									->update([
 									  'status' => 2
 									]);

@@ -337,7 +337,7 @@ transform: scale(1);
 						@else
 						<td><span class="label label-info">{{$vals->status_name}}</span></td>
 						@endif
-						<td>{{$vals->po_created_date}}</td>
+						<td>{{ explode(' ',$vals->po_created_date)[0] }}</td>
 						<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick="view_order_details('{{ $vals->id }}','{{ $vals->po_no }}','{{ $vals->buyer_id }}','{{ $vals->customer_id }}','{{ $vals->po_file }}')"><i class="fa fa-eye action-button-view"  title="" data-original-title="view Details"></i></a></td>
 					</tr>
 					@endforeach
@@ -765,7 +765,7 @@ transform: scale(1);
 						var label = 'label label-info';
 					}
 					
-					if(index.size != null)
+					if(index.size != null && index.size != 0)
 					{
 						var size = index.size;
 					}

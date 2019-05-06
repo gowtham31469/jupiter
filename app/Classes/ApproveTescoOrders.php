@@ -51,11 +51,22 @@ class ApproveTescoOrders
                           'order_approved_at' => $this->current_date
                         ]);
             $order_details  = TescoTCL1Orders::where('id',$template_id)
-                                ->select('order_status','tesco_supplier_id','purchase_order_no')
+                                ->select('order_status','tesco_supplier_id','purchase_order_no','pi_id')
                                 ->first();
             $order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', $order_details->order_status)->first();
 
-            $erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$order_details->tesco_supplier_id)->where('po_no',$order_details->purchase_order_no)->first();
+            $customer_data  = DB::table('customers')->select('pi_required', 'po_required')->where('id', $order_details->tesco_supplier_id)->first();
+
+            if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) 
+            {
+              $purchase_order_no     = $order_details->pi_id;
+            }
+            else if($customer_data->po_required== 1)
+            {
+              $purchase_order_no     = $order_details->purchase_order_no;
+            }         
+
+            $erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$order_details->tesco_supplier_id)->where('po_no', $purchase_order_no)->first();
 
             if ($erp_orders) {
               Erp::where('id',$erp_orders->id)
@@ -85,11 +96,22 @@ class ApproveTescoOrders
                           'order_approved_at' => $this->current_date
                         ]);
             $order_details  = TescoTCL2Orders::where('id',$template_id)
-                                ->select('order_status','tesco_supplier_id','purchase_order_no')
+                                ->select('order_status','tesco_supplier_id','purchase_order_no','pi_id')
                                 ->first();
             $order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', $order_details->order_status)->first();
 
-            $erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$order_details->tesco_supplier_id)->where('po_no',$order_details->purchase_order_no)->first();
+            $customer_data  = DB::table('customers')->select('pi_required', 'po_required')->where('id', $order_details->tesco_supplier_id)->first();
+
+            if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) 
+            {
+              $purchase_order_no     = $order_details->pi_id;
+            }
+            else if($customer_data->po_required== 1)
+            {
+              $purchase_order_no     = $order_details->purchase_order_no;
+            }         
+
+            $erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$order_details->tesco_supplier_id)->where('po_no', $purchase_order_no)->first();
 
             if ($erp_orders) {
               Erp::where('id',$erp_orders->id)
@@ -119,11 +141,22 @@ class ApproveTescoOrders
                           'order_approved_at' => $this->current_date
                         ]);
             $order_details  = TescoTSL1Orders::where('id',$template_id)
-                                ->select('order_status','tesco_supplier_id','purchase_order_no')
+                                ->select('order_status','tesco_supplier_id','purchase_order_no','pi_id')
                                 ->first();
             $order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', $order_details->order_status)->first();
 
-            $erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$order_details->tesco_supplier_id)->where('po_no',$order_details->purchase_order_no)->first();
+            $customer_data  = DB::table('customers')->select('pi_required', 'po_required')->where('id', $order_details->tesco_supplier_id)->first();
+
+            if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) 
+            {
+              $purchase_order_no     = $order_details->pi_id;
+            }
+            else if($customer_data->po_required== 1)
+            {
+              $purchase_order_no     = $order_details->purchase_order_no;
+            }         
+
+            $erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$order_details->tesco_supplier_id)->where('po_no', $purchase_order_no)->first();
 
             if ($erp_orders) {
               Erp::where('id',$erp_orders->id)
@@ -153,11 +186,22 @@ class ApproveTescoOrders
                           'order_approved_at' => $this->current_date
                         ]);
             $order_details  = TescoTCL4Orders::where('id',$template_id)
-                                ->select('order_status','tesco_supplier_id','purchase_order_no')
+                                ->select('order_status','tesco_supplier_id','purchase_order_no','pi_id')
                                 ->first();
             $order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', $order_details->order_status)->first();
 
-            $erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$order_details->tesco_supplier_id)->where('po_no',$order_details->purchase_order_no)->first();
+            $customer_data  = DB::table('customers')->select('pi_required', 'po_required')->where('id', $order_details->tesco_supplier_id)->first();
+
+            if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) 
+            {
+              $purchase_order_no     = $order_details->pi_id;
+            }
+            else if($customer_data->po_required== 1)
+            {
+              $purchase_order_no     = $order_details->purchase_order_no;
+            }         
+
+            $erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$order_details->tesco_supplier_id)->where('po_no', $purchase_order_no)->first();
 
             if ($erp_orders) {
               Erp::where('id',$erp_orders->id)
@@ -187,11 +231,22 @@ class ApproveTescoOrders
                           'order_approved_at' => $this->current_date
                         ]);
             $order_details  = TescoTSL3Orders::where('id',$template_id)
-                                ->select('order_status','tesco_supplier_id','purchase_order_no')
+                                ->select('order_status','tesco_supplier_id','purchase_order_no','pi_id')
                                 ->first();
             $order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', $order_details->order_status)->first();
 
-            $erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$order_details->tesco_supplier_id)->where('po_no',$order_details->purchase_order_no)->first();
+            $customer_data  = DB::table('customers')->select('pi_required', 'po_required')->where('id', $order_details->tesco_supplier_id)->first();
+
+            if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) 
+            {
+              $purchase_order_no     = $order_details->pi_id;
+            }
+            else if($customer_data->po_required== 1)
+            {
+              $purchase_order_no     = $order_details->purchase_order_no;
+            }         
+
+            $erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$order_details->tesco_supplier_id)->where('po_no', $purchase_order_no)->first();
 
             if ($erp_orders) {
               Erp::where('id',$erp_orders->id)
@@ -221,11 +276,22 @@ class ApproveTescoOrders
                           'order_approved_at' => $this->current_date
                         ]);
             $order_details  = TescoTHL1Orders::where('id',$template_id)
-                                ->select('order_status','tesco_supplier_id','purchase_order_no')
+                                ->select('order_status','tesco_supplier_id','purchase_order_no','pi_id')
                                 ->first();
             $order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', $order_details->order_status)->first();
 
-            $erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$order_details->tesco_supplier_id)->where('po_no',$order_details->purchase_order_no)->first();
+            $customer_data  = DB::table('customers')->select('pi_required', 'po_required')->where('id', $order_details->tesco_supplier_id)->first();
+
+            if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) 
+            {
+              $purchase_order_no     = $order_details->pi_id;
+            }
+            else if($customer_data->po_required== 1)
+            {
+              $purchase_order_no     = $order_details->purchase_order_no;
+            }         
+
+            $erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$order_details->tesco_supplier_id)->where('po_no', $purchase_order_no)->first();
 
             if ($erp_orders) {
               Erp::where('id',$erp_orders->id)
@@ -255,12 +321,23 @@ class ApproveTescoOrders
                               'order_approved_at' => $this->current_date
                             ]);
             $order_details  = TescoTHL3Orders::where('id',$template_id)
-                                ->select('order_status','tesco_supplier_id','purchase_order_no')
+                                ->select('order_status','tesco_supplier_id','purchase_order_no','pi_id')
                                 ->first();
             $order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', $order_details->order_status)->first();
 
-            $erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$order_details->tesco_supplier_id)->where('po_no',$order_details->purchase_order_no)->first();
+            $customer_data  = DB::table('customers')->select('pi_required', 'po_required')->where('id', $order_details->tesco_supplier_id)->first();
 
+            if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) 
+            {
+              $purchase_order_no     = $order_details->pi_id;
+            }
+            else if($customer_data->po_required== 1)
+            {
+              $purchase_order_no     = $order_details->purchase_order_no;
+            }         
+
+            $erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$order_details->tesco_supplier_id)->where('po_no', $purchase_order_no)->first();
+            
             if ($erp_orders) {
               Erp::where('id',$erp_orders->id)
                     ->update([
