@@ -2011,10 +2011,10 @@ class OrderManagementCntrl extends Controller
    *
    * @return pdf
    */
-	
+    
     public function generateDivTesco(Request $request)
     {
-		    $svgarr = explode(',_',$request->svg);
+            $svgarr = explode(',_',$request->svg);
         $name=$request->name;
         $svg=urldecode($request->svg);
         define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
@@ -2022,56 +2022,56 @@ class OrderManagementCntrl extends Controller
         PDF::setPrintHeader(false);
         PDF::setPrintFooter(false);
         PDF::SetFont('frankgothcnbt');
-		PDF::SetAutoPageBreak(TRUE);
-		$i=0;
-		foreach($svgarr as $value)
-		{
-			 PDF::SetMargins(0, 0, 0, false);
-			 PDF::AddPage('L', array(80,127));
-			 $svg=urldecode($value);
-			 PDF::setImageScale(1.66);
-			 PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=127, $h=80, $link='', $align='', $palign='', $border=0, $fitonpage=true);
-			if($name != "TCL2-sticker" && $name != "TCL4-sticker")
-			{
-				 if($name != "THL3-sticker")
-				 {
-					 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-				 }
-				else
-				{
-					 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 0, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-				}
-			}
-			
-			 $i++;
-		}
+        PDF::SetAutoPageBreak(TRUE);
+        $i=0;
+        foreach($svgarr as $value)
+        {
+             PDF::SetMargins(0, 0, 0, false);
+             PDF::AddPage('L', array(80,127));
+             $svg=urldecode($value);
+             PDF::setImageScale(1.66);
+             PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=127, $h=80, $link='', $align='', $palign='', $border=0, $fitonpage=true);
+            if($name != "TCL2-sticker" && $name != "TCL4-sticker")
+            {
+                 if($name != "THL3-sticker")
+                 {
+                     PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+                 }
+                else
+                {
+                     PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -2, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+                }
+            }
+            
+             $i++;
+        }
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
-		
-		
-		
-//		$svgarr = explode(',_',$request->svg);
-//		$name=$request->name;
+        
+        
+        
+//      $svgarr = explode(',_',$request->svg);
+//      $name=$request->name;
 //        $svg=urldecode($request->svg);
 //        define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
 //        define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
 //        PDF::setPrintHeader(false);
 //        PDF::setPrintFooter(false);
 //        PDF::SetFont('frankgothcnbt');
-//		PDF::SetAutoPageBreak(TRUE);
-//		$j=0;
-//		foreach($svgarr as $value)
-//		{
-//			PDF::SetMargins(0, 0, 0, false);
-//			PDF::setImageScale(1);
-//			PDF::AddPage('L', array(80,127));
-//			$svg=urldecode($value);
-//			file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
-//			$html = '<img style="width:480px;height:302.36220472px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
-//			PDF::writeHTMLCell(129, 82.5, -1,0, $html, '', 0, 0, false, 'L', false);
-//			$j++;
-//		}
-//		PDF::deletePage(1);
+//      PDF::SetAutoPageBreak(TRUE);
+//      $j=0;
+//      foreach($svgarr as $value)
+//      {
+//          PDF::SetMargins(0, 0, 0, false);
+//          PDF::setImageScale(1);
+//          PDF::AddPage('L', array(80,127));
+//          $svg=urldecode($value);
+//          file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
+//          $html = '<img style="width:480px;height:302.36220472px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
+//          PDF::writeHTMLCell(129, 82.5, -1,0, $html, '', 0, 0, false, 'L', false);
+//          $j++;
+//      }
+//      PDF::deletePage(1);
 //        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
 //        print_r(url('/storage/app/template/'.$name.'.pdf'));
     } 

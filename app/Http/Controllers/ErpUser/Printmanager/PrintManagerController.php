@@ -101,6 +101,7 @@ class PrintManagerController extends Controller
 										 ->join('erp_status','erp_orders.status','erp_status.id')->join('tesco_template', 'tesco_template.item_id', 'erp_order_details.template_id')
 										 ->where('erp_order_details.template_id',$valuess)
 										 ->whereIn('erp_orders.buyer_id', $buyers)
+										 ->where('erp_orders.status','!=',4)
 										 ->groupBy('erp_orders.id','customers.company_name','erp_status.status_name','erp_order_details.created_at','erp_order_details.template_id','erp_order_details.buyer_po_number','erp_order_details.order_type','erp_order_details.style_no','erp_order_details.zone','erp_order_details.reference_name','tesco_template.template_file')
 										 ->select('erp_orders.*','customers.company_name','erp_status.status_name','erp_order_details.created_at as po_created_date','erp_order_details.template_id','erp_order_details.buyer_po_number','erp_order_details.order_type','erp_order_details.style_no','erp_order_details.zone','erp_order_details.reference_name','tesco_template.template_file')
 										 ->get();

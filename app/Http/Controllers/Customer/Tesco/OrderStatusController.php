@@ -323,6 +323,11 @@ class OrderStatusController extends Controller
             $sub_total  =   0 ;
             $pi_obj     =   new ProfomaInvoice();
             $data       =   $pi_obj->getTescoPIDetails($request);
+            $attatchment =  $pi_obj->getAttachment($data,$request);
+
+            $erpOrders  =   [];
+            $erp_obj    =   new ErpOrders();
+
             if ($data)
             {
                 if ($data['bank_details']->zone == "CE")
@@ -352,7 +357,8 @@ class OrderStatusController extends Controller
                     'place_of_supply'  => $data['bank_details']->place_of_supply,
                     'template_type'  => $data['bank_details']->template_type,
                     'revision_no'  => $data['item_details'][0]->pi_rev_no,
-                    'rep_order_id'     => $rep_order_id
+                    'rep_order_id'     => $rep_order_id,
+                    'pi_file'         => $attatchment
                     
                 ]);
                 foreach ($data['item_details'] as $key => $value)
@@ -391,28 +397,55 @@ class OrderStatusController extends Controller
             }
             
             if ($data['item_details'][0]->order_flag == "newOrder") {
+                $tableID = 0;
                foreach ($data['tables'] as $table => $vals) {
                     if ($data['bank_details']->zone == "CE") {
+                       
+                        $tableID =  DB::table($table)
+                                            ->where($table.'.is_order_count_empty',0)
+                                            ->where('ce_style_ref',$style_no)
+                                            ->where('order_flag',$data['item_details'][0]->order_flag)
+                                            ->where('pi_status',$data['item_details'][0]->pi_status)
+                                            ->where('po_number',$data['bank_details']->po_number)->value('id');
                         $approved_data   =   DB::table($table)
                                             ->where($table.'.is_order_count_empty',0)
                                             ->where('ce_style_ref',$style_no)
                                             ->where('order_flag',$data['item_details'][0]->order_flag)
+                                            ->where('pi_status',$data['item_details'][0]->pi_status)
                                             ->where('po_number',$data['bank_details']->po_number)
                                             ->update([
                                                'pi_status' => "PI Approved",
+                                               'pi_id' => $pi_details->id,
+                                               'pi_file' => $attatchment,
                                                'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                                             ]);
                     }
                     else {
+                        $tableID = DB::table($table)
+                                            ->where($table.'.is_order_count_empty',0)
+                                            ->where('uk_style_ref',$style_no)
+                                            ->where('order_flag',$data['item_details'][0]->order_flag)
+                                            ->where('pi_status',$data['item_details'][0]->pi_status)
+                                            ->where('po_number',$data['bank_details']->po_number)->value('id');
                         $approved_data   = DB::table($table)
                                             ->where($table.'.is_order_count_empty',0)
                                             ->where('uk_style_ref',$style_no)
                                             ->where('order_flag',$data['item_details'][0]->order_flag)
+                                            ->where('pi_status',$data['item_details'][0]->pi_status)
                                             ->where('po_number',$data['bank_details']->po_number)
                                             ->update([
-                                               'pi_status' => "PI Approved",
-                                               'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
-                                            ]);
+                                                'pi_status' => "PI Approved",
+                                                'pi_id' => $pi_details->id,
+                                                'pi_file' => $attatchment,   
+                                                'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
+                                             ]);
+                    }
+                    $erpOrders['tableName'] = $table;
+                    $erpOrders['id']        = $tableID;
+                    $erpOrders['buyer_id']  = $buyer_id;
+                    $customer_data  = DB::table('customers')->where('id',$data['bank_details']->id)->first();
+                    if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
+                        $erp_obj->updateTescoErpOrders($erpOrders);
                     }
                 }
             }
@@ -420,9 +453,19 @@ class OrderStatusController extends Controller
                 $approved_data   = DB::table($table_name)
                                     ->where('id',$row_id)
                                     ->update([
-                                       'pi_status' => "PI Approved",
-                                       'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
-                                    ]);
+                                        'pi_status' => "PI Approved",
+                                        'pi_id' => $pi_details->id,
+                                        'pi_file' => $attatchment, 
+                                        'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
+                                     ]);
+                $erpOrders['tableName'] = $table_name;
+                $erpOrders['id']        = $row_id;
+                $erpOrders['buyer_id']  = $buyer_id;   
+                $customer_data  = DB::table('customers')->where('id',$data['bank_details']->id)->first();
+
+                if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
+                    $erp_obj->updateTescoErpOrders($erpOrders);
+                }
             }
             if ($approved_data)
             {
@@ -979,6 +1022,7 @@ class OrderStatusController extends Controller
             $table_data = DB::table($table_name)->where('po_number', $request['po_number'])
                       ->where('ce_style_ref', $request['ce_style'])
                       ->where('id', '<>', $template_id)
+                      ->where('order_status', '<>', 'Order Cancelled')
                       ->whereIn('order_flag', ['newOrder', 'repeatOrder'])
                       ->first();
         }
@@ -987,6 +1031,7 @@ class OrderStatusController extends Controller
             $table_data = DB::table($table_name)->where('po_number', $request['po_number'])
                       ->where('uk_style_ref', $request['uk_style'])
                       ->where('id', '<>', $template_id)
+                      ->where('order_status', '<>', 'Order Cancelled')
                       ->whereIn('order_flag', ['newOrder', 'repeatOrder'])
                       ->first();
         }
@@ -1336,6 +1381,23 @@ class OrderStatusController extends Controller
 		
 		return response()->json(['error'=> true,'order_details' =>$order_details],200);
     }
+
+    public function downloadTescoPI(Request $request)
+   {
+        try {
+            // $pi_obj     =   new ProfomaInvoice();
+            // $data       =   $pi_obj->getTescoPIDetails($request);
+            // $attatchment =  $pi_obj->getAttachment($data,$request);
+            $id         =  $request['id'];
+            $table_name =  $request['tableName'];            
+            $result     =  DB::table($table_name)->where('id',$id)->value('pi_file');   
+        }  
+        catch (\Exception $e)
+        {
+           $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+   }
 
     /**
      * method to get erp status of this order

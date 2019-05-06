@@ -148,7 +148,7 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
                             $('#item_details').html(tr)
                             if (pi_status=="true")
                             {
-                                $('.pi_actions').html('<button class="btn btn-default btn-xs downloadPi" id="downloadPi" >Download</button><button type="button" class="btn btn-default btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
+                                $('.pi_actions').html('<button class="btn btn-default btn-xs downloadPi" id="downloadPi" onclick=downloadPi("'+template_id+'","'+id+'","'+tableName+'","tesco")>Download</button><button type="button" class="btn btn-default btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
                             }
                             else
                             {
@@ -159,22 +159,22 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
                             $('#profoma-invoice').modal("show")
 
                             //Download Pi using JSPDF
-                            $('.downloadPi').click(function () {
-                                var myOffscreenEl = document.getElementById("proforma-invoice"),
-                                    useWidth      = myOffscreenEl.style.width,
-                                    useHeight     = myOffscreenEl.style.height;
-                                    myOffscreenEl.style.backgroundColor = 'white';
-                                var opt = {
-                                  // margin:       [20, 15, 23, 15],
-                                  margin:       [28, 23, 31, 23],
-                                  filename:     'Proforma-Invoice.pdf',
-                                  image:        { type: 'jpeg', quality: 0.98 },
-                                  html2canvas:  { dpi: 300, letterRendering: true },
-                                  jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' },
+                            // $('.downloadPi').click(function () {
+                            //     var myOffscreenEl = document.getElementById("proforma-invoice"),
+                            //         useWidth      = myOffscreenEl.style.width,
+                            //         useHeight     = myOffscreenEl.style.height;
+                            //         myOffscreenEl.style.backgroundColor = 'white';
+                            //     var opt = {
+                            //       // margin:       [20, 15, 23, 15],
+                            //       margin:       [28, 23, 31, 23],
+                            //       filename:     'Proforma-Invoice.pdf',
+                            //       image:        { type: 'jpeg', quality: 0.98 },
+                            //       html2canvas:  { dpi: 300, letterRendering: true },
+                            //       jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' },
                                  
-                                }
-                                html2pdf(myOffscreenEl,opt);
-                            });
+                            //     }
+                            //     html2pdf(myOffscreenEl,opt);
+                            // });
                            
                         } else {
                             $('.snackbar_span').html('Price details should be within a range !!');
@@ -246,12 +246,7 @@ function tescoApprovePI(template_id,id,table_name,billamnt)
                // var attrbs = attrbs.replace("false", "true");
                $('#'+table_name+'_'+id+' .pi_generation').attr('onclick', attrbs);
                showSnackbar();
-               // if($(location).attr('href') === base_url + "customer/create-order"){
-               //      alert()
-               //  }
-               // else{
-               //    location.reload();  
-               //  }
+               location.reload();
             },
             400: function()
             {
@@ -435,4 +430,55 @@ function RsPaise(n) {
         }
         return (op)
     }
+}
+
+function downloadPi(template_id,id,table_name){
+
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    var buyer_id = localStorage.getItem("buyer_id");
+    var amntText = $('#bilamnt').text();
+    $.ajax({
+        url: base_url + "/customer/tesco/download-tesco-pi",
+        type: "Post",
+        dataType: "json",
+        data: {
+            _token: csrf_token,
+            tableName: table_name,
+            buyer_id:buyer_id,
+            template_id:template_id,
+            id:id,
+            amntText:amntText
+        },
+        beforeSend: function () {
+            $(".loader").show();
+            $(".loader").css('margin-top', '12%');
+        },
+        statusCode:
+        { 
+            200: function(data)
+            {
+                var resp = JSON.stringify(data);
+                    console.log( base_url+data.responseText)
+                    $('.snackbar_span').html("Successfully send Invoice to the Customer !");
+                    showSnackbar();
+                window.open(
+                    base_url+$.trim(data.responseText),
+                    '_blank' // <- This is what makes it open in a new window.
+                );            
+            },
+            400: function()
+            {
+               $('.snackbar_span').html('Something went wrong!');
+               $('#profoma-invoice').modal("hide")
+               showSnackbar();
+            }
+        },
+        error: function (data){
+            console.log(data);
+        },
+        complete: function () {
+            $(".loader").hide();
+            $(".loader").css('margin-top', '0%');
+        }
+    })
 }

@@ -113,7 +113,7 @@ class JobManagerController extends Controller
 											->join('erp_status', 'erp_orders.status', 'erp_status.id')
 						                    ->join('tesco_template', 'tesco_template.item_id', 'erp_order_details.template_id')
 											->where('erp_order_details.template_id', '=', $valuess)
-											->where('erp_orders.status', '=', $erp_status_id)
+											// ->where('erp_orders.status', '=', $erp_status_id)
 											->where('erp_order_details.status', '=', $erp_status_id)
 											->where('erp_orders.order_status_id', '=', $order_status_id)
 											->whereIn('erp_orders.buyer_id', $buyers)
@@ -273,7 +273,7 @@ class JobManagerController extends Controller
 			}
  			sort($order_detail_ids);
 
-			$workorder_id = substr(number_format(Carbon::now()->timestamp * rand(),0,'',''),0,8);
+			$workorder_id = substr(number_format(Carbon::now('Asia/Kolkata')->timestamp * rand(),0,'',''),0,8);
 
 			foreach($order_detail_ids as $key => $order_detail_id)
 			{
@@ -1032,7 +1032,7 @@ class JobManagerController extends Controller
 					$i++;
 					
 				}
-				$random = number_format(Carbon::now()->timestamp * rand(),0,'','');
+				$random = number_format(Carbon::now('Asia/Kolkata')->timestamp * rand(),0,'','');
 				PDF::Output( public_path('/storage/app/template/'.$random.'-'.$name.'.pdf'), 'F');
 				$file_path =  "/storage/app/template/".$random.'-'.$name."."."pdf";	
 				
@@ -1274,7 +1274,7 @@ class JobManagerController extends Controller
 			$i++;
 
 		}
-		$random = number_format(Carbon::now()->timestamp * rand(),0,'','');
+		$random = number_format(Carbon::now('Asia/Kolkata')->timestamp * rand(),0,'','');
 		PDF::Output( public_path('/storage/app/template/'.$random.'-'.$name.'.pdf'), 'F');
 		$file_path =  "/storage/app/template/".$random.'-'.$name."."."pdf";	
 		
@@ -1920,7 +1920,7 @@ class JobManagerController extends Controller
 				 }
 				else
 				{
-					 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 0, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+					 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -2, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 				}
 			}
 			

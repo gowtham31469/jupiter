@@ -297,7 +297,7 @@ class OrderStatusCntrl extends Controller
             $pi_obj     =   new ProfomaInvoice();
             $data       =   $pi_obj->getTescoPIDetails($request);
             $attatchment =  $pi_obj->getAttachment($data,$request);
-            // return $data;
+            
             $erpOrders  =   [];
             $erp_obj    =   new ErpOrders();
 
@@ -923,6 +923,7 @@ class OrderStatusCntrl extends Controller
             $table_data = DB::table($table_name)->where('po_number', $request['po_number'])
                       ->where('ce_style_ref', $request['ce_style'])
                       ->where('id', '<>', $template_id)
+                      ->where('order_status', '<>', 'Order Cancelled')
                       ->whereIn('order_flag', ['newOrder', 'repeatOrder'])
                       ->first();
         }
@@ -931,6 +932,7 @@ class OrderStatusCntrl extends Controller
             $table_data = DB::table($table_name)->where('po_number', $request['po_number'])
                       ->where('uk_style_ref', $request['uk_style'])
                       ->where('id', '<>', $template_id)
+                      ->where('order_status', '<>', 'Order Cancelled')
                       ->whereIn('order_flag', ['newOrder', 'repeatOrder'])
                       ->first();
         }
