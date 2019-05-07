@@ -1,0 +1,162 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class AddNewCsvFieldsToOrchestraParcelDetailsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table('orchestra_parcel_details', function (Blueprint $table) {
+            $table->string('Season_Code')->nullable();
+            $table->string('SKU_Code')->nullable();
+            $table->integer('Po_Line_Number')->nullable();
+            $table->integer('Po_Line_Suffix')->nullable();
+            $table->integer('Po_Status_Code')->nullable();
+            $table->string('Po_Status_Code_Description')->nullable();
+            $table->string('Style_Code')->nullable();
+            $table->string('Activity_Code')->nullable();
+            $table->string('Activity_Label')->nullable();
+            $table->string('Universe_Code')->nullable();
+            $table->string('Universe_Label')->nullable();
+            $table->string('Department_Code')->nullable();
+            $table->string('Department_Label')->nullable();
+            $table->integer('Family_Code')->nullable();
+            $table->string('Family_Label')->nullable();
+            $table->string('Sub_Family_Code')->nullable();
+            $table->string('Sub_Family_Label')->nullable();
+            $table->string('Theme_Code')->nullable();
+            $table->string('Brand_Code')->nullable();
+            $table->string('Brand_Label')->nullable();
+            $table->string('Product_Name')->nullable();
+            $table->string('Description_Fr')->nullable();
+            $table->string('Buyer_Email')->nullable();
+            $table->string('Agent_Code')->nullable();
+            $table->string('Agent_Name')->nullable();
+            $table->string('Agent_Email')->nullable();
+            $table->text('Agent_Address')->nullable();
+            $table->string('Agent_Country')->nullable();
+            $table->string('Supplier_Code')->nullable();
+            $table->string('Factory_Name')->nullable();
+            $table->string('Factory_Email')->nullable();
+            $table->text('Factory_Address')->nullable();
+            $table->string('Made_In_Code')->nullable();
+            $table->string('Made_In_Label')->nullable();
+            $table->string('First_ETD_SHIPMENT_DATE')->nullable();
+            $table->string('Shipment_Destination_Code')->nullable();
+            $table->string('Shipment_Destination_Label')->nullable();
+            $table->string('Incoterms_Code')->nullable();
+            $table->string('Incoterms_City_Label')->nullable();
+            $table->integer('Sku_Barcode')->nullable();
+            $table->string('Set_')->nullable();
+            $table->string('Number_Of_Pieces')->nullable();
+            $table->string('Color_Code')->nullable();
+            $table->string('Color_Label')->nullable();
+            $table->string('Standard_Code')->nullable();
+            $table->integer('Standard_Barcode')->nullable();
+            $table->string('Size_Range_Code')->nullable();
+            $table->string('Size_Range_Label')->nullable();
+            $table->string('Size_Code')->nullable();
+            $table->string('Size_Label')->nullable();
+            $table->integer('Size_Breakdown')->nullable();
+            $table->integer('Total_Standard_Solid_Parcel_Number')->nullable();
+            $table->string('Product_Type')->nullable();
+            $table->string('Licence_Code')->nullable();
+            $table->string('Licence_Label')->nullable();
+            $table->string('Licence_Character_Code')->nullable();
+            $table->string('Licence_Character_Label')->nullable();
+            $table->date('Start_Print_Date')->nullable();
+            $table->string('Composition_Label')->nullable();
+            $table->date('Po_Change_Date')->nullable();
+            $table->double('Purchase_Price')->nullable();
+            $table->double('Po_Amount')->nullable();
+            $table->string('Typologie')->nullable();
+            $table->integer('Payment_Condition_Code')->nullable();
+            $table->string('Payment_Terms')->nullable();
+            $table->string('Payment_Terms_Label')->nullable();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('orchestra_parcel_details', function (Blueprint $table) {
+            $table->dropColumn('Season_Code');
+            $table->dropColumn('SKU_Code');
+            $table->dropColumn('Po_Line_Number');
+            $table->dropColumn('Po_Line_Suffix');
+            $table->dropColumn('Po_Status_Code');
+            $table->dropColumn('Po_Status_Code_Description');
+            $table->dropColumn('Style_Code');
+            $table->dropColumn('Activity_Code');
+            $table->dropColumn('Activity_Label');
+            $table->dropColumn('Universe_Code');
+            $table->dropColumn('Universe_Label');
+            $table->dropColumn('Department_Code');
+            $table->dropColumn('Department_Label');
+            $table->dropColumn('Family_Code');
+            $table->dropColumn('Family_Label');
+            $table->dropColumn('Sub_Family_Code');
+            $table->dropColumn('Sub_Family_Label');
+            $table->dropColumn('Theme_Code');
+            $table->dropColumn('Brand_Code');
+            $table->dropColumn('Brand_Label');
+            $table->dropColumn('Product_Name');
+            $table->dropColumn('Description_Fr');
+            $table->dropColumn('Buyer_Email');
+            $table->dropColumn('Agent_Code');
+            $table->dropColumn('Agent_Name');
+            $table->dropColumn('Agent_Email');
+            $table->dropColumn('Agent_Address');
+            $table->dropColumn('Agent_Country');
+            $table->dropColumn('Supplier_Code');
+            $table->dropColumn('Factory_Name');
+            $table->dropColumn('Factory_Email');
+            $table->dropColumn('Factory_Address');
+            $table->dropColumn('Made_In_Code');
+            $table->dropColumn('Made_In_Label');
+            $table->dropColumn('First_ETD_SHIPMENT_DATE');
+            $table->dropColumn('Shipment_Destination_Code');
+            $table->dropColumn('Shipment_Destination_Label');
+            $table->dropColumn('Incoterms_Code');
+            $table->dropColumn('Incoterms_City_Label');
+            $table->dropColumn('Sku_Barcode');
+            $table->dropColumn('Set_');
+            $table->dropColumn('Number_Of_Pieces');
+            $table->dropColumn('Color_Code');
+            $table->dropColumn('Color_Label');
+            $table->dropColumn('Standard_Code');
+            $table->dropColumn('Standard_Barcode');
+            $table->dropColumn('Size_Range_Code');
+            $table->dropColumn('Size_Range_Label');
+            $table->dropColumn('Size_Code');
+            $table->dropColumn('Size_Label');
+            $table->dropColumn('Size_Breakdown');
+            $table->dropColumn('Total_Standard_Solid_Parcel_Number');
+            $table->dropColumn('Product_Type');
+            $table->dropColumn('Licence_Code');
+            $table->dropColumn('Licence_Label');
+            $table->dropColumn('Licence_Character_Code');
+            $table->dropColumn('Licence_Character_Label');
+            $table->dropColumn('Start_Print_Date');
+            $table->dropColumn('Composition_Label');
+            $table->dropColumn('Po_Change_Date');
+            $table->dropColumn('Purchase_Price');
+            $table->dropColumn('Po_Amount');
+            $table->dropColumn('Typologie');
+            $table->dropColumn('Payment_Condition_Code');
+            $table->dropColumn('Payment_Terms');
+            $table->dropColumn('Payment_Terms_Label');
+        });
+    }
+}
