@@ -97,8 +97,8 @@ class OrderManagementCntrl extends Controller
 	
     public function Orders()
     {
-            $data['sticker_orders'] = DB::table('orchestra_parcel_details')->select('id','UVC',DB::raw('"-" as Season'),'BuyerPONo','SupplierName','NomApple as Style_Name','Quantity','IsSTD as Type',DB::raw('"Stickers" as OrderType'),DB::raw('"-" as Disney'))->get();
-            $data['label_orders'] = DB::table('orchestra_item_details')->select('id','UVC','Collection as Season',DB::raw('"-" as BuyerPONo'),'SupplierName','Description','Style_Name','Disney',DB::raw('"-" as Type'),'Quantity',DB::raw('"Labels" as OrderType'))->groupBy('UVC')->get();
+            $data['sticker_orders'] = DB::table('orchestra_parcel_details')->select('id','UVC',DB::raw("'-' as Season"),'BuyerPONo','SupplierName','NomApple as Style_Name','Quantity','IsSTD as Type',DB::raw("'Stickers' as OrderType"),DB::raw("'-' as Disney"))->get();
+            $data['label_orders'] = DB::table('orchestra_item_details')->select('id','UVC','Collection as Season',DB::raw("'-' as BuyerPONo"),'SupplierName','Description','Style_Name','Disney',DB::raw("'-' as Type"),'Quantity',DB::raw("'Labels' as OrderType"))->groupBy('id','UVC')->get();
             echo json_encode($data);
     } 
 	
@@ -357,7 +357,7 @@ class OrderManagementCntrl extends Controller
         
          $data['orchestra_parcel_quantity_details'] = DB::table('orchestra_parcel_quantity_details')->select('*')->where('BuyerPONo',$po)->get();
         
-         $data['orchestra_parcel_details']= DB::table('orchestra_parcel_details')->select('*')->where('BuyerPONo',$po)->groupBy('BuyerPONo')->get();
+         $data['orchestra_parcel_details']= DB::table('orchestra_parcel_details')->select('*')->where('BuyerPONo',$po)->groupBy('id','BuyerPONo')->get();
         
         $data['orchestra_age_group']= DB::table('orchestra_age_group')->select('*')->get();      
         

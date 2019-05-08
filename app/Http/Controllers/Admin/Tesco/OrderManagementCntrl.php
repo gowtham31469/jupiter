@@ -2048,6 +2048,25 @@ class OrderManagementCntrl extends Controller
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
         
+		
+//		 $svgarr = explode(',_',$request->svg);
+//        $name=$request->name;
+//        $svg=urldecode($request->svg);
+//        define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
+//        define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
+//        PDF::setPrintHeader(false);
+//        PDF::setPrintFooter(false);
+//        PDF::SetFont('frankgothcnbt');
+//		PDF::AddPage('P', array(49,117));
+//		PDF::SetMargins(0, 0, 0, false);
+//        PDF::SetAutoPageBreak(TRUE);
+//		PDF::setImageScale(1.66);
+//		PDF::ImageSVG(public_path('/storage/app/template/svg_working_2.svg'), $x=0, $y=0, $w=49, $h=117, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+//		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+//		
+//		exec("gs -dSAFER -dBATCH -dNOPAUSE -dNOCACHE -sDEVICE=pdfwrite -sColorConversionStrategy=CMYK -dProcessColorModel=/DeviceCMYK -sOutputFile=".public_path('/storage/app/template/'.$name.'_cmyk.pdf')." ".public_path('/storage/app/template/'.$name.'.pdf'));
+//        
+//        print_r(url('/storage/app/template/'.$name.'_cmyk.pdf'));
         
         
 //      $svgarr = explode(',_',$request->svg);
