@@ -8,61 +8,29 @@
     .large .modal-lg .modal-content {
         border-radius: 0px;
     }
-
 </style>
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-12 col-md-12 main">
             <div class="top-content">
-                <!--
-                <ol class="breadcrumb">
-                    <li><a href="/admin/dashboard">Dashboard</a></li>
-                    <li class="active">Upload CSV</li>
-                </ol>
--->
             </div>
             <div class="main-content">
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="parcel-details card">
-                            <h4><a class="btn btn-primary btn-sm pull-right upload-parcel-details ">Upload Parcel Details</a>Parcel Details</h4>
-                            <hr/>
+                <div class="parcel-details card">
+                    <h4><a class="btn btn-primary btn-sm pull-right upload-csv-files ">Upload</a>Orchestra CSV Files</h4>
+                    <hr/>
 
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="">
-                                        <h5><sub class="pull-right"> (Supported Files : .csv)</sub>Parcel Detail File - 1 </h5>
-                                        <form action="/file-upload" class="dropzone" id="parcel-details-1">
-                                            {{ csrf_field() }}
-                                        </form>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="">
-                                        <h5><sub class="pull-right"> (Supported Files : .csv)</sub>Parcel Detail File - 2 </h5>
-                                        <form action="/file-upload" class="dropzone" id="parcel-details-2">
-                                            {{ csrf_field() }}
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5><sub class="pull-right"> (Supported Files : .csv)</sub><strong>PO file</strong> </h5>
+                            <form action="/file-upload" class="dropzone" id="po-csv-file">
+                                {{ csrf_field() }}
+                            </form>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="label-details card">
-                            <h4><a class="btn btn-primary btn-sm pull-right upload-label-details hidden">Upload label Details</a>Label Details</h4>
-                            <hr/>
-                            <div class="row">
-
-                                <div class="col-md-12">
-                                    <div class="">
-                                        <h5><sub class="pull-right"> (Supported Files : .csv)</sub>Label Details File </h5>
-                                        <form method="post" class="dropzone" id="label-details">
-                                            {{ csrf_field() }}
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="col-md-6">
+                            <h5><sub class="pull-right"> (Supported Files : .csv)</sub><strong>Price File</strong> </h5>
+                            <form action="/file-upload" class="dropzone" id="price-csv-file">
+                                {{ csrf_field() }}
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -70,7 +38,6 @@
         </div>
     </div>
 </div>
-
 
 @endsection @else
 <script type="text/javascript">
@@ -81,76 +48,12 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('.logo').html('Upload CSV');
-        $('#example').DataTable();
     })
-    Dropzone.options.labelDetails = {
 
-      // Prevents Dropzone from uploading dropped files immediately
-        url:"upload-label-details",
-        autoProcessQueue: false,
-        maxFilesize: 500,
-        maxFiles:1,
-        acceptedFiles: ".csv, .xlsx, .xls",
-        addRemoveLinks: true,
+    Dropzone.options.poCsvFile = {
 
-        init: function() {
-
-            var submitButton = document.querySelector(".upload-label-details")
-            myDropzone = this; // closure
-
-
-            submitButton.addEventListener("click", function() {
-                myDropzone.processQueue(); // Tell Dropzone to process all queued files.
-         
-
-            });
-
-            // You might want to show the submit button only when 
-            // files are dropped here:
-
-            this.on("addedfile", function(file)
-            {
-                var filename = file.name;   
-                if (filename.indexOf("ItemDetails_ORCHESTRA") !=-1)
-                {
-                    $(".upload-label-details").removeClass("hidden");
-                }
-                else
-                {
-                   alert('You uploaded the wrong file !')                   
-                   this.removeFile(file);
-                }
-              // Show submit button here and/or inform user to click it.
-            });
-            this.on("complete", function(file){        
-                 this.removeFile(file);
-
-            });
-            this.on("queuecomplete", function (file)
-            {
-                
-            });
-            this.on("success", function(file, response){ 
-                 console.log(response);
-                $('.dz-remove').hide();
-                this.removeFile(file);
-                $(".upload-label-details").addClass("hidden");
-                
-            });
-            this.on("error", function(file, response) {
-                 alert('error');
-                 this.removeFile(file);
-                 $(".upload-label-details").addClass("hidden");
-            });
-
-
-        }
-    };
-
-    Dropzone.options.parcelDetails1 = {
-
-      // Prevents Dropzone from uploading dropped files immediately
-        url:"upload-parcel-details-file-one",
+        // Prevents Dropzone from uploading dropped files immediately
+        url:"upload-orchestra-po-file-csv",
         autoProcessQueue: false,
         maxFilesize: 10,
         maxFiles: 1,
@@ -163,38 +66,45 @@
             // You might want to show the submit button only when 
             // files are dropped here:
             this.on("addedfile", function(file) {
-              // Show submit button here and/or inform user to click it.
-               var filename = file.name;             
-                if (filename.indexOf("ParcelDetails_File1") !=-1)
-                {
-                    $(".upload-parcel-details").removeClass("hidden");
-                }
-                else
-                {
-                   alert('You uploaded the wrong file !')                   
-                   this.removeFile(file);
+                // Show submit button here and/or inform user to click it.
+                //Original string 
+                var filename       = file.name;       
+                var alt_filename   = filename.replace(/-/g,"_");
+                var new_filename   = alt_filename.replace("_","-",1);
+                var filename_array = new_filename.split("-",2);   
+
+                while(filename_array[1].indexOf("ORC_M3_PO_FILE_BU_A_ORCIN") === -1)
+                {                  
+                    $('.snackbar_span').html("Upload correct file !!");
+                    showSnackbar();
+                    this.removeFile(file);
                 }
             });
 
             this.on("complete", function(file){        
                  this.removeFile(file);
+                 $('.snackbar_span').html("File uploaded successfully");
+                 showSnackbar();
             });
             this.on("success", function(file, response){ 
+                $('.snackbar_span').html("File uploaded successfully");
+                showSnackbar();
                 $('.dz-remove').hide();
                  this.removeFile(file);
             });
             this.on("error", function(file, response) {
-                 alert('error');
+                 $('.snackbar_span').html("You can only upload a maximum 1 file. ");
+                 showSnackbar();
                  this.removeFile(file);
-                 $(".upload-parcel-details").addClass("hidden");
+                 $(".upload-csv-files").addClass("hidden");
             });
         }
     };
 
-    Dropzone.options.parcelDetails2 = {
+    Dropzone.options.priceCsvFile = {
 
       // Prevents Dropzone from uploading dropped files immediately
-        url:"upload-parcel-details-file-two",
+        url:"upload-orchestra-price-file-csv",
         autoProcessQueue: false,
         maxFilesize: 10,
         maxFiles: 1,
@@ -206,39 +116,53 @@
 
             // You might want to show the submit button only when files are dropped here:
             this.on("addedfile", function(file) {
-              // Show submit button here and/or inform user to click it.
-                var filename = file.name;             
-                if (filename.indexOf("ParcelDetails_File2") !=-1)
-                {
-                    $(".upload-parcel-details").removeClass("hidden");
-                }
-                else
-                {
-                   alert('You uploaded the wrong file !')                   
-                   this.removeFile(file);
+                // Show submit button here and/or inform user to click it.
+                //Original string 
+                var filename       = file.name;       
+                var alt_filename   = filename.replace(/-/g,"_");
+                var new_filename   = alt_filename.replace("_","-",1);
+                var filename_array = new_filename.split("-",2);   
+
+                while(filename_array[1].indexOf("ORC_M3_PRICE_FILE_BU_A_ORCIN") === -1)
+                {                  
+                    $('.snackbar_span').html("Upload correct file !!");
+                    showSnackbar();
+                    this.removeFile(file);
                 }
             });
-            this.on("complete", function(file){        
-                 this.removeFile(file);
+            this.on("complete", function(file){   
+                $('.snackbar_span').html("File uploaded successfully");
+                showSnackbar();     
+                this.removeFile(file);
             });
             this.on("success", function(file, response){ 
+                $('.snackbar_span').html("File uploaded successfully");
+                showSnackbar();
                 $('.dz-remove').hide();
                  this.removeFile(file);
             });
             this.on("error", function(file, response) {
-                alert('error');
+                $('.snackbar_span').html("You can only upload a maximum 1 file. ");
+                showSnackbar();
                 this.removeFile(file);
-                $(".upload-parcel-details").addClass("hidden");
-
+                $(".upload-csv-files").addClass("hidden");
             });
         }
     };
 
 
-    $('.upload-parcel-details').on('click', function ()
+    $('.upload-csv-files').on('click', function ()
     {
-        myDropzone1.processQueue();
-        myDropzone2.processQueue();
+        if(myDropzone1.files.length === 1 && myDropzone2.files.length === 1)
+        {
+            myDropzone1.processQueue();
+            myDropzone2.processQueue();
+        }
+        else
+        {
+            $('.snackbar_span').html("Orchestra PO File and Price File Required.");
+            showSnackbar();
+        }
     });
  
 </script>
