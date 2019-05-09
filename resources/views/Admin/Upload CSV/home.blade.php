@@ -68,12 +68,10 @@
             this.on("addedfile", function(file) {
                 // Show submit button here and/or inform user to click it.
                 //Original string 
-                var filename       = file.name;       
-                var alt_filename   = filename.replace(/-/g,"_");
-                var new_filename   = alt_filename.replace("_","-",1);
-                var filename_array = new_filename.split("-",2);   
-
-                while(filename_array[1].indexOf("ORC_M3_PO_FILE_BU_A_ORCIN") === -1)
+                var filename_array = [];
+                var filename       = file.name;    
+                
+                while(filename.includes("ORC_M3_PO_FILE_BU-A-ORCIN") === false)
                 {                  
                     $('.snackbar_span').html("Upload correct file !!");
                     showSnackbar();
@@ -118,12 +116,9 @@
             this.on("addedfile", function(file) {
                 // Show submit button here and/or inform user to click it.
                 //Original string 
-                var filename       = file.name;       
-                var alt_filename   = filename.replace(/-/g,"_");
-                var new_filename   = alt_filename.replace("_","-",1);
-                var filename_array = new_filename.split("-",2);   
-
-                while(filename_array[1].indexOf("ORC_M3_PRICE_FILE_BU_A_ORCIN") === -1)
+                var filename       = file.name; 
+                
+                while(filename.includes("ORC_M3_PRICE_FILE_BU-A-ORCIN") === false)
                 {                  
                     $('.snackbar_span').html("Upload correct file !!");
                     showSnackbar();
