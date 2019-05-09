@@ -26,8 +26,9 @@ class Uploads
 		$data = array();
 		if (($handle = fopen($filename, 'r')) !== FALSE)
 		{
-			while (($row = fgetcsv($handle, 1000, $delimiter)) !== FALSE)
+			while (($row = fgetcsv($handle, 2000, $delimiter)) !== FALSE)
 			{
+				$row =  array_map("utf8_encode", $row);
 				if(!$header)
 					$header = $row;
 				else

@@ -392,8 +392,8 @@ Route::post('admin/tesco/template-management/template-list', 'Admin\Tesco\Templa
 /** upload csv **/
 
 Route::get('admin/upload-csv', 'Admin\UploadCSV\UploadCsvController@index');
-Route::post('admin/upload-orchestra-po-file-csv','Admin\UploadCSV\UploadCsvController@uploadParcelDetailsFileOne');
-Route::post('admin/upload-orchestra-price-file-csv','Admin\UploadCSV\UploadCsvController@uploadParcelDetailsFileTwo');
+Route::post('admin/upload-orchestra-po-file-csv','Admin\UploadCSV\UploadCsvController@uploadPOCSVFile');
+Route::post('admin/upload-orchestra-price-file-csv','Admin\UploadCSV\UploadCsvController@uploadPriceCSVFile');
 
 
 /**orchestra Settings Page**/

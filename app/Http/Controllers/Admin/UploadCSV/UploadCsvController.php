@@ -62,27 +62,26 @@ class UploadCsvController extends Controller
     }
 
     /**
-     * method to upload the parcel details csv
+     * method to upload the the orchestra po csv file
      * @return [type] [description]
      */
-    public function uploadParcelDetailsFileOne(Request $request)
+    public function uploadPOCSVFile(Request $request)
     {
-      return "1";
       try
       {
         $upload_obj = new Uploads();
-        ini_set('max_execution_time', 1000);
+        ini_set('max_execution_time', 2000);
         $delimiter = ";";
         $path     = $request->file('file')->getRealPath();
         $filename = $request->file('file')->getClientOriginalName();
         $extension  = $request->file('file')->getClientOriginalExtension();
-        // $data  = Excel::load($path, function($reader) {})->get();
         $filename = strtok($filename, " ");
-        $data     =  $upload_obj->csv_to_array($path,$delimiter);
         
-          if (preg_match('/ParcelDetails_File1_ORCHESTRA/',$filename))
+          if (preg_match('/ORC_M3_PO_FILE_BU-A-ORCIN/',$filename))
           {
+            return $data     =  $upload_obj->csv_to_array($path,$delimiter);
             $data_exists = OrchestraParcelDetails::select()->get();
+
             if (count($data_exists)>0)
             {
               foreach ($data as $key => $value)
@@ -102,19 +101,7 @@ class UploadCsvController extends Controller
                           $parcel_std = DB::table('orchestra_parcel_details')->where('UVC',$data[$key]['UVC'])->where('BuyerPONo',$data[$key]['BuyerPONo'])->where('VersionNumber',$data[$key]['VersionNumber'])->where('EditionNumber',$data[$key]['EditionNumber'])->where('IsSTD',$data[$key]['IsSTD'])->select('*')->get();
                           if (count($parcel_std)>0)
                           {
-                            // foreach ($parcel_std as $vals)
-                            // {
-                            //   if ($vals->IsSTD == 1)
-                            //   {
-                            //     DB::table('orchestra_parcel_quantity_details')
-                            //      ->where('UVC',$data[$key]['UVC'])
-                            //      ->where('BuyerPONo',$data[$key]['BuyerPONo'])
-                            //      ->where('VersionNumber',$data[$key]['VersionNumber'])
-                            //      ->where('EditionNumber',$data[$key]['EditionNumber'])
-                            //      ->delete();
-                            //   }
-                              $upload_obj->updateOrchestraParcelDetails($data,$key);
-                            // }
+                            $upload_obj->updateOrchestraParcelDetails($data,$key);
                           }
                           else
                           {
@@ -165,27 +152,26 @@ class UploadCsvController extends Controller
     }
 
       /**
-     * method to upload the parcel details file 2 csv
+     * method to upload the orchestra price csv file
      * @return [type] [description]
      */
-    public function uploadParcelDetailsFileTwo(Request $request)
+    public function uploadPriceCSVFile(Request $request)
     {
-      return "2";
       try
       {
         $upload_obj = new Uploads();
-        ini_set('max_execution_time', 1000);
+        ini_set('max_execution_time', 2000);
         $delimiter = ";";
         $path     = $request->file('file')->getRealPath();
         $filename = $request->file('file')->getClientOriginalName();
         $extension  = $request->file('file')->getClientOriginalExtension();
-        // $data  = Excel::load($path, function($reader) {})->get();
         $filename = strtok($filename, " ");
-        $data     =  $upload_obj->csv_to_array($path,$delimiter);
        
-          if (preg_match('/ParcelDetails_File2_ORCHESTRA/',$filename))
+          if (preg_match('/ORC_M3_PRICE_FILE_BU-A-ORCIN/',$filename))
           {
+           return  $data     =  $upload_obj->csv_to_array($path,$delimiter);
             $data_exists = OrchestraParcelQuantityDetails::select()->get();
+
               if (count($data_exists)>0)
               {
                 foreach ($data as $key=> $value)
