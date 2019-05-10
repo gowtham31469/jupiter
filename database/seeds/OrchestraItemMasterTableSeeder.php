@@ -656,7 +656,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 78,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 0,    
                         'item_name' => "Printed Boards",
                         'ref_no' => "",
@@ -664,7 +664,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 79,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 78,    
                         'item_name' => "Orchestra",
                         'ref_no' => "",
@@ -672,7 +672,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 80,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 79,    
                         'item_name' => "Tags",
                         'ref_no' => "",
@@ -680,7 +680,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 81,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 80,    
                         'item_name' => "Department Hang Tag",
                         'ref_no' => "",
@@ -688,7 +688,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 82,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 81,    
                         'item_name' => "Girl",
                         'ref_no' => "",
@@ -696,7 +696,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 83,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 82,    
                         'item_name' => "T01A",
                         'ref_no' => "",
@@ -704,7 +704,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 84,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 82,    
                         'item_name' => "T01B",
                         'ref_no' => "",
@@ -712,7 +712,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 85,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 82,    
                         'item_name' => "T01C",
                         'ref_no' => "",
@@ -720,7 +720,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 86,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 82,    
                         'item_name' => "T01D",
                         'ref_no' => "",
@@ -728,7 +728,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 87,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 82,    
                         'item_name' => "T01E",
                         'ref_no' => "",
@@ -736,7 +736,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 88,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 81,    
                         'item_name' => "Boy",
                         'ref_no' => "",
@@ -744,7 +744,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 89,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 88,    
                         'item_name' => "T02A",
                         'ref_no' => "",
@@ -752,7 +752,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 90,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 88,    
                         'item_name' => "T02B",
                         'ref_no' => "",
@@ -760,7 +760,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 91,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 88,    
                         'item_name' => "T02C",
                         'ref_no' => "",
@@ -768,7 +768,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 92,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 88,    
                         'item_name' => "T02D",
                         'ref_no' => "",
@@ -776,7 +776,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 93,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 88,    
                         'item_name' => "T02E",
                         'ref_no' => "",
@@ -784,7 +784,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 94,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 81,    
                         'item_name' => "Baby",
                         'ref_no' => "",
@@ -792,7 +792,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 95,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 94,    
                         'item_name' => "T05A",
                         'ref_no' => "",
@@ -800,7 +800,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 96,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 94,    
                         'item_name' => "T05B",
                         'ref_no' => "",
@@ -808,7 +808,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 97,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 94,    
                         'item_name' => "T05C",
                         'ref_no' => "",
@@ -816,7 +816,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 98,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 94,    
                         'item_name' => "T05D",
                         'ref_no' => "",
@@ -824,7 +824,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 99,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 94,    
                         'item_name' => "T05E",
                         'ref_no' => "",
@@ -832,7 +832,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 100,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 80,    
                         'item_name' => "Special Tags",
                         'ref_no' => "",
@@ -840,7 +840,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 101,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 100,    
                         'item_name' => "Plus Products",
                         'ref_no' => "",
@@ -848,7 +848,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 102,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 101,    
                         'item_name' => "T10R1",
                         'ref_no' => "",
@@ -856,7 +856,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 103,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 101,    
                         'item_name' => "T33",
                         'ref_no' => "",
@@ -864,7 +864,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 104,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 101,    
                         'item_name' => "T10H",
                         'ref_no' => "",
@@ -872,7 +872,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 105,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 101,    
                         'item_name' => "T10Q",
                         'ref_no' => "",
@@ -880,7 +880,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 106,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 101,    
                         'item_name' => "T10R",
                         'ref_no' => "",
@@ -888,7 +888,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 107,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 101,    
                         'item_name' => "T10M2",
                         'ref_no' => "",
@@ -896,7 +896,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 108,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 101,    
                         'item_name' => "T10C",
                         'ref_no' => "",
@@ -904,7 +904,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 109,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 101,    
                         'item_name' => "T10V",
                         'ref_no' => "",
@@ -912,7 +912,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 110,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 101,    
                         'item_name' => "T21",
                         'ref_no' => "",
@@ -920,7 +920,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 111,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 101,    
                         'item_name' => "T21A",
                         'ref_no' => "",
@@ -928,7 +928,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 112,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 101,    
                         'item_name' => "T10Y",
                         'ref_no' => "",
@@ -936,7 +936,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 113,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 101,    
                         'item_name' => "T10P",
                         'ref_no' => "",
@@ -944,7 +944,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 114,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 101,    
                         'item_name' => "T10A",
                         'ref_no' => "",
@@ -952,7 +952,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 115,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 101,    
                         'item_name' => "T10W",
                         'ref_no' => "",
@@ -960,7 +960,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 116,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 101,    
                         'item_name' => "T10Z",
                         'ref_no' => "",
@@ -968,7 +968,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 117,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 100,    
                         'item_name' => "Warnings",
                         'ref_no' => "",
@@ -976,7 +976,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 118,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 117,    
                         'item_name' => "T11F",
                         'ref_no' => "",
@@ -984,7 +984,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 119,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 117,    
                         'item_name' => "T11D",
                         'ref_no' => "",
@@ -992,7 +992,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 120,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 117,    
                         'item_name' => "T11A",
                         'ref_no' => "",
@@ -1000,7 +1000,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 121,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 117,    
                         'item_name' => "T11C",
                         'ref_no' => "",
@@ -1008,7 +1008,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 122,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 117,    
                         'item_name' => "T11D",
                         'ref_no' => "",
@@ -1016,7 +1016,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 123,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 80,    
                         'item_name' => "Pomme Frambosie",
                         'ref_no' => "",
@@ -1024,7 +1024,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 124,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 123,    
                         'item_name' => "PTPF",
                         'ref_no' => "",
@@ -1032,7 +1032,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 125,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 123,    
                         'item_name' => "T03",
                         'ref_no' => "",
@@ -1040,7 +1040,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 126,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 79,    
                         'item_name' => "Header Cards",
                         'ref_no' => "",
@@ -1048,7 +1048,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 127,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 79,    
                         'item_name' => "Insert Cards",
                         'ref_no' => "",
@@ -1056,7 +1056,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 128,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 79,    
                         'item_name' => "Cascades",
                         'ref_no' => "",
@@ -1064,7 +1064,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 129,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 78,    
                         'item_name' => "Disney",
                         'ref_no' => "",
@@ -1072,7 +1072,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 130,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 129,    
                         'item_name' => "Hang Tags",
                         'ref_no' => "",
@@ -1080,7 +1080,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 131,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 130,    
                         'item_name' => "Disney Baby",
                         'ref_no' => "",
@@ -1088,7 +1088,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 132,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 131,    
                         'item_name' => "DBB1",
                         'ref_no' => "",
@@ -1096,7 +1096,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 133,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 131,    
                         'item_name' => "DBB2",
                         'ref_no' => "",
@@ -1104,7 +1104,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 134,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 131,    
                         'item_name' => "DBB3",
                         'ref_no' => "",
@@ -1112,7 +1112,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 135,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 130,    
                         'item_name' => "Disney Boy",
                         'ref_no' => "",
@@ -1120,7 +1120,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 136,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 135,    
                         'item_name' => "COD1",
                         'ref_no' => "",
@@ -1128,7 +1128,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 137,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 135,    
                         'item_name' => "COD2",
                         'ref_no' => "",
@@ -1136,7 +1136,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 138,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 135,    
                         'item_name' => "COD2x",
                         'ref_no' => "",
@@ -1144,7 +1144,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 139,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 135,    
                         'item_name' => "COD3",
                         'ref_no' => "",
@@ -1152,7 +1152,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 140,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 130,    
                         'item_name' => "Disney Girl",
                         'ref_no' => "",
@@ -1160,7 +1160,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 141,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 140,    
                         'item_name' => "COD1",
                         'ref_no' => "",
@@ -1168,7 +1168,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 142,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 140,    
                         'item_name' => "COD2",
                         'ref_no' => "",
@@ -1176,7 +1176,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 143,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 140,    
                         'item_name' => "COD2x",
                         'ref_no' => "",
@@ -1184,7 +1184,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 144,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 140,    
                         'item_name' => "COD3",
                         'ref_no' => "",
@@ -1192,7 +1192,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 145,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 78,    
                         'item_name' => "Marvel",
                         'ref_no' => "",
@@ -1200,7 +1200,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 146,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 145,    
                         'item_name' => "Hang Tag",
                         'ref_no' => "",
@@ -1208,7 +1208,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 147,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 146,    
                         'item_name' => "Boy - DM1",
                         'ref_no' => "",
@@ -1216,7 +1216,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 148,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 146,    
                         'item_name' => "Girl - DM2",
                         'ref_no' => "",
@@ -1224,7 +1224,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 149,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 78,    
                         'item_name' => "Star Wars",
                         'ref_no' => "",
@@ -1232,7 +1232,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 150,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 149,    
                         'item_name' => "Hang Tag",
                         'ref_no' => "",
@@ -1240,7 +1240,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 151,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 150,    
                         'item_name' => "Boy - DSW",
                         'ref_no' => "",
@@ -1248,7 +1248,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 152    ,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 150,    
                         'item_name' => "Girl - DSW",
                         'ref_no' => "",
@@ -1256,7 +1256,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 153,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 78,    
                         'item_name' => "Smiley",
                         'ref_no' => "",
@@ -1264,7 +1264,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 154,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 153,    
                         'item_name' => "Hang Tag",
                         'ref_no' => "",
@@ -1272,7 +1272,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 155,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 154,    
                         'item_name' => "Smiley Baby - SMIBB1",
                         'ref_no' => "",
@@ -1280,7 +1280,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 156,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 154,    
                         'item_name' => "Smiley Kids - SMI1",
                         'ref_no' => "",
@@ -1288,7 +1288,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 157,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 78,    
                         'item_name' => "Warner",
                         'ref_no' => "",
@@ -1296,7 +1296,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 158,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 157,    
                         'item_name' => "Hang Tag",
                         'ref_no' => "",
@@ -1304,7 +1304,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 159,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 158,    
                         'item_name' => "Batman – HTBT",
                         'ref_no' => "",
@@ -1312,7 +1312,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 160,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 158,    
                         'item_name' => "LooneyTunesClassic – HTLT",
                         'ref_no' => "",
@@ -1320,7 +1320,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 161,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 158,    
                         'item_name' => "Superman – HTSM",
                         'ref_no' => "",
@@ -1328,7 +1328,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 162,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 158,    
                         'item_name' => "Wonder woman - WWHT",
                         'ref_no' => "",
@@ -1336,7 +1336,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 163,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 78,    
                         'item_name' => "Puriculture / Premaman",
                         'ref_no' => "",
@@ -1344,7 +1344,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 164,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 163,    
                         'item_name' => "Hang Tag",
                         'ref_no' => "",
@@ -1352,7 +1352,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 165,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 164,    
                         'item_name' => "Baby - T12",
                         'ref_no' => "",
@@ -1360,7 +1360,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 166,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 78,    
                         'item_name' => "Maternity",
                         'ref_no' => "",
@@ -1368,7 +1368,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 167,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 166,    
                         'item_name' => "Hang Tag",
                         'ref_no' => "",
@@ -1376,7 +1376,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 168,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 167,    
                         'item_name' => "HM1BA",
                         'ref_no' => "",
@@ -1384,7 +1384,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 169,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 167,    
                         'item_name' => "HM1BRA",
                         'ref_no' => "",
@@ -1392,7 +1392,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 170,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 167,    
                         'item_name' => "HM1D",
                         'ref_no' => "",
@@ -1400,7 +1400,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 171,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 167,    
                         'item_name' => "HM1",
                         'ref_no' => "",
@@ -1408,7 +1408,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 172,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 167,    
                         'item_name' => "HM2BRA",
                         'ref_no' => "",
@@ -1416,7 +1416,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 173,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 167,    
                         'item_name' => "MPT",
                         'ref_no' => "",
@@ -1424,7 +1424,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 174,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 78,    
                         'item_name' => "Price Tag",
                         'ref_no' => "",
@@ -1432,7 +1432,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 175,
-                        'company_id' => 1,
+                        'company_id' => 2,
                         'parent_id' => 174,    
                         'item_name' => "PT",
                         'ref_no' => "",
