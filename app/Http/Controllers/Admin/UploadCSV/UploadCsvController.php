@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use DB;
 use App\Classes\Uploads;
+use Carbon\Carbon;
+use \Datetime;
 
 class UploadCsvController extends Controller
 {
@@ -79,53 +81,31 @@ class UploadCsvController extends Controller
         
           if (preg_match('/ORC_M3_PO_FILE_BU-A-ORCIN/',$filename))
           {
-            return $data     =  $upload_obj->csv_to_array($path,$delimiter);
-            $data_exists = OrchestraParcelDetails::select()->get();
+            $data     =  $upload_obj->csv_to_array($path,$delimiter);
+            $data_exists = OrchestraItemDetails::select()->get();
 
             if (count($data_exists)>0)
             {
               foreach ($data as $key => $value)
               {
-                  $parcel_uvc = DB::table('orchestra_parcel_details')->where('UVC',$data[$key]['UVC'])->select('*')->get();
-                  if (count($parcel_uvc)>0)
+                  $item_details_uvc = DB::table('orchestra_item_details')->where('UVC',$data[$key]['REFERENCE CODE'])->select('*')->get();
+                  if (count($item_details_uvc)>0)
                   {
-                    $parcel_po = DB::table('orchestra_parcel_details')->where('UVC',$data[$key]['UVC'])->where('BuyerPONo',$data[$key]['BuyerPONo'])->select('*')->get();
-                    if (count($parcel_po)>0)
+                    $item_details_po = DB::table('orchestra_item_details')->where('UVC',$data[$key]['REFERENCE CODE'])->where('BuyerPONo',$data[$key]['PO'])->select('*')->get();
+                    if (count($item_details_po)>0)
                     {
-                      $parcel_version = DB::table('orchestra_parcel_details')->where('UVC',$data[$key]['UVC'])->where('BuyerPONo',$data[$key]['BuyerPONo'])->where('VersionNumber',$data[$key]['VersionNumber'])->select('*')->get();
-                      if (count($parcel_version)>0)
-                      {
-                        $parcel_edition = DB::table('orchestra_parcel_details')->where('UVC',$data[$key]['UVC'])->where('BuyerPONo',$data[$key]['BuyerPONo'])->where('VersionNumber',$data[$key]['VersionNumber'])->where('EditionNumber',$data[$key]['EditionNumber'])->select('*')->get();
-                        if (count($parcel_edition))
-                        {
-                          $parcel_std = DB::table('orchestra_parcel_details')->where('UVC',$data[$key]['UVC'])->where('BuyerPONo',$data[$key]['BuyerPONo'])->where('VersionNumber',$data[$key]['VersionNumber'])->where('EditionNumber',$data[$key]['EditionNumber'])->where('IsSTD',$data[$key]['IsSTD'])->select('*')->get();
-                          if (count($parcel_std)>0)
-                          {
-                            $upload_obj->updateOrchestraParcelDetails($data,$key);
-                          }
-                          else
-                          {
-                            $upload_obj->insertOrchestraParcelDetails($data,$key);
-                          }
-                        }
-                        else
-                        {
-                          $upload_obj->insertOrchestraParcelDetails($data,$key);
-                        }
-                      }
-                      else
-                      {
-                        $upload_obj->insertOrchestraParcelDetails($data,$key);
-                      }
+                          
+                      $upload_obj->updateOrchestraItemDetails($data,$key);
+                          
                     }
                     else
                     {
-                      $upload_obj->insertOrchestraParcelDetails($data,$key);
+                      $upload_obj->insertOrchestraItemDetails($data,$key);
                     }
                   }
                   else
                   {
-                    $upload_obj->insertOrchestraParcelDetails($data,$key);
+                    $upload_obj->insertOrchestraItemDetails($data,$key);
                   }
                 }
                 $result = response()->json(['error' =>false,'message' => 'Uploaded Successfully'], 200);
@@ -134,7 +114,7 @@ class UploadCsvController extends Controller
               {
                 foreach ($data as $key=> $value)
                 {
-                  $upload_obj->insertOrchestraParcelDetails($data,$key);
+                  $upload_obj->insertOrchestraItemDetails($data,$key);
                 }
                 $result = response()->json(['error' =>false,'message' => 'Uploaded Successfully'], 200);
               }

@@ -26,7 +26,7 @@ class DropNomAppleFromOrchestraParcelDetailsTable extends Migration
     public function down()
     {
         Schema::table('orchestra_parcel_details', function (Blueprint $table) {
-            $table->addColumn('NomApple');
+            $table->string('NomApple')->nullable();
         });
     }
 }

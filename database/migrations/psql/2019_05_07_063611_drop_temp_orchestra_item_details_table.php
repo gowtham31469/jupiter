@@ -33,8 +33,8 @@ class DropTempOrchestraItemDetailsTable extends Migration
             $table->string('SupplierCountry')->nullable();
             $table->string('BuyerEmail')->nullable();
             $table->string('First_ETD_SHIPMENT_DATE')->nullable();
-            $table->integer('EditionNumber')->nullable();
-            $table->integer('VersionNumber')->nullable();
+            $table->bigInteger('EditionNumber')->nullable();
+            $table->bigInteger('VersionNumber')->nullable();
             $table->string('Collection')->nullable();
             $table->string('BuyerPONo')->nullable();
             $table->string('BarcodeForPricesTags')->nullable();
@@ -73,7 +73,7 @@ class DropTempOrchestraItemDetailsTable extends Migration
             $table->double('Prix_Club_TUNISIE')->nullable();
             $table->double('Prix_Vente_ALGERIE')->nullable();
             $table->double('Prix_Club_ALGERIE')->nullable();
-            $table->integer('Quantity')->nullable();
+            $table->bigInteger('Quantity')->nullable();
             $table->string('UVC')->nullable();
             $table->string('ParcelBarCode',13)->nullable();
             $table->string('ParcelCode')->nullable();
