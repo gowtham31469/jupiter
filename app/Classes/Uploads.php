@@ -66,7 +66,14 @@ class Uploads
 		}
 		
 	}
-
+	/**
+	 * Parse Price CSV file data into Orchestra item details table 
+	 *
+	 * @param [array] $data
+	 * @param [integer] $key
+	 * @return void
+	 * @author Praveen <praveen@wizroots.com>
+	 */
 	public function insertOrchestraItemDetails($data,$key)
 	{
 	    OrchestraItemDetails::create([
@@ -148,9 +155,6 @@ class Uploads
 			  'Payment_Terms_Label'                => $data[$key]['PAYMENT TERMS LABEL'] === '_'?null:$data[$key]['PAYMENT TERMS LABEL'],
 			  'Po_Packing_Type'                    => $data[$key]['PO PACKING TYPE'] === 'STANDARD'?1:0,
 		  ]);
-
-		  // insert into orchestra parcel details table
-		  $this->insertOrchestraParcelDetails($data,$key);
 	}
 
   /**
@@ -351,7 +355,14 @@ class Uploads
 	    }
 	}
 
-
+	/**
+	 * Parse PO CSV file data into Orchestra parcel details table 
+	 *
+	 * @param [array] $data
+	 * @param [integer] $key
+	 * @return void
+	 * @author Praveen <praveen@wizroots.com>
+	 */
 	public function insertOrchestraParcelDetails($data,$key)
 	{
 		OrchestraParcelDetails::create([

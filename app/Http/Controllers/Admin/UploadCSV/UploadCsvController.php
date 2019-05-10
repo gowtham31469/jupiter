@@ -65,7 +65,8 @@ class UploadCsvController extends Controller
 
     /**
      * method to upload the the orchestra po csv file
-     * @return [type] [description]
+     * @return [boolean] [success or fail]
+     * @author Praveen <praveen@wizroots.com>
      */
     public function uploadPOCSVFile(Request $request)
     {
@@ -82,9 +83,11 @@ class UploadCsvController extends Controller
           if (preg_match('/ORC_M3_PO_FILE_BU-A-ORCIN/',$filename))
           {
             $data     =  $upload_obj->csv_to_array($path,$delimiter);
-            $data_exists = OrchestraItemDetails::select()->get();
+            $item_details_data_exists = OrchestraItemDetails::select()->get();
+            $parcel_details_data_exists = OrchestraParcelDetails::select()->get();
 
-            if (count($data_exists)>0)
+            /** If there is no collision, Insert into item details table otherwise update temp item details table*/
+            if (count($item_details_data_exists) > 0)
             {
               foreach ($data as $key => $value)
               {
@@ -108,7 +111,7 @@ class UploadCsvController extends Controller
                     $upload_obj->insertOrchestraItemDetails($data,$key);
                   }
                 }
-                $result = response()->json(['error' =>false,'message' => 'Uploaded Successfully'], 200);
+                
               }
               else
               {
@@ -116,8 +119,45 @@ class UploadCsvController extends Controller
                 {
                   $upload_obj->insertOrchestraItemDetails($data,$key);
                 }
-                $result = response()->json(['error' =>false,'message' => 'Uploaded Successfully'], 200);
+                
               }
+
+              /** If there is no collision, Insert into parcel details table otherwise update temp parcel details table*/
+              if (count($parcel_details_data_exists) > 0)
+              {
+                foreach ($data as $key => $value)
+                {
+                    $parcel_details_uvc = DB::table('orchestra_parcel_details')->where('UVC',$data[$key]['REFERENCE CODE'])->select('*')->get();
+                    if (count($parcel_details_uvc)>0)
+                    {
+                      $parcel_details_po = DB::table('orchestra_parcel_details')->where('UVC',$data[$key]['REFERENCE CODE'])->where('BuyerPONo',$data[$key]['PO'])->select('*')->get();
+                      if (count($parcel_details_po)>0)
+                      {
+                            
+                        $upload_obj->updateOrchestraParcelDetails($data,$key);
+                            
+                      }
+                      else
+                      {
+                        $upload_obj->insertOrchestraParcelDetails($data,$key);
+                      }
+                    }
+                    else
+                    {
+                      $upload_obj->insertOrchestraParcelDetails($data,$key);
+                    }
+                  }
+                  
+                }
+                else
+                {
+                  foreach ($data as $key=> $value)
+                  {
+                    $upload_obj->insertOrchestraParcelDetails($data,$key);
+                  }
+                  
+                }
+              $result = response()->json(['error' =>false,'message' => 'Uploaded Successfully'], 200);
           }
           else
           {
