@@ -17,8 +17,8 @@ class AddNewCsvFieldsToOrchestraParcelQuantityDetailsTable extends Migration
             $table->string('Country_Code')->nullable();
             $table->string('Season_Code')->nullable();
             $table->string('Currency')->nullable();
-            $table->double('Price')->nullable();
-            $table->double('Club_Price')->nullable();
+            $table->string('Price')->nullable();
+            $table->string('Club_Price')->nullable();
             $table->string('Nom_Appel')->nullable();
             $table->integer('Last_Change_Date')->nullable();
             $table->string('Supplier_Code')->nullable();

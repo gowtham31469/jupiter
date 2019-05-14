@@ -71,7 +71,7 @@
                 var filename_array = [];
                 var filename       = file.name;    
                 
-                while(filename.includes("ORC_M3_PO_FILE_BU-A-ORCIN") === false)
+                while(filename.includes("ORC_M3_PO_FILE") === false)
                 {                  
                     $('.snackbar_span').html("Upload correct file !!");
                     showSnackbar();
@@ -118,7 +118,7 @@
                 //Original string 
                 var filename       = file.name; 
                 
-                while(filename.includes("ORC_M3_PRICE_FILE_BU-A-ORCIN") === false)
+                while(filename.includes("ORC_M3_PRICE_FILE") === false)
                 {                  
                     $('.snackbar_span').html("Upload correct file !!");
                     showSnackbar();

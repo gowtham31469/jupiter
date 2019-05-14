@@ -74,8 +74,8 @@ class AddNewCsvFieldsToOrchestraParcelDetailsTable extends Migration
             $table->string('Start_Print_Date')->nullable();
             $table->string('Composition_Label')->nullable();
             $table->string('Po_Change_Date')->nullable();
-            $table->double('Purchase_Price')->nullable();
-            $table->double('Po_Amount')->nullable();
+            $table->string('Purchase_Price')->nullable();
+            $table->string('Po_Amount')->nullable();
             $table->string('Typologie')->nullable();
             $table->bigInteger('Payment_Condition_Code')->nullable();
             $table->string('Payment_Terms')->nullable();
