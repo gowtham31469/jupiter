@@ -14,7 +14,7 @@ class AddPoPackingTypeToTempOrchestraItemDetails extends Migration
     public function up()
     {
         Schema::table('temp_orchestra_item_details', function (Blueprint $table) {
-            $table->tinyInteger('Po_Packing_Type')->nullable();
+            $table->string('Po_Packing_Type')->nullable();
         });
     }
 

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddBigintegerDatatypeFieldsToTempOrchestraParcelDetails extends Migration
+class AddStringDatatypeFieldsToTempOrchestraParcelDetails extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +14,10 @@ class AddBigintegerDatatypeFieldsToTempOrchestraParcelDetails extends Migration
     public function up()
     {
         Schema::table('temp_orchestra_parcel_details', function (Blueprint $table) {
-            $table->bigInteger('EditionNumber')->nullable();
-            $table->bigInteger('VersionNumber')->nullable();
-            $table->bigInteger('IsSTD')->nullable();
-            $table->bigInteger('Quantity')->nullable();
+            $table->string('EditionNumber')->nullable();
+            $table->string('VersionNumber')->nullable();
+            $table->string('IsSTD')->nullable();
+            $table->string('Quantity')->nullable();
             $table->text('SupplierAddress')->nullable();
         });
     }

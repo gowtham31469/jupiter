@@ -73,7 +73,7 @@ class UploadCsvController extends Controller
       try
       {
         $upload_obj = new Uploads();
-        ini_set('max_execution_time', 2000);
+        ini_set('max_execution_time', 5000);
         $delimiter = ";";
         $path     = $request->file('file')->getRealPath();
         $filename = $request->file('file')->getClientOriginalName();
@@ -157,7 +157,7 @@ class UploadCsvController extends Controller
               }
               
             }
-            $result = response()->json(['error' =>false,'message' => 'Uploaded Successfully'], 200);
+            $result = response()->json(['error' =>false,'message' => 'PO CSV File Uploaded Successfully'], 200);
           }
           else
           {
@@ -180,7 +180,7 @@ class UploadCsvController extends Controller
       try
       {
         $upload_obj = new Uploads();
-        ini_set('max_execution_time', 2000);
+        ini_set('max_execution_time', 5000);
         $delimiter = ";";
         $path     = $request->file('file')->getRealPath();
         $filename = $request->file('file')->getClientOriginalName();
@@ -193,8 +193,8 @@ class UploadCsvController extends Controller
             
             foreach ($data as $key=> $value)
             {
-              $parcel_details_data = DB::table('orchestra_parcel_details')->where('SKU_Code', 'ilike',trim($data[$key]['SKU CODE']))->select('*')->first();
-              $item_details_data   = DB::table('orchestra_item_details')->where('UVC_TCO', 'ilike',trim($data[$key]['SKU CODE']))->select('*')->first();
+              $parcel_details_data = DB::table('orchestra_parcel_details')->where('SKU_Code', 'ilike',trim($data[$key]['SKU CODE']))->select('*')->get();
+              $item_details_data   = DB::table('orchestra_item_details')->where('UVC_TCO', 'ilike',trim($data[$key]['SKU CODE']))->select('*')->get();
               //$quantity_uvc = DB::table('orchestra_parcel_quantity_details')->where('UVC_TCO',$data[$key]['SKU CODE'])->select('*')->get();
               // if (count($quantity_uvc)>0)
               // {
@@ -204,11 +204,20 @@ class UploadCsvController extends Controller
               // }
               // else
               // {
-                $upload_obj->insertOrchestraParcelQuantityDetails($data, $key, $parcel_details_data);
-                $upload_obj->updateOrchestraItemDetailsPriceDetails($data, $key, $item_details_data);
+
              // }
+              if($parcel_details_data)
+              {
+                $upload_obj->insertOrchestraParcelQuantityDetails($data, $key, $parcel_details_data);
+              }
+                
+              if($item_details_data)
+              {
+                $upload_obj->updateOrchestraItemDetailsPriceDetails($data, $key, $item_details_data);
+              }
+              
             }
-            $result = response()->json(['error' =>false,'message' => 'Uploaded Successfully'], 200);
+            $result = response()->json(['error' =>false,'message' => 'Price CSV File Uploaded Successfully'], 200);
           }
           else
           {

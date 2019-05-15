@@ -81,11 +81,11 @@
 
             this.on("complete", function(file){        
                  this.removeFile(file);
-                 $('.snackbar_span').html("File uploaded successfully");
+                 $('.snackbar_span').html("PO File uploaded successfully");
                  showSnackbar();
             });
             this.on("success", function(file, response){ 
-                $('.snackbar_span').html("File uploaded successfully");
+                $('.snackbar_span').html("PO File uploaded successfully");
                 showSnackbar();
                 $('.dz-remove').hide();
                  this.removeFile(file);
@@ -126,12 +126,12 @@
                 }
             });
             this.on("complete", function(file){   
-                $('.snackbar_span').html("File uploaded successfully");
+                $('.snackbar_span').html("Price CSV File uploaded successfully");
                 showSnackbar();     
                 this.removeFile(file);
             });
             this.on("success", function(file, response){ 
-                $('.snackbar_span').html("File uploaded successfully");
+                $('.snackbar_span').html("Price CSV File uploaded successfully");
                 showSnackbar();
                 $('.dz-remove').hide();
                  this.removeFile(file);

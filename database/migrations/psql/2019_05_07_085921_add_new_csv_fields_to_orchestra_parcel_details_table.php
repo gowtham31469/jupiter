@@ -16,9 +16,9 @@ class AddNewCsvFieldsToOrchestraParcelDetailsTable extends Migration
         Schema::table('orchestra_parcel_details', function (Blueprint $table) {
             $table->string('Season_Code')->nullable();
             $table->string('SKU_Code')->nullable();
-            $table->bigInteger('Po_Line_Number')->nullable();
-            $table->bigInteger('Po_Line_Suffix')->nullable();
-            $table->bigInteger('Po_Status_Code')->nullable();
+            $table->string('Po_Line_Number')->nullable();
+            $table->string('Po_Line_Suffix')->nullable();
+            $table->string('Po_Status_Code')->nullable();
             $table->string('Po_Status_Code_Description')->nullable();
             $table->string('Style_Code')->nullable();
             $table->string('Activity_Code')->nullable();
@@ -27,7 +27,7 @@ class AddNewCsvFieldsToOrchestraParcelDetailsTable extends Migration
             $table->string('Universe_Label')->nullable();
             $table->string('Department_Code')->nullable();
             $table->string('Department_Label')->nullable();
-            $table->bigInteger('Family_Code')->nullable();
+            $table->string('Family_Code')->nullable();
             $table->string('Family_Label')->nullable();
             $table->string('Sub_Family_Code')->nullable();
             $table->string('Sub_Family_Label')->nullable();
@@ -53,19 +53,19 @@ class AddNewCsvFieldsToOrchestraParcelDetailsTable extends Migration
             $table->string('Shipment_Destination_Label')->nullable();
             $table->string('Incoterms_Code')->nullable();
             $table->string('Incoterms_City_Label')->nullable();
-            $table->bigInteger('Sku_Barcode')->nullable();
+            $table->string('Sku_Barcode')->nullable();
             $table->string('Set_')->nullable();
             $table->string('Number_Of_Pieces')->nullable();
             $table->string('Color_Code')->nullable();
             $table->string('Color_Label')->nullable();
             $table->string('Standard_Code')->nullable();
-            $table->bigInteger('Standard_Barcode')->nullable();
+            $table->string('Standard_Barcode')->nullable();
             $table->string('Size_Range_Code')->nullable();
             $table->string('Size_Range_Label')->nullable();
             $table->string('Size_Code')->nullable();
             $table->string('Size_Label')->nullable();
-            $table->bigInteger('Size_Breakdown')->nullable();
-            $table->bigInteger('Total_Standard_Solid_Parcel_Number')->nullable();
+            $table->string('Size_Breakdown')->nullable();
+            $table->string('Total_Standard_Solid_Parcel_Number')->nullable();
             $table->string('Product_Type')->nullable();
             $table->string('Licence_Code')->nullable();
             $table->string('Licence_Label')->nullable();
@@ -77,7 +77,7 @@ class AddNewCsvFieldsToOrchestraParcelDetailsTable extends Migration
             $table->string('Purchase_Price')->nullable();
             $table->string('Po_Amount')->nullable();
             $table->string('Typologie')->nullable();
-            $table->bigInteger('Payment_Condition_Code')->nullable();
+            $table->string('Payment_Condition_Code')->nullable();
             $table->string('Payment_Terms')->nullable();
             $table->string('Payment_Terms_Label')->nullable();
             $table->string('NomApple')->nullable();
