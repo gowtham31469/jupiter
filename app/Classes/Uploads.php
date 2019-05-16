@@ -159,10 +159,12 @@ class Uploads
 
   /**
    * method to update the price and country details in orchestra item details in DB
-   * @param  [type] $data [description]
-   * @return [type]       [description]
+   * @param  [type] $data
+   * @param  [type] $key
+   * @param  [type] $item_details_datas
+   * @author Praveen <praveen@wizroots.com>
    */
-	public function updateOrchestraItemDetailsPriceDetails($data, $key, $item_details_datas)
+	public function updateOrchestraItemPriceDetails($data, $key, $item_details_datas)
 	{
 		$currency = trim($data[$key]['CURRENCY']);
 		foreach( $item_details_datas as $item_details_data)
@@ -347,6 +349,15 @@ class Uploads
             'NomApple' => $data[$key]['NomApple']]);
 	}
 
+	/**
+	 * Parse Price CSV file data into Orchestra parcel quantity details table 
+	 *
+	 * @param [array] $data
+	 * @param [integer] $key
+	 * @param [integer] $parcel_details_datas
+	 * @return void
+	 * @author Praveen <praveen@wizroots.com>
+	 */
 	public function insertOrchestraParcelQuantityDetails($data, $key, $parcel_details_datas)
 	{
 		foreach($parcel_details_datas as $parcel_details_data)
