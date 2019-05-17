@@ -358,32 +358,28 @@ class Uploads
 	 * @return void
 	 * @author Praveen <praveen@wizroots.com>
 	 */
-	public function insertOrchestraParcelQuantityDetails($data, $key, $parcel_details_datas)
+	public function insertOrchestraParcelQuantityDetails($data, $key, $parcel_details_data)
 	{
-		foreach($parcel_details_datas as $parcel_details_data)
-		{
-			OrchestraParcelQuantityDetails::create([
-				'FactoryCode' 	       => $parcel_details_data->FactoryCode,
-				'BuyerPONo'            => $parcel_details_data->BuyerPONo,
-				'Theme'                => $parcel_details_data->Theme,
-				'UVC_TCO'              => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
-				'Quantity'             => $parcel_details_data->Quantity,
-				'Color'                => $parcel_details_data->Color_Code,
-				'UVC'                  => trim($parcel_details_data->UVC) === '_'?null:trim($parcel_details_data->UVC),
-				'Size'                 => $parcel_details_data->Size_Label,
-				'BarcodeForPricesTags' => $data[$key]['SKU BARCODE'],
-				'Country_Code'         => $data[$key]['COUNTRY CODE'],
-				'Season_Code'          => $data[$key]['SEASON CODE'],
-				'Currency'             => $data[$key]['CURRENCY'],
-				'Price'                => $data[$key]['PRICE'],
-				'Club_Price'           => $data[$key]['CLUB PRICE'],
-				'Nom_Appel'            => $data[$key]['NOM_APPEL'],
-				'Last_Change_Date'     => $data[$key]['LAST_CHANGE_DATE'],
-				'Supplier_Code'        => $data[$key]['SUPPLIER_CODE'],
-				'Supplier_Name'        => $data[$key]['SUPPLIER_NAME'],
-				]);
-		}
-		
+		OrchestraParcelQuantityDetails::create([
+			'FactoryCode' 	       => $parcel_details_data->FactoryCode,
+			'BuyerPONo'            => $parcel_details_data->BuyerPONo,
+			'Theme'                => $parcel_details_data->Theme,
+			'UVC_TCO'              => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
+			'Quantity'             => $parcel_details_data->Quantity,
+			'Color'                => $parcel_details_data->Color_Code,
+			'UVC'                  => trim($parcel_details_data->UVC) === '_'?null:trim($parcel_details_data->UVC),
+			'Size'                 => $parcel_details_data->Size_Label,
+			'BarcodeForPricesTags' => $data[$key]['SKU BARCODE'],
+			'Country_Code'         => $data[$key]['COUNTRY CODE'],
+			'Season_Code'          => $data[$key]['SEASON CODE'],
+			'Currency'             => $data[$key]['CURRENCY'],
+			'Price'                => $data[$key]['PRICE'],
+			'Club_Price'           => $data[$key]['CLUB PRICE'],
+			'Nom_Appel'            => $data[$key]['NOM_APPEL'],
+			'Last_Change_Date'     => $data[$key]['LAST_CHANGE_DATE'],
+			'Supplier_Code'        => $data[$key]['SUPPLIER_CODE'],
+			'Supplier_Name'        => $data[$key]['SUPPLIER_NAME'],
+			]);
 	}
 
 	public function updateOrchestraParcelQuantityDetails($data,$key)
