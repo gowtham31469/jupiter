@@ -81,6 +81,7 @@ class UploadCsvController extends Controller
             $data     =  $upload_obj->csv_to_array($path,$delimiter);
             $item_details_data_exists = OrchestraItemDetails::select()->get();
             $parcel_details_data_exists = OrchestraParcelDetails::select()->get();
+            $customer_data = $upload_obj->isCustomerExists($data);
 
             /** If there is no collision, Insert into item details table otherwise update temp item details table*/
             if (count($item_details_data_exists) > 0)
@@ -99,8 +100,8 @@ class UploadCsvController extends Controller
                         $item_details_last_date = DB::table('orchestra_item_details')->where('UVC',trim($data[$key]['REFERENCE CODE']))->where('BuyerPONo',trim($data[$key]['PO']))->where('UVC_TCO',trim($data[$key]['SKU CODE']))->where('Po_Change_Date','<>',trim($data[$key]['PO CHANGE DATE']))->select('*')->get();
                         if(count($item_details_last_date)>0)
                         {
-                          // collision. update temp item details table
-                          //$upload_obj->updateOrchestraItemDetails($data,$key);
+                          // collision. insert temp item details table
+                          $upload_obj->insertOrchestraTempItemDetails($data,$key);
                         }
                       }
                       else
@@ -108,8 +109,8 @@ class UploadCsvController extends Controller
                         $item_details_last_date = DB::table('orchestra_item_details')->where('UVC',trim($data[$key]['REFERENCE CODE']))->where('BuyerPONo',trim($data[$key]['PO']))->where('Po_Change_Date','<>',trim($data[$key]['PO CHANGE DATE']))->select('*')->get();
                         if(count($item_details_last_date)>0)
                         {
-                          //collision. update temp item details table
-                          $upload_obj->updateOrchestraItemDetails($data,$key);
+                          // collision. insert temp item details table
+                          $upload_obj->insertOrchestraTempItemDetails($data,$key);
                         }
                         else 
                         {
@@ -155,7 +156,7 @@ class UploadCsvController extends Controller
                         if(count($parcel_details_last_date)>0)
                         {
                           // collision. update temp parcel details table
-                          //$upload_obj->updateOrchestraParcelDetails($data,$key);
+                          $upload_obj->updateOrchestraTempParcelDetails($data,$key);
                         }
                       }
                       else
@@ -164,7 +165,7 @@ class UploadCsvController extends Controller
                         if(count($parcel_details_last_date)>0)
                         {
                           //collision. update temp parcel details table 
-                         // $upload_obj->updateOrchestraParcelDetails($data,$key);
+                          $upload_obj->updateOrchestraTempParcelDetails($data,$key);
                         }
                         else 
                         {
@@ -246,7 +247,7 @@ class UploadCsvController extends Controller
                 if(count($quantity_date) > 0)
                 {
                   // collision. update temp orchestra parcel quantity details table 
-                  //$upload_obj->updateOrchestraParcelQuantityDetails($value);
+                  $upload_obj->updateOrchestraTempParcelQuantityDetails($data, $key, $parcel_details_data);
                 }
                 
               }
@@ -267,7 +268,7 @@ class UploadCsvController extends Controller
                 else 
                 {
                   // collision. update temp orchestra parcel quantity details table 
-                  //$upload_obj->updateOrchestraParcelQuantityDetails($value);
+                  $upload_obj->updateOrchestraTempParcelQuantityDetails($data, $key, $parcel_details_data);
                 }
               }
             }
@@ -292,8 +293,11 @@ class UploadCsvController extends Controller
               $diff_order = DB::table('orchestra_item_details')->where('UVC_TCO',trim($data[$key]['SKU CODE']))->whereNotIn('Last_Change_Date',[trim($data[$key]['LAST_CHANGE_DATE']), 'Null', 'null', 'NULL'])->select('*')->get();
               if (count($diff_order) > 0)
               {
+                // get po details from orchestra_item_details for this UVC_TCO, UVC and PO change date
+                $temp_item_details_data   = DB::table('temp_orchestra_item_details')->where('UVC_TCO', 'ilike',trim($data[$key]['SKU CODE']))->select('*')->get();
+
                 // collision. update temp orchestra item details table 
-                $upload_obj->updateOrchestraItemDetails($value);
+                $upload_obj->updateOrchestraTempItemDetails($data, $key, $temp_item_details_data);
               }
               else
               {
