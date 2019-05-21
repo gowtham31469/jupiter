@@ -31,7 +31,7 @@ class CSVDataHandlingController extends Controller
      * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
-    public function home()
+    public function conflictsCSV()
     {
       try
       {
@@ -45,6 +45,12 @@ class CSVDataHandlingController extends Controller
           View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
               return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
           });
+
+          $tp_item_details = DB::table('temp_orchestra_item_details')->get();
+
+          $tp_parcel_details = DB::table('temp_orchestra_item_details')->get();
+          $tp_parcel_qty_details = DB::table('temp_orchestra_parcel_quantity_details')->get();
+
           return view('Admin/Upload CSV/csv-conflicts');
         }
         else

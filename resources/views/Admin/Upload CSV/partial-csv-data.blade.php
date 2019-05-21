@@ -15,6 +15,7 @@
 <script type="text/javascript">
     window.location = "{{ url('/admin') }}";
 </script>
+<script src="{{ asset('js/Admin/orchestra-csv-upload.js') }}"></script>
 @endif @section('jqueryIncludes')
 
 <script type="text/javascript">

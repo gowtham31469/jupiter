@@ -43,11 +43,16 @@
 <script type="text/javascript">
     window.location = "{{ url('/admin') }}";
 </script>
+<script src="{{ asset('js/Admin/orchestra-csv-upload.js') }}"></script>
 @endif @section('jqueryIncludes')
 
 <script type="text/javascript">
     $(document).ready(function() {
         $('.logo').html('Upload CSV');
+
+        $(function() {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
     })
 
     Dropzone.options.poCsvFile = {
@@ -59,10 +64,10 @@
         maxFiles: 1,
         acceptedFiles: ".csv, .xlsx, .xls",
         addRemoveLinks: true,
-
+    
         init: function() {
              myDropzone1 = this; // closure
-
+    
             // You might want to show the submit button only when 
             // files are dropped here:
             this.on("addedfile", function(file) {
@@ -78,7 +83,7 @@
                     this.removeFile(file);
                 }
             });
-
+    
             this.on("complete", function(file){        
                  this.removeFile(file);
                  $('.snackbar_span').html("PO File uploaded successfully");
@@ -98,9 +103,9 @@
             });
         }
     };
-
+    
     Dropzone.options.priceCsvFile = {
-
+    
       // Prevents Dropzone from uploading dropped files immediately
         url:"upload-orchestra-price-file-csv",
         autoProcessQueue: false,
@@ -108,10 +113,10 @@
         maxFiles: 1,
         acceptedFiles: ".csv, .xlsx, .xls",
         addRemoveLinks: true,
-
+    
         init: function() {
             myDropzone2 = this; // closure
-
+    
             // You might want to show the submit button only when files are dropped here:
             this.on("addedfile", function(file) {
                 // Show submit button here and/or inform user to click it.
@@ -144,8 +149,8 @@
             });
         }
     };
-
-
+    
+    
     $('.upload-csv-files').on('click', function ()
     {
         if(myDropzone1.files.length === 1 && myDropzone2.files.length === 1)

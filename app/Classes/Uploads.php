@@ -84,25 +84,25 @@ class Uploads
 	public function insertOrchestraItemDetails($data,$key)
 	{
 	    OrchestraItemDetails::create([
-	          'FactoryCode'                        => trim($data[$key]['FACTORY CODE']) === '_'?null:trim($data[$key]['FACTORY CODE']),
-	          'SupplierName'                       => trim($data[$key]['SUPPLIER NAME']) === '_'?null:trim($data[$key]['SUPPLIER NAME']),
-	          'SupplierAddress'			           => trim($data[$key]['SUPPLIER ADDRESS']) === '_'?null:trim($data[$key]['SUPPLIER ADDRESS']),
-	          'SupplierEmail'                      => trim($data[$key]['SUPPLIER EMAIL']) === '_'?null:trim($data[$key]['SUPPLIER EMAIL']),
-	          'SupplierCountry'                    => trim($data[$key]['SUPPLIER COUNTRY']) === '_'?null:trim($data[$key]['SUPPLIER COUNTRY']),
-	          'BuyerEmail'                         => trim($data[$key]['BUYER EMAIL']) === '_'?null:trim($data[$key]['BUYER EMAIL']),
-	          'First_ETD_SHIPMENT_DATE'            => trim($data[$key]['FIRST ETD SHIPMENT DATE']) === '_'?null:trim($data[$key]['FIRST ETD SHIPMENT DATE']),
-	          'Collection'                         => trim($data[$key]['SEASON CODE']) === '_'?null:trim($data[$key]['SEASON CODE']),
-	          'BuyerPONo'                          => trim($data[$key]['PO']) === '_'?null:trim($data[$key]['PO']),
-	          'BarcodeForPricesTags'               => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE']),
-	          'UVC_TCO'                            => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
-	          'Description'                        => trim($data[$key]['THEME LABEL']) === '_'?null:trim($data[$key]['THEME LABEL']),
-	          'Color'                              => trim($data[$key]['COLOR CODE']) === '_'?null:trim($data[$key]['COLOR CODE']),
-	          'Size'                               => trim($data[$key]['SIZE LABEL']) === '_'?null:trim($data[$key]['SIZE LABEL']),
-	          'Age'                                => trim($data[$key]['SIZE RANGE LABEL']) === '_'?null:trim($data[$key]['SIZE RANGE LABEL']),
-	          'Disney'                             => trim($data[$key]['LICENCE CODE']) === 'DI'?1:0,
-	          'Marvel'                             => trim($data[$key]['LICENCE CODE']) === 'MA'?1:0,
-	          'Quantity'                           => trim($data[$key]['QTY PER SKU-PO']) === '_'?null:trim($data[$key]['QTY PER SKU-PO']),
-	          'UVC'                                => trim($data[$key]['REFERENCE CODE']) === '_'?null:trim($data[$key]['REFERENCE CODE']),
+				'FactoryCode'                        => trim($data[$key]['FACTORY CODE']) === '_'?null:trim($data[$key]['FACTORY CODE']),
+				'SupplierName'                       => trim($data[$key]['SUPPLIER NAME']) === '_'?null:trim($data[$key]['SUPPLIER NAME']),
+				'SupplierAddress'			               => trim($data[$key]['SUPPLIER ADDRESS']) === '_'?null:trim($data[$key]['SUPPLIER ADDRESS']),
+				'SupplierEmail'                      => trim($data[$key]['SUPPLIER EMAIL']) === '_'?null:trim($data[$key]['SUPPLIER EMAIL']),
+				'SupplierCountry'                    => trim($data[$key]['SUPPLIER COUNTRY']) === '_'?null:trim($data[$key]['SUPPLIER COUNTRY']),
+				'BuyerEmail'                         => trim($data[$key]['BUYER EMAIL']) === '_'?null:trim($data[$key]['BUYER EMAIL']),
+				'First_ETD_SHIPMENT_DATE'            => trim($data[$key]['FIRST ETD SHIPMENT DATE']) === '_'?null:trim($data[$key]['FIRST ETD SHIPMENT DATE']),
+				'Collection'                         => trim($data[$key]['SEASON CODE']) === '_'?null:trim($data[$key]['SEASON CODE']),
+				'BuyerPONo'                          => trim($data[$key]['PO']) === '_'?null:trim($data[$key]['PO']),
+				'BarcodeForPricesTags'               => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE']),
+				'UVC_TCO'                            => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
+				'Description'                        => trim($data[$key]['THEME LABEL']) === '_'?null:trim($data[$key]['THEME LABEL']),
+				'Color'                              => trim($data[$key]['COLOR CODE']) === '_'?null:trim($data[$key]['COLOR CODE']),
+				'Size'                               => trim($data[$key]['SIZE LABEL']) === '_'?null:trim($data[$key]['SIZE LABEL']),
+				'Age'                                => trim($data[$key]['SIZE RANGE LABEL']) === '_'?null:trim($data[$key]['SIZE RANGE LABEL']),
+				'Disney'                             => trim($data[$key]['LICENCE CODE']) === 'DI'?1:0,
+				'Marvel'                             => trim($data[$key]['LICENCE CODE']) === 'MA'?1:0,
+				'Quantity'                           => trim($data[$key]['QTY PER SKU-PO']) === '_'?null:trim($data[$key]['QTY PER SKU-PO']),
+				'UVC'                                => trim($data[$key]['REFERENCE CODE']) === '_'?null:trim($data[$key]['REFERENCE CODE']),
 			  'HangTag_Print_Date'                 => trim($data[$key]['START PRINT DATE']) === '_'?null:trim($data[$key]['START PRINT DATE']),
 			  'Po_Line_Number'                     => trim($data[$key]['PO LINE NUMBER']) === '_'?null:trim($data[$key]['PO LINE NUMBER']),
 			  'Po_Line_Suffix'                     => trim($data[$key]['PO LINE SUFFIX']) === '_'?null:trim($data[$key]['PO LINE SUFFIX']),
@@ -243,6 +243,130 @@ class Uploads
 	}
 
 	/**
+   * method to insert the price and country details in orchestra item details in DB, without po details
+   * @param  [type] $data
+   * @param  [type] $key
+   * @author Praveen <praveen@wizroots.com>
+   */
+	public function insertOrchestraItemPriceDetails($data, $key)
+	{
+		$currency = trim($data[$key]['CURRENCY']);
+
+		// check if UVC_TCO and last change date already exists or not
+		$item_details_count = DB::table('orchestra_item_details')->where('UVC_TCO',trim($data[$key]['SKU CODE']))->where('Last_Change_Date',trim($data[$key]['LAST_CHANGE_DATE']))->count();
+
+		if($item_details_count === 0)
+		{
+			switch ($currency) {
+				case "EUR":
+					OrchestraItemDetails::create(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+					'UVC_TCO'              => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
+					'Collection'           => trim($data[$key]['SEASON CODE']) === '_'?null:trim($data[$key]['SEASON CODE']),
+					'Last_Change_Date'     => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+					'Supplier_Code'        => trim($data[$key]['SUPPLIER_CODE']) === '_'?null:trim($data[$key]['SUPPLIER_CODE']),
+					'Supplier_Name'        => trim($data[$key]['SUPPLIER_NAME']) === '_'?null:trim($data[$key]['SUPPLIER_NAME']),
+					'BarcodeForPricesTags' => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE']),
+					'PrixEurope'           => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
+					'PrixClubEurope'       => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE'])]);
+					break;
+				case "SAR":
+					OrchestraItemDetails::create(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+					'UVC_TCO'              => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
+					'Collection'           => trim($data[$key]['SEASON CODE']) === '_'?null:trim($data[$key]['SEASON CODE']),
+					'Last_Change_Date'     => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+					'Supplier_Code'        => trim($data[$key]['SUPPLIER_CODE']) === '_'?null:trim($data[$key]['SUPPLIER_CODE']),
+					'Supplier_Name'        => trim($data[$key]['SUPPLIER_NAME']) === '_'?null:trim($data[$key]['SUPPLIER_NAME']),
+					'BarcodeForPricesTags' => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE']),
+					'Prix_Vente_Arabie_Saoudite' => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
+					'Prix_Club_Arabie_Saoudite'  => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE'])]);
+					break;
+				case "CAD":
+					OrchestraItemDetails::create(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+					'UVC_TCO'              => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
+					'Collection'           => trim($data[$key]['SEASON CODE']) === '_'?null:trim($data[$key]['SEASON CODE']),
+					'Last_Change_Date'     => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+					'Supplier_Code'        => trim($data[$key]['SUPPLIER_CODE']) === '_'?null:trim($data[$key]['SUPPLIER_CODE']),
+					'Supplier_Name'        => trim($data[$key]['SUPPLIER_NAME']) === '_'?null:trim($data[$key]['SUPPLIER_NAME']),
+					'BarcodeForPricesTags' => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE']),
+					'Prix_Vente_Canada'    => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
+					'Prix_Club_Canada'     => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE'])]);
+					break;
+				case "CHF":
+					OrchestraItemDetails::create(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+					'UVC_TCO'              => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
+					'Collection'           => trim($data[$key]['SEASON CODE']) === '_'?null:trim($data[$key]['SEASON CODE']),
+					'Last_Change_Date'     => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+					'Supplier_Code'        => trim($data[$key]['SUPPLIER_CODE']) === '_'?null:trim($data[$key]['SUPPLIER_CODE']),
+					'Supplier_Name'        => trim($data[$key]['SUPPLIER_NAME']) === '_'?null:trim($data[$key]['SUPPLIER_NAME']),
+					'BarcodeForPricesTags' => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE']),
+					'Prix_Vente_Suisse'    => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
+					'Prix_Club_Suisse'     => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE'])]);
+					break;
+				case "MAD":
+					OrchestraItemDetails::create(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+					'UVC_TCO'              => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
+					'Collection'           => trim($data[$key]['SEASON CODE']) === '_'?null:trim($data[$key]['SEASON CODE']),
+					'Last_Change_Date'     => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+					'Supplier_Code'        => trim($data[$key]['SUPPLIER_CODE']) === '_'?null:trim($data[$key]['SUPPLIER_CODE']),
+					'Supplier_Name'        => trim($data[$key]['SUPPLIER_NAME']) === '_'?null:trim($data[$key]['SUPPLIER_NAME']),
+					'BarcodeForPricesTags' => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE']),
+					'Prix_Vente_Maroc'     => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
+					'Prix_Club_Maroc'      => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE'])]);
+					break;
+				case "MUR":
+					OrchestraItemDetails::create(['Nom_Appel'    => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+					'UVC_TCO'              => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
+					'Collection'           => trim($data[$key]['SEASON CODE']) === '_'?null:trim($data[$key]['SEASON CODE']),
+					'Last_Change_Date'     => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+					'Supplier_Code'        => trim($data[$key]['SUPPLIER_CODE']) === '_'?null:trim($data[$key]['SUPPLIER_CODE']),
+					'Supplier_Name'        => trim($data[$key]['SUPPLIER_NAME']) === '_'?null:trim($data[$key]['SUPPLIER_NAME']),
+					'BarcodeForPricesTags' => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE']),
+					'Prix_Vente_Ile_Maurice' => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
+					'Prix_Club_Ile_Maurice'  => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE'])]);
+					break;
+				case "DZD":
+					OrchestraItemDetails::create(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+					'UVC_TCO'              => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
+					'Collection'           => trim($data[$key]['SEASON CODE']) === '_'?null:trim($data[$key]['SEASON CODE']),
+					'Last_Change_Date'     => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+					'Supplier_Code'        => trim($data[$key]['SUPPLIER_CODE']) === '_'?null:trim($data[$key]['SUPPLIER_CODE']),
+					'Supplier_Name'        => trim($data[$key]['SUPPLIER_NAME']) === '_'?null:trim($data[$key]['SUPPLIER_NAME']),
+					'BarcodeForPricesTags' => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE']),
+					'Prix_Vente_ALGERIE'   => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
+					'Prix_Club_ALGERIE'    => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE'])]);
+					break;
+				case "USD":
+					OrchestraItemDetails::create(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+					'UVC_TCO'              => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
+					'Collection'           => trim($data[$key]['SEASON CODE']) === '_'?null:trim($data[$key]['SEASON CODE']),
+					'Last_Change_Date'     => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+					'Supplier_Code'        => trim($data[$key]['SUPPLIER_CODE']) === '_'?null:trim($data[$key]['SUPPLIER_CODE']),
+					'Supplier_Name'        => trim($data[$key]['SUPPLIER_NAME']) === '_'?null:trim($data[$key]['SUPPLIER_NAME']),
+					'BarcodeForPricesTags' => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE']),
+					'Prix_Vente_USA'      => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
+					'Prix_Club_USA'       => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE'])]);
+					break;
+				default:
+					OrchestraItemDetails::create(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+					'UVC_TCO'              => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
+					'Collection'           => trim($data[$key]['SEASON CODE']) === '_'?null:trim($data[$key]['SEASON CODE']),
+					'Last_Change_Date'     => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+					'Supplier_Code'        => trim($data[$key]['SUPPLIER_CODE']) === '_'?null:trim($data[$key]['SUPPLIER_CODE']),
+					'Supplier_Name'        => trim($data[$key]['SUPPLIER_NAME']) === '_'?null:trim($data[$key]['SUPPLIER_NAME']),
+					'BarcodeForPricesTags' => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE'])]);
+			}
+		}
+		else   
+		{
+			// get po details from orchestra_item_details for this UVC_TCO, UVC and PO change date
+			$item_details_datas = DB::table('orchestra_item_details')->where('UVC_TCO', 'ilike',trim($data[$key]['SKU CODE']))->where('Last_Change_Date',trim($data[$key]['LAST_CHANGE_DATE']))->select('*')->get();
+
+			$this->updateOrchestraItemPriceDetails($data, $key, $item_details_datas);
+		}	
+	    
+	}
+
+	/**
 	 * Parse PO CSV file data into Orchestra parcel details table 
 	 *
 	 * @param [array] $data
@@ -255,7 +379,7 @@ class Uploads
 		OrchestraParcelDetails::create([
 			'FactoryCode'                        => trim($data[$key]['FACTORY CODE']) === '_'?null:trim($data[$key]['FACTORY CODE']),
 			'SupplierName'                       => trim($data[$key]['SUPPLIER NAME']) === '_'?null:trim($data[$key]['SUPPLIER NAME']),
-			'SupplierAddress'			         => trim($data[$key]['SUPPLIER ADDRESS']) === '_'?null:trim($data[$key]['SUPPLIER ADDRESS']),
+			'SupplierAddress'			               => trim($data[$key]['SUPPLIER ADDRESS']) === '_'?null:trim($data[$key]['SUPPLIER ADDRESS']),
 			'SupplierEmail'                      => trim($data[$key]['SUPPLIER EMAIL']) === '_'?null:trim($data[$key]['SUPPLIER EMAIL']),
 			'SupplierCountry'                    => trim($data[$key]['SUPPLIER COUNTRY']) === '_'?null:trim($data[$key]['SUPPLIER COUNTRY']),
 			'BuyerPONo'                          => trim($data[$key]['PO']) === '_'?null:trim($data[$key]['PO']),
@@ -404,7 +528,7 @@ class Uploads
 			TempOrchestraItemDetails::create([
 				'FactoryCode'                        => trim($data[$key]['FACTORY CODE']) === '_'?null:trim($data[$key]['FACTORY CODE']),
 				'SupplierName'                       => trim($data[$key]['SUPPLIER NAME']) === '_'?null:trim($data[$key]['SUPPLIER NAME']),
-				'SupplierAddress'			           => trim($data[$key]['SUPPLIER ADDRESS']) === '_'?null:trim($data[$key]['SUPPLIER ADDRESS']),
+				'SupplierAddress'			               => trim($data[$key]['SUPPLIER ADDRESS']) === '_'?null:trim($data[$key]['SUPPLIER ADDRESS']),
 				'SupplierEmail'                      => trim($data[$key]['SUPPLIER EMAIL']) === '_'?null:trim($data[$key]['SUPPLIER EMAIL']),
 				'SupplierCountry'                    => trim($data[$key]['SUPPLIER COUNTRY']) === '_'?null:trim($data[$key]['SUPPLIER COUNTRY']),
 				'BuyerEmail'                         => trim($data[$key]['BUYER EMAIL']) === '_'?null:trim($data[$key]['BUYER EMAIL']),
@@ -501,7 +625,7 @@ class Uploads
 			TempOrchestraParcelDetails::create([
 				'FactoryCode'                        => trim($data[$key]['FACTORY CODE']) === '_'?null:trim($data[$key]['FACTORY CODE']),
 				'SupplierName'                       => trim($data[$key]['SUPPLIER NAME']) === '_'?null:trim($data[$key]['SUPPLIER NAME']),
-				'SupplierAddress'			         => trim($data[$key]['SUPPLIER ADDRESS']) === '_'?null:trim($data[$key]['SUPPLIER ADDRESS']),
+				'SupplierAddress'			               => trim($data[$key]['SUPPLIER ADDRESS']) === '_'?null:trim($data[$key]['SUPPLIER ADDRESS']),
 				'SupplierEmail'                      => trim($data[$key]['SUPPLIER EMAIL']) === '_'?null:trim($data[$key]['SUPPLIER EMAIL']),
 				'SupplierCountry'                    => trim($data[$key]['SUPPLIER COUNTRY']) === '_'?null:trim($data[$key]['SUPPLIER COUNTRY']),
 				'BuyerPONo'                          => trim($data[$key]['PO']) === '_'?null:trim($data[$key]['PO']),
@@ -588,75 +712,176 @@ class Uploads
    */
   public function updateOrchestraTempItemDetails($data, $key, $item_details_datas)
   {
-	  $currency = trim($data[$key]['CURRENCY']);
-	  if($item_details_datas)
+		$currency = trim($data[$key]['CURRENCY']);
+	  if(sizeof($item_details_datas) > 0)
 	  {
-		foreach( $item_details_datas as $item_details_data)
+			foreach( $item_details_datas as $item_details_data)
+			{
+				switch ($currency) {
+					case "EUR":
+						TempOrchestraItemDetails::where('id',$item_details_data->id)
+						->update(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+						'Last_Change_Date'    => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+						'PrixEurope'          => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
+						'PrixClubEurope'      => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE'])]);
+						break;
+					case "SAR":
+						TempOrchestraItemDetails::where('id',$item_details_data->id)
+						->update(['Nom_Appel'        => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+						'Last_Change_Date'           => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+						'Prix_Vente_Arabie_Saoudite' => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
+						'Prix_Club_Arabie_Saoudite'  => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE'])]);
+						break;
+					case "CAD":
+						TempOrchestraItemDetails::where('id',$item_details_data->id)
+						->update(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+						'Last_Change_Date'    => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+						'Prix_Vente_Canada'   => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
+						'Prix_Club_Canada'    => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE'])]);
+						break;
+					case "CHF":
+						TempOrchestraItemDetails::where('id',$item_details_data->id)
+						->update(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+						'Last_Change_Date'    => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+						'Prix_Vente_Suisse'   => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
+						'Prix_Club_Suisse'    => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE'])]);
+						break;
+					case "MAD":
+						TempOrchestraItemDetails::where('id',$item_details_data->id)
+						->update(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+						'Last_Change_Date'    => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+						'Prix_Vente_Maroc'    => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
+						'Prix_Club_Maroc'     => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE'])]);
+						break;
+					case "MUR":
+						TempOrchestraItemDetails::where('id',$item_details_data->id)
+						->update(['Nom_Appel'    => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+						'Last_Change_Date'       => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+						'Prix_Vente_Ile_Maurice' => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
+						'Prix_Club_Ile_Maurice'  => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE'])]);
+						break;
+					case "DZD":
+						TempOrchestraItemDetails::where('id',$item_details_data->id)
+						->update(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+						'Last_Change_Date'    => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+						'Prix_Vente_ALGERIE'  => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
+						'Prix_Club_ALGERIE'   => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE'])]);
+						break;
+					case "USD":
+						TempOrchestraItemDetails::where('id',$item_details_data->id)
+						->update(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+						'Last_Change_Date'    => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+						'Prix_Vente_USA'      => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
+						'Prix_Club_USA'       => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE'])]);
+						break;
+					default:
+						TempOrchestraItemDetails::where('id',$item_details_data->id)
+						->update(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+						'Last_Change_Date'    => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE'])]);
+				}
+			}
+		} 
+		else   
 		{
 			switch ($currency) {
 				case "EUR":
-					TempOrchestraItemDetails::where('id',$item_details_data->id)
-					->update(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
-					'Last_Change_Date'    => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
-					'PrixEurope'          => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
-					'PrixClubEurope'      => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE'])]);
+				  TempOrchestraItemDetails::create(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+					'UVC_TCO'              => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
+					'Collection'           => trim($data[$key]['SEASON CODE']) === '_'?null:trim($data[$key]['SEASON CODE']),
+					'Last_Change_Date'     => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+					'Supplier_Code'        => trim($data[$key]['SUPPLIER_CODE']) === '_'?null:trim($data[$key]['SUPPLIER_CODE']),
+					'Supplier_Name'        => trim($data[$key]['SUPPLIER_NAME']) === '_'?null:trim($data[$key]['SUPPLIER_NAME']),
+					'BarcodeForPricesTags' => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE']),
+					'PrixEurope'           => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
+					'PrixClubEurope'       => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE'])]);
 					break;
 				case "SAR":
-					TempOrchestraItemDetails::where('id',$item_details_data->id)
-					->update(['Nom_Appel'        => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
-					'Last_Change_Date'           => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+					TempOrchestraItemDetails::create(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+					'UVC_TCO'              => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
+					'Collection'           => trim($data[$key]['SEASON CODE']) === '_'?null:trim($data[$key]['SEASON CODE']),
+					'Last_Change_Date'     => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+					'Supplier_Code'        => trim($data[$key]['SUPPLIER_CODE']) === '_'?null:trim($data[$key]['SUPPLIER_CODE']),
+					'Supplier_Name'        => trim($data[$key]['SUPPLIER_NAME']) === '_'?null:trim($data[$key]['SUPPLIER_NAME']),
+					'BarcodeForPricesTags' => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE']),
 					'Prix_Vente_Arabie_Saoudite' => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
 					'Prix_Club_Arabie_Saoudite'  => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE'])]);
 					break;
 				case "CAD":
-					TempOrchestraItemDetails::where('id',$item_details_data->id)
-					->update(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
-					'Last_Change_Date'    => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
-					'Prix_Vente_Canada'   => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
-					'Prix_Club_Canada'    => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE'])]);
+					TempOrchestraItemDetails::create(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+					'UVC_TCO'              => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
+					'Collection'           => trim($data[$key]['SEASON CODE']) === '_'?null:trim($data[$key]['SEASON CODE']),
+					'Last_Change_Date'     => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+					'Supplier_Code'        => trim($data[$key]['SUPPLIER_CODE']) === '_'?null:trim($data[$key]['SUPPLIER_CODE']),
+					'Supplier_Name'        => trim($data[$key]['SUPPLIER_NAME']) === '_'?null:trim($data[$key]['SUPPLIER_NAME']),
+					'BarcodeForPricesTags' => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE']),
+					'Prix_Vente_Canada'    => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
+					'Prix_Club_Canada'     => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE'])]);
 					break;
 				case "CHF":
-					TempOrchestraItemDetails::where('id',$item_details_data->id)
-					->update(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
-					'Last_Change_Date'    => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
-					'Prix_Vente_Suisse'   => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
-					'Prix_Club_Suisse'    => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE'])]);
+					TempOrchestraItemDetails::create(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+					'UVC_TCO'              => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
+					'Collection'           => trim($data[$key]['SEASON CODE']) === '_'?null:trim($data[$key]['SEASON CODE']),
+					'Last_Change_Date'     => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+					'Supplier_Code'        => trim($data[$key]['SUPPLIER_CODE']) === '_'?null:trim($data[$key]['SUPPLIER_CODE']),
+					'Supplier_Name'        => trim($data[$key]['SUPPLIER_NAME']) === '_'?null:trim($data[$key]['SUPPLIER_NAME']),
+					'BarcodeForPricesTags' => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE']),
+					'Prix_Vente_Suisse'    => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
+					'Prix_Club_Suisse'     => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE'])]);
 					break;
 				case "MAD":
-					TempOrchestraItemDetails::where('id',$item_details_data->id)
-					->update(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
-					'Last_Change_Date'    => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
-					'Prix_Vente_Maroc'    => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
-					'Prix_Club_Maroc'     => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE'])]);
+					TempOrchestraItemDetails::create(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+					'UVC_TCO'              => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
+					'Collection'           => trim($data[$key]['SEASON CODE']) === '_'?null:trim($data[$key]['SEASON CODE']),
+					'Last_Change_Date'     => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+					'Supplier_Code'        => trim($data[$key]['SUPPLIER_CODE']) === '_'?null:trim($data[$key]['SUPPLIER_CODE']),
+					'Supplier_Name'        => trim($data[$key]['SUPPLIER_NAME']) === '_'?null:trim($data[$key]['SUPPLIER_NAME']),
+					'BarcodeForPricesTags' => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE']),
+					'Prix_Vente_Maroc'     => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
+					'Prix_Club_Maroc'      => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE'])]);
 					break;
 				case "MUR":
-					TempOrchestraItemDetails::where('id',$item_details_data->id)
-					->update(['Nom_Appel'    => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
-					'Last_Change_Date'       => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+					TempOrchestraItemDetails::create(['Nom_Appel'    => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+					'UVC_TCO'              => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
+					'Collection'           => trim($data[$key]['SEASON CODE']) === '_'?null:trim($data[$key]['SEASON CODE']),
+					'Last_Change_Date'     => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+					'Supplier_Code'        => trim($data[$key]['SUPPLIER_CODE']) === '_'?null:trim($data[$key]['SUPPLIER_CODE']),
+					'Supplier_Name'        => trim($data[$key]['SUPPLIER_NAME']) === '_'?null:trim($data[$key]['SUPPLIER_NAME']),
+					'BarcodeForPricesTags' => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE']),
 					'Prix_Vente_Ile_Maurice' => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
 					'Prix_Club_Ile_Maurice'  => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE'])]);
 					break;
 				case "DZD":
-					TempOrchestraItemDetails::where('id',$item_details_data->id)
-					->update(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
-					'Last_Change_Date'    => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
-					'Prix_Vente_ALGERIE'  => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
-					'Prix_Club_ALGERIE'   => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE'])]);
+					TempOrchestraItemDetails::create(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+					'UVC_TCO'              => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
+					'Collection'           => trim($data[$key]['SEASON CODE']) === '_'?null:trim($data[$key]['SEASON CODE']),
+					'Last_Change_Date'     => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+					'Supplier_Code'        => trim($data[$key]['SUPPLIER_CODE']) === '_'?null:trim($data[$key]['SUPPLIER_CODE']),
+					'Supplier_Name'        => trim($data[$key]['SUPPLIER_NAME']) === '_'?null:trim($data[$key]['SUPPLIER_NAME']),
+					'BarcodeForPricesTags' => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE']),
+					'Prix_Vente_ALGERIE'   => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
+					'Prix_Club_ALGERIE'    => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE'])]);
 					break;
 				case "USD":
-					TempOrchestraItemDetails::where('id',$item_details_data->id)
-					->update(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
-					'Last_Change_Date'    => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+					TempOrchestraItemDetails::create(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+					'UVC_TCO'              => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
+					'Collection'           => trim($data[$key]['SEASON CODE']) === '_'?null:trim($data[$key]['SEASON CODE']),
+					'Last_Change_Date'     => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+					'Supplier_Code'        => trim($data[$key]['SUPPLIER_CODE']) === '_'?null:trim($data[$key]['SUPPLIER_CODE']),
+					'Supplier_Name'        => trim($data[$key]['SUPPLIER_NAME']) === '_'?null:trim($data[$key]['SUPPLIER_NAME']),
+					'BarcodeForPricesTags' => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE']),
 					'Prix_Vente_USA'      => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
 					'Prix_Club_USA'       => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE'])]);
 					break;
 				default:
-					TempOrchestraItemDetails::where('id',$item_details_data->id)
-					->update(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
-					'Last_Change_Date'    => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE'])]);
+					TempOrchestraItemDetails::create(['Nom_Appel' => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+					'UVC_TCO'              => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
+					'Collection'           => trim($data[$key]['SEASON CODE']) === '_'?null:trim($data[$key]['SEASON CODE']),
+					'Last_Change_Date'     => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+					'Supplier_Code'        => trim($data[$key]['SUPPLIER_CODE']) === '_'?null:trim($data[$key]['SUPPLIER_CODE']),
+					'Supplier_Name'        => trim($data[$key]['SUPPLIER_NAME']) === '_'?null:trim($data[$key]['SUPPLIER_NAME']),
+					'BarcodeForPricesTags' => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE'])]);
 			}
 		}
-	  }
 	  
   }
 
