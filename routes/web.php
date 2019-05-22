@@ -70,6 +70,7 @@ Route::get('admin/order-management/reorder', 'Admin\OrderManagement\OrderControl
 Route::post('admin/orchestra/order-management/compositions-details', 'Admin\Orchestra\OrderManagementCntrl@compositionDetails');
 
 Route::post('admin/order-management/print-pdf', 'Admin\OrderManagement\OrderController@printPdf');
+Route::post('admin/order-management/print-pdf-arr', 'Admin\OrderManagement\OrderController@printPdfArr');
 Route::post('admin/order-management/print-pdf-small', 'Admin\OrderManagement\OrderController@printPdfSmall');
 Route::post('admin/order-management/print-pdf-table', 'Admin\OrderManagement\OrderController@printPdfTable');
 Route::post('admin/order-management/print-hang-pdf', 'Admin\OrderManagement\OrderController@printHangPdf');
@@ -716,3 +717,7 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::put('/settings/make-finishtype-enabled', 'ErpUser\ERPSettings\ERPSettingsController@makeFinishTypeEnabled');
 	Route::put('/settings/make-finishtype-disabled', 'ErpUser\ERPSettings\ERPSettingsController@makeFinishTypeDisabled');
 });
+
+
+Route::post('customer/orchestra/order-management/orders', 'Customer\Orchestra\OrderController@Orders');
+Route::post('customer/orchestra/order-management/order-status', 'Customer\Orchestra\OrderController@orderStatus');

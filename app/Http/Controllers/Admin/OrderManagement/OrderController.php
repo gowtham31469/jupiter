@@ -478,6 +478,64 @@ class OrderController extends Controller
         print_r(url('/storage/app/template/'.$name.'.pdf'));
     } 
 	
+	
+	/**
+	 * Print Preview For 150 * 100 Size Stickers
+	 *
+	 * @return pdf
+	 */
+	
+    public function printPdfArr(Request $request)
+    {
+		 $name=$request->name;
+		 $svgarr = explode(',_',$request->svg);
+         //$svg=urldecode($request->svg);
+         define ('PDF_FONT_NAME_MAIN', 'calibrib');
+         define ('PDF_FONT_NAME_DATA', 'calibrib');
+//          print_r($svg);
+        PDF::setImageScale(1.66);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('calibrib');
+		PDF::AddPage('P', 'A4');
+		PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+		PDF::SetAutoPageBreak(TRUE);
+		$i=0;
+		$j=0;
+		$yy=12.5;
+		foreach($svgarr as $value)
+        {
+			$svg=urldecode($value);
+			
+			if($i == 2)
+			{
+				PDF::AddPage('P', 'A4');
+				PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+				$yy=12.5;
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+				$i = 0;
+			}
+			else if($i == 0)
+			{
+				PDF::RoundedRect(10, 160, 150, 100, 0, '0000');
+				$yy=12.5;
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+				
+			}
+			else
+			{
+				PDF::RoundedRect(10, 160, 150, 100, 0, '0000');
+				$yy += 150;
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+			}
+			$i++;
+			$j++;
+		 }
+		 
+		 PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+		 print_r(url('/storage/app/template/'.$name.'.pdf'));
+    } 
+	
 	/**
 	 * Print Preview For Hang Tag
 	 *
@@ -691,18 +749,57 @@ class OrderController extends Controller
 	
      public function printPdfSmall(Request $request)
     {
-      
-        $name=$request->name;
-        $svg=urldecode($request->svg);
-        define ('PDF_FONT_NAME_MAIN', 'calibrib');
-        define ('PDF_FONT_NAME_DATA', 'calibrib');
-        PDF::setImageScale(1);
+		 
+		  $name=$request->name;
+		 $svgarr = explode(',_',$request->svg);
+         //$svg=urldecode($request->svg);
+         define ('PDF_FONT_NAME_MAIN', 'calibrib');
+         define ('PDF_FONT_NAME_DATA', 'calibrib');
+//          print_r($svg);
+        PDF::setImageScale(1.66);
         PDF::setPrintHeader(false);
         PDF::setPrintFooter(false);
         PDF::SetFont('calibrib');
-        PDF::AddPage();
-        PDF::RoundedRect(10, 10, 100, 70, 0, '0000');
-        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=95, $h=65, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+		PDF::AddPage('P', 'A4');
+		PDF::RoundedRect(10, 10, 100, 70, 0, '0000');
+		PDF::SetAutoPageBreak(TRUE);
+		$i=0;
+		$j=0;
+		$yy=12.5;
+		foreach($svgarr as $value)
+        {
+			$svg=urldecode($value);
+			
+			if($i == 3)
+			{
+				PDF::AddPage('P', 'A4');
+				PDF::RoundedRect(10, 10, 100, 70, 0, '0000');
+				$yy=12.5;
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+				$i = 0;
+			}
+			else  if($i == 0)
+			{
+				PDF::RoundedRect(10, 100, 100, 70, 0, '0000');
+				$yy=12.5;
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+				
+			}
+			else if($i == 1)
+			{
+				PDF::RoundedRect(10, 100, 100, 70, 0, '0000');
+				$yy += 90;
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+			}
+			else
+			{
+				PDF::RoundedRect(10, 190, 100, 70, 0, '0000');
+				$yy += 90;
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+			}
+			$i++;
+			$j++;
+		 }
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
     }

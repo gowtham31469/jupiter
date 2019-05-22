@@ -97,8 +97,8 @@ class OrderManagementCntrl extends Controller
 	
     public function Orders()
     {
-            $data['sticker_orders'] = DB::table('orchestra_parcel_details')->select('id','UVC',DB::raw("'-' as Season"),'BuyerPONo','SupplierName','NomApple as Style_Name','Quantity','IsSTD as Type',DB::raw("'Stickers' as OrderType"),DB::raw("'-' as Disney"))->get();
-            $data['label_orders'] = DB::table('orchestra_item_details')->select('id','UVC','Collection as Season',DB::raw("'-' as BuyerPONo"),'SupplierName','Description','Style_Name','Disney',DB::raw("'-' as Type"),'Quantity',DB::raw("'Labels' as OrderType"))->groupBy('id','UVC')->get();
+            $data['sticker_orders'] = DB::table('orchestra_parcel_details')->select('id','UVC',DB::raw("'-' as \"Season\""),'BuyerPONo','SupplierName','Product_Name as Style_Name','Quantity','IsSTD as Type',DB::raw("'Stickers' as \"OrderType\""),DB::raw("'-' as \"Disney\""))->get();
+            $data['label_orders'] = DB::table('orchestra_item_details')->select('id','UVC','Collection as Season',DB::raw("'-' as \"BuyerPONo\""),'SupplierName','Description','Style_Name','Disney',DB::raw("'-' as \"Type\""),'Quantity',DB::raw("'Labels' as \"OrderType\""))->groupBy('id','UVC')->get();
             echo json_encode($data);
     } 
 	
@@ -140,11 +140,12 @@ class OrderManagementCntrl extends Controller
     public function labelOrderDetails(Request $request)
     {
             $uvc=$request->uvc;
-            $data['order_details'] = DB::table('orchestra_item_details') ->leftJoin('orchestra_size_chart','orchestra_item_details.Size','=','orchestra_size_chart.age')->select('*',DB::raw("sum(Quantity) as Sum"))->where('UVC',$uvc)->groupBy('Size')->orderBy('orchestra_item_details.id')->get();
+            $data['order_details'] = DB::table('orchestra_item_details') ->leftJoin('orchestra_size_chart','orchestra_item_details.Size','=','orchestra_size_chart.age')->select('orchestra_item_details.*','orchestra_size_chart.cm',DB::raw("sum(\"Quantity\") as \"Sum\""))->where('UVC',$uvc)->groupBy('orchestra_item_details.id','Size','orchestra_size_chart.cm')->orderBy('orchestra_item_details.id')->get();
 		
-            $data['barcode'] = DB::table('orchestra_item_details')->select('*')->where('UVC',$uvc)->groupBy('BuyerPONo')->get();
+		
+            $data['barcode'] = DB::table('orchestra_item_details')->select('*')->where('UVC',$uvc)->groupBy('id','BuyerPONo')->get();
         
-            $total_qty = DB::table('orchestra_item_details')->select('*',DB::raw("sum(Quantity) as total_qty"))->where('UVC',$uvc)->groupBy('UVC')->get();
+            $total_qty = DB::table('orchestra_item_details')->select('*',DB::raw("sum(\"Quantity\") as total_qty"))->where('UVC',$uvc)->groupBy('id','UVC')->get();
             $data['total_qty']=$total_qty{0}->total_qty;
             if($total_qty{0}->Disney == 1)
             {
@@ -155,10 +156,10 @@ class OrderManagementCntrl extends Controller
                 $data['orchestra_wash_template']="/storage/app/template/orchestra_wcl_disney.svg";
                 $data['orchestra_wash_template_id']=2;
                 
-                $orchestra_template_front = DB::table('orchestra_template')->select('*')->where('item_id','2')->where('Disney','1')->get();
+                $orchestra_template_front = DB::table('orchestra_template')->select('*')->where('item_id','2')->where('disney','1')->get();
                 $data['orchestra_template_front']=$orchestra_template_front;
 				
-				 $treeviewData= DB::table("orchestra_item_master")->select('id',DB::raw('IF(ref_no = "", item_name, CONCAT(item_name," -  ",ref_no)) as text'),'parent_id')->orWhere('id','5')->orWhere('tag_name','Disney')->orWhere('id','1')->orderBy('item_name', 'asc')->get()->toArray();
+				 $treeviewData= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no IS NULL THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','5')->orWhere('tag_name','Disney')->orWhere('id','1')->orderBy('item_name', 'asc')->get()->toArray();
             if($treeviewData){
                         $childs = array();
                         foreach($treeviewData as &$item) 
@@ -185,13 +186,16 @@ class OrderManagementCntrl extends Controller
                 $data['orchestra_template']=$orchestra_template{0}->template_file;
                 $data['orchestra_template_id']=1;
                 
-                $data['orchestra_wash_template']="/storage/app/template/orchestra_wcl.svg";
+                $data['orchestra_wash_template_front']="/storage/app/template/Orchestra/WCL/sticker1.svg";
+                $data['orchestra_wash_template_back']="/storage/app/template/Orchestra/WCL/sticker2.svg";
+                $data['orchestra_wash_template_middle']="/storage/app/template/Orchestra/WCL/sticker3.svg";
                 $data['orchestra_wash_template_id']=1;
                 
-                $orchestra_template_front = DB::table('orchestra_template')->select('*')->where('item_id','2')->where('Disney','0')->get();
+                $orchestra_template_front = DB::table('orchestra_template')->select('*')->where('item_id','2')->where('disney','0')->get();
                 $data['orchestra_template_front']=$orchestra_template_front;
 				
-				 $treeviewData= DB::table("orchestra_item_master")->select('id',DB::raw('IF(ref_no = "", item_name, CONCAT(item_name," -  ",ref_no)) as text'),'parent_id')->orWhere('id','5')->orWhere('tag_name','hang')->orWhere('id','1')->orderBy('item_name', 'asc')->get()->toArray();
+				
+				 $treeviewData= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no IS NULL THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','5')->orWhere('tag_name','hang')->orWhere('id','1')->orderBy('item_name', 'asc')->get()->toArray();
             if($treeviewData){
                         $childs = array();
                         foreach($treeviewData as &$item) 
@@ -216,7 +220,7 @@ class OrderManagementCntrl extends Controller
          // $treeviewData= DB::table("orchestra_item_master")->select('id','item_name as text','parent_id')->orWhere('id','6')->orWhere('parent_id','6')->orWhere('id','1')->get()->toArray();
          
         
-        $treeviewspecial= DB::table("orchestra_item_master")->select('id',DB::raw('IF(ref_no = "", item_name, CONCAT(item_name," -  ",ref_no)) as text'),'parent_id')->orWhere('id','6')->orWhere('parent_id','6')->orWhere('id','1')->orderBy('item_name', 'asc')->get()->toArray();
+        $treeviewspecial= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no IS NULL THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','6')->orWhere('parent_id','6')->orWhere('id','1')->orderBy('item_name', 'asc')->get()->toArray();
             if($treeviewspecial){
                         $childs = array();
                         foreach($treeviewspecial as &$item) 
@@ -237,7 +241,7 @@ class OrderManagementCntrl extends Controller
 
                }
 		
-		$treeviewwash= DB::table("orchestra_item_master")->select('id',DB::raw('IF(ref_no = "", item_name, CONCAT(item_name," -  ",ref_no)) as text'),'parent_id')->orWhere('parent_id','120')->orWhere('id','77')->orWhere('id','4')->orWhere('id','120')->orderBy('item_name', 'asc')->get()->toArray();
+		$treeviewwash= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no IS NULL THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('parent_id','120')->orWhere('id','77')->orWhere('id','4')->orWhere('id','120')->orderBy('item_name', 'asc')->get()->toArray();
 		//print_r($treeviewwash);
             if($treeviewwash){
                         $childs = array();
@@ -259,7 +263,7 @@ class OrderManagementCntrl extends Controller
 
                }
         
-        $treeviewmain= DB::table("orchestra_item_master")->select('id',DB::raw('IF(ref_no = "", item_name, CONCAT(item_name," -  ",ref_no)) as text'),'parent_id')->orWhere('id','4')->orWhere('id','76')->orWhere('tag_name','mainsize')->orderBy('item_name', 'asc')->get()->toArray();
+        $treeviewmain= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no IS NULL THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','4')->orWhere('id','76')->orWhere('tag_name','mainsize')->orderBy('item_name', 'asc')->get()->toArray();
             if($treeviewmain){
                         $childs = array();
                         foreach($treeviewmain as &$item) 
@@ -279,9 +283,8 @@ class OrderManagementCntrl extends Controller
                         $data['treeviewmain']=$tree;
 
                }
-        
                 $code=substr($uvc, -4, 2);
-                $data['orchestra_hang_tag_orders']=DB::table('orchestra_hang_tag_orders')->select('*',DB::raw('"Hang Tag" as TemplateName'))->where('uvc',$uvc)->get();
+                $data['orchestra_hang_tag_orders']=DB::table('orchestra_hang_tag_orders')->select('*',DB::raw("'Hang Tag' as \"TemplateName\""))->where('uvc',$uvc)->get();
         if(count($data['orchestra_hang_tag_orders']) > 0)
         {
             $data['orchestra_hang_tag_orders_qty']=DB::table('orchestra_hang_tag_orders_qty')->select('*')->where('oht_id',$data['orchestra_hang_tag_orders']{0}->id)->get();
@@ -290,7 +293,7 @@ class OrderManagementCntrl extends Controller
         {
             $data['orchestra_hang_tag_orders_qty']="";
         }
-         $data['orchestra_special_tag_orders']=DB::table('orchestra_special_tag_orders')->select('*',DB::raw('"Special Tag" as TemplateName'))->where('uvc',$uvc)->get();
+         $data['orchestra_special_tag_orders']=DB::table('orchestra_special_tag_orders')->select('*',DB::raw("'Special Tag' as \"TemplateName\""))->where('uvc',$uvc)->get();
         if(count($data['orchestra_special_tag_orders']) > 0)
         {
             $data['orchestra_special_tag_orders_qty']=DB::table('orchestra_special_tag_orders_qty')->select('*')->where('ost_id',$data['orchestra_special_tag_orders']{0}->id)->get();
@@ -323,7 +326,7 @@ class OrderManagementCntrl extends Controller
             $value1->care_instruction=$care_instructions;
         }
 		        $factory = $data['order_details']{0}->FactoryCode;
-		  		$data['customers']=DB::table('customers')->where('factory_code',$factory)->select('*')->get();
+		  		$data['customers']=DB::table('customers')->join('customer_buyers','customer_buyers.customer_id','=','customers.id')->where('customers.factory_code',$factory)->where('customer_buyers.buyer_id',1)->select('*')->get();
 				if(count($data['customers']) > 0)
 				{
 					$cust_id = $data['customers']{0}->id;
@@ -413,23 +416,75 @@ class OrderManagementCntrl extends Controller
         
         if($data['orchestra_parcel_details']{0}->IsSTD == 1)
         {
-            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','74')->get();
+            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','129')->get();
             $data['carton_template']=$orchestra_template{0}->template_file;
-            $data['carton_template_id']=74;
-            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','75')->get();
+            $data['carton_template_id']=129;
+			
+			$factory_code = $data['orchestra_parcel_details']{0}->FactoryCode;
+			$customer_id = DB::table('customers')->select('*')->where('factory_code',$factory_code)->get();
+			if(count($customer_id) > 0)
+			{
+			$carton_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',129)->get();
+			
+			$data['carton_moq']=$carton_moq{0}->moq;
+			}
+			else
+			{
+				$data['carton_moq']=1;
+			}
+			
+            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','128')->get();
             $data['polybag_template']=$orchestra_template{0}->template_file;
             $data['template_name']="Standard";
-            $data['polybag_template_id']=75;
+            $data['polybag_template_id']=128;
+			if(count($customer_id) > 0)
+			{
+			$polybag_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',128)->get();
+			
+			$data['polybag_moq']=$polybag_moq{0}->moq;
+			}
+			else
+			{
+				$data['polybag_moq']=1;
+			}
         }
         else
         {
-            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','72')->get();
+            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','3')->get();
             $data['carton_template']=$orchestra_template{0}->template_file;
-            $data['carton_template_id']=72;
-            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','73')->get();
+            $data['carton_template_id']=3;
+			
+			$factory_code = $data['orchestra_parcel_details']{0}->FactoryCode;
+			$customer_id = DB::table('customers')->select('*')->where('factory_code',$factory_code)->get();
+			
+			if(count($customer_id) > 0)
+			{
+				$carton_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',3)->get();
+			
+				$data['carton_moq']=$carton_moq{0}->moq;
+			}
+			else
+			{
+				$data['carton_moq']=1;
+			}
+			
+			
+            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','127')->get();
             $data['polybag_template']=$orchestra_template{0}->template_file;
             $data['template_name']="Solid";
-            $data['polybag_template_id']=73;
+            $data['polybag_template_id']=127;
+			
+			if(count($customer_id) > 0)
+			{
+				$polybag_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',127)->get();
+
+				$data['polybag_moq']=$polybag_moq{0}->moq;
+			}
+			else
+			{
+				$data['polybag_moq']=1;
+			}
+			
             
         }
         

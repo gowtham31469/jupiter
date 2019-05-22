@@ -679,7 +679,7 @@ background: rgba(0,0,0,0.2);
 @endif @section('jqueryIncludes')      
 <script src="{{ asset('js/Customer/customer-tesco-order.js') }}"></script>
 <script src="{{ asset('js/Customer/tesco-reorder.js') }}"></script>
-<script src="{{ asset('js/Admin/order.js') }}"></script>
+<script src="{{ asset('js/Customer/customer-order.js') }}"></script>
 <script src="{{ asset('js/Admin/parser.js') }}"></script>
 <script src="{{ asset('js/moment.min.js') }}"></script>
 <script src="{{ asset('js/Customer/customer-pi.js') }}"></script>
