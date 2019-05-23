@@ -14,7 +14,7 @@ class AddFlagOrchestraTemplate extends Migration
     public function up()
     {
         Schema::table('orchestra_template', function($table) {
-            $table->tinyInteger('flag')->after('tax');
+            $table->tinyInteger('flag')->after('tax')->nullable();
         });
     }
 
