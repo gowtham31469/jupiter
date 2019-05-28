@@ -52,7 +52,7 @@ class Uploads
 	{
 		foreach ($data as $key => $value)
 		{
-		    $data_exists = Customer::where('email', trim($value['SUPPLIER EMAIL']))->where('company_name', trim($value['SUPPLIER NAME']))->count();
+		  $data_exists = Customer::where('factory_code', trim($data[$key]['SUPPLIER CODE']))->count();
 			if($data_exists == 0 && trim($data[$key]['SUPPLIER EMAIL']) != '_' && trim($data[$key]['SUPPLIER EMAIL']) != '')
 			{
 				$custm_details = Customer::create([
