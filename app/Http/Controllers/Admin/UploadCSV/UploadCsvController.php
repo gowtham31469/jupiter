@@ -310,10 +310,21 @@ class UploadCsvController extends Controller
                 if($same_date_exists === 0)
                 {
                   // get po details from orchestra_item_details for this UVC_TCO, UVC and PO change date
-                  $temp_item_details_data = DB::table('temp_orchestra_item_details')->where('UVC_TCO', trim($data[$key]['SKU CODE']))->where('Last_Change_Date',trim($data[$key]['LAST_CHANGE_DATE']))->select('*')->get();
+                  $temp_item_details_data = DB::table('temp_orchestra_item_details')->where('UVC_TCO', trim($data[$key]['SKU CODE']))->where('Last_Change_Date',trim($data[$key]['LAST_CHANGE_DATE']))->orWhere('Last_Change_Date', null)->select('*')->get();
 
                   // collision. update temp orchestra item details table 
                   $upload_obj->updateOrchestraTempItemDetails($data, $key, $temp_item_details_data);
+                }
+                else  
+                {
+                  // get po details from orchestra_item_details for this sku code.
+                  $item_details_data   = DB::table('orchestra_item_details')->where('UVC_TCO', trim($data[$key]['SKU CODE']))->where('Last_Change_Date', trim($data[$key]['LAST_CHANGE_DATE']))->orWhere('Last_Change_Date', null)->select('*')->get();
+
+                  // update price details in orchestra_item_details table.
+                  if($item_details_data)
+                  {
+                    $upload_obj->updateOrchestraItemPriceDetails($data, $key, $item_details_data);
+                  }
                 }
                 
               }
