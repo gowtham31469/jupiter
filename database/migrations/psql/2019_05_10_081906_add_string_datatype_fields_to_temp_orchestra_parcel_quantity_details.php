@@ -16,7 +16,7 @@ class AddStringDatatypeFieldsToTempOrchestraParcelQuantityDetails extends Migrat
         Schema::table('temp_orchestra_parcel_quantity_details', function (Blueprint $table) {
             $table->string('EditionNumber')->nullable();
             $table->string('VersionNumber')->nullable();
-            $table->string('Quantity')->nullable();
+            $table->integer('Quantity')->nullable();
         });
     }
 

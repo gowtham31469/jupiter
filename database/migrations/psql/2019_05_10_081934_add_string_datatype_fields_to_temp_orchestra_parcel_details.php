@@ -17,7 +17,7 @@ class AddStringDatatypeFieldsToTempOrchestraParcelDetails extends Migration
             $table->string('EditionNumber')->nullable();
             $table->string('VersionNumber')->nullable();
             $table->string('IsSTD')->nullable();
-            $table->string('Quantity')->nullable();
+            $table->integer('Quantity')->nullable();
             $table->text('SupplierAddress')->nullable();
         });
     }

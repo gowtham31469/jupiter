@@ -730,7 +730,7 @@ function table(data,path){
                     if (value[key] == "Null") {
                         var Disney = "-";
                     } else {
-                        var Disney = value[key] == "0" ? "No" : "Yes";
+                        var Disney = value[key] === ("DI" || 1) ? "Yes" : "No";
                     }
 
                     tr += '<td align="center">' + Disney + '</td>';
@@ -3057,7 +3057,7 @@ function washcarelabels(data, dataid) {
             ttots=ttots;
         }
 	
-	if(data.order_details[0].Disney !=0)
+	if(data.order_details[0].Disney === 'DI')
 	{
 		var treestruct='<label id="hang_template_error" class="hidden" style="color:red">Please Select the Template</label>  <div><input type="text" id="tree_wash'+dataid+'_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div id="tree_wash'+dataid+'"></div>';
 		var disney_flag="1";
@@ -4159,7 +4159,7 @@ function hangtagmodal(data) {
                     if (data.length > 0) {
                         $('#' + ids).find('.sample-artwork').html('<object id="svg_hang_front" style="height: 486px;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
                         $('#' + ids).find('.sample_back').html('<object class="center-block" id="svg2" style="height:486px" data="' + data[1].template_file + '" type="image/svg+xml"></object>')
-                        if (data[0].disney == 0) {
+                        if (data[0].disney != "DI") {
                             var mySVG = document.getElementById("svg_hang_front");
                             var svgDoc;
                             mySVG.addEventListener("load", function () {
@@ -4306,7 +4306,7 @@ function hangtagmodal(data) {
                         $('#' + ids).find('.sample-artwork').html('<object id="svg_hang_front" style="height: 486px;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
                         $('#' + ids).find('.sample_back').html('<object class="center-block" id="svg2" style="height:486px" data="' + data[1].template_file + '" type="image/svg+xml"></object>')
 
-                        if (data[0].disney == 0) {
+                        if (data[0].disney != "DI") {
                             var mySVG = document.getElementById("svg_hang_front");
                             var svgDoc;
                             mySVG.addEventListener("load", function () {

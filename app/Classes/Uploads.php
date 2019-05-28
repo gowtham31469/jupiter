@@ -44,7 +44,7 @@ class Uploads
 
 
 	/**
-	 * method to add customer based on factory code
+	 * method to add customer based on supplier code
 	 * @param  [type]  $data [description]
 	 * @return boolean       [description]
 	 */
@@ -56,15 +56,15 @@ class Uploads
 			if($data_exists == 0 && trim($data[$key]['SUPPLIER EMAIL']) != '_' && trim($data[$key]['SUPPLIER EMAIL']) != '')
 			{
 				$custm_details = Customer::create([
-									'company_name'  => trim($data[$key]['SUPPLIER NAME']) === '_'?null:trim($data[$key]['SUPPLIER NAME']),
-				       				'factory_code' 	=> trim($data[$key]['FACTORY CODE']) === '_'?null:trim($data[$key]['FACTORY CODE']),
-				       				'email'			=> trim($data[$key]['SUPPLIER EMAIL'])
+								    	'company_name'  => trim($data[$key]['SUPPLIER NAME']) === '_'?null:trim($data[$key]['SUPPLIER NAME']),
+				       				'factory_code' 	=> trim($data[$key]['SUPPLIER CODE']) === '_'?null:trim($data[$key]['SUPPLIER CODE']),
+				       				'email'		    	=> trim($data[$key]['SUPPLIER EMAIL'])
 								  ]);				
 				CustomerBillAddress::create([
 			                        'customer_id'   => $custm_details->id,
 			                        'address'       => trim($data[$key]['SUPPLIER ADDRESS']) === '_'?null:trim($data[$key]['SUPPLIER ADDRESS']),
 			                        'country'       => trim($data[$key]['SUPPLIER COUNTRY']) === '_'?null:trim($data[$key]['SUPPLIER COUNTRY']),
-						       		'email'			=> trim($data[$key]['SUPPLIER EMAIL'])
+						       		        'email'			    => trim($data[$key]['SUPPLIER EMAIL'])
 									]);
 		    	CustomerContactPersons::create([
 			                        'customer_id'   => $custm_details->id
