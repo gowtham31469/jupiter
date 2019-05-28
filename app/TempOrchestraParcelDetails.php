@@ -92,5 +92,8 @@ class TempOrchestraParcelDetails extends Model
         'VersionNumber', 	 	
         'IsSTD', 	 	
         'Quantity',
+        'BarcodeForPricesTags',
+        'UVC_TCO',
+        'Size'
     ];
 }

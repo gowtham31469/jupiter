@@ -79,12 +79,12 @@ class UploadCsvController extends Controller
           if (preg_match('/ORC_M3_PO_FILE/',$filename))
           {
             $data     =  $upload_obj->csv_to_array($path,$delimiter);
-            $item_details_data_exists = OrchestraItemDetails::count();
+          //  $item_details_data_exists = OrchestraItemDetails::count();
             $parcel_details_data_exists = OrchestraParcelDetails::count();
             $customer_data = $upload_obj->isCustomerExists($data);
 
             /** If there is no collision, Insert into item details table otherwise update temp item details table*/
-            if ($item_details_data_exists > 0)
+            /* if ($item_details_data_exists > 0)
             {
               foreach ($data as $key => $value)
               {
@@ -145,7 +145,7 @@ class UploadCsvController extends Controller
                 $upload_obj->insertOrchestraItemDetails($data,$key);
               }
               
-            }
+            } */
 
             /** If there is no collision, Insert into parcel details table otherwise update temp parcel details table*/
             if ($parcel_details_data_exists > 0)
@@ -293,7 +293,7 @@ class UploadCsvController extends Controller
           // end of foreach
 
           // Foreach begins
-          foreach ($data as $key=> $value)
+        /*   foreach ($data as $key=> $value)
           {
             // check sku code already exists or not 
             $sku_exists = DB::table('orchestra_item_details')->where('UVC_TCO', trim($data[$key]['SKU CODE']))->count();
@@ -345,7 +345,7 @@ class UploadCsvController extends Controller
               // insert price details without po details.
               $upload_obj->insertOrchestraItemPriceDetails($data, $key);
             }
-          }
+          } */
           // end of foreach
 
           $result = response()->json(['error' =>false,'message' => 'Price CSV File Uploaded Successfully'], 200);

@@ -453,6 +453,9 @@ class Uploads
 			'Payment_Condition_Code'             => trim($data[$key]['PAYMENT CONDITION CODE']) === '_'?null:trim($data[$key]['PAYMENT CONDITION CODE']),
 			'Payment_Terms'                      => trim($data[$key]['PAYMENT TERMS']) === '_'?null:trim($data[$key]['PAYMENT TERMS']),
 			'Payment_Terms_Label'                => trim($data[$key]['PAYMENT TERMS LABEL']) === '_'?null:trim($data[$key]['PAYMENT TERMS LABEL']),
+			'BarcodeForPricesTags'               => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE']),
+			'UVC_TCO'                            => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
+			'Size'                               => trim($data[$key]['SIZE LABEL']) === '_'?null:trim($data[$key]['SIZE LABEL']),
    		]);
 	}
 
@@ -699,6 +702,9 @@ class Uploads
 				'Payment_Condition_Code'             => trim($data[$key]['PAYMENT CONDITION CODE']) === '_'?null:trim($data[$key]['PAYMENT CONDITION CODE']),
 				'Payment_Terms'                      => trim($data[$key]['PAYMENT TERMS']) === '_'?null:trim($data[$key]['PAYMENT TERMS']),
 				'Payment_Terms_Label'                => trim($data[$key]['PAYMENT TERMS LABEL']) === '_'?null:trim($data[$key]['PAYMENT TERMS LABEL']),
+				'BarcodeForPricesTags'               => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE']),
+				'UVC_TCO'                            => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
+				'Size'                               => trim($data[$key]['SIZE LABEL']) === '_'?null:trim($data[$key]['SIZE LABEL']),
 			   ]);
 		}
 	}
