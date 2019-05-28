@@ -198,7 +198,7 @@ class OrderManagementCntrl extends Controller
                     }
                 }
             }
-return $data['order_details'];
+
             $data['barcode'] = DB::table('orchestra_parcel_details')->select('*')->where('UVC',$uvc)->groupBy('id','BuyerPONo')->get();
         
            $total_qty = DB::table('orchestra_parcel_details')->select('*',DB::raw("sum(\"Quantity\") as total_qty"))->where('UVC',$uvc)->groupBy('id','UVC')->get();
