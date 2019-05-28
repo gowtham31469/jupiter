@@ -84,7 +84,7 @@ class Uploads
 	// public function insertOrchestraItemDetails($data,$key)
 	// {
 	//     OrchestraItemDetails::create([
-	// 			'FactoryCode'                        => trim($data[$key]['FACTORY CODE']) === '_'?null:trim($data[$key]['FACTORY CODE']),
+	// 			'FactoryCode'                        => trim($data[$key]['SUPPLIER CODE']) === '_'?null:trim($data[$key]['SUPPLIER CODE']),
 	// 			'SupplierName'                       => trim($data[$key]['SUPPLIER NAME']) === '_'?null:trim($data[$key]['SUPPLIER NAME']),
 	// 			'SupplierAddress'			               => trim($data[$key]['SUPPLIER ADDRESS']) === '_'?null:trim($data[$key]['SUPPLIER ADDRESS']),
 	// 			'SupplierEmail'                      => trim($data[$key]['SUPPLIER EMAIL']) === '_'?null:trim($data[$key]['SUPPLIER EMAIL']),
@@ -377,7 +377,7 @@ class Uploads
 	public function insertOrchestraParcelDetails($data,$key)
 	{
 		OrchestraParcelDetails::create([
-			'FactoryCode'                        => trim($data[$key]['FACTORY CODE']) === '_'?null:trim($data[$key]['FACTORY CODE']),
+			'FactoryCode'                        => trim($data[$key]['SUPPLIER CODE']) === '_'?null:trim($data[$key]['SUPPLIER CODE']),
 			'SupplierName'                       => trim($data[$key]['SUPPLIER NAME']) === '_'?null:trim($data[$key]['SUPPLIER NAME']),
 			'SupplierAddress'			               => trim($data[$key]['SUPPLIER ADDRESS']) === '_'?null:trim($data[$key]['SUPPLIER ADDRESS']),
 			'SupplierEmail'                      => trim($data[$key]['SUPPLIER EMAIL']) === '_'?null:trim($data[$key]['SUPPLIER EMAIL']),
@@ -529,7 +529,7 @@ class Uploads
 	// 	if($temp_item_details_count === 0)
 	// 	{
 	// 		TempOrchestraItemDetails::create([
-	// 			'FactoryCode'                        => trim($data[$key]['FACTORY CODE']) === '_'?null:trim($data[$key]['FACTORY CODE']),
+	// 			'FactoryCode'                        => trim($data[$key]['SUPPLIER CODE']) === '_'?null:trim($data[$key]['SUPPLIER CODE']),
 	// 			'SupplierName'                       => trim($data[$key]['SUPPLIER NAME']) === '_'?null:trim($data[$key]['SUPPLIER NAME']),
 	// 			'SupplierAddress'			               => trim($data[$key]['SUPPLIER ADDRESS']) === '_'?null:trim($data[$key]['SUPPLIER ADDRESS']),
 	// 			'SupplierEmail'                      => trim($data[$key]['SUPPLIER EMAIL']) === '_'?null:trim($data[$key]['SUPPLIER EMAIL']),
@@ -626,7 +626,7 @@ class Uploads
 		if($parcel_details_count === 0)
 		{
 			TempOrchestraParcelDetails::create([
-				'FactoryCode'                        => trim($data[$key]['FACTORY CODE']) === '_'?null:trim($data[$key]['FACTORY CODE']),
+				'FactoryCode'                        => trim($data[$key]['SUPPLIER CODE']) === '_'?null:trim($data[$key]['SUPPLIER CODE']),
 				'SupplierName'                       => trim($data[$key]['SUPPLIER NAME']) === '_'?null:trim($data[$key]['SUPPLIER NAME']),
 				'SupplierAddress'			               => trim($data[$key]['SUPPLIER ADDRESS']) === '_'?null:trim($data[$key]['SUPPLIER ADDRESS']),
 				'SupplierEmail'                      => trim($data[$key]['SUPPLIER EMAIL']) === '_'?null:trim($data[$key]['SUPPLIER EMAIL']),
