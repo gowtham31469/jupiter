@@ -216,7 +216,7 @@ class OrderManagementCntrl extends Controller
                 $data['orchestra_wash_template']="/storage/app/template/orchestra_wcl_disney.svg";
                 $data['orchestra_wash_template_id']=2;
                 
-                $orchestra_template_front = DB::table('orchestra_template')->select('*')->where('item_id','2')->where('disney','DI')->get();
+                $orchestra_template_front = DB::table('orchestra_template')->select('*')->where('item_id','2')->where('disney',1)->get();
                 $data['orchestra_template_front']=$orchestra_template_front;
 				
 				 $treeviewData= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no IS NULL THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','5')->orWhere('tag_name','Disney')->orWhere('id','1')->orderBy('item_name', 'asc')->get()->toArray();
@@ -251,7 +251,7 @@ class OrderManagementCntrl extends Controller
                 $data['orchestra_wash_template_middle']="/storage/app/template/Orchestra/WCL/sticker3.svg";
                 $data['orchestra_wash_template_id']=1;
                 
-                $orchestra_template_front = DB::table('orchestra_template')->select('*')->where('item_id','2')->where('disney', '<>', 'DI')->get();
+                $orchestra_template_front = DB::table('orchestra_template')->select('*')->where('item_id','2')->where('disney', 0)->get();
                 $data['orchestra_template_front']=$orchestra_template_front;
 				
 				
