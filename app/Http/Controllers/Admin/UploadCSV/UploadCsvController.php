@@ -88,34 +88,43 @@ class UploadCsvController extends Controller
             {
               foreach ($data as $key => $value)
               {
-                  $item_details_uvc = DB::table('orchestra_item_details')->where('UVC',trim($data[$key]['REFERENCE CODE']))->count();
+                  $item_details_uvc = DB::table('orchestra_item_details')->whereIn('UVC',[trim($data[$key]['REFERENCE CODE']), null])->count();
                   if ($item_details_uvc > 0)
                   {
-                    $item_details_po = DB::table('orchestra_item_details')->where('UVC',trim($data[$key]['REFERENCE CODE']))->where('BuyerPONo',trim($data[$key]['PO']))->count();
+                    $item_details_po = DB::table('orchestra_item_details')->whereIn('UVC',[trim($data[$key]['REFERENCE CODE']), null])->whereIn('BuyerPONo', [trim($data[$key]['PO']), null])->count();
                     if ($item_details_po > 0)
                     {  
-                      $item_details_sku_code = DB::table('orchestra_item_details')->where('UVC',trim($data[$key]['REFERENCE CODE']))->where('BuyerPONo',trim($data[$key]['PO']))->where('UVC_TCO', 'ilike',trim($data[$key]['SKU CODE']))->count();
+                      $item_details_sku_code = DB::table('orchestra_item_details')->whereIn('UVC',[trim($data[$key]['REFERENCE CODE']), null])->whereIn('BuyerPONo', [trim($data[$key]['PO']), null])->where('UVC_TCO', trim($data[$key]['SKU CODE']))->count();
                       if($item_details_sku_code > 0)
                       {
-                        $item_details_last_date = DB::table('orchestra_item_details')->where('UVC',trim($data[$key]['REFERENCE CODE']))->where('BuyerPONo',trim($data[$key]['PO']))->where('UVC_TCO', 'ilike',trim($data[$key]['SKU CODE']))->where('Po_Change_Date','<>',trim($data[$key]['PO CHANGE DATE']))->count();
-                        if($item_details_last_date > 0)
+                        $item_details_last_date = DB::table('orchestra_item_details')->whereIn('UVC',[trim($data[$key]['REFERENCE CODE']), null])->whereIn('BuyerPONo', [trim($data[$key]['PO']), null])->where('UVC_TCO', trim($data[$key]['SKU CODE']))->whereIn('Po_Change_Date',[trim($data[$key]['PO CHANGE DATE']), null])->count();
+
+                        if($item_details_last_date === 0)
                         {
-                          // collision. insert temp item details table
+                          // collision. insert temp details table
                           $upload_obj->insertOrchestraTempItemDetails($data,$key);
+                        } 
+                        else  
+                        {
+                          // update po details (for po details missing in csv)
+                          
                         }
+                        
                       }
                       else
                       {
-                        $item_details_last_date = DB::table('orchestra_item_details')->where('UVC',trim($data[$key]['REFERENCE CODE']))->where('BuyerPONo',trim($data[$key]['PO']))->where('Po_Change_Date','<>',trim($data[$key]['PO CHANGE DATE']))->count();
+                        $item_details_last_date = DB::table('orchestra_item_details')->whereIn('UVC',[trim($data[$key]['REFERENCE CODE']), null])->whereIn('BuyerPONo', [trim($data[$key]['PO']), null])->whereIn('Po_Change_Date',[trim($data[$key]['PO CHANGE DATE']), null])->count();
+
                         if($item_details_last_date > 0)
-                        {
-                          // collision. insert temp item details table
-                          $upload_obj->insertOrchestraTempItemDetails($data,$key);
-                        }
-                        else 
                         {
                           $upload_obj->insertOrchestraItemDetails($data,$key);
                         }
+                        else 
+                        {
+                          // collision. insert temp details table
+                          $upload_obj->insertOrchestraTempItemDetails($data,$key);
+                        }
+
                       }
                     }
                     else
@@ -231,18 +240,18 @@ class UploadCsvController extends Controller
           foreach ($data as $key=> $value)
           {
             // get po details from orchestra_parcel_details for this sku code.
-            $parcel_details_data = DB::table('orchestra_parcel_details')->where('SKU_Code', 'ilike',trim($data[$key]['SKU CODE']))->select('*')->first();
+            $parcel_details_data = DB::table('orchestra_parcel_details')->where('SKU_Code', trim($data[$key]['SKU CODE']))->select('*')->first();
 
             // check sku code already exists or not 
-            $sku_exists = DB::table('orchestra_parcel_quantity_details')->where('UVC_TCO', 'ilike',trim($data[$key]['SKU CODE']))->count();
+            $sku_exists = DB::table('orchestra_parcel_quantity_details')->where('UVC_TCO', trim($data[$key]['SKU CODE']))->count();
             if($sku_exists > 0)
             {
               // check price details already exists for this sku code with different Country_Code.
-              $diff_order = DB::table('orchestra_parcel_quantity_details')->where('UVC_TCO', 'ilike',trim($data[$key]['SKU CODE']))->where('Country_Code',trim($data[$key]['COUNTRY CODE']))->count();
+              $diff_order = DB::table('orchestra_parcel_quantity_details')->where('UVC_TCO', trim($data[$key]['SKU CODE']))->where('Country_Code',trim($data[$key]['COUNTRY CODE']))->count();
               if ($diff_order > 0)
               {
                 // check price details already exists with same UVC_TCO ,COUNTRY CODE & different Last_Change_Date
-                $quantity_date = DB::table('orchestra_parcel_quantity_details')->where('UVC_TCO', 'ilike',trim($data[$key]['SKU CODE']))->where('Country_Code',trim($data[$key]['COUNTRY CODE']))->where('Last_Change_Date','<>',trim($data[$key]['LAST_CHANGE_DATE']))->count();
+                $quantity_date = DB::table('orchestra_parcel_quantity_details')->where('UVC_TCO', trim($data[$key]['SKU CODE']))->where('Country_Code',trim($data[$key]['COUNTRY CODE']))->where('Last_Change_Date','<>',trim($data[$key]['LAST_CHANGE_DATE']))->count();
 
                 if($quantity_date > 0)
                 {
@@ -254,7 +263,7 @@ class UploadCsvController extends Controller
               else
               {
                 // check price details already exists with same UVC_TCO & Last_Change_Date
-                $quantity_date = DB::table('orchestra_parcel_quantity_details')->where('UVC_TCO', 'ilike',trim($data[$key]['SKU CODE']))->where('Last_Change_Date',trim($data[$key]['LAST_CHANGE_DATE']))->count();
+                $quantity_date = DB::table('orchestra_parcel_quantity_details')->where('UVC_TCO', trim($data[$key]['SKU CODE']))->where('Last_Change_Date',trim($data[$key]['LAST_CHANGE_DATE']))->count();
                 
                 // insert price details, iff order with same sku code, country code and last change date doesn't exists.
                 if($quantity_date > 0)
@@ -280,38 +289,44 @@ class UploadCsvController extends Controller
                 $upload_obj->insertOrchestraParcelQuantityDetails($data, $key, $parcel_details_data);
               //}
             }
+          }
+          // end of foreach
 
+          // Foreach begins
+          foreach ($data as $key=> $value)
+          {
             // check sku code already exists or not 
-            $sku_exists = DB::table('orchestra_item_details')->where('UVC_TCO', 'ilike',trim($data[$key]['SKU CODE']))->count();
+            $sku_exists = DB::table('orchestra_item_details')->where('UVC_TCO', trim($data[$key]['SKU CODE']))->count();
 
             if($sku_exists > 0)
             {
-              // check price details already exists for this sku code with different last_change_date.
-              $diff_order = DB::table('orchestra_item_details')->where('UVC_TCO', 'ilike',trim($data[$key]['SKU CODE']))->where('Last_Change_Date', trim($data[$key]['LAST_CHANGE_DATE']))->count();
-              if ($diff_order === 0)
+              // check po data only exists for this SKU CODE
+              $po_data = DB::table('orchestra_item_details')->where('UVC_TCO', trim($data[$key]['SKU CODE']))->where('Last_Change_Date', null)->count();
+              if ($po_data === 0)
               {
-                // get po details from orchestra_item_details for this UVC_TCO, UVC and PO change date
-                $temp_item_details_data = DB::table('temp_orchestra_item_details')->where('UVC_TCO', 'ilike',trim($data[$key]['SKU CODE']))->where('Last_Change_Date',trim($data[$key]['LAST_CHANGE_DATE']))->select('*')->get();
+                // check SKU CODE with same date already exists ot not.
+                $same_date_exists = DB::table('orchestra_item_details')->where('UVC_TCO', trim($data[$key]['SKU CODE']))->where('Last_Change_Date', trim($data[$key]['LAST_CHANGE_DATE']))->count();
 
-                // collision. update temp orchestra item details table 
-                $upload_obj->updateOrchestraTempItemDetails($data, $key, $temp_item_details_data);
+                if($same_date_exists === 0)
+                {
+                  // get po details from orchestra_item_details for this UVC_TCO, UVC and PO change date
+                  $temp_item_details_data = DB::table('temp_orchestra_item_details')->where('UVC_TCO', trim($data[$key]['SKU CODE']))->where('Last_Change_Date',trim($data[$key]['LAST_CHANGE_DATE']))->select('*')->get();
+
+                  // collision. update temp orchestra item details table 
+                  $upload_obj->updateOrchestraTempItemDetails($data, $key, $temp_item_details_data);
+                }
+                
               }
               else
               {
-                // get po details from orchestra_item_details for this sku code.
-                $item_details_data   = DB::table('orchestra_item_details')->where('UVC_TCO', 'ilike',trim($data[$key]['SKU CODE']))->where('Last_Change_Date',trim($data[$key]['LAST_CHANGE_DATE']))->select('*')->get();
-                // check price details already exists with same last_change_date & COUNTRY CODE
-                /*  $quantity_date = DB::table('orchestra_item_details')->where('UVC_TCO',trim($data[$key]['SKU CODE']))->where('Last_Change_Date',trim($data[$key]['LAST_CHANGE_DATE']))->select('*')->get(); */
-                
-                // insert price details, iff order with same sku code, country code and last change date doesn't exists.
-                /* if(count($quantity_date) === 0)
-                { */
+                  // get po details from orchestra_item_details for this sku code.
+                  $item_details_data   = DB::table('orchestra_item_details')->where('UVC_TCO', trim($data[$key]['SKU CODE']))->where('Last_Change_Date', null)->select('*')->get();
+
                   // update price details in orchestra_item_details table.
                   if($item_details_data)
                   {
                     $upload_obj->updateOrchestraItemPriceDetails($data, $key, $item_details_data);
                   }
-                /* } */
               }
             }
             else  
