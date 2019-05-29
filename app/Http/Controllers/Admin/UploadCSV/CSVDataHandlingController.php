@@ -7,9 +7,10 @@ use App\Http\Controllers\Controller;
 use App\Classes\Modules;
 use Response;
 use View;
-use App\OrchestraItemDetails;
 use App\OrchestraParcelDetails;
 use App\OrchestraParcelQuantityDetails;
+use App\TempOrchestraParcelDetails;
+use App\TempOrchestraParcelQuantityDetails;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use DB;
@@ -46,10 +47,11 @@ class CSVDataHandlingController extends Controller
               return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
           });
 
-          $tp_parcel_details = DB::table('temp_orchestra_parcel_details')->get();
-          $tp_parcel_qty_details = DB::table('temp_orchestra_parcel_quantity_details')->get();
+          
+          $tp_parcel_details = TempOrchestraParcelDetails::select(DB::raw('distinct on ("UVC") "UVC"'), 'FactoryCode', 'SupplierName', 'BuyerPONo', 'Theme', 'Season_Code', 'UVC_TCO')->groupBy('UVC', 'id')->get();
+          $tp_parcel_qty_details = TempOrchestraParcelQuantityDetails::select(DB::raw('distinct on ("UVC") "UVC"'), 'FactoryCode', 'Supplier_Name', 'BuyerPONo', 'UVC_TCO', 'Season_Code', 'Theme')->groupBy('UVC', 'id')->get();
 
-          return view('Admin/Upload CSV/csv-conflicts');
+          return View::make('Admin/Upload CSV/csv-conflicts', compact(['tp_parcel_details', 'tp_parcel_qty_details']));
         }
         else
         {

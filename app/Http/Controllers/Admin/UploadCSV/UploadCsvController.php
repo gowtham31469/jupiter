@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Classes\Modules;
 use Response;
 use View;
-use App\OrchestraItemDetails;
 use App\OrchestraParcelDetails;
 use App\OrchestraParcelQuantityDetails;
 use Illuminate\Support\Facades\Input;

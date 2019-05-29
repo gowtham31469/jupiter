@@ -25,6 +25,9 @@
                       <th>License</th>
                     </tr>
                   </thead>
+                  {{ $tp_parcel_details }}
+                  {{ $tp_parcel_qty_details }}
+
                   <tbody>
                     <tr id="">
                     <td></td>
