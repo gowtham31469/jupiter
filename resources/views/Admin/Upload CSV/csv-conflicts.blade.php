@@ -17,14 +17,12 @@
                   <thead>
                     <tr>
                       <th>Sl. No</th>
-                      <th>Module</th>
-                      <th>URL</th>
-                      <th>Event</th>
-                      <th>User</th>
-                      <th>User Email</th>
-                      <th>User Agent</th>
-                      <th>Date & Time</th>
-                      <th>Compare</th>
+                      <th>UVC</th>
+                      <th>Collection</th>
+                      <th>Supplier Name</th>
+                      <th>Theme</th>
+                      <th>Marque</th>
+                      <th>License</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -36,8 +34,6 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td><a href="#"><i class="fa fa-eye filterbtn options fa-button compare-conflict" aria-hidden="true" title="View Changes" id="compare"></i></a></td>
                    </tr>
                   </tbody>
                  </table>

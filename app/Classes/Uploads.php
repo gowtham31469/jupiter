@@ -164,6 +164,7 @@ class Uploads
 			'BarcodeForPricesTags'               => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE']),
 			'UVC_TCO'                            => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
 			'Size'                               => trim($data[$key]['SIZE LABEL']) === '_'?null:trim($data[$key]['SIZE LABEL']),
+			'ParcelBarCode'                      => trim($data[$key]['STANDARD BARCODE']) === '_'?null:trim($data[$key]['STANDARD BARCODE']),
    		]);
 	}
 
@@ -316,6 +317,7 @@ class Uploads
 				'BarcodeForPricesTags'               => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE']),
 				'UVC_TCO'                            => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
 				'Size'                               => trim($data[$key]['SIZE LABEL']) === '_'?null:trim($data[$key]['SIZE LABEL']),
+				'ParcelBarCode'                      => trim($data[$key]['STANDARD BARCODE']) === '_'?null:trim($data[$key]['STANDARD BARCODE']),
 			   ]);
 		}
 	}
