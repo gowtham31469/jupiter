@@ -97,8 +97,10 @@ class OrderManagementCntrl extends Controller
 	
     public function Orders()
     {
-        $data['sticker_orders'] = DB::table('orchestra_parcel_details')->select('id','UVC',DB::raw("'-' as \"Season\""),'BuyerPONo','SupplierName','NomApple as Style_Name','Quantity','IsSTD as Type',DB::raw("'Stickers' as \"OrderType\""),DB::raw("'-' as \"Disney\""))->get();
+        $data['sticker_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id',DB::raw("'-' as \"Season\""),'BuyerPONo','SupplierName','NomApple as Style_Name','Quantity','IsSTD as Type',DB::raw("'Stickers' as \"OrderType\""),DB::raw("'-' as \"Disney\""))->groupBy('id','UVC')->get();
+
         $data['label_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id','Season_Code as Season',DB::raw("'-' as \"BuyerPONo\""),'SupplierName','Theme as Description','NomApple as Style_Name','Licence_Code as Disney',DB::raw("'-' as \"Type\""),'Quantity',DB::raw("'Labels' as \"OrderType\""))->groupBy('id','UVC')->get();
+        
         echo json_encode($data);
     } 
 	
@@ -148,7 +150,8 @@ class OrderManagementCntrl extends Controller
                                         ->groupBy('orchestra_parcel_details.id','Size_Label','orchestra_size_chart.cm')
                                         ->orderBy('orchestra_parcel_details.id')
                                         ->get();
-            
+
+            // get price details for po data
             foreach($data['order_details'] as $key => $value)
             {
                 $price_data = DB::table('orchestra_parcel_quantity_details')
@@ -481,9 +484,9 @@ class OrderManagementCntrl extends Controller
 			$customer_id = DB::table('customers')->select('*')->where('factory_code',$factory_code)->get();
 			if(count($customer_id) > 0)
 			{
-			$carton_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',129)->get();
-			
-			$data['carton_moq']=$carton_moq{0}->moq;
+                $carton_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',129)->get();
+                
+                $data['carton_moq']=$carton_moq{0}->moq;
 			}
 			else
 			{
@@ -496,9 +499,9 @@ class OrderManagementCntrl extends Controller
             $data['polybag_template_id']=128;
 			if(count($customer_id) > 0)
 			{
-			$polybag_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',128)->get();
-			
-			$data['polybag_moq']=$polybag_moq{0}->moq;
+                $polybag_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',128)->get();
+                
+                $data['polybag_moq']=$polybag_moq{0}->moq;
 			}
 			else
 			{

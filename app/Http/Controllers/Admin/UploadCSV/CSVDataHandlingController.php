@@ -46,8 +46,6 @@ class CSVDataHandlingController extends Controller
               return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
           });
 
-          $tp_item_details = DB::table('temp_orchestra_item_details')->get();
-
           $tp_parcel_details = DB::table('temp_orchestra_item_details')->get();
           $tp_parcel_qty_details = DB::table('temp_orchestra_parcel_quantity_details')->get();
 
