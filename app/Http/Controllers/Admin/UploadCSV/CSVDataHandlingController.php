@@ -46,12 +46,14 @@ class CSVDataHandlingController extends Controller
           View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
               return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
           });
-
           
-          $tp_parcel_details = TempOrchestraParcelDetails::select(DB::raw('distinct on ("UVC") "UVC"'), 'FactoryCode', 'SupplierName', 'BuyerPONo', 'Theme', 'Season_Code', 'UVC_TCO')->groupBy('UVC', 'id')->get();
-          $tp_parcel_qty_details = TempOrchestraParcelQuantityDetails::select(DB::raw('distinct on ("UVC") "UVC"'), 'FactoryCode', 'Supplier_Name', 'BuyerPONo', 'UVC_TCO', 'Season_Code', 'Theme')->groupBy('UVC', 'id')->get();
+          $tp_parcel_details = TempOrchestraParcelDetails::select(DB::raw('distinct on ("UVC") "UVC"'), 'SupplierName',  'Theme', 'Season_Code', DB::raw("'temp_orchestra_parcel_quantity_details' as \"table\""))->groupBy('UVC', 'id')->get()->toArray();
 
-          return View::make('Admin/Upload CSV/csv-conflicts', compact(['tp_parcel_details', 'tp_parcel_qty_details']));
+          $tp_parcel_qty_details = TempOrchestraParcelQuantityDetails::select(DB::raw('distinct on ("UVC") "UVC"'), 'Supplier_Name as SupplierName', 'Season_Code', 'Theme', DB::raw("'temp_orchestra_parcel_details' as \"table\""))->groupBy('UVC', 'id')->get()->toArray();
+
+          $result_array = array_merge($tp_parcel_qty_details, $tp_parcel_details);
+
+          return View::make('Admin/Upload CSV/csv-conflicts', compact(['result_array']));
         }
         else
         {
@@ -89,6 +91,31 @@ class CSVDataHandlingController extends Controller
         {
           return redirect('/admin/dashboard');
         }
+      }
+      catch (\Exception $e)
+      {
+        return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }  
+    }
+
+    public function getDataByUVC(Request $request)
+    {
+      try
+      {
+        $uvc = $request->uvc;
+        $table = $request->table_name;
+
+        if($table === 'temp_orchestra_parcel_details')
+        {
+          $data = DB::table($table)->select(DB::raw('distinct on ("UVC_TCO") "UVC_TCO"'),'BuyerPONo', 'UVC_TCO', 'Season_Code', 'Size', 'Quantity', 'Po_Status_Code_Description', DB::raw("'PO Conflicting' as \"Changes\""), DB::raw("'temp_orchestra_parcel_details' as \"table\""))->where('UVC', $uvc)->groupBy('UVC_TCO', 'id')->get();
+        }
+        else   
+        {
+          $data = DB::table($table)->select(DB::raw('distinct on ("UVC_TCO") "UVC_TCO"'),'BuyerPONo', 'UVC_TCO', 'Season_Code', 'Size', 'Quantity', 'Po_Status_Code_Description', DB::raw("'Price Conflicting' as \"Changes\""), DB::raw("'temp_orchestra_parcel_quantity_details' as \"table\""))->where('UVC', $uvc)->groupBy('UVC_TCO', 'id')->get();
+        }
+        
+        return response()->json(['error'=>'false','message' =>'success', 'data' => $data, 'uvc' => $uvc]);
+
       }
       catch (\Exception $e)
       {
