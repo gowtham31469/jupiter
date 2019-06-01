@@ -397,6 +397,11 @@ Route::post('admin/upload-orchestra-po-file-csv','Admin\UploadCSV\UploadCsvContr
 Route::post('admin/upload-orchestra-price-file-csv','Admin\UploadCSV\UploadCsvController@uploadPriceCSVFile');
 Route::get('admin/csv-conflicts', 'Admin\UploadCSV\CSVDataHandlingController@conflictsCSV');
 Route::get('admin/partial-csv', 'Admin\UploadCSV\CSVDataHandlingController@partialCSV');
+Route::get('admin/get-uvc-data', 'Admin\UploadCSV\CSVDataHandlingController@getDataByUVC');
+Route::post('admin/confirm-uvc-data','Admin\UploadCSV\CSVDataHandlingController@confirmUVCOrders');
+Route::post('admin/cancel-uvc-data','Admin\UploadCSV\CSVDataHandlingController@cancelUVCOrders');
+Route::get('admin/csv-conflicts-page','Admin\UploadCSV\CSVDataHandlingController@orderChangesPage');
+Route::get('admin/get-order-changes-data','Admin\UploadCSV\CSVDataHandlingController@getOrderChangesData');
 
 
 

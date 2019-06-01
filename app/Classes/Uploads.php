@@ -5,10 +5,8 @@ use App\Http\Controllers\Controller;
 use Response;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
-use App\OrchestraItemDetails;
 use App\OrchestraParcelDetails;
 use App\OrchestraParcelQuantityDetails;
-use App\TempOrchestraItemDetails;
 use App\TempOrchestraParcelQuantityDetails;
 use App\TempOrchestraParcelDetails;
 use App\Customer;
@@ -188,6 +186,8 @@ class Uploads
 			$Color_Code  = $parcel_details_data->Color_Code;
 			$UVC         = $parcel_details_data->UVC;
 			$Size_Label  = $parcel_details_data->Size_Label;
+			$po_status_code = $parcel_details_data->Po_Status_Code;
+      $po_status_code_desc = $parcel_details_data->Po_Status_Code_Description;
 		}
 		else 
 		{
@@ -198,27 +198,31 @@ class Uploads
 			$Color_Code  = null;
 			$UVC         = null;
 			$Size_Label  = null;
+			$po_status_code = null;
+            $po_status_code_desc = null;
 		}
 
 		OrchestraParcelQuantityDetails::create([
-			'FactoryCode' 	       => $FactoryCode,
-			'BuyerPONo'            => $BuyerPONo,
-			'Theme'                => $Theme,
-			'UVC_TCO'              => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
-			'Quantity'             => $Quantity,
-			'Color'                => $Color_Code,
-			'UVC'                  => $UVC,
-			'Size'                 => $Size_Label,
-			'BarcodeForPricesTags' => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE']),
-			'Country_Code'         => trim($data[$key]['COUNTRY CODE']) === '_'?null:trim($data[$key]['COUNTRY CODE']),
-			'Season_Code'          => trim($data[$key]['SEASON CODE']) === '_'?null:trim($data[$key]['SEASON CODE']),
-			'Currency'             => trim($data[$key]['CURRENCY']) === '_'?null:trim($data[$key]['CURRENCY']),
-			'Price'                => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
-			'Club_Price'           => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE']),
-			'Nom_Appel'            => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
-			'Last_Change_Date'     => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
-			'Supplier_Code'        => trim($data[$key]['SUPPLIER_CODE']) === '_'?null:trim($data[$key]['SUPPLIER_CODE']),
-			'Supplier_Name'        => trim($data[$key]['SUPPLIER_NAME']) === '_'?null:trim($data[$key]['SUPPLIER_NAME']),
+			'FactoryCode' 	       		    => $FactoryCode,
+			'BuyerPONo'            		    => $BuyerPONo,
+			'Theme'                		    => $Theme,
+			'UVC_TCO'              		    => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
+			'Quantity'             		    => $Quantity,
+			'Color'                		    => $Color_Code,
+			'UVC'                  		    => $UVC,
+			'Size'                 		    => $Size_Label,
+			'BarcodeForPricesTags' 		    => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE']),
+			'Country_Code'         		    => trim($data[$key]['COUNTRY CODE']) === '_'?null:trim($data[$key]['COUNTRY CODE']),
+			'Season_Code'          		    => trim($data[$key]['SEASON CODE']) === '_'?null:trim($data[$key]['SEASON CODE']),
+			'Currency'             		    => trim($data[$key]['CURRENCY']) === '_'?null:trim($data[$key]['CURRENCY']),
+			'Price'                		    => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
+			'Club_Price'           		    => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE']),
+			'Nom_Appel'            		    => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+			'Last_Change_Date'     		    => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+			'Supplier_Code'        		    => trim($data[$key]['SUPPLIER_CODE']) === '_'?null:trim($data[$key]['SUPPLIER_CODE']),
+			'Supplier_Name'        		    => trim($data[$key]['SUPPLIER_NAME']) === '_'?null:trim($data[$key]['SUPPLIER_NAME']),
+			'Po_Status_Code'              => $po_status_code,
+			'Po_Status_Code_Description'  => $po_status_code_desc,
 			]);
 	}
 
@@ -342,6 +346,8 @@ class Uploads
 			$Color_Code  = $parcel_details_data->Color_Code;
 			$UVC         = $parcel_details_data->UVC;
 			$Size_Label  = $parcel_details_data->Size_Label;
+			$po_status_code = $parcel_details_data->Po_Status_Code;
+            $po_status_code_desc = $parcel_details_data->Po_Status_Code_Description;
 		}
 		else 
 		{
@@ -352,6 +358,8 @@ class Uploads
 			$Color_Code  = null;
 			$UVC         = null;
 			$Size_Label  = null;
+			$po_status_code = null;
+            $po_status_code_desc = null;
 		}
 
 		// check if UVC_TCO, UVC and PO change date already exists or not
@@ -360,24 +368,26 @@ class Uploads
 		if($parcel_details_count === 0)
 		{
 			TempOrchestraParcelQuantityDetails::create([
-				'FactoryCode' 	       => $FactoryCode,
-				'BuyerPONo'            => $BuyerPONo,
-				'Theme'                => $Theme,
-				'UVC_TCO'              => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
-				'Quantity'             => $Quantity,
-				'Color'                => $Color_Code,
-				'UVC'                  => $UVC,
-				'Size'                 => $Size_Label,
-				'BarcodeForPricesTags' => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE']),
-				'Country_Code'         => trim($data[$key]['COUNTRY CODE']) === '_'?null:trim($data[$key]['COUNTRY CODE']),
-				'Season_Code'          => trim($data[$key]['SEASON CODE']) === '_'?null:trim($data[$key]['SEASON CODE']),
-				'Currency'             => trim($data[$key]['CURRENCY']) === '_'?null:trim($data[$key]['CURRENCY']),
-				'Price'                => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
-				'Club_Price'           => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE']),
-				'Nom_Appel'            => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
-				'Last_Change_Date'     => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
-				'Supplier_Code'        => trim($data[$key]['SUPPLIER_CODE']) === '_'?null:trim($data[$key]['SUPPLIER_CODE']),
-				'Supplier_Name'        => trim($data[$key]['SUPPLIER_NAME']) === '_'?null:trim($data[$key]['SUPPLIER_NAME']),
+				'FactoryCode' 	              => $FactoryCode,
+				'BuyerPONo'                   => $BuyerPONo,
+				'Theme'                       => $Theme,
+				'UVC_TCO'                     => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
+				'Quantity'                    => $Quantity,
+				'Color'                       => $Color_Code,
+				'UVC'                         => $UVC,
+				'Size'                        => $Size_Label,
+				'BarcodeForPricesTags'        => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE']),
+				'Country_Code'                => trim($data[$key]['COUNTRY CODE']) === '_'?null:trim($data[$key]['COUNTRY CODE']),
+				'Season_Code'                 => trim($data[$key]['SEASON CODE']) === '_'?null:trim($data[$key]['SEASON CODE']),
+				'Currency'                    => trim($data[$key]['CURRENCY']) === '_'?null:trim($data[$key]['CURRENCY']),
+				'Price'                       => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
+				'Club_Price'                  => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE']),
+				'Nom_Appel'                   => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+				'Last_Change_Date'            => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+				'Supplier_Code'               => trim($data[$key]['SUPPLIER_CODE']) === '_'?null:trim($data[$key]['SUPPLIER_CODE']),
+				'Supplier_Name'               => trim($data[$key]['SUPPLIER_NAME']) === '_'?null:trim($data[$key]['SUPPLIER_NAME']),
+				'Po_Status_Code'              => $po_status_code,
+			  'Po_Status_Code_Description'  => $po_status_code_desc
 				]);
 		}
 	}
@@ -394,14 +404,16 @@ class Uploads
 	{
 		OrchestraParcelQuantityDetails::where('UVC_TCO', $parcel_details_data->SKU_Code)
 				->update([
-					'FactoryCode' 	       => $parcel_details_data->FactoryCode,
-					'BuyerPONo'            => $parcel_details_data->BuyerPONo,
-					'Theme'                => $parcel_details_data->Theme,
-					'UVC_TCO'              => $parcel_details_data->SKU_Code,
-					'Quantity'             => $parcel_details_data->Quantity,
-					'Color'                => $parcel_details_data->Color_Code,
-					'UVC'                  => $parcel_details_data->UVC,
-					'Size'                 => $parcel_details_data->Size_Label
+					'FactoryCode' 	              => $parcel_details_data->FactoryCode,
+					'BuyerPONo'                   => $parcel_details_data->BuyerPONo,
+					'Theme'                       => $parcel_details_data->Theme,
+					'UVC_TCO'                     => $parcel_details_data->SKU_Code,
+					'Quantity'                    => $parcel_details_data->Quantity,
+					'Color'                       => $parcel_details_data->Color_Code,
+					'UVC'                         => $parcel_details_data->UVC,
+					'Size'                        => $parcel_details_data->Size_Label,
+					'Po_Status_Code'              => $parcel_details_data->Po_Status_Code,
+		      'Po_Status_Code_Description'  => $parcel_details_data->Po_Status_Code_Description
 					]);
 	}
 	

@@ -27,5 +27,7 @@ class OrchestraParcelQuantityDetails extends Model
         'Last_Change_Date', 
         'Supplier_Code',
         'Supplier_Name',
+        'Po_Status_Code',
+        'Po_Status_Code_Description'
     ];
 }
