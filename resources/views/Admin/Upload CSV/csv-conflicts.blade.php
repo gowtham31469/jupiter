@@ -11,7 +11,11 @@
           </div>
           <div class="clearfix"></div>
             <div class="main-content">
-                <div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
+                <div class="loader" style="display:none;">
+                    <div class=" fa-3x">
+                        <i class="fa fa-spinner fa-pulse"></i>
+                    </div>
+                </div>
                 <div class="col-md-12" id="csv-conflicts-table">
                 <table id="csv-conflicts-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%">
                   <thead>

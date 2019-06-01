@@ -29,7 +29,11 @@ var csrf_token = $('meta[name="csrf-token"]').attr('content');
                     <button class="btn btn-xs btn-success " type="button" onclick="confirmUVCOrders()"><i class="fa fa-floppy-o" aria-hidden="true"></i> Confirm</button>\
                     <button class="btn btn-xs btn-danger" type="button" onclick="cancelUVCOrders()" style="margin-right: 5px;"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>');
 
-                    var html = '<div class="loader"><div class="fa fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>\
+                    var html = '<div class="loader" style="display:none;">\
+                    <div class=" fa-3x">\
+                        <i class="fa fa-spinner fa-pulse"></i>\
+                    </div>\
+                  </div>\
                     <div class="col-md-12"" id="uvc-data-table">\
                     <table id="uvc-data-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%">\
                       <thead>\
