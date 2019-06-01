@@ -659,7 +659,7 @@ class OrderManagementCntrl extends Controller
 				$po_status="PO Pending";
 				$pi_status="";
 			}
-			$status="Approved";
+			$status="Order Approved";
 		}
 		else
 		{
@@ -777,7 +777,7 @@ class OrderManagementCntrl extends Controller
 				$po_status="PO Pending";
 				$pi_status="";
 			}
-			$status="Approved";
+			$status="Order Approved";
 		}
 		else
 		{
@@ -900,7 +900,7 @@ class OrderManagementCntrl extends Controller
 				$po_status="PO Pending";
 				$pi_status="";
 			}
-			$status="Approved";
+			$status="Order Approved";
 		}
 		else
 		{
@@ -1023,7 +1023,7 @@ class OrderManagementCntrl extends Controller
 				$po_status="PO Pending";
 				$pi_status="";
 			}
-			$status="Approved";
+			$status="Order Approved";
 		}
 		else
 		{
@@ -1215,7 +1215,7 @@ class OrderManagementCntrl extends Controller
 				$po_status="PO Pending";
 				$pi_status="";
 			}
-			$status="Approved";
+			$status="Order Approved";
 		}
 		else
 		{
@@ -1959,14 +1959,14 @@ class OrderManagementCntrl extends Controller
      */
 	public function reOrder(Request $request)
     {
-              $data['orchestra_hang_tag_orders'] = DB::table('orchestra_hang_tag_orders')->select('*')->where('status',"Approved")->get();
-			  $data['orchestra_main_label_orders'] = DB::table('orchestra_main_label_orders')->select('*')->where('status',"Approved")->get();
-			  $data['orchestra_special_tag_orders'] = DB::table('orchestra_special_tag_orders')->select('*')->where('status',"Approved")->get();
-			  $data['orchestra_wash_care_label_orders'] = DB::table('orchestra_wash_care_label_orders')->select('*')->where('status',"Approved")->get();
-			  $data['orchestra_solid_carton_sticker_orders'] = DB::table('orchestra_solid_carton_sticker_orders')->select('*')->where('status',"Approved")->get();
-			  $data['orchestra_solid_poly_bag_sticker_orders'] = DB::table('orchestra_solid_poly_bag_sticker_orders')->select('*')->where('status',"Approved")->get();
-			  $data['orchestra_standard_carton_sticker_orders'] = DB::table('orchestra_standard_carton_sticker_orders')->select('*')->where('status',"Approved")->get();
-			  $data['orchestra_standard_polybag_sticker_orders'] = DB::table('orchestra_standard_polybag_sticker_orders')->select('*')->where('status',"Approved")->get();
+              $data['orchestra_hang_tag_orders'] = DB::table('orchestra_hang_tag_orders')->select('*')->where('status',"Order Approved")->get();
+			  $data['orchestra_main_label_orders'] = DB::table('orchestra_main_label_orders')->select('*')->where('status',"Order Approved")->get();
+			  $data['orchestra_special_tag_orders'] = DB::table('orchestra_special_tag_orders')->select('*')->where('status',"Order Approved")->get();
+			  $data['orchestra_wash_care_label_orders'] = DB::table('orchestra_wash_care_label_orders')->select('*')->where('status',"Order Approved")->get();
+			  $data['orchestra_solid_carton_sticker_orders'] = DB::table('orchestra_solid_carton_sticker_orders')->select('*')->where('status',"Order Approved")->get();
+			  $data['orchestra_solid_poly_bag_sticker_orders'] = DB::table('orchestra_solid_poly_bag_sticker_orders')->select('*')->where('status',"Order Approved")->get();
+			  $data['orchestra_standard_carton_sticker_orders'] = DB::table('orchestra_standard_carton_sticker_orders')->select('*')->where('status',"Order Approved")->get();
+			  $data['orchestra_standard_polybag_sticker_orders'] = DB::table('orchestra_standard_polybag_sticker_orders')->select('*')->where('status',"Order Approved")->get();
               echo json_encode($data);
     }
 	/**
