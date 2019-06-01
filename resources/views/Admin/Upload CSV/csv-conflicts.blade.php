@@ -21,16 +21,18 @@
                       <th>Collection</th>
                       <th>Supplier Name</th>
                       <th>Theme</th>
+                      <th>Changes</th>
                     </tr>
                   </thead>
                   <tbody>
                       @foreach($result_array as $key => $value)
                          <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td><a href="javaScript:void(0);" title="view more" class="view-more" data-placement="bottom"  data-backdrop="static" data-keyboard="false" onclick="get_uvc_data(this)" data-table="{{ $value['table'] }}">{{ $value['UVC'] }}</a></td>
-                            <td>{{ $value['Season_Code'] }}</td>
-                            <td>{{ $value['SupplierName'] }}</td>
-                            <td>{{ $value['Theme'] }}</td>
+                            <td><a href="javaScript:void(0);" title="view more" class="view-more" data-placement="bottom"  data-backdrop="static" data-keyboard="false" onclick="getUvcData('{{ $value['table'] }}', '{{ $value['UVC'] }}')" data-table="{{ $value['table'] }}">{{ $value['UVC'] ?? '-' }}</a></td>
+                            <td>{{ $value['Season_Code'] ?? '-' }}</td>
+                            <td>{{ $value['SupplierName'] ?? '-' }}</td>
+                            <td>{{ $value['Theme'] ?? '-' }}</td>
+                            <td>{{ $value['Changes'] ?? '-' }}</td>
                            </tr>
                       @endforeach
                   </tbody>
@@ -41,6 +43,48 @@
         </div>
     </div>
 </div>
+
+<!-- View Changes Modal  -->
+<div class="modal view-changes-modal fade" id="ViewChangesModalCenter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog view-changes-modal-dialog" role="document">
+          <div class="modal-content view-changes-modal-content">
+                <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                      <h4 class="modal-title buyer-modal-title" id="myModalLabel">View Changes</h4>
+                  </div>
+                  <div class="modal-body view-changes-modal-body">
+                  <div class="container-fluid">
+                      <div class="row">
+                          <!-- Card Projects -->
+                          <div class="col-md-6">
+                              <div class="card old-values-card">
+                                  <h4 class="card-title">Old Values</h4>
+                                  <hr>
+                                  <div class="card-content old-values-card-content">
+                                      
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-md-6">
+                              <div class="card new-values-card">
+                                  <h4 class="card-title">New Values</h4>
+                                  <hr>
+                                  <div class="card-content new-values-card-content">
+                                      
+                                  </div>
+                              </div>
+                          </div>
+                        
+                      </div>
+                  </div>
+                  </div>
+                  <div class="modal-footer view-changes-modal-footer">
+                      {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                  </div>
+            {!! Form::close() !!}
+          </div>
+      </div>
+  </div>
 @endsection @else
 <script type="text/javascript">
     window.location = "{{ url('/admin') }}";

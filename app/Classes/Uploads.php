@@ -187,7 +187,7 @@ class Uploads
 			$UVC         = $parcel_details_data->UVC;
 			$Size_Label  = $parcel_details_data->Size_Label;
 			$po_status_code = $parcel_details_data->Po_Status_Code;
-            $po_status_code_desc = $parcel_details_data->Po_Status_Code_Description;
+      $po_status_code_desc = $parcel_details_data->Po_Status_Code_Description;
 		}
 		else 
 		{
@@ -203,24 +203,24 @@ class Uploads
 		}
 
 		OrchestraParcelQuantityDetails::create([
-			'FactoryCode' 	       		  => $FactoryCode,
-			'BuyerPONo'            		  => $BuyerPONo,
-			'Theme'                		  => $Theme,
-			'UVC_TCO'              		  => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
-			'Quantity'             		  => $Quantity,
-			'Color'                		  => $Color_Code,
-			'UVC'                  		  => $UVC,
-			'Size'                 		  => $Size_Label,
-			'BarcodeForPricesTags' 		  => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE']),
-			'Country_Code'         		  => trim($data[$key]['COUNTRY CODE']) === '_'?null:trim($data[$key]['COUNTRY CODE']),
-			'Season_Code'          		  => trim($data[$key]['SEASON CODE']) === '_'?null:trim($data[$key]['SEASON CODE']),
-			'Currency'             		  => trim($data[$key]['CURRENCY']) === '_'?null:trim($data[$key]['CURRENCY']),
-			'Price'                		  => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
-			'Club_Price'           		  => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE']),
-			'Nom_Appel'            		  => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
-			'Last_Change_Date'     		  => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
-			'Supplier_Code'        		  => trim($data[$key]['SUPPLIER_CODE']) === '_'?null:trim($data[$key]['SUPPLIER_CODE']),
-			'Supplier_Name'        		  => trim($data[$key]['SUPPLIER_NAME']) === '_'?null:trim($data[$key]['SUPPLIER_NAME']),
+			'FactoryCode' 	       		    => $FactoryCode,
+			'BuyerPONo'            		    => $BuyerPONo,
+			'Theme'                		    => $Theme,
+			'UVC_TCO'              		    => trim($data[$key]['SKU CODE']) === '_'?null:trim($data[$key]['SKU CODE']),
+			'Quantity'             		    => $Quantity,
+			'Color'                		    => $Color_Code,
+			'UVC'                  		    => $UVC,
+			'Size'                 		    => $Size_Label,
+			'BarcodeForPricesTags' 		    => trim($data[$key]['SKU BARCODE']) === '_'?null:trim($data[$key]['SKU BARCODE']),
+			'Country_Code'         		    => trim($data[$key]['COUNTRY CODE']) === '_'?null:trim($data[$key]['COUNTRY CODE']),
+			'Season_Code'          		    => trim($data[$key]['SEASON CODE']) === '_'?null:trim($data[$key]['SEASON CODE']),
+			'Currency'             		    => trim($data[$key]['CURRENCY']) === '_'?null:trim($data[$key]['CURRENCY']),
+			'Price'                		    => trim($data[$key]['PRICE']) === '_'?null:trim($data[$key]['PRICE']),
+			'Club_Price'           		    => trim($data[$key]['CLUB PRICE']) === '_'?null:trim($data[$key]['CLUB PRICE']),
+			'Nom_Appel'            		    => trim($data[$key]['NOM_APPEL']) === '_'?null:trim($data[$key]['NOM_APPEL']),
+			'Last_Change_Date'     		    => trim($data[$key]['LAST_CHANGE_DATE']) === '_'?null:trim($data[$key]['LAST_CHANGE_DATE']),
+			'Supplier_Code'        		    => trim($data[$key]['SUPPLIER_CODE']) === '_'?null:trim($data[$key]['SUPPLIER_CODE']),
+			'Supplier_Name'        		    => trim($data[$key]['SUPPLIER_NAME']) === '_'?null:trim($data[$key]['SUPPLIER_NAME']),
 			'Po_Status_Code'              => $po_status_code,
 			'Po_Status_Code_Description'  => $po_status_code_desc,
 			]);
@@ -387,7 +387,7 @@ class Uploads
 				'Supplier_Code'               => trim($data[$key]['SUPPLIER_CODE']) === '_'?null:trim($data[$key]['SUPPLIER_CODE']),
 				'Supplier_Name'               => trim($data[$key]['SUPPLIER_NAME']) === '_'?null:trim($data[$key]['SUPPLIER_NAME']),
 				'Po_Status_Code'              => $po_status_code,
-			    'Po_Status_Code_Description'  => $po_status_code_desc
+			  'Po_Status_Code_Description'  => $po_status_code_desc
 				]);
 		}
 	}
@@ -413,7 +413,7 @@ class Uploads
 					'UVC'                         => $parcel_details_data->UVC,
 					'Size'                        => $parcel_details_data->Size_Label,
 					'Po_Status_Code'              => $parcel_details_data->Po_Status_Code,
-		        	'Po_Status_Code_Description'  => $parcel_details_data->Po_Status_Code_Description
+		      'Po_Status_Code_Description'  => $parcel_details_data->Po_Status_Code_Description
 					]);
 	}
 	

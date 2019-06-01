@@ -73,6 +73,8 @@
     <script src="{{ asset('js/tree.jquery.min.js') }}"></script>
     <script src="{{ asset('js/jstree.min.js') }}"></script>  
     <script src="{{ asset('js/jquery.nicescroll.js') }}"></script>
+    <script src="{{ asset('js/dataTables.checkboxes.min.js') }}"></script>
+
     
       <!-- Bootstrap Date-Picker Plugin -->
     <script type="text/javascript" src="{{ asset('js/bootstrap-datepicker.js') }}"></script>
