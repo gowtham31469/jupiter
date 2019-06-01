@@ -784,6 +784,20 @@ function table(data,path){
                     
                     tr += '<td align="center">'+$status_text+'</td>';
                    
+                }  else if (key == "Order Status") {
+                    var str=value[key] ;
+                    if(str != null && str != "")
+                    {
+                        $order_status=str;
+                    }
+                    else
+                    {
+                        
+                        $order_status=" - ";
+                    }
+                    
+                    tr += '<td align="center">'+$order_status+'</td>';
+                   
                 } else if (key == "DeliveryDate") {
                     var str=value[key] ;
                     if(str != null && str != "" && str != "00-00-0000")
@@ -4070,7 +4084,7 @@ function hangtagmodal(data) {
                             var svgDoc;
                             mySVG_hang_disney.addEventListener("load", function () {
                                 svgDoc = mySVG_hang_disney.contentDocument;
-                                var pri = order_details[0].PrixEurope.split(".")
+                                var pri = order_details[0].PrixEurope.split(",")
 
                                 if (pri.length == 1) {
                                     var svgItem = svgDoc.getElementById("price1");
@@ -4081,7 +4095,7 @@ function hangtagmodal(data) {
                                     svgItem.innerHTML = pri[0];
                                     svgDoc.getElementById("price2").innerHTML = "," + pri[1];
                                 }
-                                var pri1 = order_details[0].PrixClubEurope.toString().split(".")
+                                var pri1 = order_details[0].PrixClubEurope.toString().split(",")
                                 if (pri1.length == 1) {
                                     svgDoc.getElementById("club_price1").innerHTML = order_details[0].PrixClubEurope;
                                     svgDoc.getElementById("club_price2").innerHTML = "";
@@ -4096,7 +4110,7 @@ function hangtagmodal(data) {
                             var svgDoc;
                             mySVG_hang.addEventListener("load", function () {
                                 svgDoc = mySVG_hang.contentDocument;
-                                var pri = order_details[0].PrixEurope.split(".")
+                                var pri = order_details[0].PrixEurope.split(",")
 
                                 if (pri.length == 1) {
                                     var svgItem = svgDoc.getElementById("price1");
@@ -4107,7 +4121,7 @@ function hangtagmodal(data) {
                                     svgItem.innerHTML = pri[0];
                                     svgDoc.getElementById("price2").innerHTML = "," + pri[1];
                                 }
-                                var pri1 = order_details[0].PrixClubEurope.toString().split(".")
+                                var pri1 = order_details[0].PrixClubEurope.toString().split(",")
                                 if (pri1.length == 1) {
                                     svgDoc.getElementById("club_price1").innerHTML = order_details[0].PrixClubEurope;
                                     svgDoc.getElementById("club_price2").innerHTML = "";
@@ -4130,7 +4144,7 @@ function hangtagmodal(data) {
                             var svgItem = svgDoc.getElementById("uvc_tco");
                             svgDoc.getElementById("algeria_price").innerHTML = order_details[0].Prix_Vente_ALGERIE != null ? order_details[0].Prix_Vente_ALGERIE.toString().replace(".", ",") : "";
                             svgDoc.getElementById("algeria_club_price").innerHTML = order_details[0].Prix_Club_ALGERIE != null ? order_details[0].Prix_Club_ALGERIE.toString().replace(".", ",") : "";
-                            //svgDoc.getElementById("saudi_price").innerHTML = order_details[0].Prix_Vente_Arabie_Saoudite != null ? order_details[0].Prix_Vente_Arabie_Saoudite.toString().replace(".", ",") : "";
+                            svgDoc.getElementById("saudi_club_price").innerHTML = order_details[0].Prix_Vente_Arabie_Saoudite != null ? order_details[0].Prix_Vente_Arabie_Saoudite.toString().replace(".", ",") : "";
                             svgDoc.getElementById("morocco_price").innerHTML = order_details[0].Prix_Vente_Maroc != null ? order_details[0].Prix_Vente_Maroc.toString().replace(".", ",") : "";
                             svgDoc.getElementById("swiss_price").innerHTML = order_details[0].Prix_Vente_Suisse != null ? order_details[0].Prix_Vente_Suisse.toString().replace(".", ",") : "";
                             svgDoc.getElementById("canada_price").innerHTML = order_details[0].Prix_Vente_Canada != null ? order_details[0].Prix_Vente_Canada.toString().replace(".", ",") : "";
@@ -4148,6 +4162,12 @@ function hangtagmodal(data) {
                             svgDoc.getElementById("theme").innerHTML = order_details[0].Theme;
 							
 							if(order_details[0].Size == "TAILLE UNIQUE")
+							{
+								svgDoc.getElementById("size").innerHTML = "TU";
+								svgDoc.getElementById("size_french").innerHTML = "";
+								svgDoc.getElementById("size_english").innerHTML = "";
+							}
+							else if(order_details[0].Size == "TAILLE L")
 							{
 								svgDoc.getElementById("size").innerHTML = "TU";
 								svgDoc.getElementById("size_french").innerHTML = "";
@@ -4244,7 +4264,7 @@ function hangtagmodal(data) {
                             var svgDoc;
                             mySVG_hang.addEventListener("load", function () {
                                 svgDoc = mySVG_hang.contentDocument;
-                                var pri = order_details[0].PrixEurope.split(".")
+                                var pri = order_details[0].PrixEurope.split(",")
 
                                 if (pri.length == 1) {
                                     var svgItem = svgDoc.getElementById("price1");
@@ -4255,7 +4275,7 @@ function hangtagmodal(data) {
                                     svgItem.innerHTML = pri[0];
                                     svgDoc.getElementById("price2").innerHTML = "," + pri[1];
                                 }
-                                var pri1 = order_details[0].PrixClubEurope.toString().split(".")
+                                var pri1 = order_details[0].PrixClubEurope.toString().split(",")
                                 if (pri1.length == 1) {
                                     svgDoc.getElementById("club_price1").innerHTML = order_details[0].PrixClubEurope;
                                     svgDoc.getElementById("club_price2").innerHTML = "";
@@ -4278,7 +4298,7 @@ function hangtagmodal(data) {
                             var svgItem = svgDoc.getElementById("uvc_tco");
                             svgDoc.getElementById("algeria_price").innerHTML = order_details[0].Prix_Vente_ALGERIE != null ? order_details[0].Prix_Vente_ALGERIE.toString().replace(".", ",") : "";
                             svgDoc.getElementById("algeria_club_price").innerHTML = order_details[0].Prix_Club_ALGERIE != null ? order_details[0].Prix_Club_ALGERIE.toString().replace(".", ",") : "";
-                           // svgDoc.getElementById("saudi_price").innerHTML = order_details[0].Prix_Vente_Arabie_Saoudite != null ? order_details[0].Prix_Vente_Arabie_Saoudite.toString().replace(".", ",") : "";
+                            svgDoc.getElementById("saudi_club_price").innerHTML = order_details[0].Prix_Vente_Arabie_Saoudite != null ? order_details[0].Prix_Vente_Arabie_Saoudite.toString().replace(".", ",") : "";
                             svgDoc.getElementById("morocco_price").innerHTML = order_details[0].Prix_Vente_Maroc != null ? order_details[0].Prix_Vente_Maroc.toString().replace(".", ",") : "";
                             svgDoc.getElementById("swiss_price").innerHTML = order_details[0].Prix_Vente_Suisse != null ? order_details[0].Prix_Vente_Suisse.toString().replace(".", ",") : "";
                             svgDoc.getElementById("canada_price").innerHTML = order_details[0].Prix_Vente_Canada != null ? order_details[0].Prix_Vente_Canada.toString().replace(".", ",") : "";
@@ -4295,6 +4315,12 @@ function hangtagmodal(data) {
 							svgDoc.getElementById("theme").innerHTML = order_details[0].Theme;
                             var size = order_details[0].Size.split(" ")
 							if(order_details[0].Size == "TAILLE UNIQUE")
+							{
+								svgDoc.getElementById("size").innerHTML = "TU";
+								svgDoc.getElementById("size_french").innerHTML = "";
+								svgDoc.getElementById("size_english").innerHTML = "";
+							}
+							else if(order_details[0].Size == "TAILLE L")
 							{
 								svgDoc.getElementById("size").innerHTML = "TU";
 								svgDoc.getElementById("size_french").innerHTML = "";
@@ -4360,7 +4386,7 @@ function hangtagmodal(data) {
             var svgDoc;
             mySVG.addEventListener("load", function () {
                 svgDoc = mySVG.contentDocument;
-                var pri = data.order_details[0].PrixEurope.split(".")
+                var pri = data.order_details[0].PrixEurope.split(",")
 
                 if (pri.length == 1) {
                     var svgItem = svgDoc.getElementById("price1");
@@ -4371,7 +4397,7 @@ function hangtagmodal(data) {
                     svgItem.innerHTML = innerHTML = pri[0];
                     svgDoc.getElementById("price2").innerHTML = "," + pri[1];
                 }
-                var pri1 = data.order_details[0].PrixClubEurope.toString().split(".")
+                var pri1 = data.order_details[0].PrixClubEurope.toString().split(",")
                 if (pri1.length == 1) {
                     svgDoc.getElementById("club_price1").innerHTML = data.order_details[0].PrixClubEurope;
                     svgDoc.getElementById("club_price2").innerHTML = "";

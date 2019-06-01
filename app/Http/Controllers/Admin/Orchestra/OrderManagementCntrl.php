@@ -100,21 +100,21 @@ class OrderManagementCntrl extends Controller
 	
     public function Orders()
     {
-        $data['sticker_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id',DB::raw("'-' as \"Season\""),'BuyerPONo','SupplierName','NomApple as Style_Name','Quantity','IsSTD as Type',DB::raw("'Stickers' as \"OrderType\""),DB::raw("'-' as \"Disney\""))->groupBy('id','UVC')->get();
+        $data['sticker_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id',DB::raw("'-' as \"Season\""),'BuyerPONo','SupplierName','NomApple as Style_Name','Quantity','IsSTD as Type',DB::raw("'Stickers' as \"OrderType\""),'sticker_order_status as Order Status',DB::raw("'-' as \"Disney\""))->groupBy('id','UVC')->get();
 		
-		foreach($data['sticker_orders'] as $value)
-		{
-			if($value->Type == 0)
-			{
-				
-			}
-			else
-			{
-				
-			}
-		}
+//		foreach($data['sticker_orders'] as $value)
+//		{
+//			if($value->Type == 0)
+//			{
+//				
+//			}
+//			else
+//			{
+//				
+//			}
+//		}
 
-        $data['label_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id','Season_Code as Season',DB::raw("'-' as \"BuyerPONo\""),'SupplierName','Theme as Description','NomApple as Style_Name','Licence_Code as Disney',DB::raw("'-' as \"Type\""),'Quantity',DB::raw("'Labels' as \"OrderType\""))->groupBy('id','UVC')->get();
+        $data['label_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id','Season_Code as Season',DB::raw("'-' as \"BuyerPONo\""),'SupplierName','Theme as Description','NomApple as Style_Name','Licence_Code as Disney',DB::raw("'-' as \"Type\""),'Quantity',DB::raw("'Labels' as \"OrderType\""),'order_status as Order Status')->groupBy('id','UVC')->get();
         
         echo json_encode($data);
     } 
@@ -505,7 +505,14 @@ class OrderManagementCntrl extends Controller
 			{
                 $carton_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',179)->get();
                 
-                $data['carton_moq']=$carton_moq{0}->moq;
+                if(count($carton_moq) > 0)
+				{
+					$data['carton_moq']=$carton_moq{0}->moq;
+				}
+				else
+				{
+					$data['carton_moq']=1;
+				}
 			}
 			else
 			{
@@ -520,7 +527,14 @@ class OrderManagementCntrl extends Controller
 			{
                 $polybag_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',180)->get();
                 
-                $data['polybag_moq']=$polybag_moq{0}->moq;
+                if(count($polybag_moq) > 0)
+				{
+					$data['polybag_moq']=$polybag_moq{0}->moq;
+				}
+				else
+				{
+					$data['polybag_moq']=1;
+				}
 			}
 			else
 			{
@@ -539,8 +553,17 @@ class OrderManagementCntrl extends Controller
 			if(count($customer_id) > 0)
 			{
 				$carton_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',177)->get();
+				
+				if(count($carton_moq) > 0)
+				{
+					$data['carton_moq']=$carton_moq{0}->moq;
+				}
+				else
+				{
+					$data['carton_moq']=1;
+				}
 			
-				$data['carton_moq']=$carton_moq{0}->moq;
+				
 			}
 			else
 			{
@@ -557,7 +580,14 @@ class OrderManagementCntrl extends Controller
 			{
 				$polybag_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',178)->get();
 
-				$data['polybag_moq']=$polybag_moq{0}->moq;
+				if(count($polybag_moq) > 0)
+				{
+					$data['polybag_moq']=$polybag_moq{0}->moq;
+				}
+				else
+				{
+					$data['polybag_moq']=1;
+				}
 			}
 			else
 			{
@@ -605,7 +635,7 @@ class OrderManagementCntrl extends Controller
 		$cm =$request->cm;
 		$in =$request->in;
         $id =$request->id;
-		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('*')->get();
+		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('customers.*')->get();
 		if(count($factory) > 0)
 		{
 			
@@ -646,6 +676,7 @@ class OrderManagementCntrl extends Controller
                         'template_back_id'      => $template_back_id,
                         'svg_path'    => "", 
                         'status'    => $status,
+                        'customer_id'    => $factory{0}->id,
 					    'cm'    => $cm,
 					    'in'    => $in,
 					    'pi_status'           => $pi_status,
@@ -664,6 +695,12 @@ class OrderManagementCntrl extends Controller
                              ]);
                     $i++;
                 }
+			
+				DB::table("orchestra_parcel_details")->where('UVC',$uvc)
+                        ->update([
+                          'order_status' => "Order Placed"
+
+                ]);
         }
         else
         {
@@ -673,6 +710,7 @@ class OrderManagementCntrl extends Controller
                                     'template_back_id'      => $template_back_id,
                                     'svg_path'    => "", 
                                     'status'    => $status,
+                        			'customer_id'    => $factory{0}->id,
 				 					'cm'    => $cm,
 				 					'in'    => $in,
 				 					'pi_status'           => $pi_status,
@@ -689,6 +727,11 @@ class OrderManagementCntrl extends Controller
                          ]);
                 $i++;
             }
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
+                        ->update([
+                          'order_status' => "Order Placed"
+
+            ]);
         }
            
     }
@@ -749,6 +792,7 @@ class OrderManagementCntrl extends Controller
                         'template_id'      => $template_front_id, 
                         'svg_path'    => "",
 					    'final_qty'    => $tot_qty_table, 
+                        'customer_id'    => $factory{0}->id,
                         'status'    => $status,
 					    'pi_status'           => $pi_status,
 				 		'po_status'           => $po_status,
@@ -766,6 +810,11 @@ class OrderManagementCntrl extends Controller
 //                             ]);
 //                    $i++;
 //                }
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
+                        ->update([
+                          'order_status' => "Order Placed"
+
+            ]);
         }
         else
         {
@@ -774,6 +823,7 @@ class OrderManagementCntrl extends Controller
                                     'template_id'      => $template_front_id, 
                                     'svg_path'    => "", 
 				 					'final_qty'    => $tot_qty_table,
+                        			'customer_id'    => $factory{0}->id,
                                     'status'    => $status,
 				 					'pi_status'           => $pi_status,
 				 					'po_status'           => $po_status,
@@ -789,6 +839,11 @@ class OrderManagementCntrl extends Controller
 //                         ]);
 //                $i++;
 //            }
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
+                        ->update([
+                          'order_status' => "Order Placed"
+
+            ]);
         }
            
     } 
@@ -861,6 +916,7 @@ class OrderManagementCntrl extends Controller
                         'template_name'      => $template_name,
                         'svg_path'    => "", 
 					    'final_qty'    => $tots, 
+                        'customer_id'    => $factory{0}->id,
 					    'total_flag'    => $main_flag, 
                         'status'    => $status,
 					    'pi_status'           => $pi_status,
@@ -880,6 +936,11 @@ class OrderManagementCntrl extends Controller
                              ]);
                     $i++;
                 }
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
+                        ->update([
+                          'order_status' => "Order Placed"
+
+            ]);
         }
         else
         {
@@ -888,6 +949,7 @@ class OrderManagementCntrl extends Controller
                                 'template_id'      => $template_front_id,
                                 'template_name'      => $template_name,
 				   				'final_qty'    => $tots, 
+                        		'customer_id'    => $factory{0}->id,
 				   				'total_flag'    => $main_flag, 
                                 'svg_path'    => "", 
                                 'status'    => $status,
@@ -906,6 +968,11 @@ class OrderManagementCntrl extends Controller
                              ]);
                     $i++;
                 }
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
+                        ->update([
+                          'order_status' => "Order Placed"
+
+            ]);
         }
        
            
@@ -971,6 +1038,7 @@ class OrderManagementCntrl extends Controller
                         'template_id'      => $polybag_template_id,
                         'po'               => $po,
                         'height'           => $height,  
+                        'customer_id'    => $factory{0}->id,
                         'svg_path'         => "", 
                         'status'           => $status,
 					    'pi_status'           => $pi_status,
@@ -992,6 +1060,12 @@ class OrderManagementCntrl extends Controller
                              ]);
                     $j++;
                 }
+			
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
+                        ->update([
+                          'sticker_order_status' => "Order Placed"
+
+            ]);
         }
         else
         {
@@ -999,7 +1073,8 @@ class OrderManagementCntrl extends Controller
                                 'uvc' => $uvc,
                                 'template_id'      => $polybag_template_id,
                                 'po'               => $po,
-                                'height'           => $height, 
+                                'height'           => $height,
+				  				'customer_id'    => $factory{0}->id, 
                                 'svg_path'    => "", 
                                 'status'    => $status,
 				  				'pi_status'           => $pi_status,
@@ -1017,6 +1092,11 @@ class OrderManagementCntrl extends Controller
                              ]);
                     $j++;
                 }
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
+                        ->update([
+                          'sticker_order_status' => "Order Placed"
+
+            ]);
         }
         if($carton_id != "null")
         {
@@ -1026,6 +1106,7 @@ class OrderManagementCntrl extends Controller
                         'template_id'      => $carton_template_id,
                         'po'               => $po,
                         'height'           => $height, 
+                        'customer_id'    => $factory{0}->id,
                         'svg_path'         => "", 
                         'status'           => $status,
 					    'pi_status'           => $pi_status,
@@ -1045,7 +1126,11 @@ class OrderManagementCntrl extends Controller
                     $i++;
                 }
             
-            
+            DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
+                        ->update([
+                          'sticker_order_status' => "Order Placed"
+
+            ]);
         }
         else
         {
@@ -1054,6 +1139,7 @@ class OrderManagementCntrl extends Controller
                                 'template_id'      => $carton_template_id,
                                 'po'               => $po,
                                 'height'           => $height, 
+                        		'customer_id'    => $factory{0}->id,
                                 'svg_path'    => "", 
                                 'status'    => $status,
 				   				'pi_status'           => $pi_status,
@@ -1069,7 +1155,12 @@ class OrderManagementCntrl extends Controller
                                         'quantity_sets'    => $value
                              ]);
                     $i++;
-                }             
+                }   
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
+                        ->update([
+                          'sticker_order_status' => "Order Placed"
+
+            ]);
         }
        
            
@@ -1140,6 +1231,7 @@ class OrderManagementCntrl extends Controller
                         'template_id'      => $polybag_template_id,
                         'po'               => $po,
                         'height'           => $height, 
+                        'customer_id'    => $factory{0}->id,
                         'no_of_carton'    => $no_of_carton, 
                         'total_polybag'    => $total_polybag, 
                         'final_order_qty_sets'    => $final_order_qty_sets, 
@@ -1162,6 +1254,12 @@ class OrderManagementCntrl extends Controller
                                         'quantity'    => $total_polybag,
                                         'quantity_sets'    => $final_order_qty_sets
                      ]);
+
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
+                        ->update([
+                          'sticker_order_status' => "Order Placed"
+
+            ]);
         }
         else
         {
@@ -1170,6 +1268,7 @@ class OrderManagementCntrl extends Controller
                                 'template_id'      => $polybag_template_id,
                                 'po'               => $po,
                                 'height'           => $height, 
+				  				'customer_id'    => $factory{0}->id,
                                 'no_of_carton'    => $no_of_carton, 
                                 'total_polybag'    => $total_polybag, 
                                 'final_order_qty_sets'    => $final_order_qty_sets, 
@@ -1188,6 +1287,12 @@ class OrderManagementCntrl extends Controller
                                         'quantity'    => $total_polybag,
                                         'quantity_sets'    => $final_order_qty_sets
                              ]);
+			
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
+                        ->update([
+                          'sticker_order_status' => "Order Placed"
+
+            ]);
                 
         }
         if($carton_id != "null")
@@ -1198,6 +1303,7 @@ class OrderManagementCntrl extends Controller
                         'template_id'      => $carton_template_id,
                         'po'               => $po,
                         'height'           => $height, 
+                        'customer_id'    => $factory{0}->id,
                         'no_of_carton'    => $no_of_carton, 
                         'total_polybag'    => $total_polybag, 
                         'final_order_qty_sets'    => $final_order_qty_sets, 
@@ -1219,6 +1325,11 @@ class OrderManagementCntrl extends Controller
                                         'quantity'    => $order_qty,
                                         'quantity_sets'    => $final_order_qty
                      ]);
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
+                        ->update([
+                          'sticker_order_status' => "Order Placed"
+
+            ]);
         }
         else
         {
@@ -1227,6 +1338,7 @@ class OrderManagementCntrl extends Controller
                                 'template_id'      => $carton_template_id,
                                 'po'               => $po,
                                 'height'           => $height, 
+				   				'customer_id'    => $factory{0}->id,
                                 'no_of_carton'    => $no_of_carton, 
                                 'total_polybag'    => $total_polybag, 
                                 'final_order_qty_sets'    => $final_order_qty_sets, 
@@ -1244,6 +1356,12 @@ class OrderManagementCntrl extends Controller
                                         'quantity'    => $order_qty,
                                         'quantity_sets'    => $final_order_qty
                       ]);
+			
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
+                        ->update([
+                          'sticker_order_status' => "Order Placed"
+
+            ]);
         }
        
            
@@ -1325,6 +1443,7 @@ class OrderManagementCntrl extends Controller
                         'cleaning_id'      => $cleaning_select,
                         'made_in_id'      => $made_in_select,
                         'care_instruction_id'      => $care_instruction_select,
+                        'customer_id'    => $factory{0}->id,
                         'svg_path'    => "", 
 					    'cm'    => $cm, 
 					    'in'    => $in, 
@@ -1375,6 +1494,12 @@ class OrderManagementCntrl extends Controller
                 }
                 $k++;
             }
+			
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
+                        ->update([
+                          'order_status' => "Order Placed"
+
+            ]);
         }
         else
         {
@@ -1390,6 +1515,7 @@ class OrderManagementCntrl extends Controller
                                 'cleaning_id'      => $cleaning_select,
                                 'made_in_id'      => $made_in_select,
                                 'care_instruction_id'      => $care_instruction_select,
+                        		'customer_id'    => $factory{0}->id,
                                 'svg_path'    => "", 
 				   				'cm'    => $cm, 
 				   				'in'    => $in, 
@@ -1436,6 +1562,11 @@ class OrderManagementCntrl extends Controller
                 }
                 $k++;
             }
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
+                        ->update([
+                          'order_status' => "Order Placed"
+
+            ]);
         }
        
            
