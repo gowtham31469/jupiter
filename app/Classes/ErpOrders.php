@@ -17,6 +17,13 @@ use App\ErpOrderDetails;
 class ErpOrders
 {
 	private $created_at;
+
+	/**
+	 * Update tesco orders details in erp_orders table
+	 *
+	 * @param [type] $request
+	 * @return void
+	 */
 	public function updateTescoErpOrders($request)
 	{
 		try
@@ -102,7 +109,19 @@ class ErpOrders
         }
         return $result;
 	}
-
+	
+	/**
+	 * Insert Tesco Order details in erp_order_details table
+	 *
+	 * @param [type] $qnty_table
+	 * @param [type] $order_details
+	 * @param [type] $orders
+	 * @param [type] $erp_orders
+	 * @param [type] $buyer_id
+	 * @param [type] $status
+	 * @param [type] $erp_orders_id
+	 * @return void
+	 */
 	function insertOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders_id)
 	{
 		if ($order_details)
@@ -145,8 +164,107 @@ class ErpOrders
 				}
 
 				// remove erp_orders table row , if no FK relation exists in erp_order_details table
-				DB::table('erp_orders')->select('erp_orders.id')->whereNotIn('erp_orders.id', function($rightjoin) {                                                                                         $rightjoin->select('erp_orders.id')                                                                   ->from('erp_orders')                                                                        ->rightjoin('erp_order_details', 'erp_orders.id', 'erp_order_details.erp_order_id')                                                                                ->groupBy('erp_orders.id');                                                         })->delete();
+				DB::table('erp_orders')->select('erp_orders.id')->whereNotIn('erp_orders.id', function($rightjoin) {                                                                                         $rightjoin->select('erp_orders.id')                                                                   ->from('erp_orders')->rightjoin('erp_order_details', 'erp_orders.id', 'erp_order_details.erp_order_id')                                                                                ->groupBy('erp_orders.id');                                                         })->delete();
 			}
 		}
+	}
+
+	/**
+	 * Update orchestra orders details in erp_orders table
+	 *
+	 * @param [type] $request
+	 * @return void
+	 */
+	public function updateOrchestraErpOrders($request)
+	{
+		try
+		{			
+			$table_name     = $request['tableName']; 
+			$buyer_id		= $request['buyer_id'];
+			$row_id		    = $request['id'];
+			$qnty_table     = $table_name.'_qty' ;
+			
+			// get the first letter of each word for a given string
+            $result_str  =  str_replace("_"," ",str_replace("_orders","",$table_name));
+            $qnty_id = '';
+            foreach (explode(' ', $result_str) as $word)
+            {
+                $qnty_id .= strtolower($word[0]);
+            }
+			
+			$this->created_at = Carbon::now('Asia/Kolkata')->toDateTimeString();
+            $orders     	= DB::table($table_name)->where($table_name.'.id',$row_id)
+            					->join('orchestra_item_master',$table_name.'.template_id','=','orchestra_item_master.id')
+                                ->select('*')->first();
+            $order_details  = DB::table($qnty_table)->where($qnty_id,$row_id)
+            				->get();
+			$order_status   = $orders->order_status;
+
+			$customer_data  = DB::table('customers')->where('id',$orders->customer_id)->first();
+
+			if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
+				$po_no     = $orders->pi_id;
+				$po_file   = $orders->pi_file;
+			}
+			else if($customer_data->po_required== 1){
+				$po_no     = $orders->purchase_order_no;
+				$po_file   = $orders->po_file;
+			}
+
+			$order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', $order_status)->first();
+			
+			// if ($orders->purchase_order_no == "" && $orders->po_file == "" && $orders->po_file=="") {
+				
+			// }
+			// else{
+				$erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$orders->customer_id)->where('po_no',$po_no)->first();
+			// }			
+
+			if ($erp_orders) {
+			
+				// $erp_order_table_status = DB::table('erp_order_details')
+				// 	->where('erp_order_details.erp_order_id', $erp_orders->id)
+				// 	->pluck('status')->all();
+				
+				// if(count(array_unique($erp_order_table_status)) === 1)
+				// {
+				// 	DB::table('erp_orders')
+				// 		->where('erp_orders.id', $erp_orders->id)
+				// 		->update([
+				// 			'status'  => $erp_order_table_status[0]
+				// 		]);
+				// 	$status = $erp_order_table_status[0];
+				// }
+				// else 
+				// {
+					Erp::where('id',$erp_orders->id)->update(['status'=>1, 'po_file' => $po_file]);
+					$status = 1;
+				//}
+			    $this->insertOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders->id);
+			}
+			else
+			{
+				$erp_orders = Erp::create([
+								'buyer_id'         => $buyer_id,
+								'customer_id'      => $orders->customer_id,
+								'po_no'            => $po_no,
+								'po_file'          => $po_file,
+								'status'		   => 1,
+								'order_status_id'  => $order_status_id->id,
+								'created_at'       => $this->created_at
+							 ]);
+				$erp_id = "ERPID-0".$erp_orders->id;
+				Erp::where('id',$erp_orders->id)->update(['erp_id'=>$erp_id]);
+				$status = 1;
+
+				$this->insertOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders->id);
+			}
+			$result = response()->json(['error'=> false,'message' =>'success'],200);
+		}
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
 	}
 }

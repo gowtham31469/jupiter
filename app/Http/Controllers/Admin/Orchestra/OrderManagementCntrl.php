@@ -32,6 +32,7 @@ use App\StandardPolyStickersQty;
 use View;
 use DB;
 use App\Classes\ERPOrderStatusCheck;
+use App\Classes\ErpOrders;
 
 class OrderManagementCntrl extends Controller
 {
@@ -1442,28 +1443,56 @@ class OrderManagementCntrl extends Controller
     }
     /**
      * method to set the purchase order number to the respective order
-     * @param Request $request [table_name,po_number]
+     * @param Request $request [table_name,po_number, id]
      */
     public function setPONumber(Request $request)
     {
         try
         {
-            $po_number  =   $request->po_number;
-            $id         =   $request->id;
-            $table_name =   $request->table_name;
-            $data       = DB::table($table_name)->where('id',$id)
-                        ->update([
-                          'po_number' => $po_number,
-                          'po_status' => "PO Approved"
-                        ]);
-            if (count($data)>0)
+            $erp_obj        = new ErpOrders();
+            $po_number      = $request->po_number;
+			$template_id    = $request->id;
+            $table_name     = $request->tableName; 
+
+            $po_details     = DB::table($table_name)->where('id',$template_id)
+                                ->select('po_file')->first();
+
+            // check order status in erp_oorders table.                    
+            $data_array = [];
+            $data_array['id'] = $request->id;
+            $data_array['table_name'] = $table_name;
+            $class_obj = new ERPOrderStatusCheck();
+            $erp_order_details = $class_obj->OrchestraERPStatus($data_array);
+            
+            if($erp_order_details[0] != null)
             {
-                $result = response()->json(['error'=> false,'message' =>'success'],200);
+                if($erp_order_details{0}->status_name != 'Hold For JC Queue' &&  $erp_order_details{0}->status_name != 'Moved To ERP' )
+                {
+                    return response()->json(['error'=> false,'message' =>'Order status is '.$erp_order_details{0}->status_name. '. PO number edit is not allowed.'],403);
+                }
+                
+            }
+            
+            if ($po_details->po_file === "" || $po_details->po_file === "null")
+            {
+                $po_status = "PO Pending";
             }
             else
             {
-                $result = response()->json(['error'=> true,'message' =>'Error'],400);
+                $po_status = "PO Uploaded";
             }
+
+            $data 		=   DB::table($table_name)->where('id',$template_id)
+                            ->update([
+                                'purchase_order_no' => $po_number,
+                                'po_status' => $po_status,
+                                'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
+                                ]);
+            if ($po_status == "PO Uploaded") {
+               $erp_obj->updateOrchestraErpOrders($request);
+            }
+
+            return response()->json(['error'=> false,'message' =>'Purchase Order Number added Successfully'],200);
             
         }
         catch (\Exception $e)
