@@ -360,10 +360,13 @@ background: rgba(0,0,0,0.2);
 		border-bottom: 2px solid;
 	}
 	
+/*
 	.left-panel.active {
     margin-right: 0%;
 }
+*/
 </style>
+<input type="hidden" id="status_flag">
 <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
         <div class="buyer-nav-div hidden">
@@ -691,6 +694,7 @@ background: rgba(0,0,0,0.2);
 <script type="text/javascript" src="http://canvg.github.io/canvg/canvg.js"></script> 
 <script>
     $(document).ready(function() {
+		$('#status_flag').val("Orders")
 		localStorage.removeItem("artwork_back");
 		localStorage.removeItem("back_flag");
 		localStorage.removeItem("order_type_back");

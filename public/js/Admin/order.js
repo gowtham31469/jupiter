@@ -1261,9 +1261,9 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 			$parcelVolume = "";
             $age = 0;
             $no_of_carton = "";
-            $total_polybag = "";
+            $total_polybag = data.orchestra_parcel_details[0].Quantity;
             $final_order_qty_sets = "";
-            $order_qty = "";
+            $order_qty = data.orchestra_parcel_details[0].Quantity;
             $final_order_qty = "";
         }
 		
@@ -2788,7 +2788,7 @@ function label_order_details(uvc) {
             });
             
             $('#washcarelabelform'+washcare+' table tbody').find('.tot_qty_table_fin').text($('#washcarelabelform'+index+' table tbody').find('.tot_qty_table_fin').text())
-            var mySVG = document.getElementById("washcare_svg"+washcare);
+            var mySVG = document.getElementById("washcare_svg_front"+washcare);
             var svgDoc;
             mySVG.addEventListener("load", function () {
                 svgDoc=mySVG.contentDocument;
@@ -3096,7 +3096,7 @@ function washcarelabels(data, dataid) {
 		
 		var inches=$(this).val();
 		var cm=$('#washcarelabelform' + dataid+' .washonesizecm').val();
-        var mySVG = document.getElementById("washcare_svg" + dataid);
+        var mySVG = document.getElementById("washcare_svg_front" + dataid);
 		var svgDoc;
 		svgDoc = mySVG.contentDocument;
 		svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm /"+inches+"in";
@@ -3105,10 +3105,10 @@ function washcarelabels(data, dataid) {
 		
     });
 	$('#washcarelabelform' + dataid+' .washonesizecm').keyup(function () {
-		
+		//alert(dataid)
 		var cm=$(this).val();
 		var inches=$('#washcarelabelform' + dataid+' .washonesizein').val();
-        var mySVG = document.getElementById("washcare_svg" + dataid);
+        var mySVG = document.getElementById("washcare_svg_front" + dataid);
 		var svgDoc;
 		svgDoc = mySVG.contentDocument;
 		svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm /"+inches+"in";
@@ -4157,13 +4157,13 @@ function hangtagmodal(data) {
                 },
                 success: function (data) {
                     if (data.length > 0) {
-                        $('#' + ids).find('.sample-artwork').html('<object id="svg_hang_front" style="height: 486px;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
-                        $('#' + ids).find('.sample_back').html('<object class="center-block" id="svg2" style="height:486px" data="' + data[1].template_file + '" type="image/svg+xml"></object>')
+                        $('#' + ids).find('.sample-artwork').html('<object id="svg_hang_front" style="height: 486px;" class="center-block svg2" data="' + data[1].template_file + '" type="image/svg+xml"></object>')
+                        $('#' + ids).find('.sample_back').html('<object class="center-block" id="svg2" style="height:486px" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
                         if (data[0].disney != "DI") {
-                            var mySVG = document.getElementById("svg_hang_front");
+                            var mySVG_hang_disney = document.getElementById("svg_hang_front");
                             var svgDoc;
-                            mySVG.addEventListener("load", function () {
-                                svgDoc = mySVG.contentDocument;
+                            mySVG_hang_disney.addEventListener("load", function () {
+                                svgDoc = mySVG_hang_disney.contentDocument;
                                 var pri = order_details[0].PrixEurope.split(".")
 
                                 if (pri.length == 1) {
@@ -4186,10 +4186,10 @@ function hangtagmodal(data) {
 
                             }, false);
                         } else {
-                            var mySVG = document.getElementById("svg2");
+                            var mySVG_hang = document.getElementById("svg2");
                             var svgDoc;
-                            mySVG.addEventListener("load", function () {
-                                svgDoc = mySVG.contentDocument;
+                            mySVG_hang.addEventListener("load", function () {
+                                svgDoc = mySVG_hang.contentDocument;
                                 var pri = order_details[0].PrixEurope.split(".")
 
                                 if (pri.length == 1) {
@@ -4219,16 +4219,16 @@ function hangtagmodal(data) {
                             svgDoc = mySVG.contentDocument;
 							
 							svgDoc.getElementById("cm").innerHTML = $('.onesizecm').val();
-							svgDoc.getElementById("in").innerHTML = $('.onesizein').val();
+							//svgDoc.getElementById("in").innerHTML = $('.onesizein').val();
 							
                             var svgItem = svgDoc.getElementById("uvc_tco");
                             svgDoc.getElementById("algeria_price").innerHTML = order_details[0].Prix_Vente_ALGERIE != null ? order_details[0].Prix_Vente_ALGERIE.toString().replace(".", ",") : "";
                             svgDoc.getElementById("algeria_club_price").innerHTML = order_details[0].Prix_Club_ALGERIE != null ? order_details[0].Prix_Club_ALGERIE.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("saudi_price").innerHTML = order_details[0].Prix_Vente_Arabie_Saoudite != null ? order_details[0].Prix_Vente_Arabie_Saoudite.toString().replace(".", ",") : "";
+                            //svgDoc.getElementById("saudi_price").innerHTML = order_details[0].Prix_Vente_Arabie_Saoudite != null ? order_details[0].Prix_Vente_Arabie_Saoudite.toString().replace(".", ",") : "";
                             svgDoc.getElementById("morocco_price").innerHTML = order_details[0].Prix_Vente_Maroc != null ? order_details[0].Prix_Vente_Maroc.toString().replace(".", ",") : "";
                             svgDoc.getElementById("swiss_price").innerHTML = order_details[0].Prix_Vente_Suisse != null ? order_details[0].Prix_Vente_Suisse.toString().replace(".", ",") : "";
                             svgDoc.getElementById("canada_price").innerHTML = order_details[0].Prix_Vente_Canada != null ? order_details[0].Prix_Vente_Canada.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("turkey_price").innerHTML = order_details[0].Prix_Vente_Turquie != null ? order_details[0].Prix_Vente_Turquie.toString().replace(".", ",") : "";
+                            //svgDoc.getElementById("turkey_price").innerHTML = order_details[0].Prix_Vente_Turquie != null ? order_details[0].Prix_Vente_Turquie.toString().replace(".", ",") : "";
                             svgDoc.getElementById("us_price").innerHTML = order_details[0].Prix_Vente_USA != null ? order_details[0].Prix_Vente_USA.toString().replace(".", ",") : "";
                             svgDoc.getElementById("us_club_price").innerHTML = order_details[0].Prix_Club_USA != null ? order_details[0].Prix_Club_USA.toString().replace(".", ",") : "";
                             svgDoc.getElementById("morris_price").innerHTML = order_details[0].Prix_Vente_Ile_Maurice != null ? order_details[0].Prix_Vente_Ile_Maurice.toString().replace(".", ",") : "";
@@ -4236,7 +4236,7 @@ function hangtagmodal(data) {
                             svgDoc.getElementById("morroco_club_price").innerHTML = order_details[0].Prix_Club_Maroc != null ? order_details[0].Prix_Club_Maroc.toString().replace(".", ",") : "";
                             svgDoc.getElementById("swiss_club_price").innerHTML = order_details[0].Prix_Club_Suisse != null ? order_details[0].Prix_Club_Suisse.toString().replace(".", ",") : "";
                             svgDoc.getElementById("canada_club_price").innerHTML = order_details[0].Prix_Club_Canada != null ? order_details[0].Prix_Club_Canada.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("turkey_club_price").innerHTML = order_details[0].Prix_Club_Turquie != null ? order_details[0].Prix_Club_Turquie.toString().replace(".", ",") : "";
+                           // svgDoc.getElementById("turkey_club_price").innerHTML = order_details[0].Prix_Club_Turquie != null ? order_details[0].Prix_Club_Turquie.toString().replace(".", ",") : "";
                             svgItem.innerHTML = order_details[0].UVC_TCO;
                             var size = order_details[0].Size.split(" ")
                             svgDoc.getElementById("theme").innerHTML = order_details[0].Theme;
@@ -4252,7 +4252,7 @@ function hangtagmodal(data) {
 								svgDoc.getElementById("size").innerHTML = size[0];
 								svgDoc.getElementById("size_list").innerHTML = order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-");
 								svgDoc.getElementById("cm").innerHTML = order_details[0].cm;
-								svgDoc.getElementById("in").innerHTML = order_details[0].in;
+								//svgDoc.getElementById("in").innerHTML = order_details[0].in;
 								if (size[1] == "ANS") {
 									svgDoc.getElementById("size_french").innerHTML = size[1];
 									svgDoc.getElementById("size_english").innerHTML = "years";
@@ -4272,6 +4272,7 @@ function hangtagmodal(data) {
 
                     } else {
                         $('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
+						$('#' + ids).find('.sample_back').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
                     }
                 },
                 error: function (data) {
@@ -4303,14 +4304,14 @@ function hangtagmodal(data) {
                 },
                 success: function (data) {
                     if (data.length > 0) {
-                        $('#' + ids).find('.sample-artwork').html('<object id="svg_hang_front" style="height: 486px;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
-                        $('#' + ids).find('.sample_back').html('<object class="center-block" id="svg2" style="height:486px" data="' + data[1].template_file + '" type="image/svg+xml"></object>')
+                        $('#' + ids).find('.sample-artwork').html('<object id="svg_hang_front" style="height: 486px;" class="center-block svg2" data="' + data[1].template_file + '" type="image/svg+xml"></object>')
+                        $('#' + ids).find('.sample_back').html('<object class="center-block" id="svg2" style="height:486px" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
 
                         if (data[0].disney != "DI") {
-                            var mySVG = document.getElementById("svg_hang_front");
+                            var mySVG_hang_disney = document.getElementById("svg_hang_front");
                             var svgDoc;
-                            mySVG.addEventListener("load", function () {
-                                svgDoc = mySVG.contentDocument;
+                            mySVG_hang_disney.addEventListener("load", function () {
+                                svgDoc = mySVG_hang_disney.contentDocument;
                                 var pri = order_details[0].PrixEurope.split(".")
 
                                 if (pri.length == 1) {
@@ -4333,10 +4334,10 @@ function hangtagmodal(data) {
 
                             }, false);
                         } else {
-                            var mySVG = document.getElementById("svg2");
+                            var mySVG_hang = document.getElementById("svg2");
                             var svgDoc;
-                            mySVG.addEventListener("load", function () {
-                                svgDoc = mySVG.contentDocument;
+                            mySVG_hang.addEventListener("load", function () {
+                                svgDoc = mySVG_hang.contentDocument;
                                 var pri = order_details[0].PrixEurope.split(".")
 
                                 if (pri.length == 1) {
@@ -4366,16 +4367,16 @@ function hangtagmodal(data) {
                             svgDoc = mySVG.contentDocument;
 							
 							svgDoc.getElementById("cm").innerHTML = $('.onesizecm').val();
-							svgDoc.getElementById("in").innerHTML = $('.onesizein').val();
+							//svgDoc.getElementById("in").innerHTML = $('.onesizein').val();
 							
                             var svgItem = svgDoc.getElementById("uvc_tco");
                             svgDoc.getElementById("algeria_price").innerHTML = order_details[0].Prix_Vente_ALGERIE != null ? order_details[0].Prix_Vente_ALGERIE.toString().replace(".", ",") : "";
                             svgDoc.getElementById("algeria_club_price").innerHTML = order_details[0].Prix_Club_ALGERIE != null ? order_details[0].Prix_Club_ALGERIE.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("saudi_price").innerHTML = order_details[0].Prix_Vente_Arabie_Saoudite != null ? order_details[0].Prix_Vente_Arabie_Saoudite.toString().replace(".", ",") : "";
+                           // svgDoc.getElementById("saudi_price").innerHTML = order_details[0].Prix_Vente_Arabie_Saoudite != null ? order_details[0].Prix_Vente_Arabie_Saoudite.toString().replace(".", ",") : "";
                             svgDoc.getElementById("morocco_price").innerHTML = order_details[0].Prix_Vente_Maroc != null ? order_details[0].Prix_Vente_Maroc.toString().replace(".", ",") : "";
                             svgDoc.getElementById("swiss_price").innerHTML = order_details[0].Prix_Vente_Suisse != null ? order_details[0].Prix_Vente_Suisse.toString().replace(".", ",") : "";
                             svgDoc.getElementById("canada_price").innerHTML = order_details[0].Prix_Vente_Canada != null ? order_details[0].Prix_Vente_Canada.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("turkey_price").innerHTML = order_details[0].Prix_Vente_Turquie != null ? order_details[0].Prix_Vente_Turquie.toString().replace(".", ",") : "";
+                            //svgDoc.getElementById("turkey_price").innerHTML = order_details[0].Prix_Vente_Turquie != null ? order_details[0].Prix_Vente_Turquie.toString().replace(".", ",") : "";
                             svgDoc.getElementById("us_price").innerHTML = order_details[0].Prix_Vente_USA != null ? order_details[0].Prix_Vente_USA.toString().replace(".", ",") : "";
                             svgDoc.getElementById("us_club_price").innerHTML = order_details[0].Prix_Club_USA != null ? order_details[0].Prix_Club_USA.toString().replace(".", ",") : "";
                             svgDoc.getElementById("morris_price").innerHTML = order_details[0].Prix_Vente_Ile_Maurice != null ? order_details[0].Prix_Vente_Ile_Maurice.toString().replace(".", ",") : "";
@@ -4383,7 +4384,7 @@ function hangtagmodal(data) {
                             svgDoc.getElementById("morroco_club_price").innerHTML = order_details[0].Prix_Club_Maroc != null ? order_details[0].Prix_Club_Maroc.toString().replace(".", ",") : "";
                             svgDoc.getElementById("swiss_club_price").innerHTML = order_details[0].Prix_Club_Suisse != null ? order_details[0].Prix_Club_Suisse.toString().replace(".", ",") : "";
                             svgDoc.getElementById("canada_club_price").innerHTML = order_details[0].Prix_Club_Canada != null ? order_details[0].Prix_Club_Canada.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("turkey_club_price").innerHTML = order_details[0].Prix_Club_Turquie != null ? order_details[0].Prix_Club_Turquie.toString().replace(".", ",") : "";
+                           // svgDoc.getElementById("turkey_club_price").innerHTML = order_details[0].Prix_Club_Turquie != null ? order_details[0].Prix_Club_Turquie.toString().replace(".", ",") : "";
                             svgItem.innerHTML = order_details[0].UVC_TCO;
 							svgDoc.getElementById("theme").innerHTML = order_details[0].Theme;
                             var size = order_details[0].Size.split(" ")
@@ -4395,10 +4396,11 @@ function hangtagmodal(data) {
 							}
 							else
 							{
+								//alert(size[0])
 								svgDoc.getElementById("size").innerHTML = size[0];
 								svgDoc.getElementById("size_list").innerHTML = order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-");
 								svgDoc.getElementById("cm").innerHTML = order_details[0].cm;
-								svgDoc.getElementById("in").innerHTML = order_details[0].in;
+								//svgDoc.getElementById("in").innerHTML = order_details[0].in;
 								if (size[1] == "ANS") {
 									svgDoc.getElementById("size_french").innerHTML = size[1];
 									svgDoc.getElementById("size_english").innerHTML = "years";
@@ -4420,6 +4422,7 @@ function hangtagmodal(data) {
 
                     } else {
                         $('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
+						$('#' + ids).find('.sample_back').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
                     }
 
                 },
@@ -4566,9 +4569,11 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 	}
 
 	$('.main-content').html('<input type="hidden" value="' + data.order_details[0].UVC + '" id="uvc_id"><hr/><div class="col-md-3"><h4>Quantity And Artworks</h4></div><div class="form-group col-md-offset-9 has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Merchandiser</label><select data-live-search="true" class="form-control selectpicker input-sm merchandisers" required>' + merchandisersoption + '</select><div class="help-block with-errors"></div><label class="hidden merchandiser_error" style="color:red">Please Select Merchandiser</label></div><div class="col-md-4"><div class="card add-card hang-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><span class="label label-' + $hang_status + ' label-status">' + $hang_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmehang" style="cursor: pointer;">View &amp; Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p> <h5><b>Hangtag</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ht_default.png" class="img-responsive center-block"></div></div><div class="col-md-6"><div class="text_artwork"></div></div></div></div></div><div class="col-md-4"><div class="card special-card" style="min-height:279px"><span class="label label-' + $special_status + ' label-status">' + $special_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmespecial" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b>Specialtag</b></h5></div><div class="row"><div class="col-md-10 col-md-offset-1"><div class="img_artwork"><img src="' +
-		base_url + '/images/st_default.png" class="img-responsive center-block"></div></div></div></div></div> <div class="col-md-4"> <div class="card add-card wash-card" style="height: 280px;" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><span class="label label-' + $wash_status + ' label-status">' + $wash_status_text + '</span> <div class="card-title"> <p class="pull-right" id="clickme" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="washlabelname">' + wash_name + 'Washcare Label</b></h5> </div><div class="row"> <div class="col-md-6 col-md-offset-3"> <div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="washcare_label_card" style="'+wash_enable+';cursor:pointer;display: inline-block;"><i class="fa fa-plus" aria-hidden="true"></i> Add washcare label</p><p id="clone_washcare_label_card" style="'+wash_enable+';cursor:pointer;    display: inline-block;float: right;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div><div class="col-md-4"><div class="card add-card main-card" style="height: 280px;"><span class="label label-' + $main_status + ' label-status">' + $main_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmemain" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="mainlabelname">' + main_name + 'Main & Size Label</b></h5> </div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' +
-		base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div></div><p id="main_label_card" style="'+main_enable+';cursor:pointer"><i class="fa fa-plus" aria-hidden="true"></i> Add Main & Size Label</p></div></div></div><div id="add_modal"></div><div class="bottom-bar"><div class="modal-footer"><button onclick="' + onclick + '" class="btn btn-danger  pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button>  <button class="btn btn-success  pull-right btn-xs" data-toggle="modal" id="po-file-upload-button" style="'+update_disabel_button+'">Update PO</button></div></div>');
-
+		base_url + '/images/st_default.png" class="img-responsive center-block"></div></div></div></div></div> <div class="col-md-4"> <div class="card add-card wash-card" style="height: 280px;" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><span class="label label-' + $wash_status + ' label-status">' + $wash_status_text + '</span> <div class="card-title"> <p class="pull-right" id="clickme" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="washlabelname">' + wash_name + 'Washcare Label</b></h5> </div><div class="row"> <div class="col-md-6 col-md-offset-3"> <div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="washcare_label_card" style="'+wash_enable+';cursor:pointer;display: inline-block;"><i class="fa fa-plus" aria-hidden="true"></i> Add washcare label</p><p id="clone_washcare_label_card" style="'+wash_enable+';cursor:pointer;    display: inline-block;float: right;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div><div id="add_modal"></div><div class="bottom-bar"><div class="modal-footer"><button onclick="' + onclick + '" class="btn btn-danger  pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button>  <button class="btn btn-success  pull-right btn-xs" data-toggle="modal" id="po-file-upload-button" style="'+update_disabel_button+'">Update PO</button></div></div>');
+	
+	//Before add_modal
+	
+	//<div class="col-md-4"><div class="card add-card main-card" style="height: 280px;"><span class="label label-' + $main_status + ' label-status">' + $main_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmemain" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="mainlabelname">' + main_name + 'Main & Size Label</b></h5> </div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div></div><p id="main_label_card" style="'+main_enable+';cursor:pointer"><i class="fa fa-plus" aria-hidden="true"></i> Add Main & Size Label</p></div></div></div>
 	
 	
 	$('#po-file-upload-button').click(function () {
@@ -5073,7 +5078,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
             });
             
             $('#washcarelabelform'+washcare+' table tbody').find('.tot_qty_table_fin').text($('#washcarelabelform table tbody').find('.tot_qty_table_fin').text())
-            var mySVG = document.getElementById("washcare_svg"+washcare);
+            var mySVG = document.getElementById("washcare_svg_front"+washcare);
             var svgDoc;
             mySVG.addEventListener("load", function () {
                 svgDoc=mySVG.contentDocument;
@@ -5410,9 +5415,9 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
 				},
 				success: function (data) {
 					if (data.length > 0) {
-						$('#' + ids).find('.sample-artwork').html('<object style="height: calc( 100vh - 125px );" id="washcare_svg'+dataid+'" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
+						$('#' + ids).find('.sample-artwork').html('<object style="height: calc( 100vh - 125px );" id="washcare_svg_front'+dataid+'" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
 						
-							var mySVG = document.getElementById("washcare_svg"+dataid);
+							var mySVG = document.getElementById("washcare_svg_front"+dataid);
 							var svgDoc;
 							mySVG.addEventListener("load", function () {
 								svgDoc = mySVG.contentDocument;
@@ -5639,10 +5644,10 @@ if(datas.order_details[0].Size == "TAILLE UNIQUE")
 				success: function (data) {
 					
 					if (data.length > 0) {
-						$('#' + ids).find('.sample-artwork').html('<object style="height: calc( 100vh - 125px );"  id="washcare_svg'+dataid+'"  class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
+						$('#' + ids).find('.sample-artwork').html('<object style="height: calc( 100vh - 125px );"  id="washcare_svg_front'+dataid+'"  class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
 						
 						
-						var mySVG = document.getElementById("washcare_svg"+dataid);
+						var mySVG = document.getElementById("washcare_svg_front"+dataid);
 							var svgDoc;
 							mySVG.addEventListener("load", function () {
 								svgDoc = mySVG.contentDocument;
@@ -5981,7 +5986,8 @@ function jsbarcode_hang(code, id, svgDoc) {
 		ctx,
 		img;
 	// if our "svg" doesn't have 'xmlns' attribute we must add it
-	//    svg.setAttribute('width', '188.931023622px');
+	    svg.setAttribute('width', '80.931023622px');
+	   // svg.setAttribute('height', '80.931023622px');
 	svg.setAttribute('font-size', '50px');
 	svg.setAttribute('font-family', 'calibrib');
 
@@ -6803,7 +6809,7 @@ function clonewashcarelabels(index)
             });
             
             $('#washcarelabelform'+washcare+' table tbody').find('.tot_qty_table_fin').text($('#washcarelabelform'+index+' table tbody').find('.tot_qty_table_fin').text())
-            var mySVG = document.getElementById("washcare_svg"+washcare);
+            var mySVG = document.getElementById("washcare_svg_front"+washcare);
             var svgDoc;
             mySVG.addEventListener("load", function () {
                 svgDoc=mySVG.contentDocument;
