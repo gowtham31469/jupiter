@@ -33,6 +33,7 @@ use View;
 use DB;
 use App\Classes\ERPOrderStatusCheck;
 use App\Classes\ErpOrders;
+use Carbon\Carbon;
 
 class OrderManagementCntrl extends Controller
 {
@@ -1605,7 +1606,7 @@ class OrderManagementCntrl extends Controller
                 
             }
             
-            if ($po_details->po_file === "" || $po_details->po_file === "null")
+            if ($po_details->po_file === null || $po_details->po_file === "null")
             {
                 $po_status = "PO Pending";
             }
@@ -1614,12 +1615,12 @@ class OrderManagementCntrl extends Controller
                 $po_status = "PO Uploaded";
             }
 
-            $data 		=   DB::table($table_name)->where('id',$template_id)
-                            ->update([
-                                'purchase_order_no' => $po_number,
-                                'po_status' => $po_status,
-                                'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
-                                ]);
+            $data = DB::table($table_name)->where('id',$template_id)
+                    ->update([
+                        'po_number' => $po_number,
+                        'po_status' => $po_status,
+                        'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
+                        ]);
             if ($po_status == "PO Uploaded") {
                $erp_obj->updateOrchestraErpOrders($request);
             }
@@ -1642,21 +1643,37 @@ class OrderManagementCntrl extends Controller
     {
         try 
         {
+            $erp_obj    = new ErpOrders();
             $table_name = $request->tableName;
-            $row_id     = $request->rowID;
-            $po_file = $request->file('file');
-            $path = $request->file('file')->getRealPath();
-            $filename = $request->file('file')->getClientOriginalName();
+            $row_id     = $request->id;
+            $po_file    = $request->file('file');
+            $path       = $request->file('file')->getRealPath();
+            $filename   = $request->file('file')->getClientOriginalName();
             $destination_path='/storage/app/public/po-files/';
-            $path='storage/app/public/po-files/';
-            $Orname = $po_file->getClientOriginalName();
-            $filename= str_random(6).'_'.preg_replace('/\s+/', '-', $Orname);
+            $path       ='storage/app/public/po-files/';
+            $Orname     = $po_file->getClientOriginalName();
+            $filename   = str_random(6).'_'.preg_replace('/\s+/', '-', $Orname);
             $po_file->move($path,$filename);
             $destination_path_insert=$destination_path.$filename;
 
-            $po_details = DB::table($table_name)->where('id',$row_id)->select('purchase_order_no')->first();
+            $po_details = DB::table($table_name)->where('id',$row_id)->select('po_number')->first();
+
+            $data_array = [];
+            $data_array['id'] = $row_id;
+            $data_array['table_name'] = $table_name;
+            $class_obj = new ERPOrderStatusCheck();
+            $erp_order_details = $class_obj->OrchestraERPStatus($data_array);
+
+            if($erp_order_details[0] != null)
+            {
+                if($erp_order_details{0}->status_name != 'Hold For JC Queue' &&  $erp_order_details{0}->status_name != 'Moved To ERP' )
+                {
+                    return response()->json(['error'=> false,'message' =>'Order status is '.$erp_order_details{0}->status_name. '. PO file upload is not allowed.'],403);
+                }
+                
+            }
             
-            if ($po_details->purchase_order_no =="" || $po_details->purchase_order_no=="null")
+            if ($po_details->po_number === null || $po_details->po_number === "null")
             {
                 $po_status = "PO Pending";
             }
@@ -1667,17 +1684,26 @@ class OrderManagementCntrl extends Controller
             $data   = DB::table($table_name)->where('id',$row_id)
                         ->update([
                           'po_file' => $destination_path_insert,
-                          'po_status' => $po_status
+                          'po_status' => $po_status,
+                          'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
 
                         ]);
+            if ($po_status == "PO Uploaded") {
+                $request_array = [];
+                $request_array['id'] = $row_id;
+                $request_array['tableName'] = $table_name; 
+                $request_array['buyer_id'] = $request['buyer_id']; 
+
+                $erp_obj->updateOrchestraErpOrders($request_array);
+            }
             if ($data)
             {
-               $result = response()->json(['error'=> false,'message' =>'success','po_file'=>$destination_path_insert],200);
+               return response()->json(['error'=> false,'message' =>'success','po_file'=>$destination_path_insert],200);
             }
             else
             {
-                $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }    
+                return response()->json(['error'=> true,'message' =>'Error'],400);
+            }   
         }
         catch (Exception $e)
         {
