@@ -798,6 +798,20 @@ function table(data,path){
                     
                     tr += '<td align="center">'+$status_text+'</td>';
                    
+                } else if (key == "Order Status") {
+                    var str=value[key] ;
+                    if(str != null && str != "")
+                    {
+                        $order_status=str;
+                    }
+                    else
+                    {
+                        
+                        $order_status=" - ";
+                    }
+                    
+                    tr += '<td align="center">'+$order_status+'</td>';
+                   
                 } else {
                     if (key == "SupplierName" || key == "Style_Name"){
                         tr += '<td>' + value[key] + '</td>';
@@ -2811,7 +2825,7 @@ function label_order_details(uvc) {
                     $('select.made_in_select' + washcare).find(':selected').data('arabic') + " - " +
                     $('select.made_in_select' + washcare).find(':selected').data('greek') + " - " +
                     $('select.made_in_select' + washcare).find(':selected').data('turkish') + '</p>';
-                svgDoc.getElementById("country").innerHTML = wordWrap(text_for_mad_in, 24);
+                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
                 
                 svgDoc.getElementById("text_care_instruction").innerHTML = "";
                 $('.care_instruction_select' + washcare + ' option:selected').each(function () {
@@ -3324,7 +3338,7 @@ function washcarelabels(data, dataid) {
                     $('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('greek') + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('turkish') + '</p>';
-                svgDoc.getElementById("country").innerHTML = wordWrap(text_for_mad_in, 24);
+                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
 				
                 $('.washing_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].washing_id);
 
@@ -3407,8 +3421,8 @@ function washcarelabels(data, dataid) {
                 var text_for_mad_in =  $('select.made_in_select' + dataid).find(':selected').data('french') + " - " + $('select.made_in_select' + dataid).find(':selected').data('english') + " - " + $('select.made_in_select' + dataid).find(':selected').data('spanish') + " - " + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + dataid).find(':selected').data('italian') + " - " + $('select.made_in_select' + dataid).find(':selected').data('dutch') + " - " + $('select.made_in_select' + dataid).find(':selected').data('german') + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('greek');
-				console.log(wordWrap(text_for_mad_in, 24));
-                svgDoc.getElementById("country").innerHTML = wordWrap(text_for_mad_in, 24);
+				console.log(text_for_mad_in);
+                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
 
             } else {
 
@@ -4164,7 +4178,7 @@ function hangtagmodal(data) {
                             var svgDoc;
                             mySVG_hang_disney.addEventListener("load", function () {
                                 svgDoc = mySVG_hang_disney.contentDocument;
-                                var pri = order_details[0].PrixEurope.split(".")
+                                var pri = order_details[0].PrixEurope.split(",")
 
                                 if (pri.length == 1) {
                                     var svgItem = svgDoc.getElementById("price1");
@@ -4175,7 +4189,7 @@ function hangtagmodal(data) {
                                     svgItem.innerHTML = pri[0];
                                     svgDoc.getElementById("price2").innerHTML = "," + pri[1];
                                 }
-                                var pri1 = order_details[0].PrixClubEurope.toString().split(".")
+                                var pri1 = order_details[0].PrixClubEurope.toString().split(",")
                                 if (pri1.length == 1) {
                                     svgDoc.getElementById("club_price1").innerHTML = order_details[0].PrixClubEurope;
                                     svgDoc.getElementById("club_price2").innerHTML = "";
@@ -4190,7 +4204,7 @@ function hangtagmodal(data) {
                             var svgDoc;
                             mySVG_hang.addEventListener("load", function () {
                                 svgDoc = mySVG_hang.contentDocument;
-                                var pri = order_details[0].PrixEurope.split(".")
+                                var pri = order_details[0].PrixEurope.split(",")
 
                                 if (pri.length == 1) {
                                     var svgItem = svgDoc.getElementById("price1");
@@ -4201,7 +4215,7 @@ function hangtagmodal(data) {
                                     svgItem.innerHTML = pri[0];
                                     svgDoc.getElementById("price2").innerHTML = "," + pri[1];
                                 }
-                                var pri1 = order_details[0].PrixClubEurope.toString().split(".")
+                                var pri1 = order_details[0].PrixClubEurope.toString().split(",")
                                 if (pri1.length == 1) {
                                     svgDoc.getElementById("club_price1").innerHTML = order_details[0].PrixClubEurope;
                                     svgDoc.getElementById("club_price2").innerHTML = "";
@@ -4224,7 +4238,7 @@ function hangtagmodal(data) {
                             var svgItem = svgDoc.getElementById("uvc_tco");
                             svgDoc.getElementById("algeria_price").innerHTML = order_details[0].Prix_Vente_ALGERIE != null ? order_details[0].Prix_Vente_ALGERIE.toString().replace(".", ",") : "";
                             svgDoc.getElementById("algeria_club_price").innerHTML = order_details[0].Prix_Club_ALGERIE != null ? order_details[0].Prix_Club_ALGERIE.toString().replace(".", ",") : "";
-                            //svgDoc.getElementById("saudi_price").innerHTML = order_details[0].Prix_Vente_Arabie_Saoudite != null ? order_details[0].Prix_Vente_Arabie_Saoudite.toString().replace(".", ",") : "";
+                            svgDoc.getElementById("saudi_club_price").innerHTML = order_details[0].Prix_Vente_Arabie_Saoudite != null ? order_details[0].Prix_Vente_Arabie_Saoudite.toString().replace(".", ",") : "";
                             svgDoc.getElementById("morocco_price").innerHTML = order_details[0].Prix_Vente_Maroc != null ? order_details[0].Prix_Vente_Maroc.toString().replace(".", ",") : "";
                             svgDoc.getElementById("swiss_price").innerHTML = order_details[0].Prix_Vente_Suisse != null ? order_details[0].Prix_Vente_Suisse.toString().replace(".", ",") : "";
                             svgDoc.getElementById("canada_price").innerHTML = order_details[0].Prix_Vente_Canada != null ? order_details[0].Prix_Vente_Canada.toString().replace(".", ",") : "";
@@ -4242,6 +4256,12 @@ function hangtagmodal(data) {
                             svgDoc.getElementById("theme").innerHTML = order_details[0].Theme;
 							
 							if(order_details[0].Size == "TAILLE UNIQUE")
+							{
+								svgDoc.getElementById("size").innerHTML = "TU";
+								svgDoc.getElementById("size_french").innerHTML = "";
+								svgDoc.getElementById("size_english").innerHTML = "";
+							}
+							else if(order_details[0].Size == "TAILLE L")
 							{
 								svgDoc.getElementById("size").innerHTML = "TU";
 								svgDoc.getElementById("size_french").innerHTML = "";
@@ -4312,7 +4332,7 @@ function hangtagmodal(data) {
                             var svgDoc;
                             mySVG_hang_disney.addEventListener("load", function () {
                                 svgDoc = mySVG_hang_disney.contentDocument;
-                                var pri = order_details[0].PrixEurope.split(".")
+                                var pri = order_details[0].PrixEurope.split(",")
 
                                 if (pri.length == 1) {
                                     var svgItem = svgDoc.getElementById("price1");
@@ -4323,7 +4343,7 @@ function hangtagmodal(data) {
                                     svgItem.innerHTML = innerHTML = pri[0];
                                     svgDoc.getElementById("price2").innerHTML = "," + pri[1];
                                 }
-                                var pri1 = order_details[0].PrixClubEurope.toString().split(".")
+                                var pri1 = order_details[0].PrixClubEurope.toString().split(",")
                                 if (pri1.length == 1) {
                                     svgDoc.getElementById("club_price1").innerHTML = order_details[0].PrixClubEurope;
                                     svgDoc.getElementById("club_price2").innerHTML = "";
@@ -4338,7 +4358,7 @@ function hangtagmodal(data) {
                             var svgDoc;
                             mySVG_hang.addEventListener("load", function () {
                                 svgDoc = mySVG_hang.contentDocument;
-                                var pri = order_details[0].PrixEurope.split(".")
+                                var pri = order_details[0].PrixEurope.split(",")
 
                                 if (pri.length == 1) {
                                     var svgItem = svgDoc.getElementById("price1");
@@ -4349,7 +4369,7 @@ function hangtagmodal(data) {
                                     svgItem.innerHTML = pri[0];
                                     svgDoc.getElementById("price2").innerHTML = "," + pri[1];
                                 }
-                                var pri1 = order_details[0].PrixClubEurope.toString().split(".")
+                                var pri1 = order_details[0].PrixClubEurope.toString().split(",")
                                 if (pri1.length == 1) {
                                     svgDoc.getElementById("club_price1").innerHTML = order_details[0].PrixClubEurope;
                                     svgDoc.getElementById("club_price2").innerHTML = "";
@@ -4372,7 +4392,7 @@ function hangtagmodal(data) {
                             var svgItem = svgDoc.getElementById("uvc_tco");
                             svgDoc.getElementById("algeria_price").innerHTML = order_details[0].Prix_Vente_ALGERIE != null ? order_details[0].Prix_Vente_ALGERIE.toString().replace(".", ",") : "";
                             svgDoc.getElementById("algeria_club_price").innerHTML = order_details[0].Prix_Club_ALGERIE != null ? order_details[0].Prix_Club_ALGERIE.toString().replace(".", ",") : "";
-                           // svgDoc.getElementById("saudi_price").innerHTML = order_details[0].Prix_Vente_Arabie_Saoudite != null ? order_details[0].Prix_Vente_Arabie_Saoudite.toString().replace(".", ",") : "";
+                            svgDoc.getElementById("saudi_club_price").innerHTML = order_details[0].Prix_Vente_Arabie_Saoudite != null ? order_details[0].Prix_Vente_Arabie_Saoudite.toString().replace(".", ",") : "";
                             svgDoc.getElementById("morocco_price").innerHTML = order_details[0].Prix_Vente_Maroc != null ? order_details[0].Prix_Vente_Maroc.toString().replace(".", ",") : "";
                             svgDoc.getElementById("swiss_price").innerHTML = order_details[0].Prix_Vente_Suisse != null ? order_details[0].Prix_Vente_Suisse.toString().replace(".", ",") : "";
                             svgDoc.getElementById("canada_price").innerHTML = order_details[0].Prix_Vente_Canada != null ? order_details[0].Prix_Vente_Canada.toString().replace(".", ",") : "";
@@ -4388,7 +4408,14 @@ function hangtagmodal(data) {
                             svgItem.innerHTML = order_details[0].UVC_TCO;
 							svgDoc.getElementById("theme").innerHTML = order_details[0].Theme;
                             var size = order_details[0].Size.split(" ")
+							
 							if(order_details[0].Size == "TAILLE UNIQUE")
+							{
+								svgDoc.getElementById("size").innerHTML = "TU";
+								svgDoc.getElementById("size_french").innerHTML = "";
+								svgDoc.getElementById("size_english").innerHTML = "";
+							}
+							else if(order_details[0].Size == "TAILLE L")
 							{
 								svgDoc.getElementById("size").innerHTML = "TU";
 								svgDoc.getElementById("size_french").innerHTML = "";
@@ -4454,7 +4481,7 @@ function hangtagmodal(data) {
             var svgDoc;
             mySVG.addEventListener("load", function () {
                 svgDoc = mySVG.contentDocument;
-                var pri = data.order_details[0].PrixEurope.split(".")
+                var pri = data.order_details[0].PrixEurope.split(",")
 
                 if (pri.length == 1) {
                     var svgItem = svgDoc.getElementById("price1");
@@ -4465,7 +4492,7 @@ function hangtagmodal(data) {
                     svgItem.innerHTML = innerHTML = pri[0];
                     svgDoc.getElementById("price2").innerHTML = "," + pri[1];
                 }
-                var pri1 = data.order_details[0].PrixClubEurope.toString().split(".")
+                var pri1 = data.order_details[0].PrixClubEurope.toString().split(",")
                 if (pri1.length == 1) {
                     svgDoc.getElementById("club_price1").innerHTML = data.order_details[0].PrixClubEurope;
                     svgDoc.getElementById("club_price2").innerHTML = "";
@@ -5101,7 +5128,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
                     $('select.made_in_select' + washcare).find(':selected').data('arabic') + " - " +
                     $('select.made_in_select' + washcare).find(':selected').data('greek') + " - " +
                     $('select.made_in_select' + washcare).find(':selected').data('turkish') + '</p>';
-                svgDoc.getElementById("country").innerHTML = wordWrap(text_for_mad_in, 24);
+                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
                 
                 svgDoc.getElementById("text_care_instruction").innerHTML = "";
                 $('.care_instruction_select' + washcare + ' option:selected').each(function () {
@@ -5486,7 +5513,7 @@ if(datas.order_details[0].Size == "TAILLE UNIQUE")
 										$('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
 										$('select.made_in_select' + dataid).find(':selected').data('greek') + " - " +
 										$('select.made_in_select' + dataid).find(':selected').data('turkish') + '</p>';
-									svgDoc.getElementById("country").innerHTML = wordWrap(text_for_mad_in, 24);
+									svgDoc.getElementById("country").innerHTML = text_for_mad_in;
 								}
 
 									svgDoc.getElementById("text_care_instruction").innerHTML = "";
@@ -5576,7 +5603,7 @@ if(datas.order_details[0].Size == "TAILLE UNIQUE")
                     $('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('greek') + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('turkish') + '</p>';
-                svgDoc.getElementById("country").innerHTML = wordWrap(text_for_mad_in, 24);
+                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
 
             } else {
 
@@ -5714,7 +5741,7 @@ if(datas.order_details[0].Size == "TAILLE UNIQUE")
 										$('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
 										$('select.made_in_select' + dataid).find(':selected').data('greek') + " - " +
 										$('select.made_in_select' + dataid).find(':selected').data('turkish') + '</p>';
-									svgDoc.getElementById("country").innerHTML = wordWrap(text_for_mad_in, 24);
+									svgDoc.getElementById("country").innerHTML = text_for_mad_in;
 								}
 
 									svgDoc.getElementById("text_care_instruction").innerHTML = "";
@@ -5804,7 +5831,7 @@ if(datas.order_details[0].Size == "TAILLE UNIQUE")
                     $('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('greek') + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('turkish') + '</p>';
-                svgDoc.getElementById("country").innerHTML = wordWrap(text_for_mad_in, 24);
+                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
 
             } else {
 
@@ -6832,7 +6859,7 @@ function clonewashcarelabels(index)
                     $('select.made_in_select' + washcare).find(':selected').data('arabic') + " - " +
                     $('select.made_in_select' + washcare).find(':selected').data('greek') + " - " +
                     $('select.made_in_select' + washcare).find(':selected').data('turkish') + '</p>';
-                svgDoc.getElementById("country").innerHTML = wordWrap(text_for_mad_in, 24);
+                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
                 
                 svgDoc.getElementById("text_care_instruction").innerHTML = "";
                 $('.care_instruction_select' + washcare + ' option:selected').each(function () {

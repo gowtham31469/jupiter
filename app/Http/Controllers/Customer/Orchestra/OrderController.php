@@ -94,9 +94,9 @@ class OrderController extends Controller
 		
 		 $customers = DB::table('customers')->select('*')->where('id',$company_id)->get();
 		
-		 $data['sticker_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id',DB::raw("'-' as \"Season\""),'BuyerPONo','SupplierName','NomApple as Style_Name','Quantity','IsSTD as Type',DB::raw("'Stickers' as \"OrderType\""),DB::raw("'-' as \"Disney\""))->where('orchestra_parcel_details.FactoryCode', $customers{0}->factory_code)->groupBy('id','UVC')->get();
+		 $data['sticker_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id',DB::raw("'-' as \"Season\""),'BuyerPONo','SupplierName','NomApple as Style_Name','Quantity','IsSTD as Type',DB::raw("'Stickers' as \"OrderType\""),'sticker_order_status as Order Status',DB::raw("'-' as \"Disney\""))->where('orchestra_parcel_details.FactoryCode', $customers{0}->factory_code)->groupBy('id','UVC')->get();
 
-        $data['label_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id','Season_Code as Season',DB::raw("'-' as \"BuyerPONo\""),'SupplierName','Theme as Description','NomApple as Style_Name','Licence_Code as Disney',DB::raw("'-' as \"Type\""),'Quantity',DB::raw("'Labels' as \"OrderType\""))->where('orchestra_parcel_details.FactoryCode', $customers{0}->factory_code)->groupBy('id','UVC')->get();
+        $data['label_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id','Season_Code as Season',DB::raw("'-' as \"BuyerPONo\""),'SupplierName','Theme as Description','NomApple as Style_Name','Licence_Code as Disney',DB::raw("'-' as \"Type\""),'Quantity',DB::raw("'Labels' as \"OrderType\""),'order_status as Order Status')->where('orchestra_parcel_details.FactoryCode', $customers{0}->factory_code)->groupBy('id','UVC')->get();
         
         echo json_encode($data);
     } 
@@ -480,7 +480,14 @@ class OrderController extends Controller
 			{
                 $carton_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',179)->get();
                 
-                $data['carton_moq']=$carton_moq{0}->moq;
+                if(count($carton_moq) > 0)
+				{
+					$data['carton_moq']=$carton_moq{0}->moq;
+				}
+				else
+				{
+					$data['carton_moq']=1;
+				}
 			}
 			else
 			{
@@ -495,7 +502,14 @@ class OrderController extends Controller
 			{
                 $polybag_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',180)->get();
                 
-                $data['polybag_moq']=$polybag_moq{0}->moq;
+                if(count($polybag_moq) > 0)
+				{
+					$data['polybag_moq']=$polybag_moq{0}->moq;
+				}
+				else
+				{
+					$data['polybag_moq']=1;
+				}
 			}
 			else
 			{
@@ -515,7 +529,14 @@ class OrderController extends Controller
 			{
 				$carton_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',177)->get();
 			
-				$data['carton_moq']=$carton_moq{0}->moq;
+				if(count($carton_moq) > 0)
+				{
+					$data['carton_moq']=$carton_moq{0}->moq;
+				}
+				else
+				{
+					$data['carton_moq']=1;
+				}
 			}
 			else
 			{
@@ -532,7 +553,14 @@ class OrderController extends Controller
 			{
 				$polybag_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',178)->get();
 
-				$data['polybag_moq']=$polybag_moq{0}->moq;
+				if(count($polybag_moq) > 0)
+				{
+					$data['polybag_moq']=$polybag_moq{0}->moq;
+				}
+				else
+				{
+					$data['polybag_moq']=1;
+				}
 			}
 			else
 			{
@@ -632,6 +660,11 @@ class OrderController extends Controller
                              ]);
                     $i++;
                 }
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
+                        ->update([
+                          'order_status' => "Order Placed"
+
+            ]);
         }
         else
         {
@@ -657,6 +690,11 @@ class OrderController extends Controller
                          ]);
                 $i++;
             }
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
+                        ->update([
+                          'order_status' => "Order Placed"
+
+            ]);
         }
            
     }
@@ -734,6 +772,11 @@ class OrderController extends Controller
 //                             ]);
 //                    $i++;
 //                }
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
+                        ->update([
+                          'order_status' => "Order Placed"
+
+            ]);
         }
         else
         {
@@ -757,6 +800,11 @@ class OrderController extends Controller
 //                         ]);
 //                $i++;
 //            }
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
+                        ->update([
+                          'order_status' => "Order Placed"
+
+            ]);
         }
            
     } 
@@ -848,6 +896,11 @@ class OrderController extends Controller
                              ]);
                     $i++;
                 }
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
+                        ->update([
+                          'order_status' => "Order Placed"
+
+            ]);
         }
         else
         {
@@ -874,6 +927,11 @@ class OrderController extends Controller
                              ]);
                     $i++;
                 }
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
+                        ->update([
+                          'order_status' => "Order Placed"
+
+            ]);
         }
        
            
@@ -960,6 +1018,11 @@ class OrderController extends Controller
                              ]);
                     $j++;
                 }
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
+                        ->update([
+                          'sticker_order_status' => "Order Placed"
+
+            ]);
         }
         else
         {
@@ -985,6 +1048,11 @@ class OrderController extends Controller
                              ]);
                     $j++;
                 }
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
+                        ->update([
+                          'sticker_order_status' => "Order Placed"
+
+            ]);
         }
         if($carton_id != "null")
         {
@@ -1012,6 +1080,12 @@ class OrderController extends Controller
                              ]);
                     $i++;
                 }
+			
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
+                        ->update([
+                          'sticker_order_status' => "Order Placed"
+
+            ]);
             
             
         }
@@ -1037,7 +1111,12 @@ class OrderController extends Controller
                                         'quantity_sets'    => $value
                              ]);
                     $i++;
-                }             
+                }    
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
+                        ->update([
+                          'sticker_order_status' => "Order Placed"
+
+            ]);
         }
        
            
@@ -1130,6 +1209,11 @@ class OrderController extends Controller
                                         'quantity'    => $total_polybag,
                                         'quantity_sets'    => $final_order_qty_sets
                      ]);
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
+                        ->update([
+                          'sticker_order_status' => "Order Placed"
+
+            ]);
         }
         else
         {
@@ -1156,6 +1240,11 @@ class OrderController extends Controller
                                         'quantity'    => $total_polybag,
                                         'quantity_sets'    => $final_order_qty_sets
                              ]);
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
+                        ->update([
+                          'sticker_order_status' => "Order Placed"
+
+            ]);
                 
         }
         if($carton_id != "null")
@@ -1187,6 +1276,11 @@ class OrderController extends Controller
                                         'quantity'    => $order_qty,
                                         'quantity_sets'    => $final_order_qty
                      ]);
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
+                        ->update([
+                          'sticker_order_status' => "Order Placed"
+
+            ]);
         }
         else
         {
@@ -1212,6 +1306,11 @@ class OrderController extends Controller
                                         'quantity'    => $order_qty,
                                         'quantity_sets'    => $final_order_qty
                       ]);
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
+                        ->update([
+                          'sticker_order_status' => "Order Placed"
+
+            ]);
         }
        
            
@@ -1343,6 +1442,11 @@ class OrderController extends Controller
                 }
                 $k++;
             }
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
+                        ->update([
+                          'order_status' => "Order Placed"
+
+            ]);
         }
         else
         {
@@ -1404,6 +1508,11 @@ class OrderController extends Controller
                 }
                 $k++;
             }
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
+                        ->update([
+                          'order_status' => "Order Placed"
+
+            ]);
         }
        
            
