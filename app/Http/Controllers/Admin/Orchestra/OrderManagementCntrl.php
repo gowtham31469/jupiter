@@ -637,6 +637,7 @@ class OrderManagementCntrl extends Controller
 		$in =$request->in;
         $id =$request->id;
 		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('customers.*')->get();
+		print_r($factory);
 		if(count($factory) > 0)
 		{
 			
@@ -754,7 +755,7 @@ class OrderManagementCntrl extends Controller
         $size = explode(',',$request->size);
         $uvc =$request->uvc;
         $id =$request->id;
-		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('*')->get();
+		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('customers.*')->get();
 		if(count($factory) > 0)
 		{
 			
@@ -868,7 +869,7 @@ class OrderManagementCntrl extends Controller
 		$main_label_qty =$request->main_label_qty;
         $id =$request->id;
 		$main_flag =$request->main_flag;
-		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('*')->get();
+		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('customers.*')->get();
 		
 		if($main_flag == "size")
 		{
@@ -1000,7 +1001,7 @@ class OrderManagementCntrl extends Controller
         $carton_id =$request->carton_id; 
         $poly_id =$request->poly_id; 
         $group_id =$request->group_id;
-		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('*')->get();
+		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('customers.*')->get();
 		if(count($factory) > 0)
 		{
 			
@@ -1192,7 +1193,7 @@ class OrderManagementCntrl extends Controller
         $order_qty =$request->order_qty;
         $final_order_qty =$request->final_order_qty;
 		
-		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('*')->get();
+		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('customers.*')->get();
 		if(count($factory) > 0)
 		{
 			
@@ -1396,7 +1397,7 @@ class OrderManagementCntrl extends Controller
         $made_in_select = $request->made_in_select; 
         $care_instruction_select = $request->care_instruction_select; 
 		
-		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('*')->get();
+		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('customers.*')->get();
 		
 		if(count($factory) > 0)
 		{
