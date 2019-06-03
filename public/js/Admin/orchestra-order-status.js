@@ -2,7 +2,7 @@
 var td_row = "";
 
 /**
- * method to show the tesco order status table
+ * method to show the Orchestra order status table
  * @return {[type]} [description]
  */
 function orderStatus() {
@@ -40,9 +40,7 @@ function orderStatus() {
                 });
                 $('.main-content').append(orchestraStatusTable(newObj, path));
                 $('.top-content').html("")
-                //$('#datatable-tesco-orders th:contains("StyleNo")').text('Style No');
                 var uniqueNames = [];
-               // var zones = [];
 
                 newObj1.sort(function (obj1, obj2) {
                     var date1 = obj1.OrderDate;
@@ -52,19 +50,7 @@ function orderStatus() {
                     return 0;
                 });
 
-//                for (i = 0; i < newObj1.length; i++) {
-//                    if (newObj1[i].Zone == "CE") {
-//                        if (uniqueNames.indexOf(newObj1[i].ce_style_ref) === -1) {
-//                            uniqueNames.push(newObj1[i].ce_style_ref);
-//                            zones.push("CE");
-//                        }
-//                    } else {
-//                        if (uniqueNames.indexOf(newObj1[i].uk_style_ref) === -1) {
-//                            uniqueNames.push(newObj1[i].uk_style_ref);
-//                            zones.push("UK");
-//                        }
-//                    }
-//                }
+
                 var options = "<option>Select UVC</option>";
                 for (i = 0; i < uniqueNames.length; i++) {
                     options += "<option>" + uniqueNames[i] + "</option>";
@@ -343,7 +329,7 @@ function orderStatus() {
                                                             data: form_data,
                                                             type: 'post',
                                                             success: function (data) {
-                                                                tescoOrderStatus()
+                                                                orderStatus()
                                                                 $('#po-file-upload-group').modal('hide')
                                                                 $('.snackbar_span').html('PO Updated Successfully');
                                                                 showSnackbar();
@@ -417,7 +403,7 @@ function orderStatus() {
                                                             data: form_data,
                                                             type: 'post',
                                                             success: function (data) {
-                                                                tescoOrderStatus()
+                                                                orderStatus()
                                                                 $('#po-file-upload-group').modal('hide')
                                                                 $('.snackbar_span').html('PO Updated Successfully');
                                                                 showSnackbar();
@@ -483,7 +469,7 @@ function orderStatus() {
 
                                                         },
                                                         success: function (data) {
-                                                            tescoOrderStatus()
+                                                            orderStatus()
                                                             $('#po-file-upload-group').modal('hide')
                                                             $('.snackbar_span').html('PO Updated Successfully');
                                                             showSnackbar();
@@ -729,10 +715,9 @@ function orchestraStatusTable(data, path) {
                 if (key == "PO Number" && value['po_required'] == 1 && value['is_order_count_empty'] == 0) {
                     var po_file = value['po_file'];
                     let customer_po_number = value[key] === null?'':value[key];
-                    tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" onkeypress="return AvoidSpace(event)" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" placeholder="Enter PO" maxlength="11" value="'+customer_po_number+'"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=orchestraSetPO(this,"' + value.tableID + '","' + value.tableName + '","' + po_file + '")><span class="fa fa-check"></span></button></span></div></div></td>';
+                    tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" onkeypress="return AvoidSpace(event)" name="orchestra-po" id="orchestra-po-'+value.tableID+'" class="form-control input-sm orchestra-po" placeholder="Enter PO" maxlength="11" value="'+customer_po_number+'"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default orchestra-po-submit" onclick=orchestraSetPO(this,"' + value.tableID + '","' + value.tableName + '","' + po_file + '")><span class="fa fa-check"></span></button></span></div></div></td>';
                 } else if (key == "OrderDate") {
                     if (value['is_order_count_empty'] == 0) {
-					//	alert(value[key]);
                         var orderDate = value[key];
                         tr += '<td align="center">' + orderDate + '</td>';
                     } else {
@@ -857,8 +842,8 @@ function orchestraStatusTable(data, path) {
  * @return {[type]}     [description]
  */
 function orchestraSetPO(obj, id, tableName, po_file) {
-    $('.tesco-po').css('border-color', '');
-    var po_number = $(obj).closest('tr').find('.tesco-po').val();
+    $('.orchestra-po').css('border-color', '');
+    var po_number = $(obj).closest('tr').find('.orchestra-po').val();
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     var buyer_id = localStorage.getItem("buyer_id");
     if (po_number != "") {
@@ -881,20 +866,15 @@ function orchestraSetPO(obj, id, tableName, po_file) {
                 200: function (data) {
                     $('#snackbar').css('background-color', '#00b6ff');
                     $('.snackbar_span').html(data.message);
-                    //$(obj).closest('tr').find('.tesco-po').val(po_number);
-                   // $(obj).closest('tr').find('.po-span').addClass('hidden');
-                    $ponumber = $(obj).closest('tr').find('.tesco-po').val();
-                    // $div = $(obj).closest('tr').find('.text-center');
-                    // $(obj).closest('tr').find('.tesco-po').parent().parent().remove();
-                    // $div.text($ponumber)
+                    $ponumber = $(obj).closest('tr').find('.orchestra-po').val();
                     if ($(obj).closest('tr').find('.po_class').text() == "PO Pending" && po_file != "null") {
                         $(obj).closest('tr').find('.po_class').html("PO Uploaded")
                         $(obj).closest('tr').find('.po_class').removeClass("label-POPending").addClass('label-POUploaded');
                     }
                     showSnackbar();
                     if (po_number == "") {
-                        $(obj).closest('tr').find('.tesco-po').attr('disabled');
-                        $(obj).closest('tr').find('.tesco-po').attr('placeholder', "Enter PO");
+                        $(obj).closest('tr').find('.orchestra-po').attr('disabled');
+                        $(obj).closest('tr').find('.orchestra-po').attr('placeholder', "Enter PO");
                     }
 
                 },
@@ -916,14 +896,14 @@ function orchestraSetPO(obj, id, tableName, po_file) {
             }
         })
     } else {
-        $(obj).closest('tr').find('.tesco-po').focus();
-        $(obj).closest('tr').find('.tesco-po').css('border-color', '#F44336');
+        $(obj).closest('tr').find('.orchestra-po').focus();
+        $(obj).closest('tr').find('.orchestra-po').css('border-color', '#F44336');
         $('.snackbar_span').html('Please enter a valid PO number');
         showSnackbar();
     }
 }
 /**
- * [tescoPOUpload description]
+ * [orchestraPOUpload description]
  * @param  {[type]} obj [description]
  * @param  {[type]} id  [description]
  * @return {[type]}     [description]
@@ -966,7 +946,7 @@ function orchestraPOUpload(obj, id, po_file, tableName) {
         },
         complete: function () {
             $(".loader").hide();
-            if (po_file == "null") {
+            if (po_file === "null") {
                 $('#po_upload').removeClass('hidden')
                 $('.upload-po').removeClass('hidden')
                 $('#po_file').addClass('hidden')
