@@ -30,6 +30,8 @@
 	}
     .html2canvas-container { width: 3000px !important; height: 3000px !important; }
 </style>
+
+<input type="hidden" id="status_flag">
 <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
         <div class="buyer-nav-div hidden">
@@ -453,10 +455,11 @@
 	<script  type="text/javascript" src="{{ asset('js/moment.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/daterangepicker.js') }}"></script>
     <script src="{{ asset('js/html2pdf.bundle.min.js') }}"></script>
-    <script src="{{ asset('js/Admin/order.js') }}"></script>
+<!--    <script src="{{ asset('js/Admin/order.js') }}"></script>-->
     <script src="{{ asset('js/Customer/customer-order-status.js') }}"></script>
     <script src="{{ asset('js/Customer/customer-pi.js') }}"></script>
     <script type="text/javascript">
+		$('#status_flag').val("orderStatus")
         var buyer = localStorage.getItem("buyer");
         Dropzone.options.poUpload = {   
 

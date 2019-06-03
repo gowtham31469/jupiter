@@ -35,11 +35,11 @@ class ProfomaInvoice
                                           ->select('company.*')
                                           ->first();
 
-        $customer_details = DB::table('orchestra_item_details')
-                          ->join('customers','orchestra_item_details.FactoryCode','=','customers.factory_code')
+        $customer_details = DB::table('orchestra_parcel_details')
+                          ->join('customers','orchestra_parcel_details.FactoryCode','=','customers.factory_code')
                           ->leftjoin('payment_terms','customers.payment_terms','=','payment_terms.id')
                           ->leftjoin('freight_terms','customers.freight_type','=','freight_terms.id')
-                          ->where('orchestra_item_details.UVC',$uvc)
+                          ->where('orchestra_parcel_details.UVC',$uvc)
                           ->select('customers.*','payment_terms.payment_terms','freight_terms.freight_terms')
                           ->first();
         $data['bank_details'] =  $customer_details;

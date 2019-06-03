@@ -117,7 +117,8 @@ class OrderStatusCntrl extends Controller
             $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
         return $result;
-	}
+    }
+    
     /**
      * method to set the PO number for an order
      * @param Request $request
@@ -126,7 +127,6 @@ class OrderStatusCntrl extends Controller
 	{
 		try
 		{
-			$buyer_id       = $request->buyer_id;
             $erp_obj        = new ErpOrders();
             $po_number      = $request->po_number;
 			$template_id    = $request->id;
@@ -134,7 +134,8 @@ class OrderStatusCntrl extends Controller
 
             $po_details     = DB::table($table_name)->where('id',$template_id)
                                 ->select('po_file')->first();
-                                
+            
+            // check order status in erp_oorders table.                    
             $data_array = [];
             $data_array['id'] = $request->id;
             $data_array['table_name'] = $table_name;
@@ -150,7 +151,7 @@ class OrderStatusCntrl extends Controller
                 
             }
             
-            if ($po_details->po_file =="" || $po_details->po_file=="null")
+            if ($po_details->po_file === "" || $po_details->po_file === "null")
             {
                 $po_status = "PO Pending";
             }

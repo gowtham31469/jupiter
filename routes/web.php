@@ -70,6 +70,7 @@ Route::get('admin/order-management/reorder', 'Admin\OrderManagement\OrderControl
 Route::post('admin/orchestra/order-management/compositions-details', 'Admin\Orchestra\OrderManagementCntrl@compositionDetails');
 
 Route::post('admin/order-management/print-pdf', 'Admin\OrderManagement\OrderController@printPdf');
+Route::post('admin/order-management/print-pdf-arr', 'Admin\OrderManagement\OrderController@printPdfArr');
 Route::post('admin/order-management/print-pdf-small', 'Admin\OrderManagement\OrderController@printPdfSmall');
 Route::post('admin/order-management/print-pdf-table', 'Admin\OrderManagement\OrderController@printPdfTable');
 Route::post('admin/order-management/print-hang-pdf', 'Admin\OrderManagement\OrderController@printHangPdf');
@@ -380,11 +381,6 @@ Route::post('admin/tesco/generatebarcodetsl3', 'Admin\Tesco\OrderManagementCntrl
 Route::post('admin/tesco/generatebarcodeeanbig', 'Admin\Tesco\OrderManagementCntrl@generateBarcodeEanBig');
 Route::post('admin/tesco/generatebarcodeitfbig', 'Admin\Tesco\OrderManagementCntrl@generateBarcodeItfBig');
 
-
-// Route::get('upload', 'UploadController@index');
-// Route::post('admin/order-management/upload', ['as'=>'dropzone.store','uses'=>'UploadController@csvUpload']);
-// Route::post('dropzone/store', ['as'=>'dropzone.store','uses'=>'HomeController@dropzoneStore']);
-
 Route::post('admin/orchestra/template-management/template-list', 'Admin\Orchestra\TemplateManagementCntrl@templateList');
 
 Route::post('admin/tesco/template-management/template-list', 'Admin\Tesco\TemplateManagementCntrl@templateList');
@@ -392,10 +388,16 @@ Route::post('admin/tesco/template-management/template-list', 'Admin\Tesco\Templa
 /** upload csv **/
 
 Route::get('admin/upload-csv', 'Admin\UploadCSV\UploadCsvController@index');
-Route::post('admin/upload-label-details','Admin\UploadCSV\UploadCsvController@uploadLabelDetails');
-Route::post('admin/upload-parcel-details-file-one','Admin\UploadCSV\UploadCsvController@uploadParcelDetailsFileOne');
-Route::post('admin/upload-parcel-details-file-two','Admin\UploadCSV\UploadCsvController@uploadParcelDetailsFileTwo');
-Route::get('admin/csv-updates', 'Admin\UploadCSV\UploadCsvController@index');
+Route::post('admin/upload-orchestra-po-file-csv','Admin\UploadCSV\UploadCsvController@uploadPOCSVFile');
+Route::post('admin/upload-orchestra-price-file-csv','Admin\UploadCSV\UploadCsvController@uploadPriceCSVFile');
+Route::get('admin/csv-conflicts', 'Admin\UploadCSV\CSVDataHandlingController@conflictsCSV');
+Route::get('admin/partial-csv', 'Admin\UploadCSV\CSVDataHandlingController@partialCSV');
+Route::get('admin/get-uvc-data', 'Admin\UploadCSV\CSVDataHandlingController@getDataByUVC');
+Route::post('admin/confirm-uvc-data','Admin\UploadCSV\CSVDataHandlingController@confirmUVCOrders');
+Route::post('admin/cancel-uvc-data','Admin\UploadCSV\CSVDataHandlingController@cancelUVCOrders');
+Route::get('admin/csv-conflicts-page','Admin\UploadCSV\CSVDataHandlingController@orderChangesPage');
+Route::get('admin/get-order-changes-data','Admin\UploadCSV\CSVDataHandlingController@getOrderChangesData');
+
 
 
 /**orchestra Settings Page**/
@@ -716,3 +718,27 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::put('/settings/make-finishtype-enabled', 'ErpUser\ERPSettings\ERPSettingsController@makeFinishTypeEnabled');
 	Route::put('/settings/make-finishtype-disabled', 'ErpUser\ERPSettings\ERPSettingsController@makeFinishTypeDisabled');
 });
+
+
+Route::post('customer/orchestra/order-management/orders', 'Customer\Orchestra\OrderController@Orders');
+Route::post('customer/orchestra/order-management/order-status', 'Customer\Orchestra\OrderController@orderStatus');
+
+Route::get('admin/orchestra/get-erp-status', 'Admin\Orchestra\OrderManagementCntrl@checkERPStatus');
+
+
+
+Route::post('customer/orchestra/order-management/label-order-details', 'Customer\Orchestra\OrderController@labelOrderDetails');
+Route::post('customer/orchestra/order-management/sticker-order-details', 'Customer\Orchestra\OrderController@stickerOrderDetails');
+
+
+Route::post('customer/orchestra/order-management/set_hang_tag', 'Customer\Orchestra\OrderController@setHangTag');
+Route::post('customer/orchestra/order-management/set_special_tag', 'Customer\Orchestra\OrderController@setSpecialTag');
+Route::post('customer/orchestra/order-management/set_main_label', 'Customer\Orchestra\OrderController@setMainLabel');
+Route::post('customer/orchestra/order-management/remove_main_label', 'Customer\Orchestra\OrderController@removeMainLabel');
+Route::post('customer/orchestra/order-management/remove_wash_label', 'Customer\Orchestra\OrderController@removeWashLabel');
+Route::post('customer/orchestra/order-management/set_wash_label', 'Customer\Orchestra\OrderController@setWashLabel');
+Route::post('customer/orchestra/order-management/set_solid_stickers', 'Customer\Orchestra\OrderController@setSolidStickers');
+Route::post('customer/orchestra/order-management/set_standard_stickers', 'Customer\Orchestra\OrderController@setStandardStickers');
+
+
+Route::post('customer/orchestra/template-management/template-view', 'Customer\Orchestra\TemplateManagementCntrl@templateView');
