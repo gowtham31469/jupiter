@@ -1649,7 +1649,7 @@ class OrderManagementCntrl extends Controller
             $po_file    = $request->file('file');
             $path       = $request->file('file')->getRealPath();
             $filename   = $request->file('file')->getClientOriginalName();
-            $destination_path='/storage/app/public/po-files/';
+            $destination_path = '/storage/app/public/po-files/';
             $path       ='storage/app/public/po-files/';
             $Orname     = $po_file->getClientOriginalName();
             $filename   = str_random(6).'_'.preg_replace('/\s+/', '-', $Orname);
