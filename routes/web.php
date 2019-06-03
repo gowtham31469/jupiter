@@ -220,7 +220,7 @@ Route::group(['middleware' => 'customer_auth'], function()
 	Route::post('customer/tesco/update-delivery-date', 'Customer\Tesco\OrderStatusController@updateDeliveryDate');
 	Route::post('customer/tesco/set-tesco-order-status', 'Customer\Tesco\OrderStatusController@setTescoOrderStatus');
 	Route::post('customer/tesco/set-po-file', 'Customer\Tesco\OrderStatusController@setCustomerPOFile');
-	Route::post('customer/tesco/get_order_details', 'Customer\Tesco\OrderStatusController@getOrderDetails');
+	Route::post('customer/tesco/get-order-details', 'Customer\Tesco\OrderStatusController@getOrderDetails');
 	Route::get('customer/tesco/get-erp-status', 'Customer\Tesco\OrderStatusController@checkERPStatus');
 	Route::post('customer/tesco/order-management/orders', 'Customer\Tesco\OrderController@Orders');
 	Route::get('customer/tesco/templates-details', 'Customer\Tesco\OrderController@getTescoTemplateDetails');
@@ -651,7 +651,7 @@ Route::group(['prefix' => 'erp'], function () {
 	
 	/* Routes for jobcard Manager Module */
 	Route::get('job-manager', 'ErpUser\Jobmanager\JobManagerController@index')->name('jobcard-manager'); 
-	Route::post('/job-manager/get_order_details', 'ErpUser\Jobmanager\JobManagerController@getOrderDetails'); 
+	Route::post('/job-manager/get-order-details', 'ErpUser\Jobmanager\JobManagerController@getOrderDetails'); 
 	Route::get('job-manager/get-jobcard-order-details', 'ErpUser\Jobmanager\JobManagerController@getOrderDetailsByIds'); 
 	Route::post('job-manager/store-jobcard-details', 'ErpUser\Jobmanager\JobManagerController@storeJobcardData'); 
 	
