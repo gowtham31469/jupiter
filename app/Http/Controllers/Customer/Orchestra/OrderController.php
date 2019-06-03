@@ -213,7 +213,7 @@ class OrderController extends Controller
                 $orchestra_template_front = DB::table('orchestra_template')->select('*')->where('item_id','2')->where('disney',1)->get();
                 $data['orchestra_template_front']=$orchestra_template_front;
 				
-				 $treeviewData= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no IS NULL THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','78')->orWhere('tag_name','disney')->orderBy('item_name', 'asc')->get()->toArray();
+				 $treeviewData= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','78')->orWhere('tag_name','disney')->orderBy('item_name', 'asc')->get()->toArray();
             if($treeviewData){
                         $childs = array();
                         foreach($treeviewData as &$item) 
@@ -249,7 +249,7 @@ class OrderController extends Controller
                 $data['orchestra_template_front']=$orchestra_template_front;
 				
 				
-				 $treeviewData= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no IS NULL THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','78')->orWhere('tag_name','hang')->orWhere('id','79')->orWhere('id','80')->orderBy('item_name', 'asc')->get()->toArray();
+				 $treeviewData= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','78')->orWhere('tag_name','hang')->orWhere('id','79')->orWhere('id','80')->orderBy('item_name', 'asc')->get()->toArray();
             if($treeviewData){
                         $childs = array();
                         foreach($treeviewData as &$item) 
@@ -274,7 +274,7 @@ class OrderController extends Controller
          // $treeviewData= DB::table("orchestra_item_master")->select('id','item_name as text','parent_id')->orWhere('id','6')->orWhere('parent_id','6')->orWhere('id','1')->get()->toArray();
          
         
-        $treeviewspecial= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no IS NULL THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','78')->orWhere('id','79')->orWhere('id','80')->orWhere('tag_name','special')->orderBy('item_name', 'asc')->get()->toArray();
+        $treeviewspecial= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','78')->orWhere('id','79')->orWhere('id','80')->orWhere('tag_name','special')->orderBy('item_name', 'asc')->get()->toArray();
             if($treeviewspecial){
                         $childs = array();
                         foreach($treeviewspecial as &$item) 

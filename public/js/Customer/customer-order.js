@@ -2711,7 +2711,7 @@ function label_order_details(uvc) {
             });
             
             $('#washcarelabelform'+washcare+' table tbody').find('.tot_qty_table_fin').text($('#washcarelabelform'+index+' table tbody').find('.tot_qty_table_fin').text())
-            var mySVG = document.getElementById("washcare_svg"+washcare);
+            var mySVG = document.getElementById("washcare_svg_front"+washcare);
             var svgDoc;
             mySVG.addEventListener("load", function () {
                 svgDoc=mySVG.contentDocument;
@@ -2964,7 +2964,7 @@ function washcarelabels(data, dataid) {
             $wash_cm = "";
 			$wash_in = "";
         }
-		var sizebox='<div class="form-group has-feedback has-error has-danger"><label>Enter Size in Cm</label><input onkeypress="return checkNumbersOnly(event)" type="text" maxlength="3" class="form-control input-sm washonesizecm" value="'+$wash_cm+'" required="" placeholder="Enter Size in Cm"><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-error has-danger"><label>Enter Size in inches</label><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control input-sm washonesizein" maxlength="3" value="'+$wash_in+'" required="" placeholder="Enter Size in inches"><div class="help-block with-errors"></div></div>';
+		var sizebox='<div class="form-group has-feedback has-error has-danger"><label>Enter Size in Cm</label><input onkeypress="return checkNumbersOnly(event)" type="text" maxlength="3" class="form-control input-sm washonesizecm" value="'+$wash_cm+'" required="" placeholder="Enter Size in Cm"><div class="help-block with-errors"></div></div><div class="form-group hidden has-feedback has-error has-danger"><label>Enter Size in inches</label><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control input-sm washonesizein" maxlength="3" value="'+$wash_in+'" placeholder="Enter Size in inches"><div class="help-block with-errors"></div></div>';
 	}
 	else
 	{
@@ -3017,25 +3017,25 @@ function washcarelabels(data, dataid) {
 	
 	$('#washcarelabelform' + dataid+' .washonesizein').keyup(function () {
 		
-		var inches=$(this).val();
+		//var inches=$(this).val();
 		var cm=$('#washcarelabelform' + dataid+' .washonesizecm').val();
         var mySVG = document.getElementById("washcare_svg_front" + dataid);
 		var svgDoc;
 		svgDoc = mySVG.contentDocument;
-		svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm /"+inches+"in";
-		svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm /"+inches+"in";
+		svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm";
+		svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm";
 
 		
     });
 	$('#washcarelabelform' + dataid+' .washonesizecm').keyup(function () {
 		//alert(dataid)
 		var cm=$(this).val();
-		var inches=$('#washcarelabelform' + dataid+' .washonesizein').val();
+		//var inches=$('#washcarelabelform' + dataid+' .washonesizein').val();
         var mySVG = document.getElementById("washcare_svg_front" + dataid);
 		var svgDoc;
 		svgDoc = mySVG.contentDocument;
-		svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm /"+inches+"in";
-		svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm /"+inches+"in";
+		svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm";
+		svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm";
 		
     });
 	
@@ -3247,7 +3247,7 @@ function washcarelabels(data, dataid) {
                     $('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('greek') + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('turkish') + '</p>';
-                svgDoc.getElementById("country").innerHTML = wordWrap(text_for_mad_in, 24);
+                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
 				
                 $('.washing_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].washing_id);
 
@@ -3330,8 +3330,8 @@ function washcarelabels(data, dataid) {
                 var text_for_mad_in =  $('select.made_in_select' + dataid).find(':selected').data('french') + " - " + $('select.made_in_select' + dataid).find(':selected').data('english') + " - " + $('select.made_in_select' + dataid).find(':selected').data('spanish') + " - " + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + dataid).find(':selected').data('italian') + " - " + $('select.made_in_select' + dataid).find(':selected').data('dutch') + " - " + $('select.made_in_select' + dataid).find(':selected').data('german') + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('greek');
-				console.log(wordWrap(text_for_mad_in, 24));
-                svgDoc.getElementById("country").innerHTML = wordWrap(text_for_mad_in, 24);
+				//console.log(wordWrap(text_for_mad_in, 24));
+                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
 
             } else {
 
@@ -3358,13 +3358,20 @@ function washcarelabels(data, dataid) {
 		
 		if(data.order_details[0].Size == "TAILLE UNIQUE")
 		{
-			var inches=$('#washcarelabelform' + dataid+' .washonesizein').val()
+		//	var inches=$('#washcarelabelform' + dataid+' .washonesizein').val()
 			var cm=$('#washcarelabelform' + dataid+' .washonesizecm').val()
 			
-			svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm /"+inches+"in";;
-        svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm /"+inches+"in";;
+			svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm";
+        svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm";
 			svgDoc.getElementById("size1").innerHTML ="TU";
 			svgDoc.getElementById("size2").innerHTML ="TU";
+		}
+		else if(data.order_details[0].Size == "TAILLE L")
+		{
+			svgDoc.getElementById("size1").innerHTML = "TU";
+			svgDoc.getElementById("size2").innerHTML = "TU";
+			svgDoc.getElementById("size_in_fr_en1").innerHTML = "";
+			svgDoc.getElementById("size_in_fr_en2").innerHTML = "";
 		}
 		else
 		{
@@ -3446,7 +3453,7 @@ function add_to_composition(dataid) {
         dataid = dataid;
     }
     composition_percentage_global = 0;
-    var mySVG = document.getElementById("washcare_svg" + dataid);
+    var mySVG = document.getElementById("washcare_svg_back" + dataid);
     var svgDoc = mySVG.contentDocument;
     var a = [];
     var com = [];
@@ -3505,7 +3512,7 @@ function add_to_page(dataid) {
   } else {
     dataid = dataid;
   } 
-    var mySVG = document.getElementById("washcare_svg" + dataid);
+    var mySVG = document.getElementById("washcare_svg_back" + dataid);
     var svgDoc = mySVG.contentDocument;
     
     var check=0;
@@ -3582,7 +3589,7 @@ function deleteComposition(obj, dataid) {
 	}
 	$(obj).parent().parent().remove();
 	var classname = $(obj).parent().parent().attr('id');
-	var mySVG = document.getElementById("washcare_svg" + dataid);
+	var mySVG = document.getElementById("washcare_svg_back" + dataid);
 	var svgDoc = mySVG.contentDocument;
 	var list = svgDoc.getElementsByClassName("composition_" + classname);
 	for (var i = list.length - 1; 0 <= i; i--) {
@@ -3963,7 +3970,7 @@ function hangtagmodal(data) {
             $hang_cm = "";
 			$hang_in = "";
         }
-		var sizebox='<div class="form-group has-feedback has-error has-danger"><label>Enter Size in Cm</label><input onkeypress="return checkNumbersOnly(event)" type="text" maxlength="3" class="form-control input-sm onesizecm" value="'+$hang_cm+'" required="" placeholder="Enter Size in Cm"><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-error has-danger"><label>Enter Size in inches</label><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control input-sm onesizein" maxlength="3" value="'+$hang_in+'" required="" placeholder="Enter Size in inches"><div class="help-block with-errors"></div></div>';
+		var sizebox='<div class="form-group has-feedback has-error has-danger"><label>Enter Size in Cm</label><input onkeypress="return checkNumbersOnly(event)" type="text" maxlength="3" class="form-control input-sm onesizecm" value="'+$hang_cm+'" required="" placeholder="Enter Size in Cm"><div class="help-block with-errors"></div></div><div class="form-group hidden has-feedback has-error has-danger"><label>Enter Size in inches</label><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control input-sm onesizein" maxlength="3" value="'+$hang_in+'" placeholder="Enter Size in inches"><div class="help-block with-errors"></div></div>';
 	}
 	else
 	{
@@ -4081,8 +4088,8 @@ function hangtagmodal(data) {
                 },
                 success: function (data) {
                     if (data.length > 0) {
-                        $('#' + ids).find('.sample-artwork').html('<object id="svg_hang_front" style="height: 486px;" class="center-block svg2" data="' + data[1].template_file + '" type="image/svg+xml"></object>')
-                        $('#' + ids).find('.sample_back').html('<object class="center-block" id="svg2" style="height:486px" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
+                        $('#' + ids).find('.sample-artwork').html('<object id="svg_hang_front" style="height: 486px;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
+                        $('#' + ids).find('.sample_back').html('<object class="center-block" id="svg2" style="height:486px" data="' + data[1].template_file + '" type="image/svg+xml"></object>')
                         if (data[0].disney != "DI") {
                             var mySVG_hang_disney = document.getElementById("svg_hang_front");
                             var svgDoc;
@@ -4234,8 +4241,8 @@ function hangtagmodal(data) {
                 },
                 success: function (data) {
                     if (data.length > 0) {
-                        $('#' + ids).find('.sample-artwork').html('<object id="svg_hang_front" style="height: 486px;" class="center-block svg2" data="' + data[1].template_file + '" type="image/svg+xml"></object>')
-                        $('#' + ids).find('.sample_back').html('<object class="center-block" id="svg2" style="height:486px" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
+                        $('#' + ids).find('.sample-artwork').html('<object id="svg_hang_front" style="height: 486px;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
+                        $('#' + ids).find('.sample_back').html('<object class="center-block" id="svg2" style="height:486px" data="' + data[1].template_file + '" type="image/svg+xml"></object>')
 
                         if (data[0].disney != "DI") {
                             var mySVG_hang_disney = document.getElementById("svg_hang_front");
@@ -5013,7 +5020,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
             });
             
             $('#washcarelabelform'+washcare+' table tbody').find('.tot_qty_table_fin').text($('#washcarelabelform table tbody').find('.tot_qty_table_fin').text())
-            var mySVG = document.getElementById("washcare_svg"+washcare);
+            var mySVG = document.getElementById("washcare_svg_front"+washcare);
             var svgDoc;
             mySVG.addEventListener("load", function () {
                 svgDoc=mySVG.contentDocument;
@@ -5350,9 +5357,9 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
 				},
 				success: function (data) {
 					if (data.length > 0) {
-						$('#' + ids).find('.sample-artwork').html('<object style="height: calc( 100vh - 125px );" id="washcare_svg'+dataid+'" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
+						$('#' + ids).find('.sample-artwork').html('<object style="height: calc( 100vh - 125px );" id="washcare_svg_front'+dataid+'" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
 						
-							var mySVG = document.getElementById("washcare_svg"+dataid);
+							var mySVG = document.getElementById("washcare_svg_front"+dataid);
 							var svgDoc;
 							mySVG.addEventListener("load", function () {
 								svgDoc = mySVG.contentDocument;
@@ -5373,13 +5380,20 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
 								
 if(datas.order_details[0].Size == "TAILLE UNIQUE")
 		{
-			var inches=$('#washcarelabelform' + dataid+' .washonesizein').val()
+			//var inches=$('#washcarelabelform' + dataid+' .washonesizein').val()
 			var cm=$('#washcarelabelform' + dataid+' .washonesizecm').val()
 			
-			svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm /"+inches+"in";;
-        svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm /"+inches+"in";;
+			svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm";
+        svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm";
 			svgDoc.getElementById("size1").innerHTML ="TU";
 			svgDoc.getElementById("size2").innerHTML ="TU";
+		}
+		else if(datas.order_details[0].Size == "TAILLE L")
+		{
+			svgDoc.getElementById("size1").innerHTML = "TU";
+			svgDoc.getElementById("size2").innerHTML = "TU";
+			svgDoc.getElementById("size_in_fr_en1").innerHTML = "";
+			svgDoc.getElementById("size_in_fr_en2").innerHTML = "";
 		}
 		else
 		{
@@ -5579,10 +5593,10 @@ if(datas.order_details[0].Size == "TAILLE UNIQUE")
 				success: function (data) {
 					
 					if (data.length > 0) {
-						$('#' + ids).find('.sample-artwork').html('<object style="height: calc( 100vh - 125px );"  id="washcare_svg'+dataid+'"  class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
+						$('#' + ids).find('.sample-artwork').html('<object style="height: calc( 100vh - 125px );"  id="washcare_svg_front'+dataid+'"  class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
 						
 						
-						var mySVG = document.getElementById("washcare_svg"+dataid);
+						var mySVG = document.getElementById("washcare_svg_front"+dataid);
 							var svgDoc;
 							mySVG.addEventListener("load", function () {
 								svgDoc = mySVG.contentDocument;
@@ -5604,15 +5618,22 @@ if(datas.order_details[0].Size == "TAILLE UNIQUE")
 									var inches=$('#washcarelabelform' + dataid+' .washonesizein').val()
 									var cm=$('#washcarelabelform' + dataid+' .washonesizecm').val()
 
-									svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm /"+inches+"in";;
-								svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm /"+inches+"in";;
+									svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm";
+								svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm";
 									svgDoc.getElementById("size1").innerHTML ="TU";
 									svgDoc.getElementById("size2").innerHTML ="TU";
 								}
+								else if(datas.order_details[0].Size == "TAILLE L")
+								{
+									svgDoc.getElementById("size1").innerHTML = "TU";
+									svgDoc.getElementById("size2").innerHTML = "TU";
+									svgDoc.getElementById("size_in_fr_en1").innerHTML = "";
+									svgDoc.getElementById("size_in_fr_en2").innerHTML = "";
+								}
 								else
 								{
-									svgDoc.getElementById("size_in_fr_en1").innerHTML = datas.order_details[0].cm + "cm / " + datas.order_details[0].in + "in";
-									svgDoc.getElementById("size_in_fr_en2").innerHTML = datas.order_details[0].cm + "cm / " + datas.order_details[0].in + "in";
+									svgDoc.getElementById("size_in_fr_en1").innerHTML = datas.order_details[0].cm + "cm";
+									svgDoc.getElementById("size_in_fr_en2").innerHTML = datas.order_details[0].cm + "cm";
 									svgDoc.getElementById("size1").innerHTML = datas.order_details[0].Size.replace(" ", "").toLowerCase() + "/" + size1;
 									svgDoc.getElementById("size2").innerHTML = datas.order_details[0].Size.replace(" ", "").toLowerCase() + "/" + size1;
 								}
@@ -6744,7 +6765,7 @@ function clonewashcarelabels(index)
             });
             
             $('#washcarelabelform'+washcare+' table tbody').find('.tot_qty_table_fin').text($('#washcarelabelform'+index+' table tbody').find('.tot_qty_table_fin').text())
-            var mySVG = document.getElementById("washcare_svg"+washcare);
+            var mySVG = document.getElementById("washcare_svg_front"+washcare);
             var svgDoc;
             mySVG.addEventListener("load", function () {
                 svgDoc=mySVG.contentDocument;
