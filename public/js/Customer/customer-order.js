@@ -154,7 +154,7 @@ function orderStatus() {
 								$('#exist_artwork_div_status').removeClass('hidden')
 								
 								$.ajax({
-									url: base_url + "/customer/" + buyer + "/order-management/get_existing_label_orders_status_po",
+									url: base_url + "/customer/" + buyer + "/order-management/get-existing-label-orders-po",
 									type: "get",
 									dataType: "json",
 									data: {
@@ -383,7 +383,7 @@ function orderStatus() {
 						form_data.append('po', new_po_no);
 						form_data.append('_token', csrf_token);
 						$.ajax({
-							url: base_url + "/customer/" + buyer + "/order-management/put_existing_label_orders_po_new",
+							url: base_url + "/customer/" + buyer + "/order-management/update-label-orders-po",
 							dataType: 'text',
 							cache: false,
 							contentType: false,
@@ -438,7 +438,7 @@ function orderStatus() {
 							form_data.append('po', new_po_no);
 							form_data.append('_token', csrf_token);
 							$.ajax({
-								url: base_url + "/customer/" + buyer + "/order-management/put_existing_label_orders_po_new",
+								url: base_url + "/customer/" + buyer + "/order-management/update-label-orders-po",
 								dataType: 'text',
 								cache: false,
 								contentType: false,
@@ -486,7 +486,7 @@ function orderStatus() {
 						var aa = a.join(',');
 						var csrf_token = $('meta[name="csrf-token"]').attr('content');
 						$.ajax({
-							url: base_url + "/customer/" + buyer + "/order-management/put_existing_label_orders_po",
+							url: base_url + "/customer/" + buyer + "/order-management/map-label-orders-po",
 							type: "Post",
 							dataType: "json",
 							data: {
@@ -1413,7 +1413,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 		$('#map_po').removeClass('hidden')
 
 		$.ajax({
-			url: base_url + "/customer/" + buyer + "/order-management/get_existing_solid_sticker_orders_po",
+			url: base_url + "/customer/" + buyer + "/order-management/get-existing-solid-sticker-orders-po",
 			type: "get",
 			dataType: "json",
 			data: {
@@ -1588,7 +1588,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 						form_data.append('po', new_po_no);
 						form_data.append('_token', csrf_token);
 						$.ajax({
-							url: base_url + "/customer/" + buyer + "/order-management/put_existing_label_orders_po_new",
+							url: base_url + "/customer/" + buyer + "/order-management/update-label-orders-po",
 							dataType: 'text',
 							cache: false,
 							contentType: false,
@@ -1636,7 +1636,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 						var aa = a.join(',');
 						var csrf_token = $('meta[name="csrf-token"]').attr('content');
 						$.ajax({
-							url: base_url + "/customer/" + buyer + "/order-management/put_existing_label_orders_po",
+							url: base_url + "/customer/" + buyer + "/order-management/map-label-orders-po",
 							type: "Post",
 							dataType: "json",
 							data: {
@@ -1732,7 +1732,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 		$('#map_po').removeClass('hidden')
 
 		$.ajax({
-			url: base_url + "/customer/" + buyer + "/order-management/get_existing_standard_sticker_orders_po",
+			url: base_url + "/customer/" + buyer + "/order-management/get-existing-standard-sticker-orders-po",
 			type: "get",
 			dataType: "json",
 			data: {
@@ -1907,7 +1907,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 						form_data.append('po', new_po_no);
 						form_data.append('_token', csrf_token);
 						$.ajax({
-							url: base_url + "/customer/" + buyer + "/order-management/put_existing_label_orders_po_new",
+							url: base_url + "/customer/" + buyer + "/order-management/update-label-orders-po",
 							dataType: 'text',
 							cache: false,
 							contentType: false,
@@ -1954,7 +1954,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 						var aa = a.join(',');
 						var csrf_token = $('meta[name="csrf-token"]').attr('content');
 						$.ajax({
-							url: base_url + "/customer/" + buyer + "/order-management/put_existing_label_orders_po",
+							url: base_url + "/customer/" + buyer + "/order-management/map-label-orders-po",
 							type: "Post",
 							dataType: "json",
 							data: {
@@ -4521,7 +4521,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 		$('#map_po').removeClass('hidden')
 
 		$.ajax({
-			url: base_url + "/customer/" + buyer + "/order-management/get_existing_label_orders_po",
+			url: base_url + "/customer/" + buyer + "/order-management/get-existing-label-orders-po",
 			type: "get",
 			dataType: "json",
 			data: {
@@ -4696,7 +4696,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 						form_data.append('po', new_po_no);
 						form_data.append('_token', csrf_token);
 						$.ajax({
-							url: base_url + "/customer/" + buyer + "/order-management/put_existing_label_orders_po_new",
+							url: base_url + "/customer/" + buyer + "/order-management/update-label-orders-po",
 							dataType: 'text',
 							cache: false,
 							contentType: false,
@@ -4744,7 +4744,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 						var aa = a.join(',');
 						var csrf_token = $('meta[name="csrf-token"]').attr('content');
 						$.ajax({
-							url: base_url + "/customer/" + buyer + "/order-management/put_existing_label_orders_po",
+							url: base_url + "/customer/" + buyer + "/order-management/map-label-orders-po",
 							type: "Post",
 							dataType: "json",
 							data: {

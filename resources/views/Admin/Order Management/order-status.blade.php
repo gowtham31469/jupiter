@@ -238,17 +238,9 @@
                     <div id="map_po_div_status" class="hidden">
                         <h4>Map to Existing PO : </h4>
                         <label style="color:red" id="select_error_status" class="hidden">Please Select PO</label>
-                        <div class="form-group" id="selectpo_status">
+                        <div class="form-group" id="po_select_div">
                             <label>Select PO</label>
-                            <select class="form-control">
-								  <option>1</option>
-								  <option>2</option>
-								  <option>3</option>
-								  <option>4</option>
-								  <option>5</option>
-								</select>
                         </div>
-
                     </div>
 
                     <div id="new_po_div_status" class="hidden">

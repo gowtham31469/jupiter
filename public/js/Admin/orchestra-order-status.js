@@ -50,6 +50,12 @@ function orderStatus() {
                     return 0;
                 });
 
+                // push uvc into array and show it in uvc selectio dropdown
+                for (i = 0; i < newObj1.length; i++) {
+                    if (uniqueNames.indexOf(newObj1[i].UVC) === -1) {
+                        uniqueNames.push(newObj1[i].UVC);
+                    }
+                }
 
                 var options = "<option>Select UVC</option>";
                 for (i = 0; i < uniqueNames.length; i++) {
@@ -58,8 +64,8 @@ function orderStatus() {
 
                 $('#po-file-upload-button').click(function () {
                     $('#po-file-upload-group').modal("show")
-                    $('#uvc_select_div').html('<label>Select UVC</label><select id="style_num" class="form-control selectpicker" data-live-search="true">' + options + '</select>')
-                    $('#style_num').selectpicker('refresh');
+                    $('#uvc_select_div').html('<label>Select UVC</label><select id="uvc_selection" class="form-control selectpicker" data-live-search="true">' + options + '</select>')
+                    $('#uvc_selection').selectpicker('refresh');
                     $('#new_po_div_status').addClass('hidden');
                     $('#new_po1_status').addClass('hidden');
                     $('#map_po_status').addClass('hidden');
@@ -73,7 +79,7 @@ function orderStatus() {
                     $('#new_po_error_status').addClass('hidden')
                     $('#new_po_file_error_status').addClass('hidden')
                     $('#new_po_error_length_status').addClass('hidden');
-                    $('#style_num').change(function () {
+                    $('#uvc_selection').change(function () {
                         if ($(this).val() != "Select UVC") {
                             $('#new_po_div_status').addClass('hidden');
                             $('#new_po1_status').addClass('hidden');
@@ -85,14 +91,13 @@ function orderStatus() {
                             $('#exist_artwork_div_status').removeClass('hidden')
 
                             var selected = $(this).find('option:selected');
-                            var styleNum = selected.val();
-                            //var zone = selected.data('zone');
+                            var uvc = selected.val();
                             $.ajax({
-                                url: base_url + "/admin/" + buyer + "/order-management/get_existing_label_orders_status_po",
+                                url: base_url + "/admin/" + buyer + "/order-management/get-existing-label-orders-status-po",
                                 type: "get",
                                 dataType: "json",
                                 data: {
-                                    styleNum: styleNum
+                                    uvc: uvc
                                 },
                                 beforeSend: function () {
 
@@ -100,7 +105,6 @@ function orderStatus() {
                                 statusCode: {
                                     /** [Show response status based on HTTP status code] */
                                     200: function (data) {
-
                                         $('#check_error_status').addClass('hidden')
                                         $('#new_po_error_status').addClass('hidden')
                                         $('#new_po_file_error_status').addClass('hidden')
@@ -109,16 +113,15 @@ function orderStatus() {
                                         var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_polybag_sticker_orders)))))));
                                         var coun = 0;
                                         var options = "<option>Select PO</option>";
-                                        var unique_po = []
                                         var old_po = ""
                                         var new_po_div_status = 0;
                                         $(newObj).each(function (index1, value1) {
 
-                                            if (value1.purchase_order_no != "" && value1.purchase_order_no != null) {
-                                                if (old_po != value1.purchase_order_no) {
-                                                    options += "<option>" + value1.purchase_order_no + "</option>";
+                                            if (value1.po_number != "" && value1.po_number != null) {
+                                                if (old_po != value1.po_number) {
+                                                    options += "<option>" + value1.po_number + "</option>";
                                                 }
-                                                old_po = value1.purchase_order_no
+                                                old_po = value1.po_number
                                                 coun++;
                                                 $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="check-list">' + value1.TemplateName + '</li>')
                                                 new_po_div_status++;
@@ -231,7 +234,7 @@ function orderStatus() {
                                         })
 
 
-                                        $('#selectpo_status').html('<label>Select PO</label><select id="select_po_status" class="form-control">' + options + '</select>')
+                                        $('#po_select_div').html('<label>Select PO</label><select id="select_po_status" class="form-control">' + options + '</select>')
                                         if (coun == 0) {
                                             $('#map_po_status').addClass('hidden');
                                             $('#new_po1_status').addClass('hidden');
@@ -273,7 +276,7 @@ function orderStatus() {
                                                 }
                                             });
 
-                                            if (sList > 0) {
+                                            if (sList > 0) { 
                                                 $('#update_po_status').removeClass('hidden')
                                                 $('#update_new_po_status').addClass('hidden')
                                                 $('#new_pos_status').addClass('hidden')
@@ -321,7 +324,7 @@ function orderStatus() {
                                                         form_data.append('po', new_po_no);
                                                         form_data.append('_token', csrf_token);
                                                         $.ajax({
-                                                            url: base_url + "/admin/" + buyer + "/order-management/put_existing_label_orders_po_new",
+                                                            url: base_url + "/admin/" + buyer + "/order-management/update-label-orders-po",
                                                             dataType: 'text',
                                                             cache: false,
                                                             contentType: false,
@@ -395,7 +398,7 @@ function orderStatus() {
                                                         form_data.append('po', new_po_no);
                                                         form_data.append('_token', csrf_token);
                                                         $.ajax({
-                                                            url: base_url + "/admin/" + buyer + "/order-management/put_existing_label_orders_po_new",
+                                                            url: base_url + "/admin/" + buyer + "/order-management/update-label-orders-po",
                                                             dataType: 'text',
                                                             cache: false,
                                                             contentType: false,
@@ -457,7 +460,7 @@ function orderStatus() {
                                                     var aa = a.join(',');
                                                     var csrf_token = $('meta[name="csrf-token"]').attr('content');
                                                     $.ajax({
-                                                        url: base_url + "/admin/" + buyer + "/order-management/put_existing_label_orders_po",
+                                                        url: base_url + "/admin/" + buyer + "/order-management/map-label-orders-po",
                                                         type: "Post",
                                                         dataType: "json",
                                                         data: {

@@ -311,13 +311,13 @@ Route::post('admin/orchestra/order-management/set_wash_label', 'Admin\Orchestra\
 Route::post('admin/orchestra/order-management/set_solid_stickers', 'Admin\Orchestra\OrderManagementCntrl@setSolidStickers');
 Route::post('admin/orchestra/order-management/set_standard_stickers', 'Admin\Orchestra\OrderManagementCntrl@setStandardStickers');
 
-Route::get('admin/orchestra/order-management/get_existing_label_orders_po', 'Admin\Orchestra\OrderManagementCntrl@getExistingLabelOrdersPo');
-Route::get('admin/orchestra/order-management/get_existing_standard_sticker_orders_po', 'Admin\Orchestra\OrderManagementCntrl@getExistingStandardStickerOrdersPo');
-Route::get('admin/orchestra/order-management/get_existing_solid_sticker_orders_po', 'Admin\Orchestra\OrderManagementCntrl@getExistingSolidStickerOrdersPo');
-Route::get('admin/orchestra/order-management/get_existing_label_orders_status_po', 'Admin\Orchestra\OrderManagementCntrl@getExistingLabelOrderStatusPo');
+Route::get('admin/orchestra/order-management/get-existing-label-orders-po', 'Admin\Orchestra\OrderManagementCntrl@getExistingLabelOrdersPo');
+Route::get('admin/orchestra/order-management/get-existing-standard-sticker-orders-po', 'Admin\Orchestra\OrderManagementCntrl@getExistingStandardStickerOrdersPo');
+Route::get('admin/orchestra/order-management/get-existing-solid-sticker-orders-po', 'Admin\Orchestra\OrderManagementCntrl@getExistingSolidStickerOrdersPo');
+Route::get('admin/orchestra/order-management/get-existing-label-orders-status-po', 'Admin\Orchestra\OrderManagementCntrl@getExistingLabelOrderStatusPo');
 
-Route::Post('admin/orchestra/order-management/put_existing_label_orders_po', 'Admin\Orchestra\OrderManagementCntrl@putExistingLabelOrdersPo');
-Route::Post('admin/orchestra/order-management/put_existing_label_orders_po_new', 'Admin\Orchestra\OrderManagementCntrl@putExistingLabelOrdersPoNew');
+Route::Post('admin/orchestra/order-management/map-label-orders-po', 'Admin\Orchestra\OrderManagementCntrl@mapLabelOrdersPo');
+Route::Post('admin/orchestra/order-management/update-label-orders-po', 'Admin\Orchestra\OrderManagementCntrl@updateLabelOrdersPO');
 Route::get('admin/orchestra/template-management/get-company-list', 'Admin\Orchestra\TemplateManagementCntrl@getCompanyList');
 
 Route::post('/admin/order-management/order_sub_modules', 'Admin\AdminController@orderSubModules');

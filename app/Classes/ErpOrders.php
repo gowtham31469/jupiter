@@ -242,7 +242,7 @@ class ErpOrders
         return $result;
 	}
 
-		/**
+   /**
 	 * Insert Orchestra Order details in erp_order_details table
 	 *
 	 * @param [type] $qnty_table
