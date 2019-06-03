@@ -2554,11 +2554,12 @@ function barcode_polybag(id, data) {
 	mySVG.addEventListener("load", function () {
 		svgDoc = mySVG.contentDocument;
 		var svgItem = svgDoc.getElementById("uvc_tco");
-
-		svgDoc.getElementById("parcel_code").innerHTML = data.orchestra_parcel_details[0].ParcelCode;
+//alert(data.orchestra_parcel_details[0].ParcelCode);
+		
 		//svgDoc.getElementById("round").style.fill = $('#age').val();
 
 		if (data.template_name == "Standard") {
+			svgDoc.getElementById("parcel_code").innerHTML = data.orchestra_parcel_details[0].ParcelCode;
 
 			$td_col = "";
 			$td_size = "";
@@ -2578,6 +2579,7 @@ function barcode_polybag(id, data) {
 			svgDoc.getElementById("theme").innerHTML = data.orchestra_parcel_details[0].Theme;
 			svgDoc.getElementById("cartontable").innerHTML = $tbl;
 		} else {
+			svgDoc.getElementById("parcel_code").innerHTML = data.orchestra_parcel_details[0].UVC_TCO;
 			var code = data.orchestra_parcel_quantity_details[0].BarcodeForPricesTags.toString();
 			svgDoc.getElementById("size").innerHTML = data.orchestra_parcel_quantity_details[0].Size;
 			svgDoc.getElementById("color").innerHTML = data.orchestra_parcel_quantity_details[0].Color;
@@ -2606,14 +2608,16 @@ function barcode_carton(id, data) {
 		svgDoc.getElementById("height").innerHTML = $('#modal_height').val();
 		svgDoc.getElementById("volume").innerHTML = $('#parcelVolume').text();
 		svgDoc.getElementById("theme").innerHTML = data.orchestra_parcel_details[0].Theme;
-		svgDoc.getElementById("parcelcode").innerHTML = data.orchestra_parcel_details[0].ParcelCode;
+		
 		svgDoc.getElementById("color").innerHTML = data.orchestra_parcel_quantity_details[0].Color;
 
 		if (data.template_name == "Standard") {
 			var code = data.orchestra_parcel_details[0].ParcelBarCode.toString();
+			svgDoc.getElementById("parcelcode").innerHTML = data.orchestra_parcel_details[0].ParcelCode;
 		} else {
 			var code = data.orchestra_parcel_quantity_details[0].BarcodeForPricesTags.toString();
 			svgDoc.getElementById("size").innerHTML = data.orchestra_parcel_quantity_details[0].Size;
+			svgDoc.getElementById("parcelcode").innerHTML = data.orchestra_parcel_details[0].UVC_TCO;
 		}
 
 		jsbarcode(code, 'barcode1', svgDoc)
@@ -3289,7 +3293,7 @@ function washcarelabels(data, dataid) {
                 });
             }
 		
-			svgDoc_back.getElementById("product_family").innerHTML = data.product_family[0].arabic;
+			svgDoc_back.getElementById("product_family").innerHTML = data.product_family.length > 0 ? data.product_family[0].arabic : "";
 
         }
 		
@@ -5459,7 +5463,7 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
 								}
 								
 								svgDoc.getElementById("parcel_code1").innerHTML = datas.order_details[0].UVC_TCO;
-								svgDoc.getElementById("product_family").innerHTML = datas.product_family[0].arabic;
+								svgDoc.getElementById("product_family").innerHTML = datas.product_family.length > 0 ? datas.product_family[0].arabic : "";
 								svgDoc.getElementById("parcel_code2").innerHTML = datas.order_details[0].UVC_TCO;
 								
 								
@@ -5689,7 +5693,7 @@ if(datas.order_details[0].Size == "TAILLE UNIQUE")
 								}
 								
 								svgDoc.getElementById("parcel_code1").innerHTML = datas.order_details[0].UVC_TCO;
-								svgDoc.getElementById("product_family").innerHTML = datas.product_family[0].arabic;
+								svgDoc.getElementById("product_family").innerHTML = datas.product_family.length > 0 ? datas.product_family[0].arabic : "";
 								svgDoc.getElementById("parcel_code2").innerHTML = datas.order_details[0].UVC_TCO;
 								if(datas.order_details[0].Size == "TAILLE UNIQUE")
 								{

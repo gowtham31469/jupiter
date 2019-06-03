@@ -364,7 +364,7 @@ class OrderManagementCntrl extends Controller
 //                        $data['treeviewmain']=$tree;
 //
 //               }
-                $code=substr($uvc, -4, 2);
+                $code=$data['order_details']{0}->Family_Code;
                 $data['orchestra_hang_tag_orders']=DB::table('orchestra_hang_tag_orders')->select('*',DB::raw("'Hang Tag' as \"TemplateName\""))->where('uvc',$uvc)->get();
         if(count($data['orchestra_hang_tag_orders']) > 0)
         {
@@ -423,7 +423,15 @@ class OrderManagementCntrl extends Controller
                 $data['orchestra_countries'] = DB::table('orchestra_countries')->select('*')->get();
                 $data['orchestra_care_instruction'] = DB::table('orchestra_care_instruction')->select('*')->get(); 
                 $data['orchestra_parts'] = DB::table('orchestra_parts')->select('*')->get();
-                $data['product_family'] = DB::table('orchestra_product_family')->select('*')->where('code',$code)->get();
+                $pro_family = DB::table('orchestra_product_family')->select('*')->where('code',$code)->get();
+				if(count($pro_family) > 0)
+				{
+					$data['product_family'] = DB::table('orchestra_product_family')->select('*')->where('code',$code)->get();
+				}
+				else
+				{
+					$data['product_family'] ="";
+				}
                 echo json_encode($data);
     }
 	
@@ -441,7 +449,7 @@ class OrderManagementCntrl extends Controller
         
          $data['orchestra_parcel_quantity_details'] = DB::table('orchestra_parcel_quantity_details')->select(DB::raw('distinct on ("UVC_TCO") "UVC_TCO"'),'UVC','Size','BarcodeForPricesTags','Quantity','Color')->where('BuyerPONo',$po)->get();
         
-         $data['orchestra_parcel_details']= DB::table('orchestra_parcel_details')->select('*')->where('BuyerPONo',$po)->groupBy('id','BuyerPONo')->get();
+         $data['orchestra_parcel_details']= DB::table('orchestra_parcel_details')->select('*','Standard_Code as ParcelCode')->where('BuyerPONo',$po)->groupBy('id','BuyerPONo')->get();
         
         $data['orchestra_age_group']= DB::table('orchestra_age_group')->select('*')->get();      
         
