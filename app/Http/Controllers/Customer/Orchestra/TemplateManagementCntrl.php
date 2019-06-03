@@ -122,7 +122,7 @@ class TemplateManagementCntrl extends Controller
                                 ->select('orchestra_template.*','orchestra_item_master.ref_no','orchestra_item_master.company_id','company.name as company_name')
                                 ->join('orchestra_item_master','orchestra_item_master.id','=','orchestra_template.item_id')
                                 ->join('company','company.id','=','orchestra_item_master.company_id')
-                                ->where('item_id',$template_id)
+                                ->where('item_id',$template_id)->orderBy('orchestra_template.id','asc')
                                 ->get();
          return json_encode($treeviewData);
     } 
