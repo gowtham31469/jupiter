@@ -4175,8 +4175,8 @@ function hangtagmodal(data) {
                 },
                 success: function (data) {
                     if (data.length > 0) {
-                        $('#' + ids).find('.sample-artwork').html('<object id="svg_hang_front" style="height: 486px;" class="center-block svg2" data="' + data[1].template_file + '" type="image/svg+xml"></object>')
-                        $('#' + ids).find('.sample_back').html('<object class="center-block" id="svg2" style="height:486px" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
+                        $('#' + ids).find('.sample-artwork').html('<object id="svg_hang_front" style="height: 486px;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
+                        $('#' + ids).find('.sample_back').html('<object class="center-block" id="svg2" style="height:486px" data="' + data[1].template_file + '" type="image/svg+xml"></object>')
                         if (data[0].disney != "DI") {
                             var mySVG_hang_disney = document.getElementById("svg_hang_front");
                             var svgDoc;
@@ -4328,8 +4328,8 @@ function hangtagmodal(data) {
                 },
                 success: function (data) {
                     if (data.length > 0) {
-                        $('#' + ids).find('.sample-artwork').html('<object id="svg_hang_front" style="height: 486px;" class="center-block svg2" data="' + data[1].template_file + '" type="image/svg+xml"></object>')
-                        $('#' + ids).find('.sample_back').html('<object class="center-block" id="svg2" style="height:486px" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
+                        $('#' + ids).find('.sample-artwork').html('<object id="svg_hang_front" style="height: 486px;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
+                        $('#' + ids).find('.sample_back').html('<object class="center-block" id="svg2" style="height:486px" data="' + data[1].template_file + '" type="image/svg+xml"></object>')
 
                         if (data[0].disney != "DI") {
                             var mySVG_hang_disney = document.getElementById("svg_hang_front");
