@@ -116,7 +116,7 @@ function orderStatus() {
      success: function (data) {
          if (buyer == "orchestra") {
             
-             var path = base_url + "/admin/" + buyer + "/order-management/order-status";
+             var path = base_url + "/customer/" + buyer + "/order-management/order-status";
              var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_polybag_sticker_orders)))))));
 
              var newObj1 = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_polybag_sticker_orders)))))));
@@ -185,7 +185,7 @@ function orderStatus() {
                          var selected = $(this).find('option:selected');
                          var uvc = selected.val();
                          $.ajax({
-                             url: base_url + "/admin/" + buyer + "/order-management/get-existing-label-orders-status-po",
+                             url: base_url + "/customer/" + buyer + "/order-management/get-existing-label-orders-status-po",
                              type: "get",
                              dataType: "json",
                              data: {
@@ -418,7 +418,7 @@ function orderStatus() {
                                                      form_data.append('po', new_po_no);
                                                      form_data.append('_token', csrf_token);
                                                      $.ajax({
-                                                         url: base_url + "/admin/" + buyer + "/order-management/update-label-orders-po",
+                                                         url: base_url + "/customer/" + buyer + "/order-management/update-label-orders-po",
                                                          dataType: 'text',
                                                          cache: false,
                                                          contentType: false,
@@ -492,7 +492,7 @@ function orderStatus() {
                                                      form_data.append('po', new_po_no);
                                                      form_data.append('_token', csrf_token);
                                                      $.ajax({
-                                                         url: base_url + "/admin/" + buyer + "/order-management/update-label-orders-po",
+                                                         url: base_url + "/customer/" + buyer + "/order-management/update-label-orders-po",
                                                          dataType: 'text',
                                                          cache: false,
                                                          contentType: false,
@@ -554,7 +554,7 @@ function orderStatus() {
                                                  var aa = a.join(',');
                                                  var csrf_token = $('meta[name="csrf-token"]').attr('content');
                                                  $.ajax({
-                                                     url: base_url + "/admin/" + buyer + "/order-management/map-label-orders-po",
+                                                     url: base_url + "/customer/" + buyer + "/order-management/map-label-orders-po",
                                                      type: "Post",
                                                      dataType: "json",
                                                      data: {
@@ -3775,7 +3775,7 @@ function PopupTesco(data, name,zone,style_no,buyer_no,id,created_at) {
      var db = "tesco_thl3_orders";
  }
  var url = "";
- // window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
+ // window.open(base_url + "/customer/order-management/print-pdf?svg="+svg);
  var csrf_token = $('meta[name="csrf-token"]').attr('content');
  $.ajax({
      url: base_url + "/customer/" + buyer + "/print-div-tesco",
@@ -4192,10 +4192,6 @@ function checkjsbarcodeean(code) {
 function editArtwork()
  {
      $("#create_tesco_order_status_form :input").prop("disabled", false);
-     // $('#tesco_po_number').prop('disabled',true);
-     // $('#tesco_uk_style').prop('disabled',true);
-     // $('#tesco_ce_style').prop('disabled',true);
-     // $('#tesco_supplier').prop('disabled',true);
      $('#add_row').removeClass('disabled');
      $('#submit').removeClass("hidden");
      
@@ -4204,7 +4200,7 @@ function editArtwork()
 
 
 /**
-* [method append data to tescoStatusTable ]
+* [method append data to orchestraStatusTable ]
 * @param  {[type]} data [description]
 * @param  {[type]} path [description]
 * @return {[type]}      [description]
@@ -4232,10 +4228,9 @@ function orchestraStatusTable(data, path) {
              if (key == "PO Number" && value['po_required'] == 1 && value['is_order_count_empty'] == 0) {
                  var po_file = value['po_file'];
                  let customer_po_number = value[key] === null?'':value[key];
-                 tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" onkeypress="return AvoidSpace(event)" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" placeholder="Enter PO" maxlength="11" value="'+customer_po_number+'"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=orchestraSetPO(this,"' + value.tableID + '","' + value.tableName + '","' + po_file + '")><span class="fa fa-check"></span></button></span></div></div></td>';
+                 tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" onkeypress="return AvoidSpace(event)" name="orchestra-po" id="orchestra-po-'+value.tableID+'" class="form-control input-sm orchestra-po" placeholder="Enter PO" maxlength="11" value="'+customer_po_number+'"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default orchestra-po-submit" onclick=orchestraSetPO(this,"' + value.tableID + '","' + value.tableName + '","' + po_file + '")><span class="fa fa-check"></span></button></span></div></div></td>';
              } else if (key == "OrderDate") {
                  if (value['is_order_count_empty'] == 0) {
-                 //	alert(value[key]);
                      var orderDate = value[key];
                      tr += '<td align="center">' + orderDate + '</td>';
                  } else {
@@ -4296,13 +4291,6 @@ function orchestraStatusTable(data, path) {
                      span_style = '<span title="Repeat Order" class="batch-reorder">R</span>'
                  }
                  var style_no = value.UVC;
-//                    var zone = value.Zone
-//                    var style_no = "";
-//                    if (zone == "CE") {
-//                        style_no = value.ce_style_ref;
-//                    } else {
-//                        style_no = value.uk_style_ref;
-//                    }
                  tr += '<td align="center" data-id="' + value.tableID + '" data-table="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>' + span_style + '' + style_no + '</a></td>';
              } else if (key == "Actions") {
                  var po_file = value['po_file'];
@@ -4349,24 +4337,24 @@ function orchestraStatusTable(data, path) {
      }
      tr += '</tr>';
  })
- return '<table id="datatable-tesco-orders" class="table table-hover table-striped table-bordered" style="width: 100%"><thead><tr>' + th + '</tr></thead><tbody>' + tr + '</tbody></table></div></div></div></div></div></div>';
+ return '<table id="datatable-orchestra-orders" class="table table-hover table-striped table-bordered" style="width: 100%"><thead><tr>' + th + '</tr></thead><tbody>' + tr + '</tbody></table></div></div></div></div></div></div>';
 }
 
 
 /**
-* [tescoSetPO description]
+* [orchestraSetPO for updating orchestra customer po]
 * @param  {[type]} obj [description]
 * @param  {[type]} id  [description]
 * @return {[type]}     [description]
 */
 function orchestraSetPO(obj, id, tableName, po_file) {
- $('.tesco-po').css('border-color', '');
- var po_number = $(obj).closest('tr').find('.tesco-po').val();
+ $('.orchestra-po').css('border-color', '');
+ var po_number = $(obj).closest('tr').find('.orchestra-po').val();
  var csrf_token = $('meta[name="csrf-token"]').attr('content');
  var buyer_id = localStorage.getItem("buyer_id");
  if (po_number != "") {
      $.ajax({
-         url: base_url + "/admin/orchestra/order-management/set-po-number",
+         url: base_url + "/customer/orchestra/order-management/set-po-number",
          type: "Post",
          dataType: "json",
          data: {
@@ -4384,20 +4372,15 @@ function orchestraSetPO(obj, id, tableName, po_file) {
              200: function (data) {
                  $('#snackbar').css('background-color', '#00b6ff');
                  $('.snackbar_span').html(data.message);
-                 //$(obj).closest('tr').find('.tesco-po').val(po_number);
-                // $(obj).closest('tr').find('.po-span').addClass('hidden');
-                 $ponumber = $(obj).closest('tr').find('.tesco-po').val();
-                 // $div = $(obj).closest('tr').find('.text-center');
-                 // $(obj).closest('tr').find('.tesco-po').parent().parent().remove();
-                 // $div.text($ponumber)
+                 $ponumber = $(obj).closest('tr').find('.orchestra-po').val();
                  if ($(obj).closest('tr').find('.po_class').text() == "PO Pending" && po_file != "null") {
                      $(obj).closest('tr').find('.po_class').html("PO Uploaded")
                      $(obj).closest('tr').find('.po_class').removeClass("label-POPending").addClass('label-POUploaded');
                  }
                  showSnackbar();
                  if (po_number == "") {
-                     $(obj).closest('tr').find('.tesco-po').attr('disabled');
-                     $(obj).closest('tr').find('.tesco-po').attr('placeholder', "Enter PO");
+                     $(obj).closest('tr').find('.orchestra-po').attr('disabled');
+                     $(obj).closest('tr').find('.orchestra-po').attr('placeholder', "Enter PO");
                  }
 
              },
@@ -4419,14 +4402,15 @@ function orchestraSetPO(obj, id, tableName, po_file) {
          }
      })
  } else {
-     $(obj).closest('tr').find('.tesco-po').focus();
-     $(obj).closest('tr').find('.tesco-po').css('border-color', '#F44336');
+     $(obj).closest('tr').find('.orchestra-po').focus();
+     $(obj).closest('tr').find('.orchestra-po').css('border-color', '#F44336');
      $('.snackbar_span').html('Please enter a valid PO number');
      showSnackbar();
  }
 }
+
 /**
-* [tescoPOUpload description]
+* [orchestraPOUpload  for customer po file upload]
 * @param  {[type]} obj [description]
 * @param  {[type]} id  [description]
 * @return {[type]}     [description]
@@ -4434,7 +4418,7 @@ function orchestraSetPO(obj, id, tableName, po_file) {
 function orchestraPOUpload(obj, id, po_file, tableName) {
  var csrf_token = $('meta[name="csrf-token"]').attr('content');
  $.ajax({
-     url: base_url + "/admin/orchestra/get-erp-status",
+     url: base_url + "/customer/orchestra/get-erp-status",
      type: 'get',
      data: {
          table_name: tableName,

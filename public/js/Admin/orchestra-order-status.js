@@ -516,7 +516,7 @@ function orderStatus() {
 
                 });
 
-                var $tableSel = $('#datatable-tesco-orders');
+                var $tableSel = $('#datatable-orchestra-orders');
                 $tableSel.DataTable({
                     "pageLength": 25,
                     "order": [
@@ -617,9 +617,9 @@ function orderStatus() {
                 $('.pi-view').tooltip('toggle')
                 $('.po-view').tooltip('show')
                 $('.po-view').tooltip('toggle')
-                $("#datatable-tesco-orders_filter input").addClass('form-control input-sm');
-                $("#datatable-tesco-orders_filter input").attr('placeholder', 'Data Search');
-                $('#datatable-tesco-orders_length select').addClass('form-control input-sm');
+                $("#datatable-orchestra-orders_filter input").addClass('form-control input-sm');
+                $("#datatable-orchestra-orders_filter input").attr('placeholder', 'Data Search');
+                $('#datatable-orchestra-orders_length select').addClass('form-control input-sm');
             },
             400: function () {
                 $('.snackbar_span').html('Something went wrong');
@@ -690,7 +690,7 @@ var normalizeDate = function (dateString) {
 
 
 /**
- * [method append data to tescoStatusTable ]
+ * [method append data to orchestraStatusTable ]
  * @param  {[type]} data [description]
  * @param  {[type]} path [description]
  * @return {[type]}      [description]
@@ -781,13 +781,6 @@ function orchestraStatusTable(data, path) {
                         span_style = '<span title="Repeat Order" class="batch-reorder">R</span>'
                     }
 					var style_no = value.UVC;
-//                    var zone = value.Zone
-//                    var style_no = "";
-//                    if (zone == "CE") {
-//                        style_no = value.ce_style_ref;
-//                    } else {
-//                        style_no = value.uk_style_ref;
-//                    }
                     tr += '<td align="center" data-id="' + value.tableID + '" data-table="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>' + span_style + '' + style_no + '</a></td>';
                 } else if (key == "Actions") {
                     var po_file = value['po_file'];
@@ -834,12 +827,12 @@ function orchestraStatusTable(data, path) {
         }
         tr += '</tr>';
     })
-    return '<table id="datatable-tesco-orders" class="table table-hover table-striped table-bordered" style="width: 100%"><thead><tr>' + th + '</tr></thead><tbody>' + tr + '</tbody></table></div></div></div></div></div></div>';
+    return '<table id="datatable-orchestra-orders" class="table table-hover table-striped table-bordered" style="width: 100%"><thead><tr>' + th + '</tr></thead><tbody>' + tr + '</tbody></table></div></div></div></div></div></div>';
 }
 
 
 /**
- * [tescoSetPO description]
+ * [orchestraSetPO for updating orchestra customer po]
  * @param  {[type]} obj [description]
  * @param  {[type]} id  [description]
  * @return {[type]}     [description]
@@ -906,7 +899,7 @@ function orchestraSetPO(obj, id, tableName, po_file) {
     }
 }
 /**
- * [orchestraPOUpload description]
+ * [orchestraPOUpload for customer po file upload]
  * @param  {[type]} obj [description]
  * @param  {[type]} id  [description]
  * @return {[type]}     [description]

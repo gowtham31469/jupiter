@@ -196,11 +196,11 @@ class ErpOrders
 
 			$customer_data  = DB::table('customers')->where('id',$orders->customer_id)->first();
 
-			if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
+			if ($customer_data->pi_required === 1 && $customer_data->po_required === 0) {
 				$po_no     = $orders->pi_id;
 				$po_file   = $orders->pi_file;
 			}
-			else if($customer_data->po_required== 1){
+			else if($customer_data->po_required === 1){
 				$po_no     = $orders->po_number;
 				$po_file   = $orders->po_file;
 			}

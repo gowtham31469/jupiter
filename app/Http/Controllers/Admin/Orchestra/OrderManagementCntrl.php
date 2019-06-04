@@ -103,18 +103,6 @@ class OrderManagementCntrl extends Controller
     public function Orders()
     {
         $data['sticker_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id',DB::raw("'-' as \"Season\""),'BuyerPONo','SupplierName','NomApple as Style_Name','Quantity','IsSTD as Type',DB::raw("'Stickers' as \"OrderType\""),'sticker_order_status as Order Status',DB::raw("'-' as \"Disney\""))->groupBy('id','UVC')->get();
-		
-//		foreach($data['sticker_orders'] as $value)
-//		{
-//			if($value->Type == 0)
-//			{
-//				
-//			}
-//			else
-//			{
-//				
-//			}
-//		}
 
         $data['label_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id','Season_Code as Season',DB::raw("'-' as \"BuyerPONo\""),'SupplierName','Theme as Description','NomApple as Style_Name','Licence_Code as Disney',DB::raw("'-' as \"Type\""),'Quantity',DB::raw("'Labels' as \"OrderType\""),'order_status as Order Status')->groupBy('id','UVC')->get();
         
@@ -1961,7 +1949,7 @@ class OrderManagementCntrl extends Controller
 				DB::table($value[0])->where('id',$value[1])
                 ->update([
                     'po_number' => $po,
-                    'po_status' => "PO Uploaded",
+                    'po_status' => "PO Pending",
                     'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                 ]);
 		}
