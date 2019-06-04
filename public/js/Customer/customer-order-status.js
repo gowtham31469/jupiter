@@ -4291,7 +4291,7 @@ function orchestraStatusTable(data, path) {
                      span_style = '<span title="Repeat Order" class="batch-reorder">R</span>'
                  }
                  var style_no = value.UVC;
-                 tr += '<td align="center" data-id="' + value.tableID + '" data-table="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>' + span_style + '' + style_no + '</a></td>';
+                 tr += '<td align="center" data-id="' + value.tableID + '" data-table="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '"><a class="" href="javascript:void(0)" onclick="">' + span_style + '' + style_no + '</a></td>';
              } else if (key == "Actions") {
                  var po_file = value['po_file'];
                  if (po_file != null) {

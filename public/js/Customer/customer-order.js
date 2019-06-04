@@ -4555,8 +4555,6 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 					$('#po-file-upload-div').find('#exist_artwork_div ul').append('<li data-id="'+value1.type+'-'+value1.id+'" data-company="'+value1.company_id+'" class="list-group-item">'+value1.TemplateName+" - "+value1.TemplateType+'</li>')
 				});
 				
-				
-				
 				//Start bootstrap checkbox 
 				
 				$('.list-group.checked-list-box .list-group-item').each(function () {
