@@ -1178,6 +1178,8 @@ class OrchestraSettings extends Controller
     public function addOrchestraSymbols(Request $request)
     {
         try {
+
+          
           $destination_path='images/WashCareSymbols/';
           $destination_path_db='/images/WashCareSymbols/';
           $cofreet_symbols= $request->file('cofreet_symbols');
@@ -1186,44 +1188,54 @@ class OrchestraSettings extends Controller
           $cofreet_symbols_orname = $cofreet_symbols->getClientOriginalName();
           $astms_symbol_orname = $astms_symbol->getClientOriginalName();
 
-          $cofreet_symbols_filename= str_random(6).'_'.$cofreet_symbols_orname;
-          $astms_symbol_filename= str_random(6).'_'.$astms_symbol_orname;
+          $cofreet_extension = $cofreet_symbols->getClientOriginalExtension();
+          $astms_extension = $astms_symbol->getClientOriginalExtension();
 
-            switch($request->category_id){
-              case 1:
-                $upload_path = 'Washing/';
-                break;
-              case 2:
-                $upload_path = 'Whitening/';
-                break;
-              case 3:
-                $upload_path = 'Dryer/';
-                break;
-              case 4:
-                $upload_path = 'Ironing/';
-                break;
-              case 5:
-                $upload_path = 'Cleaning/';
-                break;
-              default:
-                $upload_path = 'Washing/';
-                break;
-            }
+          if($cofreet_extension === 'png' && $astms_extension === 'png')
+          {
+            $cofreet_symbols_filename= str_random(6).'_'.$cofreet_symbols_orname;
+            $astms_symbol_filename= str_random(6).'_'.$astms_symbol_orname;
 
-            $cofreet_symbols->move($destination_path.$upload_path,$cofreet_symbols_filename);
-            $astms_symbol->move($destination_path.$upload_path,$astms_symbol_filename);
-  
-            $cofreet_path_insert=$destination_path_db.$upload_path.$cofreet_symbols_filename;
-            $astms_path_insert=$destination_path_db.$upload_path.$astms_symbol_filename;
+              switch($request->category_id){
+                case 1:
+                  $upload_path = 'Washing/';
+                  break;
+                case 2:
+                  $upload_path = 'Whitening/';
+                  break;
+                case 3:
+                  $upload_path = 'Dryer/';
+                  break;
+                case 4:
+                  $upload_path = 'Ironing/';
+                  break;
+                case 5:
+                  $upload_path = 'Cleaning/';
+                  break;
+                default:
+                  $upload_path = 'Washing/';
+                  break;
+              }
 
-            $inserted = DB::table('orchestra_care_symbols')->insert([
-                'category_id'     =>  $request->category_id,
-                'cofreet_symbols' =>  $cofreet_path_insert,
-                'astms_symbol'    =>  $astms_path_insert,
-                'care_instruction'=>  $request->care_instruction
-            ]);
+              $cofreet_symbols->move($destination_path.$upload_path,$cofreet_symbols_filename);
+              $astms_symbol->move($destination_path.$upload_path,$astms_symbol_filename);
+    
+              $cofreet_path_insert=$destination_path_db.$upload_path.$cofreet_symbols_filename;
+              $astms_path_insert=$destination_path_db.$upload_path.$astms_symbol_filename;
 
-            $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+              $inserted = DB::table('orchestra_care_symbols')->insert([
+                  'category_id'     =>  $request->category_id,
+                  'cofreet_symbols' =>  $cofreet_path_insert,
+                  'astms_symbol'    =>  $astms_path_insert,
+                  'care_instruction'=>  $request->care_instruction
+              ]);
+          }
+          else   
+          {
+            $inserted = '';
+          }
+
+          $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Unprocessable Format'],422);
 
         } catch (\Exception $e)
         {
