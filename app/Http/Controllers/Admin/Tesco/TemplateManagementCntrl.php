@@ -41,7 +41,7 @@ class TemplateManagementCntrl extends Controller
                 return $view->with(['modules' => $get_main_module]);
             });
             $get_sub_module = $module_var->getSubModules(22);
-            return view('Admin/Orchestra/template-management');
+            return view('Admin/Tesco/template-management');
         }
         else
         {
@@ -84,7 +84,7 @@ class TemplateManagementCntrl extends Controller
                                 ->select('tesco_template.*','tesco_item_master.ref_no','company.name as company_name','tesco_item_master.company_id')
                                 ->join('tesco_item_master','tesco_item_master.id','=','tesco_template.item_id')
                                 ->join('company','company.id','=','tesco_item_master.company_id')
-                                ->where('item_id',$exp)->orderBy('orchestra_template.id','asc')
+                                ->where('item_id',$exp)->orderBy('tesco_template.id','asc')
                                 ->get();
              array_push($view,$treeviewData);
          }

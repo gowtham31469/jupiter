@@ -4876,7 +4876,7 @@ try{
         var div_html = '';
         /** [ store last updated id as hidden input , for approve order functionality] */
         $.each(data.last_insertions, function (index, value) {
-            div_html += '<input id="' + index.replace(' ', '') + '_id" name="' + index.replace(' ', '') + '_id" type="hidden" value="' + value + '">';
+            div_html += '<input class="table-id-hidden" id="' + index.replace(' ', '') + '_id" name="' + index.replace(' ', '') + '_id" type="hidden" value="' + value + '">';
         });
         $('.invisible-div').html(div_html);
         $('.snackbar_span').html('Your order has been placed successfully');
@@ -6647,7 +6647,7 @@ function mapStoredValues(oDetails) {
         /** [ store last updated id as hidden input , for updating] */
         for (var k in last_insertions){
             if (last_insertions.hasOwnProperty(k)) {
-                 div_html += '<input id="'+k+'" name="'+k+'" type="hidden" value="'+last_insertions[k]+'">';
+                 div_html += '<input class="table-id-hidden" id="'+k+'" name="'+k+'" type="hidden" value="'+last_insertions[k]+'">';
             }
         }
         $('.invisible-div').html(div_html);
@@ -6809,7 +6809,7 @@ function afterOrderSaved(data)
          var div_html='';
          /** [ store last updated id as hidden input , for updating] */
          $.each(data.last_insertions, function (index, value) {
-             div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+             div_html += '<input class="table-id-hidden" id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
          });
          $('.invisible-div').html(div_html);
      }

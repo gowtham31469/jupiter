@@ -1,0 +1,34 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class AddOrderStatusIdToErpOrderDetailsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table('erp_order_details', function (Blueprint $table) {
+            $table->integer('order_status_id')->nullable();
+            $table->foreign('order_status_id')->references('id')->on('orders_status')->onDelete('cascade');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('erp_order_details', function (Blueprint $table) {
+            $table->dropForeign('erp_order_details_order_status_id_foreign');
+            $table->dropColumn('order_status_id');
+        });
+    }
+}
