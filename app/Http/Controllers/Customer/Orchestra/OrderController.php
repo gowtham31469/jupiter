@@ -29,6 +29,8 @@ use View;
 use DB;
 use Auth;
 use App\Classes\ERPOrderStatusCheck;
+use App\Classes\ErpOrders;
+use Carbon\Carbon;
 
 class OrderController extends Controller
 {
@@ -70,23 +72,23 @@ class OrderController extends Controller
         
     } 
     
-    public function labelOrders()
-    {
-            $orders = DB::table('orchestra_item_details')->select('id','UVC','Collection as Season','SupplierName','Description','Theme','Style_Name','Disney','Quantity')->groupBy('UVC')->get();
-            echo json_encode($orders);
-    } 
-    public function backLabelOrders()
-    {
-            $data['orders'] = DB::table('orchestra_item_details')->select('id','UVC','Collection as Season','SupplierName','Description','Theme','Style_Name','Disney','Quantity')->groupBy('UVC')->get();
-            $data['buyer'] =DB::table('buyers')->select('*')->where('is_active','=',1)->get();
-            echo json_encode($data);
-    } 
-    public function backStickerOrders()
-    {
-            $data['orders'] = DB::table('orchestra_parcel_details')->select('id','UVC','BuyerPONo','SupplierName','Theme','Quantity','IsSTD as Type')->get();
-            $data['buyer'] =DB::table('buyers')->select('*')->where('is_active','=',1)->get();
-            echo json_encode($data);
-    }
+    // public function labelOrders()
+    // {
+    //         $orders = DB::table('orchestra_item_details')->select('id','UVC','Collection as Season','SupplierName','Description','Theme','Style_Name','Disney','Quantity')->groupBy('UVC')->get();
+    //         echo json_encode($orders);
+    // } 
+    // public function backLabelOrders()
+    // {
+    //         $data['orders'] = DB::table('orchestra_item_details')->select('id','UVC','Collection as Season','SupplierName','Description','Theme','Style_Name','Disney','Quantity')->groupBy('UVC')->get();
+    //         $data['buyer'] =DB::table('buyers')->select('*')->where('is_active','=',1)->get();
+    //         echo json_encode($data);
+    // } 
+    // public function backStickerOrders()
+    // {
+    //         $data['orders'] = DB::table('orchestra_parcel_details')->select('id','UVC','BuyerPONo','SupplierName','Theme','Quantity','IsSTD as Type')->get();
+    //         $data['buyer'] =DB::table('buyers')->select('*')->where('is_active','=',1)->get();
+    //         echo json_encode($data);
+    // }
     public function Orders()
     {
 		 $company_id = Auth::guard('web_customer')->user()->company_id;
@@ -213,7 +215,7 @@ class OrderController extends Controller
                 $orchestra_template_front = DB::table('orchestra_template')->select('*')->where('item_id','2')->where('disney',1)->get();
                 $data['orchestra_template_front']=$orchestra_template_front;
 				
-				 $treeviewData= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no IS NULL THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','78')->orWhere('tag_name','disney')->orderBy('item_name', 'asc')->get()->toArray();
+				 $treeviewData= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','78')->orWhere('tag_name','disney')->orderBy('item_name', 'asc')->get()->toArray();
             if($treeviewData){
                         $childs = array();
                         foreach($treeviewData as &$item) 
@@ -249,7 +251,7 @@ class OrderController extends Controller
                 $data['orchestra_template_front']=$orchestra_template_front;
 				
 				
-				 $treeviewData= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no IS NULL THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','78')->orWhere('tag_name','hang')->orWhere('id','79')->orWhere('id','80')->orderBy('item_name', 'asc')->get()->toArray();
+				 $treeviewData= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','78')->orWhere('tag_name','hang')->orWhere('id','79')->orWhere('id','80')->orderBy('item_name', 'asc')->get()->toArray();
             if($treeviewData){
                         $childs = array();
                         foreach($treeviewData as &$item) 
@@ -274,7 +276,7 @@ class OrderController extends Controller
          // $treeviewData= DB::table("orchestra_item_master")->select('id','item_name as text','parent_id')->orWhere('id','6')->orWhere('parent_id','6')->orWhere('id','1')->get()->toArray();
          
         
-        $treeviewspecial= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no IS NULL THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','78')->orWhere('id','79')->orWhere('id','80')->orWhere('tag_name','special')->orderBy('item_name', 'asc')->get()->toArray();
+        $treeviewspecial= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','78')->orWhere('id','79')->orWhere('id','80')->orWhere('tag_name','special')->orderBy('item_name', 'asc')->get()->toArray();
             if($treeviewspecial){
                         $childs = array();
                         foreach($treeviewspecial as &$item) 
@@ -633,7 +635,7 @@ class OrderController extends Controller
 				$po_status="PO Pending";
 				$pi_status="";
 			}
-			$status="Approved";
+			$status="Order Approved";
 		}
 		else
 		{
@@ -654,7 +656,8 @@ class OrderController extends Controller
 					    'cm'    => $cm,
 					    'in'    => $in,
 					    'pi_status'           => $pi_status,
-					   	'po_status'           => $po_status,
+                        'po_status'           => $po_status,
+                        'customer_id'    => $factory{0}->id,
                   ]);
                 $deleted = HangTagOrdersQty::where('oht_id', '=', $id)
                             ->delete();
@@ -686,7 +689,8 @@ class OrderController extends Controller
 				 					'cm'    => $cm,
 				 					'in'    => $in,
 				 					'pi_status'           => $pi_status,
-				 					'po_status'           => $po_status,
+                                    'po_status'           => $po_status,
+                                    'customer_id'    => $factory{0}->id,
                          ]);
             $i=0;
             foreach($tot_qty_table as $value)
@@ -748,7 +752,7 @@ class OrderController extends Controller
 				$po_status="PO Pending";
 				$pi_status="";
 			}
-			$status="Approved";
+			$status="Order Approved";
 		}
 		else
 		{
@@ -766,7 +770,8 @@ class OrderController extends Controller
 					    'final_qty'    => $tot_qty_table, 
                         'status'    => $status,
 					    'pi_status'           => $pi_status,
-				 		'po_status'           => $po_status,
+                        'po_status'           => $po_status,
+                        'customer_id'    => $factory{0}->id,
                   ]);
 //                $deleted = SpecialTagOrdersQty::where('ost_id', '=', $id)
 //                            ->delete();
@@ -796,7 +801,8 @@ class OrderController extends Controller
 				 					'final_qty'    => $tot_qty_table,
                                     'status'    => $status,
 				 					'pi_status'           => $pi_status,
-				 					'po_status'           => $po_status,
+                                    'po_status'           => $po_status,
+                                    'customer_id'    => $factory{0}->id,
                          ]);
 //            $i=0;
 //            foreach($tot_qty_table as $value)
@@ -869,7 +875,7 @@ class OrderController extends Controller
 				$po_status="PO Pending";
 				$pi_status="";
 			}
-			$status="Approved";
+			$status="Order Approved";
 		}
 		else
 		{
@@ -889,7 +895,8 @@ class OrderController extends Controller
 					    'total_flag'    => $main_flag, 
                         'status'    => $status,
 					    'pi_status'           => $pi_status,
-				 		'po_status'           => $po_status,
+                        'po_status'           => $po_status,
+                        'customer_id'    => $factory{0}->id,
                   ]);
                 $deleted = MainLabelOrdersQty::where('oml_id', '=', $id)
                             ->delete();
@@ -922,7 +929,8 @@ class OrderController extends Controller
                                 'svg_path'    => "", 
                                 'status'    => $status,
 				   				'pi_status'           => $pi_status,
-				 				'po_status'           => $po_status,
+                                'po_status'           => $po_status,
+                                'customer_id'    => $factory{0}->id,
                      ]);
                 $i=0;
                 foreach($tot_qty_table as $value)
@@ -990,7 +998,7 @@ class OrderController extends Controller
 				$po_status="PO Pending";
 				$pi_status="";
 			}
-			$status="Approved";
+			$status="Order Approved";
 		}
 		else
 		{
@@ -1008,9 +1016,10 @@ class OrderController extends Controller
                         'height'           => $height,  
                         'svg_path'         => "", 
                         'status'           => $status,
-					    'pi_status'           => $pi_status,
-				 		'po_status'           => $po_status,
-                        'group_id'    => $age,
+					    'pi_status'        => $pi_status,
+				 		'po_status'        => $po_status,
+                        'group_id'         => $age,
+                        'customer_id'      => $factory{0}->id,
                   ]);
             
                  $deleted = SolidPolyStickerOrdersQty::where('ospbs_id', '=', $poly_id)
@@ -1045,6 +1054,7 @@ class OrderController extends Controller
 				  				'pi_status'           => $pi_status,
 				 				'po_status'           => $po_status,
                                 'group_id'    => $age,
+                                'customer_id'    => $factory{0}->id,
                      ]);
                 $j=0;
                 foreach($tot_qty_poly as $value)
@@ -1074,7 +1084,8 @@ class OrderController extends Controller
                         'svg_path'         => "", 
                         'status'           => $status,
 					    'pi_status'           => $pi_status,
-				 		'po_status'           => $po_status,
+                        'po_status'           => $po_status,
+                        'customer_id'    => $factory{0}->id,
                   ]);
                 $deleted = SolidCartonStickerOrdersQty::where('oscs_id', '=', $carton_id)
                             ->delete();
@@ -1108,7 +1119,8 @@ class OrderController extends Controller
                                 'svg_path'    => "", 
                                 'status'    => $status,
 				   				'pi_status'           => $pi_status,
-				 				'po_status'           => $po_status,
+                                'po_status'           => $po_status,
+                                'customer_id'    => $factory{0}->id,
                      ]);
                 $i=0;
                 foreach($tot_qty_carton as $value)
@@ -1179,7 +1191,7 @@ class OrderController extends Controller
 				$po_status="PO Pending";
 				$pi_status="";
 			}
-			$status="Approved";
+			$status="Order Approved";
 		}
 		else
 		{
@@ -1206,6 +1218,7 @@ class OrderController extends Controller
 					   	'pi_status'           => $pi_status,
 					   	'po_status'           => $po_status,
                         'group_id'    => $age,
+                        'customer_id'    => $factory{0}->id,
                   ]);
 			
 					$deleted = StandardPolyStickersQty::where('ospbs_id', '=', $poly_id)
@@ -1241,6 +1254,7 @@ class OrderController extends Controller
 						  		'pi_status'           => $pi_status,
 								'po_status'           => $po_status,
                                 'group_id'    => $age,
+                                'customer_id'    => $factory{0}->id,
                      ]);
 			
 				StandardPolyStickersQty::create([
@@ -1272,7 +1286,8 @@ class OrderController extends Controller
                         'svg_path'         => "", 
                         'status'           => $status,
 					    'pi_status'           => $pi_status,
-					   	'po_status'           => $po_status,
+                        'po_status'           => $po_status,
+                        'customer_id'    => $factory{0}->id,
                   ]);
 			
 			$deleted = StandardCartonStickersQty::where('oscs_id', '=', $carton_id)
@@ -1306,7 +1321,8 @@ class OrderController extends Controller
                                 'svg_path'    => "", 
                                 'status'    => $status,
 				   				'pi_status'           => $pi_status,
-				   				'po_status'           => $po_status,
+                                'po_status'           => $po_status,
+                                'customer_id'    => $factory{0}->id,
                      ]);
 			
 				StandardCartonStickersQty::create([
@@ -1406,7 +1422,8 @@ class OrderController extends Controller
 					    'in'    => $in, 
                         'status'    => "Buyer Approval Pending",
 					    'pi_status'           => $pi_status,
-					   	'po_status'           => $po_status,
+                        'po_status'           => $po_status,
+                        'customer_id'    => $factory{0}->id,
                   ]);
                 $deleted = WashLabelOrdersQty::where('owcl_id', '=', $id)
                             ->delete();
@@ -1476,7 +1493,8 @@ class OrderController extends Controller
 				   				'in'    => $in, 
                                 'status'    => "Buyer Approval Pending",
 				   				'pi_status'           => $pi_status,
-				   				'po_status'           => $po_status,
+                                'po_status'           => $po_status,
+                                'customer_id'    => $factory{0}->id,
                      ]);
                 $i=0;
                 foreach($tot_qty_table as $value)
@@ -1533,6 +1551,347 @@ class OrderController extends Controller
     public function removeWashLabel(Request $request)
     {
          $deleted = WashLabelOrders::where('id', '=', $request->id)->delete();
+    }
+
+    /**
+     * This Function is used to get the existing artworks for populating in the modal.
+     *
+     * @return Void
+     */
+	
+    public function getExistingLabelOrdersPo(Request $request)
+    {
+		 $uvc        =   $request->uvc;
+        $data['orchestra_hang_tag_orders']=DB::table('orchestra_hang_tag_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_hang_tag_orders.template_front_id')->select('orchestra_hang_tag_orders.*','orchestra_item_master.company_id',DB::raw("'Hang Tag' as \"TemplateName\""),DB::raw("'Hang Tag' as \"TemplateType\""),DB::raw("'orchestra_hang_tag_orders' as \"type\""))->where('uvc',$uvc)->get();
+
+        $data['orchestra_special_tag_orders']=DB::table('orchestra_special_tag_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_special_tag_orders.template_id')->select('orchestra_special_tag_orders.*','orchestra_item_master.company_id',DB::raw("'Special Tag' as \"TemplateName\""),DB::raw("'Special Tag' as \"TemplateType\""),DB::raw("'orchestra_special_tag_orders' as \"type\""))->where('uvc',$uvc)->get();
+
+        $data['orchestra_main_label_orders']=DB::table('orchestra_main_label_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_main_label_orders.template_id')->select('orchestra_main_label_orders.*','orchestra_item_master.company_id','orchestra_main_label_orders.template_name as TemplateName',DB::raw("'Main and Size Labels' as \"TemplateType\""),DB::raw("'orchestra_main_label_orders' as \"type\""))->where('uvc',$uvc)->get();
+
+        $data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_wash_care_label_orders.template_id')->select('orchestra_wash_care_label_orders.*','orchestra_item_master.company_id','orchestra_wash_care_label_orders.template_name as TemplateName',DB::raw("'Wash Care Labels' as \"TemplateType\""),DB::raw("'orchestra_wash_care_label_orders' as \"type\""))->where('uvc',$uvc)->get();
+
+		 echo json_encode($data);
+    }
+
+    /**
+     * This Function is used to get the existing artworks for populating in the modal.
+     *
+     * @return Void
+     */
+	
+    public function getExistingStandardStickerOrdersPo(Request $request)
+    {
+		 $uvc        =   $request->uvc;
+	
+		 $data['orchestra_standard_carton_sticker_orders']=DB::table('orchestra_standard_carton_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_standard_carton_sticker_orders.template_id')->select('orchestra_standard_carton_sticker_orders.*','orchestra_item_master.company_id', DB::raw("'Standard Carton Stickers' as \"TemplateName\""),DB::raw("'Standard Carton Stickers' as \"TemplateType\""),DB::raw("'orchestra_standard_carton_sticker_orders' as \"type\""))->where('uvc',$uvc)->get();
+		
+		 $data['orchestra_standard_polybag_sticker_orders']=DB::table('orchestra_standard_polybag_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_standard_polybag_sticker_orders.template_id')->select('orchestra_standard_polybag_sticker_orders.*','orchestra_item_master.company_id', DB::raw("'Standard Poly Bag Stickers' as \"TemplateName\""),DB::raw("'Standard Poly Bag Stickers' as \"TemplateType\""),DB::raw("'orchestra_standard_polybag_sticker_orders' as \"type\""))->where('uvc',$uvc)->get();
+		
+		 echo json_encode($data);
+    } 
+
+   /**
+     * This Function is used to get the existing artworks for populating in the modal.
+     *
+     * @return Void
+     */
+	
+    public function getExistingSolidStickerOrdersPo(Request $request)
+    {
+		 $uvc        =   $request->uvc;
+		
+		 $data['orchestra_solid_carton_sticker_orders']=DB::table('orchestra_solid_carton_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_solid_carton_sticker_orders.template_id')->select('orchestra_solid_carton_sticker_orders.*','orchestra_item_master.company_id', DB::raw("'Solid Carton Stickers' as \"TemplateName\""),DB::raw("'Solid Carton Stickers' as \"TemplateType\""),DB::raw("'orchestra_solid_carton_sticker_orders' as \"type\""))->where('uvc',$uvc)->get();
+		
+         $data['orchestra_solid_poly_bag_sticker_orders']=DB::table('orchestra_solid_poly_bag_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_solid_poly_bag_sticker_orders.template_id')->select('orchestra_solid_poly_bag_sticker_orders.*','orchestra_item_master.company_id', DB::raw("'Solid Poly Bag Stickers' as \"TemplateName\""),DB::raw("'Solid Poly Bag Stickers' as \"TemplateType\""),DB::raw("'orchestra_solid_poly_bag_sticker_orders' as \"type\""))->where('uvc',$uvc)->get();
+		
+		 echo json_encode($data);
+    } 
+
+    /**
+     * This Function is used to get the existing artworks for populating in the modal.
+     *
+     * @return Void
+     */
+	
+    public function getExistingLabelOrderStatusPo(Request $request)
+    {
+		 $uvc        =   $request->uvc;
+          $data['orchestra_hang_tag_orders']=DB::table('orchestra_hang_tag_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_hang_tag_orders.template_front_id')->select('orchestra_hang_tag_orders.*','orchestra_item_master.company_id', DB::raw("'Hang Tag' as \"TemplateName\""),DB::raw("'Hang Tag' as \"TemplateType\""),DB::raw("'orchestra_hang_tag_orders' as \"tableName\""))->where('uvc',$uvc)->get();
+		
+		  $data['orchestra_special_tag_orders']=DB::table('orchestra_special_tag_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_special_tag_orders.template_id')->select('orchestra_special_tag_orders.*','orchestra_item_master.company_id', DB::raw("'Special Tag' as \"TemplateName\""),DB::raw("'Special Tag' as \"TemplateType\""),DB::raw("'orchestra_special_tag_orders' as \"tableName\""))->where('uvc',$uvc)->get();
+		
+		  $data['orchestra_main_label_orders']=DB::table('orchestra_main_label_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_main_label_orders.template_id')->select('orchestra_main_label_orders.*','orchestra_item_master.company_id','orchestra_main_label_orders.template_name as TemplateName',DB::raw("'Main and Size Labels' as \"TemplateType\""),DB::raw("'orchestra_main_label_orders' as \"tableName\""))->where('uvc',$uvc)->get();
+		
+		  $data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_wash_care_label_orders.template_id')->select('orchestra_wash_care_label_orders.*','orchestra_item_master.company_id','orchestra_wash_care_label_orders.template_name as TemplateName',DB::raw("'Wash Care Labels' as \"TemplateType\""),DB::raw("'orchestra_wash_care_label_orders' as \"tableName\""))->where('uvc',$uvc)->get();
+		
+		  $data['orchestra_solid_carton_sticker_orders']=DB::table('orchestra_solid_carton_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_solid_carton_sticker_orders.template_id')->select('orchestra_solid_carton_sticker_orders.*','orchestra_item_master.company_id',DB::raw("'Solid Carton Stickers' as \"TemplateName\""),DB::raw("'Solid Carton Stickers' as \"TemplateType\""),DB::raw("'orchestra_solid_carton_sticker_orders' as \"tableName\""))->where('uvc',$uvc)->get();
+		
+		  $data['orchestra_solid_poly_bag_sticker_orders']=DB::table('orchestra_solid_poly_bag_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_solid_poly_bag_sticker_orders.template_id')->select('orchestra_solid_poly_bag_sticker_orders.*','orchestra_item_master.company_id',DB::raw("'Solid Poly Bag Stickers' as \"TemplateName\""),DB::raw("'Solid Poly Bag Stickers' as \"TemplateType\""),DB::raw("'orchestra_solid_poly_bag_sticker_orders' as \"tableName\""))->where('uvc',$uvc)->get();
+		
+		 $data['orchestra_standard_carton_sticker_orders']=DB::table('orchestra_standard_carton_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_standard_carton_sticker_orders.template_id')->select('orchestra_standard_carton_sticker_orders.*','orchestra_item_master.company_id',DB::raw("'Standard Carton Stickers' as \"TemplateName\""),DB::raw("'Standard Carton Stickers' as \"TemplateType\""),DB::raw("'orchestra_standard_carton_sticker_orders' as \"tableName\""))->where('uvc',$uvc)->get();
+		
+		 $data['orchestra_standard_polybag_sticker_orders']=DB::table('orchestra_standard_polybag_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_standard_polybag_sticker_orders.template_id')->select('orchestra_standard_polybag_sticker_orders.*','orchestra_item_master.company_id',DB::raw("'Standard Poly Bag Stickers' as \"TemplateName\""),DB::raw("'Standard Poly Bag Stickers' as \"TemplateType\""),DB::raw("'orchestra_standard_polybag_sticker_orders' as \"tableName\""))->where('uvc',$uvc)->get();
+		
+		
+		 echo json_encode($data);
+    } 
+
+    /**
+     * This Function is used to map the existing PO to new artworks.
+     *
+     * @return Void
+     */
+	public function mapLabelOrdersPo(Request $request)
+    {
+		 $id        =   explode(',',$request->id);
+		 $po        =   $request->po;
+		
+		foreach($id as $val)
+		{
+				$value    =  explode('-',$val);
+			
+				DB::table($value[0])->where('id',$value[1])
+                ->update([
+                    'po_number' => $po,
+                    'po_status' => "PO Pending",
+                    'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
+                ]);
+		}
+		return response()->json(['error'=> false,'message' =>'success'],200);
+    }
+	/**
+     * This Function is used to update the po number and po file to the new artworks.
+     *
+     * @return Void
+     */
+	public function updateLabelOrdersPO(Request $request)
+    {
+        try
+        {  
+            $erp_obj   =   new ErpOrders();
+            $id        =   explode(',',$request->id);
+            $po        =   $request->po;
+            $po_file   =   $request->po_file;
+           
+            $destination_path_insert = "";
+            $destination_path_db = "";
+
+            if( $request->hasFile('po_file'))
+            {
+                $file = $request->file('po_file');
+                $destination_path = 'storage/app/public/po-files/';
+                $destination_path_db = '/storage/app/public/po-files/';
+                $Orname = $file->getClientOriginalName();
+                $filename = str_random(6).'_'.$Orname;
+                $file->move($destination_path,$filename);
+                $destination_path_insert = $destination_path_db.$filename;
+                
+                foreach($id as $val)
+                {
+                    $value    =  explode('-',$val);
+
+                    DB::table($value[0])->where('id',$value[1])
+                        ->update([
+                            'po_number' => $po,
+                            'po_file' => $destination_path_insert,
+                            'po_status' => "PO Uploaded",
+                            'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
+                        ]);
+
+                    /** @var array [Pass array of values to updateOrchestraErpOrders function] */
+                    $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Orchestra')->first();
+                    $request_array = [];
+                    $request_array['id'] = $value[1];
+                    $request_array['tableName'] = $value[0]; 
+                    $request_array['buyer_id'] = $tesco_buyer_id->id; 
+
+                   return $erp_obj->updateOrchestraErpOrders($request_array);
+                }
+            }
+            else
+            {
+                foreach($id as $val)
+                {
+                    $value = explode('-',$val);
+
+                    DB::table($value[0])->where('id',$value[1])
+                        ->update([
+                            'po_number' => $po,
+                            'po_status' => "PO Uploaded",
+                            'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
+                        ]);
+                }
+            }
+            $result = response()->json(['error'=> false,'message' =>'success'],200);
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+    /**
+     * method to set the purchase order number to the respective order
+     * @param Request $request [table_name,po_number, id]
+     */
+    public function setPONumber(Request $request)
+    {
+        try
+        {
+            $erp_obj        = new ErpOrders();
+            $po_number      = $request->po_number;
+			$template_id    = $request->id;
+            $table_name     = $request->tableName; 
+
+            $po_details     = DB::table($table_name)->where('id',$template_id)
+                                ->select('po_file')->first();
+
+            // check order status in erp_oorders table.                    
+            $data_array = [];
+            $data_array['id'] = $request->id;
+            $data_array['table_name'] = $table_name;
+            $class_obj = new ERPOrderStatusCheck();
+            $erp_order_details = $class_obj->OrchestraERPStatus($data_array);
+            
+            if($erp_order_details[0] != null)
+            {
+                if($erp_order_details{0}->status_name != 'Hold For JC Queue' &&  $erp_order_details{0}->status_name != 'Moved To ERP' )
+                {
+                    return response()->json(['error'=> false,'message' =>'Order status is '.$erp_order_details{0}->status_name. '. PO number edit is not allowed.'],403);
+                }
+                
+            }
+            
+            if ($po_details->po_file === null || $po_details->po_file === "null")
+            {
+                $po_status = "PO Pending";
+            }
+            else
+            {
+                $po_status = "PO Uploaded";
+            }
+
+            $data = DB::table($table_name)->where('id',$template_id)
+                    ->update([
+                        'po_number' => $po_number,
+                        'po_status' => $po_status,
+                        'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
+                        ]);
+            if ($po_status == "PO Uploaded") {
+               $erp_obj->updateOrchestraErpOrders($request);
+            }
+
+            return response()->json(['error'=> false,'message' =>'Purchase Order Number added Successfully'],200);
+            
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+    /**
+     * method to set the po number and pdf file for an order
+     * @param po_number and pdf (pdf is optional)
+     * @return \Illuminate\Http\Response
+     */
+    public function setCustomerPOFile(Request $request)
+    {
+        try 
+        {
+            $erp_obj    = new ErpOrders();
+            $table_name = $request->tableName;
+            $row_id     = $request->id;
+            $po_file    = $request->file('file');
+            $path       = $request->file('file')->getRealPath();
+            $filename   = $request->file('file')->getClientOriginalName();
+            $destination_path = '/storage/app/public/po-files/';
+            $path       ='storage/app/public/po-files/';
+            $Orname     = $po_file->getClientOriginalName();
+            $filename   = str_random(6).'_'.preg_replace('/\s+/', '-', $Orname);
+            $po_file->move($path,$filename);
+            $destination_path_insert=$destination_path.$filename;
+
+            $po_details = DB::table($table_name)->where('id',$row_id)->select('po_number')->first();
+
+            $data_array = [];
+            $data_array['id'] = $row_id;
+            $data_array['table_name'] = $table_name;
+            $class_obj = new ERPOrderStatusCheck();
+            $erp_order_details = $class_obj->OrchestraERPStatus($data_array);
+
+            if($erp_order_details[0] != null)
+            {
+                if($erp_order_details{0}->status_name != 'Hold For JC Queue' &&  $erp_order_details{0}->status_name != 'Moved To ERP' )
+                {
+                    return response()->json(['error'=> false,'message' =>'Order status is '.$erp_order_details{0}->status_name. '. PO file upload is not allowed.'],403);
+                }
+                
+            }
+            
+            if ($po_details->po_number === null || $po_details->po_number === "null")
+            {
+                $po_status = "PO Pending";
+            }
+            else
+            {
+                $po_status = "PO Uploaded";
+            }
+            $data   = DB::table($table_name)->where('id',$row_id)
+                        ->update([
+                          'po_file' => $destination_path_insert,
+                          'po_status' => $po_status,
+                          'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
+
+                        ]);
+            if ($po_status == "PO Uploaded") {
+                $request_array = [];
+                $request_array['id'] = $row_id;
+                $request_array['tableName'] = $table_name; 
+                $request_array['buyer_id'] = $request['buyer_id']; 
+
+                $erp_obj->updateOrchestraErpOrders($request_array);
+            }
+            if ($data)
+            {
+               return response()->json(['error'=> false,'message' =>'success','po_file'=>$destination_path_insert],200);
+            }
+            else
+            {
+                return response()->json(['error'=> true,'message' =>'Error'],400);
+            }   
+        }
+        catch (Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        } 
+        return $result;
+    }
+
+    /**
+     * method to get erp status of this order
+     * @param  Request $request [description]
+     * @return ERP_Status          [description]
+     * @author Praveen <praveen@wizroots.com>
+     */
+    public function checkERPStatus(Request $request)
+    {
+        try
+        {   
+            $data_array = [];
+            $data_array['id'] = $request->id;
+            $data_array['table_name'] = $request->table_name;
+            $class_obj = new ERPOrderStatusCheck();
+            $erp_order_details = $class_obj->OrchestraERPStatus($data_array);
+            
+            $result = response()->json(['error'=> false,'message' =>'success','erp_details' => $erp_order_details],200);
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
     }
 }
 

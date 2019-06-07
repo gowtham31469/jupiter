@@ -115,7 +115,7 @@ class JobManagerController extends Controller
 											->where('erp_order_details.template_id', '=', $valuess)
 											// ->where('erp_orders.status', '=', $erp_status_id)
 											->where('erp_order_details.status', '=', $erp_status_id)
-											->where('erp_orders.order_status_id', '=', $order_status_id)
+											->where('erp_order_details.order_status_id', '=', $order_status_id)
 											->whereIn('erp_orders.buyer_id', $buyers)
 											->orderBy('erp_order_details.erp_order_id', 'asc')
 											->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id','tesco_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at')
@@ -1336,40 +1336,6 @@ class JobManagerController extends Controller
            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
        }
     }
-	
-	
-	public function scriptUpdateBuyerNo()
-	{
-		$order_details = DB::table('erp_order_details')->get();
-		
-		foreach($order_details as $value)
-		{
-			
-			
-			$order_details_omp  = 	DB::table($value->order_qnty_table_name)
-									->where('id',$value->order_qnty_table_id)
-									->select('*')
-									->get();
-			
-			$order_table = str_replace("_quanty","",$value->order_qnty_table_name);
-			$order_id  = strtolower(str_replace(" ","",$value->reference_name).'_order_id');
-			
-			$order_omp  = 	DB::table($order_table)
-									->where($order_table.'.id',$order_details_omp{0}->$order_id)
-									->select($order_table.'.*')
-									->get();
-			
-			 $data['custom_name']=DB::table('price_taxation')->where('template_id',$order_omp{0}->template_id)->where('customer_id',$order_omp{0}->tesco_supplier_id)->where('buyer_id',2)->select('*')->get();
-			
-			DB::table('erp_order_details')
-							->where('erp_order_details.id', $value->id)
-							->update([
-								'buyer_po_number'  => $order_omp{0}->po_number,
-								'zone'  => $order_omp{0}->zone,
-								'custom_ref_name'  => $data['custom_name']{0}->custom_name
-							]);
-		}
-	}
 
 	/**
      * Function to get all jobcards list.
@@ -1739,42 +1705,6 @@ class JobManagerController extends Controller
 			return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
 		}
 	}
-	/**
-     * Function to update ordertype value for existing data in erp_order_details table.
-     * @author <Praveen>
-     */
-	public function scriptUpdateOrderType()
-	{
-		$order_details = DB::table('erp_order_details')->get();
-		
-		foreach($order_details as $value)
-		{
-			$order_details_data  = 	DB::table($value->order_qnty_table_name)
-									->where('id',$value->order_qnty_table_id)
-									->select('*')
-									->get();
-			
-			if($order_details_data)
-			{
-				$order_table = str_replace("_quanty","",$value->order_qnty_table_name);
-				$order_id    = strtolower(str_replace(" ","",$value->reference_name).'_order_id');
-				$order_data  = 	DB::table($order_table)
-										->where($order_table.'.id',$order_details_data{0}->$order_id)
-										->select($order_table.'.*')
-										->get();
-				$order_type = $order_data{0}->order_flag;
-			}
-			else
-			{
-				$order_type = 'newOrder';
-			}
-			DB::table('erp_order_details')
-							->where('erp_order_details.id', $value->id)
-							->update([
-								'order_type' => $order_type
-							]);
-		}
-	}
 
 
 	/**
@@ -2112,6 +2042,41 @@ class JobManagerController extends Controller
     			echo $value->order_qnty_table_name;
     		}
     	}
-    }
+		}
+		
+		/**
+		 * Function to update order status id value for existing data in erp_order_details table.
+		 * @author <Praveen>
+		 */
+		public function scriptUpdateOrderStatusId()
+		{
+			$order_details = DB::table('erp_order_details')->get();
+			
+			foreach($order_details as $value)
+			{
+				$order_details_data  = 	DB::table($value->order_qnty_table_name)
+										->where('id',$value->order_qnty_table_id)
+										->select('*')
+										->get();
+				
+				if($order_details_data)
+				{
+					$order_table = str_replace("_quanty","",$value->order_qnty_table_name);
+					$order_id    = strtolower(str_replace(" ","",$value->reference_name).'_order_id');
+					$order_data  = 	DB::table($order_table)
+											->where($order_table.'.id',$order_details_data{0}->$order_id)
+											->select($order_table.'.*')
+											->get();
+					$order_status = $order_data{0}->order_status;
+
+					$order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', $order_status)->first();
+					
+					ErpOrderDetails::where('id',$value->id)
+					->update([
+										'order_status_id'  => $order_status_id->id
+									]);
+				}
+			}
+		}
 
 }

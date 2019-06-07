@@ -211,7 +211,7 @@ function mapStoredValues(oDetails) {
         /** [ store last updated id as hidden input , for updating] */
         for (var k in last_insertions){
             if (last_insertions.hasOwnProperty(k)) {
-                 div_html += '<input id="'+k+'" name="'+k+'" type="hidden" value="'+last_insertions[k]+'">';
+                 div_html += '<input class="table-id-hidden" id="'+k+'" name="'+k+'" type="hidden" value="'+last_insertions[k]+'">';
             }
         }
         $('.invisible-div').html(div_html);

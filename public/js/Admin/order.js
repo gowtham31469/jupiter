@@ -154,7 +154,7 @@ function orderStatus() {
 								$('#exist_artwork_div_status').removeClass('hidden')
 								
 								$.ajax({
-									url: base_url + "/admin/" + buyer + "/order-management/get_existing_label_orders_status_po",
+									url: base_url + "/admin/" + buyer + "/order-management/get-existing-label-orders-po",
 									type: "get",
 									dataType: "json",
 									data: {
@@ -383,7 +383,7 @@ function orderStatus() {
 						form_data.append('po', new_po_no);
 						form_data.append('_token', csrf_token);
 						$.ajax({
-							url: base_url + "/admin/" + buyer + "/order-management/put_existing_label_orders_po_new",
+							url: base_url + "/admin/" + buyer + "/order-management/update-label-orders-po",
 							dataType: 'text',
 							cache: false,
 							contentType: false,
@@ -438,7 +438,7 @@ function orderStatus() {
 							form_data.append('po', new_po_no);
 							form_data.append('_token', csrf_token);
 							$.ajax({
-								url: base_url + "/admin/" + buyer + "/order-management/put_existing_label_orders_po_new",
+								url: base_url + "/admin/" + buyer + "/order-management/update-label-orders-po",
 								dataType: 'text',
 								cache: false,
 								contentType: false,
@@ -486,7 +486,7 @@ function orderStatus() {
 						var aa = a.join(',');
 						var csrf_token = $('meta[name="csrf-token"]').attr('content');
 						$.ajax({
-							url: base_url + "/admin/" + buyer + "/order-management/put_existing_label_orders_po",
+							url: base_url + "/admin/" + buyer + "/order-management/map-label-orders-po",
 							type: "Post",
 							dataType: "json",
 							data: {
@@ -1381,7 +1381,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
     {
         var onclick = "orderStatus()";
     }
-    $('.top-content').append('<form id="solid_carton_form"><h3><i class="ion-ios-browsers-outline"></i> Sticker Order Details for UVC ' + uvc + ' and PO ' + po + '</h3><hr/><h5><span class="sticker-details">Supplier: <strong><span id="supplier">' + data.orchestra_parcel_details[0].SupplierName + '</span></strong> </span> <span class="sticker-details">Edition: <strong><span id="edition">' + data.orchestra_parcel_details[0].EditionNumber + '</span></strong> </span><span class="sticker-details">Version: <strong><span id="version">' + data.orchestra_parcel_details[0].VersionNumber + '</span></strong></span><span class="sticker-details">Style: <strong><span id="style">' + data.orchestra_parcel_details[0].NomApple + '</span></strong></span><span class="sticker-details">Color: <strong><span id="color">' + data.orchestra_parcel_quantity_details[0].Color + '</span></strong></span><span class="sticker-details" style="display: inline-flex; white-space: nowrap;">Age Group: <strong><span id="ageGroup">  <select class="form-control" style="margin-top: -9px; margin-left: 10px;" name="carlist" id="age" form="carform">' + option + '</select></span></strong> </span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>' + head_qty + '</h4><div class="table-responsive"><table class="table table-condensed table-bordered table-hover" id="solidform">' + thead + '<tbody id="solidformtbody">' + tr + '</tbody><tfoot><tr class="strong"><td class="text-right" colspan="2">Total</td><td>' + data.orchestra_parcel_details[0].Quantity + '</td>' + ttotal + '</tr></tfoot></table><div class="bottom-bar"><div class="modal-footer"> <button onclick="'+onclick+'" class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="submit" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button><button type="button" class="btn btn-success  pull-right btn-xs" data-toggle="modal" id="'+po_file_upload_button+'" style="'+update_disabel_button+'" >Update PO</button></div></div></form></div></div><div class="col-md-4"><h4>' + head_qty1 + '</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" disabled value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" disabled value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume">' + $parcelVolume + '</span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input ' + disabled + ' data-toggle="modal" data-target=".needed_modal" value="' + $no_of_carton + '" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>' + standard_div + ' </div></div>');
+    $('.top-content').append('<form id="solid_carton_form"><h3><i class="ion-ios-browsers-outline"></i> Sticker Order Details for UVC ' + uvc + ' and PO ' + po + '</h3><hr/><h5><div style="margin-bottom: 10px;"><label style="color:red" class="age_group_error hidden">Please Select Age Group</label></div><span class="sticker-details">Supplier: <strong><span id="supplier">' + data.orchestra_parcel_details[0].SupplierName + '</span></strong> </span> <span class="sticker-details">Style: <strong><span id="style">' + data.orchestra_parcel_details[0].NomApple + '</span></strong></span><span class="sticker-details">Color: <strong><span id="color">' + data.orchestra_parcel_quantity_details[0].Color + '</span></strong></span><span class="sticker-details" style="display: inline-flex; white-space: nowrap;">Age Group: <strong><span id="ageGroup">  <select class="form-control" style="margin-top: -9px; margin-left: 10px;" name="carlist" id="age" form="carform">' + option + '</select></span></strong> </span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>' + head_qty + '</h4><div class="table-responsive"><table class="table table-condensed table-bordered table-hover" id="solidform">' + thead + '<tbody id="solidformtbody">' + tr + '</tbody><tfoot><tr class="strong"><td class="text-right" colspan="2">Total</td><td>' + data.orchestra_parcel_details[0].Quantity + '</td>' + ttotal + '</tr></tfoot></table><div class="bottom-bar"><div class="modal-footer"> <button onclick="'+onclick+'" class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="submit" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button><button type="button" class="btn btn-success  pull-right btn-xs" data-toggle="modal" id="'+po_file_upload_button+'" style="'+update_disabel_button+'" >Update PO</button></div></div></form></div></div><div class="col-md-4"><h4>' + head_qty1 + '</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" disabled value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" disabled value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume">' + $parcelVolume + '</span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input ' + disabled + ' data-toggle="modal" data-target=".needed_modal" value="' + $no_of_carton + '" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>' + standard_div + ' </div></div>');
     $('#solid_carton_form');
 
     $('.main-content').html('<input type="hidden" value="' + data.std_carton_id + '" id="std_carton_id"><input type="hidden" value="' + data.std_poly_id + '" id="std_poly_id"><input type="hidden" value="' + data.carton_id + '" id="carton_id"><input type="hidden" value="' + data.poly_id + '" id="poly_id"><input type="hidden" value="' + data.carton_template_id + '" id="carton_template_id"><input type="hidden" value="' + data.polybag_template_id + '" id="polybag_template_id"><input type="hidden" value="' + uvc + '" id="uvc_id"><input type="hidden" value="' + po + '" id="po"><hr/><h4>Carton and Polybag Stickers</h4><div class="row"> <div class="col-md-4"> <div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"> <div class="card-title"> <p class="pull-right" style="cursor:pointer">Click to view</p> <h5>Carton Sticker</h5></div><div class="img_artwork"><object id="svg2" style="width:300px;height:200px; border:2px solid" class="center-block svg2" data="' + data.carton_template + '" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"> <div class="modal-content"><div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Carton Sticker</h4></div><div class="modal-body"><object id="svg3" style="width:575px;height:378;border: 2px #000 solid;" class="center-block" data="' + data.carton_template + '" type="image/svg+xml"></object></div><div id="svgdiv" style="display:none"><svg id="ean-13"></svg></div><div class="modal-footer"> <button type="button" class="btn btn-primary" onclick=printDiv("svg3",' + data.orchestra_parcel_details[0].IsSTD + ',"'+uvc+'")>Print</button></div> </div> </div> </div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg2" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" style="cursor:pointer">Click to view</p><h5>Polybag Sticker</h5></div><div class="img_artwork"><object id="svg1" class="center-block" style="width:300px;height:200px;border:2px solid" data="' + data.polybag_template + '" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg2 artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Polybag Sticker</h4></div><div class="modal-body"><object id="svg4" class="center-block" style="width:500px;height:330px;border:2px solid" data="' + data.polybag_template + '" type="image/svg+xml"></object> </div><div class="modal-footer"><button type="button" class="btn btn-primary" onclick=printDiv("svg4",' + data.orchestra_parcel_details[0].IsSTD + ',"'+uvc+'")>Print</button></div></div></div></div> </div> </div> </div></div><div class="modal fade bs-example-modal-sm artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header alert-danger"><button type="button" class="close" data-dismiss="modal" aria-label="Close" id="modal_close"><span aria-hidden="true">&times;</span></button><p>Use this column only if needed</p></div></div>')
@@ -1413,7 +1413,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 		$('#map_po').removeClass('hidden')
 
 		$.ajax({
-			url: base_url + "/admin/" + buyer + "/order-management/get_existing_solid_sticker_orders_po",
+			url: base_url + "/admin/" + buyer + "/order-management/get-existing-solid-sticker-orders-po",
 			type: "get",
 			dataType: "json",
 			data: {
@@ -1588,7 +1588,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 						form_data.append('po', new_po_no);
 						form_data.append('_token', csrf_token);
 						$.ajax({
-							url: base_url + "/admin/" + buyer + "/order-management/put_existing_label_orders_po_new",
+							url: base_url + "/admin/" + buyer + "/order-management/update-label-orders-po",
 							dataType: 'text',
 							cache: false,
 							contentType: false,
@@ -1636,7 +1636,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 						var aa = a.join(',');
 						var csrf_token = $('meta[name="csrf-token"]').attr('content');
 						$.ajax({
-							url: base_url + "/admin/" + buyer + "/order-management/put_existing_label_orders_po",
+							url: base_url + "/admin/" + buyer + "/order-management/map-label-orders-po",
 							type: "Post",
 							dataType: "json",
 							data: {
@@ -1732,7 +1732,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 		$('#map_po').removeClass('hidden')
 
 		$.ajax({
-			url: base_url + "/admin/" + buyer + "/order-management/get_existing_standard_sticker_orders_po",
+			url: base_url + "/admin/" + buyer + "/order-management/get-existing-standard-sticker-orders-po",
 			type: "get",
 			dataType: "json",
 			data: {
@@ -1907,7 +1907,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 						form_data.append('po', new_po_no);
 						form_data.append('_token', csrf_token);
 						$.ajax({
-							url: base_url + "/admin/" + buyer + "/order-management/put_existing_label_orders_po_new",
+							url: base_url + "/admin/" + buyer + "/order-management/update-label-orders-po",
 							dataType: 'text',
 							cache: false,
 							contentType: false,
@@ -1954,7 +1954,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 						var aa = a.join(',');
 						var csrf_token = $('meta[name="csrf-token"]').attr('content');
 						$.ajax({
-							url: base_url + "/admin/" + buyer + "/order-management/put_existing_label_orders_po",
+							url: base_url + "/admin/" + buyer + "/order-management/map-label-orders-po",
 							type: "Post",
 							dataType: "json",
 							data: {
@@ -3059,7 +3059,7 @@ function washcarelabels(data, dataid) {
             $wash_cm = "";
 			$wash_in = "";
         }
-		var sizebox='<div class="form-group has-feedback has-error has-danger"><label>Enter Size in Cm</label><input onkeypress="return checkNumbersOnly(event)" type="text" maxlength="3" class="form-control input-sm washonesizecm" value="'+$wash_cm+'" required="" placeholder="Enter Size in Cm"><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-error has-danger"><label>Enter Size in inches</label><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control input-sm washonesizein" maxlength="3" value="'+$wash_in+'" required="" placeholder="Enter Size in inches"><div class="help-block with-errors"></div></div>';
+		var sizebox='<div class="form-group has-feedback has-error has-danger"><label>Enter Size in Cm</label><input onkeypress="return checkNumbersOnly(event)" type="text" maxlength="3" class="form-control input-sm washonesizecm" value="'+$wash_cm+'" required="" placeholder="Enter Size in Cm"><div class="help-block with-errors"></div></div><div class="form-group hidden has-feedback has-error has-danger"><label>Enter Size in inches</label><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control input-sm washonesizein" maxlength="3" value="'+$wash_in+'" placeholder="Enter Size in inches"><div class="help-block with-errors"></div></div>';
 	}
 	else
 	{
@@ -3112,25 +3112,25 @@ function washcarelabels(data, dataid) {
 	
 	$('#washcarelabelform' + dataid+' .washonesizein').keyup(function () {
 		
-		var inches=$(this).val();
+		//var inches=$(this).val();
 		var cm=$('#washcarelabelform' + dataid+' .washonesizecm').val();
         var mySVG = document.getElementById("washcare_svg_front" + dataid);
 		var svgDoc;
 		svgDoc = mySVG.contentDocument;
-		svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm /"+inches+"in";
-		svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm /"+inches+"in";
+		svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm";
+		svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm";
 
 		
     });
 	$('#washcarelabelform' + dataid+' .washonesizecm').keyup(function () {
 		//alert(dataid)
 		var cm=$(this).val();
-		var inches=$('#washcarelabelform' + dataid+' .washonesizein').val();
+		//var inches=$('#washcarelabelform' + dataid+' .washonesizein').val();
         var mySVG = document.getElementById("washcare_svg_front" + dataid);
 		var svgDoc;
 		svgDoc = mySVG.contentDocument;
-		svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm /"+inches+"in";
-		svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm /"+inches+"in";
+		svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm";
+		svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm";
 		
     });
 	
@@ -3453,13 +3453,20 @@ function washcarelabels(data, dataid) {
 		
 		if(data.order_details[0].Size == "TAILLE UNIQUE")
 		{
-			var inches=$('#washcarelabelform' + dataid+' .washonesizein').val()
+			//var inches=$('#washcarelabelform' + dataid+' .washonesizein').val()
 			var cm=$('#washcarelabelform' + dataid+' .washonesizecm').val()
 			
-			svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm /"+inches+"in";;
-        svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm /"+inches+"in";;
+			svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm";
+        svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm";
 			svgDoc.getElementById("size1").innerHTML ="TU";
 			svgDoc.getElementById("size2").innerHTML ="TU";
+		}
+		else if(data.order_details[0].Size == "TAILLE L")
+		{
+			svgDoc.getElementById("size1").innerHTML = "TU";
+			svgDoc.getElementById("size2").innerHTML = "TU";
+			svgDoc.getElementById("size_in_fr_en1").innerHTML = "";
+			svgDoc.getElementById("size_in_fr_en2").innerHTML = "";
 		}
 		else
 		{
@@ -4057,7 +4064,7 @@ function hangtagmodal(data) {
             $hang_cm = "";
 			$hang_in = "";
         }
-		var sizebox='<div class="form-group has-feedback has-error has-danger"><label>Enter Size in Cm</label><input onkeypress="return checkNumbersOnly(event)" type="text" maxlength="3" class="form-control input-sm onesizecm" value="'+$hang_cm+'" required="" placeholder="Enter Size in Cm"><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-error has-danger"><label>Enter Size in inches</label><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control input-sm onesizein" maxlength="3" value="'+$hang_in+'" required="" placeholder="Enter Size in inches"><div class="help-block with-errors"></div></div>';
+		var sizebox='<div class="form-group has-feedback has-error has-danger"><label>Enter Size in Cm</label><input onkeypress="return checkNumbersOnly(event)" type="text" maxlength="3" class="form-control input-sm onesizecm" value="'+$hang_cm+'" required="" placeholder="Enter Size in Cm"><div class="help-block with-errors"></div></div><div class="form-group hidden has-feedback has-error has-danger"><label>Enter Size in inches</label><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control input-sm onesizein" maxlength="3" value="'+$hang_in+'" placeholder="Enter Size in inches"><div class="help-block with-errors"></div></div>';
 	}
 	else
 	{
@@ -4600,7 +4607,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 	}
 
 	$('.main-content').html('<input type="hidden" value="' + data.order_details[0].UVC + '" id="uvc_id"><hr/><div class="col-md-3"><h4>Quantity And Artworks</h4></div><div class="form-group col-md-offset-9 has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Merchandiser</label><select data-live-search="true" class="form-control selectpicker input-sm merchandisers" required>' + merchandisersoption + '</select><div class="help-block with-errors"></div><label class="hidden merchandiser_error" style="color:red">Please Select Merchandiser</label></div><div class="col-md-4"><div class="card add-card hang-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><span class="label label-' + $hang_status + ' label-status">' + $hang_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmehang" style="cursor: pointer;">View &amp; Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p> <h5><b>Hangtag</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ht_default.png" class="img-responsive center-block"></div></div><div class="col-md-6"><div class="text_artwork"></div></div></div></div></div><div class="col-md-4"><div class="card special-card" style="min-height:279px"><span class="label label-' + $special_status + ' label-status">' + $special_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmespecial" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b>Specialtag</b></h5></div><div class="row"><div class="col-md-10 col-md-offset-1"><div class="img_artwork"><img src="' +
-		base_url + '/images/st_default.png" class="img-responsive center-block"></div></div></div></div></div> <div class="col-md-4"> <div class="card add-card wash-card" style="height: 280px;" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><span class="label label-' + $wash_status + ' label-status">' + $wash_status_text + '</span> <div class="card-title"> <p class="pull-right" id="clickme" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="washlabelname">' + wash_name + 'Washcare Label</b></h5> </div><div class="row"> <div class="col-md-6 col-md-offset-3"> <div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="washcare_label_card" style="'+wash_enable+';cursor:pointer;display: inline-block;"><i class="fa fa-plus" aria-hidden="true"></i> Add washcare label</p><p id="clone_washcare_label_card" style="'+wash_enable+';cursor:pointer;    display: inline-block;float: right;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div><div id="add_modal"></div><div class="bottom-bar"><div class="modal-footer"><button onclick="' + onclick + '" class="btn btn-danger  pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button>  <button class="btn btn-success  pull-right btn-xs" data-toggle="modal" id="po-file-upload-button" style="'+update_disabel_button+'">Update PO</button></div></div>');
+		base_url + '/images/st_default.png" class="img-responsive center-block"></div></div></div></div></div> <div class="col-md-4"> <div class="card add-card wash-card" style="height: 280px;" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><span class="label label-' + $wash_status + ' label-status">' + $wash_status_text + '</span> <div class="card-title"> <p class="pull-right" id="clickme" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="washlabelname">' + wash_name + 'Washcare Label</b></h5> </div><div class="row"> <div class="col-md-6 col-md-offset-3"> <div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="washcare_label_card" style="'+wash_enable+';cursor:pointer;display: inline-block;"><i class="fa fa-plus" aria-hidden="true"></i> Add washcare label</p><p id="clone_washcare_label_card" style="'+wash_enable+';cursor:pointer;    display: inline-block;float: right;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div><div id="add_modal"></div><div class="bottom-bar"><div class="modal-footer"><button onclick="' + onclick + '" class="btn btn-danger  pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> </div></div>');
 	
 	//Before add_modal
 	
@@ -4617,7 +4624,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 		$('#map_po').removeClass('hidden')
 
 		$.ajax({
-			url: base_url + "/admin/" + buyer + "/order-management/get_existing_label_orders_po",
+			url: base_url + "/admin/" + buyer + "/order-management/get-existing-label-orders-po",
 			type: "get",
 			dataType: "json",
 			data: {
@@ -4792,7 +4799,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 						form_data.append('po', new_po_no);
 						form_data.append('_token', csrf_token);
 						$.ajax({
-							url: base_url + "/admin/" + buyer + "/order-management/put_existing_label_orders_po_new",
+							url: base_url + "/admin/" + buyer + "/order-management/update-label-orders-po",
 							dataType: 'text',
 							cache: false,
 							contentType: false,
@@ -4840,7 +4847,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 						var aa = a.join(',');
 						var csrf_token = $('meta[name="csrf-token"]').attr('content');
 						$.ajax({
-							url: base_url + "/admin/" + buyer + "/order-management/put_existing_label_orders_po",
+							url: base_url + "/admin/" + buyer + "/order-management/map-label-orders-po",
 							type: "Post",
 							dataType: "json",
 							data: {
@@ -5467,15 +5474,22 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
 								svgDoc.getElementById("parcel_code2").innerHTML = datas.order_details[0].UVC_TCO;
 								
 								
-if(datas.order_details[0].Size == "TAILLE UNIQUE")
+		if(datas.order_details[0].Size == "TAILLE UNIQUE")
 		{
-			var inches=$('#washcarelabelform' + dataid+' .washonesizein').val()
+			//var inches=$('#washcarelabelform' + dataid+' .washonesizein').val()
 			var cm=$('#washcarelabelform' + dataid+' .washonesizecm').val()
 			
-			svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm /"+inches+"in";;
-        svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm /"+inches+"in";;
+			svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm";
+        svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm";
 			svgDoc.getElementById("size1").innerHTML ="TU";
 			svgDoc.getElementById("size2").innerHTML ="TU";
+		}
+		else if(datas.order_details[0].Size == "TAILLE L")
+		{
+			svgDoc.getElementById("size1").innerHTML = "TU";
+			svgDoc.getElementById("size2").innerHTML = "TU";
+			svgDoc.getElementById("size_in_fr_en1").innerHTML = "";
+			svgDoc.getElementById("size_in_fr_en2").innerHTML = "";
 		}
 		else
 		{
@@ -5697,18 +5711,25 @@ if(datas.order_details[0].Size == "TAILLE UNIQUE")
 								svgDoc.getElementById("parcel_code2").innerHTML = datas.order_details[0].UVC_TCO;
 								if(datas.order_details[0].Size == "TAILLE UNIQUE")
 								{
-									var inches=$('#washcarelabelform' + dataid+' .washonesizein').val()
+									//var inches=$('#washcarelabelform' + dataid+' .washonesizein').val()
 									var cm=$('#washcarelabelform' + dataid+' .washonesizecm').val()
 
-									svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm /"+inches+"in";;
-								svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm /"+inches+"in";;
+									svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm";
+								svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm";
 									svgDoc.getElementById("size1").innerHTML ="TU";
 									svgDoc.getElementById("size2").innerHTML ="TU";
 								}
+								else if(datas.order_details[0].Size == "TAILLE L")
+								{
+									svgDoc.getElementById("size1").innerHTML = "TU";
+									svgDoc.getElementById("size2").innerHTML = "TU";
+									svgDoc.getElementById("size_in_fr_en1").innerHTML = "";
+									svgDoc.getElementById("size_in_fr_en2").innerHTML = "";
+								}
 								else
 								{
-									svgDoc.getElementById("size_in_fr_en1").innerHTML = datas.order_details[0].cm + "cm / " + datas.order_details[0].in + "in";
-									svgDoc.getElementById("size_in_fr_en2").innerHTML = datas.order_details[0].cm + "cm / " + datas.order_details[0].in + "in";
+									svgDoc.getElementById("size_in_fr_en1").innerHTML = datas.order_details[0].cm + "cm";
+									svgDoc.getElementById("size_in_fr_en2").innerHTML = datas.order_details[0].cm + "cm";
 									svgDoc.getElementById("size1").innerHTML = datas.order_details[0].Size.replace(" ", "").toLowerCase() + "/" + size1;
 									svgDoc.getElementById("size2").innerHTML = datas.order_details[0].Size.replace(" ", "").toLowerCase() + "/" + size1;
 								}
@@ -6655,6 +6676,9 @@ function save_label_orders() {
  */
 
 function setSolidStickers() {
+	
+	if($('#age').val() != "Age Group"){
+		$('.age_group_error').addClass('hidden')
 	if ($('#carton_hidden').val() == "standard") {
 		var buyer = localStorage.getItem("buyer");
 		var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -6740,6 +6764,10 @@ function setSolidStickers() {
 
 			}
 		})
+	}
+	}
+	else{
+		$('.age_group_error').removeClass('hidden')
 	}
 
 }

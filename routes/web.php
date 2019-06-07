@@ -279,7 +279,7 @@ Route::group(['middleware' => 'merchandiser_auth'], function()
 
 });
 
-//Orchestra Order Management
+//Orchestra Order Management - Admin
 
 Route::get('admin/orchestra/order-management', 'Admin\Orchestra\OrderManagementCntrl@index');
 Route::post('admin/orchestra/order-management/label-orders', 'Admin\Orchestra\OrderManagementCntrl@labelOrders');
@@ -311,14 +311,15 @@ Route::post('admin/orchestra/order-management/set_wash_label', 'Admin\Orchestra\
 Route::post('admin/orchestra/order-management/set_solid_stickers', 'Admin\Orchestra\OrderManagementCntrl@setSolidStickers');
 Route::post('admin/orchestra/order-management/set_standard_stickers', 'Admin\Orchestra\OrderManagementCntrl@setStandardStickers');
 
-Route::get('admin/orchestra/order-management/get_existing_label_orders_po', 'Admin\Orchestra\OrderManagementCntrl@getExistingLabelOrdersPo');
-Route::get('admin/orchestra/order-management/get_existing_standard_sticker_orders_po', 'Admin\Orchestra\OrderManagementCntrl@getExistingStandardStickerOrdersPo');
-Route::get('admin/orchestra/order-management/get_existing_solid_sticker_orders_po', 'Admin\Orchestra\OrderManagementCntrl@getExistingSolidStickerOrdersPo');
-Route::get('admin/orchestra/order-management/get_existing_label_orders_status_po', 'Admin\Orchestra\OrderManagementCntrl@getExistingLabelOrderStatusPo');
+Route::get('admin/orchestra/order-management/get-existing-label-orders-po', 'Admin\Orchestra\OrderManagementCntrl@getExistingLabelOrdersPo');
+Route::get('admin/orchestra/order-management/get-existing-standard-sticker-orders-po', 'Admin\Orchestra\OrderManagementCntrl@getExistingStandardStickerOrdersPo');
+Route::get('admin/orchestra/order-management/get-existing-solid-sticker-orders-po', 'Admin\Orchestra\OrderManagementCntrl@getExistingSolidStickerOrdersPo');
+Route::get('admin/orchestra/order-management/get-existing-label-orders-status-po', 'Admin\Orchestra\OrderManagementCntrl@getExistingLabelOrderStatusPo');
 
-Route::Post('admin/orchestra/order-management/put_existing_label_orders_po', 'Admin\Orchestra\OrderManagementCntrl@putExistingLabelOrdersPo');
-Route::Post('admin/orchestra/order-management/put_existing_label_orders_po_new', 'Admin\Orchestra\OrderManagementCntrl@putExistingLabelOrdersPoNew');
+Route::Post('admin/orchestra/order-management/map-label-orders-po', 'Admin\Orchestra\OrderManagementCntrl@mapLabelOrdersPo');
+Route::Post('admin/orchestra/order-management/update-label-orders-po', 'Admin\Orchestra\OrderManagementCntrl@updateLabelOrdersPO');
 Route::get('admin/orchestra/template-management/get-company-list', 'Admin\Orchestra\TemplateManagementCntrl@getCompanyList');
+Route::get('admin/orchestra/get-erp-status', 'Admin\Orchestra\OrderManagementCntrl@checkERPStatus');
 
 Route::post('/admin/order-management/order_sub_modules', 'Admin\AdminController@orderSubModules');
 Route::post('/admin/template-management/sub_modules', 'Admin\AdminController@templateSubModules');
@@ -671,7 +672,6 @@ Route::group(['prefix' => 'erp'], function () {
 	
 
 	Route::get('job-manager/tesco/get-tsl-size', 'ErpUser\Jobmanager\JobManagerController@getTescoTSLSizechart');
-	Route::get('job-manager/script-update-buyer-no', 'ErpUser\Jobmanager\JobManagerController@scriptUpdateBuyerNo');
 
 	Route::get('job-manager/script-check-orders', 'ErpUser\Jobmanager\JobManagerController@scriptCheckOrder');
 
@@ -679,7 +679,7 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::get('job-manager/jobcards-list', 'ErpUser\Jobmanager\JobManagerController@getJobcards')->name('jobcards-list'); 
 	Route::get('job-manager/jobcard-details', 'ErpUser\Jobmanager\JobManagerController@getJobcardDetailsById');  
 	Route::put('job-manager/update-jobcard-details', 'ErpUser\Jobmanager\JobManagerController@updateJobcardById'); 
-	Route::get('job-manager/script-update-order-type', 'ErpUser\Jobmanager\JobManagerController@scriptUpdateOrderType');
+	Route::get('job-manager/script-update-order-status', 'ErpUser\Jobmanager\JobManagerController@scriptUpdateOrderStatusId');
 	Route::get('job-manager/get-customers-list', 'ErpUser\Jobmanager\JobManagerController@getCustomersListByBuyerId'); 
 	Route::get('job-manager/get-jobcard-id-list', 'ErpUser\Jobmanager\JobManagerController@getJobcardIdListByBuyerCustomerId'); 
 	Route::get('job-manager/get-jobcards-list', 'ErpUser\Jobmanager\JobManagerController@getJobcardsListByBuyerCustomerJobcardId'); 
@@ -719,18 +719,11 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::put('/settings/make-finishtype-disabled', 'ErpUser\ERPSettings\ERPSettingsController@makeFinishTypeDisabled');
 });
 
-
+//Orchestra Order Management - customer
 Route::post('customer/orchestra/order-management/orders', 'Customer\Orchestra\OrderController@Orders');
 Route::post('customer/orchestra/order-management/order-status', 'Customer\Orchestra\OrderController@orderStatus');
-
-Route::get('admin/orchestra/get-erp-status', 'Admin\Orchestra\OrderManagementCntrl@checkERPStatus');
-
-
-
 Route::post('customer/orchestra/order-management/label-order-details', 'Customer\Orchestra\OrderController@labelOrderDetails');
 Route::post('customer/orchestra/order-management/sticker-order-details', 'Customer\Orchestra\OrderController@stickerOrderDetails');
-
-
 Route::post('customer/orchestra/order-management/set_hang_tag', 'Customer\Orchestra\OrderController@setHangTag');
 Route::post('customer/orchestra/order-management/set_special_tag', 'Customer\Orchestra\OrderController@setSpecialTag');
 Route::post('customer/orchestra/order-management/set_main_label', 'Customer\Orchestra\OrderController@setMainLabel');
@@ -739,6 +732,15 @@ Route::post('customer/orchestra/order-management/remove_wash_label', 'Customer\O
 Route::post('customer/orchestra/order-management/set_wash_label', 'Customer\Orchestra\OrderController@setWashLabel');
 Route::post('customer/orchestra/order-management/set_solid_stickers', 'Customer\Orchestra\OrderController@setSolidStickers');
 Route::post('customer/orchestra/order-management/set_standard_stickers', 'Customer\Orchestra\OrderController@setStandardStickers');
+Route::get('customer/orchestra/order-management/get-existing-label-orders-po', 'Customer\Orchestra\OrderController@getExistingLabelOrdersPo');
+Route::get('customer/orchestra/order-management/get-existing-standard-sticker-orders-po', 'Customer\Orchestra\OrderController@getExistingStandardStickerOrdersPo');
+Route::get('customer/orchestra/order-management/get-existing-solid-sticker-orders-po', 'Customer\Orchestra\OrderController@getExistingSolidStickerOrdersPo');
+Route::get('customer/orchestra/order-management/get-existing-label-orders-status-po', 'Customer\Orchestra\OrderController@getExistingLabelOrderStatusPo');
+Route::post('customer/orchestra/order-management/set-po-number', 'Customer\Orchestra\OrderController@setPONumber');
+Route::post('customer/orchestra/set-po-file', 'Customer\Orchestra\OrderController@setCustomerPOFile');
+Route::Post('customer/orchestra/order-management/map-label-orders-po', 'Customer\Orchestra\OrderController@mapLabelOrdersPo');
+Route::Post('customer/orchestra/order-management/update-label-orders-po', 'Customer\Orchestra\OrderController@updateLabelOrdersPO');
+Route::get('customer/orchestra/get-erp-status', 'Customer\Orchestra\OrderController@checkERPStatus');
 
 
 Route::post('customer/orchestra/template-management/template-view', 'Customer\Orchestra\TemplateManagementCntrl@templateView');
