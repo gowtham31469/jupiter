@@ -3851,48 +3851,13 @@ class OrderController extends Controller
                   /** [ Creating new object for ApproveTescoOrders() class ] */
                   $approve_order_obj = new ApproveTescoOrders();
                   $buyer_id = DB::table("buyers")->where('buyer_name','ilike','Tesco')->pluck('id')->first();
-                  $TCL1_id = $request['tcl1_last_id'];
-                  $TCL2_id = $request['tcl2_last_id'];
-                  $TSL1_id = $request['tsl1_last_id'];
-                  $TCL4_id = $request['tcl4_last_id'];
-                  $TSL3_id = $request['tsl3_last_id'];
-                  $THL1_id = $request['thl1_last_id'];
-                  $THL3_id = $request['thl3_last_id'];
                   
-                  if($TCL1_id && $buyer_id)
+                  $table_array = $request->data_array;
+
+                  if(sizeof($table_array) > 0)
                   {
-                    /** [ Invoking approveTCL1Order function using class instance ] */
-                    $approved_order = $approve_order_obj->approveTCL1Order($TCL1_id, $buyer_id);
-                  }
-                  if($TCL2_id && $buyer_id)
-                  {
-                    /** [ Invoking approveTCL2Order function using class instance ] */
-                    $approved_order = $approve_order_obj->approveTCL2Order($TCL2_id, $buyer_id);
-                  }
-                  if($TSL1_id && $buyer_id)
-                  {
-                    /** [ Invoking approveTSL1Order function using class instance ] */
-                    $approved_order = $approve_order_obj->approveTSL1Order($TSL1_id, $buyer_id);
-                  }
-                  if($TCL4_id && $buyer_id)
-                  {
-                    /** [ Invoking approveTCL4Order function using class instance ] */
-                    $approved_order = $approve_order_obj->approveTCL4Order($TCL4_id, $buyer_id);
-                  }
-                  if($TSL3_id && $buyer_id)
-                  {
-                    /** [ Invoking approveTSL3Order function using class instance ] */
-                    $approved_order = $approve_order_obj->approveTSL3Order($TSL3_id, $buyer_id);
-                  }
-                  if($THL1_id && $buyer_id)
-                  {
-                    /** [ Invoking approveTHL1Order function using class instance ] */
-                    $approved_order = $approve_order_obj->approveTHL1Order($THL1_id, $buyer_id);
-                  }
-                  if($THL3_id && $buyer_id)
-                  {
-                    /** [ Invoking approveTHL3Order function using class instance ] */
-                    $approved_order = $approve_order_obj->approveTHL3Order($THL3_id, $buyer_id);
+                    /** [ Invoking approveTscoOrderClass function using class instance ] */
+                    $approved_order = $approve_order_obj->approveTescoOrderClass($table_array, $buyer_id);
                   }
                 
                 if($approved_order == "approved")
