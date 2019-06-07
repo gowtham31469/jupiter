@@ -4266,8 +4266,8 @@ class OrderManagementCntrl extends Controller
 
               if(sizeof($table_array) > 0)
               {
-                /** [ Invoking approveTscoOrderClass function using class instance ] */
-                $approved_order = $approve_order_obj->approveTescoOrderClass($table_array, $buyer_id);
+                /** [ Invoking approveTescoOrderMethod function using class instance ] */
+                $approved_order = $approve_order_obj->approveTescoOrderMethod($table_array, $buyer_id);
               }
             
               if($approved_order == "approved")
@@ -4342,58 +4342,23 @@ class OrderManagementCntrl extends Controller
               /** [ Creating new object for CancelTescoOrders() class ] */
               $cancel_order_obj = new CancelTescoOrders();
               $buyer_id = DB::table("buyers")->where('buyer_name','ilike','Tesco')->pluck('id')->first();
-              $TCL1_id = $request['tcl1_last_id'];
-              $TCL2_id = $request['tcl2_last_id'];
-              $TSL1_id = $request['tsl1_last_id'];
-              $TCL4_id = $request['tcl4_last_id'];
-              $TSL3_id = $request['tsl3_last_id'];
-              $THL1_id = $request['thl1_last_id'];
-              $THL3_id = $request['thl3_last_id'];
               
-              if($TCL1_id && $buyer_id)
+              $table_array = $request->data_array;
+
+              if(sizeof($table_array) > 0)
               {
-                /** [ Invoking cancelTCL1Order function using class instance ] */
-                 $canceled_order = $cancel_order_obj->cancelTCL1Order($TCL1_id, $buyer_id);
-              }
-              if($TCL2_id && $buyer_id)
-              {
-                /** [ Invoking cancelTCL2Order function using class instance ] */
-                 $canceled_order = $cancel_order_obj->cancelTCL2Order($TCL2_id, $buyer_id);
-              }
-              if($TSL1_id && $buyer_id)
-              {
-                /** [ Invoking cancelTSL1Order function using class instance ] */
-                 $canceled_order = $cancel_order_obj->cancelTSL1Order($TSL1_id, $buyer_id);
-              }
-              if($TCL4_id && $buyer_id)
-              {
-                /** [ Invoking cancelTCL4Order function using class instance ] */
-                 $canceled_order = $cancel_order_obj->cancelTCL4Order($TCL4_id, $buyer_id);
-              }
-              if($TSL3_id && $buyer_id)
-              {
-                /** [ Invoking cancelTSL3Order function using class instance ] */
-                 $canceled_order = $cancel_order_obj->cancelTSL3Order($TSL3_id, $buyer_id);
-              }
-              if($THL1_id && $buyer_id)
-              {
-                /** [ Invoking cancelTHL1Order function using class instance ] */
-                 $canceled_order = $cancel_order_obj->cancelTHL1Order($THL1_id, $buyer_id);
-              }
-              if($THL3_id && $buyer_id)
-              {
-                /** [ Invoking cancelTHL3Order function using class instance ] */
-                 $canceled_order = $cancel_order_obj->cancelTHL3Order($THL3_id, $buyer_id);
+                /** [ Invoking cancelTescoOrderMethod function using class instance ] */
+                $canceled_order = $cancel_order_obj->cancelTescoOrderMethod($table_array, $buyer_id);
               }
             
-            if($canceled_order == "cancelled")
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
+              if($canceled_order == "cancelled")
+              {
+                $result = response()->json(['error'=> false,'message' =>'success'],200);
+              }
+              else
+              {
+                $result = response()->json(['error'=> true,'message' =>'Error'],400);
+              }
 
         } catch (\Exception $e)
         {

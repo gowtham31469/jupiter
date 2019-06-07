@@ -7405,13 +7405,14 @@ function validateItfBarcode(obj)
  */
 function cancelTescoOrder() {
 	try {
-		var tcl1_last_id = $('#TCL1_id').val();
-		var tcl2_last_id = $('#TCL2_id').val();
-		var tsl1_last_id = $('#TSL1_id').val();
-		var tcl4_last_id = $('#TCL4_id').val();
-		var tsl3_last_id = $('#TSL3_id').val();
-		var thl1_last_id = $('#THL1_id').val();
-		var thl3_last_id = $('#THL3_id').val();
+		var array_list   = [];
+		$('.table-id-hidden').each(function (i, table_id) {
+			my_object    = new Object();
+			var table_names = table_id.id.split("_");
+			my_object.table = table_names[0];
+			my_object.table_id = table_id.value;
+			array_list.push(my_object);
+		});
 		var csrf_token = $('meta[name="csrf-token"]').attr('content');
 
 		$.ajax({
@@ -7419,13 +7420,7 @@ function cancelTescoOrder() {
 			type: 'PUT',
 			data: {
 				_token: csrf_token,
-				tcl1_last_id: tcl1_last_id,
-				tcl2_last_id: tcl2_last_id,
-				tsl1_last_id: tsl1_last_id,
-				tcl4_last_id: tcl4_last_id,
-				tsl3_last_id: tsl3_last_id,
-				thl1_last_id: thl1_last_id,
-				thl3_last_id: thl3_last_id
+				data_array:array_list
 			},
 			tryCount: 0,
 			retryLimit: 2,

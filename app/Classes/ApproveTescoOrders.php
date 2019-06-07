@@ -47,10 +47,10 @@ class ApproveTescoOrders
   
   /**
    * method to approve the tesco orders
-   * @param  [type] $table_array
+   * @param  [type] $table_array, $buyer_id
    * @return tesco order table id
    */
-  public function approveTescoOrderClass($table_array, $buyer_id)
+  public function approveTescoOrderMethod($table_array, $buyer_id)
   {
     try {
             foreach($table_array as  $index => $data)
