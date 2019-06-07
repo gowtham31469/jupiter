@@ -61,7 +61,7 @@ class ErpOrders
 			
 				Erp::where('id',$erp_orders->id)->update(['status'=>1, 'po_file' => $po_file]);
 				$status = 1;
-			    $this->insertOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders->id);
+			    $this->insertOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders->id, $order_status_id);
 			}
 			else
 			{
@@ -71,14 +71,13 @@ class ErpOrders
 								'po_no'            => $po_no,
 								'po_file'          => $po_file,
 								'status'		   => 1,
-								'order_status_id'  => $order_status_id->id,
 								'created_at'       => $this->created_at
 							 ]);
 				$erp_id = "ERPID-0".$erp_orders->id;
 				Erp::where('id',$erp_orders->id)->update(['erp_id'=>$erp_id]);
 				$status = 1;
 
-				$this->insertOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders->id);
+				$this->insertOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders->id, $order_status_id);
 			}
 			$result = response()->json(['error'=> false,'message' =>'success'],200);
 		}
@@ -101,7 +100,7 @@ class ErpOrders
 	 * @param [type] $erp_orders_id
 	 * @return void
 	 */
-	function insertOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders_id)
+	function insertOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders_id, $order_status_id)
 	{
 		if ($order_details)
 		{
@@ -138,7 +137,8 @@ class ErpOrders
 						'buyer_po_number'  		=> $orders->po_number,
 						'zone'					=> $orders->zone,
 						'order_type'            => $orders->order_flag,
-						'created_at'            => $this->created_at
+						'created_at'            => $this->created_at,
+						'order_status_id'       => $order_status_id->id,
 					]);
 				}
 
@@ -214,7 +214,7 @@ class ErpOrders
 			
 				Erp::where('id',$erp_orders->id)->update(['status'=>1, 'po_file' => $po_file]);
 					$status = 1;
-			    $this->insertOrchestraOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders->id, $table_name);
+			    $this->insertOrchestraOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders->id, $table_name, $order_status_id);
 			}
 			else
 			{
@@ -224,14 +224,13 @@ class ErpOrders
 								'po_no'            => $po_no,
 								'po_file'          => $po_file,
 								'status'		   => 1,
-								'order_status_id'  => $order_status_id->id,
 								'created_at'       => $this->created_at
 							 ]);
 				$erp_id = "ERPID-0".$erp_orders->id;
 				Erp::where('id',$erp_orders->id)->update(['erp_id'=>$erp_id]);
 				$status = 1;
 
-				$this->insertOrchestraOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders->id, $table_name);
+				$this->insertOrchestraOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders->id, $table_name, $order_status_id);
 			}
 			$result = response()->json(['error'=> false,'message' =>'success'],200);
 		}
@@ -254,7 +253,7 @@ class ErpOrders
 	 * @param [type] $erp_orders_id
 	 * @return void
 	 */
-	function insertOrchestraOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders_id, $table_name)
+	function insertOrchestraOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders_id, $table_name, $order_status_id)
 	{
 		if ($order_details)
 		{
@@ -296,7 +295,8 @@ class ErpOrders
 						'custom_ref_name' 		=> $custom_ref_name,
 						'buyer_po_number'  		=> $orders->po,
 						'order_type'            => $orders->order_flag,
-						'created_at'            => $this->created_at
+						'created_at'            => $this->created_at,
+						'order_status_id'       => $order_status_id->id,
 					]);
 				}
 

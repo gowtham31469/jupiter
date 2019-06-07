@@ -672,7 +672,6 @@ Route::group(['prefix' => 'erp'], function () {
 	
 
 	Route::get('job-manager/tesco/get-tsl-size', 'ErpUser\Jobmanager\JobManagerController@getTescoTSLSizechart');
-	Route::get('job-manager/script-update-buyer-no', 'ErpUser\Jobmanager\JobManagerController@scriptUpdateBuyerNo');
 
 	Route::get('job-manager/script-check-orders', 'ErpUser\Jobmanager\JobManagerController@scriptCheckOrder');
 
@@ -680,7 +679,7 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::get('job-manager/jobcards-list', 'ErpUser\Jobmanager\JobManagerController@getJobcards')->name('jobcards-list'); 
 	Route::get('job-manager/jobcard-details', 'ErpUser\Jobmanager\JobManagerController@getJobcardDetailsById');  
 	Route::put('job-manager/update-jobcard-details', 'ErpUser\Jobmanager\JobManagerController@updateJobcardById'); 
-	Route::get('job-manager/script-update-order-type', 'ErpUser\Jobmanager\JobManagerController@scriptUpdateOrderType');
+	Route::get('job-manager/script-update-order-status', 'ErpUser\Jobmanager\JobManagerController@scriptUpdateOrderStatusId');
 	Route::get('job-manager/get-customers-list', 'ErpUser\Jobmanager\JobManagerController@getCustomersListByBuyerId'); 
 	Route::get('job-manager/get-jobcard-id-list', 'ErpUser\Jobmanager\JobManagerController@getJobcardIdListByBuyerCustomerId'); 
 	Route::get('job-manager/get-jobcards-list', 'ErpUser\Jobmanager\JobManagerController@getJobcardsListByBuyerCustomerJobcardId'); 
