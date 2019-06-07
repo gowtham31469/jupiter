@@ -273,7 +273,7 @@ class JobManagerController extends Controller
 			}
  			sort($order_detail_ids);
 
-			$workorder_id = substr(number_format(Carbon::now('Asia/Kolkata')->timestamp * rand(),0,'',''),0,8);
+			$workorder_id = DB::table('jobcard_main_table')->max('id')+1;
 
 			foreach($order_detail_ids as $key => $order_detail_id)
 			{

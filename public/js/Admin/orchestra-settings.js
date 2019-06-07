@@ -2826,9 +2826,10 @@ function addOrchestraSymbols(cofreet_symbols, astms_symbol, category_id, care_in
                         $('#addOrchestraSymbolsModal').modal('hide');
                         orchestraSymbols();
                 },
-                400: function() {
-                        $('.snackbar_span').html('Something went wrong');
-                        showSnackbar();
+                422: function() {
+                        $('.hidden-error').html('<div class="alert alert-warning">\
+                        Invalid File Format\
+                      </div>')
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
