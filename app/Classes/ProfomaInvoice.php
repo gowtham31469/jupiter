@@ -65,7 +65,6 @@ class ProfomaInvoice
                                             ->where('orchestra_hang_tag_orders_qty.oht_id',$id)
                                             ->select('size','quantity','orchestra_hang_tag_orders.uvc as style','price_taxation.custom_name as material_name','price_taxation.price as unit_price','price_taxation.tax')
                                             ->get();
-               
                 break;
             case 'orchestra_main_label_orders':
                 $data['item_details']    = DB::table('orchestra_main_label_orders')
