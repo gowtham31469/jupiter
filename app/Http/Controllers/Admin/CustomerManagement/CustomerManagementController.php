@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use DB;
 use Hash;
+use Auth;
 use App\Customer;
 use App\CustomerContactPersons;
 use App\CustomerBillAddress;
@@ -20,6 +21,12 @@ use App\PlaceOfSupply;
 use App\FreightTerms;
 use App\NominatedForwarder;
 use App\CustomerMetadata;
+use App\PriceRange;
+use App\PriceTaxation;
+use Illuminate\Support\Facades\URL;
+use App\Audits;
+use Carbon\Carbon;
+
 /**
  * Customer management controller
  * @author <Praveen>
@@ -238,6 +245,7 @@ class CustomerManagementController extends Controller
                   $pincode          = explode(',',$pincode);
                   $customers        = explode(',',$customers);
 
+
                   $customer = Customer::create([
                                 'factory_code'           => $factory_code,
                                 'company_name'           => $company_name,
@@ -272,36 +280,49 @@ class CustomerManagementController extends Controller
                         ]);
                         $i++;
                     }
-                    $j = 0;
-                    foreach($address as $value)
+
+                    if(array_filter($address) != NULL)
                     {
-                        CustomerBillAddress::create([
-                            'customer_id'            => $insert_Id,
-                            'address'                => $value,
-                            'country'                => $country[$j],
-                            'email'                  => $address_email[$j],
-                            'telephone'              => $telephone[$j],
-                            'fax'                    => $fax[$j],
-                            'is_billing_address'     => $billing_address[$j],
-                            'is_shipping_address'    => $shipping_address[$j],
-                            'pincode'                => $pincode[$j]
-                        ]);
-                        $j++;
+                      $j = 0;
+                      foreach($address as $value)
+                      {
+                          CustomerBillAddress::create([
+                              'customer_id'            => $insert_Id,
+                              'address'                => preg_replace('/\s*,\s*/', ', ', $value),
+                              'country'                => $country[$j],
+                              'email'                  => $address_email[$j],
+                              'telephone'              => $telephone[$j],
+                              'fax'                    => $fax[$j],
+                              'is_billing_address'     => $billing_address[$j],
+                              'is_shipping_address'    => $shipping_address[$j],
+                              'pincode'                => $pincode[$j]
+                          ]);
+                          $j++;
+                      }
                     }
-                    foreach($buyers as $buyer)
+                    
+                    if(array_filter($buyers) != NULL)
                     {
-                        CustomerBuyers::create([
-                            'customer_id'     => $insert_Id,
-                            'buyer_id'        => $buyer
-                        ]);
+                      foreach($buyers as $buyer)
+                      {
+                          CustomerBuyers::create([
+                              'customer_id'     => $insert_Id,
+                              'buyer_id'        => $buyer
+                          ]);
+                      }
                     }
-                    foreach($customers as $customer)
+                    
+                    if(array_filter($customers) != NULL)
                     {
-                        CustomerMetadata::create([
-                            'customer_id'           => $insert_Id,
-                            'customer_metadata_id'  => $customer
-                        ]);
+                      foreach($customers as $customer)
+                      {
+                          CustomerMetadata::create([
+                              'customer_id'           => $insert_Id,
+                              'customer_metadata_id'  => $customer
+                          ]);
+                      }
                     }
+                    
                     $result = response()->json(['error'=> false,'message' =>'success'],200);
                   }
                   else
@@ -641,7 +662,9 @@ class CustomerManagementController extends Controller
                             'sap_code'               => $input['sap_code']
                           ]);
                       /** Delete existing data before updating **/
-                      CustomerContactPersons::where('customer_id', '=', $id)
+                      if(array_filter($contact_person) != NULL)
+                      {
+                        CustomerContactPersons::where('customer_id', '=', $id)
                             ->delete();
                         $i = 0;
                         foreach($contact_person as $contact)
@@ -655,44 +678,55 @@ class CustomerManagementController extends Controller
                             ]);
                             $i++;
                         }
+                      }
+                        
                         /** Delete existing data before updating **/
-                        CustomerBillAddress::where('customer_id', '=', $id)
-                            ->delete();
-                        $j = 0;
-                        foreach($address as $value)
+                        if(array_filter($address) != NULL)
                         {
-                            CustomerBillAddress::create([
-                                'customer_id'         => $id,
-                                'address'             => $value,
-                                'country'             => $country[$j],
-                                'email'               => $address_email[$j],
-                                'telephone'           => $telephone[$j],
-                                'fax'                 => $fax[$j],
-                                'is_billing_address'  => $billing_address[$j],
-                                'is_shipping_address' => $shipping_address[$j],
-                                'pincode'             => $pincode[$j]
-                            ]);
-                            $j++;
+                          CustomerBillAddress::where('customer_id', '=', $id)
+                              ->delete();
+                          $j = 0;
+                          foreach($address as $value)
+                          {
+                              CustomerBillAddress::create([
+                                  'customer_id'         => $id,
+                                  'address'             => preg_replace('/\s*,\s*/', ', ', $value),
+                                  'country'             => $country[$j],
+                                  'email'               => $address_email[$j],
+                                  'telephone'           => $telephone[$j],
+                                  'fax'                 => $fax[$j],
+                                  'is_billing_address'  => $billing_address[$j],
+                                  'is_shipping_address' => $shipping_address[$j],
+                                  'pincode'             => $pincode[$j]
+                              ]);
+                              $j++;
+                          }
                         }
                         /** Delete existing data before updating **/
-                        CustomerBuyers::where('customer_id', '=', $id)
-                            ->delete();
-                        foreach($buyers as $buyer)
+                        if(array_filter($buyers) != NULL)
                         {
-                            CustomerBuyers::create([
-                                'customer_id'     => $id,
-                                'buyer_id'        => $buyer
-                            ]);
+                          CustomerBuyers::where('customer_id', '=', $id)
+                              ->delete();
+                          foreach($buyers as $buyer)
+                          {
+                              CustomerBuyers::create([
+                                  'customer_id'     => $id,
+                                  'buyer_id'        => $buyer
+                              ]);
+                          }
                         }
                         /** Delete existing data before updating **/
-                        CustomerMetadata::where('customer_id', '=', $id)
-                            ->delete();
-                        foreach($customers as $customer)
+                        if(array_filter($customers) != NULL)
                         {
-                            CustomerMetadata::create([
-                                'customer_id'          => $id,
-                                'customer_metadata_id' => $customer
-                            ]);
+                          CustomerMetadata::where('customer_id', '=', $id)
+                              ->delete();
+                          foreach($customers as $customer)
+                          {
+                              CustomerMetadata::create([
+                                  'customer_id'          => $id,
+                                  'customer_metadata_id' => $customer
+                              ]);
+                          }
                         }
                         $result = response()->json(['error'=> false,'message' =>'success'],200);
                       
@@ -941,7 +975,7 @@ class CustomerManagementController extends Controller
 					 				 ->join('roles', 'roles.id', 'customer_profile.role_id')
 					 				 ->join('customers', 'customers.id', 'customer_profile.company_id')
                                      ->select('customer_profile.*','roles.role_name','customers.company_name')
-					 				->orderBy('customer_profile.status', 'asc')
+					 				->orderBy('customer_profile.status', 'desc')
                                      ->get();  
                  if($is_allowed)
                  {
@@ -1004,6 +1038,26 @@ class CustomerManagementController extends Controller
      * @return [type]           [description]
      */
     public function savePriceTax(Request $request) {
+         // get user details for auditing.
+         $user_agent   = $request->header('user-agent');
+         $user_id      = Auth::user()->id;
+         $ip_address   = $request->ip();
+         $module       = 'Pricing';
+         $url          = URL::current();
+         // get the current time
+         $current_date = Carbon::now('Asia/Kolkata');
+         $date         = $current_date->toDateTimeString();
+
+         // create  old and new pricing values array for auditing
+         $old_values   = [];
+         $new_values   = [];
+         
+         // new changes in pricing module (auditing)
+         $new_values['company_id']  = $request->customer_id;
+         $new_values['buyer_id']    = $request->buyer_id;
+         $new_values['template_id'] = $request->template_id;
+         $new_values['custom_name'] = $request->custom_name;
+         $new_values['moq']         = $request->moq;
 
          $validator = Validator::make($request->all(), [
             'customer_id' => 'bail|required',
@@ -1015,22 +1069,44 @@ class CustomerManagementController extends Controller
         if ($validator->fails()) {
              return response()->json(['error' => true,'error' => $validator], 409);
         }
+
         parse_str($request->price, $pricearray);        
         $isExists = DB::table('price_taxation')->where([
             'customer_id' => $request->customer_id,
             'buyer_id'    => $request->buyer_id,
             'template_id' => $request->template_id])->pluck('id');
         $price_taxation_id = '';
+
         if($isExists->count()) {
+          $event = 'updated';
+          // get old values from price_taxation table for auditing.
+          $old_price_taxation_data = DB::table('price_taxation')->where([
+              'customer_id' => $request->customer_id,
+              'buyer_id'    => $request->buyer_id,
+              'template_id' => $request->template_id])->select('*')->first();
+
+          // push price_taxation old values into old_values array
+          $old_values['company_id']  = $old_price_taxation_data->customer_id;
+          $old_values['buyer_id']    = $old_price_taxation_data->buyer_id;
+          $old_values['template_id'] = $old_price_taxation_data->template_id;
+          $old_values['custom_name'] = $old_price_taxation_data->custom_name;
+          $old_values['moq']         = $old_price_taxation_data->moq;
+
           $price_taxation_id = $isExists[0];
-          DB::table('price_taxation')
-              ->where('id', $price_taxation_id)
+          
+          // get old values from price_range table for auditing(before deleting).
+          $old_price_range_data = PriceRange::where('price_taxation_id', '=', $price_taxation_id)->select('volume_from','volume_to','price')->get();
+          // push price_range old values into old_values array
+          $old_values['price_range'] = $old_price_range_data;
+
+          PriceTaxation::where('id', $price_taxation_id)
               ->update([
                   'custom_name' => $request->custom_name,
                   'moq' => $request->moq
                 ]) ;
         } else {
-            $price_taxation_id = DB::table('price_taxation')->insertGetId([
+            $event = 'created';
+            $price_taxation_id = PriceTaxation::insertGetId([
             'customer_id' => $request->customer_id,
             'buyer_id'    => $request->buyer_id,
             'template_id' => $request->template_id,
@@ -1039,16 +1115,35 @@ class CustomerManagementController extends Controller
           ]);
         }
 
-        DB::table('price_range')->where('price_taxation_id', '=', $price_taxation_id)->delete();
+        PriceRange::where('price_taxation_id', '=', $price_taxation_id)->delete();
+
         $count = count($pricearray);
         for ($i=1; $i <= ($count/3); $i++) { 
-          DB::table('price_range')->insert([
+          PriceRange::insert([
             'price_taxation_id' => $price_taxation_id,
             'volume_from'    => $pricearray['volume_from_'.$i],
             'volume_to' => $pricearray['volume_to_'.$i],
             'price' => $pricearray['price_'.$i]
           ]);
         }
+        // get new values from price_range table for auditing.
+        $new_price_range_data = PriceRange::where('price_taxation_id', '=', $price_taxation_id)->select('volume_from','volume_to','price')->get();
+        // push price_range new_values into new_values array
+        $new_values['price_range'] = $new_price_range_data;
+        
+        // save pricing changes into audits table.
+        Audits::create([
+          'user_id'    => $user_id,
+          'module'     => $module,
+          'ip_address' => $ip_address,
+          'user_agent' => $user_agent,
+          'event'      => $event,
+          'old_values' => json_encode($old_values),
+          'new_values' => json_encode($new_values),
+          'url'        => $url,
+          'created_at' => $date,
+          'updated_at' => $date
+        ]);
         return response()->json(['message' => 'success'], 200);
 
     }
@@ -1081,7 +1176,7 @@ class CustomerManagementController extends Controller
                                 ->select('tesco_template.*','tesco_item_master.ref_no','company.name as company_name')
                                 ->join('tesco_item_master','tesco_item_master.id','=','tesco_template.item_id')
                                 ->join('company','company.id','=','tesco_item_master.company_id')
-                                ->where('item_id',$request['template_id'])
+                                ->where('item_id',$request['template_id'])->orderBy('orchestra_template.id','asc')
                                 ->get();
          
          return json_encode($treeviewData);
@@ -1097,7 +1192,7 @@ class CustomerManagementController extends Controller
       try {
             $id = $request['id'];
             $customer = DB::table('customers')
-                     ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.pi_required','customers.po_required','customers.delivery_date_required','nominated_forwarders.forwarder','freight_terms.freight_terms','delivery_day_count','short_name','payment_terms.payment_terms','place_of_supply.place_of_supply')
+                     ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.pi_required','customers.po_required','customers.delivery_date_required','nominated_forwarders.forwarder','freight_terms.freight_terms','delivery_day_count','short_name','payment_terms.payment_terms','place_of_supply.place_of_supply','customers.sap_code')
                      ->leftjoin('payment_terms','customers.payment_terms','payment_terms.id')
                      ->leftjoin('place_of_supply','customers.place_of_supply','place_of_supply.id')
                      ->leftjoin('freight_terms','customers.freight_type','freight_terms.id')

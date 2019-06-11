@@ -8,7 +8,7 @@
               </div>
                 <div class="main-sub-menu">
                   <div class="action-group pull-right sub-menu-button">
-                    <a href="#" data-target="#addCustomerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Customer</a>
+                    <a href="#" data-target="#addCustomerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Customer</a>
                   </div>
                 </div>
                <div class="clearfix"></div>
@@ -23,7 +23,7 @@
                           <th>Email</th>
                           <th>Company</th>
                           <th>Role</th>
-						  <th>Status</th>
+						              <th>Status</th>
                           <th>Actions</th>
                         </tr>
                       </thead>
@@ -31,11 +31,11 @@
                         @foreach ($customers as $value)
                           <tr id="{{$value->id}}">
                           	<td>{{ $loop->iteration }}</td>
-							  <td>{{$value->name}}</td>
-							  <td>{{$value->email}}</td>
-							  <td>{{$value->company_name}}</td>
-							  <td>{{$value->role_name}}</td>
-							   @if($value->status === 1)
+                            <td>{{$value->name}}</td>
+                            <td>{{$value->email}}</td>
+                            <td>{{$value->company_name}}</td>
+                            <td>{{$value->role_name}}</td>
+                            @if($value->status === 1)
                               <td><span class="label label-success">Active</span></td>
                             @else
                               <td><span class="label label-danger">Inactive</span></td>
@@ -85,7 +85,7 @@
                           <div class="col-md-6">
                       <div class="form-group has-feedback">
                           {!! Form::label('customer_add_name', 'Customer Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('customer_add_name',$value = '', array('class' => 'form-control input-sm','id' => 'customer_add_name','placeholder' => 'Customer Name','required')) !!}
+                          {!! Form::text('customer_add_name',$value = '', array('class' => 'form-control input-sm','id' => 'customer_add_name','placeholder' => 'Customer Name','required', 'style' => 'text-transform: capitalize;')) !!}
                           <div class="help-block with-errors"></div>
                       </div>
                   </div>
@@ -166,7 +166,7 @@
                   <div class="col-md-6">
                       <div class="form-group has-feedback">
                           {!! Form::label('customer_name', 'Customer Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('customer_name',$value = '', array('class' => 'form-control input-sm','id' => 'customer_name','placeholder' => 'Customer Name','required')) !!}
+                          {!! Form::text('customer_name',$value = '', array('class' => 'form-control input-sm','id' => 'customer_name','placeholder' => 'Customer Name','required', 'style' => 'text-transform: capitalize;')) !!}
                           <div class="help-block with-errors"></div>
                       </div>
                   </div>
@@ -231,6 +231,10 @@
     <script src="{{ asset('js/Admin/customer_profile.js') }}"></script>
     <script>
     $( document ).ready(function() {
+      // toggle tooltip
+      $('a,i').tooltip().eq(0).tooltip('show').tooltip('disable').one('mouseout', function() {
+        $(this).tooltip('enable');
+      });
       /* Show logo on left side */
       $('.logo').html('Customers')
       $('#add_customer_form').trigger("reset");
@@ -431,5 +435,15 @@
 			  } 
         });
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
+
+    /** To refresh modal and form data**/
+    $('.modal').on('hidden.bs.modal', function (e) {
+      $('#add_customer_form').trigger('reset');
+      $('#customer_result').hide();
+      $('#customer_add_role').val('0').selectpicker('refresh');
+      $('#customer_add_company').val('0').selectpicker('refresh');
+      $('#customer_add_buyer').val('0').selectpicker('refresh');
+      $('#customer_add_title').val('0').selectpicker('refresh');
+     })
     </script>
     @endsection

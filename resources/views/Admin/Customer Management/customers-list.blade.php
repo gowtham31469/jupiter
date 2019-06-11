@@ -8,7 +8,7 @@
               </div>
                 <div class="main-sub-menu">
                   <div class="action-group pull-right sub-menu-button">
-                    <a href="#" data-target="#addCustomerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Company</a>
+                    <a href="#" data-target="#addCustomerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Company</a>
                   </div>
                 </div>
                <div class="clearfix"></div>
@@ -32,7 +32,7 @@
                         @foreach ($customers as $value)
                           <tr id="{{$value->id}}">
                             <td rowspan="3">{{ $loop->iteration }}</td>
-                            <td rowspan="3"><a href="#" title="view more" class="view-more" data-placement="left"  data-backdrop="static" data-keyboard="false">{{ $value->company_name }}</a></td>
+                            <td rowspan="3"><a href="#" title="view more" class="view-more" data-placement="bottom"  data-backdrop="static" data-keyboard="false">{{ $value->company_name }}</a></td>
                             <td><i class="fa fa-user" aria-hidden="true"></i></td>
                             <td>{{ $value->contact_person }}</td>
                             <td >
@@ -60,7 +60,7 @@
                               <td rowspan="3"><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Active" id="make_active" data-placement="left"></i></a>
                             @endif
                                  <a href="#">
-                                  <i class="fa fa-pencil filterbtn options edit-customer fa-button" title="Edit" data-placement="left"></i>
+                                  <i class="fa fa-pencil filterbtn options edit-company fa-button" title="Edit" data-placement="left"></i>
                                  </a>
                                </td>
                           </tr>
@@ -102,21 +102,21 @@
                           <div class="col-md-6">
                               <div class="form-group has-feedback">
                                   {!! Form::label('factory_code', 'Factory Code', ['class' => 'form_label']) !!}
-                                  {!! Form::text('factory_code',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Factory Code','required','pattern'=>'[a-z0-9]+')) !!}
+                                  {!! Form::text('factory_code',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Factory Code','required')) !!}
                                   <div class="help-block with-errors"></div>
                               </div>
                           </div>
                           <div class="col-md-6">
                               <div class="form-group has-feedback">
                                   {!! Form::label('short_name', 'Short Name', ['class' => 'form_label']) !!}
-                                  {!! Form::text('short_name',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Short Name','required','data-minlength' => '3','maxlength' => '40')) !!}
+                                  {!! Form::text('short_name',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Short Name','required','data-minlength' => '3','maxlength' => '40', 'style' => 'text-transform: capitalize;')) !!}
                                   <div class="help-block with-errors"></div>
                               </div>
                           </div>
                           <div class="col-md-6">
                               <div class="form-group has-feedback">
                                   {!! Form::label('company_name', 'Company Name', ['class' => 'form_label']) !!}
-                                  {!! Form::text('company_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Company Name','required','data-minlength' => '3','maxlength' => '40')) !!}
+                                  {!! Form::text('company_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Company Name','required','data-minlength' => '3','maxlength' => '40', 'style' => 'text-transform: capitalize;')) !!}
                                   <div class="help-block with-errors"></div>
                               </div>
                           </div>
@@ -200,7 +200,7 @@
                               <div class="help-block with-errors"></div>
                             </div>
                           </div>
-                          <div class="col-md-6 forwarder_div">
+                          <div class="col-md-6 forwarder_div" style="display: none;">
                             <div class="form-group has-feedback">
                               {!! Form::label('forwarder', 'Select Nominated Forwarder', ['class' => 'form_label']) !!}
                                 {{ Form::select('forwarder',(['' => '-- Select a forwarder --']+ $forwarder),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'forwarder')) }}
@@ -219,7 +219,7 @@
                               </div>
                               <div class="form-check form-group has-feedback po-required-div"  style="display: none;">
                                 <label class="form-check-label">
-                                  <input class="form-check-input" type="checkbox" value="" name="po_required" id="po_required">
+                                  <input class="form-check-input" checked="true" type="checkbox" value="" name="po_required" id="po_required">
                                   Purchase Order(PO) Required ? 
                                 </label>
                                 <div class="help-block with-errors"></div>
@@ -280,7 +280,7 @@
                               </div>
                               <div class="clearfix"></div>
                               <div class="form-group">
-                                  <button type="button" onclick="addContact(this,event)" data-id="0" class='btn btn-primary'><i class="ion ion-plus"></i> Contact Person</button>
+                                  <button type="button" onclick="addContact(this,event)" data-id="0" class='btn btn-primary'><i class="fa fa-plus"></i> Contact Person</button>
                               </div>
                             </div>
                             <div class="col-md-6" style="border-left: 1px solid #ecf0f1;">
@@ -290,7 +290,7 @@
                                       <div id="billaddress0" class="panel">
                                         <div class="form-group has-feedback">
                                           {!! Form::label('address0', 'Address', ['class' => 'form_label']) !!}
-                                          {!! Form::textarea('address0',$value = '', array('class' => 'form-control address','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3,'onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
+                                          {!! Form::textarea('address0',$value = '', array('class' => 'form-control address','placeholder' => 'Address','required','style'=>'resize:none; text-transform: capitalize;','rows'=>3)) !!}
                                           <div class="help-block with-errors"></div>
                                         </div>
                                         <div class="form-group has-feedback">
@@ -343,7 +343,7 @@
                               </div>
                               <div class="clearfix"></div>
                               <div class="form-group">
-                                  <button type="button" onclick="addAddress(this,event)" data-id="0" class='btn btn-primary'><i class="ion ion-plus"></i> Address</button>
+                                  <button type="button" onclick="addAddress(this,event)" data-id="0" class='btn btn-primary'><i class="fa fa-plus"></i> Address</button>
                               </div>
                             </div>
                           </div>
@@ -380,14 +380,14 @@
                   <div class="col-md-6">
                       <div class="form-group has-feedback">
                           {!! Form::label('edit_short_name', 'Short Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('edit_short_name',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Short Name','required','data-minlength' => '3','maxlength' => '40')) !!}
+                          {!! Form::text('edit_short_name',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Short Name','required','data-minlength' => '3','maxlength' => '40', 'style' => 'text-transform: capitalize;')) !!}
                           <div class="help-block with-errors"></div>
                       </div>
                   </div>
                   <div class="col-md-6">
                       <div class="form-group has-feedback">
                           {!! Form::label('edit_company_name', 'Company Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('edit_company_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Company Name','required','data-minlength' => '3','maxlength' => '40')) !!}
+                          {!! Form::text('edit_company_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Company Name','required','data-minlength' => '3','maxlength' => '40', 'style' => 'text-transform: capitalize;')) !!}
                           <div class="help-block with-errors"></div>
                       </div>
                   </div>
@@ -471,7 +471,7 @@
                         <div class="help-block with-errors"></div>
                       </div>
                     </div>
-                    <div class="col-md-6 edit_forwarder_div">
+                    <div class="col-md-6 edit_forwarder_div" style="display: none;">
                       <div class="form-group has-feedback">
                         {!! Form::label('edit_forwarder', 'Select Nominated Forwarder', ['class' => 'form_label']) !!}
                           {{ Form::select('edit_forwarder',(['' => '-- Select a forwarder --']+ $forwarder),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'edit_forwarder')) }}
@@ -490,7 +490,7 @@
                     </div>
                     <div class="form-check form-group has-feedback edit-po-required-div"  style="display: none;">
                       <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" value="" name="edit_po_required" id="edit_po_required">
+                        <input class="form-check-input" type="checkbox" checked="true" value="" name="edit_po_required" id="edit_po_required">
                         Purchase Order(PO) Required ? 
                       </label>
                       <div class="help-block with-errors"></div>
@@ -519,7 +519,7 @@
                   </div>
                   <div class="clearfix"></div>
                   <div class="form-group">
-                      <button type="button" id="edit_contact" onclick="editAddContact(this,event)" data-id="1" class='btn btn-primary'><i class="ion ion-plus"></i> Contact Person</button>
+                      <button type="button" id="edit_contact" onclick="editAddContact(this,event)" data-id="1" class='btn btn-primary'><i class="fa fa-plus"></i> Contact Person</button>
                   </div>
                 </div>
                 <div class="col-md-6" style="border-left: 1px solid #ecf0f1;">
@@ -528,7 +528,7 @@
                   </div>
                   <div class="clearfix"></div>
                   <div class="form-group">
-                      <button type="button" id="edit_address" onclick="editAddAddress(this,event)" data-id="1" class='btn btn-primary'><i class="ion ion-plus"></i> Address</button>
+                      <button type="button" id="edit_address" onclick="editAddAddress(this,event)" data-id="1" class='btn btn-primary'><i class="fa fa-plus"></i> Address</button>
                   </div>
                 </div>
               </div>
@@ -586,6 +586,10 @@
                                      <tr>
                                        <td class="pull-left">TIN Number :</td>
                                        <td id="tin-number"></td>
+                                     </tr>
+                                     <tr>
+                                       <td class="pull-left">SAP Code :</td>
+                                       <td id="sap-code"></td>
                                      </tr>
                                      <tr>
                                        <td class="pull-left">Payment Terms :</td>
@@ -649,6 +653,11 @@
     <script src="{{ asset('js/Admin/customer.js') }}"></script>
     <script>
     $( document ).ready(function() {
+
+      // toggle tooltip
+      $('a,i').tooltip().eq(0).tooltip('show').tooltip('disable').one('mouseout', function() {
+        $(this).tooltip('enable');
+      });
       /* Show logo on left side */
       $('.logo').html('Customers')
       $('#add_customer_form').trigger("reset");
@@ -665,16 +674,15 @@
       $('#buyer').val('0').selectpicker('refresh');
       $('#edit_customers_metadata').val('0').selectpicker('refresh');
       $('#customers_metadata').val('0').selectpicker('refresh');
-      $('.edit-customer').tooltip('show')
-      $('.edit-customer').tooltip('toggle')
-      $('.status').tooltip('show')
-      $('.status').tooltip('toggle')
-      $('.view-more').tooltip('show')
-      $('.view-more').tooltip('toggle')
       $('.dataTables_length select').addClass('form-control');
       $('div.freight_charge_div').hide()
       $('.forwarder_div').hide(); 
+      $('#forwarder').val('0').selectpicker('refresh');
+      $('#edit_forwarder').val('0').selectpicker('refresh');
       $('#customers_metadata').prop('required',false)
+      $('#freight').val('0').selectpicker('refresh');
+      $('#edit_freight').val('0').selectpicker('refresh');
+      $('div.po-required-div').hide();
       /* Refresh auto populate country functionality */
       autopopulateCountry(0)
     });
@@ -704,9 +712,14 @@
       $('#place_of_supply').val('0').selectpicker('refresh');
       $('#edit_place_of_supply').val('0').selectpicker('refresh');
       $('.forwarder_div').hide();
+      $('#forwarder').val('0').selectpicker('refresh');
+      $('#edit_forwarder').val('0').selectpicker('refresh');
       $('#edit_customers_metadata').val('0').selectpicker('refresh');
       $('#customers_metadata').val('0').selectpicker('refresh');
       $('#customers_metadata').prop('required',false)
+      $('#freight').val('0').selectpicker('refresh');
+      $('#edit_freight').val('0').selectpicker('refresh');
+      $('div.po-required-div').hide();
      })
 
     /** function to generate random strings */
@@ -759,7 +772,7 @@
     });
 
     /** Get edit customer details on click and populate details on edit form **/
-     $(document).on('click','.edit-customer',function(e){
+     $(document).on('click','.edit-company',function(e){
          var id = $(this).closest('tr').attr('id');
          e.preventDefault();
          /* call getCustomer function from customer.js*/
@@ -787,14 +800,14 @@
            if($('#pi_required').is(':checked'))
            {
             $('div.po-required-div').show();
-            /** [ uncheck po required checkbox on page load ] */
+            /** [ uncheck po required checkbox ] */
             $('input:checkbox[name=po_required]').prop('checked',false);
            }
            else
            {
             $('div.po-required-div').hide();
-            /** [ uncheck po required checkbox while hidden ] */
-            $('input:checkbox[name=po_required]').prop('checked',false);
+            /** [ uncheck po required(default po_required) checkbox while hidden ] */
+            $('input:checkbox[name=po_required]').prop('checked',true);
            }
         });
 
@@ -803,18 +816,20 @@
            if($('#edit_pi_required').is(':checked'))
            {
             $('div.edit-po-required-div').show();
-            /** [ uncheck po required checkbox on page load ] */
+            /** [ uncheck po required(default po_required) checkbox ] */
             $('input:checkbox[name=edit_po_required]').prop('checked',false);
            }
            else
            {
             $('div.edit-po-required-div').hide();
-            /** [ uncheck po required checkbox while hidden ] */
-            $('input:checkbox[name=edit_po_required]').prop('checked',false);
+            /** [ check po required(default po_required) checkbox while hidden ] */
+            $('input:checkbox[name=edit_po_required]').prop('checked',true);
            }
         });
         /** [ To hide/show Nominated forwarder dropdown ( Based on freight type selected :Nominated Forwarded) ] */
           $('#freight').change(function(){
+            $('#forwarder').val('0').selectpicker('refresh');
+      
               if($('#freight option:selected').text() === "Nominated Forwarded") {
                   $('.forwarder_div').show(); 
                   $('#forwarder').prop('required',true);
@@ -824,6 +839,7 @@
               } 
         });
           $('#edit_freight').change(function(){
+            $('#edit_forwarder').val('0').selectpicker('refresh');
               if($('#edit_freight option:selected').text() === "Nominated Forwarded") {
                   $('.edit_forwarder_div').show(); 
                   $('#edit_forwarder').prop('required',true);

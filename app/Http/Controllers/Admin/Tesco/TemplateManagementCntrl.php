@@ -41,7 +41,7 @@ class TemplateManagementCntrl extends Controller
                 return $view->with(['modules' => $get_main_module]);
             });
             $get_sub_module = $module_var->getSubModules(22);
-            return view('Admin/Orchestra/template-management');
+            return view('Admin/Tesco/template-management');
         }
         else
         {
@@ -84,7 +84,7 @@ class TemplateManagementCntrl extends Controller
                                 ->select('tesco_template.*','tesco_item_master.ref_no','company.name as company_name','tesco_item_master.company_id')
                                 ->join('tesco_item_master','tesco_item_master.id','=','tesco_template.item_id')
                                 ->join('company','company.id','=','tesco_item_master.company_id')
-                                ->where('item_id',$exp)
+                                ->where('item_id',$exp)->orderBy('tesco_template.id','asc')
                                 ->get();
              array_push($view,$treeviewData);
          }
@@ -93,10 +93,18 @@ class TemplateManagementCntrl extends Controller
     } 
 	public function getCompany(Request $request)
     {
-         $items = DB::table("company")
+        $items = array();
+         $items['company']  = DB::table("company")
                                 ->select('*')
                                 ->get();
-         
+         $items['tax']      = DB::table("tax_code")
+                                ->select('tax')
+                                ->distinct()
+                                ->get();
+         $items['material'] = DB::table("raw_material_master")
+                                ->select('id','material_name_employee')
+                                ->where('is_enabled','=',true)
+                                ->get();
          return json_encode($items);
     }
     /**
@@ -108,18 +116,28 @@ class TemplateManagementCntrl extends Controller
         try {
             $template_id = $request['template_id'];
             $taxation    = $request['tax'];
-			$name    = $request['name'];
-			$ref    = $request['ref'];
-			$company   = $request['company'];
-			$inside_tamilnadu   = $request['inside_tamilnadu'];
-			$outside_tamilnadu   = $request['outside_tamilnadu'];
+			$ref         = $request['ref'];
+			$company     = $request['company'];
+			$hsncode     = $request['hsncode'];
+            $glcode      = $request['glcode'];
+            $gl_text     = $request['gltext'];
+            $color       = $request['color'];
+            $material_id = $request['material_id'];
+            $height      = $request['height'];
+            $width       = $request['width'];
+
             DB::table('tesco_template')
                         ->where('id',$template_id)
                         ->update([
-                           'tax' => $taxation,
-						   'template_name' => $name,
-						   'inside_tamilnadu' => $inside_tamilnadu,
-						   'outside_tamilnadu' => $outside_tamilnadu
+                           'tax'              => $taxation,
+						   'template_name'    => $ref,
+						   'hsn_code'         => $hsncode,
+						   'gl_code'          => $glcode,
+                           'gl_text'          => $gl_text,
+                           'color'            => $color,
+                           'dimension_height' => $height,
+                           'dimension_width'  => $width,
+                           'material_id'      => $material_id
                         ]);
 			
 			$items = DB::table("tesco_template")
@@ -130,9 +148,8 @@ class TemplateManagementCntrl extends Controller
 			DB::table('tesco_item_master')
                         ->where('id',$item_id)
                         ->update([
-						   'item_name' => $name,
-						   'company_id' => $company,
-						   'ref_no' => $ref
+						   'item_name'  => $ref,
+						   'company_id' => $company
                         ]);
             $result = response()->json(['error'=> false,'message' =>'success'],200);
         }

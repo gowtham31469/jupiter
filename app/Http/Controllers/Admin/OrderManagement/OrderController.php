@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use DB;
 use PDF;
+use App\Classes\Dashboard;
 
 class OrderController extends Controller
 {
@@ -48,7 +49,280 @@ class OrderController extends Controller
             
             $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->get();
             $buyer_count = count($buyers);
-            return view('Admin/Order Management/dashboard',['buyers' => $buyers,'buyer_count' => $buyer_count]);
+			
+			$new_count['tcl1'] = DB::table('tesco_tcl1_orders')
+									->whereRaw('created_at > current_date - 1')
+									->where('new_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$new_count['tcl2'] = DB::table('tesco_tcl2_orders')
+									->whereRaw('created_at > current_date - 1')
+									->where('new_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$new_count['tcl4'] = DB::table('tesco_tcl4_orders')
+									->whereRaw('created_at > current_date - 1')
+									->where('new_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$new_count['thl1'] = DB::table('tesco_thl1_orders')
+									->whereRaw('created_at > current_date - 1')
+									->where('new_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$new_count['thl3'] = DB::table('tesco_thl3_orders')
+									->whereRaw('created_at > current_date - 1')
+									->where('new_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$new_count['tsl1'] = DB::table('tesco_tsl1_orders')
+									->whereRaw('created_at > current_date - 1')
+									->where('new_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$new_count['tsl3'] = DB::table('tesco_tsl3_orders')
+									->whereRaw('created_at > current_date - 1')
+									->where('new_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$tot_count = $new_count['tcl1']{0}->sum + $new_count['tcl2']{0}->sum + $new_count['tcl4']{0}->sum + $new_count['thl1']{0}->sum + $new_count['thl3']{0}->sum + $new_count['tsl1']{0}->sum + $new_count['tsl3']{0}->sum;
+			
+			
+			$approved_orders['tcl1'] = DB::table('tesco_tcl1_orders')
+									->where('order_status','Order Approved')
+									->where('app_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$approved_orders['tcl2'] = DB::table('tesco_tcl2_orders')
+									->where('order_status','Order Approved')
+									->where('app_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$approved_orders['tcl4'] = DB::table('tesco_tcl4_orders')
+									->where('order_status','Order Approved')
+									->where('app_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$approved_orders['thl1'] = DB::table('tesco_thl1_orders')
+									->where('order_status','Order Approved')
+									->where('app_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$approved_orders['thl3'] = DB::table('tesco_thl3_orders')
+									->where('order_status','Order Approved')
+									->where('app_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$approved_orders['tsl1'] = DB::table('tesco_tsl1_orders')
+									->where('order_status','Order Approved')
+									->where('app_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$approved_orders['tsl3'] = DB::table('tesco_tsl3_orders')
+									->where('order_status','Order Approved')
+									->where('app_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$approve_count = $approved_orders['tcl1']{0}->sum + $approved_orders['tcl2']{0}->sum + $approved_orders['tcl4']{0}->sum + $approved_orders['thl1']{0}->sum + $approved_orders['thl3']{0}->sum + $approved_orders['tsl1']{0}->sum + $approved_orders['tsl3']{0}->sum;
+			
+			$pending_orders['tcl1'] = DB::table('tesco_tcl1_orders')
+									->where('order_status','Order Placed')
+									->where('pen_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$pending_orders['tcl2'] = DB::table('tesco_tcl2_orders')
+									->where('order_status','Order Placed')
+									->where('pen_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$pending_orders['tcl4'] = DB::table('tesco_tcl4_orders')
+									->where('order_status','Order Placed')
+									->where('pen_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$pending_orders['thl1'] = DB::table('tesco_thl1_orders')
+									->where('order_status','Order Placed')
+									->where('pen_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$pending_orders['thl3'] = DB::table('tesco_thl3_orders')
+									->where('order_status','Order Placed')
+									->where('pen_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$pending_orders['tsl1'] = DB::table('tesco_tsl1_orders')
+									->where('order_status','Order Placed')
+									->where('pen_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$pending_orders['tsl3'] = DB::table('tesco_tsl3_orders')
+									->where('order_status','Order Placed')
+									->where('pen_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$pending_count = $pending_orders['tcl1']{0}->sum + $pending_orders['tcl2']{0}->sum + $pending_orders['tcl4']{0}->sum + $pending_orders['thl1']{0}->sum + $pending_orders['thl3']{0}->sum + $pending_orders['tsl1']{0}->sum + $pending_orders['tsl3']{0}->sum;
+			
+			
+			$app_pipo1['tcl1'] = DB::table('tesco_tcl1_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Pending')
+									->whereIn('pi_status',['PI Approval Pending',""])
+									->where('app_pipo_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$app_pipo2['tcl1'] = DB::table('tesco_tcl1_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Uploaded')
+									->where('pi_status','PI Approval Pending')
+									->where('app_pipo_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$app_pipo1['tcl2'] = DB::table('tesco_tcl2_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Pending')
+									->whereIn('pi_status',['PI Approval Pending',""])
+									->where('app_pipo_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$app_pipo2['tcl2'] = DB::table('tesco_tcl2_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Uploaded')
+									->where('pi_status','PI Approval Pending')
+									->where('app_pipo_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$app_pipo1['tcl4'] = DB::table('tesco_tcl4_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Pending')
+									->whereIn('pi_status',['PI Approval Pending',""])
+									->where('app_pipo_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$app_pipo2['tcl4'] = DB::table('tesco_tcl4_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Uploaded')
+									->where('pi_status','PI Approval Pending')
+									->where('app_pipo_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$app_pipo1['thl1'] = DB::table('tesco_thl1_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Pending')
+									->whereIn('pi_status',['PI Approval Pending',""])
+									->where('app_pipo_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$app_pipo2['thl1'] = DB::table('tesco_thl1_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Uploaded')
+									->where('pi_status','PI Approval Pending')
+									->where('app_pipo_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$app_pipo1['thl3'] = DB::table('tesco_thl3_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Pending')
+									->whereIn('pi_status',['PI Approval Pending',""])
+									->where('app_pipo_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$app_pipo2['thl3'] = DB::table('tesco_thl3_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Uploaded')
+									->where('pi_status','PI Approval Pending')
+									->where('app_pipo_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$app_pipo1['tsl1'] = DB::table('tesco_tsl1_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Pending')
+									->whereIn('pi_status',['PI Approval Pending',""])
+									->where('app_pipo_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$app_pipo2['tsl1'] = DB::table('tesco_tsl1_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Uploaded')
+									->where('pi_status','PI Approval Pending')
+									->where('app_pipo_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$app_pipo1['tsl3'] = DB::table('tesco_tsl3_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Pending')
+									->whereIn('pi_status',['PI Approval Pending',""])
+									->where('app_pipo_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$app_pipo2['tsl3'] = DB::table('tesco_tsl3_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Uploaded')
+									->where('pi_status','PI Approval Pending')
+									->where('app_pipo_flag',0)
+									->where('is_order_count_empty',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			
+			$app_pipo = $app_pipo1['tcl1']{0}->sum + $app_pipo1['tcl2']{0}->sum + $app_pipo1['tcl4']{0}->sum + $app_pipo1['thl1']{0}->sum + $app_pipo1['thl3']{0}->sum + $app_pipo1['tsl1']{0}->sum + $app_pipo1['tsl3']{0}->sum + $app_pipo2['tcl1']{0}->sum + $app_pipo2['tcl2']{0}->sum + $app_pipo2['tcl4']{0}->sum + $app_pipo2['thl1']{0}->sum + $app_pipo2['thl3']{0}->sum + $app_pipo2['tsl1']{0}->sum + $app_pipo2['tsl3']{0}->sum;
+			
+			$pending_class    = new Dashboard();
+
+            $pendingproduction      = $pending_class->pendingProduction();
+                
+			
+			
+		
+          return view('Admin/Order Management/dashboard',['buyers' => $buyers,'buyer_count' => $buyer_count,'new_orders'=>$tot_count,'approved_pipo'=>$app_pipo,'approved_orders'=>$approve_count,'pending_orders'=>$pending_count,'pendingproduction'=>$pendingproduction]);
         }
         else
         {
@@ -56,6 +330,8 @@ class OrderController extends Controller
         }
 
     }
+	
+	
 	
 	 /**
 	 * Show the Order dashboard.
@@ -75,7 +351,7 @@ class OrderController extends Controller
                 return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
             });
             
-            $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->get();
+            $buyers = DB::table('buyers')->select('*')->where('artwork_flag','=',1)->where('is_active','=',1)->get();
             $buyer_count = count($buyers);
             return view('Admin/Order Management/orders',['buyers' => $buyers,'buyer_count' => $buyer_count]);
         }
@@ -85,6 +361,38 @@ class OrderController extends Controller
         }
 
     }    
+	
+	 /**
+	 * Show the Order dashboard.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	
+    public function nonArtworkOrders()
+    {
+        $module_var = new Modules();
+        $is_allowed = $module_var->permittedModules();
+        if($is_allowed)
+        {
+            $get_main_module = $module_var->getMainModules();
+            $get_sub_module = $module_var->getSubModules(9);
+            View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
+                return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
+            });
+            
+            $buyers = DB::table('buyers')->select('*')->where('artwork_flag','=',1)->where('is_active','=',1)->get();
+			
+			$orders = DB::table('non_artwork_orders')->select('*')->get();
+			
+            $buyer_count = count($buyers);
+            return view('Admin/Order Management/non-art-orders',['buyers' => $buyers,'buyer_count' => $buyer_count,'orders' => $orders]);
+        }
+        else
+        {
+             return redirect('/admin/dashboard');
+        }
+
+    }   
 	
 	 /**
 	 * Show the Order Status dashboard.
@@ -106,7 +414,7 @@ class OrderController extends Controller
             $tesco_brand = DB::table('tesco_brand')->select('brand','id')->get();
             $tesco_department = DB::table('tesco_department')->select('department','id')->get();
             $tesco_suppliers = DB::table('tesco_suppliers')->select('tesco_suppliers.supplier_name','tesco_suppliers.id')->join('customer_metadata','customer_metadata.customer_metadata_id','=','tesco_suppliers.id')->where('is_enabled','=',1)->get();
-            $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->get();
+            $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->where('artwork_flag','=',1)->get();
             $buyer_count = count($buyers);
             return view('Admin/Order Management/order-status',['buyers' => $buyers,'tesco_brand' => $tesco_brand,'tesco_department' => $tesco_department,'tesco_suppliers' => $tesco_suppliers,'buyer_count' => $buyer_count]);
         }
@@ -168,6 +476,64 @@ class OrderController extends Controller
         PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=1, $fitonpage=false);
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
+    } 
+	
+	
+	/**
+	 * Print Preview For 150 * 100 Size Stickers
+	 *
+	 * @return pdf
+	 */
+	
+    public function printPdfArr(Request $request)
+    {
+		 $name=$request->name;
+		 $svgarr = explode(',_',$request->svg);
+         //$svg=urldecode($request->svg);
+         define ('PDF_FONT_NAME_MAIN', 'calibrib');
+         define ('PDF_FONT_NAME_DATA', 'calibrib');
+//          print_r($svg);
+        PDF::setImageScale(1.66);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('calibrib');
+		PDF::AddPage('P', 'A4');
+		PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+		PDF::SetAutoPageBreak(TRUE);
+		$i=0;
+		$j=0;
+		$yy=12.5;
+		foreach($svgarr as $value)
+        {
+			$svg=urldecode($value);
+			
+			if($i == 2)
+			{
+				PDF::AddPage('P', 'A4');
+				PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+				$yy=12.5;
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+				$i = 0;
+			}
+			else if($i == 0)
+			{
+				PDF::RoundedRect(10, 160, 150, 100, 0, '0000');
+				$yy=12.5;
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+				
+			}
+			else
+			{
+				PDF::RoundedRect(10, 160, 150, 100, 0, '0000');
+				$yy += 150;
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+			}
+			$i++;
+			$j++;
+		 }
+		 
+		 PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+		 print_r(url('/storage/app/template/'.$name.'.pdf'));
     } 
 	
 	/**
@@ -383,18 +749,57 @@ class OrderController extends Controller
 	
      public function printPdfSmall(Request $request)
     {
-      
-        $name=$request->name;
-        $svg=urldecode($request->svg);
-        define ('PDF_FONT_NAME_MAIN', 'calibrib');
-        define ('PDF_FONT_NAME_DATA', 'calibrib');
-        PDF::setImageScale(1);
+		 
+		  $name=$request->name;
+		 $svgarr = explode(',_',$request->svg);
+         //$svg=urldecode($request->svg);
+         define ('PDF_FONT_NAME_MAIN', 'calibrib');
+         define ('PDF_FONT_NAME_DATA', 'calibrib');
+//          print_r($svg);
+        PDF::setImageScale(1.66);
         PDF::setPrintHeader(false);
         PDF::setPrintFooter(false);
         PDF::SetFont('calibrib');
-        PDF::AddPage();
-        PDF::RoundedRect(10, 10, 100, 70, 0, '0000');
-        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=95, $h=65, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+		PDF::AddPage('P', 'A4');
+		PDF::RoundedRect(10, 10, 100, 70, 0, '0000');
+		PDF::SetAutoPageBreak(TRUE);
+		$i=0;
+		$j=0;
+		$yy=12.5;
+		foreach($svgarr as $value)
+        {
+			$svg=urldecode($value);
+			
+			if($i == 3)
+			{
+				PDF::AddPage('P', 'A4');
+				PDF::RoundedRect(10, 10, 100, 70, 0, '0000');
+				$yy=12.5;
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+				$i = 0;
+			}
+			else  if($i == 0)
+			{
+				PDF::RoundedRect(10, 100, 100, 70, 0, '0000');
+				$yy=12.5;
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+				
+			}
+			else if($i == 1)
+			{
+				PDF::RoundedRect(10, 100, 100, 70, 0, '0000');
+				$yy += 90;
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+			}
+			else
+			{
+				PDF::RoundedRect(10, 190, 100, 70, 0, '0000');
+				$yy += 90;
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+			}
+			$i++;
+			$j++;
+		 }
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
     }

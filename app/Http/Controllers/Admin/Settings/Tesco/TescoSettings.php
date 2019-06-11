@@ -28,6 +28,9 @@ use App\TescoTSL1Orders;
 use App\TescoTSL1OrdersQuantity;
 use App\TescoTSL3Orders;
 use App\TescoTSL3OrdersQuantity;
+use App\TescoTaxCode;
+use App\RawMaterialMaster;
+use App\TescoErrorReportEmails;
 
 class TescoSettings extends Controller
 {
@@ -50,6 +53,7 @@ class TescoSettings extends Controller
     {
       try {
             $tesco_brand = DB::table('tesco_brand')->select('id','brand','is_enabled')->orderBy('is_enabled','desc')->get();
+
             return response()->json(['error'=>'false','message' =>'success', 'tesco_brands' => $tesco_brand]);
           } catch (\Exception $e)
           {
@@ -68,11 +72,8 @@ class TescoSettings extends Controller
         try {
 
              /** @var array [Database Unique field validation] */
-             $is_exists = array(
-                 'name' => 'required|unique:tesco_brand,brand',
-             );
-             $validator = Validator::make($request->all() ,$is_exists);
-             if($validator->fails())
+             $is_exists = TescoBrand::where('brand','ilike',$request['name'])->select('id')->get();
+             if(sizeof($is_exists) > 0)
              {
                $result = response()->json(['error'=> true,'message' =>'Brand Already Exists'],208);
              }
@@ -122,12 +123,10 @@ class TescoSettings extends Controller
           $name      = $request['name'];
           
           /** @var array [Database Unique field validation] */
-          $rules     = array('name' => 'unique:tesco_brand,brand,'.$id);
-          $Validator  = Validator::make($request->all(),$rules);
-
-          if($Validator->fails())
+          $is_exists = TescoBrand::where('brand','ilike',$request['name'])->where('id','<>',$id)->select('id')->get();
+          if(sizeof($is_exists) > 0)
           {
-              return response()->json(['error'=> true,'message' =>'Brand Already Exists'],208);
+              $result = response()->json(['error'=> true,'message' =>'Brand Already Exists'],208);
           }
           else
           {
@@ -185,18 +184,18 @@ class TescoSettings extends Controller
               $tcl4_table_brands = TescoTCL4Orders::where('tesco_brand_id','=',$id)->pluck('id')->all();
               $thl1_table_brands = TescoTHL1Orders::where('tesco_brand_id','=',$id)->pluck('id')->all();
               $thl3_table_brands = TescoTHL3Orders::where('tesco_brand_id','=',$id)->pluck('id')->all();
-              array_merge($tcl1_table_brands,$tcl4_table_brands,$thl1_table_brands,$thl3_table_brands);
-              if(empty($tcl1_table_brands) != '')
+
+             if((sizeof($tcl1_table_brands) > 0) || (sizeof($tcl4_table_brands) > 0) || (sizeof($thl1_table_brands) > 0) || (sizeof($thl3_table_brands) > 0))
+              {
+                $result = response()->json(['error'=> false,'message' =>'Brand is in use.'],208);
+              }
+              else
               {
                 TescoBrand::where('id',$id)
                  ->update([
                    'is_enabled'  => 0
                 ]);
                 $result = response()->json(['error'=> false,'message' =>'Success'],200);
-              }
-              else
-              {
-                $result = response()->json(['error'=> false,'message' =>'Brand is in use.'],208);
               }
             } 
             catch (\Exception $e)
@@ -233,11 +232,8 @@ class TescoSettings extends Controller
     {
         try {
              /** @var array [Database Unique field validation] */
-             $is_exists = array(
-                 'department' => 'required|unique:tesco_department,department',
-             );
-             $validator = Validator::make($request->all() ,$is_exists);
-             if($validator->fails())
+              $is_exists = TescoDepartment::where('department','ilike',$request['department'])->select('id')->get();
+              if(sizeof($is_exists) > 0)
              {
                $result = response()->json(['error'=> true,'message' =>'Department Already Exists'],208);
              }
@@ -290,12 +286,10 @@ class TescoSettings extends Controller
           $rbg = $request['rbg'];
           
           /** @var array [Database Unique field validation] */
-          $rules     = array('department' => 'unique:tesco_department,department,'.$id);
-          $Validator  = Validator::make($request->all(),$rules);
-
-          if($Validator->fails())
+          $is_exists = TescoDepartment::where('department','ilike',$request['department'])->where('id','<>',$id)->select('id')->get();
+          if(sizeof($is_exists) > 0)
           {
-              return response()->json(['error'=> true,'message' =>'Department Already Exists'],208);
+              $result = response()->json(['error'=> true,'message' =>'Department Already Exists'],208);
           }
           else
           {
@@ -355,19 +349,18 @@ class TescoSettings extends Controller
               $tcl4_table_departments = TescoTCL4Orders::where('tesco_department_id','=',$id)->pluck('id')->all();
               $thl1_table_departments = TescoTHL1Orders::where('tesco_department_id','=',$id)->pluck('id')->all();
               $thl3_table_departments = TescoTHL3Orders::where('tesco_department_id','=',$id)->pluck('id')->all();
-              array_merge($tcl1_table_departments,$tcl4_table_departments,$thl1_table_departments,$thl3_table_departments);
 
-              if(empty($tcl1_table_departments) != '')
+              if((sizeof($tcl1_table_departments) > 0) || (sizeof($tcl4_table_departments) > 0) || (sizeof($thl1_table_departments) > 0) || (sizeof($thl3_table_departments) > 0))
+              {
+                $result = response()->json(['error'=> false,'message' =>'Department is in use.'],208);
+              }
+              else
               {
                 TescoDepartment::where('id',$id)
                  ->update([
                    'is_enabled'  => 0
                 ]);
                 $result = response()->json(['error'=> false,'message' =>'Success'],200);
-              }
-              else
-              {
-                $result = response()->json(['error'=> false,'message' =>'Department is in use.'],208);
               }
             } 
             catch (\Exception $e)
@@ -402,8 +395,8 @@ class TescoSettings extends Controller
     {
         try {
               /** @var array [Database Unique field validation] */
-              $is_exists = TescoSupplier::where(['supplier_name' => $request['supplier_name'],'supplier_code' => $request['supplier_code']])->select('id')->get();
-              if(count($is_exists) > 0)
+              $is_exists = TescoSupplier::where('supplier_code', '=', $request['supplier_code'])->where('supplier_name','ilike',$request['supplier_name'])->select('id')->get();
+              if(sizeof($is_exists) > 0)
               {
                 $result = response()->json(['error'=> true,'message' =>'Supplier Already Exists'],208);
               }
@@ -456,13 +449,13 @@ class TescoSettings extends Controller
 
           /** @var array [Database Unique field validation] */
           $is_exists = TescoSupplier::select('id')
-                       ->where('supplier_name', '=', $request['supplier_name'])
+                       ->where('supplier_name', 'ilike', $request['supplier_name'])
                        ->where('supplier_code', '=', $request['supplier_code'])
                        ->where('id','<>',$id)
                        ->get();
-          if(count($is_exists) > 0)
+          if(sizeof($is_exists) > 0)
           {
-              return response()->json(['error'=> true,'message' =>'Supplier Already Exists.'],208);
+              $result = response()->json(['error'=> true,'message' =>'Supplier Already Exists.'],208);
           }
           else
           {
@@ -567,12 +560,9 @@ class TescoSettings extends Controller
     public function addTescoSizeCharts(Request $request)
     {
         try {
-             $is_exists = TescoSizeChart::where('po_size', '=', $request['po_size'])->select('id')->get();
-             $is_exists = array(
-                 'po_size' => 'required|unique:tesco_size_chart,po_size',
-             );
-             $validator = Validator::make($request->all() ,$is_exists);
-             if($validator->fails())
+             $is_exists = TescoSizeChart::where('po_size', 'ilike', $request['po_size'])->select('id')->get();
+
+             if(sizeof($is_exists) > 0)
              {
                $result = response()->json(['error'=> true,'message' =>'Size Chart Already Exists'],208);
              }
@@ -620,16 +610,19 @@ class TescoSettings extends Controller
     {
     try {
           $id        = $request['id'];
-          $po_size      = $request['po_size'];
-          $uk = $request['uk'];
-          $ce = $request['ce'];
+          $po_size   = $request['po_size'];
+          $uk        = $request['uk'];
+          $ce        = $request['ce'];
 
-          $rules     = array('po_size' => 'unique:tesco_size_chart,po_size,'.$id);
-          $Validator  = Validator::make($request->all(),$rules);
+          /** @var array [Database Unique field validation] */
+          $is_exists = TescoSizeChart::select('id')
+                       ->where('po_size', 'ilike', $po_size)
+                       ->where('id','<>',$id)
+                       ->get();
 
-          if($Validator->fails())
+          if(sizeof($is_exists) > 0)
           {
-              return response()->json(['error'=> true,'message' =>'Size Chart Already Exists'],208);
+              $result = response()->json(['error'=> true,'message' =>'Size Chart Already Exists'],208);
           }
           else
           {
@@ -688,11 +681,14 @@ class TescoSettings extends Controller
               // Checking for 1 template order table from each combination.
               // (ie, TCL4 from TCL4 and TSL3 combination)
               // size only for tesco single templates
-              $tcl4_sizes = TescoTCL4OrdersQuantity::where('size','=',$size->po_size)->pluck('id')->all();
-              $thl3_sizes = TescoTHL3OrdersQuantity::where('size','=',$size->po_size)->pluck('id')->all();
-              array_merge($tcl4_sizes,$thl3_sizes);
+              $tcl4_sizes = TescoTCL4OrdersQuantity::where('size','ilike',$size->po_size)->pluck('id')->all();
+              $thl3_sizes = TescoTHL3OrdersQuantity::where('size','ilike',$size->po_size)->pluck('id')->all();
 
-              if(empty($tcl4_sizes) != '')
+              if((sizeof($tcl4_sizes) > 0) || (sizeof($thl3_sizes) > 0))
+              {
+                $result = response()->json(['error'=> false,'message' =>'Size Chart is in use.'],208);
+              }
+              else
               {
                 TescoSizeChart::where('id',$id)
                  ->update([
@@ -700,10 +696,430 @@ class TescoSettings extends Controller
                 ]);
                 $result = response()->json(['error'=> false,'message' =>'Success'],200);
               }
+
+            } 
+            catch (\Exception $e)
+            {
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+      }
+
+        /**
+          * Tesco/Orchestra metadata tax code list show using ajax.
+          * @author <Praveen>
+          * @return \Illuminate\Http\Response
+          */
+         public function taxCode()
+         {
+           try {
+                 $taxcode = DB::table('tax_code')->select('id','tax_code','tax_type','is_enabled', 'tax')->orderBy('is_enabled','desc')->get();
+                 return response()->json(['error'=>'false','message' =>'success', 'taxcodes' => $taxcode]);
+               } catch (\Exception $e)
+               {
+                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+               }
+         }
+
+      /**
+        * Add Tesco/Orchestra tax code.
+        * @param \Illuminate\Http\Request
+        * @author <Praveen>
+        * @return \Illuminate\Http\Response
+        */
+       public function addTaxCodes(Request $request)
+       {
+           try {
+                $is_exists = TescoTaxCode::where('tax_type', 'ilike', $request['tax_type'])->where('tax_code', 'ilike', $request['tax_code'])->where('tax', '=', $request['tax'])->select('id')->get();
+
+                if(sizeof($is_exists) > 0)
+                {
+                  $result = response()->json(['error'=> true,'message' =>'Tax Code Already Exists'],208);
+                }
+                else
+                {
+                   $inserted = TescoTaxCode::create([
+                           'tax_type'   => $request['tax_type'],
+                           'tax_code'   => $request['tax_code'],
+                           'tax'        => $request['tax'],
+                           'is_enabled' => 1
+                         ]);
+                   $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+                }
+
+           } catch (\Exception $e)
+           {
+               $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+           }
+           return $result;
+       }
+      /**
+        * Get Tesco/Orchestra tax code details by ID for editing.
+        * @param Tesco tax code id
+        * @author <Praveen>
+        * @return \Illuminate\Http\Response
+        */
+       public function getTaxCodesById(Request $request)
+       {
+       try {
+             $id = $request['id'];
+             $tax_code = DB::table('tax_code')->select('id','tax_code','tax_type','is_enabled', 'tax')->where('tax_code.id',$id)->get();
+             return response()->json(['error'=>'false','message' =>'success', 'tax_codes' => $tax_code]);
+           } catch (\Exception $e)
+           {
+             return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+           }
+       }
+      /**
+       * Update Tesco/Orchestra tax code by id.
+       * @param taxcode id
+       * @author <Praveen>
+       * @return \Illuminate\Http\Response
+       */
+       public function updateTaxCodesById(Request $request)
+       {
+       try {
+             $id        = $request['id'];
+             $tax_code  = $request['tax_code'];
+             $tax_type  = $request['tax_type'];
+             $tax       = $request['tax'];
+
+             /** @var array [Database Unique field validation] */
+             $is_exists = TescoTaxCode::select('id')
+                          ->where('tax_type', 'ilike', $tax_type)
+                          ->where('tax_code', 'ilike', $tax_code)
+                          ->where('tax', '=', $tax)
+                          ->where('id','<>',$id)
+                          ->get();
+
+             if(sizeof($is_exists) > 0)
+             {
+                 $result = response()->json(['error'=> true,'message' =>'Tax Code Already Exists'],208);
+             }
+             else
+             {
+                TescoTaxCode::where('id',$id)
+                 ->update([
+                   'tax_code' => $tax_code,
+                   'tax_type' => $tax_type,
+                   'tax'      => $tax,
+
+                ]);
+
+                $result = response()->json(['error'=> false,'message' =>'Success'],200);
+             }
+           
+           } catch (\Exception $e)
+           {
+             $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+           }
+           return $result;
+       }
+       /**
+         * Raw material Metadata list show using ajax.
+         * @author <Praveen>
+         * @return \Illuminate\Http\Response
+         */
+        public function rawMaterials()
+        {
+          try {
+                $raw_materials = DB::table('raw_material_master')->select('id','material_name_employee','material_name_production','is_enabled', 'material_name_purchase')->orderBy('is_enabled','desc')->get();
+                return response()->json(['error'=>'false','message' =>'success', 'raw_materials' => $raw_materials]);
+              } catch (\Exception $e)
+              {
+                return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+              }
+        }
+
+       /**
+         * Add Raw material Metadata.
+         * @param \Illuminate\Http\Request
+         * @author <Praveen>
+         * @return \Illuminate\Http\Response
+         */
+        public function addRawMaterial(Request $request)
+        {
+            try {
+                 $is_exists = RawMaterialMaster::where('material_name_employee', 'ilike', $request['emp_material'])->where('material_name_production', 'ilike', $request['production_material'])->where('material_name_purchase', 'ilike', $request['purchase_material'])->select('id')->get();
+
+                 if(sizeof($is_exists) > 0)
+                 {
+                   $result = response()->json(['error'=> true,'message' =>'Material Already Exists'],208);
+                 }
+                 else
+                 {
+                    $inserted = RawMaterialMaster::create([
+                            'material_name_employee'    => $request['emp_material'],
+                            'material_name_production'  => $request['production_material'],
+                            'material_name_purchase'    => $request['purchase_material'],
+                            'is_enabled'                => false
+                          ]);
+                    $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+                 }
+
+            } catch (\Exception $e)
+            {
+                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+       /**
+         * Get Raw material Metadata details by ID for editing.
+         * @param Raw material id
+         * @author <Praveen>
+         * @return \Illuminate\Http\Response
+         */
+        public function getRawMaterialById(Request $request)
+        {
+        try {
+              $id = $request['id'];
+              $raw_material = DB::table('raw_material_master')->select('id','material_name_employee','material_name_production','is_enabled', 'material_name_purchase')->where('raw_material_master.id',$id)->get();
+              return response()->json(['error'=>'false','message' =>'success', 'raw_material' => $raw_material]);
+            } catch (\Exception $e)
+            {
+              return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+        }
+       /**
+        * Update Raw material Metadata by id.
+        * @param material id
+        * @author <Praveen>
+        * @return \Illuminate\Http\Response
+        */
+        public function updateRawMaterialById(Request $request)
+        {
+        try {
+              $id                  = $request['id'];
+              $emp_material        = $request['emp_material'];
+              $production_material = $request['production_material'];
+              $purchase_material   = $request['purchase_material'];
+
+              /** @var array [Database Unique field validation] */
+              $is_exists = RawMaterialMaster::select('id')
+                           ->where('material_name_employee', 'ilike', $emp_material)
+                           ->where('material_name_production', 'ilike', $production_material)
+                           ->where('material_name_purchase', 'ilike', $purchase_material)
+                           ->where('id','<>',$id)
+                           ->get();
+
+              if(sizeof($is_exists) > 0)
+              {
+                  $result = response()->json(['error'=> true,'message' =>'Material Already Exists'],208);
+              }
               else
               {
-                $result = response()->json(['error'=> false,'message' =>'Size Chart is in use.'],208);
+                 RawMaterialMaster::where('id',$id)
+                  ->update([
+                    'material_name_employee'    => $emp_material,
+                    'material_name_production'  => $production_material,
+                    'material_name_purchase'    => $purchase_material,
+                 ]);
+
+                 $result = response()->json(['error'=> false,'message' =>'Success'],200);
               }
+            
+            } catch (\Exception $e)
+            {
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+      /**
+       * Make Material enabled
+       * @param Material id
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeMaterialEnabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              RawMaterialMaster::where('id',$id)
+               ->update([
+                 'is_enabled'  => true
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+      /**
+       * Make Material disabled
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeMaterialDisabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              /** @var array [Database Unique field validation] */
+              $is_exists = DB::table('tesco_template')->where('material_id','=',$id)->select('id')->get();
+              if(sizeof($is_exists) > 0)
+             {
+               $result = response()->json(['error'=> true,'message' =>'Material is in use.'],208);
+             }
+             else
+             {
+                $inserted = RawMaterialMaster::where('id',$id)
+                              ->update([
+                                'is_enabled'  => false
+                            ]);
+                $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+             }
+            } 
+            catch (\Exception $e)
+            {
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+      }
+      /**
+        * Tesco error report emails list show using ajax.
+        * @author <Praveen>
+        * @return \Illuminate\Http\Response
+        */
+       public function tescoErrorReportEmails()
+       {
+         try {
+               $error_report_data = TescoErrorReportEmails::select('tesco_error_report_emails.id','company.name as company','error_case','contact_person','email_address','is_enabled')->join('company','company.id','tesco_error_report_emails.company_id')->orderBy('tesco_error_report_emails.is_enabled','desc')->get();
+               
+               return response()->json(['error'=>'false','message' =>'success', 'error_report_data' => $error_report_data]);
+             } catch (\Exception $e)
+             {
+               return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+             }
+       }
+       /**
+        * Add Tesco PO error reporting emails.
+        * @param \Illuminate\Http\Request
+        * @author <Praveen>
+        * @return \Illuminate\Http\Response
+        */
+       public function addTescoErrorReportEmail(Request $request)
+       {
+           try {
+                $is_exists = TescoErrorReportEmails::where('error_case', 'ilike', $request['error_case'])->where('email_address', 'ilike', $request['email'])->where('company_id', '=', $request['company'])->select('id')->get();
+
+                if(sizeof($is_exists) > 0)
+                {
+                  $result = response()->json(['error'=> true,'message' =>'Email Details Already Exists'],208);
+                }
+                else
+                {
+                   $inserted = TescoErrorReportEmails::create([
+                           'company_id'     => $request['company'],
+                           'error_case'     => $request['error_case'],
+                           'contact_person' => $request['contact_person'],
+                           'email_address'  => $request['email'],
+                           'is_enabled'     => false
+                         ]);
+                   $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+                }
+
+           } catch (\Exception $e)
+           {
+               $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+           }
+           return $result;
+       }
+       /**
+         * Get Tesco Error Report Email details by ID for editing.
+         * @param Tesco Error Report Email id
+         * @author <Praveen>
+         * @return \Illuminate\Http\Response
+         */
+        public function getTescoErrorReportEmailById(Request $request)
+        {
+        try {
+              $id = $request['id'];
+              $error_report_data = TescoErrorReportEmails::select('*')->where('id',$id)->get();
+              return response()->json(['error'=>'false','message' =>'success', 'error_report_data' => $error_report_data]);
+            } catch (\Exception $e)
+            {
+              return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+        }
+        /**
+         * Edit Tesco PO error reporting emails.
+         * @param \Illuminate\Http\Request
+         * @author <Praveen>
+         * @return \Illuminate\Http\Response
+         */
+        public function updateTescoErrorReportEmailById(Request $request)
+        {
+            try {
+                 /** @var array [Database Unique field validation] */
+                 $is_exists = TescoErrorReportEmails::select('id')
+                             ->where('error_case', 'ilike', $request['error_case'])
+                             ->where('email_address', 'ilike', $request['email'])
+                             ->where('company_id', '=', $request['company'])
+                             ->where('id','<>',$request['id'])
+                             ->get();
+                 if(sizeof($is_exists) > 0)
+                 {
+                   $result = response()->json(['error'=> true,'message' =>'Email Details Already Exists'],208);
+                 }
+                 else
+                 {
+                    TescoErrorReportEmails::where('id',$request['id'])
+                     ->update([
+                        'company_id'     => $request['company'],
+                        'error_case'     => $request['error_case'],
+                        'contact_person' => $request['contact_person'],
+                        'email_address'  => $request['email']
+                    ]);
+                    $result = response()->json(['error'=> false,'message' =>'success'],200);
+                 }
+
+            } catch (\Exception $e)
+            {
+                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+      /**
+       * Make Tesco PO error reporting email  enabled
+       * @param Tesco PO error reporting email  id
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeErrorReportEmailEnabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              TescoErrorReportEmails::where('id',$id)
+               ->update([
+                 'is_enabled'  => true
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+      /**
+       * Make Tesco PO error reporting email disabled
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeErrorReportEmailDisabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              TescoErrorReportEmails::where('id',$id)
+               ->update([
+                 'is_enabled'  => false
+              ]);
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
 
             } 
             catch (\Exception $e)

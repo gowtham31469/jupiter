@@ -107,9 +107,9 @@
                 </li>
                
                 
-                <li><a class="dropdown-toggle profile-dropdown-admin" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
+                <li><a class="dropdown-toggle profile-dropdown-admin" href="{{ 'admin/logout' }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
                 
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        <form id="logout-form" action="{{ '/admin/logout' }}" method="POST" style="display: none;">
                             {{ csrf_field() }}
                         </form>
 
@@ -135,7 +135,7 @@
                          {!! Form::label('feedback_email', 'Your Email', ['class' => 'form_label']) !!}
                          <div class="input-group">
                            <span class="input-group-addon input-sm" id="basic-addon1">@</span>
-                           {!! Form::email('feedback_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required','onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
+                           {!! Form::email('feedback_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required','onkeyup' => '$(this).val($(this).val().toLowerCase());','maxlength' => '50')) !!}
                          </div>
                          <div class="help-block with-errors"></div>
                        </div>
@@ -174,14 +174,14 @@
                    <div id="admin_profile_result"></div>
                      <div class="form-group has-feedback">
                        {!! Form::label('admin_profile_name', 'Name', ['class' => 'form_label']) !!}
-                       {!! Form::text('admin_profile_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required')) !!}
+                       {!! Form::text('admin_profile_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required','maxlength' => '25', 'style' => 'text-transform: capitalize;')) !!}
                        <div class="help-block with-errors"></div>
                      </div>
                      <div class="form-group has-feedback">
                        {!! Form::label('admin_profile_email', 'Email', ['class' => 'form_label']) !!}
                        <div class="input-group">
                          <span class="input-group-addon input-sm" id="basic-addon1">@</span>
-                         {!! Form::email('admin_profile_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required','onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
+                         {!! Form::email('admin_profile_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required','onkeyup' => '$(this).val($(this).val().toLowerCase());','maxlength' => '50')) !!}
                        </div>
                        <div class="help-block with-errors"></div>
                      </div>
@@ -195,7 +195,7 @@
                      </div>
                      <div class="form-group has-feedback">
                        {!! Form::label('admin_profile_address', 'Address', ['class' => 'form_label']) !!}
-                       {!! Form::textarea('admin_profile_address',$value = '', array('class' => 'form-control','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3,'onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
+                       {!! Form::textarea('admin_profile_address',$value = '', array('class' => 'form-control','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3, 'style' => 'text-transform: capitalize;')) !!}
                        <div class="help-block with-errors"></div>
                      </div>
                  </div>

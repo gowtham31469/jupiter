@@ -18,5 +18,5 @@ class ProfomaInvoiceItemDetails extends Model
       *
       * @var array
       */
-      protected $fillable = ['pi_id','material','size','style','quantity','unit_cost','template_id','ref_no'];
+      protected $fillable = ['pi_id','material','size','style','quantity','unit_cost','template_id','ref_no','tax'];
 }

@@ -1,0 +1,3013 @@
+/**
+ * ERP job card manager jquery/javascript file
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+
+$(document).ready(function() {
+	$('input[class="row-checkbox"]').prop('checked', false);
+
+    $('#create_jobcard').trigger("reset");
+
+	/** To refresh modal while hidden **/
+	$('.modal').on('hidden.bs.modal', function (e) {
+        $('#create_jobcard').trigger("reset");
+        /** [ Refresh  bootstrap selectpicker ] */
+        $('#finish_type').selectpicker('refresh');
+        $('#teeth_no').selectpicker('refresh');
+        $('#machine').selectpicker('refresh');
+        $('#disp_mode').selectpicker('refresh');
+	})
+
+	// Checkbox click functionality
+	$('.approved-order-list tr').click(function (event) {
+        if (event.target.type !== 'checkbox') {
+            $(':checkbox', this).trigger('click');
+        }
+    });
+
+    /** Datatable filter script**/
+	var listTable = $('#approved-order-list').dataTable({
+		/** Table column filter functionality **/
+		initComplete: function () {
+			$('.main-content > #approved-orders-table > .dataTables_wrapper > .row > .col-sm-6 > #approved-order-list_filter:first').append(' <button class="filterbtn-erp" type="button" onClick="showFilter()" title="Filter" data-placement="bottom"><i class="fa fa-filter" aria-hidden="true"></i></button>');
+			$('.main-content > #approved-orders-table > .dataTables_wrapper > .row > .col-sm-6 > #approved-order-list_filter:first .dataTables_filter').css('display', 'inline-block');
+			$('.main-content > #approved-orders-table > .dataTables_wrapper > .row > .col-sm-12:first').prepend('<div class="filter-window-jobcard"><h5><strong>Jobcard Filter</strong></h5> <div class="row"> <div class="col-md-2"><select class="selectpicker" id="erp_id_filter" data-live-search="true"> <option disabled selected>SELECT AN ERP ID</option></select></div><div class="col-md-2"><select class="selectpicker" id="customer_name_filter"  data-live-search="true"> <option disabled selected>SELECT A CUSTOMER</option></select></div><div class="col-md-2"><select class="selectpicker" id="po_number_filter"  data-live-search="true"> <option disabled selected>SELECT A PO NUMBER</option></select></div><div class="col-md-2"><select class="selectpicker" id="style_number_filter"  data-live-search="true"> <option disabled selected>SELECT A STYLE NUMBER</option></select></div><div class="col-md-2"><select class="selectpicker" id="ref_number_filter"  data-live-search="true"> <option disabled selected>SELECT A REFERENCE</option></select></div><div class="col-md-2"><select class="selectpicker" id="delivery_date_filter"  data-live-search="true"> <option disabled selected>SELECT A DELIVERY DATE</option></select></div></div><div class="filter-actions-erp"><button class="btn btn-primary input-sm pull-right" id="reset">Clear Filter</button><button id="close_filter" class="btn btn-default input-sm pull-right" onclick="showFilter()">Close</button><div class="clearfix"></div></div></div>');
+
+			//For Custom Filters
+			this.api().columns().every( function (i) {
+				var column = this;
+				if(i === 1 || i === 2 || i === 4 || i === 6 || i === 7 || i === 8) {
+					var select;
+					switch(i) {
+						case 1:
+							select = $('#erp_id_filter')
+							break;
+						case 2:
+							select = $('#customer_name_filter')
+							break;
+						case 4:
+							select = $('#po_number_filter')
+							break;
+						case 6:
+							select = $('#style_number_filter')
+							break;
+						case 7:
+							select = $('#ref_number_filter')
+							break;
+						case 8:
+							select = $('#delivery_date_filter')
+							break;
+					}
+					select.on( 'change', function () {
+						var val = $.fn.dataTable.util.escapeRegex(
+							$(this).val()
+						);
+	
+						column
+							.search( val ? '^'+val+'$' : '', true, false )
+							.draw();
+					});
+					select.append( '<option value=""> </option>' );
+					column.data().unique().sort().each( function ( d, j ) {
+						cleanText = d.replace(/<\/?[^>]+(>|$)/g, "");
+						select.append('<option value="'+cleanText+'">'+cleanText+'</option>')
+					});
+				}
+			});
+		}
+    } );
+    
+	/** Get an array of the TR nodes that are used in the table's body */
+	allPages = listTable.fnGetNodes();
+
+	$("#reset").on("click", function () {
+		$('#erp_id_filter').val('').change();
+		$('#customer_name_filter').val('').change();
+		$('#po_number_filter').val('').change();
+		$('#style_number_filter').val('').change();
+		$('#ref_number_filter').val('').change();
+		$('#delivery_date_filter').val('').change();
+		$.fn.dataTableExt.afnFiltering.length = 0;
+		listTable.dataTable().fnDraw();
+		$('#erp_id_filter').selectpicker('val', 1);
+        $('#erp_id_filter').selectpicker('refresh');
+
+        $('#customer_name_filter').selectpicker('val', 1);
+        $('#customer_name_filter').selectpicker('refresh');
+
+        $('#po_number_filter').selectpicker('val', 1);
+        $('#po_number_filter').selectpicker('refresh');
+
+        $('#style_number_filter').selectpicker('val', 1);
+        $('#style_number_filter').selectpicker('refresh');
+
+        $('#ref_number_filter').selectpicker('val', 1);
+        $('#ref_number_filter').selectpicker('refresh');
+
+        $('#delivery_date_filter').selectpicker('val', 1);
+        $('#delivery_date_filter').selectpicker('refresh');
+	});
+
+	$('.selectpicker').selectpicker();
+
+	// Clear the filter. Unlike normal filters in Datatables,
+	// custom filters need to be removed from the afnFiltering array.
+	$('.cancelBtn').on('click', function(e){
+		e.preventDefault();
+		$.fn.dataTableExt.afnFiltering.length = 0;
+		listTable.dataTable().fnDraw();
+	});
+
+    /** Create job card form validation **/
+    $('#create_jobcard').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented())
+        {
+
+        }
+        else
+        {
+            e.preventDefault();
+            storeJobcard();
+        }
+    })
+    
+    // Datatables for tables
+    $("#approved-order-list_filter input[type=search]").addClass('form-control');
+    $('.dataTables_length select').addClass('form-control');
+    $("#approved-order-list_filter input[type=search]").attr('placeholder', 'Data Search');
+
+    $('#jobcard-list-table').DataTable({
+        "paging": false,
+        "searching": false,
+        "bInfo" : false,
+        "ordering": false
+    });
+    $("#jobcard-list-table_filter input").addClass('form-control input-sm');
+    $("#jobcard-list-table_filter input").attr('placeholder', 'Data Search');
+    $('#jobcard-list-table_length select').addClass('form-control input-sm');
+
+    /** Get edit jobcard details on click**/
+    $(document).on('click','.edit-jobcard',function(e){
+        var id = $(this).closest('tr').attr('id');
+        e.preventDefault();
+        /* call getBuyer function from buyers.js*/
+        getJobcardDetails(id);
+    });
+    /** edit job card form validation **/
+    $('#edit_jobcard').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented())
+        {
+
+        }
+        else
+        {
+            e.preventDefault();
+            updateJobcard();
+        }
+    })
+
+    /** Filter jobcard list form validation **/
+    $('#jobcard_filter_form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented())
+        {
+
+        }
+        else
+        {
+            e.preventDefault();
+            getJobcardsList();
+        }
+    })
+});
+/* End of document.ready() */
+
+/**
+ * Toggle show filter window
+ *  @author <Praveen> [praveen@wizroots.com]
+ */
+function showFilter() {
+    $('.filter-window-jobcard').toggle();
+}
+
+/**
+ * Job card generation 
+ * @author <Praveen> [praveen@wizroots.com]
+ */
+function generateJobcard(){
+    if ($("input[class='row-checkbox']:checked", allPages).length === 0)
+    {
+        $('.snackbar_span').html("Select atleast one order.");
+		showSnackbar();
+    }
+    else
+    {
+        // remove file_path from local-storage
+        localStorage.removeItem('file_path');
+        
+        orders = [];
+        /** [ Create array of orders selected ] */
+        $('.row-checkbox', allPages).each(function (i, item) {
+            if ($(this).is(':checked')) {
+                orders.push($(this).closest('tr').attr('id')); 
+            }
+        });
+        orders   = orders.join(',');
+
+        ref_array = [];
+        /** [ Create array of reference selected ] */
+        $('.row-checkbox', allPages).each(function (i, item) {
+            if ($(this).is(':checked')) {
+                ref_array.push($(this).closest('tr').data('refname')); 
+            }
+        });
+        ref_array   = ref_array.join(',');
+
+        buyer_po_array = [];
+        /** [ Create array of buyer po selected ] */
+        $('.row-checkbox', allPages).each(function (i, item) {
+            if ($(this).is(':checked')) {
+                buyer_po_array.push($(this).closest('tr').data('buyer-po')); 
+            }
+        });
+        buyer_po_array   = buyer_po_array.join(',');
+
+        order_type_array = [];
+        /** [ Create array of order type selected ] */
+        $('.row-checkbox', allPages).each(function (i, item) {
+            if ($(this).is(':checked')) {
+                order_type_array.push($(this).closest('tr').data('order-type')); 
+            }
+        });
+        order_type_array   = order_type_array.join(',');
+
+        created_at_array = [];
+        /** [ Create array of created_at selected ] */
+        $('.row-checkbox', allPages).each(function (i, item) {
+            if ($(this).is(':checked')) {
+                created_at_array.push($(this).closest('tr').data('created-at')); 
+            }
+        });
+        created_at_array   = created_at_array.join(',');
+
+        $.ajax({
+            url:base_url + "/erp/job-manager/get-jobcard-order-details",
+            dataType:"json",
+            method:"get",
+            data:{orders:orders, ref_array:ref_array, buyer_po_array:buyer_po_array,order_type_array:order_type_array,created_at_array:created_at_array},
+            tryCount : 0,
+            retryLimit : 2,
+            beforeSend: function () {
+              $(".loader").show();
+            },
+            statusCode: {
+                /** [Show response status based on HTTP status code] */
+                200: function(data) {
+                    
+                    if(data.error === false)
+                    {
+                        if(data.template_data.company)
+                        {
+                            $('#jc_company_name').text(data.template_data.company.company)
+                            $('#company_address').text(data.template_data.company.company_address)
+                            $('#company_logo').attr('src', data.template_data.company.company_logo);
+                            $('#jc_company_name').attr('data-company-id', data.template_data.company.company_id)
+                        }
+
+                        var workorder_id = data.template_data.company.company === 'Jupiter Garments Accessories'?'JGA-JC-':'SP-JC-';
+                        $('#work_order').text( workorder_id+data.template_data.workorder_id);
+
+                        $('#today_date').text( data.template_data.today_date);
+
+                        data.template_data.article.length > 0?$('#article').text(data.template_data.article):'';
+
+                        $('#material').val(data.template_data.material)
+
+                        if(data.template_data.customer)
+                        {
+                            $('#customer').text(data.template_data.customer.customer_name)
+                            $('#customer').attr('data-customer-id', data.template_data.customer.customer_id)
+                        }
+
+                        if(data.template_data.buyer)
+                        {
+                            $('#buyer').text(data.template_data.buyer.buyer_name)
+                            $('#buyer').attr('data-buyer-id', data.template_data.buyer.buyer_id)
+                        }
+
+                        if(data.template_data.style_array.length === 1)
+                        {
+                            $('#style_no').val(data.template_data.style_array)
+                        }
+                        else
+                        {
+                            $('#style_no').val('')
+                        }
+
+                        if(data.template_data.refnum_array.length === 1)
+                        {
+                            $('#reference').val(data.template_data.refnum_array)
+                        }
+                        else
+                        {
+                            $('#reference').val('')
+                        }
+                        
+                        if(data.template_data.ordertype_array.length === 1)
+                        {
+                           if(data.template_data.ordertype_array[0] === 'newOrder')
+                           {
+                             $('#order_type').text('Initial')
+                           }
+                           else if(data.template_data.ordertype_array[0] ===  'reOrder')
+                           {
+                             $('#order_type').text('ReOrder')
+                           }
+                           else if(data.template_data.ordertype_array[0] === 'repeatOrder')
+                           {
+                             $('#order_type').text('RepeatOrder')
+                           }
+                           else
+                           {
+                             $('#order_type').text('')
+                           }
+                        }
+                        else 
+                        {
+                            $('#order_type').text('')
+                        } 
+                        
+                        $('#order_date').text(data.template_data.order_date);  
+
+                        if(data.template_data.length.length === 1)
+                        {
+                            $('#length').val(data.template_data.length)
+                        }
+                        else
+                        {
+                            $('#length').val('')
+                        } 
+
+                        if(data.template_data.width.length === 1)
+                        {
+                            $('#width').val(data.template_data.width)
+                        }
+                        else
+                        {
+                            $('#width').val('')
+                        } 
+
+                        if(data.template_data.color.length === 1)
+                        {
+                            $('#print_color').val(data.template_data.color)
+                        }
+                        else
+                        {
+                            $('#print_color').val('')
+                        }
+
+                        if(data.template_data.cus_del_date.length === 1)
+                        {
+                            $('#cus_del_date').val(data.template_data.cus_del_date)
+                        }
+                        else
+                        {
+                            $('#cus_del_date').val('')
+                        }
+
+                        /** append erp_details_ids  as hidden */
+                        var hidden_html = '';
+                        $.each(data.template_data.order_detail_ids, function(index, erp_details_id){
+                            hidden_html += '<div hidden class="erp-details-id">'+erp_details_id+'</div>'
+                        });
+                        $('.order-details-div').html(hidden_html);
+
+                        /** Show ratio templates dynamic table */
+                        var ratio_table_html = '';
+                        if(data.template_data.ratio.length != 0)
+                        {
+                            $.each(data.template_data.ratio, function(key, template){
+                                var total = 0;
+                                ratio_table_html += '<table class="table table-bordered table-responsive ratio-list-table"  style="font-size: 12px;" id="ratio_list_table" data-ratio-ref-table="'+key+'"  border="0.2">\
+                                                        <thead>\
+                                                            <tr>\
+                                                                <th>REF.NO</th>\
+                                                                <th>PO.NO</th>\
+                                                                <th>ID.NO</th>\
+                                                                <th>OCN</th>\
+                                                                <th>QNTY</th>\
+                                                                <th>P.QNTY</th>\
+                                                            </tr>\
+                                                        </thead>\
+                                                        <tbody>';
+                                                        template.sort(function(a, b){
+                                                            return a.qty_table_id - b.qty_table_id;
+                                                        });
+                                                        $.each(template, function(ratio_table_row, row){
+                                                            total += parseInt(row.order_quantity);
+                                                            ratio_table_html += '<tr class="tr-'+row.reference_name.replace(' ', '-')+'" id='+row.erp_order_details_id+' data-template-id='+row.template_id+'>\
+                                                            <td id="ratio_tr_refname_'+ratio_table_row+'">'+row.reference_name+' '+row.ratio_pack_type+'</td>\
+                                                            <td id="ratio_tr_buyer_po_'+ratio_table_row+'">'+row.buyer_po_number+'</td>\
+                                                            <td id="ratio_tr_erp_id_'+ratio_table_row+'">'+row.erp_id+'</td>\
+                                                            <td id="ratio_tr_ocn_'+ratio_table_row+'">'+row.ocn_number+'</td>\
+                                                            <td id="ratio_tr_qty_'+ratio_table_row+'">'+row.order_quantity+'</td>\
+                                                            <td></td>\
+                                                            </tr>';
+                                                            ratio_table_row++;
+                                                        });
+                                                        ratio_table_html += '<tr>\
+                                                            <th class="highlight_row" colspan="4">Total</th>\
+                                                            <td><strong>'+total+'</strong></td>\
+                                                            <td></td>\
+                                                        </tr>\
+                                                    </tbody>\
+                                                </table>';
+                            });
+                            $('.ratio-list-table-div').html(ratio_table_html);
+                        }
+                        else{
+                            $('.ratio-list-table-div').html(ratio_table_html);
+                        }
+
+                        /** Show single templates dynamic table */
+                        var single_table_html = '';
+                        var meters_div_html = '';
+                        if(data.template_data.single.length != 0)
+                        {
+                            var row = 0;
+                            var table = 0;
+                            $.each(data.template_data.single, function(key, erpid){   
+                                single_table_html += '<table class="table table-bordered table-responsive single-list-table"  style="font-size: 12px;" id="single_list_table_'+table+'"  border="0.2">\
+                                <tbody id="single_list_table_body"><tr>\
+                                <th width="80px">ID.NO</th>';
+                                $.each(erpid.order_data, function(index, common_data){
+                                    single_table_html += '<td colspan="2" data-template-id="'+common_data.template_id+'" class="single-erpid-'+index+'">'+common_data.erp_id+'</td>';
+                                });
+                                var template_name = key.split("_");
+                                single_table_html += '<td colspan="4" class="highlight_row" rowspan="3" data-single-ref-name ="'+template_name[0]+'">REFNUM  : '+template_name[0]+'</td></tr>\
+                                                            <tr>\
+                                                                <th width="80px">B.PO.NO</th>';
+                                $.each(erpid.order_data, function(index, common_data){
+                                    single_table_html += '<td colspan="2" class="single-buyer-po-'+index+'">'+common_data.buyer_po_number+'</td>';
+                                });
+                                single_table_html += '</tr>\
+                                                            <tr>\
+                                                                <th width="80px">OCN</th>';
+                                $.each(erpid.order_data, function(index, common_data){
+                                    single_table_html += '<td colspan="2" class="single-ocn-'+index+'">'+common_data.ocn_number+'</td>';
+                                });
+
+                                single_table_html += '</tr>\
+                                                      <th width="80px">SIZE /PRICE</th>';
+                                $.each(erpid.order_data, function(index, common_data){
+                                    single_table_html += '<th>O.QNT</th>\
+                                    <th>P.QNT</th>';
+                                });
+                                single_table_html += '<th>TOTAL</th>\
+                                                                <th width="180px">EXCESS</th>\
+                                                                <th>MTRS</th>\
+                                                                <th>STOCK</th>\
+                                                            </tr>';
+                                var total_quantity_final = 0;
+                                var sum = [];
+                                $.each(erpid.size, function(index2, quantity_data){
+                                    var total_qty_sizewise = 0;
+                                    var size_text = index2.split("_");
+                                    var col = 0;
+                                    single_table_html += '<tr><td class="single-size-row">'+size_text[0]+'</td>';
+                                    
+                                    $.each(quantity_data, function(index3, qty){
+                                        total_qty_sizewise += parseInt(qty);
+                                        single_table_html +='<td class="quantity-'+col+' quantity-td" data-size-value="'+size_text[0]+'">'+parseInt(qty)+'</td><td></td>';
+                                        /** Column wise total quantity calculation */
+                                        sum[col] = parseInt(qty) + (sum[col] || 0);
+                                        col++;
+                                    });
+
+                                    single_table_html += '<td class="total-quantity-class total-quantity-row-'+row+'"><strong>'+parseInt(total_qty_sizewise)+'</strong></td><td class="total-excess"><div class="form-group has-feedback"><input type="number" data-step-error="Decimal values not allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm total-excess-row-table-'+table+'" id="total_excess_row_table_'+row+'" data-required-error="Mandatory Field." name="total_excess_row_table_'+row+'"" placeholder="Excess %" onkeyup="return totalExcess()" ><div class="help-block with-errors"></div></div></td><td></td><td></td></tr>';
+                                
+                                    total_quantity_final += parseInt(total_qty_sizewise);
+                                    row++;
+                                });
+
+                                single_table_html += '<tr>\
+                                                      <th class="highlight_row total-text" data-ref-name = "'+template_name[0].replace(' ', '_')+'">TOTAL</th>';
+                                var total_col = 0;
+                                $.each(erpid.order_data, function(index, common_data){
+                                    single_table_html += '<td class="total-quantity-col-'+total_col+'"><strong>'+sum[total_col]+'</strong></td>\
+                                                          <td></td>';
+                                    total_col++;
+                                });
+                                
+                                single_table_html += '<td><strong class="total-qty-'+template_name[0].replace(' ', '_')+'">'+parseInt(total_quantity_final)+'</strong></td>\
+                                                        <td class="total-excess-col-table-'+table+' total-excess-'+template_name[0].replace(' ', '_')+'"></td>\
+                                                        <td></td>\
+                                                        <td></td>\
+                                                    </tr>';
+                                single_table_html += ' </tbody>\
+                                                </table>';
+                                table++;
+                                /** Show actual excess % and meters div only once for each references */
+                                if(template_name[1] === '0')
+                                {
+                                    meters_div_html +='<div class="col-md-12">\
+                                                <div class="col-md-3">\
+                                                    <label for="act_excess_'+template_name[0].replace(' ', '_')+'" >ACT EXCESS % ('+template_name[0]+'):</label>\
+                                                    <span class="act-excess" data-act-excess-ref="'+template_name[0]+'" id="act_excess_'+template_name[0].replace(' ', '_')+'"></span>\
+                                                </div>\
+                                                <div class="col-md-3">\
+                                                    <label for="sticker_mtr_'+template_name[0].replace(' ', '_')+'" >STKRS MTRS ('+template_name[0]+'):</label>\
+                                                    <span class="sticker-mtrs" id="sticker_mtr_'+template_name[0].replace(' ', '_')+'"></span>\
+                                                </div>\
+                                                <div class="col-md-3">\
+                                                <div class="form-group has-feedback">\
+                                                    <label for="settings_'+template_name[0].replace(' ', '_')+'" >SETTINGS ('+template_name[0]+') :</label>\
+                                                    <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" class="form-control input-sm settings"  name="settings_'+template_name[0].replace(' ', '_')+'" placeholder="SETTINGS" id="settings_'+template_name[0].replace(' ', '_')+'" onkeyup="return totalMeters()" max="99999"  data-max-error="Value should be <= 99999">\
+                                                    <div class="help-block with-errors"></div>\
+                                                </div>\
+                                                </div>\
+                                                <div class="col-md-3">\
+                                                <label for="total_mtrs_'+template_name[0].replace(' ', '_')+'" >TOTAL MTRS ('+template_name[0]+'):</label>\
+                                                <span id="total_mtrs_'+template_name[0].replace(' ', '_')+'" class="total-meters"></span>\
+                                                </div>\
+                                            </div>';
+                                }
+                            });
+                                
+                            $('.single-list-table-div').html(single_table_html);
+                            $('.meter-calculation-div').html(meters_div_html);
+                        } else {
+                            $('.single-list-table-div').html(single_table_html);
+                            $('.meter-calculation-div').html(meters_div_html);
+                        }
+                        
+                    }
+                    else
+                    {
+                        $('.snackbar_span').html("Something went wrong");
+                        showSnackbar();
+                    }
+                       
+                    
+                    /** [ Backdrop for bootstrap modal ] */
+                    $('#jobcardCreationModalCenter').modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    })
+
+                    /** [ Validate create_jobcard form using bootstrap validator ] */
+                    $('#create_jobcard').validator('update');
+                    $('#jobcardCreationModalCenter').modal('show');
+                    $('.datepicker').datepicker({
+                        format: 'dd-mm-yyyy'
+                    });
+                    // enable print button (for old version browsers)
+                    $('#jc_print_btn').prop('disabled', false);
+                },
+                406: function(data) {
+                     $('.snackbar_span').html(data.responseJSON.message);
+                     showSnackbar();
+                },
+                404: function(data) {
+                    $('.snackbar_span').html(data.responseJSON.message);
+                    showSnackbar();
+               },
+                400: function() {
+                    $('.snackbar_span').html("Something went wrong");
+                    showSnackbar();
+                }
+           },
+            error: function(errorXHR, errorStatus, errorThrown) {
+               this.tryCount++;
+               if (this.tryCount <= this.retryLimit) {
+                   $.ajax(this);
+                   return;
+               }
+            },
+            complete: function () {
+                $(".loader").hide();
+            }
+        })
+        
+    }
+}
+
+/**
+ * Multi checkbox selection and disable different customer/buyer checkbox
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function selectOrders(event)
+{
+    /** Table checkbox click functionality	**/
+    let checkbox = $("input[class='row-checkbox']", allPages);
+    let customer_name = $(event).data('customer-name');
+    let buyer_name = $(event).data('buyer-name');
+    let ischecked= $(event).is(':checked');
+    let length= $(checkbox).filter(':checked').length;
+
+    if(ischecked)
+    {
+        /** change table row background color	**/
+        $(event).closest('tr').addClass("highlight_row");
+        /** Make checkboxes disabled(having different customer and buyer names) **/
+        $(checkbox).not("[data-customer-name='"+customer_name+"']").attr("disabled", "true");
+        $(checkbox).not("[data-buyer-name='"+buyer_name+"']").attr("disabled", "true");
+    }
+    else
+    {
+        /** change table row background color	**/
+        $(event).closest('tr').removeClass("highlight_row");
+        /** Make checkboxes enabled iff all checkboxes unchecked **/
+        if(length === 0)
+         $(checkbox).not("[data-customer-name='"+customer_name+"']").removeAttr("disabled");
+         $(checkbox).not("[data-buyer-name='"+buyer_name+"']").removeAttr("disabled");
+    }
+}
+
+/** ---------------------- Excess calculation functions for create jobcard begins ----------------------**/
+/**
+ * Dynamic Excess calculation based on excess value entered.
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function calculateExcess(evt)
+{
+    let item = $('.total-quantity-class');
+    $.each(item, function(key, value){
+        let total_excess = parseFloat($(value).text() * (evt.value*1/100)).toFixed(2);
+        $('#total_excess_row_table_'+key).val(Math.round(total_excess));
+        /** refresh excess values fields in single ref table */
+        $('#total_excess_row_table_'+key).trigger('input');
+    });
+    totalExcess();
+}
+
+/**
+ * Dynamic Total Excess calculation based on calculated excess value.
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function totalExcess()
+{
+    var table = 0;
+    $('.single-list-table').each(function () {
+        var total_excess_final = 0;
+        $(this).find('.total-excess-row-table-'+table).each(function () {
+            var excess = $(this).val();
+            if (!isNaN(excess) && excess.length !== 0) {
+                total_excess_final += parseInt(excess);
+            }
+        });
+        $('.total-excess-col-table-'+table).html('<strong>'+Math.round(total_excess_final)+'</strong>');
+
+        table++;
+    });
+    actualExcess()
+}
+
+/**
+ * Dynamic Actual Excess calculation based on excess value and total quantity.
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function actualExcess()
+{
+    $('.total-text').each(function(){
+        let ref_name              = $(this).data('ref-name');
+        let total_qty             = 0;
+        let total_excess          = 0;
+        let act_excess            = 0;
+
+        $('.total-qty-'+ref_name).each(function(){
+            if (!isNaN(total_qty) && total_qty.length !== 0) {
+                total_qty += parseInt($(this).text());
+            }
+        });
+        $('.total-excess-'+ref_name).each(function(){
+            if (!isNaN(total_excess) && total_excess.length !== 0) {
+                total_excess += parseInt($(this).text());
+            }
+        });
+        if (!isNaN(total_qty) && !isNaN(total_excess)) {
+            act_excess = parseFloat((total_excess/total_qty)*100).toFixed(2);
+        }
+        $('#act_excess_'+ref_name).text(Math.round(act_excess))
+    });
+}
+
+/**
+ * Dynamic Mtrs for sticker calculation.
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function mtrsForStickers()
+{
+    var length_side_dimension = $('#length_side').val() === ''?0:$('#length_side').val();
+    $('.total-text').each(function(){
+        let ref_name              = $(this).data('ref-name');
+        let total_qty             = 0;
+        let mtrs                  = 0;
+        let no_of_repeats         = $('#no_sticker').val() === ''?0:$('#no_sticker').val();
+        let repeat_gap            = $('#repeat_gap').val() === ''?0:$('#repeat_gap').val();
+
+        $('.total-qty-'+ref_name).each(function(){
+            if (!isNaN(total_qty) && total_qty.length !== 0) {
+                total_qty += parseInt($(this).text());
+            }
+        });
+
+        if(!isNaN(total_qty) && !isNaN(length_side_dimension) && !isNaN(no_of_repeats) && !isNaN(repeat_gap) && no_of_repeats != 0 && repeat_gap != 0)
+        {
+            mtrs =  parseFloat((parseInt(total_qty)/parseInt(no_of_repeats)) * ((parseFloat(length_side_dimension) + parseInt(repeat_gap))/1000)).toFixed(2);
+        }
+        
+        $('#sticker_mtr_'+ref_name).text(Math.round(mtrs))
+        totalMeters()
+    });
+}
+
+/**
+ * Dynamic Total Meters calculation.
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function totalMeters()
+{
+    $('.total-meters').each(function(){
+       let total_mtrs_id = $(this).attr('id').split("_");
+       let ref_name = total_mtrs_id[2]+'_'+total_mtrs_id[3];
+       let mtrs_for_stickers = $('#sticker_mtr_'+ref_name).text() === ''?0:$('#sticker_mtr_'+ref_name).text();
+       let settings = $('#settings_'+ref_name).val() === ''?0:$('#settings_'+ref_name).val();
+       if (!isNaN(settings) && !isNaN(mtrs_for_stickers)) {
+           var total_mtr = parseInt(settings) + parseInt(mtrs_for_stickers);
+        }
+       $('#total_mtrs_'+ref_name).text(Math.round(total_mtr));
+    });
+}
+/** ----------------- Excess calculation functions for create jobcard ends ----------------------**/
+/**
+ * Store jobcard
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function storeJobcard()
+{
+    var company_id      = $( '#jc_company_name' ).data('company-id');
+    var workorder_id    = $( '#work_order' ).text() === ''?null:$('#work_order').text();
+    var created_date    = $( '#today_date' ).text() === ''?null:$('#today_date').text();
+    var article         = $( '#article' ).text() === ''?null:$('#article').text();
+    var material        = $( '#material' ).val() === ''?null:$('#material').val();
+    var customer_id     = $( '#customer' ).data('customer-id');
+    var style_no        = $( '#style_no' ).val() === ''?null:$('#style_no').val();
+    var order_type      = $( '#order_type' ).text() === ''?null:$('#order_type').text();
+    var buyer_id        = $( '#buyer' ).data('buyer-id');
+    var reference       = $( '#reference' ).val() === ''?null:$('#reference').val();
+    var disp_mode       = $( '#disp_mode option:selected' ).val() === ''?null:$('#disp_mode option:selected').val();
+    var order_date      = $( '#order_date' ).text() === ''?null:$('#order_date').text();
+    var length          = $( '#length' ).val() === ''?null:$('#length').val();
+    var repeat_gap      = $( '#repeat_gap' ).val() === ''?null:$( '#repeat_gap' ).val();
+    var machine         = $( '#machine option:selected' ).val() === ''?null:$( '#machine option:selected' ).val();
+    var cus_del_date    = $( '#cus_del_date' ).val() === ''?null:$( '#cus_del_date' ).val();
+    var roll_width      = $( '#roll_width' ).val() === ''?null:$( '#roll_width' ).val();
+    var width           = $( '#width' ).val() === ''?null:$('#width').val();
+    var film_no         = $( '#film_no' ).val() === ''?null:$( '#film_no' ).val();
+    var invoice_date    = $( '#invoice_date' ).val() === ''?null:$( '#invoice_date' ).val();
+    var length_side     = $( '#length_side' ).val() === ''?null:$( '#length_side' ).val();
+    var excess          = $( '#excess' ).val() === ''?null:$( '#excess' ).val();
+    var teeth_no        = $( '#teeth_no option:selected' ).val() === ''?null:$( '#teeth_no option:selected' ).val();
+    var inv_no          = $( '#inv_no' ).val() === ''?null:$( '#inv_no' ).val();
+    var no_sticker      = $( '#no_sticker' ).val() === ''?null:$( '#no_sticker' ).val();
+    var finish_type     = $( '#finish_type option:selected' ).val() === ''?null:$( '#finish_type option:selected' ).val();
+    var print_color     = $( '#print_color' ).val() === ''?null:$('#print_color').val();
+    var compiled_by     = $( '#compiled_by' ).val() === ''?null:$('#compiled_by').val();
+    var barcode_read    = $( '#barcode_read' ).val() === ''?null:$('#barcode_read').val();
+    var operator        = $( '#operator' ).val() === ''?null:$('#operator').val();
+    var checker         = $( '#checker' ).val() === ''?null:$('#checker').val();
+    var authorized_by   = $( '#author' ).val() === ''?null:$('#author').val();
+    var axicon_verifier = $( '#axicon_verifier' ).val() === ''?null:$('#axicon_verifier').val();
+    var approved_by     = $( '#approved_by' ).val() === ''?null:$('#approved_by').val();
+    var packer          = $( '#packer' ).val() === ''?null:$('#packer').val();
+    var approval_date   = $( '#approval_date' ).val() === ''?null:$('#approval_date').val();
+    var roll_issued_by  = $( '#roll_issued_by' ).val() === ''?null:$('#roll_issued_by').val();
+    var cutter          = $( '#cutter' ).val() === ''?null:$('#cutter').val();
+    var cartons         = $( '#cartons' ).val() === ''?null:$('#cartons').val();
+
+    var final_json_obj =   {
+        "ratio": {},
+        "single": {},
+        "erp_order_details" : []
+          };  
+    var ratio_object = {};
+    /** Create ratio templates json object */
+    $('.ratio-list-table').each(function (i, table) {
+     var my_object    = new Object();
+     var array_list   = [];
+         ref_name     = $(this).data('ratio-ref-table').replace(' ', '_');
+
+      $(table).find('tbody tr:not(:last)').each(function (index, row) {
+        my_object = {}; 
+        my_object.reference_name  = $(row).find ( "#ratio_tr_refname_"+index ).text();
+        my_object.erp_id          = $(row).find ( "#ratio_tr_erp_id_"+index ).text();
+        my_object.buyer_po_number = $(row).find ( "#ratio_tr_buyer_po_"+index ).text();
+        my_object.ocn_number      = $(row).find ( "#ratio_tr_ocn_"+index ).text();
+        my_object.order_quantity  = $(row).find ( "#ratio_tr_qty_"+index ).text();
+        my_object.template_id     = $(row).data ( 'template-id' );
+
+        array_list.push(my_object);
+        index++;
+        ratio_object[ref_name] = array_list;
+      });
+      // pushing ratio templates array into json object
+      final_json_obj['ratio'] = ratio_object;
+    });
+    
+    
+    var single_ref_obj = {};
+    
+    /** Create single templates json object */
+    $('.single-list-table').each(function (index, table) {
+        var single_obj = {
+            "erp_id": [],
+            "buyer_po": [],
+            "ocn": [],
+            "temp_id": [],
+            "size": [],
+            "total": [],
+            "excess": []
+              };
+        var erp_id_object  = {};
+        var erp_id_array   = [];
+        var po_object      = {};
+        var po_array       = [];
+        var ocn_object     = {};
+        var ocn_array      = [];
+        var temp_id_object = {};
+        var temp_id_array  = [];
+        single_ref_name    = $(table).find('tbody tr:eq(0) td:last-child').data('single-ref-name').replace(' ', '_');
+        
+        // create erp_id array
+        $(table).find('tbody tr:eq(0) td:not(:last)').each(function (i, item) {
+            erp_id_object = {};
+            erp_id_object = item.innerHTML;
+            erp_id_array.push(erp_id_object);
+
+            temp_id_object = {};
+            temp_id_object = $(item).data('template-id');
+            temp_id_array.push(temp_id_object);
+        });
+        
+        single_obj['erp_id']  = erp_id_array;
+        single_obj['temp_id'] = temp_id_array;
+        // create po number array
+        $(table).find('tbody tr:eq(1) td').each(function (i, item) {
+            po_object = {};
+            po_object = item.innerHTML;
+            po_array.push(po_object);
+        });
+        single_obj['buyer_po'] = po_array;
+
+        // create ocn number array
+        $(table).find('tbody tr:eq(2) td').each(function (i, item) {
+            ocn_object = {};
+            ocn_object = item.innerHTML;
+            ocn_array.push(ocn_object);
+        });
+        single_obj['ocn'] = ocn_array;
+
+        var size_object_final = {};
+        var total_qty_object_final = {};
+        var excess_object_final = {};
+        // create size, qty and excess json object
+        $(table).find('tbody tr:gt(3):not(:last-child)').each(function (i, item) {
+            
+            var size_text  = $(item).find('.single-size-row').text();
+            var size_array      = [];
+            $(item).find('.quantity-td').each(function (index, row) {
+                size_object = {};
+                size_object = row.innerHTML;
+                size_array.push(size_object);
+            });
+            size_object_final[size_text] = size_array;
+
+            $(item).find('.total-quantity-class strong').each(function (index1, total_qty) {
+                total_qty_object = {};
+                total_qty_object = total_qty.innerHTML;
+            });
+            total_qty_object_final[size_text] = total_qty_object;
+
+            $(item).find('.total-excess div input').each(function (index2, excess) {
+                excess_object = {};
+                excess_object = excess.value;
+            });
+            excess_object_final[size_text] = excess_object;
+
+        });
+        single_obj['size'] = size_object_final;
+        single_obj['total'] = total_qty_object_final;
+        single_obj['excess'] = excess_object_final;
+        
+        single_ref_obj[single_ref_name+'_'+index] = single_obj;
+        // pushing single templates array into json object
+        final_json_obj['single'] = single_ref_obj;
+    });
+    
+    var single_ref = [];
+    var act_excess = [];
+    /** [ Create array of act-excess ] */
+    $('.act-excess').each(function (i, item) {
+        act_excess[i] = $(item).text() === ''?0:$(item).text();
+        single_ref[i] = $(item).data('act-excess-ref');
+    });
+    act_excess = act_excess.join(',');
+    single_ref = single_ref.join(',');
+
+    var sticker_mtr = [];
+    /** [ Create array of sticker-mtrs ] */
+    $('.sticker-mtrs').each(function (i, item) {
+        sticker_mtr[i] = $(item).text() === ''?0:$(item).text();
+
+    });
+    sticker_mtr = sticker_mtr.join(',');
+
+    var settings = [];
+    /** [ Create array of settings ] */
+    $('.settings').each(function (i, item) {
+        settings[i] = $(item).val() === ''?0:$(item).val();
+
+    });
+    settings = settings.join(',');
+
+    var total_mtrs = [];
+    /** [ Create array of total-meters ] */
+    $('.total-meters').each(function (i, item) {
+        total_mtrs[i] = $(item).text() === ''?0:$(item).text();
+
+    });
+    total_mtrs = total_mtrs.join(',');
+
+    erp_orders_ids = [];
+    /** [ Create array of orders selected ] */
+    $('.row-checkbox', allPages).each(function (i, item) {
+        if ($(this).is(':checked')) {
+            erp_orders_ids.push($(this).closest('tr').attr('id')); 
+        }
+    });
+
+    erp_orders_ids   = erp_orders_ids.join(',');
+
+    selected_ref_array = [];
+    /** [ Create array of reference selected ] */
+    $('.row-checkbox', allPages).each(function (i, item) {
+        if ($(this).is(':checked')) {
+            selected_ref_array.push($(this).closest('tr').data('refname')); 
+        }
+    });
+    selected_ref_array   = selected_ref_array.join(',');
+
+    selected_buyer_po_array = [];
+    /** [ Create array of buyer po selected ] */
+    $('.row-checkbox', allPages).each(function (i, item) {
+        if ($(this).is(':checked')) {
+            selected_buyer_po_array.push($(this).closest('tr').data('buyer-po')); 
+        }
+    });
+    selected_buyer_po_array   = selected_buyer_po_array.join(',');
+
+    order_type_array = [];
+    /** [ Create array of order type selected ] */
+    $('.row-checkbox', allPages).each(function (i, item) {
+        if ($(this).is(':checked')) {
+            order_type_array.push($(this).closest('tr').data('order-type')); 
+        }
+    });
+    order_type_array   = order_type_array.join(',');
+
+    created_at_array = [];
+    /** [ Create array of created_at selected ] */
+    $('.row-checkbox', allPages).each(function (i, item) {
+        if ($(this).is(':checked')) {
+            created_at_array.push($(this).closest('tr').data('created-at')); 
+        }
+    });
+    created_at_array   = created_at_array.join(',');
+    
+    jsonArray = [];
+    /** [ Create json object of selected orders ] */
+    $('.row-checkbox', allPages).each(function (i, item) {
+        erp_order_details_obj = {};
+        
+        if ($(this).is(':checked')) {
+            erp_order_details_obj.created_at = $(this).closest('tr').data('created-at'); 
+            erp_order_details_obj.order_type = $(this).closest('tr').data('order-type'); 
+            erp_order_details_obj.buyer_po   = $(this).closest('tr').data('buyer-po'); 
+            erp_order_details_obj.refname    = $(this).closest('tr').data('refname'); 
+            erp_order_details_obj.erp_id     = $(this).closest('tr').attr('id');
+            erp_order_details_obj.style_no   = $(this).closest('tr').data('style-no');
+            erp_order_details_obj.temp_file  = $(this).closest('tr').data('template-file');
+
+            jsonArray.push(erp_order_details_obj);
+        }
+    });
+
+    // pushing created_at array into json object
+    final_json_obj['erp_order_details'] = jsonArray;
+
+    $.ajax({
+        url: base_url + "/erp/job-manager/store-jobcard-details",
+        type: 'POST',
+        data: {
+            _token: csrf_token,
+            company_id: company_id,
+            workorder_id: workorder_id,
+            created_date: created_date,
+            article: article,
+            material: material,
+            customer_id: customer_id,
+            style_no: style_no,
+            order_type: order_type,
+            buyer_id: buyer_id,
+            reference: reference,
+            disp_mode: disp_mode,
+            order_date: order_date,
+            length: length,
+            repeat_gap: repeat_gap,
+            machine: machine,
+            cus_del_date: cus_del_date,
+            roll_width: roll_width,
+            width: width,
+            film_no: film_no,
+            invoice_date: invoice_date,
+            length_side: length_side,
+            excess: excess,
+            teeth_no: teeth_no,
+            inv_no: inv_no,
+            no_sticker: no_sticker,
+            finish_type: finish_type,
+            print_color:print_color,
+            compiled_by:compiled_by,
+            barcode_read:barcode_read,
+            operator:operator,
+            checker:checker,
+            authorized_by:authorized_by,
+            axicon_verifier:axicon_verifier,
+            approved_by:approved_by,
+            packer:packer,
+            approval_date:approval_date,
+            roll_issued_by:roll_issued_by,
+            cutter:cutter,
+            cartons:cartons,
+            final_json_obj:JSON.stringify(final_json_obj),
+            single_ref:single_ref,
+            act_excess:act_excess,
+            sticker_mtr:sticker_mtr,
+            settings:settings,
+            total_mtrs:total_mtrs,
+            erp_orders_ids:erp_orders_ids,
+            selected_ref_array:selected_ref_array,
+            selected_buyer_po_array:selected_buyer_po_array,
+            order_type_array:order_type_array,
+            created_at_array:created_at_array
+        },
+        tryCount: 0,
+        retryLimit: 2,
+        async: false,
+        dataType: "json",
+        beforeSend: function () {
+            $(".loader").show();
+            $('#jc_print_btn').prop('disabled', true);
+        },
+        statusCode: {
+            200: function(data) {
+
+                /** [ Store file path into localstorage ] */
+                localStorage.setItem('file_path',data.file_path)
+             
+                var isEdit        = false;
+                $('.row-checkbox', allPages).each(function (i, item) {
+                  
+                    if ($(this).is(':checked')) {
+                        refname       = $(this).closest('tr').data('refname'); 
+                        id            = $(this).closest('tr').attr('id');
+                        buyer_po_no   = $(this).closest('tr').data('buyer-po');
+                        order_type    = $(this).closest('tr').data('order-type');
+                        created_at    = $(this).closest('tr').data('created-at');
+                        style_no      = $(this).closest('tr').data('style-no');
+                        loop          = $(this).closest('tr').data('iteration');
+                        modal_name    = refname.replace(' ', '');
+
+                        openmodaltescopreview(modal_name, loop, style_no, buyer_po_no, id, order_type, created_at, isEdit);
+                    }
+                });
+              
+            },
+            400: function() {
+                $('.snackbar_span').html("Parameter is missing !!!");
+                showSnackbar();
+            },
+       },
+        error: function (errorXHR, errorStatus, errorThrown) {
+            this.tryCount++;
+            if (this.tryCount <= this.retryLimit) {
+                $.ajax(this);
+                return;
+            }
+        },
+        complete: function () {
+            $(".loader").hide();
+        }
+    })
+}
+
+/**
+   * Function for get jobcard details for editing
+   * @param id
+   * @author <praveen>
+   *
+   */
+  function getJobcardDetails(id)
+  {
+    try{
+         $.ajax({
+             url:base_url + "/erp/job-manager/jobcard-details",
+             dataType:"json",
+             method:"get",
+             data:{id:id},
+             tryCount : 0,
+             retryLimit : 2,
+             beforeSend: function () {
+               $(".loader").show();
+               // remove file_path from local-storage
+               localStorage.removeItem('file_path');
+             },
+             success: function(data){
+                 $('.edit-ratio-list-table-div').html('');
+                 $('.edit-single-list-table-div').html('');
+                 //hidden jobcard id for edit functionality
+                 $('#jobcard_id').val(id);
+                 $('#edit_jc_company_name').text(data.jobcard_data.company);
+                 $('#edit_company_address').text(data.jobcard_data.company_address);
+                 $('#edit_company_logo').attr('src', data.jobcard_data.company_logo);
+                 $('#edit_jc_company_name').attr('data-company-id', data.jobcard_data.company_id);
+                 $('#edit_work_order').text(data.jobcard_data.work_order_id);
+                 $('#edit_today_date').text(data.jobcard_data.created_date);
+                 $('#edit_article').text(data.jobcard_data.article);
+                 $('#edit_material').val(data.jobcard_data.material);
+                 $('#edit_customer').text(data.jobcard_data.customer);
+                 $('#edit_customer').attr('data-customer-id', data.jobcard_data.customer_id);
+                 $('#edit_buyer').text(data.jobcard_data.buyer_name);
+                 $('#edit_buyer').attr('data-buyer-id', data.jobcard_data.buyer_id);
+                 $('#edit_style_no').val(data.jobcard_data.style_number);
+                 $('#edit_reference').val(data.jobcard_data.reference);
+                 $('#edit_order_type').text(data.jobcard_data.order_type);
+                 $('#edit_disp_mode').val(data.jobcard_data.dispatch_mode);
+                 $('#edit_order_date').text(data.jobcard_data.order_date);
+                 $('#edit_length').val(data.jobcard_data.length);
+                 $('#edit_repeat_gap').val(data.jobcard_data.repeat_gap);
+                 $('#edit_machine').val(data.jobcard_data.machine);
+                 $('#edit_cus_del_date').val(data.jobcard_data.customer_del_date);
+                 $('#edit_width').val(data.jobcard_data.width);
+                 $('#edit_roll_width').val(data.jobcard_data.roll_width);
+                 $('#edit_film_no').val(data.jobcard_data.film_no);
+                 $('#edit_invoice_date').val(data.jobcard_data.invoice_date);
+                 $('#edit_length_side').val(data.jobcard_data.length_side);
+                 $('#edit_excess').val(data.jobcard_data.excess_percentage);
+                 $('#edit_teeth_no').val(data.jobcard_data.teeth_no);
+                 $('#edit_inv_no').val(data.jobcard_data.invoice_num);
+                 $('#edit_no_sticker').val(data.jobcard_data.no_of_stickers);
+                 $('#edit_finish_type').val(data.jobcard_data.finish_type);
+                 $('#edit_print_color').val(data.jobcard_data.print_color);
+                 $('#edit_compiled_by').val(data.jobcard_data.compiled_by);
+                 $('#edit_barcode_read').val(data.jobcard_data.barcode_read);
+                 $('#edit_operator').val(data.jobcard_data.operator);
+                 $('#edit_checker').val(data.jobcard_data.checker);
+                 $('#edit_author').val(data.jobcard_data.authorized_by);
+                 $('#edit_axicon_verifier').val(data.jobcard_data.axicon_verifier);
+                 $('#edit_approved_by').val(data.jobcard_data.approved_by);
+                 $('#edit_packer').val(data.jobcard_data.packer);
+                 $('#edit_approval_date').val(data.jobcard_data.approval_date);
+                 $('#edit_roll_issued_by').val(data.jobcard_data.roll_issued_by);
+                 $('#edit_cutter').val(data.jobcard_data.cutter);
+                 $('#edit_cartons').val(data.jobcard_data.cartons);
+
+                 /** [ Refresh  bootstrap selectpicker ] */
+                 $('#edit_finish_type').selectpicker('refresh');
+                 $('#edit_teeth_no').selectpicker('refresh');
+                 $('#edit_machine').selectpicker('refresh');
+                 $('#edit_disp_mode').selectpicker('refresh');
+                 var ratio_table = '';
+                 $.each(JSON.parse(data.jobcard_data.template_quantity_json), function(template_type, template_type_data){
+                    if(template_type === 'ratio')
+                    {
+                        if (!($.isEmptyObject(template_type_data)))
+                        {
+                            $.each(template_type_data, function(table, table_data){
+                                ratio_table += '<table class="table table-bordered table-responsive edit-ratio-list-table"  style="font-size: 12px;" id="ratio_list_table" data-ratio-ref-table="'+table.replace('_', ' ')+'"  border="0.2">\
+                                    <thead style="width:fixed;">\
+                                        <tr>\
+                                            <th><strong>REF.NO</strong></th>\
+                                            <th><strong>PO.NO</strong></th>\
+                                            <th><strong>ID.NO</strong></th>\
+                                            <th><strong>OCN</strong></th>\
+                                            <th><strong>QNTY</strong></th>\
+                                            <th><strong>P.QNTY</strong></th>\
+                                        </tr>\
+                                    </thead>\
+                                    <tbody>';
+                                        var ratio_total = 0;
+                                        $.each(table_data, function(key, value){
+                                            ratio_table += '<tr class="tr-'+table.replace('_', ' ')+'"  data-template-id="'+value["template_id"]+'">\
+                                                                <td id="edit_ratio_tr_refname_'+key+'">'+value["reference_name"]+'</td>\
+                                                                <td id="edit_ratio_tr_buyer_po_'+key+'">'+value["buyer_po_number"]+'</td>\
+                                                                <td id="edit_ratio_tr_erp_id_'+key+'">'+value["erp_id"]+'</td>\
+                                                                <td id="edit_ratio_tr_ocn_'+key+'">'+value["ocn_number"]+'</td>\
+                                                                <td id="edit_ratio_tr_qty_'+key+'">'+value["order_quantity"]+'</td>\
+                                                                <td></td>\
+                                                            </tr>';
+
+                                          ratio_total += parseInt(value["order_quantity"]);
+                                        });
+                                        ratio_table += '<tr>\
+                                            <th colspan="4" class="highlight_row"><strong>Total</strong></th>\
+                                            <td><strong>'+ratio_total+'</strong></td>\
+                                            <td></td>\
+                                        </tr>\
+                                    </tbody>\
+                                </table>';
+                            });
+                         $('.edit-ratio-list-table-div').html(ratio_table);
+
+                        }
+                    }
+                    else if(template_type === 'single')
+                    {
+                        if (!($.isEmptyObject(template_type_data)))
+                        {
+                            var table_row = 0;
+                            var table_count = 0;
+                            var single_table = '';
+                            $.each(template_type_data, function(table, table_data){
+                                var template = table.split("_");
+                                single_table += '<table class="table table-bordered table-responsive edit-single-list-table" style="font-size: 12px;" id="single_list_table_'+table_count+'" border="0.2">\
+                                        <tbody id="single_list_table_body">\
+                                        <tr>\
+                                            <th width="80px">ID.NO</th>';
+                                            $.each(table_data.erp_id, function(key, value){
+                                                single_table += '<td colspan="2" data-template-id="'+table_data.temp_id[key]+'" class="single-erpid-'+key+'">'+value+'</td>';
+                                            });
+                                            single_table += '<td colspan="4" class="highlight_row" rowspan="3" data-single-ref-name="'+template[0]+' '+template[1]+'">REFNUM &nbsp;: '+template[0]+' '+template[1]+'</td>\
+                                        </tr>\
+                                        <tr>\
+                                            <th width="80px">B.PO.NO</th>';
+                                            $.each(table_data.buyer_po, function(key, value){
+                                                single_table += '<td colspan="2" class="single-buyer-po-'+key+'">'+value+'</td>';
+                                            });
+                                            single_table += '</tr>\
+                                        <tr>\
+                                            <th width="80px">OCN</th>';
+                                            $.each(table_data.ocn, function(key, value){
+                                                single_table += '<td colspan="2" class="single-ocn-'+key+'">'+value+'</td>';
+                                            });
+                                            single_table += '</tr>\
+                                        <tr>\
+                                          <th width="80px"><strong>SIZE /PRICE</strong></th>';
+                                        $.each(table_data.erp_id, function(key, value){
+                                            single_table += '<th><strong>O.QNT</strong></th>\
+                                                             <th><strong>P.QNT</strong></th>';
+                                        });
+                                        single_table += '<th><strong>TOTAL</strong></th>\
+                                                         <th width="180px"><strong>EXCESS</strong></th>\
+                                                         <th><strong>MTRS</strong></th>\
+                                                         <th><strong>STOCK</strong></th></tr>';
+                                                         
+                                        var total_quantity_final = 0;
+                                        var total_excess_final = 0;
+                                        var qty_col_sum = [];
+                                        $.each(table_data.size, function(size, quantities){
+                                            var total_qty_sizewise = 0;
+                                            var col = 0;
+                                            single_table += '<tr>\
+                                                <td class="edit-single-size-row">'+size+'</td>';
+                                                $.each(quantities, function(key, qty){
+                                                    single_table += '<td class="quantity-'+key+' edit-quantity-td" data-size-value="'+size+'">'+qty+'</td>\
+                                                            <td></td>';
+                                                    total_qty_sizewise += parseInt(qty);
+                                                    /** Column wise total quantity calculation */
+                                                    qty_col_sum[col] = parseInt(qty) + (qty_col_sum[col] || 0);
+                                                    col++;
+                                                });
+                                                single_table += '<td class="edit-total-quantity-class total-quantity-row-'+table_row+'"><strong>'+parseInt(total_qty_sizewise)+'</strong></td>\
+                                                <td class="edit-total-excess">\
+                                                    <div class="form-group has-feedback">\
+                                                        <input type="number" data-step-error="Decimal values not allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm edit-total-excess-row-table-'+table_count+'"  id="edit_total_excess_row_table_'+table_row+'" data-required-error="Mandatory Field." name="edit_total_excess_row_table_'+table_row+'" "="" placeholder="Excess %" onkeyup="return editTotalExcess()" value="'+table_data.excess[size]+'">\
+                                                        <div class="help-block with-errors"></div>\
+                                                    </div>\
+                                                </td>\
+                                                <td></td>\
+                                                <td></td>\
+                                                </tr>';
+                                          total_quantity_final += parseInt(total_qty_sizewise);
+                                          total_excess_final   += parseInt(table_data.excess[size]);
+                                          table_row++;
+                                        });
+                                        single_table += '<tr>\
+                                                            <th class="highlight_row edit-total-text" data-ref-name="'+template[0]+'_'+template[1]+'">TOTAL</th>';
+                                        
+                                        var qty_total_col = 0;
+                                        $.each(table_data.erp_id, function(key, value){
+                                            single_table += '<td class="edit-total-quantity-col-'+qty_total_col+'"><strong>'+qty_col_sum[qty_total_col]+'</strong></td>\
+                                            <td></td>';
+                                            qty_total_col++;
+                                        });
+                                                            
+                                        single_table += '<td><strong class="edit-total-qty-'+template[0]+'_'+template[1]+'">'+parseInt(total_quantity_final)+'</strong></td>\
+                                                <td class="edit-total-excess-col-table-'+table_count+' edit-total-excess-'+template[0]+'_'+template[1]+'"><strong>'+Math.round(isNaN(total_excess_final) ? '0' : total_excess_final)+'</strong></td>\
+                                                <td></td>\
+                                                <td></td>\
+                                            </tr>\
+                                    </tbody>\
+                                </table>';
+                                table_count++;
+                            });
+                        $('.edit-single-list-table-div').html(single_table);
+                        }
+                    }
+                    
+                 });
+
+                // excess, meters and settings calculation values.
+                edit_meters_div_html = '';
+                if(data.jobcard_data.additional_details.length > 0)
+                {
+                    $.each(data.jobcard_data.additional_details, function(key, item){
+                        edit_meters_div_html +='<div class="col-md-12">\
+                                            <div class="col-md-3">\
+                                                <label for="edit_act_excess_'+item.ref_name.replace(' ', '_')+'" >ACT EXCESS % ('+item.ref_name+'):</label>\
+                                                <span class="edit-act-excess" data-act-excess-ref="'+item.ref_name+'" id="edit_act_excess_'+item.ref_name.replace(' ', '_')+'">'+item.actual_excess+'</span>\
+                                            </div>\
+                                            <div class="col-md-3">\
+                                                <label for="edit_sticker_mtr_'+item.ref_name.replace(' ', '_')+'" >STKRS MTRS ('+item.ref_name+'):</label>\
+                                                <span class="edit-sticker-mtrs" id="edit_sticker_mtr_'+item.ref_name.replace(' ', '_')+'">'+item.mtrs_for_stickers+'</span>\
+                                            </div>\
+                                            <div class="col-md-3">\
+                                            <div class="form-group has-feedback">\
+                                                <label for="edit_settings_'+item.ref_name.replace(' ', '_')+'" >SETTINGS ('+item.ref_name+') :</label>\
+                                                <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" max="99999" data-max-error="Value should be <= 99999" class="form-control input-sm edit-settings" name="edit_settings_'+item.ref_name.replace(' ', '_')+'" placeholder="SETTINGS" id="edit_settings_'+item.ref_name.replace(' ', '_')+'" onkeyup="return totalMetersEdit()" value="'+item.settings+'" >\
+                                                <div class="help-block with-errors"></div>\
+                                            </div>\
+                                            </div>\
+                                            <div class="col-md-3">\
+                                            <label for="edit_total_mtrs_'+item.ref_name.replace(' ', '_')+'" >TOTAL MTRS ('+item.ref_name+'):</label>\
+                                            <span id="edit_total_mtrs_'+item.ref_name.replace(' ', '_')+'" class="edit-total-meters">'+item.total_mtrs+'</span>\
+                                            </div>\
+                                        </div>';
+                    });
+                   
+                    $('.edit-meter-calculation-div').html(edit_meters_div_html);
+                }  
+                else
+                {
+                    edit_meters_div_html = '';
+                    $('.edit-meter-calculation-div').html(edit_meters_div_html);
+                    
+                } 
+                
+                var erp_details_div_html = '';
+                $.each(JSON.parse(data.jobcard_data.template_quantity_json), function(index, artwork_data){ 
+                 if(index != "ratio" && index != "single")
+                 {
+                    if(index === "erp_order_details")
+                    {
+                        if(artwork_data.length > 0)
+                        {
+                            var incr = 0;
+                            // hidden erp_order_details data.
+                            $.each(artwork_data, function(index, erp_data){
+                                erp_details_div_html += '<div hidden class="edit-erp-details" data-erp-id="'+erp_data.erp_id+'" data-ref-name="'+erp_data.refname+'" data-order-type="'+erp_data.order_type+'" data-buyer-po="'+erp_data.buyer_po+'" data-created-at="'+erp_data.created_at+'"  data-style-no="'+erp_data.style_no+'" data-template-file="'+erp_data.temp_file+'"></div><object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal'+incr+'" class="center-block tesco_svg'+incr+'" data="'+erp_data.temp_file+'" type="image/svg+xml"></object>'
+                                incr++;
+                            });
+                            
+                            $('.edit-order-details-div').html(erp_details_div_html);
+                        }
+                    }
+                    
+                 }
+                });
+                    
+                /** [ Backdrop for bootstrap modal ] */
+                $('#jobcardUpdationModalCenter').modal({
+                    backdrop: 'static',
+                    keyboard: false
+                })
+
+                /** [ Validate edit_jobcard form using bootstrap validator ] */
+                $('#edit_jobcard').validator('validate');
+                $('#jobcardUpdationModalCenter').modal('show');
+                $('.datepicker').datepicker({
+                    format: 'dd-mm-yyyy'
+                });
+             },
+             error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
+              },
+             complete: function () {
+                 $(".loader").hide();
+             }
+         })
+   } catch (e) {
+     console.log("Error:"+e)
+   }
+  }
+
+  /** ---------------------- Excess calculation functions for edit jobcard begins ----------------------**/
+/**
+ * Dynamic Excess calculation based on excess value entered.
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function calculateExcessEdit(evt)
+{
+    let item = $('.edit-total-quantity-class');
+    $.each(item, function(key, value){
+        let total_excess = parseFloat($(value).text() * (evt.value*1/100)).toFixed(2);
+        $('#edit_total_excess_row_table_'+key).val(Math.round(total_excess));
+        /** refresh excess values fields in single ref table */
+        $('#edit_total_excess_row_table_'+key).trigger('input');
+    });
+    editTotalExcess();
+}
+
+/**
+ * Dynamic Total Excess calculation based on calculated excess value.
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function editTotalExcess()
+{
+    var table = 0;
+    $('.edit-single-list-table').each(function () {
+        var total_excess_final = 0;
+        $(this).find('.edit-total-excess-row-table-'+table).each(function () {
+            var excess = $(this).val();
+            if (!isNaN(excess) && excess.length !== 0) {
+                total_excess_final += parseInt(excess);
+            }
+        });
+        $('.edit-total-excess-col-table-'+table).html('<strong>'+Math.round(total_excess_final)+'</strong>');
+
+        table++;
+    });
+    actualExcessEdit()
+}
+
+/**
+ * Dynamic Actual Excess calculation based on excess value and total quantity.
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function actualExcessEdit()
+{
+    $('.edit-total-text').each(function(){
+        let ref_name              = $(this).data('ref-name');
+        let total_qty             = 0;
+        let total_excess          = 0;
+        let act_excess            = 0;
+
+        $('.edit-total-qty-'+ref_name).each(function(){
+            if (!isNaN(total_qty) && total_qty.length !== 0) {
+                total_qty += parseInt($(this).text());
+            }
+        });
+        $('.edit-total-excess-'+ref_name).each(function(){
+            if (!isNaN(total_excess) && total_excess.length !== 0) {
+                total_excess += parseInt($(this).text());
+            }
+        });
+        if (!isNaN(total_qty) && !isNaN(total_excess)) {
+            act_excess = parseFloat((total_excess/total_qty)*100).toFixed(2);
+        }
+        $('#edit_act_excess_'+ref_name).text(Math.round(act_excess));
+    });
+}
+
+/**
+ * Dynamic Mtrs for sticker calculation.
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function mtrsForStickersEdit()
+{
+    var length_side_dimension = $('#edit_length_side').val() === ''?0:$('#edit_length_side').val();
+    $('.edit-total-text').each(function(){
+        let ref_name              = $(this).data('ref-name');
+        let total_qty             = 0;
+        let mtrs                  = 0;
+        let no_of_repeats         = $('#edit_no_sticker').val() === ''?0:$('#edit_no_sticker').val();
+        let repeat_gap            = $('#edit_repeat_gap').val() === ''?0:$('#edit_repeat_gap').val();
+
+        $('.edit-total-qty-'+ref_name).each(function(){
+            if (!isNaN(total_qty) && total_qty.length !== 0) {
+                total_qty += parseInt($(this).text());
+            }
+        });
+
+        if(!isNaN(total_qty) && !isNaN(length_side_dimension) && !isNaN(no_of_repeats) && !isNaN(repeat_gap) && no_of_repeats != 0 && repeat_gap != 0)
+        {
+            mtrs =  parseFloat((parseInt(total_qty)/parseInt(no_of_repeats)) * ((parseFloat(length_side_dimension) + parseInt(repeat_gap))/1000)).toFixed(2);
+        }
+        
+        $('#edit_sticker_mtr_'+ref_name).text(Math.round(mtrs));
+        totalMetersEdit()
+    });
+}
+
+/**
+ * Dynamic Total Meters calculation.
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function totalMetersEdit()
+{
+    $('.edit-total-meters').each(function(){
+       let total_mtrs_id = $(this).attr('id').split("_");
+       let ref_name = total_mtrs_id[3]+'_'+total_mtrs_id[4];
+       let mtrs_for_stickers = $('#edit_sticker_mtr_'+ref_name).text() === ''?0:$('#edit_sticker_mtr_'+ref_name).text();
+       let settings = $('#edit_settings_'+ref_name).val() === ''?0:$('#edit_settings_'+ref_name).val();
+       if (!isNaN(settings) && !isNaN(mtrs_for_stickers)) {
+           var total_mtr = parseInt(settings) + parseInt(mtrs_for_stickers);
+        }
+       $('#edit_total_mtrs_'+ref_name).text(Math.round(total_mtr));
+    });
+}
+/** ----------------- Excess calculation functions for edit jobcard ends ----------------------**/
+
+/**
+ * Update jobcard
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function updateJobcard(formData)
+{
+    var company_id      = $( '#edit_jc_company_name' ).data('company-id');
+    var workorder_id    = $( '#edit_work_order' ).text() === ''?null:$('#edit_work_order').text();
+    var created_date    = $( '#edit_today_date' ).text() === ''?null:$('#edit_today_date').text();
+    var article         = $( '#edit_article' ).text() === ''?null:$('#edit_article').text();
+    var material        = $( '#edit_material' ).val() === ''?null:$('#edit_material').val();
+    var customer_id     = $( '#edit_customer' ).data('customer-id');
+    var style_no        = $( '#edit_style_no' ).val() === ''?null:$('#edit_style_no').val();
+    var order_type      = $( '#edit_order_type' ).text() === ''?null:$('#edit_order_type').text();
+    var buyer_id        = $( '#edit_buyer' ).data('buyer-id');
+    var reference       = $( '#edit_reference' ).val() === ''?null:$('#edit_reference').val();
+    var disp_mode       = $( '#edit_disp_mode option:selected' ).val() === ''?null:$('#edit_disp_mode option:selected').val();
+    var order_date      = $( '#edit_order_date' ).text() === ''?null:$('#edit_order_date').text();
+    var length          = $( '#edit_length' ).val() === ''?null:$('#edit_length').val();
+    var repeat_gap      = $( '#edit_repeat_gap' ).val() === ''?null:$( '#edit_repeat_gap' ).val();
+    var machine         = $( '#edit_machine option:selected' ).val() === ''?null:$( '#edit_machine option:selected' ).val();
+    var cus_del_date    = $( '#edit_cus_del_date' ).val() === ''?null:$( '#edit_cus_del_date' ).val();
+    var roll_width      = $( '#edit_roll_width' ).val() === ''?null:$( '#edit_roll_width' ).val();
+    var width           = $( '#edit_width' ).val() === ''?null:$('#edit_width').val();
+    var film_no         = $( '#edit_film_no' ).val() === ''?null:$( '#edit_film_no' ).val();
+    var invoice_date    = $( '#edit_invoice_date' ).val() === ''?null:$( '#edit_invoice_date' ).val();
+    var length_side     = $( '#edit_length_side' ).val() === ''?null:$( '#edit_length_side' ).val();
+    var excess          = $( '#edit_excess' ).val() === ''?null:$( '#edit_excess' ).val();
+    var teeth_no        = $( '#edit_teeth_no option:selected' ).val() === ''?null:$( '#edit_teeth_no option:selected' ).val();
+    var inv_no          = $( '#edit_inv_no' ).val() === ''?null:$( '#edit_inv_no' ).val();
+    var no_sticker      = $( '#edit_no_sticker' ).val() === ''?null:$( '#edit_no_sticker' ).val();
+    var finish_type     = $( '#edit_finish_type option:selected' ).val() === ''?null:$( '#edit_finish_type option:selected' ).val();
+    var print_color     = $( '#edit_print_color' ).val() === ''?null:$('#edit_print_color').val();
+    var compiled_by     = $( '#edit_compiled_by' ).val() === ''?null:$('#edit_compiled_by').val();
+    var barcode_read    = $( '#edit_barcode_read' ).val() === ''?null:$('#edit_barcode_read').val();
+    var operator        = $( '#edit_operator' ).val() === ''?null:$('#edit_operator').val();
+    var checker         = $( '#edit_checker' ).val() === ''?null:$('#edit_checker').val();
+    var authorized_by   = $( '#edit_author' ).val() === ''?null:$('#edit_author').val();
+    var axicon_verifier = $( '#edit_axicon_verifier' ).val() === ''?null:$('#edit_axicon_verifier').val();
+    var approved_by     = $( '#edit_approved_by' ).val() === ''?null:$('#edit_approved_by').val();
+    var packer          = $( '#edit_packer' ).val() === ''?null:$('#edit_packer').val();
+    var approval_date   = $( '#edit_approval_date' ).val() === ''?null:$('#edit_approval_date').val();
+    var roll_issued_by  = $( '#edit_roll_issued_by' ).val() === ''?null:$('#edit_roll_issued_by').val();
+    var cutter          = $( '#edit_cutter' ).val() === ''?null:$('#edit_cutter').val();
+    var cartons         = $( '#edit_cartons' ).val() === ''?null:$('#edit_cartons').val();
+    var jobcard_id      = $( '#jobcard_id' ).val();
+
+    var final_json_obj =   {
+        "ratio": {},
+        "single": {},
+        "erp_order_details" : []
+          };   
+    var ratio_object = {};
+    /** Create ratio templates json object */
+    $('.edit-ratio-list-table').each(function (i, table) {
+     var my_object    = new Object();
+     var array_list   = [];
+         ref_name     = $(this).data('ratio-ref-table').replace(' ', '_');
+
+      $(table).find('tbody tr:not(:last)').each(function (index, row) {
+        my_object = {}; 
+        my_object.reference_name  = $(row).find ( "#edit_ratio_tr_refname_"+index ).text();
+        my_object.erp_id          = $(row).find ( "#edit_ratio_tr_erp_id_"+index ).text();
+        my_object.buyer_po_number = $(row).find ( "#edit_ratio_tr_buyer_po_"+index ).text();
+        my_object.ocn_number      = $(row).find ( "#edit_ratio_tr_ocn_"+index ).text();
+        my_object.order_quantity  = $(row).find ( "#edit_ratio_tr_qty_"+index ).text();
+        my_object.template_id     = $(row).data ( 'template-id' );
+
+        array_list.push(my_object);
+        index++;
+        ratio_object[ref_name] = array_list;
+      });
+      // pushing ratio templates array into json object
+      final_json_obj['ratio'] = ratio_object;
+    });
+    
+    
+    var single_ref_obj = {};
+    
+    /** Create single templates json object */
+    $('.edit-single-list-table').each(function (index, table) {
+        var single_obj = {
+            "erp_id": [],
+            "buyer_po": [],
+            "ocn": [],
+            "temp_id": [],
+            "size": [],
+            "total": [],
+            "excess": []
+              };
+        var erp_id_object  = {};
+        var erp_id_array   = [];
+        var po_object      = {};
+        var po_array       = [];
+        var ocn_object     = {};
+        var ocn_array      = [];
+        var temp_id_object = {};
+        var temp_id_array  = [];
+        single_ref_name    = $(table).find('tbody tr:eq(0) td:last-child').data('single-ref-name').replace(' ', '_');
+        
+        // create erp_id array
+        $(table).find('tbody tr:eq(0) td:not(:last)').each(function (i, item) {
+            erp_id_object = {};
+            erp_id_object = item.innerHTML;
+            erp_id_array.push(erp_id_object);
+
+            temp_id_object = {};
+            temp_id_object = $(item).data('template-id');
+            temp_id_array.push(temp_id_object);
+        });
+        
+        single_obj['erp_id']  = erp_id_array;
+        single_obj['temp_id'] = temp_id_array;
+        // create po number array
+        $(table).find('tbody tr:eq(1) td').each(function (i, item) {
+            po_object = {};
+            po_object = item.innerHTML;
+            po_array.push(po_object);
+        });
+        single_obj['buyer_po'] = po_array;
+
+        // create ocn number array
+        $(table).find('tbody tr:eq(2) td').each(function (i, item) {
+            ocn_object = {};
+            ocn_object = item.innerHTML;
+            ocn_array.push(ocn_object);
+        });
+        single_obj['ocn'] = ocn_array;
+
+        var size_object_final = {};
+        var total_qty_object_final = {};
+        var excess_object_final = {};
+        // create size, qty and excess json object
+        $(table).find('tbody tr:gt(3):not(:last-child)').each(function (i, item) {
+            
+            var size_text  = $(item).find('.edit-single-size-row').text();
+            var size_array      = [];
+            $(item).find('.edit-quantity-td').each(function (index, row) {
+                size_object = {};
+                size_object = row.innerHTML;
+                size_array.push(size_object);
+            });
+            size_object_final[size_text] = size_array;
+
+            $(item).find('.edit-total-quantity-class strong').each(function (index1, total_qty) {
+                total_qty_object = {};
+                total_qty_object = total_qty.innerHTML;
+            });
+            total_qty_object_final[size_text] = total_qty_object;
+
+            $(item).find('.edit-total-excess div input').each(function (index2, excess) {
+                excess_object = {};
+                excess_object = excess.value;
+            });
+            excess_object_final[size_text] = excess_object;
+
+        });
+        single_obj['size'] = size_object_final;
+        single_obj['total'] = total_qty_object_final;
+        single_obj['excess'] = excess_object_final;
+        
+        single_ref_obj[single_ref_name+'_'+index] = single_obj;
+        // pushing single templates array into json object
+        final_json_obj['single'] = single_ref_obj;
+    });
+
+    var single_ref = [];
+    var act_excess = [];
+    /** [ Create array of act-excess ] */
+    $('.edit-act-excess').each(function (i, item) {
+        act_excess[i] = $(item).text() === ''?0:$(item).text();
+        single_ref[i] = $(item).data('act-excess-ref');
+    });
+    act_excess = act_excess.join(',');
+    single_ref = single_ref.join(',');
+
+    var sticker_mtr = [];
+    /** [ Create array of sticker-mtrs ] */
+    $('.edit-sticker-mtrs').each(function (i, item) {
+        sticker_mtr[i] = $(item).text() === ''?0:$(item).text();
+
+    });
+    sticker_mtr = sticker_mtr.join(',');
+
+    var settings = [];
+    /** [ Create array of settings ] */
+    $('.edit-settings').each(function (i, item) {
+        settings[i] = $(item).val() === ''?0:$(item).val();
+
+    });
+    settings = settings.join(',');
+
+    var total_mtrs = [];
+    /** [ Create array of total-meters ] */
+    $('.edit-total-meters').each(function (i, item) {
+        total_mtrs[i] = $(item).text() === ''?0:$(item).text();
+
+    });
+    total_mtrs = total_mtrs.join(',');
+
+    jsonArray = [];
+    /** [ Create json object of jobcard-craeted orders ] */
+    $('.edit-erp-details').each(function (i, item) {
+        erp_order_details_obj = {};
+        erp_order_details_obj.created_at = $(this).attr('data-created-at'); 
+        erp_order_details_obj.order_type = $(this).attr('data-order-type'); 
+        erp_order_details_obj.buyer_po   = $(this).attr('data-buyer-po'); 
+        erp_order_details_obj.refname    = $(this).attr('data-ref-name'); 
+        erp_order_details_obj.erp_id     = $(this).attr('data-erp-id');
+        erp_order_details_obj.style_no   = $(this).attr('data-style-no');
+        erp_order_details_obj.temp_file  = $(this).attr('data-template-file');
+
+        jsonArray.push(erp_order_details_obj);
+    });
+
+    // pushing created_at array into json object
+    final_json_obj['erp_order_details'] = jsonArray;
+
+    $.ajax({
+        url: base_url + "/erp/job-manager/update-jobcard-details",
+        type: 'PUT',
+        data: {
+            _token: csrf_token,
+            company_id: company_id,
+            workorder_id: workorder_id,
+            created_date: created_date,
+            article: article,
+            material: material,
+            customer_id: customer_id,
+            style_no: style_no,
+            order_type: order_type,
+            buyer_id: buyer_id,
+            reference: reference,
+            disp_mode: disp_mode,
+            order_date: order_date,
+            length: length,
+            repeat_gap: repeat_gap,
+            machine: machine,
+            cus_del_date: cus_del_date,
+            roll_width: roll_width,
+            width: width,
+            film_no: film_no,
+            invoice_date: invoice_date,
+            length_side: length_side,
+            excess: excess,
+            teeth_no: teeth_no,
+            inv_no: inv_no,
+            no_sticker: no_sticker,
+            finish_type: finish_type,
+            print_color:print_color,
+            compiled_by:compiled_by,
+            barcode_read:barcode_read,
+            operator:operator,
+            checker:checker,
+            authorized_by:authorized_by,
+            axicon_verifier:axicon_verifier,
+            approved_by:approved_by,
+            packer:packer,
+            approval_date:approval_date,
+            roll_issued_by:roll_issued_by,
+            cutter:cutter,
+            cartons:cartons,
+            final_json_obj:JSON.stringify(final_json_obj),
+            single_ref:single_ref,
+            act_excess:act_excess,
+            sticker_mtr:sticker_mtr,
+            settings:settings,
+            total_mtrs:total_mtrs,
+            jobcard_id:jobcard_id
+        },
+        tryCount: 0,
+        retryLimit: 2,
+        dataType: "json",
+        async: false,
+        beforeSend: function () {
+            $(".loader").show();
+            $('#jc_print_btn').prop('disabled', true);
+            
+        },
+        statusCode: {
+            200: function(data) {
+                /** [ Store file path into localstorage ] */
+                localStorage.setItem('file_path',data.file_path)
+                var loop = 0;
+                var isEdit = true;
+                $('.edit-erp-details').each(function (i, item) {
+                    created_at = $(this).attr('data-created-at'); 
+                    order_type = $(this).attr('data-order-type'); 
+                    buyer_po_no= $(this).attr('data-buyer-po'); 
+                    refname    = $(this).attr('data-ref-name'); 
+                    id         = $(this).attr('data-erp-id');
+                    style_no   = $(this).attr('data-style-no');
+                    modal_name = refname.replace(' ', '');
+
+                    openmodaltescopreview(modal_name, loop, style_no, buyer_po_no, id, order_type, created_at, isEdit);
+                    loop++;
+                });
+            },
+            400: function() {
+                $('.snackbar_span').html("Parameter is missing !!!");
+                showSnackbar();
+            },
+       },
+        error: function (errorXHR, errorStatus, errorThrown) {
+            this.tryCount++;
+            if (this.tryCount <= this.retryLimit) {
+                $.ajax(this);
+                return;
+            }
+        },
+        complete: function () {
+            $(".loader").hide();
+        }
+    })
+}
+
+/**
+ * Get customers list based on buyer selection
+ * @param buyer_id
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function getCustomersList(evt)
+{
+    try {
+        let selected_buyer_id = evt.value;
+        if (selected_buyer_id != '') 
+        {
+            $.ajax({
+                url: base_url + "/erp/job-manager/get-customers-list",
+                type: 'GET',
+                data: {
+                    selected_buyer_id: selected_buyer_id
+                },
+                tryCount: 0,
+                retryLimit: 2,
+                dataType: "json",
+                beforeSend: function () {
+                    $(".loader").show();
+                },
+                statusCode: {
+                    200: function(data) {
+                        var html = '<option value="">SELECT A CUSTOMER</option>';
+                        /** [ customers list selectpicker value populating ] */
+                        $.each(data.customers_list, function (key, item) {
+                            html += '<option value="' + key + '">' + item + '</option>';
+                        });
+                        $('#customer_filter').html(html);
+                        $('#customer_filter').selectpicker('refresh');
+                    },
+                    400: function() {
+                        $('.snackbar_span').html("Parameter is missing !!!");
+                        showSnackbar();
+                    },
+               },
+                error: function (errorXHR, errorStatus, errorThrown) {
+                    this.tryCount++;
+                    if (this.tryCount <= this.retryLimit) {
+                        $.ajax(this);
+                        return;
+                    }
+                },
+                complete: function () {
+                    $(".loader").hide();
+                }
+            })
+        }
+        else
+        {
+            $('#customer_filter').html('<option value="">SELECT A CUSTOMER</option>');
+            $('#customer_filter').selectpicker('refresh');
+            $('#jobcard_id_filter').html('<option value="">SELECT A JOBCARD ID</option>');
+            $('#jobcard_id_filter').selectpicker('refresh');
+        }
+    } catch (e) {
+        console.log("Error:"+e)
+    }
+}
+
+/**
+ * Get jobcard id list based on buyer and customer selection
+ * @param buyer_id, customer_id
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+function getJobcardIDList(evt)
+{
+    try {
+        let selected_customer_id = evt.value;
+        let selected_buyer_id    = $('#buyer_filter option:selected').val();
+        if (selected_customer_id != '') 
+        {
+            $.ajax({
+                url: base_url + "/erp/job-manager/get-jobcard-id-list",
+                type: 'GET',
+                data: {
+                    selected_customer_id: selected_customer_id,
+                    selected_buyer_id:selected_buyer_id
+                },
+                tryCount: 0,
+                retryLimit: 2,
+                dataType: "json",
+                beforeSend: function () {
+                    $(".loader").show();
+                },
+                statusCode: {
+                    200: function(data) {
+                        var html = '<option value="">SELECT A JOBCARD ID</option>';
+                        /** [ jobcard id list selectpicker value populating ] */
+                        $.each(data.jobcard_id_list, function (key, item) {
+                            html += '<option value="' + key + '">' + item + '</option>';
+                        });
+                        $('#jobcard_id_filter').html(html);
+                        $('#jobcard_id_filter').selectpicker('refresh');
+                    },
+                    400: function() {
+                        $('.snackbar_span').html("Parameter is missing !!!");
+                        showSnackbar();
+                    },
+               },
+                error: function (errorXHR, errorStatus, errorThrown) {
+                    this.tryCount++;
+                    if (this.tryCount <= this.retryLimit) {
+                        $.ajax(this);
+                        return;
+                    }
+                },
+                complete: function () {
+                    $(".loader").hide();
+                }
+            })
+        }
+        else
+        {
+            $('#jobcard_id_filter').html('<option value="">SELECT A JOBCARD ID</option>');
+            $('#jobcard_id_filter').selectpicker('refresh');
+        }
+    } catch (e) {
+        console.log("Error:"+e)
+    }
+}
+/**
+ * Get jobcard list based on buyer,customer and jobcard id selection
+ * @param buyer_id, customer_id and jobcard_id
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+
+function getJobcardsList()
+{
+    try {
+        let selected_buyer_id    = $('#buyer_filter option:selected').val();
+        let selected_customer_id = $('#customer_filter option:selected').val();
+        let selected_jobcard_id  = $('#jobcard_id_filter option:selected').val();
+        if (selected_customer_id != '') 
+        {
+            $.ajax({
+                url: base_url + "/erp/job-manager/get-jobcards-list",
+                type: 'GET',
+                data: {
+                    selected_customer_id: selected_customer_id,
+                    selected_buyer_id:selected_buyer_id,
+                    selected_jobcard_id:selected_jobcard_id
+                },
+                tryCount: 0,
+                retryLimit: 2,
+                dataType: "json",
+                beforeSend: function () {
+                    $(".loader").show();
+                },
+                statusCode: {
+                    200: function(data) {
+                        var html = '<tr id="'+data.jobcards_list.jobcard_id+'">\
+                        <td>1</td>\
+                        <td>'+data.jobcards_list.work_order_id+'</td>\
+                        <td>'+data.jobcards_list.company_name+'</td>\
+                        <td>'+data.jobcards_list.buyer_name+'</td>\
+                        <td><a href="#"><i class="fa fa-pencil fa-button edit-jobcard filterbtn options" title="Edit Jobcard" data-placement="left"></i></a></td>\
+                        </tr>';
+                        $('#jobcard_list_table_body').html(html);            
+                    },
+                    400: function() {
+                        $('.snackbar_span').html("Parameter is missing !!!");
+                        showSnackbar();
+                    },
+               },
+                error: function (errorXHR, errorStatus, errorThrown) {
+                    this.tryCount++;
+                    if (this.tryCount <= this.retryLimit) {
+                        $.ajax(this);
+                        return;
+                    }
+                },
+                complete: function () {
+                    $(".loader").hide();
+                }
+            })
+        }
+        else
+        {
+            $('#jobcard_id_filter').html('<option value="">SELECT A JOBCARD ID</option>');
+            $('#jobcard_id_filter').selectpicker('refresh');
+        }
+    } catch (e) {
+        console.log("Error:"+e)
+    }
+}
+
+/**
+ * This Function is used to invoke JSBarcode.
+ * 
+ * @return barcode
+ */
+function openmodaltescopreview(modal, loop, style_no,buyer_no, id, order_type, created_at, isEdit) 
+{
+	
+    genarateArtworkPreview("tesco_svg_modal" + loop, modal,style_no,buyer_no,id,order_type,created_at, isEdit);
+
+}
+
+function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,created_at, isEdit) 
+{
+    var a = document.getElementById(data);
+    var svgDoc = a.contentDocument;
+    var name2=name;
+    var name = name + "-sticker";
+    if (name == "TSL1-sticker" || name == "TSL3-sticker") {
+    var svgarr = [];
+    var ajax_count = 0;
+    var b = " ";
+    var position = 3;
+    var ref_name = [name2.slice(0, position), b, name2.slice(position)].join('').trim();
+
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+            url: base_url + "/erp/job-manager/get-order-details",
+            type: "Post",
+            dataType: "json",
+            async: false,
+            data: {
+                _token: csrf_token,
+                ref_name: ref_name,
+                style_no: style_no,
+                buyer_no: buyer_no,
+                id: id,
+                created_at: created_at,
+                order_type:order_type
+            },
+            beforeSend: function() {
+
+            },
+            success: function(data) {
+                $(data.order_details).each(function (key, val) {
+                    var svgRoot = svgDoc.documentElement;
+                    var zone=val.zone;
+                    localStorage.setItem("zone", zone);
+
+                    if ((name == "TSL1-sticker" && zone == "CE")) {
+                        svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + val.orms_tpn;
+                    } else if ((name == "TSL3-sticker" && zone == "CE")) {
+                        svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + val.orms_tpn;
+                    } else if ((name == "TSL3-sticker" && zone == "UK")) {
+                        svgDoc.getElementById("tpnd").innerHTML = "TPND: " + val.tpnd;
+                    } else if ((name == "TSL1-sticker" && zone == "UK")) {
+                        svgDoc.getElementById("tpnd").innerHTML = "TPND: " + val.tpnd;
+                    }
+
+                    if ((name == "TSL3-sticker")) {
+                        if (zone == "CE") {
+                            var barcode_change = val.ean_barcode
+                        } else {
+                            var barcode_change = val.ean_barcode
+                        }
+                        jsbarcodetescotslean(barcode_change, 'barcode', svgDoc)
+                        svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+                    } else {
+                        if (zone == "CE") {
+                            var barcode_change = val.itf_barcode
+                        } else {
+                            var barcode_change = val.itf_barcode
+                        }
+                        jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
+                        svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+
+                    }
+
+                    if (zone == "CE") {
+                        var size = val.size;
+                    } else {
+                        var size = val.size;
+                    }
+
+                    var description = val.short_description.replace(/&/g,'&#038;');
+                    if ((name == "TSL3-sticker")) {
+                        if (size != '') {
+                            $.ajax({
+                                url: base_url + "/erp/job-manager/tesco/get-tsl-size",
+                                type: 'GET',
+                                async: false,
+                                data: {
+                                    size: size,
+                                    zone: zone
+                                },
+                                tryCount: 0,
+                                retryLimit: 2,
+                                success: function (data) {
+                                        /** [ Dynamically change svg short description ] */
+                                    if (description != '' && data.size_chart.length != 0) {
+                                        var str = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+
+                                        
+                                        if (str.length > 24) {
+                                            if (/\S/.test(str.charAt(24))) {
+                                                //No Space
+                                                if (str.indexOf(" ") == "-1") {
+                                                    svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+                                                    svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+                                                } else {
+                                                    svgDoc.getElementById("description").innerHTML = str.substr(0, str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+                                                    svgDoc.getElementById("description1").innerHTML = str.substr(str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+                                                }
+
+                                            } else {
+                                                //Space
+                                                svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+                                                svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+                                            }
+                                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+                                        } else {
+                                            svgDoc.getElementById("description").innerHTML = str.toUpperCase();
+                                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+                                            svgDoc.getElementById("description1").innerHTML = "";
+                                        }
+                                    } else if (data.size_chart.length != 0) {
+                                        svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+                                        svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
+                                        svgDoc.getElementById("description1").innerHTML = '';
+                                    } else if (description != '') {
+                                        if (description.length > 24) {
+                                            if (/\S/.test(description.charAt(24))) {
+                                                //No Space
+                                                if (description.indexOf(" ") == "-1") {
+                                                    svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+                                                    svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+                                                } else {
+                                                    svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+                                                    svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+                                                }
+
+                                            } else {
+                                                //Space
+                                                svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+                                                svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+                                            }
+                                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+                                        } else {
+                                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+                                            svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                                            svgDoc.getElementById("description1").innerHTML = "";
+                                        }
+                                    } else {
+                                        svgDoc.getElementById("description").innerHTML = '';
+                                        svgDoc.getElementById("description1").innerHTML = '';
+                                    }
+                                    var s = new XMLSerializer();
+                                    var d = svgRoot;
+                                    var str = s.serializeToString(d);
+                                    var svg = encodeURI(str)
+                                    svgarr.push(svg)
+                                },
+                                error: function (errorXHR, errorStatus, errorThrown) {
+                                    this.tryCount++;
+                                    if (this.tryCount <= this.retryLimit) {
+                                        $.ajax(this);
+                                        return;
+                                    }
+                                },
+                                complete: function () {
+
+                                }
+                            })
+                        } else {
+                            /** [ Dynamically change svg short description ] */
+                            if (description != '') {
+                                
+                                    if (description.length > 24) {
+                                        if (/\S/.test(description.charAt(24))) {
+                                            //No Space
+                                            if (description.indexOf(" ") == "-1") {
+                                                svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+                                                svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+                                            } else {
+                                                svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+                                                svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+                                            }
+
+                                        } else {
+                                            //Space
+                                            svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+                                            svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+                                        }
+                                        svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+                                    } else {
+                                        svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                                        svgDoc.getElementById("description1").innerHTML = "";
+                                        svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+                                    }
+                            } else {
+                                svgDoc.getElementById("description").innerHTML = '';
+                            }
+                            var s = new XMLSerializer();
+                            var d = svgRoot;
+                            var str = s.serializeToString(d);
+                            var svg = encodeURI(str)
+                            svgarr.push(svg)
+
+                        }
+                    } else {
+                        var description =val.short_description.replace(/&/g,'&#038;');
+                        if (description.length > 24) {
+                            if (/\S/.test(description.charAt(24))) {
+                                //No Space
+                                if (description.indexOf(" ") == "-1") {
+                                    svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+                                    svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+                                } else {
+                                    svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+                                    svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+                                }
+
+                            } else {
+                                //Space
+                                svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+                                svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+                            }
+                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+                        } else {
+                            svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                            svgDoc.getElementById("description1").innerHTML = "";
+                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+                        }
+                        var s = new XMLSerializer();
+                        var d = svgRoot;
+                        var str = s.serializeToString(d);
+                        var svg = encodeURI(str)
+                        svgarr.push(svg)
+                    }
+                    ajax_count++;
+                })
+                if (ajax_count == data.order_details.length) {
+                    var svg_fin = svgarr.join(',_');
+                    var zone = localStorage.getItem("zone");
+                    PDFTescoSmallPreview(svg_fin, name,zone,style_no,buyer_no,id,created_at, isEdit);
+                }
+            },
+            error: function(data) {
+
+            },
+            complete: function() {
+
+            }
+        })
+
+} else {
+    var svgarr = [];
+    var ajax_count = 0;
+    var b = " ";
+    var position = 3;
+    var ref_name = [name2.slice(0, position), b, name2.slice(position)].join('').trim();
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+            url: base_url + "/erp/job-manager/get-order-details",
+            type: "Post",
+            dataType: "json",
+            async: false,
+            data: {
+                _token: csrf_token,
+                ref_name: ref_name,
+                style_no: style_no,
+                buyer_no: buyer_no,
+                id: id,
+                created_at: created_at,
+                order_type:order_type
+            },
+            beforeSend: function() {
+
+            },
+            success: function(data) {
+                $(data.order_details).each(function (key, val) {
+                    var zone=val.zone;
+                    localStorage.setItem("zone", zone);
+                    var svgRoot = svgDoc.documentElement;
+                                
+                if (val.supplier_name != '') {
+                    svgDoc.getElementById("supplier").innerHTML = val.supplier_name.toUpperCase().replace('&', '&amp;');
+                } else {
+                    svgDoc.getElementById("supplier").innerHTML = "";
+                }
+                                
+                if (val.po_number != '') {
+                    svgDoc.getElementById("po_number").innerHTML = val.po_number.toUpperCase();
+                } else {
+                    svgDoc.getElementById("po_number").innerHTML = '';
+                }
+
+                /** [ Dynamically change svg CE style reference number ] */
+                if (val.ce_style_ref != '') {
+                    svgDoc.getElementById("ce_style").innerHTML = val.ce_style_ref.toUpperCase();
+                } else {
+                    svgDoc.getElementById("ce_style").innerHTML = '';
+                }
+                /** [ Dynamically change svg UK style reference number ] */
+                if (val.uk_style_ref != '') {
+                    svgDoc.getElementById("uk_style").innerHTML = val.uk_style_ref.toUpperCase();
+                } else {
+                    svgDoc.getElementById("uk_style").innerHTML = '';
+                }
+                /** [ Dynamically change svg EQOS code ] */
+                if (val.eqos_site_code != '') {
+                    svgDoc.getElementById("eqos").innerHTML = val.eqos_site_code.toUpperCase();
+                } else {
+                    svgDoc.getElementById("eqos").innerHTML = '';
+                }
+                
+                            
+                                /** [ Dynamically change  svg department ] */
+                if (val.department != '') {
+                    /** [Give font-size for department] */
+                    if (val.department.length < 17) {
+                        svgDoc.getElementById("department").setAttribute("style", "font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;");
+                    } else {
+                        svgDoc.getElementById("department").setAttribute("style", "font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:9px;");
+                    }
+                    /** [ Dynamically change svg department] */
+                    svgDoc.getElementById("department").innerHTML = val.department.toUpperCase().replace('&', '&amp;');
+                } else {
+                    svgDoc.getElementById("department").innerHTML = '';
+                }
+                /** [ Dynamically change svg brand ] */
+                if (val.brand != '') {
+                    /** [Give font-size for brand] */
+                    if (val.brand.length < 17) {
+                        svgDoc.getElementById("brand").setAttribute("style", "font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;");
+                    } else {
+                        svgDoc.getElementById("brand").setAttribute("style", "font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:9px;");
+                    }
+                    svgDoc.getElementById("brand").innerHTML = val.brand.toUpperCase().replace('&', '&amp;');
+                } else {
+                    svgDoc.getElementById("brand").innerHTML = '';
+                }
+                                
+                                                
+                var tag_at_source = val.tag_at_source == 0 ? "no" : "yes";
+                var rfid = val.rfid_compliant == 0 ? "no" : "yes";
+                                
+                /** [ Dynamically svg RFID ] */
+                if (rfid != '') {
+                    svgDoc.getElementById("rfid").innerHTML = rfid.toUpperCase();
+                } else {
+                    svgDoc.getElementById("rfid").innerHTML = '';
+                }
+                /** [ Dynamically change svg tag at source ] */
+                if (tag_at_source != '') {
+                    svgDoc.getElementById("tag_at_source").innerHTML = tag_at_source.toUpperCase();
+                } else {
+                    svgDoc.getElementById("tag_at_source").innerHTML = '';
+                }
+                /** [ Dynamically change svg tag at source ] */
+                if (val.season_code != '') {
+                    svgDoc.getElementById("season_code").innerHTML = val.season_code.toUpperCase();
+                } else {
+                    svgDoc.getElementById("season_code").innerHTML = '';
+                }
+                /** [ Dynamically change svg manufacture date ] */
+                if (val.manufacture_date != '') {
+                    svgDoc.getElementById("manufactured_date").innerHTML = val.manufacture_date.toUpperCase();
+                } else {
+                    svgDoc.getElementById("manufactured_date").innerHTML = '';
+                }
+                                
+                    if ((name == "TCL1-sticker" && zone == "CE") || (name == "TCL2-sticker" && zone == "CE") || (name == "TSL1-sticker" && zone == "CE") || (name == "THL1-sticker" && zone == "CE")) {
+                        svgDoc.getElementById("pieces_in_ratio").innerHTML = val.cases_per_carton;
+
+                        svgDoc.getElementById("tpnd").innerHTML = val.orms_tpn;
+                    } else if ((name == "TCL4-sticker" && zone == "CE") || (name == "THL3-sticker" && zone == "CE")) {
+                        svgDoc.getElementById("unit_per_case").innerHTML = val.case_size;
+
+                        svgDoc.getElementById("tpnd").innerHTML =val.orms_tpn;
+                    } else if ((name == "TCL4-sticker" && zone == "UK") || (name == "THL3-sticker" && zone == "UK")) {
+                        svgDoc.getElementById("unit_per_case").innerHTML = val.case_size;
+
+                        svgDoc.getElementById("tpnd").innerHTML = val.tpnd;
+                    } else if ((name == "TCL1-sticker" && zone == "UK") || (name == "TCL2-sticker" && zone == "UK") || (name == "TSL1-sticker" && zone == "UK") || (name == "THL1-sticker" && zone == "UK")) {
+                        svgDoc.getElementById("pieces_in_ratio").innerHTML = val.units_per_carton;
+
+                        svgDoc.getElementById("tpnd").innerHTML = val.tpnd;
+                    }
+                    if ((name == "THL3-sticker")) {
+
+                        if (zone == "CE") {
+                            var barcode_change = val.ean_barcode
+                        } else {
+                            var barcode_change = val.ean_barcode
+                        }
+                        jsbarcodetescoean(barcode_change, 'barcode', svgDoc)
+                        svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+                    } else if ((name == "TCL1-sticker") || (name == "THL1-sticker")) {
+
+                        if (zone == "CE") {
+                            var barcode_change = val.itf_barcode
+                        } else {
+                            var barcode_change = val.itf_barcode
+                        }
+                        jsbarcodetesco(barcode_change, 'barcode', svgDoc)
+                        svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+
+                    }
+
+                    if (zone == "CE") {
+                        var size = val.size;
+                    } else {
+                        var size = val.size;
+                    }
+
+                    var description = val.short_description.replace(/&/g,'&#038;');
+                    if ((name == "TCL4-sticker") || (name == "TSL3-sticker") || (name == "THL3-sticker")) {
+                        if (size != '') {
+                            $.ajax({
+                                url: base_url + "/erp/job-manager/tesco/get-tsl-size",
+                                type: 'GET',
+                                async: false,
+                                data: {
+                                    size: size,
+                                    zone: zone
+                                },
+                                tryCount: 0,
+                                retryLimit: 2,
+                                success: function (data) {
+                                    /** [ Dynamically change svg short description ] */
+                                    if (description != '' && data.size_chart.length != 0) {
+                                        svgDoc.getElementById("description").innerHTML = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+                                    } else if (data.size_chart.length != 0) {
+                                        svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
+                                    } else if (description != '') {
+                                        svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                                    } else {
+                                        svgDoc.getElementById("description").innerHTML = '';
+                                    }
+                                    var s = new XMLSerializer();
+                                    var d = svgRoot;
+                                    var str = s.serializeToString(d);
+                                    svgarr.push(str)
+                                },
+                                error: function (errorXHR, errorStatus, errorThrown) {
+                                    this.tryCount++;
+                                    if (this.tryCount <= this.retryLimit) {
+                                        $.ajax(this);
+                                        return;
+                                    }
+                                },
+                                complete: function () {
+
+                                }
+                            })
+                        } else {
+                            /** [ Dynamically change svg short description ] */
+                            if (description != '') {
+                                svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                            } else {
+                                svgDoc.getElementById("description").innerHTML = '';
+                            }
+                            var s = new XMLSerializer();
+                            var d = svgRoot;
+                            var str = s.serializeToString(d);
+
+                            svgarr.push(str)
+
+                        }
+                    } else {
+                        if (description != '') {
+                                svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                            } else {
+                                svgDoc.getElementById("description").innerHTML = '';
+                            }
+                        var s = new XMLSerializer();
+                        var d = svgRoot;
+                        var str = s.serializeToString(d);
+
+                        svgarr.push(str)
+                    }
+                    ajax_count++;
+                })
+                if (ajax_count == data.order_details.length) {
+                    var svg_fin = svgarr.join(',_');
+                    var zone = localStorage.getItem("zone");
+                    PDFTescoPreview(svg_fin, name,zone,style_no,buyer_no,id,created_at, isEdit);
+                }
+            },
+            error: function(data) {
+
+            },
+            complete: function() {
+
+            }
+        });
+    
+}
+
+
+}
+ 
+/** Get order details for artwork attachment ( while edit jobcard functionality ) */
+
+
+
+/**
+* This Function is Sub Function of #printDivTesco.
+*  For print preview of stickers
+* @return Pdf
+*/
+
+function PDFTescoPreview(data, name,zone,style_no,buyer_no,id,created_at, isEdit) {
+	if(name == "TCL1-sticker")
+	{
+		var db = "tesco_tcl1_orders";
+	}
+	else if(name == "TCL2-sticker")
+	{
+		var db = "tesco_tcl2_orders";
+	}
+	else if(name == "TCL4-sticker")
+	{
+		var db = "tesco_tcl4_orders";
+	}
+	else if(name == "THL1-sticker")
+	{
+		var db = "tesco_thl1_orders";
+	}
+	else if(name == "THL3-sticker")
+	{
+		var db = "tesco_thl3_orders";
+	}
+$.ajax({
+    url: base_url + "/erp/job-manager/tesco/print-div-tesco",
+    type: "post",
+    data: {
+       _token: csrf_token,
+		svg: data,
+		name:name,
+		zone:zone,
+		style:style_no,
+		tesco_po_number:buyer_no,
+		id:id,
+		created_at:created_at,
+		db:db
+    },
+    tryCount: 0,
+    retryLimit: 2,
+    async: false,
+    success: function (data) {
+
+        localStorage.setItem('file_path',localStorage.getItem('file_path')+','+data.file_path);
+
+        // differentiate between edit and create functionality
+        if(isEdit === false)
+        {
+            operation()
+        }
+        else
+        {
+            operationEdit()
+        }
+
+    },
+    error: function (errorXHR, errorStatus, errorThrown) {
+        this.tryCount++;
+        if (this.tryCount <= this.retryLimit) {
+            $.ajax(this);
+            return;
+        }
+    },
+})
+}
+/**
+* This Function is Sub Function of #printDivTesco.
+*  For print preview of small stickers
+* @return Pdf
+*/
+
+function PDFTescoSmallPreview(data, name,zone,style_no,buyer_no,id,created_at, isEdit) {
+	
+	if(name == "TCL1-sticker")
+	{
+		var db = "tesco_tcl1_orders";
+	}
+	else if(name == "TCL2-sticker")
+	{
+		var db = "tesco_tcl2_orders";
+	}
+	else if(name == "TCL4-sticker")
+	{
+		var db = "tesco_tcl4_orders";
+	}
+	else if(name == "THL1-sticker")
+	{
+		var db = "tesco_thl1_orders";
+	}
+	else if(name == "THL3-sticker")
+	{
+		var db = "tesco_thl3_orders";
+	}
+	
+$.ajax({
+    url: base_url + "/erp/job-manager/tesco/print-div-tesco-small",
+    type: "post",
+    data: {
+       _token: csrf_token,
+		svg: data,
+		name:name,
+		zone:zone,
+		style:style_no,
+		tesco_po_number:buyer_no,
+		id:id,
+		created_at:created_at,
+		db:db
+    },
+    tryCount: 0,
+    retryLimit: 2,
+    async: false,
+    success: function (data) {
+        localStorage.setItem('file_path',localStorage.getItem('file_path')+','+data.file_path);
+        
+        // differentiate between edit and create functionality
+        if(isEdit === false)
+        {
+            operation()
+        }
+        else
+        {
+            operationEdit()
+        }
+
+    },
+    error: function (errorXHR, errorStatus, errorThrown) {
+        this.tryCount++;
+        if (this.tryCount <= this.retryLimit) {
+            $.ajax(this);
+            return;
+        }
+    },
+})
+}
+
+
+/**
+* This Function is used to invoke JSBarcode.
+* 
+* @return barcode
+*/
+function jsbarcodetesco(code, id, svgDoc) {
+
+JsBarcode("#ean-13", code, {
+    format: "ITF14",
+    width: 3.28148,
+    height: 202,
+    fontSize: 30,
+    flat: true,
+    displayValue: false
+});
+var svg = document.getElementById('svgdiv').querySelector('svg'),
+    canvas = document.createElement('canvas'),
+    body = document.getElementsByTagName('body')[0],
+    canvasTmp,
+    svg_xml,
+    ctx,
+    img;
+// if our "svg" doesn't have 'xmlns' attribute we must add it
+//    svg.setAttribute('width', '188.931023622px');
+svg.setAttribute('font-size', '30px');
+svg.setAttribute('font-family', 'frankgothcnbt');
+
+svg.setAttribute('width', '408.900px');
+svg.setAttribute('height', '328.02px');
+
+
+
+//svg.removeAttribute('version');
+//svg.removeAttribute('viewBox');
+//	svg.removeAttribute('x');
+//	svg.removeAttribute('y');
+//svg.setAttribute('viewBox','0 ,0 ,463 ,222');
+
+canvas.id = 'canvas';
+canvas.width = svg.getBoundingClientRect().width;
+canvas.height = svg.getBoundingClientRect().height;
+
+body.appendChild(canvas);
+canvasTmp = document.getElementById('canvas');
+
+/* Time to play ;) */
+
+// https://developer.mozilla.org/en/XMLSerializer
+svg_xml = (new XMLSerializer()).serializeToString(svg);
+ctx = canvasTmp.getContext('2d');
+
+// JavaScript (HTML) image
+img = new Image();
+
+img.onload = function () {
+    ctx.drawImage(img, 0, 0);
+};
+
+// img.src - contains base64 URI from svg
+// https://developer.mozilla.org/en/DOM/window.btoa
+img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+
+
+//remove temporary canvas
+canvasTmp.remove();
+svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+
+/**
+* This Function is used to invoke Ean 13 JSBarcode.
+* 
+* @return barcode
+*/
+function jsbarcodetescoean(code, id, svgDoc) {
+JsBarcode("#ean-13", code, {
+    format: "ean13",
+    width: 3.9260,
+    height: 170,
+    fontSize: 30,
+    flat: true,
+    displayValue: false
+});
+var svg = document.getElementById('svgdiv').querySelector('svg'),
+    canvas = document.createElement('canvas'),
+    body = document.getElementsByTagName('body')[0],
+    canvasTmp,
+    svg_xml,
+    ctx,
+    img;
+// if our "svg" doesn't have 'xmlns' attribute we must add it
+//    svg.setAttribute('width', '188.931023622px');
+svg.setAttribute('font-size', '50px');
+svg.setAttribute('font-family', 'frankgothcnbt');
+
+svg.setAttribute('width', '412.25px');
+svg.setAttribute('height', '378.02px');
+
+canvas.id = 'canvas';
+canvas.width = svg.getBoundingClientRect().width;
+canvas.height = svg.getBoundingClientRect().height;
+
+body.appendChild(canvas);
+canvasTmp = document.getElementById('canvas');
+
+/* Time to play ;) */
+
+// https://developer.mozilla.org/en/XMLSerializer
+svg_xml = (new XMLSerializer()).serializeToString(svg);
+ctx = canvasTmp.getContext('2d');
+
+// JavaScript (HTML) image
+img = new Image();
+
+img.onload = function () {
+    ctx.drawImage(img, 0, 0);
+};
+
+// img.src - contains base64 URI from svg
+// https://developer.mozilla.org/en/DOM/window.btoa
+img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+
+//remove temporary canvas
+canvasTmp.remove();
+
+svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+/**
+* This Function is used to invoke Ean 13 JSBarcode.
+* 
+* @return barcode
+*/
+function jsbarcodetescotslean(code, id, svgDoc) {
+JsBarcode("#ean-13", code, {
+    format: "ean13",
+    width: 3.9260,
+    height: 167,
+    fontSize: 30,
+    flat: true,
+    displayValue: false
+});
+var svg = document.getElementById('svgdiv').querySelector('svg'),
+    canvas = document.createElement('canvas'),
+    body = document.getElementsByTagName('body')[0],
+    canvasTmp,
+    svg_xml,
+    ctx,
+    img;
+// if our "svg" doesn't have 'xmlns' attribute we must add it
+//    svg.setAttribute('width', '188.931023622px');
+svg.setAttribute('font-size', '50px');
+svg.setAttribute('font-family', 'frankgothcnbt');
+
+svg.setAttribute('width', '419.075px');
+svg.setAttribute('height', '275.02px');
+
+canvas.id = 'canvas';
+canvas.width = svg.getBoundingClientRect().width;
+canvas.height = svg.getBoundingClientRect().height;
+
+body.appendChild(canvas);
+canvasTmp = document.getElementById('canvas');
+
+/* Time to play ;) */
+
+// https://developer.mozilla.org/en/XMLSerializer
+svg_xml = (new XMLSerializer()).serializeToString(svg);
+ctx = canvasTmp.getContext('2d');
+
+// JavaScript (HTML) image
+img = new Image();
+
+img.onload = function () {
+    ctx.drawImage(img, 0, 0);
+};
+
+// img.src - contains base64 URI from svg
+// https://developer.mozilla.org/en/DOM/window.btoa
+img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+
+//remove temporary canvas
+canvasTmp.remove();
+
+svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+
+/**
+* This Function is used to invoke JSBarcode.
+* 
+* @return barcode 
+*/
+
+
+function jsbarcodetescotsl(code, id, svgDoc) {
+JsBarcode("#ean-13", code, {
+    format: "ITF14",
+    width: 3.28148,
+    height: 199,
+    fontSize: 30,
+    flat: true,
+    displayValue: false
+});
+var svg = document.getElementById('svgdiv').querySelector('svg'),
+    canvas = document.createElement('canvas'),
+    body = document.getElementsByTagName('body')[0],
+    canvasTmp,
+    svg_xml,
+    ctx,
+    img;
+// if our "svg" doesn't have 'xmlns' attribute we must add it
+//    svg.setAttribute('width', '188.931023622px');
+svg.setAttribute('font-size', '30px');
+svg.setAttribute('font-family', 'frankgothcnbt');
+
+svg.setAttribute('width', '415.100px');
+svg.setAttribute('height', '328.02px');
+
+canvas.id = 'canvas';
+canvas.width = svg.getBoundingClientRect().width;
+canvas.height = svg.getBoundingClientRect().height;
+body.appendChild(canvas);
+canvasTmp = document.getElementById('canvas');
+/* Time to play ;) */
+// https://developer.mozilla.org/en/XMLSerializer
+svg_xml = (new XMLSerializer()).serializeToString(svg);
+ctx = canvasTmp.getContext('2d');
+// JavaScript (HTML) image
+img = new Image();
+img.onload = function () {
+    ctx.drawImage(img, 0, 0);
+};
+
+// img.src - contains base64 URI from svg
+// https://developer.mozilla.org/en/DOM/window.btoa
+img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+//remove temporary canvas
+canvasTmp.remove();
+
+svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+/**
+ * Check if loop execution completed or not (for create jobcard)
+ * @author praveen
+ */
+var operationsCompleted = 0;
+function operation() {
+    ++operationsCompleted;
+    if (operationsCompleted === $('[class="row-checkbox"]:checked').length) after_forloop(); 
+}
+
+/**
+ * Check if loop execution completed or not(for edit jobcard)
+ * @author praveen
+ */
+var isOperationsCompleted = 0;
+function operationEdit() {
+    ++isOperationsCompleted;
+    if (isOperationsCompleted === $('.edit-erp-details').length) after_forloop(); 
+}
+
+/**
+ * Call after loop execution completed
+ * @author praveen
+ */
+function after_forloop()
+{
+    $.ajax({
+        url: base_url + "/erp/job-manager/pdf-merge",
+        type: 'post',
+        data: {
+            _token: csrf_token,
+            path:localStorage.getItem('file_path')
+        },
+        tryCount: 0,
+        retryLimit: 2,
+        async: false,
+        dataType: "json",
+        beforeSend: function () {
+            $(".loader").show();
+        },
+        statusCode: {
+            200: function(data) {     
+                var resp = JSON.stringify(data.file_path);
+                $('.snackbar_span').html("Jobcard Created Successfully");
+                showSnackbar();
+                $('.modal').modal('hide');
+                location.reload();
+                window.open(
+                    base_url+JSON.parse(resp),
+                    '_blank' // <- This is what makes it open in a new window.
+                );   
+            },
+            400: function() {
+              
+            },
+       },
+        error: function (errorXHR, errorStatus, errorThrown) {
+            this.tryCount++;
+            if (this.tryCount <= this.retryLimit) {
+                $.ajax(this);
+                return;
+            }
+        },
+        complete: function () {
+            $(".loader").hide();
+        }
+    })
+}

@@ -5,7 +5,7 @@
  */
 function reOrderTesco()
 {
-    $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+    //$('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
 	var buyer = localStorage.getItem("buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
@@ -20,21 +20,33 @@ function reOrderTesco()
 		},
 		success: function (data) {
 			var newObj = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders))))));
+			
+			var newObj1 = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders))))));
+			
 			var uniqueNames = [];
-			console.log(newObj)
-				for(i = 0; i< newObj.length; i++){
-					if(newObj[i].is_order_count_empty == 0)
+			
+			
+			newObj1.sort(function(obj1, obj2) {
+					var date1 =obj1.created_at;
+					var date2 =obj2.created_at;
+					if (date1 > date2) return -1;
+					if (date1 < date2) return 1;
+					return 0;
+				});
+			
+				for(i = 0; i< newObj1.length; i++){
+					if(newObj1[i].is_order_count_empty == 0)
 					{
-						if(newObj[i].zone == "CE")
+						if(newObj1[i].zone == "CE")
 						{
-							if(uniqueNames.indexOf(newObj[i].ce_style_ref) === -1){
-									uniqueNames.push(newObj[i].ce_style_ref);    
+							if(uniqueNames.indexOf(newObj1[i].ce_style_ref) === -1){
+									uniqueNames.push(newObj1[i].ce_style_ref);    
 							}   
 						}
 						else
 						{
-							if(uniqueNames.indexOf(newObj[i].uk_style_ref) === -1){
-									uniqueNames.push(newObj[i].uk_style_ref);   
+							if(uniqueNames.indexOf(newObj1[i].uk_style_ref) === -1){
+									uniqueNames.push(newObj1[i].uk_style_ref);   
 							}   
 						}
 					}
@@ -46,21 +58,31 @@ function reOrderTesco()
 				
 				var newObjrepeatOrder = data.tesco_thl3_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_tsl3_orders))
 				
-			
+				var newObjrepeatOrder1 = data.tesco_thl3_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_tsl3_orders))
+				
 				var uniqueNamesRepeatOrder = [];
-				for(i = 0; i< newObjrepeatOrder.length; i++){
-					if(newObj[i].is_order_count_empty == 0)
+			
+				newObjrepeatOrder1.sort(function(obj1, obj2) {
+					var date1 =obj1.created_at;
+					var date2 =obj2.created_at;
+					if (date1 > date2) return -1;
+					if (date1 < date2) return 1;
+					return 0;
+				});
+			
+				for(i = 0; i< newObjrepeatOrder1.length; i++){
+					if(newObjrepeatOrder1[i].is_order_count_empty == 0)
 					{
-						if(newObjrepeatOrder[i].zone == "CE")
+						if(newObjrepeatOrder1[i].zone == "CE")
 						{
-							if(uniqueNamesRepeatOrder.indexOf(newObjrepeatOrder[i].ce_style_ref) === -1){
-								uniqueNamesRepeatOrder.push(newObjrepeatOrder[i].ce_style_ref);        
+							if(uniqueNamesRepeatOrder.indexOf(newObjrepeatOrder1[i].ce_style_ref) === -1){
+								uniqueNamesRepeatOrder.push(newObjrepeatOrder1[i].ce_style_ref);        
 							}   
 						}
 						else
 						{
-							if(uniqueNamesRepeatOrder.indexOf(newObjrepeatOrder[i].uk_style_ref) === -1){
-								uniqueNamesRepeatOrder.push(newObjrepeatOrder[i].uk_style_ref);        
+							if(uniqueNamesRepeatOrder.indexOf(newObjrepeatOrder1[i].uk_style_ref) === -1){
+								uniqueNamesRepeatOrder.push(newObjrepeatOrder1[i].uk_style_ref);        
 							}   
 						}
 					}
@@ -71,8 +93,21 @@ function reOrderTesco()
 					 optionsRepeatOrder+="<option>"+uniqueNamesRepeatOrder[i]+"</option>";
 				}
 			
-			$('.main-content').html('<ul class="nav nav-tabs"> <li class="nav-item active"> <a class="nav-link active" data-toggle="tab" href="#panel1" role="tab">Clone Order</a> </li><li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#panel2" role="tab">Repeat Order</a> </li></ul><div class="tab-content "> <div class="tab-pane fade in active" id="panel1" role="tabpanel"><div class="container pad-top"><div class="col-md-10 col-md-offset-1"><div class="image-container text-center"> <img src="'+base_url+'/images/repeat.png" alt="Repeat" class="img-rounded"><h4>Clone Order</h4></div><form><div class="form-group select_div"> <select class="form-control" id="uvc_number" data-live-search="true" onchange=reordertescoartworks()>'+options+'</select></div></form><div class="how_it_works_reorder text-center"><h4>How it works ?</h4><p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p></div><div class="list_div list_div_reorder"><ul class="list-group"></ul></div></div></div> </div><div class="tab-pane fade" id="panel2" role="tabpanel"><div class="container pad-top"><div class="col-md-10 col-md-offset-1 "><div class="image-container text-center"> <img src="'+base_url+'/images/repeat.png" alt="Repeat" class="img-rounded"><h4>Repeat Order</h4></div><form><div class="form-group select_div"> <select class="form-control" id="style_number" data-live-search="true" onchange=repeatordertescoartworks()>'+optionsRepeatOrder+'</select></div></form><div class="how_it_works_repeat text-center"><h4>How it works ?</h4><p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p></div><div class="list_div list_div_repeat"><ul class="list-group"></ul></div></div></div></div></div>')
+			$('.reorder-content').html('<ul class="nav nav-tabs nav-tabs-item"> <li class="nav-item li-item active"> <a class="nav-link  li-a active" id="clone_hide" data-toggle="tab" href="#panel1" role="tab">Clone Order</a> </li><li class="nav-item li-item"> <a class="nav-link li-a" data-toggle="tab" href="#panel2" id="repeat_hide" role="tab">Repeat Order</a> </li></ul><div class="tab-content "> <div class="tab-pane fade in active" id="panel1" role="tabpanel"><div><div><div style="padding-top: 15px;" class="image-container text-center"> <img style="width:50px;height:50px" src="'+base_url+'/images/repeat.png" alt="Repeat" class="img-rounded"><h4>Clone Order</h4></div><form><div class="form-group select_div"> <select class="form-control" id="uvc_number" data-live-search="true" onchange=reordertescoartworks()>'+options+'</select></div></form></div></div> </div><div class="tab-pane fade" id="panel2" role="tabpanel"><div><div><div style="padding-top: 15px;" class="image-container text-center"> <img  style="width:50px;height:50px" src="'+base_url+'/images/repeat.png" alt="Repeat" class="img-rounded"><h4>Repeat Order</h4></div><form><div class="form-group select_div"> <select class="form-control" id="style_number" data-live-search="true" onchange=repeatordertescoartworks()>'+optionsRepeatOrder+'</select></div></form><div class="list_div list_div_repeat"><ul class="list-group"></ul></div></div></div></div></div>')
 			$('#uvc_number,#style_number').selectpicker();
+			
+			$('#clone_hide').click(function () {
+				$('.templateDiv').html('<div style="margin-top:150px" class="how_it_works_reorder text-center"><h4>How it works ?</h4><p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p></div><div style="padding-top:0px;overflow-y: scroll;max-height: 450px;" class="list_div list_div_reorder scroll hidden"><ul class="list-group"></ul></div>')
+				$('#head_template').html("Re Order")
+				$('#uvc_number').val("Select Style Number");
+				$('#uvc_number').selectpicker('refresh');
+			});
+			$('#repeat_hide').click(function () {
+					$('.templateDiv').html('<div style="margin-top:150px" class="how_it_works_reorder text-center"><h4>How it works ?</h4><p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p></div><div style="padding-top:0px;overflow-y: scroll;max-height: 450px;" class="list_div list_div_reorder scroll hidden"><ul class="list-group"></ul></div>')
+					$('#head_template').html("Re Order")
+				    $('#style_number').val("Select Style Number");
+				$('#style_number').selectpicker('refresh');
+			});
 		},
 		error: function (data) {
 
@@ -92,6 +127,7 @@ function reOrderTesco()
 
 function reordertescoartworks()
 {
+	$('.how_it_works_reorder').css('margin-top','0px')
 	var uvc=$('#uvc_number').val();
 	var buyer = localStorage.getItem("buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -120,12 +156,22 @@ function reordertescoartworks()
 						   if(index.zone == "CE")
 							{
 								var span='<span class="label labels">'+index.zone+'</span><span id="list-li-reorder'+i+'"></span>';
+								if(index.ce_style_ref == uvc)
+								{
+									$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="'+base_url+'/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">Style-'+uvc+'</p></div><div class="col-md-2"><p class="po">PO-'+index.po_number+'</p></div><div class="col-md-2"><p class="name">'+index.TemplateName+'</p></div><div class="col-md-2">'+span+' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantityTesco("'+index.type+'","'+index.id+'","'+index.TemplateName.replace(' ', '')+'","'+index.zone+'","'+index.po_number+'","list-li-reorder'+i+'")>ADDITIONAL QUANTITY</button></div></div></li>').appendTo('.list_div_reorder ul').show('slow')
+									$('.list_div_reorder').removeClass("hidden")
+								}
 							}
 							else
 							{
 								var span='<span class="label sticker">'+index.zone+'</span><span id="list-li-reorder'+i+'"></span>';
+								if(index.uk_style_ref == uvc)
+								{
+									$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="'+base_url+'/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">Style-'+uvc+'</p></div><div class="col-md-2"><p class="po">PO-'+index.po_number+'</p></div><div class="col-md-2"><p class="name">'+index.TemplateName+'</p></div><div class="col-md-2">'+span+' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantityTesco("'+index.type+'","'+index.id+'","'+index.TemplateName.replace(' ', '')+'","'+index.zone+'","'+index.po_number+'","list-li-reorder'+i+'")>ADDITIONAL QUANTITY</button></div></div></li>').appendTo('.list_div_reorder ul').show('slow')
+									$('.list_div_reorder').removeClass("hidden")
+								}
 							}
-								$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="'+base_url+'/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">Style-'+uvc+'</p></div><div class="col-md-2"><p class="po">PO-'+index.po_number+'</p></div><div class="col-md-2"><p class="name">'+index.TemplateName+'</p></div><div class="col-md-2">'+span+' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantityTesco("'+index.type+'","'+index.id+'","'+index.TemplateName.replace(' ', '')+'","'+index.zone+'","'+index.po_number+'","list-li-reorder'+i+'")>ADDITIONAL QUANTITY</button></div></div></li>').appendTo('.list_div_reorder ul').show('slow')
+								
 					i++;
 					}
 				})
@@ -144,6 +190,9 @@ function reordertescoartworks()
 	{
 		$('.how_it_works_reorder').html('<h4>How it works ?</h4><p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>');
 		$('.list_div_reorder').html('<ul class="list-group"></ul>');
+		
+		$('.list_div_reorder').addClass("hidden")
+		$('.how_it_works_reorder').css('margin-top','150px')
 	}
 }
 /**
@@ -154,13 +203,14 @@ function reordertescoartworks()
 
 function repeatordertescoartworks()
 {
+	$('.how_it_works_reorder').css('margin-top','0px')
 	var uvc=$('#style_number').val();
 	var buyer = localStorage.getItem("buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	if(uvc != "Select Style Number")
 	{
-		$('.how_it_works_repeat').html("");
-		$('.list_div_repeat').html('<ul class="list-group"></ul>');
+		$('.how_it_works_reorder').html("");
+		$('.list_div_reorder').html('<ul class="list-group"></ul>');
 		$.ajax({
 			url: base_url + "/admin/" + buyer + "/order-management/repeatorder-artwork",
 			type: "Post",
@@ -183,12 +233,22 @@ function repeatordertescoartworks()
 						if(index.zone == "CE")
 						{
 							var span='<span class="label labels">'+index.zone+'</span><span id="list-li-repeatorder'+i+'"></span>';
+							if(index.ce_style_ref == uvc)
+							{
+								$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="'+base_url+'/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">Style-'+uvc+'</p></div><div class="col-md-2"><p class="po">PO-'+index.po_number+'</p></div><div class="col-md-2"><p class="name">'+index.TemplateName+'</p></div><div class="col-md-2">'+span+' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantityTesco("'+index.type+'","'+index.id+'","'+index.TemplateName.replace(' ', '')+'","'+index.zone+'","'+index.po_number+'","list-li-repeatorder'+i+'")>ADDITIONAL QUANTITY</button></div></div></li>').appendTo('.list_div_reorder ul').show('slow')
+								$('.list_div_reorder').removeClass("hidden")
+							}
 						}
 						else
 						{
 							var span='<span class="label sticker">'+index.zone+'</span><span id="list-li-repeatorder'+i+'"></span>';
+							if(index.uk_style_ref == uvc)
+							{
+								$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="'+base_url+'/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">Style-'+uvc+'</p></div><div class="col-md-2"><p class="po">PO-'+index.po_number+'</p></div><div class="col-md-2"><p class="name">'+index.TemplateName+'</p></div><div class="col-md-2">'+span+' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantityTesco("'+index.type+'","'+index.id+'","'+index.TemplateName.replace(' ', '')+'","'+index.zone+'","'+index.po_number+'","list-li-repeatorder'+i+'")>ADDITIONAL QUANTITY</button></div></div></li>').appendTo('.list_div_reorder ul').show('slow')
+								$('.list_div_reorder').removeClass("hidden")
+							}
 						}
-						$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="'+base_url+'/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">Style-'+uvc+'</p></div><div class="col-md-2"><p class="po">PO-'+index.po_number+'</p></div><div class="col-md-2"><p class="name">'+index.TemplateName+'</p></div><div class="col-md-2">'+span+' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantityTesco("'+index.type+'","'+index.id+'","'+index.TemplateName.replace(' ', '')+'","'+index.zone+'","'+index.po_number+'","list-li-repeatorder'+i+'")>ADDITIONAL QUANTITY</button></div></div></li>').appendTo('.list_div_repeat ul').show('slow')
+						
 						i++;
 					}
 				})
@@ -205,8 +265,10 @@ function repeatordertescoartworks()
 	}
 	else
 	{
-		$('.how_it_works_repeat').html('<h4>How it works ?</h4><p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>');
-		$('.list_div_repeat').html('<ul class="list-group"></ul>');
+		$('.how_it_works_reorder').html('<h4>How it works ?</h4><p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>');
+		$('.list_div_reorder').html('<ul class="list-group"></ul>');
+		$('.list_div_reorder').addClass("hidden")
+		$('.how_it_works_reorder').css('margin-top','150px')
 	}
 }
 
@@ -236,7 +298,7 @@ function extraQuantityTesco(type,id,name,zone,po_number,liid)
 			
 			if((name == "TCL1" && zone=="CE") ||(name == "TCL2" && zone=="CE") || (name == "TSL1" && zone=="CE") || (name == "THL1" && zone=="CE"))
 			{
-				var qty="Cases per carton";
+				var qty="Cases Per Carton";
 				var barcode_tr="ITF Barcode";
 				var tpnd_tr="ORMS TPND";
 				var th_tr="";
@@ -257,7 +319,7 @@ function extraQuantityTesco(type,id,name,zone,po_number,liid)
 			}
 			else if((name == "TCL1" && zone=="UK") ||(name == "TCL2" && zone=="UK") || (name == "TSL1" && zone=="UK") || (name == "THL1" && zone=="UK"))
 			{
-				var qty="Units per carton";
+				var qty="Units Per Carton";
 				var barcode_tr="ITF Barcode";
 				var tpnd_tr="TPND";
 				var th_tr="";
@@ -294,12 +356,21 @@ function extraQuantityTesco(type,id,name,zone,po_number,liid)
 						var tpnd_td=index.tpnd;
 						var th_td="";
 					}
+				
+				if(data.moq.length > 0)
+				{
+					var moq = data.moq[0].moq;
+				}
+				else
+				{
+					var moq = 1;
+				}
 
-				 tr += '<tr><td class="tpnd">' + tpnd_td + '</td><td class="barcode">' + barcode_td + '</td><td class="size">' + unit_qty + '</td>'+th_td+'<td> <div class="form-group has-feedback has-success"><input maxlength="4" onkeypress="return checkNumbersOnly(event)" type="text" class="form-control  input-sm tot_qty_table" value="" required placeholder="Quantity"><div class="help-block with-errors"></div></div></td></tr>';
+				 tr += '<tr><td class="tpnd">' + tpnd_td + '</td><td class="barcode">' + barcode_td + '</td><td class="size">' + unit_qty + '</td>'+th_td+'<td> <div class="form-group has-feedback has-success"><input min="'+moq+'" onInput="checkLength(6,this)" type="number" class="form-control  input-sm tot_qty_table" value="" required placeholder="Quantity" data-min-error="Quantity Should be >= '+moq+'."><div class="help-block with-errors"></div></div></td></tr>';
 			});
 			$('.quantity').html('<form id="qty_table"><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px"> <thead> <tr> <th>'+tpnd_tr+'</th><th>'+barcode_tr+'</th> <th>'+qty+'</th> '+th_tr+'<th>Quantity</th> </tr></thead> <tbody style="font-size: 11px">'+tr+'</tbody></table><div class="po_div"></div><button style="margin-left: 10px;" class="btn btn-primary submitbutton pull-right">Submit</button><button type="button" class="btn btn-danger remove pull-right">Close</button><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></form>')
 			
-			var item = $('.nav-item.active').find('a').text();
+			var item = $('.li-item.active').find('a').text();
 			if(item == "Repeat Order")
 			{
 				if((name == "TSL1") ||(name == "TSL3"))
@@ -308,12 +379,24 @@ function extraQuantityTesco(type,id,name,zone,po_number,liid)
 				}
 				else
 				{
-					$('.po_div').append('<div class="form-group has-feedback has-success"><input maxlength="9" type="text" class="form-control  input-sm purchase_order_number" onkeyup="repeatorderpo()" value="" required placeholder="PO Number"> <label style="color:red" id="po_already_error" class="hidden">PO Number already exists</label><div class="help-block with-errors"></div>')
+					if(zone == "CE")
+					{
+						$('.po_div').append('<div class="form-group has-feedback has-success"> <label for="tesco_manufacture_date">PO Number</label><input data-minlength="7" maxlength="7" data-required-error="Mandatory Field." data-minlength-error="Enter 7 digits."  type="text" class="form-control  input-sm purchase_order_number" onkeyup="repeatorderpo()"  required placeholder="PO Number"> <label style="color:red" id="po_already_error" class="hidden">PO Number already exists</label><div class="help-block with-errors"></div></div><div class="form-group has-feedback"> <label for="tesco_manufacture_date">OCN Number</label><input onkeypress="return isNumber(event)"  type="text" class="form-control" name="tesco_ocn" id="tesco_ocn" required="" placeholder="Enter OCN Code" maxlength="15"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"> <label for="tesco_manufacture_date">Manufactured Date</label><div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1"><input  id="tesco_manufacture_date" name="tesco_manufacture_date" type="text" class="form-control" required="" placeholder="Select Manufactured Date" onchange="repeatordermanufacturedate()"><div class="input-group-addon"><span class="glyphicon glyphicon-th"> </span > </div ></div ><div class="help-block with-errors"></div> </div>')
+						  
+					}
+					else
+					{
+						$('.po_div').append('<div class="form-group has-feedback has-success"> <label for="tesco_manufacture_date">PO Number</label><input data-minlength="9" maxlength="9" data-required-error="Mandatory Field." data-minlength-error="Enter 9 digits."  type="text" class="form-control  input-sm purchase_order_number" onkeyup="repeatorderpo()" required placeholder="PO Number"> <label style="color:red" id="po_already_error" class="hidden">PO Number already exists</label><div class="help-block with-errors"></div></div><div class="form-group has-feedback">  <label for="tesco_manufacture_date">OCN Number</label><input type="text" class="form-control" onkeypress="return isNumber(event)"  name="tesco_ocn" id="tesco_ocn" required="" placeholder="Enter OCN Code" maxlength="15"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"> <label for="tesco_manufacture_date">Manufactured Date</label><div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1"><input id="tesco_manufacture_date" name="tesco_manufacture_date" type="text" class="form-control" required="" placeholder="Select Manufactured Date" onchange="repeatordermanufacturedate()"><div class="input-group-addon"><span class="glyphicon glyphicon-th"> </span > </div ></div ><div class="help-block with-errors"></div> </div>')
+					}
 				}
 				
 			}
 				
-				
+			$('#datePicker1').datepicker({
+				autoclose: true,
+				minViewMode: 1,
+				format: 'MM,yyyy',
+			})
 			
 			$('.remove').click(function(){
 				 $('.left-panel').removeClass('active');
@@ -343,6 +426,19 @@ function extraQuantityTesco(type,id,name,zone,po_number,liid)
 	})
 }
 
+function checkLength(len,ele){
+  var fieldLength = ele.value.length;
+  if(fieldLength <= len){
+    return true;
+  }
+  else
+  {
+    var str = ele.value;
+    str = str.substring(0, str.length - 1);
+    ele.value = str;
+  }
+}
+
 /**
  * This Function is used to restrict alpha numeric and special characters.
  * 
@@ -367,6 +463,19 @@ function repeatorderpo()
 	var svgDoc;
     var po=$('.purchase_order_number').val();
     svgDoc1.getElementById("po_number").innerHTML = po;
+}
+
+/**
+ * This Function is used to render manufacture date in artwork.
+ *
+ * @return View
+ */
+function repeatordermanufacturedate()
+{
+	var mySVG = document.getElementById("reorder_svg");
+	var svgDoc;
+    var md=$('#tesco_manufacture_date').val();
+    svgDoc1.getElementById("manufactured_date").innerHTML = md.toUpperCase();
 }
 
 /**
@@ -404,7 +513,7 @@ function contentdocument(data,name,zone)
 		if(name == "TSL3")
 		{
 		    svgDoc1 = mySVG.contentDocument;
-			var description = data.template[0].short_description;
+			var description = data.template[0].short_description.replace(/&/g,'&#038;');
 			var size=data.qty[0].size;
 			$.ajax({
                      url: base_url + "/admin/tesco/get-tsl-size",
@@ -451,7 +560,7 @@ function contentdocument(data,name,zone)
 		else if(name == "TSL1")
 		{
 		   svgDoc1 = mySVG.contentDocument;
-		   svgDoc1.getElementById("description").innerHTML = data.template[0].short_description;
+		   svgDoc1.getElementById("description").innerHTML = data.template[0].short_description.replace(/&/g,'&#038;');
 		   svgDoc1.getElementById("tpnd").innerHTML = tpnd_td;
 		   jsbarcodetescotsl(data.qty[0].itf_barcode, 'barcode', svgDoc1)
 		   svgDoc1.getElementById("barcode_number").innerHTML = data.qty[0].itf_barcode;
@@ -484,11 +593,11 @@ function contentdocument(data,name,zone)
 			svgDoc1.getElementById("po_number").innerHTML = data.template[0].po_number;
 			svgDoc1.getElementById("uk_style").innerHTML = data.template[0].uk_style_ref;
 			svgDoc1.getElementById("ce_style").innerHTML = data.template[0].ce_style_ref;
-			svgDoc1.getElementById("description").innerHTML = data.template[0].short_description;
+			svgDoc1.getElementById("description").innerHTML = data.template[0].short_description.replace(/&/g,'&#038;');
 			svgDoc1.getElementById("eqos").innerHTML = data.template[0].eqos_site_code;
 			svgDoc1.getElementById("supplier").innerHTML = data.template[0].supplier_name;
-			svgDoc1.getElementById("manufactured_date").innerHTML = data.template[0].manufacture_date;
-			var description = data.template[0].short_description;
+			svgDoc1.getElementById("manufactured_date").innerHTML = data.template[0].manufacture_date.toUpperCase();
+			var description = data.template[0].short_description.replace(/&/g,'&#038;');
 			if(name == "TCL4" || name == "THL3" )
 			{
 				
@@ -622,7 +731,6 @@ function jsbarcodetesco(code, id, svgDoc) {
 	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
 	// img.src - contains base64 URI from svg
-	console.log(img.src);
 
 	//remove temporary canvas
 	canvasTmp.remove();
@@ -684,7 +792,6 @@ function jsbarcodetescoean(code, id, svgDoc) {
 	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
 	// img.src - contains base64 URI from svg
-	console.log(img.src);
 
 	//remove temporary canvas
 	canvasTmp.remove();
@@ -820,8 +927,7 @@ function jsbarcodetescotsl(code, id, svgDoc) {
  */
 function setTescoReorder(type,id,liid)
 {
-	
-	var item = $('.nav-item.active').find('a').text();
+	var item = $('.li-item.active').find('a').text();
 	var po=$('.purchase_order_number').val();
 	var count=[];
 	var val_count=0;
@@ -831,9 +937,10 @@ function setTescoReorder(type,id,liid)
 		 	val_count	+= parseInt($(item).val());
         });
         count = count.join(',');
-		$('#'+liid).append('<span class="label sticker" style="position: absolute;margin-left: 15px;margin-top: 5px;">'+val_count+'</span><img src="http://atlas-content-cdn.pixelsquid.com/stock-images/check-mark-z074ln3-600.jpg" alt="Tag" style="position: absolute;margin-left: 60px;margin-top: -2px;">');
+		$('#'+liid).append('<span class="label sticker" style="position: absolute;margin-left: -100px;margin-top: 5px;">'+val_count+'</span><img src="/images/tick.png" alt="Tag" style="position: absolute;margin-left: 20px;margin-top: -2px;">');
 	if(item == "Repeat Order")
 	{
+		var uvc=$('#style_number').val();
 		var buyer = localStorage.getItem("buyer");
 		var csrf_token = $('meta[name="csrf-token"]').attr('content');
 		var po_number=$('.purchase_order_number').val();
@@ -841,14 +948,16 @@ function setTescoReorder(type,id,liid)
 		var ce_style=$('#ce_style').val()
 		var template_name=$('#template_name').val()
 		var zone=$('#zone').val()
+		var tesco_ocn=$('#tesco_ocn').val()
+		var tesco_manufacture_date=$('#tesco_manufacture_date').val()
 		
 		$.ajax({
 			 url: base_url + "/admin/tesco/edit-check-exist-po-repeat",
 			 type: 'post',
 			 data: { _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,zone:zone,template_name:template_name},
 			 success: function (data) {
-				if(data == "true")
-				{
+				if($.trim(data) == "true" || template_name == "TSL3")
+				{	
 					$.ajax({
 						url: base_url + "/admin/" + buyer + "/order-management/set-tesco-repeat-order",
 						type: "Post",
@@ -858,13 +967,30 @@ function setTescoReorder(type,id,liid)
 							type:type,
 							id:id,
 							po:po,
+							manufacture_date:tesco_manufacture_date,
+							ocn:tesco_ocn,
 							counts:count
 						},
 						beforeSend: function () {
 
 						},
 						success: function (data) {
+						
+							var i=1;
+							$(".list-group li").each(function(key,index){
+								i++;
+							})
+
 							$('.left-panel').removeClass('active');
+								if(data[0].zone == "CE")
+								{
+									var span='<span class="label labels">'+data[0].zone+'</span><span id="list-li-repeatorder'+i+'">';
+								}
+								else
+								{
+									var span='<span class="label sticker">'+data[0].zone+'</span><span id="list-li-repeatorder'+i+'">';
+								}
+								$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="'+base_url+'/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">Style-'+uvc+'</p></div><div class="col-md-2"><p class="po">PO-'+data[0].po_number+'</p></div><div class="col-md-2"><p class="name">'+data[0].TemplateName+'</p></div><div class="col-md-2">'+span+' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantityTesco("'+data[0].type+'","'+data[0].id+'","'+data[0].TemplateName.replace(' ', '')+'","'+data[0].zone+'","'+data[0].po_number+'","list-li-repeatorder'+i+'")>ADDITIONAL QUANTITY</button></div></div></li>').appendTo('.list_div_reorder ul').show('slow')
 							$('.snackbar_span').html('Repeat Order Created Successfully ...!');
 							showSnackbar();
 						},

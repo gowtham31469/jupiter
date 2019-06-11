@@ -30,9 +30,11 @@
 	}
     .html2canvas-container { width: 3000px !important; height: 3000px !important; }
 </style>
+
+<input type="hidden" id="status_flag">
 <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
-        <div class="buyer-nav-div">
+        <div class="buyer-nav-div hidden">
            <a class="dropdown-toggle profile-dropdown-admin selected-buyer" style="text-transform:capitalize;cursor: pointer;">Select Buyer</a>
         </div>
         {{ Form::hidden('invisible', $buyer_count, array('id' => 'invisible__count_id')) }}
@@ -54,13 +56,16 @@
                     <div class="po_file hidden text-center" id="po_file">
                         <a href="javascript:void(0)" target="_blank" id="po_link"><i class="fa fa-file-pdf-o fa-4x" style="color: #ff151599;"></i></a>
                         <br>
+                        <span id="error_msg_span" style="color:red;"></span>
+                        <br>
                         <button type="button" class="btn btn-primary btn-xs update-po-file" style="margin-top: 10px;">Update PO File</button>
                     </div>
                     <div class="po_upload" id="po_upload">
                         <label>Upload Purchase Order</label>
                         <form method="post" class="dropzone" id="po-upload">
+                            <input type="hidden" name="buyer_id" id="buyer_id" value="">
                             <input type="hidden" name="tableName" id="tableName" value="">
-                            <input type="hidden" name="rowID" id="rowID" value=""> {{ csrf_field() }}
+                            <input type="hidden" name="id" id="rowID" value=""> {{ csrf_field() }}
                         </form>
                     </div>
 
@@ -118,7 +123,7 @@
                             <label style='color:red' id='new_po_file_error' class='hidden'>Please upload Po File</label>
                             <label for="exampleInputFile">PO File</label>
                             <input type="file" id="new_po_file">
-                            <p class="help-block">Example block-level help text here.</p>
+                            <p class="help-block"></p>
                         </div>
                     </div>
                 </div>
@@ -153,7 +158,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="right" style="float: right">
-                                        <img id="company-logo" style="height: 35px;" src="" class="img-responsive">
+                                        <img id="company-logo" style="height: 45px;" src="" class="img-responsive">
                                         <strong>Date</strong>
                                         <span style="padding-left: 14px;"> : <span style="padding-left: 6px;" class="pi-date"></span>
                                         </span></br>
@@ -257,7 +262,7 @@
                             <label style='color:red' id='new_po_file_error_status' class='hidden'>Please upload Po File</label>
                             <br><label >PO File</label>
                             <input type="file" accept="application/pdf" id="new_po_file_status">
-                            <p class="help-block">Example block-level help text here.</p>
+                            <p class="help-block"></p>
                         </div>
                     </div>
                 </div>
@@ -273,7 +278,6 @@
     <div class="left-panel col-md-12" style="display: none;">
         <div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
         <div class="div-max">
-            
                 <form method="POST" id="create_tesco_order_status_form" data-toggle="validator" role="form" novalidate="true">
                     <div class="col-md-4">
                 <h4 class="text-center osorderdetails">Order Details</h4>
@@ -286,7 +290,6 @@
                          <div class="form-group has-feedback">
                             <label for="tesco_uk_style">PO Number.</label>
                             <input type="text" maxlength="9" class="form-control" name="tesco_po_number" id="tesco_po_number" required="" onkeyup="dynamicSVGTemplates()">
-                             <label style="color:red" id="po_already_error" class="hidden">PO Number already exists</label>
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
@@ -301,7 +304,7 @@
                         </div>
                         <div class="form-group has-feedback">
                             <label for="tesco_season_code">Season Code</label>
-                            <input type="text" class="form-control" name="tesco_season_code" id="tesco_season_code" required="" placeholder="Enter Season Code" onkeyup="dynamicSVGTemplates()" maxlength="4">
+                            <input type="text" class="form-control" name="tesco_season_code" id="tesco_season_code" required="" placeholder="Enter Season Code" onkeyup="dynamicSVGTemplates()" data-minlength="4" maxlength="4" data-required-error="Mandatory Field." data-minlength-error="Enter 4 digits." maxlength="4">
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
@@ -345,9 +348,9 @@
                         </select>
                     </div>
                            <div class="form-group has-feedback">
-                        <label for="tesco_supplier">Supplier</label> 
+                        <label for="tesco_supplier">Customer</label> 
                         <select class="selectpicker" data-live-search="true" id="tesco_supplier" name="tesco_supplier" required="" onchange="dynamicSVGTemplates()">
-                            <option value="">Select Supplier</option> @foreach($tesco_suppliers as $suppliers)
+                            <option value="">Select Customer</option> @foreach($tesco_suppliers as $suppliers)
                                 <option title="{{$suppliers->supplier_name}}" value="{{$suppliers->id}}">{{$suppliers->supplier_name}}
                                 </option>
                             @endforeach
@@ -423,27 +426,45 @@
                  </div>
                  <div class="modal-footer buyer-selection-modal-footer">
                      {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                     {!! Form::button('Proceed', ['class' => 'btn btn-primary btn-sm proceed-btn','type' => 'submit'] ) !!}
                  </div>
             {!! Form::close() !!}
          </div>
      </div>
  </div>
+ <div class="modal fade" id="age_modal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header alert-warning">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <p class="modal-title" id="myModalLabel"><i class="fa fa-warning" style="font-size:24px"></i>   The size of the file you uploaded exceeds the limit !</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{{-- Hidden div for svg rendering --}}
+<div id="modaldiv">
+	<div id="svgdiv" style="position:absolute;visibility:hidden">\
+	 <svg id="ean-13"></svg>\
+   </div>
+</div>
     @endsection @else
     <script type="text/javascript">
         window.location = "{{ url('/customer') }}";
     </script>
     @endif @section('jqueryIncludes')
-    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+	<script  type="text/javascript" src="{{ asset('js/moment.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/daterangepicker.js') }}"></script>
     <script src="{{ asset('js/html2pdf.bundle.min.js') }}"></script>
-    <script src="{{ asset('js/Admin/order.js') }}"></script>
+<!--    <script src="{{ asset('js/Admin/order.js') }}"></script>-->
     <script src="{{ asset('js/Customer/customer-order-status.js') }}"></script>
+    <script src="{{ asset('js/Customer/customer-pi.js') }}"></script>
     <script type="text/javascript">
-        Dropzone.options.poUpload = {
+		$('#status_flag').val("orderStatus")
+        var buyer = localStorage.getItem("buyer");
+        Dropzone.options.poUpload = {   
 
             // Prevents Dropzone from uploading dropped files immediately
-            url: base_url + "/customer/tesco/set-po-file",
+            url: base_url + "/customer/" + buyer + "/set-po-file",
             autoProcessQueue: false,
             maxFilesize: 500,
             maxFiles: 1,
@@ -464,8 +485,15 @@
                 // files are dropped here:
 
                 this.on("addedfile", function(file) {
-                    var filename = file.name;
-                    $('.upload-po').removeClass('disabled')
+                    if(((file.size/1024)/1024)>2){
+                       $('#age_modal').modal("show");
+                        this.removeFile(file);
+                        $('.upload-po').addClass('disabled')
+                    }else{
+                        var filename = file.name;
+                        $('.upload-po').removeClass('disabled')
+                    }
+                    
                     // Show submit button here and/or inform user to click it.
                 });
                 this.on("complete", function(file) {
@@ -478,28 +506,32 @@
                 this.on("success", function(file, response) {
                     $('.dz-remove').hide();
                     this.removeFile(file);
-                    var po_link = base_url+response.po_file; 
-                    var row_id  = $('#rowID').val(); 
-                    var tab_nm  = $('#tableName').val(); 
-                    $('#'+tab_nm+'_'+row_id+' .po-style').attr('onclick','tescoPOUpload(this,"'+row_id+'","'+response.po_file+'","'+tab_nm+'")'); 
-                    var po_num = $('#'+tab_nm+'_'+row_id+' .tesco-po').val(); 
-                    if(po_num != null && po_num != '' && po_num != 'undefined') { 
-                        $('#'+tab_nm+'_'+row_id+' .tesco-po').val(); 
-                        $('#'+tab_nm+'_'+row_id).find('.po_class').html("PO Uploaded"); 
-                        $('#'+tab_nm+'_'+row_id).find('.po_class').removeClass("label-POPending").addClass('label-POUploaded'); 
-                    } 
-                    $('#'+tab_nm+'_'+row_id).find('.tesco-po-submit').attr('onclick','tescoSetPO(this,"'+row_id+'","'+tab_nm+'","'+response.po_file+'")'); 
-                    $('#'+tab_nm+'_'+row_id).find('.po-view').css('border-color', '#FFFFFF'); 
+                    var po_link = base_url+response.po_file;
+                    var row_id  = $('#rowID').val();
+                    var tab_nm  = $('#tableName').val();
+                    $('#'+tab_nm+'_'+row_id+' .po-style').attr('onclick',buyer+'POUpload(this,"'+row_id+'","'+response.po_file+'","'+tab_nm+'")');
+                    var po_num = $('#'+tab_nm+'_'+row_id+' .'+buyer+'-po-'+row_id).val();
+                    if(po_num != null && po_num != '' && po_num != 'undefined') {
+                        $('#'+tab_nm+'_'+row_id+' .'+buyer+'-po-'+row_id).val();
+                        $('#'+tab_nm+'_'+row_id).find('.po_class').html("PO Uploaded");
+                        $('#'+tab_nm+'_'+row_id).find('.po_class').removeClass("label-POPending").addClass('label-POUploaded');
+                    }
+                    $('#'+tab_nm+'_'+row_id).find('.'+buyer+'-po-submit').attr('onclick',buyer+'SetPO(this,"'+row_id+'","'+tab_nm+'","'+response.po_file+'")');
+                    $('#'+tab_nm+'_'+row_id).find('.po-view').css('border-color', '#FFFFFF');
                     $('#po-file-upload').modal('hide')
                     $('#snackbar').css('background-color','#00b6ff');
                     $('.snackbar_span').html('Purchase Order File Uploaded Successfully');
                     showSnackbar();
+                    window.location = "{{ url('/customer/order-status') }}";
                 });
                 this.on("error", function(file, response) {
                     this.removeFile(file);
-                    $('.snackbar_span').html('Something went wrong');
+                    $('.snackbar_span').html('Cancelled Uploading !');
                     $('#snackbar').css('background-color', '#F44336');
                     showSnackbar();
+                });
+                this.on("removedfile", function(file){
+                    $('.upload-po').addClass('disabled')
                 });
             }
     };
@@ -517,7 +549,7 @@
     })
     $('.remove').click(function() {
         $('.left-panel').removeClass('active');
+
     })
-    </script>
-    
+    </script>  
     @endsection

@@ -29,11 +29,31 @@ use App\TescoTSL3Orders;
 use App\TescoTSL3OrdersQuantity;
 use App\Classes\TescoOrders;
 use App\Classes\SaveTescoOrders;
+use App\Classes\ApproveTescoOrders;
+use App\Classes\CancelTescoOrders;
 use PDF;
 use Carbon\Carbon;
+use App\Classes\ErpOrders;
 
 class OrderController extends Controller
 {
+   
+    private $tcl1;
+    private $tcl2;
+    private $tcl4;
+    private $thl1;
+    private $thl3;
+    private $tsl1;
+    private $tsl3;
+    private $tcl1_type;
+    private $tcl2_type;
+    private $tcl4_type;
+    private $thl1_type;
+    private $thl3_type;
+    private $tsl1_type;
+    private $tsl3_type;
+    private $current_date;
+    private $ratio_pack_type;
 
     /**
      * Create a new controller instance.
@@ -44,6 +64,26 @@ class OrderController extends Controller
     {
 
        $this->middleware('customer_auth');
+       $this->tcl1 = "TCL 1";
+       $this->tcl2 = "TCL 2";
+       $this->tcl4 = "TCL 4";
+       $this->thl1 = "THL 1";
+       $this->thl3 = "THL 3";
+       $this->tsl1 = "TSL 1";
+       $this->tsl3 = "TSL 3";
+
+       $this->tcl1_type = "tesco_tcl1_orders";
+       $this->tcl2_type = "tesco_tcl2_orders";
+       $this->tcl4_type = "tesco_tcl4_orders";
+       $this->thl1_type = "tesco_thl1_orders";
+       $this->thl3_type = "tesco_thl3_orders";
+       $this->tsl1_type = "tesco_tsl1_orders";
+       $this->tsl3_type = "tesco_tsl3_orders";
+
+       // get the current time
+       $this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
+
+       $this->ratio_pack_type = ['RatA', 'RatB', 'RatC', 'RatD', 'RatE', 'RatF', 'RatG', 'RatH', 'RatI', 'RatJ', 'RatK', 'RatL', 'RatM', 'RatN', 'RatO', 'RatP', 'RatQ', 'RatR', 'RatS', 'RatT', 'RatU', 'RatV', 'RatW', 'RatX', 'RatY', 'RatZ'];
     }
 
     /**
@@ -59,23 +99,23 @@ class OrderController extends Controller
 	  $customer_role_id = DB::table('customer_profile')->select('*')->where('id',$customer_id)->first();
 	  if($customer_role_id->role_id == 1)
 	  {
-		  $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->select('*',DB::raw('"TCL 1" as TemplateName'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->get();
-		  $data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->select('*',DB::raw('"TCL 2" as TemplateName'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->get();
-		  $data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->select('*',DB::raw('"TCL 4" as TemplateName'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->get();
-		  $data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->select('*',DB::raw('"THL 1" as TemplateName'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->get();
-		  $data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->select('*',DB::raw('"THL 3" as TemplateName'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->get();
-		  $data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->select('*',DB::raw('"TSL 1" as TemplateName'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->get();
-		  $data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->select('*',DB::raw('"TSL 3" as TemplateName'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->get();
+		  $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->select('*',DB::raw("'".$this->tcl1."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->get();
+		  $data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->select('*',DB::raw("'".$this->tcl2."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->get();
+		  $data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->select('*',DB::raw("'".$this->tcl4."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->get();
+		  $data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->select('*',DB::raw("'".$this->thl1."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->get();
+		  $data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->select('*',DB::raw("'".$this->thl3."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->get();
+		  $data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->select('*',DB::raw("'".$this->tsl1."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->get();
+		  $data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->select('*',DB::raw("'".$this->tsl3."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->get();
 	  }
 	  else
 	  {
-		  $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->select('*',DB::raw('"TCL 1" as TemplateName'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
-		  $data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->select('*',DB::raw('"TCL 2" as TemplateName'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
-		  $data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->select('*',DB::raw('"TCL 4" as TemplateName'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
-		  $data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->select('*',DB::raw('"THL 1" as TemplateName'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
-		  $data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->select('*',DB::raw('"THL 3" as TemplateName'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
-		  $data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->select('*',DB::raw('"TSL 1" as TemplateName'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
-		  $data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->select('*',DB::raw('"TSL 3" as TemplateName'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
+		  $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->select('*',DB::raw("'".$this->tcl1."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->get();
+		  $data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->select('*',DB::raw("'".$this->tcl2."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->get();
+		  $data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->select('*',DB::raw("'".$this->tcl4."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->get();
+		  $data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->select('*',DB::raw("'".$this->thl1."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->get();
+		  $data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->select('*',DB::raw("'".$this->thl3."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->get();
+		  $data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->select('*',DB::raw("'".$this->tsl1."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->get();
+		  $data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->select('*',DB::raw("'".$this->tsl3."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->get();
 	  }
       
       echo json_encode($data);
@@ -97,7 +137,7 @@ class OrderController extends Controller
                                   ->select('tesco_template.*','tesco_item_master.ref_no','company.name as company_name')
                                   ->join('tesco_item_master','tesco_item_master.id','=','tesco_template.item_id')
                                   ->join('company','company.id','=','tesco_item_master.company_id')
-                                  ->where('item_id',$exp)
+                                  ->where('item_id',$exp)->orderBy('tesco_template.id','asc')
                                   ->get();
                array_push($view,$treeviewData);
            }
@@ -115,20 +155,43 @@ class OrderController extends Controller
          try {
              $templates = explode(',',$request['template_id']);
              $id = Auth::guard('web_customer')->id();
+             $buyer_id = $request['buyer_id'];
              $customer = DB::table('customer_profile')
                           ->select('*')
                           ->where('customer_profile.id','=',$id)
                           ->first();
+             $moq_array = array();
+             $moq_value = array();
              /* Fetch all template details by id */
-             foreach ($templates as $value) 
+             foreach ($templates as $template_id) 
              {
                  $template_details[] = DB::table('tesco_template')
                              ->select('tesco_item_master.id','tesco_template.template_name','tesco_template.template_file','company.name as company')
                              ->join('tesco_item_master','tesco_template.item_id','=','tesco_item_master.id')
                              ->join('company','company.id','=','tesco_item_master.company_id')
-                             ->where('tesco_item_master.id','=',$value)
+                             ->where('tesco_item_master.id','=',$template_id)
                              ->first();
+                 
+                    $temp_name = DB::table('tesco_item_master')
+                             ->select('tesco_item_master.item_name')
+                             ->where('id','=',$template_id)
+                             ->first();
+                    $moq = DB::table('price_taxation')
+                             ->select('price_taxation.moq')
+                             ->where('template_id','=',$template_id)
+                             ->where('customer_id','=',$customer->company_id)
+                             ->where('buyer_id','=',$buyer_id)
+                             ->first();
+                    if($moq)
+                    {
+                      $moq_value[$temp_name->item_name] = $moq->moq;
+                    }
+                    else
+                    {
+                      $moq_value[$temp_name->item_name] = 0;
+                    }
              }
+             array_push($moq_array,$moq_value);
 
              /* Fetch tesco brands,departments and suppliers details */
              $tesco_brand = DB::table('tesco_brand')->select('brand','id')->where('is_enabled','=',1)->get();
@@ -140,7 +203,7 @@ class OrderController extends Controller
                                       ->where('customer_metadata.customer_id','=',$customer->company_id)
                                       ->get();
              
-             return response()->json(['templates' => $template_details,'tesco_brand' => $tesco_brand,'tesco_department' => $tesco_department,'tesco_suppliers' => $tesco_suppliers]);
+             return response()->json(['templates' => $template_details,'tesco_brand' => $tesco_brand,'tesco_department' => $tesco_department,'tesco_suppliers' => $tesco_suppliers,'moq' => $moq_array]);
          } catch (\Exception $e) {
              return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
          }
@@ -159,11 +222,11 @@ class OrderController extends Controller
 
            if($zone == 'UK')
            {
-               $size = DB::table('tesco_size_chart')->select('uk as size')->where('po_size','=',$size)->where('is_enabled','=',1)->get();
+               $size = DB::table('tesco_size_chart')->select('uk as size')->where('po_size', 'ilike', $size)->where('is_enabled','=',1)->get();
            }
            else
            {
-               $size = DB::table('tesco_size_chart')->select('ce as size')->where('po_size','=',$size)->where('is_enabled','=',1)->get();
+               $size = DB::table('tesco_size_chart')->select('ce as size')->where('po_size', 'ilike', $size)->where('is_enabled','=',1)->get();
            }
            
            return response()->json(['size_chart' => $size]);
@@ -181,7 +244,7 @@ class OrderController extends Controller
     {
         try {
             /** [ Creating new object for TescoOrders() class ] */
-            $tesco_order_obj = new TescoOrders();
+            $tesco_order_obj  = new TescoOrders();
             
             $orms_tpn         = explode(',',$request['orms_tpn']);
             $itf_code         = explode(',',$request['itf_code']);
@@ -190,14 +253,17 @@ class OrderController extends Controller
             $last_insertions  = [];
             $already_exists   = [];
             $created_by       = $request['created_by'];
-            $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
+            $zero_quantity    = [];
+
+            $tesco_main_customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
             
-            if($customer_ids)
+            if($tesco_main_customer_id)
             {
-              $customer_id = $customer_ids->customer_id;
-              $customer_details = DB::table("customers")->where('id','=',$customer_id)->select('pi_required','delivery_date_required','delivery_day_count')->first();  
+              $customer_id = $tesco_main_customer_id->customer_id;
+              $customer_details = DB::table("customers")->where('id','=',$customer_id)->select('pi_required','delivery_date_required','delivery_day_count','po_required')->first();  
               $delivery_date_req= $customer_details->delivery_date_required; 
               $pi_required      = $customer_details->pi_required; 
+              $po_required      = $customer_details->po_required; 
               $day_count        = $customer_details->delivery_day_count; 
               $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
             } 
@@ -206,6 +272,7 @@ class OrderController extends Controller
               $customer_id      = NULL;
               $delivery_date_req= 0; 
               $pi_required      = 0; 
+              $po_required      = 0; 
               $day_count        = 0; 
               $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
             }
@@ -224,7 +291,7 @@ class OrderController extends Controller
                    $is_order_count_empty = array_filter($count_TCL1) != NULL?0:1;
 
                     /** [ Check if order already placed for this CE style ] */
-                    $is_exists = TescoTCL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                    $is_exists = TescoTCL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
 
                     if($is_exists)
                     {
@@ -234,7 +301,7 @@ class OrderController extends Controller
                     else
                     {
                       /** [ Invoking createTCL1Order function using class instance ] */
-                       $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by);
+                       $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required);
 
                        /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                        if($request['is_insert'] == 'true')
@@ -250,13 +317,14 @@ class OrderController extends Controller
                                 'orms_tpn'         => $tpn,
                                 'itf_barcode'      => $itf_code[$i],
                                 'cases_per_carton' => $cases_per_carton[$i],
-                                'count'            => $count_TCL1[$i]
+                                'count'            => $count_TCL1[$i],
+                                'ratio_pack_type'  => $this->ratio_pack_type[$i]
                               ]);
                            $i++;
                          }
                          
                          /** [ tesco order id, that has artwork count > 0] */
-                         $templates_inserted = $is_order_count_empty != 1?array('TCL 1' => $tesco_order_id):[];
+                         $templates_inserted = array('TCL 1' => $tesco_order_id);
                        }
                        else
                        {
@@ -270,15 +338,18 @@ class OrderController extends Controller
                                 'orms_tpn'         => $tpn,
                                 'itf_barcode'      => $itf_code[$i],
                                 'cases_per_carton' => $cases_per_carton[$i],
-                                'count'            => $count_TCL1[$i]
+                                'count'            => $count_TCL1[$i],
+                                'ratio_pack_type'  => $this->ratio_pack_type[$i]
                               ]);
                            $i++;
                          }
                          /** [ tesco order id, that has artwork count > 0] */
-                         $templates_inserted = $is_order_count_empty != 1?array('TCL 1' => $request['tcl1_last_id']):[];
+                         $templates_inserted = array('TCL 1' => $request['tcl1_last_id']);
                        }
                        /** [ Return array of inserted id ] */
                        $last_insertions = array_merge($last_insertions,$templates_inserted);
+                       $quantity_empty  = $is_order_count_empty == 1?array('TCL 1'):[];
+                       $zero_quantity   = array_merge($zero_quantity,$quantity_empty);
                     }
                    
                 }
@@ -288,7 +359,7 @@ class OrderController extends Controller
                   $is_order_count_empty = array_filter($count_TCL2) != NULL?0:1;
 
                     /** [ Check if order already placed for this CE style ] */
-                    $is_exists = TescoTCL2Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                    $is_exists = TescoTCL2Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -297,7 +368,7 @@ class OrderController extends Controller
                     else
                     {
                          /** [ Invoking createTCL2Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by);
+                         $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required);
 
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -313,13 +384,14 @@ class OrderController extends Controller
                                   'orms_tpn'         => $tpn,
                                   'itf_barcode'      => $itf_code[$i],
                                   'cases_per_carton' => $cases_per_carton[$i],
-                                  'count'            => $count_TCL2[$i]
+                                  'count'            => $count_TCL2[$i],
+                                  'ratio_pack_type'  => $this->ratio_pack_type[$i]
                                 ]);
                              $i++;
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('TCL 2' => $tesco_order_id):[];
+                           $templates_inserted = array('TCL 2' => $tesco_order_id);
                          }
                          else
                          {
@@ -333,17 +405,20 @@ class OrderController extends Controller
                                   'orms_tpn'         => $tpn,
                                   'itf_barcode'      => $itf_code[$i],
                                   'cases_per_carton' => $cases_per_carton[$i],
-                                  'count'            => $count_TCL2[$i]
+                                  'count'            => $count_TCL2[$i],
+                                  'ratio_pack_type'  => $this->ratio_pack_type[$i]
                                 ]);
                              $i++;
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('TCL 2' => $request['tcl2_last_id']):[];
+                           $templates_inserted = array('TCL 2' => $request['tcl2_last_id']);
                          }
 
                          /** [ Return array of inserted id ] */
                          $last_insertions = array_merge($last_insertions,$templates_inserted);
+                         $quantity_empty  = $is_order_count_empty == 1?array('TCL 2'):[];
+                         $zero_quantity   = array_merge($zero_quantity,$quantity_empty);
                    }
                 }
                 else
@@ -352,7 +427,7 @@ class OrderController extends Controller
                     $is_order_count_empty = array_filter($count_TSL1) != NULL?0:1;
 
                     /** [ Check if order already placed for this CE style ] */
-                    $is_exists = TescoTSL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                    $is_exists = TescoTSL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -361,7 +436,7 @@ class OrderController extends Controller
                     else
                     {
                         /** [ Invoking createTSL1Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by);
+                         $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -377,13 +452,14 @@ class OrderController extends Controller
                                   'orms_tpn'         => $tpn,
                                   'itf_barcode'      => $itf_code[$i],
                                   'cases_per_carton' => $cases_per_carton[$i],
-                                  'count'            => $count_TSL1[$i]
+                                  'count'            => $count_TSL1[$i],
+                                  'ratio_pack_type'  => $this->ratio_pack_type[$i]
                                 ]);
                              $i++;
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('TSL 1' => $tesco_order_id):[];
+                           $templates_inserted = array('TSL 1' => $tesco_order_id);
                          }
                          else
                          {
@@ -397,17 +473,20 @@ class OrderController extends Controller
                                   'orms_tpn'         => $tpn,
                                   'itf_barcode'      => $itf_code[$i],
                                   'cases_per_carton' => $cases_per_carton[$i],
-                                  'count'            => $count_TSL1[$i]
+                                  'count'            => $count_TSL1[$i],
+                                  'ratio_pack_type'  => $this->ratio_pack_type[$i]
                                 ]);
                              $i++;
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('TSL 1' => $request['tsl1_last_id']):[];
+                           $templates_inserted = array('TSL 1' => $request['tsl1_last_id']);
                          }
 
                          /** [ Return array of inserted id ] */
                          $last_insertions = array_merge($last_insertions,$templates_inserted);
+                         $quantity_empty  = $is_order_count_empty == 1?array('TSL 1'):[];
+                         $zero_quantity   = array_merge($zero_quantity,$quantity_empty);
                     }
                 }
               }
@@ -419,7 +498,7 @@ class OrderController extends Controller
                   $is_order_count_empty = array_filter($count_THL1) != NULL?0:1;
 
                   /** [ Check if order already placed for this CE style ] */
-                  $is_exists = TescoTHL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                  $is_exists = TescoTHL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -428,7 +507,7 @@ class OrderController extends Controller
                   else
                   {
                      /** [ Invoking createTHL1Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by);
+                     $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required);
 
                      /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                      if($request['is_insert'] == 'true')
@@ -444,13 +523,14 @@ class OrderController extends Controller
                               'orms_tpn'         => $tpn,
                               'itf_barcode'      => $itf_code[$i],
                               'cases_per_carton' => $cases_per_carton[$i],
-                              'count'            => $count_THL1[$i]
+                              'count'            => $count_THL1[$i],
+                              'ratio_pack_type'  => $this->ratio_pack_type[$i]
                             ]);
                          $i++;
                        }
 
                        /** [ tesco order id, that has artwork count > 0] */
-                       $templates_inserted = $is_order_count_empty != 1?array('THL 1' => $tesco_order_id):[];
+                       $templates_inserted = array('THL 1' => $tesco_order_id);
                      }
                      else
                      {
@@ -464,22 +544,25 @@ class OrderController extends Controller
                               'orms_tpn'         => $tpn,
                               'itf_barcode'      => $itf_code[$i],
                               'cases_per_carton' => $cases_per_carton[$i],
-                              'count'            => $count_THL1[$i]
+                              'count'            => $count_THL1[$i],
+                              'ratio_pack_type'  => $this->ratio_pack_type[$i]
                             ]);
                          $i++;
                        }
 
                        /** [ tesco order id, that has artwork count > 0] */
-                       $templates_inserted = $is_order_count_empty != 1?array('THL 1' => $request['thl1_last_id']):[];
+                       $templates_inserted = array('THL 1' => $request['thl1_last_id']);
                      }
 
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
+                     $quantity_empty  = $is_order_count_empty == 1?array('THL 1'):[];
+                     $zero_quantity   = array_merge($zero_quantity,$quantity_empty);
                  }
               }
             }
             
-            return response()->json(['error'=> true,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists],200);
+            return response()->json(['error'=> true,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required ,'pi_required'=>$pi_required, 'zero_quantity' => $zero_quantity],200);
            
 
         } catch (\Exception $e)
@@ -497,7 +580,7 @@ class OrderController extends Controller
     {
         try {
             /** [ Creating new object for TescoOrders() class ] */
-            $tesco_order_obj = new TescoOrders();
+            $tesco_order_obj  = new TescoOrders();
             
             $orms_tpn         = explode(',',$request['orms_tpn']);
             $ean_code         = explode(',',$request['ean_code']);
@@ -507,14 +590,17 @@ class OrderController extends Controller
             $last_insertions  = [];
             $already_exists   = [];
             $created_by       = $request['created_by'];
-            $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
+            $zero_quantity    = []; 
+
+            $tesco_main_customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
             
-            if($customer_ids)
+            if($tesco_main_customer_id)
             {
-              $customer_id = $customer_ids->customer_id;
-              $customer_details = DB::table("customers")->where('id','=',$customer_id)->select('pi_required','delivery_date_required','delivery_day_count')->first();  
+              $customer_id = $tesco_main_customer_id->customer_id;
+              $customer_details = DB::table("customers")->where('id','=',$customer_id)->select('pi_required','delivery_date_required','delivery_day_count','po_required')->first();  
               $delivery_date_req= $customer_details->delivery_date_required; 
               $pi_required      = $customer_details->pi_required; 
+              $po_required      = $customer_details->po_required; 
               $day_count        = $customer_details->delivery_day_count; 
               $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
             } 
@@ -523,6 +609,7 @@ class OrderController extends Controller
               $customer_id      = NULL;
               $delivery_date_req= 0; 
               $pi_required      = 0; 
+              $po_required      = 0; 
               $day_count        = 0; 
               $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
             }
@@ -541,7 +628,7 @@ class OrderController extends Controller
                    $is_order_count_empty = array_filter($count_TCL4) != NULL?0:1;
 
                     /** [ Check if order already placed for this CE style ] */
-                    $is_exists = TescoTCL4Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                    $is_exists = TescoTCL4Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -550,7 +637,7 @@ class OrderController extends Controller
                     else
                     {
                          /** [ Invoking createTCL4Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by);
+                         $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -573,7 +660,7 @@ class OrderController extends Controller
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('TCL 4' => $tesco_order_id):[];
+                           $templates_inserted = array('TCL 4' => $tesco_order_id);
                          }
                          else
                          {
@@ -594,11 +681,13 @@ class OrderController extends Controller
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('TCL 4' => $request['tcl4_last_id']):[];
+                           $templates_inserted = array('TCL 4' => $request['tcl4_last_id']);
                          }
 
                          /** [ Return array of inserted id ] */
                          $last_insertions = array_merge($last_insertions,$templates_inserted);
+                         $quantity_empty  = $is_order_count_empty == 1?array('TCL 4'):[];
+                         $zero_quantity   = array_merge($zero_quantity,$quantity_empty);
                     }
                 }
                 else
@@ -607,7 +696,7 @@ class OrderController extends Controller
                     $is_order_count_empty = array_filter($count_TSL3) != NULL?0:1;
 
                     /** [ Check if order already placed for this CE style ] */
-                    $is_exists = TescoTSL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                    $is_exists = TescoTSL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -616,7 +705,7 @@ class OrderController extends Controller
                     else
                     {
                          /** [ Invoking createTSL3Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by);
+                         $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -639,7 +728,7 @@ class OrderController extends Controller
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('TSL 3' => $tesco_order_id):[];
+                           $templates_inserted = array('TSL 3' => $tesco_order_id);
                          }
                          else
                          {
@@ -660,11 +749,13 @@ class OrderController extends Controller
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('TSL 3' => $request['tsl3_last_id']):[];
+                           $templates_inserted = array('TSL 3' => $request['tsl3_last_id']);
                          }
 
                          /** [ Return array of inserted id ] */
                          $last_insertions = array_merge($last_insertions,$templates_inserted);
+                         $quantity_empty  = $is_order_count_empty == 1?array('TSL 3'):[];
+                         $zero_quantity   = array_merge($zero_quantity,$quantity_empty);
                     }
                 }
               }
@@ -676,7 +767,7 @@ class OrderController extends Controller
                   $is_order_count_empty = array_filter($count_THL3) != NULL?0:1;
 
                     /** [ Check if order already placed for this CE style ] */
-                    $is_exists = TescoTHL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                    $is_exists = TescoTHL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -685,7 +776,7 @@ class OrderController extends Controller
                     else
                     {
                          /** [ Invoking createTHL3Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by);
+                         $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -708,7 +799,7 @@ class OrderController extends Controller
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('THL 3' => $tesco_order_id):[];
+                           $templates_inserted = array('THL 3' => $tesco_order_id);
                          }
                          else
                          {
@@ -729,16 +820,18 @@ class OrderController extends Controller
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('THL 3' => $request['thl3_last_id']):[];
+                           $templates_inserted = array('THL 3' => $request['thl3_last_id']);
                          }
                          
                          /** [ Return array of inserted id ] */
                          $last_insertions = array_merge($last_insertions,$templates_inserted);
+                         $quantity_empty  = $is_order_count_empty == 1?array('THL 3'):[];
+                         $zero_quantity   = array_merge($zero_quantity,$quantity_empty);
                     }
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required,'pi_required'=>$pi_required, 'zero_quantity' => $zero_quantity],200);
 
         } catch (\Exception $e)
         {
@@ -755,7 +848,7 @@ class OrderController extends Controller
     {
         try {
             /** [ Creating new object for TescoOrders() class ] */
-            $tesco_order_obj = new TescoOrders();
+            $tesco_order_obj  = new TescoOrders();
             
             $tpnd             = explode(',',$request['tpnd']);
             $itf_code         = explode(',',$request['itf_code']);
@@ -764,14 +857,17 @@ class OrderController extends Controller
             $last_insertions  = [];
             $already_exists   = [];
             $created_by       = $request['created_by'];
-            $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
+            $zero_quantity    = [];
+
+            $tesco_main_customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
             
-            if($customer_ids)
+            if($tesco_main_customer_id)
             {
-              $customer_id = $customer_ids->customer_id;
-              $customer_details = DB::table("customers")->where('id','=',$customer_id)->select('pi_required','delivery_date_required','delivery_day_count')->first();  
+              $customer_id = $tesco_main_customer_id->customer_id;
+              $customer_details = DB::table("customers")->where('id','=',$customer_id)->select('pi_required','delivery_date_required','delivery_day_count','po_required')->first();  
               $delivery_date_req= $customer_details->delivery_date_required; 
               $pi_required      = $customer_details->pi_required; 
+              $po_required      = $customer_details->po_required; 
               $day_count        = $customer_details->delivery_day_count; 
               $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
             } 
@@ -780,6 +876,7 @@ class OrderController extends Controller
               $customer_id      = NULL;
               $delivery_date_req= 0; 
               $pi_required      = 0; 
+              $po_required      = 0; 
               $day_count        = 0; 
               $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
             }
@@ -799,7 +896,7 @@ class OrderController extends Controller
                     $is_order_count_empty = array_filter($count_TCL1) != NULL?0:1;
 
                     /** [ Check if order already placed for this UK style ] */
-                    $is_exists = TescoTCL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                    $is_exists = TescoTCL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -808,7 +905,7 @@ class OrderController extends Controller
                     else
                     {
                          /** [ Invoking createTCL1Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by);
+                         $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -824,13 +921,14 @@ class OrderController extends Controller
                                   'tpnd'             => $value,
                                   'itf_barcode'      => $itf_code[$i],
                                   'units_per_carton' => $units_per_carton[$i],
-                                  'count'            => $count_TCL1[$i]
+                                  'count'            => $count_TCL1[$i],
+                                  'ratio_pack_type'  => $this->ratio_pack_type[$i]
                                 ]);
                              $i++;
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('TCL 1' => $tesco_order_id):[];
+                           $templates_inserted = array('TCL 1' => $tesco_order_id);
                          }
                          else
                          {
@@ -844,17 +942,20 @@ class OrderController extends Controller
                                   'tpnd'             => $value,
                                   'itf_barcode'      => $itf_code[$i],
                                   'units_per_carton' => $units_per_carton[$i],
-                                  'count'            => $count_TCL1[$i]
+                                  'count'            => $count_TCL1[$i],
+                                  'ratio_pack_type'  => $this->ratio_pack_type[$i]
                                 ]);
                              $i++;
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('TCL 1' => $request['tcl1_last_id']):[];
+                           $templates_inserted = array('TCL 1' => $request['tcl1_last_id']);
                          }
 
                          /** [ Return array of inserted id ] */
                          $last_insertions = array_merge($last_insertions,$templates_inserted);
+                         $quantity_empty  = $is_order_count_empty == 1?array('TCL 1'):[];
+                         $zero_quantity   = array_merge($zero_quantity,$quantity_empty);
                     }
                 }
                 else if($template['template_name'] == "TCL 2")
@@ -863,7 +964,7 @@ class OrderController extends Controller
                     $is_order_count_empty = array_filter($count_TCL2) != NULL?0:1;
 
                     /** [ Check if order already placed for this UK style ] */
-                    $is_exists = TescoTCL2Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                    $is_exists = TescoTCL2Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -872,7 +973,7 @@ class OrderController extends Controller
                     else
                     {
                          /** [ Invoking createTCL2Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by);
+                         $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -888,13 +989,14 @@ class OrderController extends Controller
                                   'tpnd'             => $value,
                                   'itf_barcode'      => $itf_code[$i],
                                   'units_per_carton' => $units_per_carton[$i],
-                                  'count'            => $count_TCL2[$i]
+                                  'count'            => $count_TCL2[$i],
+                                  'ratio_pack_type'  => $this->ratio_pack_type[$i]
                                 ]);
                              $i++;
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('TCL 2' => $tesco_order_id):[];
+                           $templates_inserted = array('TCL 2' => $tesco_order_id);
                          }
                          else
                          {
@@ -908,17 +1010,20 @@ class OrderController extends Controller
                                   'tpnd'             => $value,
                                   'itf_barcode'      => $itf_code[$i],
                                   'units_per_carton' => $units_per_carton[$i],
-                                  'count'            => $count_TCL2[$i]
+                                  'count'            => $count_TCL2[$i],
+                                  'ratio_pack_type'  => $this->ratio_pack_type[$i]
                                 ]);
                              $i++;
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('TCL 2' => $request['tcl2_last_id']):[];
+                           $templates_inserted = array('TCL 2' => $request['tcl2_last_id']);
                          }
 
                          /** [ Return array of inserted id ] */
                          $last_insertions = array_merge($last_insertions,$templates_inserted);
+                         $quantity_empty  = $is_order_count_empty == 1?array('TCL 2'):[];
+                         $zero_quantity   = array_merge($zero_quantity,$quantity_empty);
                     }
                 }
                 else
@@ -927,7 +1032,7 @@ class OrderController extends Controller
                   $is_order_count_empty = array_filter($count_TSL1) != NULL?0:1;
 
                   /** [ Check if order already placed for this UK style ] */
-                  $is_exists = TescoTSL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                  $is_exists = TescoTSL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -936,7 +1041,7 @@ class OrderController extends Controller
                   else
                   {
                      /** [ Invoking createTSL1Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by);
+                     $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required);
                      
                      /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                      if($request['is_insert'] == 'true')
@@ -952,13 +1057,14 @@ class OrderController extends Controller
                               'tpnd'             => $value,
                               'itf_barcode'      => $itf_code[$i],
                               'units_per_carton' => $units_per_carton[$i],
-                              'count'            => $count_TSL1[$i]
+                              'count'            => $count_TSL1[$i],
+                              'ratio_pack_type'  => $this->ratio_pack_type[$i]
                             ]);
                          $i++;
                        }
 
                        /** [ tesco order id, that has artwork count > 0] */
-                       $templates_inserted = $is_order_count_empty != 1?array('TSL 1' => $tesco_order_id):[];
+                       $templates_inserted = array('TSL 1' => $tesco_order_id);
                      }
                      else
                      {
@@ -972,17 +1078,20 @@ class OrderController extends Controller
                               'tpnd'             => $value,
                               'itf_barcode'      => $itf_code[$i],
                               'units_per_carton' => $units_per_carton[$i],
-                              'count'            => $count_TSL1[$i]
+                              'count'            => $count_TSL1[$i],
+                              'ratio_pack_type'  => $this->ratio_pack_type[$i]
                             ]);
                          $i++;
                        }
 
                        /** [ tesco order id, that has artwork count > 0] */
-                       $templates_inserted = $is_order_count_empty != 1?array('TSL 1' => $request['tsl1_last_id']):[];
+                       $templates_inserted = array('TSL 1' => $request['tsl1_last_id']);
                      }
                      
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
+                     $quantity_empty  = $is_order_count_empty == 1?array('TSL 1'):[];
+                     $zero_quantity   = array_merge($zero_quantity,$quantity_empty);
                    }
                 }
               }
@@ -994,7 +1103,7 @@ class OrderController extends Controller
                   $is_order_count_empty = array_filter($count_THL1) != NULL?0:1;
 
                   /** [ Check if order already placed for this UK style ] */
-                  $is_exists = TescoTHL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                  $is_exists = TescoTHL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -1003,7 +1112,7 @@ class OrderController extends Controller
                   else
                   {
                        /** [ Invoking createTHL1Order function using class instance ] */
-                       $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by);
+                       $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required);
                        
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -1019,13 +1128,14 @@ class OrderController extends Controller
                                   'tpnd'             => $value,
                                   'itf_barcode'      => $itf_code[$i],
                                   'units_per_carton' => $units_per_carton[$i],
-                                  'count'            => $count_THL1[$i]
+                                  'count'            => $count_THL1[$i],
+                                  'ratio_pack_type'  => $this->ratio_pack_type[$i]
                                 ]);
                              $i++;
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('THL 1' => $tesco_order_id):[];
+                           $templates_inserted = array('THL 1' => $tesco_order_id);
                          }
                          else
                          {
@@ -1039,22 +1149,25 @@ class OrderController extends Controller
                                   'tpnd'             => $value,
                                   'itf_barcode'      => $itf_code[$i],
                                   'units_per_carton' => $units_per_carton[$i],
-                                  'count'            => $count_THL1[$i]
+                                  'count'            => $count_THL1[$i],
+                                  'ratio_pack_type'  => $this->ratio_pack_type[$i]
                                 ]);
                              $i++;
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('THL 1' => $request['thl1_last_id']):[];
+                           $templates_inserted = array('THL 1' => $request['thl1_last_id']);
                          }
 
                          /** [ Return array of inserted id ] */
                          $last_insertions = array_merge($last_insertions,$templates_inserted);
+                         $quantity_empty  = $is_order_count_empty == 1?array('THL 1'):[];
+                         $zero_quantity   = array_merge($zero_quantity,$quantity_empty);
                     }
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required,'pi_required'=>$pi_required, 'zero_quantity' => $zero_quantity],200);
 
         } catch (\Exception $e)
         {
@@ -1071,7 +1184,7 @@ class OrderController extends Controller
     {
         try {
             /** [ Creating new object for TescoOrders() class ] */
-            $tesco_order_obj = new TescoOrders();
+            $tesco_order_obj  = new TescoOrders();
             
             $tpnd             = explode(',',$request['tpnd']);
             $ean_code         = explode(',',$request['ean_code']);
@@ -1081,14 +1194,17 @@ class OrderController extends Controller
             $last_insertions  = [];
             $already_exists   = [];
             $created_by       = $request['created_by'];
-            $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
+            $zero_quantity    = [];
+
+            $tesco_main_customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
             
-            if($customer_ids)
+            if($tesco_main_customer_id)
             {
-              $customer_id = $customer_ids->customer_id;
-              $customer_details = DB::table("customers")->where('id','=',$customer_id)->select('pi_required','delivery_date_required','delivery_day_count')->first();  
+              $customer_id = $tesco_main_customer_id->customer_id;
+              $customer_details = DB::table("customers")->where('id','=',$customer_id)->select('pi_required','delivery_date_required','delivery_day_count','po_required')->first();  
               $delivery_date_req= $customer_details->delivery_date_required; 
               $pi_required      = $customer_details->pi_required; 
+              $po_required      = $customer_details->po_required; 
               $day_count        = $customer_details->delivery_day_count; 
               $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
             } 
@@ -1097,6 +1213,7 @@ class OrderController extends Controller
               $customer_id      = NULL;
               $delivery_date_req= 0; 
               $pi_required      = 0; 
+              $po_required      = 0; 
               $day_count        = 0; 
               $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
             }
@@ -1115,7 +1232,7 @@ class OrderController extends Controller
                       $is_order_count_empty = array_filter($count_TCL4) != NULL?0:1;
 
                       /** [ Check if order already placed for this UK style ] */
-                      $is_exists = TescoTCL4Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                      $is_exists = TescoTCL4Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                       if($is_exists)
                       {
                         /** [ Create array of already exists artworks ] */
@@ -1124,7 +1241,7 @@ class OrderController extends Controller
                       else
                       {
                          /** [ Invoking createTCL4Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by);
+                         $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -1147,7 +1264,7 @@ class OrderController extends Controller
                              }
 
                              /** [ tesco order id, that has artwork count > 0] */
-                             $templates_inserted = $is_order_count_empty != 1?array('TCL 4' => $tesco_order_id):[];
+                             $templates_inserted = array('TCL 4' => $tesco_order_id);
                          }
                          else
                          {
@@ -1168,11 +1285,13 @@ class OrderController extends Controller
                              }
 
                              /** [ tesco order id, that has artwork count > 0] */
-                             $templates_inserted = $is_order_count_empty != 1?array('TCL 4' => $request['tcl4_last_id']):[];
+                             $templates_inserted = array('TCL 4' => $request['tcl4_last_id']);
                          }
 
                          /** [ Return array of inserted id ] */
                          $last_insertions = array_merge($last_insertions,$templates_inserted);
+                         $quantity_empty  = $is_order_count_empty == 1?array('TCL 4'):[];
+                         $zero_quantity   = array_merge($zero_quantity,$quantity_empty);
                     }
                 }
                 else
@@ -1181,7 +1300,7 @@ class OrderController extends Controller
                       $is_order_count_empty = array_filter($count_TSL3) != NULL?0:1;
 
                       /** [ Check if order already placed for this UK style ] */
-                      $is_exists = TescoTSL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                      $is_exists = TescoTSL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                       if($is_exists)
                       {
                         /** [ Create array of already exists artworks ] */
@@ -1190,7 +1309,7 @@ class OrderController extends Controller
                       else
                       {
                          /** [ Invoking createTSL3Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by);
+                         $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -1213,7 +1332,7 @@ class OrderController extends Controller
                              }
 
                              /** [ tesco order id, that has artwork count > 0] */
-                             $templates_inserted = $is_order_count_empty != 1?array('TSL 3' => $tesco_order_id):[];
+                             $templates_inserted = array('TSL 3' => $tesco_order_id);
                          }
                          else
                          {
@@ -1234,11 +1353,13 @@ class OrderController extends Controller
                              }
 
                              /** [ tesco order id, that has artwork count > 0] */
-                             $templates_inserted = $is_order_count_empty != 1?array('TSL 3' => $request['tsl3_last_id']):[];
+                             $templates_inserted = array('TSL 3' => $request['tsl3_last_id']);
                          }
 
                          /** [ Return array of inserted id ] */
                          $last_insertions = array_merge($last_insertions,$templates_inserted);
+                         $quantity_empty  = $is_order_count_empty == 1?array('TSL 3'):[];
+                         $zero_quantity   = array_merge($zero_quantity,$quantity_empty);
                       }
                 }
               }
@@ -1250,7 +1371,7 @@ class OrderController extends Controller
                    $is_order_count_empty = array_filter($count_THL3) != NULL?0:1;
 
                   /** [ Check if order already placed for this UK style ] */
-                   $is_exists = TescoTHL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                   $is_exists = TescoTHL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -1259,7 +1380,7 @@ class OrderController extends Controller
                   else
                   {
                        /** [ Invoking createTHL3Order function using class instance ] */
-                       $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by);
+                       $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required);
                        
                        /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                        if($request['is_insert'] == 'true')
@@ -1282,7 +1403,7 @@ class OrderController extends Controller
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('THL 3' => $tesco_order_id):[];
+                           $templates_inserted = array('THL 3' => $tesco_order_id);
                        }
                        else
                        {
@@ -1303,16 +1424,18 @@ class OrderController extends Controller
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('THL 3' => $request['thl3_last_id']):[];
+                           $templates_inserted = array('THL 3' => $request['thl3_last_id']);
                        }
 
                        /** [ Return array of inserted id ] */
                        $last_insertions = array_merge($last_insertions,$templates_inserted);
+                       $quantity_empty  = $is_order_count_empty == 1?array('THL 3'):[];
+                       $zero_quantity   = array_merge($zero_quantity,$quantity_empty);
                   }
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required,'pi_required'=>$pi_required, 'zero_quantity' => $zero_quantity],200);
 
         } catch (\Exception $e)
         {
@@ -1325,48 +1448,56 @@ class OrderController extends Controller
      * @return boolean true or false
      */
     public function uploadCombinedOrdersPO(Request $request)
-        {
-           try {
-            $template_ids  = explode(',',$request['template_id']);
-            $template     = explode(',',$request['templates']);
-            
-             $po_file = $request['po_file'];
-             $destination_path='/storage/app/public/po-files/';
-             $path='storage/app/public/po-files/';
-             $Orname = $po_file->getClientOriginalName();
-             $filename= 'TESCO_PO_'.time().'_'.preg_replace('/\s+/', '-', $Orname);
-             $po_file->move($path,$filename);
-             $destination_path_insert=$destination_path.$filename;
-              foreach($template_ids as $key => $template_id)
+    {
+      try {
+         $erp_obj      = new ErpOrders();
+         $template_ids = explode(',',$request['template_id']);
+         $template     = explode(',',$request['templates']);
+        
+         $po_file = $request['po_file'];
+         $destination_path='/storage/app/public/po-files/';
+         $path='storage/app/public/po-files/';
+         $Orname = $po_file->getClientOriginalName();
+         $filename= 'TESCO_PO_'.time().'_'.preg_replace('/\s+/', '-', $Orname);
+         $po_file->move($path,$filename);
+         $destination_path_insert=$destination_path.$filename;
+          foreach($template_ids as $key => $template_id)
+          {
+              if($template_id > 0)
               {
-                  if($template_id > 0)
-                  {
-                    //Dynamic function name and database model name for each templates
-                    $func_name = "upload".$template[$key]."PO";
-                    $model_name = 'App\\'."Tesco".$template[$key]."Orders";
-                    $response = $model_name::where('id',$template_id)
-                                  ->update([
-                                  'po_status'         => "PO Uploaded",
-                                  'purchase_order_no' => $request['po_number'],
-                                  'po_file'           => $destination_path_insert,
-                                  'delivery_date'     => $request['delivery_date']
-                                ]);
-                  }
+                //Dynamic function name and database model name for each templates
+                $model_name = 'App\\'."Tesco".$template[$key]."Orders";
+                $response = $model_name::where('id',$template_id)
+                              ->update([
+                              'po_status'         => "PO Uploaded",
+                              'purchase_order_no' => $request['po_number'],
+                              'po_file'           => $destination_path_insert,
+                              'delivery_date'     => $request['delivery_date'],
+                              'po_uploaded_at'    => $this->current_date
+                            ]);
+                /** @var array [Pass array of values to updateTescoErpOrders function] */
+                $data_array = [];   
+                $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
+                $data_array['tableName'] = "tesco_".strtolower($template[$key])."_orders";
+                $data_array['buyer_id'] = $tesco_buyer_id->id;
+                $data_array['id'] = $template_id;
+                $updated_erp_table = $erp_obj->updateTescoErpOrders($data_array);
               }
-               if (($response != '') || ($response != "Invalid Template")) 
-               {
-                 $result = response()->json(['error'=> false,'message' =>'success', 'po_number' => $request['po_number']],200);
-               }
-               else
-               {
-                $result = response()->json(['error'=> true,'message' =>'Failed'],400);
-               }
-               
-           } catch (\Exception $e) {
-               $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-           }
-           return $result;
-        }
+          }
+          if ($updated_erp_table != '')
+          {
+            $result = response()->json(['error'=> false,'message' =>'success', 'po_number' => $request['po_number']],200);
+          }
+          else
+          {
+           $result = response()->json(['error'=> true,'message' =>'Failed'],400);
+          }
+           
+       } catch (\Exception $e) {
+           $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+       }
+       return $result;
+    }
     /**
      * Save CE ratio template orders
      * @param \Illuminate\Http\Request
@@ -1398,7 +1529,7 @@ class OrderController extends Controller
                   if($template['template_name'] == "TCL 1")
                   {
                     /** [ Check if order already placed for this CE style ] */
-                   $is_exists = TescoTCL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                   $is_exists = TescoTCL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -1456,7 +1587,7 @@ class OrderController extends Controller
                   else if($template['template_name'] == "TCL 2")
                   {
                     /** [ Check if order already placed for this CE style ] */
-                   $is_exists = TescoTCL2Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                   $is_exists = TescoTCL2Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -1514,7 +1645,7 @@ class OrderController extends Controller
                   else
                   {
                     /** [ Check if order already placed for this CE style ] */
-                   $is_exists = TescoTSL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                   $is_exists = TescoTSL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -1575,7 +1706,7 @@ class OrderController extends Controller
                    $count_THL1       = explode(',',$request['count_THL1']);
 
                    /** [ Check if order already placed for this CE style ] */
-                   $is_exists = TescoTHL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                   $is_exists = TescoTHL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -1667,7 +1798,7 @@ class OrderController extends Controller
                 if($template['template_name'] == "TCL 4")
                 {
                   /** [ Check if order already placed for this CE style ] */
-                     $is_exists = TescoTCL4Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                     $is_exists = TescoTCL4Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                       if($is_exists)
                       {
                         /** [ Create array of already exists artworks ] */
@@ -1728,7 +1859,7 @@ class OrderController extends Controller
                 else
                 {
                   /** [ Check if order already placed for this CE style ] */
-                  $is_exists = TescoTSL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                  $is_exists = TescoTSL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -1792,7 +1923,7 @@ class OrderController extends Controller
                  $count_THL3       = explode(',',$request['count_THL3']);
 
                  /** [ Check if order already placed for this CE style ] */
-                 $is_exists = TescoTHL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                 $is_exists = TescoTHL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -1890,7 +2021,7 @@ class OrderController extends Controller
                 if($template['template_name'] == "TCL 1")
                 {
                   /** [ Check if order already placed for this UK style ] */
-                  $is_exists = TescoTCL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                  $is_exists = TescoTCL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -1949,7 +2080,7 @@ class OrderController extends Controller
                 else if($template['template_name'] == "TCL 2")
                 {
                   /** [ Check if order already placed for this UK style ] */
-                  $is_exists = TescoTCL2Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                  $is_exists = TescoTCL2Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -2008,7 +2139,7 @@ class OrderController extends Controller
                 else
                 {
                   /** [ Check if order already placed for this UK style ] */
-                  $is_exists = TescoTSL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                  $is_exists = TescoTSL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -2070,7 +2201,7 @@ class OrderController extends Controller
                  $count_THL1       = explode(',',$request['count_THL1']);
 
                  /** [ Check if order already placed for this UK style ] */
-                  $is_exists = TescoTHL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                  $is_exists = TescoTHL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -2165,7 +2296,7 @@ class OrderController extends Controller
                 if($template['template_name'] == "TCL 4")
                 {
                   /** [ Check if order already placed for this UK style ] */
-                  $is_exists = TescoTCL4Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                  $is_exists = TescoTCL4Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -2226,7 +2357,7 @@ class OrderController extends Controller
                 else
                 {
                   /** [ Check if order already placed for this UK style ] */
-                  $is_exists = TescoTSL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                  $is_exists = TescoTSL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -2290,7 +2421,7 @@ class OrderController extends Controller
                  $count_THL3       = explode(',',$request['count_THL3']);
 
                  /** [ Check if order already placed for this UK style ] */
-                  $is_exists = TescoTHL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
+                  $is_exists = TescoTHL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->where('order_status','!=', 'Order Cancelled')->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -2787,7 +2918,7 @@ class OrderController extends Controller
         $result = '';
         $data = [];
         if (in_array("TCL 1", $artwork)) {
-              $tesco_tcl1_orders = DB::table('tesco_tcl1_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*', DB::raw('"TCL 1" as TemplateName'),DB::raw('"tesco_tcl1_orders" as type'))->first();
+              $tesco_tcl1_orders = DB::table('tesco_tcl1_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->where('order_status','!=', 'Order Cancelled')->select('*', DB::raw("'".$this->tcl1."'".' as "TemplateName"'),DB::raw("'".$this->tcl1_type."'".' as "type"'))->first();
             if($tesco_tcl1_orders) {
               $data['tesco_tcl1_orders'] = $tesco_tcl1_orders;
               $data['tesco_tcl1_orders']->order_quantity = DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$tesco_tcl1_orders->id)->select('*')->get();
@@ -2795,7 +2926,7 @@ class OrderController extends Controller
         }
         
         if (in_array("TCL 2", $artwork)) {
-          $tesco_tcl2_orders = DB::table('tesco_tcl2_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw('"TCL 2" as TemplateName'),DB::raw('"tesco_tcl2_orders" as type'))->first();
+          $tesco_tcl2_orders = DB::table('tesco_tcl2_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->where('order_status','!=', 'Order Cancelled')->select('*',DB::raw("'".$this->tcl2."'".' as "TemplateName"'),DB::raw("'".$this->tcl2_type."'".' as "type"'))->first();
           if($tesco_tcl2_orders) {
             $data['tesco_tcl2_orders'] = $tesco_tcl2_orders;
             $data['tesco_tcl2_orders']->order_quantity = DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$tesco_tcl2_orders->id)->select('*')->get();
@@ -2803,7 +2934,7 @@ class OrderController extends Controller
         }
         
         if (in_array("TCL 4", $artwork)) {
-          $tesco_tcl4_orders = DB::table('tesco_tcl4_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw('"TCL 4" as TemplateName'),DB::raw('"tesco_tcl4_orders" as type'))->first();
+          $tesco_tcl4_orders = DB::table('tesco_tcl4_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->where('order_status','!=', 'Order Cancelled')->select('*',DB::raw("'".$this->tcl4."'".' as "TemplateName"'),DB::raw("'".$this->tcl4_type."'".' as "type"'))->first();
           if($tesco_tcl4_orders) {
             $data['tesco_tcl4_orders'] = $tesco_tcl4_orders;
             $data['tesco_tcl4_orders']->order_quantity = DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$tesco_tcl4_orders->id)->select('*')->get();
@@ -2811,7 +2942,7 @@ class OrderController extends Controller
         }
         
         if (in_array("THL 1", $artwork)) {
-          $tesco_thl1_orders = DB::table('tesco_thl1_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw('"THL 1" as TemplateName'),DB::raw('"tesco_thl1_orders" as type'))->first();
+          $tesco_thl1_orders = DB::table('tesco_thl1_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->where('order_status','!=', 'Order Cancelled')->select('*',DB::raw("'".$this->thl1."'".' as "TemplateName"'),DB::raw("'".$this->thl1_type."'".' as "type"'))->first();
           if($tesco_thl1_orders) {
             $data['tesco_thl1_orders'] = $tesco_thl1_orders;
             $data['tesco_thl1_orders']->order_quantity = DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$tesco_thl1_orders->id)->select('*')->get();
@@ -2820,7 +2951,7 @@ class OrderController extends Controller
         
         
         if (in_array("THL 3", $artwork)) {
-          $tesco_thl3_orders = DB::table('tesco_thl3_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw('"THL 3" as TemplateName'),DB::raw('"tesco_thl3_orders" as type'))->first();
+          $tesco_thl3_orders = DB::table('tesco_thl3_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->where('order_status','!=', 'Order Cancelled')->select('*',DB::raw("'".$this->thl3."'".' as "TemplateName"'),DB::raw("'".$this->thl3_type."'".' as "type"'))->first();
           if($tesco_thl3_orders) {
             $data['tesco_thl3_orders'] = $tesco_thl3_orders;
             $data['tesco_thl3_orders']->order_quantity = DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$tesco_thl3_orders->id)->select('*')->get();
@@ -2828,7 +2959,7 @@ class OrderController extends Controller
         }
         
         if (in_array("TSL 1", $artwork)) {
-          $tesco_tsl1_orders = DB::table('tesco_tsl1_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw('"TSL 1" as TemplateName'),DB::raw('"tesco_tsl1_orders" as type'))->first();
+          $tesco_tsl1_orders = DB::table('tesco_tsl1_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->where('order_status','!=', 'Order Cancelled')->select('*',DB::raw("'".$this->tsl1."'".' as "TemplateName"'),DB::raw("'".$this->tsl1_type."'".' as "type"'))->first();
           if($tesco_tsl1_orders) {
             $data['tesco_tsl1_orders'] = $tesco_tsl1_orders;
             $data['tesco_tsl1_orders']->order_quantity = DB::table('tesco_tsl1_orders_quanty')->where('tsl1_order_id',$tesco_tsl1_orders->id)->select('*')->get();
@@ -2836,7 +2967,7 @@ class OrderController extends Controller
         }
         
         if (in_array("TSL 3", $artwork)) {
-          $tesco_tsl3_orders = DB::table('tesco_tsl3_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw('"TSL 3" as TemplateName'),DB::raw('"tesco_tsl3_orders" as type'))->first();
+          $tesco_tsl3_orders = DB::table('tesco_tsl3_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->where('order_status','!=', 'Order Cancelled')->select('*',DB::raw("'".$this->tsl3."'".' as "TemplateName"'),DB::raw("'".$this->tsl3_type."'".' as "type"'))->first();
           if($tesco_tsl3_orders) {
             $data['tesco_tsl3_orders'] = $tesco_tsl3_orders;
             $data['tesco_tsl3_orders']->order_quantity = DB::table('tesco_tsl3_orders_quanty')->where('tsl3_order_id',$tesco_tsl3_orders->id)->select('*')->get();
@@ -2946,25 +3077,25 @@ class OrderController extends Controller
   public function reOrderArtwork(Request $request)
     {
     $style=$request->style;
-        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"TCL 1" as TemplateName'),DB::raw('"tesco_tcl1_orders" as type'))->groupBy('tesco_tcl1_orders.uk_style_ref')->groupBy('tesco_tcl1_orders.ce_style_ref')->groupBy('tesco_tcl1_orders.zone')->groupBy('tesco_tcl1_orders.po_number')->get();
+        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw("'".$this->tcl1."'".' as "TemplateName"'),DB::raw("'".$this->tcl1_type."'".' as "type"'))->groupBy('tesco_tcl1_orders.uk_style_ref')->groupBy('tesco_tcl1_orders.ce_style_ref')->groupBy('tesco_tcl1_orders.zone')->groupBy('tesco_tcl1_orders.po_number')->get();
       
       
-    $data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"TCL 2" as TemplateName'),DB::raw('"tesco_tcl2_orders" as type'))->groupBy('tesco_tcl2_orders.uk_style_ref')->groupBy('tesco_tcl2_orders.ce_style_ref')->groupBy('tesco_tcl2_orders.zone')->groupBy('tesco_tcl2_orders.po_number')->get();
+    $data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw("'".$this->tcl2."'".' as "TemplateName"'),DB::raw("'".$this->tcl2_type."'".' as "type"'))->groupBy('tesco_tcl2_orders.uk_style_ref')->groupBy('tesco_tcl2_orders.ce_style_ref')->groupBy('tesco_tcl2_orders.zone')->groupBy('tesco_tcl2_orders.po_number')->get();
       
       
-    $data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"TCL 4" as TemplateName'),DB::raw('"tesco_tcl4_orders" as type'))->groupBy('tesco_tcl4_orders.uk_style_ref')->groupBy('tesco_tcl4_orders.ce_style_ref')->groupBy('tesco_tcl4_orders.zone')->groupBy('tesco_tcl4_orders.po_number')->get();
+    $data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw("'".$this->tcl4."'".' as "TemplateName"'),DB::raw("'".$this->tcl4_type."'".' as "type"'))->groupBy('tesco_tcl4_orders.uk_style_ref')->groupBy('tesco_tcl4_orders.ce_style_ref')->groupBy('tesco_tcl4_orders.zone')->groupBy('tesco_tcl4_orders.po_number')->get();
       
       
-    $data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"THL 1" as TemplateName'),DB::raw('"tesco_thl1_orders" as type'))->groupBy('tesco_thl1_orders.uk_style_ref')->groupBy('tesco_thl1_orders.ce_style_ref')->groupBy('tesco_thl1_orders.zone')->groupBy('tesco_thl1_orders.po_number')->get();
+    $data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw("'".$this->thl1."'".' as "TemplateName"'),DB::raw("'".$this->thl1_type."'".' as "type"'))->groupBy('tesco_thl1_orders.uk_style_ref')->groupBy('tesco_thl1_orders.ce_style_ref')->groupBy('tesco_thl1_orders.zone')->groupBy('tesco_thl1_orders.po_number')->get();
       
       
-    $data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"THL 3" as TemplateName'),DB::raw('"tesco_thl3_orders" as type'))->groupBy('tesco_thl3_orders.uk_style_ref')->groupBy('tesco_thl3_orders.ce_style_ref')->groupBy('tesco_thl3_orders.zone')->groupBy('tesco_thl3_orders.po_number')->get();
+    $data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw("'".$this->thl3."'".' as "TemplateName"'),DB::raw("'".$this->thl3_type."'".' as "type"'))->groupBy('tesco_thl3_orders.uk_style_ref')->groupBy('tesco_thl3_orders.ce_style_ref')->groupBy('tesco_thl3_orders.zone')->groupBy('tesco_thl3_orders.po_number')->get();
       
       
-    $data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"TSL 1" as TemplateName'),DB::raw('"tesco_tsl1_orders" as type'))->groupBy('tesco_tsl1_orders.uk_style_ref')->groupBy('tesco_tsl1_orders.ce_style_ref')->groupBy('tesco_tsl1_orders.zone')->groupBy('tesco_tsl1_orders.po_number')->get();
+    $data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw("'".$this->tsl1."'".' as "TemplateName"'),DB::raw("'".$this->tsl1_type."'".' as "type"'))->groupBy('tesco_tsl1_orders.uk_style_ref')->groupBy('tesco_tsl1_orders.ce_style_ref')->groupBy('tesco_tsl1_orders.zone')->groupBy('tesco_tsl1_orders.po_number')->get();
       
       
-    $data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"TSL 3" as TemplateName'),DB::raw('"tesco_tsl3_orders" as type'))->groupBy('tesco_tsl3_orders.uk_style_ref')->groupBy('tesco_tsl3_orders.ce_style_ref')->groupBy('tesco_tsl3_orders.zone')->groupBy('tesco_tsl3_orders.po_number')->get();
+    $data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw("'".$this->tsl3."'".' as "TemplateName"'),DB::raw("'".$this->tsl3_type."'".' as "type"'))->groupBy('tesco_tsl3_orders.uk_style_ref')->groupBy('tesco_tsl3_orders.ce_style_ref')->groupBy('tesco_tsl3_orders.zone')->groupBy('tesco_tsl3_orders.po_number')->get();
       
      
     echo json_encode($data);
@@ -2979,14 +3110,14 @@ class OrderController extends Controller
     {
         $style=$request->style;
 
-        $data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"TCL 4" as TemplateName'),DB::raw('"tesco_tcl4_orders" as type'))->groupBy('tesco_tcl4_orders.uk_style_ref')->groupBy('tesco_tcl4_orders.ce_style_ref')->groupBy('tesco_tcl4_orders.zone')->groupBy('tesco_tcl4_orders.po_number')->get();
+        $data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw("'".$this->tcl4."'".' as "TemplateName"'),DB::raw("'".$this->tcl4_type."'".' as "type"'))->groupBy('tesco_tcl4_orders.uk_style_ref')->groupBy('tesco_tcl4_orders.ce_style_ref')->groupBy('tesco_tcl4_orders.zone')->groupBy('tesco_tcl4_orders.po_number')->get();
 
 
-        $data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"THL 3" as TemplateName'),DB::raw('"tesco_thl3_orders" as type'))->groupBy('tesco_thl3_orders.uk_style_ref')->groupBy('tesco_thl3_orders.ce_style_ref')->groupBy('tesco_thl3_orders.zone')->groupBy('tesco_thl3_orders.po_number')->get();
+        $data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw("'".$this->thl3."'".' as "TemplateName"'),DB::raw("'".$this->thl3_type."'".' as "type"'))->groupBy('tesco_thl3_orders.uk_style_ref')->groupBy('tesco_thl3_orders.ce_style_ref')->groupBy('tesco_thl3_orders.zone')->groupBy('tesco_thl3_orders.po_number')->get();
 
 
 
-        $data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"TSL 3" as TemplateName'),DB::raw('"tesco_tsl3_orders" as type'))->groupBy('tesco_tsl3_orders.uk_style_ref')->groupBy('tesco_tsl3_orders.ce_style_ref')->groupBy('tesco_tsl3_orders.zone')->groupBy('tesco_tsl3_orders.po_number')->get();
+        $data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw("'".$this->tsl3."'".' as "TemplateName"'),DB::raw("'".$this->tsl3_type."'".' as "type"'))->groupBy('tesco_tsl3_orders.uk_style_ref')->groupBy('tesco_tsl3_orders.ce_style_ref')->groupBy('tesco_tsl3_orders.zone')->groupBy('tesco_tsl3_orders.po_number')->get();
 
 
         echo json_encode($data);
@@ -3015,785 +3146,770 @@ class OrderController extends Controller
      *
      * @return json value
      */
-  public function setTescoReorder(Request $request)
-    {
-            $type         =   $request->type;
-            $id           =   $request->id;
-            $counts       =   explode(',',$request->counts);
-            if($type == "tesco_tcl1_orders")
-            {
-                $tasks = TescoTCL1Orders::find($id);
-                $newTasks = $tasks->replicate();
-                $newTasks->save();
+  // public function setTescoReorder(Request $request)
+  //   {
+  //           $type         =   $request->type;
+  //           $id           =   $request->id;
+  //           $counts       =   explode(',',$request->counts);
+  //           if($type == "tesco_tcl1_orders")
+  //           {
+  //               $tasks = TescoTCL1Orders::find($id);
+  //               $newTasks = $tasks->replicate();
+  //               $newTasks->save();
                 
-                $factory=DB::table('tesco_tcl1_orders')->join('customers','customers.id','=','tesco_tcl1_orders.tesco_supplier_id')->where('tesco_tcl1_orders.id',$id)->select('*')->get();
+  //               $factory=DB::table('tesco_tcl1_orders')->join('customers','customers.id','=','tesco_tcl1_orders.tesco_supplier_id')->where('tesco_tcl1_orders.id',$id)->select('*')->get();
                 
-                $pi_required=$factory{0}->pi_required;
-                if($pi_required == 1)
-                {
-                    $pi_status="PI Approval Pending";
-                    if($factory{0}->po_required == 1)
-                    {
-                        $po_status="PO Pending";
-                    }
-                    else
-                    {
-                        $po_status="";
-                    }
+  //               $pi_required=$factory{0}->pi_required;
+  //               if($pi_required == 1)
+  //               {
+  //                   $pi_status="PI Approval Pending";
+  //                   if($factory{0}->po_required == 1)
+  //                   {
+  //                       $po_status="PO Pending";
+  //                   }
+  //                   else
+  //                   {
+  //                       $po_status="";
+  //                   }
 
-                }
-                else
-                {
-                    $po_status="PO Pending";
-                    $pi_status="";
-                }
-                $newTasks->po_status = $po_status;
-                $newTasks->pi_status = $pi_status;
-                $newTasks->purchase_order_no = "";
-                $newTasks->po_file = "";
-                $newTasks->order_flag = "reOrder";
-                $newTasks->save();
+  //               }
+  //               else
+  //               {
+  //                   $po_status="PO Pending";
+  //                   $pi_status="";
+  //               }
+  //               $newTasks->po_status = $po_status;
+  //               $newTasks->pi_status = $pi_status;
+  //               $newTasks->purchase_order_no = "";
+  //               $newTasks->po_file = "";
+  //               $newTasks->order_flag = "reOrder";
+  //               $newTasks->save();
                 
-                $data['tesco']=DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$id)->select('*')->get();
-                $i=0;
-                foreach($data['tesco'] as $value)
-                {
-                    $tasks = TescoTCL1OrdersQuantity::find($value->id);
-                    $newTask = $tasks->replicate();
-                    $newTask->save();
-                    $newTask->tcl1_order_id = $newTasks->id;
-                    $newTask->count = $counts[$i];
-                    $newTask->save();
-                    $i++;
-                }
-            }
-            if($type == "tesco_tcl2_orders")
-            {
-                $tasks = TescoTCL2Orders::find($id);
-                $newTasks = $tasks->replicate();
-                $newTasks->save();
+  //               $data['tesco']=DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$id)->select('*')->get();
+  //               $i=0;
+  //               foreach($data['tesco'] as $value)
+  //               {
+  //                   $tasks = TescoTCL1OrdersQuantity::find($value->id);
+  //                   $newTask = $tasks->replicate();
+  //                   $newTask->save();
+  //                   $newTask->tcl1_order_id = $newTasks->id;
+  //                   $newTask->count = $counts[$i];
+  //                   $newTask->save();
+  //                   $i++;
+  //               }
+  //           }
+  //           if($type == "tesco_tcl2_orders")
+  //           {
+  //               $tasks = TescoTCL2Orders::find($id);
+  //               $newTasks = $tasks->replicate();
+  //               $newTasks->save();
                 
-                $factory=DB::table('tesco_tcl2_orders')->join('customers','customers.id','=','tesco_tcl2_orders.tesco_supplier_id')->where('tesco_tcl2_orders.id',$id)->select('*')->get();
+  //               $factory=DB::table('tesco_tcl2_orders')->join('customers','customers.id','=','tesco_tcl2_orders.tesco_supplier_id')->where('tesco_tcl2_orders.id',$id)->select('*')->get();
                 
-                $pi_required=$factory{0}->pi_required;
-                if($pi_required == 1)
-                {
-                    $pi_status="PI Approval Pending";
-                    if($factory{0}->po_required == 1)
-                    {
-                        $po_status="PO Pending";
-                    }
-                    else
-                    {
-                        $po_status="";
-                    }
+  //               $pi_required=$factory{0}->pi_required;
+  //               if($pi_required == 1)
+  //               {
+  //                   $pi_status="PI Approval Pending";
+  //                   if($factory{0}->po_required == 1)
+  //                   {
+  //                       $po_status="PO Pending";
+  //                   }
+  //                   else
+  //                   {
+  //                       $po_status="";
+  //                   }
 
-                }
-                else
-                {
-                    $po_status="PO Pending";
-                    $pi_status="";
-                }
-                $newTasks->po_status = $po_status;
-                $newTasks->pi_status = $pi_status;
-                $newTasks->purchase_order_no = "";
-                $newTasks->po_file = "";
-                $newTasks->order_flag = "reOrder";
-                $newTasks->save();
+  //               }
+  //               else
+  //               {
+  //                   $po_status="PO Pending";
+  //                   $pi_status="";
+  //               }
+  //               $newTasks->po_status = $po_status;
+  //               $newTasks->pi_status = $pi_status;
+  //               $newTasks->purchase_order_no = "";
+  //               $newTasks->po_file = "";
+  //               $newTasks->order_flag = "reOrder";
+  //               $newTasks->save();
                 
-                $data['tesco']=DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$id)->select('*')->get();
-                $i=0;
-                foreach($data['tesco'] as $value)
-                {
-                    $tasks = TescoTCL2OrdersQuantity::find($value->id);
-                    $newTask = $tasks->replicate();
-                    $newTask->save();
-                    $newTask->tcl2_order_id = $newTasks->id;
-                    $newTask->count = $counts[$i];
-                    $newTask->save();
-                    $i++;
-                }
-            }
-            if($type == "tesco_tcl4_orders")
-            {
-                $tasks = TescoTCL4Orders::find($id);
-                $newTasks = $tasks->replicate();
-                $newTasks->save();
+  //               $data['tesco']=DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$id)->select('*')->get();
+  //               $i=0;
+  //               foreach($data['tesco'] as $value)
+  //               {
+  //                   $tasks = TescoTCL2OrdersQuantity::find($value->id);
+  //                   $newTask = $tasks->replicate();
+  //                   $newTask->save();
+  //                   $newTask->tcl2_order_id = $newTasks->id;
+  //                   $newTask->count = $counts[$i];
+  //                   $newTask->save();
+  //                   $i++;
+  //               }
+  //           }
+  //           if($type == "tesco_tcl4_orders")
+  //           {
+  //               $tasks = TescoTCL4Orders::find($id);
+  //               $newTasks = $tasks->replicate();
+  //               $newTasks->save();
                 
-                $factory=DB::table('tesco_tcl4_orders')->join('customers','customers.id','=','tesco_tcl4_orders.tesco_supplier_id')->where('tesco_tcl4_orders.id',$id)->select('*')->get();
+  //               $factory=DB::table('tesco_tcl4_orders')->join('customers','customers.id','=','tesco_tcl4_orders.tesco_supplier_id')->where('tesco_tcl4_orders.id',$id)->select('*')->get();
                 
-                $pi_required=$factory{0}->pi_required;
-                if($pi_required == 1)
-                {
-                    $pi_status="PI Approval Pending";
-                    if($factory{0}->po_required == 1)
-                    {
-                        $po_status="PO Pending";
-                    }
-                    else
-                    {
-                        $po_status="";
-                    }
+  //               $pi_required=$factory{0}->pi_required;
+  //               if($pi_required == 1)
+  //               {
+  //                   $pi_status="PI Approval Pending";
+  //                   if($factory{0}->po_required == 1)
+  //                   {
+  //                       $po_status="PO Pending";
+  //                   }
+  //                   else
+  //                   {
+  //                       $po_status="";
+  //                   }
 
-                }
-                else
-                {
-                    $po_status="PO Pending";
-                    $pi_status="";
-                }
-                $newTasks->po_status = $po_status;
-                $newTasks->pi_status = $pi_status;
-                $newTasks->purchase_order_no = "";
-                $newTasks->po_file = "";
-                $newTasks->order_flag = "reOrder";
-                $newTasks->save();
+  //               }
+  //               else
+  //               {
+  //                   $po_status="PO Pending";
+  //                   $pi_status="";
+  //               }
+  //               $newTasks->po_status = $po_status;
+  //               $newTasks->pi_status = $pi_status;
+  //               $newTasks->purchase_order_no = "";
+  //               $newTasks->po_file = "";
+  //               $newTasks->order_flag = "reOrder";
+  //               $newTasks->save();
                 
-                $data['tesco']=DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$id)->select('*')->get();
-                $i=0;
-                foreach($data['tesco'] as $value)
-                {
-                    $tasks = TescoTCL4OrdersQuantity::find($value->id);
-                    $newTask = $tasks->replicate();
-                    $newTask->save();
-                    $newTask->tcl4_order_id = $newTasks->id;
-                    $newTask->count = $counts[$i];
-                    $newTask->save();
-                    $i++;
-                }
-            }
-            if($type == "tesco_thl1_orders")
-            {
-                $tasks = TescoTHL1Orders::find($id);
-                $newTasks = $tasks->replicate();
-                $newTasks->save();
+  //               $data['tesco']=DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$id)->select('*')->get();
+  //               $i=0;
+  //               foreach($data['tesco'] as $value)
+  //               {
+  //                   $tasks = TescoTCL4OrdersQuantity::find($value->id);
+  //                   $newTask = $tasks->replicate();
+  //                   $newTask->save();
+  //                   $newTask->tcl4_order_id = $newTasks->id;
+  //                   $newTask->count = $counts[$i];
+  //                   $newTask->save();
+  //                   $i++;
+  //               }
+  //           }
+  //           if($type == "tesco_thl1_orders")
+  //           {
+  //               $tasks = TescoTHL1Orders::find($id);
+  //               $newTasks = $tasks->replicate();
+  //               $newTasks->save();
                 
                 
-                $factory=DB::table('tesco_thl1_orders')->join('customers','customers.id','=','tesco_thl1_orders.tesco_supplier_id')->where('tesco_thl1_orders.id',$id)->select('*')->get();
+  //               $factory=DB::table('tesco_thl1_orders')->join('customers','customers.id','=','tesco_thl1_orders.tesco_supplier_id')->where('tesco_thl1_orders.id',$id)->select('*')->get();
                 
-                $pi_required=$factory{0}->pi_required;
-                if($pi_required == 1)
-                {
-                    $pi_status="PI Approval Pending";
-                    if($factory{0}->po_required == 1)
-                    {
-                        $po_status="PO Pending";
-                    }
-                    else
-                    {
-                        $po_status="";
-                    }
+  //               $pi_required=$factory{0}->pi_required;
+  //               if($pi_required == 1)
+  //               {
+  //                   $pi_status="PI Approval Pending";
+  //                   if($factory{0}->po_required == 1)
+  //                   {
+  //                       $po_status="PO Pending";
+  //                   }
+  //                   else
+  //                   {
+  //                       $po_status="";
+  //                   }
 
-                }
-                else
-                {
-                    $po_status="PO Pending";
-                    $pi_status="";
-                }
-                $newTasks->po_status = $po_status;
-                $newTasks->pi_status = $pi_status;
-                $newTasks->purchase_order_no = "";
-                $newTasks->po_file = "";
-                $newTasks->order_flag = "reOrder";
-                $newTasks->save();
+  //               }
+  //               else
+  //               {
+  //                   $po_status="PO Pending";
+  //                   $pi_status="";
+  //               }
+  //               $newTasks->po_status = $po_status;
+  //               $newTasks->pi_status = $pi_status;
+  //               $newTasks->purchase_order_no = "";
+  //               $newTasks->po_file = "";
+  //               $newTasks->order_flag = "reOrder";
+  //               $newTasks->save();
                 
-                $data['tesco']=DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$id)->select('*')->get();
-                $i=0;
-                foreach($data['tesco'] as $value)
-                {
-                    $tasks = TescoTHL1OrdersQuantity::find($value->id);
-                    $newTask = $tasks->replicate();
-                    $newTask->save();
-                    $newTask->thl1_order_id = $newTasks->id;
-                    $newTask->count = $counts[$i];
-                    $newTask->save();
-                    $i++;
-                }
-            }
-            if($type == "tesco_thl3_orders")
-            {
-                $tasks = TescoTHL3Orders::find($id);
-                $newTasks = $tasks->replicate();
-                $newTasks->save();
+  //               $data['tesco']=DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$id)->select('*')->get();
+  //               $i=0;
+  //               foreach($data['tesco'] as $value)
+  //               {
+  //                   $tasks = TescoTHL1OrdersQuantity::find($value->id);
+  //                   $newTask = $tasks->replicate();
+  //                   $newTask->save();
+  //                   $newTask->thl1_order_id = $newTasks->id;
+  //                   $newTask->count = $counts[$i];
+  //                   $newTask->save();
+  //                   $i++;
+  //               }
+  //           }
+  //           if($type == "tesco_thl3_orders")
+  //           {
+  //               $tasks = TescoTHL3Orders::find($id);
+  //               $newTasks = $tasks->replicate();
+  //               $newTasks->save();
                 
                 
-                $factory=DB::table('tesco_thl3_orders')->join('customers','customers.id','=','tesco_thl3_orders.tesco_supplier_id')->where('tesco_thl3_orders.id',$id)->select('*')->get();
+  //               $factory=DB::table('tesco_thl3_orders')->join('customers','customers.id','=','tesco_thl3_orders.tesco_supplier_id')->where('tesco_thl3_orders.id',$id)->select('*')->get();
                 
-                $pi_required=$factory{0}->pi_required;
-                if($pi_required == 1)
-                {
-                    $pi_status="PI Approval Pending";
-                    if($factory{0}->po_required == 1)
-                    {
-                        $po_status="PO Pending";
-                    }
-                    else
-                    {
-                        $po_status="";
-                    }
+  //               $pi_required=$factory{0}->pi_required;
+  //               if($pi_required == 1)
+  //               {
+  //                   $pi_status="PI Approval Pending";
+  //                   if($factory{0}->po_required == 1)
+  //                   {
+  //                       $po_status="PO Pending";
+  //                   }
+  //                   else
+  //                   {
+  //                       $po_status="";
+  //                   }
 
-                }
-                else
-                {
-                    $po_status="PO Pending";
-                    $pi_status="";
-                }
-                $newTasks->po_status = $po_status;
-                $newTasks->pi_status = $pi_status;
-                $newTasks->purchase_order_no = "";
-                $newTasks->po_file = "";
-                $newTasks->order_flag = "reOrder";
-                $newTasks->save();
+  //               }
+  //               else
+  //               {
+  //                   $po_status="PO Pending";
+  //                   $pi_status="";
+  //               }
+  //               $newTasks->po_status = $po_status;
+  //               $newTasks->pi_status = $pi_status;
+  //               $newTasks->purchase_order_no = "";
+  //               $newTasks->po_file = "";
+  //               $newTasks->order_flag = "reOrder";
+  //               $newTasks->save();
                 
-                $data['tesco']=DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$id)->select('*')->get();
-                $i=0;
-                foreach($data['tesco'] as $value)
-                {
-                    $tasks = TescoTHL3OrdersQuantity::find($value->id);
-                    $newTask = $tasks->replicate();
-                    $newTask->save();
-                    $newTask->thl3_order_id = $newTasks->id;
-                    $newTask->count = $counts[$i];
-                    $newTask->save();
-                    $i++;
-                }
-            }
-            if($type == "tesco_tsl1_orders")
-            {
-                $tasks = TescoTSL1Orders::find($id);
-                $newTasks = $tasks->replicate();
-                $newTasks->save();
+  //               $data['tesco']=DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$id)->select('*')->get();
+  //               $i=0;
+  //               foreach($data['tesco'] as $value)
+  //               {
+  //                   $tasks = TescoTHL3OrdersQuantity::find($value->id);
+  //                   $newTask = $tasks->replicate();
+  //                   $newTask->save();
+  //                   $newTask->thl3_order_id = $newTasks->id;
+  //                   $newTask->count = $counts[$i];
+  //                   $newTask->save();
+  //                   $i++;
+  //               }
+  //           }
+  //           if($type == "tesco_tsl1_orders")
+  //           {
+  //               $tasks = TescoTSL1Orders::find($id);
+  //               $newTasks = $tasks->replicate();
+  //               $newTasks->save();
                 
                 
-                $factory=DB::table('tesco_tsl1_orders')->join('customers','customers.id','=','tesco_tsl1_orders.tesco_supplier_id')->where('tesco_tsl1_orders.id',$id)->select('*')->get();
+  //               $factory=DB::table('tesco_tsl1_orders')->join('customers','customers.id','=','tesco_tsl1_orders.tesco_supplier_id')->where('tesco_tsl1_orders.id',$id)->select('*')->get();
                 
-                $pi_required=$factory{0}->pi_required;
-                if($pi_required == 1)
-                {
-                    $pi_status="PI Approval Pending";
-                    if($factory{0}->po_required == 1)
-                    {
-                        $po_status="PO Pending";
-                    }
-                    else
-                    {
-                        $po_status="";
-                    }
+  //               $pi_required=$factory{0}->pi_required;
+  //               if($pi_required == 1)
+  //               {
+  //                   $pi_status="PI Approval Pending";
+  //                   if($factory{0}->po_required == 1)
+  //                   {
+  //                       $po_status="PO Pending";
+  //                   }
+  //                   else
+  //                   {
+  //                       $po_status="";
+  //                   }
 
-                }
-                else
-                {
-                    $po_status="PO Pending";
-                    $pi_status="";
-                }
-                $newTasks->po_status = $po_status;
-                $newTasks->pi_status = $pi_status;
-                $newTasks->purchase_order_no = "";
-                $newTasks->po_file = "";
-                $newTasks->order_flag = "reOrder";
-                $newTasks->save();
+  //               }
+  //               else
+  //               {
+  //                   $po_status="PO Pending";
+  //                   $pi_status="";
+  //               }
+  //               $newTasks->po_status = $po_status;
+  //               $newTasks->pi_status = $pi_status;
+  //               $newTasks->purchase_order_no = "";
+  //               $newTasks->po_file = "";
+  //               $newTasks->order_flag = "reOrder";
+  //               $newTasks->save();
                 
-                $data['tesco']=DB::table('tesco_tsl1_orders_quanty')->where('tsl1_order_id',$id)->select('*')->get();
-                $i=0;
-                foreach($data['tesco'] as $value)
-                {
-                    $tasks = TescoTSL1OrdersQuantity::find($value->id);
-                    $newTask = $tasks->replicate();
-                    $newTask->save();
-                    $newTask->tsl1_order_id = $newTasks->id;
-                    $newTask->count = $counts[$i];
-                    $newTask->save();
-                    $i++;
-                }
-            }
-            if($type == "tesco_tsl3_orders")
-            {
-                $tasks = TescoTSL3Orders::find($id);
-                $newTasks = $tasks->replicate();
-                $newTasks->save();
+  //               $data['tesco']=DB::table('tesco_tsl1_orders_quanty')->where('tsl1_order_id',$id)->select('*')->get();
+  //               $i=0;
+  //               foreach($data['tesco'] as $value)
+  //               {
+  //                   $tasks = TescoTSL1OrdersQuantity::find($value->id);
+  //                   $newTask = $tasks->replicate();
+  //                   $newTask->save();
+  //                   $newTask->tsl1_order_id = $newTasks->id;
+  //                   $newTask->count = $counts[$i];
+  //                   $newTask->save();
+  //                   $i++;
+  //               }
+  //           }
+  //           if($type == "tesco_tsl3_orders")
+  //           {
+  //               $tasks = TescoTSL3Orders::find($id);
+  //               $newTasks = $tasks->replicate();
+  //               $newTasks->save();
                 
-                $factory=DB::table('tesco_tsl3_orders')->join('customers','customers.id','=','tesco_tsl3_orders.tesco_supplier_id')->where('tesco_tsl3_orders.id',$id)->select('*')->get();
+  //               $factory=DB::table('tesco_tsl3_orders')->join('customers','customers.id','=','tesco_tsl3_orders.tesco_supplier_id')->where('tesco_tsl3_orders.id',$id)->select('*')->get();
                 
-                $pi_required=$factory{0}->pi_required;
-                if($pi_required == 1)
-                {
-                    $pi_status="PI Approval Pending";
-                    if($factory{0}->po_required == 1)
-                    {
-                        $po_status="PO Pending";
-                    }
-                    else
-                    {
-                        $po_status="";
-                    }
+  //               $pi_required=$factory{0}->pi_required;
+  //               if($pi_required == 1)
+  //               {
+  //                   $pi_status="PI Approval Pending";
+  //                   if($factory{0}->po_required == 1)
+  //                   {
+  //                       $po_status="PO Pending";
+  //                   }
+  //                   else
+  //                   {
+  //                       $po_status="";
+  //                   }
 
-                }
-                else
-                {
-                    $po_status="PO Pending";
-                    $pi_status="";
-                }
-                $newTasks->po_status = $po_status;
-                $newTasks->pi_status = $pi_status;
-                $newTasks->purchase_order_no = "";
-                $newTasks->po_file = "";
-                $newTasks->order_flag = "reOrder";
-                $newTasks->save();
+  //               }
+  //               else
+  //               {
+  //                   $po_status="PO Pending";
+  //                   $pi_status="";
+  //               }
+  //               $newTasks->po_status = $po_status;
+  //               $newTasks->pi_status = $pi_status;
+  //               $newTasks->purchase_order_no = "";
+  //               $newTasks->po_file = "";
+  //               $newTasks->order_flag = "reOrder";
+  //               $newTasks->save();
                 
-                $data['tesco']=DB::table('tesco_tsl3_orders_quanty')->where('tsl3_order_id',$id)->select('*')->get();
-                $i=0;
-                foreach($data['tesco'] as $value)
-                {
-                    $tasks = TescoTSL3OrdersQuantity::find($value->id);
-                    $newTask = $tasks->replicate();
-                    $newTask->save();
-                    $newTask->tsl3_order_id = $newTasks->id;
-                    $newTask->count = $counts[$i];
-                    $newTask->save();
-                    $i++;
-                }
-            }   
-            echo true;
-    }
+  //               $data['tesco']=DB::table('tesco_tsl3_orders_quanty')->where('tsl3_order_id',$id)->select('*')->get();
+  //               $i=0;
+  //               foreach($data['tesco'] as $value)
+  //               {
+  //                   $tasks = TescoTSL3OrdersQuantity::find($value->id);
+  //                   $newTask = $tasks->replicate();
+  //                   $newTask->save();
+  //                   $newTask->tsl3_order_id = $newTasks->id;
+  //                   $newTask->count = $counts[$i];
+  //                   $newTask->save();
+  //                   $i++;
+  //               }
+  //           }   
+  //           echo true;
+  //   }
   /**
      * This Function is used to set the tesco repeat order.
      *
      * @return json value
      */
-  public function setTescoRepeatorder(Request $request)
-  {
-      $type         =   $request->type;
-      $id           =   $request->id;
-      $po           =   $request->po;
-      $counts       =   explode(',',$request->counts);
-      if($type == "tesco_tcl1_orders")
-      {
-        $tasks = TescoTCL1Orders::find($id);
-        $newTasks = $tasks->replicate();
-        $newTasks->save();
+  // public function setTescoRepeatorder(Request $request)
+  // {
+  //     $type         =   $request->type;
+  //     $id           =   $request->id;
+  //     $po           =   $request->po;
+  //     $counts       =   explode(',',$request->counts);
+  //     if($type == "tesco_tcl1_orders")
+  //     {
+  //       $tasks = TescoTCL1Orders::find($id);
+  //       $newTasks = $tasks->replicate();
+  //       $newTasks->save();
         
-        $factory=DB::table('tesco_tcl1_orders')->join('customers','customers.id','=','tesco_tcl1_orders.tesco_supplier_id')->where('tesco_tcl1_orders.id',$id)->select('*')->get();
+  //       $factory=DB::table('tesco_tcl1_orders')->join('customers','customers.id','=','tesco_tcl1_orders.tesco_supplier_id')->where('tesco_tcl1_orders.id',$id)->select('*')->get();
         
-        $pi_required=$factory{0}->pi_required;
-                if($pi_required == 1)
-                {
-                  $pi_status="PI Approval Pending";
-                  if($factory{0}->po_required == 1)
+  //       $pi_required=$factory{0}->pi_required;
+  //               if($pi_required == 1)
+  //               {
+  //                 $pi_status="PI Approval Pending";
+  //                 if($factory{0}->po_required == 1)
+  //                 {
+  //                   $po_status="PO Pending";
+  //                 }
+  //                 else
+  //                 {
+  //                   $po_status="";
+  //                 }
+  //               }
+  //               else
+  //               {
+  //                   $po_status="PO Pending";
+  //                   $pi_status="";
+  //               }
+  //               $newTasks->po_status = $po_status;
+  //               $newTasks->pi_status = $pi_status;
+  //               $newTasks->po_number =$po;
+  //               $newTasks->purchase_order_no = "";
+  //               $newTasks->po_file = "";
+  //               $newTasks->order_flag = "repeatOrder";
+  //               $newTasks->save();
+                
+                
+  //               $data['tesco']=DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$id)->select('*')->get();
+  //               $i=0;
+  //               foreach($data['tesco'] as $value)
+  //               {
+  //                   $tasks = TescoTCL1OrdersQuantity::find($value->id);
+  //                   $newTask = $tasks->replicate();
+  //                   $newTask->save();
+  //                   $newTask->tcl1_order_id = $newTasks->id;
+  //                   $newTask->count = $counts[$i];
+  //                   $newTask->save();
+  //                   $i++;
+  //               }
+  //           }
+  //           if($type == "tesco_tcl2_orders")
+  //           {
+  //               $tasks = TescoTCL2Orders::find($id);
+  //               $newTasks = $tasks->replicate();
+  //               $newTasks->save();
+                
+  //               $factory=DB::table('tesco_tcl2_orders')->join('customers','customers.id','=','tesco_tcl2_orders.tesco_supplier_id')->where('tesco_tcl2_orders.id',$id)->select('*')->get();
+                
+  //               $pi_required=$factory{0}->pi_required;
+  //               if($pi_required == 1)
+  //               {
+  //                   $pi_status="PI Approval Pending";
+  //                   if($factory{0}->po_required == 1)
+  //                   {
+  //                       $po_status="PO Pending";
+  //                   }
+  //                   else
+  //                   {
+  //                       $po_status="";
+  //                   }
+
+  //               }
+  //               else
+  //               {
+  //                   $po_status="PO Pending";
+  //                   $pi_status="";
+  //               }
+  //               $newTasks->po_status = $po_status;
+  //               $newTasks->pi_status = $pi_status;
+  //               $newTasks->po_number =$po;
+  //               $newTasks->purchase_order_no = "";
+  //               $newTasks->po_file = "";
+  //               $newTasks->order_flag = "repeatOrder";
+  //               $newTasks->save();
+                
+  //               $data['tesco']=DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$id)->select('*')->get();
+  //               $i=0;
+  //               foreach($data['tesco'] as $value)
+  //               {
+  //                   $tasks = TescoTCL2OrdersQuantity::find($value->id);
+  //                   $newTask = $tasks->replicate();
+  //                   $newTask->save();
+  //                   $newTask->tcl2_order_id = $newTasks->id;
+  //                   $newTask->count = $counts[$i];
+  //                   $newTask->save();
+  //                   $i++;
+  //               }
+  //           }
+  //           if($type == "tesco_tcl4_orders")
+  //           {
+  //               $tasks = TescoTCL4Orders::find($id);
+  //               $newTasks = $tasks->replicate();
+  //               $newTasks->save();
+                
+                
+  //               $factory=DB::table('tesco_tcl4_orders')->join('customers','customers.id','=','tesco_tcl4_orders.tesco_supplier_id')->where('tesco_tcl4_orders.id',$id)->select('*')->get();
+                
+  //               $pi_required=$factory{0}->pi_required;
+  //               if($pi_required == 1)
+  //               {
+  //                   $pi_status="PI Approval Pending";
+  //                   if($factory{0}->po_required == 1)
+  //                   {
+  //                       $po_status="PO Pending";
+  //                   }
+  //                   else
+  //                   {
+  //                       $po_status="";
+  //                   }
+
+  //               }
+  //               else
+  //               {
+  //                   $po_status="PO Pending";
+  //                   $pi_status="";
+  //               }
+  //               $newTasks->po_status = $po_status;
+  //               $newTasks->pi_status = $pi_status;
+  //               $newTasks->po_number =$po;
+  //               $newTasks->purchase_order_no = "";
+  //               $newTasks->po_file = "";
+  //               $newTasks->order_flag = "repeatOrder";
+  //               $newTasks->save();
+                
+  //               $data['tesco']=DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$id)->select('*')->get();
+  //               $i=0;
+  //               foreach($data['tesco'] as $value)
+  //               {
+  //                   $tasks = TescoTCL4OrdersQuantity::find($value->id);
+  //                   $newTask = $tasks->replicate();
+  //                   $newTask->save();
+  //                   $newTask->tcl4_order_id = $newTasks->id;
+  //                   $newTask->count = $counts[$i];
+  //                   $newTask->save();
+  //                   $i++;
+  //               }
+  //           }
+  //           if($type == "tesco_thl1_orders")
+  //           {
+  //               $tasks = TescoTHL1Orders::find($id);
+  //               $newTasks = $tasks->replicate();
+  //               $newTasks->save();
+                
+                
+  //               $factory=DB::table('tesco_thl1_orders')->join('customers','customers.id','=','tesco_thl1_orders.tesco_supplier_id')->where('tesco_thl1_orders.id',$id)->select('*')->get();
+                
+  //               $pi_required=$factory{0}->pi_required;
+  //               if($pi_required == 1)
+  //               {
+  //                   $pi_status="PI Approval Pending";
+  //                   if($factory{0}->po_required == 1)
+  //                   {
+  //                       $po_status="PO Pending";
+  //                   }
+  //                   else
+  //                   {
+  //                       $po_status="";
+  //                   }
+
+  //               }
+  //               else
+  //               {
+  //                   $po_status="PO Pending";
+  //                   $pi_status="";
+  //               }
+  //               $newTasks->po_status = $po_status;
+  //               $newTasks->pi_status = $pi_status;
+  //               $newTasks->po_number =$po;
+  //               $newTasks->purchase_order_no = "";
+  //               $newTasks->po_file = "";
+  //               $newTasks->order_flag = "repeatOrder";
+  //               $newTasks->save();
+                
+  //               $data['tesco']=DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$id)->select('*')->get();
+  //               $i=0;
+  //               foreach($data['tesco'] as $value)
+  //               {
+  //                   $tasks = TescoTHL1OrdersQuantity::find($value->id);
+  //                   $newTask = $tasks->replicate();
+  //                   $newTask->save();
+  //                   $newTask->thl1_order_id = $newTasks->id;
+  //                   $newTask->count = $counts[$i];
+  //                   $newTask->save();
+  //                   $i++;
+  //               }
+  //           }
+  //           if($type == "tesco_thl3_orders")
+  //           {
+  //               $tasks = TescoTHL3Orders::find($id);
+  //               $newTasks = $tasks->replicate();
+  //               $newTasks->save();
+                
+                
+  //               $factory=DB::table('tesco_thl3_orders')->join('customers','customers.id','=','tesco_thl3_orders.tesco_supplier_id')->where('tesco_thl3_orders.id',$id)->select('*')->get();
+                
+  //               $pi_required=$factory{0}->pi_required;
+  //               if($pi_required == 1)
+  //               {
+  //                   $pi_status="PI Approval Pending";
+  //                   if($factory{0}->po_required == 1)
+  //                   {
+  //                       $po_status="PO Pending";
+  //                   }
+  //                   else
+  //                   {
+  //                       $po_status="";
+  //                   }
+
+  //               }
+  //               else
+  //               {
+  //                   $po_status="PO Pending";
+  //                   $pi_status="";
+  //               }
+  //               $newTasks->po_status = $po_status;
+  //               $newTasks->pi_status = $pi_status;
+  //               $newTasks->po_number =$po;
+  //               $newTasks->purchase_order_no = "";
+  //               $newTasks->po_file = "";
+  //               $newTasks->order_flag = "repeatOrder";
+  //               $newTasks->save();
+                
+  //               $data['tesco']=DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$id)->select('*')->get();
+  //               $i=0;
+  //               foreach($data['tesco'] as $value)
+  //               {
+  //                   $tasks = TescoTHL3OrdersQuantity::find($value->id);
+  //                   $newTask = $tasks->replicate();
+  //                   $newTask->save();
+  //                   $newTask->thl3_order_id = $newTasks->id;
+  //                   $newTask->count = $counts[$i];
+  //                   $newTask->save();
+  //                   $i++;
+  //               }
+  //           }
+  //           if($type == "tesco_tsl1_orders")
+  //           {
+  //               $tasks = TescoTSL1Orders::find($id);
+  //               $newTasks = $tasks->replicate();
+  //               $newTasks->save();
+                
+                
+  //               $factory=DB::table('tesco_tsl1_orders')->join('customers','customers.id','=','tesco_tsl1_orders.tesco_supplier_id')->where('tesco_tsl1_orders.id',$id)->select('*')->get();
+                
+  //               $pi_required=$factory{0}->pi_required;
+  //               if($pi_required == 1)
+  //               {
+  //                   $pi_status="PI Approval Pending";
+  //                   if($factory{0}->po_required == 1)
+  //                   {
+  //                       $po_status="PO Pending";
+  //                   }
+  //                   else
+  //                   {
+  //                       $po_status="";
+  //                   }
+
+  //               }
+  //               else
+  //               {
+  //                   $po_status="PO Pending";
+  //                   $pi_status="";
+  //               }
+  //               $newTasks->po_status = $po_status;
+  //               $newTasks->pi_status = $pi_status;
+  //               $newTasks->po_number =$po;
+  //               $newTasks->purchase_order_no = "";
+  //               $newTasks->po_file = "";
+  //               $newTasks->order_flag = "repeatOrder";
+  //               $newTasks->save();
+                
+  //               $data['tesco']=DB::table('tesco_tsl1_orders_quanty')->where('tsl1_order_id',$id)->select('*')->get();
+  //               $i=0;
+  //               foreach($data['tesco'] as $value)
+  //               {
+  //                   $tasks = TescoTSL1OrdersQuantity::find($value->id);
+  //                   $newTask = $tasks->replicate();
+  //                   $newTask->save();
+  //                   $newTask->tsl1_order_id = $newTasks->id;
+  //                   $newTask->count = $counts[$i];
+  //                   $newTask->save();
+  //                   $i++;
+  //               }
+  //           }
+  //           if($type == "tesco_tsl3_orders")
+  //           {
+  //               $tasks = TescoTSL3Orders::find($id);
+  //               $newTasks = $tasks->replicate();
+  //               $newTasks->save();
+                
+                
+  //               $factory=DB::table('tesco_tsl3_orders')->join('customers','customers.id','=','tesco_tsl3_orders.tesco_supplier_id')->where('tesco_tsl3_orders.id',$id)->select('*')->get();
+                
+  //               $pi_required=$factory{0}->pi_required;
+  //               if($pi_required == 1)
+  //               {
+  //                   $pi_status="PI Approval Pending";
+  //                   if($factory{0}->po_required == 1)
+  //                   {
+  //                       $po_status="PO Pending";
+  //                   }
+  //                   else
+  //                   {
+  //                       $po_status="";
+  //                   }
+
+  //               }
+  //               else
+  //               {
+  //                   $po_status="PO Pending";
+  //                   $pi_status="";
+  //               }
+  //               $newTasks->po_status = $po_status;
+  //               $newTasks->pi_status = $pi_status;
+  //               $newTasks->po_number =$po;
+  //               $newTasks->purchase_order_no = "";
+  //               $newTasks->po_file = "";
+  //               $newTasks->order_flag = "repeatOrder";
+  //               $newTasks->save();
+                
+  //               $data['tesco']=DB::table('tesco_tsl3_orders_quanty')->where('tsl3_order_id',$id)->select('*')->get();
+  //               $i=0;
+  //               foreach($data['tesco'] as $value)
+  //               {
+  //                   $tasks = TescoTSL3OrdersQuantity::find($value->id);
+  //                   $newTask = $tasks->replicate();
+  //                   $newTask->save();
+  //                   $newTask->tsl3_order_id = $newTasks->id;
+  //                   $newTask->count = $counts[$i];
+  //                   $newTask->save();
+  //                   $i++;
+  //               }
+  //           }   
+  //           echo true;
+  //   }
+    /**
+         * Approve tesco order
+         * @param \Illuminate\Http\Request
+         * @author <Praveen>
+         * @return \Illuminate\Http\Response
+         */
+        public function approveTescoOrder(Request $request)
+        {
+            try {
+                  /** [ Creating new object for ApproveTescoOrders() class ] */
+                  $approve_order_obj = new ApproveTescoOrders();
+                  $buyer_id = DB::table("buyers")->where('buyer_name','ilike','Tesco')->pluck('id')->first();
+
+                  $table_array = $request->data_array;
+
+                  if(sizeof($table_array) > 0)
                   {
-                    $po_status="PO Pending";
+                    /** [ Invoking approveTscoOrderClass function using class instance ] */
+                    $approved_order = $approve_order_obj->approveTescoOrderClass($table_array, $buyer_id);
+                  }
+                
+                if($approved_order == "approved")
+                {
+                  $result = response()->json(['error'=> false,'message' =>'success'],200);
+                }
+                else
+                {
+                  $result = response()->json(['error'=> true,'message' =>'Error'],400);
+                }
+
+            } catch (\Exception $e)
+            {
+                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+
+        /**
+         * Cancel tesco order
+         * @param \Illuminate\Http\Request
+         * @author <Praveen>
+         * @return \Illuminate\Http\Response
+         */
+        public function cancelTescoOrder(Request $request)
+        {
+            try {
+                  /** [ Creating new object for CancelTescoOrders() class ] */
+                  $cancel_order_obj = new CancelTescoOrders();
+                  $buyer_id = DB::table("buyers")->where('buyer_name','ilike','Tesco')->pluck('id')->first();
+
+                  $table_array = $request->data_array;
+
+                  if(sizeof($table_array) > 0)
+                  {
+                    /** [ Invoking cancelTescoOrderMethod function using class instance ] */
+                    $canceled_order = $cancel_order_obj->cancelTescoOrderMethod($table_array, $buyer_id);
+                  }
+                
+                  if($canceled_order == "cancelled")
+                  {
+                    $result = response()->json(['error'=> false,'message' =>'success'],200);
                   }
                   else
                   {
-                    $po_status="";
+                    $result = response()->json(['error'=> true,'message' =>'Error'],400);
                   }
-                }
-                else
-                {
-                    $po_status="PO Pending";
-                    $pi_status="";
-                }
-                $newTasks->po_status = $po_status;
-                $newTasks->pi_status = $pi_status;
-                $newTasks->po_number =$po;
-                $newTasks->purchase_order_no = "";
-                $newTasks->po_file = "";
-                $newTasks->order_flag = "repeatOrder";
-                $newTasks->save();
-                
-                
-                $data['tesco']=DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$id)->select('*')->get();
-                $i=0;
-                foreach($data['tesco'] as $value)
-                {
-                    $tasks = TescoTCL1OrdersQuantity::find($value->id);
-                    $newTask = $tasks->replicate();
-                    $newTask->save();
-                    $newTask->tcl1_order_id = $newTasks->id;
-                    $newTask->count = $counts[$i];
-                    $newTask->save();
-                    $i++;
-                }
-            }
-            if($type == "tesco_tcl2_orders")
+
+            } catch (\Exception $e)
             {
-                $tasks = TescoTCL2Orders::find($id);
-                $newTasks = $tasks->replicate();
-                $newTasks->save();
-                
-                $factory=DB::table('tesco_tcl2_orders')->join('customers','customers.id','=','tesco_tcl2_orders.tesco_supplier_id')->where('tesco_tcl2_orders.id',$id)->select('*')->get();
-                
-                $pi_required=$factory{0}->pi_required;
-                if($pi_required == 1)
-                {
-                    $pi_status="PI Approval Pending";
-                    if($factory{0}->po_required == 1)
-                    {
-                        $po_status="PO Pending";
-                    }
-                    else
-                    {
-                        $po_status="";
-                    }
-
-                }
-                else
-                {
-                    $po_status="PO Pending";
-                    $pi_status="";
-                }
-                $newTasks->po_status = $po_status;
-                $newTasks->pi_status = $pi_status;
-                $newTasks->po_number =$po;
-                $newTasks->purchase_order_no = "";
-                $newTasks->po_file = "";
-                $newTasks->order_flag = "repeatOrder";
-                $newTasks->save();
-                
-                $data['tesco']=DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$id)->select('*')->get();
-                $i=0;
-                foreach($data['tesco'] as $value)
-                {
-                    $tasks = TescoTCL2OrdersQuantity::find($value->id);
-                    $newTask = $tasks->replicate();
-                    $newTask->save();
-                    $newTask->tcl2_order_id = $newTasks->id;
-                    $newTask->count = $counts[$i];
-                    $newTask->save();
-                    $i++;
-                }
+                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
             }
-            if($type == "tesco_tcl4_orders")
-            {
-                $tasks = TescoTCL4Orders::find($id);
-                $newTasks = $tasks->replicate();
-                $newTasks->save();
-                
-                
-                $factory=DB::table('tesco_tcl4_orders')->join('customers','customers.id','=','tesco_tcl4_orders.tesco_supplier_id')->where('tesco_tcl4_orders.id',$id)->select('*')->get();
-                
-                $pi_required=$factory{0}->pi_required;
-                if($pi_required == 1)
-                {
-                    $pi_status="PI Approval Pending";
-                    if($factory{0}->po_required == 1)
-                    {
-                        $po_status="PO Pending";
-                    }
-                    else
-                    {
-                        $po_status="";
-                    }
-
-                }
-                else
-                {
-                    $po_status="PO Pending";
-                    $pi_status="";
-                }
-                $newTasks->po_status = $po_status;
-                $newTasks->pi_status = $pi_status;
-                $newTasks->po_number =$po;
-                $newTasks->purchase_order_no = "";
-                $newTasks->po_file = "";
-                $newTasks->order_flag = "repeatOrder";
-                $newTasks->save();
-                
-                $data['tesco']=DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$id)->select('*')->get();
-                $i=0;
-                foreach($data['tesco'] as $value)
-                {
-                    $tasks = TescoTCL4OrdersQuantity::find($value->id);
-                    $newTask = $tasks->replicate();
-                    $newTask->save();
-                    $newTask->tcl4_order_id = $newTasks->id;
-                    $newTask->count = $counts[$i];
-                    $newTask->save();
-                    $i++;
-                }
-            }
-            if($type == "tesco_thl1_orders")
-            {
-                $tasks = TescoTHL1Orders::find($id);
-                $newTasks = $tasks->replicate();
-                $newTasks->save();
-                
-                
-                $factory=DB::table('tesco_thl1_orders')->join('customers','customers.id','=','tesco_thl1_orders.tesco_supplier_id')->where('tesco_thl1_orders.id',$id)->select('*')->get();
-                
-                $pi_required=$factory{0}->pi_required;
-                if($pi_required == 1)
-                {
-                    $pi_status="PI Approval Pending";
-                    if($factory{0}->po_required == 1)
-                    {
-                        $po_status="PO Pending";
-                    }
-                    else
-                    {
-                        $po_status="";
-                    }
-
-                }
-                else
-                {
-                    $po_status="PO Pending";
-                    $pi_status="";
-                }
-                $newTasks->po_status = $po_status;
-                $newTasks->pi_status = $pi_status;
-                $newTasks->po_number =$po;
-                $newTasks->purchase_order_no = "";
-                $newTasks->po_file = "";
-                $newTasks->order_flag = "repeatOrder";
-                $newTasks->save();
-                
-                $data['tesco']=DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$id)->select('*')->get();
-                $i=0;
-                foreach($data['tesco'] as $value)
-                {
-                    $tasks = TescoTHL1OrdersQuantity::find($value->id);
-                    $newTask = $tasks->replicate();
-                    $newTask->save();
-                    $newTask->thl1_order_id = $newTasks->id;
-                    $newTask->count = $counts[$i];
-                    $newTask->save();
-                    $i++;
-                }
-            }
-            if($type == "tesco_thl3_orders")
-            {
-                $tasks = TescoTHL3Orders::find($id);
-                $newTasks = $tasks->replicate();
-                $newTasks->save();
-                
-                
-                $factory=DB::table('tesco_thl3_orders')->join('customers','customers.id','=','tesco_thl3_orders.tesco_supplier_id')->where('tesco_thl3_orders.id',$id)->select('*')->get();
-                
-                $pi_required=$factory{0}->pi_required;
-                if($pi_required == 1)
-                {
-                    $pi_status="PI Approval Pending";
-                    if($factory{0}->po_required == 1)
-                    {
-                        $po_status="PO Pending";
-                    }
-                    else
-                    {
-                        $po_status="";
-                    }
-
-                }
-                else
-                {
-                    $po_status="PO Pending";
-                    $pi_status="";
-                }
-                $newTasks->po_status = $po_status;
-                $newTasks->pi_status = $pi_status;
-                $newTasks->po_number =$po;
-                $newTasks->purchase_order_no = "";
-                $newTasks->po_file = "";
-                $newTasks->order_flag = "repeatOrder";
-                $newTasks->save();
-                
-                $data['tesco']=DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$id)->select('*')->get();
-                $i=0;
-                foreach($data['tesco'] as $value)
-                {
-                    $tasks = TescoTHL3OrdersQuantity::find($value->id);
-                    $newTask = $tasks->replicate();
-                    $newTask->save();
-                    $newTask->thl3_order_id = $newTasks->id;
-                    $newTask->count = $counts[$i];
-                    $newTask->save();
-                    $i++;
-                }
-            }
-            if($type == "tesco_tsl1_orders")
-            {
-                $tasks = TescoTSL1Orders::find($id);
-                $newTasks = $tasks->replicate();
-                $newTasks->save();
-                
-                
-                $factory=DB::table('tesco_tsl1_orders')->join('customers','customers.id','=','tesco_tsl1_orders.tesco_supplier_id')->where('tesco_tsl1_orders.id',$id)->select('*')->get();
-                
-                $pi_required=$factory{0}->pi_required;
-                if($pi_required == 1)
-                {
-                    $pi_status="PI Approval Pending";
-                    if($factory{0}->po_required == 1)
-                    {
-                        $po_status="PO Pending";
-                    }
-                    else
-                    {
-                        $po_status="";
-                    }
-
-                }
-                else
-                {
-                    $po_status="PO Pending";
-                    $pi_status="";
-                }
-                $newTasks->po_status = $po_status;
-                $newTasks->pi_status = $pi_status;
-                $newTasks->po_number =$po;
-                $newTasks->purchase_order_no = "";
-                $newTasks->po_file = "";
-                $newTasks->order_flag = "repeatOrder";
-                $newTasks->save();
-                
-                $data['tesco']=DB::table('tesco_tsl1_orders_quanty')->where('tsl1_order_id',$id)->select('*')->get();
-                $i=0;
-                foreach($data['tesco'] as $value)
-                {
-                    $tasks = TescoTSL1OrdersQuantity::find($value->id);
-                    $newTask = $tasks->replicate();
-                    $newTask->save();
-                    $newTask->tsl1_order_id = $newTasks->id;
-                    $newTask->count = $counts[$i];
-                    $newTask->save();
-                    $i++;
-                }
-            }
-            if($type == "tesco_tsl3_orders")
-            {
-                $tasks = TescoTSL3Orders::find($id);
-                $newTasks = $tasks->replicate();
-                $newTasks->save();
-                
-                
-                $factory=DB::table('tesco_tsl3_orders')->join('customers','customers.id','=','tesco_tsl3_orders.tesco_supplier_id')->where('tesco_tsl3_orders.id',$id)->select('*')->get();
-                
-                $pi_required=$factory{0}->pi_required;
-                if($pi_required == 1)
-                {
-                    $pi_status="PI Approval Pending";
-                    if($factory{0}->po_required == 1)
-                    {
-                        $po_status="PO Pending";
-                    }
-                    else
-                    {
-                        $po_status="";
-                    }
-
-                }
-                else
-                {
-                    $po_status="PO Pending";
-                    $pi_status="";
-                }
-                $newTasks->po_status = $po_status;
-                $newTasks->pi_status = $pi_status;
-                $newTasks->po_number =$po;
-                $newTasks->purchase_order_no = "";
-                $newTasks->po_file = "";
-                $newTasks->order_flag = "repeatOrder";
-                $newTasks->save();
-                
-                $data['tesco']=DB::table('tesco_tsl3_orders_quanty')->where('tsl3_order_id',$id)->select('*')->get();
-                $i=0;
-                foreach($data['tesco'] as $value)
-                {
-                    $tasks = TescoTSL3OrdersQuantity::find($value->id);
-                    $newTask = $tasks->replicate();
-                    $newTask->save();
-                    $newTask->tsl3_order_id = $newTasks->id;
-                    $newTask->count = $counts[$i];
-                    $newTask->save();
-                    $i++;
-                }
-            }   
-            echo true;
-    }
-    /**
-     * Approve tesco order
-     * @param \Illuminate\Http\Request
-     * @author <Praveen>
-     * @return \Illuminate\Http\Response
-     */
-    public function approveTescoOrder(Request $request)
-    {
-        try {
-              $TCL1_id = $request['tcl1_last_id'];
-              $TCL2_id = $request['tcl2_last_id'];
-              $TSL1_id = $request['tsl1_last_id'];
-              $TCL4_id = $request['tcl4_last_id'];
-              $TSL3_id = $request['tsl3_last_id'];
-              $THL1_id = $request['thl1_last_id'];
-              $THL3_id = $request['thl3_last_id'];
-              
-              if($TCL1_id)
-              {
-                TescoTCL1Orders::where('id',$TCL1_id)
-                              ->update([
-                              'order_status'    => "Order Approved",
-                              'artwork_status'  => "Order Approved",
-                              'print_status'    => "Order Approved",
-                            ]);
-              }
-              if($TCL2_id)
-              {
-                TescoTCL2Orders::where('id',$TCL2_id)
-                              ->update([
-                              'order_status'    => "Order Approved",
-                              'artwork_status'  => "Order Approved",
-                              'print_status'    => "Order Approved",
-                            ]);
-              }
-              if($TSL1_id)
-              {
-                TescoTSL1Orders::where('id',$TSL1_id)
-                              ->update([
-                              'order_status'    => "Order Approved",
-                              'artwork_status'  => "Order Approved",
-                              'print_status'    => "Order Approved",
-                            ]);
-              }
-              if($TCL4_id)
-              {
-                TescoTCL4Orders::where('id',$TCL4_id)
-                              ->update([
-                              'order_status'    => "Order Approved",
-                              'artwork_status'  => "Order Approved",
-                              'print_status'    => "Order Approved",
-                            ]);
-              }
-              if($TSL3_id)
-              {
-                TescoTSL3Orders::where('id',$TSL3_id)
-                              ->update([
-                              'order_status'    => "Order Approved",
-                              'artwork_status'  => "Order Approved",
-                              'print_status'    => "Order Approved",
-                            ]);
-              }
-              if($THL1_id)
-              {
-                TescoTHL1Orders::where('id',$THL1_id)
-                              ->update([
-                              'order_status'    => "Order Approved",
-                              'artwork_status'  => "Order Approved",
-                              'print_status'    => "Order Approved",
-                            ]);
-              }
-              if($THL3_id)
-              {
-                TescoTHL3Orders::where('id',$THL3_id)
-                              ->update([
-                              'order_status'    => "Order Approved",
-                              'artwork_status'  => "Order Approved",
-                              'print_status'    => "Order Approved",
-                            ]);
-              }
-            
-           return response()->json(['error'=> false,'message' =>'success'],200);
-
-        } catch (\Exception $e)
-        {
-            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            return $result;
         }
-    }
 }

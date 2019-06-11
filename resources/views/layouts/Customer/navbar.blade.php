@@ -19,7 +19,7 @@
                         <li><a  href="{{ url('/customer/dashboard') }}">Dashboard</a></li>
                         <li><a  href="{{ url('/customer/create-order') }}">Create Order</a></li>
                         <li><a  href="{{ url('/customer/order-status') }}">Order Status</a></li>
-                        <li><a  href="{{ url('/customer/reorder') }}">ReOrder</a></li>
+<!--                        <li><a  href="{{ url('/customer/reorder') }}">ReOrder</a></li>-->
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -32,9 +32,9 @@
 
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a style="cursor: pointer;" onclick="getCustomerProfile({{ Auth::guard('web_customer')->user()->id }})">Profile</a></li>
-									 @if(Auth::guard('web_customer')->user()->role_id == 1)
-									<li><a  href="{{ url('/customer/customers') }}">Customers</a></li>
-									@endif
+              									 @if(Auth::guard('web_customer')->user()->role_id == 1)
+              									<li><a  href="{{ url('/customer/customers') }}">Customers</a></li>
+              									@endif
                                       <li><a style="cursor: pointer;" data-target="#changePasswordModal" data-toggle="modal" data-backdrop="static" data-keyboard="false">Change Password</a></li>
 
                                 </ul>
@@ -155,7 +155,7 @@
                   <div class="col-md-6">
                       <div class="form-group has-feedback">
                           {!! Form::label('customer_name', 'Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('customer_name',$value = '', array('class' => 'form-control input-sm','id' => 'customer_name','placeholder' => 'Name','required')) !!}
+                          {!! Form::text('customer_name',$value = '', array('class' => 'form-control input-sm','id' => 'customer_name','placeholder' => 'Name','required', 'style' => 'text-transform: capitalize;')) !!}
                           <div class="help-block with-errors"></div>
                       </div>
                   </div>

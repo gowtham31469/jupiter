@@ -456,10 +456,10 @@
     pointer-events: none;
     position: absolute;
     height: 16px;
-    left: 50%;
-    top: 50%;
-    margin-top: -8px;
-    width: 80px;
+    left: 49%;
+    top: 27%;
+    margin-top: 54px;
+    width: 83px;
     margin-left: -40px;
     background: rgba(255, 255, 255, 0.9);
     -webkit-transform: scale(1);

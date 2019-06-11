@@ -12,5 +12,22 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // $this->call(UsersTableSeeder::class);
+		$this->call([
+			ErpUsersTableSeeder::class,
+			ErpUsersCompanyMappingTableSeeder::class,
+			ErpUsersBuyerMappingTableSeeder::class,
+			ErpRolesTableSeeder::class,
+			ErpStatusTableSeeder::class,
+			AddCancelStatusToErpStatusTableSeeder::class,
+			AddHoldOrderStatusToErpStatusTabbleSeeder::class,
+			BuyersTableSeeder::class,
+			CnAItemMasterTableSeeder::class,
+			WWItemMasterTableSeeder::class,
+			GerberItemMasterTableSeeder::class,
+			PrimarkItemMasterTableSeeder::class,
+			LIDLItemMasterTableSeeder::class,
+			ERVEItemMasterTableSeeder::class,
+			OSTINItemMasterTableSeeder::class,
+		]);
     }
 }

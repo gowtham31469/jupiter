@@ -6,7 +6,7 @@
               </div>
                 <div class="main-sub-menu">
                   <div class="action-group pull-right sub-menu-button">
-                    <a href="#" data-target="#addCustomerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Customer</a>
+                    <a href="#" data-target="#addCustomerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Customer</a>
                   </div>
                 </div>
                <div class="clearfix"></div>
@@ -81,7 +81,7 @@
                           <div class="col-md-6">
                       <div class="form-group has-feedback">
                           {!! Form::label('customer_add_name', 'Customer Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('customer_add_name',$value = '', array('class' => 'form-control input-sm','id' => 'customer_add_name','placeholder' => 'Customer Name','required')) !!}
+                          {!! Form::text('customer_add_name',$value = '', array('class' => 'form-control input-sm','id' => 'customer_add_name','placeholder' => 'Customer Name','required', 'style' => 'text-transform: capitalize;')) !!}
                           <div class="help-block with-errors"></div>
                       </div>
                   </div>
@@ -98,7 +98,7 @@
 						<div class="col-md-6 edit_forwarder_div">
                       <div class="form-group has-feedback">
                         {!! Form::label('customer_add_company', 'Select Company', ['class' => 'form_label']) !!}
-                          {{ Form::select('customer_add_company',(['' => '-- Select Company --']+ $company),$customer_id,array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'customer_add_company','required','disabled')) }}
+                          {{ Form::select('customer_add_company',(['' => '-- Select Company --']+ $company),$company_id,array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'customer_add_company','required','disabled')) }}
                         <div class="help-block with-errors"></div>
                       </div>
                     </div>
@@ -161,7 +161,7 @@
                   <div class="col-md-6">
                       <div class="form-group has-feedback">
                           {!! Form::label('customer_edit_name', 'Customer Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('customer_edit_name',$value = '', array('class' => 'form-control input-sm','id' => 'customer_edit_name','placeholder' => 'Customer Name','required')) !!}
+                          {!! Form::text('customer_edit_name',$value = '', array('class' => 'form-control input-sm','id' => 'customer_edit_name','placeholder' => 'Customer Name','required', 'style' => 'text-transform: capitalize;')) !!}
                           <div class="help-block with-errors"></div>
                       </div>
                   </div>

@@ -273,12 +273,11 @@ class PrintController extends Controller
 						$yy += 100;
 					}
 					$j++;
-					PDF::RoundedRect(15, $yy, 127, 80, 0, '1111');
-					 file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
-					shell_exec("inkscape -z -e ".public_path('/storage/app/template/demo_'.$j.'.png')." -w 1024 -h 640 ".public_path('/storage/app/template/demo_'.$j.'.svg')."");
-				// PDF::Image(public_path('/storage/app/template/demo_'.$j.'.png'), 15, $yy, 127, 80, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
+			
 					
-					$html = '<img src="'.public_path('/storage/app/template/demo_'.$j.'.png').'">';
+					$svg=urldecode($value);
+					file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
+					$html = '<img style="width:480px;height:302.36220472px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
 					PDF::writeHTMLCell(127, 80, 15, $yy+1, $html, '', 0, 0, false, 'L', false);
 				
 					$i++;
@@ -526,9 +525,18 @@ class PrintController extends Controller
 				$xx+=70;
 			}
 			$j++;
+			
+			
 			file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
-			shell_exec("inkscape -z -e ".public_path('/storage/app/template/demo_'.$j.'.png')." -w 1024 -h 653 ".public_path('/storage/app/template/demo_'.$j.'.svg')."");
-			PDF::Image(public_path('/storage/app/template/demo_'.$j.'.png'), $xx, $yy, 40, 30, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
+			// PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+			$html = '<img style="width:151.18110236px;height:113.38582677px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
+			PDF::writeHTMLCell(42, 32, $xx, $yy, $html, '', 0, 0, false, 'L', false);
+			
+//			
+//			
+//			file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
+//			shell_exec("inkscape -z -e ".public_path('/storage/app/template/demo_'.$j.'.png')." -w 1024 -h 653 ".public_path('/storage/app/template/demo_'.$j.'.svg')."");
+//			PDF::Image(public_path('/storage/app/template/demo_'.$j.'.png'), $xx, $yy, 40, 30, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
 			$i++;
 
 		}

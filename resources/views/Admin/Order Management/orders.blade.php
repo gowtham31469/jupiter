@@ -272,13 +272,101 @@ margin-bottom: 4px;
 content: '';
 margin-left: -117px;
 height: 1px;
-width: 80%;
+width: 75%;
 background: rgba(0,0,0,0.2);
 }
+	
+	
+	.list_div p {
+		margin: 5px 0px 5px 0px;
+	}
+	
+	.list_div p.uvc {
+		font-weight: bold;
+	}
+	
+	.list_div p.name {
+		font-weight: 400;
+		color: #666;
+		font-size: 13px;
+	}
+	
+	.list_div span.label {
+		vertical-align: bottom;
+	}
+	
+	
+	.list_div {
+		padding-top: 50px;
+	}
+	
+	.list-group img {
+		width: 30px;
+		height: 30px;
+	}
+	
+	.list_div li {
+		border: 1px solid #f7f7f7;
+		box-shadow: -1px 2px 4px 1px #0000000f;
+		outline: none;
+	}
+	.nav-tabs-item
+	{
+		border-bottom: 0px solid;
+		    margin-left: 70px;
+	}
+	
+	.sticker {
+		border-radius: 10px;
+		background-color: #1A237E;
+		padding: 3px 15px;
+	}
+	
+	.labels {
+		border-radius: 10px;
+		background-color: #00BCD4;
+		padding: 3px 15px;
+	}
+	
+	.btn-ghost {
+		background-color: #fff;
+		border: 1px solid #818080;
+		color: #818080;
+		padding: 4px -1px;
+		border-radius: 3px;
+		transition: 0.3s ease;
+        font-size: 10px;
+	}
+	
+	.btn-ghost:hover {
+		background-color: #333;
+		color: #fff;
+	}
+	
+	.nav-tabs>.li-item.active>.li-a,
+	.nav-tabs>.li-item.active>.li-a:focus,
+	.nav-tabs>.li-item.active>.li-a:hover {
+		border: 2px solid transparent;
+		border-bottom: 2px solid;
+		color: #273238;
+	}
+	
+	.nav-tabs>.li-item>.li-a:hover {
+		border-color:  rgba(39, 50, 56, 0.66);
+		background-color: transparent;
+		border: 2px solid transparent;
+		border-bottom: 2px solid;
+	}
+	
+/*
+	.left-panel.active {
+    margin-right: 0%;
+}
+*/
 </style>
 <div class="col-sm-12 col-md-12 main">
 	<div class="top-content">
-        <div class="buyer-nav-div">
+        <div class="buyer-nav-div hidden">
            <a class="dropdown-toggle profile-dropdown-admin selected-buyer" style="text-transform:capitalize;cursor: pointer;">Select Buyer</a>
         </div>
         {{ Form::hidden('invisible', $buyer_count, array('id' => 'invisible__count_id')) }}
@@ -386,7 +474,7 @@ background: rgba(0,0,0,0.2);
 							<div class="form-group">
 								<label for="exampleInputFile">PO File</label>
 								<input type="file" id="new_po_file">
-								<p class="help-block">Example block-level help text here.</p>
+								<p class="help-block"></p>
 							</div>
 							
 						</div>
@@ -409,10 +497,11 @@ background: rgba(0,0,0,0.2);
 <div class="modal fade" id="poUploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div id="order-exists-alert"></div>
+        <div id="price-missing-alert"></div>
         <div class="modal-content po-modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="gridSystemModalLabel">Buyer Purchase Order Upload</h4>
+                <h4 class="modal-title" id="gridSystemModalLabel">Customer Purchase Order Upload</h4>
             </div>
             <div class="modal-body">
                 <div class="alert alert-success" id="success-alert">
@@ -483,7 +572,7 @@ background: rgba(0,0,0,0.2);
                    </div>
                    <div class="modal-footer">
                        {!! Form::button('No', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Yes', ['class' => 'btn btn-primary btn-sm','onclick' => 'location.reload()'] ) !!}
+                       {!! Form::button('Yes', ['class' => 'btn btn-primary btn-sm', 'id' => 'cancel_btn','onclick' => 'cancelTescoOrder()'] ) !!}
                    </div>
            </div>
        </div>
@@ -511,12 +600,118 @@ background: rgba(0,0,0,0.2);
                  </div>
                  <div class="modal-footer buyer-selection-modal-footer">
                      {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                     {!! Form::button('Proceed', ['class' => 'btn btn-primary btn-sm proceed-btn','type' => 'submit'] ) !!}
                  </div>
             {!! Form::close() !!}
          </div>
      </div>
  </div>
+
+
+
+<div class="left-panel col-md-12" style="display: none;">
+	<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
+	<div class="div-max">
+		<div class="col-md-7">
+			<h4 class="artwork_name"></h4>
+			<hr>
+			<div class="section-1 sections">
+				<div class="sample-artwork scroll" style="text-align:center;height: calc(100vh - 120px);overflow-y: scroll;"></div>
+			</div>
+		</div>
+		<div class="col-md-5 scroll" style="overflow-y: scroll;height: 100%;">
+			<h4>Quantity Information</h4>
+			<hr>
+
+			<div class="merchandiser-area">
+
+				<div class="quantity"></div>
+				<div class="buttons pull-right" style="margin-top:10px;">
+
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+<!-- Proforma Invoice Modal -->
+<div class="modal fade" id="profoma-invoice" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div style="margin-left: 5px" class="pi_actions pull-right">
+
+                    </div>
+                    <h5><strong>Proforma Invoice for <span id="uvc_number"></span></strong></h5>
+
+                </div>
+                <div class="modal-body" id="proforma-invoice">
+                    <div class="col-md-12 text-center">
+                        <h4><strong><u>Proforma Invoice</u></strong></h4>
+                        <br/>
+                        <br/>
+                    </div>
+                    <div class="row color-invoice">
+                        <div class="col-md-10 col-md-offset-1">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="right" style="float: right">
+                                        <img id="company-logo" style="height: 45px;" src="" class="img-responsive">
+                                        <strong>Date</strong>
+                                        <span style="padding-left: 14px;"> : <span style="padding-left: 6px;" class="pi-date"></span>
+                                        </span></br>
+                                        <strong>PI </strong>
+                                            <span style="padding-left: 31px;"> : </span>
+                                            <span style="padding-left: 8px;" class="pi_number"></span>
+                                        <p class="rev hidden"><strong>Rev no</strong><span style="padding-left: 3px;"> : </span>
+                                        <span style="padding-left: 4px;" class="rev_number"> </span></p>
+                                    </div>
+                                    <div id="company_details">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row">
+                                <strong style="margin-left: 15px; font-size:11px;">Customer Details : </strong>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4" id="bill_to">
+
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4">
+
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 pull-right" id="ship_to" style="padding-left: 50px;">
+
+                                </div>
+                                <div class="col-lg-5 col-md-5 col-sm-5">
+
+                                </div>
+                            </div>
+                            <hr />
+                            <strong>ITEM DESCRIPTION & DETAILS :</strong>
+                            <div class="row" id="item_details">
+
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <p class="text-left"><strong>Payment Terms : </strong><span class="advnc"></span></p><p class="text-left"><strong>Freight Type  : <span class="bond"></span></strong><span class="freight"> </span></p>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12" id="bank_details">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <div style="float:right" class="pi_actions">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 	@endsection @else
 	<script type="text/javascript">
 		window.location = "{{ url('/admin') }}";
@@ -524,9 +719,13 @@ background: rgba(0,0,0,0.2);
 	</script>
 	@endif @section('jqueryIncludes') 
 	<script src="{{ asset('js/Admin/order.js') }}"></script>
+	<script src="{{ asset('js/Admin/tesco-reorder.js') }}"></script>
 	<script src="{{ asset('js/Admin/tesco-orders.js') }}"></script>
+    <script src="{{ asset('js/Admin/tesco-pi.js') }}"></script>
+    <script src="{{ asset('js/Admin/orchestra-pi.js') }}"></script>
     <script src="{{ asset('js/Admin/parser.js') }}"></script>
     <script src="{{ asset('js/Admin/tesco-view-orders.js') }}"></script>
+<script src="{{ asset('js/moment.min.js') }}"></script>
 	<script>
 	$(document).ready (function(){
         $("#success-alert").hide();
@@ -622,6 +821,13 @@ background: rgba(0,0,0,0.2);
 
 		$(document).ready(function() {
 			/** Clear local storage data **/
+			localStorage.removeItem("artwork_back");
+			localStorage.removeItem("back_flag");
+			localStorage.removeItem("order_type_back");
+			localStorage.removeItem("back_zone");
+			localStorage.removeItem("back_template_id");
+			localStorage.removeItem("style_number_back");
+			localStorage.removeItem("po_num_back");
 			localStorage.removeItem("hang_tag");
 			localStorage.removeItem("special_tag");
 			localStorage.removeItem("main_label");
@@ -654,6 +860,27 @@ background: rgba(0,0,0,0.2);
               $('div.buyers-card').removeClass("active");
               $(this).addClass("active");
               $('#hidden-buyer-div').hide();
+
+                /* Save selected buyer into localdb */
+                if ($('.buyers-card.active-buyer.active').length != 0) 
+                {
+                    $('#hidden-buyer-div').hide();
+                    localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
+                    localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
+                    $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
+                    $('#buyerSelectionModalCenter').modal('hide');
+                    var buyer = localStorage.getItem("buyer");
+                    if (buyer === 'orchestra') 
+                    {
+                        orders();
+                    } else if (buyer === 'tesco')  {
+                        tescoOrders(reOrderTesco);
+                    }
+                } else {
+                    localStorage.removeItem("buyer");
+                    localStorage.removeItem("buyer_id");
+                    $('#hidden-buyer-div').show();
+                }
             });
 
             /** [ Show already selected(active) buyer on clicking buyer menu] */
@@ -665,7 +892,8 @@ background: rgba(0,0,0,0.2);
                 } 
                 else 
                 {
-                    $('#'+localStorage.getItem("buyer")).addClass('active');
+                    var id_buyer = localStorage.getItem("buyer").replace("&", "\\&");
+                    $('#'+id_buyer).addClass('active');
                     $("#buyerSelectionModalCenter").modal("show");
                 }
             });
@@ -698,34 +926,14 @@ background: rgba(0,0,0,0.2);
                 if (buyer === 'orchestra') 
                 {
                     orders();
-                } else {
-                    tescoOrders();
+                }  else if (buyer === 'tesco')  {
+                    tescoOrders(reOrderTesco);
                 }
+				else{
+					localStorage.removeItem("buyer")
+					 $("#buyerSelectionModalCenter").modal("show");
+				}
             }
-
-            /** [ Select buyer on clicking proceed button] */
-            $('.proceed-btn').on('click', function() {
-                
-                if ($('.buyers-card.active-buyer.active').length != 0) 
-                {
-                    $('#hidden-buyer-div').hide();
-                    localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
-                    localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
-                    $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
-                    $('#buyerSelectionModalCenter').modal('hide');
-                    var buyer = localStorage.getItem("buyer");
-                    if (buyer === 'orchestra') 
-                    {
-                        orders();
-                    } else {
-                        tescoOrders();
-                    }
-                } else {
-                    localStorage.removeItem("buyer");
-                    localStorage.removeItem("buyer_id");
-                    $('#hidden-buyer-div').show();
-                }
-            });
 
             /** To refresh modal while hidden **/
             $('#buyerSelectionModalCenter').on('hidden.bs.modal', function (e) {
@@ -743,13 +951,15 @@ background: rgba(0,0,0,0.2);
                     if (buyer === 'orchestra') 
                     {
                         orders();
-                    } else {
-                        tescoOrders();
+                    } else if (buyer === 'tesco')  {
+                       tescoOrders(reOrderTesco);
                     }
               }
              })
             
         });
+		
+		
         
 	</script>
 

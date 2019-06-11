@@ -38,11 +38,12 @@ function price_template_list() {
     });
 
     $.ajax({
-        url: base_url + "/admin/" + buyer + "/template-management/template-list",
+        url: base_url + "/admin/template-management/template-hierarchy",
         type: "Post",
         dataType: "json",
         data: {
-            _token: csrf_token
+            _token: csrf_token,
+			buyer:buyer
         },
         beforeSend: function () {
             $(".loader").show();
@@ -84,15 +85,18 @@ function price_template_list() {
                     var csrf_token = $('meta[name="csrf-token"]').attr('content');
                     if(buyer === 'tesco') {
                         var url = base_url + "/admin/" + buyer + "/customer-management/template-view";
-                    } else {
+                    } else if(buyer === 'orchestra') {
                         var url =  base_url + "/admin/" + buyer + "/template-management/template-view";
-                    }
-                                        $.ajax({
+                    } else{
+						var url =  base_url + "/admin/template-management/template-view";
+					}
+                     $.ajax({
                         url: url,
                         type: "Post",
                         dataType: "json",
                         data: {
                             template_id: template_id,
+							buyer:buyer,
                             _token: csrf_token
                         },
                         beforeSend: function () {
@@ -103,12 +107,24 @@ function price_template_list() {
                         success: function (data) {
 
                             if (data.length > 0) {
-                                $('.viewDiv').html('<object id="svg2" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
-                                $('.descriptionDiv').html('<label>Template Name : </label><p>' + data[0].template_name + '</p><label>Reference Number : </label><p>' + data[0].ref_no + '</p><label>Company Name : </label><p>' + data[0].company_name + '</p>')
-                                $('.descriptionDiv').css('margin-top', '20px')
-                                $('.viewDiv').css('margin-top', '0px');
+								
+								if(data[0].template_file != "")
+								{
+									$('.viewDiv').html('<object id="svg2" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
+									$('.descriptionDiv').html('<label>Template Name : </label><p>' + data[0].template_name + '</p><label>Reference Number : </label><p>' + data[0].ref_no + '</p><label>Company Name : </label><p>' + data[0].company_name + '</p>')
+									$('.descriptionDiv').css('margin-top', '20px')
+									$('.viewDiv').css('margin-top', '0px');
+								}
+								else
+								{
+									$('.viewDiv').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover;margin-top: 122px; font-size: 100px;"></i>')
+									$('.descriptionDiv').html('<b>Template Not Found</b>');
+									$('.descriptionDiv').css('margin-top', '0px')
+									$('.viewDiv').css('margin-top', '140px');
+								}
+                               
                             } else {
-                                $('.viewDiv').html('<img style="width:160px;height:150px;object-fit:cover;margin-left: 118px;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
+                                $('.viewDiv').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover;margin-top: 122px; font-size: 100px;"></i>')
                                 $('.descriptionDiv').html('<b>Template Not Found</b>');
                                 $('.descriptionDiv').css('margin-top', '0px')
                                 $('.viewDiv').css('margin-top', '140px');
@@ -140,7 +156,7 @@ function price_template_list() {
  * Method to show the pricing details on a template click
  */
 function showPricing() {
-    $('.viewDiv').append('<hr><div class="template-form"><h4 style="margin-bottom:20px;">Artwork Configuration</h4><form role="form" data-toggle="validator" id="priceForm"><div class="form-group row has-feedback"> <label for="custom_name" class="col-sm-3 col-md-offset-1 col-form-label text-left">Name in Invoice</label><div class="col-md-8"> <input class="form-control input-sm " placeholder="Template Custom Name" required type="text" id="name"> </div></div><div class="form-group row has-feedback"> <label for="moq" class="col-sm-3 col-md-offset-1 col-form-label text-left">MOQ</label> <div class="col-md-8"> <input type="number" class="form-control input-sm" id="moq" oninput="baseMOQ()" placeholder="Minimum Order Quantity"> </div></div> <div class="col-md-offset-1"><button type="button" onclick="addVolume(this,event)" data-id="1" style="margin-bottom: 10px;" class="btn btn-default pull-left add-volume"><i class="fa fa-plus" aria-hidden="true"></i> Add Volume</button></div><div class="col-md-offset-1"><table class="table table-bordered text-center"> <thead> <tr> <th>Line No.</th> <th>Volume Begin</th> <th>Volume End</th> <th>Price</th> <th>Actions</th> </tr></thead> <tbody id="table_row"> <tr> <td class="slno">1</td><td> <div class="form-group has-feedback"> <input type="number" class="form-control input-sm" required="" id="volume_from_1" name="volume_from_1" placeholder="Volume From"> <div class="help-block with-errors"></div></div></td><td> <div class="form-group has-feedback"> <input type="number" class="form-control input-sm" required="" id="volume_to_1" name="volume_to_1" placeholder="Volume To"> <div class="help-block with-errors"></div></div></td><td> <div class="form-group has-feedback"> <input type="number" class="form-control input-sm" required="" id="price_1" name="price_1" placeholder="Price in INR" step="0.01"> <div class="help-block with-errors"></div></div></td><td></td></tr></tbody></table></div><button type="submit" style="margin-bottom:20px;" class="btn btn-primary pull-right">Save</button></form></div>');
+    $('.viewDiv').append('<hr><div class="template-form"><h4 style="margin-bottom:20px;">Artwork Configuration</h4><form role="form" data-toggle="validator" id="priceForm"><div class="form-group row has-feedback"> <label for="custom_name" class="col-sm-3 col-md-offset-1 col-form-label text-left">Name in Invoice</label><div class="col-md-8"> <input class="form-control input-sm " placeholder="Template Custom Name" required type="text" id="name"> </div></div><div class="form-group row has-feedback"> <label for="moq" class="col-sm-3 col-md-offset-1 col-form-label text-left">MOQ</label> <div class="col-md-8"> <input type="number" class="form-control input-sm" id="moq" min=1  onkeypress="return isNumber(event)" oninput="baseMOQ()" placeholder="Minimum Order Quantity"> </div></div> <div class="col-md-offset-1"><button type="button" onclick="addVolume(this,event)" data-id="1" style="margin-bottom: 10px;" class="btn btn-default pull-left add-volume"><i class="fa fa-plus" aria-hidden="true"></i> Add Volume</button></div><div class="col-md-offset-1"><table class="table table-bordered text-center"> <thead> <tr> <th>Line No.</th> <th>Volume Begin</th> <th>Volume End</th> <th>Price (&#x20b9;)</th> <th>Actions</th> </tr></thead> <tbody id="table_row"> <tr> <td class="slno">1</td><td> <div class="form-group has-feedback"> <input min=1 data-min-error="Value should be > 0" type="number" class="form-control input-sm" required="" id="volume_from_1" name="volume_from_1" placeholder="Volume From"> <div class="help-block with-errors"></div></div></td><td> <div class="form-group has-feedback"> <input min=1 data-min-error="Value should be > 0" type="number" class="form-control input-sm" required="" id="volume_to_1" name="volume_to_1" placeholder="Volume To"> <div class="help-block with-errors"></div></div></td><td> <div class="form-group has-feedback"> <input type="number" class="form-control input-sm" required="" id="price_1"  min=0.01 data-min-error="Value should be > 0" name="price_1" placeholder="Price in INR" step="0.01"> <div class="help-block with-errors"></div></div></td><td></td></tr></tbody></table></div><button type="submit" style="margin-bottom:20px;" class="btn btn-primary pull-right">Save</button></form></div>');
 
     $('#priceForm').validator().on('submit', function (e) {
         if (e.isDefaultPrevented())
@@ -182,19 +198,19 @@ try{
                     <td class="slno">'+val+'</td>\
                     <td>\
                         <div class="form-group has-feedback">\
-                            <input type="text" class="form-control input-sm" id="volume_from_'+val+'" name="volume_from_'+val+'" required="" placeholder="Volume From">\
+                            <input  min=1 type="number" data-min-error="Value should be > 0" class="form-control input-sm" id="volume_from_'+val+'" name="volume_from_'+val+'" required="" placeholder="Volume From">\
                             <div class="help-block with-errors"></div>\
                         </div>\
                     </td>\
                     <td>\
                         <div class="form-group has-feedback">\
-                            <input type="text" class="form-control input-sm"  id="volume_to_'+val+'" name="volume_to_'+val+'" required="" placeholder="Volume To">\
+                            <input  min=1 type="number" data-min-error="Value should be > 0" class="form-control input-sm"  id="volume_to_'+val+'" name="volume_to_'+val+'" required="" placeholder="Volume To">\
                             <div class="help-block with-errors"></div>\
                         </div>\
                     </td>\
                     <td>\
                         <div class="form-group has-feedback">\
-                            <input type="text" class="form-control input-sm"  id="price_'+val+'" name="price_'+val+'" required="" placeholder="Price in INR" step="0.01">\
+                            <input min=0.01 type="number" data-min-error="Value should be > 0" class="form-control input-sm"  id="price_'+val+'" name="price_'+val+'" required="" placeholder="Price in INR" step="0.01">\
                             <div class="help-block with-errors"></div>\
                         </div>\
                     </td>';

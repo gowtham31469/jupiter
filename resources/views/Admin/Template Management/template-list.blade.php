@@ -23,27 +23,6 @@
         border: 1px solid #555555;
     }
 
-    .descriptionDiv {
-        background: #fff;
-        padding: 10px;
-        margin-left: -13px;
-        text-align: center;
-        margin-bottom: 11px;
-        position: absolute;
-        bottom: 0;
-        width: 97%;
-        border: 1px dashed #333;
-    }
-
-    .descriptionDiv span {
-        font-weight: 400;
-    }
-
-    .descriptionDiv h4 {
-        color: #333;
-        border-bottom: 1px solid #cacaca;
-        padding-bottom: 8px;
-    }
     p.delta {
         display: inline-block;
         margin-right: 30px;
@@ -58,7 +37,7 @@
 </style>
 <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
-        <div class="buyer-nav-div">
+        <div class="buyer-nav-div hidden">
            <a class="dropdown-toggle profile-dropdown-admin selected-buyer" style="text-transform:capitalize;cursor: pointer;">Select Buyer</a>
         </div>
         {{ Form::hidden('invisible', $buyer_count, array('id' => 'invisible__count_id')) }}
@@ -116,7 +95,6 @@
                      </div>
                      <div class="modal-footer buyer-selection-modal-footer">
                          {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                         {!! Form::button('Proceed', ['class' => 'btn btn-primary btn-sm proceed-btn','type' => 'submit'] ) !!}
                      </div>
                 {!! Form::close() !!}
              </div>
@@ -137,12 +115,12 @@
                     <div class="row">
                        <input name="template_id" id="template_id" value="" class="form-control hidden" >
                         <div class="col-sm-12 col-md-12">
-                            <div class="col-md-7 featuresDiv">
+                            <div class="col-md-10 featuresDiv">
                              
                              
                             </div>
                             <div class="col-md-2">
-                              <button type="button" class="btn raise_btn addNew"> + Add</button>
+                              <button type="button" class="btn btn-primary raise_btn addNew"> + Add</button>
                             </div>
                         </div>
                       
@@ -151,7 +129,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-default btn-sm">Cancel</button>
-                {{ Form::submit('Save', array('class' => 'btn custom_btn btn-sm pull-right')) }}
+                {{ Form::submit('Save', array('class' => 'btn btn-primary btn-sm pull-right')) }}
             </div>
         </div>
           {!! Form::close() !!}
@@ -173,6 +151,21 @@
               $('div.buyers-card').removeClass("active");
               $(this).addClass("active");
               $('#hidden-buyer-div').hide();
+
+              /* Save selected buyer into localdb */
+              if ($('.buyers-card.active-buyer.active').length != 0) 
+              {
+                  $('#hidden-buyer-div').hide();
+                  localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
+                  localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
+                  $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
+                  $('#buyerSelectionModalCenter').modal('hide');
+                  template_list();
+              } else {
+                  localStorage.removeItem("buyer");
+                  localStorage.removeItem("buyer_id");
+                  $('#hidden-buyer-div').show();
+              }
             });
 
             /** [ Show already selected(active) buyer on clicking buyer menu] */
@@ -184,7 +177,8 @@
                 } 
                 else 
                 {
-                    $('#'+localStorage.getItem("buyer")).addClass('active');
+					var id_buyer = localStorage.getItem("buyer").replace("&", "\\&");
+                    $('#'+id_buyer).addClass('active');
                     $("#buyerSelectionModalCenter").modal("show");
                 }
             });
@@ -216,24 +210,6 @@
                 template_list();
             }
 
-            /** [ Select buyer on clicking proceed button] */
-            $('.proceed-btn').on('click', function() {
-                
-                if ($('.buyers-card.active-buyer.active').length != 0) 
-                {
-                    $('#hidden-buyer-div').hide();
-                    localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
-                    localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
-                    $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
-                    $('#buyerSelectionModalCenter').modal('hide');
-                    template_list();
-                } else {
-                    localStorage.removeItem("buyer");
-                    localStorage.removeItem("buyer_id");
-                    $('#hidden-buyer-div').show();
-                }
-            });
-
             /** To refresh modal while hidden **/
             $('#buyerSelectionModalCenter').on('hidden.bs.modal', function (e) {
               $('div.buyers-card').removeClass("active");
@@ -253,8 +229,9 @@
         });
 
          $(document).on('click', '.addNew', function() {
-        $(".featuresDiv").append(`<div class="form-group">
-                {{ Form::textarea('edit_details[]', null, ['class' => 'form-control input-sm','rows' => '3', 'cols'=>'25', 'placeholder' => 'Enter details', 'style' => 'resize:none;']) }}
+        $(".featuresDiv").append(`<div class="row form-group">
+                {{ Form::textarea('edit_details[]', null, ['class' => 'form-control input-sm','rows' => '3', 'cols'=>'25', 'placeholder' => 'Enter details', 'style' => 'resize:none;' ,'required']) }}
+                  
         </div>`);
         });
          $('.modal').on('hidden.bs.modal', function (e) {

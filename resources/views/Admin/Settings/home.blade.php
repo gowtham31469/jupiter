@@ -1,7 +1,7 @@
 @extends('layouts.Admin.app') @if (Auth::guard("web")->user()) @section('content')
 <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
-        <div class="buyer-nav-div">
+        <div class="buyer-nav-div hidden">
            <a class="dropdown-toggle profile-dropdown-admin selected-buyer" style="text-transform:capitalize;cursor: pointer;">Select Buyer</a>
         </div>
         {{ Form::hidden('invisible', $buyer_count, array('id' => 'invisible__count_id')) }}
@@ -22,7 +22,7 @@
               <li id="6" onclick="compositions()"><a>Compositions</a></li>
               <li id="7" onclick="parts()"><a>Parts</a></li>
               <li id="8"  onclick="sizeChart()"><a>Size Chart</a></li>
-              <li id="8"  onclick="orchestraSymbols()"><a>Symbols</a></li>
+              <li id="9"  onclick="orchestraSymbols()"><a>Symbols</a></li>
             </ul>
           </div>
         <div class="tesco-sidebar sidebar style-4" style="display: none;">
@@ -30,7 +30,7 @@
           <ul class="customer-select meta-data-list-1">
             <li id="1" onclick="tescoBrands()"><a class="active">Brands</a></li>
             <li id="2" onclick="tescoDepartment()"><a>Departments</a></li>
-            <li id="3" onclick="tescoSuppliers()"><a>Suppliers</a></li>
+            <li id="3" onclick="tescoSuppliers()"><a>Customers</a></li>
             <li id="4"  onclick="tescoSizeChart()"><a>Size Chart</a></li>
           </ul>
         </div>
@@ -1137,14 +1137,14 @@
                       <div class="col-md-6">
                         <div class="form-group has-feedback">
                           {!! Form::label('cm', 'Centimeters', ['class' => 'form_label']) !!}
-                          {!! Form::text('cm',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Centimeters','required','onkeypress' => 'return isNumberKey(event)')) !!}
+                          {!! Form::text('cm',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Centimeters','required','onkeypress' => 'return isNumber(event)')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group has-feedback">
                           {!! Form::label('inch', 'Inches', ['class' => 'form_label']) !!}
-                          {!! Form::text('inch',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Inches','required','onkeypress' => 'return isNumberKey(event)')) !!}
+                          {!! Form::text('inch',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Inches','required','onkeypress' => 'return isNumber(event)')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                       </div>
@@ -1181,14 +1181,14 @@
                       <div class="col-md-6">
                         <div class="form-group has-feedback">
                           {!! Form::label('edit_cm', 'Centimeters', ['class' => 'form_label']) !!}
-                          {!! Form::text('edit_cm',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Centimeters','required','onkeypress' => 'return isNumberKey(event)')) !!}
+                          {!! Form::text('edit_cm',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Centimeters','required','onkeypress' => 'return isNumber(event)')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group has-feedback">
                           {!! Form::label('edit_inch', 'Inches', ['class' => 'form_label']) !!}
-                          {!! Form::text('edit_inch',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Inches','required','onkeypress' => 'return isNumberKey(event)')) !!}
+                          {!! Form::text('edit_inch',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Inches','required','onkeypress' => 'return isNumber(event)')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                       </div>
@@ -1215,7 +1215,7 @@
             </div>
             {!! Form::open(['id' => 'add_orchestra_symbols_form','data-toggle' => 'validator','role' => 'form']) !!}
                 <div class="modal-body">
-     
+                    <div class="hidden-error"></div>
                     <div class="form-group has-feedback">
                      
                          {!! Form::label('symbol_category', 'Category', ['class' => 'form_label']) !!}
@@ -1225,9 +1225,9 @@
                     
                     <div class="form-group has-feedback">
                      
-                         {!! Form::label('cofreet_symbol', 'Cofreet Symbol', ['class' => 'form_label']) !!}
+                         {!! Form::label('cofreet_symbol', 'Cofreet Symbol (*.png only)', ['class' => 'form_label']) !!}
                          <div class="row">
-                         <div class="col-md-2"> <img width="30px" id="add_cofreet_symbol" src="" alt="Null"></div>
+                         <div class="col-md-2"> <img width="30px" id="add_cofreet_symbol" src="/not-available.png" alt="symbol"></div>
                          <div class="col-md-10"> {{ Form::file('cofreet_symbol', ['required', 'accept' => 'image/png']) }}</div>
                          </div>
                       
@@ -1235,9 +1235,9 @@
                     </div>
                     <div class="form-group has-feedback">
                      
-                         {!! Form::label('astms_symbol', 'Astms Symbol', ['class' => 'form_label']) !!}
+                         {!! Form::label('astms_symbol', 'Astms Symbol (*.png only)', ['class' => 'form_label']) !!}
                          <div class="row">
-                         <div class="col-md-2"><img width="30px" id="add_astms_symbol" src="" alt="Null"></div>
+                         <div class="col-md-2"><img width="30px" id="add_astms_symbol" src="/not-available.png" alt="symbol"></div>
                          <div class="col-md-10">{{ Form::file('astms_symbol', ['required', 'accept' => 'image/png']) }}</div>
                          </div>
                          
@@ -1282,7 +1282,7 @@
                     
                     <div class="form-group has-feedback">
                      
-                         {!! Form::label('edit_cofreet_symbol', 'Cofreet Symbol', ['class' => 'form_label']) !!}
+                         {!! Form::label('edit_cofreet_symbol', 'Cofreet Symbol (*.png only)', ['class' => 'form_label']) !!}
                         
                          <div class="row">
                          <div class="col-md-2"> <img width="30px" id="cofreet_image" src="" alt="Null"></div>
@@ -1297,7 +1297,7 @@
                     </div>
                     <div class="form-group has-feedback">
                      
-                         {!! Form::label('edit_astms_symbol', 'Astms Symbol', ['class' => 'form_label']) !!}
+                         {!! Form::label('edit_astms_symbol', 'Astms Symbol (*.png only)', ['class' => 'form_label']) !!}
                          <div class="row">
                          <div class="col-md-2"><img width="30px" id="astms_image" src="" alt="Null"></div>
                          <div class="hidden hidden_edit_astms_symbol">
@@ -1342,7 +1342,7 @@
                       <div id="tesco_brand_result"></div>
                         <div class="form-group has-feedback">
                           {!! Form::label('brand_name', 'Brand Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('brand_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Brand Name','required')) !!}
+                          {!! Form::text('brand_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Brand Name','required', 'maxlength' => '25')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -1369,7 +1369,7 @@
                      {!! Form::hidden('edit_tesco_brands_id',$value = null, array('id'=>'edit_tesco_brands_id','class' => 'form-control input-sm')) !!}
                        <div class="form-group has-feedback">
                          {!! Form::label('edit_brand_name', 'Brand Name', ['class' => 'form_label']) !!}
-                         {!! Form::text('edit_brand_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Brand Name','required')) !!}
+                         {!! Form::text('edit_brand_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Brand Name','required', 'maxlength' => '25')) !!}
                          <div class="help-block with-errors"></div>
                        </div>
                    </div>
@@ -1397,17 +1397,17 @@
                       <div id="tesco_department_result"></div>
                         <div class="form-group has-feedback">
                           {!! Form::label('department_name', 'Department Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('department_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Department Name','required')) !!}
+                          {!! Form::text('department_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Department Name','required', 'maxlength' => '25')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
                           {!! Form::label('pantone', 'Pantone', ['class' => 'form_label']) !!}
-                          {!! Form::text('pantone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Pantone','required')) !!}
+                          {!! Form::text('pantone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Pantone','required', 'maxlength' => '10')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
                           {!! Form::label('rbg', 'RBG', ['class' => 'form_label']) !!}
-                          {!! Form::text('rbg',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'RBG','required')) !!}
+                          {!! Form::text('rbg',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'RBG','required', 'maxlength' => '10')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -1434,17 +1434,17 @@
                      {!! Form::hidden('edit_tesco_departments_id',$value = null, array('id'=>'edit_tesco_departments_id','class' => 'form-control input-sm')) !!}
                        <div class="form-group has-feedback">
                          {!! Form::label('edit_department_name', 'Department Name', ['class' => 'form_label']) !!}
-                         {!! Form::text('edit_department_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Department Name','required')) !!}
+                         {!! Form::text('edit_department_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Department Name','required', 'maxlength' => '25')) !!}
                          <div class="help-block with-errors"></div>
                        </div>
                        <div class="form-group has-feedback">
                          {!! Form::label('edit_pantone_name', 'Pantone Name', ['class' => 'form_label']) !!}
-                         {!! Form::text('edit_pantone_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Pantone Name','required')) !!}
+                         {!! Form::text('edit_pantone_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Pantone Name','required', 'maxlength' => '10')) !!}
                          <div class="help-block with-errors"></div>
                        </div>
                        <div class="form-group has-feedback">
                          {!! Form::label('edit_rbg_name', 'RBG Name', ['class' => 'form_label']) !!}
-                         {!! Form::text('edit_rbg_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'RBG Name','required')) !!}
+                         {!! Form::text('edit_rbg_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'RBG Name','required', 'maxlength' => '10')) !!}
                          <div class="help-block with-errors"></div>
                        </div>
                        
@@ -1466,19 +1466,19 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="addTescoSupplierLabel">Add Supplier</h4>
+                    <h4 class="modal-title" id="addTescoSupplierLabel">Add Customer</h4>
                 </div>
                 {!! Form::open(['id' => 'add_tesco_suppliers_form','data-toggle' => 'validator','role' => 'form']) !!}
                     <div class="modal-body">
                       <div id="supplier_result"></div>
                         <div class="form-group has-feedback">
-                          {!! Form::label('supplier_name', 'Supplier Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('supplier_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Supplier Name','required')) !!}
+                          {!! Form::label('supplier_name', 'Customer Name', ['class' => 'form_label']) !!}
+                          {!! Form::text('supplier_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Customer Name','required', 'maxlength' => '50')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
-                          {!! Form::label('supplier_code', 'Supplier Code', ['class' => 'form_label']) !!}
-                          {!! Form::text('supplier_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Supplier Code','required','onkeypress' => 'return isNumberKey(event)')) !!}
+                          {!! Form::label('supplier_code', 'Customer Code', ['class' => 'form_label']) !!}
+                          {!! Form::text('supplier_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Customer Code','required','onkeypress' => 'return isNumber(event)', 'maxlength' => '15')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -1497,20 +1497,20 @@
            <div class="modal-content">
                <div class="modal-header">
                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                   <h4 class="modal-title" id="myModalLabel">Edit Supplier</h4>
+                   <h4 class="modal-title" id="myModalLabel">Edit Customer</h4>
                </div>
                {!! Form::open(['id' => 'edit_tesco_suppliers_form','data-toggle' => 'validator','role' => 'form']) !!}
                    <div class="modal-body">
                     <div id="edit_supplier_result"></div>
                      {!! Form::hidden('edit_tesco_suppliers_id',$value = null, array('id'=>'edit_tesco_suppliers_id','class' => 'form-control input-sm')) !!}
                        <div class="form-group has-feedback">
-                         {!! Form::label('edit_supplier_name', 'Supplier Name', ['class' => 'form_label']) !!}
-                         {!! Form::text('edit_supplier_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Supplier Name','required')) !!}
+                         {!! Form::label('edit_supplier_name', 'Customer Name', ['class' => 'form_label']) !!}
+                         {!! Form::text('edit_supplier_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Customer Name','required', 'maxlength' => '50')) !!}
                          <div class="help-block with-errors"></div>
                        </div>
                        <div class="form-group has-feedback">
-                         {!! Form::label('edit_supplier_code', 'Supplier Code', ['class' => 'form_label']) !!}
-                         {!! Form::text('edit_supplier_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Supplier Code','required')) !!}
+                         {!! Form::label('edit_supplier_code', 'Customer Code', ['class' => 'form_label']) !!}
+                         {!! Form::text('edit_supplier_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Customer Code','required', 'maxlength' => '15')) !!}
                          <div class="help-block with-errors"></div>
                        </div>
                        
@@ -1537,17 +1537,17 @@
                         <div id="tesco_sizechart_result"></div>
                         <div class="form-group has-feedback">
                           {!! Form::label('po_size', 'PO Size', ['class' => 'form_label']) !!}
-                          {!! Form::text('po_size',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'PO Size','required')) !!}
+                          {!! Form::text('po_size',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'PO Size','required', 'maxlength' => '10')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
                           {!! Form::label('uk', 'UK', ['class' => 'form_label']) !!}
-                          {!! Form::text('uk',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'UK','required')) !!}
+                          {!! Form::text('uk',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'UK','required', 'maxlength' => '10')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
                           {!! Form::label('ce', 'CE', ['class' => 'form_label']) !!}
-                          {!! Form::text('ce',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'CE','required')) !!}
+                          {!! Form::text('ce',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'CE','required', 'maxlength' => '10')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -1574,17 +1574,17 @@
                      {!! Form::hidden('edit_tesco_size_charts_id',$value = null, array('id'=>'edit_tesco_size_charts_id','class' => 'form-control input-sm')) !!}
                        <div class="form-group has-feedback">
                          {!! Form::label('edit_po_size', 'PO Size', ['class' => 'form_label']) !!}
-                         {!! Form::text('edit_po_size',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'PO Size','required')) !!}
+                         {!! Form::text('edit_po_size',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'PO Size','required', 'maxlength' => '10')) !!}
                          <div class="help-block with-errors"></div>
                        </div>
                        <div class="form-group has-feedback">
                          {!! Form::label('edit_uk', 'UK', ['class' => 'form_label']) !!}
-                         {!! Form::text('edit_uk',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'UK','required')) !!}
+                         {!! Form::text('edit_uk',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'UK','required', 'maxlength' => '10')) !!}
                          <div class="help-block with-errors"></div>
                        </div>
                        <div class="form-group has-feedback">
                          {!! Form::label('edit_ce', 'CE', ['class' => 'form_label']) !!}
-                         {!! Form::text('edit_ce',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'CE','required')) !!}
+                         {!! Form::text('edit_ce',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'CE','required', 'maxlength' => '10')) !!}
                          <div class="help-block with-errors"></div>
                        </div>
                        
@@ -1598,6 +1598,237 @@
        </div>
    </div>
 
+   {{-- Add  Tax Code Modal --}}
+   <div class="modal fade" id="addTaxCodesModal" tabindex="-1" role="dialog" aria-labelledby="addTaxCodeLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="addTaxCodeLabel">Add Tax Code</h4>
+                </div>
+                {!! Form::open(['id' => 'add_tax_codes_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                        <div id="taxcode_result"></div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('tax_type', 'Tax Type', ['class' => 'form_label']) !!}
+                          {!! Form::text('tax_type',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tax Type','required', 'maxlength' => '50')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('tax', 'Tax (%)', ['class' => 'form_label']) !!}
+                          {!! Form::text('tax',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tax In %','required','onkeypress' => 'return isNumber(event)')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('tax_code', 'Tax Code', ['class' => 'form_label']) !!}
+                          {!! Form::text('tax_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tax Code','required', 'maxlength' => '5')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::submit('Submit', ['class' => 'btn btn-primary btn-sm'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+
+    {{-- Edit Tesco Tax Code Modal --}}
+   <div class="modal fade" id="editTaxCodesModal" tabindex="-1" role="dialog" aria-labelledby="editTaxCodeLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="editTaxCodeLabel">Edit Tax Code</h4>
+                </div>
+                {!! Form::open(['id' => 'edit_tax_codes_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                        <div id="edit_taxcode_result"></div>
+                        {!! Form::hidden('edit_tax_code_id',$value = null, array('id'=>'edit_tax_code_id','class' => 'form-control input-sm')) !!}
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_tax_type', 'Tax Type', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_tax_type',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tax Type','required', 'maxlength' => '50')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_tax', 'Tax (%)', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_tax',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tax In %','required','onkeypress' => 'return isNumber(event)')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_tax_code', 'Tax Code', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_tax_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tax Code','required', 'maxlength' => '5')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::submit('Update', ['class' => 'btn btn-primary btn-sm'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+    {{-- Add Raw Material Master Modal --}}
+   <div class="modal fade" id="addTescoMaterialModal" tabindex="-1" role="dialog" aria-labelledby="addTescoMaterialLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="addTescoMaterialLabel">Add Material</h4>
+                </div>
+                {!! Form::open(['id' => 'add_tesco_material_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                        <div id="tesco_material_result"></div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('material_name_employee', 'Material Name For Employee', ['class' => 'form_label']) !!}
+                          {!! Form::text('material_name_employee',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Material Name For Employee','required', 'maxlength' => '50')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('material_name_production', 'Material Name For Production', ['class' => 'form_label']) !!}
+                          {!! Form::text('material_name_production',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Material Name For Production','required', 'maxlength' => '50')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('material_name_purchase', 'Material Name For Purchase', ['class' => 'form_label']) !!}
+                          {!! Form::text('material_name_purchase',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Material Name For Purchase','required', 'maxlength' => '50')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::submit('Submit', ['class' => 'btn btn-primary btn-sm'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+
+    {{-- Edit Raw material Modal --}}
+    <div class="modal fade" id="editTescoMaterialModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Edit Material</h4>
+               </div>
+               {!! Form::open(['id' => 'edit_tesco_material_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body"> 
+                    <div id="edit_tesco_material_result"></div>
+                     {!! Form::hidden('edit_tesco_material_id',$value = null, array('id'=>'edit_tesco_material_id','class' => 'form-control input-sm')) !!}
+                       <div class="form-group has-feedback">
+                          {!! Form::label('edit_material_name_employee', 'Material Name For Employee', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_material_name_employee',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Material Name For Employee','required', 'maxlength' => '50')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_material_name_production', 'Material Name For Production', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_material_name_production',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Material Name For Production','required', 'maxlength' => '50')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_material_name_purchase', 'Material Name For Purchase', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_material_name_purchase',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Material Name For Purchase','required', 'maxlength' => '50')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::submit('Update', ['class' => 'btn btn-primary btn-sm'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
+       </div>
+   </div>
+    {{-- Add Tesco error report email Modal --}}
+   <div class="modal fade" id="addTescoErrorReportEmailModal" tabindex="-1" role="dialog" aria-labelledby="addTescoErrorReportEmailLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="addTescoErrorReportEmailLabel">Add Error Report Email</h4>
+                </div>
+                {!! Form::open(['id' => 'add_tesco_error_report_email_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                        <div id="tesco_error_report_email_result"></div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('company', 'Select a Company', ['class' => 'form_label']) !!}
+                          {{  Form::select('company',(['' => '-- Select a Company --']+ $company),'',array('class' => 'form-control input-sm','id'=>'company','required')) }}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('error_case', 'Select an Error Case', ['class' => 'form_label']) !!}
+                          {{  Form::select('error_case',(['' => '-- Select an Error Case --','Wrong Price' => 'Wrong Price','Wrong Quantity' => 'Wrong Quantity','Wrong Reference' => 'Wrong Reference','Wrong Style' => 'Wrong Style','Partial PO' => 'Partial PO','Others' => 'Others']),'',array('class' => 'form-control input-sm','id'=>'error_case','required')) }}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('contact_person', 'Contact Person Name', ['class' => 'form_label']) !!}
+                          {!! Form::text('contact_person',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Contact Person Name','maxlength' => '25')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('error_email', 'Contact Email', ['class' => 'form_label']) !!}
+                          <div class="input-group">
+                            <span class="input-group-addon input-sm" id="basic-addon1">@</span>
+                            {!! Form::email('error_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Contact Email','required','onkeyup' => '$(this).val($(this).val().toLowerCase());',  'maxlength' => '50')) !!}
+                          </div>
+                          <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::submit('Submit', ['class' => 'btn btn-primary btn-sm'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+    {{-- Edit Tesco error report email Modal --}}
+   <div class="modal fade" id="editTescoErrorReportEmailModal" tabindex="-1" role="dialog" aria-labelledby="editTescoErrorReportEmailLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="editTescoErrorReportEmailLabel">Edit Error Report Email</h4>
+                </div>
+                {!! Form::open(['id' => 'edit_tesco_error_report_email_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                        <div id="edit_tesco_error_report_email_result"></div>
+                        {!! Form::hidden('edit_tesco_error_report_email_id',$value = null, array('id'=>'edit_tesco_error_report_email_id','class' => 'form-control input-sm')) !!}
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_company', 'Select a Company', ['class' => 'form_label']) !!}
+                          {{  Form::select('edit_company',(['' => '-- Select a Company --']+ $company),'',array('class' => 'form-control input-sm','id'=>'edit_company','required')) }}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_error_case', 'Select an Error Case', ['class' => 'form_label']) !!}
+                          {{  Form::select('edit_error_case',(['' => '-- Select an Error Case --','Wrong Price' => 'Wrong Price','Wrong Quantity' => 'Wrong Quantity','Wrong Reference' => 'Wrong Reference','Wrong Style' => 'Wrong Style','Partial PO' => 'Partial PO','Others' => 'Others']),'',array('class' => 'form-control input-sm','id'=>'edit_error_case','required')) }}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_contact_person', 'Contact Person Name', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_contact_person',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Contact Person Name','maxlength' => '25')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_error_email', 'Contact Email', ['class' => 'form_label']) !!}
+                          <div class="input-group">
+                            <span class="input-group-addon input-sm" id="basic-addon1">@</span>
+                            {!! Form::email('edit_error_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Contact Email','required','onkeyup' => '$(this).val($(this).val().toLowerCase());',  'maxlength' => '50')) !!}
+                          </div>
+                          <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::submit('Update', ['class' => 'btn btn-primary btn-sm'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
    {{-- Show snackbar html code --}}
     <div id="snackbar"><span class="snackbar_span"></span></div>
     <!-- Buyer selection Modal -->
@@ -1622,7 +1853,6 @@
                      </div>
                      <div class="modal-footer buyer-selection-modal-footer">
                          {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                         {!! Form::button('Proceed', ['class' => 'btn btn-primary btn-sm proceed-btn','type' => 'submit'] ) !!}
                      </div>
                 {!! Form::close() !!}
              </div>
@@ -1649,6 +1879,36 @@
          $('div.buyers-card').removeClass("active");
          $(this).addClass("active");
          $('#hidden-buyer-div').hide();
+
+         /* Save selected buyer into localdb */
+         if ($('.buyers-card.active-buyer.active').length != 0) 
+         {
+             $('#hidden-buyer-div').hide();
+             localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
+             localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
+             $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
+             $('#buyerSelectionModalCenter').modal('hide');
+             var buyer = localStorage.getItem("buyer");
+              /* call orchestraSettings function from orchestra-settings.js*/
+              /**  [ Show orchestraSettings page based on buyer selection ] */
+             if(buyer === 'orchestra')
+              {
+                $('.meta-data-list li a').removeClass("active");
+                $('.meta-data-list li:first a').addClass("active");
+                   orchestraSettings();
+
+              }
+              else
+              {
+                $('.meta-data-list-1 li a').removeClass("active");
+                $('.meta-data-list-1 li:first a').addClass("active");
+                tescoBrands();
+              } 
+         } else {
+             localStorage.removeItem("buyer");
+             localStorage.removeItem("buyer_id");
+             $('#hidden-buyer-div').show();
+         }
        });
 
        /** [ Show already selected(active) buyer on clicking buyer menu] */
@@ -1707,39 +1967,6 @@
             } 
        }
 
-       /** [ Select buyer on clicking proceed button] */
-       $('.proceed-btn').on('click', function() {
-           
-           if ($('.buyers-card.active-buyer.active').length != 0) 
-           {
-               $('#hidden-buyer-div').hide();
-               localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
-               localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
-               $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
-               $('#buyerSelectionModalCenter').modal('hide');
-               var buyer = localStorage.getItem("buyer");
-                /* call orchestraSettings function from orchestra-settings.js*/
-                /**  [ Show orchestraSettings page based on buyer selection ] */
-               if(buyer === 'orchestra')
-                {
-                  $('.meta-data-list li a').removeClass("active");
-                  $('.meta-data-list li:first a').addClass("active");
-                     orchestraSettings();
-
-                }
-                else
-                {
-                  $('.meta-data-list-1 li a').removeClass("active");
-                  $('.meta-data-list-1 li:first a').addClass("active");
-                  tescoBrands();
-                } 
-           } else {
-               localStorage.removeItem("buyer");
-               localStorage.removeItem("buyer_id");
-               $('#hidden-buyer-div').show();
-           }
-       });
-
        /** To refresh modal while hidden **/
        $('#buyerSelectionModalCenter').on('hidden.bs.modal', function (e) {
          $('div.buyers-card').removeClass("active");
@@ -1784,6 +2011,9 @@
         $('#add_tesco_departments_form').trigger("reset");
         $('#add_tesco_suppliers_form').trigger("reset");
         $('#add_tesco_size_charts_form').trigger("reset");
+        $('#add_tax_codes_form').trigger("reset");
+        $('#add_tesco_material_form').trigger("reset");
+        $('#add_tesco_error_report_email_form').trigger("reset");
         $('#edit_orchestra_symbols_form').trigger("reset");
         $('#add_orchestra_symbols_form').trigger("reset");
         $('#supplier_result').hide();
@@ -1794,6 +2024,13 @@
         $('#edit_tesco_department_result').hide();
         $('#tesco_brand_result').hide();
         $('#edit_tesco_brand_result').hide();
+        $('#taxcode_result').hide();
+        $('#edit_taxcode_result').hide();
+        $('#tesco_material_result').hide();
+        $('#edit_tesco_material_result').hide();
+        $('#tesco_error_report_email_result').hide();
+        $('#edit_tesco_error_report_email_result').hide();
+        $('.hidden-error').html('');
        })
 
       /** Add orchestra garment form validation **/
@@ -2460,6 +2697,140 @@
            makeSizeChartDisabled(id,csrf_token)
        });
 
+     /** Add  Tax Code form validation **/
+     $('#add_tax_codes_form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented())
+        {
+
+        }
+        else
+        {
+           e.preventDefault();
+           /* call addTaxCodes function from  tesco-settings.js*/
+           addTaxCodes();
+        }
+      })
+       
+         /** get edit  tax code details **/
+       $(document).on('click','.edit-taxcodes',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           /* call getTaxCodesById function from tesco-settings.js*/
+           getTaxCodesById(id);
+       });
+
+       /** submit edit  tax code form **/
+       $('#edit_tax_codes_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            /* call editTaxCodes function from tesco-settings.js*/
+            editTaxCode();
+         }
+       })
+
+     /** Add Tesco material form validation **/
+     $('#add_tesco_material_form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented())
+        {
+
+        }
+        else
+        {
+           e.preventDefault();
+           /* call addTescoMaterial function from  tesco-settings.js*/
+           addTescoMaterial();
+        }
+      })
+       
+       /** get edit Tesco material details **/
+       $(document).on('click','.edit-tesco-material',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           /* call getTescoMaterialById function from tesco-settings.js*/
+           getTescoMaterialById(id);
+       });
+
+       /** submit edit Tesco material form **/
+       $('#edit_tesco_material_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            /* call editTescoMaterial function from tesco-settings.js*/
+            editTescoMaterial();
+         }
+       })
+       /** To Enable  Material  on click **/
+       $(document).on('click', '#make_material_enabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeMaterialEnabled function from tesco-settings.js*/
+           makeMaterialEnabled(id,csrf_token)
+       });
+
+       /** To disable Material  on click **/
+       $(document).on('click', '#make_material_disabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeMaterialDisabled function from tesco-settings.js*/
+           makeMaterialDisabled(id,csrf_token)
+       });
+     /** Add Tesco error report emails form validation **/
+     $('#add_tesco_error_report_email_form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented())
+        {
+
+        }
+        else
+        {
+           e.preventDefault();
+           /* call addTescoErrorReportEmail function from  tesco-settings.js*/
+           addTescoErrorReportEmail();
+        }
+      })
+     /** get edit Tesco error report email details **/
+     $(document).on('click','.edit-tesco-error-report-email',function(e){
+         var id = $(this).closest('tr').attr('id');
+         e.preventDefault();
+         /* call getTescoErrorReportEmailById function from tesco-settings.js*/
+         getTescoErrorReportEmailById(id);
+     });
+      /** submit edit Tesco error report email form **/
+       $('#edit_tesco_error_report_email_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            /* call editTescoErrorReportEmail function from tesco-settings.js*/
+            editTescoErrorReportEmail();
+         }
+       }) 
+      /** To Enable  Tesco error report email  on click **/
+       $(document).on('click', '#make_error_report_email_enabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeErrorReportEmailEnabled function from tesco-settings.js*/
+           makeErrorReportEmailEnabled(id,csrf_token)
+       });
+
+       /** To disable Tesco error report email  on click **/
+       $(document).on('click', '#make_error_report_email_disabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeErrorReportEmailDisabled function from tesco-settings.js*/
+           makeErrorReportEmailDisabled(id,csrf_token)
+       });
       /** [ Make sidebar active ] */
        $('.meta-data-list li a').click(function(){
         $('.meta-data-list li a').removeClass("active");

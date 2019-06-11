@@ -30,7 +30,7 @@ function loadTemplatePreview() {
                     }
                 });
             } else {
-                $('.templateDiv').html('<img style="height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
+                $('.templateDiv').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover;margin-top: 122px; font-size: 100px;"></i>')
 
                 $('.descriptionDiv').html('<b>Template Not Found</b>');
                 $('.descriptionDiv').css('margin-top', '0px')
@@ -131,7 +131,7 @@ function viewOrder(pNumber,aWork) {
 function mapStoredValues(oDetails) {
     var artwork_num = oDetails.length;
     var count = 0;
-    var artwork_status = '';
+    var order_status = '';
     var last_insertions = [];
     var header = 'Create Order For TESCO - '+localStorage.getItem('zone')+' - '+localStorage.getItem('template_group');
     $('.page-header h4 strong').text(header);
@@ -150,6 +150,7 @@ function mapStoredValues(oDetails) {
             $('#tesco_supplier').val(ele.tesco_metadata_supplier_id);
             $('#tesco_rfid').val(ele.rfid_compliant === 1  ? 'yes' : 'no');
             $('#tesco_tag_at_source').val(ele.tag_at_source === 1  ? 'yes' : 'no');
+            $('#tesco_ocn').val(ele.ocn_number);
 
             if(ele.template_type === 'single') {
                 $.each(ele.order_quantity, function(i, j) {
@@ -191,38 +192,124 @@ function mapStoredValues(oDetails) {
             $('#'+ele.zone.toLowerCase()+'_'+ele.template_type+'_count_'+ele.TemplateName.replace(/ /g,"")+'_'+(loop+1)).val(qty.count);
         });
         count++;
-        artwork_status = ele.artwork_status;
+        order_status = ele.order_status;
         last_insertions[ele.TemplateName.replace(/ /g,"")+'_id'] = ele.id;
-
+        /** [ Remove print and proof genration button if quantity is 0 ] */
+        if(ele.is_order_count_empty === 1)
+        {
+           $('#print_' + ele.TemplateName.replace(' ', '') + '_btn').hide();
+           $('#proof_' + ele.TemplateName.replace(' ', '') + '_btn').hide();
+        }
+        else
+        {
+            $('#print_' + ele.TemplateName.replace(' ', '') + '_btn').show();
+            $('#proof_' + ele.TemplateName.replace(' ', '') + '_btn').show();
+        }
     });
     
         var div_html='';
         /** [ store last updated id as hidden input , for updating] */
         for (var k in last_insertions){
             if (last_insertions.hasOwnProperty(k)) {
-                 div_html += '<input id="'+k+'" name="'+k+'" type="hidden" value="'+last_insertions[k]+'">';
+                 div_html += '<input class="table-id-hidden" id="'+k+'" name="'+k+'" type="hidden" value="'+last_insertions[k]+'">';
             }
         }
         $('.invisible-div').html(div_html);
         
-    if(artwork_status != 'Saved') {
+    if(order_status != 'Saved') {
         $('#create_tesco_order_form input').attr('readonly', 'readonly');
         $('.selectpicker').prop('disabled', true);
         $('#tesco_manufacture_date').prop('disabled',true);
         $("#datePicker1").datepicker("disabled");
         $('.delete-row, .add-row-btn, .submit-btn, .save-btn').remove();
-        $('.print-btn').show();
-        /** Remove cancel button data-target if order status is not saved */
-        $('.cancel-btn').removeAttr('data-target'); 
-        $('.cancel-btn').attr('onClick','location.reload()');
-        if(artwork_status === 'Order Placed')
+        if(order_status === 'Order Placed')
         {
             $('.approve-btn').show();
+            $('.cancel-btn').show();
         }
         else 
         {
             $('.approve-btn').hide();
+            $('.cancel-btn').hide();
         }
+    }
+
+    /** [For MOQ validation after page load] */
+        var templates = localStorage.getItem("templates");
+        var buyer_id  = localStorage.getItem("buyer_id");
+        var supplier_id = $('#tesco_supplier option:selected').val();
+        /** [ Get template details from localstorage ] */
+        var temp_data = JSON.parse(localStorage.getItem("data"));
+        /** [ Dynamically change  svg supplier name ] */
+        if (supplier_id != '') {
+        /*
+         * Get MOQ value based on supplier value.
+         */
+        if(isSubmitting) 
+        {
+          return;
+        }
+        isSubmitting = true;
+        $.ajax({
+               url:base_url + "/admin/tesco/get-moq-value",
+               dataType:"json",
+               method:"get",
+               data:{supplier:supplier_id,buyer_id:buyer_id,templates:templates},
+               tryCount : 0,
+               retryLimit : 2,
+               beforeSend: function () {
+                 $(".loader").show();
+               },
+               success: function(data){
+                     /** Store moq values for validation */
+                     localStorage.setItem("moq_values", JSON.stringify(data.moq));
+                     
+                     /** hide quantity missing error msgs */
+                     $('.quantity-feedback').removeClass('has-error has-danger');
+                     $('.quantity-feedback-err-msg').css('display', 'none');
+                     $('.quantity-field').prop('required', false);
+                     $('.quantity-field').parent().removeClass('has-error')
+                     $('.help-block').html('');
+                     /** [ Dynamic moq value assignment on supplier change ] */
+                     var moq_array = JSON.parse(localStorage.getItem("moq_values"));
+                     $.each(temp_data, function (i, item) {
+                        var temp_name = item.template_name;
+                        if(moq_array != null)
+                        {
+                            moq_array.forEach(function(i,j){
+                                moq = i[temp_name];
+                            })
+                            $('.count_' + item.template_name.replace(' ', '') ).attr("min",moq); 
+                            $('.count_' + item.template_name.replace(' ', '') ).data("min-error","Quantity Should be >= "+moq); 
+                        }
+                    });
+                     
+               },
+               error: function(errorXHR, errorStatus, errorThrown) {
+                    this.tryCount++;
+                    if (this.tryCount <= this.retryLimit) {
+                        $.ajax(this);
+                        return;
+                    }
+                },
+               complete: function () {
+                   isSubmitting = false;
+                   $(".loader").hide();
+               }
+           })
+    } else {
+            localStorage.removeItem("moq_values");
+            /** hide quantity missing error msgs */
+            $('.quantity-feedback').removeClass('has-error has-danger');
+            $('.quantity-feedback-err-msg').css('display', 'none');
+            $('.quantity-field').prop('required', false);
+            $('.quantity-field').parent().removeClass('has-error')
+            $('.help-block').html('');
+            /** [ Remove MOQ values] */
+            $.each(temp_data, function (i, item) {
+                $('.count_' + item.template_name.replace(' ', '') ).removeAttr("min"); 
+                $('.count_' + item.template_name.replace(' ', '') ).data("min-error",""); 
+            });
     }
 	/** [ Refresh boostrap form-validator ]  */
 	$('#create_tesco_order_form').validator('validate');

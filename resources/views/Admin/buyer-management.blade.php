@@ -1,6 +1,6 @@
 @extends('layouts.Admin.app') @if (Auth::guard("web")->user()) @section('content')
  <div class="col-sm-12 col-md-12 main">
-                <h3><i class="ion-bag"></i>Buyer Management</h3>
+                <h3><i class="fa fa-briefcase"></i>Buyer Management</h3>
 
                 <div class="col-md-4">
                     <div class="card">

@@ -75,7 +75,7 @@ class MerchandiserProfileController extends Controller
                    ->update([
                      'merchandiser_name'      => $input['name'],
                      'email'                  => $input['email'],
-                     'merchandiser_address'   => $input['address'],
+                     'merchandiser_address'   => preg_replace('/\s*,\s*/', ', ', $input['address']),
                      'merchandiser_phone'     => $input['phone'],
                      'buyer_id'               => $input['buyer'],
                   ]);

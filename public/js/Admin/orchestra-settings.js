@@ -23,35 +23,6 @@ var isSubmitting = false;
    }
   }
 
-/** 
- * Validation for numeric values with dot*
- * @param  evt
- * @return {Boolean}
- * @author <praveen>
- */
- function isNumberKey(evt){
-  try{
-       var charCode = (evt.which) ? evt.which : event.keyCode
-
-       if (charCode == 46)
-       {
-           var inputValue = $("#inputfield").val()
-           if (inputValue.indexOf('.') < 1)
-           {
-               return true;
-           }
-           return false;
-       }
-       if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
-       {
-           return false;
-       }
-       return true;
-    } catch (e) {
-     console.log("Error:"+e)
-   }
-  }
-
 /**
   * Function to Orchestra Settings home page
   * @author <praveen>
@@ -76,7 +47,7 @@ function orchestraSettings() {
             $(".loader").show();
         },
         success: function (data) {
-                var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraGarmentsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Garment</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Garments</h3></div><table id="orchestra-garments-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Garment Name</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+                var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraGarmentsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Garment</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Garments</h3></div><table id="orchestra-garments-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Garment Name</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
 	             $.each(data.orchestra_garments, function(i, item){
 	              var index = i+1;
 	              orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.garment_name+'</td>';
@@ -303,7 +274,7 @@ function showSnackbar() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-garment-enabled",
+               url:base_url + "/admin/orchestra/make-garment-enabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -351,7 +322,7 @@ function showSnackbar() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-garment-disabled",
+               url:base_url + "/admin/orchestra/make-garment-disabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -410,7 +381,7 @@ function showSnackbar() {
               $(".loader").show();
           },
           success: function (data) {
-                  var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraAgeGroupModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Age Group</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Age Groups</h3></div><table id="orchestra-age-group-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Age Group Name</th><th>Color</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+                  var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraAgeGroupModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Age Group</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Age Groups</h3></div><table id="orchestra-age-group-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Age Group Name</th><th>Color</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                  $.each(data.orchestra_agegroups, function(i, item){
                   var index = i+1;
                   orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.age_group_name+'</td><td>'+item.color+'</td>';
@@ -620,7 +591,7 @@ function showSnackbar() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-agegroup-enabled",
+               url:base_url + "/admin/orchestra/make-agegroup-enabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -668,7 +639,7 @@ function showSnackbar() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-agegroup-disabled",
+               url:base_url + "/admin/orchestra/make-agegroup-disabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -725,7 +696,7 @@ function countries() {
             $(".loader").show();
         },
         success: function (data) {
-                var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraCountryModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Country Name</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Countries</h3></div><table id="orchestra-countries-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+                var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraCountryModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Country Name</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Countries</h3></div><table id="orchestra-countries-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                $.each(data.orchestra_countries, function(i, item){
                 var index = i+1;
                 orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.spanish+'</td><td>'+item.portuguese+'</td><td>'+item.italian+'</td><td>'+item.dutch+'</td><td>'+item.german+'</td><td>'+item.russian+'</td><td>'+item.chinese+'</td><td>'+item.arabic+'</td><td>'+item.greek+'</td><td>'+item.turkish+'</td>';
@@ -970,7 +941,7 @@ function countries() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-country-enabled",
+               url:base_url + "/admin/orchestra/make-country-enabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -1018,7 +989,7 @@ function countries() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-country-disabled",
+               url:base_url + "/admin/orchestra/make-country-disabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -1074,7 +1045,7 @@ function countries() {
               $(".loader").show();
           },
           success: function (data) {
-                  var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraProductFamilyModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Product Family</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Product Families</h3></div><table id="orchestra-productfamily-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Product Family Code</th><th>English</th><th>French</th><th>Arabic</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+                  var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraProductFamilyModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Product Family</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Product Families</h3></div><table id="orchestra-productfamily-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Product Family Code</th><th>English</th><th>French</th><th>Arabic</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                  $.each(data.orchestra_product_family, function(i, item){
                     var index = i+1;
                     orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.code+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.arabic+'</td>';
@@ -1297,7 +1268,7 @@ function countries() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-productfamily-enabled",
+               url:base_url + "/admin/orchestra/make-productfamily-enabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -1345,7 +1316,7 @@ function countries() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-productfamily-disabled",
+               url:base_url + "/admin/orchestra/make-productfamily-disabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -1402,7 +1373,7 @@ function countries() {
                 $(".loader").show();
             },
             success: function (data) {
-                    var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraSpecialInstructionModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Special Instruction</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Special Instructions</h3></div><table id="orchestra-special-instruction-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+                    var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraSpecialInstructionModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Special Instruction</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Special Instructions</h3></div><table id="orchestra-special-instruction-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.orchestra_specialinstructions, function(i, item){
                     var index = i+1;
                     orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.spanish+'</td><td>'+item.portuguese+'</td><td>'+item.italian+'</td><td>'+item.dutch+'</td><td>'+item.german+'</td><td>'+item.russian+'</td><td>'+item.chinese+'</td><td>'+item.arabic+'</td><td>'+item.greek+'</td><td>'+item.turkish+'</td>';
@@ -1647,7 +1618,7 @@ function countries() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-special-instruction-enabled",
+               url:base_url + "/admin/orchestra/make-special-instruction-enabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -1695,7 +1666,7 @@ function countries() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-special-instruction-disabled",
+               url:base_url + "/admin/orchestra/make-special-instruction-disabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -1751,7 +1722,7 @@ function countries() {
                 $(".loader").show();
             },
             success: function (data) {
-                    var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraCompositionModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Composition</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Compositions</h3></div><table id="orchestra-composition-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+                    var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraCompositionModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Composition</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Compositions</h3></div><table id="orchestra-composition-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.orchestra_compositions, function(i, item){
                     var index = i+1;
                     orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.spanish+'</td><td>'+item.portuguese+'</td><td>'+item.italian+'</td><td>'+item.dutch+'</td><td>'+item.german+'</td><td>'+item.russian+'</td><td>'+item.chinese+'</td><td>'+item.arabic+'</td><td>'+item.greek+'</td><td>'+item.turkish+'</td>';
@@ -1996,7 +1967,7 @@ function countries() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-composition-enabled",
+               url:base_url + "/admin/orchestra/make-composition-enabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -2044,7 +2015,7 @@ function countries() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-composition-disabled",
+               url:base_url + "/admin/orchestra/make-composition-disabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -2100,7 +2071,7 @@ function countries() {
                 $(".loader").show();
             },
             success: function (data) {
-                    var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraPartModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Part</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Parts</h3></div><table id="orchestra-part-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+                    var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraPartModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Part</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Parts</h3></div><table id="orchestra-part-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.orchestra_parts, function(i, item){
                     var index = i+1;
                     orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.spanish+'</td><td>'+item.portuguese+'</td><td>'+item.italian+'</td><td>'+item.dutch+'</td><td>'+item.german+'</td><td>'+item.russian+'</td><td>'+item.chinese+'</td><td>'+item.arabic+'</td><td>'+item.greek+'</td><td>'+item.turkish+'</td>';
@@ -2345,7 +2316,7 @@ function countries() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-part-enabled",
+               url:base_url + "/admin/orchestra/make-part-enabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -2393,7 +2364,7 @@ function countries() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-part-disabled",
+               url:base_url + "/admin/orchestra/make-part-disabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -2449,7 +2420,7 @@ function countries() {
                 $(".loader").show();
             },
             success: function (data) {
-                    var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraSizeChartModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Size Chart</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Size Charts</h3></div><table id="orchestra-size-chart-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Age</th><th>Centimeter(cm)</th><th>Inches(inch)</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+                    var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraSizeChartModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Size Chart</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Size Charts</h3></div><table id="orchestra-size-chart-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Age</th><th>Centimeter(cm)</th><th>Inches(inch)</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.orchestra_size_charts, function(i, item){
                     var index = i+1;
                     orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.age+'</td><td>'+item.cm+'</td><td>'+item.in+'</td>';
@@ -2665,7 +2636,7 @@ function countries() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-size-chart-enabled",
+               url:base_url + "/admin/orchestra/make-size-chart-enabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -2713,7 +2684,7 @@ function countries() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-size-chart-disabled",
+               url:base_url + "/admin/orchestra/make-size-chart-disabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -2769,7 +2740,7 @@ function orchestraSymbols() {
               $(".loader").show();
           },
           success: function (data) {
-                  var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraSymbolsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Symbol</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Symbols</h3></div><table id="orchestra-symbols-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Cofreet Symbols</th><th>Astms Symbol</th><th>Care Instruction</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+                  var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraSymbolsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Symbol</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Symbols</h3></div><table id="orchestra-symbols-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Cofreet Symbols</th><th>Astms Symbol</th><th>Care Instruction</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.orchestra_care_symbols, function(i, item){
                     var index = i+1;
                     orchestra_metadata += '<tr data-category="'+item.category_id+'" id="'+item.id+'"><td>'+index+'</td><td class="td_cofreet_symbols"><img width="30px" src="'+item.cofreet_symbols+'"></td><td class="td_astms_symbol"><img width="30px" src="'+item.astms_symbol+'"></td><td class="td_care_instruction">'+item.care_instruction+'</td>';
@@ -2855,9 +2826,10 @@ function addOrchestraSymbols(cofreet_symbols, astms_symbol, category_id, care_in
                         $('#addOrchestraSymbolsModal').modal('hide');
                         orchestraSymbols();
                 },
-                400: function() {
-                        $('.snackbar_span').html('Something went wrong');
-                        showSnackbar();
+                422: function() {
+                        $('.hidden-error').html('<div class="alert alert-warning">\
+                        Invalid File Format\
+                      </div>')
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
@@ -2945,7 +2917,7 @@ function addOrchestraSymbols(cofreet_symbols, astms_symbol, category_id, care_in
          }
          isSubmitting = true;
          $.ajax({
-              url:base_url + "/admin/Orchestra/make-symbol-enabled",
+              url:base_url + "/admin/orchestra/make-symbol-enabled",
               dataType:"json",
               beforeSend: function () {
                 $(".loader").show();
@@ -2993,7 +2965,7 @@ function addOrchestraSymbols(cofreet_symbols, astms_symbol, category_id, care_in
          }
          isSubmitting = true;
          $.ajax({
-              url:base_url + "/admin/Orchestra/make-symbol-disabled",
+              url:base_url + "/admin/orchestra/make-symbol-disabled",
               dataType:"json",
               beforeSend: function () {
                 $(".loader").show();
@@ -3072,8 +3044,8 @@ function readURL(input) {
     $("#cofreet_symbol").add("#astms_symbol").add("#edit_cofreet_symbol").add("#edit_astms_symbol").change(function() {
             readURL(this);
             if(".hidden_"+this.id != "undefined"){
-                console.log("hai")
                 $(".hidden_"+this.id).removeClass('hidden')
             }
 
     });
+

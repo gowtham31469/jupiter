@@ -1,7 +1,7 @@
 @extends('layouts.Admin.app') @if (Auth::guard("web")->user()) @section('content')
 <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
-        <div class="buyer-nav-div">
+        <div class="buyer-nav-div hidden">
            <a class="dropdown-toggle profile-dropdown-admin selected-buyer" style="text-transform:capitalize;cursor: pointer;">Select Buyer</a>
         </div>
         {{ Form::hidden('invisible', $buyer_count, array('id' => 'invisible__count_id')) }}
@@ -40,7 +40,6 @@
                      </div>
                      <div class="modal-footer buyer-selection-modal-footer">
                          {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                         {!! Form::button('Proceed', ['class' => 'btn btn-primary btn-sm proceed-btn','type' => 'submit'] ) !!}
                      </div>
                 {!! Form::close() !!}
              </div>
@@ -63,6 +62,21 @@
               $('div.buyers-card').removeClass("active");
               $(this).addClass("active");
               $('#hidden-buyer-div').hide();
+
+              /* Save selected buyer into localdb */
+              if ($('.buyers-card.active-buyer.active').length != 0) 
+              {
+                  $('#hidden-buyer-div').hide();
+                  localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
+                  localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
+                  $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
+                  $('#buyerSelectionModalCenter').modal('hide');
+                  price_template_list();
+              } else {
+                  localStorage.removeItem("buyer");
+                  localStorage.removeItem("buyer_id");
+                  $('#hidden-buyer-div').show();
+              }
             });
 
             /** [ Show already selected(active) buyer on clicking buyer menu] */
@@ -74,7 +88,8 @@
                 } 
                 else 
                 {
-                    $('#'+localStorage.getItem("buyer")).addClass('active');
+                   var id_buyer = localStorage.getItem("buyer").replace("&", "\\&");
+                    $('#'+id_buyer).addClass('active');
                     $("#buyerSelectionModalCenter").modal("show");
                 }
             });
@@ -105,24 +120,6 @@
                 $('.selected-buyer').text('Selected Buyer : '+localStorage.getItem("buyer"));
                 price_template_list();
             }
-
-            /** [ Select buyer on clicking proceed button] */
-            $('.proceed-btn').on('click', function() {
-                
-                if ($('.buyers-card.active-buyer.active').length != 0) 
-                {
-                    $('#hidden-buyer-div').hide();
-                    localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
-                    localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
-                    $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
-                    $('#buyerSelectionModalCenter').modal('hide');
-                    price_template_list();
-                } else {
-                    localStorage.removeItem("buyer");
-                    localStorage.removeItem("buyer_id");
-                    $('#hidden-buyer-div').show();
-                }
-            });
 
             /** To refresh modal while hidden **/
             $('#buyerSelectionModalCenter').on('hidden.bs.modal', function (e) {
