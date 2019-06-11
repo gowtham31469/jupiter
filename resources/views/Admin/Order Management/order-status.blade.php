@@ -238,17 +238,9 @@
                     <div id="map_po_div_status" class="hidden">
                         <h4>Map to Existing PO : </h4>
                         <label style="color:red" id="select_error_status" class="hidden">Please Select PO</label>
-                        <div class="form-group" id="selectpo_status">
+                        <div class="form-group" id="po_select_div">
                             <label>Select PO</label>
-                            <select class="form-control">
-								  <option>1</option>
-								  <option>2</option>
-								  <option>3</option>
-								  <option>4</option>
-								  <option>5</option>
-								</select>
                         </div>
-
                     </div>
 
                     <div id="new_po_div_status" class="hidden">
@@ -458,12 +450,13 @@
 
 <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
 <script src="{{ asset('js/moment.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/daterangepicker.js') }}"></script>
-<script src="{{ asset('js/html2pdf.bundle.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/daterangepicker.js') }}"></script>
 <script src="{{ asset('js/html2pdf.bundle.min.js') }}"></script>
 <script src="{{ asset('js/Admin/order.js') }}"></script>
 <script src="{{ asset('js/Admin/tesco-pi.js') }}"></script>
 <script src="{{ asset('js/Admin/tesco-order-status.js') }}"></script>
+<script src="{{ asset('js/Admin/orchestra-order-status.js') }}"></script>
+<script src="{{ asset('js/Admin/orchestra-pi.js') }}"></script>
 <script>
     localStorage.removeItem("page_navigation");
     var buyer_count = $('#invisible__count_id').val();
@@ -623,14 +616,14 @@
                 var po_link = base_url+response.po_file;
                 var row_id  = $('#rowID').val();
                 var tab_nm  = $('#tableName').val();
-                $('#'+tab_nm+'_'+row_id+' .po-style').attr('onclick','tescoPOUpload(this,"'+row_id+'","'+response.po_file+'","'+tab_nm+'")');
-                var po_num = $('#'+tab_nm+'_'+row_id+' .tesco-po').val();
+                $('#'+tab_nm+'_'+row_id+' .po-style').attr('onclick',buyer+'POUpload(this,"'+row_id+'","'+response.po_file+'","'+tab_nm+'")');
+                var po_num = $('#'+tab_nm+'_'+row_id+' .'+buyer+'-po-'+row_id).val();
                 if(po_num != null && po_num != '' && po_num != 'undefined') {
-                    $('#'+tab_nm+'_'+row_id+' .tesco-po').val();
+                    $('#'+tab_nm+'_'+row_id+' .'+buyer+'-po-'+row_id).val();
                     $('#'+tab_nm+'_'+row_id).find('.po_class').html("PO Uploaded");
                     $('#'+tab_nm+'_'+row_id).find('.po_class').removeClass("label-POPending").addClass('label-POUploaded');
                 }
-                $('#'+tab_nm+'_'+row_id).find('.tesco-po-submit').attr('onclick','tescoSetPO(this,"'+row_id+'","'+tab_nm+'","'+response.po_file+'")');
+                $('#'+tab_nm+'_'+row_id).find('.'+buyer+'-po-submit').attr('onclick',buyer+'SetPO(this,"'+row_id+'","'+tab_nm+'","'+response.po_file+'")');
                 $('#'+tab_nm+'_'+row_id).find('.po-view').css('border-color', '#FFFFFF');
                 $('#po-file-upload').modal('hide')
                 $('#snackbar').css('background-color','#00b6ff');

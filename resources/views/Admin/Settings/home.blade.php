@@ -1215,7 +1215,7 @@
             </div>
             {!! Form::open(['id' => 'add_orchestra_symbols_form','data-toggle' => 'validator','role' => 'form']) !!}
                 <div class="modal-body">
-     
+                    <div class="hidden-error"></div>
                     <div class="form-group has-feedback">
                      
                          {!! Form::label('symbol_category', 'Category', ['class' => 'form_label']) !!}
@@ -1225,9 +1225,9 @@
                     
                     <div class="form-group has-feedback">
                      
-                         {!! Form::label('cofreet_symbol', 'Cofreet Symbol', ['class' => 'form_label']) !!}
+                         {!! Form::label('cofreet_symbol', 'Cofreet Symbol (*.png only)', ['class' => 'form_label']) !!}
                          <div class="row">
-                         <div class="col-md-2"> <img width="30px" id="add_cofreet_symbol" src="" alt="Null"></div>
+                         <div class="col-md-2"> <img width="30px" id="add_cofreet_symbol" src="/not-available.png" alt="symbol"></div>
                          <div class="col-md-10"> {{ Form::file('cofreet_symbol', ['required', 'accept' => 'image/png']) }}</div>
                          </div>
                       
@@ -1235,9 +1235,9 @@
                     </div>
                     <div class="form-group has-feedback">
                      
-                         {!! Form::label('astms_symbol', 'Astms Symbol', ['class' => 'form_label']) !!}
+                         {!! Form::label('astms_symbol', 'Astms Symbol (*.png only)', ['class' => 'form_label']) !!}
                          <div class="row">
-                         <div class="col-md-2"><img width="30px" id="add_astms_symbol" src="" alt="Null"></div>
+                         <div class="col-md-2"><img width="30px" id="add_astms_symbol" src="/not-available.png" alt="symbol"></div>
                          <div class="col-md-10">{{ Form::file('astms_symbol', ['required', 'accept' => 'image/png']) }}</div>
                          </div>
                          
@@ -1282,7 +1282,7 @@
                     
                     <div class="form-group has-feedback">
                      
-                         {!! Form::label('edit_cofreet_symbol', 'Cofreet Symbol', ['class' => 'form_label']) !!}
+                         {!! Form::label('edit_cofreet_symbol', 'Cofreet Symbol (*.png only)', ['class' => 'form_label']) !!}
                         
                          <div class="row">
                          <div class="col-md-2"> <img width="30px" id="cofreet_image" src="" alt="Null"></div>
@@ -1297,7 +1297,7 @@
                     </div>
                     <div class="form-group has-feedback">
                      
-                         {!! Form::label('edit_astms_symbol', 'Astms Symbol', ['class' => 'form_label']) !!}
+                         {!! Form::label('edit_astms_symbol', 'Astms Symbol (*.png only)', ['class' => 'form_label']) !!}
                          <div class="row">
                          <div class="col-md-2"><img width="30px" id="astms_image" src="" alt="Null"></div>
                          <div class="hidden hidden_edit_astms_symbol">
@@ -2030,6 +2030,7 @@
         $('#edit_tesco_material_result').hide();
         $('#tesco_error_report_email_result').hide();
         $('#edit_tesco_error_report_email_result').hide();
+        $('.hidden-error').html('');
        })
 
       /** Add orchestra garment form validation **/

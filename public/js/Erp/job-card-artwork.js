@@ -24,7 +24,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at) 
 	
 		var csrf_token = $('meta[name="csrf-token"]').attr('content');
 			$.ajax({
-				url: base_url + "/erp/job-manager/get_order_details",
+				url: base_url + "/erp/job-manager/get-order-details",
 				type: "Post",
 				dataType: "json",
 				data: {
@@ -267,7 +267,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at) 
 		var ref_name = [name2.slice(0, position), b, name2.slice(position)].join('').trim();
 		var csrf_token = $('meta[name="csrf-token"]').attr('content');
 			$.ajax({
-				url: base_url + "/erp/job-manager/get_order_details",
+				url: base_url + "/erp/job-manager/get-order-details",
 				type: "Post",
 				dataType: "json",
 				data: {

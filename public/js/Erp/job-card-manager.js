@@ -2081,7 +2081,7 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
 
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
-            url: base_url + "/erp/job-manager/get_order_details",
+            url: base_url + "/erp/job-manager/get-order-details",
             type: "Post",
             dataType: "json",
             async: false,
@@ -2317,7 +2317,7 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
     var ref_name = [name2.slice(0, position), b, name2.slice(position)].join('').trim();
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
-            url: base_url + "/erp/job-manager/get_order_details",
+            url: base_url + "/erp/job-manager/get-order-details",
             type: "Post",
             dataType: "json",
             async: false,
