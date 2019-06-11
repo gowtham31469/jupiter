@@ -29,10 +29,10 @@ class ProfomaInvoice
         $buyer_id   =   $request->buyer_id;
 
         $data['company_details'] =  DB::table('orchestra_item_master')
-                                          ->join('orchestra_hang_tag_orders','orchestra_hang_tag_orders.template_front_id','=','orchestra_item_master.id')
+                                          ->join($table_name,$table_name.'.template_id','=','orchestra_item_master.id')
                                           ->join('company','company.id','=','orchestra_item_master.company_id')
-                                          ->where('orchestra_hang_tag_orders.id',$id)
-                                          ->select('company.*')
+                                          ->where($table_name.'.id',$id)
+                                          ->select('company.*',$table_name.'.pi_rev_no as rev_number')
                                           ->first();
 
         $customer_details = DB::table('orchestra_parcel_details')

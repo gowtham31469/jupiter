@@ -2059,7 +2059,7 @@ class JobManagerController extends Controller
 										->select('*')
 										->get();
 				
-				if($order_details_data)
+				if(sizeof($order_details_data) > 0)
 				{
 					$order_table = str_replace("_quanty","",$value->order_qnty_table_name);
 					$order_id    = strtolower(str_replace(" ","",$value->reference_name).'_order_id');
@@ -2071,11 +2071,13 @@ class JobManagerController extends Controller
 
 					$order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', $order_status)->first();
 					
-					ErpOrderDetails::where('id',$value->id)
+					$data = ErpOrderDetails::where('id',$value->id)
 					->update([
 										'order_status_id'  => $order_status_id->id
 									]);
+									echo  "array size= ".sizeof($order_details_data)." |  order status : ". $order_status. "| code_status : ".$data;
 				}
+				echo  "array size= ".sizeof($order_details_data);
 			}
 		}
 
