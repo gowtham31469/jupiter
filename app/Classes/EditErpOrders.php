@@ -64,7 +64,7 @@ class EditErpOrders
 			// update customer id in erp_orders table
             Erp::where('id',$erp_order_id)->update(['customer_id' => $orders->customer_id]);
 
-            $this->updateOrderDetails($qnty_table, $order_details, $orders, $erp_order_id, $buyer_id, $erp_status_id);
+            $this->updateOrderDetails($qnty_table, $order_details, $orders, $erp_order_id, $buyer_id, $erp_status_id, $order_status_id);
 
 			$result = response()->json(['error'=> false,'message' =>'success'],200);
 		}
@@ -87,7 +87,7 @@ class EditErpOrders
 	 * @return void
 	 * @author Praveen <praveen@wizroots.com>
 	 */
-	function updateOrderDetails($qnty_table, $order_details, $orders, $erp_order_id, $buyer_id, $erp_status_id)
+	function updateOrderDetails($qnty_table, $order_details, $orders, $erp_order_id, $buyer_id, $erp_status_id, $order_status_id)
 	{
 		if ($order_details)
 		{
@@ -120,7 +120,8 @@ class EditErpOrders
 						'buyer_po_number'  		=> $orders->po_number,
 						'zone'					=> $orders->zone,
 						'order_type'            => $orders->order_flag,
-						'updated_at'            => $this->updated_at
+						'updated_at'            => $this->updated_at,
+						'order_status_id'       => $order_status_id->id,
 					]);
 				}				
 			}
