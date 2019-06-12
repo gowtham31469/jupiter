@@ -14,10 +14,10 @@ use App\RolePermissionMdl;
 use Carbon\Carbon;
 use App\Classes\PiTCPDF;
 
-class ProfomaInvoice
+class ProformaInvoice
 {
 	/**
-	 * method to the Profoma information for a particular order
+	 * method to the Proforma information for a particular order
 	 * @param  [type] $request [description]
 	 * @return PI details
 	 */

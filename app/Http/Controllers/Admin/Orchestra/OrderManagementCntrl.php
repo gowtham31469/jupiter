@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;   
 use App\Classes\Modules;
-use App\Classes\ProfomaInvoice;
+use App\Classes\ProformaInvoice;
 use Response;
 use Excel;
 use App\HangTagOrders;
@@ -1708,15 +1708,15 @@ class OrderManagementCntrl extends Controller
         return $result;
     }
     /**
-     * method to get all the details for profoma invoice generation
+     * method to get all the details for proforma invoice generation
      * @param  Request $request [table_name,id]
      * @return [type]           [description]
      */
-    public function getProfomaInvoice(Request $request)
+    public function getProformaInvoice(Request $request)
     {
         try
         {
-            $pi_obj = new ProfomaInvoice();
+            $pi_obj = new ProformaInvoice();
             $data   = $pi_obj->getPIDetails($request);
             $result = response()->json(['error'=> false,'message' =>'success','data'=>$data],200);
         }
@@ -1728,11 +1728,11 @@ class OrderManagementCntrl extends Controller
     }
 
     /**
-     * method to approve the profoma invoice
+     * method to approve the proforma invoice
      * @param  Request $request [description]
      * @return [type]           [description]
      */
-    public function approveProfomaInvice(Request $request)
+    public function approveProformaInvice(Request $request)
     {
         try
         {
@@ -1740,7 +1740,7 @@ class OrderManagementCntrl extends Controller
             $table_name =   $request->table_name;
             $total_qnty =   0 ; 
             $sub_total  =   0 ;
-            $pi_obj     =   new ProfomaInvoice();
+            $pi_obj     =   new ProformaInvoice();
             $data       =   $pi_obj->getPIDetails($request);
             if (count($data)>0)
             {
@@ -1797,11 +1797,11 @@ class OrderManagementCntrl extends Controller
     }
 	
     /**
-     * method to reject the profoma invoice
+     * method to reject the proforma invoice
      * @param  Request $request [description]
      * @return [type]           [description]
      */
-    public function rejectProfomaInvice(Request $request)
+    public function rejectProformaInvice(Request $request)
     {
         try
         {

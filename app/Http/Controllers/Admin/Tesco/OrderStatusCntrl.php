@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use App\Classes\Modules;
-use App\Classes\ProfomaInvoice;
+use App\Classes\ProformaInvoice;
 use App\ProfomaInvoice as PI;
 use App\Classes\ErpOrders;
 use App\ProfomaInvoiceItemDetails;
@@ -251,7 +251,7 @@ class OrderStatusCntrl extends Controller
     }
 
     /**
-     * method to get the profoma invoice details of an artwork
+     * method to get the proforma invoice details of an artwork
      * @param  Request $request [description]
      * @return [type]           [description]
      */
@@ -259,7 +259,7 @@ class OrderStatusCntrl extends Controller
     {
         try
         {   
-            $pi_obj    = new ProfomaInvoice();
+            $pi_obj    = new ProformaInvoice();
             $pi_status = $request->pi_status;
 
             // if ($pi_status == "true")
@@ -281,7 +281,7 @@ class OrderStatusCntrl extends Controller
         return $result;
     }
     /**
-     * method to approve the profoma invoice
+     * method to approve the proforma invoice
      * @param  Request $request [description]
      * @return \Illuminate\Http\Response
      */
@@ -295,7 +295,7 @@ class OrderStatusCntrl extends Controller
             $billamnt   =   $request->billamnt;
             $total_qnty =   0 ; 
             $sub_total  =   0 ;
-            $pi_obj     =   new ProfomaInvoice();
+            $pi_obj     =   new ProformaInvoice();
             $data       =   $pi_obj->getTescoPIDetails($request);
             $attatchment =  $pi_obj->getAttachment($data,$request);
             
@@ -458,7 +458,7 @@ class OrderStatusCntrl extends Controller
     }
     
     /**
-     * method to reject the profoma invoice
+     * method to reject the proforma invoice
      * @param  Request $request [description]
      * @return [type]           [description]
      */
@@ -1248,7 +1248,7 @@ class OrderStatusCntrl extends Controller
    public function downloadTescoPI(Request $request)
    {
         try {
-            // $pi_obj     =   new ProfomaInvoice();
+            // $pi_obj     =   new ProformaInvoice();
             // $data       =   $pi_obj->getTescoPIDetails($request);
             // $attatchment =  $pi_obj->getAttachment($data,$request);
             $id         =  $request['id'];

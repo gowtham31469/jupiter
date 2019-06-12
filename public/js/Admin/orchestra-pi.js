@@ -14,7 +14,7 @@ function genarateOrchetraPI(id,table_name,uvc,pi_status)
     var buyer_id = localStorage.getItem("buyer_id");
     var tr = ""
     $.ajax({
-        url: base_url + "/admin/orchestra/order-management/show-profoma-invoice",
+        url: base_url + "/admin/orchestra/order-management/show-proforma-invoice",
         type: "Post",
         dataType: "json",
         data: {
