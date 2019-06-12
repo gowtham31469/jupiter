@@ -834,7 +834,7 @@ function table(data,path){
                         
                         tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="po" id="po" class="form-control input-sm po" value="'+value[key]+'"><span class="input-group-btn"><button type="submit" class="btn btn-sm btn-default po-submit" onclick=setPO(this,"'+value.id+'","'+value.tableName+'")><i class="fa fa-floppy-o" aria-hidden="true"></i></button></span></div></div></td>';
                    }
-                   
+                      
                 }
                 if (key == "pi_required")
                 {    

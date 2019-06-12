@@ -7,12 +7,10 @@
  * @return profoma invoice
  */
 
-function genarateOrchetraPI(id,table_name,uvc,pi_status)
+const genarateOrchetraPI = (id,table_name,uvc,pi_status) => 
 {
-    $('#uvc_number').text(uvc)
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     var buyer_id = localStorage.getItem("buyer_id");
-    var tr = ""
     $.ajax({
         url: base_url + "/admin/orchestra/order-management/show-proforma-invoice",
         type: "Post",
@@ -41,6 +39,7 @@ function genarateOrchetraPI(id,table_name,uvc,pi_status)
                }
                else
                {
+                    $('#uvc_number').text(uvc)
                     $('#company_details').html('<h3><strong>'+data.data.company_details.name+'</strong></h3>'+data.data.company_details.address+'<br/>'+data.data.company_details.phone+'<br/><strong>GSTIN :'+data.data.company_details.phone+'</strong>')
                     $('#bill_to').html('<h4>Billing Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.bill_to.address+'</br> GSTIN :'+data.data.bank_details.gstin_number+ '</p>')
                     $('#ship_to').html('<h4>Shipping Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.ship_to.address+'</p>')
