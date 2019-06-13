@@ -297,10 +297,10 @@ Route::post('admin/orchestra/order-management/order-status', 'Admin\Orchestra\Or
 
 
 Route::post('admin/orchestra/order-management/set-po-number', 'Admin\Orchestra\OrderManagementCntrl@setPONumber');
-Route::post('admin/orchestra/order-management/show-profoma-invoice', 'Admin\Orchestra\OrderManagementCntrl@getProfomaInvoice');
+Route::post('admin/orchestra/order-management/show-proforma-invoice', 'Admin\Orchestra\OrderManagementCntrl@getProformaInvoice');
 Route::post('admin/orchestra/set-po-file', 'Admin\Orchestra\OrderManagementCntrl@setCustomerPOFile');
-Route::post('admin/orchestra/approve-profoma-invoice', 'Admin\Orchestra\OrderManagementCntrl@approveProfomaInvice');
-Route::post('admin/orchestra/reject-profoma-invoice', 'Admin\Orchestra\OrderManagementCntrl@rejectProfomaInvice');
+Route::post('admin/orchestra/approve-proforma-invoice', 'Admin\Orchestra\OrderManagementCntrl@approveProformaInvice');
+Route::post('admin/orchestra/reject-proforma-invoice', 'Admin\Orchestra\OrderManagementCntrl@rejectProformaInvice');
 
 Route::post('admin/orchestra/order-management/set_hang_tag', 'Admin\Orchestra\OrderManagementCntrl@setHangTag');
 Route::post('admin/orchestra/order-management/set_special_tag', 'Admin\Orchestra\OrderManagementCntrl@setSpecialTag');
