@@ -91,122 +91,49 @@ class ProformaInvoice
         {
             $qnty_id .= strtolower($word[0]);
         }
-        
         $item_details    = DB::table($table_name)
                           ->join($table_name.'_qty',$table_name.'_qty.'.$qnty_id.'_id','=',$table_name.'.id')
-                          ->join('orchestra_item_master','orchestra_item_master.id',$table_name.'.'.$temp_id_field)
-                          ->leftjoin('price_taxation','price_taxation.template_id','=',$table_name.'.'.$temp_id_field)
-                          ->leftjoin('orchestra_template','orchestra_template.item_id','=','price_taxation.template_id')
+                          ->leftjoin('orchestra_template','orchestra_template.id','=',$table_name.'.'.$temp_id_field)
+                          ->join('orchestra_item_master','orchestra_item_master.id','orchestra_template.item_id')
+                          ->leftjoin('price_taxation','price_taxation.template_id','=','orchestra_item_master.id')
                           ->where('price_taxation.customer_id',$customer_details->id)
                           ->where('price_taxation.buyer_id',$buyer_id)
-                          ->where('orchestra_template.item_id',$customer_details->template_id)
+                          ->where('orchestra_template.id',$customer_details->template_id)
                           ->where($table_name.'_qty.'.$qnty_id.'_id',$id)
-                          ->select('size',$table_name.'_qty.quantity','price_taxation.custom_name as material_name','po as po_no','orchestra_item_master.item_name as ref_no','orchestra_template.item_id','pi_rev_no','order_flag','orchestra_template.template_name','pi_status','pi_rev_no','uvc as style')
+                          ->select('size',$table_name.'_qty.quantity','price_taxation.custom_name as material_name','po as po_no','orchestra_item_master.item_name as ref_no','orchestra_template.item_id','pi_rev_no','order_flag','orchestra_template.template_name','pi_status','pi_rev_no','uvc as style',$table_name.'_qty.uvc_tco')
                           ->get()->toArray();
-                          dd($item_details);
-        if ($item_details){
-          
+       
+        if (sizeof($item_details) > 0)
+        {
           $data['tables'][$table_name]= $table_name.'_qty';
+          $data['item_details'] = $item_details;
+
           $item_id_array = array();
           $price_array = array();
-          $templates = array();
-          array_push($item_id_array, $request->template_id);
-          if ($item_details[0]->order_flag!="reOrder" && $item_details[0]->order_flag!="repeatOrder"){
-              if ($table_name == "tesco_tcl1_orders" || $table_name == "tesco_tcl2_orders" || $table_name == "tesco_tsl1_orders") {
-                $table_array = array('tesco_tcl1_orders','tesco_tcl2_orders','tesco_tsl1_orders');
-                $qnty_id_array = array('tesco_tcl1_orders_quanty','tesco_tcl2_orders_quanty','tesco_tsl1_orders_quanty');
-                $template_array = array_combine($table_array, $qnty_id_array);
-                $count = 3;
 
-              }
-              if ($table_name == "tesco_tcl4_orders" || $table_name == "tesco_tsl3_orders") {
-                $table_array = array('tesco_tcl4_orders','tesco_tsl3_orders');
-                $qnty_id_array = array('tesco_tcl4_orders_quanty','tesco_tsl3_orders_quanty');
-                $template_array = array_combine($table_array, $qnty_id_array);
-                $count = 2;
-              }
-              if (!empty($template_array)) {
-                  unset($template_array[$table_name]);
-                  $data['tables']  = array_merge($data['tables'],$template_array);
+          array_push($item_id_array, $customer_details->template_id);
 
-                  foreach ($template_array as $key => $qunty_tbl) {
-                  $qnty_id =  str_replace("_orders","_order_id",str_replace("tesco_","",$key));
-                  if ($item_details[0]->zone =="CE") {
-                    $item_details2    = DB::table($key)
-                                  ->join($qunty_tbl,$qunty_tbl.'.'.$qnty_id,'=',$key.'.id')
-                                  ->join('tesco_item_master','tesco_item_master.id',$key.'.template_id')
-                                  ->leftjoin('price_taxation','price_taxation.template_id','=',$key.'.template_id')
-                                  ->leftjoin('tesco_template','tesco_template.item_id','=','price_taxation.template_id')
-                                  ->where($key.'.is_order_count_empty',0)
-                                  ->where('price_taxation.customer_id',$customer_details->id)
-                                  ->where('price_taxation.buyer_id',$buyer_id)
-                                  ->where($key.'.po_number',$item_details[0]->po_no)
-                                  ->where('ce_style_ref',$item_details[0]->style)
-                                  ->where($key.'.pi_status',$item_details[0]->pi_status)
-                                  ->where($key.'.order_flag',"newOrder")
-                                  ->select($key.'.id','size',$qunty_tbl.'.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name','po_number as po_no','zone','tesco_item_master.item_name as ref_no','tesco_template.item_id',$key.'.pi_rev_no','tesco_template.template_name','pi_rev_no')->get()->toArray();
+          if ($item_id_array) 
+          {
+            foreach (array_unique($item_id_array) as $item_id) 
+            {
+              $price_list      = DB::table('price_taxation')
+                                      ->join('price_range','price_range.price_taxation_id','price_taxation.id')
+                                      ->join('orchestra_template','orchestra_template.item_id','price_taxation.template_id')
+                                      ->where('orchestra_template.id','=',$item_id)
+                                      ->where('price_taxation.customer_id',$customer_details->id)
+                                      ->where('price_taxation.buyer_id',$buyer_id)
+                                      ->orderBy('price_range.volume_to')
+                                      ->select('price_range.volume_from', 'price_range.volume_to','price_range.price',DB::raw($item_id.' as item_id'),'orchestra_template.tax')
+                                      ->get()->toArray();
 
-                  }
-                  else{
-                    
-                    $item_details2    = DB::table($key)
-                                  ->join($qunty_tbl,$qunty_tbl.'.'.$qnty_id,'=',$key.'.id')
-                                  ->join('tesco_item_master','tesco_item_master.id',$key.'.template_id')
-                                  ->leftjoin('price_taxation','price_taxation.template_id','=',$key.'.template_id')
-                                  ->leftjoin('tesco_template','tesco_template.item_id','=','price_taxation.template_id')
-                                  ->where($key.'.is_order_count_empty',0)
-                                  ->where('price_taxation.customer_id',$customer_details->id)
-                                  ->where('price_taxation.buyer_id',$buyer_id)
-                                  ->where($key.'.po_number',$item_details[0]->po_no)
-                                  ->where($key.'.pi_status',$item_details[0]->pi_status)
-                                  ->where('uk_style_ref',$item_details[0]->style)
-                                  ->where($key.'.order_flag',"newOrder")
-                                  ->select($key.'.id','size',$qunty_tbl.'.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name','po_number as po_no','zone','tesco_item_master.item_name as ref_no','tesco_template.item_id',$key.'.pi_rev_no','tesco_template.template_name','pi_rev_no')->get()->toArray();
-                  }
-                  if ($item_details2) {
-                    $item_details = array_merge($item_details,$item_details2);
-                  }
-                }
-                foreach ($item_details as $key => $value) {
-                   if ($value->zone == "CE") {
-                      $value->style = $value->ce_style_ref;
-                   }
-                   else{
-                      $value->style = $value->uk_style_ref;
-                   }
-                   array_push($item_id_array, $value->item_id);
-                }
-                // if ($count == sizeof($item_details)) {
-                //   $data['item_details'] = $item_details;
-                // }
-                // else{
-                //   $data['item_details'] = [];
-                // }
-                $data['item_details'] = $item_details;
-              }
-          }  
-
-          if ($item_id_array) {
-            foreach (array_unique($item_id_array) as $item_id) {
-             $price_list      = DB::table('price_taxation')
-                                    ->join('price_range','price_range.price_taxation_id','price_taxation.id')
-                                    ->join('tesco_template','tesco_template.item_id','price_taxation.template_id')
-                                    // ->join('tax_code','tesco_template.tax_code_id','tax_code.id')
-                                    ->where('price_taxation.template_id','=',$item_id)
-                                    ->where('price_taxation.customer_id',$customer_details->id)
-                                    ->where('price_taxation.buyer_id',$buyer_id)
-                                    ->orderBy('price_range.volume_to')
-                                    ->select('price_range.volume_from', 'price_range.volume_to','price_range.price',DB::raw($item_id.' as item_id'),'tesco_template.tax')
-                                    ->get()->toArray();
-              $price_array = array_merge($price_array,$price_list);
+                $price_array = array_merge($price_array,$price_list);
             } 
-          $data['price_list'] = $price_array;
-          }
-          if (empty($template_array) && sizeof($item_details)!=0) {
-            $data['item_details'] = $item_details;
+            $data['price_list'] = $price_array;
           }
         }
-        else{
+        else
+        {
           $data['price_list'] = [];
           $data['item_details'] = [];
         }
