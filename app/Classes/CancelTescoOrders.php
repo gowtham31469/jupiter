@@ -135,27 +135,5 @@ class CancelTescoOrders
              return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
   }
-
-  /**
-   * method to update cancel tesco orders status in erp_orders and erp_order_details table
-   * @param  [type] $row_id, $order_qty_table_name, $erp_orders, $order_status_id
-   * @return tesco order table id
-   */
-  public function updateERPCancelStatus($erp_order_qty, $erp_orders, $order_status_id)
-  {
-    try {
-          
-          if ($order_qty_ids) 
-          {
-            
-            
-          }
-          return "cancelled";
-            
-        } catch (\Exception $e)
-        {
-             return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-        }
-  }
   
 }
