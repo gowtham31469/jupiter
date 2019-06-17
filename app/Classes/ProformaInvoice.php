@@ -100,14 +100,14 @@ class ProformaInvoice
                           ->where('price_taxation.buyer_id',$buyer_id)
                           ->where('orchestra_template.id',$customer_details->template_id)
                           ->where($table_name.'_qty.'.$qnty_id.'_id',$id)
-                          ->select('size',$table_name.'_qty.quantity','price_taxation.custom_name as material_name','po as po_no','orchestra_item_master.item_name as ref_no','orchestra_template.item_id','pi_rev_no','order_flag','orchestra_template.template_name','pi_status','pi_rev_no','uvc as style',$table_name.'_qty.uvc_tco')
+                          ->select('size',$table_name.'_qty.quantity','price_taxation.custom_name as material_name','po as po_no','orchestra_item_master.item_name as ref_no','orchestra_template.item_id','pi_rev_no','order_flag','orchestra_template.template_name','pi_status','pi_rev_no','uvc',$table_name.'_qty.uvc_tco', DB::raw($customer_details->template_id.' as item_id'))
                           ->get()->toArray();
-       
+
+        $data['tables'][$table_name]= $table_name.'_qty';
+        $data['template_id'] = $customer_details->template_id;
         if (sizeof($item_details) > 0)
         {
-          $data['tables'][$table_name]= $table_name.'_qty';
           $data['item_details'] = $item_details;
-
           $item_id_array = array();
           $price_array = array();
 

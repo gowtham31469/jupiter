@@ -1,9 +1,9 @@
 /**
  * call the method for getting all the details for profoma invoice generation
- * @param  {[type]} uvc         [description]
- * @param  {[type]} po          [description]
- * @param  {[type]} template_id [description]
- * @param  {[type]} table_name  [description]
+ * @param  {[type]} uvc         
+ * @param  {[type]} po          
+ * @param  {[type]} table_name  
+ * @param  {[type]} buyer_id  
  * @return profoma invoice
  */
 
@@ -42,7 +42,9 @@ const genarateOrchetraPI = (id,table_name,uvc,pi_status) =>
                     $('.advnc').text(data.data.bank_details.payment_terms)
                     $('.freight').text(data.data.bank_details.freight_terms)
                     $('.pi_number').text(data.data.company_details.pi_number)
-                    $('.pi-date').text(moment(data.data.company_details.pi_date).format('DD/MM/YYYY'))
+                    $('.pi-date').text(moment(data.data.company_details.pi_date).format('DD/MM/YYYY'));
+
+                    // check if revision number is 0 or not.
                     if (data.data.company_details.rev_number!=0)
                     {
                        $('.rev').removeClass('hidden')
@@ -52,32 +54,26 @@ const genarateOrchetraPI = (id,table_name,uvc,pi_status) =>
                       $('.rev').addClass('hidden')
                     }
 
+                    // company details data
                     $('#company_details').html('<strong style="font-size:11px;">'+data.data.company_details.name+'</strong><br/>'+data.data.company_details.address+'<br/>PH : '+data.data.company_details.office_phone+', '+data.data.company_details.phone+'<br/>GSTIN : '+data.data.company_details.gstin)
-                    $('#bill_to').html('<h4>Billing Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.bill_to.address+'</br> GSTIN :'+data.data.bank_details.gstin_number+ '</p>')
-                    $('#ship_to').html('<h4>Shipping Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.ship_to.address+'</p>')
-                    $('#bank_details').html(' <strong>BANK DETAILS: </strong><table class="table table-condensed" style="width:50%;"><tr><td>BANK</td><td>'+data.data.company_details.bank+'</td></tr><tr><td>A/C No</td><td>'+data.data.company_details.account_no+'</td></tr><tr><td>A/C NAME</td><td>'+data.data.company_details.account_holder+'</td></tr><tr><td>IFSC CODE</td><td>'+data.data.company_details.ifsc_code+'</td></tr></table>')
+                    $('#bill_to').html('<h4>Billing Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.bill_to.address+'</br> GSTIN :'+data.data.bank_details.gstin_number+ '</p>');
 
+                    // ship to details data
+                    $('#ship_to').html('<h4>Shipping Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.ship_to.address+'</p>')
+                    $('#bank_details').html(' <strong>BANK DETAILS: </strong><table class="table table-condensed" style="width:50%;"><tr><td>BANK</td><td>'+data.data.company_details.bank+'</td></tr><tr><td>A/C No</td><td>'+data.data.company_details.account_no+'</td></tr><tr><td>A/C NAME</td><td>'+data.data.company_details.account_holder+'</td></tr><tr><td>IFSC CODE</td><td>'+data.data.company_details.ifsc_code+'</td></tr></table>');
+
+                    // order details table.
                     var i = 0;
                     var totalqnty = 0;
                     var subtotal = 0;
                    
-                    var tr = '';
-                    if (data.data.bank_details.template_type == "single")
-                    {
-                        tr += '<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>S.No.</th><th>Style</th><th>Po.No.</th><th>Ref</th><th class="size-pi">Size</th><th>Quantity</th><th>Unit Cost</th><th>Tax</th><th>Total</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12">';    
-                    }
-                    else
-                    {
-                        tr += '<table class="table table-bordered table-condensed"><thead><tr><th>S.No.</th><th>Style</th><th>Po.No.</th><th>Ref</th><th>Quantity</th><th>Unit Cost</th><th>Tax</th><th>Total</th></tr></thead>';
-                    }
+                    var tr = '<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>S.No.</th><th>UVC</th><th>Po.No.</th><th>Ref</th><th class="size-pi">Size</th><th>Quantity</th><th>Unit Cost</th><th>Tax</th><th>Total</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12">';    
 
                     if(data.data.item_details.length != 0 && data.data.price_list.length != 0)
                     {
                         var noPrice = 0;
-                        var noVol = 0 ;
                         var taxamnt = 0;
                         var amnt = 0;
-                        var totaltax = 0;
                         var totalcgst = 0;
                         var totalsgst = 0;
                         var totaligst = 0;
@@ -85,9 +81,9 @@ const genarateOrchetraPI = (id,table_name,uvc,pi_status) =>
                         var amount = 0;
                         $.each(data.data.item_details, function (index, value)
                         {
+                            // set unit price and tax value based on quantity and volume to value
                             var unit_price = 0;
                             var tax = 0;
-
                             $.each(data.data.price_list, function(i, val){
                                 if (value.item_id == val.item_id) {
                                     if(value.quantity <= val.volume_to) {
@@ -95,46 +91,40 @@ const genarateOrchetraPI = (id,table_name,uvc,pi_status) =>
                                         tax = val.tax;
                                         return false; 
                                     }
-                                    else{
-                                        noVol++;
-                                    }
                                 }
                             });
+
+                            // if price is 0, (ie, there is no price data available for quantity) increment 'noPrice' by 1
                             if(unit_price === 0){
                                 noPrice++;
                             }
-                            taxamnt = (value.quantity*unit_price)*(tax/100);
-                            amnt =  (value.quantity*unit_price) + taxamnt ;
 
-                            if (data.data.bank_details.template_type == "single")
-                            {
-                                size = value.size ;
-                                tr += '<tr><td>'+ ++i +'</td><td>'+value.style+'</td><td>'+value.po_no+'</td><td>'+value.ref_no+'</td><td>'+size+'</td><td>'+value.quantity+'</td><td>'+unit_price+'</td><td>'+tax+'</td><td style="text-align: right;">'+amnt.toFixed(2)+'</td></tr>'
-                            }
-                            else
-                            {
-                                tr += '<tr><td>'+ ++i +'</td><td>'+value.style+'</td><td>'+value.po_no+'</td><td>'+value.ref_no+'</td><td>'+value.quantity+'</td><td>'+unit_price+'</td><td>'+tax+'</td><td style="text-align: right;">'+amnt.toFixed(2)+'</td></tr>'
-                            }
+                            taxamnt = (value.quantity*unit_price)*(tax/100);
+                            amnt    =  (value.quantity*unit_price) + taxamnt ;
+
+                            // table rows
+                            size = value.size ;
+                            var buyer_po = value.po_no === ('' || null)?'-':value.po_no;
+                            tr += '<tr><td>'+ ++i +'</td><td>'+value.uvc+'</td><td>'+buyer_po+'</td><td>'+value.ref_no+'</td><td>'+size+'</td><td>'+value.quantity+'</td><td>'+unit_price+'</td><td>'+tax+'</td><td style="text-align: right;">'+amnt.toFixed(2)+'</td></tr>';
                             
-                            totaltax+=parseInt(tax);
+                            
                             if (data.data.bank_details.place_of_supply==1){
-                                totalcgst+=((parseInt(tax)/2)/100)*(value.quantity*unit_price);
-                                totalsgst+=((parseInt(tax)/2)/100)*(value.quantity*unit_price);
+                                totalcgst += ((parseInt(tax)/2)/100)*(value.quantity*unit_price);
+                                totalsgst += ((parseInt(tax)/2)/100)*(value.quantity*unit_price);
                             }
                             else if (data.data.bank_details.place_of_supply==2){
-                                totaligst+= ((parseInt(tax))/100)*(value.quantity*unit_price);
+                                totaligst += ((parseInt(tax))/100)*(value.quantity*unit_price);
                             }
                             else{
-                               // amount +=(totaltax/100)* (value.quantity*unit_price);
-                               amount +=(parseInt(tax)/100)* (value.quantity*unit_price);
+                               amount += (parseInt(tax)/100)* (value.quantity*unit_price);
                             }
-                            totalqnty+=value.quantity;
-                            subtotal+=(value.quantity*unit_price);
-                            billamnt+=amnt;
+                            totalqnty += value.quantity;
+                            subtotal += (value.quantity*unit_price);
+                            billamnt += amnt;
                         });
-                        if(noPrice <1) {
-                            // var taxamnt = subtotal*(tax/100);
-                            // var billamnt = subtotal+taxamnt;
+
+                        // price details missing
+                        if(noPrice < 1) {
                             tr += '</tbody></table></div><hr><h4 class="text-right"> Total Quantity : '+totalqnty+' </h4><hr><h4 class="text-right"> Sub-Total : ₹ '+subtotal.toFixed(2)+' </h4><hr/><div class="text-right">'
                             if (data.data.bank_details.place_of_supply==1)
                             {
@@ -151,11 +141,11 @@ const genarateOrchetraPI = (id,table_name,uvc,pi_status) =>
                             $('#item_details').html(tr)
                             if (pi_status=="true")
                             {
-                                $('.pi_actions').html('<button class="btn btn-default btn-xs downloadPi" id="downloadPi" onclick=downloadPi("'+template_id+'","'+id+'","'+tableName+'","tesco")>Download</button><button type="button" class="btn btn-default btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
+                                $('.pi_actions').html('<button class="btn btn-default btn-xs downloadPi" id="downloadPi" onclick=downloadPi("'+data.data.template_id+'","'+id+'","'+tableName+'","tesco")>Download</button><button type="button" class="btn btn-default btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
                             }
                             else
                             {
-                                $('.pi_actions').html('<button class="btn btn-success btn-xs" onclick=tescoApprovePI("'+template_id+'","'+id+'","'+tableName+'","'+billamnt+'")>Approve</button><button class="btn btn-danger btn-xs" onclick=tescoRejectPI("'+id+'","'+tableName+'","tesco")>Reject</button><button type="button" class="btn btn-primary btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
+                                $('.pi_actions').html('<button class="btn btn-success btn-xs" onclick=tescoApprovePI("'+data.data.template_id+'","'+id+'","'+tableName+'","'+billamnt+'")>Approve</button><button class="btn btn-danger btn-xs" onclick=tescoRejectPI("'+id+'","'+tableName+'","tesco")>Reject</button><button type="button" class="btn btn-primary btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
                             }
                             var logo = base_url+data.data.company_details.logo
                             $('#company-logo').attr('src',logo);
