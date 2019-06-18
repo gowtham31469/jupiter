@@ -105,14 +105,16 @@ class OrderManagementCntrl extends Controller
     public function Orders()
     {
 		
-		// check for price data missing for SKU Code(In PO CSV)
-        $parcel_details = OrchestraParcelDetails::select(DB::raw('distinct on (orchestra_parcel_quantity_details."UVC_TCO") orchestra_parcel_quantity_details."UVC_TCO"'))->join('orchestra_parcel_quantity_details', 'orchestra_parcel_quantity_details.UVC_TCO', 'orchestra_parcel_details.UVC_TCO')->groupBy('orchestra_parcel_quantity_details.UVC_TCO')->get()->toArray();
-
-        $UVC_TCO_array1 = [];
-        foreach ($parcel_details as $key => $value) {
-          array_push($UVC_TCO_array1, $value['UVC_TCO']);
-        }
-
+//		// check for price data missing for SKU Code(In PO CSV)
+//        $parcel_details = OrchestraParcelDetails::select(DB::raw('distinct on (orchestra_parcel_quantity_details."UVC_TCO") orchestra_parcel_quantity_details."UVC_TCO"'))->join('orchestra_parcel_quantity_details', 'orchestra_parcel_quantity_details.UVC_TCO', 'orchestra_parcel_details.UVC_TCO')->groupBy('orchestra_parcel_quantity_details.UVC_TCO')->get()->toArray();
+//
+//        $UVC_TCO_array1 = [];
+//        foreach ($parcel_details as $key => $value) {
+//          array_push($UVC_TCO_array1, $value['UVC_TCO']);
+//        }
+//
+		
+		 $UVC_TCO_array1 = [];
          // check for po data missing for SKU Code(In price CSV)
          $parcel_qty_details = OrchestraParcelQuantityDetails::select(DB::raw('distinct on (orchestra_parcel_details."UVC_TCO") orchestra_parcel_details."UVC_TCO"'))->join('orchestra_parcel_details', 'orchestra_parcel_quantity_details.UVC_TCO', 'orchestra_parcel_details.UVC_TCO')->groupBy('orchestra_parcel_details.UVC_TCO')->get()->toArray();
 
@@ -120,9 +122,9 @@ class OrderManagementCntrl extends Controller
            array_push($UVC_TCO_array1, $value['UVC_TCO']);
          }
 		
-        $data['sticker_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id',DB::raw("'-' as \"Season\""),'BuyerPONo','SupplierName','NomApple as Style_Name','Quantity','IsSTD as Type',DB::raw("'Stickers' as \"OrderType\""),'sticker_order_status as Order Status',DB::raw("'-' as \"Disney\""))->whereIn('UVC_TCO', $UVC_TCO_array1)->groupBy('id','UVC')->get();
+        $data['sticker_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id',DB::raw("'-' as \"Season\""),'BuyerPONo','SupplierName','NomApple as Style_Name','Quantity','IsSTD as Type',DB::raw("'Stickers' as \"OrderType\""),'sticker_order_status as Order Status',DB::raw("'-' as \"Disney\""))->whereNotIn('UVC_TCO', $UVC_TCO_array1)->groupBy('id','UVC')->get();
 
-        $data['label_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id','Season_Code as Season',DB::raw("'-' as \"BuyerPONo\""),'SupplierName','Theme as Description','NomApple as Style_Name','Licence_Code as Disney',DB::raw("'-' as \"Type\""),'Quantity',DB::raw("'Labels' as \"OrderType\""),'order_status as Order Status')->groupBy('id','UVC')->whereIn('UVC_TCO', $UVC_TCO_array1)->get();
+        $data['label_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id','Season_Code as Season',DB::raw("'-' as \"BuyerPONo\""),'SupplierName','Theme as Description','NomApple as Style_Name','Licence_Code as Disney',DB::raw("'-' as \"Type\""),'Quantity',DB::raw("'Labels' as \"OrderType\""),'order_status as Order Status')->whereNotIn('UVC_TCO', $UVC_TCO_array1)->groupBy('id','UVC')->get();
         
         echo json_encode($data);
     } 
