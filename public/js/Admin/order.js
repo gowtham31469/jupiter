@@ -1038,7 +1038,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
         var disabled = '';
         var ttotal = '';
         var thead = '<thead><tr><th>Size</th><th>Ratio</th><th>Barcode<br/><sub>(for parcel/carton & polybag)</sub></th></tr></thead>';
-        $.each(data.orchestra_parcel_quantity_details, function (index, value) {
+        $.each(data.orchestra_parcel_details, function (index, value) {
             tr += '<tr><td class="size">' + value.Size + '</td><td class="qty">' + value.Quantity + '</td><td>' + data.orchestra_parcel_details[0].ParcelBarCode + '</td></tr>';
 
         });
@@ -1103,7 +1103,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 		
         var thead = '<thead><tr><th>Size</th><th>Barcode<br/>(for parcel/carton & polybag)</th><th>Item Qty</th><th>Polybag Sticker Qty<br/>incl. wastage</th><th>Parcel Sticker Qty<br/>(in sets)</th></tr></thead>';
         $qu = 0;
-        $.each(data.orchestra_parcel_quantity_details, function (index, value) {
+        $.each(data.orchestra_parcel_details, function (index, value) {
 
             if (data.orchestra_solid_carton_sticker_orders != "") {
                 $carton_count = data.orchestra_solid_carton_sticker_orders[0].qty[$qu].quantity;
@@ -1174,7 +1174,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
     {
         var onclick = "orderStatus()";
     }
-    $('.top-content').append('<form id="solid_carton_form"><h3><i class="ion-ios-browsers-outline"></i> Sticker Order Details for UVC ' + uvc + ' and PO ' + po + '</h3><hr/><h5><div style="margin-bottom: 10px;"><label style="color:red" class="age_group_error hidden">Please Select Age Group</label></div><span class="sticker-details">Supplier: <strong><span id="supplier">' + data.orchestra_parcel_details[0].SupplierName + '</span></strong> </span> <span class="sticker-details">Style: <strong><span id="style">' + data.orchestra_parcel_details[0].NomApple + '</span></strong></span><span class="sticker-details">Color: <strong><span id="color">' + data.orchestra_parcel_quantity_details[0].Color + '</span></strong></span><span class="sticker-details" style="display: inline-flex; white-space: nowrap;">Age Group: <strong><span id="ageGroup">  <select class="form-control" style="margin-top: -9px; margin-left: 10px;" name="carlist" id="age" form="carform">' + option + '</select></span></strong> </span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>' + head_qty + '</h4><div class="table-responsive"><table class="table table-condensed table-bordered table-hover" id="solidform">' + thead + '<tbody id="solidformtbody">' + tr + '</tbody><tfoot><tr class="strong"><td class="text-right" colspan="2">Total</td><td>' + data.orchestra_parcel_details[0].Quantity + '</td>' + ttotal + '</tr></tfoot></table><div class="bottom-bar"><div class="modal-footer"> <button onclick="'+onclick+'" class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="submit" class="btn btn-xs btn-success"><i class="fa fa-floppy-o"></i>Save</button><button type="button" class="btn btn-success  pull-right btn-xs" data-toggle="modal" id="'+po_file_upload_button+'" style="'+update_disabel_button+'" >Update PO</button></div></div></form></div></div><div class="col-md-4"><h4>' + head_qty1 + '</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" disabled value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" disabled value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume">' + $parcelVolume + '</span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input ' + disabled + ' data-toggle="modal" data-target=".needed_modal" value="' + $no_of_carton + '" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>' + standard_div + ' </div></div>');
+    $('.top-content').append('<form id="solid_carton_form"><h3><i class="ion-ios-browsers-outline"></i> Sticker Order Details for UVC ' + uvc + ' and PO ' + po + '</h3><hr/><h5><div style="margin-bottom: 10px;"><label style="color:red" class="age_group_error hidden">Please Select Age Group</label></div><span class="sticker-details">Supplier: <strong><span id="supplier">' + data.orchestra_parcel_details[0].SupplierName + '</span></strong> </span> <span class="sticker-details">Style: <strong><span id="style">' + data.orchestra_parcel_details[0].NomApple + '</span></strong></span><span class="sticker-details">Color: <strong><span id="color">' + data.orchestra_parcel_details[0].Color_Code + '</span></strong></span><span class="sticker-details" style="display: inline-flex; white-space: nowrap;">Age Group: <strong><span id="ageGroup">  <select class="form-control" style="margin-top: -9px; margin-left: 10px;" name="carlist" id="age" form="carform">' + option + '</select></span></strong> </span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>' + head_qty + '</h4><div class="table-responsive"><table class="table table-condensed table-bordered table-hover" id="solidform">' + thead + '<tbody id="solidformtbody">' + tr + '</tbody><tfoot><tr class="strong"><td class="text-right" colspan="2">Total</td><td>' + data.orchestra_parcel_details[0].Quantity + '</td>' + ttotal + '</tr></tfoot></table><div class="bottom-bar"><div class="modal-footer"> <button onclick="'+onclick+'" class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="submit" class="btn btn-xs btn-success"><i class="fa fa-floppy-o"></i>Save</button><button type="button" class="btn btn-success  pull-right btn-xs" data-toggle="modal" id="'+po_file_upload_button+'" style="'+update_disabel_button+'" >Update PO</button></div></div></form></div></div><div class="col-md-4"><h4>' + head_qty1 + '</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" disabled value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" disabled value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume">' + $parcelVolume + '</span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input ' + disabled + ' data-toggle="modal" data-target=".needed_modal" value="' + $no_of_carton + '" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>' + standard_div + ' </div></div>');
     $('#solid_carton_form');
 
     $('.main-content').html('<input type="hidden" value="' + data.std_carton_id + '" id="std_carton_id"><input type="hidden" value="' + data.std_poly_id + '" id="std_poly_id"><input type="hidden" value="' + data.carton_id + '" id="carton_id"><input type="hidden" value="' + data.poly_id + '" id="poly_id"><input type="hidden" value="' + data.carton_template_id + '" id="carton_template_id"><input type="hidden" value="' + data.polybag_template_id + '" id="polybag_template_id"><input type="hidden" value="' + uvc + '" id="uvc_id"><input type="hidden" value="' + po + '" id="po"><hr/><h4>Carton and Polybag Stickers</h4><div class="row"> <div class="col-md-4"> <div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"> <div class="card-title"> <p class="pull-right" style="cursor:pointer">Click to view</p> <h5>Carton Sticker</h5></div><div class="img_artwork"><object id="svg2" style="width:300px;height:200px; border:2px solid" class="center-block svg2" data="' + data.carton_template + '" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"> <div class="modal-content"><div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Carton Sticker</h4></div><div class="modal-body"><object id="svg3" style="width:575px;height:378;border: 2px #000 solid;" class="center-block" data="' + data.carton_template + '" type="image/svg+xml"></object></div><div id="svgdiv" style="display:none"><svg id="ean-13"></svg></div><div class="modal-footer"> <button type="button" class="btn btn-primary" onclick=printDiv("svg3",' + data.orchestra_parcel_details[0].IsSTD + ',"'+uvc+'")>Print</button></div> </div> </div> </div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg2" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" style="cursor:pointer">Click to view</p><h5>Polybag Sticker</h5></div><div class="img_artwork"><object id="svg1" class="center-block" style="width:300px;height:200px;border:2px solid" data="' + data.polybag_template + '" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg2 artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Polybag Sticker</h4></div><div class="modal-body"><object id="svg4" class="center-block" style="width:500px;height:330px;border:2px solid" data="' + data.polybag_template + '" type="image/svg+xml"></object> </div><div class="modal-footer"><button type="button" class="btn btn-primary" onclick=printDiv("svg4",' + data.orchestra_parcel_details[0].IsSTD + ',"'+uvc+'")>Print</button></div></div></div></div> </div> </div> </div></div><div class="modal fade bs-example-modal-sm artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header alert-danger"><button type="button" class="close" data-dismiss="modal" aria-label="Close" id="modal_close"><span aria-hidden="true">&times;</span></button><p>Use this column only if needed</p></div></div>')
@@ -2001,6 +2001,42 @@ function printWashDiv(data,data_back,data_middle ,dataid) {
 	var a1 = document.getElementById(data);
 	var svgDoc1 = a1.contentDocument;
 	var svgRoot1 = svgDoc1.documentElement;
+	var index_arr=[];
+	var svgarr = [];
+	$('#wash_care_label_table tbody tr').each(function (key, val) {
+		if(index_arr.includes($(this).find('.size').text()) != true)
+		{
+			if($(this).find('.size').text() != "")
+				{
+					index_arr.push($(this).find('.size').text())
+					
+					
+					var size = $(this).find('.size').text().split(" ")
+
+					if (size[1] == "ANS") {
+						var size1 = "years";
+					} else {
+						var size1 = "months";
+					}
+					
+				    svgDoc1.getElementById("size1").innerHTML = $(this).find('.size').text().replace(" ", "").toLowerCase() + "/" + size1;
+				    svgDoc1.getElementById("size2").innerHTML = $(this).find('.size').text().replace(" ", "").toLowerCase() + "/" + size1;
+				    svgDoc1.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -30 135) rotate(270)');
+					
+					var code = $(this).find('.barcode').text();
+					jsbarcodewash(code, 'barcode', svgDoc1)
+					
+					
+					var s = new XMLSerializer();
+					var d = svgRoot1;
+					var str = s.serializeToString(d);
+					var svg = encodeURI(str)
+					svgarr.push(svg)
+				}
+		}
+	})
+	//console.log(index_arr)
+	
 	
 	var a1_back = document.getElementById(data_back);
 	var svgDoc1_back = a1_back.contentDocument;
@@ -2009,8 +2045,8 @@ function printWashDiv(data,data_back,data_middle ,dataid) {
 	var a1_middle = document.getElementById(data_middle);
 	var svgDoc1_middle = a1_middle.contentDocument;
 	var svgRoot1_middle = svgDoc1_middle.documentElement;
-
-	PopupWash(svgRoot1,svgRoot1_back,svgRoot1_middle, dataid);
+	var svg_fin = svgarr.join(',_');
+	PopupWash(svg_fin,svgRoot1_back,svgRoot1_middle, dataid,svgDoc1);
 }
 
 /**
@@ -2070,7 +2106,8 @@ function PopupSpecial(data) {
  * @return Pdf
  */
 
-function PopupWash(data,data_back,data_middle,dataid) {
+function PopupWash(data,data_back,data_middle,dataid,svgDoc1) {
+	
     if (dataid != undefined) {
         dataid=dataid;
     }
@@ -2078,10 +2115,10 @@ function PopupWash(data,data_back,data_middle,dataid) {
     {
         dataid="";
     }
-    var s = new XMLSerializer();
-    var d = data;
-    var str = s.serializeToString(d);
-    var svg = encodeURI(str)
+      var s = new XMLSerializer();
+//    var d = data;
+//    var str = s.serializeToString(d);
+//    var svg = encodeURI(str)
 	
 	
 	var d_back = data_back;
@@ -2112,13 +2149,14 @@ function PopupWash(data,data_back,data_middle,dataid) {
             made_in_select:made_in_select,
             care_instruction_select_fin:care_instruction_select_fin,
             composition:wash_finals,
-            svg: svg,
+            svg: data,
             svg_back: svg_back,
             svg_middle: svg_middle,
             
         },
         async: false,
         success: function (data) {
+			svgDoc1.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -13 125.454) rotate(270)');
             success = true;
             url = data;
         },
@@ -2373,9 +2411,9 @@ function barcode_polybag(id, data) {
 			svgDoc.getElementById("cartontable").innerHTML = $tbl;
 		} else {
 			svgDoc.getElementById("parcel_code").innerHTML = data.orchestra_parcel_details[0].UVC_TCO;
-			var code = data.orchestra_parcel_quantity_details[0].BarcodeForPricesTags.toString();
-			svgDoc.getElementById("size").innerHTML = data.orchestra_parcel_quantity_details[0].Size;
-			svgDoc.getElementById("color").innerHTML = data.orchestra_parcel_quantity_details[0].Color;
+			var code = data.orchestra_parcel_details[0].BarcodeForPricesTags.toString();
+			svgDoc.getElementById("size").innerHTML = data.orchestra_parcel_details[0].Size;
+			svgDoc.getElementById("color").innerHTML = data.orchestra_parcel_details[0].Color_Code;
 
 		}
 		jsbarcode(code, 'barcode', svgDoc)
@@ -2402,14 +2440,14 @@ function barcode_carton(id, data) {
 		svgDoc.getElementById("volume").innerHTML = $('#parcelVolume').text();
 		svgDoc.getElementById("theme").innerHTML = data.orchestra_parcel_details[0].Theme;
 		
-		svgDoc.getElementById("color").innerHTML = data.orchestra_parcel_quantity_details[0].Color;
+		svgDoc.getElementById("color").innerHTML = data.orchestra_parcel_details[0].Color_Code;
 
 		if (data.template_name == "Standard") {
 			var code = data.orchestra_parcel_details[0].ParcelBarCode.toString();
 			svgDoc.getElementById("parcelcode").innerHTML = data.orchestra_parcel_details[0].ParcelCode;
 		} else {
-			var code = data.orchestra_parcel_quantity_details[0].BarcodeForPricesTags.toString();
-			svgDoc.getElementById("size").innerHTML = data.orchestra_parcel_quantity_details[0].Size;
+			var code = data.orchestra_parcel_details[0].BarcodeForPricesTags.toString();
+			svgDoc.getElementById("size").innerHTML = data.orchestra_parcel_details[0].Size;
 			svgDoc.getElementById("parcelcode").innerHTML = data.orchestra_parcel_details[0].UVC_TCO;
 		}
 
@@ -2617,21 +2655,15 @@ function label_order_details(uvc) {
  + ' option:selected').data('astm'));
                 
                 var text_for_mad_in = '<p>' + $('select.made_in_select' + washcare).find(':selected').data('french') + " - " + $('select.made_in_select' + washcare).find(':selected').data('english') + " - " + $('select.made_in_select' + washcare).find(':selected').data('spanish') + " - " + $('select.made_in_select' + washcare).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + washcare).find(':selected').data('italian') + " - " + $('select.made_in_select' + washcare).find(':selected').data('dutch') + " - " + $('select.made_in_select' + washcare).find(':selected').data('german') + " - " +
-                    $('select.made_in_select' + washcare).find(':selected').data('russian') + " - " +
-                    $('select.made_in_select' + washcare).find(':selected').data('chinese') + " - " +
                     $('select.made_in_select' + washcare).find(':selected').data('arabic') + " - " +
-                    $('select.made_in_select' + washcare).find(':selected').data('greek') + " - " +
-                    $('select.made_in_select' + washcare).find(':selected').data('turkish') + '</p>';
+                    $('select.made_in_select' + washcare).find(':selected').data('greek')  + '</p>';
                 svgDoc.getElementById("country").innerHTML = text_for_mad_in;
                 
                 svgDoc.getElementById("text_care_instruction").innerHTML = "";
                 $('.care_instruction_select' + washcare + ' option:selected').each(function () {
-                    var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german') + "-" +
-                        $(this).data('russian') + "-" +
-                        $(this).data('chinese') + "-" +
+                    var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german')  + "-" +
                         $(this).data('arabic') + "-" +
-                        $(this).data('greek') + "-" +
-                        $(this).data('turkish') + '</p>';
+                        $(this).data('greek')  + '</p>';
                     svgDoc.getElementById("text_care_instruction").innerHTML += value;
                 });
                 
@@ -2639,7 +2671,7 @@ function label_order_details(uvc) {
               $('#composition_remove_qty' + washcare + ' tr').each(function () {
                   if($(this).find('select').find(':selected').val() != "Select Option")
                   {
-                       svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german') + "-" + $(this).find('select' ).find(':selected').data('russian') + "-" + $(this).find('select' ).find(':selected').data('chinese') + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek')  + "-" + $(this).find('select' ).find(':selected').data('turkish')  + '</p>';
+                       svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german') + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek') + '</p>';
                   }
                  
                   var id=$(this).attr('id')
@@ -2648,7 +2680,7 @@ function label_order_details(uvc) {
                   $(compss).each(function (index1,value1) {
                       var english = value1.split('_');
 
-                    svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + id + '" id="composition_' + id + '">' + english[12] + "% " + english[0]  + "-" +english[1] + "-" + english[2]+ "-" +english[3] + "-" + english[4] + "-" + english[5] + "-" + english[6] + "-" + english[7]+ "-" +english[8] + "-" + english[9] + "-" + english[10] + "-" + english[11]+ '</p>';
+                    svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + id + '" id="composition_' + id + '">' + english[9] + "% " + english[0]  + "-" +english[1] + "-" + english[2]+ "-" +english[3] + "-" + english[4] + "-" + english[5] + "-" +english[6] + "-" + english[7] + "-" + english[8]+ '</p>';
                 });
               })
             $('.composition_error_hidden').addClass('hidden')
@@ -2661,7 +2693,7 @@ function label_order_details(uvc) {
                   var compss = compo.split(',');
                     $(compss).each(function (index1,value1){ 
                         var english = value1.split('_');
-                        washcomp1.push(value+"_"+english[0]+"_"+english[12]) 
+                        washcomp1.push(value+"_"+english[1]+"_"+english[9]) 
                     });
                 washcomp.push(washcomp1)
             })
@@ -2733,16 +2765,16 @@ function washcarelabels(data, dataid) {
 
 
     $.each(data.orchestra_countries, function (index, value) {
-        made_option += "<option data-id='" + value.id + "'  data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german + "' data-russian='" + value.russian + "' data-chinese='" + value.chinese + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' data-turkish='" + value.turkish + "' value=" + value.id + ">" + value.english + "</option>";
+        made_option += "<option data-id='" + value.id + "'  data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' value=" + value.id + ">" + value.english + "</option>";
     });
     $.each(data.orchestra_care_instruction, function (index, value) {
-        instruction_option += "<option data-id='" + value.id + "' data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german + "' data-russian='" + value.russian + "' data-chinese='" + value.chinese + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' data-turkish='" + value.turkish + "' value=" + value.id + ">" + value.english + "</option>";
+        instruction_option += "<option data-id='" + value.id + "' data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german  + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' value=" + value.id + ">" + value.english + "</option>";
     });
     $.each(data.orchestra_parts, function (index, value) {
-        parts_option += "<option data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german + "' data-russian='" + value.russian + "' data-chinese='" + value.chinese + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' data-turkish='" + value.turkish + "' value=" + value.id + ">" + value.english + "</option>";
+        parts_option += "<option data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' value=" + value.id + ">" + value.english + "</option>";
     });
     $.each(data.orchestra_composition, function (index, value) {
-        composition_option += "<option data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german + "' data-russian='" + value.russian + "' data-chinese='" + value.chinese + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' data-turkish='" + value.turkish + "' value=" + value.id + ">" + value.english + "</option>";
+        composition_option += "<option data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german  + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' value=" + value.id + ">" + value.english + "</option>";
     });
     $.each(data.orchestra_care_symbols, function (index, value) {
         if (value.category_id == 1) {
@@ -2824,7 +2856,7 @@ function washcarelabels(data, dataid) {
         }
 
 
-        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + (value.Size).replace("ANS", '') + '</td><td>' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control input-sm tot_qty_table" value="' + $wash_label_count + '" required placeholder="WCL Count"><div class="help-block with-errors"></div></div></td></tr>';
+        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + (value.Size).replace("ANS", '') + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control input-sm tot_qty_table" value="' + $wash_label_count + '" required placeholder="WCL Count"><div class="help-block with-errors"></div></div></td></tr>';
 
         $qu++;
         ttots += parseInt($wash_label_count);
@@ -2879,7 +2911,7 @@ function washcarelabels(data, dataid) {
 		var disney_flag="0";
 	}
 
-    $('.top-content').append('<form id="washcarelabelform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><div class="left-panel col-md-9"> <div class="div-max"> <div class="col-md-3"> <h4>Options</h4> <hr><div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">WCL Name</label><input type="text" class="form-control input-sm" required="" placeholder="WCL Name" value="' + $wcl_name + '" id="wcl_name' + dataid + '"><div class="help-block with-errors"></div></div>  <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Washing</label><select data-live-search="true" class="form-control selectpicker input-sm washing_select' + dataid + '" required>' + washing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Whitening</label><select data-live-search="true" class="form-control selectpicker input-sm whitening_select' + dataid + '" required>' + whitening_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Dryer</label><select data-live-search="true" class="form-control selectpicker input-sm dryer_select' + dataid + '" required>' + dryer_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Ironing</label><select data-live-search="true" class="form-control selectpicker input-sm ironing_select' + dataid + '" required>' + ironing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Cleaning</label><select data-live-search="true" class="form-control selectpicker input-sm cleaning_select' + dataid + '" required>' + cleaning_option + '</select><div class="help-block with-errors"></div></div>'+treestruct+'  </div></div> <div class="col-md-5"> <h4>Art Work</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span> <hr> <div class="section-1 sections"> <div class="sample-artwork"><object style="height: calc( 100vh - 125px );"  id="washcare_svg_front' + dataid + '" data="' + data.orchestra_wash_template_front + '" type="image/svg+xml"></object> <object style="height: calc( 100vh - 125px );margin-left: 10px;"  id="washcare_svg_back' + dataid + '"  data="' + data.orchestra_wash_template_back + '" type="image/svg+xml"></object><object style="height: calc( 100vh - 125px );width: 250px;margin-left: 10px;"  id="washcare_svg_middle' + dataid + '" data="' + data.orchestra_wash_template_middle + '" type="image/svg+xml"></object></div><input type="hidden" value="' + disney_flag + '" id="wash_label_id"></div> </div> <div class="col-md-4 " style="padding-left:0px"> <h4>Options</h4> <hr>'+sizebox+' <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Made In</label><select data-live-search="true" class="form-control selectpicker input-sm made_in_select' + dataid + '" required>' + made_option + '</select><div class="help-block with-errors"></div></div> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Care Instructions</label><select data-live-search="true" class="form-control selectpicker input-sm care_instruction_select' + dataid + '" required multiple>' + instruction_option + '</select><div class="help-block with-errors"></div></div> <div class="section-1 sections"> <h5>Compositions</h5> <select class="selectpicker composition_select' + dataid + '"  data-live-search="true">  ' + composition_option + '  </select><p class="hidden" style="color:red" id="composition_error_required' + dataid + '">Please Select Composition</p> </div> <h5>Percentage</h5> <input type="number" min="1" max="100" class="form-control input-sm composition_percent' + dataid + '"><p class="hidden" style="color:red" id="percentage_error_required' + dataid + '">Please Enter Percentage</p>  <button type="button" class="btn  btn-primary pull-right input-sm add_to_list' + dataid + '" onclick="add_to_list(' + dataid + ')">Add To List</button> <table class="table table-striped table-hover table-condensed"><thead><th>Composition</th><th>Quantity</th></thead><tbody id="composition_table_qty' + dataid + '"></tbody></table><button class="btn  btn-primary pull-right input-sm add_to_composition' + dataid + '"  type="button" disabled onclick="add_to_composition(' + dataid + ')">Add To Composition</button><div><h4>Compositions :</h4><label id="wash_composition_error' + dataid + '" class="hidden" style="color:red">Please Select composition</label><label id="wash_composition_page_error' + dataid + '" class="hidden" style="color:red">Please Add Composition to Page</label><label class="hidden composition_error_hidden" style="color:red">Please select parts</label><div class="row"><table class="table table-striped table-hover table-condensed"><thead><tr><th>Composition Name</th><th>Parts</th><th>Actions</th></tr></thead><tbody id="composition_remove_qty' + dataid + '"></tbody></table><button class="btn  btn-primary pull-right input-sm add_to_page' + dataid + '"  style="position:relative;right:12px" type="button" onclick="add_to_page(' + dataid + ')">Add To Page</button></div></div><div class="parts_none'+dataid+'" style="display:none"><select>' + parts_option + '</select></div> </div> </div> </div></div> <div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for <span class="washlabelnameqty' + dataid + '"> WashCare Label</span></h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal" style="font-size:11px"> <thead> <tr> <th>UVC TCO#</th> <th>Size in ANS</th> <th>Barcode</th> <th>Qty.</th> <th><input type="text" class="form-control input-sm extra_percentage" onkeypress="return checkNumbersOnly(event)" placeholder="Extra Qty %" style="float:left;height:20px;"></th> </tr></thead> <tbody style="font-size: 11px">' + tr + ' <tr class="strong"> <td class="text-right" colspan="3">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table><hr>'+ $comment +' <button class="btn btn-primary pull-right input-sm left" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" id="close" type="button">Close</button> <button type="button" class="btn btn-primary" onclick=printWashDiv("washcare_svg_front","washcare_svg_back","washcare_svg_middle",'+dataid+')>Print</button></div> </div>  <div class="backdrop"></div></form>');
+    $('.top-content').append('<form id="washcarelabelform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><div class="left-panel col-md-9"> <div class="div-max"> <div class="col-md-3"> <h4>Options</h4> <hr><div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">WCL Name</label><input type="text" class="form-control input-sm" required="" placeholder="WCL Name" value="' + $wcl_name + '" id="wcl_name' + dataid + '"><div class="help-block with-errors"></div></div>  <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Washing</label><select data-live-search="true" class="form-control selectpicker input-sm washing_select' + dataid + '" required>' + washing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Whitening</label><select data-live-search="true" class="form-control selectpicker input-sm whitening_select' + dataid + '" required>' + whitening_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Dryer</label><select data-live-search="true" class="form-control selectpicker input-sm dryer_select' + dataid + '" required>' + dryer_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Ironing</label><select data-live-search="true" class="form-control selectpicker input-sm ironing_select' + dataid + '" required>' + ironing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Cleaning</label><select data-live-search="true" class="form-control selectpicker input-sm cleaning_select' + dataid + '" required>' + cleaning_option + '</select><div class="help-block with-errors"></div></div>'+treestruct+'  </div></div> <div class="col-md-5"> <h4>Art Work</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span> <hr> <div class="section-1 sections"> <div class="sample-artwork"><object style="height: calc( 100vh - 125px );"  id="washcare_svg_front' + dataid + '" data="' + data.orchestra_wash_template_front + '" type="image/svg+xml"></object> <object style="height: calc( 100vh - 125px );margin-left: 10px;"  id="washcare_svg_back' + dataid + '"  data="' + data.orchestra_wash_template_back + '" type="image/svg+xml"></object><object style="height: calc( 100vh - 125px );width: 250px;margin-left: 10px;"  id="washcare_svg_middle' + dataid + '" data="' + data.orchestra_wash_template_middle + '" type="image/svg+xml"></object></div><input type="hidden" value="' + disney_flag + '" id="wash_label_id"></div> </div> <div class="col-md-4 " style="padding-left:0px"> <h4>Options</h4> <hr>'+sizebox+' <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Made In</label><select data-live-search="true" class="form-control selectpicker input-sm made_in_select' + dataid + '" required>' + made_option + '</select><div class="help-block with-errors"></div></div> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Care Instructions</label><select data-live-search="true" class="form-control selectpicker input-sm care_instruction_select' + dataid + '" required multiple>' + instruction_option + '</select><div class="help-block with-errors"></div></div> <div class="section-1 sections"> <h5>Compositions</h5> <select class="selectpicker composition_select' + dataid + '"  data-live-search="true">  ' + composition_option + '  </select><p class="hidden" style="color:red" id="composition_error_required' + dataid + '">Please Select Composition</p> </div> <h5>Percentage</h5> <input type="number" min="1" max="100" class="form-control input-sm composition_percent' + dataid + '"><p class="hidden" style="color:red" id="percentage_error_required' + dataid + '">Please Enter Percentage</p>  <button type="button" class="btn  btn-primary pull-right input-sm add_to_list' + dataid + '" onclick="add_to_list(' + dataid + ')">Add To List</button> <table class="table table-striped table-hover table-condensed"><thead><th>Composition</th><th>Quantity</th></thead><tbody id="composition_table_qty' + dataid + '"></tbody></table><button class="btn  btn-primary pull-right input-sm add_to_composition' + dataid + '"  type="button" disabled onclick="add_to_composition(' + dataid + ')">Add To Composition</button><div><h4>Compositions :</h4><label id="wash_composition_error' + dataid + '" class="hidden" style="color:red">Please Select composition</label><label id="wash_composition_page_error' + dataid + '" class="hidden" style="color:red">Please Add Composition to Page</label><label class="hidden composition_error_hidden" style="color:red">Please select parts</label><div class="row"><table class="table table-striped table-hover table-condensed"><thead><tr><th>Composition Name</th><th>Parts</th><th>Actions</th></tr></thead><tbody id="composition_remove_qty' + dataid + '"></tbody></table><button class="btn  btn-primary pull-right input-sm add_to_page' + dataid + '"  style="position:relative;right:12px" type="button" onclick="add_to_page(' + dataid + ')">Add To Page</button></div></div><div class="parts_none'+dataid+'" style="display:none"><select>' + parts_option + '</select></div> </div> </div> </div></div> <div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for <span class="washlabelnameqty' + dataid + '"> WashCare Label</span></h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal" id="wash_care_label_table" style="font-size:11px"> <thead> <tr> <th>UVC TCO#</th> <th>Size in ANS</th> <th>Barcode</th> <th>Qty.</th> <th><input type="text" class="form-control input-sm extra_percentage" onkeypress="return checkNumbersOnly(event)" placeholder="Extra Qty %" style="float:left;height:20px;"></th> </tr></thead> <tbody style="font-size: 11px">' + tr + ' <tr class="strong"> <td class="text-right" colspan="3">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table><hr>'+ $comment +' <button class="btn btn-primary pull-right input-sm left" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" id="close" type="button">Close</button> <button type="button" class="btn btn-primary" onclick=printWashDiv("washcare_svg_front","washcare_svg_back","washcare_svg_middle",'+dataid+')>Print</button></div> </div>  <div class="backdrop"></div></form>');
    //$('.left').removeClass('disabled')
 
     $('#washcarelabelform' + dataid + ' .tot_qty_table').keyup(function () {
@@ -3015,11 +3047,8 @@ function washcarelabels(data, dataid) {
                 svgDoc_back.getElementById("text_care_instruction").innerHTML = "";
                 $('.care_instruction_select' + dataid + ' option:selected').each(function () {
                     var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german') + "-" +
-                        $(this).data('russian') + "-" +
-                        $(this).data('chinese') + "-" +
                         $(this).data('arabic') + "-" +
-                        $(this).data('greek') + "-" +
-                        $(this).data('turkish') + '</p>';
+                        $(this).data('greek') + '</p>';
                     svgDoc_back.getElementById("text_care_instruction").innerHTML += value;
                 });
 
@@ -3036,11 +3065,11 @@ function washcarelabels(data, dataid) {
                             {
                                 if(comps != "")
                                 {
-                                    comps+=","+value1.french+"_"+value1.english+"_"+value1.spanish+"_"+value1.portuguese+"_"+value1.italian+"_"+value1.dutch+"_"+value1.german+"_"+value1.russian+"_"+value1.chinese+"_"+value1.arabic+"_"+value1.greek+"_"+value1.turkish+"_"+value1.percentage;
+                                    comps+=","+value1.french+"_"+value1.english+"_"+value1.spanish+"_"+value1.portuguese+"_"+value1.italian+"_"+value1.dutch+"_"+value1.german+"_"+value1.arabic+"_"+value1.greek+"_"+value1.percentage;
                                 }
                                 else
                                 {
-                                    comps+=value1.french+"_"+value1.english+"_"+value1.spanish+"_"+value1.portuguese+"_"+value1.italian+"_"+value1.dutch+"_"+value1.german+"_"+value1.russian+"_"+value1.chinese+"_"+value1.arabic+"_"+value1.greek+"_"+value1.turkish+"_"+value1.percentage;
+                                    comps+=value1.french+"_"+value1.english+"_"+value1.spanish+"_"+value1.portuguese+"_"+value1.italian+"_"+value1.dutch+"_"+value1.german+"_"+value1.arabic+"_"+value1.greek+"_"+value1.percentage;
                                 }
                                 
                             }
@@ -3065,7 +3094,7 @@ function washcarelabels(data, dataid) {
                               var compss = compo.split(',');
                                 $(compss).each(function (index1,value1){ 
                                     var english = value1.split('_');
-                                    washcomp1.push(value+"_"+english[0]+"_"+english[12]) 
+                                    washcomp1.push(value+"_"+english[1]+"_"+english[9]) 
                                 });
                             washcomp.push(washcomp1)
                         })
@@ -3075,11 +3104,11 @@ function washcarelabels(data, dataid) {
                         localStorage.setItem('wash_composition_final'+dataid, wash_finals);
                         
                         if (value.parts_english != null) {
-                            svgDoc_back.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + add_page_composition + '" id="composition_' + add_page_composition + '">' + value.parts_french + "-" + value.parts_english + "-" + value.parts_spanish + "-" + value.parts_portuguese + "-" + value.parts_italian + "-" + value.parts_dutch + "-" + value.parts_german + "-" + value.parts_russian + "-" + value.parts_chinese + "-" + value.parts_arabic + "-" + value.parts_greek + "-" + value.parts_turkish + '</p>';
+                            svgDoc_back.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + add_page_composition + '" id="composition_' + add_page_composition + '">' + value.parts_french + "-" + value.parts_english + "-" + value.parts_spanish + "-" + value.parts_portuguese + "-" + value.parts_italian + "-" + value.parts_dutch + "-" + value.parts_german + "-" + value.parts_arabic + "-" + value.parts_greek + '</p>';
                         }
                         
                     }
-                    svgDoc_back.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + add_page_composition + '" id="composition_' + add_page_composition + '">' + value.percentage + "% " + value.french + "-" + value.english + "-" + value.spanish + "-" + value.portuguese + "-" + value.italian + "-" + value.dutch + "-" + value.german + "-" + value.russian + "-" + value.chinese + "-" + value.arabic + "-" + value.greek + "-" + value.turkish + '</p>';
+                    svgDoc_back.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + add_page_composition + '" id="composition_' + add_page_composition + '">' + value.percentage + "% " + value.french + "-" + value.english + "-" + value.spanish + "-" + value.portuguese + "-" + value.italian + "-" + value.dutch + "-" + value.german  + "-" + value.arabic + "-" + value.greek + '</p>';
 
                     page_id = value.page_id;
 
@@ -3094,12 +3123,9 @@ function washcarelabels(data, dataid) {
             if ($('.care_instruction_select' + dataid + ' option:selected').val() != "") {
                 svgDoc_back.getElementById("text_care_instruction").innerHTML = "";
                 $('.care_instruction_select' + dataid + ' option:selected').each(function () {
-                    var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german') + "-" +
-                        $(this).data('russian') + "-" +
-                        $(this).data('chinese') + "-" +
+                    var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german')  + "-" +
                         $(this).data('arabic') + "-" +
-                        $(this).data('greek') + "-" +
-                        $(this).data('turkish') + '</p>';
+                        $(this).data('greek') + '</p>';
                     svgDoc_back.getElementById("text_care_instruction").innerHTML += value;
                 });
 
@@ -3130,11 +3156,8 @@ function washcarelabels(data, dataid) {
             if (data.orchestra_wash_care_label_orders.length > dataid1) {
                 $('.made_in_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].made_in_id);
                 var text_for_mad_in = '<p>' + $('select.made_in_select' + dataid).find(':selected').data('french') + " - " + $('select.made_in_select' + dataid).find(':selected').data('english') + " - " + $('select.made_in_select' + dataid).find(':selected').data('spanish') + " - " + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + dataid).find(':selected').data('italian') + " - " + $('select.made_in_select' + dataid).find(':selected').data('dutch') + " - " + $('select.made_in_select' + dataid).find(':selected').data('german') + " - " +
-                    $('select.made_in_select' + dataid).find(':selected').data('russian') + " - " +
-                    $('select.made_in_select' + dataid).find(':selected').data('chinese') + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
-                    $('select.made_in_select' + dataid).find(':selected').data('greek') + " - " +
-                    $('select.made_in_select' + dataid).find(':selected').data('turkish') + '</p>';
+                    $('select.made_in_select' + dataid).find(':selected').data('greek') + '</p>';
                 svgDoc.getElementById("country").innerHTML = text_for_mad_in;
 				
                 $('.washing_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].washing_id);
@@ -3256,8 +3279,8 @@ function washcarelabels(data, dataid) {
 		}
 		else if(data.order_details[0].Size == "TAILLE L")
 		{
-			svgDoc.getElementById("size1").innerHTML = "TU";
-			svgDoc.getElementById("size2").innerHTML = "TU";
+			svgDoc.getElementById("size1").innerHTML = "TAILLE L";
+			svgDoc.getElementById("size2").innerHTML = "TAILLE L";
 			svgDoc.getElementById("size_in_fr_en1").innerHTML = "";
 			svgDoc.getElementById("size_in_fr_en2").innerHTML = "";
 		}
@@ -3297,7 +3320,7 @@ function add_to_list(dataid) {
 		if (composition_percentage_global <= "100") {
 
 			composition_percentage_global = composition_percentage_global;
-			$('#composition_table_qty' + dataid).append("<tr><td class='comp'><input type='hidden' class='list_comp' value='" + $('.composition_select' + dataid + ' option:selected').attr('data-french') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-english') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-spanish') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-portuguese') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-italian') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-dutch') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-german') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-russian') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-chinese') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-arabic') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-greek') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-turkish') + "_" + parseInt($('.composition_percent' + dataid).val()) + "'>" + $('.composition_select' + dataid + ' option:selected').text() + "</td><td class='percent'>" + parseInt($('.composition_percent' + dataid).val()) + "</td></tr>")
+			$('#composition_table_qty' + dataid).append("<tr><td class='comp'><input type='hidden' class='list_comp' value='" + $('.composition_select' + dataid + ' option:selected').attr('data-french') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-english') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-spanish') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-portuguese') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-italian') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-dutch') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-german') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-arabic') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-greek') + "_" + parseInt($('.composition_percent' + dataid).val()) + "'>" + $('.composition_select' + dataid + ' option:selected').text() + "</td><td class='percent'>" + parseInt($('.composition_percent' + dataid).val()) + "</td></tr>")
 		} else {
 			composition_percentage_global -= parseInt($('.composition_percent' + dataid).val());
 		}
@@ -3351,7 +3374,7 @@ function add_to_composition(dataid) {
         var comp1 = comp.split('_');
         var percent = $(this).find('.percent').text();
         var parts = $('.parts_select' + dataid + ' option:selected').val()
-        a.push(comp1[0]+"_"+comp1[1]+"_"+comp1[2]+"_"+comp1[3]+"_"+comp1[4]+"_"+comp1[5]+"_"+comp1[6]+"_"+comp1[7]+"_"+comp1[8]+"_"+comp1[9]+"_"+comp1[10]+"_"+comp1[11]+"_"+comp1[12])
+        a.push(comp1[0]+"_"+comp1[1]+"_"+comp1[2]+"_"+comp1[3]+"_"+comp1[4]+"_"+comp1[5]+"_"+comp1[6]+"_"+comp1[7]+"_"+comp1[8]+"_"+comp1[9])
        
     })
     comps = a.join(',');
@@ -3425,7 +3448,7 @@ function add_to_page(dataid) {
               $('#composition_remove_qty' + dataid + ' tr').each(function () {
                   if($(this).find('select').find(':selected').val() != "Select Option")
                   {
-                       svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german') + "-" + $(this).find('select' ).find(':selected').data('russian') + "-" + $(this).find('select' ).find(':selected').data('chinese') + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek')  + "-" + $(this).find('select' ).find(':selected').data('turkish')  + '</p>';
+                       svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german') + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek')  + '</p>';
                   }
                  
                   var id=$(this).attr('id')
@@ -3433,8 +3456,9 @@ function add_to_page(dataid) {
                   var compss = compo.split(',');
                   $(compss).each(function (index1,value1) {
                       var english = value1.split('_');
+					  
 
-                    svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + id + '" id="composition_' + id + '">' + english[12] + "% " + english[0]  + "-" +english[1] + "-" + english[2]+ "-" +english[3] + "-" + english[4] + "-" + english[5] + "-" + english[6] + "-" + english[7]+ "-" +english[8] + "-" + english[9] + "-" + english[10] + "-" + english[11]+ '</p>';
+                    svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + id + '" id="composition_' + id + '">' + english[9] + "% " + english[0]  + "-" +english[1] + "-" + english[2]+ "-" +english[3] + "-" + english[4] + "-" + english[5] + "-" +english[6] + "-" + english[7] + "-" + english[8]+ '</p>';
                 });
               })
             $('.composition_error_hidden').addClass('hidden')
@@ -3447,7 +3471,7 @@ function add_to_page(dataid) {
                   var compss = compo.split(',');
                     $(compss).each(function (index1,value1){ 
                         var english = value1.split('_');
-                        washcomp1.push(value+"_"+english[0]+"_"+english[12]) 
+                        washcomp1.push(value+"_"+english[1]+"_"+english[9]) 
                     });
                 washcomp.push(washcomp1)
             })
@@ -3843,7 +3867,7 @@ function hangtagmodal(data) {
         } else {
             $hang_tag_count = "";
         }
-        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td>' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control  input-sm tot_qty_table" value="' + $hang_tag_count + '" required placeholder="Hang Tag Count"><div class="help-block with-errors"></div></div></td></tr>';
+        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control  input-sm tot_qty_table" value="' + $hang_tag_count + '" required placeholder="Hang Tag Count"><div class="help-block with-errors"></div></div></td></tr>';
         ttots += parseInt($hang_tag_count);
         $qu++;
     });
@@ -4067,7 +4091,7 @@ function hangtagmodal(data) {
 							}
 							else if(order_details[0].Size == "TAILLE L")
 							{
-								svgDoc.getElementById("size").innerHTML = "TU";
+								svgDoc.getElementById("size").innerHTML = "TAILLE L";
 								svgDoc.getElementById("size_french").innerHTML = "";
 								svgDoc.getElementById("size_english").innerHTML = "";
 							}
@@ -4221,7 +4245,7 @@ function hangtagmodal(data) {
 							}
 							else if(order_details[0].Size == "TAILLE L")
 							{
-								svgDoc.getElementById("size").innerHTML = "TU";
+								svgDoc.getElementById("size").innerHTML = "TAILLE L";
 								svgDoc.getElementById("size_french").innerHTML = "";
 								svgDoc.getElementById("size_english").innerHTML = "";
 							}
@@ -4927,21 +4951,15 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
  + ' option:selected').data('astm'));
                 
                 var text_for_mad_in = '<p>' + $('select.made_in_select' + washcare).find(':selected').data('french') + " - " + $('select.made_in_select' + washcare).find(':selected').data('english') + " - " + $('select.made_in_select' + washcare).find(':selected').data('spanish') + " - " + $('select.made_in_select' + washcare).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + washcare).find(':selected').data('italian') + " - " + $('select.made_in_select' + washcare).find(':selected').data('dutch') + " - " + $('select.made_in_select' + washcare).find(':selected').data('german') + " - " +
-                    $('select.made_in_select' + washcare).find(':selected').data('russian') + " - " +
-                    $('select.made_in_select' + washcare).find(':selected').data('chinese') + " - " +
                     $('select.made_in_select' + washcare).find(':selected').data('arabic') + " - " +
-                    $('select.made_in_select' + washcare).find(':selected').data('greek') + " - " +
-                    $('select.made_in_select' + washcare).find(':selected').data('turkish') + '</p>';
+                    $('select.made_in_select' + washcare).find(':selected').data('greek')  + '</p>';
                 svgDoc.getElementById("country").innerHTML = text_for_mad_in;
                 
                 svgDoc.getElementById("text_care_instruction").innerHTML = "";
                 $('.care_instruction_select' + washcare + ' option:selected').each(function () {
-                    var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german') + "-" +
-                        $(this).data('russian') + "-" +
-                        $(this).data('chinese') + "-" +
+                    var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german')  + "-" +
                         $(this).data('arabic') + "-" +
-                        $(this).data('greek') + "-" +
-                        $(this).data('turkish') + '</p>';
+                        $(this).data('greek')  + '</p>';
                     svgDoc.getElementById("text_care_instruction").innerHTML += value;
                 });
                 
@@ -4949,7 +4967,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
               $('#composition_remove_qty' + washcare + ' tr').each(function () {
                   if($(this).find('select').find(':selected').val() != "Select Option")
                   {
-                       svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german') + "-" + $(this).find('select' ).find(':selected').data('russian') + "-" + $(this).find('select' ).find(':selected').data('chinese') + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek')  + "-" + $(this).find('select' ).find(':selected').data('turkish')  + '</p>';
+                       svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german') + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek') + '</p>';
                   }
                  
                   var id=$(this).attr('id')
@@ -4958,7 +4976,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
                   $(compss).each(function (index1,value1) {
                       var english = value1.split('_');
 
-                    svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + id + '" id="composition_' + id + '">' + english[12] + "% " + english[0]  + "-" +english[1] + "-" + english[2]+ "-" +english[3] + "-" + english[4] + "-" + english[5] + "-" + english[6] + "-" + english[7]+ "-" +english[8] + "-" + english[9] + "-" + english[10] + "-" + english[11]+ '</p>';
+                    svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + id + '" id="composition_' + id + '">' + english[9] + "% " + english[0]  + "-" +english[1] + "-" + english[2]+ "-" +english[3] + "-" + english[4] + "-" + english[5] + "-" +english[6] + "-" + english[7] + "-" + english[8]+ '</p>';
                 });
               })
             $('.composition_error_hidden').addClass('hidden')
@@ -4971,7 +4989,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
                   var compss = compo.split(',');
                     $(compss).each(function (index1,value1){ 
                         var english = value1.split('_');
-                        washcomp1.push(value+"_"+english[0]+"_"+english[12]) 
+                        washcomp1.push(value+"_"+english[1]+"_"+english[9]) 
                     });
                 washcomp.push(washcomp1)
             })
@@ -5279,8 +5297,8 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
 		}
 		else if(datas.order_details[0].Size == "TAILLE L")
 		{
-			svgDoc.getElementById("size1").innerHTML = "TU";
-			svgDoc.getElementById("size2").innerHTML = "TU";
+			svgDoc.getElementById("size1").innerHTML = "TAILLE L";
+			svgDoc.getElementById("size2").innerHTML = "TAILLE L";
 			svgDoc.getElementById("size_in_fr_en1").innerHTML = "";
 			svgDoc.getElementById("size_in_fr_en2").innerHTML = "";
 		}
@@ -5318,23 +5336,17 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
 									svgDoc.getElementById("astm_symbol5").setAttribute('xlink:href', $('.cleaning_select' + dataid + ' option:selected').data('astm'));
 								}
 								if ($('.made_in_select' + dataid + ' option:selected').val() != "") {
-									 var text_for_mad_in = '<p>' + $('select.made_in_select' + dataid).find(':selected').data('french') + " - " + $('select.made_in_select' + dataid).find(':selected').data('english') + " - " + $('select.made_in_select' + dataid).find(':selected').data('spanish') + " - " + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + dataid).find(':selected').data('italian') + " - " + $('select.made_in_select' + dataid).find(':selected').data('dutch') + " - " + $('select.made_in_select' + dataid).find(':selected').data('german') + " - " +
-										$('select.made_in_select' + dataid).find(':selected').data('russian') + " - " +
-										$('select.made_in_select' + dataid).find(':selected').data('chinese') + " - " +
+									 var text_for_mad_in = '<p>' + $('select.made_in_select' + dataid).find(':selected').data('french') + " - " + $('select.made_in_select' + dataid).find(':selected').data('english') + " - " + $('select.made_in_select' + dataid).find(':selected').data('spanish') + " - " + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + dataid).find(':selected').data('italian') + " - " + $('select.made_in_select' + dataid).find(':selected').data('dutch') + " - " + $('select.made_in_select' + dataid).find(':selected').data('german')  + " - " +
 										$('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
-										$('select.made_in_select' + dataid).find(':selected').data('greek') + " - " +
-										$('select.made_in_select' + dataid).find(':selected').data('turkish') + '</p>';
+										$('select.made_in_select' + dataid).find(':selected').data('greek') + '</p>';
 									svgDoc.getElementById("country").innerHTML = text_for_mad_in;
 								}
 
 									svgDoc.getElementById("text_care_instruction").innerHTML = "";
 									$('.care_instruction_select' + dataid + ' option:selected').each(function () {
 										var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german') + "-" +
-											$(this).data('russian') + "-" +
-											$(this).data('chinese') + "-" +
 											$(this).data('arabic') + "-" +
-											$(this).data('greek') + "-" +
-											$(this).data('turkish') + '</p>';
+											$(this).data('greek')  + '</p>';
 										svgDoc.getElementById("text_care_instruction").innerHTML += value;
 									});
 
@@ -5342,7 +5354,7 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
 								  $('#composition_remove_qty' + dataid + ' tr').each(function () {
 									  if($(this).find('select').find(':selected').val() != "Select Option")
 									  {
-										   svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german') + "-" + $(this).find('select' ).find(':selected').data('russian') + "-" + $(this).find('select' ).find(':selected').data('chinese') + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek')  + "-" + $(this).find('select' ).find(':selected').data('turkish')  + '</p>';
+										   svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german')+ "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek') + '</p>';
 									  }
 
 									  var id=$(this).attr('id')
@@ -5351,7 +5363,7 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
 									  $(compss).each(function (index1,value1) {
 										  var english = value1.split('_');
 
-										svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + id + '" id="composition_' + id + '">' + english[12] + "% " + english[0]  + "-" +english[1] + "-" + english[2]+ "-" +english[3] + "-" + english[4] + "-" + english[5] + "-" + english[6] + "-" + english[7]+ "-" +english[8] + "-" + english[9] + "-" + english[10] + "-" + english[11]+ '</p>';
+										svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + id + '" id="composition_' + id + '">' + english[9] + "% " + english[0]  + "-" +english[1] + "-" + english[2]+ "-" +english[3] + "-" + english[4] + "-" + english[5] + "-" +english[6] + "-" + english[7] + "-" + english[8]+ '</p>';
 									});
 								  })
 								  
@@ -5408,12 +5420,9 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
         $('.made_in_select' + dataid + '.bootstrap-select').on('changed.bs.select', function () {
             if ($('.made_in_select' + dataid + ' option:selected').val() != "") {
 
-                var text_for_mad_in = '<p>' + $('select.made_in_select' + dataid).find(':selected').data('french') + " - " + $('select.made_in_select' + dataid).find(':selected').data('english') + " - " + $('select.made_in_select' + dataid).find(':selected').data('spanish') + " - " + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + dataid).find(':selected').data('italian') + " - " + $('select.made_in_select' + dataid).find(':selected').data('dutch') + " - " + $('select.made_in_select' + dataid).find(':selected').data('german') + " - " +
-                    $('select.made_in_select' + dataid).find(':selected').data('russian') + " - " +
-                    $('select.made_in_select' + dataid).find(':selected').data('chinese') + " - " +
+                var text_for_mad_in = '<p>' + $('select.made_in_select' + dataid).find(':selected').data('french') + " - " + $('select.made_in_select' + dataid).find(':selected').data('english') + " - " + $('select.made_in_select' + dataid).find(':selected').data('spanish') + " - " + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + dataid).find(':selected').data('italian') + " - " + $('select.made_in_select' + dataid).find(':selected').data('dutch') + " - " + $('select.made_in_select' + dataid).find(':selected').data('german')  + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
-                    $('select.made_in_select' + dataid).find(':selected').data('greek') + " - " +
-                    $('select.made_in_select' + dataid).find(':selected').data('turkish') + '</p>';
+                    $('select.made_in_select' + dataid).find(':selected').data('greek')  + '</p>';
                 svgDoc.getElementById("country").innerHTML = text_for_mad_in;
 
             } else {
@@ -5428,11 +5437,8 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
                 svgDoc.getElementById("text_care_instruction").innerHTML = "";
                 $('.care_instruction_select' + dataid + ' option:selected').each(function () {
                     var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german') + "-" +
-                        $(this).data('russian') + "-" +
-                        $(this).data('chinese') + "-" +
                         $(this).data('arabic') + "-" +
-                        $(this).data('greek') + "-" +
-                        $(this).data('turkish') + '</p>';
+                        $(this).data('greek')  + '</p>';
                     svgDoc.getElementById("text_care_instruction").innerHTML += value;
                 });
 
@@ -5514,8 +5520,8 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
 								}
 								else if(datas.order_details[0].Size == "TAILLE L")
 								{
-									svgDoc.getElementById("size1").innerHTML = "TU";
-									svgDoc.getElementById("size2").innerHTML = "TU";
+									svgDoc.getElementById("size1").innerHTML = "TAILLE L";
+									svgDoc.getElementById("size2").innerHTML = "TAILLE L";
 									svgDoc.getElementById("size_in_fr_en1").innerHTML = "";
 									svgDoc.getElementById("size_in_fr_en2").innerHTML = "";
 								}
@@ -5554,22 +5560,16 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
 								}
 								if ($('.made_in_select' + dataid + ' option:selected').val() != "") {
 									 var text_for_mad_in = '<p>' + $('select.made_in_select' + dataid).find(':selected').data('french') + " - " + $('select.made_in_select' + dataid).find(':selected').data('english') + " - " + $('select.made_in_select' + dataid).find(':selected').data('spanish') + " - " + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + dataid).find(':selected').data('italian') + " - " + $('select.made_in_select' + dataid).find(':selected').data('dutch') + " - " + $('select.made_in_select' + dataid).find(':selected').data('german') + " - " +
-										$('select.made_in_select' + dataid).find(':selected').data('russian') + " - " +
-										$('select.made_in_select' + dataid).find(':selected').data('chinese') + " - " +
 										$('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
-										$('select.made_in_select' + dataid).find(':selected').data('greek') + " - " +
-										$('select.made_in_select' + dataid).find(':selected').data('turkish') + '</p>';
+										$('select.made_in_select' + dataid).find(':selected').data('greek')  + '</p>';
 									svgDoc.getElementById("country").innerHTML = text_for_mad_in;
 								}
 
 									svgDoc.getElementById("text_care_instruction").innerHTML = "";
 									$('.care_instruction_select' + dataid + ' option:selected').each(function () {
-										var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german') + "-" +
-											$(this).data('russian') + "-" +
-											$(this).data('chinese') + "-" +
+										var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german')  + "-" +
 											$(this).data('arabic') + "-" +
-											$(this).data('greek') + "-" +
-											$(this).data('turkish') + '</p>';
+											$(this).data('greek') + '</p>';
 										svgDoc.getElementById("text_care_instruction").innerHTML += value;
 									});
 
@@ -5577,7 +5577,7 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
 								  $('#composition_remove_qty' + dataid + ' tr').each(function () {
 									  if($(this).find('select').find(':selected').val() != "Select Option")
 									  {
-										   svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german') + "-" + $(this).find('select' ).find(':selected').data('russian') + "-" + $(this).find('select' ).find(':selected').data('chinese') + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek')  + "-" + $(this).find('select' ).find(':selected').data('turkish')  + '</p>';
+										   svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german')  + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek')  + '</p>';
 									  }
 
 									  var id=$(this).attr('id')
@@ -5586,7 +5586,7 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
 									  $(compss).each(function (index1,value1) {
 										  var english = value1.split('_');
 
-										svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + id + '" id="composition_' + id + '">' + english[12] + "% " + english[0]  + "-" +english[1] + "-" + english[2]+ "-" +english[3] + "-" + english[4] + "-" + english[5] + "-" + english[6] + "-" + english[7]+ "-" +english[8] + "-" + english[9] + "-" + english[10] + "-" + english[11]+ '</p>';
+										svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + id + '" id="composition_' + id + '">' + english[9] + "% " + english[0]  + "-" +english[1] + "-" + english[2]+ "-" +english[3] + "-" + english[4] + "-" + english[5] + "-" +english[6] + "-" + english[7] + "-" + english[8]+ '</p>';
 									});
 								  })
 								  
@@ -5643,12 +5643,9 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
         $('.made_in_select' + dataid + '.bootstrap-select').on('changed.bs.select', function () {
             if ($('.made_in_select' + dataid + ' option:selected').val() != "") {
 
-                var text_for_mad_in = '<p>' + $('select.made_in_select' + dataid).find(':selected').data('french') + " - " + $('select.made_in_select' + dataid).find(':selected').data('english') + " - " + $('select.made_in_select' + dataid).find(':selected').data('spanish') + " - " + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + dataid).find(':selected').data('italian') + " - " + $('select.made_in_select' + dataid).find(':selected').data('dutch') + " - " + $('select.made_in_select' + dataid).find(':selected').data('german') + " - " +
-                    $('select.made_in_select' + dataid).find(':selected').data('russian') + " - " +
-                    $('select.made_in_select' + dataid).find(':selected').data('chinese') + " - " +
+                var text_for_mad_in = '<p>' + $('select.made_in_select' + dataid).find(':selected').data('french') + " - " + $('select.made_in_select' + dataid).find(':selected').data('english') + " - " + $('select.made_in_select' + dataid).find(':selected').data('spanish') + " - " + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + dataid).find(':selected').data('italian') + " - " + $('select.made_in_select' + dataid).find(':selected').data('dutch') + " - " + $('select.made_in_select' + dataid).find(':selected').data('german')  + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
-                    $('select.made_in_select' + dataid).find(':selected').data('greek') + " - " +
-                    $('select.made_in_select' + dataid).find(':selected').data('turkish') + '</p>';
+                    $('select.made_in_select' + dataid).find(':selected').data('greek')  + '</p>';
                 svgDoc.getElementById("country").innerHTML = text_for_mad_in;
 
             } else {
@@ -5662,12 +5659,9 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
             if ($('.care_instruction_select' + dataid + ' option:selected').val() != "") {
                 svgDoc.getElementById("text_care_instruction").innerHTML = "";
                 $('.care_instruction_select' + dataid + ' option:selected').each(function () {
-                    var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german') + "-" +
-                        $(this).data('russian') + "-" +
-                        $(this).data('chinese') + "-" +
+                    var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german')  + "-" +
                         $(this).data('arabic') + "-" +
-                        $(this).data('greek') + "-" +
-                        $(this).data('turkish') + '</p>';
+                        $(this).data('greek')  + '</p>';
                     svgDoc.getElementById("text_care_instruction").innerHTML += value;
                 });
 
@@ -5708,7 +5702,7 @@ function jsbarcode(code, id, svgDoc) {
 		format: "ean13",
 		width: 5.99,
 		height: 343,
-		fontSize: 50
+		fontSize: 60
 	});
 	var svg = document.getElementById('svgdiv').querySelector('svg'),
 		canvas = document.createElement('canvas'),
@@ -5719,7 +5713,7 @@ function jsbarcode(code, id, svgDoc) {
 		img;
 	// if our "svg" doesn't have 'xmlns' attribute we must add it
 	//    svg.setAttribute('width', '188.931023622px');
-	svg.setAttribute('font-size', '50px');
+	svg.setAttribute('font-size', '70px');
 	svg.setAttribute('font-family', 'calibrib');
 
 	canvas.id = 'canvas';
@@ -5763,8 +5757,9 @@ function jsbarcodewash(code, id, svgDoc) {
     JsBarcode("#ean-13", code, {
         format: "ean13",
         width: 5.99,
-        height: 343,
-        fontSize: 50
+        height: 283,
+		lineColor: "#1F1A17",
+        fontSize: 55
     });
     var svg = document.getElementById('svgdiv').querySelector('svg'),
         canvas = document.createElement('canvas'),
@@ -5775,10 +5770,10 @@ function jsbarcodewash(code, id, svgDoc) {
         img;
     // if our "svg" doesn't have 'xmlns' attribute we must add it
     //    svg.setAttribute('width', '188.931023622px');
-    svg.setAttribute('font-size', '50px');
-    svg.setAttribute('font-family', 'calibrib');
-    svg.setAttribute('width', '100px');
-    svg.setAttribute('height', '115px');
+    svg.setAttribute('font-size', '70px');
+    svg.setAttribute('font-family', 'ocr-b-10bt');
+    svg.setAttribute('width', '95px');
+    svg.setAttribute('height', '105px');
     canvas.id = 'canvas';
     canvas.width = svg.getBoundingClientRect().width;
     canvas.height = svg.getBoundingClientRect().height;
@@ -6679,21 +6674,15 @@ function clonewashcarelabels(index)
  + ' option:selected').data('astm'));
                 
                 var text_for_mad_in = '<p>' + $('select.made_in_select' + washcare).find(':selected').data('french') + " - " + $('select.made_in_select' + washcare).find(':selected').data('english') + " - " + $('select.made_in_select' + washcare).find(':selected').data('spanish') + " - " + $('select.made_in_select' + washcare).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + washcare).find(':selected').data('italian') + " - " + $('select.made_in_select' + washcare).find(':selected').data('dutch') + " - " + $('select.made_in_select' + washcare).find(':selected').data('german') + " - " +
-                    $('select.made_in_select' + washcare).find(':selected').data('russian') + " - " +
-                    $('select.made_in_select' + washcare).find(':selected').data('chinese') + " - " +
                     $('select.made_in_select' + washcare).find(':selected').data('arabic') + " - " +
-                    $('select.made_in_select' + washcare).find(':selected').data('greek') + " - " +
-                    $('select.made_in_select' + washcare).find(':selected').data('turkish') + '</p>';
+                    $('select.made_in_select' + washcare).find(':selected').data('greek')  + '</p>';
                 svgDoc.getElementById("country").innerHTML = text_for_mad_in;
                 
                 svgDoc.getElementById("text_care_instruction").innerHTML = "";
                 $('.care_instruction_select' + washcare + ' option:selected').each(function () {
-                    var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german') + "-" +
-                        $(this).data('russian') + "-" +
-                        $(this).data('chinese') + "-" +
+                    var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german')  + "-" +
                         $(this).data('arabic') + "-" +
-                        $(this).data('greek') + "-" +
-                        $(this).data('turkish') + '</p>';
+                        $(this).data('greek') + '</p>';
                     svgDoc.getElementById("text_care_instruction").innerHTML += value;
                 });
                 
@@ -6701,7 +6690,7 @@ function clonewashcarelabels(index)
               $('#composition_remove_qty' + washcare + ' tr').each(function () {
                   if($(this).find('select').find(':selected').val() != "Select Option")
                   {
-                       svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german') + "-" + $(this).find('select' ).find(':selected').data('russian') + "-" + $(this).find('select' ).find(':selected').data('chinese') + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek')  + "-" + $(this).find('select' ).find(':selected').data('turkish')  + '</p>';
+                       svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german')  + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek') + '</p>';
                   }
                  
                   var id=$(this).attr('id')
@@ -6710,7 +6699,7 @@ function clonewashcarelabels(index)
                   $(compss).each(function (index1,value1) {
                       var english = value1.split('_');
 
-                    svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + id + '" id="composition_' + id + '">' + english[12] + "% " + english[0]  + "-" +english[1] + "-" + english[2]+ "-" +english[3] + "-" + english[4] + "-" + english[5] + "-" + english[6] + "-" + english[7]+ "-" +english[8] + "-" + english[9] + "-" + english[10] + "-" + english[11]+ '</p>';
+                    svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + id + '" id="composition_' + id + '">' + english[9] + "% " + english[0]  + "-" +english[1] + "-" + english[2]+ "-" +english[3] + "-" + english[4] + "-" + english[5] + "-" +english[6] + "-" + english[7] + "-" + english[8]+ '</p>';
                 });
               })
             $('.composition_error_hidden').addClass('hidden')
@@ -6723,7 +6712,7 @@ function clonewashcarelabels(index)
                   var compss = compo.split(',');
                     $(compss).each(function (index1,value1){ 
                         var english = value1.split('_');
-                        washcomp1.push(value+"_"+english[0]+"_"+english[12]) 
+                        washcomp1.push(value+"_"+english[1]+"_"+english[9]) 
                     });
                 washcomp.push(washcomp1)
             })
