@@ -296,64 +296,78 @@ transform: scale(1);
 </ul>
 
 @endsection @section('content')
-<div class="col-sm-12 col-md-12 main">
-	<div class="company-nav-div hidden">
-		<a class="dropdown-toggle profile-dropdown-admin selected-buyer" style="text-transform:capitalize;cursor: pointer;">Select Company</a>
-	</div>
-	<div class="main-content">
 
 
-		<div class="loader">
-			<div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>
-		</div>
-		<div class="col" id="customer-table">
-			<input type="hidden" value="{{ session()->get('company') }}" id="company_id">
-			<input type="hidden" value="{{ session()->get('company_name') }}" id="company_name">
-			<table id="po-list-table" class="table table-hover table-striped table-bordered table-responsive">
-				<thead>
-					<tr>
-						<th>Sl. No</th>
-						<th>ERP ID</th>
-						<th>Style No</th>
-						<th>Buyer PO</th>
-						<th>Zone</th>
-						<th>Reference Name</th>
-						<th>Customer Name</th>
-						<th>PO Number</th>
-						<th>Partial</th>
-						<th>Status</th>
-						<th>Created Date</th>
-						<th>Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					@foreach($orders as $vals)
-					@php $ref_name = str_replace(" ","",$vals->reference_name) @endphp
-					<tr id="{{$vals->id}}">
-						<td class="">{{ $loop->iteration }}</td>
-						<td>{{$vals->id}}</td>
-						<td>{{$vals->style_no}}</td>
-						<td>{{$vals->buyer_po_number}}</td>
-						<td>{{$vals->zone}}</td>
-						<td>{{$vals->reference_name}}</td>
-						<td>{{$vals->company_name}}</td>
-						<td>{{$vals->po_no}}</td>
-						<td>{{$vals->partial_status == 0 ? "NO":"YES"}}</td>
-						@if($vals->status == 2)
-						<td><span class="label label-danger">{{$vals->status_name}}</span></td>
-						@else
-						<td><span class="label label-info">{{$vals->status_name}}</span></td>
-						@endif
-						<td>{{ explode(' ',$vals->po_created_date)[0] }}</td>
-						<td align="center"><object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal{{$loop->iteration}}" class="center-block tesco_svg{{$loop->iteration}}" data="{{$vals->template_file}}" type="image/svg+xml"></object><a class="print_download" href="javascript:void(0)" onclick="DownloadArtwork('{{$ref_name}}','{{ $loop->iteration }}','{{$vals->template_file}}','{{$vals->style_no}}','{{$vals->buyer_po_number}}','{{$vals->id}}','{{$vals->order_type}}','{{$vals->po_created_date}}','print')" ><i class="fa fa-edit"  title="Download Print" data-original-title="Download Print"></i></a><a style="margin-left: 10px;" class="proof_download" href="javascript:void(0)" onclick="DownloadArtwork('{{$ref_name}}','{{ $loop->iteration }}','{{$vals->template_file}}','{{$vals->style_no}}','{{$vals->buyer_po_number}}','{{$vals->id}}','{{$vals->order_type}}','{{$vals->po_created_date}}','proof')"><i class="fa fa-edit"  title="Download Proof" data-original-title="Download Proof"></i></a></td>
-					</tr>
-					@endforeach
-				</tbody>
-			</table>
-		</div>
-
-	</div>
-</div>
+<div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12" style="padding-top: 25px;">
+              <div class="top-content">
+              </div>
+              <div class="main-sub-menu">
+			    <div class="company-nav-div hidden">
+			    	<a class="dropdown-toggle profile-dropdown-admin selected-buyer" style="text-transform:capitalize;cursor: pointer;">Select Company</a>
+				</div>
+              </div>
+             <div class="clearfix"></div>
+                <div class="main-content">
+                    <div class="loader" style="display:none;">
+						<div class=" fa-3x">
+                            <i class="fa fa-spinner fa-pulse"></i>
+                        </div>
+					</div>
+					<div class="filter-window-jobcard-list">
+					{!! Form::open(['id' => 'printmanager_filter_form','data-toggle' => 'validator','role' => 'form']) !!}
+					<h5 style="margin-left:15px;"><strong>Print Orders Filter</strong></h5>
+					<div class="col-xs-6 col-sm-4">
+					    <div class="form-group has-feedback">
+							{{ Form::select('buyer_filter', (['' => 'SELECT A BUYER']+ $buyers), '', array('class' => 'form-control input-sm selectpicker', 'data-width' => '100%','data-live-search'=>'true', 'id' => 'buyer_filter', 'required', 'onchange' => 'getCustomersList(this)')) }}
+						    <div class="help-block with-errors"></div>
+					    </div>
+					</div>
+					<div class="col-xs-6 col-sm-4">
+						<div class="form-group has-feedback">
+							{{ Form::select('customer_filter', (['' => 'SELECT A CUSTOMER']), '', array('class' => 'form-control input-sm selectpicker', 'data-width' => '100%','data-live-search'=>'true', 'id' => 'customer_filter', 'required', 'onchange' => 'getJobcardIDList(this)')) }}
+						    <div class="help-block with-errors"></div>
+					    </div>
+					</div>
+					<div class="col-xs-6 col-sm-4">
+						<div class="form-group has-feedback">
+							{{ Form::select('style_no_filter',(['' => 'SELECT A ERP ID']),'',array('class' => 'form-control input-sm selectpicker', 'data-width' => '100%','data-live-search'=>'true','id' => 'style_no_filter','required')) }}
+							<div class="help-block with-errors"></div>
+						</div>
+					</div>
+						<div class="filter-actions-erp">
+							{!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm pull-right','type' => 'submit', 'style' => 'margin-top: 0.5em;margin-right: 15px;'] ) !!}
+							<div class="clearfix"></div>
+						</div>
+					{!! Form::close() !!}
+					</div>
+					<br>
+                    <div class="col" id="jobcard-lists-table">
+                        <input type="hidden" value="{{ session()->get('company') }}" id="company_id">
+                        <input type="hidden" value="{{ session()->get('company_name') }}" id="company_name">
+                            <table id="jobcard-list-table" class="table table-bordered table-responsive table-hover " style="font-size: 12px;">
+                                <thead>
+                                    <tr>
+									<th>Sl. No</th>
+									<th>Style No</th>
+									<th>Buyer PO</th>
+									<th>Zone</th>
+									<th>Reference Name</th>
+									<th>Partial</th>
+									<th>Status</th>
+									<th>Created Date</th>
+									<th>Actions</th>
+									</tr>
+                                </thead>
+                                <tbody id="jobcard_list_table_body">
+                                </tbody>
+                            </table>
+				    </div>
+                </div>
+                </div>
+            </div>
+        </div>
 
 <!-- Hidden div for svg rendering -->
 <div id="modaldiv">
@@ -498,8 +512,213 @@ transform: scale(1);
 	});
 		
 	});
+	
+	
+function getCustomersList(evt)
+{
+    try {
+        let selected_buyer_id = evt.value;
+        if (selected_buyer_id != '') 
+        {
+            $.ajax({
+                url: base_url + "/print-manager/get-customers-list",
+                type: 'GET',
+                data: {
+                    selected_buyer_id: selected_buyer_id
+                },
+                tryCount: 0,
+                retryLimit: 2,
+                dataType: "json",
+                beforeSend: function () {
+                    $(".loader").show();
+                },
+                statusCode: {
+                    200: function(data) {
+                        var html = '<option value="">SELECT A CUSTOMER</option>';
+                        /** [ customers list selectpicker value populating ] */
+                        $.each(data.customers_list, function (key, item) {
+                            html += '<option value="' + key + '">' + item + '</option>';
+                        });
+                        $('#customer_filter').html(html);
+                        $('#customer_filter').selectpicker('refresh');
+                    },
+                    400: function() {
+                        $('.snackbar_span').html("Parameter is missing !!!");
+                        showSnackbar();
+                    },
+               },
+                error: function (errorXHR, errorStatus, errorThrown) {
+                    this.tryCount++;
+                    if (this.tryCount <= this.retryLimit) {
+                        $.ajax(this);
+                        return;
+                    }
+                },
+                complete: function () {
+                    $(".loader").hide();
+                }
+            })
+        }
+        else
+        {
+            $('#customer_filter').html('<option value="">SELECT A CUSTOMER</option>');
+            $('#customer_filter').selectpicker('refresh');
+            $('#style_no_filter').html('<option value="">SELECT A ERP ID</option>');
+            $('#style_no_filter').selectpicker('refresh');
+        }
+    } catch (e) {
+        console.log("Error:"+e)
+    }
+}
+	
+	
+function getJobcardIDList(evt)
+{
+    try {
+        let selected_customer_id = evt.value;
+        let selected_buyer_id    = $('#buyer_filter option:selected').val();
+        if (selected_customer_id != '') 
+        {
+            $.ajax({
+                url: base_url + "/print-manager/get-style-list",
+                type: 'GET',
+                data: {
+                    selected_customer_id: selected_customer_id,
+                    selected_buyer_id:selected_buyer_id
+                },
+                tryCount: 0,
+                retryLimit: 2,
+                dataType: "json",
+                beforeSend: function () {
+                    $(".loader").show();
+                },
+                statusCode: {
+                    200: function(data) {
+                        var html = '<option value="">SELECT A ERP ID</option>';
+                        /** [ jobcard id list selectpicker value populating ] */
+                        $.each(data.jobcard_id_list, function (key, item) {
+                            html += '<option value="' + key + '">' + item + '</option>';
+                        });
+                        $('#style_no_filter').html(html);
+                        $('#style_no_filter').selectpicker('refresh');
+                    },
+                    400: function() {
+                        $('.snackbar_span').html("Parameter is missing !!!");
+                        showSnackbar();
+                    },
+               },
+                error: function (errorXHR, errorStatus, errorThrown) {
+                    this.tryCount++;
+                    if (this.tryCount <= this.retryLimit) {
+                        $.ajax(this);
+                        return;
+                    }
+                },
+                complete: function () {
+                    $(".loader").hide();
+                }
+            })
+        }
+        else
+        {
+            $('#style_no_filter').html('<option value="">SELECT A ERP ID</option>');
+            $('#style_no_filter').selectpicker('refresh');
+        }
+    } catch (e) {
+        console.log("Error:"+e)
+    }
+}
+ $('#printmanager_filter_form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented())
+        {
 
+        }
+        else
+        {
+            e.preventDefault();
+            getErpOrderList();
+        }
+    })
 
+function getErpOrderList()
+{
+    try {
+        let selected_buyer_id    = $('#buyer_filter option:selected').val();
+        let selected_customer_id = $('#customer_filter option:selected').val();
+        let selected_jobcard_id  = $('#style_no_filter option:selected').val();
+        if (selected_customer_id != '') 
+        {
+            $.ajax({
+                url: base_url + "/print-manager/get-erporder-list",
+                type: 'GET',
+                data: {
+                    selected_customer_id: selected_customer_id,
+                    selected_buyer_id:selected_buyer_id,
+                    erp_id:selected_jobcard_id
+                },
+                tryCount: 0,
+                retryLimit: 2,
+                dataType: "json",
+                beforeSend: function () {
+                    $(".loader").show();
+                },
+                statusCode: {
+                    200: function(data) {
+                        var i=1;
+						var html="";
+						$.each(data.erp_orders_list, function (key, item) {
+							if(item.status == 2)
+							{
+								var status='label-danger';
+							}
+							else
+							{
+								var status='label-info';
+							}
+							var partial_status = item.partial_status == 0 ? "NO":"YES"; 
+							$ref_name = item.reference_name.replace(" ","") 
+                            html += `<tr id="`+item.id+`">
+										<td>`+i+`</td>
+										<td>`+item.style_no+`</td>
+										<td>`+item.buyer_po_number+`</td>
+										<td>`+item.zone+`</td>
+										<td>`+item.reference_name+`</td>
+										<td>`+partial_status +`</td>
+										<td><span class="label `+status+`">`+item.status_name+`</span></td>
+										<td>`+item.created_at.split(" ")[0]+`</td>
+										<td><object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal`+i+`" class="center-block tesco_svg`+i+`" data="`+item.template_file+`" type="image/svg+xml"></object><a class="print_download" href="javascript:void(0)" onclick="DownloadArtwork('`+$ref_name+`','`+i+`','`+item.template_file+`','`+item.style_no+`','`+item.buyer_po_number+`','`+item.erp_order_id+`','`+item.order_type+`','`+item.created_at+`','print')" ><i class="fa fa-edit"  title="Download Print" data-original-title="Download Print"></i></a><a style="margin-left: 10px;" class="proof_download" href="javascript:void(0)" onclick="DownloadArtwork('`+$ref_name+`','`+i+`','`+item.template_file+`','`+item.style_no+`','`+item.buyer_po_number+`','`+item.erp_order_id+`','`+item.order_type+`','`+item.created_at+`','proof')"><i class="fa fa-edit"  title="Download Proof" data-original-title="Download Proof"></i></a></td>
+										</tr>`;
+							i++;
+                        });
+                        $('#jobcard_list_table_body').html(html);           
+                    },
+                    400: function() {
+                        $('.snackbar_span').html("Parameter is missing !!!");
+                        showSnackbar();
+                    },
+               },
+                error: function (errorXHR, errorStatus, errorThrown) {
+                    this.tryCount++;
+                    if (this.tryCount <= this.retryLimit) {
+                        $.ajax(this);
+                        return;
+                    }
+                },
+                complete: function () {
+                    $(".loader").hide();
+                }
+            })
+        }
+        else
+        {
+            $('#style_no_filter').html('<option value="">SELECT A JOBCARD ID</option>');
+            $('#style_no_filter').selectpicker('refresh');
+        }
+    } catch (e) {
+        console.log("Error:"+e)
+    }
+}
+	
 </script>
 
 @endsection
