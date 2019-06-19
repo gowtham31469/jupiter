@@ -1593,6 +1593,7 @@ class OrderManagementCntrl extends Controller
     /**
      * method to set the purchase order number to the respective order
      * @param Request $request [table_name,po_number, id]
+     * @author <Praveen>
      */
     public function setPONumber(Request $request)
     {
@@ -1654,6 +1655,7 @@ class OrderManagementCntrl extends Controller
      * method to set the po number and pdf file for an order
      * @param po_number and pdf (pdf is optional)
      * @return \Illuminate\Http\Response
+     * @author <Praveen>
      */
     public function setCustomerPOFile(Request $request)
     {
@@ -1731,13 +1733,14 @@ class OrderManagementCntrl extends Controller
      * method to get all the details for proforma invoice generation
      * @param  Request $request [table_name,id]
      * @return [type]           [description]
+     * @author <Praveen>
      */
-    public function getProformaInvoice(Request $request)
+    public function getOrchestraPI(Request $request)
     {
         try
         {
             $pi_obj = new ProformaInvoice();
-            $data   = $pi_obj->getPIDetails($request);
+            $data   = $pi_obj->getOrchestraPIDetails($request);
             $result = response()->json(['error'=> false,'message' =>'success','data'=>$data],200);
         }
         catch (\Exception $e)
@@ -1751,59 +1754,112 @@ class OrderManagementCntrl extends Controller
      * method to approve the proforma invoice
      * @param  Request $request [description]
      * @return [type]           [description]
+     * @author <Praveen>
      */
-    public function approveProformaInvice(Request $request)
+    public function approveOrchestraPI(Request $request)
     {
-        return $request;
         try
         {
-            $row_id     =   $request->id;
-            $table_name =   $request->table_name;
-            $total_qnty =   0 ; 
-            $sub_total  =   0 ;
-            $pi_obj     =   new ProformaInvoice();
-            $data       =   $pi_obj->getPIDetails($request);
-            if (count($data)>0)
+            $row_id      =   $request->id;
+            $table_name  =   $request->table_name;
+            $buyer_id    =   $request->buyer_id;
+            $billamnt    =   $request->billamnt;
+            $template_id =   $request->template_id; 
+            
+            $pi_obj      =   new ProformaInvoice();
+            $data        =   $pi_obj->getOrchestraPIDetails($request);
+            $attatchment =   $pi_obj->getOrchestraAttachment($data,$request);
+            
+            $erpOrders   =   [];
+            $total_qnty  =   0 ; 
+            $sub_total   =   0 ;
+            $erp_obj     =   new ErpOrders();
+
+            if ($data)
             {
+                if ($data['item_details'][0]->order_flag=="reOrder") 
+                {
+                    $rep_order_id = str_replace(' ', '', $data['item_details'][0]->template_name)."_".$row_id;
+                }
+                else
+                {
+                    $rep_order_id = 0;
+                }
                 
+                $ship_address = $data['ship_to']->address.','.$data['ship_to']->country;
+                $bill_address = $data['bill_to']->address.','.$data['bill_to']->country;
+
                 $pi_details = PI::create([
-                    'company_id' => $data['company_details']->id,
+                    'buyer_id'         => $buyer_id,
+                    'company_id'       => $data['company_details']->id,
                     'customer_id'      => $data['bank_details']->id,
-                    'shipping_address' => $data['ship_to']->address,
-                    'billing_address'  => $data['bill_to']->address,
-                    'place_of_supply'  => $data['bank_details']->place_of_supply
+                    'buyer_po_no'      => $data['bank_details']->po,
+                    'uvc_style_no'     => $data['bank_details']->uvc,
+                    'ref_no'           => $data['bank_details']->ref_no,
+                    'shipping_address' => $ship_address,
+                    'billing_address'  => $bill_address,
+                    'place_of_supply'  => $data['bank_details']->place_of_supply,
+                    'revision_no'      => $data['item_details'][0]->pi_rev_no,
+                    'rep_order_id'     => $rep_order_id,
+                    'pi_file'          => $attatchment
                     
                 ]);
+
                 foreach ($data['item_details'] as $key => $value)
                 {
+                    $unit_cost = 0;
+                    foreach ($data['price_list'] as $i => $val) {
+                        if ($value->item_id == $val->item_id) {
+                            if($value->quantity <= $val->volume_to) {
+                                $unit_cost = $val->price;
+                                $tax = $val->tax;
+                                break;
+                            }
+                        }
+                    }
                     $total_qnty+= $value->quantity;
-                    $sub_total += $value->quantity *$value->unit_price;
+                    $sub_total += $value->quantity *$unit_cost;
+
                     ProfomaInvoiceItemDetails::create([
-                        'pi_id'     => $pi_details->id,
-                        'material'  => $value->material_name,
-                        'size'      => $value->size,
-                        'style'     => $value->style,
-                        'quantity'  => $value->quantity,
-                        'unit_cost' => $value->unit_price
+                        'pi_id'       => $pi_details->id,
+                        'material'    => $value->material_name,
+                        'size'        => $value->size,
+                        'template_id' => $value->item_id,
+                        'ref_no'      => $value->ref_no,
+                        'style'       => $value->uvc,
+                        'quantity'    => $value->quantity,
+                        'unit_cost'   => $unit_cost,
+                        'tax'         => $tax
                     ]);
                 }
                 PI::where('id',$pi_details->id)
                             ->update([
                               'total_quantity'   => $total_qnty,
                               'sub_total'        => $sub_total,
-                              'tax'              => $data['item_details'][0]->tax,
-                              'bill_amount'      => $sub_total*$data['item_details'][0]->tax
+                              'bill_amount'      => $billamnt
                             ]);
             }
-            
-            $data       =   DB::table($table_name)
-                            ->where('id',$row_id)
-                            ->update([
-                              'pi_status' => "PI Approved"
-                            ]);
-            if ($data)
+
+            $approved_data   = DB::table($table_name)
+                        ->where('id',$row_id)
+                        ->update([
+                            'pi_status' => "PI Approved",
+                            'pi_id' => $pi_details->id,
+                            'pi_file' => $attatchment, 
+                            'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
+                        ]);
+            $erpOrders['tableName'] = $table_name;
+            $erpOrders['id']        = $row_id;
+            $erpOrders['buyer_id']  = $buyer_id;   
+            $customer_data  = DB::table('customers')->where('id',$data['bank_details']->id)->first();
+
+            if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
+                $erp_obj->updateOrchestraErpOrders($erpOrders);
+            } 
+
+            if ($approved_data)
             {
-               $result = response()->json(['error'=> false,'message' =>'success'],200);
+               $result = response()->json(['error'=> false,'message' =>'success'    ],200);
             }
             else
             {
@@ -1821,18 +1877,21 @@ class OrderManagementCntrl extends Controller
      * method to reject the proforma invoice
      * @param  Request $request [description]
      * @return [type]           [description]
+     * @author <Praveen>
      */
-    public function rejectProformaInvice(Request $request)
+    public function rejectOrchestraPI(Request $request)
     {
         try
         {
             $row_id     =   $request->id;
             $table_name =   $request->table_name;
-            $data       =   DB::table($table_name)
-                            ->where('id',$row_id)
-                            ->update([
-                              'pi_status' => "PI Rejected"
-                            ]);
+            $table_data =   DB::table($table_name)->where('id',$row_id)->first();
+            $data = DB::table($table_name)
+                        ->where('id',$row_id)
+                         ->update([
+                          'pi_status' => "PI Rejected",
+                          'pi_rev_no' => $table_data->pi_rev_no+1
+                        ]);
             if ($data)
             {
                $result = response()->json(['error'=> false,'message' =>'success'],200);
@@ -1848,6 +1907,27 @@ class OrderManagementCntrl extends Controller
         }
         return $result;
     }
+
+    /**
+     * Download Orchestra PI file
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     * @author <Praveen>
+     */
+    public function downloadOrchestraPI(Request $request)
+    {
+         try {
+             $id         =  $request['id'];
+             $table_name =  $request['table_name'];            
+             $result     =  DB::table($table_name)->where('id',$id)->value('pi_file');   
+         }  
+         catch (\Exception $e)
+         {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+         }
+         return $result;
+    }
+
 	/**
      * This Function is used to delete the Extra Main and size Label Details.
      *
