@@ -3248,7 +3248,7 @@ function washcarelabels(data, dataid) {
                     $('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('greek');
 				console.log(text_for_mad_in);
-                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
+                svgDoc.getElementById("country").innerHTML = wordWrap(text_for_mad_in, 25);
 
             } else {
 
