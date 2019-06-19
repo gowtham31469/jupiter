@@ -106,7 +106,7 @@ function orderStatus() {
                 //aswathy
                 var path = base_url + "/admin/" + buyer + "/order-management/order-status";
 
-                var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_poly_bag_sticker_orders)))))));
+                var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_polybag_sticker_orders)))))));
                 //based on path extra column will append in the datatable
                 $('.main-content').html("<button style='margin-bottom:10px;' id='po-file-upload-button' class='btn btn-primary pull-right byn-sm' type='button'>Update PO</button>");
                 	
@@ -166,7 +166,7 @@ function orderStatus() {
 									success: function (data) {
 										//$('#po-file-upload-group').modal('show')
 										$('#po-file-upload-group').find('#exist_artwork_div_status ul').html("");
-										 var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_poly_bag_sticker_orders)))))));
+										 var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_polybag_sticker_orders)))))));
 										
 										var coun = 0;
 										var options = "<option>Select PO</option>";
@@ -1045,22 +1045,22 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 
 
 
-        if (data.orchestra_standard_poly_bag_sticker_orders != "") {
+        if (data.orchestra_standard_polybag_sticker_orders != "") {
            
-            if (data.orchestra_standard_poly_bag_sticker_orders[0].height == null) {
+            if (data.orchestra_standard_polybag_sticker_orders[0].height == null) {
                 $height = "";
             } else {
-                $height = data.orchestra_standard_poly_bag_sticker_orders[0].height;
+                $height = data.orchestra_standard_polybag_sticker_orders[0].height;
             }
-            $age = data.orchestra_standard_poly_bag_sticker_orders[0].group_id;
+            $age = data.orchestra_standard_polybag_sticker_orders[0].group_id;
 			var num = 600 * 395 * $height
             var val = num / (1000 * 1000 * 1000)
             $parcelVolume = val;
-            $no_of_carton = data.orchestra_standard_poly_bag_sticker_orders[0].no_of_carton;
-            $total_polybag = data.orchestra_standard_poly_bag_sticker_orders[0].total_polybag;
-            $final_order_qty_sets = data.orchestra_standard_poly_bag_sticker_orders[0].final_order_qty_sets;
-            $order_qty = data.orchestra_standard_poly_bag_sticker_orders[0].order_qty;
-            $final_order_qty = data.orchestra_standard_poly_bag_sticker_orders[0].final_order_qty;
+            $no_of_carton = data.orchestra_standard_polybag_sticker_orders[0].no_of_carton;
+            $total_polybag = data.orchestra_standard_polybag_sticker_orders[0].total_polybag;
+            $final_order_qty_sets = data.orchestra_standard_polybag_sticker_orders[0].final_order_qty_sets;
+            $order_qty = data.orchestra_standard_polybag_sticker_orders[0].order_qty;
+            $final_order_qty = data.orchestra_standard_polybag_sticker_orders[0].final_order_qty;
 			update_disable=1;	
         } else {
             
@@ -1074,7 +1074,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
             $final_order_qty = "";
         }
 		
-		if (data.orchestra_standard_poly_bag_sticker_orders != "") {
+		if (data.orchestra_standard_polybag_sticker_orders != "") {
 			update_disable=1;
 		}
 
@@ -1540,7 +1540,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 
 				$('#po-file-upload-div').modal('show')
 				$('#po-file-upload-div').find('#exist_artwork_div ul').html("");
-				var newObj = data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_poly_bag_sticker_orders);
+				var newObj = data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_polybag_sticker_orders);
 				var coun = 0;
 				var options = "<option>Select PO</option>";
 				$(newObj).each(function (index1, value1) {
@@ -2409,14 +2409,16 @@ function barcode_polybag(id, data) {
 			var code = data.orchestra_parcel_details[0].ParcelBarCode.toString();
 			svgDoc.getElementById("theme").innerHTML = data.orchestra_parcel_details[0].Theme;
 			svgDoc.getElementById("cartontable").innerHTML = $tbl;
+			jsbarcodestdpoly(code, 'barcode', svgDoc)
 		} else {
 			svgDoc.getElementById("parcel_code").innerHTML = data.orchestra_parcel_details[0].UVC_TCO;
 			var code = data.orchestra_parcel_details[0].BarcodeForPricesTags.toString();
 			svgDoc.getElementById("size").innerHTML = data.orchestra_parcel_details[0].Size;
 			svgDoc.getElementById("color").innerHTML = data.orchestra_parcel_details[0].Color_Code;
+			jsbarcodesolidpoly(code, 'barcode', svgDoc)
 
 		}
-		jsbarcode(code, 'barcode', svgDoc)
+		
 	}, false);
 
 }
@@ -2445,14 +2447,18 @@ function barcode_carton(id, data) {
 		if (data.template_name == "Standard") {
 			var code = data.orchestra_parcel_details[0].ParcelBarCode.toString();
 			svgDoc.getElementById("parcelcode").innerHTML = data.orchestra_parcel_details[0].ParcelCode;
+			jsbarcodestdcartonA(code, 'barcode1', svgDoc)
+			jsbarcodestdcartonB(code, 'barcode2', svgDoc)
 		} else {
 			var code = data.orchestra_parcel_details[0].BarcodeForPricesTags.toString();
 			svgDoc.getElementById("size").innerHTML = data.orchestra_parcel_details[0].Size;
 			svgDoc.getElementById("parcelcode").innerHTML = data.orchestra_parcel_details[0].UVC_TCO;
+			jsbarcodesolidcartonA(code, 'barcode1', svgDoc)
+			jsbarcodesolidcartonB(code, 'barcode2', svgDoc)
 		}
 
-		jsbarcode(code, 'barcode1', svgDoc)
-		jsbarcode(code, 'barcode2', svgDoc)
+		
+		
 
 
 	}, false);
@@ -3242,7 +3248,7 @@ function washcarelabels(data, dataid) {
                     $('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('greek');
 				console.log(text_for_mad_in);
-                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
+                svgDoc.getElementById("country").innerHTML = wordWrap(text_for_mad_in, 25);
 
             } else {
 
@@ -5715,6 +5721,340 @@ function jsbarcode(code, id, svgDoc) {
 	//    svg.setAttribute('width', '188.931023622px');
 	svg.setAttribute('font-size', '70px');
 	svg.setAttribute('font-family', 'calibrib');
+
+	canvas.id = 'canvas';
+	canvas.width = svg.getBoundingClientRect().width;
+	canvas.height = svg.getBoundingClientRect().height;
+
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
+
+	/* Time to play ;) */
+
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
+
+	// JavaScript (HTML) image
+	img = new Image();
+
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
+
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+	// img.src - contains base64 URI from svg
+
+	//remove temporary canvas
+	canvasTmp.remove();
+
+	svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+/**
+ * This Function is used to invoke JSBarcode.
+ * 
+ * @return barcode
+ */
+
+function jsbarcodesolidcartonA(code, id, svgDoc) {
+	JsBarcode("#ean-13", code, {
+		format: "ean13",
+		width: 6.1958492847,
+		height: 333.784615418,
+		fontSize: 50
+	});
+	var svg = document.getElementById('svgdiv').querySelector('svg'),
+		canvas = document.createElement('canvas'),
+		body = document.getElementsByTagName('body')[0],
+		canvasTmp,
+		svg_xml,
+		ctx,
+		img;
+	// if our "svg" doesn't have 'xmlns' attribute we must add it
+	//    svg.setAttribute('width', '188.931023622px');
+	svg.setAttribute('font-size', '50px');
+	svg.setAttribute('font-family', 'calibrib');
+	svg.setAttribute('letter-spacing', '10px');
+
+	canvas.id = 'canvas';
+	canvas.width = svg.getBoundingClientRect().width;
+	canvas.height = svg.getBoundingClientRect().height;
+
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
+
+	/* Time to play ;) */
+
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
+
+	// JavaScript (HTML) image
+	img = new Image();
+
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
+
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+	// img.src - contains base64 URI from svg
+
+	//remove temporary canvas
+	canvasTmp.remove();
+
+	svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+
+/**
+ * This Function is used to invoke JSBarcode.
+ * 
+ * @return barcode
+ */
+
+function jsbarcodestdcartonA(code, id, svgDoc) {
+	JsBarcode("#ean-13", code, {
+		format: "ean13",
+		width: 5.99,
+		height: 343,
+		fontSize: 60
+	});
+	var svg = document.getElementById('svgdiv').querySelector('svg'),
+		canvas = document.createElement('canvas'),
+		body = document.getElementsByTagName('body')[0],
+		canvasTmp,
+		svg_xml,
+		ctx,
+		img;
+	// if our "svg" doesn't have 'xmlns' attribute we must add it
+	//    svg.setAttribute('width', '188.931023622px');
+	svg.setAttribute('font-size', '70px');
+	svg.setAttribute('font-family', 'calibrib');
+
+	canvas.id = 'canvas';
+	canvas.width = svg.getBoundingClientRect().width;
+	canvas.height = svg.getBoundingClientRect().height;
+
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
+
+	/* Time to play ;) */
+
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
+
+	// JavaScript (HTML) image
+	img = new Image();
+
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
+
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+	// img.src - contains base64 URI from svg
+
+	//remove temporary canvas
+	canvasTmp.remove();
+
+	svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+/**
+ * This Function is used to invoke JSBarcode.
+ * 
+ * @return barcode
+ */
+
+function jsbarcodesolidcartonB(code, id, svgDoc) {	
+	JsBarcode("#ean-13", code, {
+		format: "ean13",
+		width: 7.343600,
+		height: 278.99646,
+		fontSize: 60
+	});
+	var svg = document.getElementById('svgdiv').querySelector('svg'),
+		canvas = document.createElement('canvas'),
+		body = document.getElementsByTagName('body')[0],
+		canvasTmp,
+		svg_xml,
+		ctx,
+		img;
+	// if our "svg" doesn't have 'xmlns' attribute we must add it
+	//    svg.setAttribute('width', '188.931023622px');
+	svg.setAttribute('font-size', '70px');
+	svg.setAttribute('font-family', 'calibrib');
+
+	canvas.id = 'canvas';
+	canvas.width = svg.getBoundingClientRect().width;
+	canvas.height = svg.getBoundingClientRect().height;
+
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
+
+	/* Time to play ;) */
+
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
+
+	// JavaScript (HTML) image
+	img = new Image();
+
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
+
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+	// img.src - contains base64 URI from svg
+
+	//remove temporary canvas
+	canvasTmp.remove();
+
+	svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+
+/**
+ * This Function is used to invoke JSBarcode.
+ * 
+ * @return barcode
+ */
+
+function jsbarcodestdcartonB(code, id, svgDoc) {
+	JsBarcode("#ean-13", code, {
+		format: "ean13",
+		width: 5.99,
+		height: 343,
+		fontSize: 60
+	});
+	var svg = document.getElementById('svgdiv').querySelector('svg'),
+		canvas = document.createElement('canvas'),
+		body = document.getElementsByTagName('body')[0],
+		canvasTmp,
+		svg_xml,
+		ctx,
+		img;
+	// if our "svg" doesn't have 'xmlns' attribute we must add it
+	//    svg.setAttribute('width', '188.931023622px');
+	svg.setAttribute('font-size', '70px');
+	svg.setAttribute('font-family', 'calibrib');
+
+	canvas.id = 'canvas';
+	canvas.width = svg.getBoundingClientRect().width;
+	canvas.height = svg.getBoundingClientRect().height;
+
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
+
+	/* Time to play ;) */
+
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
+
+	// JavaScript (HTML) image
+	img = new Image();
+
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
+
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+	// img.src - contains base64 URI from svg
+
+	//remove temporary canvas
+	canvasTmp.remove();
+
+	svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+/**
+ * This Function is used to invoke JSBarcode.
+ * 
+ * @return barcode
+ */
+
+function jsbarcodestdpoly(code, id, svgDoc) {
+	JsBarcode("#ean-13", code, {
+		format: "ean13",
+		width: 5.99,
+		height: 343,
+		fontSize: 60
+	});
+	var svg = document.getElementById('svgdiv').querySelector('svg'),
+		canvas = document.createElement('canvas'),
+		body = document.getElementsByTagName('body')[0],
+		canvasTmp,
+		svg_xml,
+		ctx,
+		img;
+	// if our "svg" doesn't have 'xmlns' attribute we must add it
+	//    svg.setAttribute('width', '188.931023622px');
+	svg.setAttribute('font-size', '70px');
+	svg.setAttribute('font-family', 'calibrib');
+
+	canvas.id = 'canvas';
+	canvas.width = svg.getBoundingClientRect().width;
+	canvas.height = svg.getBoundingClientRect().height;
+
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
+
+	/* Time to play ;) */
+
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
+
+	// JavaScript (HTML) image
+	img = new Image();
+
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
+
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+	// img.src - contains base64 URI from svg
+
+	//remove temporary canvas
+	canvasTmp.remove();
+
+	svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+/**
+ * This Function is used to invoke JSBarcode.
+ * 
+ * @return barcode
+ */
+
+function jsbarcodesolidpoly(code, id, svgDoc) {
+	JsBarcode("#ean-13", code, {
+		format: "ean13",
+		width: 6.55,
+		height: 355,
+		fontSize: 50
+	});
+	var svg = document.getElementById('svgdiv').querySelector('svg'),
+		canvas = document.createElement('canvas'),
+		body = document.getElementsByTagName('body')[0],
+		canvasTmp,
+		svg_xml,
+		ctx,
+		img;
+	// if our "svg" doesn't have 'xmlns' attribute we must add it
+	//    svg.setAttribute('width', '188.931023622px');
+	svg.setAttribute('font-size', '54px');
+	svg.setAttribute('font-family', 'calibrib');
+	svg.setAttribute('letter-spacing', '10px');
 
 	canvas.id = 'canvas';
 	canvas.width = svg.getBoundingClientRect().width;

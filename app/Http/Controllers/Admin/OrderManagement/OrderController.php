@@ -664,7 +664,7 @@ class OrderController extends Controller
         	PDF::ImageSVG('@' . $svg, $x=$xx, $y=12.5, '25', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			PDF::SetFillColor(255, 255, 255);
 			PDF::SetTextColor(0, 0, 0);
-			PDF::writeHTMLCell('25.5', '40', $xx, '151.5', $tbl1, '', 1, 1, true, 'C', true);
+			//PDF::writeHTMLCell('25.5', '40', $xx, '151.5', $tbl1, '', 1, 1, true, 'C', true);
 			$xx += 37.5;
 			$i++;
 			
