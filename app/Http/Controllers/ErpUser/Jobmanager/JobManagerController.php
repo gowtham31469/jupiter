@@ -995,7 +995,7 @@ class JobManagerController extends Controller
 		
 				$svgarr = explode(',_',$request->svg);
 				$name=$request->name;
-		        $svg=urldecode($request->svg);
+		       // $svg=urldecode($request->svg);
 				PDF::setImageScale(1);
 				PDF::SetFont('frankgothcnbt');
 				PDF::AddPage();
@@ -1005,7 +1005,7 @@ class JobManagerController extends Controller
 				PDF::SetXY(10, 50);
 				foreach($svgarr as $value)
 				{
-					$svg=urldecode($value);
+					//$svg=urldecode($value);
 					PDF::SetFillColor(255,255,255);
 					if($i == 2)
 					{
@@ -1024,8 +1024,8 @@ class JobManagerController extends Controller
 					$j++;
 			
 					
-					$svg=urldecode($value);
-					file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
+					//$svg=urldecode($value);
+					file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $value);
 					$html = '<img style="width:480px;height:302.36220472px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
 					PDF::writeHTMLCell(127, 80, 15, $yy+1, $html, '', 0, 0, false, 'L', false);
 				
