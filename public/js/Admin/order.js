@@ -2409,14 +2409,16 @@ function barcode_polybag(id, data) {
 			var code = data.orchestra_parcel_details[0].ParcelBarCode.toString();
 			svgDoc.getElementById("theme").innerHTML = data.orchestra_parcel_details[0].Theme;
 			svgDoc.getElementById("cartontable").innerHTML = $tbl;
+			jsbarcodestdpoly(code, 'barcode', svgDoc)
 		} else {
 			svgDoc.getElementById("parcel_code").innerHTML = data.orchestra_parcel_details[0].UVC_TCO;
 			var code = data.orchestra_parcel_details[0].BarcodeForPricesTags.toString();
 			svgDoc.getElementById("size").innerHTML = data.orchestra_parcel_details[0].Size;
 			svgDoc.getElementById("color").innerHTML = data.orchestra_parcel_details[0].Color_Code;
+			jsbarcodesolidpoly(code, 'barcode', svgDoc)
 
 		}
-		jsbarcode(code, 'barcode', svgDoc)
+		
 	}, false);
 
 }
@@ -2445,14 +2447,18 @@ function barcode_carton(id, data) {
 		if (data.template_name == "Standard") {
 			var code = data.orchestra_parcel_details[0].ParcelBarCode.toString();
 			svgDoc.getElementById("parcelcode").innerHTML = data.orchestra_parcel_details[0].ParcelCode;
+			jsbarcodestdcartonA(code, 'barcode1', svgDoc)
+			jsbarcodestdcartonB(code, 'barcode2', svgDoc)
 		} else {
 			var code = data.orchestra_parcel_details[0].BarcodeForPricesTags.toString();
 			svgDoc.getElementById("size").innerHTML = data.orchestra_parcel_details[0].Size;
 			svgDoc.getElementById("parcelcode").innerHTML = data.orchestra_parcel_details[0].UVC_TCO;
+			jsbarcodesolidcartonA(code, 'barcode1', svgDoc)
+			jsbarcodesolidcartonB(code, 'barcode2', svgDoc)
 		}
 
-		jsbarcode(code, 'barcode1', svgDoc)
-		jsbarcode(code, 'barcode2', svgDoc)
+		
+		
 
 
 	}, false);
@@ -5715,6 +5721,340 @@ function jsbarcode(code, id, svgDoc) {
 	//    svg.setAttribute('width', '188.931023622px');
 	svg.setAttribute('font-size', '70px');
 	svg.setAttribute('font-family', 'calibrib');
+
+	canvas.id = 'canvas';
+	canvas.width = svg.getBoundingClientRect().width;
+	canvas.height = svg.getBoundingClientRect().height;
+
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
+
+	/* Time to play ;) */
+
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
+
+	// JavaScript (HTML) image
+	img = new Image();
+
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
+
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+	// img.src - contains base64 URI from svg
+
+	//remove temporary canvas
+	canvasTmp.remove();
+
+	svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+/**
+ * This Function is used to invoke JSBarcode.
+ * 
+ * @return barcode
+ */
+
+function jsbarcodesolidcartonA(code, id, svgDoc) {
+	JsBarcode("#ean-13", code, {
+		format: "ean13",
+		width: 6.15,
+		height: 339,
+		fontSize: 50
+	});
+	var svg = document.getElementById('svgdiv').querySelector('svg'),
+		canvas = document.createElement('canvas'),
+		body = document.getElementsByTagName('body')[0],
+		canvasTmp,
+		svg_xml,
+		ctx,
+		img;
+	// if our "svg" doesn't have 'xmlns' attribute we must add it
+	//    svg.setAttribute('width', '188.931023622px');
+	svg.setAttribute('font-size', '50px');
+	svg.setAttribute('font-family', 'calibrib');
+	svg.setAttribute('letter-spacing', '10px');
+
+	canvas.id = 'canvas';
+	canvas.width = svg.getBoundingClientRect().width;
+	canvas.height = svg.getBoundingClientRect().height;
+
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
+
+	/* Time to play ;) */
+
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
+
+	// JavaScript (HTML) image
+	img = new Image();
+
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
+
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+	// img.src - contains base64 URI from svg
+
+	//remove temporary canvas
+	canvasTmp.remove();
+
+	svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+
+/**
+ * This Function is used to invoke JSBarcode.
+ * 
+ * @return barcode
+ */
+
+function jsbarcodestdcartonA(code, id, svgDoc) {
+	JsBarcode("#ean-13", code, {
+		format: "ean13",
+		width: 5.99,
+		height: 343,
+		fontSize: 60
+	});
+	var svg = document.getElementById('svgdiv').querySelector('svg'),
+		canvas = document.createElement('canvas'),
+		body = document.getElementsByTagName('body')[0],
+		canvasTmp,
+		svg_xml,
+		ctx,
+		img;
+	// if our "svg" doesn't have 'xmlns' attribute we must add it
+	//    svg.setAttribute('width', '188.931023622px');
+	svg.setAttribute('font-size', '70px');
+	svg.setAttribute('font-family', 'calibrib');
+
+	canvas.id = 'canvas';
+	canvas.width = svg.getBoundingClientRect().width;
+	canvas.height = svg.getBoundingClientRect().height;
+
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
+
+	/* Time to play ;) */
+
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
+
+	// JavaScript (HTML) image
+	img = new Image();
+
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
+
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+	// img.src - contains base64 URI from svg
+
+	//remove temporary canvas
+	canvasTmp.remove();
+
+	svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+/**
+ * This Function is used to invoke JSBarcode.
+ * 
+ * @return barcode
+ */
+
+function jsbarcodesolidcartonB(code, id, svgDoc) {
+	JsBarcode("#ean-13", code, {
+		format: "ean13",
+		width: 5.99,
+		height: 343,
+		fontSize: 60
+	});
+	var svg = document.getElementById('svgdiv').querySelector('svg'),
+		canvas = document.createElement('canvas'),
+		body = document.getElementsByTagName('body')[0],
+		canvasTmp,
+		svg_xml,
+		ctx,
+		img;
+	// if our "svg" doesn't have 'xmlns' attribute we must add it
+	//    svg.setAttribute('width', '188.931023622px');
+	svg.setAttribute('font-size', '70px');
+	svg.setAttribute('font-family', 'calibrib');
+
+	canvas.id = 'canvas';
+	canvas.width = svg.getBoundingClientRect().width;
+	canvas.height = svg.getBoundingClientRect().height;
+
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
+
+	/* Time to play ;) */
+
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
+
+	// JavaScript (HTML) image
+	img = new Image();
+
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
+
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+	// img.src - contains base64 URI from svg
+
+	//remove temporary canvas
+	canvasTmp.remove();
+
+	svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+
+/**
+ * This Function is used to invoke JSBarcode.
+ * 
+ * @return barcode
+ */
+
+function jsbarcodestdcartonB(code, id, svgDoc) {
+	JsBarcode("#ean-13", code, {
+		format: "ean13",
+		width: 5.99,
+		height: 343,
+		fontSize: 60
+	});
+	var svg = document.getElementById('svgdiv').querySelector('svg'),
+		canvas = document.createElement('canvas'),
+		body = document.getElementsByTagName('body')[0],
+		canvasTmp,
+		svg_xml,
+		ctx,
+		img;
+	// if our "svg" doesn't have 'xmlns' attribute we must add it
+	//    svg.setAttribute('width', '188.931023622px');
+	svg.setAttribute('font-size', '70px');
+	svg.setAttribute('font-family', 'calibrib');
+
+	canvas.id = 'canvas';
+	canvas.width = svg.getBoundingClientRect().width;
+	canvas.height = svg.getBoundingClientRect().height;
+
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
+
+	/* Time to play ;) */
+
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
+
+	// JavaScript (HTML) image
+	img = new Image();
+
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
+
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+	// img.src - contains base64 URI from svg
+
+	//remove temporary canvas
+	canvasTmp.remove();
+
+	svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+/**
+ * This Function is used to invoke JSBarcode.
+ * 
+ * @return barcode
+ */
+
+function jsbarcodestdpoly(code, id, svgDoc) {
+	JsBarcode("#ean-13", code, {
+		format: "ean13",
+		width: 5.99,
+		height: 343,
+		fontSize: 60
+	});
+	var svg = document.getElementById('svgdiv').querySelector('svg'),
+		canvas = document.createElement('canvas'),
+		body = document.getElementsByTagName('body')[0],
+		canvasTmp,
+		svg_xml,
+		ctx,
+		img;
+	// if our "svg" doesn't have 'xmlns' attribute we must add it
+	//    svg.setAttribute('width', '188.931023622px');
+	svg.setAttribute('font-size', '70px');
+	svg.setAttribute('font-family', 'calibrib');
+
+	canvas.id = 'canvas';
+	canvas.width = svg.getBoundingClientRect().width;
+	canvas.height = svg.getBoundingClientRect().height;
+
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
+
+	/* Time to play ;) */
+
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
+
+	// JavaScript (HTML) image
+	img = new Image();
+
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
+
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+	// img.src - contains base64 URI from svg
+
+	//remove temporary canvas
+	canvasTmp.remove();
+
+	svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+/**
+ * This Function is used to invoke JSBarcode.
+ * 
+ * @return barcode
+ */
+
+function jsbarcodesolidpoly(code, id, svgDoc) {
+	JsBarcode("#ean-13", code, {
+		format: "ean13",
+		width: 6.55,
+		height: 345,
+		fontSize: 50
+	});
+	var svg = document.getElementById('svgdiv').querySelector('svg'),
+		canvas = document.createElement('canvas'),
+		body = document.getElementsByTagName('body')[0],
+		canvasTmp,
+		svg_xml,
+		ctx,
+		img;
+	// if our "svg" doesn't have 'xmlns' attribute we must add it
+	//    svg.setAttribute('width', '188.931023622px');
+	svg.setAttribute('font-size', '54px');
+	svg.setAttribute('font-family', 'calibrib');
+	svg.setAttribute('letter-spacing', '10px');
 
 	canvas.id = 'canvas';
 	canvas.width = svg.getBoundingClientRect().width;
