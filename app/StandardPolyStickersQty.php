@@ -15,6 +15,6 @@ class StandardPolyStickersQty extends Authenticatable
      * @var array
      */
 
-    protected $table = 'orchestra_standard_polybag_sticker_orders_qty';
+    protected $table = 'orchestra_standard_poly_bag_sticker_orders_qty';
     protected $fillable =['ospbs_id','size','quantity','quantity_sets'];
 }
