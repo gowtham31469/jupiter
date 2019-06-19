@@ -6040,7 +6040,7 @@ function jsbarcodesolidpoly(code, id, svgDoc) {
 	JsBarcode("#ean-13", code, {
 		format: "ean13",
 		width: 6.55,
-		height: 346,
+		height: 355,
 		fontSize: 50
 	});
 	var svg = document.getElementById('svgdiv').querySelector('svg'),
