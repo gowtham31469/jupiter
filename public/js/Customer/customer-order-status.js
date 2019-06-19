@@ -1978,7 +1978,6 @@ function tescoPOUpload(obj,id,po_file,tableName)
              $('#po_upload').addClass('hidden') 
              $('.upload-po').addClass('hidden') 
              $('#po_file').removeClass('hidden')
-             $('.update-po-file').addClass('hidden') 
              
          } 
          var po_link = base_url+po_file 
