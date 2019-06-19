@@ -3856,8 +3856,8 @@ class OrderController extends Controller
 
                   if(sizeof($table_array) > 0)
                   {
-                    /** [ Invoking approveTscoOrderClass function using class instance ] */
-                    $approved_order = $approve_order_obj->approveTescoOrderClass($table_array, $buyer_id);
+                    /** [ Invoking approveTescoOrderMethod function using class instance ] */
+                    $approved_order = $approve_order_obj->approveTescoOrderMethod($table_array, $buyer_id);
                   }
                 
                 if($approved_order == "approved")

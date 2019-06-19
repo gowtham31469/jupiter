@@ -2042,6 +2042,14 @@ class OrderManagementCntrl extends Controller
                      PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -2, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
                 }
             }
+			
+// new style
+//			$style = array(
+//				'border' => false,
+//				'padding' => 0,
+//				'bgcolor' => false
+//			);
+//			PDF::write2DBarcode('Gowtham', 'QRCODE,Q', 100, 50, 23, 23, $style, 'N');
             
              $i++;
         }

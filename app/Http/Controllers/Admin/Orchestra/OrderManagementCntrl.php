@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;   
 use App\Classes\Modules;
-use App\Classes\ProfomaInvoice;
+use App\Classes\ProformaInvoice;
 use Response;
 use Excel;
 use App\HangTagOrders;
@@ -34,6 +34,8 @@ use DB;
 use App\Classes\ERPOrderStatusCheck;
 use App\Classes\ErpOrders;
 use Carbon\Carbon;
+use App\OrchestraParcelDetails;
+use App\OrchestraParcelQuantityDetails;
 
 class OrderManagementCntrl extends Controller
 {
@@ -102,9 +104,27 @@ class OrderManagementCntrl extends Controller
 	
     public function Orders()
     {
-        $data['sticker_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id',DB::raw("'-' as \"Season\""),'BuyerPONo','SupplierName','NomApple as Style_Name','Quantity','IsSTD as Type',DB::raw("'Stickers' as \"OrderType\""),'sticker_order_status as Order Status',DB::raw("'-' as \"Disney\""))->groupBy('id','UVC')->get();
+		
+//		// check for price data missing for SKU Code(In PO CSV)
+//        $parcel_details = OrchestraParcelDetails::select(DB::raw('distinct on (orchestra_parcel_quantity_details."UVC_TCO") orchestra_parcel_quantity_details."UVC_TCO"'))->join('orchestra_parcel_quantity_details', 'orchestra_parcel_quantity_details.UVC_TCO', 'orchestra_parcel_details.UVC_TCO')->groupBy('orchestra_parcel_quantity_details.UVC_TCO')->get()->toArray();
+//
+//        $UVC_TCO_array1 = [];
+//        foreach ($parcel_details as $key => $value) {
+//          array_push($UVC_TCO_array1, $value['UVC_TCO']);
+//        }
+//
+		
+		 $UVC_TCO_array1 = [];
+         // check for po data missing for SKU Code(In price CSV)
+         $parcel_qty_details = OrchestraParcelQuantityDetails::select(DB::raw('distinct on (orchestra_parcel_details."UVC_TCO") orchestra_parcel_details."UVC_TCO"'))->join('orchestra_parcel_details', 'orchestra_parcel_quantity_details.UVC_TCO', 'orchestra_parcel_details.UVC_TCO')->groupBy('orchestra_parcel_details.UVC_TCO')->get()->toArray();
 
-        $data['label_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id','Season_Code as Season',DB::raw("'-' as \"BuyerPONo\""),'SupplierName','Theme as Description','NomApple as Style_Name','Licence_Code as Disney',DB::raw("'-' as \"Type\""),'Quantity',DB::raw("'Labels' as \"OrderType\""),'order_status as Order Status')->groupBy('id','UVC')->get();
+         foreach ($parcel_qty_details as $key => $value) {
+           array_push($UVC_TCO_array1, $value['UVC_TCO']);
+         }
+		
+        $data['sticker_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id',DB::raw("'-' as \"Season\""),'BuyerPONo','SupplierName','NomApple as Style_Name','Quantity','IsSTD as Type',DB::raw("'Stickers' as \"OrderType\""),'sticker_order_status as Order Status',DB::raw("'-' as \"Disney\""))->whereNotIn('UVC_TCO', $UVC_TCO_array1)->groupBy('id','UVC')->get();
+
+        $data['label_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id','Season_Code as Season',DB::raw("'-' as \"BuyerPONo\""),'SupplierName','Theme as Description','NomApple as Style_Name','Licence_Code as Disney',DB::raw("'-' as \"Type\""),'Quantity',DB::raw("'Labels' as \"OrderType\""),'order_status as Order Status')->whereNotIn('UVC_TCO', $UVC_TCO_array1)->groupBy('id','UVC')->get();
         
         echo json_encode($data);
     } 
@@ -134,7 +154,7 @@ class OrderManagementCntrl extends Controller
     
             $data['orchestra_standard_carton_sticker_orders'] = DB::table('orchestra_standard_carton_sticker_orders')->join('orchestra_parcel_details','orchestra_parcel_details.UVC','=','orchestra_standard_carton_sticker_orders.uvc')->join('orchestra_item_master','orchestra_item_master.id','=','orchestra_standard_carton_sticker_orders.template_id')->leftjoin('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->select(DB::raw('distinct on (orchestra_standard_carton_sticker_orders.uvc,orchestra_standard_carton_sticker_orders.po) "UVC"'),DB::raw("'-' as Season"),DB::raw("'-' as \"BuyerPONo\""),DB::raw("'Standard Carton Stickers' as \"ArtworkType\""),DB::raw("'Standard Carton Stickers' as \"TemplateName\""),'customers.id as customer_id','orchestra_parcel_details.SupplierName as SupplierName',DB::raw("to_char(orchestra_standard_carton_sticker_orders.created_at,"."'".$ddmmyy."'".") as \"OrderDate\""),DB::raw("to_char(orchestra_standard_carton_sticker_orders.delivery_date,"."'".$ddmmyy."'".") as \"DeliveryDate\""),'orchestra_standard_carton_sticker_orders.status as Artwork Status','orchestra_standard_carton_sticker_orders.pi_status as PI Status','orchestra_standard_carton_sticker_orders.po_status as PO Status','orchestra_standard_carton_sticker_orders.po_number as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'orchestra_standard_carton_sticker_orders' as \"tableName\""),'orchestra_standard_carton_sticker_orders.id  as tableID','orchestra_standard_carton_sticker_orders.po_file','customers.pi_required','customers.po_required','orchestra_standard_carton_sticker_orders.template_id','orchestra_standard_carton_sticker_orders.order_flag','customers.delivery_day_count','orchestra_standard_carton_sticker_orders.is_order_count_empty')->where('orchestra_parcel_details.IsSTD',1)->groupBy('orchestra_standard_carton_sticker_orders.uvc','orchestra_parcel_details.UVC','orchestra_standard_carton_sticker_orders.po','orchestra_parcel_details.SupplierName','orchestra_standard_carton_sticker_orders.created_at','orchestra_standard_carton_sticker_orders.delivery_date','orchestra_standard_carton_sticker_orders.status','orchestra_standard_carton_sticker_orders.pi_status','orchestra_standard_carton_sticker_orders.po_status','orchestra_standard_carton_sticker_orders.po_number','orchestra_standard_carton_sticker_orders.id','customers.pi_required','customers.id')->get();
 
-            $data['orchestra_standard_polybag_sticker_orders'] = DB::table('orchestra_standard_polybag_sticker_orders')->join('orchestra_parcel_details','orchestra_parcel_details.UVC','=','orchestra_standard_polybag_sticker_orders.uvc')->join('orchestra_item_master','orchestra_item_master.id','=','orchestra_standard_polybag_sticker_orders.template_id')->leftjoin('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->select(DB::raw('distinct on (orchestra_standard_polybag_sticker_orders.uvc,orchestra_standard_polybag_sticker_orders.po) "UVC"'),DB::raw("'-' as Season"),DB::raw("'-' as \"BuyerPONo\""),DB::raw("'Standard Poly Bag Stickers' as \"ArtworkType\""),DB::raw("'Standard Poly Bag Stickers' as \"TemplateName\""),'customers.id as customer_id','orchestra_parcel_details.SupplierName as SupplierName',DB::raw("to_char(orchestra_standard_polybag_sticker_orders.created_at,"."'".$ddmmyy."'".") as \"OrderDate\""),DB::raw("to_char(orchestra_standard_polybag_sticker_orders.delivery_date,"."'".$ddmmyy."'".") as \"DeliveryDate\""),'orchestra_standard_polybag_sticker_orders.status as Artwork Status','orchestra_standard_polybag_sticker_orders.pi_status as PI Status','orchestra_standard_polybag_sticker_orders.po_status as PO Status','orchestra_standard_polybag_sticker_orders.po_number as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'orchestra_standard_polybag_sticker_orders' as \"tableName\""),'orchestra_standard_polybag_sticker_orders.id  as tableID','orchestra_standard_polybag_sticker_orders.po_file','customers.pi_required','customers.po_required','orchestra_standard_polybag_sticker_orders.template_id','orchestra_standard_polybag_sticker_orders.order_flag','customers.delivery_day_count','orchestra_standard_polybag_sticker_orders.is_order_count_empty')->where('orchestra_parcel_details.IsSTD',1)->groupBy('orchestra_standard_polybag_sticker_orders.uvc','orchestra_parcel_details.UVC','orchestra_standard_polybag_sticker_orders.po','orchestra_parcel_details.SupplierName','orchestra_standard_polybag_sticker_orders.created_at','orchestra_standard_polybag_sticker_orders.delivery_date','orchestra_standard_polybag_sticker_orders.status','orchestra_standard_polybag_sticker_orders.pi_status','orchestra_standard_polybag_sticker_orders.po_status','orchestra_standard_polybag_sticker_orders.po_number','orchestra_standard_polybag_sticker_orders.id','customers.pi_required','customers.id')->get();
+            $data['orchestra_standard_poly_bag_sticker_orders'] = DB::table('orchestra_standard_poly_bag_sticker_orders')->join('orchestra_parcel_details','orchestra_parcel_details.UVC','=','orchestra_standard_poly_bag_sticker_orders.uvc')->join('orchestra_item_master','orchestra_item_master.id','=','orchestra_standard_poly_bag_sticker_orders.template_id')->leftjoin('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->select(DB::raw('distinct on (orchestra_standard_poly_bag_sticker_orders.uvc,orchestra_standard_poly_bag_sticker_orders.po) "UVC"'),DB::raw("'-' as Season"),DB::raw("'-' as \"BuyerPONo\""),DB::raw("'Standard Poly Bag Stickers' as \"ArtworkType\""),DB::raw("'Standard Poly Bag Stickers' as \"TemplateName\""),'customers.id as customer_id','orchestra_parcel_details.SupplierName as SupplierName',DB::raw("to_char(orchestra_standard_poly_bag_sticker_orders.created_at,"."'".$ddmmyy."'".") as \"OrderDate\""),DB::raw("to_char(orchestra_standard_poly_bag_sticker_orders.delivery_date,"."'".$ddmmyy."'".") as \"DeliveryDate\""),'orchestra_standard_poly_bag_sticker_orders.status as Artwork Status','orchestra_standard_poly_bag_sticker_orders.pi_status as PI Status','orchestra_standard_poly_bag_sticker_orders.po_status as PO Status','orchestra_standard_poly_bag_sticker_orders.po_number as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'orchestra_standard_poly_bag_sticker_orders' as \"tableName\""),'orchestra_standard_poly_bag_sticker_orders.id  as tableID','orchestra_standard_poly_bag_sticker_orders.po_file','customers.pi_required','customers.po_required','orchestra_standard_poly_bag_sticker_orders.template_id','orchestra_standard_poly_bag_sticker_orders.order_flag','customers.delivery_day_count','orchestra_standard_poly_bag_sticker_orders.is_order_count_empty')->where('orchestra_parcel_details.IsSTD',1)->groupBy('orchestra_standard_poly_bag_sticker_orders.uvc','orchestra_parcel_details.UVC','orchestra_standard_poly_bag_sticker_orders.po','orchestra_parcel_details.SupplierName','orchestra_standard_poly_bag_sticker_orders.created_at','orchestra_standard_poly_bag_sticker_orders.delivery_date','orchestra_standard_poly_bag_sticker_orders.status','orchestra_standard_poly_bag_sticker_orders.pi_status','orchestra_standard_poly_bag_sticker_orders.po_status','orchestra_standard_poly_bag_sticker_orders.po_number','orchestra_standard_poly_bag_sticker_orders.id','customers.pi_required','customers.id')->get();
 
      
             echo json_encode($data);
@@ -467,7 +487,7 @@ class OrderManagementCntrl extends Controller
         }
         foreach($data['orchestra_solid_poly_bag_sticker_orders'] as $value1)
         {
-            $orchestra_solid_poly_bag_sticker_orders_qty=DB::table('orchestra_solid_poly_bag_sticker_order_qty')->select('*')->where('ospbs_id',$value1->id)->get();
+            $orchestra_solid_poly_bag_sticker_orders_qty=DB::table('orchestra_solid_poly_bag_sticker_orders_qty')->select('*')->where('ospbs_id',$value1->id)->get();
             $value1->qty=$orchestra_solid_poly_bag_sticker_orders_qty;
         }
         
@@ -481,10 +501,10 @@ class OrderManagementCntrl extends Controller
             $data['std_carton_id']="null";
         }
         
-        $data['orchestra_standard_polybag_sticker_orders']=DB::table('orchestra_standard_polybag_sticker_orders')->select('*')->where('uvc',$uvc)->where('po',$po)->get();
-        if(count($data['orchestra_standard_polybag_sticker_orders']) > 0)
+        $data['orchestra_standard_poly_bag_sticker_orders']=DB::table('orchestra_standard_poly_bag_sticker_orders')->select('*')->where('uvc',$uvc)->where('po',$po)->get();
+        if(count($data['orchestra_standard_poly_bag_sticker_orders']) > 0)
         {
-             $data['std_poly_id']=$data['orchestra_standard_polybag_sticker_orders'][0]->id;
+             $data['std_poly_id']=$data['orchestra_standard_poly_bag_sticker_orders'][0]->id;
         }
         else
         {
@@ -1708,15 +1728,15 @@ class OrderManagementCntrl extends Controller
         return $result;
     }
     /**
-     * method to get all the details for profoma invoice generation
+     * method to get all the details for proforma invoice generation
      * @param  Request $request [table_name,id]
      * @return [type]           [description]
      */
-    public function getProfomaInvoice(Request $request)
+    public function getProformaInvoice(Request $request)
     {
         try
         {
-            $pi_obj = new ProfomaInvoice();
+            $pi_obj = new ProformaInvoice();
             $data   = $pi_obj->getPIDetails($request);
             $result = response()->json(['error'=> false,'message' =>'success','data'=>$data],200);
         }
@@ -1728,19 +1748,20 @@ class OrderManagementCntrl extends Controller
     }
 
     /**
-     * method to approve the profoma invoice
+     * method to approve the proforma invoice
      * @param  Request $request [description]
      * @return [type]           [description]
      */
-    public function approveProfomaInvice(Request $request)
+    public function approveProformaInvice(Request $request)
     {
+        return $request;
         try
         {
             $row_id     =   $request->id;
             $table_name =   $request->table_name;
             $total_qnty =   0 ; 
             $sub_total  =   0 ;
-            $pi_obj     =   new ProfomaInvoice();
+            $pi_obj     =   new ProformaInvoice();
             $data       =   $pi_obj->getPIDetails($request);
             if (count($data)>0)
             {
@@ -1797,11 +1818,11 @@ class OrderManagementCntrl extends Controller
     }
 	
     /**
-     * method to reject the profoma invoice
+     * method to reject the proforma invoice
      * @param  Request $request [description]
      * @return [type]           [description]
      */
-    public function rejectProfomaInvice(Request $request)
+    public function rejectProformaInvice(Request $request)
     {
         try
         {
@@ -1882,7 +1903,7 @@ class OrderManagementCntrl extends Controller
 	
 		 $data['orchestra_standard_carton_sticker_orders']=DB::table('orchestra_standard_carton_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_standard_carton_sticker_orders.template_id')->select('orchestra_standard_carton_sticker_orders.*','orchestra_item_master.company_id', DB::raw("'Standard Carton Stickers' as \"TemplateName\""),DB::raw("'Standard Carton Stickers' as \"TemplateType\""),DB::raw("'orchestra_standard_carton_sticker_orders' as \"type\""))->where('uvc',$uvc)->get();
 		
-		 $data['orchestra_standard_polybag_sticker_orders']=DB::table('orchestra_standard_polybag_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_standard_polybag_sticker_orders.template_id')->select('orchestra_standard_polybag_sticker_orders.*','orchestra_item_master.company_id', DB::raw("'Standard Poly Bag Stickers' as \"TemplateName\""),DB::raw("'Standard Poly Bag Stickers' as \"TemplateType\""),DB::raw("'orchestra_standard_polybag_sticker_orders' as \"type\""))->where('uvc',$uvc)->get();
+		 $data['orchestra_standard_poly_bag_sticker_orders']=DB::table('orchestra_standard_poly_bag_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_standard_poly_bag_sticker_orders.template_id')->select('orchestra_standard_poly_bag_sticker_orders.*','orchestra_item_master.company_id', DB::raw("'Standard Poly Bag Stickers' as \"TemplateName\""),DB::raw("'Standard Poly Bag Stickers' as \"TemplateType\""),DB::raw("'orchestra_standard_poly_bag_sticker_orders' as \"type\""))->where('uvc',$uvc)->get();
 		
 		 echo json_encode($data);
     } 
@@ -1927,7 +1948,7 @@ class OrderManagementCntrl extends Controller
 		
 		 $data['orchestra_standard_carton_sticker_orders']=DB::table('orchestra_standard_carton_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_standard_carton_sticker_orders.template_id')->select('orchestra_standard_carton_sticker_orders.*','orchestra_item_master.company_id',DB::raw("'Standard Carton Stickers' as \"TemplateName\""),DB::raw("'Standard Carton Stickers' as \"TemplateType\""),DB::raw("'orchestra_standard_carton_sticker_orders' as \"tableName\""))->where('uvc',$uvc)->get();
 		
-		 $data['orchestra_standard_polybag_sticker_orders']=DB::table('orchestra_standard_polybag_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_standard_polybag_sticker_orders.template_id')->select('orchestra_standard_polybag_sticker_orders.*','orchestra_item_master.company_id',DB::raw("'Standard Poly Bag Stickers' as \"TemplateName\""),DB::raw("'Standard Poly Bag Stickers' as \"TemplateType\""),DB::raw("'orchestra_standard_polybag_sticker_orders' as \"tableName\""))->where('uvc',$uvc)->get();
+		 $data['orchestra_standard_poly_bag_sticker_orders']=DB::table('orchestra_standard_poly_bag_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_standard_poly_bag_sticker_orders.template_id')->select('orchestra_standard_poly_bag_sticker_orders.*','orchestra_item_master.company_id',DB::raw("'Standard Poly Bag Stickers' as \"TemplateName\""),DB::raw("'Standard Poly Bag Stickers' as \"TemplateType\""),DB::raw("'orchestra_standard_poly_bag_sticker_orders' as \"tableName\""))->where('uvc',$uvc)->get();
 		
 		
 		 echo json_encode($data);
@@ -2040,7 +2061,7 @@ class OrderManagementCntrl extends Controller
 			  $data['orchestra_solid_carton_sticker_orders'] = DB::table('orchestra_solid_carton_sticker_orders')->select('*')->where('status',"Order Approved")->get();
 			  $data['orchestra_solid_poly_bag_sticker_orders'] = DB::table('orchestra_solid_poly_bag_sticker_orders')->select('*')->where('status',"Order Approved")->get();
 			  $data['orchestra_standard_carton_sticker_orders'] = DB::table('orchestra_standard_carton_sticker_orders')->select('*')->where('status',"Order Approved")->get();
-			  $data['orchestra_standard_polybag_sticker_orders'] = DB::table('orchestra_standard_polybag_sticker_orders')->select('*')->where('status',"Order Approved")->get();
+			  $data['orchestra_standard_poly_bag_sticker_orders'] = DB::table('orchestra_standard_poly_bag_sticker_orders')->select('*')->where('status',"Order Approved")->get();
               echo json_encode($data);
     }
 	/**
@@ -2065,7 +2086,7 @@ class OrderManagementCntrl extends Controller
 		
 		 $data['orchestra_standard_carton_sticker_orders']=DB::table('orchestra_standard_carton_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_standard_carton_sticker_orders.template_id')->select('orchestra_standard_carton_sticker_orders.*','orchestra_item_master.company_id',DB::raw('"Standard Carton Stickers" as TemplateName'),DB::raw('"Sticker" as Labeltype'),DB::raw('"Standard Carton Stickers" as TemplateType'),DB::raw('"orchestra_standard_carton_sticker_orders" as type'))->where('uvc',$uvc)->get();
 		
-		 $data['orchestra_standard_polybag_sticker_orders']=DB::table('orchestra_standard_polybag_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_standard_polybag_sticker_orders.template_id')->select('orchestra_standard_polybag_sticker_orders.*','orchestra_item_master.company_id',DB::raw('"Standard Poly Bag Stickers" as TemplateName'),DB::raw('"Sticker" as Labeltype'),DB::raw('"Standard Poly Bag Stickers" as TemplateType'),DB::raw('"orchestra_standard_polybag_sticker_orders" as type'))->where('uvc',$uvc)->get();
+		 $data['orchestra_standard_poly_bag_sticker_orders']=DB::table('orchestra_standard_poly_bag_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_standard_poly_bag_sticker_orders.template_id')->select('orchestra_standard_poly_bag_sticker_orders.*','orchestra_item_master.company_id',DB::raw('"Standard Poly Bag Stickers" as TemplateName'),DB::raw('"Sticker" as Labeltype'),DB::raw('"Standard Poly Bag Stickers" as TemplateType'),DB::raw('"orchestra_standard_poly_bag_sticker_orders" as type'))->where('uvc',$uvc)->get();
 		
 		
 		 echo json_encode($data);
@@ -2111,7 +2132,7 @@ class OrderManagementCntrl extends Controller
 		  } 
 		  else if($type == "orchestra_solid_poly_bag_sticker_orders")
 		  {
-			  $data['qty']=DB::table('orchestra_solid_poly_bag_sticker_order_qty')->where('ospbs_id',$id)->select('*')->get();
+			  $data['qty']=DB::table($type.'_qty')->where('ospbs_id',$id)->select('*')->get();
 			  $data['template']=DB::table($type)->where('id',$id)->select('*')->get();
 			  $data['template_file']=DB::table('orchestra_template')->where('id',$data['template']{0}->template_id)->select('*')->get();
 		  } 
@@ -2120,7 +2141,7 @@ class OrderManagementCntrl extends Controller
 			  $data['template']=DB::table($type)->where('id',$id)->select('*')->get();
 			  $data['template_file']=DB::table('orchestra_template')->where('id',$data['template']{0}->template_id)->select('*')->get();
 		  } 
-		  else if($type == "orchestra_standard_polybag_sticker_orders")
+		  else if($type == "orchestra_standard_poly_bag_sticker_orders")
 		  {
 			  $data['template']=DB::table($type)->where('id',$id)->select('*')->get();
 			  $data['template_file']=DB::table('orchestra_template')->where('id',$data['template']{0}->template_id)->select('*')->get();

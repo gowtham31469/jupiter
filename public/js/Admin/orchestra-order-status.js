@@ -9,7 +9,7 @@ function orderStatus() {
     $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
     $('.top-content').html('');
     $('.template-error').html('');
-	var buyer = localStorage.getItem("buyer");
+    var buyer = localStorage.getItem("buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: base_url + "/admin/" + buyer + "/order-management/order-status",
@@ -26,9 +26,9 @@ function orderStatus() {
             /** [Show response status based on HTTP status code] */
             200: function (data) {
                 var path = base_url + "/admin/" + buyer + "/order-management/order-status";
-                var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_polybag_sticker_orders)))))));
+                var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_poly_bag_sticker_orders)))))));
 
-                var newObj1 = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_polybag_sticker_orders)))))));
+                var newObj1 = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_poly_bag_sticker_orders)))))));
 
                 $('.main-content').html("<button style='margin-bottom:10px' id='po-file-upload-button' class='btn btn-sm btn-primary pull-right' type='button'>Update PO</button>");
                 newObj.sort(function (obj1, obj2) {
@@ -110,7 +110,7 @@ function orderStatus() {
                                         $('#new_po_file_error_status').addClass('hidden')
                                         $('#new_po_error_length_status').addClass('hidden');
                                         $('#po-file-upload-group').find('#exist_artwork_div_status ul').html("");
-                                        var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_polybag_sticker_orders)))))));
+                                        var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_poly_bag_sticker_orders)))))));
                                         var coun = 0;
                                         var options = "<option>Select PO</option>";
                                         var old_po = ""
@@ -276,7 +276,7 @@ function orderStatus() {
                                                 }
                                             });
 
-                                            if (sList > 0) { 
+                                            if (sList > 0) {
                                                 $('#update_po_status').removeClass('hidden')
                                                 $('#update_new_po_status').addClass('hidden')
                                                 $('#new_pos_status').addClass('hidden')
@@ -505,8 +505,7 @@ function orderStatus() {
                                         showSnackbar();
                                     }
                                 },
-                                error: function (data) {
-                                },
+                                error: function (data) {},
                                 complete: function () {
                                     $(".loader").hide();
                                 }
@@ -626,8 +625,7 @@ function orderStatus() {
                 showSnackbar();
             }
         },
-        error: function (data) {
-        },
+        error: function (data) {},
         complete: function () {
             $(".loader").hide();
             $(".loader").css('margin-top', '0%');
@@ -717,8 +715,8 @@ function orchestraStatusTable(data, path) {
 
                 if (key == "PO Number" && value['po_required'] == 1 && value['is_order_count_empty'] == 0) {
                     var po_file = value['po_file'];
-                    let customer_po_number = value[key] === null?'':value[key];
-                    tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" onkeypress="return AvoidSpace(event)" name="orchestra-po" id="orchestra-po-'+value.tableID+'" class="form-control input-sm orchestra-po" placeholder="Enter PO" maxlength="11" value="'+customer_po_number+'"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default orchestra-po-submit" onclick=orchestraSetPO(this,"' + value.tableID + '","' + value.tableName + '","' + po_file + '")><span class="fa fa-check"></span></button></span></div></div></td>';
+                    let customer_po_number = value[key] === null ? '' : value[key];
+                    tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" onkeypress="return AvoidSpace(event)" name="orchestra-po" id="orchestra-po-' + value.tableID + '" class="form-control input-sm orchestra-po" placeholder="Enter PO" maxlength="11" value="' + customer_po_number + '"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default orchestra-po-submit" onclick=orchestraSetPO(this,"' + value.tableID + '","' + value.tableName + '","' + po_file + '")><span class="fa fa-check"></span></button></span></div></div></td>';
                 } else if (key == "OrderDate") {
                     if (value['is_order_count_empty'] == 0) {
                         var orderDate = value[key];
@@ -836,7 +834,7 @@ function orchestraStatusTable(data, path) {
  * @param  {[type]} id  [description]
  * @return {[type]}     [description]
  */
-function orchestraSetPO(obj, id, tableName, po_file) {
+const orchestraSetPO = (obj, id, tableName, po_file) => {
     $('.orchestra-po').css('border-color', '');
     var po_number = $(obj).closest('tr').find('.orchestra-po').val();
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -884,8 +882,7 @@ function orchestraSetPO(obj, id, tableName, po_file) {
                     showSnackbar();
                 }
             },
-            error: function (data) {
-            },
+            error: function (data) {},
             complete: function () {
                 $(".loader").hide();
             }
@@ -903,7 +900,7 @@ function orchestraSetPO(obj, id, tableName, po_file) {
  * @param  {[type]} id  [description]
  * @return {[type]}     [description]
  */
-function orchestraPOUpload(obj, id, po_file, tableName) {
+const orchestraPOUpload = (obj, id, po_file, tableName) => {
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: base_url + "/admin/orchestra/get-erp-status",
@@ -914,7 +911,7 @@ function orchestraPOUpload(obj, id, po_file, tableName) {
             _token: csrf_token
         },
         beforeSend: function () {
-             $(".loader").show();
+            $(".loader").show();
         },
         success: function (data) {
             // erp_details array null , if order is not moved to erp tables
@@ -924,14 +921,11 @@ function orchestraPOUpload(obj, id, po_file, tableName) {
                     $('.update-po-file').hide();
 
                     $('#error_msg_span').html('ERP Order Status : <strong>' + data.erp_details[0].status_name + '</strong>. You are not permitted to upload any more po files for this order.')
-                }
-                else{
+                } else {
                     $('.update-po-file').show();
                     $('#error_msg_span').html('');
                 }
-            }
-            else
-            {
+            } else {
                 $('.update-po-file').show();
                 $('#error_msg_span').html('');
             }

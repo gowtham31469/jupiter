@@ -297,10 +297,10 @@ Route::post('admin/orchestra/order-management/order-status', 'Admin\Orchestra\Or
 
 
 Route::post('admin/orchestra/order-management/set-po-number', 'Admin\Orchestra\OrderManagementCntrl@setPONumber');
-Route::post('admin/orchestra/order-management/show-profoma-invoice', 'Admin\Orchestra\OrderManagementCntrl@getProfomaInvoice');
+Route::post('admin/orchestra/order-management/show-proforma-invoice', 'Admin\Orchestra\OrderManagementCntrl@getProformaInvoice');
 Route::post('admin/orchestra/set-po-file', 'Admin\Orchestra\OrderManagementCntrl@setCustomerPOFile');
-Route::post('admin/orchestra/approve-profoma-invoice', 'Admin\Orchestra\OrderManagementCntrl@approveProfomaInvice');
-Route::post('admin/orchestra/reject-profoma-invoice', 'Admin\Orchestra\OrderManagementCntrl@rejectProfomaInvice');
+Route::post('admin/orchestra/approve-proforma-invoice', 'Admin\Orchestra\OrderManagementCntrl@approveProformaInvice');
+Route::post('admin/orchestra/reject-proforma-invoice', 'Admin\Orchestra\OrderManagementCntrl@rejectProformaInvice');
 
 Route::post('admin/orchestra/order-management/set_hang_tag', 'Admin\Orchestra\OrderManagementCntrl@setHangTag');
 Route::post('admin/orchestra/order-management/set_special_tag', 'Admin\Orchestra\OrderManagementCntrl@setSpecialTag');
@@ -745,7 +745,14 @@ Route::get('customer/orchestra/get-erp-status', 'Customer\Orchestra\OrderControl
 
 Route::post('customer/orchestra/template-management/template-view', 'Customer\Orchestra\TemplateManagementCntrl@templateView');
 
-
 // Route for report generation
 Route::get('reportTest','Reports\ReportController@index');
 Route::get('filter_1','Reports\ReportController@filter_1');
+
+
+
+Route::get('print-manager/get-customers-list', 'ErpUser\Printmanager\PrintManagerController@getCustomersListByBuyerId'); 
+Route::get('print-manager/get-style-list', 'ErpUser\Printmanager\PrintManagerController@getStyleListByBuyerCustomerId'); 
+Route::get('print-manager/get-erporder-list', 'ErpUser\Printmanager\PrintManagerController@getErpOrderListByBuyerCustomerId'); 
+
+
