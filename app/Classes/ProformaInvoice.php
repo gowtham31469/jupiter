@@ -17,11 +17,11 @@ use App\Classes\PiTCPDF;
 class ProformaInvoice
 {
 	/**
-	 * method to the Proforma information for a particular order
+	 * method to get the Proforma information for a particular order
 	 * @param  [type] $request [description]
 	 * @return PI details
 	 */
-	public function getPIDetails($request)
+	public function getOrchestraPIDetails($request)
 	{
 		    $id         =   $request->id;
         $table_name =   $request->table_name;
@@ -59,7 +59,8 @@ class ProformaInvoice
         
         $customer_details       = DB::table($table_name)
                                   ->join('customers',$table_name.'.customer_id','=','customers.id')
-                                  ->join('orchestra_item_master','orchestra_item_master.id',$table_name.'.'.$temp_id_field)
+                                  ->leftjoin('orchestra_template','orchestra_template.id','=',$table_name.'.'.$temp_id_field)
+                                  ->join('orchestra_item_master','orchestra_item_master.id','orchestra_template.item_id')
                                   ->leftjoin('payment_terms','customers.payment_terms','=','payment_terms.id')
                                   ->leftjoin('freight_terms','customers.freight_type','=','freight_terms.id')
                                   ->where($table_name.'.id',$id)
@@ -332,6 +333,12 @@ class ProformaInvoice
        
     }  
 
+    /**
+     * Get approved tesco PI Data
+     *
+     * @param [type] $request
+     * @return void
+     */
     public function getApprovedTescoPI($request)
     {
         
@@ -423,8 +430,24 @@ class ProformaInvoice
 
     }
 
-
-    public function getAttachment($data,$request){
+    /**
+     * Generate Tesco PI PDF using TCPDF
+     *
+     * @param [type] $data
+     * @param [type] $request
+     * @return void
+     */
+    public function getTescoAttachment($data,$request){
+      // pi name based on company
+      $pi_max_id = DB::table('profoma_invoices')->max('id')+1;
+      if($data['company_details']->name === 'Jupiter Garments Accessories')
+      {
+        $pi_name = 'JGA-PI-'.$pi_max_id;
+      }
+      else 
+      {
+        $pi_name = 'SP-PI-'.$pi_max_id;
+      }
       $dynView = View::make('Admin.Order Management.pi-pdf-template')
                 ->with(['company_details' => $data['company_details'], 'bank_details' => $data['bank_details'], 'ship_to'=>$data['ship_to'],'bill_to'=>$data['bill_to'],'item_details'=>$data['item_details'],'price_list'=> $data['price_list'], 'amtText'=>$request->amntText ]);
       ob_start();
@@ -451,9 +474,59 @@ class ProformaInvoice
       $pdf->SetXY(14, 35);
       $pdf->writeHTML($dynView->render());
 
-      $pdfdata =$pdf->output( public_path('storage/app/public/invoices/profoma_invoices.pdf'), 'F');
+      $pdfdata =$pdf->output( public_path('storage/app/public/pi/'.$pi_name.'.pdf'), 'F');
 
-      $attatchment =  public_path('storage/app/public/invoices/profoma_invoices.pdf');
-      return "/storage/app/public/invoices/profoma_invoices.pdf";
+      $attatchment =  public_path('storage/app/public/pi/'.$pi_name.'.pdf');
+      return "/storage/app/public/pi/".$pi_name.".pdf";
+    }
+
+    /**
+     * Generate Tesco PI PDF using TCPDF
+     *
+     * @param [type] $data
+     * @param [type] $request
+     * @return void
+     */
+    public function getOrchestraAttachment($data,$request){
+      // pi name based on company
+      $pi_max_id = DB::table('profoma_invoices')->max('id')+1;
+      if($data['company_details']->name === 'Jupiter Garments Accessories')
+      {
+        $pi_name = 'JGA-PI-'.$pi_max_id;
+      }
+      else 
+      {
+        $pi_name = 'SP-PI-'.$pi_max_id;
+      }
+      $dynView = View::make('Admin.Order Management.pi-pdf-template-orchestra')
+                ->with(['company_details' => $data['company_details'], 'bank_details' => $data['bank_details'], 'ship_to'=>$data['ship_to'],'bill_to'=>$data['bill_to'],'item_details'=>$data['item_details'],'price_list'=> $data['price_list'], 'amtText'=>$request->amntText ]);
+      ob_start();
+      $pdf = new PiTCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+      $pdf->setCompanyData($data['company_details']);
+      //margins
+      $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+      $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+      $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+      // set header and footer fonts
+      $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+      $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+      // set auto page breaks
+      $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_TOP);
+
+      // set image scale factor
+      $pdf->setImageScale(0.8);
+
+      // set font
+      $pdf->SetFont('helvetica', '', 8);
+
+      // add a page
+      $pdf->AddPage('P', 'A4');
+      $pdf->SetXY(14, 35);
+      $pdf->writeHTML($dynView->render());
+
+      $pdfdata =$pdf->output( public_path('storage/app/public/pi/'.$pi_name.'.pdf'), 'F');
+
+      $attatchment =  public_path('storage/app/public/pi/'.$pi_name.'.pdf');
+      return "/storage/app/public/pi/".$pi_name.".pdf";
     }
 }

@@ -323,7 +323,7 @@ class OrderStatusController extends Controller
             $sub_total  =   0 ;
             $pi_obj     =   new ProformaInvoice();
             $data       =   $pi_obj->getTescoPIDetails($request);
-            $attatchment =  $pi_obj->getAttachment($data,$request);
+            $attatchment =  $pi_obj->getTescoAttachment($data,$request);
 
             $erpOrders  =   [];
             $erp_obj    =   new ErpOrders();
