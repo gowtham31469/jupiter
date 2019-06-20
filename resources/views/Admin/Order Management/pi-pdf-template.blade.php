@@ -167,7 +167,7 @@
                 <td width="140"></td>
                 <td width="140"></td>
                 <td width="50"><strong>Sub-Total</strong></td>
-                <td width="70" style="text-align:right;"><strong>{{number_format((float)$subtotal, 2, '.', '')}}</strong></td>
+                <td width="70" style="text-align:right;"><strong>INR {{number_format((float)$subtotal, 2, '.', '')}}</strong></td>
             </tr>
         </table>
         <hr>
@@ -177,27 +177,27 @@
                     <td width="140"></td>
                     <td width="140"></td>
                     <td width="40"><strong>CGST</strong></td>
-                    <td width="80" style="text-align:right;"><strong>{{number_format((float)$totalcgst, 2, '.', '')}}</strong></td>
+                    <td width="80" style="text-align:right;"><strong>INR {{number_format((float)$totalcgst, 2, '.', '')}}</strong></td>
                 </tr>
                 <tr>
                     <td width="140"></td>
                     <td width="140"></td>
                     <td width="40"><strong>SGST</strong></td>
-                    <td width="80" style="text-align:right;"><strong>{{number_format((float)$totalcgst, 2, '.', '')}}</strong></td>
+                    <td width="80" style="text-align:right;"><strong>INR {{number_format((float)$totalcgst, 2, '.', '')}}</strong></td>
                 </tr>
             @elseif($bank_details->place_of_supply==2)
                 <tr>
                     <td width="140"></td>
                     <td width="140"></td>
                     <td width="40"><strong>IGST</strong></td>
-                    <td width="80" style="text-align:right;"><strong>{{number_format((float)$totaligst, 2, '.', '')}}</strong></td>
+                    <td width="80" style="text-align:right;"><strong>INR {{number_format((float)$totaligst, 2, '.', '')}}</strong></td>
                 </tr>
             @else
                 <tr>
                     <td width="140"></td>
                     <td width="140"></td>
                     <td width="40"><strong>Taxes</strong></td>
-                    <td width="80" style="text-align:right;"><strong>{{number_format((float)$amount, 2, '.', '')}}</strong></td>
+                    <td width="80" style="text-align:right;"><strong>INR {{number_format((float)$amount, 2, '.', '')}}</strong></td>
                 </tr>
             @endif
         </table>
@@ -205,7 +205,7 @@
         <table>
             <tr>
                 <td width="140"></td><td width="140"></td><td width="45"><strong>Bill Amount</strong></td>
-                <td width="75" style="text-align:right;"><strong>{{number_format((float)$billamnt, 2, '.', '')}}</strong></td>
+                <td width="75" style="text-align:right;"><strong>INR {{number_format((float)$billamnt, 2, '.', '')}}</strong></td>
             </tr>
             <tr>
                 <td width="90"></td><td width="90"></td><td width="220" style="text-align:right;">{{$amtText}}</td>

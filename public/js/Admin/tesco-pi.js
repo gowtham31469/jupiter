@@ -132,18 +132,18 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
                             billamnt+=amnt;
                         });
                         if(noPrice < 1) {
-                            tr += '</tbody></table></div><hr><h4 class="text-right"> Total Quantity : '+totalqnty+' </h4><hr><h4 class="text-right"> Sub-Total : ₹ '+subtotal.toFixed(2)+' </h4><hr/><div class="text-right">'
+                            tr += '</tbody></table></div><hr><h4 class="text-right"> Total Quantity : '+totalqnty+' </h4><hr><h4 class="text-right"> Sub-Total : &#x20b9; '+subtotal.toFixed(2)+' </h4><hr/><div class="text-right">'
                             if (data.data.bank_details.place_of_supply==1)
                             {
-                               tr += '<h4> CGST : (<span>'+(totalcgst).toFixed(2)+'</span>)</h4><h4> SGST : (<span>'+(totalcgst).toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p  style="text-transform: capitalize" id="bilamnt">'+RsPaise(billamnt.toFixed(2))+'  </p></div><hr /></div>'
+                               tr += '<h4> CGST : &#x20b9; (<span>'+(totalcgst).toFixed(2)+'</span>)</h4><h4> SGST : &#x20b9; (<span>'+(totalcgst).toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : &#x20b9; '+billamnt.toFixed(2)+' </h4><p  style="text-transform: capitalize" id="bilamnt">'+RsPaise(billamnt.toFixed(2))+'  </p></div><hr /></div>'
                             }
                             else if (data.data.bank_details.place_of_supply==2)
                             {
-                                tr += '<h4> IGST : (<span>'+totaligst.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p style="text-transform: capitalize" id="bilamnt">'+RsPaise(billamnt.toFixed(2))+' </p></div><hr /></div>'
+                                tr += '<h4> IGST : &#x20b9; (<span>'+totaligst.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : &#x20b9; '+billamnt.toFixed(2)+' </h4><p style="text-transform: capitalize" id="bilamnt">'+RsPaise(billamnt.toFixed(2))+' </p></div><hr /></div>'
                             }
                             else
                             {
-                                tr += '<h4> Taxes : (<span>'+amount.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹'+billamnt.toFixed(2)+' </h4><p style="text-transform: capitalize" id="bilamnt">'+RsPaise(billamnt.toFixed(2))+'  </p></div><hr /></div>'
+                                tr += '<h4> Taxes : &#x20b9; (<span>'+amount.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : &#x20b9;'+billamnt.toFixed(2)+' </h4><p style="text-transform: capitalize" id="bilamnt">'+RsPaise(billamnt.toFixed(2))+'  </p></div><hr /></div>'
                             }
                             $('#item_details').html(tr);
 
