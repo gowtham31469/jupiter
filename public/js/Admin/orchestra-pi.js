@@ -329,14 +329,12 @@ function orchestradownloadPi(template_id,id,table_name){
         { 
             200: function(data)
             {
-                var resp = JSON.stringify(data);
-                          console.log( base_url+data.responseText)
-                          $('.snackbar_span').html("Successfully send Invoice to the Customer !");
-                            showSnackbar();
-                        window.open(
-                           base_url+$.trim(data.responseText),
-                          '_blank' // <- This is what makes it open in a new window.
-                        );            
+                $('.snackbar_span').html("Successfully send Invoice to the Customer !");
+                showSnackbar();
+                window.open(
+                base_url+$.trim(data.responseText),
+                '_blank' // <- This is what makes it open in a new window.
+                );            
             },
             400: function()
             {
@@ -346,7 +344,6 @@ function orchestradownloadPi(template_id,id,table_name){
             }
         },
         error: function (data){
-            console.log(data);
         },
         complete: function () {
             $(".loader").hide();

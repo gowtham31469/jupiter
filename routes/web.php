@@ -180,10 +180,14 @@ Route::group(['middleware' => 'customer_auth'], function()
 	Route::post('customer/tesco/order-management/viewed-cancelled', 'Customer\HomeController@viewedCancelledOrder');
 	Route::post('customer/tesco/order-management/viewed-selected-cancelled', 'Customer\HomeController@viewedSelectedCancelledOrder');
 	
-	//ORCHESTRA 
+	//ORCHESTRA STATUS
 	Route::post('customer/orchestra/order-status', 'Customer\Orchestra\OrderController@orchestraOrderStatus');
+	Route::post('customer/orchestra/order-management/show-orchestra-pi', 'Customer\Orchestra\OrderController@getOrchestraPI');
+	Route::post('customer/orchestra/approve-orchestra-pi', 'Customer\Orchestra\OrderController@approveOrchestraPI');
+	Route::post('customer/orchestra/reject-orchestra-pi', 'Customer\Orchestra\OrderController@rejectOrchestraPI');
+	Route::post('customer/orchestra/download-orchestra-pi', 'Customer\Orchestra\OrderController@downloadOrchestraPI');
 
-	//TESCO
+	//TESCO STATUS
 	Route::get('customer/tesco/create-order', 'Customer\Tesco\OrderController@createOrder');
 	
 	Route::get('customer/customers', 'Customer\CustomerController@customers');

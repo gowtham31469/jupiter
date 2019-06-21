@@ -8,7 +8,7 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
         url: base_url + "/customer/tesco/order-management/show-tesco-pi",
         type: "Post",
         dataType: "json",
-        data: {
+        data: { 
             _token: csrf_token,
             tableName: tableName,
             buyer_id :buyer_id,
