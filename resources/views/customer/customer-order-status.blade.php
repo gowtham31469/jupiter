@@ -455,9 +455,10 @@
 	<script  type="text/javascript" src="{{ asset('js/moment.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/daterangepicker.js') }}"></script>
     <script src="{{ asset('js/html2pdf.bundle.min.js') }}"></script>
-<!--    <script src="{{ asset('js/Admin/order.js') }}"></script>-->
     <script src="{{ asset('js/Customer/customer-order-status.js') }}"></script>
     <script src="{{ asset('js/Customer/customer-pi.js') }}"></script>
+    <script src="{{ asset('js/Customer/customer-orchestra-pi.js') }}"></script>
+    
     <script type="text/javascript">
 		$('#status_flag').val("orderStatus")
         var buyer = localStorage.getItem("buyer");
