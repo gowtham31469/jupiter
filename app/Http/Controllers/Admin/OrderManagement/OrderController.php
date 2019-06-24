@@ -614,8 +614,8 @@ class OrderController extends Controller
         $svg=urldecode($request->svg); 
         $svg_back=urldecode($request->svg_back); 
         $svg_middle=urldecode($request->svg_middle); 
-        define ('PDF_FONT_NAME_MAIN', 'calibrib');
-        define ('PDF_FONT_NAME_DATA', 'calibrib');
+        define ('PDF_FONT_NAME_MAIN', 'calibri');
+        define ('PDF_FONT_NAME_DATA', 'calibri');
         PDF::setImageScale(1);
         PDF::setPrintHeader(false);
         PDF::setPrintFooter(false);
@@ -626,11 +626,11 @@ class OrderController extends Controller
         //PDF::SetTextColor(0, 0, 0);
 		$tbl='<span>Fabriqué en - Made in - Fabricado en - Vervaardigd in - Hergestellt in - Сделанов  - صنع في - παράγεται στην - üretim yeri</span>';
 		
-		$tbl1='<p  style="font-size:5px;">'.$orchestra_countries{0}->french.' - '.$orchestra_countries{0}->english.' - '.$orchestra_countries{0}->spanish.' - '.$orchestra_countries{0}->portuguese.' - '.$orchestra_countries{0}->italian.' - '.$orchestra_countries{0}->dutch.' - '.$orchestra_countries{0}->german.' - <span>'.$orchestra_countries{0}->arabic.'</span> - '.$orchestra_countries{0}->greek.'</p>';
+		$tbl1='<p  style="font-size:5px;font-family:Calibri">'.$orchestra_countries{0}->french.' - '.$orchestra_countries{0}->english.' - '.$orchestra_countries{0}->spanish.' - '.$orchestra_countries{0}->portuguese.' - '.$orchestra_countries{0}->italian.' - '.$orchestra_countries{0}->dutch.' - '.$orchestra_countries{0}->german.' - <span style="font-family:Dejavu Sans">'.$orchestra_countries{0}->arabic.'</span> - '.$orchestra_countries{0}->greek.'</p>';
 		$tbl2="";
 		foreach($orchestra_care_instruction as $value)
 		{
-			$tbl2.='<p style="font-size:5px;">'.$value->french.' - '.$value->english.' - '.$value->spanish.' - '.$value->portuguese.' - '.$value->italian.' - '.$value->dutch.' - '.$value->german.' - <span>'.$value->arabic.'</span> - '.$value->greek.'</p><br><br>';
+			$tbl2.='<p style="font-size:5px;font-family:Calibri">'.$value->french.' - '.$value->english.' - '.$value->spanish.' - '.$value->portuguese.' - '.$value->italian.' - '.$value->dutch.' - '.$value->german.' - <span style="font-family:Dejavu Sans">'.$value->arabic.'</span> - '.$value->greek.'</p><br><br>';
 		}
 		
 		//print_r($tbl2);
@@ -653,7 +653,7 @@ class OrderController extends Controller
 				$exp_val = explode('_',$value1);
 				$orchestra_compositions = DB::table('orchestra_compositions')->select('*')->where('english',$exp_val[1])->get();
 				
-				$tbl3.='<p style="font-size:5px">'.$exp_val[2].'% '.$orchestra_compositions{0}->french.' - '.$orchestra_compositions{0}->english.' - '.$orchestra_compositions{0}->spanish.' - '.$orchestra_compositions{0}->portuguese.' - '.$orchestra_compositions{0}->italian.' - '.$orchestra_compositions{0}->dutch.' - '.$orchestra_compositions{0}->german.' - <span>'.$orchestra_compositions{0}->arabic.'</span> - '.$orchestra_compositions{0}->greek.'</p><br><br>';
+				$tbl3.='<p style="font-size:5px;font-family:Calibri">'.$exp_val[2].'% '.$orchestra_compositions{0}->french.' - '.$orchestra_compositions{0}->english.' - '.$orchestra_compositions{0}->spanish.' - '.$orchestra_compositions{0}->portuguese.' - '.$orchestra_compositions{0}->italian.' - '.$orchestra_compositions{0}->dutch.' - '.$orchestra_compositions{0}->german.' - <span style="font-family:Dejavu Sans">'.$orchestra_compositions{0}->arabic.'</span> - '.$orchestra_compositions{0}->greek.'</p><br><br>';
 			}
 		}
 		$xx=12.5;

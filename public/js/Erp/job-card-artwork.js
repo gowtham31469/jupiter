@@ -157,10 +157,10 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at) 
 								svgDoc.getElementById("description1").innerHTML = '';
 							}
 							var s = new XMLSerializer();
-							var d = svgRoot;
-							var str = s.serializeToString(d);
-							var svg = encodeURI(str)
-							svgarr.push(svg)
+                            var d = svgRoot;
+                            var str = s.serializeToString(d);
+
+                            svgarr.push(str)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
 							this.tryCount++;
@@ -203,10 +203,10 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at) 
 						svgDoc.getElementById("description").innerHTML = '';
 					}
 					var s = new XMLSerializer();
-					var d = svgRoot;
-					var str = s.serializeToString(d);
-					var svg = encodeURI(str)
-					svgarr.push(svg)
+                            var d = svgRoot;
+                            var str = s.serializeToString(d);
+
+                            svgarr.push(str)
 
 				}
 			} else {
@@ -234,10 +234,10 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at) 
 					svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
 				}
 				var s = new XMLSerializer();
-				var d = svgRoot;
-				var str = s.serializeToString(d);
-				var svg = encodeURI(str)
-				svgarr.push(svg)
+                            var d = svgRoot;
+                            var str = s.serializeToString(d);
+
+                            svgarr.push(str)
 			}
 			ajax_count++;
 		})

@@ -180,10 +180,14 @@ Route::group(['middleware' => 'customer_auth'], function()
 	Route::post('customer/tesco/order-management/viewed-cancelled', 'Customer\HomeController@viewedCancelledOrder');
 	Route::post('customer/tesco/order-management/viewed-selected-cancelled', 'Customer\HomeController@viewedSelectedCancelledOrder');
 	
-	//ORCHESTRA 
+	//ORCHESTRA STATUS
 	Route::post('customer/orchestra/order-status', 'Customer\Orchestra\OrderController@orchestraOrderStatus');
+	Route::post('customer/orchestra/order-management/show-orchestra-pi', 'Customer\Orchestra\OrderController@getOrchestraPI');
+	Route::post('customer/orchestra/approve-orchestra-pi', 'Customer\Orchestra\OrderController@approveOrchestraPI');
+	Route::post('customer/orchestra/reject-orchestra-pi', 'Customer\Orchestra\OrderController@rejectOrchestraPI');
+	Route::post('customer/orchestra/download-orchestra-pi', 'Customer\Orchestra\OrderController@downloadOrchestraPI');
 
-	//TESCO
+	//TESCO STATUS
 	Route::get('customer/tesco/create-order', 'Customer\Tesco\OrderController@createOrder');
 	
 	Route::get('customer/customers', 'Customer\CustomerController@customers');
@@ -297,10 +301,11 @@ Route::post('admin/orchestra/order-management/order-status', 'Admin\Orchestra\Or
 
 
 Route::post('admin/orchestra/order-management/set-po-number', 'Admin\Orchestra\OrderManagementCntrl@setPONumber');
-Route::post('admin/orchestra/order-management/show-proforma-invoice', 'Admin\Orchestra\OrderManagementCntrl@getProformaInvoice');
+Route::post('admin/orchestra/order-management/show-orchestra-pi', 'Admin\Orchestra\OrderManagementCntrl@getOrchestraPI');
 Route::post('admin/orchestra/set-po-file', 'Admin\Orchestra\OrderManagementCntrl@setCustomerPOFile');
-Route::post('admin/orchestra/approve-proforma-invoice', 'Admin\Orchestra\OrderManagementCntrl@approveProformaInvice');
-Route::post('admin/orchestra/reject-proforma-invoice', 'Admin\Orchestra\OrderManagementCntrl@rejectProformaInvice');
+Route::post('admin/orchestra/approve-orchestra-pi', 'Admin\Orchestra\OrderManagementCntrl@approveOrchestraPI');
+Route::post('admin/orchestra/reject-orchestra-pi', 'Admin\Orchestra\OrderManagementCntrl@rejectOrchestraPI');
+Route::post('admin/orchestra/download-orchestra-pi', 'Admin\Orchestra\OrderManagementCntrl@downloadOrchestraPI');
 
 Route::post('admin/orchestra/order-management/set_hang_tag', 'Admin\Orchestra\OrderManagementCntrl@setHangTag');
 Route::post('admin/orchestra/order-management/set_special_tag', 'Admin\Orchestra\OrderManagementCntrl@setSpecialTag');
