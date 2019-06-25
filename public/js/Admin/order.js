@@ -5818,8 +5818,8 @@ function jsbarcodesolidcartonA(code, id, svgDoc) {
 function jsbarcodestdcartonA(code, id, svgDoc) {
 	JsBarcode("#ean-13", code, {
 		format: "ean13",
-		width: 5.99,
-		height: 343,
+		width: 6.1363,
+		height: 328.4706,
 		fontSize: 60
 	});
 	var svg = document.getElementById('svgdiv').querySelector('svg'),
@@ -5929,8 +5929,8 @@ function jsbarcodesolidcartonB(code, id, svgDoc) {
 function jsbarcodestdcartonB(code, id, svgDoc) {
 	JsBarcode("#ean-13", code, {
 		format: "ean13",
-		width: 5.99,
-		height: 343,
+		width: 6.207,
+		height: 318.114,
 		fontSize: 60
 	});
 	var svg = document.getElementById('svgdiv').querySelector('svg'),
@@ -5984,8 +5984,8 @@ function jsbarcodestdcartonB(code, id, svgDoc) {
 function jsbarcodestdpoly(code, id, svgDoc) {
 	JsBarcode("#ean-13", code, {
 		format: "ean13",
-		width: 5.99,
-		height: 343,
+		width: 6.353,
+		height: 329.82,
 		fontSize: 60
 	});
 	var svg = document.getElementById('svgdiv').querySelector('svg'),
