@@ -2602,21 +2602,21 @@ function PopupTable(data,name) {
  * @return Pdf
  */
 
-function Popupsmall(data,name) {
-	var s = new XMLSerializer();
-	var d = data;
-	var str = s.serializeToString(d);
-	var svg = encodeURI(str)
+function Popupsmall(data,name,svgDoc) {
+//	var s = new XMLSerializer();
+//	var d = data;
+//	var str = s.serializeToString(d);
+//	var svg = encodeURI(str)
 	var success = false;
-	var url = "";
+//	var url = "";
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
 		url: base_url + "/customer/order-management/print-pdf-small",
 		type: "post",
 		data: {
 			_token: csrf_token,
-			svg: svg,
-			name:name
+			svg: data,
+			name: name
 		},
 		async: false,
 		success: function (data) {
