@@ -856,5 +856,25 @@ class OrderController extends Controller
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
     }
+	/**
+     * Function to get tesco tsl template UK , CE size chart based on size entered.
+     * @author <Praveen>
+     * @param [string] $[size] [<Size entered>], [string] $[zone] [<zone selected>]
+     * @return equivalent uk,ce size for size entered
+     */
+    public function getTescoTSLSizechart(Request $request)
+    {
+       try {
+             
+             $size = $request['size'];
+
+               $size = DB::table('orchestra_size_chart')->select('cm as size')->where('age', 'ilike', $size)->where('is_enabled','=',1)->get();
+           
+           
+           return response()->json(['size_chart' => $size]);
+       } catch (\Exception $e) {
+           return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+       }
+    }
    
 }

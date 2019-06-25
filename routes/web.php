@@ -76,6 +76,8 @@ Route::post('admin/order-management/print-pdf-table', 'Admin\OrderManagement\Ord
 Route::post('admin/order-management/print-hang-pdf', 'Admin\OrderManagement\OrderController@printHangPdf');
 Route::post('admin/order-management/print-special-pdf', 'Admin\OrderManagement\OrderController@printSpecialPdf');
 
+Route::get('admin/order-management/get-tsl-size', 'Admin\OrderManagement\OrderController@getTescoTSLSizechart');
+
 Route::post('admin/order-management/print-wash-pdf', 'Admin\OrderManagement\OrderController@printWashPdf');
 
 Route::get('admin/template-management', 'Admin\TemplateManagement\TemplateController@templateList');
@@ -250,6 +252,17 @@ Route::group(['middleware' => 'customer_auth'], function()
     Route::put('customer/update-customer-password', 'Customer\CustomerProfile\CustomerProfileController@updateCustomerPassword');
     Route::get('customer/get-profile-details', 'Customer\CustomerProfile\CustomerProfileController@getCustomerDetailsById');
 	Route::put('customer/update-customer-profile-details', 'Customer\CustomerProfile\CustomerProfileController@updateCustomerDetailsById');
+	
+	
+	
+	Route::post('customer/order-management/print-pdf', 'Customer\OrderManagement\OrderController@printPdf');
+	Route::post('customer/order-management/print-pdf-arr', 'Customer\OrderManagement\OrderController@printPdfArr');
+	Route::post('customer/order-management/print-pdf-small', 'Customer\OrderManagement\OrderController@printPdfSmall');
+	Route::post('customer/order-management/print-pdf-table', 'Customer\OrderManagement\OrderController@printPdfTable');
+	Route::post('customer/order-management/print-hang-pdf', 'Customer\OrderManagement\OrderController@printHangPdf');
+	Route::post('customer/order-management/print-special-pdf', 'Customer\OrderManagement\OrderController@printSpecialPdf');
+	Route::post('customer/order-management/print-wash-pdf', 'Customer\OrderManagement\OrderController@printWashPdf');
+	Route::get('customer/order-management/get-tsl-size', 'Customer\OrderManagement\OrderController@getTescoTSLSizechart');
 	
 });
 

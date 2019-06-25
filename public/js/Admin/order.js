@@ -2003,14 +2003,16 @@ function printWashDiv(data,data_back,data_middle ,dataid) {
 	var svgRoot1 = svgDoc1.documentElement;
 	var index_arr=[];
 	var svgarr = [];
+	var i=0;
+	var ajax=0;
 	$('#wash_care_label_table tbody tr').each(function (key, val) {
 		if(index_arr.includes($(this).find('.size').text()) != true)
 		{
 			if($(this).find('.size').text() != "")
 				{
+					var size_txt = $(this).find('.size').text();
+					var uvc_tco = $(this).find('.uvc_tco').text();
 					index_arr.push($(this).find('.size').text())
-					
-					
 					var size = $(this).find('.size').text().split(" ")
 
 					if (size[1] == "ANS") {
@@ -2019,22 +2021,66 @@ function printWashDiv(data,data_back,data_middle ,dataid) {
 						var size1 = "months";
 					}
 					
-				    svgDoc1.getElementById("size1").innerHTML = $(this).find('.size').text().replace(" ", "").toLowerCase() + "/" + size1;
-				    svgDoc1.getElementById("size2").innerHTML = $(this).find('.size').text().replace(" ", "").toLowerCase() + "/" + size1;
-				    svgDoc1.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -30 135) rotate(270)');
-					
 					var code = $(this).find('.barcode').text();
-					jsbarcodewash(code, 'barcode', svgDoc1)
 					
+					$.ajax({
+						url: base_url + "/customer/order-management/get-tsl-size",
+						type: 'GET',
+						async: false,
+						data: {
+							size: $(this).find('.size').text()
+						},
+						tryCount: 0,
+						retryLimit: 2,
+						success: function (data) {
+							//console.log(data)
+							if(data.size_chart.length > 0 )
+							{
+								svgDoc1.getElementById("size_in_fr_en1").innerHTML = data.size_chart[0].size+" cm ";
+								svgDoc1.getElementById("size_in_fr_en2").innerHTML = data.size_chart[0].size+" cm ";
+							}
+							else
+							{
+								svgDoc1.getElementById("size_in_fr_en1").innerHTML = "";
+								svgDoc1.getElementById("size_in_fr_en2").innerHTML = "";
+							}
+
+							svgDoc1.getElementById("size1").innerHTML = size_txt.replace(" ", "").toLowerCase() + " / " + size1;
+							svgDoc1.getElementById("size2").innerHTML = size_txt.replace(" ", "").toLowerCase() + " / " + size1;
+							svgDoc1.getElementById("parcel_code1").innerHTML = uvc_tco;
+							svgDoc1.getElementById("parcel_code2").innerHTML = uvc_tco;
+							svgDoc1.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -30 135) rotate(270)');
+							
+							
+							jsbarcodewash(code, 'barcode', svgDoc1)
+
+
+							var s = new XMLSerializer();
+							var d = svgRoot1;
+							var str = s.serializeToString(d);
+							var svg = encodeURI(str)
+							svgarr.push(svg)
+							ajax++;
+						},
+						error: function (errorXHR, errorStatus, errorThrown) {
+							this.tryCount++;
+							if (this.tryCount <= this.retryLimit) {
+								$.ajax(this);
+								return;
+							}
+						},
+						complete: function () {
+
+						}
+					})
 					
-					var s = new XMLSerializer();
-					var d = svgRoot1;
-					var str = s.serializeToString(d);
-					var svg = encodeURI(str)
-					svgarr.push(svg)
+				i++;	
 				}
+			
 		}
 	})
+	
+	//alert(i)
 	//console.log(index_arr)
 	
 	
@@ -2046,7 +2092,12 @@ function printWashDiv(data,data_back,data_middle ,dataid) {
 	var svgDoc1_middle = a1_middle.contentDocument;
 	var svgRoot1_middle = svgDoc1_middle.documentElement;
 	var svg_fin = svgarr.join(',_');
-	PopupWash(svg_fin,svgRoot1_back,svgRoot1_middle, dataid,svgDoc1);
+	
+	if(i == ajax)
+	{
+		PopupWash(svg_fin,svgRoot1_back,svgRoot1_middle, dataid,svgDoc1);
+	}
+	
 }
 
 /**
