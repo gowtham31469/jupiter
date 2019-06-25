@@ -6120,7 +6120,7 @@ function jsbarcodestdcartonA(code, id, svgDoc) {
 	JsBarcode("#ean-13", code, {
 		format: "ean13",
 		width: 6.1363,
-		height: 328.4706,
+		height: 325.6160,
 		fontSize: 60
 	});
 	var svg = document.getElementById('svgdiv').querySelector('svg'),
@@ -6285,7 +6285,7 @@ function jsbarcodestdcartonB(code, id, svgDoc) {
 function jsbarcodestdpoly(code, id, svgDoc) {
 	JsBarcode("#ean-13", code, {
 		format: "ean13",
-		width: 6.353,
+		width:6.335,
 		height: 329.82,
 		fontSize: 60
 	});
