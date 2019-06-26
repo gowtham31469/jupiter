@@ -17,6 +17,8 @@ class CreateHistoryTable extends Migration
         $table->increments('id');
         $table->integer('buyer_id')->unsigned();
         $table->foreign('buyer_id')->references('id')->on('buyers');
+        $table->integer('erp_order_details_id')->unsigned();
+        $table->foreign('erp_order_details_id')->references('id')->on('erp_order_details');
         $table->string('template');
         $table->string('season');
         $table->string('country');

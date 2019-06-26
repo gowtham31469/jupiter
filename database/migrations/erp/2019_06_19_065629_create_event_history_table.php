@@ -17,8 +17,6 @@ class CreateEventHistoryTable extends Migration
             $table->increments('id');
             $table->integer('history_id')->unsigned();
             $table->foreign('history_id')->references('id')->on('history');
-            $table->string('table_name');
-            $table->integer('table_id');
             $table->integer('action_id')->unsigned();
             $table->foreign('action_id')->references('id')->on('actions');
             $table->integer('created_by');
