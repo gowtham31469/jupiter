@@ -6340,7 +6340,7 @@ function jsbarcodestdpoly(code, id, svgDoc) {
 function jsbarcodesolidpoly(code, id, svgDoc) {
 	JsBarcode("#ean-13", code, {
 		format: "ean13",
-		width: 6.55,
+		width: 6.5150,
 		height: 355,
 		fontSize: 50
 	});
