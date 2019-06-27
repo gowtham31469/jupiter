@@ -33,8 +33,8 @@ class JobManagerController extends Controller
 		$this->middleware('erpuser');
 		// get the current time
 		$this->current_date = Carbon::now('Asia/Kolkata')->format('d-m-Y');
-   
-		}
+
+	}
 		
     /**
      * Show the Jobcard  Manager List View.
