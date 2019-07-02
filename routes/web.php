@@ -76,6 +76,8 @@ Route::post('admin/order-management/print-pdf-table', 'Admin\OrderManagement\Ord
 Route::post('admin/order-management/print-hang-pdf', 'Admin\OrderManagement\OrderController@printHangPdf');
 Route::post('admin/order-management/print-special-pdf', 'Admin\OrderManagement\OrderController@printSpecialPdf');
 
+Route::get('admin/order-management/get-tsl-size', 'Admin\OrderManagement\OrderController@getTescoTSLSizechart');
+
 Route::post('admin/order-management/print-wash-pdf', 'Admin\OrderManagement\OrderController@printWashPdf');
 
 Route::get('admin/template-management', 'Admin\TemplateManagement\TemplateController@templateList');
@@ -180,10 +182,14 @@ Route::group(['middleware' => 'customer_auth'], function()
 	Route::post('customer/tesco/order-management/viewed-cancelled', 'Customer\HomeController@viewedCancelledOrder');
 	Route::post('customer/tesco/order-management/viewed-selected-cancelled', 'Customer\HomeController@viewedSelectedCancelledOrder');
 	
-	//ORCHESTRA 
+	//ORCHESTRA STATUS
 	Route::post('customer/orchestra/order-status', 'Customer\Orchestra\OrderController@orchestraOrderStatus');
+	Route::post('customer/orchestra/order-management/show-orchestra-pi', 'Customer\Orchestra\OrderController@getOrchestraPI');
+	Route::post('customer/orchestra/approve-orchestra-pi', 'Customer\Orchestra\OrderController@approveOrchestraPI');
+	Route::post('customer/orchestra/reject-orchestra-pi', 'Customer\Orchestra\OrderController@rejectOrchestraPI');
+	Route::post('customer/orchestra/download-orchestra-pi', 'Customer\Orchestra\OrderController@downloadOrchestraPI');
 
-	//TESCO
+	//TESCO STATUS
 	Route::get('customer/tesco/create-order', 'Customer\Tesco\OrderController@createOrder');
 	
 	Route::get('customer/customers', 'Customer\CustomerController@customers');
@@ -247,6 +253,17 @@ Route::group(['middleware' => 'customer_auth'], function()
     Route::get('customer/get-profile-details', 'Customer\CustomerProfile\CustomerProfileController@getCustomerDetailsById');
 	Route::put('customer/update-customer-profile-details', 'Customer\CustomerProfile\CustomerProfileController@updateCustomerDetailsById');
 	
+	
+	
+	Route::post('customer/order-management/print-pdf', 'Customer\OrderManagement\OrderController@printPdf');
+	Route::post('customer/order-management/print-pdf-arr', 'Customer\OrderManagement\OrderController@printPdfArr');
+	Route::post('customer/order-management/print-pdf-small', 'Customer\OrderManagement\OrderController@printPdfSmall');
+	Route::post('customer/order-management/print-pdf-table', 'Customer\OrderManagement\OrderController@printPdfTable');
+	Route::post('customer/order-management/print-hang-pdf', 'Customer\OrderManagement\OrderController@printHangPdf');
+	Route::post('customer/order-management/print-special-pdf', 'Customer\OrderManagement\OrderController@printSpecialPdf');
+	Route::post('customer/order-management/print-wash-pdf', 'Customer\OrderManagement\OrderController@printWashPdf');
+	Route::get('customer/order-management/get-tsl-size', 'Customer\OrderManagement\OrderController@getTescoTSLSizechart');
+	
 });
 
 
@@ -297,10 +314,11 @@ Route::post('admin/orchestra/order-management/order-status', 'Admin\Orchestra\Or
 
 
 Route::post('admin/orchestra/order-management/set-po-number', 'Admin\Orchestra\OrderManagementCntrl@setPONumber');
-Route::post('admin/orchestra/order-management/show-proforma-invoice', 'Admin\Orchestra\OrderManagementCntrl@getProformaInvoice');
+Route::post('admin/orchestra/order-management/show-orchestra-pi', 'Admin\Orchestra\OrderManagementCntrl@getOrchestraPI');
 Route::post('admin/orchestra/set-po-file', 'Admin\Orchestra\OrderManagementCntrl@setCustomerPOFile');
-Route::post('admin/orchestra/approve-proforma-invoice', 'Admin\Orchestra\OrderManagementCntrl@approveProformaInvice');
-Route::post('admin/orchestra/reject-proforma-invoice', 'Admin\Orchestra\OrderManagementCntrl@rejectProformaInvice');
+Route::post('admin/orchestra/approve-orchestra-pi', 'Admin\Orchestra\OrderManagementCntrl@approveOrchestraPI');
+Route::post('admin/orchestra/reject-orchestra-pi', 'Admin\Orchestra\OrderManagementCntrl@rejectOrchestraPI');
+Route::post('admin/orchestra/download-orchestra-pi', 'Admin\Orchestra\OrderManagementCntrl@downloadOrchestraPI');
 
 Route::post('admin/orchestra/order-management/set_hang_tag', 'Admin\Orchestra\OrderManagementCntrl@setHangTag');
 Route::post('admin/orchestra/order-management/set_special_tag', 'Admin\Orchestra\OrderManagementCntrl@setSpecialTag');
@@ -745,6 +763,14 @@ Route::get('customer/orchestra/get-erp-status', 'Customer\Orchestra\OrderControl
 
 Route::post('customer/orchestra/template-management/template-view', 'Customer\Orchestra\TemplateManagementCntrl@templateView');
 
+// Routes for report generation
+Route::get('reportTest','ErpUser\Reports\ReportController@index');
+Route::get('level1Filter','ErpUser\Reports\ReportController@level1Filter');
+
+
+
 Route::get('print-manager/get-customers-list', 'ErpUser\Printmanager\PrintManagerController@getCustomersListByBuyerId'); 
 Route::get('print-manager/get-style-list', 'ErpUser\Printmanager\PrintManagerController@getStyleListByBuyerCustomerId'); 
 Route::get('print-manager/get-erporder-list', 'ErpUser\Printmanager\PrintManagerController@getErpOrderListByBuyerCustomerId'); 
+
+

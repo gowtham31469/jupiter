@@ -2036,6 +2036,7 @@ class OrderManagementCntrl extends Controller
                  if($name != "THL3-sticker")
                  {
                      PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+					 //PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 8, 60, 48, 12, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
                  }
                 else
                 {
@@ -2049,7 +2050,7 @@ class OrderManagementCntrl extends Controller
 //				'padding' => 0,
 //				'bgcolor' => false
 //			);
-//			PDF::write2DBarcode('Gowtham', 'QRCODE,Q', 100, 50, 23, 23, $style, 'N');
+//			PDF::write2DBarcode('1669116,05057008332096/969,2005100388969', 'QRCODE,Q', 100, 47, 23, 23, $style, 'N');
             
              $i++;
         }

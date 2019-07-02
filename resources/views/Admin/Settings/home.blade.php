@@ -48,6 +48,7 @@
                 </div>
                 {!! Form::open(['id' => 'add_orchestra_garments_form','data-toggle' => 'validator','role' => 'form']) !!}
                     <div class="modal-body">
+                      <div id="garment_name_result"></div>
                         <div class="form-group has-feedback">
                           {!! Form::label('garment_name', 'Garment Name', ['class' => 'form_label']) !!}
                           {!! Form::text('garment_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Garment Name','required')) !!}
@@ -73,6 +74,7 @@
                </div>
                {!! Form::open(['id' => 'edit_orchestra_garments_form','data-toggle' => 'validator','role' => 'form']) !!}
                    <div class="modal-body">
+                    <div id="garment_name_result_update"></div>
                      {!! Form::hidden('edit_orchestra_garments_id',$value = null, array('id'=>'edit_orchestra_garments_id','class' => 'form-control input-sm')) !!}
                        <div class="form-group has-feedback">
                          {!! Form::label('edit_garment_name', 'Garment Name', ['class' => 'form_label']) !!}
@@ -99,6 +101,7 @@
                 </div>
                 {!! Form::open(['id' => 'add_orchestra_agegroup_form','data-toggle' => 'validator','role' => 'form']) !!}
                     <div class="modal-body">
+                      <div id="age_group_result"></div>
                       <div class="row">
                       <div class="col-md-6">
                         <div class="form-group has-feedback">
@@ -136,6 +139,7 @@
                </div>
                {!! Form::open(['id' => 'edit_orchestra_agegroup_form','data-toggle' => 'validator','role' => 'form']) !!}
                    <div class="modal-body">
+                    <div id="edit_age_group"></div>
                      {!! Form::hidden('edit_orchestra_agegroup_id',$value = null, array('id'=>'edit_orchestra_agegroup_id','class' => 'form-control input-sm')) !!}
                      <div class="row">
                       <div class="col-md-6">
@@ -173,6 +177,7 @@
                 </div>
                 {!! Form::open(['id' => 'add_orchestra_country_form','data-toggle' => 'validator','role' => 'form']) !!}
                     <div class="modal-body">
+                      <div id="country_error"></div>
                       <div class="row">
                       <div class="col-md-6">
                         <div class="form-group has-feedback">
@@ -279,6 +284,7 @@
                 </div>
                 {!! Form::open(['id' => 'edit_orchestra_country_form','data-toggle' => 'validator','role' => 'form']) !!}
                     <div class="modal-body">
+                      <div id="country_update_error"></div>
                       {!! Form::hidden('edit_orchestra_country_id',$value = null, array('id'=>'edit_orchestra_country_id','class' => 'form-control input-sm')) !!}
                       <div class="row">
                         <div class="col-md-6">
@@ -386,6 +392,7 @@
                 </div>
                 {!! Form::open(['id' => 'add_orchestra_productfamily_form','data-toggle' => 'validator','role' => 'form']) !!}
                     <div class="modal-body">
+                      <div id="product_code_error"></div>
                       <div class="row">
                        <div class="col-md-6"> 
                         <div class="form-group has-feedback">
@@ -436,6 +443,7 @@
                 </div>
                 {!! Form::open(['id' => 'edit_orchestra_productfamily_form','data-toggle' => 'validator','role' => 'form']) !!}
                     <div class="modal-body">
+                     <div id="product_code_update_error"></div>
                       {!! Form::hidden('edit_orchestra_productfamily_id',$value = null, array('id'=>'edit_orchestra_productfamily_id','class' => 'form-control input-sm')) !!}
                       <div class="row">
                         <div class="col-md-6">
@@ -487,6 +495,7 @@
                 </div>
                 {!! Form::open(['id' => 'add_orchestra_special_instruction_form','data-toggle' => 'validator','role' => 'form']) !!}
                     <div class="modal-body">
+                      <div id="spcl_instruction_error"></div>
                       <div class="row">
                         <div class="col-md-6">
                         <div class="form-group has-feedback">
@@ -593,6 +602,7 @@
                 </div>
                 {!! Form::open(['id' => 'edit_orchestra_special_instruction_form','data-toggle' => 'validator','role' => 'form']) !!}
                     <div class="modal-body">
+                      <div id="spcl_instruction_update_error"></div>
                       {!! Form::hidden('edit_orchestra_special_instruction_id',$value = null, array('id'=>'edit_orchestra_special_instruction_id','class' => 'form-control input-sm')) !!}
                       <div class="row">
                         <div class="col-md-6">
@@ -700,6 +710,7 @@
                 </div>
                 {!! Form::open(['id' => 'add_orchestra_composition_form','data-toggle' => 'validator','role' => 'form']) !!}
                     <div class="modal-body">
+                      <div id="composition_error"></div>
                       <div class="row">
                         <div class="col-md-6">
                         <div class="form-group has-feedback">
@@ -806,6 +817,7 @@
                 </div>
                 {!! Form::open(['id' => 'edit_orchestra_composition_form','data-toggle' => 'validator','role' => 'form']) !!}
                     <div class="modal-body">
+                      <div id="composition_update_error"></div>
                       {!! Form::hidden('edit_orchestra_composition_id',$value = null, array('id'=>'edit_orchestra_composition_id','class' => 'form-control input-sm')) !!}
                       <div class="row">
                         <div class="col-md-6">
@@ -913,6 +925,7 @@
                 </div>
                 {!! Form::open(['id' => 'add_orchestra_part_form','data-toggle' => 'validator','role' => 'form']) !!}
                     <div class="modal-body">
+                      <div id="part_error"></div>
                       <div class="row">
                         <div class="col-md-6">
                         <div class="form-group has-feedback">
@@ -1019,6 +1032,7 @@
                 </div>
                 {!! Form::open(['id' => 'edit_orchestra_part_form','data-toggle' => 'validator','role' => 'form']) !!}
                     <div class="modal-body">
+                     <div id="part_update_error"></div>
                       {!! Form::hidden('edit_orchestra_part_id',$value = null, array('id'=>'edit_orchestra_part_id','class' => 'form-control input-sm')) !!}
                       <div class="row">
                         <div class="col-md-6">
@@ -1126,6 +1140,7 @@
                 </div>
                 {!! Form::open(['id' => 'add_orchestra_size_chart_form','data-toggle' => 'validator','role' => 'form']) !!}
                     <div class="modal-body">
+                      <div id="size_chart_error"></div>
                       <div class="row">
                         <div class="col-md-6">
                         <div class="form-group has-feedback">
@@ -1169,6 +1184,7 @@
                 </div>
                 {!! Form::open(['id' => 'edit_orchestra_size_chart_form','data-toggle' => 'validator','role' => 'form']) !!}
                     <div class="modal-body">
+                       <div id="size_chart_update_error"></div>
                       {!! Form::hidden('edit_orchestra_size_chart_id',$value = null, array('id'=>'edit_orchestra_size_chart_id','class' => 'form-control input-sm')) !!}
                       <div class="row">
                         <div class="col-md-6">

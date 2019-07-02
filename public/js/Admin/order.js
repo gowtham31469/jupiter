@@ -106,7 +106,7 @@ function orderStatus() {
                 //aswathy
                 var path = base_url + "/admin/" + buyer + "/order-management/order-status";
 
-                var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_polybag_sticker_orders)))))));
+                var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_poly_bag_sticker_orders)))))));
                 //based on path extra column will append in the datatable
                 $('.main-content').html("<button style='margin-bottom:10px;' id='po-file-upload-button' class='btn btn-primary pull-right byn-sm' type='button'>Update PO</button>");
                 	
@@ -166,7 +166,7 @@ function orderStatus() {
 									success: function (data) {
 										//$('#po-file-upload-group').modal('show')
 										$('#po-file-upload-group').find('#exist_artwork_div_status ul').html("");
-										 var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_polybag_sticker_orders)))))));
+										 var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_poly_bag_sticker_orders)))))));
 										
 										var coun = 0;
 										var options = "<option>Select PO</option>";
@@ -1045,22 +1045,22 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 
 
 
-        if (data.orchestra_standard_polybag_sticker_orders != "") {
+        if (data.orchestra_standard_poly_bag_sticker_orders != "") {
            
-            if (data.orchestra_standard_polybag_sticker_orders[0].height == null) {
+            if (data.orchestra_standard_poly_bag_sticker_orders[0].height == null) {
                 $height = "";
             } else {
-                $height = data.orchestra_standard_polybag_sticker_orders[0].height;
+                $height = data.orchestra_standard_poly_bag_sticker_orders[0].height;
             }
-            $age = data.orchestra_standard_polybag_sticker_orders[0].group_id;
+            $age = data.orchestra_standard_poly_bag_sticker_orders[0].group_id;
 			var num = 600 * 395 * $height
             var val = num / (1000 * 1000 * 1000)
             $parcelVolume = val;
-            $no_of_carton = data.orchestra_standard_polybag_sticker_orders[0].no_of_carton;
-            $total_polybag = data.orchestra_standard_polybag_sticker_orders[0].total_polybag;
-            $final_order_qty_sets = data.orchestra_standard_polybag_sticker_orders[0].final_order_qty_sets;
-            $order_qty = data.orchestra_standard_polybag_sticker_orders[0].order_qty;
-            $final_order_qty = data.orchestra_standard_polybag_sticker_orders[0].final_order_qty;
+            $no_of_carton = data.orchestra_standard_poly_bag_sticker_orders[0].no_of_carton;
+            $total_polybag = data.orchestra_standard_poly_bag_sticker_orders[0].total_polybag;
+            $final_order_qty_sets = data.orchestra_standard_poly_bag_sticker_orders[0].final_order_qty_sets;
+            $order_qty = data.orchestra_standard_poly_bag_sticker_orders[0].order_qty;
+            $final_order_qty = data.orchestra_standard_poly_bag_sticker_orders[0].final_order_qty;
 			update_disable=1;	
         } else {
             
@@ -1074,7 +1074,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
             $final_order_qty = "";
         }
 		
-		if (data.orchestra_standard_polybag_sticker_orders != "") {
+		if (data.orchestra_standard_poly_bag_sticker_orders != "") {
 			update_disable=1;
 		}
 
@@ -1540,7 +1540,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 
 				$('#po-file-upload-div').modal('show')
 				$('#po-file-upload-div').find('#exist_artwork_div ul').html("");
-				var newObj = data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_polybag_sticker_orders);
+				var newObj = data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_poly_bag_sticker_orders);
 				var coun = 0;
 				var options = "<option>Select PO</option>";
 				$(newObj).each(function (index1, value1) {
@@ -2003,14 +2003,16 @@ function printWashDiv(data,data_back,data_middle ,dataid) {
 	var svgRoot1 = svgDoc1.documentElement;
 	var index_arr=[];
 	var svgarr = [];
+	var i=0;
+	var ajax=0;
 	$('#wash_care_label_table tbody tr').each(function (key, val) {
 		if(index_arr.includes($(this).find('.size').text()) != true)
 		{
 			if($(this).find('.size').text() != "")
 				{
+					var size_txt = $(this).find('.size').text();
+					var uvc_tco = $(this).find('.uvc_tco').text();
 					index_arr.push($(this).find('.size').text())
-					
-					
 					var size = $(this).find('.size').text().split(" ")
 
 					if (size[1] == "ANS") {
@@ -2019,22 +2021,66 @@ function printWashDiv(data,data_back,data_middle ,dataid) {
 						var size1 = "months";
 					}
 					
-				    svgDoc1.getElementById("size1").innerHTML = $(this).find('.size').text().replace(" ", "").toLowerCase() + "/" + size1;
-				    svgDoc1.getElementById("size2").innerHTML = $(this).find('.size').text().replace(" ", "").toLowerCase() + "/" + size1;
-				    svgDoc1.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -30 135) rotate(270)');
-					
 					var code = $(this).find('.barcode').text();
-					jsbarcodewash(code, 'barcode', svgDoc1)
 					
+					$.ajax({
+						url: base_url + "/customer/order-management/get-tsl-size",
+						type: 'GET',
+						async: false,
+						data: {
+							size: $(this).find('.size').text()
+						},
+						tryCount: 0,
+						retryLimit: 2,
+						success: function (data) {
+							//console.log(data)
+							if(data.size_chart.length > 0 )
+							{
+								svgDoc1.getElementById("size_in_fr_en1").innerHTML = data.size_chart[0].size+" cm ";
+								svgDoc1.getElementById("size_in_fr_en2").innerHTML = data.size_chart[0].size+" cm ";
+							}
+							else
+							{
+								svgDoc1.getElementById("size_in_fr_en1").innerHTML = "";
+								svgDoc1.getElementById("size_in_fr_en2").innerHTML = "";
+							}
+
+							svgDoc1.getElementById("size1").innerHTML = size_txt.replace(" ", "").toLowerCase() + " / " + size1;
+							svgDoc1.getElementById("size2").innerHTML = size_txt.replace(" ", "").toLowerCase() + " / " + size1;
+							svgDoc1.getElementById("parcel_code1").innerHTML = uvc_tco;
+							svgDoc1.getElementById("parcel_code2").innerHTML = uvc_tco;
+							svgDoc1.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -30 135) rotate(270)');
+							
+							
+							jsbarcodewash(code, 'barcode', svgDoc1)
+
+
+							var s = new XMLSerializer();
+							var d = svgRoot1;
+							var str = s.serializeToString(d);
+							var svg = encodeURI(str)
+							svgarr.push(svg)
+							ajax++;
+						},
+						error: function (errorXHR, errorStatus, errorThrown) {
+							this.tryCount++;
+							if (this.tryCount <= this.retryLimit) {
+								$.ajax(this);
+								return;
+							}
+						},
+						complete: function () {
+
+						}
+					})
 					
-					var s = new XMLSerializer();
-					var d = svgRoot1;
-					var str = s.serializeToString(d);
-					var svg = encodeURI(str)
-					svgarr.push(svg)
+				i++;	
 				}
+			
 		}
 	})
+	
+	//alert(i)
 	//console.log(index_arr)
 	
 	
@@ -2046,7 +2092,12 @@ function printWashDiv(data,data_back,data_middle ,dataid) {
 	var svgDoc1_middle = a1_middle.contentDocument;
 	var svgRoot1_middle = svgDoc1_middle.documentElement;
 	var svg_fin = svgarr.join(',_');
-	PopupWash(svg_fin,svgRoot1_back,svgRoot1_middle, dataid,svgDoc1);
+	
+	if(i == ajax)
+	{
+		PopupWash(svg_fin,svgRoot1_back,svgRoot1_middle, dataid,svgDoc1);
+	}
+	
 }
 
 /**
@@ -2663,7 +2714,7 @@ function label_order_details(uvc) {
                 var text_for_mad_in = '<p>' + $('select.made_in_select' + washcare).find(':selected').data('french') + " - " + $('select.made_in_select' + washcare).find(':selected').data('english') + " - " + $('select.made_in_select' + washcare).find(':selected').data('spanish') + " - " + $('select.made_in_select' + washcare).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + washcare).find(':selected').data('italian') + " - " + $('select.made_in_select' + washcare).find(':selected').data('dutch') + " - " + $('select.made_in_select' + washcare).find(':selected').data('german') + " - " +
                     $('select.made_in_select' + washcare).find(':selected').data('arabic') + " - " +
                     $('select.made_in_select' + washcare).find(':selected').data('greek')  + '</p>';
-                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
+                svgDoc.getElementById("country").innerHTML = wordWrap(text_for_mad_in, 30);
                 
                 svgDoc.getElementById("text_care_instruction").innerHTML = "";
                 $('.care_instruction_select' + washcare + ' option:selected').each(function () {
@@ -3164,7 +3215,7 @@ function washcarelabels(data, dataid) {
                 var text_for_mad_in = '<p>' + $('select.made_in_select' + dataid).find(':selected').data('french') + " - " + $('select.made_in_select' + dataid).find(':selected').data('english') + " - " + $('select.made_in_select' + dataid).find(':selected').data('spanish') + " - " + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + dataid).find(':selected').data('italian') + " - " + $('select.made_in_select' + dataid).find(':selected').data('dutch') + " - " + $('select.made_in_select' + dataid).find(':selected').data('german') + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('greek') + '</p>';
-                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
+                svgDoc.getElementById("country").innerHTML = wordWrap(text_for_mad_in, 30);
 				
                 $('.washing_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].washing_id);
 
@@ -3247,7 +3298,7 @@ function washcarelabels(data, dataid) {
                 var text_for_mad_in =  $('select.made_in_select' + dataid).find(':selected').data('french') + " - " + $('select.made_in_select' + dataid).find(':selected').data('english') + " - " + $('select.made_in_select' + dataid).find(':selected').data('spanish') + " - " + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + dataid).find(':selected').data('italian') + " - " + $('select.made_in_select' + dataid).find(':selected').data('dutch') + " - " + $('select.made_in_select' + dataid).find(':selected').data('german') + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('greek');
-				console.log(text_for_mad_in);
+				//console.log(text_for_mad_in);
                 svgDoc.getElementById("country").innerHTML = text_for_mad_in;
 
             } else {
@@ -4959,7 +5010,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
                 var text_for_mad_in = '<p>' + $('select.made_in_select' + washcare).find(':selected').data('french') + " - " + $('select.made_in_select' + washcare).find(':selected').data('english') + " - " + $('select.made_in_select' + washcare).find(':selected').data('spanish') + " - " + $('select.made_in_select' + washcare).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + washcare).find(':selected').data('italian') + " - " + $('select.made_in_select' + washcare).find(':selected').data('dutch') + " - " + $('select.made_in_select' + washcare).find(':selected').data('german') + " - " +
                     $('select.made_in_select' + washcare).find(':selected').data('arabic') + " - " +
                     $('select.made_in_select' + washcare).find(':selected').data('greek')  + '</p>';
-                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
+                svgDoc.getElementById("country").innerHTML = wordWrap(text_for_mad_in, 30);
                 
                 svgDoc.getElementById("text_care_instruction").innerHTML = "";
                 $('.care_instruction_select' + washcare + ' option:selected').each(function () {
@@ -5345,7 +5396,7 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
 									 var text_for_mad_in = '<p>' + $('select.made_in_select' + dataid).find(':selected').data('french') + " - " + $('select.made_in_select' + dataid).find(':selected').data('english') + " - " + $('select.made_in_select' + dataid).find(':selected').data('spanish') + " - " + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + dataid).find(':selected').data('italian') + " - " + $('select.made_in_select' + dataid).find(':selected').data('dutch') + " - " + $('select.made_in_select' + dataid).find(':selected').data('german')  + " - " +
 										$('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
 										$('select.made_in_select' + dataid).find(':selected').data('greek') + '</p>';
-									svgDoc.getElementById("country").innerHTML = text_for_mad_in;
+									svgDoc.getElementById("country").innerHTML = wordWrap(text_for_mad_in, 30);
 								}
 
 									svgDoc.getElementById("text_care_instruction").innerHTML = "";
@@ -5429,7 +5480,7 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
                 var text_for_mad_in = '<p>' + $('select.made_in_select' + dataid).find(':selected').data('french') + " - " + $('select.made_in_select' + dataid).find(':selected').data('english') + " - " + $('select.made_in_select' + dataid).find(':selected').data('spanish') + " - " + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + dataid).find(':selected').data('italian') + " - " + $('select.made_in_select' + dataid).find(':selected').data('dutch') + " - " + $('select.made_in_select' + dataid).find(':selected').data('german')  + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('greek')  + '</p>';
-                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
+                svgDoc.getElementById("country").innerHTML = wordWrap(text_for_mad_in, 30);
 
             } else {
 
@@ -5568,7 +5619,7 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
 									 var text_for_mad_in = '<p>' + $('select.made_in_select' + dataid).find(':selected').data('french') + " - " + $('select.made_in_select' + dataid).find(':selected').data('english') + " - " + $('select.made_in_select' + dataid).find(':selected').data('spanish') + " - " + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + dataid).find(':selected').data('italian') + " - " + $('select.made_in_select' + dataid).find(':selected').data('dutch') + " - " + $('select.made_in_select' + dataid).find(':selected').data('german') + " - " +
 										$('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
 										$('select.made_in_select' + dataid).find(':selected').data('greek')  + '</p>';
-									svgDoc.getElementById("country").innerHTML = text_for_mad_in;
+									svgDoc.getElementById("country").innerHTML = wordWrap(text_for_mad_in, 30);
 								}
 
 									svgDoc.getElementById("text_care_instruction").innerHTML = "";
@@ -5652,7 +5703,7 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
                 var text_for_mad_in = '<p>' + $('select.made_in_select' + dataid).find(':selected').data('french') + " - " + $('select.made_in_select' + dataid).find(':selected').data('english') + " - " + $('select.made_in_select' + dataid).find(':selected').data('spanish') + " - " + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + dataid).find(':selected').data('italian') + " - " + $('select.made_in_select' + dataid).find(':selected').data('dutch') + " - " + $('select.made_in_select' + dataid).find(':selected').data('german')  + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('greek')  + '</p>';
-                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
+                svgDoc.getElementById("country").innerHTML = wordWrap(text_for_mad_in, 30);
 
             } else {
 
@@ -5761,8 +5812,8 @@ function jsbarcode(code, id, svgDoc) {
 function jsbarcodesolidcartonA(code, id, svgDoc) {
 	JsBarcode("#ean-13", code, {
 		format: "ean13",
-		width: 6.15,
-		height: 339,
+		width: 6.1958492847,
+		height: 332.81,
 		fontSize: 50
 	});
 	var svg = document.getElementById('svgdiv').querySelector('svg'),
@@ -5818,8 +5869,8 @@ function jsbarcodesolidcartonA(code, id, svgDoc) {
 function jsbarcodestdcartonA(code, id, svgDoc) {
 	JsBarcode("#ean-13", code, {
 		format: "ean13",
-		width: 5.99,
-		height: 343,
+		width: 6.1363,
+		height: 328.4706,
 		fontSize: 60
 	});
 	var svg = document.getElementById('svgdiv').querySelector('svg'),
@@ -5870,11 +5921,11 @@ function jsbarcodestdcartonA(code, id, svgDoc) {
  * @return barcode
  */
 
-function jsbarcodesolidcartonB(code, id, svgDoc) {
+function jsbarcodesolidcartonB(code, id, svgDoc) {	
 	JsBarcode("#ean-13", code, {
 		format: "ean13",
-		width: 5.99,
-		height: 343,
+		width: 6.27,
+		height: 322.07,
 		fontSize: 60
 	});
 	var svg = document.getElementById('svgdiv').querySelector('svg'),
@@ -5929,8 +5980,8 @@ function jsbarcodesolidcartonB(code, id, svgDoc) {
 function jsbarcodestdcartonB(code, id, svgDoc) {
 	JsBarcode("#ean-13", code, {
 		format: "ean13",
-		width: 5.99,
-		height: 343,
+		width: 6.207,
+		height: 318.114,
 		fontSize: 60
 	});
 	var svg = document.getElementById('svgdiv').querySelector('svg'),
@@ -5984,8 +6035,8 @@ function jsbarcodestdcartonB(code, id, svgDoc) {
 function jsbarcodestdpoly(code, id, svgDoc) {
 	JsBarcode("#ean-13", code, {
 		format: "ean13",
-		width: 5.99,
-		height: 343,
+		width: 6.353,
+		height: 329.82,
 		fontSize: 60
 	});
 	var svg = document.getElementById('svgdiv').querySelector('svg'),
@@ -7016,7 +7067,7 @@ function clonewashcarelabels(index)
                 var text_for_mad_in = '<p>' + $('select.made_in_select' + washcare).find(':selected').data('french') + " - " + $('select.made_in_select' + washcare).find(':selected').data('english') + " - " + $('select.made_in_select' + washcare).find(':selected').data('spanish') + " - " + $('select.made_in_select' + washcare).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + washcare).find(':selected').data('italian') + " - " + $('select.made_in_select' + washcare).find(':selected').data('dutch') + " - " + $('select.made_in_select' + washcare).find(':selected').data('german') + " - " +
                     $('select.made_in_select' + washcare).find(':selected').data('arabic') + " - " +
                     $('select.made_in_select' + washcare).find(':selected').data('greek')  + '</p>';
-                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
+                svgDoc.getElementById("country").innerHTML = wordWrap(text_for_mad_in, 30);
                 
                 svgDoc.getElementById("text_care_instruction").innerHTML = "";
                 $('.care_instruction_select' + washcare + ' option:selected').each(function () {
@@ -7074,7 +7125,38 @@ function wordWrap(str, maxWidth) {
         // Inserts new line at first whitespace of the line
         for (i = maxWidth - 1; i >= 0; i--) {
             if (testWhite(str.charAt(i))) {
-                res = res + "<tspan  x='0' dy='7'>" +[str.slice(0, i), newLineStr].join('') + "</tspan>";
+				
+				var arabic = /[\u0600-\u06FF]/;
+//				var split_text = [str.slice(0, i), newLineStr].join('').split(' - ')
+//				$(split_text).each(function(index,value){
+//					if(arabic.test(value) == true)
+//					{
+//						"<tspan>"+value+"</tspan>"
+//					}
+//				})
+				
+				if(arabic.test([str.slice(0, i), newLineStr].join('')) == true)
+				{
+					var join_text="";
+					var split_text = [str.slice(0, i), newLineStr].join('').split(' - ')
+					$(split_text).each(function(index,value){
+						if(arabic.test(value) == true)
+						{
+							join_text += "<tspan style='font-family:Dejavu Sans' text-anchor='start'> - "+value+"</tspan>";
+						}
+						else
+						{
+							join_text += "<tspan text-anchor='end'  x='0' dy='7'> - "+value+"</tspan>";
+						}
+					})
+					res = res + join_text;
+				}
+				else
+				{
+					res = res + "<tspan  x='0' dy='7'>" +[str.slice(0, i), newLineStr].join('') + "</tspan>";
+				}
+				
+                
                 str = str.slice(i + 1);
                 found = true;
                 break;
@@ -7089,8 +7171,28 @@ function wordWrap(str, maxWidth) {
         if (str.length < maxWidth)
             done = true;
     } while (!done);
+	
+	if(arabic.test(str) == true)
+	{
+		var join_text="";
+		var split_text = str.split(' - ')
+		$(split_text).each(function(index,value){
+			if(arabic.test(value) == true)
+			{
+				join_text += "<tspan dy='7' x='0' text-anchor='end' style='font-family:Dejavu Sans'> - "+value+" </tspan>";
+			}
+			else
+			{
+				join_text += "<tspan text-anchor='start'  x='0'> "+value+"</tspan>";
+			}
+		})
+		return res + join_text;
+	}
+	else
+	{
+		return res + "<tspan  x='0' dy='7'>" + str + "</tspan>";
+	}
 
-    return res + "<tspan x='0' dy='7'>"+str+"</tspan>";
 }
 
 function testWhite(x) {

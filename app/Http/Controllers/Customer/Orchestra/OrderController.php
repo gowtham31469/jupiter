@@ -31,6 +31,11 @@ use Auth;
 use App\Classes\ERPOrderStatusCheck;
 use App\Classes\ErpOrders;
 use Carbon\Carbon;
+use App\ProfomaInvoice as PI;
+use App\ProfomaInvoiceItemDetails;
+use App\Classes\ProformaInvoice;
+use App\OrchestraParcelDetails;
+use App\OrchestraParcelQuantityDetails;
 
 class OrderController extends Controller
 {
@@ -91,14 +96,24 @@ class OrderController extends Controller
     // }
     public function Orders()
     {
+		
+		 $UVC_TCO_array1 = [];
+         // check for po data missing for SKU Code(In price CSV)
+         $parcel_qty_details = OrchestraParcelQuantityDetails::select(DB::raw('distinct on (orchestra_parcel_details."UVC_TCO") orchestra_parcel_details."UVC_TCO"'))->join('orchestra_parcel_details', 'orchestra_parcel_quantity_details.UVC_TCO', 'orchestra_parcel_details.UVC_TCO')->groupBy('orchestra_parcel_details.UVC_TCO')->get()->toArray();
+
+         foreach ($parcel_qty_details as $key => $value) {
+           array_push($UVC_TCO_array1, $value['UVC_TCO']);
+         }
+		
+		
 		 $company_id = Auth::guard('web_customer')->user()->company_id;
 		
 		
 		 $customers = DB::table('customers')->select('*')->where('id',$company_id)->get();
 		
-		 $data['sticker_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id',DB::raw("'-' as \"Season\""),'BuyerPONo','SupplierName','NomApple as Style_Name','Quantity','IsSTD as Type',DB::raw("'Stickers' as \"OrderType\""),'sticker_order_status as Order Status',DB::raw("'-' as \"Disney\""))->where('orchestra_parcel_details.FactoryCode', $customers{0}->factory_code)->groupBy('id','UVC')->get();
+		 $data['sticker_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id',DB::raw("'-' as \"Season\""),'BuyerPONo','SupplierName','NomApple as Style_Name','Quantity','IsSTD as Type',DB::raw("'Stickers' as \"OrderType\""),'sticker_order_status as Order Status',DB::raw("'-' as \"Disney\""))->whereNotIn('UVC_TCO', $UVC_TCO_array1)->where('orchestra_parcel_details.FactoryCode', $customers{0}->factory_code)->groupBy('id','UVC')->get();
 
-        $data['label_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id','Season_Code as Season',DB::raw("'-' as \"BuyerPONo\""),'SupplierName','Theme as Description','NomApple as Style_Name','Licence_Code as Disney',DB::raw("'-' as \"Type\""),'Quantity',DB::raw("'Labels' as \"OrderType\""),'order_status as Order Status')->where('orchestra_parcel_details.FactoryCode', $customers{0}->factory_code)->groupBy('id','UVC')->get();
+        $data['label_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id','Season_Code as Season',DB::raw("'-' as \"BuyerPONo\""),'SupplierName','Theme as Description','NomApple as Style_Name','Licence_Code as Disney',DB::raw("'-' as \"Type\""),'Quantity',DB::raw("'Labels' as \"OrderType\""),'order_status as Order Status')->whereNotIn('UVC_TCO', $UVC_TCO_array1)->where('orchestra_parcel_details.FactoryCode', $customers{0}->factory_code)->groupBy('id','UVC')->get();
         
         echo json_encode($data);
     } 
@@ -1892,6 +1907,204 @@ class OrderController extends Controller
             $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
         return $result;
+    }
+    /**
+     * method to get all the details for proforma invoice generation
+     * @param  Request $request [table_name,id]
+     * @return [type]           [description]
+     * @author <Praveen>
+     */
+    public function getOrchestraPI(Request $request)
+    {
+        try
+        {
+            $pi_obj = new ProformaInvoice();
+            $data   = $pi_obj->getOrchestraPIDetails($request);
+            $result = response()->json(['error'=> false,'message' =>'success','data'=>$data],200);
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+    /**
+     * method to approve the proforma invoice
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     * @author <Praveen>
+     */
+    public function approveOrchestraPI(Request $request)
+    {
+        try
+        {
+            $row_id      =   $request->id;
+            $table_name  =   $request->table_name;
+            $buyer_id    =   $request->buyer_id;
+            $billamnt    =   $request->billamnt;
+            $template_id =   $request->template_id; 
+            
+            $pi_obj      =   new ProformaInvoice();
+            $data        =   $pi_obj->getOrchestraPIDetails($request);
+            $attatchment =   $pi_obj->getOrchestraAttachment($data,$request);
+            
+            $erpOrders   =   [];
+            $total_qnty  =   0 ; 
+            $sub_total   =   0 ;
+            $erp_obj     =   new ErpOrders();
+
+            if ($data)
+            {
+                if ($data['item_details'][0]->order_flag=="reOrder") 
+                {
+                    $rep_order_id = str_replace(' ', '', $data['item_details'][0]->template_name)."_".$row_id;
+                }
+                else
+                {
+                    $rep_order_id = 0;
+                }
+                
+                $ship_address = $data['ship_to']->address.','.$data['ship_to']->country;
+                $bill_address = $data['bill_to']->address.','.$data['bill_to']->country;
+
+                $pi_details = PI::create([
+                    'buyer_id'         => $buyer_id,
+                    'company_id'       => $data['company_details']->id,
+                    'customer_id'      => $data['bank_details']->id,
+                    'buyer_po_no'      => $data['bank_details']->po,
+                    'uvc_style_no'     => $data['bank_details']->uvc,
+                    'ref_no'           => $data['bank_details']->ref_no,
+                    'shipping_address' => $ship_address,
+                    'billing_address'  => $bill_address,
+                    'place_of_supply'  => $data['bank_details']->place_of_supply,
+                    'revision_no'      => $data['item_details'][0]->pi_rev_no,
+                    'rep_order_id'     => $rep_order_id,
+                    'pi_file'          => $attatchment
+                    
+                ]);
+
+                foreach ($data['item_details'] as $key => $value)
+                {
+                    $unit_cost = 0;
+                    foreach ($data['price_list'] as $i => $val) {
+                        if ($value->item_id == $val->item_id) {
+                            if($value->quantity <= $val->volume_to) {
+                                $unit_cost = $val->price;
+                                $tax = $val->tax;
+                                break;
+                            }
+                        }
+                    }
+                    $total_qnty+= $value->quantity;
+                    $sub_total += $value->quantity *$unit_cost;
+
+                    ProfomaInvoiceItemDetails::create([
+                        'pi_id'       => $pi_details->id,
+                        'material'    => $value->material_name,
+                        'size'        => $value->size,
+                        'template_id' => $value->item_id,
+                        'ref_no'      => $value->ref_no,
+                        'style'       => $value->uvc,
+                        'quantity'    => $value->quantity,
+                        'unit_cost'   => $unit_cost,
+                        'tax'         => $tax
+                    ]);
+                }
+                PI::where('id',$pi_details->id)
+                            ->update([
+                              'total_quantity'   => $total_qnty,
+                              'sub_total'        => $sub_total,
+                              'bill_amount'      => $billamnt
+                            ]);
+            }
+
+            $approved_data   = DB::table($table_name)
+                        ->where('id',$row_id)
+                        ->update([
+                            'pi_status' => "PI Approved",
+                            'pi_id' => $pi_details->id,
+                            'pi_file' => $attatchment, 
+                            'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
+                        ]);
+            $erpOrders['tableName'] = $table_name;
+            $erpOrders['id']        = $row_id;
+            $erpOrders['buyer_id']  = $buyer_id;   
+            $customer_data  = DB::table('customers')->where('id',$data['bank_details']->id)->first();
+
+            if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
+                $erp_obj->updateOrchestraErpOrders($erpOrders);
+            } 
+
+            if ($approved_data)
+            {
+               $result = response()->json(['error'=> false,'message' =>'success'    ],200);
+            }
+            else
+            {
+                $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+	
+    /**
+     * method to reject the proforma invoice
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     * @author <Praveen>
+     */
+    public function rejectOrchestraPI(Request $request)
+    {
+        try
+        {
+            $row_id     =   $request->id;
+            $table_name =   $request->table_name;
+            $table_data =   DB::table($table_name)->where('id',$row_id)->first();
+            $data = DB::table($table_name)
+                        ->where('id',$row_id)
+                         ->update([
+                          'pi_status' => "PI Rejected",
+                          'pi_rev_no' => $table_data->pi_rev_no+1
+                        ]);
+            if ($data)
+            {
+               $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+                $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+    /**
+     * Download Orchestra PI file
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     * @author <Praveen>
+     */
+    public function downloadOrchestraPI(Request $request)
+    {
+         try {
+             $id         =  $request['id'];
+             $table_name =  $request['table_name'];            
+             $result     =  DB::table($table_name)->where('id',$id)->value('pi_file');   
+         }  
+         catch (\Exception $e)
+         {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+         }
+         return $result;
     }
 }
 
