@@ -2024,7 +2024,7 @@ function printWashDiv(data,data_back,data_middle ,dataid) {
 					var code = $(this).find('.barcode').text();
 					
 					$.ajax({
-						url: base_url + "/customer/order-management/get-tsl-size",
+						url: base_url + "/admin/order-management/get-tsl-size",
 						type: 'GET',
 						async: false,
 						data: {
@@ -2049,7 +2049,7 @@ function printWashDiv(data,data_back,data_middle ,dataid) {
 							svgDoc1.getElementById("size2").innerHTML = size_txt.replace(" ", "").toLowerCase() + " / " + size1;
 							svgDoc1.getElementById("parcel_code1").innerHTML = uvc_tco;
 							svgDoc1.getElementById("parcel_code2").innerHTML = uvc_tco;
-							svgDoc1.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -30 135) rotate(270)');
+							svgDoc1.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -33 135) rotate(270)');
 							
 							
 							jsbarcodewash(code, 'barcode', svgDoc1)
@@ -2446,12 +2446,19 @@ function barcode_polybag(id, data) {
 			$td_col = "";
 			$td_size = "";
 			$total = 0;
+			var index_arr=[];
 			$('#solidform tbody tr').each(function () {
+				
+			if(index_arr.includes($(this).find('.size').text()) != true)
+			{
 				if ($(this).find('.size').text() != "") {
-					$td_size += "<td>" + $(this).find('.size').text() + "</td>";
-					$td_col += "<td>" + $(this).find('.qty').text() + "</td>";
-					$total += parseInt($(this).find('.qty').text());
+						index_arr.push($(this).find('.size').text())
+						$td_size += "<td>" + $(this).find('.size').text() + "</td>";
+						$td_col += "<td>" + $(this).find('.qty').text() + "</td>";
+						$total += parseInt($(this).find('.qty').text());
 				}
+			}
+				
 
 
 			})
@@ -2714,7 +2721,7 @@ function label_order_details(uvc) {
                 var text_for_mad_in = '<p>' + $('select.made_in_select' + washcare).find(':selected').data('french') + " - " + $('select.made_in_select' + washcare).find(':selected').data('english') + " - " + $('select.made_in_select' + washcare).find(':selected').data('spanish') + " - " + $('select.made_in_select' + washcare).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + washcare).find(':selected').data('italian') + " - " + $('select.made_in_select' + washcare).find(':selected').data('dutch') + " - " + $('select.made_in_select' + washcare).find(':selected').data('german') + " - " +
                     $('select.made_in_select' + washcare).find(':selected').data('arabic') + " - " +
                     $('select.made_in_select' + washcare).find(':selected').data('greek')  + '</p>';
-                svgDoc.getElementById("country").innerHTML = wordWrap(text_for_mad_in, 30);
+                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
                 
                 svgDoc.getElementById("text_care_instruction").innerHTML = "";
                 $('.care_instruction_select' + washcare + ' option:selected').each(function () {
@@ -2876,6 +2883,8 @@ function washcarelabels(data, dataid) {
             $status_text=str;
             $wcl_name=data.orchestra_wash_care_label_orders[dataid1].template_name;
 			$template_id = data.orchestra_wash_care_label_orders[dataid1].template_id;
+			
+			$print_button_class = "";
         } else {
             
             $exist_id = "";
@@ -2884,6 +2893,7 @@ function washcarelabels(data, dataid) {
             $status_text="";
             $wcl_name="";
 			$template_id = "122";
+			$print_button_class = "hidden";
         }
 
     } else {
@@ -2894,6 +2904,7 @@ function washcarelabels(data, dataid) {
         $status_text="";
         $wcl_name="";
 		$template_id = "122";
+		$print_button_class = "hidden";
     }
     $.each(data.order_details, function (index, value) {
         if (data.orchestra_wash_care_label_orders != "") {
@@ -2968,7 +2979,7 @@ function washcarelabels(data, dataid) {
 		var disney_flag="0";
 	}
 
-    $('.top-content').append('<form id="washcarelabelform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><div class="left-panel col-md-9"> <div class="div-max"> <div class="col-md-3"> <h4>Options</h4> <hr><div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">WCL Name</label><input type="text" class="form-control input-sm" required="" placeholder="WCL Name" value="' + $wcl_name + '" id="wcl_name' + dataid + '"><div class="help-block with-errors"></div></div>  <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Washing</label><select data-live-search="true" class="form-control selectpicker input-sm washing_select' + dataid + '" required>' + washing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Whitening</label><select data-live-search="true" class="form-control selectpicker input-sm whitening_select' + dataid + '" required>' + whitening_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Dryer</label><select data-live-search="true" class="form-control selectpicker input-sm dryer_select' + dataid + '" required>' + dryer_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Ironing</label><select data-live-search="true" class="form-control selectpicker input-sm ironing_select' + dataid + '" required>' + ironing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Cleaning</label><select data-live-search="true" class="form-control selectpicker input-sm cleaning_select' + dataid + '" required>' + cleaning_option + '</select><div class="help-block with-errors"></div></div>'+treestruct+'  </div></div> <div class="col-md-5"> <h4>Art Work</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span> <hr> <div class="section-1 sections"> <div class="sample-artwork"><object style="height: calc( 100vh - 125px );"  id="washcare_svg_front' + dataid + '" data="' + data.orchestra_wash_template_front + '" type="image/svg+xml"></object> <object style="height: calc( 100vh - 125px );margin-left: 10px;"  id="washcare_svg_back' + dataid + '"  data="' + data.orchestra_wash_template_back + '" type="image/svg+xml"></object><object style="height: calc( 100vh - 125px );width: 250px;margin-left: 10px;"  id="washcare_svg_middle' + dataid + '" data="' + data.orchestra_wash_template_middle + '" type="image/svg+xml"></object></div><input type="hidden" value="' + disney_flag + '" id="wash_label_id"></div> </div> <div class="col-md-4 " style="padding-left:0px"> <h4>Options</h4> <hr>'+sizebox+' <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Made In</label><select data-live-search="true" class="form-control selectpicker input-sm made_in_select' + dataid + '" required>' + made_option + '</select><div class="help-block with-errors"></div></div> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Care Instructions</label><select data-live-search="true" class="form-control selectpicker input-sm care_instruction_select' + dataid + '" required multiple>' + instruction_option + '</select><div class="help-block with-errors"></div></div> <div class="section-1 sections"> <h5>Compositions</h5> <select class="selectpicker composition_select' + dataid + '"  data-live-search="true">  ' + composition_option + '  </select><p class="hidden" style="color:red" id="composition_error_required' + dataid + '">Please Select Composition</p> </div> <h5>Percentage</h5> <input type="number" min="1" max="100" class="form-control input-sm composition_percent' + dataid + '"><p class="hidden" style="color:red" id="percentage_error_required' + dataid + '">Please Enter Percentage</p>  <button type="button" class="btn  btn-primary pull-right input-sm add_to_list' + dataid + '" onclick="add_to_list(' + dataid + ')">Add To List</button> <table class="table table-striped table-hover table-condensed"><thead><th>Composition</th><th>Quantity</th></thead><tbody id="composition_table_qty' + dataid + '"></tbody></table><button class="btn  btn-primary pull-right input-sm add_to_composition' + dataid + '"  type="button" disabled onclick="add_to_composition(' + dataid + ')">Add To Composition</button><div><h4>Compositions :</h4><label id="wash_composition_error' + dataid + '" class="hidden" style="color:red">Please Select composition</label><label id="wash_composition_page_error' + dataid + '" class="hidden" style="color:red">Please Add Composition to Page</label><label class="hidden composition_error_hidden" style="color:red">Please select parts</label><div class="row"><table class="table table-striped table-hover table-condensed"><thead><tr><th>Composition Name</th><th>Parts</th><th>Actions</th></tr></thead><tbody id="composition_remove_qty' + dataid + '"></tbody></table><button class="btn  btn-primary pull-right input-sm add_to_page' + dataid + '"  style="position:relative;right:12px" type="button" onclick="add_to_page(' + dataid + ')">Add To Page</button></div></div><div class="parts_none'+dataid+'" style="display:none"><select>' + parts_option + '</select></div> </div> </div> </div></div> <div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for <span class="washlabelnameqty' + dataid + '"> WashCare Label</span></h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal" id="wash_care_label_table" style="font-size:11px"> <thead> <tr> <th>UVC TCO#</th> <th>Size in ANS</th> <th>Barcode</th> <th>Qty.</th> <th><input type="text" class="form-control input-sm extra_percentage" onkeypress="return checkNumbersOnly(event)" placeholder="Extra Qty %" style="float:left;height:20px;"></th> </tr></thead> <tbody style="font-size: 11px">' + tr + ' <tr class="strong"> <td class="text-right" colspan="3">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table><hr>'+ $comment +' <button class="btn btn-primary pull-right input-sm left" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" id="close" type="button">Close</button> <button type="button" class="btn btn-primary" onclick=printWashDiv("washcare_svg_front","washcare_svg_back","washcare_svg_middle",'+dataid+')>Print</button></div> </div>  <div class="backdrop"></div></form>');
+    $('.top-content').append('<form id="washcarelabelform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><div class="left-panel col-md-9"> <div class="div-max"> <div class="col-md-3"> <h4>Options</h4> <hr><div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">WCL Name</label><input type="text" class="form-control input-sm" required="" placeholder="WCL Name" value="' + $wcl_name + '" id="wcl_name' + dataid + '"><div class="help-block with-errors"></div></div>  <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Washing</label><select data-live-search="true" class="form-control selectpicker input-sm washing_select' + dataid + '" required>' + washing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Whitening</label><select data-live-search="true" class="form-control selectpicker input-sm whitening_select' + dataid + '" required>' + whitening_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Dryer</label><select data-live-search="true" class="form-control selectpicker input-sm dryer_select' + dataid + '" required>' + dryer_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Ironing</label><select data-live-search="true" class="form-control selectpicker input-sm ironing_select' + dataid + '" required>' + ironing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Cleaning</label><select data-live-search="true" class="form-control selectpicker input-sm cleaning_select' + dataid + '" required>' + cleaning_option + '</select><div class="help-block with-errors"></div></div>'+treestruct+'  </div></div> <div class="col-md-5"> <h4>Art Work</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span> <hr> <div class="section-1 sections"> <div class="sample-artwork"><object style="height: calc( 100vh - 125px );"  id="washcare_svg_front' + dataid + '" data="' + data.orchestra_wash_template_front + '" type="image/svg+xml"></object> <object style="height: calc( 100vh - 125px );margin-left: 10px;"  id="washcare_svg_back' + dataid + '"  data="' + data.orchestra_wash_template_back + '" type="image/svg+xml"></object><object style="height: calc( 100vh - 125px );width: 250px;margin-left: 10px;"  id="washcare_svg_middle' + dataid + '" data="' + data.orchestra_wash_template_middle + '" type="image/svg+xml"></object></div><input type="hidden" value="' + disney_flag + '" id="wash_label_id"></div> </div> <div class="col-md-4 " style="padding-left:0px"> <h4>Options</h4> <hr>'+sizebox+' <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Made In</label><select data-live-search="true" class="form-control selectpicker input-sm made_in_select' + dataid + '" required>' + made_option + '</select><div class="help-block with-errors"></div></div> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Care Instructions</label><select data-live-search="true" class="form-control selectpicker input-sm care_instruction_select' + dataid + '" required multiple>' + instruction_option + '</select><div class="help-block with-errors"></div></div> <div class="section-1 sections"> <h5>Compositions</h5> <select class="selectpicker composition_select' + dataid + '"  data-live-search="true">  ' + composition_option + '  </select><p class="hidden" style="color:red" id="composition_error_required' + dataid + '">Please Select Composition</p> </div> <h5>Percentage</h5> <input type="number" min="1" max="100" class="form-control input-sm composition_percent' + dataid + '"><p class="hidden" style="color:red" id="percentage_error_required' + dataid + '">Please Enter Percentage</p>  <button type="button" class="btn  btn-primary pull-right input-sm add_to_list' + dataid + '" onclick="add_to_list(' + dataid + ')">Add To List</button> <table class="table table-striped table-hover table-condensed"><thead><th>Composition</th><th>Quantity</th></thead><tbody id="composition_table_qty' + dataid + '"></tbody></table><button class="btn  btn-primary pull-right input-sm add_to_composition' + dataid + '"  type="button" disabled onclick="add_to_composition(' + dataid + ')">Add To Composition</button><div><h4>Compositions :</h4><label id="wash_composition_error' + dataid + '" class="hidden" style="color:red">Please Select composition</label><label id="wash_composition_page_error' + dataid + '" class="hidden" style="color:red">Please Add Composition to Page</label><label class="hidden composition_error_hidden" style="color:red">Please select parts</label><div class="row"><table class="table table-striped table-hover table-condensed"><thead><tr><th>Composition Name</th><th>Parts</th><th>Actions</th></tr></thead><tbody id="composition_remove_qty' + dataid + '"></tbody></table><button class="btn  btn-primary pull-right input-sm add_to_page' + dataid + '"  style="position:relative;right:12px" type="button" onclick="add_to_page(' + dataid + ')">Add To Page</button></div></div><div class="parts_none'+dataid+'" style="display:none"><select>' + parts_option + '</select></div> </div> </div> </div></div> <div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for <span class="washlabelnameqty' + dataid + '"> WashCare Label</span></h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal" id="wash_care_label_table" style="font-size:11px"> <thead> <tr> <th>UVC TCO#</th> <th>Size in ANS</th> <th>Barcode</th> <th>Qty.</th> <th><input type="text" class="form-control input-sm extra_percentage" onkeypress="return checkNumbersOnly(event)" placeholder="Extra Qty %" style="float:left;height:20px;"></th> </tr></thead> <tbody style="font-size: 11px">' + tr + ' <tr class="strong"> <td class="text-right" colspan="3">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table><hr>'+ $comment +' <button class="btn btn-primary pull-right input-sm left" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" id="close" type="button">Close</button> <button type="button" class="btn btn-primary '+$print_button_class+'" id="print_wash_button_'+dataid+'" onclick=printWashDiv("washcare_svg_front","washcare_svg_back","washcare_svg_middle",'+dataid+')>Print</button></div> </div>  <div class="backdrop"></div></form>');
    //$('.left').removeClass('disabled')
 
     $('#washcarelabelform' + dataid + ' .tot_qty_table').keyup(function () {
@@ -3215,7 +3226,7 @@ function washcarelabels(data, dataid) {
                 var text_for_mad_in = '<p>' + $('select.made_in_select' + dataid).find(':selected').data('french') + " - " + $('select.made_in_select' + dataid).find(':selected').data('english') + " - " + $('select.made_in_select' + dataid).find(':selected').data('spanish') + " - " + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + dataid).find(':selected').data('italian') + " - " + $('select.made_in_select' + dataid).find(':selected').data('dutch') + " - " + $('select.made_in_select' + dataid).find(':selected').data('german') + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('greek') + '</p>';
-                svgDoc.getElementById("country").innerHTML = wordWrap(text_for_mad_in, 30);
+                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
 				
                 $('.washing_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].washing_id);
 
@@ -5010,7 +5021,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
                 var text_for_mad_in = '<p>' + $('select.made_in_select' + washcare).find(':selected').data('french') + " - " + $('select.made_in_select' + washcare).find(':selected').data('english') + " - " + $('select.made_in_select' + washcare).find(':selected').data('spanish') + " - " + $('select.made_in_select' + washcare).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + washcare).find(':selected').data('italian') + " - " + $('select.made_in_select' + washcare).find(':selected').data('dutch') + " - " + $('select.made_in_select' + washcare).find(':selected').data('german') + " - " +
                     $('select.made_in_select' + washcare).find(':selected').data('arabic') + " - " +
                     $('select.made_in_select' + washcare).find(':selected').data('greek')  + '</p>';
-                svgDoc.getElementById("country").innerHTML = wordWrap(text_for_mad_in, 30);
+                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
                 
                 svgDoc.getElementById("text_care_instruction").innerHTML = "";
                 $('.care_instruction_select' + washcare + ' option:selected').each(function () {
@@ -5396,7 +5407,7 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
 									 var text_for_mad_in = '<p>' + $('select.made_in_select' + dataid).find(':selected').data('french') + " - " + $('select.made_in_select' + dataid).find(':selected').data('english') + " - " + $('select.made_in_select' + dataid).find(':selected').data('spanish') + " - " + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + dataid).find(':selected').data('italian') + " - " + $('select.made_in_select' + dataid).find(':selected').data('dutch') + " - " + $('select.made_in_select' + dataid).find(':selected').data('german')  + " - " +
 										$('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
 										$('select.made_in_select' + dataid).find(':selected').data('greek') + '</p>';
-									svgDoc.getElementById("country").innerHTML = wordWrap(text_for_mad_in, 30);
+									svgDoc.getElementById("country").innerHTML = text_for_mad_in;
 								}
 
 									svgDoc.getElementById("text_care_instruction").innerHTML = "";
@@ -5480,7 +5491,7 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
                 var text_for_mad_in = '<p>' + $('select.made_in_select' + dataid).find(':selected').data('french') + " - " + $('select.made_in_select' + dataid).find(':selected').data('english') + " - " + $('select.made_in_select' + dataid).find(':selected').data('spanish') + " - " + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + dataid).find(':selected').data('italian') + " - " + $('select.made_in_select' + dataid).find(':selected').data('dutch') + " - " + $('select.made_in_select' + dataid).find(':selected').data('german')  + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('greek')  + '</p>';
-                svgDoc.getElementById("country").innerHTML = wordWrap(text_for_mad_in, 30);
+                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
 
             } else {
 
@@ -5619,7 +5630,7 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
 									 var text_for_mad_in = '<p>' + $('select.made_in_select' + dataid).find(':selected').data('french') + " - " + $('select.made_in_select' + dataid).find(':selected').data('english') + " - " + $('select.made_in_select' + dataid).find(':selected').data('spanish') + " - " + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + dataid).find(':selected').data('italian') + " - " + $('select.made_in_select' + dataid).find(':selected').data('dutch') + " - " + $('select.made_in_select' + dataid).find(':selected').data('german') + " - " +
 										$('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
 										$('select.made_in_select' + dataid).find(':selected').data('greek')  + '</p>';
-									svgDoc.getElementById("country").innerHTML = wordWrap(text_for_mad_in, 30);
+									svgDoc.getElementById("country").innerHTML = text_for_mad_in;
 								}
 
 									svgDoc.getElementById("text_care_instruction").innerHTML = "";
@@ -5703,7 +5714,7 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
                 var text_for_mad_in = '<p>' + $('select.made_in_select' + dataid).find(':selected').data('french') + " - " + $('select.made_in_select' + dataid).find(':selected').data('english') + " - " + $('select.made_in_select' + dataid).find(':selected').data('spanish') + " - " + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + dataid).find(':selected').data('italian') + " - " + $('select.made_in_select' + dataid).find(':selected').data('dutch') + " - " + $('select.made_in_select' + dataid).find(':selected').data('german')  + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
                     $('select.made_in_select' + dataid).find(':selected').data('greek')  + '</p>';
-                svgDoc.getElementById("country").innerHTML = wordWrap(text_for_mad_in, 30);
+                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
 
             } else {
 
@@ -5812,8 +5823,8 @@ function jsbarcode(code, id, svgDoc) {
 function jsbarcodesolidcartonA(code, id, svgDoc) {
 	JsBarcode("#ean-13", code, {
 		format: "ean13",
-		width: 6.1958492847,
-		height: 332.81,
+		width: 6.4,
+		height: 347,
 		fontSize: 50
 	});
 	var svg = document.getElementById('svgdiv').querySelector('svg'),
@@ -5825,9 +5836,9 @@ function jsbarcodesolidcartonA(code, id, svgDoc) {
 		img;
 	// if our "svg" doesn't have 'xmlns' attribute we must add it
 	//    svg.setAttribute('width', '188.931023622px');
-	svg.setAttribute('font-size', '50px');
+	svg.setAttribute('font-size', '54px');
 	svg.setAttribute('font-family', 'calibrib');
-	svg.setAttribute('letter-spacing', '10px');
+	svg.setAttribute('letter-spacing', '15px');
 
 	canvas.id = 'canvas';
 	canvas.width = svg.getBoundingClientRect().width;
@@ -5869,9 +5880,9 @@ function jsbarcodesolidcartonA(code, id, svgDoc) {
 function jsbarcodestdcartonA(code, id, svgDoc) {
 	JsBarcode("#ean-13", code, {
 		format: "ean13",
-		width: 6.1363,
-		height: 328.4706,
-		fontSize: 60
+		width: 6.4,
+		height: 355,
+		fontSize: 50
 	});
 	var svg = document.getElementById('svgdiv').querySelector('svg'),
 		canvas = document.createElement('canvas'),
@@ -5882,8 +5893,9 @@ function jsbarcodestdcartonA(code, id, svgDoc) {
 		img;
 	// if our "svg" doesn't have 'xmlns' attribute we must add it
 	//    svg.setAttribute('width', '188.931023622px');
-	svg.setAttribute('font-size', '70px');
+	svg.setAttribute('font-size', '57px');
 	svg.setAttribute('font-family', 'calibrib');
+	svg.setAttribute('letter-spacing', '15px');
 
 	canvas.id = 'canvas';
 	canvas.width = svg.getBoundingClientRect().width;
@@ -5924,9 +5936,9 @@ function jsbarcodestdcartonA(code, id, svgDoc) {
 function jsbarcodesolidcartonB(code, id, svgDoc) {	
 	JsBarcode("#ean-13", code, {
 		format: "ean13",
-		width: 6.27,
-		height: 322.07,
-		fontSize: 60
+		width: 6.5,
+		height: 345,
+		fontSize: 50
 	});
 	var svg = document.getElementById('svgdiv').querySelector('svg'),
 		canvas = document.createElement('canvas'),
@@ -5937,8 +5949,9 @@ function jsbarcodesolidcartonB(code, id, svgDoc) {
 		img;
 	// if our "svg" doesn't have 'xmlns' attribute we must add it
 	//    svg.setAttribute('width', '188.931023622px');
-	svg.setAttribute('font-size', '70px');
+	svg.setAttribute('font-size', '54px');
 	svg.setAttribute('font-family', 'calibrib');
+	svg.setAttribute('letter-spacing', '15px');
 
 	canvas.id = 'canvas';
 	canvas.width = svg.getBoundingClientRect().width;
@@ -5980,9 +5993,9 @@ function jsbarcodesolidcartonB(code, id, svgDoc) {
 function jsbarcodestdcartonB(code, id, svgDoc) {
 	JsBarcode("#ean-13", code, {
 		format: "ean13",
-		width: 6.207,
-		height: 318.114,
-		fontSize: 60
+		width: 6.43,
+		height: 349,
+		fontSize: 50
 	});
 	var svg = document.getElementById('svgdiv').querySelector('svg'),
 		canvas = document.createElement('canvas'),
@@ -5993,8 +6006,9 @@ function jsbarcodestdcartonB(code, id, svgDoc) {
 		img;
 	// if our "svg" doesn't have 'xmlns' attribute we must add it
 	//    svg.setAttribute('width', '188.931023622px');
-	svg.setAttribute('font-size', '70px');
+	svg.setAttribute('font-size', '53px');
 	svg.setAttribute('font-family', 'calibrib');
+	svg.setAttribute('letter-spacing', '15px');
 
 	canvas.id = 'canvas';
 	canvas.width = svg.getBoundingClientRect().width;
@@ -6035,8 +6049,8 @@ function jsbarcodestdcartonB(code, id, svgDoc) {
 function jsbarcodestdpoly(code, id, svgDoc) {
 	JsBarcode("#ean-13", code, {
 		format: "ean13",
-		width: 6.353,
-		height: 329.82,
+		width:6.595,
+		height: 350,
 		fontSize: 60
 	});
 	var svg = document.getElementById('svgdiv').querySelector('svg'),
@@ -6048,8 +6062,9 @@ function jsbarcodestdpoly(code, id, svgDoc) {
 		img;
 	// if our "svg" doesn't have 'xmlns' attribute we must add it
 	//    svg.setAttribute('width', '188.931023622px');
-	svg.setAttribute('font-size', '70px');
+	svg.setAttribute('font-size', '64px');
 	svg.setAttribute('font-family', 'calibrib');
+	svg.setAttribute('letter-spacing', '12px');
 
 	canvas.id = 'canvas';
 	canvas.width = svg.getBoundingClientRect().width;
@@ -6090,8 +6105,8 @@ function jsbarcodestdpoly(code, id, svgDoc) {
 function jsbarcodesolidpoly(code, id, svgDoc) {
 	JsBarcode("#ean-13", code, {
 		format: "ean13",
-		width: 6.55,
-		height: 355,
+		width: 6.7,
+		height: 370,
 		fontSize: 50
 	});
 	var svg = document.getElementById('svgdiv').querySelector('svg'),
@@ -6105,7 +6120,7 @@ function jsbarcodesolidpoly(code, id, svgDoc) {
 	//    svg.setAttribute('width', '188.931023622px');
 	svg.setAttribute('font-size', '54px');
 	svg.setAttribute('font-family', 'calibrib');
-	svg.setAttribute('letter-spacing', '10px');
+	svg.setAttribute('letter-spacing', '15px');
 
 	canvas.id = 'canvas';
 	canvas.width = svg.getBoundingClientRect().width;
@@ -6148,7 +6163,7 @@ function jsbarcodewash(code, id, svgDoc) {
     JsBarcode("#ean-13", code, {
         format: "ean13",
         width: 5.99,
-        height: 283,
+        height: 288,
 		lineColor: "#1F1A17",
         fontSize: 55
     });
@@ -6163,8 +6178,8 @@ function jsbarcodewash(code, id, svgDoc) {
     //    svg.setAttribute('width', '188.931023622px');
     svg.setAttribute('font-size', '70px');
     svg.setAttribute('font-family', 'ocr-b-10bt');
-    svg.setAttribute('width', '95px');
-    svg.setAttribute('height', '105px');
+    svg.setAttribute('width', '92.5px');
+    svg.setAttribute('height', '120px');
     canvas.id = 'canvas';
     canvas.width = svg.getBoundingClientRect().width;
     canvas.height = svg.getBoundingClientRect().height;
@@ -6747,7 +6762,7 @@ function setWashLabel(index, dataid, id) {
                 $(".loader").show();
             },
             success: function (data) {
-
+				$('#print_wash_button_'+dataid).removeClass('hidden')
             },
             error: function (data) {
 
@@ -7067,7 +7082,7 @@ function clonewashcarelabels(index)
                 var text_for_mad_in = '<p>' + $('select.made_in_select' + washcare).find(':selected').data('french') + " - " + $('select.made_in_select' + washcare).find(':selected').data('english') + " - " + $('select.made_in_select' + washcare).find(':selected').data('spanish') + " - " + $('select.made_in_select' + washcare).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + washcare).find(':selected').data('italian') + " - " + $('select.made_in_select' + washcare).find(':selected').data('dutch') + " - " + $('select.made_in_select' + washcare).find(':selected').data('german') + " - " +
                     $('select.made_in_select' + washcare).find(':selected').data('arabic') + " - " +
                     $('select.made_in_select' + washcare).find(':selected').data('greek')  + '</p>';
-                svgDoc.getElementById("country").innerHTML = wordWrap(text_for_mad_in, 30);
+                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
                 
                 svgDoc.getElementById("text_care_instruction").innerHTML = "";
                 $('.care_instruction_select' + washcare + ' option:selected').each(function () {
