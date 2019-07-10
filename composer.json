@@ -15,7 +15,8 @@
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.5",
         "maatwebsite/excel": "~2.1.0",
-        "symfony/process": "~3.3"
+        "symfony/process": "~3.3",
+        "yajra/laravel-datatables-oracle": "8.4.2"
     },
     "require-dev": {
         "filp/whoops": "~2.0",
