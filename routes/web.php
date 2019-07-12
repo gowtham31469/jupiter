@@ -470,6 +470,13 @@ Route::put('admin/orchestra/update-orchestra-part', 'Admin\Settings\Orchestra\Or
 Route::put('admin/orchestra/make-part-enabled', 'Admin\Settings\Orchestra\OrchestraSettings@makePartEnabled');
 Route::put('admin/orchestra/make-part-disabled', 'Admin\Settings\Orchestra\OrchestraSettings@makePartDisabled');
 
+Route::post('admin/orchestra/settings/color', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraColorCode');
+Route::post('admin/settings/orchestra/add-color-code', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraColorCode');
+Route::get('admin/orchestra/get-orchestra-color-code-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraColorCodeById');
+Route::put('admin/orchestra/make-color-enabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeColorEnabled');
+Route::put('admin/orchestra/make-color-disabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeColorDisabled');
+Route::put('admin/orchestra/update-orchestra-color-code', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraColorCodeById');
+
 Route::post('admin/orchestra/settings/size-chart', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraSizeCharts');
 Route::post('admin/orchestra/add-orchestra-size-chart', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraSizeCharts');
 Route::get('admin/orchestra/get-orchestra-size-chart-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraSizeChartById');
