@@ -24,7 +24,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at) 
 	
 		var csrf_token = $('meta[name="csrf-token"]').attr('content');
 			$.ajax({
-				url: base_url + "/erp/job-manager/get_order_details",
+				url: base_url + "/erp/job-manager/get-order-details",
 				type: "Post",
 				dataType: "json",
 				data: {
@@ -157,10 +157,10 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at) 
 								svgDoc.getElementById("description1").innerHTML = '';
 							}
 							var s = new XMLSerializer();
-							var d = svgRoot;
-							var str = s.serializeToString(d);
-							var svg = encodeURI(str)
-							svgarr.push(svg)
+                            var d = svgRoot;
+                            var str = s.serializeToString(d);
+
+                            svgarr.push(str)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
 							this.tryCount++;
@@ -203,10 +203,10 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at) 
 						svgDoc.getElementById("description").innerHTML = '';
 					}
 					var s = new XMLSerializer();
-					var d = svgRoot;
-					var str = s.serializeToString(d);
-					var svg = encodeURI(str)
-					svgarr.push(svg)
+                            var d = svgRoot;
+                            var str = s.serializeToString(d);
+
+                            svgarr.push(str)
 
 				}
 			} else {
@@ -234,10 +234,10 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at) 
 					svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
 				}
 				var s = new XMLSerializer();
-				var d = svgRoot;
-				var str = s.serializeToString(d);
-				var svg = encodeURI(str)
-				svgarr.push(svg)
+                            var d = svgRoot;
+                            var str = s.serializeToString(d);
+
+                            svgarr.push(str)
 			}
 			ajax_count++;
 		})
@@ -267,7 +267,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at) 
 		var ref_name = [name2.slice(0, position), b, name2.slice(position)].join('').trim();
 		var csrf_token = $('meta[name="csrf-token"]').attr('content');
 			$.ajax({
-				url: base_url + "/erp/job-manager/get_order_details",
+				url: base_url + "/erp/job-manager/get-order-details",
 				type: "Post",
 				dataType: "json",
 				data: {

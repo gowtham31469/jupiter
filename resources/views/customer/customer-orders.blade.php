@@ -360,10 +360,13 @@ background: rgba(0,0,0,0.2);
 		border-bottom: 2px solid;
 	}
 	
+/*
 	.left-panel.active {
     margin-right: 0%;
 }
+*/
 </style>
+<input type="hidden" id="status_flag">
 <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
         <div class="buyer-nav-div hidden">
@@ -679,7 +682,7 @@ background: rgba(0,0,0,0.2);
 @endif @section('jqueryIncludes')      
 <script src="{{ asset('js/Customer/customer-tesco-order.js') }}"></script>
 <script src="{{ asset('js/Customer/tesco-reorder.js') }}"></script>
-<script src="{{ asset('js/Admin/order.js') }}"></script>
+<script src="{{ asset('js/Customer/customer-order.js') }}"></script>
 <script src="{{ asset('js/Admin/parser.js') }}"></script>
 <script src="{{ asset('js/moment.min.js') }}"></script>
 <script src="{{ asset('js/Customer/customer-pi.js') }}"></script>
@@ -691,6 +694,7 @@ background: rgba(0,0,0,0.2);
 <script type="text/javascript" src="http://canvg.github.io/canvg/canvg.js"></script> 
 <script>
     $(document).ready(function() {
+		$('#status_flag').val("Orders")
 		localStorage.removeItem("artwork_back");
 		localStorage.removeItem("back_flag");
 		localStorage.removeItem("order_type_back");

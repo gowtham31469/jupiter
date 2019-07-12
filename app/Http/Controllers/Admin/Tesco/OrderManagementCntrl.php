@@ -2036,18 +2036,46 @@ class OrderManagementCntrl extends Controller
                  if($name != "THL3-sticker")
                  {
                      PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+					 //PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 8, 60, 48, 12, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
                  }
                 else
                 {
                      PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -2, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
                 }
             }
+			
+// new style
+//			$style = array(
+//				'border' => false,
+//				'padding' => 0,
+//				'bgcolor' => false
+//			);
+//			PDF::write2DBarcode('1669116,05057008332096/969,2005100388969', 'QRCODE,Q', 100, 47, 23, 23, $style, 'N');
             
              $i++;
         }
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
         
+		
+//		 $svgarr = explode(',_',$request->svg);
+//        $name=$request->name;
+//        $svg=urldecode($request->svg);
+//        define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
+//        define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
+//        PDF::setPrintHeader(false);
+//        PDF::setPrintFooter(false);
+//        PDF::SetFont('frankgothcnbt');
+//		PDF::AddPage('P', array(49,117));
+//		PDF::SetMargins(0, 0, 0, false);
+//        PDF::SetAutoPageBreak(TRUE);
+//		PDF::setImageScale(1.66);
+//		PDF::ImageSVG(public_path('/storage/app/template/svg_working_2.svg'), $x=0, $y=0, $w=49, $h=117, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+//		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+//		
+//		exec("gs -dSAFER -dBATCH -dNOPAUSE -dNOCACHE -sDEVICE=pdfwrite -sColorConversionStrategy=CMYK -dProcessColorModel=/DeviceCMYK -sOutputFile=".public_path('/storage/app/template/'.$name.'_cmyk.pdf')." ".public_path('/storage/app/template/'.$name.'.pdf'));
+//        
+//        print_r(url('/storage/app/template/'.$name.'_cmyk.pdf'));
         
         
 //      $svgarr = explode(',_',$request->svg);
@@ -4238,62 +4266,27 @@ class OrderManagementCntrl extends Controller
      */
     public function approveTescoOrder(Request $request)
     {
-        try {
+      try {
               /** [ Creating new object for ApproveTescoOrders() class ] */
               $approve_order_obj = new ApproveTescoOrders();
               $buyer_id = DB::table("buyers")->where('buyer_name','ilike','Tesco')->pluck('id')->first();
-              $TCL1_id = $request['tcl1_last_id'];
-              $TCL2_id = $request['tcl2_last_id'];
-              $TSL1_id = $request['tsl1_last_id'];
-              $TCL4_id = $request['tcl4_last_id'];
-              $TSL3_id = $request['tsl3_last_id'];
-              $THL1_id = $request['thl1_last_id'];
-              $THL3_id = $request['thl3_last_id'];
-              
-              if($TCL1_id && $buyer_id)
+
+              $table_array = $request->data_array;
+
+              if(sizeof($table_array) > 0)
               {
-                /** [ Invoking approveTCL1Order function using class instance ] */
-                $approved_order = $approve_order_obj->approveTCL1Order($TCL1_id, $buyer_id);
-              }
-              if($TCL2_id && $buyer_id)
-              {
-                /** [ Invoking approveTCL2Order function using class instance ] */
-                 $approved_order = $approve_order_obj->approveTCL2Order($TCL2_id, $buyer_id);
-              }
-              if($TSL1_id && $buyer_id)
-              {
-                /** [ Invoking approveTSL1Order function using class instance ] */
-                 $approved_order = $approve_order_obj->approveTSL1Order($TSL1_id, $buyer_id);
-              }
-              if($TCL4_id && $buyer_id)
-              {
-                /** [ Invoking approveTCL4Order function using class instance ] */
-                 $approved_order = $approve_order_obj->approveTCL4Order($TCL4_id, $buyer_id);
-              }
-              if($TSL3_id && $buyer_id)
-              {
-                /** [ Invoking approveTSL3Order function using class instance ] */
-                 $approved_order = $approve_order_obj->approveTSL3Order($TSL3_id, $buyer_id);
-              }
-              if($THL1_id && $buyer_id)
-              {
-                /** [ Invoking approveTHL1Order function using class instance ] */
-                 $approved_order = $approve_order_obj->approveTHL1Order($THL1_id, $buyer_id);
-              }
-              if($THL3_id && $buyer_id)
-              {
-                /** [ Invoking approveTHL3Order function using class instance ] */
-                 $approved_order = $approve_order_obj->approveTHL3Order($THL3_id, $buyer_id);
+                /** [ Invoking approveTescoOrderMethod function using class instance ] */
+                $approved_order = $approve_order_obj->approveTescoOrderMethod($table_array, $buyer_id);
               }
             
-            if($approved_order == "approved")
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
+              if($approved_order == "approved")
+              {
+                $result = response()->json(['error'=> false,'message' =>'success'],200);
+              }
+              else
+              {
+                $result = response()->json(['error'=> true,'message' =>'Error'],400);
+              }
 
         } catch (\Exception $e)
         {
@@ -4358,58 +4351,23 @@ class OrderManagementCntrl extends Controller
               /** [ Creating new object for CancelTescoOrders() class ] */
               $cancel_order_obj = new CancelTescoOrders();
               $buyer_id = DB::table("buyers")->where('buyer_name','ilike','Tesco')->pluck('id')->first();
-              $TCL1_id = $request['tcl1_last_id'];
-              $TCL2_id = $request['tcl2_last_id'];
-              $TSL1_id = $request['tsl1_last_id'];
-              $TCL4_id = $request['tcl4_last_id'];
-              $TSL3_id = $request['tsl3_last_id'];
-              $THL1_id = $request['thl1_last_id'];
-              $THL3_id = $request['thl3_last_id'];
               
-              if($TCL1_id && $buyer_id)
+              $table_array = $request->data_array;
+
+              if(sizeof($table_array) > 0)
               {
-                /** [ Invoking cancelTCL1Order function using class instance ] */
-                 $canceled_order = $cancel_order_obj->cancelTCL1Order($TCL1_id, $buyer_id);
-              }
-              if($TCL2_id && $buyer_id)
-              {
-                /** [ Invoking cancelTCL2Order function using class instance ] */
-                 $canceled_order = $cancel_order_obj->cancelTCL2Order($TCL2_id, $buyer_id);
-              }
-              if($TSL1_id && $buyer_id)
-              {
-                /** [ Invoking cancelTSL1Order function using class instance ] */
-                 $canceled_order = $cancel_order_obj->cancelTSL1Order($TSL1_id, $buyer_id);
-              }
-              if($TCL4_id && $buyer_id)
-              {
-                /** [ Invoking cancelTCL4Order function using class instance ] */
-                 $canceled_order = $cancel_order_obj->cancelTCL4Order($TCL4_id, $buyer_id);
-              }
-              if($TSL3_id && $buyer_id)
-              {
-                /** [ Invoking cancelTSL3Order function using class instance ] */
-                 $canceled_order = $cancel_order_obj->cancelTSL3Order($TSL3_id, $buyer_id);
-              }
-              if($THL1_id && $buyer_id)
-              {
-                /** [ Invoking cancelTHL1Order function using class instance ] */
-                 $canceled_order = $cancel_order_obj->cancelTHL1Order($THL1_id, $buyer_id);
-              }
-              if($THL3_id && $buyer_id)
-              {
-                /** [ Invoking cancelTHL3Order function using class instance ] */
-                 $canceled_order = $cancel_order_obj->cancelTHL3Order($THL3_id, $buyer_id);
+                /** [ Invoking cancelTescoOrderMethod function using class instance ] */
+                $canceled_order = $cancel_order_obj->cancelTescoOrderMethod($table_array, $buyer_id);
               }
             
-            if($canceled_order == "cancelled")
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
+              if($canceled_order == "cancelled")
+              {
+                $result = response()->json(['error'=> false,'message' =>'success'],200);
+              }
+              else
+              {
+                $result = response()->json(['error'=> true,'message' =>'Error'],400);
+              }
 
         } catch (\Exception $e)
         {

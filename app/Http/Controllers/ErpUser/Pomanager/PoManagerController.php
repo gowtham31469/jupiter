@@ -311,6 +311,8 @@ class PoManagerController extends Controller
 							->join('erp_status','erp_order_details.status','erp_status.id')
 							->where('erp_order_details.erp_order_id',$id)
                             ->select('erp_order_details.*',$arr_template->template_table.'.template_name','erp_status.status_name')
+							->orderBy('erp_order_details.buyer_po_number','asc')
+							->orderBy('erp_order_details.reference_name','asc')
                             ->get();
 			   
 				$orders   = Erp::where('erp_orders.id',$id)
@@ -383,7 +385,8 @@ class PoManagerController extends Controller
 				$data_erp		=   ErpOrderDetails::where('erp_order_id',$erp_order_id)
 									->whereNotIn('status',$erp_status_ids)
 									->update([
-									  'status' => 3
+									  'status' => 3,
+									  'reason' => $commenttext
 									]);
 				
 				
@@ -419,7 +422,8 @@ class PoManagerController extends Controller
 				$data_erp		=   ErpOrderDetails::where('erp_order_id',$erp_order_id)
 									->whereNotIn('status',$erp_status_ids)
 									->update([
-									  'status' => 3
+									  'status' => 3,
+									  'reason' => $commenttext
 									]);
 				
 				$orderlist   = ErpOrderDetails::join('erp_orders','erp_order_details.erp_order_id','erp_orders.id')
@@ -462,7 +466,8 @@ class PoManagerController extends Controller
 				$data_erp		=   ErpOrderDetails::where('erp_order_id',$erp_order_id)
 									->whereNotIn('status',$erp_status_ids)
 									->update([
-									  'status' => 2
+									  'status' => 2,
+									  'reason' => $commenttext
 									]);
 				
 				$to_email =  DB::table('tesco_error_report_emails')->select('*')->where('id',1)->first();

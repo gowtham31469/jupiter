@@ -33,8 +33,8 @@ class JobManagerController extends Controller
 		$this->middleware('erpuser');
 		// get the current time
 		$this->current_date = Carbon::now('Asia/Kolkata')->format('d-m-Y');
-   
-		}
+
+	}
 		
     /**
      * Show the Jobcard  Manager List View.
@@ -115,7 +115,7 @@ class JobManagerController extends Controller
 											->where('erp_order_details.template_id', '=', $valuess)
 											// ->where('erp_orders.status', '=', $erp_status_id)
 											->where('erp_order_details.status', '=', $erp_status_id)
-											->where('erp_orders.order_status_id', '=', $order_status_id)
+											->where('erp_order_details.order_status_id', '=', $order_status_id)
 											->whereIn('erp_orders.buyer_id', $buyers)
 											->orderBy('erp_order_details.erp_order_id', 'asc')
 											->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id','tesco_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at')
@@ -169,7 +169,7 @@ class JobManagerController extends Controller
 									->where('erp_order_details.reference_name',$ref_name)
 									->where('erp_order_details.buyer_po_number',$buyer_no)
 									->where('erp_order_details.order_type',$order_type)
-									//->where('erp_order_details.created_at',$created_at)
+									->where('erp_order_details.status','!=',4)
 									->orderBy('erp_order_details.id', 'desc')
 									->select('*')
 									->get();
@@ -273,7 +273,7 @@ class JobManagerController extends Controller
 			}
  			sort($order_detail_ids);
 
-			$workorder_id = substr(number_format(Carbon::now('Asia/Kolkata')->timestamp * rand(),0,'',''),0,8);
+			$workorder_id = DB::table('jobcard_main_table')->max('id')+1;
 
 			foreach($order_detail_ids as $key => $order_detail_id)
 			{
@@ -995,7 +995,7 @@ class JobManagerController extends Controller
 		
 				$svgarr = explode(',_',$request->svg);
 				$name=$request->name;
-		        $svg=urldecode($request->svg);
+		       // $svg=urldecode($request->svg);
 				PDF::setImageScale(1);
 				PDF::SetFont('frankgothcnbt');
 				PDF::AddPage();
@@ -1005,7 +1005,7 @@ class JobManagerController extends Controller
 				PDF::SetXY(10, 50);
 				foreach($svgarr as $value)
 				{
-					$svg=urldecode($value);
+					//$svg=urldecode($value);
 					PDF::SetFillColor(255,255,255);
 					if($i == 2)
 					{
@@ -1024,8 +1024,8 @@ class JobManagerController extends Controller
 					$j++;
 			
 					
-					$svg=urldecode($value);
-					file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
+					//$svg=urldecode($value);
+					file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $value);
 					$html = '<img style="width:480px;height:302.36220472px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
 					PDF::writeHTMLCell(127, 80, 15, $yy+1, $html, '', 0, 0, false, 'L', false);
 				
@@ -1233,7 +1233,7 @@ class JobManagerController extends Controller
 		});
 		$svgarr = explode(',_',$request->svg);
 		$name=$request->name;
-    $svg=urldecode($request->svg);
+    //$svg=urldecode($request->svg);
     PDF::setImageScale(1);
     PDF::SetFont('frankgothcnbt');	
 		PDF::AddPage();
@@ -1243,7 +1243,7 @@ class JobManagerController extends Controller
 		PDF::SetXY(10, 50);
 		foreach($svgarr as $value)
 		{
-			$svg=urldecode($value);
+			//$svg=urldecode($value);
 			PDF::SetFillColor(255,255,255);
 			if($i == 3 || $i == 6 || $i == 9 || $i == 15 || $i == 18)
 			{
@@ -1268,7 +1268,7 @@ class JobManagerController extends Controller
 			$j++;
 			
 			
-			file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
+			file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $value);
 			$html = '<img style="width:151.18110236px;height:113.38582677px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
 			PDF::writeHTMLCell(42, 32, $xx, $yy, $html, '', 0, 0, false, 'L', false);
 			$i++;
@@ -1336,40 +1336,6 @@ class JobManagerController extends Controller
            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
        }
     }
-	
-	
-	public function scriptUpdateBuyerNo()
-	{
-		$order_details = DB::table('erp_order_details')->get();
-		
-		foreach($order_details as $value)
-		{
-			
-			
-			$order_details_omp  = 	DB::table($value->order_qnty_table_name)
-									->where('id',$value->order_qnty_table_id)
-									->select('*')
-									->get();
-			
-			$order_table = str_replace("_quanty","",$value->order_qnty_table_name);
-			$order_id  = strtolower(str_replace(" ","",$value->reference_name).'_order_id');
-			
-			$order_omp  = 	DB::table($order_table)
-									->where($order_table.'.id',$order_details_omp{0}->$order_id)
-									->select($order_table.'.*')
-									->get();
-			
-			 $data['custom_name']=DB::table('price_taxation')->where('template_id',$order_omp{0}->template_id)->where('customer_id',$order_omp{0}->tesco_supplier_id)->where('buyer_id',2)->select('*')->get();
-			
-			DB::table('erp_order_details')
-							->where('erp_order_details.id', $value->id)
-							->update([
-								'buyer_po_number'  => $order_omp{0}->po_number,
-								'zone'  => $order_omp{0}->zone,
-								'custom_ref_name'  => $data['custom_name']{0}->custom_name
-							]);
-		}
-	}
 
 	/**
      * Function to get all jobcards list.
@@ -1739,42 +1705,6 @@ class JobManagerController extends Controller
 			return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
 		}
 	}
-	/**
-     * Function to update ordertype value for existing data in erp_order_details table.
-     * @author <Praveen>
-     */
-	public function scriptUpdateOrderType()
-	{
-		$order_details = DB::table('erp_order_details')->get();
-		
-		foreach($order_details as $value)
-		{
-			$order_details_data  = 	DB::table($value->order_qnty_table_name)
-									->where('id',$value->order_qnty_table_id)
-									->select('*')
-									->get();
-			
-			if($order_details_data)
-			{
-				$order_table = str_replace("_quanty","",$value->order_qnty_table_name);
-				$order_id    = strtolower(str_replace(" ","",$value->reference_name).'_order_id');
-				$order_data  = 	DB::table($order_table)
-										->where($order_table.'.id',$order_details_data{0}->$order_id)
-										->select($order_table.'.*')
-										->get();
-				$order_type = $order_data{0}->order_flag;
-			}
-			else
-			{
-				$order_type = 'newOrder';
-			}
-			DB::table('erp_order_details')
-							->where('erp_order_details.id', $value->id)
-							->update([
-								'order_type' => $order_type
-							]);
-		}
-	}
 
 
 	/**
@@ -2112,6 +2042,43 @@ class JobManagerController extends Controller
     			echo $value->order_qnty_table_name;
     		}
     	}
-    }
+		}
+		
+		/**
+		 * Function to update order status id value for existing data in erp_order_details table.
+		 * @author <Praveen>
+		 */
+		public function scriptUpdateOrderStatusId()
+		{
+			$order_details = DB::table('erp_order_details')->get();
+			
+			foreach($order_details as $value)
+			{
+				$order_details_data  = 	DB::table($value->order_qnty_table_name)
+										->where('id',$value->order_qnty_table_id)
+										->select('*')
+										->get();
+				
+				if(sizeof($order_details_data) > 0)
+				{
+					$order_table = str_replace("_quanty","",$value->order_qnty_table_name);
+					$order_id    = strtolower(str_replace(" ","",$value->reference_name).'_order_id');
+					$order_data  = 	DB::table($order_table)
+											->where($order_table.'.id',$order_details_data{0}->$order_id)
+											->select($order_table.'.*')
+											->get();
+					$order_status = $order_data{0}->order_status;
+
+					$order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', $order_status)->first();
+					
+					$data = ErpOrderDetails::where('id',$value->id)
+					->update([
+										'order_status_id'  => $order_status_id->id
+									]);
+									echo  "array size= ".sizeof($order_details_data)." |  order status : ". $order_status. "| code_status : ".$data;
+				}
+				echo  "array size= ".sizeof($order_details_data);
+			}
+		}
 
 }

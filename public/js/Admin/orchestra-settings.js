@@ -9,6 +9,37 @@ var isSubmitting = false;
  * @return {Boolean}
  * @author <praveen>
  */
+
+ /**
+  * Function to hide the error div
+  * @author <sharon>
+  */
+
+ $('#addOrchestraGarmentsModal,#editOrchestraProductFamilyModal,#addOrchestraProductFamilyModal,#editOrchestraCountryModal,#addOrchestraCountryModal,#editOrchestraGarmentsModal,#addOrchestraAgeGroupModal,#editOrchestraAgeGroupModal').on('hidden.bs.modal', function () 
+ {
+  $("#garment_name_result_update").addClass('hidden')
+  $("#garment_name_result").addClass('hidden')
+  $("#age_group_result").addClass('hidden')
+  $("#edit_age_group").addClass('hidden')
+  $("#country_error").addClass('hidden')
+  $("#country_update_error").addClass('hidden')
+  $("#product_code_error").addClass('hidden')
+  $("#product_code_update_error").addClass('hidden')
+})
+
+ $('#addOrchestraSizeChartModal,#editOrchestraSizeChartModal,#editOrchestraPartModal,#addOrchestraPartModal,#editOrchestraCompositionModal,#addOrchestraCompositionModal,#addOrchestraSpecialInstructionModal,#editOrchestraSpecialInstructionModal').on('hidden.bs.modal', function () 
+ {
+  $("#spcl_instruction_error").addClass('hidden')
+  $("#spcl_instruction_update_error").addClass('hidden')
+  $("#composition_error").addClass('hidden')
+  $("#composition_update_error").addClass('hidden')
+  $("#part_error").addClass('hidden')
+  $("#part_update_error").addClass('hidden')
+  $("#size_chart_error").addClass('hidden')
+  $("#size_chart_update_error").addClass('hidden')
+
+})
+
  function isNumber(evt) {
   try{
         evt = (evt) ? evt : window.event;
@@ -144,6 +175,12 @@ function showSnackbar() {
                        $('#addOrchestraGarmentsModal').modal('hide');
                        orchestraSettings()
                   },
+                   208: function() {
+                       $('#garment_name_result').removeClass('hidden');
+                       $('#garment_name_result').removeAttr('style');
+                       $('#garment_name_result').html('Garment name already exists.')
+                       $("#garment_name_result").addClass("alert alert-warning");
+                  },
                   400: function() {
                        $('.snackbar_span').html("Something went wrong!!");
                        showSnackbar();
@@ -243,7 +280,13 @@ function showSnackbar() {
                        showSnackbar();
                        $('#editOrchestraGarmentsModal').modal('hide');
                        orchestraSettings()
-                  }
+                  },
+                  208: function() {
+                       $('#garment_name_result_update').removeClass('hidden');
+                       $('#garment_name_result_update').removeAttr('style');
+                       $('#garment_name_result_update').html('Garment name already exists.')
+                       $("#garment_name_result_update").addClass("alert alert-warning");
+                  },
            },
            error: function(errorXHR, errorStatus, errorThrown) {
               this.tryCount++;
@@ -459,6 +502,12 @@ function showSnackbar() {
                        $('#addOrchestraAgeGroupModal').modal('hide');
                        ageGroup()
                   },
+                  208: function() {
+                       $('#age_group_result').removeClass('hidden');
+                       $('#age_group_result').removeAttr('style');
+                       $('#age_group_result').html('Age group and Color already exists.')
+                       $("#age_group_result").addClass("alert alert-warning");
+                  },
                   400: function() {
                        $('.snackbar_span').html("Something went wrong!!");
                        showSnackbar();
@@ -560,7 +609,13 @@ function showSnackbar() {
                        showSnackbar();
                        $('#editOrchestraAgeGroupModal').modal('hide');
                        ageGroup()
-                  }
+                  },
+              208: function() {
+                       $('#edit_age_group').removeClass('hidden');
+                       $('#edit_age_group').removeAttr('style');
+                       $('#edit_age_group').html('Age group and Color already exists.')
+                       $("#edit_age_group").addClass("alert alert-warning");
+                  },
            },
            error: function(errorXHR, errorStatus, errorThrown) {
               this.tryCount++;
@@ -789,6 +844,12 @@ function countries() {
                        $('#addOrchestraCountryModal').modal('hide');
                        countries()
                   },
+                  208: function() {
+                       $('#country_error').removeClass('hidden');
+                       $('#country_error').removeAttr('style');
+                       $('#country_error').html('Country Name[English] exists.')
+                       $("#country_error").addClass("alert alert-warning");
+                  },
                   400: function() {
                        $('.snackbar_span').html("Something went wrong!!");
                        showSnackbar();
@@ -910,7 +971,13 @@ function countries() {
                        showSnackbar();
                        $('#editOrchestraCountryModal').modal('hide');
                        countries()
-                  }
+                  },
+                  208: function() {
+                       $('#country_update_error').removeClass('hidden');
+                       $('#country_update_error').removeAttr('style');
+                       $('#country_update_error').html('Country Name[English] exists.')
+                       $("#country_update_error").addClass("alert alert-warning");
+                  },
            },
            error: function(errorXHR, errorStatus, errorThrown) {
               this.tryCount++;
@@ -1130,6 +1197,12 @@ function countries() {
                          $('#addOrchestraProductFamilyModal').modal('hide');
                          productFamily()()
                     },
+                    208: function() {
+                       $('#product_code_error').removeClass('hidden');
+                       $('#product_code_error').removeAttr('style');
+                       $('#product_code_error').html('Product family code already exists.')
+                       $("#product_code_error").addClass("alert alert-warning");
+                      },
                     400: function() {
                          $('.snackbar_span').html("Something went wrong!!");
                          showSnackbar();
@@ -1237,7 +1310,13 @@ function countries() {
                        showSnackbar();
                        $('#editOrchestraProductFamilyModal').modal('hide');
                        productFamily()()
-                  }
+                  },
+                   208: function() {
+                       $('#product_code_update_error').removeClass('hidden');
+                       $('#product_code_update_error').removeAttr('style');
+                       $('#product_code_update_error').html('Product family code already exists.')
+                       $("#product_code_update_error").addClass("alert alert-warning");
+                      },
            },
            error: function(errorXHR, errorStatus, errorThrown) {
               this.tryCount++;
@@ -1466,6 +1545,12 @@ function countries() {
                        $('#addOrchestraSpecialInstructionModal').modal('hide');
                        specialInstruction() 
                   },
+                  208: function() {
+                       $('#spcl_instruction_error').removeClass('hidden');
+                       $('#spcl_instruction_error').removeAttr('style');
+                       $('#spcl_instruction_error').html('Special Instruction[English] already exists.')
+                       $("#spcl_instruction_error").addClass("alert alert-warning");
+                      },
                   400: function() {
                        $('.snackbar_span').html("Something went wrong!!");
                        showSnackbar();
@@ -1587,7 +1672,13 @@ function countries() {
                        showSnackbar();
                        $('#editOrchestraSpecialInstructionModal').modal('hide');
                        specialInstruction()
-                  }
+                  },
+                   208: function() {
+                       $('#spcl_instruction_update_error').removeClass('hidden');
+                       $('#spcl_instruction_update_error').removeAttr('style');
+                       $('#spcl_instruction_update_error').html('Special Instruction[English] already exists.')
+                       $("#spcl_instruction_update_error").addClass("alert alert-warning");
+                      },
            },
            error: function(errorXHR, errorStatus, errorThrown) {
               this.tryCount++;
@@ -1815,6 +1906,12 @@ function countries() {
                        $('#addOrchestraCompositionModal').modal('hide');
                        compositions() 
                   },
+                  208: function() {
+                       $('#composition_error').removeClass('hidden');
+                       $('#composition_error').removeAttr('style');
+                       $('#composition_error').html('Composition[English] already excists.')
+                       $("#composition_error").addClass("alert alert-warning");
+                  },
                   400: function() {
                        $('.snackbar_span').html("Something went wrong!!");
                        showSnackbar();
@@ -1936,7 +2033,13 @@ function countries() {
                        showSnackbar();
                        $('#editOrchestraCompositionModal').modal('hide');
                        compositions()
-                  }
+                  },
+                  208: function() {
+                       $('#composition_update_error').removeClass('hidden');
+                       $('#composition_update_error').removeAttr('style');
+                       $('#composition_update_error').html('Composition[English] already excists.')
+                       $("#composition_update_error").addClass("alert alert-warning");
+                  },
            },
            error: function(errorXHR, errorStatus, errorThrown) {
               this.tryCount++;
@@ -2164,6 +2267,12 @@ function countries() {
                        $('#addOrchestraPartModal').modal('hide');
                        parts(); 
                   },
+                  208: function() {
+                       $('#part_error').removeClass('hidden');
+                       $('#part_error').removeAttr('style');
+                       $('#part_error').html('Part Name[English] exists.')
+                       $("#part_error").addClass("alert alert-warning");
+                  },
                   400: function() {
                        $('.snackbar_span').html("Something went wrong!!");
                        showSnackbar();
@@ -2280,12 +2389,18 @@ function countries() {
            statusCode: {
 
                 /** [ Show response status based on HTTP status code ] */
-                200: function() {
+                 200: function() {
                        $('.snackbar_span').html("Part Updated Successfully");
                        showSnackbar();
                        $('#editOrchestraPartModal').modal('hide');
                        parts();
-                  }
+                  },
+                  208: function() {
+                       $('#part_update_error').removeClass('hidden');
+                       $('#part_update_error').removeAttr('style');
+                       $('#part_update_error').html('Part Name[English] exists.')
+                       $("#part_update_error").addClass("alert alert-warning");
+                  },
            },
            error: function(errorXHR, errorStatus, errorThrown) {
               this.tryCount++;
@@ -2502,6 +2617,12 @@ function countries() {
                        $('#addOrchestraSizeChartModal').modal('hide');
                        sizeChart(); 
                   },
+                   208: function() {
+                       $('#size_chart_error').removeClass('hidden');
+                       $('#size_chart_error').removeAttr('style');
+                       $('#size_chart_error').html('Age already exists.')
+                       $("#size_chart_error").addClass("alert alert-warning");
+                      },
                   400: function() {
                        $('.snackbar_span').html("Something went wrong!!");
                        showSnackbar();
@@ -2605,7 +2726,13 @@ function countries() {
                        showSnackbar();
                        $('#editOrchestraSizeChartModal').modal('hide');
                        sizeChart();
-                  }
+                  },
+                   208: function() {
+                       $('#size_chart_update_error').removeClass('hidden');
+                       $('#size_chart_update_error').removeAttr('style');
+                       $('#size_chart_update_error').html('Age already exists.')
+                       $("#size_chart_update_error").addClass("alert alert-warning");
+                      },
            },
            error: function(errorXHR, errorStatus, errorThrown) {
               this.tryCount++;
@@ -2826,9 +2953,10 @@ function addOrchestraSymbols(cofreet_symbols, astms_symbol, category_id, care_in
                         $('#addOrchestraSymbolsModal').modal('hide');
                         orchestraSymbols();
                 },
-                400: function() {
-                        $('.snackbar_span').html('Something went wrong');
-                        showSnackbar();
+                422: function() {
+                        $('.hidden-error').html('<div class="alert alert-warning">\
+                        Invalid File Format\
+                      </div>')
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {

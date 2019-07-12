@@ -237,7 +237,7 @@ class TemplateController extends Controller
                                 ->select($buyer.'_template.*',$buyer.'_item_master.ref_no',$buyer.'_item_master.company_id','company.name as company_name')
                                 ->join($buyer.'_item_master',$buyer.'_item_master.id','=',$buyer.'_template.item_id')
                                 ->join('company','company.id','=',$buyer.'_item_master.company_id')
-                                ->where('item_id',$template_id)
+                                ->where('item_id',$template_id)->orderBy('orchestra_template.id','asc')
                                 ->get();
          return json_encode($treeviewData);
     } 

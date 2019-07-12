@@ -92,13 +92,24 @@ class OrchestraSettings extends Controller
     public function addOrchestraGarments(Request $request)
     {
         try {
-            $inserted = OrchestraGarments::create([
+           $is_exists = OrchestraGarments::where('garment_name','ilike',$request['name'])->select('id')->get();
+             if(sizeof($is_exists) > 0)
+             {
+               $result = response()->json(['error'=> true,'message' =>'Garment Name Already Exists'],208);
+             }
+             else{
+              $inserted = OrchestraGarments::create([
                         'garment_name' => $request['name']
-                      ]);
-            
-            $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+                      ]);   
 
-        } catch (\Exception $e)
+
+            $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+             }
+            
+           
+
+        } 
+        catch (\Exception $e)
         {
             $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
@@ -132,13 +143,23 @@ class OrchestraSettings extends Controller
     try {
           $id        = $request['id'];
           $name      = $request['name'];
-          
-          OrchestraGarments::where('id',$id)
+
+           $is_exists = OrchestraGarments::where('garment_name','ilike',$request['name'])->select('id')->get();
+             if(sizeof($is_exists) > 0)
+             {
+               $result = response()->json(['error'=> true,'message' =>'Garment Name Already Exists'],208);
+             }
+             else{
+                  $updated = OrchestraGarments::where('id',$id)
            ->update([
              'garment_name' => $name
           ]);
 
-          $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+             }
+        
+
+          // $result = response()->json(['error'=> false,'message' =>'Success'],200);
         
         } catch (\Exception $e)
         {
@@ -178,7 +199,7 @@ class OrchestraSettings extends Controller
       public function makeGarmentDisabled(Request $request)
       {
         try {
-              $id      = $request['id'];
+              $id  = $request['id'];
               
               OrchestraGarments::where('id',$id)
                ->update([
@@ -217,11 +238,35 @@ class OrchestraSettings extends Controller
     public function addOrchestraAgeGroup(Request $request)
     {
         try {
+
+           $is_exists= OrchestraAgeGroup::where('age_group_name','ilike',$request['name'])->where('color','ilike',$request['color'])->select('id')->get();
+           // $is_exists_color= OrchestraAgeGroup::where('color','ilike',$request['color'])->select('id')->get();
+
+             if(sizeof($is_exists) > 0 )
+             {
+              // if(sizeof($is_exists_age) > 0 )
+              // {
+              //   $result = response()->json(['error'=> true,'message' =>'Age group name already exists'],208); 
+              // }
+              // if(sizeof($is_exists_color) > 0 )
+              // {
+              //   $result = response()->json(['error'=> true,'message' =>'Color already exists'],208); 
+              // }
+              // if(sizeof($is_exists_age) > 0 && sizeof($is_exists_color) > 0 )
+              // {
+              //   $result = response()->json(['error'=> true,'message' =>'Age group name and Color already exists'],208);
+              // }
+              $result = response()->json(['error'=> true,'message' =>'Age group name & Color  already exists'],208); 
+             }
+          else
+          {
             $inserted = OrchestraAgeGroup::create([
                         'age_group_name' => $request['name'],
                         'color'          => $request['color']
                       ]);
-            $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+            $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400); 
+          }
+           
 
         } catch (\Exception $e)
         {
@@ -257,14 +302,27 @@ class OrchestraSettings extends Controller
     try {
           $id        = $request['id'];
           $name      = $request['name'];
-          $color     = $request['color'];          
-          OrchestraAgeGroup::where('id',$id)
+          $color     = $request['color'];   
+
+
+           $is_exists= OrchestraAgeGroup::where('age_group_name','ilike',$request['name'])->where('color','ilike',$request['color'])->select('id')->get();
+
+            if(sizeof($is_exists) > 0 )
+             {
+
+              $result = response()->json(['error'=> true,'message' =>'Age group name & Color  already exists'],208); 
+             }
+           else{
+               $updated = OrchestraAgeGroup::where('id',$id)
            ->update([
              'age_group_name' => $name,
              'color'          => $color
           ]);
 
-          $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+           }       
+        
+          // $result = response()->json(['error'=> false,'message' =>'Success'],200);
         
         } catch (\Exception $e)
         {
@@ -343,7 +401,14 @@ class OrchestraSettings extends Controller
     public function addOrchestraCountry(Request $request)
     {
         try {
-            $inserted = OrchestraCountries::create([
+
+        $is_exists = OrchestraCountries::where('english','ilike',$request['english'])->select('id')->get();
+         if(sizeof($is_exists) > 0)
+          {
+              $result = response()->json(['error'=> true,'message' =>'Country Name[English] Already Exists'],208);
+          }
+          else{
+             $inserted = OrchestraCountries::create([
                         'english'    => $request['english'],
                         'french'     => $request['french'],
                         'spanish'    => $request['spanish'],
@@ -357,9 +422,12 @@ class OrchestraSettings extends Controller
                         'greek'      => $request['greek'],
                         'turkish'    => $request['turkish']
                       ]);
-            $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
 
-        } catch (\Exception $e)
+            $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+          }
+          
+        }
+         catch (\Exception $e)
         {
             $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
@@ -391,9 +459,16 @@ class OrchestraSettings extends Controller
     public function updateOrchestraCountryById(Request $request)
     {
     try {
-          $id        = $request['id'];
-                   
-          OrchestraCountries::where('id',$id)
+          $id = $request['id'];
+
+          $is_exists = OrchestraCountries::where('english','ilike',$request['english'])->select('id')->get();
+
+         if(sizeof($is_exists) > 0)
+          {
+              $result = response()->json(['error'=> true,'message' =>'Country Name[English] Already Exists'],208);
+          }
+          else{
+          $updated = OrchestraCountries::where('id',$id)
            ->update([
             'english'    => $request['english'],
             'french'     => $request['french'],
@@ -409,7 +484,9 @@ class OrchestraSettings extends Controller
             'turkish'    => $request['turkish']
           ]);
 
-          $result = response()->json(['error'=> false,'message' =>'Success'],200);
+           $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+         }
+          // $result = response()->json(['error'=> false,'message' =>'Success'],200);
         
         } catch (\Exception $e)
         {
@@ -488,6 +565,17 @@ class OrchestraSettings extends Controller
     public function addOrchestraProductFamily(Request $request)
     {
         try {
+
+
+
+          $is_exists = OrchestraProductFamily::where('code','ilike',$request['code'])->select('id')->get();
+
+         if(sizeof($is_exists) > 0)
+          {
+              $result = response()->json(['error'=> true,'message' =>'Product Family Code Already Exists'],208);
+          }
+          else{
+
             $inserted = OrchestraProductFamily::create([
                         'code'       => $request['code'],
                         'english'    => $request['english'],
@@ -495,6 +583,7 @@ class OrchestraSettings extends Controller
                         'arabic'     => $request['arabic']
                       ]);
             $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+          }
 
         } catch (\Exception $e)
         {
@@ -528,8 +617,17 @@ class OrchestraSettings extends Controller
     public function updateOrchestraProductFamilyById(Request $request)
     {
     try {
-          $id        = $request['id'];
-          OrchestraProductFamily::where('id',$id)
+          $id = $request['id'];
+
+           $is_exists = OrchestraProductFamily::where('code','ilike',$request['code'])->select('id')->get();
+
+         if(sizeof($is_exists) > 0)
+          {
+              $result = response()->json(['error'=> true,'message' =>'Product Family Code Already Exists'],208);
+          }
+          else{
+
+         $updated= OrchestraProductFamily::where('id',$id)
            ->update([
               'code'       => $request['code'],
               'english'    => $request['english'],
@@ -537,7 +635,9 @@ class OrchestraSettings extends Controller
               'arabic'     => $request['arabic']
           ]);
 
-          $result = response()->json(['error'=> false,'message' =>'Success'],200);
+          $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+         }
+          // $result = response()->json(['error'=> false,'message' =>'Success'],200);
         
         } catch (\Exception $e)
         {
@@ -616,6 +716,14 @@ class OrchestraSettings extends Controller
     public function addOrchestraSpecialInstructions(Request $request)
     {
         try {
+
+          $is_exists = OrchestraSpecialInstructions::where('english','ilike',$request['english'])->select('id')->get();
+
+         if(sizeof($is_exists) > 0)
+          {
+              $result = response()->json(['error'=> true,'message' =>'Special Instruction[English] Already Exists'],208);
+          }
+          else{
             $inserted = OrchestraSpecialInstructions::create([
                         'english'    => $request['english'],
                         'french'     => $request['french'],
@@ -631,6 +739,7 @@ class OrchestraSettings extends Controller
                         'turkish'    => $request['turkish']
                       ]);
             $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+          }
 
         } catch (\Exception $e)
         {
@@ -665,8 +774,14 @@ class OrchestraSettings extends Controller
     {
     try {
           $id        = $request['id'];
-                   
-          OrchestraSpecialInstructions::where('id',$id)
+         $is_exists = OrchestraSpecialInstructions::where('english','ilike',$request['english'])->select('id')->get();
+
+         if(sizeof($is_exists) > 0)
+          {
+              $result = response()->json(['error'=> true,'message' =>'Special Instruction[English] Already Exists'],208);
+          }
+          else{          
+          $updated=OrchestraSpecialInstructions::where('id',$id)
            ->update([
             'english'    => $request['english'],
             'french'     => $request['french'],
@@ -682,7 +797,7 @@ class OrchestraSettings extends Controller
             'turkish'    => $request['turkish']
           ]);
 
-          $result = response()->json(['error'=> false,'message' =>'Success'],200);
+    $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);        }
         
         } catch (\Exception $e)
         {
@@ -761,6 +876,13 @@ class OrchestraSettings extends Controller
     public function addOrchestraCompositions(Request $request)
     {
         try {
+          $is_exists = OrchestraCompositions::where('english','ilike',$request['english'])->select('id')->get();
+
+         if(sizeof($is_exists) > 0)
+          {
+              $result = response()->json(['error'=> true,'message' =>'Composition[English] Already Exists'],208);
+          }
+          else{
             $inserted = OrchestraCompositions::create([
                         'english'    => $request['english'],
                         'french'     => $request['french'],
@@ -776,6 +898,7 @@ class OrchestraSettings extends Controller
                         'turkish'    => $request['turkish']
                       ]);
             $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+          }
 
         } catch (\Exception $e)
         {
@@ -809,9 +932,15 @@ class OrchestraSettings extends Controller
     public function updateOrchestraCompositionById(Request $request)
     {
     try {
-          $id        = $request['id'];
-                   
-          OrchestraCompositions::where('id',$id)
+          $id = $request['id'];
+          $is_exists = OrchestraCompositions::where('english','ilike',$request['english'])->select('id')->get();
+
+         if(sizeof($is_exists) > 0)
+          {
+              $result = response()->json(['error'=> true,'message' =>'Composition[English] Already Exists'],208);
+          }
+          else{
+          $updated = OrchestraCompositions::where('id',$id)
            ->update([
             'english'    => $request['english'],
             'french'     => $request['french'],
@@ -827,7 +956,9 @@ class OrchestraSettings extends Controller
             'turkish'    => $request['turkish']
           ]);
 
-          $result = response()->json(['error'=> false,'message' =>'Success'],200);
+          // $result = response()->json(['error'=> false,'message' =>'Success'],200);
+           $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+        }
         
         } catch (\Exception $e)
         {
@@ -906,6 +1037,15 @@ class OrchestraSettings extends Controller
     public function addOrchestraParts(Request $request)
     {
         try {
+           
+          $id = $request['id'];
+          $is_exists = OrchestraParts::where('english','ilike',$request['english'])->select('id')->get();
+
+         if(sizeof($is_exists) > 0)
+          {
+              $result = response()->json(['error'=> true,'message' =>'Composition[English] Already Exists'],208);
+          }
+          else{
             $inserted = OrchestraParts::create([
                         'english'    => $request['english'],
                         'french'     => $request['french'],
@@ -921,6 +1061,7 @@ class OrchestraSettings extends Controller
                         'turkish'    => $request['turkish']
                       ]);
             $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+          }
 
         } catch (\Exception $e)
         {
@@ -954,9 +1095,16 @@ class OrchestraSettings extends Controller
     public function updateOrchestraPartById(Request $request)
     {
     try {
-          $id        = $request['id'];
-                   
-          OrchestraParts::where('id',$id)
+          $id = $request['id'];
+
+          $is_exists = OrchestraParts::where('english','ilike',$request['english'])->select('id')->get();
+
+         if(sizeof($is_exists) > 0)
+          {
+              $result = response()->json(['error'=> true,'message' =>'Composition[English] Already Exists'],208);
+          }
+          else{        
+          $updated = OrchestraParts::where('id',$id)
            ->update([
             'english'    => $request['english'],
             'french'     => $request['french'],
@@ -972,9 +1120,12 @@ class OrchestraSettings extends Controller
             'turkish'    => $request['turkish']
           ]);
 
-          $result = response()->json(['error'=> false,'message' =>'Success'],200);
+          // $result = response()->json(['error'=> false,'message' =>'Success'],200);
+             $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+         }
         
-        } catch (\Exception $e)
+        }
+         catch (\Exception $e)
         {
                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
@@ -1051,12 +1202,20 @@ class OrchestraSettings extends Controller
     public function addOrchestraSizeCharts(Request $request)
     {
         try {
+        $is_exists = OrchestraSizeCharts::where('age','ilike',$request['age'])->select('id')->get();
+
+         if(sizeof($is_exists) > 0)
+          {
+              $result = response()->json(['error'=> true,'message' =>'Composition[English] Already Exists'],208);
+          }
+          else{ 
             $inserted = OrchestraSizeCharts::create([
                         'age'    => $request['age'],
                         'cm'     => $request['cm'],
                         'in'     => $request['in']
                       ]);
             $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+          }
 
         } catch (\Exception $e)
         {
@@ -1090,16 +1249,25 @@ class OrchestraSettings extends Controller
     public function updateOrchestraSizeChartById(Request $request)
     {
     try {
-          $id        = $request['id'];
-                   
-          OrchestraSizeCharts::where('id',$id)
+          $id = $request['id'];
+          
+            $is_exists = OrchestraSizeCharts::where('age','ilike',$request['age'])->select('id')->get();
+
+         if(sizeof($is_exists) > 0)
+          {
+              $result = response()->json(['error'=> true,'message' =>'Composition[English] Already Exists'],208);
+          }
+          else{ 
+          $updated = OrchestraSizeCharts::where('id',$id)
            ->update([
             'age'    => $request['age'],
             'cm'     => $request['cm'],
             'in'     => $request['in']
           ]);
 
-          $result = response()->json(['error'=> false,'message' =>'Success'],200);
+          $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+          // $result = response()->json(['error'=> false,'message' =>'Success'],200);
+        }
         
         } catch (\Exception $e)
         {
@@ -1179,6 +1347,8 @@ class OrchestraSettings extends Controller
     public function addOrchestraSymbols(Request $request)
     {
         try {
+
+          
           $destination_path='images/WashCareSymbols/';
           $destination_path_db='/images/WashCareSymbols/';
           $cofreet_symbols= $request->file('cofreet_symbols');
@@ -1187,44 +1357,54 @@ class OrchestraSettings extends Controller
           $cofreet_symbols_orname = $cofreet_symbols->getClientOriginalName();
           $astms_symbol_orname = $astms_symbol->getClientOriginalName();
 
-          $cofreet_symbols_filename= str_random(6).'_'.$cofreet_symbols_orname;
-          $astms_symbol_filename= str_random(6).'_'.$astms_symbol_orname;
+          $cofreet_extension = $cofreet_symbols->getClientOriginalExtension();
+          $astms_extension = $astms_symbol->getClientOriginalExtension();
 
-            switch($request->category_id){
-              case 1:
-                $upload_path = 'Washing/';
-                break;
-              case 2:
-                $upload_path = 'Whitening/';
-                break;
-              case 3:
-                $upload_path = 'Dryer/';
-                break;
-              case 4:
-                $upload_path = 'Ironing/';
-                break;
-              case 5:
-                $upload_path = 'Cleaning/';
-                break;
-              default:
-                $upload_path = 'Washing/';
-                break;
-            }
+          if($cofreet_extension === 'png' && $astms_extension === 'png')
+          {
+            $cofreet_symbols_filename= str_random(6).'_'.$cofreet_symbols_orname;
+            $astms_symbol_filename= str_random(6).'_'.$astms_symbol_orname;
 
-            $cofreet_symbols->move($destination_path.$upload_path,$cofreet_symbols_filename);
-            $astms_symbol->move($destination_path.$upload_path,$astms_symbol_filename);
-  
-            $cofreet_path_insert=$destination_path_db.$upload_path.$cofreet_symbols_filename;
-            $astms_path_insert=$destination_path_db.$upload_path.$astms_symbol_filename;
+              switch($request->category_id){
+                case 1:
+                  $upload_path = 'Washing/';
+                  break;
+                case 2:
+                  $upload_path = 'Whitening/';
+                  break;
+                case 3:
+                  $upload_path = 'Dryer/';
+                  break;
+                case 4:
+                  $upload_path = 'Ironing/';
+                  break;
+                case 5:
+                  $upload_path = 'Cleaning/';
+                  break;
+                default:
+                  $upload_path = 'Washing/';
+                  break;
+              }
 
-            $inserted = DB::table('orchestra_care_symbols')->insert([
-                'category_id'     =>  $request->category_id,
-                'cofreet_symbols' =>  $cofreet_path_insert,
-                'astms_symbol'    =>  $astms_path_insert,
-                'care_instruction'=>  $request->care_instruction
-            ]);
+              $cofreet_symbols->move($destination_path.$upload_path,$cofreet_symbols_filename);
+              $astms_symbol->move($destination_path.$upload_path,$astms_symbol_filename);
+    
+              $cofreet_path_insert=$destination_path_db.$upload_path.$cofreet_symbols_filename;
+              $astms_path_insert=$destination_path_db.$upload_path.$astms_symbol_filename;
 
-            $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+              $inserted = DB::table('orchestra_care_symbols')->insert([
+                  'category_id'     =>  $request->category_id,
+                  'cofreet_symbols' =>  $cofreet_path_insert,
+                  'astms_symbol'    =>  $astms_path_insert,
+                  'care_instruction'=>  $request->care_instruction
+              ]);
+          }
+          else   
+          {
+            $inserted = '';
+          }
+
+          $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Unprocessable Format'],422);
 
         } catch (\Exception $e)
         {

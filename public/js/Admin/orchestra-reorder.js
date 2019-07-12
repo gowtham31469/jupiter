@@ -20,7 +20,7 @@ function reOrder()
 		},
 		success: function (data) {
 			
-			var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_polybag_sticker_orders)))))));
+			var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_poly_bag_sticker_orders)))))));
 			var uniqueNames = [];
 				for(i = 0; i< newObj.length; i++){    
 					if(uniqueNames.indexOf(newObj[i].uvc) === -1){
@@ -69,7 +69,7 @@ function reorderartworks()
 
 			},
 			success: function (data) {
-				var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_polybag_sticker_orders)))))));
+				var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_poly_bag_sticker_orders)))))));
 				$(newObj).each(function(key,index){
 					if(index.Labeltype == "Label")
 					{
@@ -167,7 +167,7 @@ function extraQuantity(type,id)
 				reorderStdCarton(data);
 				StdStickerQty(data)
 			}
-			else if(type == "orchestra_standard_polybag_sticker_orders")
+			else if(type == "orchestra_standard_poly_bag_sticker_orders")
 			{
 				reorderStdPoly(data);
 				StdStickerQty(data)

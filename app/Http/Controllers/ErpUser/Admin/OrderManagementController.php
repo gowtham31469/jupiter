@@ -6,50 +6,24 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use View;
 use Session;
+use DB;
 
 class OrderManagementController extends Controller
 {
+	private $order_status_id;
     /**
-     * Display a listing of the resource.
+     * Create a new controller instance.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function index()
+    public function __construct()
     {
-        //
-    }
+		$this->middleware('erpuser');
+		// get order cancelled status id
+		$this->order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', 'Order Cancelled')->first();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+	}
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Request $request)
-    {
-        
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -111,6 +85,19 @@ class OrderManagementController extends Controller
 				\App\ErpOrderDetails::where('id', $request->id)->restore();
 				
 				$erp_order = \App\ErpOrderDetails::where('id', $request->id)->get();
+				$order_qty_table = $erp_order{0}->order_qnty_table_name;
+				$order_qnty_table_id = $erp_order{0}->order_qnty_table_id;
+				$buyer_name = \App\ErpOrders::where('erp_orders.id', $erp_order{0}->erp_order_id)->select('buyer_name')->join('buyers', 'buyers.id', 'erp_orders.buyer_id')->first();
+
+				// update individual row quanity to 0 in artworks orders table.
+				if($buyer_name->buyer_name === 'Tesco')
+				{
+				    DB::table($order_qty_table)->where('id',$order_qnty_table_id)->update(['count' => 0]);
+				} else  
+				{
+				    DB::table($order_qty_table)->where('id',$order_qnty_table_id)->update(['quantity' => 0]);
+				}
+
 				$erp_order_id = $erp_order{0}->erp_order_id;
 				
 				$erp_order_details = \App\ErpOrderDetails::where('erp_order_id', $erp_order_id)->get();
@@ -121,7 +108,8 @@ class OrderManagementController extends Controller
 				}
 				
 				\App\ErpOrderDetails::where('id', $request->id)->update([
-					'status'	=> 4
+					'status'	=> 4,
+					'order_status_id' => $this->order_status_id->id
 				]);
 				
 				$erp_cancel_count = \App\ErpOrderDetails::where('erp_order_id', $erp_order_id)->where('status', 4)->get();
@@ -188,9 +176,45 @@ class OrderManagementController extends Controller
 				\App\ErpOrders::where('id', $request->id)->update([
 					'status'	=> 4
 				]);
+
+				/**
+				 * Update order status in orders table
+				 */
+				$erp_order_details = \App\ErpOrderDetails::where('erp_order_id', $request->id)->get();
+				$buyer_name = \App\ErpOrders::where('erp_orders.id', $erp_order_details{0}->erp_order_id)->select('buyer_name')->join('buyers', 'buyers.id', 'erp_orders.buyer_id')->first();
+
+				foreach($erp_order_details as $erp_data)
+				{
+					$order_qty_table = $erp_data->order_qnty_table_name;
+					$order_qnty_table_id = $erp_data->order_qnty_table_id;
+
+					// make orders cancelled in artwork table
+					if($buyer_name->buyer_name === 'Tesco')
+					{
+						$qnty_id  =  str_replace("_orders_quanty","_order_id",str_replace("tesco_","",$order_qty_table));
+						$main_table  = str_replace("_quanty","",$order_qty_table);
+					} 
+					else  
+					{
+						// get the first letter of each word for a given string
+						$result_str  =  str_replace("_"," ",str_replace("_orders_qty","",$order_qty_table));
+						$qnty_id = '';
+						foreach (explode(' ', $result_str) as $word)
+						{
+							$qnty_id .= strtolower($word[0]);
+						}
+						$main_table  = str_replace("_qty","",$order_qty_table);
+					}
+
+					$main_table_id = DB::table($order_qty_table)->where('id',$order_qnty_table_id)->value($qnty_id);
+
+					DB::table($main_table)->where('id',$main_table_id)->update(['order_status' => "Order Cancelled"]);
+				}
+
 				\App\ErpOrderDetails::where('erp_order_id', $request->id)->restore();
 				\App\ErpOrderDetails::where('erp_order_id', $request->id)->update([
-					'status'	=> 4
+					'status'	=> 4,
+					'order_status_id' => $this->order_status_id->id
 				]);
 				$message = "Order Cancelled successfully";
 				break;
