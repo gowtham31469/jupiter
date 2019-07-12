@@ -176,6 +176,28 @@ class OrderManagementCntrl extends Controller
                                         ->groupBy('orchestra_parcel_details.id','Size_Label','orchestra_size_chart.cm')
                                         ->orderBy('orchestra_parcel_details.id')
                                         ->get();
+		
+//			$sku_code = DB::table('orchestra_parcel_details')
+//                                        ->select('orchestra_parcel_details.SKU_Code')
+//                                        ->where('orchestra_parcel_details.UVC',$uvc)
+//                                        ->groupBy('orchestra_parcel_details.SKU_Code')
+//                                        ->get();
+//			$data['sku'] =array();
+//
+//			foreach($sku_code as $val)
+//			{
+//			  $str = explode('-',$val->SKU_Code);
+//				
+//			  if (in_array($str[1], $data['sku'])) 
+//			  { 
+//			  	
+//			  }
+//				else
+//				{
+//					array_push($data['sku'],$str[1]);
+//				}
+//			}
+		
 
             // get price details for po data
             foreach($data['order_details'] as $key => $value)
