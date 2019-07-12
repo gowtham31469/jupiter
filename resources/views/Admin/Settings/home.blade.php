@@ -23,6 +23,7 @@
               <li id="7" onclick="parts()"><a>Parts</a></li>
               <li id="8"  onclick="sizeChart()"><a>Size Chart</a></li>
               <li id="9"  onclick="orchestraSymbols()"><a>Symbols</a></li>
+              <li id="10"  onclick="orchestraColorCode()"><a>Color Code</a></li>
             </ul>
           </div>
         <div class="tesco-sidebar sidebar style-4" style="display: none;">
@@ -1327,6 +1328,95 @@
    </div>
    </div> --}}
 
+   {{-- Add Orchestra Code Modal  --}}
+   <div class="modal fade" id="addOrchestraColorCodeModal" tabindex="-1" role="dialog" aria-labelledby="orchestraColorCodeModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="orchestraColorCodeModal">Add Color Code</h4>
+            </div>
+            {!! Form::open(['id' => 'add_orchestra_color_form','data-toggle' => 'validator','role' => 'form']) !!}
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                    <div class="form-group has-feedback">
+                      {!! Form::label('code_cc', 'Code', ['class' => 'form_label']) !!}
+                      {!! Form::text('code_cc',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Code for Color','required')) !!}
+                      <div class="help-block with-errors"></div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group has-feedback">
+                      {!! Form::label('french_cc', 'French', ['class' => 'form_label']) !!}
+                      {!! Form::text('french_cc',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Color in French','required')) !!}
+                      <div class="help-block with-errors"></div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group has-feedback">
+                      {!! Form::label('english_cc', 'English', ['class' => 'form_label']) !!}
+                      {!! Form::text('english_cc',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Color in English','required')) !!}
+                      <div class="help-block with-errors"></div>
+                    </div>
+                  </div>
+                </div>
+                </div>
+                <div class="modal-footer">
+                    {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                    {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                </div>
+           {!! Form::close() !!}
+        </div>
+    </div>
+</div>
+
+{{-- Edit Orchestra color code Modal --}}
+<div class="modal fade" id="editOrchestraColorCodeModal" tabindex="-1" role="dialog" aria-labelledby="editOrchestraColorCodeLabel">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="editOrchestraColorCodeLabel">Edit Size Chart</h4>
+          </div>
+          {!! Form::open(['id' => 'edit_orchestra_color_code_form','data-toggle' => 'validator','role' => 'form']) !!}
+              <div class="modal-body">
+                {!! Form::hidden('edit_orchestra_color_code_id',$value = null, array('id'=>'edit_orchestra_color_code_id','class' => 'form-control input-sm')) !!}
+                <div class="row">
+                  <div class="col-md-6">
+                  <div class="form-group has-feedback">
+                    {!! Form::label('edit_code_cc', 'Code', ['class' => 'form_label']) !!}
+                    {!! Form::text('edit_code_cc',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Code for Color','required')) !!}
+                    <div class="help-block with-errors"></div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group has-feedback">
+                    {!! Form::label('edit_french_cc', 'French', ['class' => 'form_label']) !!}
+                    {!! Form::text('edit_french_cc',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Color in French','required')) !!}
+                    <div class="help-block with-errors"></div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group has-feedback">
+                    {!! Form::label('edit_english_cc', 'English', ['class' => 'form_label']) !!}
+                    {!! Form::text('edit_english_cc',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Color in English','required')) !!}
+                    <div class="help-block with-errors"></div>
+                  </div>
+                </div>
+              </div>
+              </div>
+              <div class="modal-footer">
+                  {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                  {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+              </div>
+         {!! Form::close() !!}
+      </div>
+  </div>
+</div>
+
+
+
 <!-- Tesco Modals -->
 
    {{-- Add Tesco Brand Modal --}}
@@ -2006,6 +2096,7 @@
         $('#add_orchestra_special_instruction_form').trigger("reset");
         $('#add_orchestra_composition_form').trigger("reset");
         $('#add_orchestra_part_form').trigger("reset");
+        $('#add_orchestra_color_form').trigger("reset");
         $('#add_orchestra_size_chart_form').trigger("reset");
         $('#add_tesco_brands_form').trigger("reset");
         $('#add_tesco_departments_form').trigger("reset");
@@ -2332,6 +2423,7 @@
            /* call makeCompositionDisabled function from orchestra-settings.js*/
            makeCompositionDisabled(id,csrf_token)
        });
+
        /** Add orchestra part form validation **/
         $('#add_orchestra_part_form').validator().on('submit', function (e) {
           if (e.isDefaultPrevented())
@@ -2717,7 +2809,7 @@
            /* call getTaxCodesById function from tesco-settings.js*/
            getTaxCodesById(id);
        });
-
+       
        /** submit edit  tax code form **/
        $('#edit_tax_codes_form').validator().on('submit', function (e) {
          if (e.isDefaultPrevented())
@@ -2839,6 +2931,62 @@
         $('.meta-data-list-1 li a').removeClass("active");
         $(this).addClass("active");
       });
+
+        /**
+          * Add orchestra Color code form validation
+          * @author "Nandha"
+          */
+
+        $('#add_orchestra_color_form').validator().on('submit', function (e) {
+          if (e.isDefaultPrevented())
+          {
+          
+          }
+          else
+          {
+             e.preventDefault();
+             /* call addColorCode function from orchestra-settings.js*/
+            
+             addColorCode();
+
+          }
+        });
+
+        $(document).on('click', '#make_color_enabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeColorEnabled function from orchestra-settings.js*/
+           makeColorEnabled(id,csrf_token)
+       });
+
+       /** To disable part  on click **/
+       $(document).on('click', '#make_color_disabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeColorDisabled function from orchestra-settings.js*/
+           makeColorDisabled(id,csrf_token)
+       });
+
+       $(document).on('click','.edit-orchestra-color',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           /* call getOrchestraColorCodeById function from orchestra-settings.js*/
+           getOrchestraColorCodeById(id);
+       });
+        /** submit edit orchestra Color code form **/
+        $('#edit_orchestra_color_code_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            /* call editOrchestraColorCode function from orchestra-settings.js*/
+            editOrchestraColorCode();
+         }
+       });
+
     </script>
   
     @endsection
