@@ -172,7 +172,7 @@ class ReportController extends Controller
             {
                         switch ($value) 
                         {
-                            case 1:
+                            case 5:
                             foreach ($def_jc1 as $key => $value)
                             {
                                 array_push($defaultValues,$value);
@@ -183,7 +183,7 @@ class ReportController extends Controller
                             }
                             break;
 
-                            case 2:
+                            case 6:
                             foreach ($def_jc2 as $key => $value) 
                             {
                                 array_push($defaultValues,$value);
@@ -205,7 +205,7 @@ class ReportController extends Controller
             {
                 switch ($value) 
                 {
-                    case 1:
+                    case 7:
                     foreach ($def_order1 as $key => $value)
                     {
                         array_push($defaultValues,$value);
@@ -216,7 +216,7 @@ class ReportController extends Controller
                     }
                     break;
 
-                    case 2:
+                    case 8:
                     foreach ($def_order2 as $key => $value)
                     {
                         array_push($defaultValues,$value);
@@ -227,7 +227,7 @@ class ReportController extends Controller
                     }
                     break;
 
-                    case 3:
+                    case 9:
                     foreach ($def_order3 as $key => $value)
                     {
                         array_push($defaultValues,$value);
@@ -238,7 +238,7 @@ class ReportController extends Controller
                     }
                     break;
 
-                    case 4:
+                    case 10:
                     foreach ($def_order4 as $key => $value)
                     {
                         array_push($defaultValues,$value);
@@ -249,7 +249,7 @@ class ReportController extends Controller
                     }
                     break;
 
-                    case 5:
+                    case 11:
                     foreach ($def_order5 as $key => $value)
                     {
                         array_push($defaultValues,$value);
@@ -260,7 +260,7 @@ class ReportController extends Controller
                     }
                     break;
 
-                    case 6:
+                    case 12:
                     foreach ($def_order6 as $key => $value)
                     {
                         array_push($defaultValues,$value);
