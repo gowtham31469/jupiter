@@ -638,7 +638,7 @@ class JobManagerController extends Controller
 								'jc_created_date' => $current_timestamp
 							]);
 							
-							/** Get update data and update in history table */
+							/** Get updated data and update in history table */
 						    $jobcard_data = DB::table('erp_order_details')
 											->where('erp_order_details.erp_order_id', $erp_orders_id)
 											->where('erp_order_details.reference_name', 'ilike', $selected_ref[$row])
@@ -696,10 +696,10 @@ class JobManagerController extends Controller
                                     // }
 									// $order_details  = DB::table($qnty_table)->select($main_table.'.*')->where($qnty_table.'.id', $qty_row_id)->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id.'_id')
 									// 				->get();
-									//$season         = $order_details->season_code;
-									//$country        = "";
-									//$template_id    = $order_details->template_id;
-									//$template_level = DB::table('tesco_item_master as t1')
+									// $season         = $order_details->season_code;
+									// $country        = "";
+									// $template_id    = $order_details->template_id;
+									// $template_level = DB::table('tesco_item_master as t1')
 									// 					->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
 									// 					->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
 									// 					->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')

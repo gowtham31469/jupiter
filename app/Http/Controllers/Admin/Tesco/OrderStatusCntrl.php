@@ -151,7 +151,7 @@ class OrderStatusCntrl extends Controller
                 
             }
             
-            if ($po_details->po_file === "" || $po_details->po_file === "null")
+            if ($po_details->po_file === null || $po_details->po_file === "null")
             {
                 $po_status = "PO Pending";
             }
@@ -217,7 +217,7 @@ class OrderStatusCntrl extends Controller
                 
             }
             
-            if ($po_details->purchase_order_no == "" || $po_details->purchase_order_no=="null")
+            if ($po_details->purchase_order_no === null || $po_details->purchase_order_no === "null")
             {
                 $po_status = "PO Pending";
             }
@@ -747,9 +747,9 @@ class OrderStatusCntrl extends Controller
             $table_name   =   $request->tableName; 
             $po_file      =   DB::table($table_name)->where('id',$row_id)
                ->pluck('po_file')->first();
-            if ($po_file=="null" || $po_file=="" || $po_file==null)
+            if ($po_file === "null" || $po_file === "" || $po_file === null)
             {
-               $po_file=="null";
+               $po_file = "null";
             }
             $result = response()->json(['error'=> false,'message' =>'success','po_file'=>$po_file],200);
         }
@@ -1033,9 +1033,13 @@ class OrderStatusCntrl extends Controller
             {
                 $erp_details_status =  $erp_order_details[0]->status_name;
                 $erp_order_id =  $erp_order_details[0]->erp_order_id;
-
-                // delete from erp_order_details table
+                
                 foreach($erp_order_details as $erp_order_detail){
+                    // delete from history table and insert new rows.
+                    $history_table_id =  DB::table('history')->where('erp_order_details_id',$erp_order_detail->id)->value('id');
+                    DB::table('event_history')->where('history_id',$history_table_id)->delete();
+                    DB::table('history')->where('id',$history_table_id)->delete();
+                    // delete from erp_order_details table
                     DB::table('erp_order_details')->where('id',$erp_order_detail->id)->delete();
                 }
                 
