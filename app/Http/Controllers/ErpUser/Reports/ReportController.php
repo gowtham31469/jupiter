@@ -71,16 +71,16 @@ class ReportController extends Controller
     public function getHistory(Request $request)
     {   
 
-        $def_po1 = ["S.No","Order.Dt","ErpId","Customer","Material","Style","PO","OCN","Reference"];
+        $def_po1 = ["No","Order.Dt","ErpId","Customer","Material","Style","PO","OCN","Reference"];
         $ext_po1 = ["A/w Date", "PO.dt","JC.No","JC.Dt","Inv.No","Inv.Dt","Buyer","Season","Country","ByrPo","Quantity","Reason","Reapprove.Dt","Disp.Mode","Awb","Status"];
 
-        $def_po2 = ["S.No","Order.Dt","ErpId","Customer","Material","Style","PO","OCN","Reference"];
+        $def_po2 = ["No","Order.Dt","ErpId","Customer","Material","Style","PO","OCN","Reference"];
         $ext_po2 = ["A/w Date", "PO.dt","JC.No","JC.Dt","Inv.No","Inv.Dt","Buyer","Season","Country","ByrPo","Quantity","Reason","Reapprove.Dt","Disp.Mode","Awb","Status"];
 
-        $def_po3 = ["S.No","Order.Dt","ErpId","Customer","Material","Style","PO","OCN","Reference","Reason"];
+        $def_po3 = ["No","Order.Dt","ErpId","Customer","Material","Style","PO","OCN","Reference","Reason"];
         $ext_po3 = ["A/w Date", "PO.dt","JC.No","JC.Dt","Inv.No","Inv.Dt","Buyer","Season","Country","ByrPo","Quantity","Reapprove.Dt","Disp.Mode","Awb","Status"];
 
-        $def_po4 = ["S.No","Order.Dt","ErpId","Customer","Material","Style","PO","OCN","Reference","Reapprove.Dt"];
+        $def_po4 = ["No","Order.Dt","ErpId","Customer","Material","Style","PO","OCN","Reference","Reapprove.Dt"];
         $ext_po4 = ["A/w Date", "PO.dt","JC.No","JC.Dt","Inv.No","Inv.Dt","Buyer","Season","Country","ByrPo","Quantity","Disp.Mode","Awb","Status","Reason"];
 
         $def_jc1 = ["S.No","Order.Dt","ErpId","JC.No","Customer","Material","Style","PO","OCN","Reference"];
@@ -281,7 +281,17 @@ class ReportController extends Controller
         }
 
 
-        $result = History::whereIn('buyer_id',$request->buyer)
+  
+        // return response()->json(['reportData'=>array_values($queryRes),'hist_id'=>$eventHistory,'Default'=>array_values(array_unique($defaultValues)),'Extra'=>array_values(array_diff(array_values(array_unique($extraValues)),array_values(array_unique($defaultValues))))]);
+
+          return response()->json(['Default'=>array_values(array_unique($defaultValues)),'Extra'=>array_values(array_diff(array_values(array_unique($extraValues)),array_values(array_unique($defaultValues))))]);
+    }
+
+    public function setUpDatatable(Request $request)
+    {
+        // dd($request->all());
+
+              $result = History::whereIn('buyer_id',$request->buyer)
                            ->whereIn('season',$request->season)
                            ->whereIn('template',$request->template)
                            ->whereIn('country',$request->country)
@@ -306,38 +316,16 @@ class ReportController extends Controller
         $queryRes = History::whereIn('history.id',$eventHistory)
                     ->leftJoin("erp_order_details",'erp_order_details.id', '=', 'history.id')
                     ->leftJoin("customers",'customers.id', '=', 'history.buyer_id')
-                    ->select('erp_order_details.created_at as Order.Dt', 'erp_order_details_id as ErpId','company_name as Customer','material as Material','style as Style','po as PO','ocn as OCN','reference as Reference','po_reapproved_date as Reapprove.Dt','customer_id as A/w Date','po_reapproved_date as PO.dt','jc_number as JC.No','jc_created_date as JC.Dt','invoice_number as Inv.No','invoice_created_date as Inv.Dt','company_name as Buyer','season as Season','country as Country','buyer_po as ByrPo','order_quantity as Quantity','company_id as Disp.Mode','company_id as Awb','status as Status','reason as Reason')
-                    ->get()
-                    ->toArray();
+                    ->select(['erp_order_details.created_at as Order.Dt', 'erp_order_details_id as ErpId','company_name as Customer','material as Material','style as Style','po as PO','ocn as OCN','reference as Reference','po_reapproved_date as Reapprove.Dt','customer_id as A/w Date','po_reapproved_date as PO.dt','jc_number as JC.No','jc_created_date as JC.Dt','invoice_number as Inv.No','invoice_created_date as Inv.Dt','company_name as Buyer','season as Season','country as Country','buyer_po as ByrPo','order_quantity as Quantity','company_id as Disp.Mode','company_id as Awb','status as Status','reason as Reason'])
+                    ->get();
+//                     ->toArray();
 // dd(array_values($queryRes));
-        return response()->json(['reportData'=>array_values($queryRes),'hist_id'=>$eventHistory,'Default'=>array_values(array_unique($defaultValues)),'Extra'=>array_values(array_diff(array_values(array_unique($extraValues)),array_values(array_unique($defaultValues))))]);
-    }
-
-    public function setTableData(Request $request)
-    {
-        // dd("vghjvghj");
-         // $reportData = History::all()->take(1);
-         // if ($request->has('history')) 
-         // {
-         //    if($request->history)
-         //    {
-         //     $erpID = History::whereIn('id',explode(',',$request->history))
-         //                        ->pluck('erp_order_details_id')->toArray();
-         //     $reportData = ErpOrderDetails::whereIn('id',$erpID)->get();
-         //    }
-         // }    
-          $reportData = ErpOrderDetails::where('id',1856)->get();
-        return Datatables::of($reportData)
-
-        // ->addColumn('seller', function ($enquiry) {
-        //            return Facilitator::where('id',Package::where('id',$enquiry->package_id)->first()->package_seller_id)->first()->package_seller_name;
-        //             })
-
-        // ->addColumn('package', function ($enquiry) {
-        //            return Package::where('id',$enquiry->package_id)->first()->package_title;
-        //             })
-
-        ->make(true);
+$queryRes->map(function ($queryRes,$key) {
+    $queryRes->No =$key+1;
+    // return $users;
+});
+// dd($queryRes);
+return Datatables::of($queryRes)->make();
     }
 
 }

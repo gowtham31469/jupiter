@@ -30,7 +30,7 @@ class CreateHistoryTable extends Migration
         $table->string('reference');
         $table->string('po');
         $table->string('buyer_po');
-        $table->integer('ocn');
+        $table->string('ocn');
         $table->timestamps();
         });
     }
