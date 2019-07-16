@@ -666,7 +666,7 @@ class TescoOrders
    * @param  [$request]
    * @param  [customer id]
    */
-  public function updateTescoOrders($table_name,$temp_data,$request,$customer_id)
+  public function updateTescoOrders($table_name,$temp_data,$request,$customer_id, $created_by)
   {
     try
     {
@@ -817,6 +817,7 @@ class TescoOrders
             $data_array['id'] = $table_data->id;
             $data_array['erp_details_status'] = $erp_details_status;
             $data_array['erp_order_id'] = $erp_order_id;
+            $data_array['created_by'] = $created_by;
 
             // pass $table_name, $buyer_id,  $table_data->id, $erp_details_status and $erp_order_id array
             $edit_erp_obj->updateTescoErpOrderDetails($data_array);

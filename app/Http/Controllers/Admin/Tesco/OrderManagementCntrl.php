@@ -35,6 +35,7 @@ use PDF;
 use Carbon\Carbon;
 use App\Classes\ErpOrders;
 use Intervention\Image\ImageManagerStatic as Image;
+use Auth;
 
 class OrderManagementCntrl extends Controller
 {
@@ -3092,6 +3093,7 @@ class OrderManagementCntrl extends Controller
                 $data_array['tableName'] = "tesco_".strtolower($template[$key])."_orders";
                 $data_array['buyer_id'] = $tesco_buyer_id->id;
                 $data_array['id'] = $template_id;
+                $data_array['created_by'] = Auth::guard('web')->id();
                 $updated_erp_table = $erp_obj->updateTescoErpOrders($data_array);
               }
           }
