@@ -440,7 +440,7 @@ class OrderController extends Controller
         
          $data['orchestra_parcel_quantity_details'] = DB::table('orchestra_parcel_quantity_details')->select(DB::raw('distinct on ("UVC_TCO") "UVC_TCO"'),'UVC','Size','BarcodeForPricesTags','Quantity','Color')->where('BuyerPONo',$po)->get();
         
-         $data['orchestra_parcel_details']= DB::table('orchestra_parcel_details')->select('*','Standard_Code as ParcelCode')->where('BuyerPONo',$po)->groupBy('id','BuyerPONo')->get();
+          $data['orchestra_parcel_details']= DB::table('orchestra_parcel_details')->leftJoin('orchestra_color_code','orchestra_color_code.code','orchestra_parcel_details.Color_Code')->select('*','Standard_Code as ParcelCode','orchestra_color_code.english as colour_Code')->where('BuyerPONo',$po)->groupBy('orchestra_parcel_details.id','orchestra_color_code.id','BuyerPONo')->get();
         
         $data['orchestra_age_group']= DB::table('orchestra_age_group')->select('*')->get();      
         
@@ -627,7 +627,7 @@ class OrderController extends Controller
 		$cm =$request->cm;
 		$in =$request->in;
         $id =$request->id;
-		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('*')->get();
+		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('customers.*')->get();
 		if(count($factory) > 0)
 		{
 			
@@ -858,7 +858,7 @@ class OrderController extends Controller
 		$main_label_qty =$request->main_label_qty;
         $id =$request->id;
 		$main_flag =$request->main_flag;
-		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('*')->get();
+		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('customers.*')->get();
 		
 		if($main_flag == "size")
 		{
@@ -990,7 +990,7 @@ class OrderController extends Controller
         $carton_id =$request->carton_id; 
         $poly_id =$request->poly_id; 
         $group_id =$request->group_id;
-		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('*')->get();
+		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('customers.*')->get();
 		if(count($factory) > 0)
 		{
 			
@@ -1183,7 +1183,7 @@ class OrderController extends Controller
         $order_qty =$request->order_qty;
         $final_order_qty =$request->final_order_qty;
 		
-		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('*')->get();
+		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('customers.*')->get();
 		if(count($factory) > 0)
 		{
 			
@@ -1384,7 +1384,7 @@ class OrderController extends Controller
         $made_in_select = $request->made_in_select; 
         $care_instruction_select = $request->care_instruction_select; 
 		
-		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('*')->get();
+		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('customers.*')->get();
 		
 		if(count($factory) > 0)
 		{

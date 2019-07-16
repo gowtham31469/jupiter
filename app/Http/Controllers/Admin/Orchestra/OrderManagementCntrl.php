@@ -480,7 +480,7 @@ class OrderManagementCntrl extends Controller
         
          $data['orchestra_parcel_quantity_details'] = DB::table('orchestra_parcel_quantity_details')->select(DB::raw('distinct on ("UVC_TCO") "UVC_TCO"'),'UVC','Size','BarcodeForPricesTags','Quantity','Color')->where('BuyerPONo',$po)->get();
         
-         $data['orchestra_parcel_details']= DB::table('orchestra_parcel_details')->select('*','Standard_Code as ParcelCode')->where('BuyerPONo',$po)->groupBy('id','BuyerPONo')->get();
+         $data['orchestra_parcel_details']= DB::table('orchestra_parcel_details')->leftJoin('orchestra_color_code','orchestra_color_code.code','orchestra_parcel_details.Color_Code')->select('*','Standard_Code as ParcelCode','orchestra_color_code.english as colour_Code')->where('BuyerPONo',$po)->groupBy('orchestra_parcel_details.id','orchestra_color_code.id','BuyerPONo')->get();
         
         $data['orchestra_age_group']= DB::table('orchestra_age_group')->select('*')->get();      
         
