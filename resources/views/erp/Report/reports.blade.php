@@ -16,7 +16,7 @@
 		font-size: smaller;
 		border-radius: 0;
 	}
-	.setMarginTop4{margin-top: 4%;}
+	.setMarginTop4{margin-top: 4%;width: 97%;}
 	.setMarginTop2{margin-top: 2%;}
 	.table-responsive{height: -webkit-fill-available;}
 	.::-webkit-input-placeholder {
@@ -166,7 +166,7 @@
 				</div>
 			</div>
 
-			<div class="row setMarginTop2 filter-panel pading1" id="filter-panel">
+			<div class="row setMarginTop2 filter-panel" id="filter-panel">
 				<div class="col-md-12 bordr1px">
 					<div class="row paddingSmaller">
 						<div class="col-md-11">
@@ -594,8 +594,14 @@
 										'status' : $('#'+$('input[name=roleSelection]:checked').data('target')).val(),
 									},
 									success:function(data)
-									{
-										create_table(data.Default,data.Extra)
+									{	
+										if(data.Default.length > 0)
+										{
+											create_table(data.Default,data.Extra)
+										}
+										else{
+											alert("No values found for this combination !!");
+										}
 									}
 								});
 							}
@@ -615,6 +621,8 @@
 				function create_table(def,extra)
 				{ 
 					$("#reportTable").DataTable().destroy();
+					$("#all_data").empty();
+					$("#all_fields").html('')
 					extraFields = extra.slice();
 					defaultFields = def.slice(); 
 
@@ -647,17 +655,19 @@
 					for (var i = 0; i < def.length ; i++)
 					{
 						heading+='<th>'+def[i]+'</th>'
-						$("#all_fields").html('')
+						
 						$("#all_fields").html(heading)
 						$(".ReportSection").removeClass('hidden')
 						allColoumns.push({
 							data: def[i]
 						});
 					}
+
 					var t = $('#reportTable').dataTable( {
 						processing: true,
 						serverSide: true,
 						sScrollX: '100%',	
+						// order: [[ 5, "asc" ]],
 						dom: 'lBfrtip',
 						// lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
 						buttons: ['copy', 'csv', 'excel', 'pdf'],
@@ -686,13 +696,13 @@
 								template : templates,
 								date_start : $("#txtFrom").val(),
 								date_end : $("#txtTo").val()
-							} 
+							}
 						},
 						"columns" :allColoumns
 					});
 
 
-					// $("#all_data").empty();
+					// 
 					// $("#all_data").html(tdData);
 					$("#filter-panel").addClass('collapse')
 					$("#reportTitle").html("Consolidated Report [ "+$('input[name=roleSelection]:checked').val()+" ]")
