@@ -564,7 +564,7 @@ class OrderController extends Controller
         //PDF::SetTextColor(0, 0, 0);
         //PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, '49', '117', $link='', $align='', $palign='', $border=0, $fitonpage=false);
 		
-        PDF::SetFont('arialbmt');
+        PDF::SetFont('arial');
 		$count=0;
 		$xx=12.5;
 		$i=0;
@@ -612,7 +612,12 @@ class OrderController extends Controller
 		}
 		
         PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
-        print_r(url('/storage/app/template/solid1.pdf'));
+		
+		exec("gs -dSAFER -dBATCH -dNOPAUSE -dNOCACHE -sDEVICE=pdfwrite -sColorConversionStrategy=CMYK -dProcessColorModel=/DeviceCMYK -sOutputFile=".public_path('/storage/app/template/solid1_cmyk.pdf')." ".public_path('/storage/app/template/solid1.pdf'));
+        
+//        print_r(url('/storage/app/template/'.$name.'_cmyk.pdf'));
+		
+        print_r(url('/storage/app/template/solid1_cmyk.pdf'));
     } 	
 	
 	/**
@@ -679,7 +684,7 @@ class OrderController extends Controller
 	
 		$tbl='<p  style="font-size:5px;font-family:Calibri;line-height:1.25">Fabriqué en - Made in - <br> Fabricado en - <br>Fabricado em - <br>Fabbricato in - <br>Vervaardigd in  - <br>Hergestellt in -<br><span style="font-family:Tahoma">  ﺻﻨﻊ ب </span>-<br> παράγεται στην</p>';
 		
-		$tbl1='<p  style="font-size:5px;font-family:Calibri">'.$orchestra_countries{0}->french.' - '.$orchestra_countries{0}->english.' - '.$orchestra_countries{0}->spanish.' - '.$orchestra_countries{0}->portuguese.' - '.$orchestra_countries{0}->italian.' - '.$orchestra_countries{0}->dutch.' - '.$orchestra_countries{0}->german.' - <span style="font-family:Tahoma">'.$orchestra_countries{0}->arabic.'</span> - '.$orchestra_countries{0}->greek.'</p>';
+		$tbl1='<p  style="font-size:5px;font-family:Calibri">'.$orchestra_countries{0}->french.' - '.$orchestra_countries{0}->english.' - '.$orchestra_countries{0}->spanish.' - '.$orchestra_countries{0}->portuguese.' - <br>'.$orchestra_countries{0}->italian.' - '.$orchestra_countries{0}->dutch.' - '.$orchestra_countries{0}->german.' - <br><span style="font-family:Tahoma">'.$orchestra_countries{0}->arabic.'</span> - '.$orchestra_countries{0}->greek.'</p>';
 		$tbl2="";
 		foreach($orchestra_care_instruction as $value)
 		{
