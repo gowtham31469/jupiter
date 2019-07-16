@@ -33,7 +33,8 @@ class EditErpOrders
 			$buyer_id		= $data_array['buyer_id'];
             $row_id		    = $data_array['id'];
             $erp_details_status	= $data_array['erp_details_status'];
-            $erp_order_id		 = $data_array['erp_order_id'];
+			$erp_order_id		 = $data_array['erp_order_id'];
+			$created_by     = $data_array['created_by']; 
             $qnty_table     = $table_name.'_quanty' ;
 			$qnty_id        =  str_replace("_orders","_order_id",str_replace("tesco_","",$table_name));
 			// Get Erp status table id for  status name.
@@ -64,7 +65,7 @@ class EditErpOrders
 			// update customer id in erp_orders table
             Erp::where('id',$erp_order_id)->update(['customer_id' => $orders->customer_id]);
 
-            $this->updateOrderDetails($qnty_table, $order_details, $orders, $erp_order_id, $buyer_id, $erp_status_id, $order_status_id);
+            $this->updateTescoOrderDetails($qnty_table, $order_details, $orders, $erp_order_id, $buyer_id, $erp_status_id, $order_status_id, $po_no, $created_by);
 
 			$result = response()->json(['error'=> false,'message' =>'success'],200);
 		}
@@ -76,7 +77,7 @@ class EditErpOrders
 	}
 
 	/**
-	 * updateOrderDetails Function to update erp_order_details table while editing from order status page 
+	 * updateTescoOrderDetails Function to update erp_order_details table while editing from order status page 
 	 *
 	 * @param [type] $qnty_table
 	 * @param [type] $order_details
@@ -87,7 +88,7 @@ class EditErpOrders
 	 * @return void
 	 * @author Praveen <praveen@wizroots.com>
 	 */
-	function updateOrderDetails($qnty_table, $order_details, $orders, $erp_order_id, $buyer_id, $erp_status_id, $order_status_id)
+	function updateTescoOrderDetails($qnty_table, $order_details, $orders, $erp_order_id, $buyer_id, $erp_status_id, $order_status_id, $customer_po_no, $created_by)
 	{
 		if ($order_details)
 		{
@@ -101,7 +102,7 @@ class EditErpOrders
 					
 				}
 				else{
-					ErpOrderDetails::create([
+					$erp_order_details_id = ErpOrderDetails::insertGetId([
 						'erp_order_id'     		=> $erp_order_id,
 		            	'style_no'         		=> $style_no,
 		           		'order_quantity'   		=> $vals->count,
@@ -123,7 +124,52 @@ class EditErpOrders
 						'updated_at'            => $this->updated_at,
 						'order_status_id'       => $order_status_id->id,
 					]);
-				}				
+				}	
+				
+				/** Get updated data and update in history table */
+				$template          = 'Avlb';
+				$current_timestamp = Carbon::now('Asia/Kolkata')->toDateTimeString();
+				$action_id         = DB::table('actions')->where('action', 'ilike', 'PO Mngr Verified Pending')->value('id');
+				
+				$template_level = DB::table('tesco_item_master as t1')
+									->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
+									->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
+									->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
+									->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
+									->where('t1.id', $orders->template_id)
+									->first();
+				
+				$material_name  = $template_level->material;
+				$material_sub   = $template_level->material_sub;
+				$material_ref   = $template_level->ref;
+
+				$history_id = DB::table('history')
+				->insertGetId([
+					'buyer_id'             => $buyer_id,
+					'erp_order_details_id' => $erp_order_details_id,
+					'template'             => $template,
+					'season'               => $orders->season_code,
+					'country'              => $orders->zone,
+					'customer_id'          => $orders->customer_id,
+					'material'             => $material_name,
+					'mat_sub'              => $material_sub,
+					'reference'            => $material_ref,
+					'style'                => $style_no,
+					'po'                   => $customer_po_no,
+					'buyer_po'             => $orders->po_number,
+					'ocn'                  => $orders->ocn_number,
+					'created_at'           => $current_timestamp,
+					'updated_at'           => $current_timestamp,
+				]);
+
+				DB::table('event_history')
+				->insert([
+					'history_id'  => $history_id,
+					'action_id'   => $action_id,
+					'created_by'  => $created_by,
+					'created_at'  => $current_timestamp,
+					'updated_at'  => $current_timestamp,
+				]);
 			}
 		}
 	}

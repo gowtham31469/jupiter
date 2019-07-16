@@ -666,7 +666,7 @@ class TescoOrders
    * @param  [$request]
    * @param  [customer id]
    */
-  public function updateTescoOrders($table_name,$temp_data,$request,$customer_id)
+  public function updateTescoOrders($table_name,$temp_data,$request,$customer_id, $created_by)
   {
     try
     {
@@ -800,10 +800,14 @@ class TescoOrders
             $erp_details_status =  $erp_order_details[0]->status_name;
             $erp_order_id =  $erp_order_details[0]->erp_order_id;
 
-            // delete from erp_order_details table
             foreach($erp_order_details as $erp_order_detail){
-                DB::table('erp_order_details')->where('id',$erp_order_detail->id)->delete();
-            }
+              // delete from history table and insert new rows.
+              $history_table_id =  DB::table('history')->where('erp_order_details_id',$erp_order_detail->id)->value('id');
+              DB::table('event_history')->where('history_id',$history_table_id)->delete();
+              DB::table('history')->where('id',$history_table_id)->delete();
+              // delete from erp_order_details table
+              DB::table('erp_order_details')->where('id',$erp_order_detail->id)->delete();
+          }
             
             /** @var array [Pass array of values to updateTescoErpOrderDetails function] */
             $data_array = [];   
@@ -813,6 +817,7 @@ class TescoOrders
             $data_array['id'] = $table_data->id;
             $data_array['erp_details_status'] = $erp_details_status;
             $data_array['erp_order_id'] = $erp_order_id;
+            $data_array['created_by'] = $created_by;
 
             // pass $table_name, $buyer_id,  $table_data->id, $erp_details_status and $erp_order_id array
             $edit_erp_obj->updateTescoErpOrderDetails($data_array);

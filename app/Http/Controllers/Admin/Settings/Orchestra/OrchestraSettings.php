@@ -20,6 +20,7 @@ use App\OrchestraParts;
 use App\OrchestraSizeCharts;
 use App\OrchestraCareSymbols;
 use App\OrchestraTaxCode;
+use App\OrchestraColorCode;
 
 /**
  * Orchestra Age Group controller
@@ -1556,4 +1557,109 @@ class OrchestraSettings extends Controller
             }
             return $result;
       }
-}
+
+      /**
+     * Orchestra colorCode list show using ajax.
+     * @author <Nandha>
+     * @return \Illuminate\Http\Response
+     */
+    
+     public function orchestraColorCode(){
+        try {
+              $color_codes = DB::table('orchestra_color_code')->select('id','code','french','english', 'is_enabled')->orderBy('is_enabled','desc')->get();
+              return response()->json(['error'=>'false','message' =>'success', 'color_codes' => $color_codes]);
+            } catch (\Exception $e)
+            {
+                   return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+          }
+    public function addOrchestraColorCode(Request $request)
+          {
+              try {
+                  $inserted = OrchestraColorCode::create([
+                              'code'       => $request['code'],
+                              'french'     => $request['french'],
+                              'english'    => $request['english'],
+                            ]);
+                  $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+      
+              } catch (\Exception $e)
+              {
+                  $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+              }
+              return $result;
+          }
+
+    public function makeColorEnabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              OrchestraColorCode::where('id',$id)
+               ->update([
+                 'is_enabled'  => 1
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+
+    public function makeColorDisabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              OrchestraColorCode::where('id',$id)
+               ->update([
+                 'is_enabled'  => 0
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+      }
+      
+      public function getOrchestraColorCodeById(Request $request)
+    {
+    try {
+          $id = $request['id'];
+          $OrchestraColorCode = DB::table('orchestra_color_code')->select('id','code','english','french')->where('orchestra_color_code.id',$id)->get();
+          return response()->json(['error'=>'false','message' =>'success', 'OrchestraColorCode' => $OrchestraColorCode]);
+          
+        } catch (\Exception $e)
+        {
+          return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+    }
+
+    public function updateOrchestraColorCodeById(Request $request)
+    {
+    try {
+          $id        = $request['id'];
+                   
+          OrchestraColorCode::where('id',$id)
+           ->update([
+            'code'    => $request['code'],
+            'english'    => $request['english'],
+            'french'     => $request['french'],
+          ]);
+
+          $result = response()->json(['error'=> false,'message' =>'Success'],200);
+        
+        } catch (\Exception $e)
+        {
+               $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+} //class ends

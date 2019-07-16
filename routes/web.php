@@ -470,6 +470,13 @@ Route::put('admin/orchestra/update-orchestra-part', 'Admin\Settings\Orchestra\Or
 Route::put('admin/orchestra/make-part-enabled', 'Admin\Settings\Orchestra\OrchestraSettings@makePartEnabled');
 Route::put('admin/orchestra/make-part-disabled', 'Admin\Settings\Orchestra\OrchestraSettings@makePartDisabled');
 
+Route::post('admin/orchestra/settings/color', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraColorCode');
+Route::post('admin/settings/orchestra/add-color-code', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraColorCode');
+Route::get('admin/orchestra/get-orchestra-color-code-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraColorCodeById');
+Route::put('admin/orchestra/make-color-enabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeColorEnabled');
+Route::put('admin/orchestra/make-color-disabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeColorDisabled');
+Route::put('admin/orchestra/update-orchestra-color-code', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraColorCodeById');
+
 Route::post('admin/orchestra/settings/size-chart', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraSizeCharts');
 Route::post('admin/orchestra/add-orchestra-size-chart', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraSizeCharts');
 Route::get('admin/orchestra/get-orchestra-size-chart-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraSizeChartById');
@@ -764,10 +771,11 @@ Route::get('customer/orchestra/get-erp-status', 'Customer\Orchestra\OrderControl
 Route::post('customer/orchestra/template-management/template-view', 'Customer\Orchestra\TemplateManagementCntrl@templateView');
 
 // Routes for report generation
-Route::get('reportTest','ErpUser\Reports\ReportController@index');
+Route::get('reportGenerator','ErpUser\Reports\ReportController@index')->name('reportGenerator');
 Route::get('level1Filter','ErpUser\Reports\ReportController@level1Filter');
-
-
+Route::get('level2Filter','ErpUser\Reports\ReportController@level2Filter');
+Route::get('getHistory','ErpUser\Reports\ReportController@getHistory');
+Route::post('setUpDatatable', 'ErpUser\Reports\ReportController@setUpDatatable' )->name('setUpDatatable');
 
 Route::get('print-manager/get-customers-list', 'ErpUser\Printmanager\PrintManagerController@getCustomersListByBuyerId'); 
 Route::get('print-manager/get-style-list', 'ErpUser\Printmanager\PrintManagerController@getStyleListByBuyerCustomerId'); 

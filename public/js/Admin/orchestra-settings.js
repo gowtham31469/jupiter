@@ -3176,3 +3176,305 @@ function readURL(input) {
 
     });
 
+/**
+    * Function to OrchestraColorCode home page
+    * @author "Nandha"
+    */
+function orchestraColorCode() {
+  try{
+    $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+    $('.tesco-sidebar').hide();
+    $('.orchestra-sidebar').show(); 
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url: base_url + "/admin/orchestra/settings/color",
+        type: "POST",
+        dataType: "json",
+        data: {
+            _token: csrf_token
+        },
+        tryCount : 0,
+        retryLimit : 2,
+        beforeSend: function () {
+            $(".loader").show();
+        },
+        success: function (data) {
+                var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraColorCodeModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Color</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Color Code</h3></div><table id="orchestra-colorcode-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Code</th><th>English</th><th>French</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+                $.each(data.color_codes, function(i, color){
+                var index = i+1;
+                orchestra_metadata += '<tr id="'+color.id+'"><td>'+index+'</td><td>'+color.code+'</td><td>'+color.english+'</td><td>'+color.french+'</td>';
+                if(color.is_enabled === 1)
+                {
+                 orchestra_metadata += '<td><span class="label label-success">Enabled</span></td>';
+                }
+                else
+                {
+                 orchestra_metadata += '<td><span class="label label-danger">Disabled</span></td>';
+                }
+                if(color.is_enabled === 1)
+                {
+                 orchestra_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="make_color_disabled" data-placement="left"></i></a>';
+                }
+                else
+                {
+                 orchestra_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="make_color_enabled" data-placement="left"></i></a>';
+                }
+
+                orchestra_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-orchestra-color filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
+               });
+               orchestra_metadata += '</tbody></table></div>';
+               $('.content').html(orchestra_metadata)
+               
+                $('#orchestra-colorcode-list-table').DataTable({
+                  'scrollX':true
+                });
+                $('.edit-orchestra-color').tooltip('show')
+                $('.edit-orchestra-color').tooltip('toggle')
+                $('.status').tooltip('show')
+                $('.status').tooltip('toggle')
+                $("#orchestra-colorcode-list-table_filter input").addClass('form-control input-sm');
+                $("#orchestra-colorcode-list-table_filter input").attr('placeholder', 'Data Search');
+                $('#orchestra-colorcode-list-table_length select').addClass('form-control input-sm');
+
+        },
+        error: function(errorXHR, errorStatus, errorThrown) {
+          this.tryCount++;
+          if (this.tryCount <= this.retryLimit) {
+              $.ajax(this);
+              return;
+          }
+        },
+        complete: function () {
+            $(".loader").hide();
+        }
+    })
+    } catch (e) {
+     console.log("Error:"+e)
+   }
+  }
+
+// function to add color values in database
+
+function addColorCode() {
+    try {
+      var code = $('#code_cc').val();
+      var english = $('#english_cc').val();
+      var french = $('#french_cc').val();
+      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+
+      $.ajax({
+        url: base_url + "/admin/settings/orchestra/add-color-code",
+        method: 'POST',
+        data: { _token: csrf_token, code: code, french: french, english: english },
+        tryCount: 0,
+        retryLimit: 2,
+        beforeSend: function () {
+          $(".loader").show();
+        },
+        statusCode: {
+          /** [ Show response status based on HTTP status code ] */
+          200: function () {
+            $('.snackbar_span').html("Color Added Successfully");
+            showSnackbar();
+            $('#addOrchestraColorCodeModal').modal('hide');
+            orchestraColorCode();
+          },
+          400: function () {
+            $('.snackbar_span').html("Something went wrong!!");
+            showSnackbar();
+          }
+        },
+        error: function (errorXHR, errorStatus, errorThrown) {
+          this.tryCount++;
+          if (this.tryCount <= this.retryLimit) {
+            $.ajax(this);
+            return;
+          }
+        },
+        complete: function () {
+          $(".loader").hide();
+        }
+      });
+    }
+    catch (e) {
+      console.log("Error:" + e);
+    }
+  }
+//Color Code Enable btn
+function makeColorEnabled(id,csrf_token)
+  {
+   try{
+         if(isSubmitting) 
+         {
+             return;
+         }
+         isSubmitting = true;
+         $.ajax({
+              url:base_url + "/admin/orchestra/make-color-enabled",
+              dataType:"json",
+              beforeSend: function () {
+                $(".loader").show();
+              },
+              method:"put",
+              data:{_token:csrf_token,id:id},
+              tryCount : 0,
+              retryLimit : 2,
+              statusCode: {
+                   /** [Show response status based on HTTP status code] */
+                   200: function() {
+                       isSubmitting = false; 
+                       $('.snackbar_span').html('Color is enabled ');
+                       showSnackbar();
+                   }
+              },
+              error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
+              },
+              complete: function () {
+                orchestraColorCode();
+                $(".loader").hide();
+              }
+          })
+   } catch (e) {
+    console.log("Error:"+e)
+   }
+  }
+  //Color Code Disable btn
+function makeColorDisabled(id,csrf_token)
+   {
+    try{
+          if(isSubmitting) 
+          {
+              return;
+          }
+          isSubmitting = true;
+          $.ajax({
+               url:base_url + "/admin/orchestra/make-color-disabled",
+               dataType:"json",
+               beforeSend: function () {
+                 $(".loader").show();
+               },
+               method:"put",
+               data:{_token:csrf_token,id:id},
+               tryCount : 0,
+               retryLimit : 2,
+               statusCode: {
+                    /** [Show response status based on HTTP status code] */
+                    200: function() {
+                         isSubmitting = false;
+                         $('.snackbar_span').html('Color is disabled ');
+                         showSnackbar();
+                    }
+               },
+               error: function(errorXHR, errorStatus, errorThrown) {
+                 this.tryCount++;
+                 if (this.tryCount <= this.retryLimit) {
+                     $.ajax(this);
+                     return;
+                 }
+               },
+               complete: function () {
+                orchestraColorCode();
+                 $(".loader").hide();
+               }
+           })
+    } catch (e) {
+     console.log("Error:"+e)
+    }
+   }
+
+// Get ColorCode ID
+
+function getOrchestraColorCodeById(id)
+  {
+    try{
+         if(isSubmitting) {
+              return;
+          }
+          isSubmitting = true;
+         $.ajax({
+             url:base_url + "/admin/orchestra/get-orchestra-color-code-details",
+             dataType:"json",
+             method:"get",
+             data:{id:id},
+             tryCount : 0,
+             retryLimit : 2,
+             beforeSend: function () {
+               $(".loader").show();
+             },
+             success: function(data){
+                 isSubmitting = false;
+                 $('#edit_orchestra_color_code_id').val(id);
+                 $('#edit_code_cc').val(data.OrchestraColorCode[0].code); 
+                 $('#edit_french_cc').val(data.OrchestraColorCode[0].french); 
+                 $('#edit_english_cc').val(data.OrchestraColorCode[0].english); 
+                 $('#editOrchestraColorCodeModal').modal({
+                      backdrop: 'static',
+                      keyboard: false
+                 })
+                 $('#editOrchestraColorCodeModal').validator('validate');
+                 $('#editOrchestraColorCodeModal').modal('show');
+             },
+             error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
+             },
+             complete: function () {
+                 $(".loader").hide();
+             }
+         })
+   } catch (e) {
+     console.log("Error:"+e)
+   }
+  }
+
+  function editOrchestraColorCode()
+ {
+  try{
+       var id         = $('#edit_orchestra_color_code_id').val();
+       var code       = $('#edit_code_cc').val();
+       var french     = $('#edit_french_cc').val();
+       var english    = $('#edit_english_cc').val();
+       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+       $.ajax({
+           url:base_url + "/admin/orchestra/update-orchestra-color-code",
+           dataType:"json",
+           beforeSend: function () {
+             $(".loader").show();
+           },
+           method:"put",
+           data: {_token:csrf_token,id:id,code:code,french:french,english:english},
+           tryCount : 0,
+           retryLimit : 2,
+           statusCode: {
+
+                /** [ Show response status based on HTTP status code ] */
+                200: function() {
+                       $('.snackbar_span').html("Color Code Updated Successfully");
+                       showSnackbar();
+                       $('#editOrchestraColorCodeModal').modal('hide');
+                       orchestraColorCode();
+                  }
+           },
+           error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+           },
+           complete: function () {
+                     $(".loader").hide();
+           }
+       })
+   } catch (e) {
+     console.log("Error:"+e)
+   }
+ } 

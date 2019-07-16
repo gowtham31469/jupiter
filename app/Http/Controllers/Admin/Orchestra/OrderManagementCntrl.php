@@ -36,6 +36,7 @@ use App\Classes\ErpOrders;
 use Carbon\Carbon;
 use App\OrchestraParcelDetails;
 use App\OrchestraParcelQuantityDetails;
+use Auth;
 
 class OrderManagementCntrl extends Controller
 {
@@ -176,6 +177,28 @@ class OrderManagementCntrl extends Controller
                                         ->groupBy('orchestra_parcel_details.id','Size_Label','orchestra_size_chart.cm')
                                         ->orderBy('orchestra_parcel_details.id')
                                         ->get();
+		
+//			$sku_code = DB::table('orchestra_parcel_details')
+//                                        ->select('orchestra_parcel_details.SKU_Code')
+//                                        ->where('orchestra_parcel_details.UVC',$uvc)
+//                                        ->groupBy('orchestra_parcel_details.SKU_Code')
+//                                        ->get();
+//			$data['sku'] =array();
+//
+//			foreach($sku_code as $val)
+//			{
+//			  $str = explode('-',$val->SKU_Code);
+//				
+//			  if (in_array($str[1], $data['sku'])) 
+//			  { 
+//			  	
+//			  }
+//				else
+//				{
+//					array_push($data['sku'],$str[1]);
+//				}
+//			}
+		
 
             // get price details for po data
             foreach($data['order_details'] as $key => $value)
@@ -457,7 +480,7 @@ class OrderManagementCntrl extends Controller
         
          $data['orchestra_parcel_quantity_details'] = DB::table('orchestra_parcel_quantity_details')->select(DB::raw('distinct on ("UVC_TCO") "UVC_TCO"'),'UVC','Size','BarcodeForPricesTags','Quantity','Color')->where('BuyerPONo',$po)->get();
         
-         $data['orchestra_parcel_details']= DB::table('orchestra_parcel_details')->select('*','Standard_Code as ParcelCode')->where('BuyerPONo',$po)->groupBy('id','BuyerPONo')->get();
+         $data['orchestra_parcel_details']= DB::table('orchestra_parcel_details')->leftJoin('orchestra_color_code','orchestra_color_code.code','orchestra_parcel_details.Color_Code')->select('*','Standard_Code as ParcelCode','orchestra_color_code.english as colour_Code')->where('BuyerPONo',$po)->groupBy('orchestra_parcel_details.id','orchestra_color_code.id','BuyerPONo')->get();
         
         $data['orchestra_age_group']= DB::table('orchestra_age_group')->select('*')->get();      
         
@@ -1609,7 +1632,7 @@ class OrderManagementCntrl extends Controller
 
             // check order status in erp_oorders table.                    
             $data_array = [];
-            $data_array['id'] = $request->id;
+            $data_array['id'] = $template_id;
             $data_array['table_name'] = $table_name;
             $class_obj = new ERPOrderStatusCheck();
             $erp_order_details = $class_obj->OrchestraERPStatus($data_array);
@@ -1639,7 +1662,13 @@ class OrderManagementCntrl extends Controller
                         'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                         ]);
             if ($po_status == "PO Uploaded") {
-               $erp_obj->updateOrchestraErpOrders($request);
+                /** @var array [Pass array of values to updateTescoErpOrders function] */
+                $request_array = [];
+                $request_array['id'] = $template_id;
+                $request_array['tableName'] = $table_name; 
+                $request_array['buyer_id'] = $request->buyer_id; 
+                $request_array['created_by'] = Auth::guard('web')->id(); 
+                $erp_obj->updateOrchestraErpOrders($request_array);
             }
 
             return response()->json(['error'=> false,'message' =>'Purchase Order Number added Successfully'],200);
@@ -1707,10 +1736,12 @@ class OrderManagementCntrl extends Controller
 
                         ]);
             if ($po_status == "PO Uploaded") {
+                /** @var array [Pass array of values to updateTescoErpOrders function] */
                 $request_array = [];
                 $request_array['id'] = $row_id;
                 $request_array['tableName'] = $table_name; 
                 $request_array['buyer_id'] = $request['buyer_id']; 
+                $request_array['created_by'] = Auth::guard('web')->id(); 
 
                 $erp_obj->updateOrchestraErpOrders($request_array);
             }
@@ -1848,9 +1879,12 @@ class OrderManagementCntrl extends Controller
                             'pi_file' => $attatchment, 
                             'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                         ]);
+            /** @var array [Pass array of values to updateTescoErpOrders function] */
             $erpOrders['tableName'] = $table_name;
             $erpOrders['id']        = $row_id;
-            $erpOrders['buyer_id']  = $buyer_id;   
+            $erpOrders['buyer_id']  = $buyer_id;  
+            $erpOrders['created_by'] = Auth::guard('web')->id(); 
+
             $customer_data  = DB::table('customers')->where('id',$data['bank_details']->id)->first();
 
             if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
@@ -2100,7 +2134,8 @@ class OrderManagementCntrl extends Controller
                     $request_array = [];
                     $request_array['id'] = $value[1];
                     $request_array['tableName'] = $value[0]; 
-                    $request_array['buyer_id'] = $tesco_buyer_id->id; 
+                    $request_array['buyer_id'] = $tesco_buyer_id->id;  
+                    $request_array['created_by'] = Auth::guard('web')->id(); 
 
                     $erp_obj->updateOrchestraErpOrders($request_array);
                 }
