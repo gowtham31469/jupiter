@@ -1117,7 +1117,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
                 $poly_count = 0;
             }
 
-            tr += '<tr><td class="size">' + value.Size + '</td><td>' + value.BarcodeForPricesTags + '</td><td class="qty">' + value.Quantity + '</td><td><div class="form-group has-feedback has-success"><input type="number" required min="'+data.polybag_moq+'" value="' + $poly_count + '" class="form-control tot_qty_table_poly input-sm"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback has-success"><input  min="'+data.carton_moq+'" required type="number" value="' + $carton_count + '" class="form-control tot_qty_table_carton input-sm"><div class="help-block with-errors"></div></div></td></tr>';
+            tr += '<tr><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="qty">' + value.Quantity + '</td><td><input type="hidden" class="SKU_Code" value="' + value.SKU_Code + '"><div class="form-group has-feedback has-success"><input type="number" required min="'+data.polybag_moq+'" value="' + $poly_count + '" class="form-control tot_qty_table_poly input-sm"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback has-success"><input  min="'+data.carton_moq+'" required type="number" value="' + $carton_count + '" class="form-control tot_qty_table_carton input-sm"><div class="help-block with-errors"></div></div></td></tr>';
             tpolytot += parseInt($poly_count);
             tcarttot += parseInt($carton_count);
             $qu++;
@@ -1914,16 +1914,30 @@ function printDiv(data, isstd,uvc) {
 		var name=uvc+"-SOL-PS";
 		var ajax_count = 0;
 		var svgarr = [];
+		var index_arr = [];
 		$('#solidform tbody tr').each(function (key, val) {
-			var svgRoot = svgDoc.documentElement;
-			var size = $(this).find('.size').text();
-			svgDoc.getElementById("size").innerHTML = size;
-			var s = new XMLSerializer();
-			var d = svgRoot;
-			var str = s.serializeToString(d);
-			var svg = encodeURI(str)
-			svgarr.push(svg)
+			
+			if(index_arr.includes($(this).find('.size').text()) != true)
+			{
+				if ($(this).find('.size').text() != "") {
+						index_arr.push($(this).find('.size').text())
+						var svgRoot = svgDoc.documentElement;
+						var size = $(this).find('.size').text();
+						var barcode = $(this).find('.barcode').text();
+						var SKU_Code = $(this).find('.SKU_Code').val();
+						svgDoc.getElementById("size").innerHTML = size;
+						svgDoc.getElementById("parcel_code").innerHTML = SKU_Code;
+						jsbarcodesolidpoly(barcode, 'barcode', svgDoc)
+						var s = new XMLSerializer();
+						var d = svgRoot;
+						var str = s.serializeToString(d);
+						var svg = encodeURI(str)
+						svgarr.push(svg)
+						
+				}
+			}
 			ajax_count++;
+			
 		});
 		
 		if (ajax_count == document.getElementById("solidformtbody").rows.length) {
@@ -1950,17 +1964,28 @@ function printDiv(data, isstd,uvc) {
 		var name=uvc+"-SOL-CS";
 		var ajax_count = 0;
 		var svgarr = [];
+		var index_arr = [];
 		$('#solidform tbody tr').each(function (key, val) {
-			var svgRoot = svgDoc.documentElement;
-			
-			var size = $(this).find('.size').text();
-			svgDoc.getElementById("size").innerHTML = size;
-			
-			var s = new XMLSerializer();
-			var d = svgRoot;
-			var str = s.serializeToString(d);
-			var svg = encodeURI(str)
-			svgarr.push(svg)
+			if(index_arr.includes($(this).find('.size').text()) != true)
+			{
+				if ($(this).find('.size').text() != "") {
+						index_arr.push($(this).find('.size').text())
+						var svgRoot = svgDoc.documentElement;
+						var size = $(this).find('.size').text();
+						var barcode = $(this).find('.barcode').text();
+						var SKU_Code = $(this).find('.SKU_Code').val();
+						svgDoc.getElementById("size").innerHTML = size;
+						svgDoc.getElementById("parcelcode").innerHTML = SKU_Code;
+						jsbarcodesolidcartonA(barcode, 'barcode1', svgDoc)
+						jsbarcodesolidcartonB(barcode, 'barcode2', svgDoc)
+
+						var s = new XMLSerializer();
+						var d = svgRoot;
+						var str = s.serializeToString(d);
+						var svg = encodeURI(str)
+						svgarr.push(svg)
+				}
+			}
 			ajax_count++;
 		});
 		
