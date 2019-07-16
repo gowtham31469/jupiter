@@ -527,7 +527,7 @@ class JobManagerController extends Controller
 				$cartons         = $request['cartons'];
 				$final_json_obj  = $request['final_json_obj'];
 				$erp_orders_ids  = explode(',', $request['erp_orders_ids']);
-			  $selected_ref    = explode(',', $request['selected_ref_array']);
+			    $selected_ref    = explode(',', $request['selected_ref_array']);
 				$buyer_pos       = explode(',', $request['selected_buyer_po_array']);
 				$order_types     = explode(',', $request['order_type_array']);
 				$created_at      = explode(',', $request['created_at_array']);
@@ -536,6 +536,8 @@ class JobManagerController extends Controller
 
 				if(isset($company_id) && isset($workorder_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($machine) && isset($cus_del_date)  && isset($finish_type)  && isset($compiled_by) && isset($final_json_obj) && isset($material))
 				{
+					$buyer    = DB::table('buyers')->select('buyer_name')->where('id', '=', $buyer_id)->first();
+
 					// Get Erp status table id for 'Jobcard Created' status.
 					$erp_status_id = DB::table('erp_status')->where('status_name', 'ilike', 'Jobcard Created')->value('id');
 					$store_jobcard_id = DB::table('jobcard_main_table')->insertGetId([
@@ -630,8 +632,125 @@ class JobManagerController extends Controller
 							->where('erp_order_details.order_type', 'ilike', $order_types[$row])
 							->where('erp_order_details.created_at', '=', $created_at[$row])
 							->update([
-								'status'  => $erp_status_id
+								'status'  => $erp_status_id,
+								'jc_number' => $workorder_id,
+								'jc_created_by' => Auth::guard('erpuser')->id(),
+								'jc_created_date' => $current_timestamp
 							]);
+							
+							/** Get updated data and update in history table */
+						    $jobcard_data = DB::table('erp_order_details')
+											->where('erp_order_details.erp_order_id', $erp_orders_id)
+											->where('erp_order_details.reference_name', 'ilike', $selected_ref[$row])
+											->where('erp_order_details.buyer_po_number', 'ilike', $buyer_pos[$row])
+											->where('erp_order_details.order_type', 'ilike', $order_types[$row])
+											->where('erp_order_details.created_at', '=', $created_at[$row])
+											->get();
+							$template       = 'Avlb';
+							$action_id  = DB::table('actions')->where('action', 'ilike', 'JC Created')->value('id');
+							
+							foreach($jobcard_data as $key => $data)
+							{
+								if($buyer->buyer_name === 'Tesco'){
+
+									$qnty_table     = $data->order_qnty_table_name;
+									$main_table     = str_replace("_quanty","",$data->order_qnty_table_name);
+									$qty_row_id     = $data->order_qnty_table_id;
+									$qnty_id        = str_replace("_orders_quanty","_order_id",str_replace("tesco_","",$qnty_table));
+									$order_details  = DB::table($qnty_table)
+														->select($main_table.'.*')
+														->where($qnty_table.'.id', $qty_row_id)
+														->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id)
+														->first();
+									$season         = $order_details->season_code;
+									$country        = $order_details->zone;
+									$style_zone     = strtolower($country).'_style_ref';
+									$template_id    = $order_details->template_id;
+									$template_level = DB::table('tesco_item_master as t1')
+														->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
+														->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
+														->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
+														->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
+														->where('t1.id', $template_id)
+														->first();
+									
+									$material_name  = $template_level->material;
+                                    $material_sub   = $template_level->material_sub;
+									$material_ref   = $template_level->ref;
+									$customer_po    = $order_details->purchase_order_no;
+									$buyer_po       = $order_details->po_number;
+									$style          = $order_details->$style_zone;
+									$ocn_number     = $order_details->ocn_number;
+									
+
+								} else if($buyer->buyer_name === 'Orchestra'){
+
+									// $qnty_table     = $data->order_qnty_table_name;
+									// $main_table     = str_replace("_qty","",$data->order_qnty_table_name);
+									// $qty_row_id     = $data->order_qnty_table_id;
+									// $result_str     =  str_replace("_"," ",str_replace("_orders","",$main_table));
+                                    // $qnty_id        = '';
+                                    // foreach (explode(' ', $result_str) as $word)
+                                    // {
+                                    //    $qnty_id .= strtolower($word[0]);
+                                    // }
+									// $order_details  = DB::table($qnty_table)->select($main_table.'.*')->where($qnty_table.'.id', $qty_row_id)->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id.'_id')
+									// 				->get();
+									// $season         = $order_details->season_code;
+									// $country        = "";
+									// $template_id    = $order_details->template_id;
+									// $template_level = DB::table('tesco_item_master as t1')
+									// 					->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
+									// 					->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
+									// 					->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
+									// 					->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
+									// 					->where('t1.id', $template_id)
+									// 					->first();
+									
+									// $material_name  = $template_level->material;
+                                    // $material_sub   = $template_level->material_sub;
+									// $material_ref   = $template_level->ref;
+									// $customer_po    = $order_details->purchase_order_no;
+									// $buyer_po       = $order_details->po_number;
+									// $style          = $order_details->$style_zone;
+									// $ocn_number     = $order_details->ocn_number;
+
+								} else {
+
+									$template       = 'Not Avlb';
+
+								}
+
+
+								$history_id = DB::table('history')
+								->insertGetId([
+									'buyer_id'             => $buyer_id,
+									'erp_order_details_id' => $data->id,
+									'template'             => $template,
+									'season'               => $season,
+									'country'              => $country,
+									'customer_id'          => $customer_id,
+									'material'             => $material_name,
+									'mat_sub'              => $material_sub,
+									'reference'            => $material_ref,
+									'style'                => $style,
+									'po'                   => $customer_po,
+									'buyer_po'             => $buyer_po,
+									'ocn'                  => $ocn_number,
+									'created_at'           => $current_timestamp,
+									'updated_at'           => $current_timestamp,
+								]);
+
+								DB::table('event_history')
+								->insert([
+									'history_id'  => $history_id,
+									'action_id'   => $action_id,
+									'created_by'  => Auth::guard('erpuser')->id(),
+									'created_at'  => $current_timestamp,
+									'updated_at'  => $current_timestamp,
+								]);
+							}
+					        
 						}
 
 						/** Update jobcard created status erp orders table(iff, all the orders in the order details table have same status. ie, after creating jobcard for all orders) */
@@ -651,7 +770,6 @@ class JobManagerController extends Controller
 							}
 						}
 
-						$buyer    = DB::table('buyers')->select('buyer_name')->where('id', '=', $buyer_id)->first();
 						$customer = DB::table('customers')->select('short_name as customer_name')->where('id', '=', $customer_id)->first();
 						$company  = DB::table('company')->select('name as company', 'address as company_address', 'logo as company_logo')->where('id', '=', $company_id)->first();
 

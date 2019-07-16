@@ -771,10 +771,11 @@ Route::get('customer/orchestra/get-erp-status', 'Customer\Orchestra\OrderControl
 Route::post('customer/orchestra/template-management/template-view', 'Customer\Orchestra\TemplateManagementCntrl@templateView');
 
 // Routes for report generation
-Route::get('reportTest','ErpUser\Reports\ReportController@index');
+Route::get('reportGenerator','ErpUser\Reports\ReportController@index')->name('reportGenerator');
 Route::get('level1Filter','ErpUser\Reports\ReportController@level1Filter');
-
-
+Route::get('level2Filter','ErpUser\Reports\ReportController@level2Filter');
+Route::get('getHistory','ErpUser\Reports\ReportController@getHistory');
+Route::post('setUpDatatable', 'ErpUser\Reports\ReportController@setUpDatatable' )->name('setUpDatatable');
 
 Route::get('print-manager/get-customers-list', 'ErpUser\Printmanager\PrintManagerController@getCustomersListByBuyerId'); 
 Route::get('print-manager/get-style-list', 'ErpUser\Printmanager\PrintManagerController@getStyleListByBuyerCustomerId'); 

@@ -56,16 +56,15 @@ class ProformaInvoice
         }
 
         $data['company_details']->pi_date = $today->toDateString();
-        
         $customer_details       = DB::table($table_name)
                                   ->join('customers',$table_name.'.customer_id','=','customers.id')
-                                  ->leftjoin('orchestra_template','orchestra_template.id','=',$table_name.'.'.$temp_id_field)
-                                  ->join('orchestra_item_master','orchestra_item_master.id','orchestra_template.item_id')
+                                  ->join('orchestra_item_master','orchestra_item_master.id','=',$table_name.'.'.$temp_id_field)
                                   ->leftjoin('payment_terms','customers.payment_terms','=','payment_terms.id')
                                   ->leftjoin('freight_terms','customers.freight_type','=','freight_terms.id')
                                   ->where($table_name.'.id',$id)
                                   ->select('customers.*',$table_name.'.'.$temp_id_field.' as template_id',$table_name.'.po',$table_name.'.uvc','payment_terms.payment_terms','freight_terms.freight_terms','orchestra_item_master.item_name as ref_no')
                                   ->first();
+
         if ($customer_details)
         {
           if ($customer_details->nominated_forwarder != null && $customer_details->nominated_forwarder != 0)
@@ -95,14 +94,14 @@ class ProformaInvoice
 
         $item_details    = DB::table($table_name)
                           ->join($table_name.'_qty',$table_name.'_qty.'.$qnty_id.'_id','=',$table_name.'.id')
-                          ->leftjoin('orchestra_template','orchestra_template.id','=',$table_name.'.'.$temp_id_field)
-                          ->join('orchestra_item_master','orchestra_item_master.id','orchestra_template.item_id')
+                          ->join('orchestra_item_master','orchestra_item_master.id','=',$table_name.'.'.$temp_id_field)
+                         // ->join('orchestra_template','orchestra_template.id','orchestra_template.item_id')
                           ->leftjoin('price_taxation','price_taxation.template_id','=','orchestra_item_master.id')
                           ->where('price_taxation.customer_id',$customer_details->id)
                           ->where('price_taxation.buyer_id',$buyer_id)
-                          ->where('orchestra_template.id',$customer_details->template_id)
+                          ->where('orchestra_item_master.id',$customer_details->template_id)
                           ->where($table_name.'_qty.'.$qnty_id.'_id',$id)
-                          ->select('size',$table_name.'_qty.quantity','price_taxation.custom_name as material_name','po as po_no','orchestra_item_master.item_name as ref_no','orchestra_template.item_id','pi_rev_no','order_flag','orchestra_template.template_name','pi_status','pi_rev_no','uvc', DB::raw($customer_details->template_id.' as item_id'))
+                          ->select('size', $table_name.'_qty.quantity', 'price_taxation.custom_name as material_name', 'po as po_no','orchestra_item_master.item_name as ref_no', 'orchestra_item_master.id as item_id', 'pi_rev_no', 'order_flag', 'pi_status', 'pi_rev_no', 'uvc', DB::raw($customer_details->template_id.' as item_id'))
                           ->get()->toArray();
 
         $data['tables'][$table_name]= $table_name.'_qty';
@@ -122,7 +121,7 @@ class ProformaInvoice
               $price_list      = DB::table('price_taxation')
                                       ->join('price_range','price_range.price_taxation_id','price_taxation.id')
                                       ->join('orchestra_template','orchestra_template.item_id','price_taxation.template_id')
-                                      ->where('orchestra_template.id','=',$item_id)
+                                      ->where('orchestra_template.item_id','=',$item_id)
                                       ->where('price_taxation.customer_id',$customer_details->id)
                                       ->where('price_taxation.buyer_id',$buyer_id)
                                       ->orderBy('price_range.volume_to')
