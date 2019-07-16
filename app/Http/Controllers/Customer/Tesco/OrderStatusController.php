@@ -248,7 +248,7 @@ class OrderStatusController extends Controller
                 
             }
 
-            if ($po_details->po_file =="" || $po_details->po_file=="null")
+            if ($po_details->po_file === null || $po_details->po_file === "null")
             {
                 $po_status = "PO Pending";
             }
@@ -852,9 +852,9 @@ class OrderStatusController extends Controller
             $table_name   =   $request->tableName; 
             $po_file      =   DB::table($table_name)->where('id',$row_id)
                ->pluck('po_file')->first();
-            if ($po_file=="null" || $po_file=="" || $po_file==null)
+            if ($po_file === "null" || $po_file === "" || $po_file === null)
             {
-               $po_file=="null";
+               $po_file = "null";
             }
             $result = response()->json(['error'=> false,'message' =>'success','po_file'=>$po_file],200);
         }
@@ -1259,7 +1259,7 @@ class OrderStatusController extends Controller
                 
             }
             
-            if ($po_details->purchase_order_no =="" || $po_details->purchase_order_no=="null")
+            if ($po_details->purchase_order_no === null || $po_details->purchase_order_no === "null")
             {
                 $po_status = "PO Pending";
             }
