@@ -123,6 +123,9 @@
 			position: absolute;
 			right: 0;"
 		}
+		.dataTables_wrapper.no-footer .dataTables_scrollBody {
+		border-bottom:1px solid #ddd !important; 
+		}
 </style>
 
 @section('content')
@@ -133,13 +136,13 @@
 					<table border="0" cellpadding="0" cellspacing="0">
 						<tr>
 							<td>
-								<input class="dateGap" type="text" id="txtFrom" placeholder="Start Date" />
+								<input class="dateGap" type="text" id="txtFrom" placeholder="Start date" />
 							</td>
 							<td>
 								&emsp;TO&emsp;
 							</td>
 							<td>
-								<input class="dateGap" type="text" id="txtTo" placeholder="End Date" />
+								<input class="dateGap" type="text" id="txtTo" placeholder="End date" />
 							</td>
 							<td>
 								&emsp;
@@ -154,7 +157,7 @@
 					@endforeach
 				</div>
 				<div class="col-md-3">
-					<h5 class="select_Status hidden">Select Status</h5>
+					<h5 class="select_Status hidden">Select status</h5>
 
 					{!! Form::select('role_Status[]', $po,null,['class' => 'selectpicker all_status _poMgr hidden','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select status [ PO Mngr ]','id'=>'_poMgr']) !!}
 
@@ -173,19 +176,19 @@
 							<div class="row">
 								<div class="col-md-3">
 									<label>Buyer</label>
-									{!! Form::select('sel_1[]', $buyers,null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Buyer','id'=>'buyer']) !!}
+									{!! Form::select('sel_1[]', $buyers,null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select buyer','id'=>'buyer']) !!}
 								</div>
 								<div class="col-md-3">
 									<label>Template</label>
-									{!! Form::select('sel_1[]',array_unique(App\History::all()->sortBy('template')->pluck('template')->toArray()),null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Template','id'=>'template']) !!}
+									{!! Form::select('sel_1[]',array_unique(App\History::all()->sortBy('template')->pluck('template')->toArray()),null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select template','id'=>'template']) !!}
 								</div>
 								<div class="col-md-3">
 									<label>Season</label>
-									{!! Form::select('sel_1[]', array_unique(App\History::all()->sortBy('season')->pluck('season')->toArray()),null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Season','id'=>'season']) !!}
+									{!! Form::select('sel_1[]', array_unique(App\History::all()->sortBy('season')->pluck('season')->toArray()),null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select season','id'=>'season']) !!}
 								</div>
 								<div class="col-md-3">
 									<label>Country</label>
-									{!! Form::select('sel_1[]',array_unique(App\History::all()->sortBy('country')->pluck('country')->toArray()),null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Country','id'=>'country']) !!}
+									{!! Form::select('sel_1[]',array_unique(App\History::all()->sortBy('country')->pluck('country')->toArray()),null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select country','id'=>'country']) !!}
 								</div>
 							</div>
 						</div>
@@ -196,19 +199,19 @@
 							<div class="row">
 								<div class="col-md-3">
 									<label>Customer</label>
-									<select id="customer" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select Customer" multiple></select>
+									<select id="customer" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select customer" multiple></select>
 								</div>
 								<div class="col-md-3">
 									<label>Material</label>
-									<select id="material" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select Material" multiple></select>
+									<select id="material" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select material" multiple></select>
 								</div>
 								<div class="col-md-3">
 									<label>Style</label>
-									<select id="style" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select Style" multiple data-live-search="true"></select>
+									<select id="style" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select style" multiple data-live-search="true"></select>
 								</div>
 								<div class="col-md-3">
 									<label>Mat-Sub</label>
-									<select id="mat_sub" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select Mat-Sub" multiple data-live-search="true"></select>
+									<select id="mat_sub" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select mat-sub" multiple data-live-search="true"></select>
 								</div>
 							</div>
 						</div>
@@ -219,7 +222,7 @@
 							<div class="row">
 								<div class="col-md-3">
 									<label>Reference</label>
-									<select id="reference" class="selectpicker filterLevel3" data-actions-box="true" data-size="10" title="Select Reference" multiple data-live-search="true"></select>
+									<select id="reference" class="selectpicker filterLevel3" data-actions-box="true" data-size="10" title="Select reference" multiple data-live-search="true"></select>
 								</div>
 								<div class="col-md-3">
 									<label>PO</label>
@@ -227,7 +230,7 @@
 								</div>
 								<div class="col-md-3">
 									<label>Buyer PO</label>
-									<select id="buyer_po" class="selectpicker filterLevel3" data-actions-box="true" data-size="10" title="Select Buyer PO" multiple data-live-search="true"></select>
+									<select id="buyer_po" class="selectpicker filterLevel3" data-actions-box="true" data-size="10" title="Select buyer PO" multiple data-live-search="true"></select>
 								</div>
 								<div class="col-md-3">
 									<label>OCN</label>
@@ -248,7 +251,7 @@
 						</div>
 						<div class="col-md-2">
 							<h4 class="text-center">
-								<a href="" id="moreOtions" class="clrGrey">More Options</a>
+								<a href="" id="moreOtions" class="clrGrey">More options</a>
 							</h4>
 						</div>
 						<div class="col-md-1" id="toggleBtn" data-icon="down">
@@ -304,6 +307,8 @@
 				</div>
 			</div>
 	</div>
+	{{-- Snackbar html code --}}
+<div id="snackbar"><span class="snackbar_span"></span></div>
 @endsection 
 
 @section('jqueryIncludes')
@@ -487,11 +492,13 @@
 						}
 						else
 						{
-							alert("Please select atleast one value from each of the select boxes")
+							$('.snackbar_span').html("Please select atleast one value from each of the select boxes.");
+							showSnackbar();
 						}
 					}
 					else{
-						alert("Please set the date interval");
+						$('.snackbar_span').html("Please set the date interval.");
+						showSnackbar();
 					}
 				}
 
@@ -573,7 +580,8 @@
 					}
 					else
 					{
-						alert("Please select atleast one value from each of the select boxes")
+						$('.snackbar_span').html("Please select atleast one value from each of the select boxes.");
+						showSnackbar();
 					}
 				}
 
@@ -600,22 +608,26 @@
 											create_table(data.Default,data.Extra)
 										}
 										else{
-											alert("No values found for this combination !!");
+											$('.snackbar_span').html("No values found for this combination !!.");
+											showSnackbar();
 										}
 									}
 								});
 							}
 							else
 							{
-								alert("Please select atleast one value from each of the select boxes")
+								$('.snackbar_span').html("Please select atleast one value from each of the select boxes.");
+								showSnackbar();
 							}
 						}
 						else{
-							alert("Please select the status");
+							$('.snackbar_span').html("Please select the status.");
+							showSnackbar();
 						}
 					}
 					else{
-						alert("Please Select One Of The Radio Buttons")
+						$('.snackbar_span').html("Please Select One Of The Radio Buttons.");
+						showSnackbar();
 					}
 				}
 				function create_table(def,extra)
@@ -662,7 +674,7 @@
 							data: def[i]
 						});
 					}
-
+					console.log(allColoumns)
 					var t = $('#reportTable').dataTable( {
 						processing: true,
 						serverSide: true,
@@ -701,9 +713,6 @@
 						"columns" :allColoumns
 					});
 
-
-					// 
-					// $("#all_data").html(tdData);
 					$("#filter-panel").addClass('collapse')
 					$("#reportTitle").html("Consolidated Report [ "+$('input[name=roleSelection]:checked').val()+" ]")
 					$('html,body').animate({
