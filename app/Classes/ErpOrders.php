@@ -144,7 +144,7 @@ class ErpOrders
 				/** Get updated data and update in history table */
 				$template          = 'Avlb';
 				$current_timestamp = Carbon::now('Asia/Kolkata')->toDateTimeString();
-				$action_id         = DB::table('actions')->where('action', 'ilike', 'PO Mngr Verified Pending')->value('id');
+				$action_id         = DB::table('actions')->where('action', 'ilike', 'PO Manager Verification Pending')->value('id');
 				
 				$template_level = DB::table('tesco_item_master as t1')
 									->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
@@ -349,7 +349,7 @@ class ErpOrders
 				// $template       = 'Avlb';
 				// $country        = "";
 				// $current_timestamp = Carbon::now('Asia/Kolkata')->toDateTimeString();
-				// $action_id      = DB::table('actions')->where('action', 'ilike', 'PO Mngr Verified Pending')->value('id');
+				// $action_id      = DB::table('actions')->where('action', 'ilike', 'PO Manager Verification Pending')->value('id');
 				
 				
 				// $template_level = DB::table('tesco_item_master as t1')
