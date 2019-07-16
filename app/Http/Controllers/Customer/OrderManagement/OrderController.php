@@ -83,6 +83,7 @@ class OrderController extends Controller
 		PDF::SetAutoPageBreak(TRUE);
 		$i=0;
 		$j=0;
+		$count=0;
 		$yy=12.5;
 		foreach($svgarr as $value)
         {
@@ -94,7 +95,14 @@ class OrderController extends Controller
 				PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
 				$yy=12.5;
 				PDF::RoundedRect(12.5, 12.5, 145, 95, 0, '0000');
-				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				file_put_contents(public_path('/storage/app/template/demo'.$count.'.svg'), $svg);
+					
+		
+				exec('inkscape -z -e '.public_path('/storage/app/template/out'.$count.'.png').' -w 1000 -h 1000 '.public_path('/storage/app/template/demo'.$count.'.svg'));
+
+				$html = '<img style="width:684px;height:449px;" src="'.public_path('/storage/app/template/out'.$count.'.png').'">';
+				PDF::writeHTMLCell(147, 97, 11.5, $yy, $html, '', 0, 0, false, 'L', false);
+				//PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 				$i = 0;
 			}
 			else if($i == 0)
@@ -102,7 +110,14 @@ class OrderController extends Controller
 				PDF::RoundedRect(10, 160, 150, 100, 0, '0000');
 				$yy=12.5;
 				PDF::RoundedRect(12.5, 162.5, 145, 95, 0, '0000');
-				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				file_put_contents(public_path('/storage/app/template/demo'.$count.'.svg'), $svg);
+					
+		
+				exec('inkscape -z -e '.public_path('/storage/app/template/out'.$count.'.png').' -w 1000 -h 1000 '.public_path('/storage/app/template/demo'.$count.'.svg'));
+
+				$html = '<img style="width:684px;height:449px;" src="'.public_path('/storage/app/template/out'.$count.'.png').'">';
+				PDF::writeHTMLCell(147, 97, 11.5, $yy, $html, '', 0, 0, false, 'L', false);
+				//PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 				
 			}
 			else
@@ -110,10 +125,19 @@ class OrderController extends Controller
 				PDF::RoundedRect(10, 160, 150, 100, 0, '0000');
 				$yy += 150;
 				PDF::RoundedRect(12.5, 162.5, 145, 95, 0, '0000');
-				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				file_put_contents(public_path('/storage/app/template/demo'.$count.'.svg'), $svg);
+					
+		
+				exec('inkscape -z -e '.public_path('/storage/app/template/out'.$count.'.png').' -w 1000 -h 1000 '.public_path('/storage/app/template/demo'.$count.'.svg'));
+
+				$html = '<img style="width:684px;height:449px;" src="'.public_path('/storage/app/template/out'.$count.'.png').'">';
+				PDF::writeHTMLCell(147, 97, 11.5, $yy, $html, '', 0, 0, false, 'L', false);
+				
+				//PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			}
 			$i++;
 			$j++;
+			$count++;
 		 }
 		 
 		 PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
@@ -485,7 +509,7 @@ class OrderController extends Controller
 		
 				exec('inkscape -z -e '.public_path('/storage/app/template/out'.$count.'.png').' -w 1000 -h 1000 '.public_path('/storage/app/template/demo'.$count.'.svg'));
 
-				$html = '<img style="width:520px;height:341;border:1px solid #333" src="'.public_path('/storage/app/template/out'.$count.'.png').'">';
+				$html = '<img style="width:520px;height:341;" src="'.public_path('/storage/app/template/out'.$count.'.png').'">';
 				PDF::writeHTMLCell(97, 67, 11.5, $yy, $html, '', 0, 0, false, 'L', false);
 				$i = 0;
 			}
@@ -500,7 +524,7 @@ class OrderController extends Controller
 		
 				exec('inkscape -z -e '.public_path('/storage/app/template/out'.$count.'.png').' -w 1000 -h 1000 '.public_path('/storage/app/template/demo'.$count.'.svg'));
 
-				$html = '<img style="width:520px;height:341;border:1px solid #333" src="'.public_path('/storage/app/template/out'.$count.'.png').'">';
+				$html = '<img style="width:520px;height:341;" src="'.public_path('/storage/app/template/out'.$count.'.png').'">';
 				PDF::writeHTMLCell(97, 67, 11.5, $yy, $html, '', 0, 0, false, 'L', false);
 				
 			}
@@ -515,7 +539,7 @@ class OrderController extends Controller
 		
 				exec('inkscape -z -e '.public_path('/storage/app/template/out'.$count.'.png').' -w 1000 -h 1000 '.public_path('/storage/app/template/demo'.$count.'.svg'));
 
-				$html = '<img style="width:520px;height:341;border:1px solid #333" src="'.public_path('/storage/app/template/out'.$count.'.png').'">';
+				$html = '<img style="width:520px;height:341;" src="'.public_path('/storage/app/template/out'.$count.'.png').'">';
 				PDF::writeHTMLCell(97, 67, 11.5, $yy, $html, '', 0, 0, false, 'L', false);
 			}
 			else
@@ -529,7 +553,7 @@ class OrderController extends Controller
 		
 				exec('inkscape -z -e '.public_path('/storage/app/template/out'.$count.'.png').' -w 1000 -h 1000 '.public_path('/storage/app/template/demo'.$count.'.svg'));
 
-				$html = '<img style="width:520px;height:341;border:1px solid #333" src="'.public_path('/storage/app/template/out'.$count.'.png').'">';
+				$html = '<img style="width:520px;height:341;" src="'.public_path('/storage/app/template/out'.$count.'.png').'">';
 				PDF::writeHTMLCell(97, 67, 11.5, $yy, $html, '', 0, 0, false, 'L', false);
 			}
 			$i++;
