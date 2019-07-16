@@ -1719,6 +1719,7 @@ class OrderController extends Controller
                     $request_array['id'] = $value[1];
                     $request_array['tableName'] = $value[0]; 
                     $request_array['buyer_id'] = $tesco_buyer_id->id; 
+                    $request_array['created_by'] = Auth::guard('web_customer')->id();
 
                    return $erp_obj->updateOrchestraErpOrders($request_array);
                 }
@@ -1794,7 +1795,13 @@ class OrderController extends Controller
                         'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                         ]);
             if ($po_status == "PO Uploaded") {
-               $erp_obj->updateOrchestraErpOrders($request);
+                /** @var array [Pass array of values to updateOrchestraErpOrders function] */
+                $request_array = [];
+                $request_array['id'] = $template_id;
+                $request_array['tableName'] = $table_name; 
+                $request_array['buyer_id'] = $request->buyer_id; 
+                $request_array['created_by'] = Auth::guard('web_customer')->id();
+                $erp_obj->updateOrchestraErpOrders($request_array);
             }
 
             return response()->json(['error'=> false,'message' =>'Purchase Order Number added Successfully'],200);
@@ -1861,10 +1868,12 @@ class OrderController extends Controller
 
                         ]);
             if ($po_status == "PO Uploaded") {
+                /** @var array [Pass array of values to updateOrchestraErpOrders function] */
                 $request_array = [];
                 $request_array['id'] = $row_id;
                 $request_array['tableName'] = $table_name; 
                 $request_array['buyer_id'] = $request['buyer_id']; 
+                $request_array['created_by'] = Auth::guard('web_customer')->id();
 
                 $erp_obj->updateOrchestraErpOrders($request_array);
             }
@@ -2030,6 +2039,7 @@ class OrderController extends Controller
             $erpOrders['tableName'] = $table_name;
             $erpOrders['id']        = $row_id;
             $erpOrders['buyer_id']  = $buyer_id;   
+            $erpOrders['created_by'] = Auth::guard('web_customer')->id();
             $customer_data  = DB::table('customers')->where('id',$data['bank_details']->id)->first();
 
             if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
