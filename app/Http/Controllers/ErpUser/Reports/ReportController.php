@@ -15,8 +15,24 @@ use DB;
 use Auth;
 class ReportController extends Controller
 {
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('erpuser');
+    }
+
     public function index()
     {
+        // dd(Auth::guard('erpuser')->user());
+        $roles  = \App\ErpUserRolesMapping::where('erp_user', $id)
+                        ->join('erp_roles', 'erpusers_roles_mapping.role', 'erp_roles.id')
+                        ->pluck('name')->all();
+                        dd($roles);
     $buyerId = History::all()->pluck('buyer_id');
     $buyers=Buyer::whereIn('id',$buyerId)->orderBy('buyer_name')->pluck('buyer_name','id')->toArray();
     $actions= Action::select('id','action','type')->get()->groupBy('type')->toArray();
