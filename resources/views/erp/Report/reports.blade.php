@@ -489,7 +489,13 @@
 									$('#style').html('')
 									$('#mat_sub').html('')
 
-									$.each(data.customers, function(key, value) {   
+									if(data.customers.length == 0 || data.result.length == 0)
+									{
+										$('.snackbar_span').html("No results could be fetched for this combination.");
+											showSnackbar();
+									}
+									else{
+											$.each(data.customers, function(key, value) {   
 										$('#customer')
 										.append($("<option></option>")
 											.attr("value",key)
@@ -532,6 +538,8 @@
 									$('.selectpicker').selectpicker('refresh');
 									$(".level2filter").removeClass('hidden')
 									$("#filter1").addClass('hidden')
+
+									}
 								}
 							});
 						}
@@ -592,6 +600,8 @@
 								$('#buyer_po').html('')
 								$('#ocn').html('')
 
+								if(data.length > 0)
+								{
 								var temp4=[]	
 								$.each(data, function(key, value) 
 								{ 
@@ -639,6 +649,12 @@
 								$('.selectpicker').selectpicker('refresh');
 								$(".level3filter").removeClass('hidden')
 								$("#filter2").addClass('hidden')
+								}
+								else{
+									$('.snackbar_span').html("No results could be fetched for this combination.");
+										showSnackbar();
+								}
+								
 							}
 
 						});
