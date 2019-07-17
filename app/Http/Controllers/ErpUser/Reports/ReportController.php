@@ -28,11 +28,50 @@ class ReportController extends Controller
 
     public function index()
     {
-        // dd(Auth::guard('erpuser')->user());
+        $allActions = array();
+        $action_as_id = array();
+        if(Auth::guard('erpuser')->user()->is_admin)
+        {
+        $roles  = \App\ErpRoles::pluck('name')->all();
+        $allActions = array_values(array_unique(Action::all()->pluck('type')->toArray()));
+        $action_as_id=["_poMgr","_jcMgr","_order","_invoice"];
+        }
+        else
+        {
+        $id = Auth::guard('erpuser')->user()->id;
+
         $roles  = \App\ErpUserRolesMapping::where('erp_user', $id)
-                        ->join('erp_roles', 'erpusers_roles_mapping.role', 'erp_roles.id')
-                        ->pluck('name')->all();
-                        dd($roles);
+        ->join('erp_roles', 'erpusers_roles_mapping.role', 'erp_roles.id')
+        ->pluck('name')->all();
+
+        foreach ($roles as $key => $value) {
+            switch ($value) 
+        {
+
+                case 'PO MANAGER' :
+                    array_push($allActions, 'PO Manager');
+                    array_push($action_as_id, '_poMgr');
+                break;
+
+                case 'JOB CARD MANAGER' :
+                    array_push($allActions, 'JC Manager');
+                    array_push($action_as_id, '_jcMgr');
+                break;
+
+                case 'INVOICE MANAGER' :
+                    array_push($allActions, 'Invoice');
+                    array_push($action_as_id, '_invoice');
+                break;
+                
+                default:
+                   
+                    break;
+            }
+            
+        }
+        array_push($allActions, 'Order');
+        array_push($action_as_id, '_order');
+        }
     $buyerId = History::all()->pluck('buyer_id');
     $buyers=Buyer::whereIn('id',$buyerId)->orderBy('buyer_name')->pluck('buyer_name','id')->toArray();
     $actions= Action::select('id','action','type')->get()->groupBy('type')->toArray();
@@ -41,29 +80,7 @@ class ReportController extends Controller
     $order = Action::where('type','Order')->pluck('action','id')->toArray();
     $invoice = Action::where('type','Invoice')->pluck('action','id')->toArray();
 
-// dd(Auth::user());
-//     switch (Auth::user()->user_role_id) {
-
-//         case 1:
-//             $allActions=['PO Manager','Order'];
-//             $action_as_id=["_poMgr","_order"];
-//         break;
-
-//         case 2:
-//             $allActions=['JC Manager','Order'];
-//             $action_as_id=["_jcMgr","_order"];
-//         break;
-
-//         case 3:
-//             $allActions=['Invoice','Order'];
-//             $action_as_id=["_invoice","_order"];
-//         break;
-        
-//         default:
-            $allActions = array_values(array_unique(Action::all()->pluck('type')->toArray()));
-            $action_as_id=["_poMgr","_jcMgr","_order","_invoice"];
-            // break;
-    // }
+ 
     return view('erp.Report.reports',compact('buyers','actions','po','jc','jc','order','invoice','allActions','action_as_id'));
 
     }
