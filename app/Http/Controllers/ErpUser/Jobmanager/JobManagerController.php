@@ -19,6 +19,7 @@ use App\Classes\JobcardPDFHeaderFooter;
 use App\Classes\FPDF_Merge;
 use File;
 use Config;
+use App\History;
 
 class JobManagerController extends Controller
 {
@@ -722,10 +723,8 @@ class JobManagerController extends Controller
 								}
 
 
-								$history_id = DB::table('history')
-								->insertGetId([
+								$history_id = History::updateOrCreate(['erp_order_details_id' => $data->id], [
 									'buyer_id'             => $buyer_id,
-									'erp_order_details_id' => $data->id,
 									'template'             => $template,
 									'season'               => $season,
 									'country'              => $country,
@@ -743,7 +742,7 @@ class JobManagerController extends Controller
 
 								DB::table('event_history')
 								->insert([
-									'history_id'  => $history_id,
+									'history_id'  => $history_id->id,
 									'action_id'   => $action_id,
 									'created_by'  => Auth::guard('erpuser')->id(),
 									'created_at'  => $current_timestamp,

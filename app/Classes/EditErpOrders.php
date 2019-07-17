@@ -121,6 +121,7 @@ class EditErpOrders
 						'buyer_po_number'  		=> $orders->po_number,
 						'zone'					=> $orders->zone,
 						'order_type'            => $orders->order_flag,
+						'created_at'            => $this->updated_at,
 						'updated_at'            => $this->updated_at,
 						'order_status_id'       => $order_status_id->id,
 					]);
@@ -128,7 +129,6 @@ class EditErpOrders
 				
 				/** Get updated data and update in history table */
 				$template          = 'Avlb';
-				$current_timestamp = Carbon::now('Asia/Kolkata')->toDateTimeString();
 				$action_id         = DB::table('actions')->where('action', 'ilike', 'PO Manager Verification Pending')->value('id');
 				
 				$template_level = DB::table('tesco_item_master as t1')
@@ -158,8 +158,8 @@ class EditErpOrders
 					'po'                   => $customer_po_no,
 					'buyer_po'             => $orders->po_number,
 					'ocn'                  => $orders->ocn_number,
-					'created_at'           => $current_timestamp,
-					'updated_at'           => $current_timestamp,
+					'created_at'           => $this->updated_at,
+					'updated_at'           => $this->updated_at,
 				]);
 
 				DB::table('event_history')
@@ -167,8 +167,8 @@ class EditErpOrders
 					'history_id'  => $history_id,
 					'action_id'   => $action_id,
 					'created_by'  => $created_by,
-					'created_at'  => $current_timestamp,
-					'updated_at'  => $current_timestamp,
+					'created_at'  => $this->updated_at,
+					'updated_at'  => $this->updated_at,
 				]);
 			}
 		}
