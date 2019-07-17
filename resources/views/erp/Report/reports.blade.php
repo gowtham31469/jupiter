@@ -467,23 +467,39 @@
 											.text(value)); 
 									});
 
+									var temp1=[]
 									$.each(data.result, function(key, value) { 
-										$('#material')
-										.append($("<option></option>")
-											.text(value['material'])); 
+
+										if($.inArray( value['material'], temp1 )==-1)	
+										{	
+											$('#material').append($("<option></option>")
+											.text(value['material']));
+										}
+										 	temp1.push(value['material'])
+									});
+									
+									var temp2=[]
+									$.each(data.result, function(key, value) 
+									{ 
+										if($.inArray( value['style'], temp2 )==-1)	
+										{	
+										$('#style').append($("<option></option>")
+										.text(value['style'])); 
+										}
+										temp2.push(value['style'])
 									});
 
-									$.each(data.result, function(key, value) { 
-										$('#style')
-										.append($("<option></option>")
-											.text(value['style'])); 
-									});
-
-									$.each(data.result, function(key, value) { 
-										$('#mat_sub')
-										.append($("<option></option>")
+									var temp3=[]
+									$.each(data.result, function(key, value) 
+									{ 
+										if($.inArray( value['mat_sub'], temp3 )==-1)	
+										{
+										$('#mat_sub').append($("<option></option>")
 											.text(value['mat_sub'])); 
+										}
+										temp3.push(value['mat_sub'])
 									});
+
 									$('.selectpicker').selectpicker('refresh');
 									$(".level2filter").removeClass('hidden')
 									$("#filter1").addClass('hidden')
@@ -547,28 +563,48 @@
 								$('#buyer_po').html('')
 								$('#ocn').html('')
 
-								$.each(data, function(key, value) { 
-									$('#reference')
-									.append($("<option></option>")
+								var temp4=[]	
+								$.each(data, function(key, value) 
+								{ 
+									if($.inArray( value['reference'], temp4 )==-1)	
+									{
+									$('#reference').append($("<option></option>")
 										.text(value['reference'])); 
+									}
+									temp4.push(value['reference'])
 								});
 
-								$.each(data, function(key, value) { 
-									$('#po')
-									.append($("<option></option>")
+								var temp5=[]
+								$.each(data, function(key, value)
+								 { 
+									if($.inArray( value['po'], temp5 )==-1)	
+									{
+									$('#po').append($("<option></option>")
 										.text(value['po'])); 
+									}
+									temp5.push(value['po'])
 								});
 
-								$.each(data, function(key, value) { 
-									$('#buyer_po')
-									.append($("<option></option>")
+								var temp6=[]
+								$.each(data, function(key, value)
+								 { 
+									if($.inArray( value['buyer_po'], temp6 )==-1)	
+									{
+									$('#buyer_po').append($("<option></option>")
 										.text(value['buyer_po'])); 
+									}
+									temp6.push(value['buyer_po'])
 								});
 
-								$.each(data, function(key, value) { 
-									$('#ocn')
-									.append($("<option></option>")
+								var temp7=[]
+								$.each(data, function(key, value)
+								 { 
+								 	if($.inArray( value['ocn'], temp7 )==-1)	
+									{
+									$('#ocn').append($("<option></option>")
 										.text(value['ocn'])); 
+									}
+									temp7.push(value['ocn'])
 								});
 
 								$('.selectpicker').selectpicker('refresh');
