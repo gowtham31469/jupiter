@@ -25,28 +25,29 @@ class ReportController extends Controller
     $order = Action::where('type','Order')->pluck('action','id')->toArray();
     $invoice = Action::where('type','Invoice')->pluck('action','id')->toArray();
 
-    switch (Auth::user()->user_role_id) {
+// dd(Auth::user());
+//     switch (Auth::user()->user_role_id) {
 
-        case 1:
-            $allActions=['PO Manager','Order'];
-            $action_as_id=["_poMgr","_order"];
-        break;
+//         case 1:
+//             $allActions=['PO Manager','Order'];
+//             $action_as_id=["_poMgr","_order"];
+//         break;
 
-        case 2:
-            $allActions=['JC Manager','Order'];
-            $action_as_id=["_jcMgr","_order"];
-        break;
+//         case 2:
+//             $allActions=['JC Manager','Order'];
+//             $action_as_id=["_jcMgr","_order"];
+//         break;
 
-        case 3:
-            $allActions=['Invoice','Order'];
-            $action_as_id=["_invoice","_order"];
-        break;
+//         case 3:
+//             $allActions=['Invoice','Order'];
+//             $action_as_id=["_invoice","_order"];
+//         break;
         
-        default:
+//         default:
             $allActions = array_values(array_unique(Action::all()->pluck('type')->toArray()));
             $action_as_id=["_poMgr","_jcMgr","_order","_invoice"];
-            break;
-    }
+            // break;
+    // }
     return view('erp.Report.reports',compact('buyers','actions','po','jc','jc','order','invoice','allActions','action_as_id'));
 
     }
@@ -73,7 +74,8 @@ class ReportController extends Controller
     }
 
     public function level2Filter(Request $request)
-    {
+    {  
+     // dd($request->all());
         $result = History::whereIn('buyer_id',$request->buyer)
                            ->whereIn('season',$request->season)
                            ->whereIn('template',$request->template)
@@ -328,11 +330,11 @@ class ReportController extends Controller
                            ->pluck('id')
                            ->toArray();
 
+
         $eventHistory = EventHistory::whereIn('history_id',$result)
                         ->whereIn('action_id',$request->status)
                         ->pluck('history_id')
                         ->toArray();
-
 
         $queryRes = History::whereIn('history.id',$eventHistory)
                     ->leftJoin("erp_order_details",'erp_order_details.id', '=', 'history.id')
@@ -343,9 +345,6 @@ class ReportController extends Controller
         $queryRes->map(function ($queryRes,$key) {
             $queryRes->No =$key+1;
         });
-
-        // dd($queryRes);
-
         return Datatables::of($queryRes)->make();
     }
 

@@ -1,10 +1,26 @@
 @extends('layouts.Erp.app')
-
+@section('content')
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.css"/>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.dataTables.min.css">
 
 <style type="text/css">
+	.card {
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+	transition: 0.3s;
+	height: 20%;
+	min-height: 80px;
+	margin-bottom: 0px;
+	border-radius: 0px;
+	margin-top: 0px;
+	/*width: 40%;*/
+	}
+	#reportTitle{margin-left: 34%;}
+	.mrgBtm{margin-bottom: 5%;}
+	.card:hover {
+	box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+	}
+	#reportTable_wrapper{margin-bottom: 1%;}
 	.dt-buttons{margin-left: 2%;}
 	.dateGap
 	{
@@ -13,7 +29,7 @@
 		border-bottom: 1px solid teal;
 		-webkit-box-shadow: none;
 		box-shadow: none;
-		font-size: smaller;
+		/*font-size: smaller;*/
 		border-radius: 0;
 	}
 	.setMarginTop4{margin-top: 4%;width: 97%;}
@@ -38,13 +54,16 @@
 		margin-top: 12%;
 		float: right;
 	}
-	.input-sm{margin-top: 30%;height: 29px;}
+	.input-sm{margin-top: 34%;height: 29px;}
 	.btn .caret, .btn-group>.btn:first-child {height: 30px!important;}
 	.bootstrap-select>.dropdown-toggle.bs-placeholder{height: 30px!important;}
 	.filter-option{font-size: smaller !important;}
 	.checklist1{min-height: 250px;cursor: pointer;max-height: 350px;overflow: auto;}
 	.checklist2{min-height: 250px;cursor: pointer;max-height: 350px;overflow: auto;}
 	.checkbox-inline i{margin-left: 15px;}
+	#filter3{    
+	margin-top: 32%;
+    height: 29px;}
 	#checklist li{padding: .4%;font: 15px;}
 	#reportTable{
 		min-width: 100%;
@@ -111,11 +130,18 @@
 			color: red;	
 		}
 		.pading1{padding: 1%;}
-		.clrGrey{color:grey;}
+		.clrGrey{
+				color:grey;  
+				border: 1px solid lightgray;
+				right: -30%;
+				top: 0;
+				padding: 3.5%;
+				margin-left: -19%;
+				position: absolute;
+			}
 		.paddingSmaller{padding: 0.5%;}
 		.bordr1px{border: 1px solid;}
 		.togBtn{
-			margin-top: -1%;
 			font-size: 20px;
 			border: 1px solid lightgray;
 			padding: 5%;
@@ -123,14 +149,17 @@
 			position: absolute;
 			right: 0;"
 		}
+		/*.filter-panel{transition: height 200ms;}*/
 		.dataTables_wrapper.no-footer .dataTables_scrollBody {
 		border-bottom:1px solid #ddd !important; 
 		}
+
 </style>
 
-@section('content')
+
 	<div class="container-fluid setMarginTop4">
-			<div class="row">
+		<h4 class="text-center">REPORT GENERATION</h4>
+			<div class="row card">
 				<div class="col-md-5">
 					<h5 id="dateLabel">Set the date interval</h5>
 					<table border="0" cellpadding="0" cellspacing="0">
@@ -169,8 +198,8 @@
 				</div>
 			</div>
 
-			<div class="row setMarginTop2 filter-panel" id="filter-panel">
-				<div class="col-md-12 bordr1px">
+			<div class="row setMarginTop2 filter-panel card" id="filter-panel">
+				<div class="col-md-12">
 					<div class="row paddingSmaller">
 						<div class="col-md-11">
 							<div class="row">
@@ -238,7 +267,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-1"><button class="btn btn-default input-sm" id="filter3">Get Report</button></div>
+						<div class="col-md-1"><button class=" btn btn-primary btn-sm" id="filter3">Get Report</button></div>
 					</div>
 				</div>
 			</div>
@@ -261,7 +290,7 @@
 				</div>
 			</div>
 
-			<div class="row" >
+			<div class="row">
 				<div class="col-md-12">
 					<table class="table table-hover table-striped table-bordered dataTable no-footer" id="reportTable">
 						<thead>
@@ -269,8 +298,8 @@
 								<th>S.No</th><th>Order.Dt</th><th>ErpId</th><th>Customer</th><th>Material</th><th>Style</th><th>PO</th><th>OCN</th><th>Reference</th><th>OCN</th><th>Reference</th><th>Reason</th><th>Reapprove.Dt</th>
 							</tr>
 						</thead>
-						<tbody id="all_data">
-						</tbody>
+						{{-- <tbody id="all_data">
+						</tbody> --}}
 					</table>
 				</div>
 			</div>
@@ -309,7 +338,7 @@
 	</div>
 	{{-- Snackbar html code --}}
 <div id="snackbar"><span class="snackbar_span"></span></div>
-@endsection 
+
 
 @section('jqueryIncludes')
 
@@ -494,7 +523,7 @@
 									{ 
 										if($.inArray( value['mat_sub'], temp3 )==-1)	
 										{
-										$('#mat_sub').append($("<option></option>")
+										$('#mat_sub').append($("<option value='"+value['mat_sub']+"'></option>")
 											.text(value['mat_sub'])); 
 										}
 										temp3.push(value['mat_sub'])
@@ -537,7 +566,7 @@
 						});
 
 						$.each($("#mat_sub option:selected"), function(){            
-							mat_sub.push($(this).html());
+							mat_sub.push($(this).val().replace('&amp;','&'));
 						});
 
 						$.ajax({
@@ -669,7 +698,7 @@
 				function create_table(def,extra)
 				{ 
 					$("#reportTable").DataTable().destroy();
-					$("#all_data").empty();
+					// $("#all_data").empty();
 					$("#all_fields").html('')
 					extraFields = extra.slice();
 					defaultFields = def.slice(); 
@@ -719,9 +748,9 @@
 						dom: 'lBfrtip',
 						// lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
 						buttons: ['copy', 'csv', 'excel', 'pdf'],
-						// fixedHeader: {
-						// 	header: true,
-						// },
+						fixedHeader: {
+							header: true,
+						},
 						"ajax": {
 							"url": "{{ url('setUpDatatable') }}",
 							"dataType": "json",
@@ -811,7 +840,10 @@
 						$("#toggleFa").removeClass('fa fa-angle-down').addClass('fa fa-angle-up')
 						$(this).data('icon',"up")
 					}
+
+
 				});
 			});
 	</script>
+@endsection 
 @endsection 
