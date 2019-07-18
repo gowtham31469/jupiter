@@ -232,7 +232,7 @@
                                 <div class="help-block with-errors"></div>
                               </div>
                               <div class="form-group has-feedback form-inline">
-                                {!! Form::label('day_count', 'Deliver order after &nbsp;') !!}
+                                {!! Form::label('day_count', 'Delivery Order After &nbsp;') !!}
                                 {!! Form::text('day_count',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Days','required','style' => 'width: 60px;','maxlength' => '3','onkeypress' => 'return isNumber(event)')) !!}
                                 {!! Form::label('day_count', '&nbsp;Days.') !!}  
                                   <div class="help-block with-errors"></div>
@@ -271,7 +271,7 @@
                                         <div class="form-check form-group has-feedback">
                                           <label class="form-check-label">
                                             <input class="form-check-input default_contact" type="checkbox" value="" name="default" id="default_contact0">
-                                            Make as default contact person
+                                            Make As Default Contact Person
                                           </label>
                                           <div class="help-block with-errors"></div>
                                         </div>
@@ -327,14 +327,14 @@
                                         <div class="form-check form-group has-feedback" style="margin-top: 25px;">
                                           <label class="form-check-label">
                                             <input class="form-check-input default_address" type="checkbox" value="" checked="true" name="default1" id="default_address0">
-                                            Make as default billing address
+                                            Make As Default Billing Address
                                           </label>
                                           <div class="help-block with-errors"></div>
                                         </div>
                                         <div class="form-check form-group has-feedback">
                                           <label class="form-check-label">
                                             <input class="form-check-input shipping_address" type="checkbox" value="" checked="true" name="defaultShip1" id="shipping_address0">
-                                            Make as default shipping address
+                                            Make As Default Shipping Address
                                           </label>
                                           <div class="help-block with-errors"></div>
                                         </div>
@@ -503,7 +503,7 @@
                       <div class="help-block with-errors"></div>
                     </div>
                     <div class="form-group has-feedback form-inline">
-                      {!! Form::label('edit_day_count', 'Deliver order after &nbsp;') !!}
+                      {!! Form::label('edit_day_count', 'Delivery Order After &nbsp;') !!}
                       {!! Form::text('edit_day_count',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Days','required','style' => 'width: 60px;','maxlength' => '3','onkeypress' => 'return isNumber(event)')) !!}
                       {!! Form::label('edit_day_count', '&nbsp;Days.') !!}  
                         <div class="help-block with-errors"></div>

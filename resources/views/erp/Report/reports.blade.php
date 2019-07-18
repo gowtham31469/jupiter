@@ -1,10 +1,26 @@
 @extends('layouts.Erp.app')
-
+@section('content')
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.css"/>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.dataTables.min.css">
 
 <style type="text/css">
+	.card {
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+	transition: 0.3s;
+	height: 20%;
+	min-height: 80px;
+	margin-bottom: 0px;
+	border-radius: 0px;
+	margin-top: 0px;
+	/*width: 40%;*/
+	}
+	#reportTitle{margin-left: 34%;}
+	.mrgBtm{margin-bottom: 5%;}
+	.card:hover {
+	box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+	}
+	#reportTable_wrapper{margin-bottom: 1%;}
 	.dt-buttons{margin-left: 2%;}
 	.dateGap
 	{
@@ -13,7 +29,7 @@
 		border-bottom: 1px solid teal;
 		-webkit-box-shadow: none;
 		box-shadow: none;
-		font-size: smaller;
+		/*font-size: smaller;*/
 		border-radius: 0;
 	}
 	.setMarginTop4{margin-top: 4%;width: 97%;}
@@ -38,13 +54,16 @@
 		margin-top: 12%;
 		float: right;
 	}
-	.input-sm{margin-top: 30%;height: 29px;}
+	.input-sm{margin-top: 34%;height: 29px;}
 	.btn .caret, .btn-group>.btn:first-child {height: 30px!important;}
 	.bootstrap-select>.dropdown-toggle.bs-placeholder{height: 30px!important;}
 	.filter-option{font-size: smaller !important;}
 	.checklist1{min-height: 250px;cursor: pointer;max-height: 350px;overflow: auto;}
 	.checklist2{min-height: 250px;cursor: pointer;max-height: 350px;overflow: auto;}
 	.checkbox-inline i{margin-left: 15px;}
+	#filter3{    
+	margin-top: 32%;
+    height: 29px;}
 	#checklist li{padding: .4%;font: 15px;}
 	#reportTable{
 		min-width: 100%;
@@ -111,11 +130,18 @@
 			color: red;	
 		}
 		.pading1{padding: 1%;}
-		.clrGrey{color:grey;}
+		.clrGrey{
+				color:grey;  
+				border: 1px solid lightgray;
+				right: -30%;
+				top: 0;
+				padding: 3.5%;
+				margin-left: -19%;
+				position: absolute;
+			}
 		.paddingSmaller{padding: 0.5%;}
 		.bordr1px{border: 1px solid;}
 		.togBtn{
-			margin-top: -1%;
 			font-size: 20px;
 			border: 1px solid lightgray;
 			padding: 5%;
@@ -123,23 +149,29 @@
 			position: absolute;
 			right: 0;"
 		}
+		/*.filter-panel{transition: height 200ms;}*/
+		.dataTables_wrapper.no-footer .dataTables_scrollBody {
+		border-bottom:1px solid #ddd !important; 
+		}
+
 </style>
 
-@section('content')
+
 	<div class="container-fluid setMarginTop4">
-			<div class="row">
+		<h4 class="text-center">REPORT GENERATION</h4>
+			<div class="row card">
 				<div class="col-md-5">
 					<h5 id="dateLabel">Set the date interval</h5>
 					<table border="0" cellpadding="0" cellspacing="0">
 						<tr>
 							<td>
-								<input class="dateGap" type="text" id="txtFrom" placeholder="Start Date" />
+								<input class="dateGap" type="text" id="txtFrom" placeholder="Start date" />
 							</td>
 							<td>
 								&emsp;TO&emsp;
 							</td>
 							<td>
-								<input class="dateGap" type="text" id="txtTo" placeholder="End Date" />
+								<input class="dateGap" type="text" id="txtTo" placeholder="End date" />
 							</td>
 							<td>
 								&emsp;
@@ -154,7 +186,7 @@
 					@endforeach
 				</div>
 				<div class="col-md-3">
-					<h5 class="select_Status hidden">Select Status</h5>
+					<h5 class="select_Status hidden">Select status</h5>
 
 					{!! Form::select('role_Status[]', $po,null,['class' => 'selectpicker all_status _poMgr hidden','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select status [ PO Mngr ]','id'=>'_poMgr']) !!}
 
@@ -166,26 +198,26 @@
 				</div>
 			</div>
 
-			<div class="row setMarginTop2 filter-panel" id="filter-panel">
-				<div class="col-md-12 bordr1px">
+			<div class="row setMarginTop2 filter-panel card" id="filter-panel">
+				<div class="col-md-12">
 					<div class="row paddingSmaller">
 						<div class="col-md-11">
 							<div class="row">
 								<div class="col-md-3">
 									<label>Buyer</label>
-									{!! Form::select('sel_1[]', $buyers,null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Buyer','id'=>'buyer']) !!}
+									{!! Form::select('sel_1[]', $buyers,null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select buyer','id'=>'buyer']) !!}
 								</div>
 								<div class="col-md-3">
 									<label>Template</label>
-									{!! Form::select('sel_1[]',array_unique(App\History::all()->sortBy('template')->pluck('template')->toArray()),null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Template','id'=>'template']) !!}
+									{!! Form::select('sel_1[]',array_unique(App\History::all()->sortBy('template')->pluck('template')->toArray()),null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select template','id'=>'template']) !!}
 								</div>
 								<div class="col-md-3">
 									<label>Season</label>
-									{!! Form::select('sel_1[]', array_unique(App\History::all()->sortBy('season')->pluck('season')->toArray()),null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Season','id'=>'season']) !!}
+									{!! Form::select('sel_1[]', array_unique(App\History::all()->sortBy('season')->pluck('season')->toArray()),null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select season','id'=>'season']) !!}
 								</div>
 								<div class="col-md-3">
 									<label>Country</label>
-									{!! Form::select('sel_1[]',array_unique(App\History::all()->sortBy('country')->pluck('country')->toArray()),null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Country','id'=>'country']) !!}
+									{!! Form::select('sel_1[]',array_unique(App\History::all()->sortBy('country')->pluck('country')->toArray()),null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select country','id'=>'country']) !!}
 								</div>
 							</div>
 						</div>
@@ -196,19 +228,19 @@
 							<div class="row">
 								<div class="col-md-3">
 									<label>Customer</label>
-									<select id="customer" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select Customer" multiple></select>
+									<select id="customer" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select customer" multiple></select>
 								</div>
 								<div class="col-md-3">
 									<label>Material</label>
-									<select id="material" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select Material" multiple></select>
+									<select id="material" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select material" multiple></select>
 								</div>
 								<div class="col-md-3">
 									<label>Style</label>
-									<select id="style" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select Style" multiple data-live-search="true"></select>
+									<select id="style" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select style" multiple data-live-search="true"></select>
 								</div>
 								<div class="col-md-3">
 									<label>Mat-Sub</label>
-									<select id="mat_sub" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select Mat-Sub" multiple data-live-search="true"></select>
+									<select id="mat_sub" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select mat-sub" multiple data-live-search="true"></select>
 								</div>
 							</div>
 						</div>
@@ -219,7 +251,7 @@
 							<div class="row">
 								<div class="col-md-3">
 									<label>Reference</label>
-									<select id="reference" class="selectpicker filterLevel3" data-actions-box="true" data-size="10" title="Select Reference" multiple data-live-search="true"></select>
+									<select id="reference" class="selectpicker filterLevel3" data-actions-box="true" data-size="10" title="Select reference" multiple data-live-search="true"></select>
 								</div>
 								<div class="col-md-3">
 									<label>PO</label>
@@ -227,7 +259,7 @@
 								</div>
 								<div class="col-md-3">
 									<label>Buyer PO</label>
-									<select id="buyer_po" class="selectpicker filterLevel3" data-actions-box="true" data-size="10" title="Select Buyer PO" multiple data-live-search="true"></select>
+									<select id="buyer_po" class="selectpicker filterLevel3" data-actions-box="true" data-size="10" title="Select buyer PO" multiple data-live-search="true"></select>
 								</div>
 								<div class="col-md-3">
 									<label>OCN</label>
@@ -235,7 +267,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-1"><button class="btn btn-default input-sm" id="filter3">Get Report</button></div>
+						<div class="col-md-1"><button class=" btn btn-primary btn-sm" id="filter3">Get Report</button></div>
 					</div>
 				</div>
 			</div>
@@ -248,7 +280,7 @@
 						</div>
 						<div class="col-md-2">
 							<h4 class="text-center">
-								<a href="" id="moreOtions" class="clrGrey">More Options</a>
+								<a href="" id="moreOtions" class="clrGrey">More options</a>
 							</h4>
 						</div>
 						<div class="col-md-1" id="toggleBtn" data-icon="down">
@@ -258,7 +290,7 @@
 				</div>
 			</div>
 
-			<div class="row" >
+			<div class="row">
 				<div class="col-md-12">
 					<table class="table table-hover table-striped table-bordered dataTable no-footer" id="reportTable">
 						<thead>
@@ -266,8 +298,8 @@
 								<th>S.No</th><th>Order.Dt</th><th>ErpId</th><th>Customer</th><th>Material</th><th>Style</th><th>PO</th><th>OCN</th><th>Reference</th><th>OCN</th><th>Reference</th><th>Reason</th><th>Reapprove.Dt</th>
 							</tr>
 						</thead>
-						<tbody id="all_data">
-						</tbody>
+						{{-- <tbody id="all_data">
+						</tbody> --}}
 					</table>
 				</div>
 			</div>
@@ -304,7 +336,9 @@
 				</div>
 			</div>
 	</div>
-@endsection 
+	{{-- Snackbar html code --}}
+<div id="snackbar"><span class="snackbar_span"></span></div>
+
 
 @section('jqueryIncludes')
 
@@ -462,23 +496,39 @@
 											.text(value)); 
 									});
 
+									var temp1=[]
 									$.each(data.result, function(key, value) { 
-										$('#material')
-										.append($("<option></option>")
-											.text(value['material'])); 
+
+										if($.inArray( value['material'], temp1 )==-1)	
+										{	
+											$('#material').append($("<option></option>")
+											.text(value['material']));
+										}
+										 	temp1.push(value['material'])
+									});
+									
+									var temp2=[]
+									$.each(data.result, function(key, value) 
+									{ 
+										if($.inArray( value['style'], temp2 )==-1)	
+										{	
+										$('#style').append($("<option></option>")
+										.text(value['style'])); 
+										}
+										temp2.push(value['style'])
 									});
 
-									$.each(data.result, function(key, value) { 
-										$('#style')
-										.append($("<option></option>")
-											.text(value['style'])); 
-									});
-
-									$.each(data.result, function(key, value) { 
-										$('#mat_sub')
-										.append($("<option></option>")
+									var temp3=[]
+									$.each(data.result, function(key, value) 
+									{ 
+										if($.inArray( value['mat_sub'], temp3 )==-1)	
+										{
+										$('#mat_sub').append($("<option value='"+value['mat_sub']+"'></option>")
 											.text(value['mat_sub'])); 
+										}
+										temp3.push(value['mat_sub'])
 									});
+
 									$('.selectpicker').selectpicker('refresh');
 									$(".level2filter").removeClass('hidden')
 									$("#filter1").addClass('hidden')
@@ -487,11 +537,13 @@
 						}
 						else
 						{
-							alert("Please select atleast one value from each of the select boxes")
+							$('.snackbar_span').html("Please select atleast one value from each of the select boxes.");
+							showSnackbar();
 						}
 					}
 					else{
-						alert("Please set the date interval");
+						$('.snackbar_span').html("Please set the date interval.");
+						showSnackbar();
 					}
 				}
 
@@ -514,7 +566,7 @@
 						});
 
 						$.each($("#mat_sub option:selected"), function(){            
-							mat_sub.push($(this).html());
+							mat_sub.push($(this).val().replace('&amp;','&'));
 						});
 
 						$.ajax({
@@ -540,28 +592,48 @@
 								$('#buyer_po').html('')
 								$('#ocn').html('')
 
-								$.each(data, function(key, value) { 
-									$('#reference')
-									.append($("<option></option>")
+								var temp4=[]	
+								$.each(data, function(key, value) 
+								{ 
+									if($.inArray( value['reference'], temp4 )==-1)	
+									{
+									$('#reference').append($("<option></option>")
 										.text(value['reference'])); 
+									}
+									temp4.push(value['reference'])
 								});
 
-								$.each(data, function(key, value) { 
-									$('#po')
-									.append($("<option></option>")
+								var temp5=[]
+								$.each(data, function(key, value)
+								 { 
+									if($.inArray( value['po'], temp5 )==-1)	
+									{
+									$('#po').append($("<option></option>")
 										.text(value['po'])); 
+									}
+									temp5.push(value['po'])
 								});
 
-								$.each(data, function(key, value) { 
-									$('#buyer_po')
-									.append($("<option></option>")
+								var temp6=[]
+								$.each(data, function(key, value)
+								 { 
+									if($.inArray( value['buyer_po'], temp6 )==-1)	
+									{
+									$('#buyer_po').append($("<option></option>")
 										.text(value['buyer_po'])); 
+									}
+									temp6.push(value['buyer_po'])
 								});
 
-								$.each(data, function(key, value) { 
-									$('#ocn')
-									.append($("<option></option>")
+								var temp7=[]
+								$.each(data, function(key, value)
+								 { 
+								 	if($.inArray( value['ocn'], temp7 )==-1)	
+									{
+									$('#ocn').append($("<option></option>")
 										.text(value['ocn'])); 
+									}
+									temp7.push(value['ocn'])
 								});
 
 								$('.selectpicker').selectpicker('refresh');
@@ -573,7 +645,8 @@
 					}
 					else
 					{
-						alert("Please select atleast one value from each of the select boxes")
+						$('.snackbar_span').html("Please select atleast one value from each of the select boxes.");
+						showSnackbar();
 					}
 				}
 
@@ -600,28 +673,32 @@
 											create_table(data.Default,data.Extra)
 										}
 										else{
-											alert("No values found for this combination !!");
+											$('.snackbar_span').html("No values found for this combination !!.");
+											showSnackbar();
 										}
 									}
 								});
 							}
 							else
 							{
-								alert("Please select atleast one value from each of the select boxes")
+								$('.snackbar_span').html("Please select atleast one value from each of the select boxes.");
+								showSnackbar();
 							}
 						}
 						else{
-							alert("Please select the status");
+							$('.snackbar_span').html("Please select the status.");
+							showSnackbar();
 						}
 					}
 					else{
-						alert("Please Select One Of The Radio Buttons")
+						$('.snackbar_span').html("Please Select One Of The Radio Buttons.");
+						showSnackbar();
 					}
 				}
 				function create_table(def,extra)
 				{ 
 					$("#reportTable").DataTable().destroy();
-					$("#all_data").empty();
+					// $("#all_data").empty();
 					$("#all_fields").html('')
 					extraFields = extra.slice();
 					defaultFields = def.slice(); 
@@ -662,7 +739,7 @@
 							data: def[i]
 						});
 					}
-
+					console.log(allColoumns)
 					var t = $('#reportTable').dataTable( {
 						processing: true,
 						serverSide: true,
@@ -671,9 +748,9 @@
 						dom: 'lBfrtip',
 						// lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
 						buttons: ['copy', 'csv', 'excel', 'pdf'],
-						// fixedHeader: {
-						// 	header: true,
-						// },
+						fixedHeader: {
+							header: true,
+						},
 						"ajax": {
 							"url": "{{ url('setUpDatatable') }}",
 							"dataType": "json",
@@ -701,9 +778,6 @@
 						"columns" :allColoumns
 					});
 
-
-					// 
-					// $("#all_data").html(tdData);
 					$("#filter-panel").addClass('collapse')
 					$("#reportTitle").html("Consolidated Report [ "+$('input[name=roleSelection]:checked').val()+" ]")
 					$('html,body').animate({
@@ -766,7 +840,10 @@
 						$("#toggleFa").removeClass('fa fa-angle-down').addClass('fa fa-angle-up')
 						$(this).data('icon',"up")
 					}
+
+
 				});
 			});
 	</script>
+@endsection 
 @endsection 

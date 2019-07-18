@@ -353,7 +353,7 @@
 							   <div class="col-md-3">
 								    <div class="form-group has-feedback">
 										{!! Form::label('edit_print_color', 'PRINT COLORS :', ['class' => 'form_label']) !!}
-										{!! Form::text('edit_print_color',$value = '', array('class' => 'form-control input-sm','placeholder' => 'STYLENUM', 'maxlength' => '20')) !!}
+										{!! Form::text('edit_print_color',$value = '', array('class' => 'form-control input-sm','placeholder' => 'COLORS', 'maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
 							   </div>
