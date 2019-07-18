@@ -15,7 +15,7 @@ class AddJcCreatedDateToErpOrders extends Migration
     {
         Schema::table('erp_order_details', function (Blueprint $table) {
              $table->timestamp('jc_created_date')->nullable();
-	     $table->timestamp('po_verified_date')->nullable();
+	         $table->timestamp('po_verified_date')->nullable();
         });
     }
 
@@ -28,7 +28,7 @@ class AddJcCreatedDateToErpOrders extends Migration
     {
         Schema::table('erp_order_details', function (Blueprint $table) {
              $table->dropColumn('jc_created_date');
-	     $table->dropColumn('po_verified_date');
+	         $table->dropColumn('po_verified_date');
         });
     }
 }
