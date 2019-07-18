@@ -553,7 +553,7 @@ function generateJobcard(){
                     $('#jobcardCreationModalCenter').modal({
                         backdrop: 'static',
                         keyboard: false
-                    })
+                    });
 
                     /** [ Validate create_jobcard form using bootstrap validator ] */
                     $('#create_jobcard').validator('update');
