@@ -1288,15 +1288,17 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 
         var head_qty = "Quantity for Standard Stickers";
         var head_qty1 = "Standard Parcel/Carton Sticker";
-        var standard_div = '<input type="hidden" id="carton_hidden" value="standard"><div class="form-group"><label>Total Polybags per carton: </label><input id="total_polybag" value="' + $total_polybag + '" onkeypress="return checkNumbersOnly(event)" type="text" placeholder="Polybag count" class="form-control input-sm"></div> <div class="form-group"><label>Final Order Qty including Wastage: </label><div class="input-group"><input id="final_order_qty_sets" value="' + $final_order_qty_sets + '" type="text" onkeypress="return checkNumbersOnly(event)" placeholder="Set of 2 Pcs." class="form-control input-sm"><span class="input-group-addon">sets</span></div></div><hr><h4>Standard Polybag Sticker</h4><div class="form-group"><label>Order Quantity</label><input id="order_qty" value="' + $order_qty + '" onkeypress="return checkNumbersOnly(event)" type="text" class="form-control input-sm"></div><div class="form-group"><label>Final Order Qty including Wastage</label><input id="final_order_qty" value="' + $final_order_qty + '" onkeypress="return checkNumbersOnly(event)" type="text" class="form-control input-sm"></div>';
+        var standard_div = '<input type="hidden" id="carton_hidden" value="standard"><div class="form-group"><label>Total Polybags per carton: </label><input id="total_polybag" value="' + $total_polybag + '" onkeypress="return checkNumbersOnly(event)" type="text" placeholder="Polybag count" class="form-control input-sm"></div> <div class="form-group"><label>Final Order Qty including Wastage: </label><div class="form-group has-feedback has-success"><input required min="'+data.polybag_moq+'" id="final_order_qty_sets" value="' + $final_order_qty_sets + '" type="number" onkeypress="return checkNumbersOnly(event)" placeholder="" class="form-control input-sm"><div class="help-block with-errors"></div></div></div><hr><h4>Standard Polybag Sticker</h4><div class="form-group"><label>Order Quantity</label><input id="order_qty" value="' + $order_qty + '" onkeypress="return checkNumbersOnly(event)" type="text" class="form-control input-sm"></div><div class="form-group"><label>Final Order Qty including Wastage</label><div class="form-group has-feedback has-success"><input required min="'+data.carton_moq+'" id="final_order_qty" value="' + $final_order_qty + '" onkeypress="return checkNumbersOnly(event)" type="number" class="form-control input-sm"><div class="help-block with-errors"></div></div></div>';
 		var po_file_upload_button="po-file-upload-button-standard";
 		if(update_disable == 0)
 		{
 			var update_disabel_button = "display:none";
+			var save_hide_button = "";
 		}
 		else
 		{
 			var update_disabel_button = "";
+			var save_hide_button = "hidden";
 		}
     } else {
 		var update_disable=0;
@@ -1315,18 +1317,24 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
             if (data.orchestra_solid_carton_sticker_orders != "") {
                 $carton_count = data.orchestra_solid_carton_sticker_orders[0].qty[$qu].quantity;
             } else {
-                $carton_count = 0;
+                $carton_count = "";
             }
 
             if (data.orchestra_solid_poly_bag_sticker_orders != "") {
                 $poly_count = data.orchestra_solid_poly_bag_sticker_orders[0].qty[$qu].quantity;
             } else {
-                $poly_count = 0;
+                $poly_count = "";
             }
 
-            tr += '<tr><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="qty">' + value.Quantity + '</td><td><input type="hidden" class="SKU_Code" value="' + value.SKU_Code + '"><div class="form-group has-feedback has-success"><input type="number" required min="'+data.polybag_moq+'" value="' + $poly_count + '" class="form-control tot_qty_table_poly input-sm"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback has-success"><input  min="'+data.carton_moq+'" required type="number" value="' + $carton_count + '" class="form-control tot_qty_table_carton input-sm"><div class="help-block with-errors"></div></div></td></tr>';
-            tpolytot += parseInt($poly_count);
-            tcarttot += parseInt($carton_count);
+            tr += '<tr><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="qty">' + value.Quantity + '</td><td><input type="hidden" class="SKU_Code" value="' + value.SKU_Code + '"><div class="form-group has-feedback has-success"><input style="margin-bottom: 0px;" type="number" required min="'+data.polybag_moq+'" onfocus="return checkMOQ(this)" value="' + $poly_count + '" class="form-control tot_qty_table_poly input-sm"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback has-success"><input style="margin-bottom: 0px;" min="'+data.carton_moq+'" onfocus="return checkMOQ(this)" required type="number" value="' + $carton_count + '" class="form-control tot_qty_table_carton input-sm"><div class="help-block with-errors"></div></div></td></tr>';
+			if($poly_count != "")
+			{
+				 tpolytot += parseInt($poly_count);
+			}
+			if($carton_count != "")
+			{
+				tcarttot += parseInt($carton_count);
+			}
             $qu++;
         });
 
@@ -1361,10 +1369,14 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 		if(update_disable == 0)
 		{
 			var update_disabel_button = "display:none";
+			
+			var save_hide_button = "";
 		}
 		else
 		{
 			var update_disabel_button = "";
+			
+			var save_hide_button = "hidden";
 		}
     }
 
@@ -1381,7 +1393,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
     {
         var onclick = "orderStatus()";
     }
-    $('.top-content').append('<form id="solid_carton_form"><h3><i class="ion-ios-browsers-outline"></i> Sticker Order Details for UVC ' + uvc + ' and PO ' + po + '</h3><hr/><h5><div style="margin-bottom: 10px;"><label style="color:red" class="age_group_error hidden">Please Select Age Group</label></div><span class="sticker-details">Supplier: <strong><span id="supplier">' + data.orchestra_parcel_details[0].SupplierName + '</span></strong> </span> <span class="sticker-details">Style: <strong><span id="style">' + data.orchestra_parcel_details[0].NomApple + '</span></strong></span><span class="sticker-details">Color: <strong><span id="color">' + data.orchestra_parcel_details[0].colour_Code + '</span></strong></span><span class="sticker-details" style="display: inline-flex; white-space: nowrap;">Age Group: <strong><span id="ageGroup">  <select class="form-control" style="margin-top: -9px; margin-left: 10px;" name="carlist" id="age" form="carform">' + option + '</select></span></strong> </span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>' + head_qty + '</h4><div class="table-responsive"><table class="table table-condensed table-bordered table-hover" id="solidform">' + thead + '<tbody id="solidformtbody">' + tr + '</tbody><tfoot><tr class="strong"><td class="text-right" colspan="2">Total</td><td>' + data.orchestra_parcel_details[0].Quantity + '</td>' + ttotal + '</tr></tfoot></table><div class="bottom-bar"><div class="modal-footer"> <button onclick="'+onclick+'" class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="submit" class="btn btn-xs btn-success"><i class="fa fa-floppy-o"></i>Save</button><button type="button" class="btn btn-success  pull-right btn-xs" data-toggle="modal" id="'+po_file_upload_button+'" style="'+update_disabel_button+'" >Update PO</button></div></div></form></div></div><div class="col-md-4"><h4>' + head_qty1 + '</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" disabled value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" disabled value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume">' + $parcelVolume + '</span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input ' + disabled + ' data-toggle="modal" data-target=".needed_modal" value="' + $no_of_carton + '" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>' + standard_div + ' </div></div>');
+    $('.top-content').append('<form id="solid_carton_form"><h3><i class="ion-ios-browsers-outline"></i> Sticker Order Details for UVC ' + uvc + ' and PO ' + po + '</h3><hr/><h5><div style="margin-bottom: 10px;"><label style="color:red" class="age_group_error hidden">Please Select Age Group</label></div><span class="sticker-details">Supplier: <strong><span id="supplier">' + data.orchestra_parcel_details[0].SupplierName + '</span></strong> </span> <span class="sticker-details">Style: <strong><span id="style">' + data.orchestra_parcel_details[0].NomApple + '</span></strong></span><span class="sticker-details">Color: <strong><span id="color">' + data.orchestra_parcel_details[0].colour_Code + '</span></strong></span><span class="sticker-details" style="display: inline-flex; white-space: nowrap;">Age Group: <strong><span id="ageGroup">  <select class="form-control" style="margin-top: -9px; margin-left: 10px;" name="carlist" id="age" form="carform">' + option + '</select></span></strong> </span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>' + head_qty + '</h4><div class="table-responsive"><table class="table table-condensed table-bordered table-hover" id="solidform">' + thead + '<tbody id="solidformtbody">' + tr + '</tbody><tfoot><tr class="strong"><td class="text-right" colspan="2">Total</td><td>' + data.orchestra_parcel_details[0].Quantity + '</td>' + ttotal + '</tr></tfoot></table><div class="bottom-bar"><div class="modal-footer"> <button onclick="'+onclick+'" class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="submit" class="btn btn-xs btn-success '+save_hide_button+'" id="save_sticker_button"><i class="fa fa-floppy-o"></i>Save</button><button type="button" class="btn btn-success  pull-right btn-xs" data-toggle="modal" id="'+po_file_upload_button+'" style="'+update_disabel_button+'" >Update PO</button></div></div></form></div></div><div class="col-md-4"><h4>' + head_qty1 + '</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" disabled value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" disabled value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume">' + $parcelVolume + '</span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input ' + disabled + ' data-toggle="modal" data-target=".needed_modal" value="' + $no_of_carton + '" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>' + standard_div + ' </div></div>');
     $('#solid_carton_form');
 
     $('.main-content').html('<input type="hidden" value="' + data.std_carton_id + '" id="std_carton_id"><input type="hidden" value="' + data.std_poly_id + '" id="std_poly_id"><input type="hidden" value="' + data.carton_id + '" id="carton_id"><input type="hidden" value="' + data.poly_id + '" id="poly_id"><input type="hidden" value="' + data.carton_template_id + '" id="carton_template_id"><input type="hidden" value="' + data.polybag_template_id + '" id="polybag_template_id"><input type="hidden" value="' + uvc + '" id="uvc_id"><input type="hidden" value="' + po + '" id="po"><hr/><h4>Carton and Polybag Stickers</h4><div class="row"> <div class="col-md-4"> <div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"> <div class="card-title"> <p class="pull-right" style="cursor:pointer">Click to view</p> <h5>Carton Sticker</h5></div><div class="img_artwork"><object id="svg2" style="width:300px;height:200px; border:2px solid" class="center-block svg2" data="' + data.carton_template + '" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"> <div class="modal-content"><div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Carton Sticker</h4></div><div class="modal-body"><object id="svg3" style="width:575px;height:378;border: 2px #000 solid;" class="center-block" data="' + data.carton_template + '" type="image/svg+xml"></object></div><div id="svgdiv" style="display:none"><svg id="ean-13"></svg></div><div class="modal-footer"> <button type="button" class="btn btn-primary" onclick=printDiv("svg3",' + data.orchestra_parcel_details[0].IsSTD + ',"'+uvc+'")>Print</button></div> </div> </div> </div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg2" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" style="cursor:pointer">Click to view</p><h5>Polybag Sticker</h5></div><div class="img_artwork"><object id="svg1" class="center-block" style="width:300px;height:200px;border:2px solid" data="' + data.polybag_template + '" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg2 artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Polybag Sticker</h4></div><div class="modal-body"><object id="svg4" class="center-block" style="width:500px;height:330px;border:2px solid" data="' + data.polybag_template + '" type="image/svg+xml"></object> </div><div class="modal-footer"><button type="button" class="btn btn-primary" onclick=printDiv("svg4",' + data.orchestra_parcel_details[0].IsSTD + ',"'+uvc+'")>Print</button></div></div></div></div> </div> </div> </div></div><div class="modal fade bs-example-modal-sm artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header alert-danger"><button type="button" class="close" data-dismiss="modal" aria-label="Close" id="modal_close"><span aria-hidden="true">&times;</span></button><p>Use this column only if needed</p></div></div>')
@@ -1430,14 +1442,20 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 				$('#po-file-upload-div').find('#exist_artwork_div ul').html("");
 				var newObj = data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders);
 				var coun = 0;
-				var options = "<option>Select PO</option>";
+				var options = "<option>Select PO</option>";var old_po = ""
 				$(newObj).each(function (index1, value1) {
 					if (value1.po_number != "" && value1.po_number != null) {
-						options += "<option>" + value1.po_number + "</option>";
-
+						if (old_po != value1.purchase_order_no) {
+							options += "<option>" + value1.po_number + "</option>";
+						}
+						old_po = value1.purchase_order_no;
 						coun++;
+						$('#po-file-upload-div').find('#exist_artwork_div ul').append('<li data-id="'+value1.type+'-'+value1.id+'" data-company="'+value1.company_id+'" class="check-list">'+value1.TemplateName+" - "+value1.TemplateType+'</li>')
 					}
-					$('#po-file-upload-div').find('#exist_artwork_div ul').append('<li data-id="'+value1.type+'-'+value1.id+'" data-company="'+value1.company_id+'" class="list-group-item">'+value1.TemplateName+" - "+value1.TemplateType+'</li>')
+					else {
+						$('#po-file-upload-div').find('#exist_artwork_div ul').append('<li data-id="'+value1.type+'-'+value1.id+'" data-company="'+value1.company_id+'" class="list-group-item">'+value1.TemplateName+" - "+value1.TemplateType+'</li>')
+					}
+					
 				});
 				
 				
@@ -2043,7 +2061,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
     $('.tot_qty_table_poly').keyup(function () {
         var tot_qty_table_poly_final = 0;
         $('#solidform tbody tr').each(function (keys, vals) {
-            if ($(this).find('.tot_qty_table_poly').val() != undefined) {
+            if ($(this).find('.tot_qty_table_poly').val() != undefined && $(this).find('.tot_qty_table_poly').val() != "") {
                 tot_qty_table_poly_final += parseInt($(this).find('.tot_qty_table_poly').val());
             }
 
@@ -2054,7 +2072,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
     $('.tot_qty_table_carton').keyup(function () {
         var tot_qty_table_carton_final = 0;
         $('#solidform tbody tr').each(function (keys, vals) {
-            if ($(this).find('.tot_qty_table_carton').val() != undefined) {
+            if ($(this).find('.tot_qty_table_carton').val() != undefined && $(this).find('.tot_qty_table_carton').val() != "" ) {
                 tot_qty_table_carton_final += parseInt($(this).find('.tot_qty_table_carton').val());
             }
         })
@@ -2237,9 +2255,24 @@ function printHangDiv(data,disney) {
 					var size = $(this).find('.size').text().split(" ")
 
 					if (size[1] == "ANS") {
-						var size1 = "years";
+						if(size_txt.split(' ')[0] == 1)
+						{
+							var size1 = "YEAR";
+						}
+						else
+						{
+							var size1 = "YEARS";
+						}
+						
 					} else {
-						var size1 = "months";
+						if(size_txt.split(' ')[0] == 1)
+						{
+							var size1 = "MONTH";
+						}
+						else
+						{
+							var size1 = "MONTHS";
+						}
 					}
 					
 					var code = $(this).find('.barcode').text();
@@ -2283,7 +2316,7 @@ function printHangDiv(data,disney) {
 							{
 								
                                jsbarcode_hang_disney(code, "barcode1", svgDoc1)
-							   svgDoc1.getElementById("barcode1").setAttribute('transform', 'matrix(1.0971 0 0 1 0 -25)');
+							   svgDoc1.getElementById("barcode1").setAttribute('transform', 'matrix(1.0971 0 0 1 0 -15)');
 							}
 
 
@@ -2599,7 +2632,7 @@ function PopupHang(svgRoot, svgRoot1,svgDoc,svgDoc1,disney) {
 			}
 			else
 			{
-				svgDoc1.getElementById("barcode1").setAttribute('transform', 'matrix(1.0971 0 0 1 10.6793 46.8835)');
+				svgDoc1.getElementById("barcode1").setAttribute('transform', 'matrix(1.0971 0 0 1 10.6793 57.8835)');
 			}
 			
 			success = true;
@@ -3230,6 +3263,14 @@ function washcarelabels(data, dataid) {
             }
             
             var str=data.orchestra_wash_care_label_orders[dataid1].status;
+			if(str == "Order Approved")
+			{
+				$save_button_class = "hidden";
+			}
+			else
+			{
+				$save_button_class = "";
+			}
             $status=str.replace(/ /g, "");
             $status_text=str;
             $wcl_name=data.orchestra_wash_care_label_orders[dataid1].template_name;
@@ -3245,6 +3286,7 @@ function washcarelabels(data, dataid) {
             $wcl_name="";
 			$template_id = "122";
 			$print_button_class = "hidden";
+			$save_button_class = "";
         }
 
     } else {
@@ -3256,6 +3298,7 @@ function washcarelabels(data, dataid) {
         $wcl_name="";
 		$template_id = "122";
 		$print_button_class = "hidden";
+		$save_button_class = "";
     }
     $.each(data.order_details, function (index, value) {
         if (data.orchestra_wash_care_label_orders != "") {
@@ -3331,7 +3374,7 @@ function washcarelabels(data, dataid) {
 		var disney_flag="0";
 	}
 
-    $('.top-content').append('<form id="washcarelabelform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><div class="left-panel col-md-9"> <div class="div-max"> <div class="col-md-3"> <h4>Options</h4> <hr><div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">WCL Name</label><input type="text" class="form-control input-sm" required="" placeholder="WCL Name" value="' + $wcl_name + '" id="wcl_name' + dataid + '"><div class="help-block with-errors"></div></div>  <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Washing</label><select data-live-search="true" class="form-control selectpicker input-sm washing_select' + dataid + '" required>' + washing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Whitening</label><select data-live-search="true" class="form-control selectpicker input-sm whitening_select' + dataid + '" required>' + whitening_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Dryer</label><select data-live-search="true" class="form-control selectpicker input-sm dryer_select' + dataid + '" required>' + dryer_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Ironing</label><select data-live-search="true" class="form-control selectpicker input-sm ironing_select' + dataid + '" required>' + ironing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Cleaning</label><select data-live-search="true" class="form-control selectpicker input-sm cleaning_select' + dataid + '" required>' + cleaning_option + '</select><div class="help-block with-errors"></div></div>'+treestruct+'  </div></div> <div class="col-md-5"> <h4>Art Work</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span> <hr> <div class="section-1 sections"> <div class="sample-artwork"><object style="height: calc( 100vh - 125px );"  id="washcare_svg_front' + dataid + '" data="' + data.orchestra_wash_template_front + '" type="image/svg+xml"></object> <object style="height: calc( 100vh - 125px );margin-left: 10px;"  id="washcare_svg_back' + dataid + '"  data="' + data.orchestra_wash_template_back + '" type="image/svg+xml"></object><object style="height: calc( 100vh - 125px );width: 250px;margin-left: 10px;"  id="washcare_svg_middle' + dataid + '" data="' + data.orchestra_wash_template_middle + '" type="image/svg+xml"></object></div><input type="hidden" value="' + disney_flag + '" id="wash_label_id"></div> </div> <div class="col-md-4 " style="padding-left:0px"> <h4>Options</h4> <hr>'+sizebox+' <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Made In</label><select data-live-search="true" class="form-control selectpicker input-sm made_in_select' + dataid + '" required>' + made_option + '</select><div class="help-block with-errors"></div></div> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Care Instructions</label><select data-live-search="true" class="form-control selectpicker input-sm care_instruction_select' + dataid + '" required multiple>' + instruction_option + '</select><div class="help-block with-errors"></div></div> <div class="section-1 sections"> <h5>Compositions</h5> <select class="selectpicker composition_select' + dataid + '"  data-live-search="true">  ' + composition_option + '  </select><p class="hidden" style="color:red" id="composition_error_required' + dataid + '">Please Select Composition</p> </div> <h5>Percentage</h5> <input type="number" min="1" max="100" class="form-control input-sm composition_percent' + dataid + '"><p class="hidden" style="color:red" id="percentage_error_required' + dataid + '">Please Enter Percentage</p>  <button type="button" class="btn  btn-primary pull-right input-sm add_to_list' + dataid + '" onclick="add_to_list(' + dataid + ')">Add To List</button> <table class="table table-striped table-hover table-condensed"><thead><th>Composition</th><th>Quantity</th></thead><tbody id="composition_table_qty' + dataid + '"></tbody></table><button class="btn  btn-primary pull-right input-sm add_to_composition' + dataid + '"  type="button" disabled onclick="add_to_composition(' + dataid + ')">Add To Composition</button><div><h4>Compositions :</h4><label id="wash_composition_error' + dataid + '" class="hidden" style="color:red">Please Select composition</label><label id="wash_composition_page_error' + dataid + '" class="hidden" style="color:red">Please Add Composition to Page</label><label class="hidden composition_error_hidden" style="color:red">Please select parts</label><div class="row"><table class="table table-striped table-hover table-condensed"><thead><tr><th>Composition Name</th><th>Parts</th><th>Actions</th></tr></thead><tbody id="composition_remove_qty' + dataid + '"></tbody></table><button class="btn  btn-primary pull-right input-sm add_to_page' + dataid + '"  style="position:relative;right:12px" type="button" onclick="add_to_page(' + dataid + ')">Add To Page</button></div></div><div class="parts_none'+dataid+'" style="display:none"><select>' + parts_option + '</select></div> </div> </div> </div></div> <div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for <span class="washlabelnameqty' + dataid + '"> WashCare Label</span></h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal" id="wash_care_label_table_'+dataid+'" style="font-size:11px"> <thead> <tr> <th>UVC TCO#</th> <th>Size in ANS</th> <th>Barcode</th> <th>Qty.</th> <th><input type="text" class="form-control input-sm extra_percentage" onkeypress="return checkNumbersOnly(event)" placeholder="Extra Qty %" style="float:left;height:20px;"></th> </tr></thead> <tbody style="font-size: 11px">' + tr + ' <tr class="strong"> <td class="text-right" colspan="3">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table><hr>'+ $comment +' <button class="btn btn-primary pull-right input-sm left" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" id="close" type="button">Close</button> <button type="button" class="btn btn-primary '+$print_button_class+'" id="print_wash_button_'+dataid+'" onclick=printWashDiv("washcare_svg_front","washcare_svg_back","washcare_svg_middle","'+dataid+'")>Print</button></div> </div>  <div class="backdrop"></div></form>');
+    $('.top-content').append('<form id="washcarelabelform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><div class="left-panelorc col-md-9"> <div class="div-max"> <div class="col-md-3"> <h4>Options</h4> <hr><div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">WCL Name</label><input type="text" class="form-control input-sm" required="" placeholder="WCL Name" value="' + $wcl_name + '" id="wcl_name' + dataid + '"><div class="help-block with-errors"></div></div>  <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Washing</label><select data-live-search="true" class="form-control selectpicker input-sm washing_select' + dataid + '" required>' + washing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Whitening</label><select data-live-search="true" class="form-control selectpicker input-sm whitening_select' + dataid + '" required>' + whitening_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Dryer</label><select data-live-search="true" class="form-control selectpicker input-sm dryer_select' + dataid + '" required>' + dryer_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Ironing</label><select data-live-search="true" class="form-control selectpicker input-sm ironing_select' + dataid + '" required>' + ironing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Cleaning</label><select data-live-search="true" class="form-control selectpicker input-sm cleaning_select' + dataid + '" required>' + cleaning_option + '</select><div class="help-block with-errors"></div></div>'+treestruct+'  </div></div> <div class="col-md-5"> <h4>Art Work</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span> <hr> <div class="section-1 sections"> <div class="sample-artwork"><object style="height: calc( 100vh - 125px );"  id="washcare_svg_front' + dataid + '" data="' + data.orchestra_wash_template_front + '" type="image/svg+xml"></object> <object style="height: calc( 100vh - 125px );margin-left: 10px;"  id="washcare_svg_back' + dataid + '"  data="' + data.orchestra_wash_template_back + '" type="image/svg+xml"></object><object style="height: calc( 100vh - 125px );width: 250px;margin-left: 10px;"  id="washcare_svg_middle' + dataid + '" data="' + data.orchestra_wash_template_middle + '" type="image/svg+xml"></object></div><input type="hidden" value="' + disney_flag + '" id="wash_label_id"></div> </div> <div class="col-md-4 " style="padding-left:0px"> <h4>Options</h4> <hr>'+sizebox+' <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Made In</label><select data-live-search="true" class="form-control selectpicker input-sm made_in_select' + dataid + '" required>' + made_option + '</select><div class="help-block with-errors"></div></div> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Care Instructions</label><select data-live-search="true" class="form-control selectpicker input-sm care_instruction_select' + dataid + '" required multiple>' + instruction_option + '</select><div class="help-block with-errors"></div></div> <div class="section-1 sections"> <h5>Compositions</h5> <select class="selectpicker composition_select' + dataid + '"  data-live-search="true">  ' + composition_option + '  </select><p class="hidden" style="color:red" id="composition_error_required' + dataid + '">Please Select Composition</p> </div> <h5>Percentage</h5> <input type="number" min="1" max="100" class="form-control input-sm composition_percent' + dataid + '"><p class="hidden" style="color:red" id="percentage_error_required' + dataid + '">Please Enter Percentage</p>  <button type="button" class="btn  btn-primary pull-right input-sm add_to_list' + dataid + '" onclick="add_to_list(' + dataid + ')">Add To List</button> <table class="table table-striped table-hover table-condensed"><thead><th>Composition</th><th>Quantity</th></thead><tbody id="composition_table_qty' + dataid + '"></tbody></table><button class="btn  btn-primary pull-right input-sm add_to_composition' + dataid + '"  type="button" disabled onclick="add_to_composition(' + dataid + ')">Add To Composition</button><div><h4>Compositions :</h4><label id="wash_composition_error' + dataid + '" class="hidden" style="color:red">Please Select composition</label><label id="wash_composition_page_error' + dataid + '" class="hidden" style="color:red">Please Add Composition to Page</label><label class="hidden composition_error_hidden" style="color:red">Please select parts</label><div class="row"><table class="table table-striped table-hover table-condensed"><thead><tr><th>Composition Name</th><th>Parts</th><th>Actions</th></tr></thead><tbody id="composition_remove_qty' + dataid + '"></tbody></table><button class="btn  btn-primary pull-right input-sm add_to_page' + dataid + '"  style="position:relative;right:12px" type="button" onclick="add_to_page(' + dataid + ')">Add To Page</button></div></div><div class="parts_none'+dataid+'" style="display:none"><select>' + parts_option + '</select></div> </div> </div> </div></div> <div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for <span class="washlabelnameqty' + dataid + '"> WashCare Label</span></h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal" id="wash_care_label_table_'+dataid+'" style="font-size:11px"> <thead> <tr> <th>UVC TCO#</th> <th>Size in ANS</th> <th>Barcode</th> <th>Qty.</th> <th><input type="text" class="form-control input-sm extra_percentage" onkeypress="return checkNumbersOnly(event)" placeholder="Extra Qty %" style="float:left;height:20px;"></th> </tr></thead> <tbody style="font-size: 11px">' + tr + ' <tr class="strong"> <td class="text-right" colspan="3">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table><hr>'+ $comment +' <button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" id="close" type="button">Close</button> <button type="button" class="btn btn-primary '+$print_button_class+'" id="print_wash_button_'+dataid+'" onclick=printWashDiv("washcare_svg_front","washcare_svg_back","washcare_svg_middle","'+dataid+'")>Print</button></div> </div>  <div class="backdrop"></div></form>');
    //$('.left').removeClass('disabled')
 
     $('#washcarelabelform' + dataid + ' .tot_qty_table').keyup(function () {
@@ -3433,7 +3476,7 @@ function washcarelabels(data, dataid) {
             $("#washcarelabelform" + dataid + " .backdrop").toggleClass('active');
             $("#washcarelabelform" + dataid + " .right-panel").toggleClass('active');
             $('#washcarelabelform' + dataid + ' .scalable').toggleClass('active');
-            $("#washcarelabelform" + dataid + " .left-panel").toggleClass('active');
+            $("#washcarelabelform" + dataid + " .left-panelorc").toggleClass('active');
             $('.merchandiser_error').addClass('hidden')
        }
        else
@@ -3444,7 +3487,7 @@ function washcarelabels(data, dataid) {
     })
 
     $(".backdrop, #close").click(function () {
-        $("#washcarelabelform" + dataid + " .left-panel").removeClass('active');
+        $("#washcarelabelform" + dataid + " .left-panelorc").removeClass('active');
         $("#washcarelabelform" + dataid + " .right-panel").removeClass('active');
         $("#washcarelabelform" + dataid + " .backdrop").removeClass('active');
         $('#washcarelabelform' + dataid + ' .scalable').removeClass('active');
@@ -3766,6 +3809,7 @@ function add_to_list(dataid) {
 		$('.add_to_list' + dataid).prop('disabled', 'true')
 		$('.add_to_composition' + dataid).removeAttr('disabled')
 	}
+	$('#wash_composition_error' + dataid).addClass('hidden')
 
 }
 
@@ -3828,6 +3872,7 @@ function add_to_composition(dataid) {
             $('.composition_select' + dataid).selectpicker('refresh');
             $(".parts_select" + dataid).val('');
             $('.parts_select' + dataid).selectpicker('refresh');
+			$('#wash_composition_error' + dataid).addClass('hidden')
 
 }
 
@@ -3902,6 +3947,9 @@ function add_to_page(dataid) {
         {
             $('.composition_error_hidden').removeClass('hidden')
         }
+	
+		$('#wash_composition_page_error' + dataid).addClass('hidden')
+	
 }
 
 
@@ -4041,7 +4089,7 @@ function mainlabels(data, dataid) {
         option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
     });
 
-    $('.top-content').append('<form id="mainlabelsform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><div class="left-panel col-md-9"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Main & Size Label Name</label><input type="text" class="form-control input-sm" required="" placeholder="Main & Size Label Name" value="' + $main_name + '" id="main_size_name' + dataid + '"><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="main_template_error' + dataid + '" class="hidden" style="color:red">Please Select the Template</label>  <div><input type="text" id="tree3' + dataid + '_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree3' + dataid + '" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$main_status+'" style="position: absolute;top: 30px;left: 15px;">'+$main_status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for <span class="mainlabelnameqty' + dataid + '">Size Labels</span></h4> <hr>  <div class="radio"><label><input type="radio" name="optionsRadios" id="optionsRadios1" value="total" checked> Total Only</label><label><input type="radio" name="optionsRadios" id="optionsRadios1" value="size">Sizewise</label> </div><table class="table table-striped table-hover table-condensed table-responsive qty-table-modal"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Qty.</th><th>Sizelabel Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" onkeypress="return checkNumbersOnly(event)"  style="height: 20px;width:60px; float: left; margin-left: 5px;"></th> <th class="text-center mainLbl" colspan="2">Mainlabel Qty.<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage_main" onkeypress="return checkNumbersOnly(event)"  style="height: 20px;width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="2">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td><td class="mainLbl mainlblfinalqtytext"><span><div class="form-group has-feedback has-success"><input type="text" style="height: 20px;"  class="form-control input-sm mainlblfinalqty main_label_qty' + dataid + '" required min=1 placeholder="Final Qty" value="'+main_count+'"><div class="help-block with-errors"></div></div></span></td></tr></tbody></table><button class="btn btn-primary pull-right input-sm left" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="close">Close</button> </div> </div>  <div class="backdrop"></div></form>');
+    $('.top-content').append('<form id="mainlabelsform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><div class="left-panelorc col-md-9"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Main & Size Label Name</label><input type="text" class="form-control input-sm" required="" placeholder="Main & Size Label Name" value="' + $main_name + '" id="main_size_name' + dataid + '"><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="main_template_error' + dataid + '" class="hidden" style="color:red">Please Select the Template</label>  <div><input type="text" id="tree3' + dataid + '_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree3' + dataid + '" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$main_status+'" style="position: absolute;top: 30px;left: 15px;">'+$main_status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for <span class="mainlabelnameqty' + dataid + '">Size Labels</span></h4> <hr>  <div class="radio"><label><input type="radio" name="optionsRadios" id="optionsRadios1" value="total" checked> Total Only</label><label><input type="radio" name="optionsRadios" id="optionsRadios1" value="size">Sizewise</label> </div><table class="table table-striped table-hover table-condensed table-responsive qty-table-modal"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Qty.</th><th>Sizelabel Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" onkeypress="return checkNumbersOnly(event)"  style="height: 20px;width:60px; float: left; margin-left: 5px;"></th> <th class="text-center mainLbl" colspan="2">Mainlabel Qty.<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage_main" onkeypress="return checkNumbersOnly(event)"  style="height: 20px;width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="2">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td><td class="mainLbl mainlblfinalqtytext"><span><div class="form-group has-feedback has-success"><input type="text" style="height: 20px;"  class="form-control input-sm mainlblfinalqty main_label_qty' + dataid + '" required min=1 placeholder="Final Qty" value="'+main_count+'"><div class="help-block with-errors"></div></div></span></td></tr></tbody></table><button class="btn btn-primary pull-right input-sm left" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="close">Close</button> </div> </div>  <div class="backdrop"></div></form>');
 	//$('.left').removeClass('disabled')
     $('#mainlabelsform' + dataid + ' .tot_qty_table').keyup(function () {
         var tot_qty_table_carton_final = 0;
@@ -4145,11 +4193,11 @@ function mainlabels(data, dataid) {
         $("#mainlabelsform" + dataid + " .backdrop").toggleClass('active');
         $("#mainlabelsform" + dataid + " .right-panel").toggleClass('active');
         $('#mainlabelsform' + dataid + ' .scalable').toggleClass('active');
-        $("#mainlabelsform" + dataid + " .left-panel").toggleClass('active');
+        $("#mainlabelsform" + dataid + " .left-panelorc").toggleClass('active');
     })
 
     $(".backdrop, #close").click(function () {
-        $("#mainlabelsform" + dataid + " .left-panel").removeClass('active');
+        $("#mainlabelsform" + dataid + " .left-panelorc").removeClass('active');
         $("#mainlabelsform" + dataid + " .right-panel").removeClass('active');
         $("#mainlabelsform" + dataid + " .backdrop").removeClass('active');
         $('#mainlabelsform' + dataid + ' .scalable').removeClass('active');
@@ -4186,6 +4234,7 @@ function specialtags(data) {
         var str=data.orchestra_special_tag_orders[0].status;
         $status=str.replace(/ /g, "");
         $status_text=str;
+        $save_button_class="hidden";
     } else {
      
         $template_id = "";
@@ -4193,13 +4242,14 @@ function specialtags(data) {
         $special_tag_count="";
         $status="";
         $status_text="";
+        $save_button_class="";
     }
     
     var option = "<option value=''>Select Option</option>";
     $.each(data.orchestra_template_front, function (index, value) {
         option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
     });
-    $('.top-content').append('<form id="specialtagform" data-toggle= "validator"><div class="left-panel col-md-9"id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="special_template_error" style="color:red" class="hidden">Please select the template</label>  <div><input type="text" id="tree2_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree2" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max"> <h4>Quantity Info for Special Tag</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Final order qty</label><input class="form-control input-sm special_qty" value="' + $special_tag_count + '" onkeypress="return checkNumbersOnly(event)" placeholder="Special Tag Count" type="text" required><div class="help-block with-errors"></div></div><button class="btn btn-primary pull-right input-sm left" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="specialclose">Close</button>  </div></div> </div>  <div class="backdrop"></div></form>');
+    $('.top-content').append('<form id="specialtagform" data-toggle= "validator"><div class="left-panelorc col-md-9"id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="special_template_error" style="color:red" class="hidden">Please select the template</label>  <div><input type="text" id="tree2_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree2" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max"> <h4>Quantity Info for Special Tag</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Final order qty</label><input class="form-control input-sm special_qty" value="' + $special_tag_count + '" onkeypress="return checkNumbersOnly(event)" placeholder="Special Tag Count" type="text" required><div class="help-block with-errors"></div></div><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_special_button" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="specialclose">Close</button>  </div></div> </div>  <div class="backdrop"></div></form>');
 	//$('.left').removeClass('disabled')
     $('#specialtagform .tot_qty_table').keyup(function () {
         var tot_qty_table_carton_final = 0;
@@ -4216,11 +4266,11 @@ function specialtags(data) {
         $("#specialtagform .backdrop").toggleClass('active');
         $("#specialtagform .right-panel").toggleClass('active');
         $('#specialtagform .scalable').toggleClass('active');
-        $("#specialtagform .left-panel").toggleClass('active');
+        $("#specialtagform .left-panelorc").toggleClass('active');
     })
 
     $(".backdrop, #specialclose").click(function () {
-        $("#specialtagform .left-panel").removeClass('active');
+        $("#specialtagform .left-panelorc").removeClass('active');
         $("#specialtagform .right-panel").removeClass('active');
         $("#specialtagform .backdrop").removeClass('active');
         $('#specialtagform .scalable').removeClass('active');
@@ -4274,6 +4324,7 @@ function hangtagmodal(data) {
         $status=str.replace(/ /g, "");
         $status_text=str;
 		$print_button_class="";
+		$save_button_class="hidden";
     } else {
        
         $template_front_id = "";
@@ -4281,6 +4332,7 @@ function hangtagmodal(data) {
         $status="";
         $status_text="";
 		$print_button_class="hidden";
+		$save_button_class="";
     }
     var ttots = 0;
     $.each(data.order_details, function (index, value) {
@@ -4323,7 +4375,7 @@ function hangtagmodal(data) {
     $.each(data.orchestra_template_front, function (index, value) {
         option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
     });
-    $('.top-content').append('<form id="hangtagform" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="left-panel col-md-9"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="hang_template_error" class="hidden" style="color:red">Please Select the Template</label>  <div><input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree1" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top: 15px;"></div><div class="help-block with-errors"></div></div>'+sizebox+'</div><div class="col-md-4"><h4>Front</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr><div class="section-1 sections"><div class="sample-artwork" style="text-align:center"></div></div></div><div class="col-md-4"><h4>Back</h4><hr><div class="section-1 sections text-center" ><input type="hidden" value="' + data.orchestra_template_id + '" id="hang_tag_id"><div class="sample_back"></div><label style="margin-top:15px">Hang Tag Print Date : ' + data.order_details[0].HangTag_Print_Date + '</label><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for Hang Tag</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal" id="hang_tag_table"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" onkeypress="return checkNumbersOnly(event)"  style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td >' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table></div> <button class="btn btn-primary pull-right input-sm left" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="hangclose">Close</button><button type="button" class="btn btn-primary '+$print_button_class+'" id="print_hang_button" onclick=printHangDiv("svg2","'+data.order_details[0].Licence_Code+'")>Print</button> </div> </div>  <div class="backdrop"></div></form>');
+    $('.top-content').append('<form id="hangtagform" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="left-panelorc col-md-9"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="hang_template_error" class="hidden" style="color:red">Please Select the Template</label>  <div><input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree1" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top: 15px;"></div><div class="help-block with-errors"></div></div>'+sizebox+'</div><div class="col-md-4"><h4>Front</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr><div class="section-1 sections"><div class="sample-artwork" style="text-align:center"></div></div></div><div class="col-md-4"><h4>Back</h4><hr><div class="section-1 sections text-center" ><input type="hidden" value="' + data.orchestra_template_id + '" id="hang_tag_id"><div class="sample_back"></div><label style="margin-top:15px">Hang Tag Print Date : ' + data.order_details[0].HangTag_Print_Date + '</label><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for Hang Tag</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal" id="hang_tag_table"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" onkeypress="return checkNumbersOnly(event)"  style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td >' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table></div> <button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_hang_button" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="hangclose">Close</button><button type="button" class="btn btn-primary '+$print_button_class+'" id="print_hang_button" onclick=printHangDiv("svg2","'+data.order_details[0].Licence_Code+'")>Print</button> </div> </div>  <div class="backdrop"></div></form>');
 
 
 //$('.left').removeClass('disabled')
@@ -4361,11 +4413,11 @@ function hangtagmodal(data) {
         $("#hangtagform .backdrop").toggleClass('active');
         $("#hangtagform .right-panel").toggleClass('active');
         $('#hangtagform .scalable').toggleClass('active');
-        $("#hangtagform .left-panel").toggleClass('active');
+        $("#hangtagform .left-panelorc").toggleClass('active');
     })
 
     $(".backdrop, #hangclose").click(function () {
-        $("#hangtagform .left-panel").removeClass('active');
+        $("#hangtagform .left-panelorc").removeClass('active');
         $("#hangtagform .right-panel").removeClass('active');
         $("#hangtagform .backdrop").removeClass('active');
         $('#hangtagform .scalable').removeClass('active');
@@ -4487,20 +4539,20 @@ function hangtagmodal(data) {
 							//svgDoc.getElementById("in").innerHTML = $('.onesizein').val();
 							
                             var svgItem = svgDoc.getElementById("uvc_tco");
-                            svgDoc.getElementById("algeria_club_price").innerHTML = order_details[0].Prix_Vente_ALGERIE != null ? order_details[0].Prix_Vente_ALGERIE.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("algeria_price").innerHTML = order_details[0].Prix_Club_ALGERIE != null ? order_details[0].Prix_Club_ALGERIE.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("saudi_club_price").innerHTML = order_details[0].Prix_Vente_Arabie_Saoudite != null ? order_details[0].Prix_Vente_Arabie_Saoudite.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("morroco_club_price").innerHTML = order_details[0].Prix_Vente_Maroc != null ? order_details[0].Prix_Vente_Maroc.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("swiss_club_price").innerHTML = order_details[0].Prix_Vente_Suisse != null ? order_details[0].Prix_Vente_Suisse.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("canada_club_price").innerHTML = order_details[0].Prix_Vente_Canada != null ? order_details[0].Prix_Vente_Canada.toString().replace(".", ",") : "";
+                            svgDoc.getElementById("algeria_club_price").innerHTML = order_details[0].Prix_Vente_ALGERIE != null ? order_details[0].Prix_Vente_ALGERIE.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("algeria_price").innerHTML = order_details[0].Prix_Club_ALGERIE != null ? order_details[0].Prix_Club_ALGERIE.toString().replace(".", ",") .replace(" ", ""): "";
+                            svgDoc.getElementById("saudi_club_price").innerHTML = order_details[0].Prix_Vente_Arabie_Saoudite != null ? order_details[0].Prix_Vente_Arabie_Saoudite.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("morroco_club_price").innerHTML = order_details[0].Prix_Vente_Maroc != null ? order_details[0].Prix_Vente_Maroc.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("swiss_club_price").innerHTML = order_details[0].Prix_Vente_Suisse != null ? order_details[0].Prix_Vente_Suisse.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("canada_club_price").innerHTML = order_details[0].Prix_Vente_Canada != null ? order_details[0].Prix_Vente_Canada.toString().replace(".", ",").replace(" ", "") : "";
                             //svgDoc.getElementById("turkey_price").innerHTML = order_details[0].Prix_Vente_Turquie != null ? order_details[0].Prix_Vente_Turquie.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("us_club_price").innerHTML = order_details[0].Prix_Vente_USA != null ? order_details[0].Prix_Vente_USA.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("us_price").innerHTML = order_details[0].Prix_Club_USA != null ? order_details[0].Prix_Club_USA.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("morris_club_price").innerHTML = order_details[0].Prix_Vente_Ile_Maurice != null ? order_details[0].Prix_Vente_Ile_Maurice.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("morris_price").innerHTML = order_details[0].Prix_Club_Ile_Maurice != null ? order_details[0].Prix_Club_Ile_Maurice.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("morocco_price").innerHTML = order_details[0].Prix_Club_Maroc != null ? order_details[0].Prix_Club_Maroc.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("swiss_price").innerHTML = order_details[0].Prix_Club_Suisse != null ? order_details[0].Prix_Club_Suisse.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("canada_price").innerHTML = order_details[0].Prix_Club_Canada != null ? order_details[0].Prix_Club_Canada.toString().replace(".", ",") : "";
+                            svgDoc.getElementById("us_club_price").innerHTML = order_details[0].Prix_Vente_USA != null ? order_details[0].Prix_Vente_USA.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("us_price").innerHTML = order_details[0].Prix_Club_USA != null ? order_details[0].Prix_Club_USA.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("morris_club_price").innerHTML = order_details[0].Prix_Vente_Ile_Maurice != null ? order_details[0].Prix_Vente_Ile_Maurice.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("morris_price").innerHTML = order_details[0].Prix_Club_Ile_Maurice != null ? order_details[0].Prix_Club_Ile_Maurice.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("morocco_price").innerHTML = order_details[0].Prix_Club_Maroc != null ? order_details[0].Prix_Club_Maroc.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("swiss_price").innerHTML = order_details[0].Prix_Club_Suisse != null ? order_details[0].Prix_Club_Suisse.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("canada_price").innerHTML = order_details[0].Prix_Club_Canada != null ? order_details[0].Prix_Club_Canada.toString().replace(".", ",").replace(" ", "") : "";
                            // svgDoc.getElementById("turkey_club_price").innerHTML = order_details[0].Prix_Club_Turquie != null ? order_details[0].Prix_Club_Turquie.toString().replace(".", ",") : "";
                             svgItem.innerHTML = order_details[0].UVC_TCO;
                             var size = order_details[0].Size.split(" ")
@@ -4521,16 +4573,33 @@ function hangtagmodal(data) {
 							else
 							{
 								svgDoc.getElementById("size").innerHTML = size[0];
-								svgDoc.getElementById("size_list").innerHTML = order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-");
+								
 								svgDoc.getElementById("cm").innerHTML = order_details[0].cm;
 								//svgDoc.getElementById("in").innerHTML = order_details[0].in;
 								if (size[1] == "ANS") {
 									svgDoc.getElementById("size_french").innerHTML = size[1];
-									svgDoc.getElementById("size_english").innerHTML = "years";
+									if(size[0] == 1)
+									{
+										svgDoc.getElementById("size_english").innerHTML = "YEAR";
+									}
+									else
+									{
+										svgDoc.getElementById("size_english").innerHTML = "YEARS";
+									}
+									svgDoc.getElementById("size_list").innerHTML = order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-");
 
 								} else {
 									svgDoc.getElementById("size_french").innerHTML = size[1];
-									svgDoc.getElementById("size_english").innerHTML = "months";
+									if(size[0] == 1)
+									{
+										svgDoc.getElementById("size_english").innerHTML = "MONTH";
+									}
+									else
+									{
+										svgDoc.getElementById("size_english").innerHTML = "MONTHS";
+									}
+									
+									svgDoc.getElementById("size_list").innerHTML = order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-")+"M";
 								}
 							}
                            if (data[0].disney != 1) {
@@ -4702,24 +4771,24 @@ function hangtagmodal(data) {
 							//svgDoc.getElementById("in").innerHTML = $('.onesizein').val();
 							
                             var svgItem = svgDoc.getElementById("uvc_tco");
-                            svgDoc.getElementById("algeria_club_price").innerHTML = order_details[0].Prix_Vente_ALGERIE != null ? order_details[0].Prix_Vente_ALGERIE.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("algeria_price").innerHTML = order_details[0].Prix_Club_ALGERIE != null ? order_details[0].Prix_Club_ALGERIE.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("saudi_club_price").innerHTML = order_details[0].Prix_Vente_Arabie_Saoudite != null ? order_details[0].Prix_Vente_Arabie_Saoudite.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("morroco_club_price").innerHTML = order_details[0].Prix_Vente_Maroc != null ? order_details[0].Prix_Vente_Maroc.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("swiss_club_price").innerHTML = order_details[0].Prix_Vente_Suisse != null ? order_details[0].Prix_Vente_Suisse.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("canada_club_price").innerHTML = order_details[0].Prix_Vente_Canada != null ? order_details[0].Prix_Vente_Canada.toString().replace(".", ",") : "";
+                            svgDoc.getElementById("algeria_club_price").innerHTML = order_details[0].Prix_Vente_ALGERIE != null ? order_details[0].Prix_Vente_ALGERIE.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("algeria_price").innerHTML = order_details[0].Prix_Club_ALGERIE != null ? order_details[0].Prix_Club_ALGERIE.toString().replace(".", ",") .replace(" ", ""): "";
+                            svgDoc.getElementById("saudi_club_price").innerHTML = order_details[0].Prix_Vente_Arabie_Saoudite != null ? order_details[0].Prix_Vente_Arabie_Saoudite.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("morroco_club_price").innerHTML = order_details[0].Prix_Vente_Maroc != null ? order_details[0].Prix_Vente_Maroc.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("swiss_club_price").innerHTML = order_details[0].Prix_Vente_Suisse != null ? order_details[0].Prix_Vente_Suisse.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("canada_club_price").innerHTML = order_details[0].Prix_Vente_Canada != null ? order_details[0].Prix_Vente_Canada.toString().replace(".", ",").replace(" ", "") : "";
                             //svgDoc.getElementById("turkey_price").innerHTML = order_details[0].Prix_Vente_Turquie != null ? order_details[0].Prix_Vente_Turquie.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("us_club_price").innerHTML = order_details[0].Prix_Vente_USA != null ? order_details[0].Prix_Vente_USA.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("us_price").innerHTML = order_details[0].Prix_Club_USA != null ? order_details[0].Prix_Club_USA.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("morris_club_price").innerHTML = order_details[0].Prix_Vente_Ile_Maurice != null ? order_details[0].Prix_Vente_Ile_Maurice.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("morris_price").innerHTML = order_details[0].Prix_Club_Ile_Maurice != null ? order_details[0].Prix_Club_Ile_Maurice.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("morocco_price").innerHTML = order_details[0].Prix_Club_Maroc != null ? order_details[0].Prix_Club_Maroc.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("swiss_price").innerHTML = order_details[0].Prix_Club_Suisse != null ? order_details[0].Prix_Club_Suisse.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("canada_price").innerHTML = order_details[0].Prix_Club_Canada != null ? order_details[0].Prix_Club_Canada.toString().replace(".", ",") : "";
+                            svgDoc.getElementById("us_club_price").innerHTML = order_details[0].Prix_Vente_USA != null ? order_details[0].Prix_Vente_USA.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("us_price").innerHTML = order_details[0].Prix_Club_USA != null ? order_details[0].Prix_Club_USA.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("morris_club_price").innerHTML = order_details[0].Prix_Vente_Ile_Maurice != null ? order_details[0].Prix_Vente_Ile_Maurice.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("morris_price").innerHTML = order_details[0].Prix_Club_Ile_Maurice != null ? order_details[0].Prix_Club_Ile_Maurice.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("morocco_price").innerHTML = order_details[0].Prix_Club_Maroc != null ? order_details[0].Prix_Club_Maroc.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("swiss_price").innerHTML = order_details[0].Prix_Club_Suisse != null ? order_details[0].Prix_Club_Suisse.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("canada_price").innerHTML = order_details[0].Prix_Club_Canada != null ? order_details[0].Prix_Club_Canada.toString().replace(".", ",").replace(" ", "") : "";
                            // svgDoc.getElementById("turkey_club_price").innerHTML = order_details[0].Prix_Club_Turquie != null ? order_details[0].Prix_Club_Turquie.toString().replace(".", ",") : "";
                             svgItem.innerHTML = order_details[0].UVC_TCO;
-							svgDoc.getElementById("theme").innerHTML = order_details[0].Theme;
                             var size = order_details[0].Size.split(" ")
+                            svgDoc.getElementById("theme").innerHTML = order_details[0].Theme;
 							
 							if(order_details[0].Size == "TAILLE UNIQUE")
 							{
@@ -4735,21 +4804,37 @@ function hangtagmodal(data) {
 							}
 							else
 							{
-								//alert(size[0])
 								svgDoc.getElementById("size").innerHTML = size[0];
-								svgDoc.getElementById("size_list").innerHTML = order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-");
+								
 								svgDoc.getElementById("cm").innerHTML = order_details[0].cm;
 								//svgDoc.getElementById("in").innerHTML = order_details[0].in;
 								if (size[1] == "ANS") {
 									svgDoc.getElementById("size_french").innerHTML = size[1];
-									svgDoc.getElementById("size_english").innerHTML = "years";
+									if(size[0] == 1)
+									{
+										svgDoc.getElementById("size_english").innerHTML = "YEAR";
+									}
+									else
+									{
+										svgDoc.getElementById("size_english").innerHTML = "YEARS";
+									}
+									svgDoc.getElementById("size_list").innerHTML = order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-");
 
 								} else {
 									svgDoc.getElementById("size_french").innerHTML = size[1];
-									svgDoc.getElementById("size_english").innerHTML = "months";
+									if(size[0] == 1)
+									{
+										svgDoc.getElementById("size_english").innerHTML = "MONTH";
+									}
+									else
+									{
+										svgDoc.getElementById("size_english").innerHTML = "MONTHS";
+									}
+									
+									svgDoc.getElementById("size_list").innerHTML = order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-")+"M";
 								}
 							}
-                            if (data[0].disney != 1) {
+                           if (data[0].disney != 1) {
 							   var code = order_details[0].BarcodeForPricesTags.toString();
                                jsbarcode_hang(code, "barcode1", svgDoc)
 						   }
@@ -4757,6 +4842,7 @@ function hangtagmodal(data) {
 							   var code = order_details[0].BarcodeForPricesTags.toString();
                                jsbarcode_hang_disney(code, "barcode1", svgDoc)
 						   }
+                            
 
 
                         }, false);
@@ -4917,16 +5003,21 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 	//<div class="col-md-4"><div class="card add-card main-card" style="height: 280px;"><span class="label label-' + $main_status + ' label-status">' + $main_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmemain" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="mainlabelname">' + main_name + 'Main & Size Label</b></h5> </div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div></div><p id="main_label_card" style="'+main_enable+';cursor:pointer"><i class="fa fa-plus" aria-hidden="true"></i> Add Main & Size Label</p></div></div></div>
 
 	
-	
 	$('#po-file-upload-button').click(function () {
-
-		$('#new_po_div').addClass('hidden')
-		$('#map_po_div').addClass('hidden')
-		$('#exist_artwork_div').removeClass('hidden')
-		$('#update_new_po').addClass('hidden')
-		$('#new_po1').removeClass('hidden')
-		$('#map_po').removeClass('hidden')
-
+		$('#po-file-upload-group').modal("show")
+		$('#new_po_div_status').addClass('hidden');
+		$('#new_po1_status').addClass('hidden');
+		$('#map_po_status').addClass('hidden');
+		$('#update_new_po_status').addClass('hidden');
+		$('#update_po_status').addClass('hidden');
+		$('#new_pos_status').addClass('hidden');
+		$('#map_po_div_status').addClass('hidden');
+		$('#exist_artwork_div_status').removeClass('hidden')
+		$('#new_po_no_status').val("")
+        $('#new_po_file_status').val("")
+		$('#new_po_error_status').addClass('hidden')
+		$('#new_po_file_error_status').addClass('hidden')
+		$('#new_po_error_length_status').addClass('hidden');
 		$.ajax({
 			url: base_url + "/customer/" + buyer + "/order-management/get-existing-label-orders-po",
 			type: "get",
@@ -4941,22 +5032,42 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 
 
 
-				$('#po-file-upload-div').modal('show')
-				$('#po-file-upload-div').find('#exist_artwork_div ul').html("");
+				$('#check_error_status').addClass('hidden')
+				$('#new_po_error_status').addClass('hidden')
+				$('#new_po_file_error_status').addClass('hidden')
+				$('#new_po_error_length_status').addClass('hidden');
+				$('#po-file-upload-group').find('#exist_artwork_div_status ul').html("");
 				var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders)));
 				var coun = 0;
 				var options = "<option>Select PO</option>";
+				var unique_po = []
+				var old_po = []
+				var new_po_div_status = 0;
 				$(newObj).each(function (index1, value1) {
 					if (value1.po_number != "" && value1.po_number != null) {
-						options += "<option>" + value1.po_number + "</option>";
-
+							
+						if(old_po.includes(value1.po_number) != true)
+						{
+							old_po.push(value1.po_number)
+							options += "<option data-id='"+value1.po_file+"'>" + value1.po_number + "</option>";
+						}
+						//old_po = value1.po_number;
 						coun++;
+						$('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="'+value1.type+'-'+value1.id+'" data-company="'+value1.company_id+'" class="check-list">'+value1.TemplateName+" - "+value1.TemplateType+'</li>')
+                         new_po_div_status++;
 					}
-					$('#po-file-upload-div').find('#exist_artwork_div ul').append('<li data-id="'+value1.type+'-'+value1.id+'" data-company="'+value1.company_id+'" class="list-group-item">'+value1.TemplateName+" - "+value1.TemplateType+'</li>')
+					else {
+						$('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="'+value1.type+'-'+value1.id+'" data-company="'+value1.company_id+'" class="list-group-item">'+value1.TemplateName+" - "+value1.TemplateType+'</li>')
+					}
+					
 				});
+				
+				
 				
 				//Start bootstrap checkbox 
 				
+				
+				//list Item Hidden By Gowtham 
 				$('.list-group.checked-list-box .list-group-item').each(function () {
 
 					// Settings
@@ -5036,6 +5147,8 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 				});
 				
 				//company wise
+				/* 
+				list Item Hidden By Gowtham 
 				$('.list-group-item').click(function(){
 					$count_li=0;
 					$('.list-group li').each(function(key,val){
@@ -5062,168 +5175,277 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 						})
 					}
 					
-				})
+				})*/
 				
 				//End bootstrap checkbox 
 				
-		$('#selectpo').html('<label>Select PO</label><select id="select_po" class="form-control">' + options + '</select>')
-				if (coun == 0) {
-					$('#map_po').addClass('hidden');
-					$('#new_po1').addClass('hidden');
-					$('#new_po_div').removeClass('hidden');
-					$('#update_new_po').removeClass('hidden');
-				}
+		   $('#po_select_div').html('<label>Select PO</label><select id="select_po_status" class="form-control">' + options + '</select>')
+                                        if (coun == 0) {
+                                            $('#map_po_status').addClass('hidden');
+                                            $('#new_po1_status').addClass('hidden');
+                                            $('#new_po_div_status').removeClass('hidden');
+                                            $('#new_pos_status').removeClass('hidden');
+                                        } else {
+                                            $('#map_po_status').removeClass('hidden');
+                                            $('#new_po1_status').removeClass('hidden');
+                                            $('#new_pos_status').addClass('hidden');
+                                        }
+                                        $('#new_po1_status').click(function () {
+                                            var sList = 0;
+                                            $('#exist_artwork_div_status input[type=checkbox]').each(function () {
+                                                if (this.checked) {
+                                                    sList++;
+                                                }
+                                            });
+
+                                            if (sList > 0) {
+
+                                                $('#update_new_po_status').removeClass('hidden')
+                                                $('#update_po_status').addClass('hidden')
+                                                $('#new_pos_status').addClass('hidden')
+                                                $('#new_po_div_status').removeClass('hidden')
+                                                $('#map_po_div_status').addClass('hidden')
+                                                $('#exist_artwork_div_status').removeClass('hidden')
+                                                $('#check_error_status').addClass('hidden')
+
+                                            } else {
+                                                $('#check_error_status').removeClass('hidden')
+                                            }
+
+                                        });
+                                        $('#map_po_status').click(function () {
+
+                                            var sList = 0;
+                                            $('#exist_artwork_div_status input[type=checkbox]').each(function () {
+                                                if (this.checked) {
+                                                    sList++;
+                                                }
+                                            });
+
+                                            if (sList > 0) {
+                                                $('#update_po_status').removeClass('hidden')
+                                                $('#update_new_po_status').addClass('hidden')
+                                                $('#new_pos_status').addClass('hidden')
+                                                $('#map_po_div_status').removeClass('hidden')
+                                                $('#new_po_div_status').addClass('hidden')
+                                                $('#exist_artwork_div_status').removeClass('hidden')
+                                                $('#check_error_status').addClass('hidden')
+
+                                            } else {
+                                                $('#check_error_status').removeClass('hidden')
+                                            }
+
+                                        }); 
 				
-				$('#update_new_po').click(function () {
-					var sList = 0;
-					$('#exist_artwork_div input[type=checkbox]').each(function () {
-						if (this.checked) {
-							sList++;
-						}
-					});
+				
+				$('#update_new_po_status').click(function () {
 
-					if (sList > 0) {
-						$('#check_error').addClass('hidden')
-					if ($('#new_po_no').val() != "") {
-						var a = [];
-						$('#exist_artwork_div input[type=checkbox]').each(function () {
-							if (this.checked) {
-								a.push($(this).parent().attr('data-id'));
-							}
-						});
-						var aa = a.join(',');
-						var new_po_file = $('#new_po_file').prop('files')[0];
-						var new_po_no = $('#new_po_no').val();
-						var csrf_token = $('meta[name="csrf-token"]').attr('content');
-						var form_data = new FormData();
-						form_data.append('id', aa);
-						form_data.append('po_file', new_po_file);
-						form_data.append('po', new_po_no);
-						form_data.append('_token', csrf_token);
-						$.ajax({
-							url: base_url + "/customer/" + buyer + "/order-management/update-label-orders-po",
-							dataType: 'text',
-							cache: false,
-							contentType: false,
-							processData: false,
-							data: form_data,
-							type: 'post',
-							success: function (data) {
-								//location.reload()
-								$('#po-file-upload-div').modal('hide')
+                                            var sList = 0;
+                                            $('#exist_artwork_div_status input[type=checkbox]').each(function () {
+                                                if (this.checked) {
+                                                    sList++;
+                                                }
+                                            });
+
+                                            if (sList > 0) {
+                                                $('#check_error_status').addClass('hidden')
+                                                if ($('#new_po_no_status').val() != "" && $('#new_po_file_status').val() != "") {
+
+                                                    if ($('#new_po_no_status').val().length > 9) {
+                                                        $('#new_po_error_length_status').removeClass('hidden');
+                                                        $('#new_po_error_status').addClass('hidden');
+                                                        $('#new_po_file_error_status').addClass('hidden');
+                                                    } else {
+                                                        var a = [];
+                                                        $('#exist_artwork_div_status input[type=checkbox]').each(function () {
+                                                            if (this.checked) {
+                                                                a.push($(this).parent().attr('data-id'));
+                                                            }
+                                                        });
+                                                        var aa = a.join(',');
+                                                        var new_po_file = $('#new_po_file_status').prop('files')[0];
+                                                        var new_po_no = $('#new_po_no_status').val();
+                                                        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                                                        var form_data = new FormData();
+                                                        form_data.append('id', aa);
+                                                        form_data.append('po_file', new_po_file);
+                                                        form_data.append('po', new_po_no);
+                                                        form_data.append('_token', csrf_token);
+                                                        $.ajax({
+                                                            url: base_url + "/customer/" + buyer + "/order-management/update-label-orders-po",
+                                                            dataType: 'text',
+                                                            cache: false,
+                                                            contentType: false,
+                                                            processData: false,
+                                                            data: form_data,
+                                                            type: 'post',
+                                                            success: function (data) {
+                                                                //tescoOrderStatus()
+                                                                $('#po-file-upload-group').modal('hide')
+                                                                $('.snackbar_span').html('PO Updated Successfully');
+                                                                showSnackbar();
+                                                            },
+                                                            error: function () {
+                                                                console.log('somethig is wrong, please try later');
+                                                            }
+
+                                                        });
+                                                    }
+
+                                                } else {
+                                                    if ($('#new_po_no_status').val() == "" && $('#new_po_file_status').val() == "") {
+                                                        $('#new_po_error_status').removeClass('hidden')
+                                                        $('#new_po_file_error_status').removeClass('hidden')
+                                                        $('#new_po_error_length_status').addClass('hidden');
+                                                    } else if ($('#new_po_file_status').val() == "") {
+                                                        $('#new_po_file_error_status').removeClass('hidden')
+                                                        $('#new_po_error_status').addClass('hidden')
+                                                        $('#new_po_error_length_status').addClass('hidden');
+                                                    } else if ($('#new_po_no_status').val() == "") {
+                                                        $('#new_po_error_status').removeClass('hidden')
+                                                        $('#new_po_file_error_status').addClass('hidden')
+                                                        $('#new_po_error_length_status').addClass('hidden');
+                                                    }
+
+                                                }
+                                            } else {
+                                                $('#check_error_status').removeClass('hidden')
+                                            }
+                                        });
+
+				
+                                        $('#new_pos_status').click(function () {
+                                            var sList = 0;
+                                            $('#exist_artwork_div_status input[type=checkbox]').each(function () {
+                                                if (this.checked) {
+                                                    sList++;
+                                                }
+                                            });
+
+                                            if (sList > 0) {
+                                                $('#check_error_status').addClass('hidden')
+                                                if ($('#new_po_no_status').val() != "" && $('#new_po_file_status').val() != "") {
+                                                    if ($('#new_po_no_status').val().length > 9) {
+                                                        $('#new_po_error_length_status').removeClass('hidden');
+
+                                                        $('#new_po_error_status').addClass('hidden');
+                                                        $('#new_po_file_error_status').addClass('hidden');
+                                                    } else {
+                                                        var a = [];
+                                                        $('#exist_artwork_div_status input[type=checkbox]').each(function () {
+                                                            if (this.checked) {
+                                                                a.push($(this).parent().attr('data-id'));
+                                                            }
+                                                        });
+                                                        var aa = a.join(',');
+                                                        var new_po_file = $('#new_po_file_status').prop('files')[0];
+                                                        var new_po_no = $('#new_po_no_status').val();
+                                                        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                                                        var form_data = new FormData();
+                                                        form_data.append('id', aa);
+                                                        form_data.append('po_file', new_po_file);
+                                                        form_data.append('po', new_po_no);
+                                                        form_data.append('_token', csrf_token);
+                                                        $.ajax({
+                                                           url: base_url + "/customer/" + buyer + "/order-management/update-label-orders-po",
+                                                            dataType: 'text',
+                                                            cache: false,
+                                                            contentType: false,
+                                                            processData: false,
+                                                            data: form_data,
+                                                            type: 'post',
+                                                            success: function (data) {
+                                                                //tescoOrderStatus()
+                                                                $('#po-file-upload-group').modal('hide')
+                                                                $('.snackbar_span').html('PO Updated Successfully');
+                                                                showSnackbar();
+                                                            },
+                                                            error: function () {
+                                                                console.log('somethig is wrong, please try later');
+                                                            }
+
+                                                        });
+                                                    }
+
+                                                } else {
+                                                    if ($('#new_po_no_status').val() == "" && $('#new_po_file_status').val() == "") {
+                                                        $('#new_po_error_status').removeClass('hidden')
+                                                        $('#new_po_file_error_status').removeClass('hidden')
+                                                        $('#new_po_error_length_status').addClass('hidden');
+                                                    } else if ($('#new_po_file_status').val() == "") {
+                                                        $('#new_po_file_error_status').removeClass('hidden')
+                                                        $('#new_po_error_status').addClass('hidden')
+                                                        $('#new_po_error_length_status').addClass('hidden');
+                                                    } else if ($('#new_po_no_status').val() == "") {
+                                                        $('#new_po_error_status').removeClass('hidden')
+                                                        $('#new_po_file_error_status').addClass('hidden')
+                                                        $('#new_po_error_length_status').addClass('hidden');
+                                                    }
+                                                }
+
+                                            } else {
+                                                $('#check_error_status').removeClass('hidden')
+                                            }
+                                        });
+				
+                                        $('#update_po_status').click(function () {
+
+                                            var sList = 0;
+                                            $('#exist_artwork_div_status input[type=checkbox]').each(function () {
+                                                if (this.checked) {
+                                                    sList++;
+                                                }
+                                            });
+
+                                            if (sList > 0) {
+                                                $('#check_error_status').addClass('hidden')
+
+                                                if ($('#select_po_status').val() != "Select PO") {
+                                                    var a = [];
+                                                    $('#exist_artwork_div_status input[type=checkbox]').each(function () {
+                                                        if (this.checked) {
+                                                            a.push($(this).parent().attr('data-id'));
+                                                        }
+                                                    });
+                                                    var aa = a.join(',');
+                                                    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+													//alert($('#select_po_status option:selected').attr('data-id'))
+                                                    $.ajax({
+                                                        url: base_url + "/customer/" + buyer + "/order-management/map-label-orders-po",
+                                                        type: "Post",
+                                                        dataType: "json",
+                                                        data: {
+                                                            _token: csrf_token,
+                                                            id: aa,
+                                                            po: $('#select_po_status').val(),
+															po_file:$('#select_po_status option:selected').attr('data-id')
+                                                        },
+                                                        beforeSend: function () {
+
+                                                        },
+                                                        success: function (data) {
+                                                            //tescoOrderStatus()
+                                                            $('#po-file-upload-group').modal('hide')
+                                                            $('.snackbar_span').html('PO Updated Successfully');
+                                                            showSnackbar();$('#po-file-upload-div').modal('hide')
 								$('.snackbar_span').html('PO Updated Successfully');
 								showSnackbar();
-							},
-							error: function () {
-								console.log('somethig is wrong, please try later');
-							}
+                                                        },
+                                                        error: function (data) {
 
-						});
-					} else {
-						$('#new_po_error').removeClass('hidden')
-					}
-					} else {
-						$('#check_error').removeClass('hidden')
-					}
+                                                        },
+                                                        complete: function () {
+                                                            $(".loader").hide();
+                                                        }
+                                                    })
+                                                } else {
+                                                    $('#select_error_status').removeClass('hidden')
+                                                }
+                                            } else {
+                                                $('#check_error_status').removeClass('hidden')
+                                            }
 
-
-				});
-
-				$('#update_po').click(function () {
-					var sList = 0;
-					$('#exist_artwork_div input[type=checkbox]').each(function () {
-						if (this.checked) {
-							sList++;
-						}
-					});
-
-					if (sList > 0) {
-						$('#check_error').addClass('hidden')
-					if ($('#select_po').val() != "Select PO") {
-						var a = [];
-						$('#exist_artwork_div input[type=checkbox]').each(function () {
-							if (this.checked) {
-								a.push($(this).parent().attr('data-id'));
-							}
-						});
-						var aa = a.join(',');
-						var csrf_token = $('meta[name="csrf-token"]').attr('content');
-						$.ajax({
-							url: base_url + "/customer/" + buyer + "/order-management/map-label-orders-po",
-							type: "Post",
-							dataType: "json",
-							data: {
-								_token: csrf_token,
-								id: aa,
-								po: $('#select_po').val()
-							},
-							beforeSend: function () {
-
-							},
-							success: function (data) {
-								$('#po-file-upload-div').modal('hide')
-								$('.snackbar_span').html('PO Updated Successfully');
-								showSnackbar();
-							},
-							error: function (data) {
-
-							},
-							complete: function () {
-								$(".loader").hide();
-							}
-						})
-					} else {
-						$('#select_error').removeClass('hidden')
-					}
-					} else {
-						$('#check_error').removeClass('hidden')
-					}
-
-				});
-				$('#new_po1').click(function () {
-					
-
-					var sList = 0;
-					$('#exist_artwork_div input[type=checkbox]').each(function () {
-						if (this.checked) {
-							sList++;
-						}
-					});
-
-					if (sList > 0) {
-						$('#update_new_po').removeClass('hidden')
-					$('#update_po').addClass('hidden')
-						$('#new_po_div').removeClass('hidden')
-						$('#map_po_div').addClass('hidden')
-						$('#exist_artwork_div').removeClass('hidden')
-					} else {
-						$('#check_error').removeClass('hidden')
-					}
-
-				});
-				$('#map_po').click(function () {
-					
-					var sList = 0;
-					$('#exist_artwork_div input[type=checkbox]').each(function () {
-						if (this.checked) {
-							sList++;
-						}
-					});
-
-					if (sList > 0) {
-						$('#update_po').removeClass('hidden')
-					$('#update_new_po').addClass('hidden')
-						$('#map_po_div').removeClass('hidden')
-						$('#new_po_div').addClass('hidden')
-						$('#exist_artwork_div').removeClass('hidden')
-						$('#check_error').addClass('hidden')
-					} else {
-						$('#check_error').removeClass('hidden')
-					}
-
-
-
-				});
+                                        });
 			},
 			error: function (data) {
 
@@ -6761,7 +6983,7 @@ function setHangTagStatus() {
         localStorage.setItem("hang_tag", exist_id);
         setHangTag(localStorage.getItem("hang_tag"))
         $('#hang_template_error').addClass('hidden')
-        $("#hangtagform .left-panel").removeClass('active');
+        $("#hangtagform .left-panelorc").removeClass('active');
         $("#hangtagform .right-panel").removeClass('active');
         $("#hangtagform .backdrop").removeClass('active');
         $('#hangtagform .scalable').removeClass('active');
@@ -6788,7 +7010,7 @@ function setSpecialTagStatus() {
         localStorage.setItem("special_tag", exist_id);
         setSpecialTag(localStorage.getItem("special_tag"))
         $('#special_template_error').addClass('hidden')
-        $("#specialtagform .left-panel").removeClass('active');
+        $("#specialtagform .left-panelorc").removeClass('active');
         $("#specialtagform .right-panel").removeClass('active');
         $("#specialtagform .backdrop").removeClass('active');
         $('#specialtagform .scalable').removeClass('active');
@@ -6817,7 +7039,7 @@ function setMainLabelStatus(dataid) {
         localStorage.setItem("main_label", main_lab);
         setMainLabel('mainlabelsform' + dataid, dataid, value)
         $('#main_template_error' + dataid).addClass('hidden')
-        $("#mainlabelsform" + dataid + " .left-panel").removeClass('active');
+        $("#mainlabelsform" + dataid + " .left-panelorc").removeClass('active');
         $("#mainlabelsform" + dataid + " .right-panel").removeClass('active');
         $("#mainlabelsform" + dataid + " .backdrop").removeClass('active');
         $('#mainlabelsform' + dataid + ' .scalable').removeClass('active');
@@ -6853,7 +7075,7 @@ function setWashCareLabelStatus(dataid) {
             $('#wash_composition_page_error' + dataid).addClass('hidden')
             localStorage.setItem("wash_label", wash_lab);
             setWashLabel('washcarelabelform' + dataid, dataid, value)
-            $("#washcarelabelform" + dataid + " .left-panel").removeClass('active');
+            $("#washcarelabelform" + dataid + " .left-panelorc").removeClass('active');
             $("#washcarelabelform" + dataid + " .right-panel").removeClass('active');
             $("#washcarelabelform" + dataid + " .backdrop").removeClass('active');
             $('#washcarelabelform' + dataid + ' .scalable').removeClass('active');
@@ -6920,13 +7142,14 @@ function setHangTag(id) {
 		},
 		success: function (data) {
 			$('#print_hang_button').removeClass('hidden')
+			$('#save_hang_button').addClass('hidden')
 		},
 		error: function (data) {
 
 		}
 	})
-		$('.hang-card span').text('Approved')
-		$('.hang-card span').addClass('label label-Approved label-status')
+		$('.hang-card span').text('Order Approved')
+		$('.hang-card span').addClass('label label-OrderApproved label-status')
 		$('#po-file-upload-button').css('display','block')
 }
 
@@ -6976,14 +7199,15 @@ function setSpecialTag(id) {
             $(".loader").show();
         },
         success: function (data) {
+			$('#save_special_button').addClass('hidden')
 
         },
         error: function (data) {
 
         }
     })
-	$('.special-card span').text('Approved')
-	$('.special-card span').addClass('label label-Approved label-status')
+	$('.special-card span').text('Order Approved')
+	$('.special-card span').addClass('label label-OrderApproved label-status')
 	$('#po-file-upload-button').css('display','block')
 }
 
@@ -7064,8 +7288,8 @@ function setMainLabel(index, dataid, id) {
         }
     })
     $('#main_label_card').css('display','block')
-	$('.main-card'+dataid+' span').text('Approved')
-	$('.main-card'+dataid+' span').addClass('label label-Approved label-status')
+	$('.main-card'+dataid+' span').text('Order Approved')
+	$('.main-card'+dataid+' span').addClass('label label-OrderApproved label-status')
 	$('#po-file-upload-button').css('display','block')
 }
 
@@ -7376,6 +7600,8 @@ function setSolidStickers() {
 				$(".loader").show();
 			},
 			success: function (data) {
+				$('#save_sticker_button').addClass('hidden')
+				$('#po-file-upload-button-solid').removeClass('hidden')
 
 			},
 			error: function (data) {
@@ -7427,6 +7653,8 @@ function setSolidStickers() {
 				$(".loader").show();
 			},
 			success: function (data) {
+				$('#save_sticker_button').addClass('hidden')
+				$('#po-file-upload-button-solid').removeClass('hidden')
 
 			},
 			error: function (data) {
@@ -7436,7 +7664,9 @@ function setSolidStickers() {
 	}
 	}
 	else{
-		$('.age_group_error').removeClass('hidden')
+		$('.snackbar_span').html('Please Select Age Group');
+		showSnackbar();
+		//$('.age_group_error').removeClass('hidden')
 	}
 
 }
@@ -7607,3 +7837,19 @@ function artwork_modal(uvc,po)
 	alert(uvc)
 	alert(po)
 }
+
+
+/**
+ * [MOQ validation function]
+ * @author <praveen>
+ */
+function checkMOQ(obj) {
+	try {
+			var moq =$(obj).attr("min"); 
+			$(obj).data("min-error","Qty should be >= "+moq); 
+	} catch (e) {
+		/** [error statements] */
+		console.error("Error:" + e)
+	}
+}
+
