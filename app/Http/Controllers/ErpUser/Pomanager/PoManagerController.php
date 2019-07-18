@@ -13,10 +13,12 @@ use DB;
 use Session;
 use App\ErpOrders as Erp;
 use App\ErpOrderDetails as ErpOrderDetails;
+use Carbon\Carbon;
 
 class PoManagerController extends Controller
 {
-    
+	private $current_date;
+	
     /**
      * Create a new controller instance.
      *
@@ -24,7 +26,9 @@ class PoManagerController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('erpuser');
+		$this->middleware('erpuser');
+		// get the current time
+		$this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
    
     }
 
@@ -357,136 +361,255 @@ class PoManagerController extends Controller
      * @return \Illuminate\Http\Response
      */
 	public function submitPoVerify(Request $request)
-    {
-		   try {
-						$po = $request->po; 
-						$style_no = $request->style_no;
-						$reference = $request->reference;
-						$qty = $request->qty;
-						$price = $request->price;
-						$po_complete = $request->po_complete;
-						$comment = $request->comment;
-						$commenttext = $request->commenttext;
-						$count = $request->count_i;
-						$count_j = $request->count_j;
-						$erp_order_id = $request->erp_order_id;
-						$purchase_order_number = $request->purchase_order_number;
-						$customer_name = $request->customer_name;
+	{
+		try {
+			$po = $request->po;
+			$style_no = $request->style_no;
+			$reference = $request->reference;
+			$qty = $request->qty;
+			$price = $request->price;
+			$po_complete = $request->po_complete;
+			$comment = $request->comment;
+			$commenttext = $request->commenttext;
+			$count = $request->count_i;
+			$count_j = $request->count_j;
+			$erp_order_id = $request->erp_order_id;
+			$purchase_order_number = $request->purchase_order_number;
+			$customer_name = $request->customer_name;
+			$erp_user     = Auth::guard('erpuser')->id();
+
 			// Get Erp status table id for 'Jobcard Created' and 'Cancelled' status.
-	    $erp_status_ids = DB::table('erp_status')->whereIn('status_name',['Jobcard Created', 'Cancelled', 'Moved To JC Queue', 'Invoice Generated','Partial Invoice'] )->pluck('id')->all();   
-			if($count == 0)
-			{
-				$data 		=   DB::table('erp_orders')->where('id',$erp_order_id)
-						  		->update([
-								  'status' => 3,
-								  'partial_status' => 0
+			$erp_status_ids = DB::table('erp_status')->whereIn('status_name', ['Jobcard Created', 'Cancelled', 'Moved To JC Queue', 'Invoice Generated', 'Partial Invoice'])->pluck('id')->all();
+
+			$orderlist   = ErpOrderDetails::join('erp_orders', 'erp_order_details.erp_order_id', 'erp_orders.id')
+					->where('erp_order_details.erp_order_id', $erp_order_id)
+					->whereNotIn('erp_order_details.status', $erp_status_ids)
+					->select('erp_order_details.*', 'erp_orders.customer_id', 'erp_orders.buyer_id')
+					->get();
+			$template  = 'Avlb';
+			// Approve orders
+			if ($count == 0) {
+				$action_id  = DB::table('actions')->where('action', 'ilike', 'PO Manager Verified')->value('id');
+
+				$data 		=   DB::table('erp_orders')->where('id', $erp_order_id)
+					->update([
+						'status' => 3,
+						'partial_status' => 0
+					]);
+
+				foreach ($orderlist as $value) {
+					$po_rejected_date = $value->po_rejected_date;
+					$buyer    = DB::table('buyers')->select('buyer_name')->where('id', '=', $value->buyer_id)->first();
+					$price =  DB::table('price_taxation')->select('price_taxation.*')->where('customer_id', $value->customer_id)->where('buyer_id', $value->buyer_id)->where('template_id', $value->template_id)->get();
+
+					$price_range =  DB::table('price_range')->select('price_range.*')->where('price_taxation_id', $price{0}->id)->where('volume_from', '<=', $value->order_quantity)->where('volume_to', '>=', $value->order_quantity)->get();
+
+					// For first time approving, update po approved date .
+					// if approving a rejected order , then update reapproved date
+					$query = ErpOrderDetails::where('id', $value->id)
+							->whereNotIn('status', $erp_status_ids);
+
+					if($po_rejected_date === null || $po_rejected_date === 'null') {
+						$query = $query->update([
+									'rate' => $price_range{0}->price,
+									'status' => 3,
+									'reason' => $commenttext,
+									'po_manager_approved_by' => $erp_user,
+									'po_verified_date' => $this->current_date
 								]);
-				
-				$data_erp		=   ErpOrderDetails::where('erp_order_id',$erp_order_id)
-									->whereNotIn('status',$erp_status_ids)
-									->update([
-									  'status' => 3,
-									  'reason' => $commenttext
-									]);
-				
-				
-				$orderlist   = ErpOrderDetails::join('erp_orders','erp_order_details.erp_order_id','erp_orders.id')
-								->where('erp_order_details.erp_order_id',$erp_order_id)
-								->select('erp_order_details.*','erp_orders.customer_id','erp_orders.buyer_id')
-								->get();
-				 foreach($orderlist as $value)
-		   		 {
-					 
-					 $price =  DB::table('price_taxation')->select('price_taxation.*')->where('customer_id',$value->customer_id)->where('buyer_id',$value->buyer_id)->where('template_id',$value->template_id)->get();
-			   
-					 $price_range =  DB::table('price_range')->select('price_range.*')->where('price_taxation_id',$price{0}->id)->where('volume_from','<=',$value->order_quantity)->where('volume_to','>=',$value->order_quantity)->get();
-					 
-					 DB::table('erp_order_details')->where('id',$value->id)
-						  		->update([
-								  'rate' => $price_range{0}->price,
-								  'po_verified_date'=>now('Asia/Kolkata')
+					} else {
+						$query->update([
+							'rate' => $price_range{0}->price,
+							'status' => 3,
+							'reason' => $commenttext,
+							'po_manager_approved_by' => $erp_user,
+							'po_reapproved_date' => $this->current_date
+						]);
+					}
+						
+				}
+				$result      = response()->json(['error' => false, 'message' => 'success', 'status' => true], 200);
+
+			} else if ($count_j == $count) {
+				// approve partial orders
+				$action_id  = DB::table('actions')->where('action', 'ilike', 'PO Manager Verified')->value('id');
+				$buyer    = DB::table('buyers')->select('buyer_name')->where('id', '=', $value->buyer_id)->first();
+				$data 		=   DB::table('erp_orders')->where('id', $erp_order_id)
+					->update([
+						'status' => 3,
+						'partial_status' => 1
+					]);
+
+				foreach ($orderlist as $value) {
+					$po_rejected_date = $value->po_rejected_date;
+					$price =  DB::table('price_taxation')->select('price_taxation.*')->where('customer_id', $value->customer_id)->where('buyer_id', $value->buyer_id)->where('template_id', $value->template_id)->get();
+
+					$price_range =  DB::table('price_range')->select('price_range.*')->where('price_taxation_id', $price{0}->id)->where('volume_from', '<=', $value->order_quantity)->where('volume_to', '>=', $value->order_quantity)->get();
+
+					// For first time approving, update po approved date .
+					// if approving a rejected order , then update reapproved date
+					$query = ErpOrderDetails::where('id', $value->id)
+							->whereNotIn('status', $erp_status_ids);
+
+					if($po_rejected_date === null || $po_rejected_date === 'null') {
+						$query = $query->update([
+									'rate' => $price_range{0}->price,
+									'status' => 3,
+									'reason' => $commenttext,
+									'po_manager_approved_by' => $erp_user,
+									'po_verified_date' => $this->current_date
 								]);
-				 }
-				
-				
-				$result      = response()->json(['error'=> false,'message' =>'success','status'=>true],200);
-			}
-		    else if($count_j == $count)
-		    {
-				$data 		=   DB::table('erp_orders')->where('id',$erp_order_id)
-						  		->update([
-								  'status' => 3,
-								  'partial_status' => 1
-								]);
-				
-				$data_erp		=   ErpOrderDetails::where('erp_order_id',$erp_order_id)
-									->whereNotIn('status',$erp_status_ids)
-									->update([
-									  'status' => 3,
-									  'reason' => $commenttext
-									]);
-				
-				$orderlist   = ErpOrderDetails::join('erp_orders','erp_order_details.erp_order_id','erp_orders.id')
-								->where('erp_order_details.erp_order_id',$erp_order_id)
-								->select('erp_order_details.*','erp_orders.customer_id','erp_orders.buyer_id')
-								->get();
-				 foreach($orderlist as $value)
-		   		 {
-					 
-					 $price =  DB::table('price_taxation')->select('price_taxation.*')->where('customer_id',$value->customer_id)->where('buyer_id',$value->buyer_id)->where('template_id',$value->template_id)->get();
-			   
-					 $price_range =  DB::table('price_range')->select('price_range.*')->where('price_taxation_id',$price{0}->id)->where('volume_from','<=',$value->order_quantity)->where('volume_to','>=',$value->order_quantity)->get();
-					 
-					 DB::table('erp_order_details')->where('id',$value->id)
-						  		->update([
-								  'rate' => $price_range{0}->price,
-								  'po_verified_date'=>now('Asia/Kolkata')
-								]);
-				 }
-				
-				$to_email =  DB::table('tesco_error_report_emails')->select('*')->where('id',1)->first();
-				
-				Mail::send('mails.error-report-po',['po'=> $po,'style_no'=>$style_no,'reference'=> $reference,'qty'=>$qty,'price'=> $price,'po_complete'=>$po_complete,'comment'=>$comment,'commenttext'=>$commenttext,'purchase_order_number'=>$purchase_order_number,'customer_name'=>$customer_name,'erp_order_id'=>$erp_order_id], function ($message) use ($to_email)
-				{
+					} else {
+						$query->update([
+							'rate' => $price_range{0}->price,
+							'status' => 3,
+							'reason' => $commenttext,
+							'po_manager_approved_by' => $erp_user,
+							'po_reapproved_date' => $this->current_date
+						]);
+					}
+				}
+
+				$to_email =  DB::table('tesco_error_report_emails')->select('*')->where('id', 1)->first();
+
+				Mail::send('mails.error-report-po', ['po' => $po, 'style_no' => $style_no, 'reference' => $reference, 'qty' => $qty, 'price' => $price, 'po_complete' => $po_complete, 'comment' => $comment, 'commenttext' => $commenttext, 'purchase_order_number' => $purchase_order_number, 'customer_name' => $customer_name, 'erp_order_id' => $erp_order_id], function ($message) use ($to_email) {
 					$message->from('admin@jga.com');
 					$message->subject('Jupiter Garments Accessories - Error Report');
 					$message->to($to_email->email_address);
-				});  
-				$result      = response()->json(['error'=> false,'message' =>'success','status'=>true],200);
-			}
-			else
-		    {
-				
-				$data 		=   DB::table('erp_orders')->where('id',$erp_order_id)
-						  		->update([
-								  'status' => 2,
-								  'partial_status' => $count_j
-								]);
-				
-				$data_erp		=   ErpOrderDetails::where('erp_order_id',$erp_order_id)
-									->whereNotIn('status',$erp_status_ids)
-									->update([
-									  'status' => 2,
-									  'reason' => $commenttext
-									]);
-				
-				$to_email =  DB::table('tesco_error_report_emails')->select('*')->where('id',1)->first();
-			   
-				Mail::send('mails.error-report-po',['po'=> $po,'style_no'=>$style_no,'reference'=> $reference,'qty'=>$qty,'price'=> $price,'po_complete'=>$po_complete,'comment'=>$comment,'commenttext'=>$commenttext,'purchase_order_number'=>$purchase_order_number,'customer_name'=>$customer_name,'erp_order_id'=>$erp_order_id], function ($message) use ($to_email)
-				{
+				});
+				$result      = response()->json(['error' => false, 'message' => 'success', 'status' => true], 200);
+
+			} else {
+				$action_id  = DB::table('actions')->where('action', 'ilike', 'PO Manager Rejected')->value('id');
+				$buyer    = DB::table('buyers')->select('buyer_name')->where('id', '=', $value->buyer_id)->first();
+				$data 		=   DB::table('erp_orders')->where('id', $erp_order_id)
+					->update([
+						'status' => 2,
+						'partial_status' => $count_j
+					]);
+
+				$data_erp		=   ErpOrderDetails::where('erp_order_id', $erp_order_id)
+					->whereNotIn('status', $erp_status_ids)
+					->update([
+						'status' => 2,
+						'reason' => $commenttext,
+						'po_rejected_date' => $this->current_date,
+						'po_rejected_by' => $erp_user,
+					]);
+
+				$to_email =  DB::table('tesco_error_report_emails')->select('*')->where('id', 1)->first();
+
+				Mail::send('mails.error-report-po', ['po' => $po, 'style_no' => $style_no, 'reference' => $reference, 'qty' => $qty, 'price' => $price, 'po_complete' => $po_complete, 'comment' => $comment, 'commenttext' => $commenttext, 'purchase_order_number' => $purchase_order_number, 'customer_name' => $customer_name, 'erp_order_id' => $erp_order_id], function ($message) use ($to_email) {
 					$message->from('admin@jga.com');
 					$message->subject('Jupiter Garments Accessories - Error Report');
 					$message->to($to_email->email_address);
-				});  
-				$result      = response()->json(['error'=> false,'message' =>'success','status'=>false],200);
-		    }
-			   
-        }
-        catch (\Exception $e)
-        {
-            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-        }
-        return $result;
+				});
+				$result      = response()->json(['error' => false, 'message' => 'success', 'status' => false], 200);
+			}
+
+			// foreach($jobcard_data as $key => $data)
+			// {
+			// 	if($buyer->buyer_name === 'Tesco'){
+
+			// 		$qnty_table     = $data->order_qnty_table_name;
+			// 		$main_table     = str_replace("_quanty","",$data->order_qnty_table_name);
+			// 		$qty_row_id     = $data->order_qnty_table_id;
+			// 		$qnty_id        = str_replace("_orders_quanty","_order_id",str_replace("tesco_","",$qnty_table));
+			// 		$order_details  = DB::table($qnty_table)
+			// 							->select($main_table.'.*')
+			// 							->where($qnty_table.'.id', $qty_row_id)
+			// 							->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id)
+			// 							->first();
+			// 		$season         = $order_details->season_code;
+			// 		$country        = $order_details->zone;
+			// 		$style_zone     = strtolower($country).'_style_ref';
+			// 		$template_id    = $order_details->template_id;
+			// 		$template_level = DB::table('tesco_item_master as t1')
+			// 							->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
+			// 							->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
+			// 							->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
+			// 							->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
+			// 							->where('t1.id', $template_id)
+			// 							->first();
+					
+			// 		$material_name  = $template_level->material;
+			// 		$material_sub   = $template_level->material_sub;
+			// 		$material_ref   = $template_level->ref;
+			// 		$customer_po    = $order_details->purchase_order_no;
+			// 		$buyer_po       = $order_details->po_number;
+			// 		$style          = $order_details->$style_zone;
+			// 		$ocn_number     = $order_details->ocn_number;
+					
+
+			// 	} else if($buyer->buyer_name === 'Orchestra'){
+
+			// 		// $qnty_table     = $data->order_qnty_table_name;
+			// 		// $main_table     = str_replace("_qty","",$data->order_qnty_table_name);
+			// 		// $qty_row_id     = $data->order_qnty_table_id;
+			// 		// $result_str     =  str_replace("_"," ",str_replace("_orders","",$main_table));
+			// 		// $qnty_id        = '';
+			// 		// foreach (explode(' ', $result_str) as $word)
+			// 		// {
+			// 		//    $qnty_id .= strtolower($word[0]);
+			// 		// }
+			// 		// $order_details  = DB::table($qnty_table)->select($main_table.'.*')->where($qnty_table.'.id', $qty_row_id)->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id.'_id')
+			// 		// 				->get();
+			// 		// $season         = $order_details->season_code;
+			// 		// $country        = "";
+			// 		// $template_id    = $order_details->template_id;
+			// 		// $template_level = DB::table('tesco_item_master as t1')
+			// 		// 					->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
+			// 		// 					->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
+			// 		// 					->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
+			// 		// 					->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
+			// 		// 					->where('t1.id', $template_id)
+			// 		// 					->first();
+					
+			// 		// $material_name  = $template_level->material;
+			// 		// $material_sub   = $template_level->material_sub;
+			// 		// $material_ref   = $template_level->ref;
+			// 		// $customer_po    = $order_details->purchase_order_no;
+			// 		// $buyer_po       = $order_details->po_number;
+			// 		// $style          = $order_details->$style_zone;
+			// 		// $ocn_number     = $order_details->ocn_number;
+
+			// 	} else {
+
+			// 		$template       = 'Not Avlb';
+
+			// 	}
+
+
+			// 	$history_id = History::updateOrCreate(['erp_order_details_id' => $data->id], [
+			// 		'buyer_id'             => $buyer_id,
+			// 		'template'             => $template,
+			// 		'season'               => $season,
+			// 		'country'              => $country,
+			// 		'customer_id'          => $customer_id,
+			// 		'material'             => $material_name,
+			// 		'mat_sub'              => $material_sub,
+			// 		'reference'            => $material_ref,
+			// 		'style'                => $style,
+			// 		'po'                   => $customer_po,
+			// 		'buyer_po'             => $buyer_po,
+			// 		'ocn'                  => $ocn_number,
+			// 		'created_at'           => $current_timestamp,
+			// 		'updated_at'           => $current_timestamp,
+			// 	]);
+
+			// 	DB::table('event_history')
+			// 	->insert([
+			// 		'history_id'  => $history_id->id,
+			// 		'action_id'   => $action_id,
+			// 		'created_by'  => Auth::guard('erpuser')->id(),
+			// 		'created_at'  => $current_timestamp,
+			// 		'updated_at'  => $current_timestamp,
+			// 	]);
+			// }
+		} catch (\Exception $e) {
+			$result = response()->json(['Message' => $e->getMessage(), 'Line' => $e->getLine(), 'File' => $e->getFile()]);
+		}
+		return $result;
 	}
 
 }

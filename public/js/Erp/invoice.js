@@ -556,7 +556,7 @@
         $('#credit-val').text(data[0].credit_limit)
         $('#company_details').html('<h4>'+company_details.name+'</h4>'+company_details.address+'<p>PH : '+company_details.office_phone+', '+company_details.phone+'</br> GSTIN : '+company_details.gstin+'</p>')
 
-        $('#bill_to').html('<p>Buyer</p><h4>'+data[0].company_name+'</h4><p>'+bill_to.address+'</br> GSTIN :'+data[0].gstin_number+ '</p>')
+        $('#bill_to').html('<p>Buyer</p><h4>'+data[0].company_name+'</h4><p>'+bill_to.address+','+bill_to.pincode+'</br> GSTIN :'+data[0].gstin_number+ '</p>')
         $('#disp_thru').text(data[0].delvry_thru);
         $('.order-details tbody input[type=checkbox]').each(function () {
             if ($(this).prop("checked") == false) {
@@ -710,8 +710,13 @@
             });
                 saveInvoice(arr,eChargesArr1)
             })
-            $('.delivery-details').html('<div class="preview-delivery-at">'+$('.delivery-card.active').html()+'</div>')
-            $('#erp-invoice').modal("show")
+            $('.delivery-details').html('<div class="preview-delivery-at">'+$('.delivery-card.active').html()+'</div>');
+            /** [ Backdrop for bootstrap modal ] */
+            $('#erp-invoice').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+            $('#erp-invoice').modal("show");
         }
     }
 

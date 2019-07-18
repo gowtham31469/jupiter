@@ -24,7 +24,7 @@ class CreateActionsTable extends Migration
         $data = array(
             // ['type'=>'PO Manager','action' =>'All'],
             ['type'=>'PO Manager','action' =>'PO Manager Verification Pending'],
-            ['type'=>'PO Manager','action' =>'Verified'],
+            ['type'=>'PO Manager','action' =>'PO Manager Verified'],
             ['type'=>'PO Manager','action' =>'PO Manager Rejected'],
             ['type'=>'PO Manager','action' =>'PO Manager Reapproved'],
             // ['type'=>'JC Manager','action' =>'All'],

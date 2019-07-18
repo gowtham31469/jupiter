@@ -45,15 +45,15 @@ class JobManagerController extends Controller
 	public function index()
 	{
 		try {
-			$customer_id = Auth::guard('erpuser')->id();
+			$erp_user_id = Auth::guard('erpuser')->id();
 			
 			$companies   = 	DB::table('erpuser_company_mapping')
 									->join('company','erpuser_company_mapping.company','company.id')
-									->where('erpuser_company_mapping.erp_user',$customer_id)
+									->where('erpuser_company_mapping.erp_user',$erp_user_id)
 									->select('erpuser_company_mapping.*','company.name', 'company.logo')
 									->get();
 			$buyers      = 	DB::table('erpuser_buyer')
-									->where('erpuser_buyer.erp_user',$customer_id)
+									->where('erpuser_buyer.erp_user',$erp_user_id)
 									->pluck('erpuser_buyer.buyer')
 									->all();
 
@@ -84,7 +84,7 @@ class JobManagerController extends Controller
 			$templates   = 		DB::table('erpusers_template_mapping')
 									->join('buyers','erpusers_template_mapping.buyer','buyers.id')
 									->where('erpusers_template_mapping.company',session()->get('company'))
-									->where('erpusers_template_mapping.erp_user',$customer_id)
+									->where('erpusers_template_mapping.erp_user',$erp_user_id)
 									->select('erpusers_template_mapping.*','buyers.template_table','buyers.item_master_table','buyers.id as buyer_id')
 									->get();
 			
