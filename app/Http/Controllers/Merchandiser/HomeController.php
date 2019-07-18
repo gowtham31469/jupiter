@@ -137,7 +137,7 @@ class HomeController extends Controller
 		           ->update([
 		             'merchandiser_comment' => $comment,
 		             'approved_date'        => $approved_date,
-		             'status'               => "Approved"
+		             'status'               => "Order Approved"
 		          ]);
 
              $result = response()->json(['error'=> false,'message' =>'Success'],200);
@@ -165,7 +165,7 @@ class HomeController extends Controller
 		           ->update([
 		             'merchandiser_comment' => $comment,
 		             'rejected_date'        => $rejected_date,
-		             'status'               => "Rejected"
+		             'status'               => "Order Rejected"
 		          ]);
 
                 $result = response()->json(['error'=> false,'message' =>'Success'],200);

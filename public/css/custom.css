@@ -608,6 +608,24 @@ span.navbar-brand.logo:hover {
     transition: 0.5s ease all;
 }
 
+.left-panelorc {
+    position: fixed;
+    right: 0px;
+    padding-right: 5px !important;
+    top: 0;
+    bottom: 0px;
+    height: 100vh !important;
+    z-index: 11;
+    transition: 0.5s ease all;
+    padding: 10px;
+    margin-right: -100%;
+}
+
+.left-panelorc.active {
+    margin-right: 25%;
+    transition: 0.5s ease all;
+}
+
 .right-panel {
     position: fixed;
     right: 0px;

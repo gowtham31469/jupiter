@@ -1660,6 +1660,7 @@ class OrderController extends Controller
     {
 		 $id        =   explode(',',$request->id);
 		 $po        =   $request->po;
+		 $po_file        =   $request->po_file;
 		
 		foreach($id as $val)
 		{
@@ -1669,6 +1670,7 @@ class OrderController extends Controller
                 ->update([
                     'po_number' => $po,
                     'po_status' => "PO Pending",
+                    'po_file' => $po_file,
                     'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                 ]);
 		}
