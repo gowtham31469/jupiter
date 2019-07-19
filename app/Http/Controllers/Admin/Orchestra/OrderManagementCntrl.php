@@ -267,6 +267,31 @@ class OrderManagementCntrl extends Controller
                 $data['orchestra_wash_template_middle']="/storage/app/template/Orchestra/WCL/sticker3.svg";
 				
                 $data['orchestra_wash_template_id']=5;
+				
+				$factory_code = $data['order_details']{0}->FactoryCode;
+				$customer_id = DB::table('customers')->select('*')->where('factory_code',$factory_code)->get();
+
+				if(count($customer_id) > 0)
+				{
+					$carton_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',5)->get();
+
+					if(count($carton_moq) > 0)
+					{
+						$data['wash_moq']=$carton_moq{0}->moq;
+					}
+					else
+					{
+						$data['wash_moq']=1;
+					}
+
+
+				}
+				else
+				{
+					$data['wash_moq']=1;
+				}
+				
+				
                 
                 $orchestra_template_front = DB::table('orchestra_template')->select('*')->where('item_id','2')->where('disney',1)->get();
                 $data['orchestra_template_front']=$orchestra_template_front;
@@ -302,6 +327,29 @@ class OrderManagementCntrl extends Controller
                 $data['orchestra_wash_template_back']="/storage/app/template/Orchestra/WCL/sticker2.svg";
                 $data['orchestra_wash_template_middle']="/storage/app/template/Orchestra/WCL/sticker3.svg";
                 $data['orchestra_wash_template_id']=4;
+				
+				$factory_code = $data['order_details']{0}->FactoryCode;
+				$customer_id = DB::table('customers')->select('*')->where('factory_code',$factory_code)->get();
+
+				if(count($customer_id) > 0)
+				{
+					$carton_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',4)->get();
+
+					if(count($carton_moq) > 0)
+					{
+						$data['wash_moq']=$carton_moq{0}->moq;
+					}
+					else
+					{
+						$data['wash_moq']=1;
+					}
+
+
+				}
+				else
+				{
+					$data['wash_moq']=1;
+				}
                 
                 $orchestra_template_front = DB::table('orchestra_template')->select('*')->where('item_id','2')->where('disney', 0)->get();
                 $data['orchestra_template_front']=$orchestra_template_front;
