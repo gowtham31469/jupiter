@@ -3109,7 +3109,7 @@ function washcarelabels(data, dataid) {
         }
 
 
-        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + (value.Size).replace("ANS", '') + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control input-sm tot_qty_table" value="' + $wash_label_count + '" required placeholder="WCL Count"><div class="help-block with-errors"></div></div></td></tr>';
+        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + (value.Size).replace("ANS", '') + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)" type="number" min="'+data.wash_moq+'" class="form-control input-sm tot_qty_table" value="' + $wash_label_count + '" required placeholder="WCL Count"><div class="help-block with-errors"></div></div></td></tr>';
 
         $qu++;
         ttots += parseInt($wash_label_count);
@@ -3137,7 +3137,7 @@ function washcarelabels(data, dataid) {
             $wash_cm = "";
 			$wash_in = "";
         }
-		var sizebox='<div class="form-group has-feedback has-error has-danger"><label>Enter Size in Cm</label><input onkeypress="return checkNumbersOnly(event)" type="text" maxlength="3" class="form-control input-sm washonesizecm" value="'+$wash_cm+'" required="" placeholder="Enter Size in Cm"><div class="help-block with-errors"></div></div><div class="form-group hidden has-feedback has-error has-danger"><label>Enter Size in inches</label><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control input-sm washonesizein" maxlength="3" value="'+$wash_in+'" placeholder="Enter Size in inches"><div class="help-block with-errors"></div></div>';
+		var sizebox='<div class="form-group has-feedback"><label>Enter Size in Cm</label><input onkeypress="return checkNumbersOnly(event)" type="text" maxlength="3" class="form-control input-sm washonesizecm" value="'+$wash_cm+'" required="" placeholder="Enter Size in Cm"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label>Enter Size in inches</label><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control input-sm washonesizein" maxlength="3" value="'+$wash_in+'" placeholder="Enter Size in inches"><div class="help-block with-errors"></div></div>';
 	}
 	else
 	{
@@ -3216,6 +3216,7 @@ function washcarelabels(data, dataid) {
     $('.care_instruction_select'+dataid).parent().removeClass('has-error')
     $('.help-block').html('')
     $('.extra_percentage').keyup(function () {
+		
         
         var tot_qty_table_carton_final = 0;
         if ($(this).val() != "") {
@@ -3274,6 +3275,8 @@ function washcarelabels(data, dataid) {
        {
                 $('.merchandiser_error').removeClass('hidden')
        }
+		//alert()
+		$('.tot_qty_table').parent().removeClass('has-error').removeClass('has-danger')
         
     })
 
@@ -3994,7 +3997,7 @@ function mainlabels(data, dataid) {
         $('#mainlabelsform' + dataid + ' .scalable').removeClass('active');
     })
     selectpicker()
-    treestructure(data.treeviewmain, "tree3" + dataid, $template_id);
+    treestructuremain(data.treeviewmain, "tree3" + dataid, $template_id);
     $('#mainlabelsform' + dataid).validator().on('submit', function (e) {
         if (e.isDefaultPrevented()) {
 
@@ -4040,7 +4043,7 @@ function specialtags(data) {
     $.each(data.orchestra_template_front, function (index, value) {
         option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
     });
-    $('.top-content').append('<form id="specialtagform" data-toggle= "validator"><div class="left-panelorc col-md-9"id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="special_template_error" style="color:red" class="hidden">Please select the template</label>  <div><input type="text" id="tree2_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree2" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max"> <h4>Quantity Info for Special Tag</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Final order qty</label><input class="form-control input-sm special_qty" value="' + $special_tag_count + '" onkeypress="return checkNumbersOnly(event)" placeholder="Special Tag Count" type="text" required><div class="help-block with-errors"></div></div><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_special_button" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="specialclose">Close</button>  </div></div> </div>  <div class="backdrop"></div></form>');
+    $('.top-content').append('<form id="specialtagform" data-toggle= "validator"><div class="left-panelorc col-md-9"id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="special_template_error" style="color:red" class="hidden">Please select the template</label>  <div><input type="text" id="tree2_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree2" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max"> <h4>Quantity Info for Special Tag</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Final order qty</label><input class="form-control input-sm special_qty" value="' + $special_tag_count + '" onkeypress="return checkorcMOQ(this)" placeholder="Special Tag Count" type="number" required><div class="help-block with-errors"></div></div><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_special_button" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="specialclose">Close</button>  </div></div> </div>  <div class="backdrop"></div></form>');
 	//$('.left').removeClass('disabled')
     $('#specialtagform .tot_qty_table').keyup(function () {
         var tot_qty_table_carton_final = 0;
@@ -4069,7 +4072,7 @@ function specialtags(data) {
 
 
 
-    treestructure(data.treeviewspecial, "tree2", $template_id);
+    treestructurespecial(data.treeviewspecial, "tree2", $template_id);
 
     $('#specialtagform').validator().on('submit', function (e) {
         if (e.isDefaultPrevented()) {
@@ -4132,7 +4135,7 @@ function hangtagmodal(data) {
         } else {
             $hang_tag_count = "";
         }
-        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control  input-sm tot_qty_table" value="' + $hang_tag_count + '" required placeholder="Hang Tag Count"><div class="help-block with-errors"></div></div></td></tr>';
+        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)"  type="number" class="form-control  input-sm tot_qty_table" value="' + $hang_tag_count + '" required placeholder="Hang Tag Count"><div class="help-block with-errors"></div></div></td></tr>';
         ttots += parseInt($hang_tag_count);
         $qu++;
     });
@@ -4146,7 +4149,7 @@ function hangtagmodal(data) {
             $hang_cm = "";
 			$hang_in = "";
         }
-		var sizebox='<div class="form-group has-feedback has-error has-danger"><label>Enter Size in Cm</label><input onkeypress="return checkNumbersOnly(event)" type="text" maxlength="3" class="form-control input-sm onesizecm" value="'+$hang_cm+'" required="" placeholder="Enter Size in Cm"><div class="help-block with-errors"></div></div><div class="form-group hidden has-feedback has-error has-danger"><label>Enter Size in inches</label><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control input-sm onesizein" maxlength="3" value="'+$hang_in+'" placeholder="Enter Size in inches"><div class="help-block with-errors"></div></div>';
+		var sizebox='<div class="form-group has-feedback"><label>Enter Size in Cm</label><input onkeypress="return checkNumbersOnly(event)" type="text" maxlength="3" class="form-control input-sm onesizecm" value="'+$hang_cm+'" required="" placeholder="Enter Size in Cm"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label>Enter Size in inches</label><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control input-sm onesizein" maxlength="3" value="'+$hang_in+'" placeholder="Enter Size in inches"><div class="help-block with-errors"></div></div>';
 	}
 	else
 	{
@@ -4257,192 +4260,20 @@ function hangtagmodal(data) {
                 dataType: "json",
                 data: {
                     template_id: template_id,
+                    customer_id: $('#customer_id').val(),
                     _token: csrf_token
                 },
                 beforeSend: function () {
                     $(".loader").show();
                 },
                 success: function (data) {
-                    if (data.length > 0) {
-                        $('#' + ids).find('.sample-artwork').html('<object id="svg_hang_front" style="height: 486px;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
-                        $('#' + ids).find('.sample_back').html('<object class="center-block" id="svg2" style="height:486px" data="' + data[1].template_file + '" type="image/svg+xml"></object>')
-                        if (data[0].disney != "DI") {
-                            var mySVG_hang_disney = document.getElementById("svg_hang_front");
-                            var svgDoc;
-                            mySVG_hang_disney.addEventListener("load", function () {
-                                svgDoc = mySVG_hang_disney.contentDocument;
-                                var pri = order_details[0].PrixEurope.split(",")
+					$('.tot_qty_table').attr('min',data.moq)
+					$('#hangtagform').validator('update')
+                    if (data.treeviewData.length > 0) {
+                        $('#' + ids).find('.sample-artwork').html('<object id="svg_hang_front" style="height: 486px;" class="center-block svg2" data="' + data.treeviewData[0].template_file + '" type="image/svg+xml"></object>')
+                        $('#' + ids).find('.sample_back').html('<object class="center-block" id="svg2" style="height:486px" data="' + data.treeviewData[1].template_file + '" type="image/svg+xml"></object>')
 
-                                if (pri.length == 1) {
-                                    var svgItem = svgDoc.getElementById("price1");
-                                    svgItem.innerHTML = order_details[0].PrixEurope;
-                                    svgDoc.getElementById("price2").innerHTML = "";
-                                } else if (pri.length == 2) {
-                                    var svgItem = svgDoc.getElementById("price1");
-                                    svgItem.innerHTML = pri[0];
-                                    svgDoc.getElementById("price2").innerHTML = "," + pri[1];
-                                }
-                                var pri1 = order_details[0].PrixClubEurope.toString().split(",")
-                                if (pri1.length == 1) {
-                                    svgDoc.getElementById("club_price1").innerHTML = order_details[0].PrixClubEurope;
-                                    svgDoc.getElementById("club_price2").innerHTML = "";
-                                } else if (pri1.length == 2) {
-                                    svgDoc.getElementById("club_price1").innerHTML = pri1[0];
-                                    svgDoc.getElementById("club_price2").innerHTML = "," + pri1[1];
-                                }
-
-                            }, false);
-                        } else {
-                            var mySVG_hang = document.getElementById("svg2");
-                            var svgDoc;
-                            mySVG_hang.addEventListener("load", function () {
-                                svgDoc = mySVG_hang.contentDocument;
-                                var pri = order_details[0].PrixEurope.split(",")
-
-                                if (pri.length == 1) {
-                                    var svgItem = svgDoc.getElementById("price1");
-                                    svgItem.innerHTML = order_details[0].PrixEurope;
-                                    svgDoc.getElementById("price2").innerHTML = "";
-                                } else if (pri.length == 2) {
-                                    var svgItem = svgDoc.getElementById("price1");
-                                    svgItem.innerHTML = pri[0];
-                                    svgDoc.getElementById("price2").innerHTML = "," + pri[1];
-                                }
-                                var pri1 = order_details[0].PrixClubEurope.toString().split(",")
-                                if (pri1.length == 1) {
-                                    svgDoc.getElementById("club_price1").innerHTML = order_details[0].PrixClubEurope;
-                                    svgDoc.getElementById("club_price2").innerHTML = "";
-                                } else if (pri1.length == 2) {
-                                    svgDoc.getElementById("club_price1").innerHTML = pri1[0];
-                                    svgDoc.getElementById("club_price2").innerHTML = "," + pri1[1];
-                                }
-
-                            }, false);
-                        }
-
-                        var mySVG = document.getElementById("svg2");
-                        var svgDoc;
-                        mySVG.addEventListener("load", function () {
-                            svgDoc = mySVG.contentDocument;
-							
-							svgDoc.getElementById("cm").innerHTML = $('.onesizecm').val();
-							//svgDoc.getElementById("in").innerHTML = $('.onesizein').val();
-							
-                            var svgItem = svgDoc.getElementById("uvc_tco");
-                            svgDoc.getElementById("algeria_club_price").innerHTML = order_details[0].Prix_Vente_ALGERIE != null ? order_details[0].Prix_Vente_ALGERIE.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("algeria_price").innerHTML = order_details[0].Prix_Club_ALGERIE != null ? order_details[0].Prix_Club_ALGERIE.toString().replace(".", ",") .replace(" ", ""): "";
-                            svgDoc.getElementById("saudi_club_price").innerHTML = order_details[0].Prix_Vente_Arabie_Saoudite != null ? order_details[0].Prix_Vente_Arabie_Saoudite.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("morroco_club_price").innerHTML = order_details[0].Prix_Vente_Maroc != null ? order_details[0].Prix_Vente_Maroc.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("swiss_club_price").innerHTML = order_details[0].Prix_Vente_Suisse != null ? order_details[0].Prix_Vente_Suisse.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("canada_club_price").innerHTML = order_details[0].Prix_Vente_Canada != null ? order_details[0].Prix_Vente_Canada.toString().replace(".", ",").replace(" ", "") : "";
-                            //svgDoc.getElementById("turkey_price").innerHTML = order_details[0].Prix_Vente_Turquie != null ? order_details[0].Prix_Vente_Turquie.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("us_club_price").innerHTML = order_details[0].Prix_Vente_USA != null ? order_details[0].Prix_Vente_USA.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("us_price").innerHTML = order_details[0].Prix_Club_USA != null ? order_details[0].Prix_Club_USA.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("morris_club_price").innerHTML = order_details[0].Prix_Vente_Ile_Maurice != null ? order_details[0].Prix_Vente_Ile_Maurice.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("morris_price").innerHTML = order_details[0].Prix_Club_Ile_Maurice != null ? order_details[0].Prix_Club_Ile_Maurice.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("morocco_price").innerHTML = order_details[0].Prix_Club_Maroc != null ? order_details[0].Prix_Club_Maroc.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("swiss_price").innerHTML = order_details[0].Prix_Club_Suisse != null ? order_details[0].Prix_Club_Suisse.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("canada_price").innerHTML = order_details[0].Prix_Club_Canada != null ? order_details[0].Prix_Club_Canada.toString().replace(".", ",").replace(" ", "") : "";
-                           // svgDoc.getElementById("turkey_club_price").innerHTML = order_details[0].Prix_Club_Turquie != null ? order_details[0].Prix_Club_Turquie.toString().replace(".", ",") : "";
-                            svgItem.innerHTML = order_details[0].UVC_TCO;
-                            var size = order_details[0].Size.split(" ")
-                            svgDoc.getElementById("theme").innerHTML = order_details[0].Theme;
-							
-							if(order_details[0].Size == "TAILLE UNIQUE")
-							{
-								svgDoc.getElementById("size").innerHTML = "TU";
-								svgDoc.getElementById("size_french").innerHTML = "";
-								svgDoc.getElementById("size_english").innerHTML = "";
-							}
-							else if(order_details[0].Size == "TAILLE L")
-							{
-								svgDoc.getElementById("size").innerHTML = "TAILLE L";
-								svgDoc.getElementById("size_french").innerHTML = "";
-								svgDoc.getElementById("size_english").innerHTML = "";
-							}
-							else
-							{
-								svgDoc.getElementById("size").innerHTML = size[0];
-								
-								svgDoc.getElementById("cm").innerHTML = order_details[0].cm;
-								//svgDoc.getElementById("in").innerHTML = order_details[0].in;
-								if (size[1] == "ANS") {
-									svgDoc.getElementById("size_french").innerHTML = size[1];
-									if(size[0] == 1)
-									{
-										svgDoc.getElementById("size_english").innerHTML = "YEAR";
-									}
-									else
-									{
-										svgDoc.getElementById("size_english").innerHTML = "YEARS";
-									}
-									svgDoc.getElementById("size_list").innerHTML = order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-");
-
-								} else {
-									svgDoc.getElementById("size_french").innerHTML = size[1];
-									if(size[0] == 1)
-									{
-										svgDoc.getElementById("size_english").innerHTML = "MONTH";
-									}
-									else
-									{
-										svgDoc.getElementById("size_english").innerHTML = "MONTHS";
-									}
-									
-									svgDoc.getElementById("size_list").innerHTML = order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-")+"M";
-								}
-							}
-                           if (data[0].disney != 1) {
-							   var code = order_details[0].BarcodeForPricesTags.toString();
-                               jsbarcode_hang(code, "barcode1", svgDoc)
-						   }
-						   else{
-							   var code = order_details[0].BarcodeForPricesTags.toString();
-                               jsbarcode_hang_disney(code, "barcode1", svgDoc)
-						   }
-                            
-
-
-                        }, false);
-
-                    } else {
-                        $('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
-						$('#' + ids).find('.sample_back').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
-                    }
-                },
-                error: function (data) {
-
-                },
-                complete: function () {
-                    $(".loader").hide();
-                }
-            })
-        }
-    });
-    //Show Template when Click tree node 
-    $('#tree1').on('activate_node.jstree', function (e, data) {
-        var ids = $(this).parent().parent().parent().parent().parent().attr('id');
-        if (data.instance.is_leaf(data.node)) {
-            var buyer = localStorage.getItem("buyer");
-            var template_id = data.node.id;
-            var csrf_token = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                url: base_url + "/admin/" + buyer + "/template-management/template-view",
-                type: "Post",
-                dataType: "json",
-                data: {
-                    template_id: template_id,
-                    _token: csrf_token
-                },
-                beforeSend: function () {
-                    $(".loader").show();
-                },
-                success: function (data) {
-                    if (data.length > 0) {
-                        $('#' + ids).find('.sample-artwork').html('<object id="svg_hang_front" style="height: 486px;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
-                        $('#' + ids).find('.sample_back').html('<object class="center-block" id="svg2" style="height:486px" data="' + data[1].template_file + '" type="image/svg+xml"></object>')
-
-                        if (data[0].disney != "DI") {
+                        if (data.treeviewData[0].disney != "DI") {
                             var mySVG_hang_disney = document.getElementById("svg_hang_front");
                             var svgDoc;
                             mySVG_hang_disney.addEventListener("load", function () {
@@ -4624,7 +4455,245 @@ function hangtagmodal(data) {
 									svgDoc.getElementById("size_list").innerHTML = order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-")+"M";
 								}
 							}
-                           if (data[0].disney != 1) {
+                           if (data.treeviewData[0].disney != 1) {
+							   var code = order_details[0].BarcodeForPricesTags.toString();
+                               jsbarcode_hang(code, "barcode1", svgDoc)
+						   }
+						   else{
+							   var code = order_details[0].BarcodeForPricesTags.toString();
+                               jsbarcode_hang_disney(code, "barcode1", svgDoc)
+						   }
+                            
+
+
+                        }, false);
+
+
+
+                    } else {
+                        $('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
+						$('#' + ids).find('.sample_back').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
+                    }
+
+                },
+                error: function (data) {
+
+                },
+                complete: function () {
+                    $(".loader").hide();
+                }
+            })
+        }
+    });
+    //Show Template when Click tree node 
+    $('#tree1').on('activate_node.jstree', function (e, data) {
+        var ids = $(this).parent().parent().parent().parent().parent().attr('id');
+        if (data.instance.is_leaf(data.node)) {
+            var buyer = localStorage.getItem("buyer");
+            var template_id = data.node.id;
+            var csrf_token = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                url: base_url + "/admin/" + buyer + "/template-management/template-view",
+                type: "Post",
+                dataType: "json",
+                data: {
+                    template_id: template_id,
+                    customer_id: $('#customer_id').val(),
+                    _token: csrf_token
+                },
+                beforeSend: function () {
+                    $(".loader").show();
+                },
+                success: function (data) {
+					$('.tot_qty_table').attr('min',data.moq)
+					$('#hangtagform').validator('update')
+                    if (data.treeviewData.length > 0) {
+                        $('#' + ids).find('.sample-artwork').html('<object id="svg_hang_front" style="height: 486px;" class="center-block svg2" data="' + data.treeviewData[0].template_file + '" type="image/svg+xml"></object>')
+                        $('#' + ids).find('.sample_back').html('<object class="center-block" id="svg2" style="height:486px" data="' + data.treeviewData[1].template_file + '" type="image/svg+xml"></object>')
+
+                        if (data.treeviewData[0].disney != "DI") {
+                            var mySVG_hang_disney = document.getElementById("svg_hang_front");
+                            var svgDoc;
+                            mySVG_hang_disney.addEventListener("load", function () {
+                                svgDoc = mySVG_hang_disney.contentDocument;
+                                var pri = order_details[0].PrixEurope.split(",")
+								
+								var size = order_details[0].Size.split(" ")
+							
+								if(order_details[0].Size == "TAILLE UNIQUE")
+								{
+									svgDoc.getElementById("size").innerHTML = "TU";
+									svgDoc.getElementById("size_french").innerHTML = "";
+									svgDoc.getElementById("size_english").innerHTML = "";
+								}
+								else if(order_details[0].Size == "TAILLE L")
+								{
+									svgDoc.getElementById("size").innerHTML = "TAILLE L";
+									svgDoc.getElementById("size_french").innerHTML = "";
+									svgDoc.getElementById("size_english").innerHTML = "";
+								}
+								else
+								{
+									//alert(size[0])
+									svgDoc.getElementById("size").innerHTML = size[0];
+									if (size[1] == "ANS") {
+										svgDoc.getElementById("size_french").innerHTML = size[1];
+										svgDoc.getElementById("size_english").innerHTML = "years";
+
+									} else {
+										svgDoc.getElementById("size_french").innerHTML = size[1];
+										svgDoc.getElementById("size_english").innerHTML = "months";
+									}
+								}
+
+                                if (pri.length == 1) {
+                                    var svgItem = svgDoc.getElementById("price1");
+                                    svgItem.innerHTML = innerHTML = order_details[0].PrixEurope;
+                                    svgDoc.getElementById("price2").innerHTML = "";
+                                } else if (pri.length == 2) {
+                                    var svgItem = svgDoc.getElementById("price1");
+                                    svgItem.innerHTML = innerHTML = pri[0];
+                                    svgDoc.getElementById("price2").innerHTML = "," + pri[1];
+                                }
+                                var pri1 = order_details[0].PrixClubEurope.toString().split(",")
+                                if (pri1.length == 1) {
+                                    svgDoc.getElementById("club_price1").innerHTML = order_details[0].PrixClubEurope;
+                                    svgDoc.getElementById("club_price2").innerHTML = "";
+                                } else if (pri1.length == 2) {
+                                    svgDoc.getElementById("club_price1").innerHTML = pri1[0];
+                                    svgDoc.getElementById("club_price2").innerHTML = "," + pri1[1];
+                                }
+
+                            }, false);
+                        } else {
+                            var mySVG_hang = document.getElementById("svg2");
+                            var svgDoc;
+                            mySVG_hang.addEventListener("load", function () {
+                                svgDoc = mySVG_hang.contentDocument;
+                                var pri = order_details[0].PrixEurope.split(",")
+								
+								var size = order_details[0].Size.split(" ")
+							
+								if(order_details[0].Size == "TAILLE UNIQUE")
+								{
+									svgDoc.getElementById("size").innerHTML = "TU";
+									svgDoc.getElementById("size_french").innerHTML = "";
+									svgDoc.getElementById("size_english").innerHTML = "";
+								}
+								else if(order_details[0].Size == "TAILLE L")
+								{
+									svgDoc.getElementById("size").innerHTML = "TAILLE L";
+									svgDoc.getElementById("size_french").innerHTML = "";
+									svgDoc.getElementById("size_english").innerHTML = "";
+								}
+								else
+								{
+									//alert(size[0])
+									svgDoc.getElementById("size").innerHTML = size[0];
+									if (size[1] == "ANS") {
+										svgDoc.getElementById("size_french").innerHTML = size[1];
+										svgDoc.getElementById("size_english").innerHTML = "years";
+
+									} else {
+										svgDoc.getElementById("size_french").innerHTML = size[1];
+										svgDoc.getElementById("size_english").innerHTML = "months";
+									}
+								}
+								
+                                if (pri.length == 1) {
+                                    var svgItem = svgDoc.getElementById("price1");
+                                    svgItem.innerHTML = order_details[0].PrixEurope;
+                                    svgDoc.getElementById("price2").innerHTML = "";
+                                } else if (pri.length == 2) {
+                                    var svgItem = svgDoc.getElementById("price1");
+                                    svgItem.innerHTML = pri[0];
+                                    svgDoc.getElementById("price2").innerHTML = "," + pri[1];
+                                }
+                                var pri1 = order_details[0].PrixClubEurope.toString().split(",")
+                                if (pri1.length == 1) {
+                                    svgDoc.getElementById("club_price1").innerHTML = order_details[0].PrixClubEurope;
+                                    svgDoc.getElementById("club_price2").innerHTML = "";
+                                } else if (pri1.length == 2) {
+                                    svgDoc.getElementById("club_price1").innerHTML = pri1[0];
+                                    svgDoc.getElementById("club_price2").innerHTML = "," + pri1[1];
+                                }
+
+                            }, false);
+                        }
+
+                        var mySVG = document.getElementById("svg2");
+                        var svgDoc;
+                        mySVG.addEventListener("load", function () {
+                            svgDoc = mySVG.contentDocument;
+							
+							svgDoc.getElementById("cm").innerHTML = $('.onesizecm').val();
+							//svgDoc.getElementById("in").innerHTML = $('.onesizein').val();
+							
+                            var svgItem = svgDoc.getElementById("uvc_tco");
+                            svgDoc.getElementById("algeria_club_price").innerHTML = order_details[0].Prix_Vente_ALGERIE != null ? order_details[0].Prix_Vente_ALGERIE.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("algeria_price").innerHTML = order_details[0].Prix_Club_ALGERIE != null ? order_details[0].Prix_Club_ALGERIE.toString().replace(".", ",") .replace(" ", ""): "";
+                            svgDoc.getElementById("saudi_club_price").innerHTML = order_details[0].Prix_Vente_Arabie_Saoudite != null ? order_details[0].Prix_Vente_Arabie_Saoudite.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("morroco_club_price").innerHTML = order_details[0].Prix_Vente_Maroc != null ? order_details[0].Prix_Vente_Maroc.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("swiss_club_price").innerHTML = order_details[0].Prix_Vente_Suisse != null ? order_details[0].Prix_Vente_Suisse.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("canada_club_price").innerHTML = order_details[0].Prix_Vente_Canada != null ? order_details[0].Prix_Vente_Canada.toString().replace(".", ",").replace(" ", "") : "";
+                            //svgDoc.getElementById("turkey_price").innerHTML = order_details[0].Prix_Vente_Turquie != null ? order_details[0].Prix_Vente_Turquie.toString().replace(".", ",") : "";
+                            svgDoc.getElementById("us_club_price").innerHTML = order_details[0].Prix_Vente_USA != null ? order_details[0].Prix_Vente_USA.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("us_price").innerHTML = order_details[0].Prix_Club_USA != null ? order_details[0].Prix_Club_USA.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("morris_club_price").innerHTML = order_details[0].Prix_Vente_Ile_Maurice != null ? order_details[0].Prix_Vente_Ile_Maurice.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("morris_price").innerHTML = order_details[0].Prix_Club_Ile_Maurice != null ? order_details[0].Prix_Club_Ile_Maurice.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("morocco_price").innerHTML = order_details[0].Prix_Club_Maroc != null ? order_details[0].Prix_Club_Maroc.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("swiss_price").innerHTML = order_details[0].Prix_Club_Suisse != null ? order_details[0].Prix_Club_Suisse.toString().replace(".", ",").replace(" ", "") : "";
+                            svgDoc.getElementById("canada_price").innerHTML = order_details[0].Prix_Club_Canada != null ? order_details[0].Prix_Club_Canada.toString().replace(".", ",").replace(" ", "") : "";
+                           // svgDoc.getElementById("turkey_club_price").innerHTML = order_details[0].Prix_Club_Turquie != null ? order_details[0].Prix_Club_Turquie.toString().replace(".", ",") : "";
+                            svgItem.innerHTML = order_details[0].UVC_TCO;
+                            var size = order_details[0].Size.split(" ")
+                            svgDoc.getElementById("theme").innerHTML = order_details[0].Theme;
+							
+							if(order_details[0].Size == "TAILLE UNIQUE")
+							{
+								svgDoc.getElementById("size").innerHTML = "TU";
+								svgDoc.getElementById("size_french").innerHTML = "";
+								svgDoc.getElementById("size_english").innerHTML = "";
+							}
+							else if(order_details[0].Size == "TAILLE L")
+							{
+								svgDoc.getElementById("size").innerHTML = "TAILLE L";
+								svgDoc.getElementById("size_french").innerHTML = "";
+								svgDoc.getElementById("size_english").innerHTML = "";
+							}
+							else
+							{
+								svgDoc.getElementById("size").innerHTML = size[0];
+								
+								svgDoc.getElementById("cm").innerHTML = order_details[0].cm;
+								//svgDoc.getElementById("in").innerHTML = order_details[0].in;
+								if (size[1] == "ANS") {
+									svgDoc.getElementById("size_french").innerHTML = size[1];
+									if(size[0] == 1)
+									{
+										svgDoc.getElementById("size_english").innerHTML = "YEAR";
+									}
+									else
+									{
+										svgDoc.getElementById("size_english").innerHTML = "YEARS";
+									}
+									svgDoc.getElementById("size_list").innerHTML = order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-");
+
+								} else {
+									svgDoc.getElementById("size_french").innerHTML = size[1];
+									if(size[0] == 1)
+									{
+										svgDoc.getElementById("size_english").innerHTML = "MONTH";
+									}
+									else
+									{
+										svgDoc.getElementById("size_english").innerHTML = "MONTHS";
+									}
+									
+									svgDoc.getElementById("size_list").innerHTML = order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-")+"M";
+								}
+							}
+                           if (data.treeviewData[0].disney != 1) {
 							   var code = order_details[0].BarcodeForPricesTags.toString();
                                jsbarcode_hang(code, "barcode1", svgDoc)
 						   }
@@ -4787,7 +4856,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 		var update_disabel_button = "";
 	}
 
-	$('.main-content').html('<input type="hidden" value="' + data.order_details[0].UVC + '" id="uvc_id"><hr/><div class="col-md-3"><h4>Quantity And Artworks</h4></div><div class="form-group col-md-offset-9 has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Merchandiser</label><select data-live-search="true" class="form-control selectpicker input-sm merchandisers" required>' + merchandisersoption + '</select><div class="help-block with-errors"></div><label class="hidden merchandiser_error" style="color:red">Please Select Merchandiser</label></div><div class="col-md-4"><div class="card add-card hang-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><span class="label label-' + $hang_status + ' label-status">' + $hang_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmehang" style="cursor: pointer;">View &amp; Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p> <h5><b>Hangtag</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ht_default.png" class="img-responsive center-block"></div></div><div class="col-md-6"><div class="text_artwork"></div></div></div></div></div><div class="col-md-4"><div class="card special-card" style="min-height:279px"><span class="label label-' + $special_status + ' label-status">' + $special_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmespecial" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b>Specialtag</b></h5></div><div class="row"><div class="col-md-10 col-md-offset-1"><div class="img_artwork"><img src="' +
+	$('.main-content').html('<input type="hidden" value="' + data.order_details[0].UVC + '" id="uvc_id"><input type="hidden" value="'+data.customers[0].id+'" id="customer_id"><hr/><div class="col-md-3"><h4>Quantity And Artworks</h4></div><div class="form-group col-md-offset-9 has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Merchandiser</label><select data-live-search="true" class="form-control selectpicker input-sm merchandisers" required>' + merchandisersoption + '</select><div class="help-block with-errors"></div><label class="hidden merchandiser_error" style="color:red">Please Select Merchandiser</label></div><div class="col-md-4"><div class="card add-card hang-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><span class="label label-' + $hang_status + ' label-status">' + $hang_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmehang" style="cursor: pointer;">View &amp; Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p> <h5><b>Hangtag</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ht_default.png" class="img-responsive center-block"></div></div><div class="col-md-6"><div class="text_artwork"></div></div></div></div></div><div class="col-md-4"><div class="card special-card" style="min-height:279px"><span class="label label-' + $special_status + ' label-status">' + $special_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmespecial" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b>Specialtag</b></h5></div><div class="row"><div class="col-md-10 col-md-offset-1"><div class="img_artwork"><img src="' +
 		base_url + '/images/st_default.png" class="img-responsive center-block"></div></div></div></div></div> <div class="col-md-4"> <div class="card add-card wash-card" style="height: 280px;" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><span class="label label-' + $wash_status + ' label-status">' + $wash_status_text + '</span> <div class="card-title"> <p class="pull-right" id="clickme" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="washlabelname">' + wash_name + 'Washcare Label</b></h5> </div><div class="row"> <div class="col-md-6 col-md-offset-3"> <div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="washcare_label_card" style="'+wash_enable+';cursor:pointer;display: inline-block;"><i class="fa fa-plus" aria-hidden="true"></i> Add washcare label</p><p id="clone_washcare_label_card" style="'+wash_enable+';cursor:pointer;    display: inline-block;float: right;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div><div id="add_modal"></div><div class="bottom-bar"><div class="modal-footer"><button onclick="' + onclick + '" class="btn btn-danger  pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button><button data-toggle="modal" id="po-file-upload-button" style="'+update_disabel_button+'" class="btn btn-success pull-right btn-xs">Update PO</button> </div></div>');
 	
 	//Before add_modal
@@ -5598,7 +5667,7 @@ function selectpicker() {
  * @return tree
  */
 
-function treestructure(data, tree, template_id) {
+function treestructurespecial(data, tree, template_id) {
 
 	$('#' + tree).jstree({
 		'core': {
@@ -5644,14 +5713,17 @@ function treestructure(data, tree, template_id) {
 				dataType: "json",
 				data: {
 					template_id: template_id,
+                    customer_id: $('#customer_id').val(),
 					_token: csrf_token
 				},
 				beforeSend: function () {
 					$(".loader").show();
 				},
 				success: function (data) {
-					if (data.length > 0) {
-						$('#' + ids).find('.sample-artwork').html('<object id="svg2" style="max-height: 350px;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
+					$('.special_qty').attr('min',data.moq)
+					$('#specialtagform').validator('update')
+					if (data.treeviewData.length > 0) {
+						$('#' + ids).find('.sample-artwork').html('<object id="svg2" style="max-height: 350px;" class="center-block svg2" data="' + data.treeviewData[0].template_file + '" type="image/svg+xml"></object>')
 					} else {
 						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
 					}
@@ -5680,14 +5752,131 @@ function treestructure(data, tree, template_id) {
 				dataType: "json",
 				data: {
 					template_id: template_id,
+                    customer_id: $('#customer_id').val(),
 					_token: csrf_token
 				},
 				beforeSend: function () {
 					$(".loader").show();
 				},
 				success: function (data) {
-					if (data.length > 0) {
-						$('#' + ids).find('.sample-artwork').html('<object id="svg2" style="max-height: 350px;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
+					$('.special_qty').attr('min',data.moq)
+					$('#specialtagform').validator('update')
+					if (data.treeviewData.length > 0) {
+						$('#' + ids).find('.sample-artwork').html('<object id="svg2" style="max-height: 350px;" class="center-block svg2" data="' + data.treeviewData[0].template_file + '" type="image/svg+xml"></object>')
+					} else {
+						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
+					}
+
+
+				},
+				error: function (data) {
+
+				},
+				complete: function () {
+					$(".loader").hide();
+				}
+			})
+		}
+	});
+}
+/**
+ * This Function is used to invoke Jstree.
+ * 
+ * @return tree
+ */
+
+function treestructuremain(data, tree, template_id) {
+
+	$('#' + tree).jstree({
+		'core': {
+			'data': data
+		},
+		"types": {
+			"default": {
+				"icon": "fa fa-folder"
+			}
+		},
+		"plugins": ["types", "search", "conditionalselect"],
+		 conditionalselect: function (node) {
+                        return this.is_leaf(node);
+         }
+	});
+	$('#expand').bind("click", function () {
+		$('#' + tree).jstree("open_all");
+	});
+	$('#collapse').bind("click", function () {
+		$('#' + tree).jstree("close_all");
+	});
+	var to = false;
+	$('#' + tree + '_q').keyup(function () {
+		if (to) {
+			clearTimeout(to);
+		}
+		to = setTimeout(function () {
+			var v = $('#' + tree + '_q').val();
+			$('#' + tree).jstree(true).search(v);
+		}, 250);
+	});
+
+	$("#" + tree).on("loaded.jstree", function (e, data) {
+
+		$('#' + tree).jstree(true).select_node(template_id);
+		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
+		if (template_id != "") {
+			var buyer = localStorage.getItem("buyer");
+			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			$.ajax({
+				url: base_url + "/admin/" + buyer + "/template-management/template-view",
+				type: "Post",
+				dataType: "json",
+				data: {
+					template_id: template_id,
+                    customer_id: $('#customer_id').val(),
+					_token: csrf_token
+				},
+				beforeSend: function () {
+					$(".loader").show();
+				},
+				success: function (data) {
+					if (data.treeviewData.length > 0) {
+						$('#' + ids).find('.sample-artwork').html('<object id="svg2" style="max-height: 350px;" class="center-block svg2" data="' + data.treeviewData[0].template_file + '" type="image/svg+xml"></object>')
+					} else {
+						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
+					}
+
+
+				},
+				error: function (data) {
+
+				},
+				complete: function () {
+					$(".loader").hide();
+				}
+			})
+		}
+	});
+
+	$('#' + tree).on('activate_node.jstree', function (e, data) {
+		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
+		if (data.instance.is_leaf(data.node)) {
+			var buyer = localStorage.getItem("buyer");
+			var template_id = data.node.id;
+			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			$.ajax({
+				url: base_url + "/admin/" + buyer + "/template-management/template-view",
+				type: "Post",
+				dataType: "json",
+				data: {
+					template_id: template_id,
+                    customer_id: $('#customer_id').val(),
+					_token: csrf_token
+				},
+				beforeSend: function () {
+					$(".loader").show();
+				},
+				success: function (data) {
+					if (data.treeviewData.length > 0) {
+						$('#' + ids).find('.sample-artwork').html('<object id="svg2" style="max-height: 350px;" class="center-block svg2" data="' + data.treeviewData[0].template_file + '" type="image/svg+xml"></object>')
 					} else {
 						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
 					}
@@ -6267,7 +6456,7 @@ function jsbarcodesolidcartonA(code, id, svgDoc) {
 		img;
 	// if our "svg" doesn't have 'xmlns' attribute we must add it
 	//    svg.setAttribute('width', '188.931023622px');
-	svg.setAttribute('font-size', '54px');
+	svg.setAttribute('font-size', '55.75px');
 	svg.setAttribute('font-family', 'calibrib');
 	svg.setAttribute('letter-spacing', '15px');
 
@@ -6324,7 +6513,7 @@ function jsbarcodestdcartonA(code, id, svgDoc) {
 		img;
 	// if our "svg" doesn't have 'xmlns' attribute we must add it
 	//    svg.setAttribute('width', '188.931023622px');
-	svg.setAttribute('font-size', '57px');
+	svg.setAttribute('font-size', '59.80px');
 	svg.setAttribute('font-family', 'calibrib');
 	svg.setAttribute('letter-spacing', '15px');
 
@@ -6380,7 +6569,7 @@ function jsbarcodesolidcartonB(code, id, svgDoc) {
 		img;
 	// if our "svg" doesn't have 'xmlns' attribute we must add it
 	//    svg.setAttribute('width', '188.931023622px');
-	svg.setAttribute('font-size', '54px');
+	svg.setAttribute('font-size', '55.75px');
 	svg.setAttribute('font-family', 'calibrib');
 	svg.setAttribute('letter-spacing', '15px');
 
@@ -6437,7 +6626,7 @@ function jsbarcodestdcartonB(code, id, svgDoc) {
 		img;
 	// if our "svg" doesn't have 'xmlns' attribute we must add it
 	//    svg.setAttribute('width', '188.931023622px');
-	svg.setAttribute('font-size', '53px');
+	svg.setAttribute('font-size', '55px');
 	svg.setAttribute('font-family', 'calibrib');
 	svg.setAttribute('letter-spacing', '15px');
 
@@ -6549,7 +6738,7 @@ function jsbarcodesolidpoly(code, id, svgDoc) {
 		img;
 	// if our "svg" doesn't have 'xmlns' attribute we must add it
 	//    svg.setAttribute('width', '188.931023622px');
-	svg.setAttribute('font-size', '54px');
+	svg.setAttribute('font-size', '55.50px');
 	svg.setAttribute('font-family', 'calibrib');
 	svg.setAttribute('letter-spacing', '15px');
 
@@ -7263,6 +7452,7 @@ function setWashLabel(index, dataid, id) {
 		$('#clone_washcare_label_card'+dataid).css('display','inline-block')
 		$('.wash-card'+dataid+' span').text('Buyer Approval Pending')
 		$('.wash-card'+dataid+' span').addClass('label label-BuyerApprovalPending label-status')
+		$('.wash-card'+dataid+' span').removeClass('label-OrderRejected')
 		$('#po-file-upload-button').css('display','block')
     }
     else
@@ -7713,6 +7903,16 @@ function testWhite(x) {
  * @author <praveen>
  */
 function checkMOQ(obj) {
+	try {
+		//alert()
+			var moq =$(obj).attr("min"); 
+			$(obj).data("min-error","Qty should be >= "+moq); 
+	} catch (e) {
+		/** [error statements] */
+		console.error("Error:" + e)
+	}
+}
+function checkorcMOQ(obj) {
 	try {
 			var moq =$(obj).attr("min"); 
 			$(obj).data("min-error","Qty should be >= "+moq); 

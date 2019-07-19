@@ -118,13 +118,26 @@ class TemplateManagementCntrl extends Controller
     public function templateView(Request $request)
     {
          $template_id = $request['template_id'];
-         $treeviewData= DB::table("orchestra_template")
+         $customer_id = $request['customer_id'];
+         $data['treeviewData']= DB::table("orchestra_template")
                                 ->select('orchestra_template.*','orchestra_item_master.ref_no','orchestra_item_master.company_id','company.name as company_name')
                                 ->join('orchestra_item_master','orchestra_item_master.id','=','orchestra_template.item_id')
                                 ->join('company','company.id','=','orchestra_item_master.company_id')
                                 ->where('item_id',$template_id)->orderBy('orchestra_template.id','asc')
                                 ->get();
-         return json_encode($treeviewData);
+		
+		$carton_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id)->where('buyer_id',1)->where('template_id',$template_id)->get();
+
+		if(count($carton_moq) > 0)
+		{
+			$data['moq']=$carton_moq{0}->moq;
+		}
+		else
+		{
+			$data['moq']=1;
+		}
+		
+         return json_encode($data);
     } 
 	public function saveTax(Request $request) {
         try {
