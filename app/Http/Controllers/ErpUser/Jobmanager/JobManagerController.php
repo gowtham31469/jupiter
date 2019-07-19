@@ -45,15 +45,15 @@ class JobManagerController extends Controller
 	public function index()
 	{
 		try {
-			$customer_id = Auth::guard('erpuser')->id();
+			$erp_user_id = Auth::guard('erpuser')->id();
 			
 			$companies   = 	DB::table('erpuser_company_mapping')
 									->join('company','erpuser_company_mapping.company','company.id')
-									->where('erpuser_company_mapping.erp_user',$customer_id)
+									->where('erpuser_company_mapping.erp_user',$erp_user_id)
 									->select('erpuser_company_mapping.*','company.name', 'company.logo')
 									->get();
 			$buyers      = 	DB::table('erpuser_buyer')
-									->where('erpuser_buyer.erp_user',$customer_id)
+									->where('erpuser_buyer.erp_user',$erp_user_id)
 									->pluck('erpuser_buyer.buyer')
 									->all();
 
@@ -84,7 +84,7 @@ class JobManagerController extends Controller
 			$templates   = 		DB::table('erpusers_template_mapping')
 									->join('buyers','erpusers_template_mapping.buyer','buyers.id')
 									->where('erpusers_template_mapping.company',session()->get('company'))
-									->where('erpusers_template_mapping.erp_user',$customer_id)
+									->where('erpusers_template_mapping.erp_user',$erp_user_id)
 									->select('erpusers_template_mapping.*','buyers.template_table','buyers.item_master_table','buyers.id as buyer_id')
 									->get();
 			
@@ -647,16 +647,16 @@ class JobManagerController extends Controller
 											->where('erp_order_details.order_type', 'ilike', $order_types[$row])
 											->where('erp_order_details.created_at', '=', $created_at[$row])
 											->get();
-							$template       = 'Avlb';
+							$template       = 'Available';
 							$action_id  = DB::table('actions')->where('action', 'ilike', 'JC Created')->value('id');
 							
 							foreach($jobcard_data as $key => $data)
 							{
+								$qnty_table     = $data->order_qnty_table_name;
+								$qty_row_id     = $data->order_qnty_table_id;
 								if($buyer->buyer_name === 'Tesco'){
 
-									$qnty_table     = $data->order_qnty_table_name;
-									$main_table     = str_replace("_quanty","",$data->order_qnty_table_name);
-									$qty_row_id     = $data->order_qnty_table_id;
+									$main_table     = str_replace("_quanty","",$qnty_table);
 									$qnty_id        = str_replace("_orders_quanty","_order_id",str_replace("tesco_","",$qnty_table));
 									$order_details  = DB::table($qnty_table)
 														->select($main_table.'.*')
@@ -686,9 +686,7 @@ class JobManagerController extends Controller
 
 								} else if($buyer->buyer_name === 'Orchestra'){
 
-									// $qnty_table     = $data->order_qnty_table_name;
-									// $main_table     = str_replace("_qty","",$data->order_qnty_table_name);
-									// $qty_row_id     = $data->order_qnty_table_id;
+									// $main_table     = str_replace("_qty","",$qnty_table);
 									// $result_str     =  str_replace("_"," ",str_replace("_orders","",$main_table));
                                     // $qnty_id        = '';
                                     // foreach (explode(' ', $result_str) as $word)
@@ -718,7 +716,7 @@ class JobManagerController extends Controller
 
 								} else {
 
-									$template       = 'Not Avlb';
+									$template       = 'Not Available';
 
 								}
 

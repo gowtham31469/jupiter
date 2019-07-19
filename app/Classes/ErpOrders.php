@@ -142,7 +142,7 @@ class ErpOrders
 				}
 
 				/** Get updated data and update in history table */
-				$template          = 'Avlb';
+				$template          = 'Available';
 				$current_timestamp = Carbon::now('Asia/Kolkata')->toDateTimeString();
 				$action_id         = DB::table('actions')->where('action', 'ilike', 'PO Manager Verification Pending')->value('id');
 				
@@ -346,7 +346,7 @@ class ErpOrders
 				}
 
 				/** Get updated data and update in history table */
-				// $template       = 'Avlb';
+				// $template       = 'Available';
 				// $country        = "";
 				// $current_timestamp = Carbon::now('Asia/Kolkata')->toDateTimeString();
 				// $action_id      = DB::table('actions')->where('action', 'ilike', 'PO Manager Verification Pending')->value('id');
