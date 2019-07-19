@@ -103,9 +103,10 @@ $invoice_details  = Invoices::join('customers','invoice.customer_id','customers.
     $jc = Action::where('type','JC Manager')->pluck('action','id')->toArray();
     $order = Action::where('type','Order')->pluck('action','id')->toArray();
     $invoice = Action::where('type','Invoice')->pluck('action','id')->toArray();
-
-
-    return view('erp.Report.reports',compact('buyers','actions','po','jc','jc','order','invoice','allActions','action_as_id'));
+    $templates = array_unique(History::all()->sortBy('template')->pluck('template')->toArray());
+    $seasons = array_unique(History::all()->sortBy('season')->pluck('season')->toArray());
+    $countries = array_unique(History::all()->sortBy('country')->pluck('country')->toArray());
+    return view('erp.Report.reports',compact('buyers','actions','po','jc','jc','order','invoice','allActions','action_as_id','countries','seasons','templates'));
 
 }
 
@@ -132,7 +133,6 @@ public function level1Filter(Request $request)
 
 public function level2Filter(Request $request)
 {  
-// dd($request->all());
     $result = History::whereIn('buyer_id',$request->buyer)
     ->whereIn('season',$request->season)
     ->whereIn('template',$request->template)
