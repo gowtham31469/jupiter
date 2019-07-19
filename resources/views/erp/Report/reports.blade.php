@@ -209,15 +209,15 @@
 								</div>
 								<div class="col-md-3">
 									<label>Template</label>
-									{!! Form::select('sel_1[]',array_unique(App\History::all()->sortBy('template')->pluck('template')->toArray()),null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select template','id'=>'template']) !!}
+									{!! Form::select('sel_1[]',$templates,null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select template','id'=>'template']) !!}
 								</div>
 								<div class="col-md-3">
 									<label>Season</label>
-									{!! Form::select('sel_1[]', array_unique(App\History::all()->sortBy('season')->pluck('season')->toArray()),null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select season','id'=>'season']) !!}
+									{!! Form::select('sel_1[]',$seasons,null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select season','id'=>'season']) !!}
 								</div>
 								<div class="col-md-3">
 									<label>Country</label>
-									{!! Form::select('sel_1[]',array_unique(App\History::all()->sortBy('country')->pluck('country')->toArray()),null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select country','id'=>'country']) !!}
+									{!! Form::select('sel_1[]',$countries,null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select country','id'=>'country']) !!}
 								</div>
 							</div>
 						</div>
