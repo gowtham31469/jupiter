@@ -272,7 +272,8 @@
 				</div>
 			</div>
 
-			<div class="row ReportSection hidden reportSec">  
+			<div class="row ReportSection hidden reportSec">
+			<hr>  
 				<div class="panel-heading">
 					<div class="row">
 						<div class="col-md-9">
@@ -298,8 +299,8 @@
 								<th>S.No</th><th>Order.Dt</th><th>ErpId</th><th>Customer</th><th>Material</th><th>Style</th><th>PO</th><th>OCN</th><th>Reference</th><th>OCN</th><th>Reference</th><th>Reason</th><th>Reapprove.Dt</th>
 							</tr>
 						</thead>
-						{{-- <tbody id="all_data">
-						</tbody> --}}
+						<tbody id="all_data">
+						</tbody>
 					</table>
 				</div>
 			</div>
@@ -362,6 +363,9 @@
 						dt.setDate(dt.getDate() + 1);
 						$("#txtTo").datepicker("option", "minDate", dt);
 						$(".filterLevel2").selectpicker('deselectAll');
+						$(".filterLevel2").find('option').remove();
+						$(".filterLevel2").selectpicker('refresh');
+						
 						$("#filter1").removeClass('hidden')
 					}
 				});
@@ -425,7 +429,7 @@
 				});
 
 				$('.filterLevel1').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
-					event.preventDefault();
+					e.preventDefault();
 					/* Act on the event */
 					$(".filterLevel2").selectpicker('deselectAll');
 					$(".filterLevel3").selectpicker('deselectAll');
@@ -437,7 +441,7 @@
 				});
 
 				$('.filterLevel2').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
-					event.preventDefault();
+					e.preventDefault();
 					/* Act on the event */
 					$(".filterLevel3").selectpicker('deselectAll');
 					if($("#customer").val().length > 0 && $("#material").val().length > 0 && $("#style").val().length > 0 && $("#mat_sub").val().length > 0 && $("#buyer").val().length > 0 && $("#season").val().length > 0 && $("#template").val().length > 0 && $("#country").val().length > 0)
@@ -489,7 +493,13 @@
 									$('#style').html('')
 									$('#mat_sub').html('')
 
-									$.each(data.customers, function(key, value) {   
+									if(data.customers.length == 0 || data.result.length == 0)
+									{
+										$('.snackbar_span').html("No results could be fetched for this combination.");
+											showSnackbar();
+									}
+									else{
+											$.each(data.customers, function(key, value) {   
 										$('#customer')
 										.append($("<option></option>")
 											.attr("value",key)
@@ -532,6 +542,8 @@
 									$('.selectpicker').selectpicker('refresh');
 									$(".level2filter").removeClass('hidden')
 									$("#filter1").addClass('hidden')
+
+									}
 								}
 							});
 						}
@@ -592,6 +604,8 @@
 								$('#buyer_po').html('')
 								$('#ocn').html('')
 
+								if(data.length > 0)
+								{
 								var temp4=[]	
 								$.each(data, function(key, value) 
 								{ 
@@ -639,6 +653,12 @@
 								$('.selectpicker').selectpicker('refresh');
 								$(".level3filter").removeClass('hidden')
 								$("#filter2").addClass('hidden')
+								}
+								else{
+									$('.snackbar_span').html("No results could be fetched for this combination.");
+										showSnackbar();
+								}
+								
 							}
 
 						});
@@ -668,6 +688,7 @@
 									},
 									success:function(data)
 									{	
+										console.log(data)
 										if(data.Default.length > 0)
 										{
 											create_table(data.Default,data.Extra)
@@ -698,7 +719,7 @@
 				function create_table(def,extra)
 				{ 
 					$("#reportTable").DataTable().destroy();
-					// $("#all_data").empty();
+					$("#all_data").empty();
 					$("#all_fields").html('')
 					extraFields = extra.slice();
 					defaultFields = def.slice(); 
@@ -739,7 +760,6 @@
 							data: def[i]
 						});
 					}
-					console.log(allColoumns)
 					var t = $('#reportTable').dataTable( {
 						processing: true,
 						serverSide: true,
@@ -778,7 +798,7 @@
 						"columns" :allColoumns
 					});
 
-					$("#filter-panel").addClass('collapse')
+					$("#filter-panel").removeClass('collapse in').addClass('collapse')
 					$("#reportTitle").html("Consolidated Report [ "+$('input[name=roleSelection]:checked').val()+" ]")
 					$('html,body').animate({
 						scrollTop: $(window).scrollTop() + 500

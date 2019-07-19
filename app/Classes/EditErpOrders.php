@@ -128,7 +128,7 @@ class EditErpOrders
 				}	
 				
 				/** Get updated data and update in history table */
-				$template          = 'Avlb';
+				$template          = 'Available';
 				$action_id         = DB::table('actions')->where('action', 'ilike', 'PO Manager Verification Pending')->value('id');
 				
 				$template_level = DB::table('tesco_item_master as t1')
