@@ -1059,6 +1059,9 @@ span.sticker-details {
 .label-Rejected {
     background: #e74c3c;
 }
+.label-OrderRejected {
+    background: #e74c3c;
+}
 
 .filter-window {
     z-index: 10;

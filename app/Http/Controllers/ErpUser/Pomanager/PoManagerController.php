@@ -14,6 +14,7 @@ use Session;
 use App\ErpOrders as Erp;
 use App\ErpOrderDetails as ErpOrderDetails;
 use Carbon\Carbon;
+use App\History;
 
 class PoManagerController extends Controller
 {
@@ -386,10 +387,8 @@ class PoManagerController extends Controller
 					->whereNotIn('erp_order_details.status', $erp_status_ids)
 					->select('erp_order_details.*', 'erp_orders.customer_id', 'erp_orders.buyer_id')
 					->get();
-			$template  = 'Avlb';
 			// Approve orders
 			if ($count == 0) {
-				$action_id  = DB::table('actions')->where('action', 'ilike', 'PO Manager Verified')->value('id');
 
 				$data 		=   DB::table('erp_orders')->where('id', $erp_order_id)
 					->update([
@@ -399,7 +398,6 @@ class PoManagerController extends Controller
 
 				foreach ($orderlist as $value) {
 					$po_rejected_date = $value->po_rejected_date;
-					$buyer    = DB::table('buyers')->select('buyer_name')->where('id', '=', $value->buyer_id)->first();
 					$price =  DB::table('price_taxation')->select('price_taxation.*')->where('customer_id', $value->customer_id)->where('buyer_id', $value->buyer_id)->where('template_id', $value->template_id)->get();
 
 					$price_range =  DB::table('price_range')->select('price_range.*')->where('price_taxation_id', $price{0}->id)->where('volume_from', '<=', $value->order_quantity)->where('volume_to', '>=', $value->order_quantity)->get();
@@ -410,6 +408,7 @@ class PoManagerController extends Controller
 							->whereNotIn('status', $erp_status_ids);
 
 					if($po_rejected_date === null || $po_rejected_date === 'null') {
+						$action_id  = DB::table('actions')->where('action', 'ilike', 'PO Manager Verified')->value('id');
 						$query = $query->update([
 									'rate' => $price_range{0}->price,
 									'status' => 3,
@@ -418,6 +417,7 @@ class PoManagerController extends Controller
 									'po_verified_date' => $this->current_date
 								]);
 					} else {
+						$action_id  = DB::table('actions')->where('action', 'ilike', 'PO Manager Reapproved')->value('id');
 						$query->update([
 							'rate' => $price_range{0}->price,
 							'status' => 3,
@@ -426,14 +426,14 @@ class PoManagerController extends Controller
 							'po_reapproved_date' => $this->current_date
 						]);
 					}
-						
+
+					// insert  into history table with action id
+					$this->insertHistoryData($value, $action_id, $erp_user);	
 				}
 				$result      = response()->json(['error' => false, 'message' => 'success', 'status' => true], 200);
 
 			} else if ($count_j == $count) {
 				// approve partial orders
-				$action_id  = DB::table('actions')->where('action', 'ilike', 'PO Manager Verified')->value('id');
-				$buyer    = DB::table('buyers')->select('buyer_name')->where('id', '=', $value->buyer_id)->first();
 				$data 		=   DB::table('erp_orders')->where('id', $erp_order_id)
 					->update([
 						'status' => 3,
@@ -452,6 +452,7 @@ class PoManagerController extends Controller
 							->whereNotIn('status', $erp_status_ids);
 
 					if($po_rejected_date === null || $po_rejected_date === 'null') {
+						$action_id  = DB::table('actions')->where('action', 'ilike', 'PO Manager Verified')->value('id');
 						$query = $query->update([
 									'rate' => $price_range{0}->price,
 									'status' => 3,
@@ -460,6 +461,7 @@ class PoManagerController extends Controller
 									'po_verified_date' => $this->current_date
 								]);
 					} else {
+						$action_id  = DB::table('actions')->where('action', 'ilike', 'PO Manager Reapproved')->value('id');
 						$query->update([
 							'rate' => $price_range{0}->price,
 							'status' => 3,
@@ -468,6 +470,9 @@ class PoManagerController extends Controller
 							'po_reapproved_date' => $this->current_date
 						]);
 					}
+
+					// insert  into history table with action id
+					$this->insertHistoryData($value, $action_id, $erp_user);
 				}
 
 				$to_email =  DB::table('tesco_error_report_emails')->select('*')->where('id', 1)->first();
@@ -481,7 +486,6 @@ class PoManagerController extends Controller
 
 			} else {
 				$action_id  = DB::table('actions')->where('action', 'ilike', 'PO Manager Rejected')->value('id');
-				$buyer    = DB::table('buyers')->select('buyer_name')->where('id', '=', $value->buyer_id)->first();
 				$data 		=   DB::table('erp_orders')->where('id', $erp_order_id)
 					->update([
 						'status' => 2,
@@ -496,7 +500,11 @@ class PoManagerController extends Controller
 						'po_rejected_date' => $this->current_date,
 						'po_rejected_by' => $erp_user,
 					]);
+				// insert  into history table with action id
+				foreach ($orderlist as $value) {
 
+					$this->insertHistoryData($value, $action_id, $erp_user);	
+				}	
 				$to_email =  DB::table('tesco_error_report_emails')->select('*')->where('id', 1)->first();
 
 				Mail::send('mails.error-report-po', ['po' => $po, 'style_no' => $style_no, 'reference' => $reference, 'qty' => $qty, 'price' => $price, 'po_complete' => $po_complete, 'comment' => $comment, 'commenttext' => $commenttext, 'purchase_order_number' => $purchase_order_number, 'customer_name' => $customer_name, 'erp_order_id' => $erp_order_id], function ($message) use ($to_email) {
@@ -507,109 +515,122 @@ class PoManagerController extends Controller
 				$result      = response()->json(['error' => false, 'message' => 'success', 'status' => false], 200);
 			}
 
-			// foreach($jobcard_data as $key => $data)
-			// {
-			// 	if($buyer->buyer_name === 'Tesco'){
-
-			// 		$qnty_table     = $data->order_qnty_table_name;
-			// 		$main_table     = str_replace("_quanty","",$data->order_qnty_table_name);
-			// 		$qty_row_id     = $data->order_qnty_table_id;
-			// 		$qnty_id        = str_replace("_orders_quanty","_order_id",str_replace("tesco_","",$qnty_table));
-			// 		$order_details  = DB::table($qnty_table)
-			// 							->select($main_table.'.*')
-			// 							->where($qnty_table.'.id', $qty_row_id)
-			// 							->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id)
-			// 							->first();
-			// 		$season         = $order_details->season_code;
-			// 		$country        = $order_details->zone;
-			// 		$style_zone     = strtolower($country).'_style_ref';
-			// 		$template_id    = $order_details->template_id;
-			// 		$template_level = DB::table('tesco_item_master as t1')
-			// 							->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
-			// 							->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
-			// 							->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
-			// 							->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
-			// 							->where('t1.id', $template_id)
-			// 							->first();
-					
-			// 		$material_name  = $template_level->material;
-			// 		$material_sub   = $template_level->material_sub;
-			// 		$material_ref   = $template_level->ref;
-			// 		$customer_po    = $order_details->purchase_order_no;
-			// 		$buyer_po       = $order_details->po_number;
-			// 		$style          = $order_details->$style_zone;
-			// 		$ocn_number     = $order_details->ocn_number;
-					
-
-			// 	} else if($buyer->buyer_name === 'Orchestra'){
-
-			// 		// $qnty_table     = $data->order_qnty_table_name;
-			// 		// $main_table     = str_replace("_qty","",$data->order_qnty_table_name);
-			// 		// $qty_row_id     = $data->order_qnty_table_id;
-			// 		// $result_str     =  str_replace("_"," ",str_replace("_orders","",$main_table));
-			// 		// $qnty_id        = '';
-			// 		// foreach (explode(' ', $result_str) as $word)
-			// 		// {
-			// 		//    $qnty_id .= strtolower($word[0]);
-			// 		// }
-			// 		// $order_details  = DB::table($qnty_table)->select($main_table.'.*')->where($qnty_table.'.id', $qty_row_id)->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id.'_id')
-			// 		// 				->get();
-			// 		// $season         = $order_details->season_code;
-			// 		// $country        = "";
-			// 		// $template_id    = $order_details->template_id;
-			// 		// $template_level = DB::table('tesco_item_master as t1')
-			// 		// 					->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
-			// 		// 					->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
-			// 		// 					->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
-			// 		// 					->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
-			// 		// 					->where('t1.id', $template_id)
-			// 		// 					->first();
-					
-			// 		// $material_name  = $template_level->material;
-			// 		// $material_sub   = $template_level->material_sub;
-			// 		// $material_ref   = $template_level->ref;
-			// 		// $customer_po    = $order_details->purchase_order_no;
-			// 		// $buyer_po       = $order_details->po_number;
-			// 		// $style          = $order_details->$style_zone;
-			// 		// $ocn_number     = $order_details->ocn_number;
-
-			// 	} else {
-
-			// 		$template       = 'Not Avlb';
-
-			// 	}
-
-
-			// 	$history_id = History::updateOrCreate(['erp_order_details_id' => $data->id], [
-			// 		'buyer_id'             => $buyer_id,
-			// 		'template'             => $template,
-			// 		'season'               => $season,
-			// 		'country'              => $country,
-			// 		'customer_id'          => $customer_id,
-			// 		'material'             => $material_name,
-			// 		'mat_sub'              => $material_sub,
-			// 		'reference'            => $material_ref,
-			// 		'style'                => $style,
-			// 		'po'                   => $customer_po,
-			// 		'buyer_po'             => $buyer_po,
-			// 		'ocn'                  => $ocn_number,
-			// 		'created_at'           => $current_timestamp,
-			// 		'updated_at'           => $current_timestamp,
-			// 	]);
-
-			// 	DB::table('event_history')
-			// 	->insert([
-			// 		'history_id'  => $history_id->id,
-			// 		'action_id'   => $action_id,
-			// 		'created_by'  => Auth::guard('erpuser')->id(),
-			// 		'created_at'  => $current_timestamp,
-			// 		'updated_at'  => $current_timestamp,
-			// 	]);
-			// }
 		} catch (\Exception $e) {
 			$result = response()->json(['Message' => $e->getMessage(), 'Line' => $e->getLine(), 'File' => $e->getFile()]);
 		}
 		return $result;
 	}
 
+	/** Function to insert OR update history table
+	 * @author praveen <praveen@wizroots.com>
+	 * @param mixed $data, $action_id, $erp_user
+	 */
+	public function insertHistoryData($data, $action_id, $erp_user)
+	{
+		try {
+				$buyer_id       = $data->buyer_id;
+				$buyer          = DB::table('buyers')->select('buyer_name')->where('id', '=', $buyer_id)->first();
+				$template       = 'Available';
+				$qty_row_id     = $data->order_qnty_table_id;
+				$qnty_table     = $data->order_qnty_table_name;
+				$customer_id    = $data->customer_id;
+
+				if($buyer->buyer_name === 'Tesco'){
+
+					$main_table     = str_replace("_quanty","",$qnty_table);
+					$qnty_id        = str_replace("_orders_quanty","_order_id",str_replace("tesco_","",$qnty_table));
+					$order_details  = DB::table($qnty_table)
+										->select($main_table.'.*')
+										->where($qnty_table.'.id', $qty_row_id)
+										->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id)
+										->first();
+					$season         = $order_details->season_code;
+					$country        = $order_details->zone;
+					$style_zone     = strtolower($country).'_style_ref';
+					$template_id    = $order_details->template_id;
+					$template_level = DB::table('tesco_item_master as t1')
+										->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
+										->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
+										->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
+										->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
+										->where('t1.id', $template_id)
+										->first();
+					
+					$material_name  = $template_level->material;
+					$material_sub   = $template_level->material_sub;
+					$material_ref   = $template_level->ref;
+					$customer_po    = $order_details->purchase_order_no;
+					$buyer_po       = $order_details->po_number;
+					$style          = $order_details->$style_zone;
+					$ocn_number     = $order_details->ocn_number;
+					
+
+				} else if($buyer->buyer_name === 'Orchestra'){
+
+					// $main_table     = str_replace("_qty","",$qnty_table);
+					// $result_str     =  str_replace("_"," ",str_replace("_orders","",$main_table));
+					// $qnty_id        = '';
+					// foreach (explode(' ', $result_str) as $word)
+					// {
+					//    $qnty_id .= strtolower($word[0]);
+					// }
+					// $order_details  = DB::table($qnty_table)->select($main_table.'.*')->where($qnty_table.'.id', $qty_row_id)->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id.'_id')
+					// 				->get();
+					// $season         = $order_details->season_code;
+					// $country        = "";
+					// $template_id    = $order_details->template_id;
+					// $template_level = DB::table('tesco_item_master as t1')
+					// 					->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
+					// 					->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
+					// 					->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
+					// 					->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
+					// 					->where('t1.id', $template_id)
+					// 					->first();
+					
+					// $material_name  = $template_level->material;
+					// $material_sub   = $template_level->material_sub;
+					// $material_ref   = $template_level->ref;
+					// $customer_po    = $order_details->purchase_order_no;
+					// $buyer_po       = $order_details->po_number;
+					// $style          = $order_details->$style_zone;
+					// $ocn_number     = $order_details->ocn_number;
+
+				} else {
+
+					$template       = 'Not Available';
+
+				}
+
+
+				$history_id = History::updateOrCreate(['erp_order_details_id' => $data->id], [
+					'buyer_id'             => $buyer_id,
+					'template'             => $template,
+					'season'               => $season,
+					'country'              => $country,
+					'customer_id'          => $customer_id,
+					'material'             => $material_name,
+					'mat_sub'              => $material_sub,
+					'reference'            => $material_ref,
+					'style'                => $style,
+					'po'                   => $customer_po,
+					'buyer_po'             => $buyer_po,
+					'ocn'                  => $ocn_number,
+					'created_at'           => $this->current_date,
+					'updated_at'           => $this->current_date,
+				]);
+
+				DB::table('event_history')
+				->insert([
+					'history_id'  => $history_id->id,
+					'action_id'   => $action_id,
+					'created_by'  => $erp_user,
+					'created_at'  => $this->current_date,
+					'updated_at'  => $this->current_date,
+				]);
+
+			return "success";
+		} catch (\Exception $e) {
+			return response()->json(['Message' => $e->getMessage(), 'Line' => $e->getLine(), 'File' => $e->getFile()]);
+		}
+	}
 }
