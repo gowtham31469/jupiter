@@ -965,7 +965,7 @@ class OrderStatusCntrl extends Controller
         }
         else
         {
-            if ($temp_data->order_flag == "newOrder" && $template_name != "THL3" && $template_name != "THL1") {
+            if ($temp_data->order_flag === "newOrder" && $template_name != "THL3" && $template_name != "THL1") {
                 $orderObj->updateTescoOrders($table_name, $temp_data, $request, $customer_id->customer_id, $created_by);
              } 
              DB::table($table_name)->where('id',$template_id)
