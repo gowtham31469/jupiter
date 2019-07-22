@@ -157,7 +157,8 @@
 		.dataTables_wrapper.no-footer .dataTables_scrollBody {
 		border-bottom:1px solid #ddd !important; 
 		}
-
+		.dataTables_scrollBody thead tr
+		{visibility:collapse;}
 </style>
 
 
@@ -768,10 +769,6 @@
 						// sScrollX: '100%',	
 						// order: [[ 5, "asc" ]],
 						"scrollX": true,
-						//work-around to remove the extra thead tag added when scrollX is set to true;
-						"initComplete": function(settings, json) {
-						$('.dataTables_scrollBody thead tr').css({visibility:'collapse'});
-						},
 						dom: 'lBfrtip',
 						// lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
 						buttons: ['copy', 'csv', 'excel', 'pdf'],
