@@ -26,8 +26,7 @@ class ErpOrders
 		{			
 			$table_name     = $request['tableName']; 
 			$buyer_id		= $request['buyer_id'];
-			$row_id		    = $request['id'];
-			$created_by     = $request['created_by']; 
+			$row_id		    = $request['id']; 
             $qnty_table     = $table_name.'_quanty' ;
 			$qnty_id        =  str_replace("_orders","_order_id",str_replace("tesco_","",$table_name));
 			
@@ -59,7 +58,7 @@ class ErpOrders
 			
 				Erp::where('id',$erp_orders->id)->update(['status'=>1, 'po_file' => $po_file]);
 				$status = 1;
-				$r = $this->insertOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders->id, $order_status_id, $po_no, $created_by);
+				$r = $this->insertOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders->id, $order_status_id, $po_no);
 			}
 			else
 			{
@@ -75,7 +74,7 @@ class ErpOrders
 				Erp::where('id',$erp_orders->id)->update(['erp_id'=>$erp_id]);
 				$status = 1;
 
-				$this->insertOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders->id, $order_status_id, $po_no, $created_by);
+				$this->insertOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders->id, $order_status_id, $po_no);
 			}
 			$result = response()->json(['error'=> false,'message' =>'success'],200);
 		}
@@ -98,7 +97,7 @@ class ErpOrders
 	 * @param [type] $erp_orders_id
 	 * @return void
 	 */
-	function insertOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders_id, $order_status_id, $customer_po_no, $created_by)
+	function insertOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders_id, $order_status_id, $customer_po_no)
 	{
 		if ($order_details)
 		{
@@ -181,7 +180,6 @@ class ErpOrders
 				->insert([
 					'history_id'  => $history_id,
 					'action_id'   => $action_id,
-					'created_by'  => $created_by,
 					'created_at'  => $current_timestamp,
 					'updated_at'  => $current_timestamp,
 				]);
@@ -208,7 +206,6 @@ class ErpOrders
 		    $table_name     = $request['tableName']; 
 			$buyer_id		= $request['buyer_id'];
 			$row_id		    = $request['id'];
-			$created_by		= $request['created_by'];
 			$qnty_table     = $table_name.'_qty' ;
 			
 			// get the first letter of each word for a given string
@@ -259,7 +256,7 @@ class ErpOrders
 			
 				Erp::where('id',$erp_orders->id)->update(['status'=>1, 'po_file' => $po_file]);
 					$status = 1;
-			    $this->insertOrchestraOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders->id, $table_name, $order_status_id, $po_no, $created_by);
+			    $this->insertOrchestraOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders->id, $table_name, $order_status_id, $po_no);
 			}
 			else
 			{
@@ -275,7 +272,7 @@ class ErpOrders
 				Erp::where('id',$erp_orders->id)->update(['erp_id'=>$erp_id]);
 				$status = 1;
 
-				$this->insertOrchestraOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders->id, $table_name, $order_status_id, $po_no, $created_by);
+				$this->insertOrchestraOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders->id, $table_name, $order_status_id, $po_no);
 			}
 			$result = response()->json(['error'=> false,'message' =>'success'],200);
 		}
@@ -298,7 +295,7 @@ class ErpOrders
 	 * @param [type] $erp_orders_id
 	 * @return void
 	 */
-	function insertOrchestraOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders_id, $table_name, $order_status_id, $customer_po_no, $created_by)
+	function insertOrchestraOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders_id, $table_name, $order_status_id, $customer_po_no)
 	{
 		if ($order_details)
 		{
@@ -387,7 +384,6 @@ class ErpOrders
 				// ->insert([
 				// 	'history_id'  => $history_id,
 				// 	'action_id'   => $action_id,
-				// 	'created_by'  => $created_by,
 				// 	'created_at'  => $current_timestamp,
 				// 	'updated_at'  => $current_timestamp,
 				// ]);
