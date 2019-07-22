@@ -703,11 +703,15 @@ class TescoOrders
           $table_data = DB::table($table)->where('po_number',$temp_data->po_number)
                         ->where('uk_style_ref',$temp_data->uk_style_ref)
                         ->where('ce_style_ref',$temp_data->ce_style_ref)
+                        ->where('order_flag',$temp_data->order_flag)
+                        ->where('order_status', '<>', 'Order Cancelled')
                         ->where('tesco_supplier_id',$temp_data->tesco_supplier_id)->first();
                    
             DB::table($table)->where('po_number',$temp_data->po_number)
                 ->where('uk_style_ref',$temp_data->uk_style_ref)
                 ->where('ce_style_ref',$temp_data->ce_style_ref)
+                ->where('order_flag',$temp_data->order_flag)
+                ->where('order_status', '<>', 'Order Cancelled')
                 ->update([
                     'zone'                 => $request['zone'],
                     'template_type'        => $request['type'],
