@@ -21,9 +21,11 @@ use App\Classes\Invoice;
 use App\InvoiceAddress;
 use Elibyy\TCPDF\Facades\TCPDF;
 use App\Classes\invoiceTCPDF;
+use Carbon\Carbon;
 
 class InvoiceController extends Controller
 {
+    private $current_date;
     /**
      * Create a new controller instance.
      *
@@ -31,9 +33,11 @@ class InvoiceController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('erpuser');
-   
-    }
+		$this->middleware('erpuser');
+		// get the current time
+		$this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
+
+	}
 
     /** 
      * @return invoice list view
@@ -309,9 +313,12 @@ class InvoiceController extends Controller
                     
                     ErpOrderDetails::where('id',$value['id'])
                         ->update([
-                            'delivered_quantity' => ( $value['order_quantity'] - $pendingQnty ),
-                            'pending_orders'     => $pendingQnty,
-                            'status'             => $status
+                            'delivered_quantity'   => ( $value['order_quantity'] - $pendingQnty ),
+                            'pending_orders'       => $pendingQnty,
+                            'status'               => $status,
+                            'invoice_number'       => $invoice_id,
+                            'invoice_created_by'   => Auth::guard('erpuser')->id(),
+                            'invoice_created_date' => $this->current_date
                             ]);                  
 
                     ErpOrdersInvoice::create([
