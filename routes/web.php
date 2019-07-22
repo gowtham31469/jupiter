@@ -774,7 +774,7 @@ Route::post('customer/orchestra/template-management/template-view', 'Customer\Or
 Route::get('reportGenerator','ErpUser\Reports\ReportController@index')->name('reportGenerator');
 Route::get('level1Filter','ErpUser\Reports\ReportController@level1Filter');
 Route::get('level2Filter','ErpUser\Reports\ReportController@level2Filter');
-Route::get('getHistory','ErpUser\Reports\ReportController@getHistory');
+Route::get('getTableFields','ErpUser\Reports\ReportController@getTableFields');
 Route::post('setUpDatatable', 'ErpUser\Reports\ReportController@setUpDatatable' )->name('setUpDatatable');
 
 Route::get('print-manager/get-customers-list', 'ErpUser\Printmanager\PrintManagerController@getCustomersListByBuyerId'); 

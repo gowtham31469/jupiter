@@ -684,14 +684,13 @@
 							{
 								$.ajax({
 									type : 'get',
-									url : '/getHistory',
+									url : '/getTableFields',
 									data:{
 										'role' : $('input[name=roleSelection]:checked').val(),
 										'status' : $('#'+$('input[name=roleSelection]:checked').data('target')).val(),
 									},
 									success:function(data)
 									{	
-										// console.log(data)
 										if(data.Default.length > 0)
 										{
 											create_table(data.Default,data.Extra)
@@ -756,20 +755,20 @@
 					for (var i = 0; i < def.length ; i++)
 					{
 						heading+='<th>'+def[i]+'</th>'
-						
 						$("#all_fields").html(heading)
 						$(".ReportSection").removeClass('hidden')
 						allColoumns.push({
 							data: def[i]
 						});
 					}
-					// $("#reportTable thead th").removeClass('sorting');
+
 					var t = $('#reportTable').dataTable( {
 						processing: true,
 						serverSide: true,
 						// sScrollX: '100%',	
 						// order: [[ 5, "asc" ]],
 						"scrollX": true,
+						//work-around to remove the extra thead tag added when scrollX is set to true;
 						"initComplete": function(settings, json) {
 						$('.dataTables_scrollBody thead tr').css({visibility:'collapse'});
 						},
@@ -812,10 +811,9 @@
 					$('html,body').animate({
 						scrollTop: $(window).scrollTop() + 500
 					});
-					// $("#reportTable tbody tr:first").addClass('ct-active');
 				}
 
-				
+					//The default and extra fields are updated and pushed to corresponding arrays
 					$(document).on('click', '#update_table', function(event) {
 					event.preventDefault();
 					var listItems1 = $(".checklist1 li");
@@ -835,6 +833,7 @@
 					create_table(arr1,arr2)
 				});
 
+				//logic to make the default and extra fields draggable
 				$(document).on('click', '#moreOtions', function(event) {
 					event.preventDefault();
 					/* Act on the event */
@@ -858,6 +857,7 @@
 					$("#optionsModal").modal();
 				});
 
+				//logic to animate the expand and collapse icon
 				$(document).on('click', '#toggleBtn', function(event) {
 					event.preventDefault();
 					/* Act on the event */

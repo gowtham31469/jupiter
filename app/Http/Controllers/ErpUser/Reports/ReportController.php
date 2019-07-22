@@ -129,7 +129,7 @@ public function level2Filter(Request $request)
     return response()->json($result);
 }
 
-public function getHistory(Request $request)
+public function getTableFields(Request $request)
 {   
 
     $def_po1 = ["No","Order.Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference"];
