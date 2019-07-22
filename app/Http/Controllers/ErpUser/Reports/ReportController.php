@@ -491,8 +491,6 @@ public function setUpDatatable(Request $request)
                     $queryRes->SGST = "-";
                     $queryRes->IGST = $queryRes->tax;
                     }
-
-                    $queryRes->No =$key+1;
                     });
                 break;
            
@@ -508,8 +506,7 @@ public function setUpDatatable(Request $request)
                         'jc_number as JC.No','jc_created_date as JC.Dt','invoice_number as Inv.No',
                         'invoice_created_date as Inv.Dt','buyer_name as Buyer','season as Season',
                         'country as Country','buyer_po as ByrPo','order_quantity as Quantity',
-                        'company_id as Disp.Mode',
-                        'status as Status','reason as Reason'])
+                        'company_id as Disp.Mode','status as Status','reason as Reason'])
                         ->get();
 
                     $queryRes->map(function ($queryRes,$key) {

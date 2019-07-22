@@ -418,7 +418,6 @@
 					$('.'+$(this).data('target')).addClass('open').removeClass('hidden')
 				});
 
-
 				$(document).on('click', '#filter1', function(event) {
 					event.preventDefault();
 					triggerLevel1()
@@ -764,11 +763,16 @@
 							data: def[i]
 						});
 					}
+					// $("#reportTable thead th").removeClass('sorting');
 					var t = $('#reportTable').dataTable( {
 						processing: true,
 						serverSide: true,
-						sScrollX: '100%',	
+						// sScrollX: '100%',	
 						// order: [[ 5, "asc" ]],
+						"scrollX": true,
+						"initComplete": function(settings, json) {
+						$('.dataTables_scrollBody thead tr').css({visibility:'collapse'});
+						},
 						dom: 'lBfrtip',
 						// lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
 						buttons: ['copy', 'csv', 'excel', 'pdf'],
@@ -804,13 +808,15 @@
 
 					$("#filter-panel").removeClass('collapse in').addClass('collapse')
 					$("#reportTitle").html("Consolidated Report [ "+$('input[name=roleSelection]:checked').val()+" ]")
+					
 					$('html,body').animate({
 						scrollTop: $(window).scrollTop() + 500
 					});
-					// $("#DataTableMovimenti tbody tr:first").addClass('ct-active');
+					// $("#reportTable tbody tr:first").addClass('ct-active');
 				}
 
-				$(document).on('click', '#update_table', function(event) {
+				
+					$(document).on('click', '#update_table', function(event) {
 					event.preventDefault();
 					var listItems1 = $(".checklist1 li");
 					var listItems2 = $(".checklist2 li");
