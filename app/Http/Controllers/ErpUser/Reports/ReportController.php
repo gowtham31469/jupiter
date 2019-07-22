@@ -34,24 +34,6 @@ public function __construct()
 
 public function index()
 {
-
-  $objInv     = new Invoice();
-            // $inv_id      = $request->id;
-            // $ddmmyy="DD/MM/YYYY";
-            $inv_details = $objInv->getInvoiceDetails(62);
-
-            // return $inv_details; 
-
-$invoice_details  = Invoices::join('customers','invoice.customer_id','customers.id')
-->join('buyers','invoice.buyer_id','buyers.id')
-// ->where('invoice_id',62)
-// ->select('invoice.invoice_id','erp_id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','po_no','invoice_file','invoice.id')
-->distinct('invoice.id')
-->get();
-
-// return $invoice_details;
-
-
     $allActions = array();
     $action_as_id = array();
     if(Auth::guard('erpuser')->user()->is_admin)
@@ -71,7 +53,6 @@ $invoice_details  = Invoices::join('customers','invoice.customer_id','customers.
         foreach ($roles as $key => $value) {
             switch ($value) 
             {
-
                 case 'PO MANAGER' :
                 array_push($allActions, 'PO Manager');
                 array_push($action_as_id, '_poMgr');
@@ -188,17 +169,16 @@ public function getHistory(Request $request)
     $ext_order6 = ["A/w Date", "PO.dt","JC.Dt","Buyer","Season","Country","ByrPo","Reapprove.Dt","Disp.Mode","Awb","Reason","Status"];
 
     $def_invoice1 =["No","Inv.No","Date","Customer","Ass.Val","CGST","SGST","Inv.Val"];
-    $ext_invoice1 = [];
+    $ext_invoice1 = ["IGST"];
 
     $def_invoice2 =["No","Inv.No","Date","Customer","Ass.Val","IGST","Inv.Val"];
-    $ext_invoice2 = [];
+    $ext_invoice2 = ["CGST","SGST"];
 
     $def_invoice3 =["No","Inv.No","Date","Customer","Ass.Val","CGST","SGST","IGST","Inv.Val"];
     $ext_invoice3 = [];
 
     $def_invoice4 =["No","Inv.No","Date","Customer","Ass.Val","CGST","SGST","IGST","Inv.Val"];
     $ext_invoice4 = [];
-
 
     $defaultValues =[];
     $extraValues =[];
@@ -460,7 +440,6 @@ public function setUpDatatable(Request $request)
          array_push($statusId, "2");
         }
 
-       // dd($request->status,$statusId);
         $eventHistory = EventHistory::whereIn('history_id',$result)
         ->whereIn('action_id',$statusId)
         ->pluck('history_id')
@@ -505,34 +484,34 @@ public function setUpDatatable(Request $request)
                     {
                     $queryRes->CGST = $queryRes->tax/2;
                     $queryRes->SGST = $queryRes->tax/2;
-                    $queryRes->IGST = 0;
+                    $queryRes->IGST = "-";
                     }
                     else{
-                    $queryRes->CGST = 0;
-                    $queryRes->SGST = 0;
+                    $queryRes->CGST = "-";
+                    $queryRes->SGST = "-";
                     $queryRes->IGST = $queryRes->tax;
                     }
-
-                    $queryRes->No =$key+1;
                     });
                 break;
            
             default:
                     $queryRes = History::whereIn('history.id',$eventHistory)
                     ->leftJoin("erp_order_details",'erp_order_details.id', '=', 'history.id')
-                    ->leftJoin("customers",'customers.id', '=', 'history.buyer_id')
-                    ->select(['erp_order_details.created_at as Order.Dt', 'erp_order_details_id as ErpId',
+                    ->leftJoin("customers",'customers.id', '=', 'history.customer_id')
+                    ->leftJoin("buyers",'buyers.id', '=', 'history.buyer_id')
+                    ->select(['erp_order_details.order_date as Order.Dt', 'erp_order_details_id as ErpId',
                         'company_name as Customer','material as Material','style as Style','history.po as P.O',
                         'ocn as OCN','reference as Reference','po_reapproved_date as Reapprove.Dt',
-                        'customer_id as A/w Date','po_reapproved_date as PO.dt','jc_number as JC.No',
-                        'jc_created_date as JC.Dt','invoice_number as Inv.No','invoice_created_date as Inv.Dt',
-                        'company_name as Buyer','season as Season','country as Country','buyer_po as ByrPo',
-                        'order_quantity as Quantity','company_id as Disp.Mode','company_id as Awb',
-                        'status as Status','reason as Reason'])
+                        'erp_order_details.aw_date as A/w Date','erp_order_details.created_at as PO.dt',
+                        'jc_number as JC.No','jc_created_date as JC.Dt','invoice_number as Inv.No',
+                        'invoice_created_date as Inv.Dt','buyer_name as Buyer','season as Season',
+                        'country as Country','buyer_po as ByrPo','order_quantity as Quantity',
+                        'company_id as Disp.Mode','status as Status','reason as Reason'])
                         ->get();
 
                     $queryRes->map(function ($queryRes,$key) {
                     $queryRes->No =$key+1;
+                    $queryRes->Awb ='-';
                     });
             break;
         }
