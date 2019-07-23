@@ -137,6 +137,8 @@ class ErpOrders
 						'order_type'            => $orders->order_flag,
 						'created_at'            => $this->created_at,
 						'order_status_id'       => $order_status_id->id,
+						'order_date'            => $orders->order_created_at,
+						'aw_date'               => $orders->order_approved_at
 					]);
 				}
 
@@ -339,6 +341,8 @@ class ErpOrders
 						'order_type'            => $orders->order_flag,
 						'created_at'            => $this->created_at,
 						'order_status_id'       => $order_status_id->id,
+						'order_date'            => $orders->order_created_at,
+						'aw_date'               => $orders->order_approved_at
 					]);
 				}
 

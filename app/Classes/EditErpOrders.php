@@ -123,6 +123,8 @@ class EditErpOrders
 						'created_at'            => $this->updated_at,
 						'updated_at'            => $this->updated_at,
 						'order_status_id'       => $order_status_id->id,
+						'order_date'            => $orders->order_created_at,
+						'aw_date'               => $orders->order_approved_at
 					]);
 				}	
 				
