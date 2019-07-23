@@ -194,28 +194,27 @@ class JobManagerController extends Controller
 									->select($order_table.'.*','tesco_department.department','tesco_brand.brand','tesco_suppliers.supplier_name')
 									->get();
 			
-			$value->tpnd=$order_details_omp{0}->tpnd;
-			$value->itf_barcode=$order_details_omp{0}->itf_barcode;
-			$value->units_per_carton=$order_details_omp{0}->units_per_carton;
-			$value->cases_per_carton=$order_details_omp{0}->cases_per_carton;
-			$value->ean_barcode=$order_details_omp{0}->ean_barcode;
-			$value->size=$order_details_omp{0}->size;
-			$value->case_size=$order_details_omp{0}->case_size;
-			$value->orms_tpn=$order_details_omp{0}->orms_tpn;
-			
-			$value->zone=$order_omp{0}->zone;
-			$value->po_number=$order_omp{0}->po_number;
-			$value->uk_style_ref=$order_omp{0}->uk_style_ref;
-			$value->ce_style_ref=$order_omp{0}->ce_style_ref;
-			$value->season_code=$order_omp{0}->season_code;
-			$value->short_description=$order_omp{0}->short_description;
-			$value->eqos_site_code=$order_omp{0}->eqos_site_code;
-			$value->manufacture_date=$order_omp{0}->manufacture_date;
-			$value->department=$order_omp{0}->department;
-			$value->brand=$order_omp{0}->brand;
-			$value->supplier_name=$order_omp{0}->supplier_name;
-			$value->rfid_compliant=$order_omp{0}->rfid_compliant;
-			$value->tag_at_source=$order_omp{0}->tag_at_source;
+			$value->tpnd              = $order_details_omp{0}->tpnd;
+			$value->itf_barcode       = $order_details_omp{0}->itf_barcode;
+			$value->units_per_carton  = $order_details_omp{0}->units_per_carton;
+			$value->cases_per_carton  = $order_details_omp{0}->cases_per_carton;
+			$value->ean_barcode       = $order_details_omp{0}->ean_barcode;
+			$value->size              = $order_details_omp{0}->size;
+			$value->case_size         = $order_details_omp{0}->case_size;
+			$value->orms_tpn          = $order_details_omp{0}->orms_tpn;
+			$value->zone              = $order_omp{0}->zone;
+			$value->po_number         = $order_omp{0}->po_number;
+			$value->uk_style_ref      = $order_omp{0}->uk_style_ref;
+			$value->ce_style_ref      = $order_omp{0}->ce_style_ref;
+			$value->season_code       = $order_omp{0}->season_code;
+			$value->short_description = $order_omp{0}->short_description;
+			$value->eqos_site_code    = $order_omp{0}->eqos_site_code;
+			$value->manufacture_date  = $order_omp{0}->manufacture_date;
+			$value->department        = $order_omp{0}->department;
+			$value->brand             = $order_omp{0}->brand;
+			$value->supplier_name     = $order_omp{0}->supplier_name;
+			$value->rfid_compliant    = $order_omp{0}->rfid_compliant;
+			$value->tag_at_source     = $order_omp{0}->tag_at_source;
 			
 		}
 		
@@ -720,7 +719,7 @@ class JobManagerController extends Controller
 
 								}
 
-
+								// it will insert if erp_order_details_id i snot exists, otherwise it will update 
 								$history_id = History::updateOrCreate(['erp_order_details_id' => $data->id], [
 									'buyer_id'             => $buyer_id,
 									'template'             => $template,
@@ -736,6 +735,7 @@ class JobManagerController extends Controller
 									'ocn'                  => $ocn_number,
 									'created_at'           => $current_timestamp,
 									'updated_at'           => $current_timestamp,
+									'disp_mode_id'         => $disp_mode
 								]);
 
 								DB::table('event_history')
@@ -746,6 +746,7 @@ class JobManagerController extends Controller
 									'created_at'  => $current_timestamp,
 									'updated_at'  => $current_timestamp,
 								]);
+								
 							}
 					        
 						}
