@@ -198,7 +198,7 @@
 
 			{!! Form::select('role_Status[]', $order,null,['class' => 'selectpicker all_status _order hidden','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select status [ Order ]','id'=>'_order']) !!}
 
-			{!! Form::select('role_Status[]', $invoice,null,['class' => 'selectpicker all_status _invoice hidden','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select status [ Invoice ]','id'=>'_invoice']) !!}
+			{!! Form::select('role_Status[]', $invoice,null,['class' => 'selectpicker all_status _invoice hidden','required','data-size'=>"10",'data-actions-box'=>"true","title"=>'Select status [ Invoice ]','id'=>'_invoice']) !!}
 		</div>
 	</div>
 
@@ -209,19 +209,19 @@
 					<div class="row">
 						<div class="col-md-3">
 							<label>Buyer</label>
-							{!! Form::select('sel_1[]', $buyers,null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select buyer','id'=>'buyer']) !!}
+							{!! Form::select('sel_1[]', $buyers,null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Buyer','id'=>'buyer']) !!}
 						</div>
 						<div class="col-md-3">
 							<label>Template</label>
-							{!! Form::select('sel_1[]',$templates,null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select template','id'=>'template']) !!}
+							{!! Form::select('sel_1[]',$templates,null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Template','id'=>'template']) !!}
 						</div>
 						<div class="col-md-3">
 							<label>Season</label>
-							{!! Form::select('sel_1[]',$seasons,null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select season','id'=>'season']) !!}
+							{!! Form::select('sel_1[]',$seasons,null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Season','id'=>'season']) !!}
 						</div>
 						<div class="col-md-3">
 							<label>Country</label>
-							{!! Form::select('sel_1[]',$countries,null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select country','id'=>'country']) !!}
+							{!! Form::select('sel_1[]',$countries,null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Country','id'=>'country']) !!}
 						</div>
 					</div>
 				</div>
@@ -232,19 +232,19 @@
 					<div class="row">
 						<div class="col-md-3">
 							<label>Customer</label>
-							<select id="customer" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select customer" multiple></select>
+							<select id="customer" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select Customer" multiple></select>
 						</div>
 						<div class="col-md-3">
 							<label>Material</label>
-							<select id="material" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select material" multiple></select>
+							<select id="material" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select Material" multiple></select>
 						</div>
 						<div class="col-md-3">
 							<label>Style</label>
-							<select id="style" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select style" multiple data-live-search="true"></select>
+							<select id="style" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select Style" multiple data-live-search="true"></select>
 						</div>
 						<div class="col-md-3">
 							<label>Mat-Sub</label>
-							<select id="mat_sub" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select mat-sub" multiple data-live-search="true"></select>
+							<select id="mat_sub" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select Mat-sub" multiple data-live-search="true"></select>
 						</div>
 					</div>
 				</div>
@@ -255,7 +255,7 @@
 					<div class="row">
 						<div class="col-md-3">
 							<label>Reference</label>
-							<select id="reference" class="selectpicker filterLevel3" data-actions-box="true" data-size="10" title="Select reference" multiple data-live-search="true"></select>
+							<select id="reference" class="selectpicker filterLevel3" data-actions-box="true" data-size="10" title="Select Reference" multiple data-live-search="true"></select>
 						</div>
 						<div class="col-md-3">
 							<label>PO</label>
@@ -263,7 +263,7 @@
 						</div>
 						<div class="col-md-3">
 							<label>Buyer PO</label>
-							<select id="buyer_po" class="selectpicker filterLevel3" data-actions-box="true" data-size="10" title="Select buyer PO" multiple data-live-search="true"></select>
+							<select id="buyer_po" class="selectpicker filterLevel3" data-actions-box="true" data-size="10" title="Select Buyer PO" multiple data-live-search="true"></select>
 						</div>
 						<div class="col-md-3">
 							<label>OCN</label>
@@ -455,7 +455,8 @@
 				});
 
 				function triggerLevel1()
-				{
+				{	
+					console.log($('input[name=roleSelection]:checked').val())
 					$('.selectpicker').removeClass('open');
 					/* Act on the event */
 					if($("#txtFrom").val().length > 0 && $("#txtTo").val().length > 0)
