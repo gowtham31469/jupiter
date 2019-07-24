@@ -31,8 +31,8 @@ class ActionTableSeeder extends Seeder
             // ['type'=>'Invoice','action' =>'All'],
             ['type'=>'Invoice','action' =>'Within State'],
             ['type'=>'Invoice','action' =>'Inter State'],
-            ['type'=>'Invoice','action' =>'GST'],
-            ['type'=>'Invoice','action' =>'Job Works']);
+            // ['type'=>'Invoice','action' =>'GST'],
+            // ['type'=>'Invoice','action' =>'Job Works']);
             // ['type'=>'Invoice','action' =>'Export']);
 
          DB::table('actions')->insert($data);
