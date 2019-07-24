@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddBaseValueToInvoice extends Migration
+class BaseValueAddToInvoice extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddBaseValueToInvoice extends Migration
      */
     public function up()
     {
-         Schema::table('invoice', function (Blueprint $table) {
-            $table->integer('base_val')->nullable();
+        Schema::table('invoice', function (Blueprint $table) {
+            $table->integer('base_amnt')->nullable();
         }); 
     }
 
@@ -26,7 +26,7 @@ class AddBaseValueToInvoice extends Migration
     public function down()
     {
         Schema::table('invoice', function (Blueprint $table) {
-            $table->dropColumn('base_val');
-        });
+            $table->dropColumn('base_amnt');
+        }); 
     }
 }
