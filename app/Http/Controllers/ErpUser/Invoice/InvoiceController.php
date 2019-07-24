@@ -262,6 +262,7 @@ class InvoiceController extends Controller
                                 'place_of_supply'=>  $place_of_supply,
                                 'delivery_at'    =>  $delivery_at,
                                 'bill_to'        =>  $billTo_id,
+                                'base_val'       =>  $request->base_amt
                             ]);
                 
                 $invoice_id =  "INV-00".$invoiceData->id;

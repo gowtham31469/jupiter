@@ -416,6 +416,7 @@
               result[index] += parseFloat($(val).text());
             });
         }); 
+        // console.log("+++++"+result[12])
         return result[12];
     }
     /**
@@ -779,6 +780,7 @@
         var invoiceNo = $('#invoice-no').val();
         var invoiceDate = $('#invoice-date').val();
         var delivery_at = $('.preview-delivery-at').find('.d_address').attr('data-id');
+        var base = totalAmount();
         $.ajax({
             url: "/erp/save-invoice",
             type: 'POST',
@@ -796,7 +798,8 @@
                 invoiceDate:invoiceDate,
                 eCharges:eCharges,
                 delivery_at:delivery_at,
-                finalData:finalData
+                finalData:finalData,
+                base_amt : base
                 
             },
             tryCount: 0,
