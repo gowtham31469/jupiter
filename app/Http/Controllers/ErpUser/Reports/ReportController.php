@@ -476,7 +476,7 @@ public function setUpDatatable(Request $request)
                                                     [$request->date_start, $request->date_end])
                                     ->select('invoice.invoice_id as Inv.No','invoice.created_at as Date',
                                              'company_name as Customer','grand_total as Inv.Val','tax',
-                                             'invoice.place_of_supply','base_val as Base.Val')
+                                             'invoice.place_of_supply','base_amnt as Base.Val')
                                     ->distinct('invoice.id')
                                     ->get();
                 }
@@ -503,7 +503,7 @@ public function setUpDatatable(Request $request)
                                     ->whereBetween('invoice.created_at', 
                                                     [$request->date_start, $request->date_end])
                                     ->select('invoice.invoice_id as Inv.No','invoice.created_at as Date',
-                                             'company_name as Customer','grand_total as Inv.Val','tax','invoice.place_of_supply','base_val as Base.Val')
+                                             'company_name as Customer','grand_total as Inv.Val','tax','invoice.place_of_supply','base_amnt as Base.Val')
                                     ->distinct('invoice.id')
                                     ->get();
                     }
