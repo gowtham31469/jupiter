@@ -20,5 +20,6 @@ class History extends Model
                             'style',
                             'po',
                             'buyer_po',
-                            'ocn'];
+                            'ocn',
+                            'disp_mode_id'];
 } 
