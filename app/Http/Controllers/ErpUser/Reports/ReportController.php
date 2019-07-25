@@ -529,10 +529,13 @@ public function setUpDatatable(Request $request)
            
             default:
                     $statusId = $request->status;
-                    if($request->role)
+
+                    if($request->role == "JC Manager")
+                    {
                     if (($key = array_search(5, $statusId)) !== false) {
                     unset($statusId[$key]);
                     array_push($statusId, "2");
+                    }
                     }
 
                     $eventHistory = EventHistory::whereIn('history_id',$result)
