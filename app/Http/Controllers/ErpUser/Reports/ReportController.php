@@ -541,10 +541,11 @@ public function setUpDatatable(Request $request)
                     ->toArray();
 
                     $queryRes = History::whereIn('history.id',$eventHistory)
-                    ->leftJoin("erp_order_details",'erp_order_details.id', '=', 'history.id')
+                    ->leftJoin("erp_order_details",'erp_order_details.id', '=', 
+                                'history.erp_order_details_id')
                     ->leftJoin("customers",'customers.id', '=', 'history.customer_id')
                     ->leftJoin("buyers",'buyers.id', '=', 'history.buyer_id')
-                    ->select(['erp_order_details.order_date as Order.Dt', 'erp_order_details_id as ErpId',
+                    ->select(['erp_order_details.order_date as Order.Dt', 'erp_order_id as ErpId',
                         'company_name as Customer','material as Material','style as Style','history.po as P.O',
                         'ocn as OCN','reference as Reference','po_reapproved_date as Reapprove.Dt',
                         'erp_order_details.aw_date as A/w Date','erp_order_details.created_at as PO.dt',
