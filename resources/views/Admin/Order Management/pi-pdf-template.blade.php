@@ -38,23 +38,23 @@
             </tr>
             <tr>
                 <td width="150"><h3><strong>Billing Address</strong></h3></td>
-                <td width="172"></td>
-                <td width="140"><h3><strong>Shipping Address</strong></h3></td>
+                <td width="150"></td>
+                <td width="150"><h3><strong>Shipping Address</strong></h3></td>
             </tr>
             <tr>
                 <td width="150">{{$bank_details->company_name}}</td>
-                <td width="172"></td>
-                <td width="140">{{$bank_details->company_name}}</td>
+                <td width="150"></td>
+                <td width="150">{{$bank_details->company_name}}</td>
             </tr>
             <tr>
                 <td width="150">{{$bill_to->address}}</td>
-                <td width="172"></td>
-                <td width="140">{{$ship_to->address}}</td>
+                <td width="150"></td>
+                <td width="150">{{$ship_to->address}}</td>
             </tr>
             <tr>
                 <td width="150">GSTIN : {{$bank_details->gstin_number}}</td>
-                <td width="172"></td>
-                <td width="140"></td>
+                <td width="150"></td>
+                <td width="150"></td>
             </tr>
             <tr>
                 <td width="300"><span></span></td>
@@ -158,7 +158,7 @@
                 <td width="140"></td>
                 <td width="142"></td>
                 <td width="65"><strong>Total Quantity</strong></td>
-                <td width="80" style="text-align:center;"><strong>{{$totalqnty}}</strong></td>
+                <td width="90" style="text-align:center;"><strong>{{$totalqnty}}</strong></td>
             </tr>
         </table>
         <hr>
