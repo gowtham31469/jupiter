@@ -191,12 +191,12 @@ class ProformaInvoice
         $data['bill_to']        = DB::table('customer_bill_address')
                                   ->where('customer_bill_address.customer_id',$customer_details->id)
                                   ->where('customer_bill_address.is_billing_address',1)
-                                  ->select('address','country')
+                                  ->select('address','country', 'pincode')
                                   ->first();                 
         $data['ship_to']        = DB::table('customer_bill_address')
                                   ->where('customer_bill_address.customer_id',$customer_details->id)
                                   ->where('customer_bill_address.is_shipping_address',1)
-                                  ->select('address','country')
+                                  ->select('address','country', 'pincode')
                                   ->first();
         $qnty_id =  str_replace("_orders","_order_id",str_replace("tesco_","",$table_name));
         
