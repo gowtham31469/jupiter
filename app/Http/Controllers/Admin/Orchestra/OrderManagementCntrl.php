@@ -1685,7 +1685,7 @@ class OrderManagementCntrl extends Controller
             $class_obj = new ERPOrderStatusCheck();
             $erp_order_details = $class_obj->OrchestraERPStatus($data_array);
             
-            if($erp_order_details[0] != null)
+            if(sizeof($erp_order_details) > 0 && $erp_order_details[0] != null)
             {
                 if($erp_order_details{0}->status_name != 'Hold For JC Queue' &&  $erp_order_details{0}->status_name != 'Moved To ERP' )
                 {
@@ -1710,7 +1710,7 @@ class OrderManagementCntrl extends Controller
                         'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                         ]);
             if ($po_status == "PO Uploaded") {
-                /** @var array [Pass array of values to updateTescoErpOrders function] */
+                /** @var array [Pass array of values to updateOrchestraErpOrders function] */
                 $request_array = [];
                 $request_array['id'] = $template_id;
                 $request_array['tableName'] = $table_name; 
@@ -1759,7 +1759,7 @@ class OrderManagementCntrl extends Controller
             $class_obj = new ERPOrderStatusCheck();
             $erp_order_details = $class_obj->OrchestraERPStatus($data_array);
 
-            if($erp_order_details[0] != null)
+            if(sizeof($erp_order_details) > 0 && $erp_order_details[0] != null)
             {
                 if($erp_order_details{0}->status_name != 'Hold For JC Queue' &&  $erp_order_details{0}->status_name != 'Moved To ERP' )
                 {
@@ -1784,7 +1784,7 @@ class OrderManagementCntrl extends Controller
 
                         ]);
             if ($po_status == "PO Uploaded") {
-                /** @var array [Pass array of values to updateTescoErpOrders function] */
+                /** @var array [Pass array of values to updateOrchestraErpOrders function] */
                 $request_array = [];
                 $request_array['id'] = $row_id;
                 $request_array['tableName'] = $table_name; 
@@ -1927,7 +1927,7 @@ class OrderManagementCntrl extends Controller
                             'pi_file' => $attatchment, 
                             'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                         ]);
-            /** @var array [Pass array of values to updateTescoErpOrders function] */
+            /** @var array [Pass array of values to updateOrchestraErpOrders function] */
             $erpOrders['tableName'] = $table_name;
             $erpOrders['id']        = $row_id;
             $erpOrders['buyer_id']  = $buyer_id;  
