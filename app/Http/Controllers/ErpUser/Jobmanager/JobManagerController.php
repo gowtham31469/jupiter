@@ -115,6 +115,7 @@ class JobManagerController extends Controller
 						                    ->join('tesco_template', 'tesco_template.item_id', 'erp_order_details.template_id')
 											->where('erp_order_details.template_id', '=', $valuess)
 											// ->where('erp_orders.status', '=', $erp_status_id)
+											->where('erp_order_details.deleted_at', null)
 											->where('erp_order_details.status', '=', $erp_status_id)
 											->where('erp_order_details.order_status_id', '=', $order_status_id)
 											->whereIn('erp_orders.buyer_id', $buyers)
@@ -171,6 +172,7 @@ class JobManagerController extends Controller
 									->where('erp_order_details.buyer_po_number',$buyer_no)
 									->where('erp_order_details.order_type',$order_type)
 									->where('erp_order_details.status','!=',4)
+									->where('erp_order_details.deleted_at', null)
 									->orderBy('erp_order_details.id', 'desc')
 									->select('*')
 									->get();
