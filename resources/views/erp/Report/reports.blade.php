@@ -136,19 +136,19 @@
 		.clrGrey{
 				color:grey;  
 				border: 1px solid lightgray;
-				right: 40%;
+				right: -34%;
 				top: 0;
 				padding: 3.5%;
 				margin-left: -19%;
 				position: absolute;
 			}
-		.clrGrey1{color:grey;  
+		/*.clrGrey1{color:grey;  
 				border: 1px solid lightgray;
 				right: -34%;
 				top: 0;
 				padding: 3.5%;
 				margin-left: -19%;
-				position: absolute;}
+				position: absolute;}*/
 		.paddingSmaller{padding: 0.5%;}
 		.bordr1px{border: 1px solid;}
 		.togBtn{
@@ -293,7 +293,7 @@
 				<div class="col-md-2">
 					<h4 class="text-center">
 						<a href="" id="moreOtions" class="clrGrey" >More options</a>
-						<a href="" id="gen_report" class="clrGrey1" >Generate Report</a>
+						{{-- <a href="" id="gen_report" class="clrGrey1" >Generate Report</a> --}}
 					</h4>
 				</div>
 				<div class="col-md-1" id="toggleBtn" data-icon="down">
@@ -425,7 +425,8 @@
 					});
 					$('.selectpicker').selectpicker('refresh');
 					$('.'+$(this).data('target')).addClass('open').removeClass('hidden')
-					$("#moreOtions").addClass('disabled_now')
+					$("#moreOtions").addClass('hidden')
+					$("#filter-panel").removeClass('collapse')
 				});
 
 				$(document).on('click', '#filter1', function(event) {
@@ -817,7 +818,8 @@
 
 					$("#filter-panel").removeClass('collapse in').addClass('collapse')
 					$("#reportTitle").html("Consolidated Report [ "+$('input[name=roleSelection]:checked').val()+" ]")
-					$("#moreOtions").removeClass('disabled_now')
+					// $("#moreOtions").removeClass('disabled_now')
+					$("#moreOtions").removeClass('hidden')
 					$('html,body').animate({
 						scrollTop: $(window).scrollTop() + 500
 					});
@@ -856,12 +858,12 @@
 					event.preventDefault();
 					/* Act on the event */
 
-					if($("#moreOtions").hasClass('disabled_now'))
-					{
-						$('.snackbar_span').html("Generate report again and try to customize.");
-						showSnackbar();
-					}
-					else{
+					// if($("#moreOtions").hasClass('disabled_now'))
+					// {
+					// 	$('.snackbar_span').html("Generate report again and try to customize.");
+					// 	showSnackbar();
+					// }
+					// else{
 					def_list="";
 					extra_list="";
 
@@ -880,7 +882,7 @@
 					$(".checklist2").html('')
 					$(".checklist2").html(def_list)
 					$("#optionsModal").modal();	
-					}
+					// }
 					
 				});
 
