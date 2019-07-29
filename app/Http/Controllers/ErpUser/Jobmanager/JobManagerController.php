@@ -106,21 +106,26 @@ class JobManagerController extends Controller
 			
 			foreach($new_orders as $key => $values)
 			{
+				$split_key = explode('-', $key);
+				$buyer_id = $split_key[0];
+				$buyer_name = strtolower(DB::table('buyers')->where('id', $buyer_id)->value('buyer_name'));
+				
 				foreach($values as $valuess)
 				{
 					$erp_order_details = Erp::join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
 											->join('customers', 'erp_orders.customer_id', 'customers.id')
 											->join('buyers', 'erp_orders.buyer_id', 'buyers.id')
 											->join('erp_status', 'erp_orders.status', 'erp_status.id')
-						                    ->join('tesco_template', 'tesco_template.item_id', 'erp_order_details.template_id')
+						                    ->join($buyer_name.'_template', $buyer_name.'_template.item_id', 'erp_order_details.template_id')
 											->where('erp_order_details.template_id', '=', $valuess)
 											// ->where('erp_orders.status', '=', $erp_status_id)
+											->where('erp_order_details.deleted_at', null)
 											->where('erp_order_details.status', '=', $erp_status_id)
 											->where('erp_order_details.order_status_id', '=', $order_status_id)
 											->whereIn('erp_orders.buyer_id', $buyers)
 											->orderBy('erp_order_details.erp_order_id', 'asc')
-											->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id','tesco_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at')
-											->select('erp_orders.*','erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name', 'buyers.id as buyer_id','tesco_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at')
+											->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id',$buyer_name.'_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at')
+											->select('erp_orders.*','erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name', 'buyers.id as buyer_id',$buyer_name.'_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at')
 											->get();
 					
 					if(count($erp_order_details) > 0)
@@ -171,6 +176,7 @@ class JobManagerController extends Controller
 									->where('erp_order_details.buyer_po_number',$buyer_no)
 									->where('erp_order_details.order_type',$order_type)
 									->where('erp_order_details.status','!=',4)
+									->where('erp_order_details.deleted_at', null)
 									->orderBy('erp_order_details.id', 'desc')
 									->select('*')
 									->get();
@@ -194,28 +200,27 @@ class JobManagerController extends Controller
 									->select($order_table.'.*','tesco_department.department','tesco_brand.brand','tesco_suppliers.supplier_name')
 									->get();
 			
-			$value->tpnd=$order_details_omp{0}->tpnd;
-			$value->itf_barcode=$order_details_omp{0}->itf_barcode;
-			$value->units_per_carton=$order_details_omp{0}->units_per_carton;
-			$value->cases_per_carton=$order_details_omp{0}->cases_per_carton;
-			$value->ean_barcode=$order_details_omp{0}->ean_barcode;
-			$value->size=$order_details_omp{0}->size;
-			$value->case_size=$order_details_omp{0}->case_size;
-			$value->orms_tpn=$order_details_omp{0}->orms_tpn;
-			
-			$value->zone=$order_omp{0}->zone;
-			$value->po_number=$order_omp{0}->po_number;
-			$value->uk_style_ref=$order_omp{0}->uk_style_ref;
-			$value->ce_style_ref=$order_omp{0}->ce_style_ref;
-			$value->season_code=$order_omp{0}->season_code;
-			$value->short_description=$order_omp{0}->short_description;
-			$value->eqos_site_code=$order_omp{0}->eqos_site_code;
-			$value->manufacture_date=$order_omp{0}->manufacture_date;
-			$value->department=$order_omp{0}->department;
-			$value->brand=$order_omp{0}->brand;
-			$value->supplier_name=$order_omp{0}->supplier_name;
-			$value->rfid_compliant=$order_omp{0}->rfid_compliant;
-			$value->tag_at_source=$order_omp{0}->tag_at_source;
+			$value->tpnd              = $order_details_omp{0}->tpnd;
+			$value->itf_barcode       = $order_details_omp{0}->itf_barcode;
+			$value->units_per_carton  = $order_details_omp{0}->units_per_carton;
+			$value->cases_per_carton  = $order_details_omp{0}->cases_per_carton;
+			$value->ean_barcode       = $order_details_omp{0}->ean_barcode;
+			$value->size              = $order_details_omp{0}->size;
+			$value->case_size         = $order_details_omp{0}->case_size;
+			$value->orms_tpn          = $order_details_omp{0}->orms_tpn;
+			$value->zone              = $order_omp{0}->zone;
+			$value->po_number         = $order_omp{0}->po_number;
+			$value->uk_style_ref      = $order_omp{0}->uk_style_ref;
+			$value->ce_style_ref      = $order_omp{0}->ce_style_ref;
+			$value->season_code       = $order_omp{0}->season_code;
+			$value->short_description = $order_omp{0}->short_description;
+			$value->eqos_site_code    = $order_omp{0}->eqos_site_code;
+			$value->manufacture_date  = $order_omp{0}->manufacture_date;
+			$value->department        = $order_omp{0}->department;
+			$value->brand             = $order_omp{0}->brand;
+			$value->supplier_name     = $order_omp{0}->supplier_name;
+			$value->rfid_compliant    = $order_omp{0}->rfid_compliant;
+			$value->tag_at_source     = $order_omp{0}->tag_at_source;
 			
 		}
 		
@@ -720,7 +725,7 @@ class JobManagerController extends Controller
 
 								}
 
-
+								// it will insert if erp_order_details_id i snot exists, otherwise it will update 
 								$history_id = History::updateOrCreate(['erp_order_details_id' => $data->id], [
 									'buyer_id'             => $buyer_id,
 									'template'             => $template,
@@ -736,6 +741,7 @@ class JobManagerController extends Controller
 									'ocn'                  => $ocn_number,
 									'created_at'           => $current_timestamp,
 									'updated_at'           => $current_timestamp,
+									'disp_mode_id'         => $disp_mode
 								]);
 
 								DB::table('event_history')
@@ -746,6 +752,7 @@ class JobManagerController extends Controller
 									'created_at'  => $current_timestamp,
 									'updated_at'  => $current_timestamp,
 								]);
+								
 							}
 					        
 						}

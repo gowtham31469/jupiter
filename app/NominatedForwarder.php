@@ -18,5 +18,5 @@ class NominatedForwarder extends Model
       *
       * @var array
       */
-      protected $fillable = [,'forwarder'];
+      protected $fillable = ['forwarder'];
 }

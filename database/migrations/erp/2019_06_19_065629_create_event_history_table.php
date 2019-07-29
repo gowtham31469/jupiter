@@ -19,11 +19,8 @@ class CreateEventHistoryTable extends Migration
             $table->foreign('history_id')->references('id')->on('history')->onDelete('cascade');
             $table->integer('action_id')->unsigned();
             $table->foreign('action_id')->references('id')->on('actions');
-
             $table->integer('created_by')->unsigned();
             $table->foreign('created_by')->references('id')->on('erpusers');
-
-            // $table->integer('created_by');
             $table->timestamps();
         });
     }

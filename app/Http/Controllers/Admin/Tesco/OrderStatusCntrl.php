@@ -143,7 +143,7 @@ class OrderStatusCntrl extends Controller
             $class_obj = new ERPOrderStatusCheck();
             $erp_order_details = $class_obj->ERPStatus($data_array);
             
-            if($erp_order_details[0] != null)
+            if(sizeof($erp_order_details) > 0 && $erp_order_details[0] != null)
             {
                 if($erp_order_details{0}->status_name != 'Hold For JC Queue' &&  $erp_order_details{0}->status_name != 'Moved To ERP' )
                 {
@@ -216,7 +216,7 @@ class OrderStatusCntrl extends Controller
             $class_obj = new ERPOrderStatusCheck();
             $erp_order_details = $class_obj->ERPStatus($data_array);
 
-            if($erp_order_details[0] != null)
+            if(sizeof($erp_order_details) > 0 && $erp_order_details[0] != null)
             {
                 if($erp_order_details{0}->status_name != 'Hold For JC Queue' &&  $erp_order_details{0}->status_name != 'Moved To ERP' )
                 {
@@ -965,7 +965,7 @@ class OrderStatusCntrl extends Controller
         }
         else
         {
-            if ($temp_data->order_flag == "newOrder" && $template_name != "THL3" && $template_name != "THL1") {
+            if ($temp_data->order_flag === "newOrder" && $template_name != "THL3" && $template_name != "THL1") {
                 $orderObj->updateTescoOrders($table_name, $temp_data, $request, $customer_id->customer_id, $created_by);
              } 
              DB::table($table_name)->where('id',$template_id)

@@ -34,7 +34,6 @@ class EditErpOrders
             $row_id		    = $data_array['id'];
             $erp_details_status	= $data_array['erp_details_status'];
 			$erp_order_id		 = $data_array['erp_order_id'];
-			$created_by     = $data_array['created_by']; 
             $qnty_table     = $table_name.'_quanty' ;
 			$qnty_id        =  str_replace("_orders","_order_id",str_replace("tesco_","",$table_name));
 			// Get Erp status table id for  status name.
@@ -65,7 +64,7 @@ class EditErpOrders
 			// update customer id in erp_orders table
             Erp::where('id',$erp_order_id)->update(['customer_id' => $orders->customer_id]);
 
-            $this->updateTescoOrderDetails($qnty_table, $order_details, $orders, $erp_order_id, $buyer_id, $erp_status_id, $order_status_id, $po_no, $created_by);
+            $this->updateTescoOrderDetails($qnty_table, $order_details, $orders, $erp_order_id, $buyer_id, $erp_status_id, $order_status_id, $po_no);
 
 			$result = response()->json(['error'=> false,'message' =>'success'],200);
 		}
@@ -88,7 +87,7 @@ class EditErpOrders
 	 * @return void
 	 * @author Praveen <praveen@wizroots.com>
 	 */
-	function updateTescoOrderDetails($qnty_table, $order_details, $orders, $erp_order_id, $buyer_id, $erp_status_id, $order_status_id, $customer_po_no, $created_by)
+	function updateTescoOrderDetails($qnty_table, $order_details, $orders, $erp_order_id, $buyer_id, $erp_status_id, $order_status_id, $customer_po_no)
 	{
 		if ($order_details)
 		{
@@ -124,6 +123,8 @@ class EditErpOrders
 						'created_at'            => $this->updated_at,
 						'updated_at'            => $this->updated_at,
 						'order_status_id'       => $order_status_id->id,
+						'order_date'            => $orders->order_created_at,
+						'aw_date'               => $orders->order_approved_at
 					]);
 				}	
 				
@@ -166,7 +167,6 @@ class EditErpOrders
 				->insert([
 					'history_id'  => $history_id,
 					'action_id'   => $action_id,
-					'created_by'  => $created_by,
 					'created_at'  => $this->updated_at,
 					'updated_at'  => $this->updated_at,
 				]);

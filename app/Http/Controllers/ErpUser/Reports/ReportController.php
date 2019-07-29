@@ -17,6 +17,7 @@ use App\InvoiceDetails;
 use App\InvExtraCharges;
 use App\Classes\Invoice;
 use App\InvoiceAddress;
+use App\TescoTaxCode;
 use DB;
 use Auth;
 class ReportController extends Controller
@@ -35,23 +36,13 @@ public function __construct()
 public function index()
 {
 
-  $objInv     = new Invoice();
-            // $inv_id      = $request->id;
-            // $ddmmyy="DD/MM/YYYY";
-            $inv_details = $objInv->getInvoiceDetails(62);
+    $tax=array_unique(TescoTaxCode::all()->pluck('tax')->toArray());
+    array_multisort($tax);
+    array_walk($tax, function(&$value, $key) { $value .= '% tax'; } );
 
-            // return $inv_details; 
-
-$invoice_details  = Invoices::join('customers','invoice.customer_id','customers.id')
-->join('buyers','invoice.buyer_id','buyers.id')
-// ->where('invoice_id',62)
-// ->select('invoice.invoice_id','erp_id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','po_no','invoice_file','invoice.id')
-->distinct('invoice.id')
-->get();
-
-// return $invoice_details;
-
-
+    // foreach ($tax as $key => $value) {
+    //     # code...
+    // }
     $allActions = array();
     $action_as_id = array();
     if(Auth::guard('erpuser')->user()->is_admin)
@@ -71,7 +62,6 @@ $invoice_details  = Invoices::join('customers','invoice.customer_id','customers.
         foreach ($roles as $key => $value) {
             switch ($value) 
             {
-
                 case 'PO MANAGER' :
                 array_push($allActions, 'PO Manager');
                 array_push($action_as_id, '_poMgr');
@@ -103,6 +93,8 @@ $invoice_details  = Invoices::join('customers','invoice.customer_id','customers.
     $jc = Action::where('type','JC Manager')->pluck('action','id')->toArray();
     $order = Action::where('type','Order')->pluck('action','id')->toArray();
     $invoice = Action::where('type','Invoice')->pluck('action','id')->toArray();
+    $invoice=$invoice+$tax;
+    // dd($invoice);
     $templates = array_unique(History::all()->sortBy('template')->pluck('template')->toArray());
     $seasons = array_unique(History::all()->sortBy('season')->pluck('season')->toArray());
     $countries = array_unique(History::all()->sortBy('country')->pluck('country')->toArray());
@@ -148,7 +140,7 @@ public function level2Filter(Request $request)
     return response()->json($result);
 }
 
-public function getHistory(Request $request)
+public function getTableFields(Request $request)
 {   
 
     $def_po1 = ["No","Order.Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference"];
@@ -187,18 +179,17 @@ public function getHistory(Request $request)
     $def_order6 = ["No","Order.Dt","ErpId","JC.No","Inv.No","Inv.Dt","Customer","Material","Style","P.O","OCN","Reference","Quantity"];
     $ext_order6 = ["A/w Date", "PO.dt","JC.Dt","Buyer","Season","Country","ByrPo","Reapprove.Dt","Disp.Mode","Awb","Reason","Status"];
 
-    $def_invoice1 =["No","Inv.No","Date","Customer","Ass.Val","CGST","SGST","Inv.Val"];
-    $ext_invoice1 = [];
+    $def_invoice1 =["No","Inv.No","Date","Customer","Base_Val","CGST","SGST","Inv.Val"];
+    $ext_invoice1 = ["IGST"];
 
-    $def_invoice2 =["No","Inv.No","Date","Customer","Ass.Val","IGST","Inv.Val"];
-    $ext_invoice2 = [];
+    $def_invoice2 =["No","Inv.No","Date","Customer","Base_Val","IGST","Inv.Val"];
+    $ext_invoice2 = ["CGST","SGST"];
 
-    $def_invoice3 =["No","Inv.No","Date","Customer","Ass.Val","CGST","SGST","IGST","Inv.Val"];
-    $ext_invoice3 = [];
+    // $def_invoice3 =["No","Inv.No","Date","Customer","Ass.Val","CGST","SGST","IGST","Inv.Val"];
+    // $ext_invoice3 = [];
 
-    $def_invoice4 =["No","Inv.No","Date","Customer","Ass.Val","CGST","SGST","IGST","Inv.Val"];
-    $ext_invoice4 = [];
-
+    // $def_invoice4 =["No","Inv.No","Date","Customer","Ass.Val","CGST","SGST","IGST","Inv.Val"];
+    // $ext_invoice4 = [];
 
     $defaultValues =[];
     $extraValues =[];
@@ -370,9 +361,9 @@ public function getHistory(Request $request)
         break;
 
         case 'Invoice':
-        foreach ($request->status as $key => $value) 
-        {
-            switch ($value) {
+        // foreach ($request->status) 
+        // {
+            switch ($request->status) {
                 case 14:
                 foreach ($def_invoice1 as $key => $value)
                 {
@@ -395,33 +386,35 @@ public function getHistory(Request $request)
                 }
                 break;
 
-                case 16:
-                foreach ($def_invoice3 as $key => $value)
-                {
-                    array_push($defaultValues,$value);
-                }
-                foreach ($ext_invoice3 as $key => $value) 
-                {
-                    array_push($extraValues,$value);
-                }
-                break;
+                // case 16:
+                // foreach ($def_invoice3 as $key => $value)
+                // {
+                //     array_push($defaultValues,$value);
+                // }
+                // foreach ($ext_invoice3 as $key => $value) 
+                // {
+                //     array_push($extraValues,$value);
+                // }
+                // break;
 
-                case 17:
-                foreach ($def_invoice4 as $key => $value)
-                {
-                    array_push($defaultValues,$value);
-                }
-                foreach ($ext_invoice4 as $key => $value) 
-                {
-                    array_push($extraValues,$value);
-                }
-                break;
+                // case 17:
+                // foreach ($def_invoice4 as $key => $value)
+                // {
+                //     array_push($defaultValues,$value);
+                // }
+                // foreach ($ext_invoice4 as $key => $value) 
+                // {
+                //     array_push($extraValues,$value);
+                // }
+                // break;
 
                 default:
-# code...
+                        
+                $defaultValues =["No","Inv.No","Date","Customer","Base_Val","CGST","SGST","IGST","Inv.Val"];
+                $extraValues = [];
                 break;
             }
-        }
+        // }
         break;
 
         default:
@@ -453,38 +446,55 @@ public function setUpDatatable(Request $request)
         ->pluck('id')
         ->toArray();
 
-       $statusId = $request->status;
-
-        if (($key = array_search(5, $statusId)) !== false) {
-         unset($statusId[$key]);
-         array_push($statusId, "2");
-        }
-
-       // dd($request->status,$statusId);
-        $eventHistory = EventHistory::whereIn('history_id',$result)
-        ->whereIn('action_id',$statusId)
-        ->pluck('history_id')
-        ->toArray();
+     
 
         switch ($request->role) {
             case 'Invoice':
+
+            $eventHistory = EventHistory::whereIn('history_id',$result)
+                    ->where('action_id',$request->status)
+                    ->pluck('history_id')
+                    ->toArray();
+
                 $invIds1 = [];
                 $invIds2 = [];
-                foreach ($request->status as $key => $value) {
-                    switch ($value) {
+                     
+
+                if($request->status < 14)
+                {  
+                    $tax_arr=array_unique(TescoTaxCode::all()->pluck('tax')->toArray());
+                    array_multisort($tax_arr);
+                    $tax = $tax_arr[$request->status];
+
+                    $queryRes   =InvoiceDetails::where('tax',$tax)
+                                    ->join('invoice','invoice.id','invoice_details.invoice_id')
+                                         // Invoices::whereIn('invoice.id',$invoiceIds)
+                                    ->join('customers','invoice.customer_id','customers.id')
+                                    // ->join('invoice_details','invoice_details.invoice_id','invoice.id')
+                                    ->join('buyers','invoice.buyer_id','buyers.id')
+                                    ->whereBetween('invoice.created_at', 
+                                                    [$request->date_start, $request->date_end])
+                                    ->select('invoice.invoice_id as Inv.No','invoice.created_at as Date',
+                                             'company_name as Customer','grand_total as Inv.Val','tax',
+                                             'invoice.place_of_supply','base_amnt as Base_Val')
+                                    ->distinct('invoice.id')
+                                    ->get();
+                }
+                else{
+                   
+                    switch ($request->status) {
                         case 14:
-                           $invIds1 = Invoices::where('place_of_supply',1)->pluck('id')->toArray();
+                           $invoiceIds = Invoices::where('place_of_supply',1)->pluck('id')->toArray();
                             break;
 
                         case 15:
-                           $invIds2= Invoices::where('place_of_supply',2)->pluck('id')->toArray();
+                           $invoiceIds= Invoices::where('place_of_supply',2)->pluck('id')->toArray();
                             break;
                         default:
                             # code...
                             break;
                     }
-                }               
-                $invoiceIds = array_merge($invIds1,$invIds2);   
+                
 
                   $queryRes   = Invoices::whereIn('invoice.id',$invoiceIds)
                                     ->join('customers','invoice.customer_id','customers.id')
@@ -493,46 +503,64 @@ public function setUpDatatable(Request $request)
                                     ->whereBetween('invoice.created_at', 
                                                     [$request->date_start, $request->date_end])
                                     ->select('invoice.invoice_id as Inv.No','invoice.created_at as Date',
-                                             'company_name as Customer','grand_total as Ass.Val',
-                                             'grand_total as Inv.Val','tax','invoice.place_of_supply')
+                                             'company_name as Customer','grand_total as Inv.Val','tax','invoice.place_of_supply','base_amnt as Base_Val')
                                     ->distinct('invoice.id')
                                     ->get();
-
+                    }
                     $queryRes->map(function ($queryRes,$key) {
                     $queryRes->No =$key+1;
-
                     if($queryRes->place_of_supply==1)
                     {
-                    $queryRes->CGST = $queryRes->tax/2;
-                    $queryRes->SGST = $queryRes->tax/2;
-                    $queryRes->IGST = 0;
+                    $queryRes->CGST = ($queryRes->tax/2)/100 * $queryRes->Base_Val;
+                    $queryRes->SGST = ($queryRes->tax/2)/100 * $queryRes->Base_Val;
+                    $queryRes->IGST = "-";
                     }
                     else{
-                    $queryRes->CGST = 0;
-                    $queryRes->SGST = 0;
-                    $queryRes->IGST = $queryRes->tax;
+                    $queryRes->CGST = "-";
+                    $queryRes->SGST = "-";
+                    $queryRes->IGST = ($queryRes->tax)/100 * $queryRes->Base_Val;
                     }
-
-                    $queryRes->No =$key+1;
                     });
+
+
+                    
+
                 break;
            
             default:
+                    $statusId = $request->status;
+
+                    if($request->role == "JC Manager")
+                    {
+                    if (($key = array_search(5, $statusId)) !== false) {
+                    unset($statusId[$key]);
+                    array_push($statusId, "2");
+                    }
+                    }
+
+                    $eventHistory = EventHistory::whereIn('history_id',$result)
+                    ->whereIn('action_id',$statusId)
+                    ->pluck('history_id')
+                    ->toArray();
+
                     $queryRes = History::whereIn('history.id',$eventHistory)
-                    ->leftJoin("erp_order_details",'erp_order_details.id', '=', 'history.id')
-                    ->leftJoin("customers",'customers.id', '=', 'history.buyer_id')
-                    ->select(['erp_order_details.created_at as Order.Dt', 'erp_order_details_id as ErpId',
+                    ->leftJoin("erp_order_details",'erp_order_details.id', '=', 
+                                'history.erp_order_details_id')
+                    ->leftJoin("customers",'customers.id', '=', 'history.customer_id')
+                    ->leftJoin("buyers",'buyers.id', '=', 'history.buyer_id')
+                    ->select(['erp_order_details.order_date as Order.Dt', 'erp_order_id as ErpId',
                         'company_name as Customer','material as Material','style as Style','history.po as P.O',
                         'ocn as OCN','reference as Reference','po_reapproved_date as Reapprove.Dt',
-                        'customer_id as A/w Date','po_reapproved_date as PO.dt','jc_number as JC.No',
-                        'jc_created_date as JC.Dt','invoice_number as Inv.No','invoice_created_date as Inv.Dt',
-                        'company_name as Buyer','season as Season','country as Country','buyer_po as ByrPo',
-                        'order_quantity as Quantity','company_id as Disp.Mode','company_id as Awb',
-                        'status as Status','reason as Reason'])
+                        'erp_order_details.aw_date as A/w Date','erp_order_details.created_at as PO.dt',
+                        'jc_number as JC.No','jc_created_date as JC.Dt','invoice_number as Inv.No',
+                        'invoice_created_date as Inv.Dt','buyer_name as Buyer','season as Season',
+                        'country as Country','buyer_po as ByrPo','order_quantity as Quantity',
+                        'company_id as Disp.Mode','status as Status','reason as Reason'])
                         ->get();
 
                     $queryRes->map(function ($queryRes,$key) {
                     $queryRes->No =$key+1;
+                    $queryRes->Awb ='-';
                     });
             break;
         }

@@ -5,6 +5,9 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.dataTables.min.css">
 
 <style type="text/css">
+	input:focus{
+	outline: none !important;
+	}
 	.card {
 	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 	transition: 0.3s;
@@ -133,12 +136,19 @@
 		.clrGrey{
 				color:grey;  
 				border: 1px solid lightgray;
-				right: -30%;
+				right: -34%;
 				top: 0;
 				padding: 3.5%;
 				margin-left: -19%;
 				position: absolute;
 			}
+		/*.clrGrey1{color:grey;  
+				border: 1px solid lightgray;
+				right: -34%;
+				top: 0;
+				padding: 3.5%;
+				margin-left: -19%;
+				position: absolute;}*/
 		.paddingSmaller{padding: 0.5%;}
 		.bordr1px{border: 1px solid;}
 		.togBtn{
@@ -153,192 +163,196 @@
 		.dataTables_wrapper.no-footer .dataTables_scrollBody {
 		border-bottom:1px solid #ddd !important; 
 		}
-
+		.dataTables_scrollBody thead tr
+		{visibility:collapse;}
 </style>
 
 
-	<div class="container-fluid setMarginTop4">
-		<h4 class="text-center">REPORT GENERATION</h4>
-			<div class="row card">
-				<div class="col-md-5">
-					<h5 id="dateLabel">Set the date interval</h5>
-					<table border="0" cellpadding="0" cellspacing="0">
-						<tr>
-							<td>
-								<input class="dateGap" type="text" id="txtFrom" placeholder="Start date" />
-							</td>
-							<td>
-								&emsp;TO&emsp;
-							</td>
-							<td>
-								<input class="dateGap" type="text" id="txtTo" placeholder="End date" />
-							</td>
-							<td>
-								&emsp;
-							</td>
-						</tr>
-					</table>
-				</div>
-				<div class="col-md-4">
-					<h5>Select one of the following </h5>
-					@foreach($allActions as $key=> $action)
-					<label><input type="radio" class="roleSelection" name="roleSelection" data-target="{{ $action_as_id[$key] }}" value="{{ $action  }}"> {{ $action }} &emsp;</label>
-					@endforeach
-				</div>
-				<div class="col-md-3">
-					<h5 class="select_Status hidden">Select status</h5>
+<div class="container-fluid setMarginTop4">
+	<h4 class="text-center">REPORT GENERATION</h4>
+	<div class="row card">
+		<div class="col-md-5">
+			<h5 id="dateLabel">Set the date interval</h5>
+			<table border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td>
+						<input class="dateGap" type="text" id="txtFrom" placeholder="Start date" />
+					</td>
+					<td>
+						&emsp;TO&emsp;
+					</td>
+					<td>
+						<input class="dateGap" type="text" id="txtTo" placeholder="End date" />
+					</td>
+					<td>
+						&emsp;
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="col-md-4">
+			<h5>Select one of the following </h5>
+			@foreach($allActions as $key=> $action)
+			<label><input type="radio" class="roleSelection" name="roleSelection" data-target="{{ $action_as_id[$key] }}" value="{{ $action  }}">&nbsp; {{ $action }} &emsp;</label>
+			@endforeach
+		</div>
+		<div class="col-md-3">
+			<h5 class="select_Status hidden">Select status</h5>
 
-					{!! Form::select('role_Status[]', $po,null,['class' => 'selectpicker all_status _poMgr hidden','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select status [ PO Mngr ]','id'=>'_poMgr']) !!}
+			{!! Form::select('role_Status[]', $po,null,['class' => 'selectpicker all_status _poMgr hidden','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Status [ PO Mngr ]','id'=>'_poMgr']) !!}
 
-					{!! Form::select('role_Status[]', $jc,null,['class' => 'selectpicker all_status _jcMgr hidden','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select status [ JC Mngr ]','id'=>'_jcMgr']) !!}
+			{!! Form::select('role_Status[]', $jc,null,['class' => 'selectpicker all_status _jcMgr hidden','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Status [ JC Mngr ]','id'=>'_jcMgr']) !!}
 
-					{!! Form::select('role_Status[]', $order,null,['class' => 'selectpicker all_status _order hidden','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select status [ Order ]','id'=>'_order']) !!}
+			{!! Form::select('role_Status[]', $order,null,['class' => 'selectpicker all_status _order hidden','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Status [ Order ]','id'=>'_order']) !!}
 
-					{!! Form::select('role_Status[]', $invoice,null,['class' => 'selectpicker all_status _invoice hidden','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select status [ Invoice ]','id'=>'_invoice']) !!}
-				</div>
-			</div>
+			{!! Form::select('role_Status[]', $invoice,null,['class' => 'selectpicker all_status _invoice hidden','required','data-size'=>"10",'data-actions-box'=>"true","title"=>'Select Status [ Invoice ]','id'=>'_invoice']) !!}
+		</div>
+	</div>
 
-			<div class="row setMarginTop2 filter-panel card" id="filter-panel">
-				<div class="col-md-12">
-					<div class="row paddingSmaller">
-						<div class="col-md-11">
-							<div class="row">
-								<div class="col-md-3">
-									<label>Buyer</label>
-									{!! Form::select('sel_1[]', $buyers,null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select buyer','id'=>'buyer']) !!}
-								</div>
-								<div class="col-md-3">
-									<label>Template</label>
-									{!! Form::select('sel_1[]',$templates,null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select template','id'=>'template']) !!}
-								</div>
-								<div class="col-md-3">
-									<label>Season</label>
-									{!! Form::select('sel_1[]',$seasons,null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select season','id'=>'season']) !!}
-								</div>
-								<div class="col-md-3">
-									<label>Country</label>
-									{!! Form::select('sel_1[]',$countries,null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select country','id'=>'country']) !!}
-								</div>
-							</div>
-						</div>
-						<div class="col-md-1"><button class="btn btn-default input-sm" id="filter1">OK</button></div>
-					</div>
-					<div class="row level2filter hidden paddingSmaller">
-						<div class="col-md-11">
-							<div class="row">
-								<div class="col-md-3">
-									<label>Customer</label>
-									<select id="customer" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select customer" multiple></select>
-								</div>
-								<div class="col-md-3">
-									<label>Material</label>
-									<select id="material" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select material" multiple></select>
-								</div>
-								<div class="col-md-3">
-									<label>Style</label>
-									<select id="style" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select style" multiple data-live-search="true"></select>
-								</div>
-								<div class="col-md-3">
-									<label>Mat-Sub</label>
-									<select id="mat_sub" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select mat-sub" multiple data-live-search="true"></select>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-1"><button class="btn btn-default input-sm" id="filter2">OK</button></div>
-					</div>
-					<div class="row level3filter hidden paddingSmaller">
-						<div class="col-md-11">
-							<div class="row">
-								<div class="col-md-3">
-									<label>Reference</label>
-									<select id="reference" class="selectpicker filterLevel3" data-actions-box="true" data-size="10" title="Select reference" multiple data-live-search="true"></select>
-								</div>
-								<div class="col-md-3">
-									<label>PO</label>
-									<select id="po" class="selectpicker filterLevel3" data-actions-box="true" data-size="10" title="Select PO" multiple data-live-search="true"></select>
-								</div>
-								<div class="col-md-3">
-									<label>Buyer PO</label>
-									<select id="buyer_po" class="selectpicker filterLevel3" data-actions-box="true" data-size="10" title="Select buyer PO" multiple data-live-search="true"></select>
-								</div>
-								<div class="col-md-3">
-									<label>OCN</label>
-									<select id="ocn" class="selectpicker filterLevel3" data-actions-box="true" data-size="10" title="Select OCN" multiple data-live-search="true"></select>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-1"><button class=" btn btn-primary btn-sm" id="filter3">Get Report</button></div>
-					</div>
-				</div>
-			</div>
-
-			<div class="row ReportSection hidden reportSec">
-			<hr>  
-				<div class="panel-heading">
+	<div class="row setMarginTop2 filter-panel card" id="filter-panel">
+		<div class="col-md-12">
+			<div class="row paddingSmaller">
+				<div class="col-md-11">
 					<div class="row">
-						<div class="col-md-9">
-							<h4 class="text-center" id="reportTitle">Consolidated Data</h4>
+						<div class="col-md-3">
+							<label>Buyer</label>
+							{!! Form::select('sel_1[]', $buyers,null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Buyer','id'=>'buyer']) !!}
 						</div>
-						<div class="col-md-2">
-							<h4 class="text-center">
-								<a href="" id="moreOtions" class="clrGrey">More options</a>
-							</h4>
+						<div class="col-md-3">
+							<label>Template</label>
+							{!! Form::select('sel_1[]',$templates,null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Template','id'=>'template']) !!}
 						</div>
-						<div class="col-md-1" id="toggleBtn" data-icon="down">
-							<i class="fa fa-angle-down togBtn" aria-hidden="true" data-toggle="collapse" data-target="#filter-panel" id="toggleFa">
-						</i>
+						<div class="col-md-3">
+							<label>Season</label>
+							{!! Form::select('sel_1[]',$seasons,null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Season','id'=>'season']) !!}
+						</div>
+						<div class="col-md-3">
+							<label>Country</label>
+							{!! Form::select('sel_1[]',$countries,null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Country','id'=>'country']) !!}
+						</div>
 					</div>
 				</div>
+				<div class="col-md-1"><button class="btn btn-default input-sm" id="filter1">OK</button></div>
 			</div>
+			<div class="row level2filter hidden paddingSmaller">
+				<div class="col-md-11">
+					<div class="row">
+						<div class="col-md-3">
+							<label>Customer</label>
+							<select id="customer" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select Customer" multiple></select>
+						</div>
+						<div class="col-md-3">
+							<label>Material</label>
+							<select id="material" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select Material" multiple></select>
+						</div>
+						<div class="col-md-3">
+							<label>Style</label>
+							<select id="style" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select Style" multiple data-live-search="true"></select>
+						</div>
+						<div class="col-md-3">
+							<label>Mat-Sub</label>
+							<select id="mat_sub" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select Mat-sub" multiple data-live-search="true"></select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-1"><button class="btn btn-default input-sm" id="filter2">OK</button></div>
+			</div>
+			<div class="row level3filter hidden paddingSmaller">
+				<div class="col-md-11">
+					<div class="row">
+						<div class="col-md-3">
+							<label>Reference</label>
+							<select id="reference" class="selectpicker filterLevel3" data-actions-box="true" data-size="10" title="Select Reference" multiple data-live-search="true"></select>
+						</div>
+						<div class="col-md-3">
+							<label>PO</label>
+							<select id="po" class="selectpicker filterLevel3" data-actions-box="true" data-size="10" title="Select PO" multiple data-live-search="true"></select>
+						</div>
+						<div class="col-md-3">
+							<label>Buyer PO</label>
+							<select id="buyer_po" class="selectpicker filterLevel3" data-actions-box="true" data-size="10" title="Select Buyer PO" multiple data-live-search="true"></select>
+						</div>
+						<div class="col-md-3">
+							<label>OCN</label>
+							<select id="ocn" class="selectpicker filterLevel3" data-actions-box="true" data-size="10" title="Select OCN" multiple data-live-search="true"></select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-1"><button class=" btn btn-primary btn-sm" id="filter3">Get Report</button></div>
+			</div>
+		</div>
+	</div>
 
+	<div class="row ReportSection hidden reportSec">
+		<hr>  
+		<div class="panel-heading">
 			<div class="row">
-				<div class="col-md-12">
-					<table class="table table-hover table-striped table-bordered dataTable no-footer" id="reportTable">
-						<thead>
-							<tr id="all_fields">
-								<th>S.No</th><th>Order.Dt</th><th>ErpId</th><th>Customer</th><th>Material</th><th>Style</th><th>PO</th><th>OCN</th><th>Reference</th><th>OCN</th><th>Reference</th><th>Reason</th><th>Reapprove.Dt</th>
-							</tr>
-						</thead>
-						<tbody id="all_data">
-						</tbody>
-					</table>
+				<div class="col-md-9">
+					<h4 class="text-center" id="reportTitle">Consolidated Data</h4>
+				</div>
+				<div class="col-md-2">
+					<h4 class="text-center">
+						<a href="" id="moreOtions" class="clrGrey" >More options</a>
+						{{-- <a href="" id="gen_report" class="clrGrey1" >Generate Report</a> --}}
+					</h4>
+				</div>
+				<div class="col-md-1" id="toggleBtn" data-icon="down">
+					<i class="fa fa-angle-down togBtn" aria-hidden="true" data-toggle="collapse" data-target="#filter-panel" id="toggleFa">
+					</i>
 				</div>
 			</div>
+		</div>
 
-			<div id="optionsModal" class="modal fade" role="dialog">
-				<div class="modal-dialog">
+		<div class="row">
+			<div class="col-md-12">
+				<table class="table table-hover table-striped table-bordered dataTable no-footer" id="reportTable">
+					<thead>
+						<tr id="all_fields">
+							<th>S.No</th><th>Order.Dt</th><th>ErpId</th><th>Customer</th><th>Material</th><th>Style</th><th>PO</th><th>OCN</th><th>Reference</th><th>OCN</th><th>Reference</th><th>Reason</th><th>Reapprove.Dt</th>
+						</tr>
+					</thead>
+					<tbody id="all_data">
+					</tbody>
+				</table>
+			</div>
+		</div>
 
-					<!-- Modal content-->
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title text-center">Drag & Drop To Add/Remove Fields From Table</h4>
-						</div>
-						<div class="modal-body">
-							<div class="row">
-								<div class="col-md-6">
-									<h4 class="modal-title text-center">Available Fields</h4>
-									<ul class="connected-sortable droppable-area2 checklist1">
-									</ul>
-								</div>
-								<div class="col-md-6">
-									<h4 class="modal-title text-center">Fields Currently Displayed</h4>
-									<ul class="connected-sortable droppable-area1 checklist2">
-									</ul>
-								</div>
+		<div id="optionsModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title text-center">Drag & Drop To Add/Remove Fields From Table</h4>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-6">
+								<h4 class="modal-title text-center">Available Fields</h4>
+								<ul class="connected-sortable droppable-area2 checklist1">
+								</ul>
+							</div>
+							<div class="col-md-6">
+								<h4 class="modal-title text-center">Fields Currently Displayed</h4>
+								<ul class="connected-sortable droppable-area1 checklist2">
+								</ul>
 							</div>
 						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn-primary" data-dismiss="modal" id="update_table">Update</button>
-							<button type="button" class="btn-default" data-dismiss="modal">Close</button>
-						</div>
 					</div>
-
+					<div class="modal-footer">
+						<button type="button" class="btn-primary" data-dismiss="modal" id="update_table">Update</button>
+						<button type="button" class="btn-default" data-dismiss="modal">Close</button>
+					</div>
 				</div>
+
 			</div>
+		</div>
 	</div>
 	{{-- Snackbar html code --}}
-<div id="snackbar"><span class="snackbar_span"></span></div>
+	<div id="snackbar">
+		<span class="snackbar_span"></span>
+</div>
 
 
 @section('jqueryIncludes')
@@ -352,7 +366,6 @@
 	<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
 	
 	<script type="text/javascript">
-
 			$(function () {
 				$("#txtFrom").datepicker({
 					numberOfMonths: 3,
@@ -409,11 +422,12 @@
 					$(".all_status").each(function(index, el) {
 						$(this).addClass('hidden')
 						$(this).val('')
-					});``
+					});
 					$('.selectpicker').selectpicker('refresh');
 					$('.'+$(this).data('target')).addClass('open').removeClass('hidden')
+					$("#moreOtions").addClass('hidden')
+					$("#filter-panel").removeClass('collapse')
 				});
-
 
 				$(document).on('click', '#filter1', function(event) {
 					event.preventDefault();
@@ -424,7 +438,8 @@
 					triggerLevel2()
 				});
 
-				$(document).on('click', '#filter3', function(event) {
+				$(document).on('click', '#filter3,#gen_report', function(event) {
+					event.preventDefault();
 					triggerLevel3()
 				});
 
@@ -451,7 +466,8 @@
 				});
 
 				function triggerLevel1()
-				{
+				{	
+					console.log($('input[name=roleSelection]:checked').val())
 					$('.selectpicker').removeClass('open');
 					/* Act on the event */
 					if($("#txtFrom").val().length > 0 && $("#txtTo").val().length > 0)
@@ -681,14 +697,13 @@
 							{
 								$.ajax({
 									type : 'get',
-									url : '/getHistory',
+									url : '/getTableFields',
 									data:{
 										'role' : $('input[name=roleSelection]:checked').val(),
 										'status' : $('#'+$('input[name=roleSelection]:checked').data('target')).val(),
 									},
 									success:function(data)
 									{	
-										console.log(data)
 										if(data.Default.length > 0)
 										{
 											create_table(data.Default,data.Extra)
@@ -716,6 +731,7 @@
 						showSnackbar();
 					}
 				}
+
 				function create_table(def,extra)
 				{ 
 					$("#reportTable").DataTable().destroy();
@@ -753,21 +769,23 @@
 					for (var i = 0; i < def.length ; i++)
 					{
 						heading+='<th>'+def[i]+'</th>'
-						
 						$("#all_fields").html(heading)
 						$(".ReportSection").removeClass('hidden')
 						allColoumns.push({
 							data: def[i]
 						});
 					}
+
 					var t = $('#reportTable').dataTable( {
 						processing: true,
 						serverSide: true,
-						sScrollX: '100%',	
+						// sScrollX: '100%',	
 						// order: [[ 5, "asc" ]],
+						"scrollX": true,
 						dom: 'lBfrtip',
 						// lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
-						buttons: ['copy', 'csv', 'excel', 'pdf'],
+						// buttons: ['copy', 'csv', 'excel', 'pdf'],
+						buttons: ['copy', 'csv','excel'],
 						fixedHeader: {
 							header: true,
 						},
@@ -800,13 +818,19 @@
 
 					$("#filter-panel").removeClass('collapse in').addClass('collapse')
 					$("#reportTitle").html("Consolidated Report [ "+$('input[name=roleSelection]:checked').val()+" ]")
+					// $("#moreOtions").removeClass('disabled_now')
+					$("#moreOtions").removeClass('hidden')
 					$('html,body').animate({
 						scrollTop: $(window).scrollTop() + 500
 					});
 				}
 
+				//The default and extra fields are updated and pushed to corresponding arrays
 				$(document).on('click', '#update_table', function(event) {
 					event.preventDefault();
+
+					if($("#reference").val().length > 0 && $("#po").val().length > 0 && $("#buyer_po").val().length > 0 && $("#ocn").val().length > 0 && $("#customer").val().length > 0 && $("#material").val().length > 0 && $("#style").val().length > 0 && $("#mat_sub").val().length > 0 && $("#buyer").val().length > 0 && $("#season").val().length > 0 && $("#template").val().length > 0 && $("#country").val().length > 0)
+					{
 					var listItems1 = $(".checklist1 li");
 					var listItems2 = $(".checklist2 li");
 					defaultFields=[]
@@ -822,11 +846,24 @@
 					arr1 = defaultFields.slice(); 
 					arr2 = extraFields.slice();
 					create_table(arr1,arr2)
+				}
+				else{
+					$('.snackbar_span').html("Please make sure all the values are selected.");
+					showSnackbar();
+				}
 				});
 
+				//logic to make the default and extra fields draggable
 				$(document).on('click', '#moreOtions', function(event) {
 					event.preventDefault();
 					/* Act on the event */
+
+					// if($("#moreOtions").hasClass('disabled_now'))
+					// {
+					// 	$('.snackbar_span').html("Generate report again and try to customize.");
+					// 	showSnackbar();
+					// }
+					// else{
 					def_list="";
 					extra_list="";
 
@@ -844,9 +881,12 @@
 					$(".checklist1").html(extra_list)
 					$(".checklist2").html('')
 					$(".checklist2").html(def_list)
-					$("#optionsModal").modal();
+					$("#optionsModal").modal();	
+					// }
+					
 				});
 
+				//logic to animate the expand and collapse icon
 				$(document).on('click', '#toggleBtn', function(event) {
 					event.preventDefault();
 					/* Act on the event */
@@ -860,8 +900,6 @@
 						$("#toggleFa").removeClass('fa fa-angle-down').addClass('fa fa-angle-up')
 						$(this).data('icon',"up")
 					}
-
-
 				});
 			});
 	</script>
