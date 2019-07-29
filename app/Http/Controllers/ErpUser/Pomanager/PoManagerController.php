@@ -390,92 +390,107 @@ class PoManagerController extends Controller
 			// Approve orders
 			if ($count == 0) {
 
-				// $data 		=   DB::table('erp_orders')->where('id', $erp_order_id)
-				// 	->update([
-				// 		'status' => 3,
-				// 		'partial_status' => 0
-				// 	]);
-
 				foreach ($orderlist as $value) {
 					$po_rejected_date = $value->po_rejected_date;
-					$price =  DB::table('price_taxation')->select('price_taxation.*')->where('customer_id', $value->customer_id)->where('buyer_id', $value->buyer_id)->where('template_id', $value->template_id)->get();
+					$price =  DB::table('price_taxation')->select('price_taxation.id')->where('customer_id', $value->customer_id)->where('buyer_id', $value->buyer_id)->where('template_id', $value->template_id)->get();
 
-					$price_range =  DB::table('price_range')->select('price_range.*')->where('price_taxation_id', $price{0}->id)->where('volume_from', '<=', $value->order_quantity)->where('volume_to', '>=', $value->order_quantity)->get();
-
-					// For first time approving, update po approved date .
-					// if approving a rejected order , then update reapproved date
-					// $query = ErpOrderDetails::where('id', $value->id)
-					// 		->whereNotIn('status', $erp_status_ids);
-
-					if($po_rejected_date === null || $po_rejected_date === 'null') {
-						$action_id  = DB::table('actions')->where('action', 'ilike', 'PO Manager Verified')->value('id');
-						// $query = $query->update([
-						// 			'rate' => $price_range{0}->price,
-						// 			'status' => 3,
-						// 			'reason' => $commenttext,
-						// 			'po_manager_approved_by' => $erp_user,
-						// 			'po_verified_date' => $this->current_date
-						// 		]);
+					if(sizeof($price) > 0) {
+						$price_range =  DB::table('price_range')->select('price_range.price')->where('price_taxation_id', $price{0}->id)->where('volume_from', '<=', $value->order_quantity)->where('volume_to', '>=', $value->order_quantity)->get();
 					} else {
-						$action_id  = DB::table('actions')->where('action', 'ilike', 'PO Manager Reapproved')->value('id');
-						// $query->update([
-						// 	'rate' => $price_range{0}->price,
-						// 	'status' => 3,
-						// 	'reason' => $commenttext,
-						// 	'po_manager_approved_by' => $erp_user,
-						// 	'po_reapproved_date' => $this->current_date
-						// ]);
+                        return response()->json(['error' => true, 'message' => 'Price Details Are Missing'], 422);
 					}
 
-					// insert  into history table with action id
-					$res = $this->insertHistoryData($value, $action_id, $erp_user);	
-					dd($res);
+					if(sizeof($price_range) > 0) {
+						// For first time approving, update po approved date .
+						// if approving a rejected order , then update reapproved date
+						$query = ErpOrderDetails::where('id', $value->id)
+						->whereNotIn('status', $erp_status_ids);
+
+						if($po_rejected_date === null || $po_rejected_date === 'null') {
+							$action_id  = DB::table('actions')->where('action', 'ilike', 'PO Manager Verified')->value('id');
+							$query = $query->update([
+										'rate' => $price_range{0}->price,
+										'status' => 3,
+										'reason' => $commenttext,
+										'po_manager_approved_by' => $erp_user,
+										'po_verified_date' => $this->current_date
+									]);
+						} else {
+							$action_id  = DB::table('actions')->where('action', 'ilike', 'PO Manager Reapproved')->value('id');
+							$query->update([
+								'rate' => $price_range{0}->price,
+								'status' => 3,
+								'reason' => $commenttext,
+								'po_manager_approved_by' => $erp_user,
+								'po_reapproved_date' => $this->current_date
+							]);
+						}
+
+						// insert  into history table with action id
+						$res = $this->insertHistoryData($value, $action_id, $erp_user);
+					} else {
+                        return response()->json(['error' => true, 'message' => 'Price Details Are Missing'], 422);
+					}
 				}
+				
+				$data 		=   DB::table('erp_orders')->where('id', $erp_order_id)
+					->update([
+						'status' => 3,
+						'partial_status' => 0
+					]);
 				$result      = response()->json(['error' => false, 'message' => 'success', 'status' => true], 200);
 
 			} else if ($count_j == $count) {
-				// approve partial orders
-				// $data 		=   DB::table('erp_orders')->where('id', $erp_order_id)
-				// 	->update([
-				// 		'status' => 3,
-				// 		'partial_status' => 1
-				// 	]);
 
 				foreach ($orderlist as $value) {
 					$po_rejected_date = $value->po_rejected_date;
-					$price =  DB::table('price_taxation')->select('price_taxation.*')->where('customer_id', $value->customer_id)->where('buyer_id', $value->buyer_id)->where('template_id', $value->template_id)->get();
+					$price =  DB::table('price_taxation')->select('price_taxation.id')->where('customer_id', $value->customer_id)->where('buyer_id', $value->buyer_id)->where('template_id', $value->template_id)->get();
 
-					$price_range =  DB::table('price_range')->select('price_range.*')->where('price_taxation_id', $price{0}->id)->where('volume_from', '<=', $value->order_quantity)->where('volume_to', '>=', $value->order_quantity)->get();
-
-					// For first time approving, update po approved date .
-					// if approving a rejected order , then update reapproved date
-					// $query = ErpOrderDetails::where('id', $value->id)
-					// 		->whereNotIn('status', $erp_status_ids);
-
-					if($po_rejected_date === null || $po_rejected_date === 'null') {
-						$action_id  = DB::table('actions')->where('action', 'ilike', 'PO Manager Verified')->value('id');
-						// $query = $query->update([
-						// 			'rate' => $price_range{0}->price,
-						// 			'status' => 3,
-						// 			'reason' => $commenttext,
-						// 			'po_manager_approved_by' => $erp_user,
-						// 			'po_verified_date' => $this->current_date
-						// 		]);
+					if(sizeof($price) > 0) {
+						$price_range =  DB::table('price_range')->select('price_range.price')->where('price_taxation_id', $price{0}->id)->where('volume_from', '<=', $value->order_quantity)->where('volume_to', '>=', $value->order_quantity)->get();
 					} else {
-						$action_id  = DB::table('actions')->where('action', 'ilike', 'PO Manager Reapproved')->value('id');
-						// $query->update([
-						// 	'rate' => $price_range{0}->price,
-						// 	'status' => 3,
-						// 	'reason' => $commenttext,
-						// 	'po_manager_approved_by' => $erp_user,
-						// 	'po_reapproved_date' => $this->current_date
-						// ]);
+                        return response()->json(['error' => true, 'message' => 'Price Details Are Missing'], 422);
 					}
 
-					// insert  into history table with action id
-					$res = $this->insertHistoryData($value, $action_id, $erp_user);
-					dd($res);
+					if(sizeof($price_range) > 0) {
+						// For first time approving, update po approved date .
+						// if approving a rejected order , then update reapproved date
+						$query = ErpOrderDetails::where('id', $value->id)
+						->whereNotIn('status', $erp_status_ids);
+
+						if($po_rejected_date === null || $po_rejected_date === 'null') {
+							$action_id  = DB::table('actions')->where('action', 'ilike', 'PO Manager Verified')->value('id');
+							$query = $query->update([
+										'rate' => $price_range{0}->price,
+										'status' => 3,
+										'reason' => $commenttext,
+										'po_manager_approved_by' => $erp_user,
+										'po_verified_date' => $this->current_date
+									]);
+						} else {
+							$action_id  = DB::table('actions')->where('action', 'ilike', 'PO Manager Reapproved')->value('id');
+							$query->update([
+								'rate' => $price_range{0}->price,
+								'status' => 3,
+								'reason' => $commenttext,
+								'po_manager_approved_by' => $erp_user,
+								'po_reapproved_date' => $this->current_date
+							]);
+						}
+
+						// insert  into history table with action id
+						$res = $this->insertHistoryData($value, $action_id, $erp_user);
+					} else {
+                        return response()->json(['error' => true, 'message' => 'Price Details Are Missing'], 422);
+					}
 				}
+
+				// approve partial orders
+				$data 	=   DB::table('erp_orders')->where('id', $erp_order_id)
+								->update([
+									'status' => 3,
+									'partial_status' => 1
+								]);
 
 				$to_email =  DB::table('tesco_error_report_emails')->select('*')->where('id', 1)->first();
 
@@ -578,30 +593,33 @@ class PoManagerController extends Controller
 					}
 					
 					$order_details  = DB::table($qnty_table)->select($main_table.'.*')->where($qnty_table.'.id', $qty_row_id)->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id.'_id')
-									->get();
-									return $order_details;
-					$season         = $order_details->season_code;
-					$country        = "";
+									->first();
 					
 					// template front and back id storing in orchestra_hang_tag_orders table
 					$template_id = $main_table === 'orchestra_hang_tag_orders'?$order_details->template_front_id:$order_details->template_id;
 
-					
-					$template_level = DB::table('tesco_item_master as t1')
-										->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
-										->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
-										->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
-										->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
-										->where('t1.id', $template_id)
+					$template_data = DB::table('orchestra_item_master')
+									  ->join('orchestra_template', 'orchestra_template.item_id', 'orchestra_item_master.id')
+									  ->where('orchestra_item_master.id', $template_id)
+									  ->select('orchestra_template.hierarchy_id', 'orchestra_item_master.item_name')->first();
+					$hierarchy_id = $template_data->hierarchy_id;
+
+					$template_level = DB::table('orchestra_item_master as t1')
+										->select('t1.item_name as material_sub', 't3.item_name as material')
+										->leftJoin('orchestra_item_master as t2', 't2.id','=','t1.parent_id')
+										->leftJoin('orchestra_item_master as t3', 't3.id','=','t2.parent_id')
+										->where('t1.id', $hierarchy_id)
 										->first();
 					
 					$material_name  = $template_level->material;
 					$material_sub   = $template_level->material_sub;
-					$material_ref   = $template_level->ref;
-					$customer_po    = $order_details->purchase_order_no;
-					$buyer_po       = $order_details->po_number;
-					$style          = $order_details->$style_zone;
-					$ocn_number     = $order_details->ocn_number;
+					$material_ref   = $template_data->item_name;
+					$customer_po    = $order_details->po_number;
+					$buyer_po       = $order_details->po;
+					$style          = $order_details->uvc;
+					$ocn_number     = null;
+					$season         = $order_details->season_code;
+					$country        = null;
 
 				} else {
 
@@ -626,7 +644,7 @@ class PoManagerController extends Controller
 					'created_at'           => $this->current_date,
 					'updated_at'           => $this->current_date,
 				]);
-
+dd($history_id);
 				DB::table('event_history')
 				->insert([
 					'history_id'  => $history_id->id,
