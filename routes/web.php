@@ -15,6 +15,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+Route::get('delete_now', function () {
+    App\OrchestraItemMaster::truncate();
+});
+
 // Auth::routes();
 
 $this->get('admin', 'Auth\LoginController@showLoginForm')->name('login');
