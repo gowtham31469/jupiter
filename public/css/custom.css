@@ -622,7 +622,7 @@ span.navbar-brand.logo:hover {
 }
 
 .left-panelorc.active {
-    margin-right: 25%;
+    margin-right: 33%;
     transition: 0.5s ease all;
 }
 
@@ -636,7 +636,7 @@ span.navbar-brand.logo:hover {
     z-index: 12;
     transition: 0.5s ease all;
     padding: 10px;
-    margin-right: -25%;
+    margin-right: -35%;
 }
 
 .right-panel.active {

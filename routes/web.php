@@ -326,8 +326,10 @@ Route::post('admin/orchestra/reject-orchestra-pi', 'Admin\Orchestra\OrderManagem
 Route::post('admin/orchestra/download-orchestra-pi', 'Admin\Orchestra\OrderManagementCntrl@downloadOrchestraPI');
 
 Route::post('admin/orchestra/order-management/set_hang_tag', 'Admin\Orchestra\OrderManagementCntrl@setHangTag');
+Route::post('admin/orchestra/order-management/set_heat_transfer', 'Admin\Orchestra\OrderManagementCntrl@setHeatTransfer');
 Route::post('admin/orchestra/order-management/set_special_tag', 'Admin\Orchestra\OrderManagementCntrl@setSpecialTag');
 Route::post('admin/orchestra/order-management/set_main_label', 'Admin\Orchestra\OrderManagementCntrl@setMainLabel');
+Route::post('admin/orchestra/order-management/set_size_label', 'Admin\Orchestra\OrderManagementCntrl@setSizeLabel');
 Route::post('admin/orchestra/order-management/remove_main_label', 'Admin\Orchestra\OrderManagementCntrl@removeMainLabel');
 Route::post('admin/orchestra/order-management/remove_wash_label', 'Admin\Orchestra\OrderManagementCntrl@removeWashLabel');
 Route::post('admin/orchestra/order-management/set_wash_label', 'Admin\Orchestra\OrderManagementCntrl@setWashLabel');
@@ -550,6 +552,7 @@ Route::post('admin/tesco/order-management/show-tesco-pi', 'Admin\Tesco\OrderStat
 Route::post('admin/tesco/approve-tesco-pi', 'Admin\Tesco\OrderStatusCntrl@approveTescoPI');
 Route::post('admin/tesco/reject-tesco-pi', 'Admin\Tesco\OrderStatusCntrl@rejectTescoPI');
 Route::post('admin/tesco/edit-artwork', 'Admin\Tesco\OrderStatusCntrl@editArtwork');
+Route::post('admin/orchestra/edit-artwork', 'Admin\Orchestra\OrderManagementCntrl@editArtwork');
 Route::get('admin/tesco/get-artworks', 'Admin\Tesco\OrderStatusCntrl@getArtwork');
 Route::post('admin/tesco/update-po', 'Admin\Tesco\OrderStatusCntrl@updateArtworkPO');
 Route::post('admin/tesco/copy-po', 'Admin\Tesco\OrderStatusCntrl@copyArtworkPO');

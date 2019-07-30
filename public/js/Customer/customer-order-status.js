@@ -3834,6 +3834,16 @@ function orchestraStatusTable(data, path) {
         if (key != "tableName" && key != "tableID" && key != "po_file" && key != "pi_required" && key != "po_required" && key != "uvc" && key != "template_id" && key != "customer_id" && key != "order_flag" && key != "delivery_day_count" && key != "is_order_count_empty") {
             if (key == "TemplateName") {
                 th += "<th style='text-align: center;'>Reference No</th>";
+            }else if (key == "BuyerPONo") {
+                th += "<th style='text-align: center;'>BuyerPO No</th>";
+            }else if (key == "ArtworkType") {
+                th += "<th style='text-align: center;'>Artwork Type</th>";
+            }else if (key == "SupplierName") {
+                th += "<th style='text-align: center;'>Supplier Name</th>";
+            } else if (key == "OrderDate") {
+                th += "<th style='text-align: center;'>Order Date</th>";
+            } else if (key == "DeliveryDate") {
+                th += "<th style='text-align: center;'>Delivery Date</th>";
             } else {
                 th += "<th style='text-align: center;'>" + key + "</th>";
             }
