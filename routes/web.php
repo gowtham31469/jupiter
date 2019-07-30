@@ -15,6 +15,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+Route::get('delete_now', function () {
+    App\OrchestraItemMaster::truncate();
+});
+
 // Auth::routes();
 
 $this->get('admin', 'Auth\LoginController@showLoginForm')->name('login');
@@ -324,6 +329,7 @@ Route::post('admin/orchestra/order-management/set_hang_tag', 'Admin\Orchestra\Or
 Route::post('admin/orchestra/order-management/set_heat_transfer', 'Admin\Orchestra\OrderManagementCntrl@setHeatTransfer');
 Route::post('admin/orchestra/order-management/set_special_tag', 'Admin\Orchestra\OrderManagementCntrl@setSpecialTag');
 Route::post('admin/orchestra/order-management/set_main_label', 'Admin\Orchestra\OrderManagementCntrl@setMainLabel');
+Route::post('admin/orchestra/order-management/set_size_label', 'Admin\Orchestra\OrderManagementCntrl@setSizeLabel');
 Route::post('admin/orchestra/order-management/remove_main_label', 'Admin\Orchestra\OrderManagementCntrl@removeMainLabel');
 Route::post('admin/orchestra/order-management/remove_wash_label', 'Admin\Orchestra\OrderManagementCntrl@removeWashLabel');
 Route::post('admin/orchestra/order-management/set_wash_label', 'Admin\Orchestra\OrderManagementCntrl@setWashLabel');

@@ -2738,40 +2738,8 @@ function label_order_details(uvc) {
             hangtagmodal(data);
             specialtags(data);
             heatTransfer(data);
-            if (data.orchestra_main_label_orders.length > 0) {
-                $.each(data.orchestra_main_label_orders, function (index, value) {
-                    mainlabel += 1;
-                    if (index == 0) {
-                        mainlabels(data, "");
-                    } else {
-                        if(data.orchestra_main_label_orders != "")
-                        {
-                            var str=data.orchestra_main_label_orders[index].status;
-                            $main_status=str.replace(/ /g, "");
-                            $main_status_text=str;
-                        }
-                        else
-                        {
-                            $main_status="";
-                        }
-                        $('#add_modal').append('<div class="col-md-4" ><div class="card add-card main-card'+index+'" style="height: 280px;" data-toggle="modal" data-target=".main_label_' + index + '" data-backdrop="static" data-keyboard="false"> <span class="label label-'+$main_status+' label-status">'+$main_status_text+'</span>   <div class="card-title"><p class="pull-right delete-main' + index + '"  style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickmemain' + index + '>Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p> <h5><b class="mainlabelname' + index + '">' + value.template_name + " - Main & Size Label" + '</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div></div>       </div></div>')
-                        $('.delete-main' + index).on('click', function (e) {
-                            deletemain.push(value.id)
-                            localStorage.setItem("deletemain", JSON.stringify(deletemain));
-                            removeMainLabel(value.id)
-                            $('#mainlabelsform' + index).remove()
-                            mainlabel -= 1;
-                            $(this).parent().parent().parent().remove();
-
-
-                        });
-                        mainlabels(data, index);
-                    }
-                });
-                mainlabel -= 1;
-            } else {
-                mainlabels(data, "");
-            }
+            mainlabels(data);
+            sizelabels(data);
             if (data.orchestra_wash_care_label_orders.length > 0) {
                 $.each(data.orchestra_wash_care_label_orders, function (index, value) {
 
@@ -3794,225 +3762,159 @@ function deleteComposition(obj, dataid) {
  * @return Main Label View
  */
 
-function mainlabels(data, dataid) {
+function mainlabels(data) {
 
     var tr = "";
     $qu = 0;
-    var ttots = 0;
-	var main_count=0;
     if (data.orchestra_main_label_orders != "") {
-        if (dataid != "") {
-            dataid1 = dataid;
-        } else {
-            dataid1 = 0;
-        }
-        if (data.orchestra_main_label_orders.length > dataid1) {
-           
-            $template_id = data.orchestra_main_label_orders[dataid1].template_id;
-            $exist_id = data.orchestra_main_label_orders[dataid1].id;
-          //  $main_count=data.orchestra_main_label_orders[dataid1].final_qty;
-            $main_name=data.orchestra_main_label_orders[dataid1].template_name;
-            
-            var str=data.orchestra_main_label_orders[dataid1].status;
-            $main_status=str.replace(/ /g, "");
-            $main_status_text=data.orchestra_main_label_orders[dataid1].status;
-			$main_flag=data.orchestra_main_label_orders[dataid1].total_flag;
-            
-        } else {
-            
-            $template_id = "";
-            $exist_id = "";
-           // $main_count="";
-            $main_status="";
-            $main_status_text="";
-            $main_name="";
-			$main_flag="";
-        }
 
-    } else {
+      
+        $template_id = data.orchestra_main_label_orders[0].template_id;
+        $exist_id = data.orchestra_main_label_orders[0].id;
+        $main_label_count=data.orchestra_main_label_orders_qty[0].quantity;
         
+        var str=data.orchestra_main_label_orders[0].status;
+        $status=str.replace(/ /g, "");
+        $status_text=str;
+        $save_button_class="hidden";
+    } else {
+     
         $template_id = "";
         $exist_id = "";
-        //$main_count="";
-        $main_status="";
-        $main_status_text="";
-        $main_name="";
-		$main_flag="";
+        $main_label_count="";
+        $status="";
+        $status_text="";
+        $save_button_class="";
     }
-    $.each(data.order_details, function (index, value) {
-        if (data.orchestra_main_label_orders != "") {
-            if (dataid != "") {
-                dataid1 = dataid;
-            } else {
-                dataid1 = 0;
-            }
-            if (data.orchestra_main_label_orders.length > dataid1) {
-                $main_label_count = data.orchestra_main_label_orders[dataid1]['qty'][$qu].quantity;
-				if(data.orchestra_main_label_orders[dataid1]['qty'][$qu].main_qty != null)
-				{
-					$main_label_counts = data.orchestra_main_label_orders[dataid1]['qty'][$qu].main_qty;
-				}
-				else
-				{
-					$main_label_counts = "";
-				}
-				
-            } else {
-                $main_label_count = "";
-				$main_label_counts = "";
-            }
-
-        } else {
-            $main_label_count = "";
-			$main_label_counts = "";
-        }
-        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)"  type="text"  class="form-control input-sm tot_qty_table" value="' + $main_label_count + '" required placeholder="Size Count"><div class="help-block with-errors"></div></div></td><td class="mainLbl input"><div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" style="height: 20px;margin-bottom: -13px;" type="text" class="form-control main_label_count input-sm" value="'+$main_label_counts+'" disabled placeholder="Main Count"><div class="help-block with-errors"></div></div></tr>';
-        ttots += parseInt($main_label_count);
-		main_count += parseInt($main_label_counts);
-        $qu++;
-    });
-    if(isNaN(ttots))
-        {
-            ttots=0;
-        }
-    else
-        {
-            ttots=ttots;
-        }
-	 if(isNaN(main_count))
-        {
-            main_count="";
-        }
-    else
-        {
-            main_count=main_count;
-        }
+    
     var option = "<option value=''>Select Option</option>";
     $.each(data.orchestra_template_front, function (index, value) {
         option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
     });
-
-    $('.top-content').append('<form id="mainlabelsform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><div class="left-panelorc col-md-9"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Main & Size Label Name</label><input type="text" class="form-control input-sm" required="" placeholder="Main & Size Label Name" value="' + $main_name + '" id="main_size_name' + dataid + '"><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="main_template_error' + dataid + '" class="hidden" style="color:red">Please Select the Template</label>  <div><input type="text" id="tree3' + dataid + '_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree3' + dataid + '" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$main_status+'" style="position: absolute;top: 30px;left: 15px;">'+$main_status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for <span class="mainlabelnameqty' + dataid + '">Size Labels</span></h4> <hr>  <div class="radio"><label><input type="radio" name="optionsRadios" id="optionsRadios1" value="total" checked> Total Only</label><label><input type="radio" name="optionsRadios" id="optionsRadios1" value="size">Sizewise</label> </div><table class="table table-striped table-hover table-condensed table-responsive qty-table-modal"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Qty.</th><th>Sizelabel Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" onkeypress="return checkNumbersOnly(event)"  style="height: 20px;width:60px; float: left; margin-left: 5px;"></th> <th class="text-center mainLbl" colspan="2">Mainlabel Qty.<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage_main" onkeypress="return checkNumbersOnly(event)"  style="height: 20px;width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="2">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td><td class="mainLbl mainlblfinalqtytext"><span><div class="form-group has-feedback has-success"><input type="text" style="height: 20px;"  class="form-control input-sm mainlblfinalqty main_label_qty' + dataid + '" required min=1 placeholder="Final Qty" value="'+main_count+'"><div class="help-block with-errors"></div></div></span></td></tr></tbody></table><button class="btn btn-primary pull-right input-sm left" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="close">Close</button> </div> </div>  <div class="backdrop"></div></form>');
+    $('.top-content').append('<form id="main_labelform" data-toggle= "validator"><div class="left-panelorc col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="main_label_template_error" style="color:red" class="hidden">Please select the template</label>  <div><input type="text" id="treeml_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="treeml" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-4"> <div class="div-max"> <h4>Quantity Info for Main Label</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Final order qty</label><input class="form-control input-sm main_label_qty" value="' + $main_label_count + '" onkeypress="return checkorcMOQ(this)" placeholder="Main Label Count" type="number" required><div class="help-block with-errors"></div></div><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_main_label_button" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="main_labelclose">Close</button>  </div></div> </div>  <div class="backdrop"></div></form>');
 	//$('.left').removeClass('disabled')
-    $('#mainlabelsform' + dataid + ' .tot_qty_table').keyup(function () {
+    $('#main_labelform .tot_qty_table').keyup(function () {
         var tot_qty_table_carton_final = 0;
-        $('#mainlabelsform' + dataid + ' tbody tr').each(function (keys, vals) {
+        $('#main_labelform tbody tr').each(function (keys, vals) {
             if ($(this).find('.tot_qty_table').val() != undefined) {
                 tot_qty_table_carton_final += parseInt($(this).find('.tot_qty_table').val());
             }
         })
-        $('#mainlabelsform' + dataid + ' .tot_qty_table_fin').text(tot_qty_table_carton_final);
-		
-    });
-	
-	
-	 $('#mainlabelsform' + dataid + ' .main_label_count').keyup(function () {
-		
-        var tot_qty_table_carton_final = 0;
-        $('#mainlabelsform' + dataid + ' tbody tr').each(function (keys, vals) {
-            if ($(this).find('.main_label_count').val() != undefined) {
-                tot_qty_table_carton_final += parseInt($(this).find('.main_label_count').val());
-            }
-        })
-        $('#mainlabelsform' + dataid + ' .mainlblfinalqty').val(tot_qty_table_carton_final);
-		
+        $('#main_labelform .tot_qty_table_fin').text(tot_qty_table_carton_final);
     });
 
-    var date = new Date();
-    date.setDate(date.getDate() + 7);
-
-    var dateMsg = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
-	
-	   (function() {
-            'use strict'
-
-            if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
-                var msViewportStyle = document.createElement('style')
-                msViewportStyle.appendChild(
-                    document.createTextNode(
-                        '@-ms-viewport{width:auto!important}'
-                    )
-                )
-                document.head.appendChild(msViewportStyle)
-            }
-
-        }())
-	var sum1=0;
-	        $('.extra_percentage_main').keyup(function () {
-            if ($(this).val() != "") {
-                var per = $(this).val();
-                $(this).parent().parent().parent().parent().parent().find('.qty-table-modal tbody tr').each(function () {
-                    var sum = $(this).find('.sum').text();
-                    var per_qty = (parseInt(sum) / 100) * parseInt(per);
-                    var tot_qty = parseInt(sum) + parseInt(per_qty);
-					if(!isNaN(parseInt($(this).find('.sum').text())))
-					{
-						 sum1+=parseInt($(this).find('.sum').text());
-					}
-                    
-					
-					
-					 if($("input[value='size']").is(':checked')) 
-					 { 
-						 $(this).find('.main_label_count').val(tot_qty);
-					 }
-					 else
-					 {	
-						 $(this).find('.main_label_count').val(""); 
-					 }
-                })
-				$('.mainlblfinalqty').val(sum1);
-            } else {
-                $(this).parent().parent().parent().parent().parent().find('.qty-table-modal tbody tr').each(function () {
-                    $(this).find('.main_label_count').val("");
-                })
-            }
-
-        })
-	if($main_flag == "size")
-	{
-		$('.main_label_count').removeAttr('disabled');
-		$('.mainlblfinalqty').attr('disabled','disabled');
-		$("input[value='size']").attr('checked','checked')
-	}
-	
-	 		  $("input[value='size']").click(function() {
-                    $('.main_label_count').removeAttr('disabled');
-				   $('.main_label_count').attr('required','required');
-				   
-				    $('.mainlblfinalqty').attr('disabled','disabled');
-		 			$('.mainlblfinalqty').val('');
-				  	$('.extra_percentage_main').val('');
-              });
-              $("input[value='total']").click(function() {
-				  $('.main_label_count').attr('disabled','disabled');
-				  $('.main_label_count').removeAttr('required');
-				  $('.mainlblfinalqty').removeAttr('disabled');
-				  $('.main_label_count').val("");
-				  $('.extra_percentage_main').val('');
-              });
-   
-    $("#clickmemain" + dataid).click(function () {
-        $("#mainlabelsform" + dataid + " .backdrop").toggleClass('active');
-        $("#mainlabelsform" + dataid + " .right-panel").toggleClass('active');
-        $('#mainlabelsform' + dataid + ' .scalable').toggleClass('active');
-        $("#mainlabelsform" + dataid + " .left-panelorc").toggleClass('active');
+    $("#clickmemain_label").click(function () {
+        // $('.sample-artwork').html("")
+        $("#main_labelform .backdrop").toggleClass('active');
+        $("#main_labelform .right-panel").toggleClass('active');
+        $('#main_labelform .scalable').toggleClass('active');
+        $("#main_labelform .left-panelorc").toggleClass('active');
     })
 
-    $(".backdrop, #close").click(function () {
-        $("#mainlabelsform" + dataid + " .left-panelorc").removeClass('active');
-        $("#mainlabelsform" + dataid + " .right-panel").removeClass('active');
-        $("#mainlabelsform" + dataid + " .backdrop").removeClass('active');
-        $('#mainlabelsform' + dataid + ' .scalable').removeClass('active');
+    $(".backdrop, #main_labelclose").click(function () {
+        $("#main_labelform .left-panelorc").removeClass('active');
+        $("#main_labelform .right-panel").removeClass('active');
+        $("#main_labelform .backdrop").removeClass('active');
+        $('#main_labelform .scalable').removeClass('active');
     })
-    selectpicker()
-    treestructuremain(data.treeviewmain, "tree3" + dataid, $template_id);
-    $('#mainlabelsform' + dataid).validator().on('submit', function (e) {
+
+
+
+    treestructuremain_label(data.treeviewmain_label, "treeml", $template_id);
+
+    $('#main_labelform').validator().on('submit', function (e) {
         if (e.isDefaultPrevented()) {
 
         } else {
             e.preventDefault();
-            setMainLabelStatus(dataid)
+            setMainLabelStatus()
+        }
+    })
+}
+/**
+ * This Function is Sub Function of #label_order_details.
+ * To integrate Main Label Information
+ * @return Main Label View
+ */
+
+function sizelabels(data) {
+
+    var tr = "";
+    $qu = 0;
+    if (data.orchestra_size_label_orders != "") {
+
+      
+        $template_id = data.orchestra_size_label_orders[0].template_id;
+        $exist_id = data.orchestra_size_label_orders[0].id;
+        $size_label_count=data.orchestra_size_label_orders[0].final_qty;
+        
+        var str=data.orchestra_size_label_orders[0].status;
+        $status=str.replace(/ /g, "");
+        $status_text=str;
+        $save_button_class="hidden";
+    } else {
+     
+        $template_id = "";
+        $exist_id = "";
+        $size_label_count="";
+        $status="";
+        $status_text="";
+        $save_button_class="";
+    }
+    var ttots = 0;
+    $.each(data.order_details, function (index, value) {
+        if (data.orchestra_size_label_orders != "") {
+
+            $size_label_count = data.orchestra_size_label_orders_qty[$qu].quantity;
+        } else {
+            $size_label_count = "";
+        }
+        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)"  type="number" class="form-control  input-sm tot_qty_table" value="' + $size_label_count + '" required placeholder="Size Label Count"><div class="help-block with-errors"></div></div></td></tr>'; 
+        ttots += parseInt($size_label_count);
+        $qu++;
+    });
+    
+    var option = "<option value=''>Select Option</option>";
+    $.each(data.orchestra_template_front, function (index, value) {
+        option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
+    });
+    $('.top-content').append('<form id="size_labelform" data-toggle= "validator"><div class="left-panelorc col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="size_label_template_error" style="color:red" class="hidden">Please select the template</label>  <div><input type="text" id="treesl_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="treesl" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-4"> <div class="div-max scroll"> <h4>Quantity Info for Heat Transfer</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal" id="size_label_table"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" onkeypress="return checkNumbersOnly(event)"  style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td >' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table></div> <button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_size_label_button" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="size_labelclose">Close</button></div> </div>  <div class="backdrop"></div></form>');
+	//$('.left').removeClass('disabled')
+    $('#size_labelform .tot_qty_table').keyup(function () {
+        var tot_qty_table_carton_final = 0;
+        $('#size_labelform tbody tr').each(function (keys, vals) {
+            if ($(this).find('.tot_qty_table').val() != undefined) {
+                tot_qty_table_carton_final += parseInt($(this).find('.tot_qty_table').val());
+            }
+        })
+        $('#size_labelform .tot_qty_table_fin').text(tot_qty_table_carton_final);
+    });
+
+    $("#clickmesize_label").click(function () {
+        // $('.sample-artwork').html("")
+        $("#size_labelform .backdrop").toggleClass('active');
+        $("#size_labelform .right-panel").toggleClass('active');
+        $('#size_labelform .scalable').toggleClass('active');
+        $("#size_labelform .left-panelorc").toggleClass('active');
+    })
+
+    $(".backdrop, #size_labelclose").click(function () {
+        $("#size_labelform .left-panelorc").removeClass('active');
+        $("#size_labelform .right-panel").removeClass('active');
+        $("#size_labelform .backdrop").removeClass('active');
+        $('#size_labelform .scalable').removeClass('active');
+    })
+
+
+
+    treestructuresize_label(data.treeviewsize_label, "treesl", $template_id);
+
+    $('#size_labelform').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented()) {
+
+        } else {
+            e.preventDefault();
+            setSizeLabelStatus()
         }
     })
 }
@@ -4914,6 +4816,24 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 		$heat_transfer_status = "";
 		$heat_transfer_status_text = "";
 	}
+	if (data.orchestra_main_label_orders != "") {
+		var str = data.orchestra_main_label_orders[0].status;
+		$main_label_status = str.replace(/ /g, "");
+		$main_label_status_text = data.orchestra_main_label_orders[0].status;
+		update_disable=1;
+	} else {
+		$main_label_status = "";
+		$main_label_status_text = "";
+	}
+	if (data.orchestra_size_label_orders != "") {
+		var str = data.orchestra_size_label_orders[0].status;
+		$size_label_status = str.replace(/ /g, "");
+		$size_label_status_text = data.orchestra_size_label_orders[0].status;
+		update_disable=1;
+	} else {
+		$size_label_status = "";
+		$size_label_status_text = "";
+	}
 	if (data.orchestra_wash_care_label_orders != "") {
 		var str = data.orchestra_wash_care_label_orders[0].status;
 		$wash_status = str.replace(/ /g, "");
@@ -4927,19 +4847,19 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 		var wash_enable = "display:none !important";
 		var wash_name = "";
 	}
-	if (data.orchestra_main_label_orders != "") {
-		var str = data.orchestra_main_label_orders[0].status;
-		$main_status = str.replace(/ /g, "");
-		$main_status_text = data.orchestra_main_label_orders[0].status;
-		var main_enable = "";
-		var main_name = data.orchestra_main_label_orders[0].template_name + " - ";
-		update_disable=1;
-	} else {
-		$main_status = "";
-		$main_status_text = "";
-		var main_enable = "display:none !important";
-		var main_name = "";
-	}
+//	if (data.orchestra_main_label_orders != "") {
+//		var str = data.orchestra_main_label_orders[0].status;
+//		$main_status = str.replace(/ /g, "");
+//		$main_status_text = data.orchestra_main_label_orders[0].status;
+//		var main_enable = "";
+//		var main_name = data.orchestra_main_label_orders[0].template_name + " - ";
+//		update_disable=1;
+//	} else {
+//		$main_status = "";
+//		$main_status_text = "";
+//		var main_enable = "display:none !important";
+//		var main_name = "";
+//	}
 
 	if (localStorage.getItem("page_navigation") == "orders") {
 		var onclick = "orders()";
@@ -4957,6 +4877,8 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 //alert(data.order_details[0].id)
 	$('.main-content').html('<input type="hidden" value="' + data.order_details[0].UVC + '" id="uvc_id"><input type="hidden" value="' + data.order_details[0].id + '" id="parcel_id"><input type="hidden" value="' + data.order_details[0].Season_Code + '" id="season_code"><input type="hidden" value="'+data.customers[0].id+'" id="customer_id"><hr/><div class="col-md-3"><h4>Quantity And Artworks</h4></div><div class="form-group col-md-offset-9 has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Merchandiser</label><select data-live-search="true" class="form-control selectpicker input-sm merchandisers" required>' + merchandisersoption + '</select><div class="help-block with-errors"></div><label class="hidden merchandiser_error" style="color:red">Please Select Merchandiser</label></div><div class="col-md-4"><div class="card add-card hang-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><span class="label label-' + $hang_status + ' label-status">' + $hang_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmehang" style="cursor: pointer;">View &amp; Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p> <h5><b>Hangtag</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ht_default.png" class="img-responsive center-block"></div></div><div class="col-md-6"><div class="text_artwork"></div></div></div></div></div><div class="col-md-4"><div class="card heat_transfer-card" style="min-height:279px"><span class="label label-' + $heat_transfer_status + ' label-status">' + $heat_transfer_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmeheat_transfer" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b>Heat Transfer</b></h5></div><div class="row"><div class="col-md-10 col-md-offset-1"><div class="img_artwork"><img src="' +
 		base_url + '/images/st_default.png" class="img-responsive center-block"></div></div></div></div></div><div class="col-md-4"><div class="card special-card" style="min-height:279px"><span class="label label-' + $special_status + ' label-status">' + $special_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmespecial" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b>Specialtag</b></h5></div><div class="row"><div class="col-md-10 col-md-offset-1"><div class="img_artwork"><img src="' +
+		base_url + '/images/st_default.png" class="img-responsive center-block"></div></div></div></div></div><div class="col-md-4"><div class="card main_label-card" style="min-height:279px"><span class="label label-' + $main_label_status + ' label-status">' + $main_label_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmemain_label" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b>Main Label</b></h5></div><div class="row"><div class="col-md-10 col-md-offset-1"><div class="img_artwork"><img src="' +
+		base_url + '/images/st_default.png" class="img-responsive center-block"></div></div></div></div></div> <div class="col-md-4"><div class="card size_label-card" style="min-height:279px"><span class="label label-' + $size_label_status + ' label-status">' + $size_label_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmesize_label" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b>Size Label</b></h5></div><div class="row"><div class="col-md-10 col-md-offset-1"><div class="img_artwork"><img src="' +
 		base_url + '/images/st_default.png" class="img-responsive center-block"></div></div></div></div></div> <div class="col-md-4"> <div class="card add-card wash-card" style="height: 280px;" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><span class="label label-' + $wash_status + ' label-status">' + $wash_status_text + '</span> <div class="card-title"> <p class="pull-right" id="clickme" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="washlabelname">' + wash_name + 'Washcare Label</b></h5> </div><div class="row"> <div class="col-md-6 col-md-offset-3"> <div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="washcare_label_card" style="'+wash_enable+';cursor:pointer;display: inline-block;"><i class="fa fa-plus" aria-hidden="true"></i> Add washcare label</p><p id="clone_washcare_label_card" style="'+wash_enable+';cursor:pointer;    display: inline-block;float: right;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div><div id="add_modal"></div><div class="bottom-bar"><div class="modal-footer"><button onclick="' + onclick + '" class="btn btn-danger  pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button><button data-toggle="modal" id="po-file-upload-button" style="'+update_disabel_button+'" class="btn btn-success pull-right btn-xs">Update PO</button> </div></div>');
 	
 	//Before add_modal
@@ -5679,70 +5601,6 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
         }
        
     });
-    $('#main_label_card').on('click', function (e) {
-        if ($('.mainname').val() != "") {
-            
-            if (mainlabel <= 5) {
-                mainlabel += 1;
-                $('#add_modal').append('<div class="col-md-4" ><div style="border:1px dashed #333;height: 280px;"  class="card add-card main-card'+mainlabel+'" data-toggle="modal" data-target=".main_label_' + mainlabel + '" data-backdrop="static" data-keyboard="false"> <span></span>   <div class="card-title"><p class="pull-right delete-main' + mainlabel + '" id="' + mainlabel + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickmemain' + mainlabel + '>Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p> <h5><b class="mainlabelname' + mainlabel + '">Main & Size Label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div></div>       </div></div>')
-                var data = localStorage.getItem("label_order_data");
-                mainlabels(JSON.parse(data), mainlabel);
-                $('.delete-main' + mainlabel).on('click', function (e) {
-                if (localStorage.getItem('main_label') != null) {
-                    var opop = JSON.parse(localStorage.getItem('main_label'));
-                    if (opop['mainlabelsform' + $(this).attr('id')] === undefined) {
-
-                    } else {
-                        delete opop['mainlabelsform' + $(this).attr('id')];
-                    }
-
-
-                    localStorage.setItem('main_label', JSON.stringify(opop))
-                }
-
-
-                $('#mainlabelsform' + $(this).attr('id')).remove()
-                mainlabel -= 1;
-                $(this).parent().parent().parent().remove();
-
-
-                 });
-          
-				//toastr.success("Wash care label cloned successfully");
-				$('.snackbar_span').html('Main and Size Label added successfully');
-				showSnackbar();
-				window.scrollTo(0, document.body.scrollHeight);
-			} else {
-				$('.snackbar_span').html('Limit exceeded');
-				showSnackbar();
-			}
-           
-            $('.mainname').val("")
-            $('.mainnameerror').addClass('hidden')
-        } else {
-            if (mainlabel < 5) {
-                $('.mainname').val("")
-                $('.mainnameerror').removeClass('hidden')
-            }
-        }
-        $('.extra_percentage').keyup(function () {
-            if ($(this).val() != "") {
-                var per = $(this).val();
-                $(this).parent().parent().parent().parent().parent().find('.qty-table-modal tbody tr').each(function () {
-                    var sum = $(this).find('.sum').text();
-                    var per_qty = (parseInt(sum) / 100) * parseInt(per);
-                    var tot_qty = parseInt(sum) + parseInt(per_qty);
-                    $(this).find('.tot_qty_table').val(tot_qty);
-                })
-            } else {
-                $(this).parent().parent().parent().parent().parent().find('.qty-table-modal tbody tr').each(function () {
-                    $(this).find('.tot_qty_table').val("");
-                })
-            }
-
-        })
-       
-    });
 
 
 }
@@ -5879,7 +5737,246 @@ function treestructurespecial(data, tree, template_id) {
 		}
 	});
 }
+/**
+ * This Function is used to invoke Jstree For Heat Transfer.
+ * 
+ * @return tree
+ */
 function treestructureheat_transfer(data, tree, template_id) {
+
+	$('#' + tree).jstree({
+		'core': {
+			'data': data
+		},
+		"types": {
+			"default": {
+				"icon": "fa fa-folder"
+			}
+		},
+		"plugins": ["types", "search", "conditionalselect"],
+		 conditionalselect: function (node) {
+                        return this.is_leaf(node);
+         }
+	});
+	$('#expand').bind("click", function () {
+		$('#' + tree).jstree("open_all");
+	});
+	$('#collapse').bind("click", function () {
+		$('#' + tree).jstree("close_all");
+	});
+	var to = false;
+	$('#' + tree + '_q').keyup(function () {
+		if (to) {
+			clearTimeout(to);
+		}
+		to = setTimeout(function () {
+			var v = $('#' + tree + '_q').val();
+			$('#' + tree).jstree(true).search(v);
+		}, 250);
+	});
+
+	$("#" + tree).on("loaded.jstree", function (e, data) {
+
+		$('#' + tree).jstree(true).select_node(template_id);
+		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
+		if (template_id != "") {
+			var buyer = localStorage.getItem("buyer");
+			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			$.ajax({
+				url: base_url + "/admin/" + buyer + "/template-management/template-view",
+				type: "Post",
+				dataType: "json",
+				data: {
+					template_id: template_id,
+                    customer_id: $('#customer_id').val(),
+					_token: csrf_token
+				},
+				beforeSend: function () {
+					$(".loader").show();
+				},
+				success: function (data) {
+					$('.special_qty').attr('min',data.moq)
+					$('#specialtagform').validator('update')
+					if (data.treeviewData.length > 0) {
+						$('#' + ids).find('.sample-artwork').html('<object id="svg2" style="max-height: 350px;" class="center-block svg2" data="' + data.treeviewData[0].template_file + '" type="image/svg+xml"></object>')
+					} else {
+						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
+					}
+
+
+				},
+				error: function (data) {
+
+				},
+				complete: function () {
+					$(".loader").hide();
+				}
+			})
+		}
+	});
+
+	$('#' + tree).on('activate_node.jstree', function (e, data) {
+		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
+		if (data.instance.is_leaf(data.node)) {
+			var buyer = localStorage.getItem("buyer");
+			var template_id = data.node.id;
+			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			$.ajax({
+				url: base_url + "/admin/" + buyer + "/template-management/template-view",
+				type: "Post",
+				dataType: "json",
+				data: {
+					template_id: template_id,
+                    customer_id: $('#customer_id').val(),
+					_token: csrf_token
+				},
+				beforeSend: function () {
+					$(".loader").show();
+				},
+				success: function (data) {
+					$('.special_qty').attr('min',data.moq)
+					$('#specialtagform').validator('update')
+					if (data.treeviewData.length > 0) {
+						$('#' + ids).find('.sample-artwork').html('<object id="svg2" style="max-height: 350px;" class="center-block svg2" data="' + data.treeviewData[0].template_file + '" type="image/svg+xml"></object>')
+					} else {
+						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
+					}
+
+
+				},
+				error: function (data) {
+
+				},
+				complete: function () {
+					$(".loader").hide();
+				}
+			})
+		}
+	});
+}
+/**
+ * This Function is used to invoke Jstree For Main Labels.
+ * 
+ * @return tree
+ */
+function treestructuremain_label(data, tree, template_id) {
+
+	$('#' + tree).jstree({
+		'core': {
+			'data': data
+		},
+		"types": {
+			"default": {
+				"icon": "fa fa-folder"
+			}
+		},
+		"plugins": ["types", "search", "conditionalselect"],
+		 conditionalselect: function (node) {
+                        return this.is_leaf(node);
+         }
+	});
+	$('#expand').bind("click", function () {
+		$('#' + tree).jstree("open_all");
+	});
+	$('#collapse').bind("click", function () {
+		$('#' + tree).jstree("close_all");
+	});
+	var to = false;
+	$('#' + tree + '_q').keyup(function () {
+		if (to) {
+			clearTimeout(to);
+		}
+		to = setTimeout(function () {
+			var v = $('#' + tree + '_q').val();
+			$('#' + tree).jstree(true).search(v);
+		}, 250);
+	});
+
+	$("#" + tree).on("loaded.jstree", function (e, data) {
+
+		$('#' + tree).jstree(true).select_node(template_id);
+		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
+		if (template_id != "") {
+			var buyer = localStorage.getItem("buyer");
+			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			$.ajax({
+				url: base_url + "/admin/" + buyer + "/template-management/template-view",
+				type: "Post",
+				dataType: "json",
+				data: {
+					template_id: template_id,
+                    customer_id: $('#customer_id').val(),
+					_token: csrf_token
+				},
+				beforeSend: function () {
+					$(".loader").show();
+				},
+				success: function (data) {
+					$('.special_qty').attr('min',data.moq)
+					$('#specialtagform').validator('update')
+					if (data.treeviewData.length > 0) {
+						$('#' + ids).find('.sample-artwork').html('<object id="svg2" style="max-height: 350px;" class="center-block svg2" data="' + data.treeviewData[0].template_file + '" type="image/svg+xml"></object>')
+					} else {
+						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
+					}
+
+
+				},
+				error: function (data) {
+
+				},
+				complete: function () {
+					$(".loader").hide();
+				}
+			})
+		}
+	});
+
+	$('#' + tree).on('activate_node.jstree', function (e, data) {
+		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
+		if (data.instance.is_leaf(data.node)) {
+			var buyer = localStorage.getItem("buyer");
+			var template_id = data.node.id;
+			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			$.ajax({
+				url: base_url + "/admin/" + buyer + "/template-management/template-view",
+				type: "Post",
+				dataType: "json",
+				data: {
+					template_id: template_id,
+                    customer_id: $('#customer_id').val(),
+					_token: csrf_token
+				},
+				beforeSend: function () {
+					$(".loader").show();
+				},
+				success: function (data) {
+					$('.special_qty').attr('min',data.moq)
+					$('#specialtagform').validator('update')
+					if (data.treeviewData.length > 0) {
+						$('#' + ids).find('.sample-artwork').html('<object id="svg2" style="max-height: 350px;" class="center-block svg2" data="' + data.treeviewData[0].template_file + '" type="image/svg+xml"></object>')
+					} else {
+						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
+					}
+
+
+				},
+				error: function (data) {
+
+				},
+				complete: function () {
+					$(".loader").hide();
+				}
+			})
+		}
+	});
+}
+/**
+ * This Function is used to invoke Jstree For Size Labels.
+ * 
+ * @return tree
+ */
+function treestructuresize_label(data, tree, template_id) {
 
 	$('#' + tree).jstree({
 		'core': {
@@ -7238,35 +7335,57 @@ function setheat_transferStatus() {
         $('#heat_transfer_template_error').removeClass('hidden')
     }
 }
-
 /**
- * This Function is used to set main labels in local storage.
+ * This Function is used to set Main Label in local storage.
  * 
  * @return void
  */
 
-function setMainLabelStatus(dataid) {
+function setMainLabelStatus() {
 
-    if ($('#mainlabelsform' + dataid).find('#exist_id' + dataid).val() != "") {
-       var value = $('#mainlabelsform' + dataid).find('#exist_id' + dataid).val();
+    if ($('#main_labelform').find('#exist_id').val() != "") {
+        var exist_id = $('#main_labelform').find('#exist_id').val();
     } else {
-       var value = "null";
+        var exist_id = "null";
     }
-
-    var main_lab = JSON.stringify(main_label);
-    var template_id = $('#mainlabelsform' + dataid).find('#tree3' + dataid).jstree('get_selected', true);
+    var template_id = $('#main_labelform').find('#treeml').jstree('get_selected', true);
     if (template_id != "") {
-        localStorage.setItem("main_label", main_lab);
-        setMainLabel('mainlabelsform' + dataid, dataid, value)
-        $('#main_template_error' + dataid).addClass('hidden')
-        $("#mainlabelsform" + dataid + " .left-panelorc").removeClass('active');
-        $("#mainlabelsform" + dataid + " .right-panel").removeClass('active');
-        $("#mainlabelsform" + dataid + " .backdrop").removeClass('active');
-        $('#mainlabelsform' + dataid + ' .scalable').removeClass('active');
+        localStorage.setItem("main_label", exist_id);
+        setMainLabel(localStorage.getItem("main_label"))
+        $('#main_label_template_error').addClass('hidden')
+        $("#main_labelform .left-panelorc").removeClass('active');
+        $("#main_labelform .right-panel").removeClass('active');
+        $("#main_labelform .backdrop").removeClass('active');
+        $('#main_labelform .scalable').removeClass('active');
     } else {
-        $('#main_template_error' + dataid).removeClass('hidden')
+        $('#main_label_template_error').removeClass('hidden')
     }
+}
+/**
+ * This Function is used to set Size Labels in local storage.
+ * 
+ * @return void
+ */
 
+function setSizeLabelStatus() {
+
+    if ($('#size_labelform').find('#exist_id').val() != "") {
+        var exist_id = $('#size_labelform').find('#exist_id').val();
+    } else {
+        var exist_id = "null";
+    }
+    var template_id = $('#size_labelform').find('#treesl').jstree('get_selected', true);
+    if (template_id != "") {
+        localStorage.setItem("size_label", exist_id);
+        setSizeLabel(localStorage.getItem("size_label"))
+        $('#size_label_template_error').addClass('hidden')
+        $("#size_labelform .left-panelorc").removeClass('active');
+        $("#size_labelform .right-panel").removeClass('active');
+        $("#size_labelform .backdrop").removeClass('active');
+        $('#size_labelform .scalable').removeClass('active');
+    } else {
+        $('#size_label_template_error').removeClass('hidden')
+    }
 }
 
 /**
@@ -7493,28 +7612,23 @@ function setHeatTransfer(id) {
 		$('.heat_transfer-card span').addClass('label label-OrderApproved label-status')
 		$('#po-file-upload-button').css('display','block')
 }
-
 /**
- * This Function is used to set main labels in db.
+ * This Function is used to set Main Label in db.
  * 
  * @return void
  */
 
 
-function setMainLabel(index, dataid, id) {
-	$('.mainlabelname'+dataid).text($('#main_size_name' + dataid).val()+" - Main & Size Label");
-   
-    var main_label_qty = $('.main_label_qty' + dataid).val();
+function setMainLabel(id) {
+  
+    var main_label_qty = $('.main_label_qty').val();
     
-   
-    var template_id = $('#' + index).find('#tree3' + dataid).jstree('get_selected', true);
-    var template_name = $('#main_size_name' + dataid).val();
+    var template_id = $('#main_labelform').find('#tree2').jstree('get_selected', true);
     template_front_id = template_id[0].id;
-    var tot_qty_table = []; 
-	var main_label_count = [];
+    var tot_qty_table = [];
     var uvc_tco = [];
     var size = [];
-    $('#' + index + ' tbody tr').each(function () {
+    $('#main_labelform tbody tr').each(function () {
         if ($(this).find('.tot_qty_table').val() != undefined) {
             tot_qty_table.push($(this).find('.tot_qty_table').val())
             uvc_tco.push($(this).find('.uvc_tco').text())
@@ -7522,23 +7636,7 @@ function setMainLabel(index, dataid, id) {
         }
 
     })
-	$('#' + index + ' tbody tr').each(function () {
-        if ($(this).find('.main_label_count').val() != undefined) {
-            main_label_count.push($(this).find('.main_label_count').val())
-            
-        }
-
-    })
-	 if($("input[value='size']").is(':checked')) 
-	 { 
-		 var main_flag="size";
-	 }
-	 else
-	 {
-		 var main_flag="total";
-	 }
     tot_qty_table_fin = tot_qty_table.join(',');
-	main_label_count_fin = main_label_count.join(',');
     uvc_tco_fin = uvc_tco.join(',');
     size_fin = size.join(',');
     var buyer = localStorage.getItem("buyer");
@@ -7550,15 +7648,11 @@ function setMainLabel(index, dataid, id) {
             
             template_front_id: template_front_id,
             id: id,
-            template_name: template_name, 
-			main_label_count: main_label_count_fin,
-            tot_qty_table: tot_qty_table_fin,
-            main_label_qty: main_label_qty,
-			parcel_id: $('#parcel_id').val(),
-			season_code: $('#season_code').val(),
-			main_flag: main_flag,
+            tot_qty_table: main_label_qty,
             uvc_tco: uvc_tco_fin,
             uvc: $('#uvc_id').val(),
+			parcel_id: $('#parcel_id').val(),
+			season_code: $('#season_code').val(),
             size: size_fin,
             _token: csrf_token
         },
@@ -7566,48 +7660,75 @@ function setMainLabel(index, dataid, id) {
             $(".loader").show();
         },
         success: function (data) {
-
+			$('#save_main_label_button').addClass('hidden')
         },
         error: function (data) {
 
         }
     })
-    $('#main_label_card').css('display','block')
-	$('.main-card'+dataid+' span').text('Order Approved')
-	$('.main-card'+dataid+' span').addClass('label label-OrderApproved label-status')
+	$('.main_label-card span').text('Order Approved')
+	$('.main_label-card span').addClass('label label-OrderApproved label-status')
 	$('#po-file-upload-button').css('display','block')
 }
-
 /**
- * This Function is used to delete main labels from db.
+ * This Function is used to set Size Label in db.
  * 
  * @return void
  */
 
 
-function removeMainLabel(id) {
+function setSizeLabel(id) {
+  
+    var template_id = $('#size_labelform').find('#treesl').jstree('get_selected', true);
+	console.log(template_id)
+	template_id = template_id[0].id;
+	
+	var tot_qty_table = [];
+	var uvc_tco = [];
+	var size = [];
+	$('#size_labelform tbody tr').each(function () {
+		if ($(this).find('.tot_qty_table').val() != undefined) {
+			tot_qty_table.push($(this).find('.tot_qty_table').val())
+			uvc_tco.push($(this).find('.uvc_tco').text())
+			size.push($(this).find('.size').text())
+		}
 
+	})
+	tot_qty_table_fin = tot_qty_table.join(',');
+	uvc_tco_fin = uvc_tco.join(',');
+	size_fin = size.join(',');
 	var buyer = localStorage.getItem("buyer");
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
-		url: base_url + "/admin/" + buyer + "/order-management/remove_main_label",
+		url: base_url + "/admin/" + buyer + "/order-management/set_size_label",
 		type: "Post",
 		data: {
+			
+			template_id: template_id,
+			tot_qty_table: tot_qty_table_fin,
 			id: id,
+			uvc_tco: uvc_tco_fin,
+			uvc: $('#uvc_id').val(),
+			parcel_id: $('#parcel_id').val(),
+			season_code: $('#season_code').val(),
+			size: size_fin,
 			_token: csrf_token
 		},
 		beforeSend: function () {
 			$(".loader").show();
 		},
 		success: function (data) {
-
+			$('#save_size_label_button').addClass('hidden')
 		},
 		error: function (data) {
 
 		}
 	})
-
+		$('.size_label-card span').text('Order Approved')
+		$('.size_label-card span').addClass('label label-OrderApproved label-status')
+		$('#po-file-upload-button').css('display','block')
 }
+
 
 /**
  * This Function is used to delete wash care labels from db.
