@@ -147,7 +147,7 @@ class OrderManagementCntrl extends Controller
             $data['orchestra_special_tag_orders'] = DB::table('orchestra_special_tag_orders')->join('orchestra_parcel_details','orchestra_parcel_details.UVC','=','orchestra_special_tag_orders.uvc')->join('orchestra_item_master','orchestra_item_master.id','=','orchestra_special_tag_orders.template_id')->leftjoin('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->select('orchestra_parcel_details.UVC',DB::raw("'-' as \"Season\""),DB::raw("'-' as \"BuyerPONo\""),DB::raw("'Special Tag' as \"ArtworkType\""),DB::raw("'Special Tag' as \"TemplateName\""),'customers.id as customer_id','orchestra_parcel_details.SupplierName as SupplierName',DB::raw("to_char(orchestra_special_tag_orders.created_at,"."'".$ddmmyy."'".") as \"OrderDate\""),DB::raw("to_char(orchestra_special_tag_orders.delivery_date,"."'".$ddmmyy."'".") as \"DeliveryDate\""),'orchestra_special_tag_orders.status as Artwork Status','orchestra_special_tag_orders.pi_status as PI Status','orchestra_special_tag_orders.po_status as PO Status','orchestra_special_tag_orders.po_number as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'orchestra_special_tag_orders' as \"tableName\""),'orchestra_special_tag_orders.id  as tableID','orchestra_special_tag_orders.po_file','customers.pi_required','customers.po_required','orchestra_special_tag_orders.template_id','orchestra_special_tag_orders.order_flag','customers.delivery_day_count','orchestra_special_tag_orders.is_order_count_empty')->groupBy('orchestra_parcel_details.UVC','orchestra_parcel_details.SupplierName','orchestra_special_tag_orders.created_at','orchestra_special_tag_orders.delivery_date','orchestra_special_tag_orders.status','orchestra_special_tag_orders.pi_status','orchestra_special_tag_orders.status','orchestra_special_tag_orders.po_status','orchestra_special_tag_orders.po_number','customers.pi_required','customers.id','orchestra_special_tag_orders.id')->get();
      
                
-            $data['orchestra_main_label_orders'] = DB::table('orchestra_main_label_orders')->join('orchestra_parcel_details','orchestra_parcel_details.UVC','=','orchestra_main_label_orders.uvc')->join('orchestra_item_master','orchestra_item_master.id','=','orchestra_main_label_orders.template_id')->leftjoin('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->select('orchestra_parcel_details.UVC',DB::raw("'-' as \"Season\""),DB::raw("'-' as \"BuyerPONo\""),DB::raw("'Main & Size Label' as \"ArtworkType\""),'orchestra_main_label_orders.template_name as TemplateName','customers.id as customer_id','orchestra_parcel_details.SupplierName as SupplierName',DB::raw("to_char(orchestra_main_label_orders.created_at,"."'".$ddmmyy."'".") as \"OrderDate\""),DB::raw("to_char(orchestra_main_label_orders.delivery_date,"."'".$ddmmyy."'".") as \"DeliveryDate\""),'orchestra_main_label_orders.status as Artwork Status','orchestra_main_label_orders.pi_status as PI Status','orchestra_main_label_orders.po_status as PO Status','orchestra_main_label_orders.po_number as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'orchestra_main_label_orders' as \"tableName\""),'orchestra_main_label_orders.id  as tableID','orchestra_main_label_orders.po_file','customers.pi_required','customers.po_required','orchestra_main_label_orders.template_id','orchestra_main_label_orders.order_flag','customers.delivery_day_count','orchestra_main_label_orders.is_order_count_empty')->groupBy('orchestra_parcel_details.UVC','orchestra_parcel_details.SupplierName','orchestra_main_label_orders.created_at','orchestra_main_label_orders.delivery_date','orchestra_main_label_orders.status','orchestra_main_label_orders.pi_status','orchestra_main_label_orders.status','orchestra_main_label_orders.po_status','orchestra_main_label_orders.po_number','customers.pi_required','customers.id','orchestra_main_label_orders.id')->get();
+            $data['orchestra_main_label_orders'] = DB::table('orchestra_main_label_orders')->join('orchestra_parcel_details','orchestra_parcel_details.UVC','=','orchestra_main_label_orders.uvc')->join('orchestra_item_master','orchestra_item_master.id','=','orchestra_main_label_orders.template_id')->leftjoin('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->select('orchestra_parcel_details.UVC',DB::raw("'-' as \"Season\""),DB::raw("'-' as \"BuyerPONo\""),DB::raw("'Main & Size Label' as \"ArtworkType\""),DB::raw("'Main Label' as \"TemplateName\""),'customers.id as customer_id','orchestra_parcel_details.SupplierName as SupplierName',DB::raw("to_char(orchestra_main_label_orders.created_at,"."'".$ddmmyy."'".") as \"OrderDate\""),DB::raw("to_char(orchestra_main_label_orders.delivery_date,"."'".$ddmmyy."'".") as \"DeliveryDate\""),'orchestra_main_label_orders.status as Artwork Status','orchestra_main_label_orders.pi_status as PI Status','orchestra_main_label_orders.po_status as PO Status','orchestra_main_label_orders.po_number as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'orchestra_main_label_orders' as \"tableName\""),'orchestra_main_label_orders.id  as tableID','orchestra_main_label_orders.po_file','customers.pi_required','customers.po_required','orchestra_main_label_orders.template_id','orchestra_main_label_orders.order_flag','customers.delivery_day_count','orchestra_main_label_orders.is_order_count_empty')->groupBy('orchestra_parcel_details.UVC','orchestra_parcel_details.SupplierName','orchestra_main_label_orders.created_at','orchestra_main_label_orders.delivery_date','orchestra_main_label_orders.status','orchestra_main_label_orders.pi_status','orchestra_main_label_orders.status','orchestra_main_label_orders.po_status','orchestra_main_label_orders.po_number','customers.pi_required','customers.id','orchestra_main_label_orders.id')->get();
 
             $data['orchestra_wash_care_label_orders'] = DB::table('orchestra_wash_care_label_orders')->join('orchestra_parcel_details','orchestra_parcel_details.UVC','=','orchestra_wash_care_label_orders.uvc')->join('orchestra_item_master','orchestra_item_master.id','=','orchestra_wash_care_label_orders.template_id')->leftjoin('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->select('orchestra_parcel_details.UVC',DB::raw("'-' as \"Season\""),DB::raw("'-' as \"BuyerPONo\""),DB::raw("'WashCareLabel' as \"ArtworkType\""),'orchestra_wash_care_label_orders.template_name as TemplateName','customers.id as customer_id','orchestra_parcel_details.SupplierName as SupplierName',DB::raw("to_char(orchestra_wash_care_label_orders.created_at,"."'".$ddmmyy."'".") as \"OrderDate\""),DB::raw("to_char(orchestra_wash_care_label_orders.delivery_date,"."'".$ddmmyy."'".") as \"DeliveryDate\""),'orchestra_wash_care_label_orders.status as Artwork Status','orchestra_wash_care_label_orders.pi_status as PI Status','orchestra_wash_care_label_orders.po_status as PO Status','orchestra_wash_care_label_orders.po_number as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'orchestra_wash_care_label_orders' as \"tableName\""),'orchestra_wash_care_label_orders.id  as tableID','orchestra_wash_care_label_orders.po_file','customers.pi_required','customers.po_required','orchestra_wash_care_label_orders.template_id','orchestra_wash_care_label_orders.order_flag','customers.delivery_day_count','orchestra_wash_care_label_orders.is_order_count_empty')->groupBy('orchestra_parcel_details.UVC','orchestra_parcel_details.SupplierName','orchestra_wash_care_label_orders.created_at','orchestra_wash_care_label_orders.delivery_date','orchestra_wash_care_label_orders.status','orchestra_wash_care_label_orders.pi_status','orchestra_wash_care_label_orders.status','orchestra_wash_care_label_orders.po_status','orchestra_wash_care_label_orders.po_number','customers.pi_required','customers.id','orchestra_wash_care_label_orders.id')->get();
 
@@ -495,13 +495,33 @@ class OrderManagementCntrl extends Controller
         {
             $data['orchestra_heat_transfer_orders_qty']="";
         }
-        
-        $data['orchestra_main_label_orders']=DB::table('orchestra_main_label_orders')->select('*','orchestra_main_label_orders.template_name as TemplateName')->where('uvc',$uvc)->get();
-        foreach($data['orchestra_main_label_orders'] as $value)
+		
+		$data['orchestra_main_label_orders']=DB::table('orchestra_main_label_orders')->select('*',DB::raw("'Main Label' as \"TemplateName\""))->where('uvc',$uvc)->get();
+        if(count($data['orchestra_main_label_orders']) > 0)
         {
-            $orchestra_main_label_orders_qty=DB::table('orchestra_main_label_orders_qty')->select('*')->where('oml_id',$value->id)->get();
-            $value->qty=$orchestra_main_label_orders_qty;
+            $data['orchestra_main_label_orders_qty']=DB::table('orchestra_main_label_orders_qty')->select('*')->where('oml_id',$data['orchestra_main_label_orders']{0}->id)->get();
         }
+        else
+        {
+            $data['orchestra_main_label_orders_qty']="";
+        }
+        
+		$data['orchestra_size_label_orders']=DB::table('orchestra_size_label_orders')->select('*',DB::raw("'Size Label' as \"TemplateName\""))->where('uvc',$uvc)->get();
+        if(count($data['orchestra_size_label_orders']) > 0)
+        {
+            $data['orchestra_size_label_orders_qty']=DB::table('orchestra_size_label_orders_qty')->select('*')->where('oml_id',$data['orchestra_size_label_orders']{0}->id)->get();
+        }
+        else
+        {
+            $data['orchestra_size_label_orders_qty']="";
+        }
+		
+//        $data['orchestra_main_label_orders']=DB::table('orchestra_main_label_orders')->select('*','orchestra_main_label_orders.template_name as TemplateName')->where('uvc',$uvc)->get();
+//        foreach($data['orchestra_main_label_orders'] as $value)
+//        {
+//            $orchestra_main_label_orders_qty=DB::table('orchestra_main_label_orders_qty')->select('*')->where('oml_id',$value->id)->get();
+//            $value->qty=$orchestra_main_label_orders_qty;
+//        }
         
         $data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->select('*','orchestra_wash_care_label_orders.template_name as TemplateName')->where('uvc',$uvc)->get();
         foreach($data['orchestra_wash_care_label_orders'] as $value1)
@@ -981,6 +1001,238 @@ class OrderManagementCntrl extends Controller
            
     }
 	
+	/**
+     * This Function is used to save the Main Label Details.
+     *
+     * @return Void
+     */
+	
+    public function setMainLabel(Request $request)
+    {
+        //$delivery_date = $request->delivery_date;
+        $template_id = $request->template_id;
+        $tot_qty_table = explode(',',$request->tot_qty_table);
+        $uvc_tco = explode(',',$request->uvc_tco);
+        $size = explode(',',$request->size);
+        $uvc =$request->uvc;
+        $parcel_id =$request->parcel_id;
+        $season_code =$request->season_code;
+        $id =$request->id;
+		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('customers.*')->get();
+		//print_r($factory);
+		if(count($factory) > 0)
+		{
+			
+			$pi_required=$factory{0}->pi_required;
+			if($pi_required == 1)
+			{
+				$pi_status="PI Approval Pending";
+				if($factory{0}->po_required == 1)
+				{
+					$po_status="PO Pending";
+				}
+				else
+				{
+					$po_status="";
+				}
+				
+			}
+			else
+			{
+				$po_status="PO Pending";
+				$pi_status="";
+			}
+			$status="Order Approved";
+		}
+		else
+		{
+			$status="";
+			$po_status="";
+			$pi_status="";
+		}
+		
+        if($id != "null")
+        {
+            HeatTransferOrders::where('id',$id)
+                   ->update([
+                        'uvc' => $uvc,
+                        'template_id'      => $template_id,
+                        'svg_path'    => "", 
+                        'status'    => $status,
+					    'orchestra_parcel_details_id'    => $parcel_id,
+					    'season_code'    => $season_code,
+                        'customer_id'    => $factory{0}->id,
+					    'pi_status'           => $pi_status,
+					   	'po_status'           => $po_status,
+                  ]);
+                $deleted = HeatTransferOrdersQty::where('oht_id', '=', $id)
+                            ->delete();
+                $i=0;
+                foreach($tot_qty_table as $value)
+                {
+                     HeatTransferOrdersQty::create([
+                                        'oht_id' => $id,
+                                        'size'      => $size[$i],
+                                        'uvc_tco'      => $uvc_tco[$i],
+                                        'quantity'    => $value
+                             ]);
+                    $i++;
+                }
+			
+				DB::table("orchestra_parcel_details")->where('UVC',$uvc)
+                        ->update([
+                          'order_status' => "Order Placed"
+
+                ]);
+        }
+        else
+        {
+             $inserted = HeatTransferOrders::create([
+                                    'uvc' => $uvc,
+									'template_id'      => $template_id,
+									'svg_path'    => "", 
+									'status'    => $status,
+									'orchestra_parcel_details_id'    => $parcel_id,
+									'season_code'    => $season_code,
+									'customer_id'    => $factory{0}->id,
+									'pi_status'           => $pi_status,
+									'po_status'           => $po_status,
+                         ]);
+            $i=0;
+            foreach($tot_qty_table as $value)
+            {
+                 HeatTransferOrdersQty::create([
+                                    'oht_id' => $inserted->id,
+                                    'size'      => $size[$i],
+                                    'uvc_tco'      => $uvc_tco[$i],
+                                    'quantity'    => $value
+                         ]);
+                $i++;
+            }
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
+                        ->update([
+                          'order_status' => "Order Placed"
+
+            ]);
+        }
+           
+    }
+	/**
+     * This Function is used to save the Size Label Details.
+     *
+     * @return Void
+     */
+	
+    public function setSizeLabel(Request $request)
+    {
+        //$delivery_date = $request->delivery_date;
+        $template_id = $request->template_id;
+        $tot_qty_table = explode(',',$request->tot_qty_table);
+        $uvc_tco = explode(',',$request->uvc_tco);
+        $size = explode(',',$request->size);
+        $uvc =$request->uvc;
+        $parcel_id =$request->parcel_id;
+        $season_code =$request->season_code;
+        $id =$request->id;
+		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('customers.*')->get();
+		//print_r($factory);
+		if(count($factory) > 0)
+		{
+			
+			$pi_required=$factory{0}->pi_required;
+			if($pi_required == 1)
+			{
+				$pi_status="PI Approval Pending";
+				if($factory{0}->po_required == 1)
+				{
+					$po_status="PO Pending";
+				}
+				else
+				{
+					$po_status="";
+				}
+				
+			}
+			else
+			{
+				$po_status="PO Pending";
+				$pi_status="";
+			}
+			$status="Order Approved";
+		}
+		else
+		{
+			$status="";
+			$po_status="";
+			$pi_status="";
+		}
+		
+        if($id != "null")
+        {
+            HeatTransferOrders::where('id',$id)
+                   ->update([
+                        'uvc' => $uvc,
+                        'template_id'      => $template_id,
+                        'svg_path'    => "", 
+                        'status'    => $status,
+					    'orchestra_parcel_details_id'    => $parcel_id,
+					    'season_code'    => $season_code,
+                        'customer_id'    => $factory{0}->id,
+					    'pi_status'           => $pi_status,
+					   	'po_status'           => $po_status,
+                  ]);
+                $deleted = HeatTransferOrdersQty::where('oht_id', '=', $id)
+                            ->delete();
+                $i=0;
+                foreach($tot_qty_table as $value)
+                {
+                     HeatTransferOrdersQty::create([
+                                        'oht_id' => $id,
+                                        'size'      => $size[$i],
+                                        'uvc_tco'      => $uvc_tco[$i],
+                                        'quantity'    => $value
+                             ]);
+                    $i++;
+                }
+			
+				DB::table("orchestra_parcel_details")->where('UVC',$uvc)
+                        ->update([
+                          'order_status' => "Order Placed"
+
+                ]);
+        }
+        else
+        {
+             $inserted = HeatTransferOrders::create([
+                                    'uvc' => $uvc,
+									'template_id'      => $template_id,
+									'svg_path'    => "", 
+									'status'    => $status,
+									'orchestra_parcel_details_id'    => $parcel_id,
+									'season_code'    => $season_code,
+									'customer_id'    => $factory{0}->id,
+									'pi_status'           => $pi_status,
+									'po_status'           => $po_status,
+                         ]);
+            $i=0;
+            foreach($tot_qty_table as $value)
+            {
+                 HeatTransferOrdersQty::create([
+                                    'oht_id' => $inserted->id,
+                                    'size'      => $size[$i],
+                                    'uvc_tco'      => $uvc_tco[$i],
+                                    'quantity'    => $value
+                         ]);
+                $i++;
+            }
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
+                        ->update([
+                          'order_status' => "Order Placed"
+
+            ]);
+        }
+           
+    }
 	
 	/**
      * This Function is used to save the Special Tag Details.
@@ -1105,135 +1357,135 @@ class OrderManagementCntrl extends Controller
      * @return Void
      */
 	
-    public function setMainLabel(Request $request)
-    {
-        //$delivery_date = $request->delivery_date;
-        $template_front_id = $request->template_front_id; 
-        $template_name = $request->template_name;
-        $tot_qty_table = explode(',',$request->tot_qty_table);
-        $uvc_tco = explode(',',$request->uvc_tco);
-        $size = explode(',',$request->size);
-        $parcel_id =$request->parcel_id;
-        $season_code =$request->season_code;
-		$main_label_count = explode(',',$request->main_label_count);
-        $uvc =$request->uvc;
-		$main_label_qty =$request->main_label_qty;
-        $id =$request->id;
-		$main_flag =$request->main_flag;
-		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('customers.*')->get();
-		
-		if($main_flag == "size")
-		{
-			$tots="";
-		}
-		else
-		{
-			$tots=$main_label_qty;
-		}
-		if(count($factory) > 0)
-		{
-			
-			$pi_required=$factory{0}->pi_required;
-			if($pi_required == 1)
-			{
-				$pi_status="PI Approval Pending";
-				if($factory{0}->po_required == 1)
-				{
-					$po_status="PO Pending";
-				}
-				else
-				{
-					$po_status="";
-				}
-				
-			}
-			else
-			{
-				$po_status="PO Pending";
-				$pi_status="";
-			}
-			$status="Order Approved";
-		}
-		else
-		{
-			$status="";
-			$po_status="";
-			$pi_status="";
-		}
-        if($id != "null")
-        {
-              MainLabelOrders::where('id',$id)
-                   ->update([
-                        'uvc' => $uvc,
-                        'template_id'      => $template_front_id,
-                        'template_name'      => $template_name,
-                        'svg_path'    => "", 
-					    'final_qty'    => $tots, 
-                        'customer_id'    => $factory{0}->id,
-					    'total_flag'    => $main_flag, 
-                        'status'    => $status,
-						'orchestra_parcel_details_id'    => $parcel_id,
-						'season_code'    => $season_code,
-					    'pi_status'           => $pi_status,
-				 		'po_status'           => $po_status,
-                  ]);
-                $deleted = MainLabelOrdersQty::where('oml_id', '=', $id)
-                            ->delete();
-                $i=0;
-                foreach($tot_qty_table as $value)
-                {
-                     MainLabelOrdersQty::create([
-                                        'oml_id' => $id,
-                                        'size'      => $size[$i],
-                                        'uvc_tco'      => $uvc_tco[$i],
-                                        'quantity'    => $value,
-						 				'main_qty'=>$main_label_count[$i]
-                             ]);
-                    $i++;
-                }
-			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
-                        ->update([
-                          'order_status' => "Order Placed"
-
-            ]);
-        }
-        else
-        {
-               $inserted = MainLabelOrders::create([
-                                'uvc' => $uvc,
-                                'template_id'      => $template_front_id,
-                                'template_name'      => $template_name,
-				   				'final_qty'    => $tots, 
-                        		'customer_id'    => $factory{0}->id,
-				   				'total_flag'    => $main_flag, 
-                                'svg_path'    => "", 
-                                'status'    => $status,
-								'orchestra_parcel_details_id'    => $parcel_id,
-								'season_code'    => $season_code,
-				   				'pi_status'           => $pi_status,
-				 				'po_status'           => $po_status,
-                     ]);
-                $i=0;
-                foreach($tot_qty_table as $value)
-                {
-                     MainLabelOrdersQty::create([
-                                        'oml_id' => $inserted->id,
-                                        'size'      => $size[$i],
-                                        'uvc_tco'      => $uvc_tco[$i],
-                                        'quantity'    => $value,
-						 				'main_qty'=>$main_label_count[$i]
-                             ]);
-                    $i++;
-                }
-			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
-                        ->update([
-                          'order_status' => "Order Placed"
-
-            ]);
-        }
-       
-           
-    } 
+//    public function setMainLabel(Request $request)
+//    {
+//        //$delivery_date = $request->delivery_date;
+//        $template_front_id = $request->template_front_id; 
+//        $template_name = $request->template_name;
+//        $tot_qty_table = explode(',',$request->tot_qty_table);
+//        $uvc_tco = explode(',',$request->uvc_tco);
+//        $size = explode(',',$request->size);
+//        $parcel_id =$request->parcel_id;
+//        $season_code =$request->season_code;
+//		$main_label_count = explode(',',$request->main_label_count);
+//        $uvc =$request->uvc;
+//		$main_label_qty =$request->main_label_qty;
+//        $id =$request->id;
+//		$main_flag =$request->main_flag;
+//		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('customers.*')->get();
+//		
+//		if($main_flag == "size")
+//		{
+//			$tots="";
+//		}
+//		else
+//		{
+//			$tots=$main_label_qty;
+//		}
+//		if(count($factory) > 0)
+//		{
+//			
+//			$pi_required=$factory{0}->pi_required;
+//			if($pi_required == 1)
+//			{
+//				$pi_status="PI Approval Pending";
+//				if($factory{0}->po_required == 1)
+//				{
+//					$po_status="PO Pending";
+//				}
+//				else
+//				{
+//					$po_status="";
+//				}
+//				
+//			}
+//			else
+//			{
+//				$po_status="PO Pending";
+//				$pi_status="";
+//			}
+//			$status="Order Approved";
+//		}
+//		else
+//		{
+//			$status="";
+//			$po_status="";
+//			$pi_status="";
+//		}
+//        if($id != "null")
+//        {
+//              MainLabelOrders::where('id',$id)
+//                   ->update([
+//                        'uvc' => $uvc,
+//                        'template_id'      => $template_front_id,
+//                        'template_name'      => $template_name,
+//                        'svg_path'    => "", 
+//					    'final_qty'    => $tots, 
+//                        'customer_id'    => $factory{0}->id,
+//					    'total_flag'    => $main_flag, 
+//                        'status'    => $status,
+//						'orchestra_parcel_details_id'    => $parcel_id,
+//						'season_code'    => $season_code,
+//					    'pi_status'           => $pi_status,
+//				 		'po_status'           => $po_status,
+//                  ]);
+//                $deleted = MainLabelOrdersQty::where('oml_id', '=', $id)
+//                            ->delete();
+//                $i=0;
+//                foreach($tot_qty_table as $value)
+//                {
+//                     MainLabelOrdersQty::create([
+//                                        'oml_id' => $id,
+//                                        'size'      => $size[$i],
+//                                        'uvc_tco'      => $uvc_tco[$i],
+//                                        'quantity'    => $value,
+//						 				'main_qty'=>$main_label_count[$i]
+//                             ]);
+//                    $i++;
+//                }
+//			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
+//                        ->update([
+//                          'order_status' => "Order Placed"
+//
+//            ]);
+//        }
+//        else
+//        {
+//               $inserted = MainLabelOrders::create([
+//                                'uvc' => $uvc,
+//                                'template_id'      => $template_front_id,
+//                                'template_name'      => $template_name,
+//				   				'final_qty'    => $tots, 
+//                        		'customer_id'    => $factory{0}->id,
+//				   				'total_flag'    => $main_flag, 
+//                                'svg_path'    => "", 
+//                                'status'    => $status,
+//								'orchestra_parcel_details_id'    => $parcel_id,
+//								'season_code'    => $season_code,
+//				   				'pi_status'           => $pi_status,
+//				 				'po_status'           => $po_status,
+//                     ]);
+//                $i=0;
+//                foreach($tot_qty_table as $value)
+//                {
+//                     MainLabelOrdersQty::create([
+//                                        'oml_id' => $inserted->id,
+//                                        'size'      => $size[$i],
+//                                        'uvc_tco'      => $uvc_tco[$i],
+//                                        'quantity'    => $value,
+//						 				'main_qty'=>$main_label_count[$i]
+//                             ]);
+//                    $i++;
+//                }
+//			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
+//                        ->update([
+//                          'order_status' => "Order Placed"
+//
+//            ]);
+//        }
+//       
+//           
+//    } 
 	
 	/**
      * This Function is used to save the Solid Sticker Details.
@@ -1878,7 +2130,7 @@ class OrderManagementCntrl extends Controller
             $class_obj = new ERPOrderStatusCheck();
             $erp_order_details = $class_obj->OrchestraERPStatus($data_array);
             
-            if(sizeof($erp_order_details) > 0 && $erp_order_details[0] != null)
+            if($erp_order_details[0] != null)
             {
                 if($erp_order_details{0}->status_name != 'Hold For JC Queue' &&  $erp_order_details{0}->status_name != 'Moved To ERP' )
                 {
@@ -1903,7 +2155,7 @@ class OrderManagementCntrl extends Controller
                         'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                         ]);
             if ($po_status == "PO Uploaded") {
-                /** @var array [Pass array of values to updateOrchestraErpOrders function] */
+                /** @var array [Pass array of values to updateTescoErpOrders function] */
                 $request_array = [];
                 $request_array['id'] = $template_id;
                 $request_array['tableName'] = $table_name; 
@@ -1952,7 +2204,7 @@ class OrderManagementCntrl extends Controller
             $class_obj = new ERPOrderStatusCheck();
             $erp_order_details = $class_obj->OrchestraERPStatus($data_array);
 
-            if(sizeof($erp_order_details) > 0 && $erp_order_details[0] != null)
+            if($erp_order_details[0] != null)
             {
                 if($erp_order_details{0}->status_name != 'Hold For JC Queue' &&  $erp_order_details{0}->status_name != 'Moved To ERP' )
                 {
@@ -1977,7 +2229,7 @@ class OrderManagementCntrl extends Controller
 
                         ]);
             if ($po_status == "PO Uploaded") {
-                /** @var array [Pass array of values to updateOrchestraErpOrders function] */
+                /** @var array [Pass array of values to updateTescoErpOrders function] */
                 $request_array = [];
                 $request_array['id'] = $row_id;
                 $request_array['tableName'] = $table_name; 
@@ -2120,7 +2372,7 @@ class OrderManagementCntrl extends Controller
                             'pi_file' => $attatchment, 
                             'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                         ]);
-            /** @var array [Pass array of values to updateOrchestraErpOrders function] */
+            /** @var array [Pass array of values to updateTescoErpOrders function] */
             $erpOrders['tableName'] = $table_name;
             $erpOrders['id']        = $row_id;
             $erpOrders['buyer_id']  = $buyer_id;  
