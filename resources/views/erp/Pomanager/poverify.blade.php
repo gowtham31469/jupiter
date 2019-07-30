@@ -697,16 +697,16 @@ transform: scale(1);
 				statusCode: {
 					200: function(data) {
 
-						$('#orderDetailsModal').modal("hide")
+						$('#orderDetailsModal').modal("hide");
 						$('.snackbar_span').html('Po Verified successfully ...!');
 						showSnackbar();
-						location.reload()
-						$('#orderDetailsModal').modal("hide")
+						location.reload();
 					
 					},
 					422: function(data) {
 						$('.snackbar_span').html(data.responseJSON.message);
 						showSnackbar();
+						$('#orderDetailsModal').modal("hide");
 					},
 	        	},
 				error: function(data) {

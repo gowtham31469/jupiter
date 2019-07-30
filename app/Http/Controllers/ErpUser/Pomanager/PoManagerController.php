@@ -644,7 +644,7 @@ class PoManagerController extends Controller
 					'created_at'           => $this->current_date,
 					'updated_at'           => $this->current_date,
 				]);
-dd($history_id);
+
 				DB::table('event_history')
 				->insert([
 					'history_id'  => $history_id->id,

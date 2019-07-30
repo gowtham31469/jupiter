@@ -2364,6 +2364,14 @@ class OrderManagementCntrl extends Controller
                 {
                     $value    =  explode('-',$val);
 
+                    /** @var array [Pass array of values to updateOrchestraErpOrders function] */
+                    $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Orchestra')->first();
+                    $request_array = [];
+                    $request_array['id'] = $value[1];
+                    $request_array['tableName'] = $value[0]; 
+                    $request_array['buyer_id'] = $tesco_buyer_id->id;  
+                    $request_array['created_by'] = Auth::guard('web')->id();
+
                     DB::table($value[0])->where('id',$value[1])
                         ->update([
                             'po_number' => $po,
@@ -2371,15 +2379,6 @@ class OrderManagementCntrl extends Controller
                             'po_status' => "PO Uploaded",
                             'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                         ]);
-
-                    /** @var array [Pass array of values to updateOrchestraErpOrders function] */
-                    $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Orchestra')->first();
-                    $request_array = [];
-                    $request_array['id'] = $value[1];
-                    $request_array['tableName'] = $value[0]; 
-                    $request_array['buyer_id'] = $tesco_buyer_id->id;  
-                    $request_array['created_by'] = Auth::guard('web')->id(); 
-
                     $erp_obj->updateOrchestraErpOrders($request_array);
                 }
             }
@@ -2389,12 +2388,21 @@ class OrderManagementCntrl extends Controller
                 {
                     $value = explode('-',$val);
 
+                    /** @var array [Pass array of values to updateOrchestraErpOrders function] */
+                    $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Orchestra')->first();
+                    $request_array = [];
+                    $request_array['id'] = $value[1];
+                    $request_array['tableName'] = $value[0]; 
+                    $request_array['buyer_id'] = $tesco_buyer_id->id;  
+                    $request_array['created_by'] = Auth::guard('web')->id();
+
                     DB::table($value[0])->where('id',$value[1])
                         ->update([
                             'po_number' => $po,
                             'po_status' => "PO Uploaded",
                             'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                         ]);
+                    $erp_obj->updateOrchestraErpOrders($request_array);
                 }
             }
             $result = response()->json(['error'=> false,'message' =>'success'],200);
