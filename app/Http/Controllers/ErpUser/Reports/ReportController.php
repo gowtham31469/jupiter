@@ -144,40 +144,40 @@ public function getTableFields(Request $request)
 {   
 
     $def_po1 = ["No","Order.Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference"];
-    $ext_po1 = ["A/w Date", "PO.dt","JC.No","JC.Dt","Inv.No","Inv.Dt","Buyer","Season","Country","ByrPo","Quantity","Reason","Reapprove.Dt","Disp.Mode","Awb","Status"];
+    $ext_po1 = ["A/w Date", "PO.dt","JC.No","JC.Dt","Inv.No","Inv.Dt","Buyer","Season","Country","ByrPo","Quantity","Reason","Reapprove.Dt","DispMode","Awb","Status"];
 
     $def_po2 = ["No","Order.Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference"];
-    $ext_po2 = ["A/w Date", "PO.dt","JC.No","JC.Dt","Inv.No","Inv.Dt","Buyer","Season","Country","ByrPo","Quantity","Reason","Reapprove.Dt","Disp.Mode","Awb","Status"];
+    $ext_po2 = ["A/w Date", "PO.dt","JC.No","JC.Dt","Inv.No","Inv.Dt","Buyer","Season","Country","ByrPo","Quantity","Reason","Reapprove.Dt","DispMode","Awb","Status"];
 
     $def_po3 = ["No","Order.Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference","Reason"];
-    $ext_po3 = ["A/w Date", "PO.dt","JC.No","JC.Dt","Inv.No","Inv.Dt","Buyer","Season","Country","ByrPo","Quantity","Reapprove.Dt","Disp.Mode","Awb","Status"];
+    $ext_po3 = ["A/w Date", "PO.dt","JC.No","JC.Dt","Inv.No","Inv.Dt","Buyer","Season","Country","ByrPo","Quantity","Reapprove.Dt","DispMode","Awb","Status"];
 
     $def_po4 = ["No","Order.Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference","Reapprove.Dt"];
-    $ext_po4 = ["A/w Date", "PO.dt","JC.No","JC.Dt","Inv.No","Inv.Dt","Buyer","Season","Country","ByrPo","Quantity","Disp.Mode","Awb","Status","Reason"];
+    $ext_po4 = ["A/w Date", "PO.dt","JC.No","JC.Dt","Inv.No","Inv.Dt","Buyer","Season","Country","ByrPo","Quantity","DispMode","Awb","Status","Reason"];
 
     $def_jc1 = ["No","Order.Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference"];
-    $ext_jc1 = ["A/w Date", "PO.dt","JC.Dt","Inv.No","Inv.Dt","Buyer","Season","Country","ByrPo","Quantity","Reapprove.Dt","Disp.Mode","Awb","Status","Reason"];
+    $ext_jc1 = ["A/w Date", "PO.dt","JC.Dt","Inv.No","Inv.Dt","Buyer","Season","Country","ByrPo","Quantity","Reapprove.Dt","DispMode","Awb","Status","Reason"];
 
     $def_jc2 = ["No","Order.Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference"];
-    $ext_jc2 = ["A/w Date", "PO.dt","JC.Dt","Inv.No","Inv.Dt","Buyer","Season","Country","ByrPo","Quantity","Reapprove.Dt","Disp.Mode","Awb","Status","Reason"];
+    $ext_jc2 = ["A/w Date", "PO.dt","JC.Dt","Inv.No","Inv.Dt","Buyer","Season","Country","ByrPo","Quantity","Reapprove.Dt","DispMode","Awb","Status","Reason"];
 
     $def_order1 = ["No","Order.Dt","ErpId","JC.No","Inv.No","Inv.Dt","Customer","Material","Style","P.O","OCN","Reference","Quantity"];
-    $ext_order1 = ["A/w Date", "PO.dt","JC.Dt","Buyer","Season","Country","ByrPo","Reapprove.Dt","Disp.Mode","Awb","Reason","Status"];
+    $ext_order1 = ["A/w Date", "PO.dt","JC.Dt","Buyer","Season","Country","ByrPo","Reapprove.Dt","DispMode","Awb","Reason","Status"];
 
     $def_order2 = ["No","Order.Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference","Quantity"];
-    $ext_order2 = ["A/w Date", "PO.dt","Inv.No","Inv.Dt","JC.Dt","Buyer","Season","Country","ByrPo","Reapprove.Dt","Disp.Mode","Awb","Reason","Status"];
+    $ext_order2 = ["A/w Date", "PO.dt","Inv.No","Inv.Dt","JC.Dt","Buyer","Season","Country","ByrPo","Reapprove.Dt","DispMode","Awb","Reason","Status"];
 
     $def_order3 = ["No","Order.Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference","Quantity","Reason"];
-    $ext_order3 = ["A/w Date", "PO.dt","Inv.No","Inv.Dt","JC.Dt","Buyer","Season","Country","ByrPo","Reapprove.Dt","Disp.Mode","Awb","Status"];
+    $ext_order3 = ["A/w Date", "PO.dt","Inv.No","Inv.Dt","JC.Dt","Buyer","Season","Country","ByrPo","Reapprove.Dt","DispMode","Awb","Status"];
 
     $def_order4 = ["No","Order.Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference","Quantity","Reason"];
-    $ext_order4 = ["A/w Date", "PO.dt","Inv.No","Inv.Dt","JC.Dt","Buyer","Season","Country","ByrPo","Reapprove.Dt","Disp.Mode","Awb","Status"];
+    $ext_order4 = ["A/w Date", "PO.dt","Inv.No","Inv.Dt","JC.Dt","Buyer","Season","Country","ByrPo","Reapprove.Dt","DispMode","Awb","Status"];
 
     $def_order5 = ["No","Order.Dt","ErpId","JC.No","Inv.No","Inv.Dt","Customer","Material","Style","P.O","OCN","Reference","Quantity"];
-    $ext_order5 = ["A/w Date", "PO.dt","JC.Dt","Buyer","Season","Country","ByrPo","Reapprove.Dt","Disp.Mode","Awb","Reason","Status"];
+    $ext_order5 = ["A/w Date", "PO.dt","JC.Dt","Buyer","Season","Country","ByrPo","Reapprove.Dt","DispMode","Awb","Reason","Status"];
 
     $def_order6 = ["No","Order.Dt","ErpId","JC.No","Inv.No","Inv.Dt","Customer","Material","Style","P.O","OCN","Reference","Quantity"];
-    $ext_order6 = ["A/w Date", "PO.dt","JC.Dt","Buyer","Season","Country","ByrPo","Reapprove.Dt","Disp.Mode","Awb","Reason","Status"];
+    $ext_order6 = ["A/w Date", "PO.dt","JC.Dt","Buyer","Season","Country","ByrPo","Reapprove.Dt","DispMode","Awb","Reason","Status"];
 
     $def_invoice1 =["No","Inv.No","Date","Customer","Base_Val","CGST","SGST","Inv.Val"];
     $ext_invoice1 = ["IGST"];
@@ -548,19 +548,20 @@ public function setUpDatatable(Request $request)
                                 'history.erp_order_details_id')
                     ->leftJoin("customers",'customers.id', '=', 'history.customer_id')
                     ->leftJoin("buyers",'buyers.id', '=', 'history.buyer_id')
+                    ->leftJoin("erp_status",'erp_order_details.status','=','erp_status.id')
                     ->select(['erp_order_details.order_date as Order.Dt', 'erp_order_id as ErpId',
                         'company_name as Customer','material as Material','style as Style','history.po as P.O',
                         'ocn as OCN','reference as Reference','po_reapproved_date as Reapprove.Dt',
                         'erp_order_details.aw_date as A/w Date','erp_order_details.created_at as PO.dt',
                         'jc_number as JC.No','jc_created_date as JC.Dt','invoice_number as Inv.No',
                         'invoice_created_date as Inv.Dt','buyer_name as Buyer','season as Season',
-                        'country as Country','buyer_po as ByrPo','order_quantity as Quantity',
-                        'company_id as Disp.Mode','status as Status','reason as Reason'])
+                        'country as Country','buyer_po as ByrPo','order_quantity as Quantity','erp_status.status_name as Status','reason as Reason'])
                         ->get();
 
                     $queryRes->map(function ($queryRes,$key) {
                     $queryRes->No =$key+1;
                     $queryRes->Awb ='-';
+                    $queryRes->DispMode ='-';
                     });
             break;
         }
