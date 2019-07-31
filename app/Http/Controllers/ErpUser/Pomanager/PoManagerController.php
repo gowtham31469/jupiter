@@ -397,7 +397,7 @@ class PoManagerController extends Controller
 					if(sizeof($price) > 0) {
 						$price_range =  DB::table('price_range')->select('price_range.price')->where('price_taxation_id', $price{0}->id)->where('volume_from', '<=', $value->order_quantity)->where('volume_to', '>=', $value->order_quantity)->get();
 					} else {
-                        return response()->json(['error' => true, 'message' => 'Price Details Are Missing'], 422);
+                        return response()->json(['error' => true, 'message' => 'Price details should be within a range'], 422);
 					}
 
 					if(sizeof($price_range) > 0) {
@@ -429,7 +429,7 @@ class PoManagerController extends Controller
 						// insert  into history table with action id
 						$res = $this->insertHistoryData($value, $action_id, $erp_user);
 					} else {
-                        return response()->json(['error' => true, 'message' => 'Price Details Are Missing'], 422);
+                        return response()->json(['error' => true, 'message' => 'Price details should be within a range'], 422);
 					}
 				}
 				
@@ -449,7 +449,7 @@ class PoManagerController extends Controller
 					if(sizeof($price) > 0) {
 						$price_range =  DB::table('price_range')->select('price_range.price')->where('price_taxation_id', $price{0}->id)->where('volume_from', '<=', $value->order_quantity)->where('volume_to', '>=', $value->order_quantity)->get();
 					} else {
-                        return response()->json(['error' => true, 'message' => 'Price Details Are Missing'], 422);
+                        return response()->json(['error' => true, 'message' => 'Price details should be within a range'], 422);
 					}
 
 					if(sizeof($price_range) > 0) {
@@ -481,7 +481,7 @@ class PoManagerController extends Controller
 						// insert  into history table with action id
 						$res = $this->insertHistoryData($value, $action_id, $erp_user);
 					} else {
-                        return response()->json(['error' => true, 'message' => 'Price Details Are Missing'], 422);
+                        return response()->json(['error' => true, 'message' => 'Price details should be within a range'], 422);
 					}
 				}
 
