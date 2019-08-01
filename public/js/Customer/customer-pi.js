@@ -166,7 +166,7 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
                     }
                     else
                     {
-                        $('.snackbar_span').html('Price Details are Missing !!');
+                        $('.snackbar_span').html('Price details should be within a range !!');
                         showSnackbar();
                     }
                 } 

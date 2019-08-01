@@ -132,33 +132,42 @@ class OrderManagementController extends Controller
 
 				} else if($buyer->buyer_name === 'Orchestra'){
 
-					// $main_table     = str_replace("_qty","",$qnty_table);
-					// $result_str     =  str_replace("_"," ",str_replace("_orders","",$main_table));
-					// $qnty_id        = '';
-					// foreach (explode(' ', $result_str) as $word)
-					// {
-					//    $qnty_id .= strtolower($word[0]);
-					// }
-					// $order_details  = DB::table($qnty_table)->select($main_table.'.*')->where($qnty_table.'.id', $qty_row_id)->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id.'_id')
-					// 				->get();
-					// $season         = $order_details->season_code;
-					// $country        = "";
-					// $template_id    = $order_details->template_id;
-					// $template_level = DB::table('tesco_item_master as t1')
-					// 					->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
-					// 					->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
-					// 					->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
-					// 					->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
-					// 					->where('t1.id', $template_id)
-					// 					->first();
+					$main_table     = str_replace("_qty","",$qnty_table);
+					$result_str     = str_replace("_"," ",str_replace("_orders","",$main_table));
+					$qnty_id        = '';
+					foreach (explode(' ', $result_str) as $word)
+					{
+					   $qnty_id .= strtolower($word[0]);
+					}
 					
-					// $material_name  = $template_level->material;
-					// $material_sub   = $template_level->material_sub;
-					// $material_ref   = $template_level->ref;
-					// $customer_po    = $order_details->purchase_order_no;
-					// $buyer_po       = $order_details->po_number;
-					// $style          = $order_details->$style_zone;
-					// $ocn_number     = $order_details->ocn_number;
+					$order_details  = DB::table($qnty_table)->select($main_table.'.*')->where($qnty_table.'.id', $qty_row_id)->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id.'_id')
+									->first();
+					
+					// template front and back id storing in orchestra_hang_tag_orders table
+					$template_id = $main_table === 'orchestra_hang_tag_orders'?$order_details->template_front_id:$order_details->template_id;
+
+					$template_data = DB::table('orchestra_item_master')
+									  ->join('orchestra_template', 'orchestra_template.item_id', 'orchestra_item_master.id')
+									  ->where('orchestra_item_master.id', $template_id)
+									  ->select('orchestra_template.hierarchy_id', 'orchestra_item_master.item_name')->first();
+					$hierarchy_id = $template_data->hierarchy_id;
+
+					$template_level = DB::table('orchestra_item_master as t1')
+										->select('t1.item_name as material_sub', 't3.item_name as material')
+										->leftJoin('orchestra_item_master as t2', 't2.id','=','t1.parent_id')
+										->leftJoin('orchestra_item_master as t3', 't3.id','=','t2.parent_id')
+										->where('t1.id', $hierarchy_id)
+										->first();
+					
+					$material_name  = $template_level->material;
+					$material_sub   = $template_level->material_sub;
+					$material_ref   = $template_data->item_name;
+					$customer_po    = $order_details->po_number;
+					$buyer_po       = $order_details->po;
+					$style          = $order_details->uvc;
+					$ocn_number     = null;
+					$season         = $order_details->season_code;
+					$country        = null;
 
 				} else {
 
@@ -257,26 +266,34 @@ class OrderManagementController extends Controller
 					}
 					$main_table  = str_replace("_qty","",$order_qty_table);
 					
-					// $order_details  = DB::table($qnty_table)->select($main_table.'.*')->where($qnty_table.'.id', $qty_row_id)->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id.'_id')
-					// 				->get();
-					// $season         = $order_details->season_code;
-					// $country        = "";
-					// $template_id    = $order_details->template_id;
-					// $template_level = DB::table('tesco_item_master as t1')
-					// 					->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
-					// 					->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
-					// 					->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
-					// 					->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
-					// 					->where('t1.id', $template_id)
-					// 					->first();
+					$order_details  = DB::table($order_qty_table)->select($main_table.'.*')->where($order_qty_table.'.id', $qty_row_id)->join($main_table, $main_table.'.id', $order_qty_table.'.'.$qnty_id.'_id')
+									->first();
 					
-					// $material_name  = $template_level->material;
-					// $material_sub   = $template_level->material_sub;
-					// $material_ref   = $template_level->ref;
-					// $customer_po    = $order_details->purchase_order_no;
-					// $buyer_po       = $order_details->po_number;
-					// $style          = $order_details->$style_zone;
-					// $ocn_number     = $order_details->ocn_number;
+					// template front and back id storing in orchestra_hang_tag_orders table
+					$template_id = $main_table === 'orchestra_hang_tag_orders'?$order_details->template_front_id:$order_details->template_id;
+
+					$template_data = DB::table('orchestra_item_master')
+									  ->join('orchestra_template', 'orchestra_template.item_id', 'orchestra_item_master.id')
+									  ->where('orchestra_item_master.id', $template_id)
+									  ->select('orchestra_template.hierarchy_id', 'orchestra_item_master.item_name')->first();
+					$hierarchy_id = $template_data->hierarchy_id;
+
+					$template_level = DB::table('orchestra_item_master as t1')
+										->select('t1.item_name as material_sub', 't3.item_name as material')
+										->leftJoin('orchestra_item_master as t2', 't2.id','=','t1.parent_id')
+										->leftJoin('orchestra_item_master as t3', 't3.id','=','t2.parent_id')
+										->where('t1.id', $hierarchy_id)
+										->first();
+					
+					$material_name  = $template_level->material;
+					$material_sub   = $template_level->material_sub;
+					$material_ref   = $template_data->item_name;
+					$customer_po    = $order_details->po_number;
+					$buyer_po       = $order_details->po;
+					$style          = $order_details->uvc;
+					$ocn_number     = null;
+					$season         = $order_details->season_code;
+					$country        = null;
 
 					// update individual row quanity to 0 in artworks orders table.
 					DB::table($order_qty_table)->where('id',$order_qnty_table_id)->update(['quantity' => 0]);
@@ -445,33 +462,42 @@ class OrderManagementController extends Controller
 
 					} else if($buyer->buyer_name === 'Orchestra'){
 
-						// $main_table     = str_replace("_qty","",$qnty_table);
-						// $result_str     =  str_replace("_"," ",str_replace("_orders","",$main_table));
-						// $qnty_id        = '';
-						// foreach (explode(' ', $result_str) as $word)
-						// {
-						//    $qnty_id .= strtolower($word[0]);
-						// }
-						// $order_details  = DB::table($qnty_table)->select($main_table.'.*')->where($qnty_table.'.id', $qty_row_id)->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id.'_id')
-						// 				->get();
-						// $season         = $order_details->season_code;
-						// $country        = "";
-						// $template_id    = $order_details->template_id;
-						// $template_level = DB::table('tesco_item_master as t1')
-						// 					->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
-						// 					->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
-						// 					->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
-						// 					->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
-						// 					->where('t1.id', $template_id)
-						// 					->first();
+						$main_table     = str_replace("_qty","",$qnty_table);
+						$result_str     = str_replace("_"," ",str_replace("_orders","",$main_table));
+						$qnty_id        = '';
+						foreach (explode(' ', $result_str) as $word)
+						{
+						$qnty_id .= strtolower($word[0]);
+						}
 						
-						// $material_name  = $template_level->material;
-						// $material_sub   = $template_level->material_sub;
-						// $material_ref   = $template_level->ref;
-						// $customer_po    = $order_details->purchase_order_no;
-						// $buyer_po       = $order_details->po_number;
-						// $style          = $order_details->$style_zone;
-						// $ocn_number     = $order_details->ocn_number;
+						$order_details  = DB::table($qnty_table)->select($main_table.'.*')->where($qnty_table.'.id', $qty_row_id)->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id.'_id')
+										->first();
+						
+						// template front and back id storing in orchestra_hang_tag_orders table
+						$template_id = $main_table === 'orchestra_hang_tag_orders'?$order_details->template_front_id:$order_details->template_id;
+
+						$template_data = DB::table('orchestra_item_master')
+										->join('orchestra_template', 'orchestra_template.item_id', 'orchestra_item_master.id')
+										->where('orchestra_item_master.id', $template_id)
+										->select('orchestra_template.hierarchy_id', 'orchestra_item_master.item_name')->first();
+						$hierarchy_id = $template_data->hierarchy_id;
+
+						$template_level = DB::table('orchestra_item_master as t1')
+											->select('t1.item_name as material_sub', 't3.item_name as material')
+											->leftJoin('orchestra_item_master as t2', 't2.id','=','t1.parent_id')
+											->leftJoin('orchestra_item_master as t3', 't3.id','=','t2.parent_id')
+											->where('t1.id', $hierarchy_id)
+											->first();
+						
+						$material_name  = $template_level->material;
+						$material_sub   = $template_level->material_sub;
+						$material_ref   = $template_data->item_name;
+						$customer_po    = $order_details->po_number;
+						$buyer_po       = $order_details->po;
+						$style          = $order_details->uvc;
+						$ocn_number     = null;
+						$season         = $order_details->season_code;
+						$country        = null;
 
 					} else {
 
@@ -580,26 +606,34 @@ class OrderManagementController extends Controller
 						}
 						$main_table  = str_replace("_qty","",$order_qty_table);
 						
-						// $order_details  = DB::table($qnty_table)->select($main_table.'.*')->where($qnty_table.'.id', $qty_row_id)->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id.'_id')
-						// 				->get();
-						// $season         = $order_details->season_code;
-						// $country        = "";
-						// $template_id    = $order_details->template_id;
-						// $template_level = DB::table('tesco_item_master as t1')
-						// 					->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
-						// 					->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
-						// 					->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
-						// 					->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
-						// 					->where('t1.id', $template_id)
-						// 					->first();
+						$order_details  = DB::table($order_qty_table)->select($main_table.'.*')->where($order_qty_table.'.id', $qty_row_id)->join($main_table, $main_table.'.id', $order_qty_table.'.'.$qnty_id.'_id')
+										->first();
 						
-						// $material_name  = $template_level->material;
-						// $material_sub   = $template_level->material_sub;
-						// $material_ref   = $template_level->ref;
-						// $customer_po    = $order_details->purchase_order_no;
-						// $buyer_po       = $order_details->po_number;
-						// $style          = $order_details->$style_zone;
-						// $ocn_number     = $order_details->ocn_number;
+						// template front and back id storing in orchestra_hang_tag_orders table
+						$template_id = $main_table === 'orchestra_hang_tag_orders'?$order_details->template_front_id:$order_details->template_id;
+
+						$template_data = DB::table('orchestra_item_master')
+										->join('orchestra_template', 'orchestra_template.item_id', 'orchestra_item_master.id')
+										->where('orchestra_item_master.id', $template_id)
+										->select('orchestra_template.hierarchy_id', 'orchestra_item_master.item_name')->first();
+						$hierarchy_id = $template_data->hierarchy_id;
+
+						$template_level = DB::table('orchestra_item_master as t1')
+											->select('t1.item_name as material_sub', 't3.item_name as material')
+											->leftJoin('orchestra_item_master as t2', 't2.id','=','t1.parent_id')
+											->leftJoin('orchestra_item_master as t3', 't3.id','=','t2.parent_id')
+											->where('t1.id', $hierarchy_id)
+											->first();
+						
+						$material_name  = $template_level->material;
+						$material_sub   = $template_level->material_sub;
+						$material_ref   = $template_data->item_name;
+						$customer_po    = $order_details->po_number;
+						$buyer_po       = $order_details->po;
+						$style          = $order_details->uvc;
+						$ocn_number     = null;
+						$season         = $order_details->season_code;
+						$country        = null;
 
 					} else {
 

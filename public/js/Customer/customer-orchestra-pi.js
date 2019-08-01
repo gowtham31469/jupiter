@@ -154,13 +154,13 @@ const genarateOrchetraPI = (id,table_name,uvc,pi_status) =>
                             $('#profoma-invoice').modal("show")
 
                         } else {
-                            $('.snackbar_span').html('Price Details are Missing !!');
+                            $('.snackbar_span').html('Price details should be within a range !!');
                             showSnackbar();
                         }
                     }
                     else
                     {
-                        $('.snackbar_span').html('Price Details are Missing !!');
+                        $('.snackbar_span').html('Price details should be within a range !!');
                         showSnackbar();
                     }
                 } 

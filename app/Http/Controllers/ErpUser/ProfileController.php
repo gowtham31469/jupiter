@@ -77,7 +77,7 @@ class ProfileController extends Controller
 			
 		}else{
 			$profile->company	= array('Admin can access all Companies');
-			$profile->buyer		= array('Admin can access all Buyes');
+			$profile->buyer		= array('Admin can access all Buyers');
 			$profile->roles		= array('You are Admin ! You have access to all modules');
 			$profile->template	= array('Admin can access all Templates');
 		}

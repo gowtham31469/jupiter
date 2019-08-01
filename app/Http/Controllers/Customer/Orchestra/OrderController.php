@@ -1734,6 +1734,7 @@ class OrderController extends Controller
            
             $destination_path_insert = "";
             $destination_path_db = "";
+            $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Orchestra')->first();
 
             if( $request->hasFile('po_file'))
             {
@@ -1758,14 +1759,13 @@ class OrderController extends Controller
                         ]);
 
                     /** @var array [Pass array of values to updateOrchestraErpOrders function] */
-                    $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Orchestra')->first();
                     $request_array = [];
                     $request_array['id'] = $value[1];
                     $request_array['tableName'] = $value[0]; 
                     $request_array['buyer_id'] = $tesco_buyer_id->id; 
                     $request_array['created_by'] = Auth::guard('web_customer')->id();
 
-                   return $erp_obj->updateOrchestraErpOrders($request_array);
+                    $erp_obj->updateOrchestraErpOrders($request_array);
                 }
             }
             else
@@ -1780,6 +1780,15 @@ class OrderController extends Controller
                             'po_status' => "PO Uploaded",
                             'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                         ]);
+                    
+                    /** @var array [Pass array of values to updateOrchestraErpOrders function] */
+                    $request_array = [];
+                    $request_array['id'] = $value[1];
+                    $request_array['tableName'] = $value[0]; 
+                    $request_array['buyer_id'] = $tesco_buyer_id->id; 
+                    $request_array['created_by'] = Auth::guard('web_customer')->id();
+
+                    $erp_obj->updateOrchestraErpOrders($request_array);
                 }
             }
             $result = response()->json(['error'=> false,'message' =>'success'],200);

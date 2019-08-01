@@ -694,13 +694,21 @@ transform: scale(1);
 				beforeSend: function() {
 
 				},
-				success: function(data) {
-					$('#orderDetailsModal').modal("hide")
-					$('.snackbar_span').html('Po Verified successfully ...!');
-					showSnackbar();
-					location.reload()
-					$('#orderDetailsModal').modal("hide")
-				},
+				statusCode: {
+					200: function(data) {
+
+						$('#orderDetailsModal').modal("hide");
+						$('.snackbar_span').html('Po Verified successfully ...!');
+						showSnackbar();
+						location.reload();
+					
+					},
+					422: function(data) {
+						$('.snackbar_span').html(data.responseJSON.message);
+						showSnackbar();
+						$('#orderDetailsModal').modal("hide");
+					},
+	        	},
 				error: function(data) {
 
 				},
