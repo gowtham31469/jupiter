@@ -29,7 +29,7 @@ class CreateOrchestraHeatTransferOrdersTable extends Migration
             $table->string('pi_status');
             $table->string('po_status');
             $table->string('order_flag')->nullable();
-	    $table->integer('is_order_count_empty')->nullable();
+	    $table->integer('is_order_count_empty')->default(0);
 	    $table->integer('pi_rev_no')->nullable();
 	    $table->integer('order_placed_by')->nullable();
 	    $table->integer('edit_permission')->nullable();
