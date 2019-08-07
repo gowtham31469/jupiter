@@ -12,91 +12,91 @@ class ActionTableSeeder extends Seeder
     public function run()
     {
 
-        \App\Actions::create([
+        \App\Action::create([
                 'id' =>1,
                 'type' => 'PO Manager',
                 'action' =>'PO Manager Verification Pending',
             ]);
 
-        \App\Actions::create([
+        \App\Action::create([
                 'id' =>2,
                 'type' => 'PO Manager',
                 'action' =>'PO Manager Verified',
             ]);
 
-        \App\Actions::create([
+        \App\Action::create([
                 'id' =>3,
                 'type' => 'PO Manager',
                 'action' =>'PO Manager Rejected',
             ]);
 
-        \App\Actions::create([
+        \App\Action::create([
                 'id' =>4,
                 'type' => 'PO Manager',
                 'action' =>'PO Manager Reapproved',
             ]);
 
-        \App\Actions::create([
+        \App\Action::create([
                 'id' =>5,
                 'type' => 'JC Manager',
                 'action' =>'JC Pending',
             ]);
 
-        \App\Actions::create([
+        \App\Action::create([
                 'id' =>6,
                 'type' => 'JC Manager',
                 'action' =>'JC Created',
             ]);
 
-        \App\Actions::create([
+        \App\Action::create([
                 'id' =>7,
                 'type' => 'Order',
                 'action' =>'Dispatched',
             ]);
 
-        \App\Actions::create([
+        \App\Action::create([
                 'id' =>8,
                 'type' => 'Order',
                 'action' =>'Pending For Dispatch',
             ]);
 
-        \App\Actions::create([
+        \App\Action::create([
                 'id' =>9,
                 'type' => 'Order',
                 'action' =>'Partial Dispatch',
             ]);
 
-        \App\Actions::create([
+        \App\Action::create([
                 'id' =>10,
                 'type' => 'Order',
                 'action' =>'Hold',
             ]);
 
-        \App\Actions::create([
+        \App\Action::create([
                 'id' =>11,
                 'type' => 'Order',
                 'action' =>'Cancelled',
             ]);
 
-        \App\Actions::create([
+        \App\Action::create([
                 'id' =>12,
                 'type' => 'Order',
                 'action' =>'In Production',
             ]);
 
-        \App\Actions::create([
+        \App\Action::create([
                 'id' =>13,
                 'type' => 'Order',
                 'action' =>'Production Complete',
             ]);
 
-        \App\Actions::create([
+        \App\Action::create([
                 'id' =>14,
                 'type' => 'Invoice',
                 'action' =>'Within State',
             ]);
 
-        \App\Actions::create([
+        \App\Action::create([
                 'id' =>15,
                 'type' => 'Invoice',
                 'action' =>'Inter State',
@@ -126,6 +126,6 @@ class ActionTableSeeder extends Seeder
             // ['type'=>'Invoice','action' =>'Job Works']);
             // ['type'=>'Invoice','action' =>'Export']);
 
-         // DB::table('actions')->insert($data);
+         // DB::table('Action')->insert($data);
     }
 }
