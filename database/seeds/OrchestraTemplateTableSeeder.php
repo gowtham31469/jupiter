@@ -190,10 +190,11 @@ class OrchestraTemplateTableSeeder extends Seeder
           //WBB1
         \App\OrchestraTemplate::create([
             'id' =>17 ,
-            'item_id' => 19,
+            'item_id' => 22,
             'template_name' => "WBB1-Woven DISNEYBABY DISNEY",
             'template_description' => "WBB1-Woven DISNEYBABY DISNEY",
-            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/DISNEY_WOVEN_LABEL/BABY/WBB1-Woven_DISNEYBABY_DISNEY_Front.jpg",
+            'template_file' => 
+            "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/WBB1_WOVEN_DISNEYBABY@DISNEY_M.L.png",
             'disney' => 1,
             'tax' => 0,
             'flag' => 1,
@@ -201,22 +202,23 @@ class OrchestraTemplateTableSeeder extends Seeder
         ]);
         \App\OrchestraTemplate::create([
             'id' =>18 ,
-            'item_id' => 19,
+            'item_id' => 23,
             'template_name' => "WBB1-Woven DISNEYBABY DISNEY",
             'template_description' => "WBB1-Woven DISNEYBABY DISNEY",
-            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/DISNEY_WOVEN_LABEL/BABY/WBB1-Woven_DISNEYBABY_DISNEY_Back_Back.jpg",
+            'template_file' =>
+            "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/WBB1_WOVEN_DISNEYBABY@DISNEY_S.L.png",
             'disney' => 1,
             'tax' => 0,
             'flag' => 0,
             'hierarchy_id' => 18,
         ]);
-
         \App\OrchestraTemplate::create([
             'id' =>19 ,
-            'item_id' => 20,
+            'item_id' => 24,
             'template_name' => "WBB2-Woven DISNEYBABY DISNEY PIXAR",
             'template_description' => "WBB2-Woven DISNEYBABY DISNEY PIXAR",
-            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/DISNEY_WOVEN_LABEL/BABY/WBB2-Woven_DISNEYBABY_DISNEY_PIXAR_Front.jpg",
+            'template_file' =>
+            "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/WBB2 - WOVEN DISNEYBABY@ PIXAR M.L.png",
             'disney' => 1,
             'tax' => 0,
             'flag' => 1,
@@ -224,10 +226,10 @@ class OrchestraTemplateTableSeeder extends Seeder
         ]);
         \App\OrchestraTemplate::create([
             'id' =>20 ,
-            'item_id' => 20,
+            'item_id' => 25,
             'template_name' => "WBB2-Woven DISNEYBABY DISNEY PIXAR",
-            'template_description' => "WBB2-Woven DISNEYBABY DISNEY PIXAR",
-            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/DISNEY_WOVEN_LABEL/BABY/WBB2-Woven_DISNEYBABY_DISNEY_PIXAR_Back.jpg",
+            'template_description' =>
+            "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/WBB2 - WOVEN DISNEYBABY@ PIXAR S.L.png",
             'disney' => 1,
             'tax' => 0,
             'flag' => 0,
@@ -235,10 +237,11 @@ class OrchestraTemplateTableSeeder extends Seeder
         ]);
         \App\OrchestraTemplate::create([
             'id' =>21 ,
-            'item_id' => 21,
+            'item_id' => 26,
             'template_name' => "WBB3-Woven DISNEYBABY WINNIE",
             'template_description' => "WBB3-Woven DISNEYBABY WINNIE",
-            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/DISNEY_WOVEN_LABEL/BABY/WBB3-Woven_DISNEYBABY_WINNIE_Front.jpg",
+            'template_file' => 
+             "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/WBB3 - WOVEN DISNEYBABY@WINNIE M.L.png",
             'disney' => 1,
             'tax' => 0,
             'flag' => 1,
@@ -246,10 +249,11 @@ class OrchestraTemplateTableSeeder extends Seeder
         ]);
         \App\OrchestraTemplate::create([
             'id' =>22 ,
-            'item_id' => 21,
+            'item_id' => 27,
             'template_name' => "WBB3-Woven DISNEYBABY WINNIE",
             'template_description' => "WBB3-Woven DISNEYBABY WINNIE",
-            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/DISNEY_WOVEN_LABEL/BABY/WBB3-Woven_DISNEYBABY_WINNIE_Back.jpg",
+            'template_file' => 
+             "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/WBB3 - WOVEN DISNEYBABY@WINNIE S.L.png",
             'disney' => 1,
             'tax' => 0,
             'flag' => 0,
@@ -257,10 +261,11 @@ class OrchestraTemplateTableSeeder extends Seeder
         ]);
         \App\OrchestraTemplate::create([
             'id' =>23 ,
-            'item_id' => 23,
+            'item_id' => 29,
             'template_name' => "WD1-Woven Disney",
             'template_description' => "WD1-Woven Disney",
-            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/DISNEY_WOVEN_LABEL/BOY/WD1-Woven_Disney_Front.jpg",
+            'template_file' =>
+             "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/WD1-Woven CDisney.png",
             'disney' => 1,
             'tax' => 0,
             'flag' => 1,
@@ -268,10 +273,11 @@ class OrchestraTemplateTableSeeder extends Seeder
         ]);
         \App\OrchestraTemplate::create([
             'id' =>24 ,
-            'item_id' => 23,
+            'item_id' => 30,
             'template_name' => "WD1-Woven Disney",
             'template_description' => "WD1-Woven Disney",
-            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/DISNEY_WOVEN_LABEL/BOY/WD1-Woven_Disney_Back.jpg",
+            'template_file' => 
+              "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/WD1-SIZE LABEL.png",
             'disney' => 1,
             'tax' => 0,
             'flag' => 0,
@@ -279,10 +285,11 @@ class OrchestraTemplateTableSeeder extends Seeder
         ]);
         \App\OrchestraTemplate::create([
             'id' =>25 ,
-            'item_id' => 24,
+            'item_id' => 31,
             'template_name' => "WD2-Woven DisneyPixar",
             'template_description' => "WD2-Woven DisneyPixar",
-            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/DISNEY_WOVEN_LABEL/BOY/WD2-Woven_DisneyPixar_Front.jpg",
+            'template_file' => 
+             "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/WD2-Woven CDisneypixar.png",
             'disney' => 1,
             'tax' => 0,
             'flag' => 1,
@@ -290,10 +297,10 @@ class OrchestraTemplateTableSeeder extends Seeder
         ]);
         \App\OrchestraTemplate::create([
             'id' =>26 ,
-            'item_id' => 24,
+            'item_id' => 32,
             'template_name' => "WD2-Woven DisneyPixar",
             'template_description' => "WD2-Woven DisneyPixar",
-            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/DISNEY_WOVEN_LABEL/BOY/WD2-Woven_DisneyPixar_Back.jpg",
+            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/WD2-SIZE LABEL.png",
             'disney' => 1,
             'tax' => 0,
             'flag' => 0,
@@ -301,10 +308,10 @@ class OrchestraTemplateTableSeeder extends Seeder
         ]);
         \App\OrchestraTemplate::create([
             'id' =>27 ,
-            'item_id' => 25,
+            'item_id' => 33,
             'template_name' => "WD3-Woven DisneyWinnie",
             'template_description' => "WD3-Woven DisneyWinnie",
-            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/DISNEY_WOVEN_LABEL/BOY/WD3-Woven_DisneyWinnie_Front.jpg",
+            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/WD3-Woven CDisneyWinnie.png",
             'disney' => 1,
             'tax' => 0,
             'flag' => 1,
@@ -312,10 +319,10 @@ class OrchestraTemplateTableSeeder extends Seeder
         ]);
         \App\OrchestraTemplate::create([
             'id' =>28 ,
-            'item_id' => 25,
+            'item_id' => 34,
             'template_name' => "WD3-Woven DisneyWinnie",
             'template_description' => "WD3-Woven DisneyWinnie",
-            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/DISNEY_WOVEN_LABEL/BOY/WD3-Woven_DisneyWinnie_Back.jpg",
+            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/WD3-SIZE LABEL.png",
             'disney' => 1,
             'tax' => 0,
             'flag' => 0,
@@ -390,10 +397,10 @@ class OrchestraTemplateTableSeeder extends Seeder
         ]);
         \App\OrchestraTemplate::create([
             'id' => 35,
-            'item_id' => 31,
+            'item_id' => 43,
             'template_name' => "WDM",
             'template_description' => "WDM",
-            'template_file' => "/storage/app/template/Orchestra/Labels/MARVEL_WOVEN_LABEL/WDM-Woven_MARVEL_Front.jpg",
+            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/WDM-WovenCMAVEL.png",
             'disney' => 0,
             'tax' => 0,
             'flag' => 1,
@@ -401,10 +408,10 @@ class OrchestraTemplateTableSeeder extends Seeder
         ]);
         \App\OrchestraTemplate::create([
             'id' => 36,
-            'item_id' => 31,
+            'item_id' => 44 ,
             'template_name' => "WDM",
             'template_description' => "WDM",
-            'template_file' => "/storage/app/template/Orchestra/Labels/MARVEL_WOVEN_LABEL/WDM-Woven_MARVEL_Back.jpg",
+            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/WDm-SIZE LABEL.png",
             'disney' => 0,
             'tax' => 0,
             'flag' => 0,
@@ -412,10 +419,10 @@ class OrchestraTemplateTableSeeder extends Seeder
         ]);
         \App\OrchestraTemplate::create([
             'id' => 37,
-            'item_id' => 33,
-            'template_name' => "",
+            'item_id' => 46,
+            'template_name' => "WSW1 Main Label",
             'template_description' => "",
-            'template_file' => "/storage/app/template/Orchestra/Labels/STARWARS_WOVEN_LABEL/WSW1-STARWARS_Front.jpg",
+            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/WSW1 - STARWARS M.L.png",
             'disney' => 0,
             'tax' => 0,
             'flag' => 1,
@@ -423,10 +430,10 @@ class OrchestraTemplateTableSeeder extends Seeder
         ]);
         \App\OrchestraTemplate::create([
             'id' => 38,
-            'item_id' => 33,
-            'template_name' => "",
+            'item_id' => 47,
+            'template_name' => "WSW1 Size Label",
             'template_description' => "",
-            'template_file' => "/storage/app/template/Orchestra/Labels/STARWARS_WOVEN_LABEL/WSW1-STARWARS_Back.jpg",
+            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/WSW1 - STARWARS S.L.png",
             'disney' => 0,
             'tax' => 0,
             'flag' => 0,
@@ -434,10 +441,10 @@ class OrchestraTemplateTableSeeder extends Seeder
         ]);
         \App\OrchestraTemplate::create([
             'id' => 39,
-            'item_id' => 35,
+            'item_id' => 49,
             'template_name' => "WSMIBB-SMILEY BB MAIN AND SIZE LABELS",
             'template_description' => "WSMIBB-SMILEY BB MAIN AND SIZE LABELS",
-            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/SMILEY_WOVEN_LABEL/BABY/WSMIBB-SMILEY_BB_MAIN_AND_SIZE_LABELS_Front.jpg",
+            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/WSMIBB - SMILEY BB M.L.png",
             'disney' => 0,
             'tax' => 0,
             'flag' => 1,
@@ -445,10 +452,10 @@ class OrchestraTemplateTableSeeder extends Seeder
         ]);
         \App\OrchestraTemplate::create([
             'id' => 40,
-            'item_id' => 35,
+            'item_id' => 51,
             'template_name' => "WSMI-SMILEYWORLD WOVEN LABELS",
             'template_description' => "WSMI-SMILEYWORLD WOVEN LABELS",
-            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/SMILEY_WOVEN_LABEL/BABY/WSMIBB-SMILEY_BB_MAIN_AND_SIZE_LABELS_Back.jpg",
+            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/WSMI - SMILEY WORLD M.L.png",
             'disney' => 0,
             'tax' => 0,
             'flag' => 0,
@@ -478,10 +485,10 @@ class OrchestraTemplateTableSeeder extends Seeder
         ]);
         \App\OrchestraTemplate::create([
             'id' => 43,
-            'item_id' => 39,
+            'item_id' => 56,
             'template_name' => "WLT-LONEYTUNES WOVEN LABELS",
             'template_description' => "WLT-LONEYTUNES WOVEN LABELS",
-            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN LABELS/WARNER WOVEN LABEL/LOONEY TUNES/WLT-LONEYTUNES_WOVEN_LABELS_Front.jpg",
+            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/WLT-LONEYTUNES M.L.png",
             'disney' => 0,
             'tax' => 0,
             'flag' => 1,
@@ -489,10 +496,10 @@ class OrchestraTemplateTableSeeder extends Seeder
         ]);
         \App\OrchestraTemplate::create([
             'id' => 44,
-            'item_id' => 39,
+            'item_id' => 55,
             'template_name' => "WLT-LONEYTUNES WOVEN LABELS",
             'template_description' => "WLT-LONEYTUNES WOVEN LABELS",
-            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN LABELS/WARNER WOVEN LABEL/LOONEY TUNES/WLT-LONEYTUNES_WOVEN_LABELS_Back.jpg",
+            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/WLT-LONEYTUNES S.L.png",
             'disney' => 0,
             'tax' => 0,
             'flag' => 0,
@@ -500,10 +507,10 @@ class OrchestraTemplateTableSeeder extends Seeder
         ]);
         \App\OrchestraTemplate::create([
             'id' => 45,
-            'item_id' => 40,
+            'item_id' => 58,
             'template_name' => "WSM-SUPERMAN WOVEN LABELS",
             'template_description' => "",
-            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN LABELS/WARNER WOVEN LABEL/SUPER MAN/WSM-SUPERMAN_WOVEN_LABELS_Front.jpg",
+            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/WSM - SUPERMAN M.L.png",
             'disney' => 0,
             'tax' => 0,
             'flag' => 1,
@@ -511,10 +518,10 @@ class OrchestraTemplateTableSeeder extends Seeder
         ]);
         \App\OrchestraTemplate::create([
             'id' => 46,
-            'item_id' => 40,
+            'item_id' => 59,
             'template_name' => "WSM-SUPERMAN WOVEN LABELS",
             'template_description' => "",
-            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN LABELS/WARNER WOVEN LABEL/SUPER MAN/WSM-SUPERMAN_WOVEN_LABELS_Back.jpg",
+            'template_file' => "/storage/app/template/Orchestra/Labels/WOVEN_LABELS/WSM - SUPERMAN S.L.png",
             'disney' => 0,
             'tax' => 0,
             'flag' => 0,
