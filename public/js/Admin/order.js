@@ -8118,7 +8118,7 @@ function setSolidStickers() {
 			},
 			success: function (data) {
 				$('#save_sticker_button').addClass('hidden')
-				$('#po-file-upload-button-solid').css('display','block')
+				$('#po-file-upload-button-standard').css('display','block')
 				$('#polybag_print_button').removeClass('hidden')
 				$('#carton_print_button').removeClass('hidden')
 			},
