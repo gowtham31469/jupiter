@@ -4637,6 +4637,7 @@ function storeCERatioTCL1TCL2TSL1() {
 			dataType: "json",
 			beforeSend: function () {
 				$(".loader").show();
+				$('.submit-btn').prop('disabled', true);
 			},
 			success: function (data) {
 				/** Call  afterOrderSubmitted() */
@@ -4745,6 +4746,7 @@ function storeCERatioTHL1() {
 			dataType: "json",
 			beforeSend: function () {
 				$(".loader").show();
+				$('.submit-btn').prop('disabled', true);
 			},
 			success: function (data) {
 
@@ -4874,6 +4876,7 @@ function storeCESingleTCL4TSL3() {
 			dataType: "json",
 			beforeSend: function () {
 				$(".loader").show();
+				$('.submit-btn').prop('disabled', true);
 			},
 			success: function (data) {
 				/** Call  afterOrderSubmitted() */
@@ -4991,6 +4994,7 @@ function storeCESingleTHL3() {
 			dataType: "json",
 			beforeSend: function () {
 				$(".loader").show();
+				$('.submit-btn').prop('disabled', true);
 			},
 			success: function (data) {
 				/** Call  afterOrderSubmitted() */
@@ -5122,6 +5126,7 @@ function storeUKRatioTCL1TCL2TSL1() {
 			dataType: "json",
 			beforeSend: function () {
 				$(".loader").show();
+				$('.submit-btn').prop('disabled', true);
 			},
 			success: function (data) {
 				/** Call  afterOrderSubmitted() */
@@ -5230,6 +5235,7 @@ function storeUKRatioTHL1() {
 			dataType: "json",
 			beforeSend: function () {
 				$(".loader").show();
+				$('.submit-btn').prop('disabled', true);
 			},
 			success: function (data) {
 				/** Call  afterOrderSubmitted() */
@@ -5358,6 +5364,7 @@ function storeUKSingleTCL4TSL3() {
 			dataType: "json",
 			beforeSend: function () {
 				$(".loader").show();
+				$('.submit-btn').prop('disabled', true);
 			},
 			success: function (data) {
 				/** Call  afterOrderSubmitted() */
@@ -5475,6 +5482,7 @@ function storeUKSingleTHL3() {
 			dataType: "json",
 			beforeSend: function () {
 				$(".loader").show();
+				$('.submit-btn').prop('disabled', true);
 			},
 			success: function (data) {
 				/** Call  afterOrderSubmitted() */
@@ -6120,8 +6128,14 @@ function uploadCombinedPO(formdata, templateName) {
 			cache: false,
 			contentType: false,
 			processData: false,
+			beforeSend: function () {
+				$('.po-submit-btn').prop('disabled', true);
+			},
 			statusCode: {
 				200: function (data) {
+					// enable submit button after po upload
+					$('.po-submit-btn').prop('disabled', false);
+					
 					/** [ Disable already uploaded templates checkbox] */
 					$.each(templateName, function (index, value) {
 						$('input[type="checkbox"]#' + value).prop('checked', false)
