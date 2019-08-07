@@ -16,9 +16,17 @@ Route::get('/', function () {
 });
 
 
+Route::get('getTemplateDetails', 'Admin\TemplateManagement\TemplateController@getTemplateDetails')->name('getTemplateDetails');
+
+Route::get('updatePath', 'Admin\TemplateManagement\TemplateController@updatePath')->name('updatePath');
+
 Route::get('delete_now', function () {
-    App\OrchestraItemMaster::truncate();
+    // App\OrchestraTemplate::truncate();
+    // App\OrchestraTemplate::where('id','>',0)
+    //     ->update(['template_file' => '/storage/app/template/Orchestra/Labels/WOVEN_LABELS/WBB1_WOVEN_DISNEYBABY@DISNEY_M.L.png']);
+    dd(App\OrchestraTemplate::where('item_id',60)->first());
 });
+
 
 // Auth::routes();
 
