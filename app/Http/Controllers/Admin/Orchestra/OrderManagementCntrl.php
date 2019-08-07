@@ -1290,10 +1290,10 @@ class OrderManagementCntrl extends Controller
 	
     public function setSpecialTag(Request $request)
     {
-        //$delivery_date = $request->delivery_date;
+        $delivery_date = $request->delivery_date;
         $template_front_id = $request->template_front_id;
-        //$tot_qty_table = explode(',',$request->tot_qty_table);
-		$tot_qty_table =$request->tot_qty_table;
+        $tot_qty_table = explode(',',$request->tot_qty_table);
+		$final_qty =$request->tot_qty_table;
         $uvc_tco = explode(',',$request->uvc_tco);
         $size = explode(',',$request->size);
         $parcel_id =$request->parcel_id;
@@ -1338,7 +1338,7 @@ class OrderManagementCntrl extends Controller
                         'uvc' => $uvc,
                         'template_id'      => $template_front_id, 
                         'svg_path'    => "",
-					    'final_qty'    => $tot_qty_table, 
+					    'final_qty'    => $final_qty, 
                         'customer_id'    => $factory{0}->id,
                         'status'    => $status,
 						'orchestra_parcel_details_id'    => $parcel_id,
@@ -1346,19 +1346,19 @@ class OrderManagementCntrl extends Controller
 					    'pi_status'           => $pi_status,
 				 		'po_status'           => $po_status,
                   ]);
-//                $deleted = SpecialTagOrdersQty::where('ost_id', '=', $id)
-//                            ->delete();
-//                $i=0;
-//                foreach($tot_qty_table as $value)
-//                {
-//                     SpecialTagOrdersQty::create([
-//                                        'ost_id' => $id,
-//                                        'size'      => $size[$i],
-//                                        'uvc_tco'      => $uvc_tco[$i],
-//                                        'quantity'    => $value
-//                             ]);
-//                    $i++;
-//                }
+                $deleted = SpecialTagOrdersQty::where('ost_id', '=', $id)
+                            ->delete();
+                $i=0;
+                foreach($tot_qty_table as $value)
+                {
+                     SpecialTagOrdersQty::create([
+                                        'ost_id' => $id,
+                                        //'size'      => $size[$i],
+                                        //'uvc_tco'      => $uvc_tco[$i],
+                                        'quantity'    => $value
+                             ]);
+                    $i++;
+                }
 			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
                         ->update([
                           'order_status' => "Order Placed"
@@ -1371,7 +1371,7 @@ class OrderManagementCntrl extends Controller
                                     'uvc' => $uvc,
                                     'template_id'      => $template_front_id, 
                                     'svg_path'    => "", 
-				 					'final_qty'    => $tot_qty_table,
+				 					'final_qty'    => $final_qty,
                         			'customer_id'    => $factory{0}->id,
                                     'status'    => $status,
 									'orchestra_parcel_details_id'    => $parcel_id,
@@ -1379,17 +1379,17 @@ class OrderManagementCntrl extends Controller
 				 					'pi_status'           => $pi_status,
 				 					'po_status'           => $po_status,
                          ]);
-//            $i=0;
-//            foreach($tot_qty_table as $value)
-//            {
-//                 SpecialTagOrdersQty::create([
-//                                    'ost_id' => $inserted->id,
-//                                    'size'      => $size[$i],
-//                                    'uvc_tco'      => $uvc_tco[$i],
-//                                    'quantity'    => $value
-//                         ]);
-//                $i++;
-//            }
+            $i=0;
+            foreach($tot_qty_table as $value)
+            {
+                 SpecialTagOrdersQty::create([
+                                    'ost_id' => $inserted->id,
+                                    //'size'      => $size[$i],
+                                    //'uvc_tco'      => $uvc_tco[$i],
+                                    'quantity'    => $value
+                         ]);
+                $i++;
+            }
 			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
                         ->update([
                           'order_status' => "Order Placed"

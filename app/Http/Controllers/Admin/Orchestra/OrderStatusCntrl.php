@@ -339,6 +339,17 @@ class OrderStatusCntrl extends Controller
         if(count($data['orchestra_hang_tag_orders']) > 0)
         {
             $data['orchestra_hang_tag_orders_qty']=DB::table('orchestra_hang_tag_orders_qty')->select('*')->where('oht_id',$data['orchestra_hang_tag_orders']{0}->id)->orderBy('orchestra_hang_tag_orders_qty.id','asc')->get();
+			
+			if(count($data['orchestra_hang_tag_orders']) > 0)
+        	{
+				$data['hang_erp_details']= DB::table('erp_order_details')->where('order_qnty_table_name','ilike','orchestra_hang_tag_orders_qty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $data['orchestra_hang_tag_orders_qty']{0}->id)->select('erp_order_details.id','erp_status.status_name')->first();
+			}
+			else
+			{
+				$data['orchestra_hang_tag_orders_qty']="";
+			}
+			
+			 
         }
         else
         {
@@ -348,6 +359,17 @@ class OrderStatusCntrl extends Controller
         if(count($data['orchestra_special_tag_orders']) > 0)
         {
             $data['orchestra_special_tag_orders_qty']=DB::table('orchestra_special_tag_orders_qty')->select('*')->where('ost_id',$data['orchestra_special_tag_orders']{0}->id)->orderBy('orchestra_special_tag_orders_qty.id','asc')->get();
+			
+			if(count($data['orchestra_special_tag_orders_qty']) > 0)
+        	{
+				 $data['special_erp_details']= DB::table('erp_order_details')->where('order_qnty_table_name','ilike','orchestra_special_tag_orders_qty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $data['orchestra_special_tag_orders_qty']{0}->id)->select('erp_order_details.id','erp_status.status_name')->first();
+			}
+			else
+			{
+				$data['orchestra_special_tag_orders_qty']="";
+			}
+			
+			
         }
         else
         {
@@ -358,6 +380,17 @@ class OrderStatusCntrl extends Controller
         if(count($data['orchestra_heat_transfer_orders']) > 0)
         {
             $data['orchestra_heat_transfer_orders_qty']=DB::table('orchestra_heat_transfer_orders_qty')->select('*')->where('oht_id',$data['orchestra_heat_transfer_orders']{0}->id)->orderBy('orchestra_heat_transfer_orders_qty.id','asc')->get();
+			
+			if(count($data['orchestra_heat_transfer_orders_qty']) > 0)
+        	{
+				$data['heat_erp_details']= DB::table('erp_order_details')->where('order_qnty_table_name','ilike','orchestra_heat_transfer_orders_qty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $data['orchestra_heat_transfer_orders_qty']{0}->id)->select('erp_order_details.id','erp_status.status_name')->first();
+			}
+			else
+			{
+				 $data['orchestra_heat_transfer_orders_qty']="";
+			}
+			
+			
         }
         else
         {
@@ -368,6 +401,17 @@ class OrderStatusCntrl extends Controller
         if(count($data['orchestra_main_label_orders']) > 0)
         {
             $data['orchestra_main_label_orders_qty']=DB::table('orchestra_main_label_orders_qty')->select('*')->where('oml_id',$data['orchestra_main_label_orders']{0}->id)->orderBy('orchestra_main_label_orders_qty.id','asc')->get();
+			
+			if(count($data['orchestra_main_label_orders_qty']) > 0)
+        	{
+				$data['main_erp_details']= DB::table('erp_order_details')->where('order_qnty_table_name','ilike','orchestra_main_label_orders_qty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $data['orchestra_main_label_orders_qty']{0}->id)->select('erp_order_details.id','erp_status.status_name')->first();
+			}
+			else
+			{
+				$data['orchestra_main_label_orders_qty']="";
+			}
+			
+			 
         }
         else
         {
@@ -378,16 +422,80 @@ class OrderStatusCntrl extends Controller
         if(count($data['orchestra_size_label_orders']) > 0)
         {
             $data['orchestra_size_label_orders_qty']=DB::table('orchestra_size_label_orders_qty')->select('*')->where('osl_id',$data['orchestra_size_label_orders']{0}->id)->orderBy('orchestra_size_label_orders_qty.id','asc')->get();
+			
+			if(count($data['orchestra_size_label_orders_qty']) > 0)
+        	{
+				$data['size_erp_details']= DB::table('erp_order_details')->where('order_qnty_table_name','ilike','orchestra_size_label_orders_qty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $data['orchestra_size_label_orders_qty']{0}->id)->select('erp_order_details.id','erp_status.status_name')->first();
+			}
+			else
+			{
+				$data['orchestra_size_label_orders_qty']="";
+			}
+			
+			
         }
         else
         {
             $data['orchestra_size_label_orders_qty']="";
         }
-			 $data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->select('*','orchestra_wash_care_label_orders.template_name as TemplateName')->where('id',$row_id)->get();
+			
+		$data['orchestra_solid_carton_sticker_orders']=DB::table('orchestra_solid_carton_sticker_orders')->select('*',DB::raw("'Size Label' as \"TemplateName\""))->where('id',$row_id)->get();
+        if(count($data['orchestra_solid_carton_sticker_orders']) > 0)
+        {
+            $data['orchestra_solid_carton_sticker_orders_qty']=DB::table('orchestra_solid_carton_sticker_orders_qty')->select('*')->where('osl_id',$data['orchestra_solid_carton_sticker_orders']{0}->id)->orderBy('orchestra_solid_carton_sticker_orders_qty.id','asc')->get();
+			
+			if(count($data['orchestra_solid_carton_sticker_orders_qty']) > 0)
+        	{
+				$data['solid_carton_erp_details']= DB::table('erp_order_details')->where('order_qnty_table_name','ilike','orchestra_solid_carton_sticker_orders_qty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $data['orchestra_solid_carton_sticker_orders_qty']{0}->id)->select('erp_order_details.id','erp_status.status_name')->first();
+			}
+			else
+			{
+				$data['orchestra_solid_carton_sticker_orders_qty']="";
+			}
+			
+			
+        }
+        else
+        {
+            $data['orchestra_solid_carton_sticker_orders_qty']="";
+        }
+			
+		$data['orchestra_solid_poly_bag_sticker_orders']=DB::table('orchestra_solid_poly_bag_sticker_orders')->select('*',DB::raw("'Size Label' as \"TemplateName\""))->where('id',$row_id)->get();
+        if(count($data['orchestra_solid_poly_bag_sticker_orders']) > 0)
+        {
+            $data['orchestra_solid_poly_bag_sticker_orders_qty']=DB::table('orchestra_solid_poly_bag_sticker_orders_qty')->select('*')->where('osl_id',$data['orchestra_solid_poly_bag_sticker_orders']{0}->id)->orderBy('orchestra_solid_poly_bag_sticker_orders_qty.id','asc')->get();
+			
+			if(count($data['orchestra_solid_poly_bag_sticker_orders_qty']) > 0)
+        	{
+				$data['solid_poly_erp_details']= DB::table('erp_order_details')->where('order_qnty_table_name','ilike','orchestra_solid_poly_bag_sticker_orders_qty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $data['orchestra_solid_poly_bag_sticker_orders_qty']{0}->id)->select('erp_order_details.id','erp_status.status_name')->first();
+			}
+			else
+			{
+				$data['orchestra_solid_poly_bag_sticker_orders_qty']="";
+			}
+			
+			
+        }
+        else
+        {
+            $data['orchestra_solid_poly_bag_sticker_orders_qty']="";
+        }
+		$data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->select('*','orchestra_wash_care_label_orders.template_name as TemplateName')->where('id',$row_id)->get();
         foreach($data['orchestra_wash_care_label_orders'] as $value1)
         {
             $orchestra_wash_label_orders_qty=DB::table('orchestra_wash_care_label_orders_qty')->select('*')->where('owcl_id',$value1->id)->orderBy('orchestra_wash_care_label_orders_qty.id','asc')->get();
             $value1->qty=$orchestra_wash_label_orders_qty;
+			
+			if(count($data['orchestra_wash_care_label_orders_qty']) > 0)
+        	{
+				$data['wash_erp_details']= DB::table('erp_order_details')->where('order_qnty_table_name','ilike','orchestra_wash_care_label_orders_qty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $orchestra_wash_label_orders_qty{0}->id)->select('erp_order_details.id','erp_status.status_name')->first();
+			}
+			else
+			{
+				 $data['orchestra_wash_care_label_orders_qty']="";
+			}
+			
+			
             
              $orchestra_wash_care_composition=DB::table('orchestra_wash_care_composition')->leftJoin('orchestra_compositions','orchestra_compositions.id','=','orchestra_wash_care_composition.composition_id')->leftJoin('orchestra_parts','orchestra_parts.id','=','orchestra_wash_care_composition.parts_id')->select('orchestra_wash_care_composition.*','orchestra_compositions.french','orchestra_compositions.english','orchestra_compositions.spanish','orchestra_compositions.portuguese','orchestra_compositions.italian','orchestra_compositions.dutch','orchestra_compositions.german','orchestra_compositions.russian','orchestra_compositions.chinese','orchestra_compositions.arabic','orchestra_compositions.greek','orchestra_compositions.turkish','orchestra_parts.french as parts_french','orchestra_parts.english as parts_english','orchestra_parts.spanish as parts_spanish','orchestra_parts.portuguese as parts_portuguese','orchestra_parts.italian as parts_italian','orchestra_parts.dutch as parts_dutch','orchestra_parts.german as parts_german','orchestra_parts.russian as parts_russian','orchestra_parts.chinese as parts_chinese','orchestra_parts.arabic as parts_arabic','orchestra_parts.greek as parts_greek','orchestra_parts.turkish as parts_turkish')->orderBy('orchestra_wash_care_composition.id','asc')->where('owcl_id',$value1->id)->get();
              $value1->composition=$orchestra_wash_care_composition;
