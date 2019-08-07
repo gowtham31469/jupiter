@@ -37,18 +37,19 @@
     .html2canvas-container { width: 3000px !important; height: 3000px !important; }
 </style>
 <div class="col-sm-12 col-md-12 main">
-    <div class="top-content">
-        <div class="buyer-nav-div hidden">
-           <a class="dropdown-toggle profile-dropdown-admin selected-buyer" style="text-transform:capitalize;cursor: pointer;">Select Buyer</a>
-        </div>
-        {{ Form::hidden('invisible', $buyer_count, array('id' => 'invisible__count_id')) }}
-        <div class="clearfix"></div>
-    </div>
+  
 
     <div class="main-content">
         <div class="select-buyer">
             
         </div>
+    </div>
+	  <div class="top-content">
+        <div class="buyer-nav-div hidden">
+           <a class="dropdown-toggle profile-dropdown-admin selected-buyer" style="text-transform:capitalize;cursor: pointer;">Select Buyer</a>
+        </div>
+        {{ Form::hidden('invisible', $buyer_count, array('id' => 'invisible__count_id')) }}
+        <div class="clearfix"></div>
     </div>
     <div class="modal fade po-details" id="po-file-upload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
@@ -408,8 +409,7 @@
         </div> 
     </div>
 
-
-    <div class="left-panelorc col-md-12" style="display: none;">
+   <!-- <div class="left-panelorc col-md-12" style="display: none;">
         <div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
         <div class="div-max">          
 			<form method="POST" id="create_tesco_order_status_form" data-toggle="validator" role="form" novalidate="true">
@@ -516,8 +516,6 @@
             </div>
             <div class="col-md-8">
             <div class="scroll" style="height: calc(100vh - 40px);">
-               <!--  <span class="pull-right" style="cursor:pointer">Enlarge</span>
-                <h4 class="text-center osartwork">Artwork</h4>  -->
                 <p class="enlarge-btn"></p>
                 
                 <h4 class="text-center osartwork" style="padding-left: 164px;">Artwork</h4> 
@@ -542,7 +540,7 @@
                 </div>
             </div>
         </div> 
-    </div>
+    </div>-->
     {{-- Show snackbar html code --}}
 <div id="snackbar"><span class="snackbar_span"></span></div>
 <!-- Buyer selection Modal -->
