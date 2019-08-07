@@ -409,7 +409,6 @@
         </div> 
     </div>
 
-
    <!-- <div class="left-panelorc col-md-12" style="display: none;">
         <div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
         <div class="div-max">          
