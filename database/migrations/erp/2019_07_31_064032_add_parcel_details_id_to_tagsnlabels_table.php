@@ -21,10 +21,6 @@ class AddParcelDetailsIdToTagsnlabelsTable extends Migration
 	        $table->integer('orchestra_parcel_details_id')->nullable();
 		$table->string('season_code')->nullable();
         });
-	Schema::table('orchestra_main_label_orders', function (Blueprint $table) {
-	        $table->integer('orchestra_parcel_details_id')->nullable();
-		$table->string('season_code')->nullable();
-        });
 	Schema::table('orchestra_solid_carton_sticker_orders', function (Blueprint $table) {
 	        $table->integer('orchestra_parcel_details_id')->nullable();
 		$table->string('season_code')->nullable();
