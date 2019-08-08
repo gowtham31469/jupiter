@@ -341,7 +341,7 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn-primary" data-dismiss="modal" id="update_table">Update</button>
+						<button type="button" class="btn-primary" id="update_table">Update</button>
 						<button type="button" class="btn-default" data-dismiss="modal">Close</button>
 					</div>
 				</div>
@@ -833,19 +833,29 @@
 					{
 					var listItems1 = $(".checklist1 li");
 					var listItems2 = $(".checklist2 li");
-					defaultFields=[]
-					extraFields=[]
-					listItems2.each(function(idx, vl) {
-						defaultFields.push($(this).html())
-					});
 
-					listItems1.each(function(idx, vl) {
-						extraFields.push($(this).html())
-					});
+					if(listItems2.length > 0)
+					{
+						defaultFields=[]
+						extraFields=[]
+						listItems2.each(function(idx, vl) {
+							defaultFields.push($(this).html())
+						});
 
-					arr1 = defaultFields.slice(); 
-					arr2 = extraFields.slice();
-					create_table(arr1,arr2)
+						listItems1.each(function(idx, vl) {
+							extraFields.push($(this).html())
+						});
+
+						arr1 = defaultFields.slice(); 
+						arr2 = extraFields.slice();
+						$("#optionsModal").modal('hide');	
+						create_table(arr1,arr2)
+					}
+					else{
+						$('.snackbar_span').html("No fields are selected,please add some to display the table.");
+					    showSnackbar();
+					}
+					
 				}
 				else{
 					$('.snackbar_span').html("Please make sure all the values are selected.");
