@@ -368,10 +368,8 @@ function parseRatioType(data) {
                 break;
             case 4:
                 ele[1].text = ele[1].text.replace('12/18', '').trim();
-				//var short_desc = ele[1].text.split('  ');
-				//ratioObj.shortDescription = (short_desc.length === 1) ? ele[1].text.trim() : ele[1].text.replace(short_desc[1], '').trim();
-				var short_desc = ele[1].text.trim();
-				ratioObj.shortDescription = short_desc;
+                var short_desc = ele[1].text.split('  ');
+                ratioObj.shortDescription = (short_desc.length === 1) ? ele[1].text.trim() : ele[1].text.replace(short_desc[1], '').trim();
         }
     });
 
