@@ -260,6 +260,11 @@ function template_list() {
 				});
 
 				$('#tree1').on('activate_node.jstree', function (e, data) {
+				
+				/*The showModal method is a temporary method created and used to update the path of 
+				 the templates in the heirarchy */
+					// showModal(data.node.id)	
+					
 					if (data.instance.is_leaf(data.node)) {
 						var template_id = data.node.id;
 						var csrf_token = $('meta[name="csrf-token"]').attr('content');

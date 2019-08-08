@@ -537,7 +537,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                      \App\OrchestraItemMaster::create([
                         'id'  => 62,
                         'company_id' => 1,
-                        'parent_id' => 16,    
+                        'parent_id' => 1,    
                         'item_name' => "Heat Tranfers",
                         'ref_no' => "",
                         'tag_name' => "",
@@ -1279,7 +1279,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     \App\OrchestraItemMaster::create([
                         'id'  => 151,
                         'company_id' => 2,
-                        'parent_id' => 105,    
+                        'parent_id' => 104,    
                         'item_name' => "Header Cards",
                         'ref_no' => "",
                         'tag_name' => "",
@@ -1287,7 +1287,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     \App\OrchestraItemMaster::create([
                         'id'  => 152,
                         'company_id' => 2,
-                        'parent_id' => 105,    
+                        'parent_id' => 104,    
                         'item_name' => "Insert Cards",
                         'ref_no' => "",
                         'tag_name' => "",
@@ -1295,7 +1295,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     \App\OrchestraItemMaster::create([
                         'id'  => 153,
                         'company_id' => 2,
-                        'parent_id' => 105,    
+                        'parent_id' => 104,    
                         'item_name' => "Cascades",
                         'ref_no' => "",
                         'tag_name' => "",
@@ -1321,7 +1321,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     \App\OrchestraItemMaster::create([
                         'id'  => 154,
                         'company_id' => 2,
-                        'parent_id' => 104,    
+                        'parent_id' => 103,    
                         'item_name' => "Disney",
                         'ref_no' => "",
                         'tag_name' => "disney",
@@ -1454,7 +1454,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     \App\OrchestraItemMaster::create([
                         'id'  => 170,
                         'company_id' => 2,
-                        'parent_id' => 104,    
+                        'parent_id' => 103,    
                         'item_name' => "Marvel",
                         'ref_no' => "",
                         'tag_name' => "marvel",
@@ -1486,7 +1486,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     \App\OrchestraItemMaster::create([
                         'id'  => 174,
                         'company_id' => 2,
-                        'parent_id' => 104,    
+                        'parent_id' => 103,    
                         'item_name' => "Star Wars",
                         'ref_no' => "",
                         'tag_name' => "starwars",
@@ -1523,7 +1523,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     \App\OrchestraItemMaster::create([
                         'id'  => 178,
                         'company_id' => 2,
-                        'parent_id' => 104,    
+                        'parent_id' => 103,    
                         'item_name' => "Smiley",
                         'ref_no' => "",
                         'tag_name' => "",
@@ -1559,7 +1559,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     \App\OrchestraItemMaster::create([
                         'id'  => 182,
                         'company_id' => 2,
-                        'parent_id' => 104,    
+                        'parent_id' => 103,    
                         'item_name' => "Warner",
                         'ref_no' => "",
                         'tag_name' => "",
@@ -1612,7 +1612,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     \App\OrchestraItemMaster::create([
                         'id'  => 188,
                         'company_id' => 2,
-                        'parent_id' => 104,    
+                        'parent_id' => 103,    
                         'item_name' => "Puriculture / Premaman",
                         'ref_no' => "",
                         'tag_name' => "",
@@ -1641,7 +1641,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     \App\OrchestraItemMaster::create([
                         'id'  => 191,
                         'company_id' => 2,
-                        'parent_id' => 104,    
+                        'parent_id' => 103,    
                         'item_name' => "Maternity",
                         'ref_no' => "",
                         'tag_name' => "hang",
@@ -1707,7 +1707,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     \App\OrchestraItemMaster::create([
                         'id'  => 199,
                         'company_id' => 2,
-                        'parent_id' => 104,    
+                        'parent_id' => 103,    
                         'item_name' => "Price Tag",
                         'ref_no' => "",
                         'tag_name' => "",
@@ -1721,47 +1721,6 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'tag_name' => "",
                     ]);
 
-
-                    // \App\OrchestraItemMaster::create([
-                    //     'id'  => 176,
-                    //     'company_id' => 2,
-                    //     'parent_id' => 70,    
-                    //     'item_name' => "Carton & Polybag Stickers",
-                    //     'ref_no' => "",
-                    //     'tag_name' => "",
-                    // ]);
-                    // \App\OrchestraItemMaster::create([
-                    //     'id'  => 177,
-                    //     'company_id' => 2,
-                    //     'parent_id' => 176,    
-                    //     'item_name' => "Solid Carton Stickers",
-                    //     'ref_no' => "",
-                    //     'tag_name' => "",
-                    // ]);
-                    // \App\OrchestraItemMaster::create([
-                    //     'id'  => 178,
-                    //     'company_id' => 2,
-                    //     'parent_id' => 176,    
-                    //     'item_name' => "Solid Polybag Stickers",
-                    //     'ref_no' => "",
-                    //     'tag_name' => "",
-                    // ]);
-                    // \App\OrchestraItemMaster::create([
-                    //     'id'  => 179,
-                    //     'company_id' => 2,
-                    //     'parent_id' => 176,    
-                    //     'item_name' => "Standard Carton Stickers",
-                    //     'ref_no' => "",
-                    //     'tag_name' => "",
-                    // ]);
-                    // \App\OrchestraItemMaster::create([
-                    //     'id'  => 180,
-                    //     'company_id' => 2,
-                    //     'parent_id' => 176,    
-                    //     'item_name' => "Standard Polybag Stickers",
-                    //     'ref_no' => "",
-                    //     'tag_name' => "",
-                    // ]);
                     
     } //run fucntion ends here
 } // class ends here
