@@ -155,36 +155,8 @@
 		}
 		.dataTables_scrollBody thead tr
 		{visibility:collapse;}
-		/*.filter-panel{ transition: height 500ms;}*/
-/*		.filter-panel {
-  -moz-transition: height .5s;
-  -ms-transition: height .5s;
-  -o-transition: height .5s;
-  -webkit-transition: height .5s;
-  transition: height .5s;
-
-}*/
-._show{ 
-	/*visibility: hidden;*/
-	display: none;
-      opacity: 0;
-    /*height: 0px !important;*/
-      transition: visibility 0s linear 0.33s, opacity 0.33s linear;}
-      ._hide{
-      	/*visibility: visible;*/
-      	/*height: 280px !important;*/
-      opacity: 1;
-      display: block;
-      transition-delay: 3s;}
-      #_preferences{transition: visibility 0s linear 0.33s, opacity 0.33s linear;}
-
-      .hidden {
-  display: none;
-}
-
-.visuallyhidden {
-  opacity: 0;
-}
+		.container-fluid{min-height: 800px;}
+		#_preferences{transition: visibility 0s, opacity 0.5s linear;}
 </style>
 
 
@@ -403,6 +375,8 @@
 						$(".filterLevel3").selectpicker('refresh');
 						
 						$("#filter1").removeClass('hidden')
+						$("#moreOtions").addClass('hidden')
+					$("#_preferences").css('display', 'block');
 					}
 				});
 				$("#txtTo").datepicker({
@@ -420,6 +394,8 @@
 						$(".filterLevel2").selectpicker('refresh');
 						$(".filterLevel3").selectpicker('refresh');
 						$("#filter1").removeClass('hidden');
+						$("#moreOtions").addClass('hidden')
+					$("#_preferences").css('display', 'block');
 					}
 				});
 			});
@@ -444,7 +420,9 @@
 					$('.selectpicker').selectpicker('refresh');
 					$('.'+$(this).data('target')).addClass('open').removeClass('hidden')
 					$("#moreOtions").addClass('hidden')
-					$("#filter-panel").removeClass('collapse')
+					$("#_preferences").css('display', 'block');
+					// $("#filter-panel").removeClass('collapse')
+
 				});
 
 				$(document).on('click', '#filter1', function(event) {
@@ -834,7 +812,8 @@
 						"columns" :allColoumns
 					});
 
-					$("#filter-panel").removeClass('collapse in').addClass('collapse')
+					// $("#filter-panel").removeClass('collapse in').addClass('collapse')
+					$("#_preferences").css('display', 'none');
 					$("#reportTitle").html("Consolidated Report [ "+$('input[name=roleSelection]:checked').val()+" ]")
 					// $("#moreOtions").removeClass('disabled_now')
 					$("#moreOtions").removeClass('hidden')
@@ -918,69 +897,19 @@
 				$(document).on('click', '#toggleBtn', function(event) {
 					event.preventDefault();
 					/* Act on the event */
-
-
-
-		// 			if (box.hasClass('hidden'))
-		// 			 {
-  //   box.removeClass('hidden');
-  //   setTimeout(function () {
-  //     box.removeClass('visuallyhidden');
-  //   }, 20);
-  // } 
-  // else 
-  // {
-  //   box.addClass('visuallyhidden');
-  //   box.one('transitionend', function(e) {
-  //     box.addClass('hidden');
-  //   });
-
-  // }
-  var box = $('#_preferences');
-
 					if($(this).data('icon')=="up")
 					{
 						$("#toggleFa").removeClass('fa fa-angle-up').addClass('fa fa-angle-down')
 						$(this).data('icon',"down")
-						// $("#_preferences").addClass('_hide')
-						 box.removeClass('hidden');
-    setTimeout(function () {
-      box.removeClass('visuallyhidden');
-    }, 20);
-			
-						// $("#_preferences").show(500);
-						// $("#_preferences").slideDown(200);
-						// $("#_preferences").animate({bottom: '250px'});
-
-						// $("#_preferences").css({
-							// visibility: 'hidden',
-							// opacity: 0,
-							// height :0,
-							// display:'none',
-							 // transition: visibility 0s linear 0.33s, opacity 0.33s linear;
-						// });
+						$("#_preferences").css('display', 'none');
 					}
 					else
 					{
 						$("#toggleFa").removeClass('fa fa-angle-down').addClass('fa fa-angle-up')
 						$(this).data('icon',"up")
-						   box.addClass('visuallyhidden');
-    box.one('transitionend', function(e) {
-      box.addClass('hidden');
-    });
-						// $("#_preferences").removeClass('_hide').addClass('_show')
-									// $("#_preferences").hide(500);
-									// $("#_preferences").slideUp(200);
-									// $("#_preferences").animate({bottom: '250px'});
-						// $("#_preferences").removeClass('hidden')
-						// $("#_preferences").css({
-							// visibility: 'visible',
-							// opacity: 1,
-							// height :270,
-							// display:'block',
-							  // transition-delay: 0s;
-						// });
-
+						$("#_preferences").css('display', 'block');
+				
+						
 					}
 				});
 			});
