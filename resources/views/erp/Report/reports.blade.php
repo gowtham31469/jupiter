@@ -168,13 +168,13 @@
 			<table border="0" cellpadding="0" cellspacing="0">
 				<tr>
 					<td>
-						<input class="dateGap" type="text" id="txtFrom" placeholder="Start date" />
+						<input class="dateGap" type="text" id="txtFrom" placeholder="Start date" autocomplete="off"/>
 					</td>
 					<td>
 						&emsp;TO&emsp;
 					</td>
 					<td>
-						<input class="dateGap" type="text" id="txtTo" placeholder="End date" />
+						<input class="dateGap" type="text" id="txtTo" placeholder="End date" autocomplete="off"/>
 					</td>
 					<td>
 						&emsp;
