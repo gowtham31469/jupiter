@@ -143,7 +143,7 @@
 		.paddingSmaller{padding: 0.5%;}
 		.bordr1px{border: 1px solid;}
 		.togBtn{
-			font-size: 20px;
+			font-size: 21px;
 			border: 1px solid lightgray;
 			padding: 5%;
 			cursor: pointer;
@@ -155,15 +155,35 @@
 		}
 		.dataTables_scrollBody thead tr
 		{visibility:collapse;}
+		/*.filter-panel{ transition: height 500ms;}*/
+/*		.filter-panel {
+  -moz-transition: height .5s;
+  -ms-transition: height .5s;
+  -o-transition: height .5s;
+  -webkit-transition: height .5s;
+  transition: height .5s;
 
+}*/
+._show{ 
+	/*visibility: hidden;*/
+	display: none;
+      opacity: 0;
+    /*height: 0px !important;*/
+      transition: visibility 0s linear 0.33s, opacity 0.33s linear;}
+      ._hide{
+      	/*visibility: visible;*/
+      	/*height: 280px !important;*/
+      opacity: 1;
+      display: block;
+      transition-delay: 3s;}
+      #_preferences{transition: visibility 0s linear 0.33s, opacity 0.33s linear;}
 
-		#wrapper {
-  /*background: #ccc;*/
-  /*overflow: hidden;*/
-  transition: height 300ms;
-  height: 230px;
-  /*max-height: 230px !important;*/
-  /*height: unset !important;*/
+      .hidden {
+  display: none;
+}
+
+.visuallyhidden {
+  opacity: 0;
 }
 </style>
 
@@ -209,8 +229,8 @@
 		</div>
 	</div>
 
-	<div class="row setMarginTop2  card open" id="wrapper">
-		<div class="col-md-12" id="list">
+	<div class="row setMarginTop2  card" id="_preferences">
+		<div class="col-md-12">
 			<div class="row paddingSmaller">
 				<div class="col-md-11">
 					<div class="row">
@@ -364,31 +384,7 @@
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 	<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
-
-
-		<script type="text/javascript">
-		$(function() {
-		var b = $("#toggleBtn");
-		var w = $("#wrapper");
-		var l = $("#list");
-
-		w.height(l.outerHeight(true));
-
-		b.click(function() {
-
-		if(w.hasClass('open')) {
-		w.removeClass('open');
-		w.height(0);
-		w.css('overflow', 'hidden');
-		} else {
-		w.addClass('open');
-		w.height(l.outerHeight(true));
-		}
-
-		});
-		});
-		</script>
-
+	
 	<script type="text/javascript">
 			$(function () {
 				$("#txtFrom").datepicker({
@@ -919,20 +915,74 @@
 				});
 
 				//logic to animate the expand and collapse icon
-				// $(document).on('click', '#toggleBtn', function(event) {
-				// 	event.preventDefault();
-				// 	/* Act on the event */
-				// 	if($(this).data('icon')=="up")
-				// 	{
-				// 		$("#toggleFa").removeClass('fa fa-angle-up').addClass('fa fa-angle-down')
-				// 		$(this).data('icon',"down")
-				// 	}
-				// 	else
-				// 	{
-				// 		$("#toggleFa").removeClass('fa fa-angle-down').addClass('fa fa-angle-up')
-				// 		$(this).data('icon',"up")
-				// 	}
-				// });
+				$(document).on('click', '#toggleBtn', function(event) {
+					event.preventDefault();
+					/* Act on the event */
+
+
+
+		// 			if (box.hasClass('hidden'))
+		// 			 {
+  //   box.removeClass('hidden');
+  //   setTimeout(function () {
+  //     box.removeClass('visuallyhidden');
+  //   }, 20);
+  // } 
+  // else 
+  // {
+  //   box.addClass('visuallyhidden');
+  //   box.one('transitionend', function(e) {
+  //     box.addClass('hidden');
+  //   });
+
+  // }
+  var box = $('#_preferences');
+
+					if($(this).data('icon')=="up")
+					{
+						$("#toggleFa").removeClass('fa fa-angle-up').addClass('fa fa-angle-down')
+						$(this).data('icon',"down")
+						// $("#_preferences").addClass('_hide')
+						 box.removeClass('hidden');
+    setTimeout(function () {
+      box.removeClass('visuallyhidden');
+    }, 20);
+			
+						// $("#_preferences").show(500);
+						// $("#_preferences").slideDown(200);
+						// $("#_preferences").animate({bottom: '250px'});
+
+						// $("#_preferences").css({
+							// visibility: 'hidden',
+							// opacity: 0,
+							// height :0,
+							// display:'none',
+							 // transition: visibility 0s linear 0.33s, opacity 0.33s linear;
+						// });
+					}
+					else
+					{
+						$("#toggleFa").removeClass('fa fa-angle-down').addClass('fa fa-angle-up')
+						$(this).data('icon',"up")
+						   box.addClass('visuallyhidden');
+    box.one('transitionend', function(e) {
+      box.addClass('hidden');
+    });
+						// $("#_preferences").removeClass('_hide').addClass('_show')
+									// $("#_preferences").hide(500);
+									// $("#_preferences").slideUp(200);
+									// $("#_preferences").animate({bottom: '250px'});
+						// $("#_preferences").removeClass('hidden')
+						// $("#_preferences").css({
+							// visibility: 'visible',
+							// opacity: 1,
+							// height :270,
+							// display:'block',
+							  // transition-delay: 0s;
+						// });
+
+					}
+				});
 			});
 	</script>
 @endsection 
