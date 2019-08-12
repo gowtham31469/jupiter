@@ -132,25 +132,24 @@
 		}
 		.pading1{padding: 1%;}
 		.clrGrey{
-				color:white;  
-				border: 1px solid lightgray;
+				color:black;  
+				border: 1px solid black;
 				right: -34%;
 				top: 0;
 				padding: 3.5%;
 				margin-left: -19%;
 				position: absolute;
-				background-color: #273339;
 
 			}
 		.paddingSmaller{padding: 0.5%;}
 		.bordr1px{border: 1px solid;}
 		.togBtn{
 			font-size: 21px;
-			border: 1px solid lightgray;
+			border: 1px solid black;
 			padding: 5%;
 			cursor: pointer;
 			position: absolute;
-			color: #273339;
+			color: black;
 			right: 0;"
 		}
 		.dataTables_wrapper.no-footer .dataTables_scrollBody {
