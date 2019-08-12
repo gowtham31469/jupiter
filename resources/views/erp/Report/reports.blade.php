@@ -900,7 +900,8 @@
 				$(document).on('click', '#toggleBtn', function(event) {
 					event.preventDefault();
 					/* Act on the event */
-					if($(this).data('icon')=="up")
+					// if($(this).data('icon')=="up")
+						if($("#_preferences").css('display')=='block')
 					{
 						$("#toggleFa").removeClass('fa fa-angle-up').addClass('fa fa-angle-down')
 						$(this).data('icon',"down")
