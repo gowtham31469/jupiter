@@ -132,13 +132,15 @@
 		}
 		.pading1{padding: 1%;}
 		.clrGrey{
-				color:grey;  
+				color:white;  
 				border: 1px solid lightgray;
 				right: -34%;
 				top: 0;
 				padding: 3.5%;
 				margin-left: -19%;
 				position: absolute;
+				background-color: #273339;
+
 			}
 		.paddingSmaller{padding: 0.5%;}
 		.bordr1px{border: 1px solid;}
@@ -148,6 +150,7 @@
 			padding: 5%;
 			cursor: pointer;
 			position: absolute;
+			color: #273339;
 			right: 0;"
 		}
 		.dataTables_wrapper.no-footer .dataTables_scrollBody {
