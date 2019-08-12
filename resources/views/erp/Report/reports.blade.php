@@ -16,7 +16,6 @@
 	margin-bottom: 0px;
 	border-radius: 0px;
 	margin-top: 0px;
-	/*width: 40%;*/
 	}
 	#reportTitle{margin-left: 34%;}
 	.mrgBtm{margin-bottom: 5%;}
@@ -32,7 +31,6 @@
 		border-bottom: 1px solid teal;
 		-webkit-box-shadow: none;
 		box-shadow: none;
-		/*font-size: smaller;*/
 		border-radius: 0;
 	}
 	.setMarginTop4{margin-top: 4%;width: 97%;}
@@ -57,7 +55,7 @@
 		margin-top: 12%;
 		float: right;
 	}
-	.input-sm{margin-top: 34%;height: 29px;}
+	#filter2,#filter1{margin-top: 34%;height: 29px;}
 	.btn .caret, .btn-group>.btn:first-child {height: 30px!important;}
 	.bootstrap-select>.dropdown-toggle.bs-placeholder{height: 30px!important;}
 	.filter-option{font-size: smaller !important;}
@@ -142,13 +140,6 @@
 				margin-left: -19%;
 				position: absolute;
 			}
-		/*.clrGrey1{color:grey;  
-				border: 1px solid lightgray;
-				right: -34%;
-				top: 0;
-				padding: 3.5%;
-				margin-left: -19%;
-				position: absolute;}*/
 		.paddingSmaller{padding: 0.5%;}
 		.bordr1px{border: 1px solid;}
 		.togBtn{
@@ -159,12 +150,21 @@
 			position: absolute;
 			right: 0;"
 		}
-		/*.filter-panel{transition: height 200ms;}*/
 		.dataTables_wrapper.no-footer .dataTables_scrollBody {
 		border-bottom:1px solid #ddd !important; 
 		}
 		.dataTables_scrollBody thead tr
 		{visibility:collapse;}
+
+
+		#wrapper {
+  /*background: #ccc;*/
+  /*overflow: hidden;*/
+  transition: height 300ms;
+  height: 230px;
+  /*max-height: 230px !important;*/
+  /*height: unset !important;*/
+}
 </style>
 
 
@@ -209,8 +209,8 @@
 		</div>
 	</div>
 
-	<div class="row setMarginTop2 filter-panel card" id="filter-panel">
-		<div class="col-md-12">
+	<div class="row setMarginTop2  card open" id="wrapper">
+		<div class="col-md-12" id="list">
 			<div class="row paddingSmaller">
 				<div class="col-md-11">
 					<div class="row">
@@ -364,7 +364,31 @@
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 	<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
-	
+
+
+		<script type="text/javascript">
+		$(function() {
+		var b = $("#toggleBtn");
+		var w = $("#wrapper");
+		var l = $("#list");
+
+		w.height(l.outerHeight(true));
+
+		b.click(function() {
+
+		if(w.hasClass('open')) {
+		w.removeClass('open');
+		w.height(0);
+		w.css('overflow', 'hidden');
+		} else {
+		w.addClass('open');
+		w.height(l.outerHeight(true));
+		}
+
+		});
+		});
+		</script>
+
 	<script type="text/javascript">
 			$(function () {
 				$("#txtFrom").datepicker({
@@ -377,7 +401,10 @@
 						$("#txtTo").datepicker("option", "minDate", dt);
 						$(".filterLevel2").selectpicker('deselectAll');
 						$(".filterLevel2").find('option').remove();
+						$(".filterLevel3").selectpicker('deselectAll');
+						$(".filterLevel3").find('option').remove();
 						$(".filterLevel2").selectpicker('refresh');
+						$(".filterLevel3").selectpicker('refresh');
 						
 						$("#filter1").removeClass('hidden')
 					}
@@ -391,17 +418,12 @@
 						dt.setDate(dt.getDate() - 1);
 						$("#txtFrom").datepicker("option", "maxDate", dt);
 						$(".filterLevel2").selectpicker('deselectAll');
-						$("#filter1").removeClass('hidden')
-						// var start = $("#txtFrom").datepicker("getDate");
-						// var end = $("#txtTo").datepicker("getDate");
-						// var days = (end - start) / (1000 * 60 * 60 * 24);
-						// console.log(days)
-						// if(days > 10)
-						// {
-						// 	alert("A maximum of 6 months is only allowed.")
-						// 	$("#txtTo").val('')
-						// 	$("#txtFrom").val('')
-						// }
+						$(".filterLevel2").find('option').remove();
+						$(".filterLevel3").selectpicker('deselectAll');
+						$(".filterLevel3").find('option').remove();
+						$(".filterLevel2").selectpicker('refresh');
+						$(".filterLevel3").selectpicker('refresh');
+						$("#filter1").removeClass('hidden');
 					}
 				});
 			});
@@ -897,20 +919,20 @@
 				});
 
 				//logic to animate the expand and collapse icon
-				$(document).on('click', '#toggleBtn', function(event) {
-					event.preventDefault();
-					/* Act on the event */
-					if($(this).data('icon')=="up")
-					{
-						$("#toggleFa").removeClass('fa fa-angle-up').addClass('fa fa-angle-down')
-						$(this).data('icon',"down")
-					}
-					else
-					{
-						$("#toggleFa").removeClass('fa fa-angle-down').addClass('fa fa-angle-up')
-						$(this).data('icon',"up")
-					}
-				});
+				// $(document).on('click', '#toggleBtn', function(event) {
+				// 	event.preventDefault();
+				// 	/* Act on the event */
+				// 	if($(this).data('icon')=="up")
+				// 	{
+				// 		$("#toggleFa").removeClass('fa fa-angle-up').addClass('fa fa-angle-down')
+				// 		$(this).data('icon',"down")
+				// 	}
+				// 	else
+				// 	{
+				// 		$("#toggleFa").removeClass('fa fa-angle-down').addClass('fa fa-angle-up')
+				// 		$(this).data('icon',"up")
+				// 	}
+				// });
 			});
 	</script>
 @endsection 
