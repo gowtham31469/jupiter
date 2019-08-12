@@ -132,7 +132,7 @@
 		}
 		.pading1{padding: 1%;}
 		.clrGrey{
-				color:black;  
+				color:gray;  
 				border: 1px solid black;
 				right: -34%;
 				top: 0;
