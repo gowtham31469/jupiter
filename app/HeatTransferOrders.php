@@ -16,5 +16,5 @@ class HeatTransferOrders extends Authenticatable
      */
 
     protected $table = 'orchestra_heat_transfer_orders';
-    protected $fillable =['uvc','template_id','delivery_date','svg_path','status','pi_status','po_status','customer_id','orchestra_parcel_details_id','season_code'];
+    protected $fillable =['uvc','template_id','delivery_date','svg_path','status','pi_status','po_status','customer_id','orchestra_parcel_details_id','season_code','color_code'];
 }
