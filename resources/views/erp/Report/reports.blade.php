@@ -16,7 +16,6 @@
 	margin-bottom: 0px;
 	border-radius: 0px;
 	margin-top: 0px;
-	/*width: 40%;*/
 	}
 	#reportTitle{margin-left: 34%;}
 	.mrgBtm{margin-bottom: 5%;}
@@ -32,7 +31,6 @@
 		border-bottom: 1px solid teal;
 		-webkit-box-shadow: none;
 		box-shadow: none;
-		/*font-size: smaller;*/
 		border-radius: 0;
 	}
 	.setMarginTop4{margin-top: 4%;width: 97%;}
@@ -57,7 +55,7 @@
 		margin-top: 12%;
 		float: right;
 	}
-	.input-sm{margin-top: 34%;height: 29px;}
+	#filter2,#filter1{margin-top: 34%;height: 29px;}
 	.btn .caret, .btn-group>.btn:first-child {height: 30px!important;}
 	.bootstrap-select>.dropdown-toggle.bs-placeholder{height: 30px!important;}
 	.filter-option{font-size: smaller !important;}
@@ -134,37 +132,33 @@
 		}
 		.pading1{padding: 1%;}
 		.clrGrey{
-				color:grey;  
-				border: 1px solid lightgray;
+				color:gray;  
+				border: 1px solid black;
 				right: -34%;
 				top: 0;
 				padding: 3.5%;
 				margin-left: -19%;
 				position: absolute;
+
 			}
-		/*.clrGrey1{color:grey;  
-				border: 1px solid lightgray;
-				right: -34%;
-				top: 0;
-				padding: 3.5%;
-				margin-left: -19%;
-				position: absolute;}*/
 		.paddingSmaller{padding: 0.5%;}
 		.bordr1px{border: 1px solid;}
 		.togBtn{
-			font-size: 20px;
-			border: 1px solid lightgray;
+			font-size: 21px;
+			border: 1px solid black;
 			padding: 5%;
 			cursor: pointer;
 			position: absolute;
+			color: black;
 			right: 0;"
 		}
-		/*.filter-panel{transition: height 200ms;}*/
 		.dataTables_wrapper.no-footer .dataTables_scrollBody {
 		border-bottom:1px solid #ddd !important; 
 		}
 		.dataTables_scrollBody thead tr
 		{visibility:collapse;}
+		.container-fluid{min-height: 800px;}
+		#_preferences{transition: visibility 0s, opacity 0.5s linear;}
 </style>
 
 
@@ -176,13 +170,13 @@
 			<table border="0" cellpadding="0" cellspacing="0">
 				<tr>
 					<td>
-						<input class="dateGap" type="text" id="txtFrom" placeholder="Start date" />
+						<input class="dateGap" type="text" id="txtFrom" placeholder="Start date" autocomplete="off"/>
 					</td>
 					<td>
 						&emsp;TO&emsp;
 					</td>
 					<td>
-						<input class="dateGap" type="text" id="txtTo" placeholder="End date" />
+						<input class="dateGap" type="text" id="txtTo" placeholder="End date" autocomplete="off"/>
 					</td>
 					<td>
 						&emsp;
@@ -209,7 +203,7 @@
 		</div>
 	</div>
 
-	<div class="row setMarginTop2 filter-panel card" id="filter-panel">
+	<div class="row setMarginTop2  card" id="_preferences">
 		<div class="col-md-12">
 			<div class="row paddingSmaller">
 				<div class="col-md-11">
@@ -377,9 +371,14 @@
 						$("#txtTo").datepicker("option", "minDate", dt);
 						$(".filterLevel2").selectpicker('deselectAll');
 						$(".filterLevel2").find('option').remove();
+						$(".filterLevel3").selectpicker('deselectAll');
+						$(".filterLevel3").find('option').remove();
 						$(".filterLevel2").selectpicker('refresh');
+						$(".filterLevel3").selectpicker('refresh');
 						
 						$("#filter1").removeClass('hidden')
+						$("#moreOtions").addClass('hidden')
+					$("#_preferences").css('display', 'block');
 					}
 				});
 				$("#txtTo").datepicker({
@@ -391,17 +390,14 @@
 						dt.setDate(dt.getDate() - 1);
 						$("#txtFrom").datepicker("option", "maxDate", dt);
 						$(".filterLevel2").selectpicker('deselectAll');
-						$("#filter1").removeClass('hidden')
-						// var start = $("#txtFrom").datepicker("getDate");
-						// var end = $("#txtTo").datepicker("getDate");
-						// var days = (end - start) / (1000 * 60 * 60 * 24);
-						// console.log(days)
-						// if(days > 10)
-						// {
-						// 	alert("A maximum of 6 months is only allowed.")
-						// 	$("#txtTo").val('')
-						// 	$("#txtFrom").val('')
-						// }
+						$(".filterLevel2").find('option').remove();
+						$(".filterLevel3").selectpicker('deselectAll');
+						$(".filterLevel3").find('option').remove();
+						$(".filterLevel2").selectpicker('refresh');
+						$(".filterLevel3").selectpicker('refresh');
+						$("#filter1").removeClass('hidden');
+						$("#moreOtions").addClass('hidden')
+					$("#_preferences").css('display', 'block');
 					}
 				});
 			});
@@ -426,7 +422,9 @@
 					$('.selectpicker').selectpicker('refresh');
 					$('.'+$(this).data('target')).addClass('open').removeClass('hidden')
 					$("#moreOtions").addClass('hidden')
-					$("#filter-panel").removeClass('collapse')
+					$("#_preferences").css('display', 'block');
+					// $("#filter-panel").removeClass('collapse')
+
 				});
 
 				$(document).on('click', '#filter1', function(event) {
@@ -816,7 +814,8 @@
 						"columns" :allColoumns
 					});
 
-					$("#filter-panel").removeClass('collapse in').addClass('collapse')
+					// $("#filter-panel").removeClass('collapse in').addClass('collapse')
+					$("#_preferences").css('display', 'none');
 					$("#reportTitle").html("Consolidated Report [ "+$('input[name=roleSelection]:checked').val()+" ]")
 					// $("#moreOtions").removeClass('disabled_now')
 					$("#moreOtions").removeClass('hidden')
@@ -900,15 +899,20 @@
 				$(document).on('click', '#toggleBtn', function(event) {
 					event.preventDefault();
 					/* Act on the event */
-					if($(this).data('icon')=="up")
+					// if($(this).data('icon')=="up")
+						if($("#_preferences").css('display')=='block')
 					{
 						$("#toggleFa").removeClass('fa fa-angle-up').addClass('fa fa-angle-down')
 						$(this).data('icon',"down")
+						$("#_preferences").css('display', 'none');
 					}
 					else
 					{
 						$("#toggleFa").removeClass('fa fa-angle-down').addClass('fa fa-angle-up')
 						$(this).data('icon',"up")
+						$("#_preferences").css('display', 'block');
+				
+						
 					}
 				});
 			});
