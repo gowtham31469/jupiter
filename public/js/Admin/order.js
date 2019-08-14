@@ -2764,13 +2764,22 @@ function label_order_details(uvc) {
             heatTransfer(data);
             mainlabels(data);
             sizelabels(data);
+			var wcl_already_exists=[];
+			var check_count=0;
+			
             if (data.orchestra_wash_care_label_orders.length > 0) {
                 $.each(data.orchestra_wash_care_label_orders, function (index, value) {
-
-                    washcare += 1;
-                    if (index == 0) {
-                        washcarelabels(data, "");
-                    } else {
+					
+						if(wcl_already_exists.includes(value.color_code) == true)
+						{
+							var wash_enable = "display:none !important";
+						}
+						else
+						{
+							var wash_enable = "";
+							wcl_already_exists.push(value.color_code);	
+						}
+						
                         if(data.orchestra_wash_care_label_orders != "")
                         {
                             var str=data.orchestra_wash_care_label_orders[index].status;
@@ -2781,24 +2790,20 @@ function label_order_details(uvc) {
                         {
                             $wash_status="";
                         }
-                        $('#add_modal').append('<div class="col-md-4" ><div class="card add-card wash-card'+index+'" style="height: 280px;" data-toggle="modal" data-target=".washcare_label_' + index + '" data-backdrop="static" data-keyboard="false">  <span class="label label-'+$wash_status+' label-status">'+$wash_status_text+'</span>   <div class="card-title"><p class="pull-right delete-wash' + index + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + index + '>Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p> <h5><b class="washlabelname' + index + '">' + value.template_name + " - Washcare Label" + '</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="clone_washcare_label_card'+index+'" style="cursor:pointer"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div>')
+                        $('#add_modal').append('<div class="col-md-4" ><input type="hidden" value="'+value.id +'" id="delete_id'+index+'"><div class="card add-card wash-card'+index+'" style="height: 280px;" data-toggle="modal" data-target=".washcare_label_' + index + '" data-backdrop="static" data-keyboard="false">  <span class="label label-'+$wash_status+' label-status">'+$wash_status_text+'</span>   <div class="card-title"><p class="pull-right delete-wash' + index + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + index + '>Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p> <h5><b class="washlabelname' + index + '">' + value.template_name + " - Washcare Label" + '</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="washcare_label_card'+index+'" style="'+wash_enable+';cursor:pointer;display: inline-block;"><i class="fa fa-plus" aria-hidden="true"></i> Add washcare label</p><p id="clone_washcare_label_card'+index+'" style="display: inline-block;float: right;cursor:pointer"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div>')
                         
-                        
-                        
-                                            
-    $('#clone_washcare_label_card'+index).on('click', function (e) {
+					
+    					$('#washcare_label_card'+index).on('click', function (e) {
 
         if ($('.washcarename').val() != "") {
           
-            
-            if (washcare <= 5) {
-                  washcare += 1;
-                $('#add_modal').append('<div class="col-md-4" ><div  style="border:1px dashed #333;height: 280px;" class="card add-card wash-card'+washcare+'" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false"><span></span>    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="clone_washcare_label_card' + washcare + '" style=";cursor:pointer;display: none;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div>')
+                washcare += 1;
+                $('#add_modal').append('<div class="col-md-4" ><input type="hidden"  id="delete_id'+washcare+'"><div  style="border:1px dashed #333;height: 280px;" class="card add-card wash-card'+washcare+'" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false"> <span></span>   <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="clone_washcare_label_card' + washcare + '" style=";cursor:pointer;display: none;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div>')
 				
 				//var index=washcare;
 				
 				$('#clone_washcare_label_card'+washcare).on('click', function (e) {
-					clonewashcarelabels(washcare);
+					clonewashcarelabels(washcare,value.color_code);
 				});
                 
                 $('.delete-wash' + washcare).on('click', function (e) {
@@ -2814,9 +2819,62 @@ function label_order_details(uvc) {
 
                         localStorage.setItem('wash_label', JSON.stringify(opop))
                     }
+					removeWashLabel(washcare)
 
                     $('#washcarelabelform' + $(this).attr('id')).remove()
-                    washcare -= 1;
+                    
+                    $(this).parent().parent().parent().remove();
+
+
+                });
+				
+				//toastr.success("Wash care label cloned successfully");
+				$('.snackbar_span').html('Wash care label added successfully');
+				showSnackbar();
+				window.scrollTo(0, document.body.scrollHeight);
+			
+         
+            $('.washcarename').val("")
+            $('.washnameerror').addClass('hidden')
+            var data = localStorage.getItem("label_order_data");
+            washcarelabels(JSON.parse(data), washcare,value.color_code);
+        } else {
+            if (washcare < 5) {
+                $('.washnameerror').removeClass('hidden')
+            }
+        }
+		
+    });
+                                 
+    					$('#clone_washcare_label_card'+index).on('click', function (e) {
+
+        if ($('.washcarename').val() != "") {
+          
+                washcare += 1;
+                $('#add_modal').append('<div class="col-md-4" ><input type="hidden"  id="delete_id'+washcare+'"><div  style="border:1px dashed #333;height: 280px;" class="card add-card wash-card'+washcare+'" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false"><span></span>    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="clone_washcare_label_card' + washcare + '" style=";cursor:pointer;display: none;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div>')
+				
+				//var index=washcare;
+				
+				$('#clone_washcare_label_card'+washcare).on('click', function (e) {
+					clonewashcarelabels(washcare,value.color_code);
+				});
+                
+                $('.delete-wash' + washcare).on('click', function (e) {
+
+                    if (localStorage.getItem('wash_label') != null) {
+                        var opop = JSON.parse(localStorage.getItem('wash_label'));
+                        if (opop['washcarelabelform' + $(this).attr('id')] === undefined) {
+
+                        } else {
+                            delete opop['washcarelabelform' + $(this).attr('id')];
+                        }
+
+
+                        localStorage.setItem('wash_label', JSON.stringify(opop))
+                    }
+					removeWashLabel(washcare)
+                    $('#washcarelabelform' + $(this).attr('id')).remove()
+                    
                     $(this).parent().parent().parent().remove();
 
 
@@ -2826,15 +2884,12 @@ function label_order_details(uvc) {
 				$('.snackbar_span').html('Wash care label cloned successfully');
 				showSnackbar();
 				window.scrollTo(0, document.body.scrollHeight);
-			} else {
-				$('.snackbar_span').html('Limit exceeded');
-				showSnackbar();
-			}
+			
          
             $('.washcarename').val("")
             $('.washnameerror').addClass('hidden')
             var data = localStorage.getItem("label_order_data");
-            washcarelabels(JSON.parse(data), washcare);
+            washcarelabels(JSON.parse(data), washcare,value.color_code);
             $('#washcarelabelform'+washcare).find('#wcl_name'+washcare).val($('#washcarelabelform'+index).find('#wcl_name'+index).val())
            
             
@@ -2879,6 +2934,10 @@ function label_order_details(uvc) {
             $('#washcarelabelform'+washcare+' table tbody').find('.tot_qty_tablewash_fin').text($('#washcarelabelform'+index+' table tbody').find('.tot_qty_tablewash_fin').text())
             var mySVG = document.getElementById("washcare_svg_front"+washcare);
             var svgDoc;
+			
+			var mySVG_back = document.getElementById("washcare_svg_back"+washcare);
+            var svgDocBack;
+			
             mySVG.addEventListener("load", function () {
                 svgDoc=mySVG.contentDocument;
                 svgDoc.getElementById("cofreet_symbol1").setAttribute('xlink:href', $('.washing_select' + washcare + ' option:selected').data('cofreet'));
@@ -2898,20 +2957,23 @@ function label_order_details(uvc) {
                     $('select.made_in_select' + washcare).find(':selected').data('arabic') + "-" +
                     $('select.made_in_select' + washcare).find(':selected').data('greek')  + '</p>';
                 svgDoc.getElementById("country").innerHTML = text_for_mad_in;
-                
-                svgDoc.getElementById("text_care_instruction").innerHTML = "";
+            });
+			
+            mySVG_back.addEventListener("load", function () {
+				svgDocBack=mySVG_back.contentDocument;
+				svgDocBack.getElementById("text_care_instruction").innerHTML = "";
                 $('.care_instruction_select' + washcare + ' option:selected').each(function () {
                     var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german')  + "-" +
                         $(this).data('arabic') + "-" +
                         $(this).data('greek')  + '</p>';
-                    svgDoc.getElementById("text_care_instruction").innerHTML += value;
+                    svgDocBack.getElementById("text_care_instruction").innerHTML += value;
                 });
                 
-                 svgDoc.getElementById("parts_composition").innerHTML ="";
+                 svgDocBack.getElementById("parts_composition").innerHTML ="";
               $('#composition_remove_qty' + washcare + ' tr').each(function () {
                   if($(this).find('select').find(':selected').val() != "Select Option")
                   {
-                       svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german') + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek') + '</p>';
+                       svgDocBack.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german') + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek') + '</p>';
                   }
                  
                   var id=$(this).attr('id')
@@ -2920,7 +2982,7 @@ function label_order_details(uvc) {
                   $(compss).each(function (index1,value1) {
                       var english = value1.split('_');
 
-                    svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + id + '" id="composition_' + id + '">' + english[9] + "% " + english[0]  + "-" +english[1] + "-" + english[2]+ "-" +english[3] + "-" + english[4] + "-" + english[5] + "-" +english[6] + "-" + english[7] + "-" + english[8]+ '</p>';
+                    svgDocBack.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + id + '" id="composition_' + id + '">' + english[9] + "% " + english[0]  + "-" +english[1] + "-" + english[2]+ "-" +english[3] + "-" + english[4] + "-" + english[5] + "-" +english[6] + "-" + english[7] + "-" + english[8]+ '</p>';
                 });
               })
             $('.composition_error_hidden').addClass('hidden')
@@ -2939,8 +3001,7 @@ function label_order_details(uvc) {
             })
             var wash_finals = JSON.stringify(washcomp);
             localStorage.setItem('wash_composition_final'+washcare, wash_finals);
-                
-            });
+			});
         } else {
             if (washcare < 5) {
                 $('.washnameerror').removeClass('hidden')
@@ -2949,28 +3010,522 @@ function label_order_details(uvc) {
         
     });
                         
-                        
-                        
-                        
-                        
-                        
-                        
                         $('.delete-wash' + index).on('click', function (e) {
                             deletewash.push(value.id)
                             localStorage.setItem("deletewash", JSON.stringify(deletewash));
-                            removeWashLabel(value.id)
+                            removeWashLabel(index)
                             $('#washcarelabelform' + index).remove()
-                            washcare -= 1;
+                            
                             $(this).parent().parent().parent().remove();
 
 
                         });
-                        washcarelabels(data, index);
+                        washcarelabels(data, index,value.color_code);
+						washcare++;
+						check_count++;
+                });
+				
+				if(check_count == data.orchestra_wash_care_label_orders.length)
+				{
+					//console.log(wcl_already_exists)
+					 $(data.color_wcl).each(function (index1, value1) {
+						// console.log(value1.color_code)
+					 if(wcl_already_exists.includes(value1.Color_Code) != true)
+					 {
+						$wash_status = "";
+						$wash_status_text = "";
+						var wash_enable = "display:none !important";
+						var wash_name = "";
+						$('#add_modal').append('<div class="col-md-4"><input type="hidden"  id="delete_id'+washcare+'"> <div class="card add-card wash-card'+washcare+'" style="height: 280px;" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><span class="label label-' + $wash_status + ' label-status">' + $wash_status_text + '</span> <div class="card-title"> <p class="pull-right" id="clickme'+washcare+'" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="washlabelname'+washcare+'">' + wash_name + 'Washcare Label</b></h5> </div><div class="row"> <div class="col-md-6 col-md-offset-3"> <div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="washcare_label_card'+washcare+'" style="'+wash_enable+';cursor:pointer;display: inline-block;"><i class="fa fa-plus" aria-hidden="true"></i> Add washcare label</p><p id="clone_washcare_label_card'+washcare+'" style="'+wash_enable+';cursor:pointer;    display: inline-block;float: right;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div>')
+						var old_id=washcare;
+						$('#washcare_label_card'+old_id).on('click', function (e) {
+
+        if ($('.washcarename').val() != "") {
+          
+                washcare += 1;
+                $('#add_modal').append('<div class="col-md-4" ><input type="hidden"  id="delete_id'+washcare+'"><div  style="border:1px dashed #333;height: 280px;" class="card add-card wash-card'+washcare+'" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false"> <span></span>   <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="clone_washcare_label_card' + washcare + '" style=";cursor:pointer;display: none;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div>')
+				
+				//var index=washcare;
+				
+				$('#clone_washcare_label_card'+washcare).on('click', function (e) {
+					clonewashcarelabels(washcare,value1.Color_Code);
+				});
+                
+                $('.delete-wash' + washcare).on('click', function (e) {
+
+                    if (localStorage.getItem('wash_label') != null) {
+                        var opop = JSON.parse(localStorage.getItem('wash_label'));
+                        if (opop['washcarelabelform' + $(this).attr('id')] === undefined) {
+
+                        } else {
+                            delete opop['washcarelabelform' + $(this).attr('id')];
+                        }
+
+
+                        localStorage.setItem('wash_label', JSON.stringify(opop))
+                    }
+					removeWashLabel(washcare)
+                    $('#washcarelabelform' + $(this).attr('id')).remove()
+                    
+                    $(this).parent().parent().parent().remove();
+
+
+                });
+				
+				//toastr.success("Wash care label cloned successfully");
+				$('.snackbar_span').html('Wash care label added successfully');
+				showSnackbar();
+				window.scrollTo(0, document.body.scrollHeight);
+			
+         
+            $('.washcarename').val("")
+            $('.washnameerror').addClass('hidden')
+            var data = localStorage.getItem("label_order_data");
+            washcarelabels(JSON.parse(data), washcare,value.color_code);
+        } else {
+            if (washcare < 5) {
+                $('.washnameerror').removeClass('hidden')
+            }
+        }
+		
+    });
+                                 
+    					$('#clone_washcare_label_card'+old_id).on('click', function (e) {
+
+        if ($('.washcarename').val() != "") {
+        
+                washcare += 1;
+                $('#add_modal').append('<div class="col-md-4" ><input type="hidden"  id="delete_id'+washcare+'"><div  style="border:1px dashed #333;height: 280px;" class="card add-card wash-card'+washcare+'" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false"><span></span>    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="clone_washcare_label_card' + washcare + '" style=";cursor:pointer;display: none;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div>')
+				
+				//var index=washcare;
+				
+				$('#clone_washcare_label_card'+washcare).on('click', function (e) {
+					clonewashcarelabels(washcare,value1.Color_Code);
+				});
+                
+                $('.delete-wash' + washcare).on('click', function (e) {
+
+                    if (localStorage.getItem('wash_label') != null) {
+                        var opop = JSON.parse(localStorage.getItem('wash_label'));
+                        if (opop['washcarelabelform' + $(this).attr('id')] === undefined) {
+
+                        } else {
+                            delete opop['washcarelabelform' + $(this).attr('id')];
+                        }
+
+
+                        localStorage.setItem('wash_label', JSON.stringify(opop))
+                    }
+					removeWashLabel(washcare)
+                    $('#washcarelabelform' + $(this).attr('id')).remove()
+                    
+                    $(this).parent().parent().parent().remove();
+
+
+                });
+           		
+				//toastr.success("Wash care label cloned successfully");
+				$('.snackbar_span').html('Wash care label cloned successfully');
+				showSnackbar();
+				window.scrollTo(0, document.body.scrollHeight);
+			
+         
+            $('.washcarename').val("")
+            $('.washnameerror').addClass('hidden')
+            var data = localStorage.getItem("label_order_data");
+            washcarelabels(JSON.parse(data), washcare,value1.Color_Code);
+            $('#washcarelabelform'+washcare).find('#wcl_name'+washcare).val($('#washcarelabelform'+old_id).find('#wcl_name'+old_id).val())
+           
+            
+            $('.washing_select'+washcare).selectpicker('val',$('.washing_select'+old_id).selectpicker('val'));
+            $('.whitening_select'+washcare).selectpicker('val',$('.whitening_select'+old_id).selectpicker('val'));
+            $('.dryer_select'+washcare).selectpicker('val',$('.dryer_select'+old_id).selectpicker('val'));
+            $('.ironing_select'+washcare).selectpicker('val',$('.ironing_select'+old_id).selectpicker('val'));
+            $('.cleaning_select'+washcare).selectpicker('val',$('.cleaning_select'+old_id).selectpicker('val'));
+            $('.made_in_select'+washcare).selectpicker('val',$('.made_in_select'+old_id).selectpicker('val'));
+			
+			$('#washcarelabelform' + washcare+' .washonesizein').val($('#washcarelabelform' + old_id+' .washonesizein').val())
+			$('#washcarelabelform' + washcare+' .washonesizecm').val($('#washcarelabelform' + old_id+' .washonesizecm').val())
+            $('.care_instruction_select'+washcare).selectpicker('val',$('.care_instruction_select'+old_id).selectpicker('val'));
+            
+            $('#composition_remove_qty'+washcare).html($('#composition_remove_qty'+old_id).html())
+            
+            $('#composition_remove_qty'+old_id+' tr').each(function (ind,val) {
+                var values= $(this).find('select').find(':selected').val()
+                var v= $(this).attr('id');
+                $('#composition_remove_qty'+washcare+' tr').each(function (inds,vals) {
+                    if($(this).attr('id') == v)
+                    {
+                        $(this).find('select').val(values)
+                        $(this).find('a').removeAttr('onclick')
+                        $(this).find('a').attr('onclick','deleteComposition(this,'+washcare+')')
                     }
                 });
-                washcare -= 1;
+            }); 
+            
+            $('#washcarelabelform'+old_id+' table tbody tr').each(function (ind,val) {
+                var values= $(this).find('.tot_qty_tablewash').val()
+                var v= $(this).find('.uvc_tco').text();
+                $('#washcarelabelform'+washcare+' table tbody tr').each(function (inds,vals) {
+                    if($(this).find('.uvc_tco').text() == v)
+                    {
+                        $(this).find('.tot_qty_tablewash').val(values)
+                        
+                    }
+                });
+            });
+            
+            $('#washcarelabelform'+washcare+' table tbody').find('.tot_qty_tablewash_fin').text($('#washcarelabelform'+old_id+' table tbody').find('.tot_qty_tablewash_fin').text())
+            var mySVG = document.getElementById("washcare_svg_front"+washcare);
+            var svgDoc;
+			
+			var mySVG_back = document.getElementById("washcare_svg_back"+washcare);
+            var svgDocBack;
+			
+            mySVG.addEventListener("load", function () {
+                svgDoc=mySVG.contentDocument;
+                svgDoc.getElementById("cofreet_symbol1").setAttribute('xlink:href', $('.washing_select' + washcare + ' option:selected').data('cofreet'));
+                svgDoc.getElementById("astm_symbol1").setAttribute('xlink:href', $('.washing_select' + washcare + ' option:selected').data('astm'));
+                svgDoc.getElementById("cofreet_symbol2").setAttribute('xlink:href', $('.whitening_select' + washcare + ' option:selected').data('cofreet'));
+                svgDoc.getElementById("astm_symbol2").setAttribute('xlink:href', $('.whitening_select' + washcare + ' option:selected').data('astm'));
+                svgDoc.getElementById("cofreet_symbol3").setAttribute('xlink:href', $('.dryer_select' + washcare + ' option:selected').data('cofreet'));
+                svgDoc.getElementById("astm_symbol3").setAttribute('xlink:href', $('.dryer_select' + washcare + ' option:selected').data('astm'));
+                svgDoc.getElementById("cofreet_symbol4").setAttribute('xlink:href', $('.ironing_select' + washcare + ' option:selected').data('cofreet'));
+                svgDoc.getElementById("astm_symbol4").setAttribute('xlink:href', $('.ironing_select' + washcare + ' option:selected').data('astm'));
+                svgDoc.getElementById("cofreet_symbol5").setAttribute('xlink:href', $('.cleaning_select' + washcare
+ + ' option:selected').data('cofreet'));
+                svgDoc.getElementById("astm_symbol5").setAttribute('xlink:href', $('.cleaning_select' + washcare
+ + ' option:selected').data('astm'));
+                
+                var text_for_mad_in = '<p>' + $('select.made_in_select' + washcare).find(':selected').data('french') + "-" + $('select.made_in_select' + washcare).find(':selected').data('english') + "-" + $('select.made_in_select' + washcare).find(':selected').data('spanish') + "-" + $('select.made_in_select' + washcare).find(':selected').data('portuguese') + "-" + $('select.made_in_select' + washcare).find(':selected').data('italian') + "-" + $('select.made_in_select' + washcare).find(':selected').data('dutch') + "-" + $('select.made_in_select' + washcare).find(':selected').data('german') + "-" +
+                    $('select.made_in_select' + washcare).find(':selected').data('arabic') + "-" +
+                    $('select.made_in_select' + washcare).find(':selected').data('greek')  + '</p>';
+                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
+            });
+			
+            mySVG_back.addEventListener("load", function () {
+				svgDocBack=mySVG_back.contentDocument;
+				svgDocBack.getElementById("text_care_instruction").innerHTML = "";
+                $('.care_instruction_select' + washcare + ' option:selected').each(function () {
+                    var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german')  + "-" +
+                        $(this).data('arabic') + "-" +
+                        $(this).data('greek')  + '</p>';
+                    svgDocBack.getElementById("text_care_instruction").innerHTML += value;
+                });
+                
+                 svgDocBack.getElementById("parts_composition").innerHTML ="";
+              $('#composition_remove_qty' + washcare + ' tr').each(function () {
+                  if($(this).find('select').find(':selected').val() != "Select Option")
+                  {
+                       svgDocBack.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german') + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek') + '</p>';
+                  }
+                 
+                  var id=$(this).attr('id')
+                  var compo =$(this).find('.compositions_hidden').val();
+                  var compss = compo.split(',');
+                  $(compss).each(function (index1,value1) {
+                      var english = value1.split('_');
+
+                    svgDocBack.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + id + '" id="composition_' + id + '">' + english[9] + "% " + english[0]  + "-" +english[1] + "-" + english[2]+ "-" +english[3] + "-" + english[4] + "-" + english[5] + "-" +english[6] + "-" + english[7] + "-" + english[8]+ '</p>';
+                });
+              })
+            $('.composition_error_hidden').addClass('hidden')
+            var washcomp=[];
+            $('#composition_remove_qty' + washcare + ' tr').each(function () {
+                  var washcomp1=[];
+                  var id=$(this).attr('id')
+                  var value=$(this).find('select').find(':selected').val();
+                  var compo =$(this).find('.compositions_hidden').val();
+                  var compss = compo.split(',');
+                    $(compss).each(function (index1,value1){ 
+                        var english = value1.split('_');
+                        washcomp1.push(value+"_"+english[1]+"_"+english[9]) 
+                    });
+                washcomp.push(washcomp1)
+            })
+            var wash_finals = JSON.stringify(washcomp);
+            localStorage.setItem('wash_composition_final'+washcare, wash_finals);
+			});
+        } else {
+            if (washcare < 5) {
+                $('.washnameerror').removeClass('hidden')
+            }
+        }
+        
+    });
+                        
+                        $('.delete-wash' + old_id).on('click', function (e) {
+                            deletewash.push(value.id)
+                            localStorage.setItem("deletewash", JSON.stringify(deletewash));
+                            removeWashLabel(old_id)
+                            $('#washcarelabelform' + old_id).remove()
+                            
+                            $(this).parent().parent().parent().remove();
+
+
+                        });
+						washcarelabels(data, old_id,value1.Color_Code);
+						washcare++;
+					 }
+					});
+				}
+				
+				
             } else {
-                washcarelabels(data, "");
+               $(data.color_wcl).each(function (index1, value1) {
+		
+						if (data.orchestra_wash_care_label_orders != "") {
+							var str = data.orchestra_wash_care_label_orders[0].status;
+							$wash_status = str.replace(/ /g, "");
+							$wash_status_text = data.orchestra_wash_care_label_orders[0].status;
+							var wash_enable = "";
+							var wash_name = data.orchestra_wash_care_label_orders[0].template_name + " - ";
+							update_disable=1;
+						} else {
+							$wash_status = "";
+							$wash_status_text = "";
+							var wash_enable = "display:none !important";
+							var wash_name = "";
+						}
+//						$(data.orchestra_wash_care_label_orders).each(function (index2, value2) {
+//							if(value2.color_code == value1.Color_Code)
+//							{
+//								console.log("hai")
+//							}
+//
+//						});
+
+						$('#add_modal').append('<div class="col-md-4"> <input type="hidden"  id="delete_id'+washcare+'"><div class="card add-card wash-card'+washcare+'" style="height: 280px;" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><span class="label label-' + $wash_status + ' label-status">' + $wash_status_text + '</span> <div class="card-title"> <p class="pull-right" id="clickme'+washcare+'" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="washlabelname'+washcare+'">' + wash_name + 'Washcare Label</b></h5> </div><div class="row"> <div class="col-md-6 col-md-offset-3"> <div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="washcare_label_card'+washcare+'" style="'+wash_enable+';cursor:pointer;display: inline-block;"><i class="fa fa-plus" aria-hidden="true"></i> Add washcare label</p><p id="clone_washcare_label_card'+washcare+'" style="'+wash_enable+';cursor:pointer;    display: inline-block;float: right;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div>')
+				   		var old_id=washcare;
+				   		$('#washcare_label_card'+old_id).on('click', function (e) {
+
+        if ($('.washcarename').val() != "") {
+          
+                washcare += 1;
+                $('#add_modal').append('<div class="col-md-4" ><input type="hidden"  id="delete_id'+washcare+'"><div  style="border:1px dashed #333;height: 280px;" class="card add-card wash-card'+washcare+'" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false"> <span></span>   <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="clone_washcare_label_card' + washcare + '" style=";cursor:pointer;display: none;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div>')
+				
+				//var index=washcare;
+				
+				$('#clone_washcare_label_card'+washcare).on('click', function (e) {
+					clonewashcarelabels(washcare,value1.Color_Code);
+				});
+                
+                $('.delete-wash' + washcare).on('click', function (e) {
+
+                    if (localStorage.getItem('wash_label') != null) {
+                        var opop = JSON.parse(localStorage.getItem('wash_label'));
+                        if (opop['washcarelabelform' + $(this).attr('id')] === undefined) {
+
+                        } else {
+                            delete opop['washcarelabelform' + $(this).attr('id')];
+                        }
+
+
+                        localStorage.setItem('wash_label', JSON.stringify(opop))
+                    }
+					removeWashLabel(washcare)
+                    $('#washcarelabelform' + $(this).attr('id')).remove()
+                    
+                    $(this).parent().parent().parent().remove();
+
+
+                });
+				
+				//toastr.success("Wash care label cloned successfully");
+				$('.snackbar_span').html('Wash care label added successfully');
+				showSnackbar();
+				window.scrollTo(0, document.body.scrollHeight);
+			
+         
+            $('.washcarename').val("")
+            $('.washnameerror').addClass('hidden')
+            var data = localStorage.getItem("label_order_data");
+            washcarelabels(JSON.parse(data), washcare,value1.Color_Code);
+        } else {
+            if (washcare < 5) {
+                $('.washnameerror').removeClass('hidden')
+            }
+        }
+		
+    });
+                                 
+    					$('#clone_washcare_label_card'+old_id).on('click', function (e) {
+
+        if ($('.washcarename').val() != "") {
+          
+                washcare += 1;
+                $('#add_modal').append('<div class="col-md-4" ><input type="hidden"  id="delete_id'+washcare+'"><div  style="border:1px dashed #333;height: 280px;" class="card add-card wash-card'+washcare+'" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false"><span></span>    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="clone_washcare_label_card' + washcare + '" style=";cursor:pointer;display: none;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div>')
+				
+				//var index=washcare;
+				
+				$('#clone_washcare_label_card'+washcare).on('click', function (e) {
+					clonewashcarelabels(washcare,value1.Color_Code);
+				});
+                
+                $('.delete-wash' + washcare).on('click', function (e) {
+
+                    if (localStorage.getItem('wash_label') != null) {
+                        var opop = JSON.parse(localStorage.getItem('wash_label'));
+                        if (opop['washcarelabelform' + $(this).attr('id')] === undefined) {
+
+                        } else {
+                            delete opop['washcarelabelform' + $(this).attr('id')];
+                        }
+
+
+                        localStorage.setItem('wash_label', JSON.stringify(opop))
+                    }
+					removeWashLabel(washcare)
+                    $('#washcarelabelform' + $(this).attr('id')).remove()
+                    
+                    $(this).parent().parent().parent().remove();
+
+
+                });
+           		
+				//toastr.success("Wash care label cloned successfully");
+				$('.snackbar_span').html('Wash care label cloned successfully');
+				showSnackbar();
+				window.scrollTo(0, document.body.scrollHeight);
+			
+         
+            $('.washcarename').val("")
+            $('.washnameerror').addClass('hidden')
+            var data = localStorage.getItem("label_order_data");
+            washcarelabels(JSON.parse(data), washcare,value1.Color_Code);
+            $('#washcarelabelform'+washcare).find('#wcl_name'+washcare).val($('#washcarelabelform'+old_id).find('#wcl_name'+old_id).val())
+           
+            
+            $('.washing_select'+washcare).selectpicker('val',$('.washing_select'+old_id).selectpicker('val'));
+            $('.whitening_select'+washcare).selectpicker('val',$('.whitening_select'+old_id).selectpicker('val'));
+            $('.dryer_select'+washcare).selectpicker('val',$('.dryer_select'+old_id).selectpicker('val'));
+            $('.ironing_select'+washcare).selectpicker('val',$('.ironing_select'+old_id).selectpicker('val'));
+            $('.cleaning_select'+washcare).selectpicker('val',$('.cleaning_select'+old_id).selectpicker('val'));
+            $('.made_in_select'+washcare).selectpicker('val',$('.made_in_select'+old_id).selectpicker('val'));
+			
+			$('#washcarelabelform' + washcare+' .washonesizein').val($('#washcarelabelform' + old_id+' .washonesizein').val())
+			$('#washcarelabelform' + washcare+' .washonesizecm').val($('#washcarelabelform' + old_id+' .washonesizecm').val())
+            $('.care_instruction_select'+washcare).selectpicker('val',$('.care_instruction_select'+old_id).selectpicker('val'));
+            
+            $('#composition_remove_qty'+washcare).html($('#composition_remove_qty'+old_id).html())
+            
+            $('#composition_remove_qty'+old_id+' tr').each(function (ind,val) {
+                var values= $(this).find('select').find(':selected').val()
+                var v= $(this).attr('id');
+                $('#composition_remove_qty'+washcare+' tr').each(function (inds,vals) {
+                    if($(this).attr('id') == v)
+                    {
+                        $(this).find('select').val(values)
+                        $(this).find('a').removeAttr('onclick')
+                        $(this).find('a').attr('onclick','deleteComposition(this,'+washcare+')')
+                    }
+                });
+            }); 
+            
+            $('#washcarelabelform'+old_id+' table tbody tr').each(function (ind,val) {
+                var values= $(this).find('.tot_qty_tablewash').val()
+                var v= $(this).find('.uvc_tco').text();
+                $('#washcarelabelform'+washcare+' table tbody tr').each(function (inds,vals) {
+                    if($(this).find('.uvc_tco').text() == v)
+                    {
+                        $(this).find('.tot_qty_tablewash').val(values)
+                        
+                    }
+                });
+            });
+            
+            $('#washcarelabelform'+washcare+' table tbody').find('.tot_qty_tablewash_fin').text($('#washcarelabelform'+old_id+' table tbody').find('.tot_qty_tablewash_fin').text())
+            var mySVG = document.getElementById("washcare_svg_front"+washcare);
+            var svgDoc;
+			
+			var mySVG_back = document.getElementById("washcare_svg_back"+washcare);
+            var svgDocBack;
+			
+            mySVG.addEventListener("load", function () {
+                svgDoc=mySVG.contentDocument;
+                svgDoc.getElementById("cofreet_symbol1").setAttribute('xlink:href', $('.washing_select' + washcare + ' option:selected').data('cofreet'));
+                svgDoc.getElementById("astm_symbol1").setAttribute('xlink:href', $('.washing_select' + washcare + ' option:selected').data('astm'));
+                svgDoc.getElementById("cofreet_symbol2").setAttribute('xlink:href', $('.whitening_select' + washcare + ' option:selected').data('cofreet'));
+                svgDoc.getElementById("astm_symbol2").setAttribute('xlink:href', $('.whitening_select' + washcare + ' option:selected').data('astm'));
+                svgDoc.getElementById("cofreet_symbol3").setAttribute('xlink:href', $('.dryer_select' + washcare + ' option:selected').data('cofreet'));
+                svgDoc.getElementById("astm_symbol3").setAttribute('xlink:href', $('.dryer_select' + washcare + ' option:selected').data('astm'));
+                svgDoc.getElementById("cofreet_symbol4").setAttribute('xlink:href', $('.ironing_select' + washcare + ' option:selected').data('cofreet'));
+                svgDoc.getElementById("astm_symbol4").setAttribute('xlink:href', $('.ironing_select' + washcare + ' option:selected').data('astm'));
+                svgDoc.getElementById("cofreet_symbol5").setAttribute('xlink:href', $('.cleaning_select' + washcare
+ + ' option:selected').data('cofreet'));
+                svgDoc.getElementById("astm_symbol5").setAttribute('xlink:href', $('.cleaning_select' + washcare
+ + ' option:selected').data('astm'));
+                
+                var text_for_mad_in = '<p>' + $('select.made_in_select' + washcare).find(':selected').data('french') + "-" + $('select.made_in_select' + washcare).find(':selected').data('english') + "-" + $('select.made_in_select' + washcare).find(':selected').data('spanish') + "-" + $('select.made_in_select' + washcare).find(':selected').data('portuguese') + "-" + $('select.made_in_select' + washcare).find(':selected').data('italian') + "-" + $('select.made_in_select' + washcare).find(':selected').data('dutch') + "-" + $('select.made_in_select' + washcare).find(':selected').data('german') + "-" +
+                    $('select.made_in_select' + washcare).find(':selected').data('arabic') + "-" +
+                    $('select.made_in_select' + washcare).find(':selected').data('greek')  + '</p>';
+                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
+            });
+			
+            mySVG_back.addEventListener("load", function () {
+				svgDocBack=mySVG_back.contentDocument;
+				svgDocBack.getElementById("text_care_instruction").innerHTML = "";
+                $('.care_instruction_select' + washcare + ' option:selected').each(function () {
+                    var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german')  + "-" +
+                        $(this).data('arabic') + "-" +
+                        $(this).data('greek')  + '</p>';
+                    svgDocBack.getElementById("text_care_instruction").innerHTML += value;
+                });
+                
+                 svgDocBack.getElementById("parts_composition").innerHTML ="";
+              $('#composition_remove_qty' + washcare + ' tr').each(function () {
+                  if($(this).find('select').find(':selected').val() != "Select Option")
+                  {
+                       svgDocBack.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german') + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek') + '</p>';
+                  }
+                 
+                  var id=$(this).attr('id')
+                  var compo =$(this).find('.compositions_hidden').val();
+                  var compss = compo.split(',');
+                  $(compss).each(function (index1,value1) {
+                      var english = value1.split('_');
+
+                    svgDocBack.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + id + '" id="composition_' + id + '">' + english[9] + "% " + english[0]  + "-" +english[1] + "-" + english[2]+ "-" +english[3] + "-" + english[4] + "-" + english[5] + "-" +english[6] + "-" + english[7] + "-" + english[8]+ '</p>';
+                });
+              })
+            $('.composition_error_hidden').addClass('hidden')
+            var washcomp=[];
+            $('#composition_remove_qty' + washcare + ' tr').each(function () {
+                  var washcomp1=[];
+                  var id=$(this).attr('id')
+                  var value=$(this).find('select').find(':selected').val();
+                  var compo =$(this).find('.compositions_hidden').val();
+                  var compss = compo.split(',');
+                    $(compss).each(function (index1,value1){ 
+                        var english = value1.split('_');
+                        washcomp1.push(value+"_"+english[1]+"_"+english[9]) 
+                    });
+                washcomp.push(washcomp1)
+            })
+            var wash_finals = JSON.stringify(washcomp);
+            localStorage.setItem('wash_composition_final'+washcare, wash_finals);
+			});
+        } else {
+            if (washcare < 5) {
+                $('.washnameerror').removeClass('hidden')
+            }
+        }
+        
+    });
+                        
+                        $('.delete-wash' + old_id).on('click', function (e) {
+                            deletewash.push(value.id)
+                            localStorage.setItem("deletewash", JSON.stringify(deletewash));
+                            removeWashLabel(old_id)
+                            $('#washcarelabelform' + old_id).remove()
+                            
+                            $(this).parent().parent().parent().remove();
+
+
+                        });
+						washcarelabels(data, old_id,value1.Color_Code);
+						washcare++;
+					});
             }
 
 
@@ -2992,7 +3547,7 @@ function label_order_details(uvc) {
  * @return Wash care View
  */
 
-function washcarelabels(data, dataid) {
+function washcarelabels(data, dataid,color_code) {
     var washing_option = "<option value=''>Select Option</option>";
     var whitening_option = "<option value=''>Select Option</option>";
     var dryer_option = "<option value=''>Select Option</option>";
@@ -3036,6 +3591,7 @@ function washcarelabels(data, dataid) {
     var tr = "";
     $qu = 0;
     var ttots = 0;
+	var totaloq = 0;
     if (data.orchestra_wash_care_label_orders != "") {
         if (dataid != "") {
             dataid1 = dataid;
@@ -3094,27 +3650,29 @@ function washcarelabels(data, dataid) {
 		$save_button_class = "";
     }
     $.each(data.order_details, function (index, value) {
-        if (data.orchestra_wash_care_label_orders != "") {
-            if (dataid != "") {
-                dataid1 = dataid;
-            } else {
-                dataid1 = 0;
-            }
-            if (data.orchestra_wash_care_label_orders.length > dataid1) {
-                $wash_label_count = data.orchestra_wash_care_label_orders[dataid1]['qty'][$qu].quantity;
-            } else {
-                $wash_label_count = "";
-            }
+        if(color_code == value.Color_Code)
+		{
+				if (data.orchestra_wash_care_label_orders != "") {
+					if (dataid != "") {
+						dataid1 = dataid;
+					} else {
+						dataid1 = 0;
+					}
+					if (data.orchestra_wash_care_label_orders.length > dataid1) {
+						console.log($qu);
+						$wash_label_count = data.orchestra_wash_care_label_orders[dataid1]['qty'][$qu].quantity;
+					} else {
+						$wash_label_count = "";
+					}
 
-        } else {
-            $wash_label_count = "";
-        }
-
-
-        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + (value.Size).replace("ANS", '') + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)" type="number" min="'+data.wash_moq+'" class="form-control input-sm tot_qty_tablewash" value="' + $wash_label_count + '" required placeholder="WCL Count"><div class="help-block with-errors"></div></div></td></tr>';
-
-        $qu++;
-        ttots += parseInt($wash_label_count);
+				} else {
+					$wash_label_count = "";
+				}
+			   tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + (value.Size).replace("ANS", '') + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)" type="number" min="'+data.wash_moq+'" class="form-control input-sm tot_qty_tablewash" value="' + $wash_label_count + '" required placeholder="WCL Count"><div class="help-block with-errors"></div></div></td></tr>';
+			 	$qu++;
+			    ttots += parseInt($wash_label_count);
+				totaloq += parseInt(value.Quantity);
+		}
 
     });
 	
@@ -3167,7 +3725,7 @@ function washcarelabels(data, dataid) {
 		var disney_flag="0";
 	}
 
-    $('.top-content').append('<form id="washcarelabelform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><div class="left-panelorc col-md-8"> <div class="div-max"> <div class="col-md-3"> <h4>Options</h4> <hr><div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">WCL Name</label><input type="text" class="form-control input-sm" required="" placeholder="WCL Name" value="' + $wcl_name + '" id="wcl_name' + dataid + '"><div class="help-block with-errors"></div></div>  <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Washing</label><select data-live-search="true" class="form-control selectpicker input-sm washing_select' + dataid + '" required>' + washing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Whitening</label><select data-live-search="true" class="form-control selectpicker input-sm whitening_select' + dataid + '" required>' + whitening_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Dryer</label><select data-live-search="true" class="form-control selectpicker input-sm dryer_select' + dataid + '" required>' + dryer_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Ironing</label><select data-live-search="true" class="form-control selectpicker input-sm ironing_select' + dataid + '" required>' + ironing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Cleaning</label><select data-live-search="true" class="form-control selectpicker input-sm cleaning_select' + dataid + '" required>' + cleaning_option + '</select><div class="help-block with-errors"></div></div>'+treestruct+'  </div></div> <div class="col-md-5"> <h4>Art Work</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span> <hr> <div class="section-1 sections"> <div class="sample-artwork"><object style="height: calc( 100vh - 125px );"  id="washcare_svg_front' + dataid + '" data="' + data.orchestra_wash_template_front + '" type="image/svg+xml"></object> <object style="height: calc( 100vh - 125px );margin-left: 10px;"  id="washcare_svg_back' + dataid + '"  data="' + data.orchestra_wash_template_back + '" type="image/svg+xml"></object><object style="height: calc( 100vh - 125px );width: 145px;margin-left: 10px;"  id="washcare_svg_middle' + dataid + '" data="' + data.orchestra_wash_template_middle + '" type="image/svg+xml"></object></div><input type="hidden" value="' + disney_flag + '" id="wash_label_id"></div> </div> <div class="col-md-4 " style="padding-left:0px"> <h4>Options</h4> <hr>'+sizebox+' <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Made In</label><select data-live-search="true" class="form-control selectpicker input-sm made_in_select' + dataid + '" required>' + made_option + '</select><div class="help-block with-errors"></div></div> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Care Instructions</label><select data-live-search="true" class="form-control selectpicker input-sm care_instruction_select' + dataid + '" required multiple>' + instruction_option + '</select><div class="help-block with-errors"></div></div> <div class="section-1 sections"> <h5>Compositions</h5> <select class="selectpicker composition_select' + dataid + '"  data-live-search="true">  ' + composition_option + '  </select><p class="hidden" style="color:red;float:right" id="composition_error_required' + dataid + '">Please Select Composition</p> </div> <h5>Percentage</h5> <input type="number" min="1" max="100" class="form-control input-sm composition_percent' + dataid + '"><p class="hidden" style="color:red;text-align:right" id="percentage_error_required' + dataid + '">Please Enter Percentage</p>  <button type="button" class="btn  btn-primary pull-right input-sm add_to_list' + dataid + '" onclick="add_to_list(' + dataid + ')">Add To List</button> <table class="table table-striped table-hover table-condensed"><thead><th>Composition</th><th>Quantity</th></thead><tbody id="composition_table_qty' + dataid + '"></tbody></table><p id="wash_composition_error' + dataid + '" class="hidden" style="color:red;text-align: right;margin-right: 10px;">Please Select composition</p><p id="wash_composition_page_error' + dataid + '" class="hidden" style="color:red;text-align: right;margin-right: 10px;">Please Add Composition to Page</p><div style="height: 30px;"><button class="btn  btn-primary pull-right input-sm add_to_composition' + dataid + '"  type="button" disabled onclick="add_to_composition(' + dataid + ')">Add To Composition</button></div><div><h4>Compositions :</h4><div><table class="table table-striped table-hover table-condensed"><thead><tr><th>Composition Name</th><th>Parts</th><th>Actions</th></tr></thead><tbody id="composition_remove_qty' + dataid + '"></tbody></table><div><p class="hidden composition_error_hidden" style="color:red;text-align: right;margin-right: 10px;">Please select parts</p></div><div><button class="btn  btn-primary pull-right input-sm add_to_page' + dataid + '"  style="position:relative;" type="button" onclick="add_to_page(' + dataid + ')">Add To Page</button></div></div></div><div class="parts_none'+dataid+'" style="display:none"><select>' + parts_option + '</select></div> </div> </div> </div></div> <div class="right-panel col-md-4"> <div class="div-max scroll"> <h4>Quantity Info for <span class="washlabelnameqty' + dataid + '"> WashCare Label</span></h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal" id="wash_care_label_table_'+dataid+'" style="font-size:11px"> <thead> <tr> <th>UVC TCO#</th> <th>Size in ANS</th> <th>Barcode</th> <th>Qty.</th> <th><input type="text" class="form-control input-sm extra_percentagewash" onkeypress="return checkNumbersOnly(event)" placeholder="Extra Qty %" style="float:left;height:20px;"></th> </tr></thead> <tbody style="font-size: 11px">' + tr + ' <tr class="strong"> <td class="text-right" colspan="3">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_tablewash_fin">' + ttots + '</td></tr></tbody></table><hr>'+ $comment +' <button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_wash_button_'+dataid+'" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" id="close" type="button">Close</button> <button type="button" class="btn btn-primary '+$print_button_class+'" id="print_wash_button_'+dataid+'" onclick=printWashDiv("washcare_svg_front","washcare_svg_back","washcare_svg_middle","'+dataid+'")>Print</button></div> </div>  <div class="backdrop"></div></form>');
+    $('.top-content').append('<form id="washcarelabelform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><input type="hidden" value="' + color_code + '" id="color_id' + dataid + '"><div class="left-panelorc col-md-8"> <div class="div-max"> <div class="col-md-3"> <h4>Options</h4> <hr><div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">WCL Name</label><input type="text" class="form-control input-sm" required="" placeholder="WCL Name" value="' + $wcl_name + '" id="wcl_name' + dataid + '"><div class="help-block with-errors"></div></div>  <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Washing</label><select data-live-search="true" class="form-control selectpicker input-sm washing_select' + dataid + '" required>' + washing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Whitening</label><select data-live-search="true" class="form-control selectpicker input-sm whitening_select' + dataid + '" required>' + whitening_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Dryer</label><select data-live-search="true" class="form-control selectpicker input-sm dryer_select' + dataid + '" required>' + dryer_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Ironing</label><select data-live-search="true" class="form-control selectpicker input-sm ironing_select' + dataid + '" required>' + ironing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Cleaning</label><select data-live-search="true" class="form-control selectpicker input-sm cleaning_select' + dataid + '" required>' + cleaning_option + '</select><div class="help-block with-errors"></div></div>'+treestruct+'  </div></div> <div class="col-md-5"> <h4>Art Work</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span> <hr> <div class="section-1 sections"> <div class="sample-artwork"><object style="height: calc( 100vh - 125px );"  id="washcare_svg_front' + dataid + '" data="' + data.orchestra_wash_template_front + '" type="image/svg+xml"></object> <object style="height: calc( 100vh - 125px );margin-left: 10px;"  id="washcare_svg_back' + dataid + '"  data="' + data.orchestra_wash_template_back + '" type="image/svg+xml"></object><object style="height: calc( 100vh - 125px );width: 145px;margin-left: 10px;"  id="washcare_svg_middle' + dataid + '" data="' + data.orchestra_wash_template_middle + '" type="image/svg+xml"></object></div><input type="hidden" value="' + disney_flag + '" id="wash_label_id"></div> </div> <div class="col-md-4 " style="padding-left:0px"> <h4>Options</h4> <hr>'+sizebox+' <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Made In</label><select data-live-search="true" class="form-control selectpicker input-sm made_in_select' + dataid + '" required>' + made_option + '</select><div class="help-block with-errors"></div></div> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Care Instructions</label><select data-live-search="true" class="form-control selectpicker input-sm care_instruction_select' + dataid + '" required multiple>' + instruction_option + '</select><div class="help-block with-errors"></div></div> <div class="section-1 sections"> <h5>Compositions</h5> <select class="selectpicker composition_select' + dataid + '"  data-live-search="true">  ' + composition_option + '  </select><p class="hidden" style="color:red;float:right" id="composition_error_required' + dataid + '">Please Select Composition</p> </div> <h5>Percentage</h5> <input type="number" min="1" max="100" class="form-control input-sm composition_percent' + dataid + '"><p class="hidden" style="color:red;text-align:right" id="percentage_error_required' + dataid + '">Please Enter Percentage</p>  <button type="button" class="btn  btn-primary pull-right input-sm add_to_list' + dataid + '" onclick="add_to_list(' + dataid + ')">Add To List</button> <table class="table table-striped table-hover table-condensed"><thead><th>Composition</th><th>Quantity</th></thead><tbody id="composition_table_qty' + dataid + '"></tbody></table><p id="wash_composition_error' + dataid + '" class="hidden" style="color:red;text-align: right;margin-right: 10px;">Please Select composition</p><p id="wash_composition_page_error' + dataid + '" class="hidden" style="color:red;text-align: right;margin-right: 10px;">Please Add Composition to Page</p><div style="height: 30px;"><button class="btn  btn-primary pull-right input-sm add_to_composition' + dataid + '"  type="button" disabled onclick="add_to_composition(' + dataid + ')">Add To Composition</button></div><div><h4>Compositions :</h4><div><table class="table table-striped table-hover table-condensed"><thead><tr><th>Composition Name</th><th>Parts</th><th>Actions</th></tr></thead><tbody id="composition_remove_qty' + dataid + '"></tbody></table><div><p class="hidden composition_error_hidden" style="color:red;text-align: right;margin-right: 10px;">Please select parts</p></div><div><button class="btn  btn-primary pull-right input-sm add_to_page' + dataid + '"  style="position:relative;" type="button" onclick="add_to_page(' + dataid + ')">Add To Page</button></div></div></div><div class="parts_none'+dataid+'" style="display:none"><select>' + parts_option + '</select></div> </div> </div> </div></div> <div class="right-panel col-md-4"> <div class="div-max scroll"> <h4>Quantity Info for <span class="washlabelnameqty' + dataid + '"> WashCare Label</span></h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal" id="wash_care_label_table_'+dataid+'" style="font-size:11px"> <thead> <tr> <th>UVC TCO#</th> <th>Size in ANS</th> <th>Barcode</th> <th>Qty.</th> <th><input type="text" class="form-control input-sm extra_percentagewash" onkeypress="return checkNumbersOnly(event)" placeholder="Extra Qty %" style="float:left;height:20px;"></th> </tr></thead> <tbody style="font-size: 11px">' + tr + ' <tr class="strong"> <td class="text-right" colspan="3">Total:</td><td>' + totaloq + '</td><td class="text-center tot_qty_tablewash_fin">' + ttots + '</td></tr></tbody></table><hr>'+ $comment +' <button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_wash_button_'+dataid+'" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" id="close" type="button">Close</button> <button type="button" class="btn btn-primary '+$print_button_class+'" id="print_wash_button_'+dataid+'" onclick=printWashDiv("washcare_svg_front","washcare_svg_back","washcare_svg_middle","'+dataid+'")>Print</button></div> </div>  <div class="backdrop"></div></form>');
    //$('.left').removeClass('disabled')
 
     $('#washcarelabelform' + dataid + ' .tot_qty_tablewash').keyup(function () {
@@ -3275,7 +3833,8 @@ function washcarelabels(data, dataid) {
        }
        else
        {
-                $('.merchandiser_error').removeClass('hidden')
+                $('.snackbar_span').html('Please Select Merchandiser');
+                showSnackbar();
        }
 		//alert()
 		$('.tot_qty_tablewash').parent().removeClass('has-error').removeClass('has-danger')
@@ -3796,7 +4355,6 @@ function mainlabels(data) {
       
         $template_id = data.orchestra_main_label_orders[0].template_id;
         $exist_id = data.orchestra_main_label_orders[0].id;
-        $main_label_count=data.orchestra_main_label_orders_qty[0].quantity;
         
         var str=data.orchestra_main_label_orders[0].status;
         $status=str.replace(/ /g, "");
@@ -3806,17 +4364,29 @@ function mainlabels(data) {
      
         $template_id = "";
         $exist_id = "";
-        $main_label_count="";
         $status="";
         $status_text="";
         $save_button_class="";
     }
     
     var option = "<option value=''>Select Option</option>";
+	var ml="";
     $.each(data.orchestra_template_front, function (index, value) {
         option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
     });
-    $('.top-content').append('<form id="main_labelform" data-toggle= "validator"><div class="left-panelorc col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="main_label_template_error" style="color:red" class="hidden">Please select the template</label>  <div><input type="text" id="treeml_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="treeml" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-4"> <div class="div-max"> <h4>Quantity Info for Main Label</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Final order qty</label><input class="form-control input-sm main_label_qty" value="' + $main_label_count + '" onkeypress="return checkorcMOQ(this)" placeholder="Main Label Count" type="number" required><div class="help-block with-errors"></div></div><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_main_label_button" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="main_labelclose">Close</button>  </div></div> </div>  <div class="backdrop"></div></form>');
+	$c=0;
+	$.each(data.color_wcl, function (index, value) {
+		if (data.orchestra_main_label_orders != "") {
+			$main_label_count=data.orchestra_main_label_orders_qty[$c].quantity;
+		}else{
+			 $main_label_count="";
+		}
+		
+        ml += '<label for="edit_merchandiser_buyer" class="form_label">Final order qty for colour '+value.Color_Code+'</label><input class="form-control input-sm main_label_qty" value="' + $main_label_count + '" onkeypress="return checkorcMOQ(this)" placeholder="Main Label Count" type="number" required>';
+		$c++;
+    });
+	
+    $('.top-content').append('<form id="main_labelform" data-toggle= "validator"><div class="left-panelorc col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="main_label_template_error" style="color:red" class="hidden">Please select the template</label>  <div><input type="text" id="treeml_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="treeml" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-4"> <div class="div-max"> <h4>Quantity Info for Main Label</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success">'+ml+'<div class="help-block with-errors"></div></div><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_main_label_button" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="main_labelclose">Close</button>  </div></div> </div>  <div class="backdrop"></div></form>');
 	//$('.left').removeClass('disabled')
     $('#main_labelform .tot_qty_table').keyup(function () {
         var tot_qty_table_carton_final = 0;
@@ -3852,7 +4422,7 @@ function mainlabels(data) {
 
         } else {
             e.preventDefault();
-            setMainLabelStatus()
+            setMainLabelStatus(data.color_wcl)
         }
     })
 }
@@ -3894,7 +4464,7 @@ function sizelabels(data) {
         } else {
             $size_label_count = "";
         }
-        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)"  type="number" class="form-control  input-sm tot_qty_tablesize" value="' + $size_label_count + '" required placeholder="Size Label Count"><div class="help-block with-errors"></div></div></td></tr>'; 
+        tr += '<tr><input type="hidden" value="' + value.Color_Code + '" class="size_id"><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)"  type="number" class="form-control  input-sm tot_qty_tablesize" value="' + $size_label_count + '" required placeholder="Size Label Count"><div class="help-block with-errors"></div></div></td></tr>'; 
         ttots += parseInt($size_label_count);
         $qu++;
     });
@@ -3966,14 +4536,13 @@ function sizelabels(data) {
 
         } else {
             e.preventDefault();
-            setSizeLabelStatus()
+            setSizeLabelStatus(data.color_wcl)
         }
     })
 }
-
 /**
  * This Function is Sub Function of #label_order_details.
- * To integrate Special Tag Information
+ * To integrate Size Labels Information
  * @return Special Tag View
  */
 
@@ -3986,7 +4555,6 @@ function specialtags(data) {
       
         $template_id = data.orchestra_special_tag_orders[0].template_id;
         $exist_id = data.orchestra_special_tag_orders[0].id;
-        $special_tag_count=data.orchestra_special_tag_orders[0].final_qty;
         
         var str=data.orchestra_special_tag_orders[0].status;
         $status=str.replace(/ /g, "");
@@ -3996,17 +4564,27 @@ function specialtags(data) {
      
         $template_id = "";
         $exist_id = "";
-        $special_tag_count="";
         $status="";
         $status_text="";
         $save_button_class="";
     }
-    
+    var st="";
     var option = "<option value=''>Select Option</option>";
     $.each(data.orchestra_template_front, function (index, value) {
         option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
     });
-    $('.top-content').append('<form id="specialtagform" data-toggle= "validator"><div class="left-panelorc col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="special_template_error" style="color:red" class="hidden">Please select the template</label>  <div><input type="text" id="tree2_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree2" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-4"> <div class="div-max"> <h4>Quantity Info for Special Tag</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Final order qty</label><input class="form-control input-sm special_qty" value="' + $special_tag_count + '" onkeypress="return checkorcMOQ(this)" placeholder="Special Tag Count" type="number" required><div class="help-block with-errors"></div></div><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_special_button" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="specialclose">Close</button>  </div></div> </div>  <div class="backdrop"></div></form>');
+	$c=0;
+	$.each(data.color_wcl, function (index, value) {
+		if (data.orchestra_special_tag_orders != "") {
+			$special_tag_count=data.orchestra_special_tag_orders_qty[$c].quantity;
+		}else{
+			 $special_tag_count="";
+		}
+		
+        st += '<label for="edit_merchandiser_buyer" class="form_label">Final order qty for colour '+value.Color_Code+'</label><input class="form-control input-sm special_qty" value="' + $special_tag_count + '" onkeypress="return checkorcMOQ(this)" placeholder="Special Tag Count" type="number" required>';
+		$c++;
+    });
+    $('.top-content').append('<form id="specialtagform" data-toggle= "validator"><div class="left-panelorc col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="special_template_error" style="color:red" class="hidden">Please select the template</label>  <div><input type="text" id="tree2_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree2" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-4"> <div class="div-max"> <h4>Quantity Info for Special Tag</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success">'+st+'<div class="help-block with-errors"></div></div><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_special_button" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="specialclose">Close</button>  </div></div> </div>  <div class="backdrop"></div></form>');
 	//$('.left').removeClass('disabled')
     $('#specialtagform .tot_qty_tablespecial').keyup(function () {
         var tot_qty_tablespecial_carton_final = 0;
@@ -4042,10 +4620,15 @@ function specialtags(data) {
 
         } else {
             e.preventDefault();
-            setSpecialTagStatus()
+            setSpecialTagStatus(data.color_wcl)
         }
     })
 }
+/**
+ * This Function is Sub Function of #label_order_details.
+ * To integrate heatTransfer Information
+ * @return Special Tag View
+ */
 
 function heatTransfer(data) {
 
@@ -4079,7 +4662,7 @@ function heatTransfer(data) {
         } else {
             $heat_transfer_count = "";
         }
-        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)"  type="number" class="form-control  input-sm tot_qty_tableheat" value="' + $heat_transfer_count + '" required placeholder="Heat Transfer Count"><div class="help-block with-errors"></div></div></td></tr>';
+        tr += '<tr><input type="hidden" value="' + value.Color_Code + '" class="size_id"><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)"  type="number" class="form-control  input-sm tot_qty_tableheat" value="' + $heat_transfer_count + '" required placeholder="Heat Transfer Count"><div class="help-block with-errors"></div></div></td></tr>';
         ttots += parseInt($heat_transfer_count);
         $qu++;
     });
@@ -4150,7 +4733,7 @@ function heatTransfer(data) {
 
         } else {
             e.preventDefault();
-            setheat_transferStatus()
+            setheat_transferStatus(data.color_wcl)
         }
     })
 }
@@ -4205,7 +4788,7 @@ function hangtagmodal(data) {
         } else {
             $hang_tag_count = "";
         }
-        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)"  type="number" class="form-control  input-sm tot_qty_tablehang" value="' + $hang_tag_count + '" required placeholder="Hang Tag Count"><div class="help-block with-errors"></div></div></td></tr>';
+        tr += '<tr><input type="hidden" value="' + value.Color_Code + '" class="size_id"><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)"  type="number" class="form-control  input-sm tot_qty_tablehang" value="' + $hang_tag_count + '" required placeholder="Hang Tag Count"><div class="help-block with-errors"></div></div></td></tr>';
         ttots += parseInt($hang_tag_count);
         $qu++;
     });
@@ -4826,7 +5409,7 @@ function hangtagmodal(data) {
 
         } else {
             e.preventDefault();
-            setHangTagStatus()
+            setHangTagStatus(data.color_wcl)
         }
     })
 
@@ -4882,8 +5465,14 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 	$.each(data.order_details, function (index, value) {
 		tr += '<tr><td>' + value.UVC_TCO + '</td><td>' + value.Size + '</td><td>' + value.BarcodeForPricesTags + '</td><td>' + value.Sum + '</td><td><input type="text" class="form-control input-sm" placeholder="Hangtag Count"><td><input type="text" class="form-control input-sm" placeholder="Specialtag Count"><td><input type="text" class="form-control input-sm" placeholder="Main & Size label Count"></td><td><input type="text" class="form-control input-sm" placeholder="WCL Count"></td></tr>';
 	});
+	var arr=[];
 	$.each(data.barcode, function (index, value) {
-		barcode += value.BuyerPONo + " | ";
+		if(arr.includes(value.BuyerPONo) == false)
+		{
+			arr.push(value.BuyerPONo)
+			barcode += value.BuyerPONo + " | ";
+		}
+		
 	});
 	//    $('.top-content').html("<ol class='breadcrumb'><li><a href='#'>Dashboard</a></li><li><a href='/admin/order-management/'>Orders</a></li><li><a href='#'>Order List</a></li><li class='active'>Order Detail for UVC " + uvc + "</li></ol></div>")
 	$('.top-content').append('<h3 class="content-heading">Order Detail for UVC ' + uvc + '</h3><h5 class="poc_number"><strong>POs for this UVC : </strong><span id="poNo">' + barcode + '  </span></h5>');
@@ -4984,7 +5573,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 		base_url + '/images/st_default.png" class="img-responsive center-block"></div></div></div></div></div><div class="col-md-4"><div class="card special-card" style="min-height:279px"><span class="label label-' + $special_status + ' label-status">' + $special_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmespecial" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b>Specialtag</b></h5></div><div class="row"><div class="col-md-10 col-md-offset-1"><div class="img_artwork"><img src="' +
 		base_url + '/images/st_default.png" class="img-responsive center-block"></div></div></div></div></div><div class="col-md-4"><div class="card main_label-card" style="min-height:279px"><span class="label label-' + $main_label_status + ' label-status">' + $main_label_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmemain_label" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b>Main Label</b></h5></div><div class="row"><div class="col-md-10 col-md-offset-1"><div class="img_artwork"><img src="' +
 		base_url + '/images/st_default.png" class="img-responsive center-block"></div></div></div></div></div> <div class="col-md-4"><div class="card size_label-card" style="min-height:279px"><span class="label label-' + $size_label_status + ' label-status">' + $size_label_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmesize_label" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b>Size Label</b></h5></div><div class="row"><div class="col-md-10 col-md-offset-1"><div class="img_artwork"><img src="' +
-		base_url + '/images/st_default.png" class="img-responsive center-block"></div></div></div></div></div> <div class="col-md-4"> <div class="card add-card wash-card" style="height: 280px;" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><span class="label label-' + $wash_status + ' label-status">' + $wash_status_text + '</span> <div class="card-title"> <p class="pull-right" id="clickme" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="washlabelname">' + wash_name + 'Washcare Label</b></h5> </div><div class="row"> <div class="col-md-6 col-md-offset-3"> <div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="washcare_label_card" style="'+wash_enable+';cursor:pointer;display: inline-block;"><i class="fa fa-plus" aria-hidden="true"></i> Add washcare label</p><p id="clone_washcare_label_card" style="'+wash_enable+';cursor:pointer;    display: inline-block;float: right;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div><div id="add_modal"></div><div class="bottom-bar"><div class="modal-footer"><button onclick="' + onclick + '" class="btn btn-danger  pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button><button data-toggle="modal" id="po-file-upload-button" style="'+update_disabel_button+'" class="btn btn-success pull-right btn-xs">Update PO</button> </div></div>');
+		base_url + '/images/st_default.png" class="img-responsive center-block"></div></div></div></div></div><div id="add_modal"></div><div class="bottom-bar"><div class="modal-footer"><button onclick="' + onclick + '" class="btn btn-danger  pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button><button data-toggle="modal" id="po-file-upload-button" style="'+update_disabel_button+'" class="btn btn-success pull-right btn-xs">Update PO</button> </div></div>');
 	
 	//Before add_modal
 	
@@ -5465,10 +6054,8 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 
         if ($('.washcarename').val() != "") {
           
-            
-            if (washcare <= 5) {
-                  washcare += 1;
-                $('#add_modal').append('<div class="col-md-4" ><div  style="border:1px dashed #333;height: 280px;" class="card add-card wash-card'+washcare+'" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false"> <span></span>   <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="clone_washcare_label_card' + washcare + '" style=";cursor:pointer;display: none;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div>')
+                washcare += 1;
+                $('#add_modal').append('<div class="col-md-4" ><input type="hidden"  id="delete_id'+washcare+'"><div  style="border:1px dashed #333;height: 280px;" class="card add-card wash-card'+washcare+'" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false"> <span></span>   <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="clone_washcare_label_card' + washcare + '" style=";cursor:pointer;display: none;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div>')
 				
 				//var index=washcare;
 				
@@ -5489,9 +6076,9 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 
                         localStorage.setItem('wash_label', JSON.stringify(opop))
                     }
-
+					removeWashLabel(washcare)
                     $('#washcarelabelform' + $(this).attr('id')).remove()
-                    washcare -= 1;
+                    
                     $(this).parent().parent().parent().remove();
 
 
@@ -5501,10 +6088,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 				$('.snackbar_span').html('Wash care label added successfully');
 				showSnackbar();
 				window.scrollTo(0, document.body.scrollHeight);
-			} else {
-				$('.snackbar_span').html('Limit exceeded');
-				showSnackbar();
-			}
+			
          
             $('.washcarename').val("")
             $('.washnameerror').addClass('hidden')
@@ -5541,10 +6125,8 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 
         if ($('.washcarename').val() != "") {
           
-            
-            if (washcare <= 5) {
-                  washcare += 1;
-                $('#add_modal').append('<div class="col-md-4" ><div  style="border:1px dashed #333;height: 280px;" class="card add-card wash-card'+washcare+'" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false">  <span></span>  <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="clone_washcare_label_card' + washcare + '" style=";cursor:pointer;display: none;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div>')
+                washcare += 1;
+                $('#add_modal').append('<div class="col-md-4" ><input type="hidden"  id="delete_id'+washcare+'"><div  style="border:1px dashed #333;height: 280px;" class="card add-card wash-card'+washcare+'" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false">  <span></span>  <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="clone_washcare_label_card' + washcare + '" style=";cursor:pointer;display: none;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div>')
 				
 				//var index=washcare;
 				
@@ -5565,9 +6147,9 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 
                         localStorage.setItem('wash_label', JSON.stringify(opop))
                     }
-
+					removeWashLabel(washcare)
                     $('#washcarelabelform' + $(this).attr('id')).remove()
-                    washcare -= 1;
+                    
                     $(this).parent().parent().parent().remove();
                 });
           
@@ -5577,10 +6159,6 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 				showSnackbar();
 				window.scrollTo(0, document.body.scrollHeight);
 				
-			} else {
-				$('.snackbar_span').html('Limit exceeded');
-				showSnackbar();
-			}
          
             $('.washcarename').val("")
             $('.washnameerror').addClass('hidden')
@@ -6018,7 +6596,7 @@ function treestructuremain_label(data, tree, template_id) {
 				},
 				success: function (data) {
 					$('.main_label_qty').attr('min',data.moq)
-					$('#specialtagform').validator('update')
+					$('#main_labelform').validator('update')
 					if (data.treeviewData.length > 0) {
 						$('#' + ids).find('.sample-artwork').html('<object id="svg2" style="max-height: 350px;" class="center-block svg2" data="' + data.treeviewData[0].template_file + '" type="image/svg+xml"></object>')
 					} else {
@@ -6057,7 +6635,7 @@ function treestructuremain_label(data, tree, template_id) {
 				},
 				success: function (data) {
 					$('.main_label_qty').attr('min',data.moq)
-					$('#specialtagform').validator('update')
+					$('#main_labelform').validator('update')
 					if (data.treeviewData.length > 0) {
 						$('#' + ids).find('.sample-artwork').html('<object id="svg2" style="max-height: 350px;" class="center-block svg2" data="' + data.treeviewData[0].template_file + '" type="image/svg+xml"></object>')
 					} else {
@@ -7366,7 +7944,7 @@ function jsbarcode_hang(code, id, svgDoc) {
  * @return void
  */
 
-function setHangTagStatus() {
+function setHangTagStatus(colour) {
     if ($('#hangtagform').find('#exist_id').val() != "") {
         var exist_id = $('#hangtagform').find('#exist_id').val();
     } else {
@@ -7376,7 +7954,7 @@ function setHangTagStatus() {
     var template_id = $('#hangtagform').find('#tree1').jstree('get_selected', true);
     if (template_id != "") {
         localStorage.setItem("hang_tag", exist_id);
-        setHangTag(localStorage.getItem("hang_tag"))
+        setHangTag(localStorage.getItem("hang_tag"),colour)
         $('#hang_template_error').addClass('hidden')
         $("#hangtagform .left-panelorc").removeClass('active');
         $("#hangtagform .right-panel").removeClass('active');
@@ -7393,7 +7971,7 @@ function setHangTagStatus() {
  * @return void
  */
 
-function setSpecialTagStatus() {
+function setSpecialTagStatus(colour) {
 
     if ($('#specialtagform').find('#exist_id').val() != "") {
         var exist_id = $('#specialtagform').find('#exist_id').val();
@@ -7403,7 +7981,7 @@ function setSpecialTagStatus() {
     var template_id = $('#specialtagform').find('#tree2').jstree('get_selected', true);
     if (template_id != "") {
         localStorage.setItem("special_tag", exist_id);
-        setSpecialTag(localStorage.getItem("special_tag"))
+        setSpecialTag(localStorage.getItem("special_tag"),colour)
         $('#special_template_error').addClass('hidden')
         $("#specialtagform .left-panelorc").removeClass('active');
         $("#specialtagform .right-panel").removeClass('active');
@@ -7420,7 +7998,7 @@ function setSpecialTagStatus() {
  * @return void
  */
 
-function setheat_transferStatus() {
+function setheat_transferStatus(colour) {
 
     if ($('#heat_transferform').find('#exist_id').val() != "") {
         var exist_id = $('#heat_transferform').find('#exist_id').val();
@@ -7430,7 +8008,7 @@ function setheat_transferStatus() {
     var template_id = $('#heat_transferform').find('#treeht').jstree('get_selected', true);
     if (template_id != "") {
         localStorage.setItem("heat_transfer", exist_id);
-        setHeatTransfer(localStorage.getItem("heat_transfer"))
+        setHeatTransfer(localStorage.getItem("heat_transfer"),colour)
         $('#heat_transfer_template_error').addClass('hidden')
         $("#heat_transferform .left-panelorc").removeClass('active');
         $("#heat_transferform .right-panel").removeClass('active');
@@ -7446,7 +8024,7 @@ function setheat_transferStatus() {
  * @return void
  */
 
-function setMainLabelStatus() {
+function setMainLabelStatus(colour) {
 
     if ($('#main_labelform').find('#exist_id').val() != "") {
         var exist_id = $('#main_labelform').find('#exist_id').val();
@@ -7456,7 +8034,7 @@ function setMainLabelStatus() {
     var template_id = $('#main_labelform').find('#treeml').jstree('get_selected', true);
     if (template_id != "") {
         localStorage.setItem("main_label", exist_id);
-        setMainLabel(localStorage.getItem("main_label"))
+        setMainLabel(localStorage.getItem("main_label"),colour)
         $('#main_label_template_error').addClass('hidden')
         $("#main_labelform .left-panelorc").removeClass('active');
         $("#main_labelform .right-panel").removeClass('active');
@@ -7472,7 +8050,7 @@ function setMainLabelStatus() {
  * @return void
  */
 
-function setSizeLabelStatus() {
+function setSizeLabelStatus(colour) {
 
     if ($('#size_labelform').find('#exist_id').val() != "") {
         var exist_id = $('#size_labelform').find('#exist_id').val();
@@ -7482,7 +8060,7 @@ function setSizeLabelStatus() {
     var template_id = $('#size_labelform').find('#treesl').jstree('get_selected', true);
     if (template_id != "") {
         localStorage.setItem("size_label", exist_id);
-        setSizeLabel(localStorage.getItem("size_label"))
+        setSizeLabel(localStorage.getItem("size_label"),colour)
         $('#size_label_template_error').addClass('hidden')
         $("#size_labelform .left-panelorc").removeClass('active');
         $("#size_labelform .right-panel").removeClass('active');
@@ -7541,7 +8119,7 @@ function setWashCareLabelStatus(dataid) {
  * @return void
  */
 
-function setHangTag(id) {
+function setHangTag(id,colour) {
 	
 	var template_id = $('#hangtagform').find('#tree1').jstree('get_selected', true);
 	template_front_id = template_id[0].id;
@@ -7552,17 +8130,20 @@ function setHangTag(id) {
 	var tot_qty_tablehang = [];
 	var uvc_tco = [];
 	var size = [];
+	var size_id = [];
 	$('#hangtagform tbody tr').each(function () {
 		if ($(this).find('.tot_qty_tablehang').val() != undefined) {
 			tot_qty_tablehang.push($(this).find('.tot_qty_tablehang').val())
 			uvc_tco.push($(this).find('.uvc_tco').text())
 			size.push($(this).find('.size').text())
+			size_id.push($(this).find('.size_id').val())
 		}
 
 	})
 	tot_qty_tablehang_fin = tot_qty_tablehang.join(',');
 	uvc_tco_fin = uvc_tco.join(',');
 	size_fin = size.join(',');
+	size_id_fin = size_id.join(',');
 	var buyer = localStorage.getItem("buyer");
 //	alert()
 //	alert($('#parcel_id').val());
@@ -7578,6 +8159,8 @@ function setHangTag(id) {
 			id: id,
 			cm:onesizecm,
 			in:onesizein,
+			colour: colour,
+			size_id: size_id_fin,
 			uvc_tco: uvc_tco_fin,
 			uvc: $('#uvc_id').val(),
 			parcel_id: $('#parcel_id').val(),
@@ -7608,9 +8191,12 @@ function setHangTag(id) {
  */
 
 
-function setSpecialTag(id) {
-  
-    var special_qty = $('.special_qty').val();
+function setSpecialTag(id,colour) {
+	var myElements = $(".special_qty");
+    var special_qty = [];
+    for (var i=0;i<myElements.length;i++) {
+        special_qty.push(myElements.eq(i).val());
+    }
     
     var template_id = $('#specialtagform').find('#tree2').jstree('get_selected', true);
     template_front_id = template_id[0].id;
@@ -7639,6 +8225,7 @@ function setSpecialTag(id) {
             id: id,
             tot_qty_table: special_qty,
             uvc_tco: uvc_tco_fin,
+			colour: colour,
             uvc: $('#uvc_id').val(),
 			parcel_id: $('#parcel_id').val(),
 			season_code: $('#season_code').val(),
@@ -7666,7 +8253,7 @@ function setSpecialTag(id) {
  */
 
 
-function setHeatTransfer(id) {
+function setHeatTransfer(id,colour) {
   
     var template_id = $('#heat_transferform').find('#treeht').jstree('get_selected', true);
 	console.log(template_id)
@@ -7675,17 +8262,20 @@ function setHeatTransfer(id) {
 	var tot_qty_tableheat = [];
 	var uvc_tco = [];
 	var size = [];
+	var size_id = [];
 	$('#heat_transferform tbody tr').each(function () {
 		if ($(this).find('.tot_qty_tableheat').val() != undefined) {
 			tot_qty_tableheat.push($(this).find('.tot_qty_tableheat').val())
 			uvc_tco.push($(this).find('.uvc_tco').text())
 			size.push($(this).find('.size').text())
+			size_id.push($(this).find('.size_id').val())
 		}
 
 	})
 	tot_qty_tableheat_fin = tot_qty_tableheat.join(',');
 	uvc_tco_fin = uvc_tco.join(',');
 	size_fin = size.join(',');
+	size_id_fin = size_id.join(',');
 	var buyer = localStorage.getItem("buyer");
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
@@ -7696,6 +8286,8 @@ function setHeatTransfer(id) {
 			template_id: template_id,
 			tot_qty_table: tot_qty_tableheat_fin,
 			id: id,
+			colour: colour,
+			size_id: size_id_fin,
 			uvc_tco: uvc_tco_fin,
 			uvc: $('#uvc_id').val(),
 			parcel_id: $('#parcel_id').val(),
@@ -7724,9 +8316,14 @@ function setHeatTransfer(id) {
  */
 
 
-function setMainLabel(id) {
+function setMainLabel(id,colour) {
   
-    var main_label_qty = $('.main_label_qty').val();
+	var myElements = $(".main_label_qty");
+    var main_label_qty = [];
+    for (var i=0;i<myElements.length;i++) {
+        main_label_qty.push(myElements.eq(i).val());
+    }
+	
     
     var template_id = $('#main_labelform').find('#treeml').jstree('get_selected', true);
     template_id = template_id[0].id;
@@ -7755,6 +8352,7 @@ function setMainLabel(id) {
             id: id,
             tot_qty_table: main_label_qty,
             uvc_tco: uvc_tco_fin,
+            colour: colour,
             uvc: $('#uvc_id').val(),
 			parcel_id: $('#parcel_id').val(),
 			season_code: $('#season_code').val(),
@@ -7782,7 +8380,7 @@ function setMainLabel(id) {
  */
 
 
-function setSizeLabel(id) {
+function setSizeLabel(id,colour) {
   
     var template_id = $('#size_labelform').find('#treesl').jstree('get_selected', true);
 	console.log(template_id)
@@ -7791,17 +8389,20 @@ function setSizeLabel(id) {
 	var tot_qty_tablesize = [];
 	var uvc_tco = [];
 	var size = [];
+	var size_id = [];
 	$('#size_labelform tbody tr').each(function () {
 		if ($(this).find('.tot_qty_tablesize').val() != undefined) {
 			tot_qty_tablesize.push($(this).find('.tot_qty_tablesize').val())
 			uvc_tco.push($(this).find('.uvc_tco').text())
 			size.push($(this).find('.size').text())
+			size_id.push($(this).find('.size_id').val())
 		}
 
 	})
 	tot_qty_tablesize_fin = tot_qty_tablesize.join(',');
 	uvc_tco_fin = uvc_tco.join(',');
 	size_fin = size.join(',');
+	size_id_fin = size_id.join(',');
 	var buyer = localStorage.getItem("buyer");
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
@@ -7812,6 +8413,8 @@ function setSizeLabel(id) {
 			template_id: template_id,
 			tot_qty_table: tot_qty_tablesize_fin,
 			id: id,
+			colour: colour,
+			size_id: size_id_fin,
 			uvc_tco: uvc_tco_fin,
 			uvc: $('#uvc_id').val(),
 			parcel_id: $('#parcel_id').val(),
@@ -7841,28 +8444,30 @@ function setSizeLabel(id) {
  * @return void
  */
 
-function removeWashLabel(id) {
+function removeWashLabel(dataid) {
+	var id=$('#delete_id'+dataid).val()	
+	if(id != null && id !="")
+	{
+		var buyer = localStorage.getItem("buyer");
+		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+		$.ajax({
+			url: base_url + "/admin/" + buyer + "/order-management/remove_wash_label",
+			type: "Post",
+			data: {
+				id: id,
+				_token: csrf_token
+			},
+			beforeSend: function () {
+				$(".loader").show();
+			},
+			success: function (data) {
 
-	var buyer = localStorage.getItem("buyer");
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
-	$.ajax({
-		url: base_url + "/admin/" + buyer + "/order-management/remove_wash_label",
-		type: "Post",
-		data: {
-			id: id,
-			_token: csrf_token
-		},
-		beforeSend: function () {
-			$(".loader").show();
-		},
-		success: function (data) {
+			},
+			error: function (data) {
 
-		},
-		error: function (data) {
-
-		}
-	})
-
+			}
+		})
+	}
 }
 
 /**
@@ -7965,6 +8570,7 @@ function setWashLabel(index, dataid, id) {
                 composition: wash_finals,
                 tot_qty_table: tot_qty_tablewash_fin,
                 uvc_tco: uvc_tco_fin,
+				color_code: $('#color_id'+dataid).val(),
                 merchandisers: merchandisers,
                 uvc: $('#uvc_id').val(),
                 size: size_fin,
@@ -7976,13 +8582,14 @@ function setWashLabel(index, dataid, id) {
             success: function (data) {
 				$('#print_wash_button_'+dataid).removeClass('hidden')
 				$('#save_wash_button_'+dataid).addClass('hidden')
+				$('#delete_id'+dataid).val(data)
             },
             error: function (data) {
 
             }
         })
         $('.composition_error_hidden').addClass('hidden')
-        $('#washcare_label_card').css('display','inline-block') 
+        $('#washcare_label_card'+dataid).css('display','inline-block') 
 		$('#clone_washcare_label_card'+dataid).css('display','inline-block')
 		$('.wash-card'+dataid+' span').text('Buyer Approval Pending')
 		$('.wash-card'+dataid+' span').addClass('label label-BuyerApprovalPending label-status')
@@ -8196,15 +8803,13 @@ function setSolidStickers() {
  * 
  * @return void
  */
-function clonewashcarelabels(index) 
+function clonewashcarelabels(index,color_code) 
 {
-	
-	 if (washcare <= 5) {
-                  washcare += 1;
-                $('#add_modal').append('<div class="col-md-4" ><div  style="border:1px dashed #333;height: 280px;" class="card add-card wash-card'+washcare+'" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false"><span></span>    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="clone_washcare_label_card' + washcare + '" style=";cursor:pointer;display: none;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div>')
+                washcare += 1;
+                $('#add_modal').append('<div class="col-md-4" ><input type="hidden"  id="delete_id'+washcare+'"><div  style="border:1px dashed #333;height: 280px;" class="card add-card wash-card'+washcare+'" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false"><span></span>    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="clone_washcare_label_card' + washcare + '" style=";cursor:pointer;display: none;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div>')
 
 				$('#clone_washcare_label_card'+washcare).on('click', function (e) {
-					clonewashcarelabels(washcare);
+					clonewashcarelabels(washcare,color_code);
 				});
 		 
                 $('.delete-wash' + washcare).on('click', function (e) {
@@ -8220,9 +8825,9 @@ function clonewashcarelabels(index)
 
                         localStorage.setItem('wash_label', JSON.stringify(opop))
                     }
-
+					removeWashLabel(washcare)
                     $('#washcarelabelform' + $(this).attr('id')).remove()
-                    washcare -= 1;
+                    
                     $(this).parent().parent().parent().remove();
 
 
@@ -8232,15 +8837,12 @@ function clonewashcarelabels(index)
 				$('.snackbar_span').html('Wash care label cloned successfully');
 				showSnackbar();
 				window.scrollTo(0, document.body.scrollHeight);
-			} else {
-				$('.snackbar_span').html('Limit exceeded');
-				showSnackbar();
-			}
+			
          
             $('.washcarename').val("")
             $('.washnameerror').addClass('hidden')
             var data = localStorage.getItem("label_order_data");
-            washcarelabels(JSON.parse(data), washcare);
+            washcarelabels(JSON.parse(data), washcare,color_code);
             $('#washcarelabelform'+washcare).find('#wcl_name'+washcare).val($('#washcarelabelform'+index).find('#wcl_name'+index).val())
            
             
@@ -8290,6 +8892,11 @@ function clonewashcarelabels(index)
             $('#washcarelabelform'+washcare+' table tbody').find('.tot_qty_tablewash_fin').text($('#washcarelabelform'+index+' table tbody').find('.tot_qty_tablewash_fin').text())
             var mySVG = document.getElementById("washcare_svg_front"+washcare);
             var svgDoc;
+	
+	
+			var mySVG_back = document.getElementById("washcare_svg_back"+washcare);
+            var svgDocBack;
+			
             mySVG.addEventListener("load", function () {
                 svgDoc=mySVG.contentDocument;
                 svgDoc.getElementById("cofreet_symbol1").setAttribute('xlink:href', $('.washing_select' + washcare + ' option:selected').data('cofreet'));
@@ -8310,19 +8917,23 @@ function clonewashcarelabels(index)
                     $('select.made_in_select' + washcare).find(':selected').data('greek')  + '</p>';
                 svgDoc.getElementById("country").innerHTML = text_for_mad_in;
                 
-                svgDoc.getElementById("text_care_instruction").innerHTML = "";
+            });
+	
+	  mySVG_back.addEventListener("load", function () {
+				svgDocBack=mySVG_back.contentDocument;
+				svgDocBack.getElementById("text_care_instruction").innerHTML = "";
                 $('.care_instruction_select' + washcare + ' option:selected').each(function () {
                     var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german')  + "-" +
                         $(this).data('arabic') + "-" +
-                        $(this).data('greek') + '</p>';
-                    svgDoc.getElementById("text_care_instruction").innerHTML += value;
+                        $(this).data('greek')  + '</p>';
+                    svgDocBack.getElementById("text_care_instruction").innerHTML += value;
                 });
                 
-                 svgDoc.getElementById("parts_composition").innerHTML ="";
+                 svgDocBack.getElementById("parts_composition").innerHTML ="";
               $('#composition_remove_qty' + washcare + ' tr').each(function () {
                   if($(this).find('select').find(':selected').val() != "Select Option")
                   {
-                       svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german')  + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek') + '</p>';
+                       svgDocBack.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german') + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek') + '</p>';
                   }
                  
                   var id=$(this).attr('id')
@@ -8331,7 +8942,7 @@ function clonewashcarelabels(index)
                   $(compss).each(function (index1,value1) {
                       var english = value1.split('_');
 
-                    svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + id + '" id="composition_' + id + '">' + english[9] + "% " + english[0]  + "-" +english[1] + "-" + english[2]+ "-" +english[3] + "-" + english[4] + "-" + english[5] + "-" +english[6] + "-" + english[7] + "-" + english[8]+ '</p>';
+                    svgDocBack.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + id + '" id="composition_' + id + '">' + english[9] + "% " + english[0]  + "-" +english[1] + "-" + english[2]+ "-" +english[3] + "-" + english[4] + "-" + english[5] + "-" +english[6] + "-" + english[7] + "-" + english[8]+ '</p>';
                 });
               })
             $('.composition_error_hidden').addClass('hidden')
@@ -8350,8 +8961,7 @@ function clonewashcarelabels(index)
             })
             var wash_finals = JSON.stringify(washcomp);
             localStorage.setItem('wash_composition_final'+washcare, wash_finals);
-                
-            });
+			});
 }
 function artwork_modal(uvc,po)
 {
