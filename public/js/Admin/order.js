@@ -178,7 +178,7 @@ function orderStatus() {
 												coun++;
 											}
 											
-											$('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="'+value1.type+'-'+value1.id+'" data-company="'+value1.company_id+'" class="list-group-item">'+value1.TemplateName+" - "+value1.TemplateType+'</li>')
+											$('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="'+value1.type+'-'+value1.id+'" data-company="'+value1.company_id+'" class="list-group-item">'+value1.color_code+' '+value1.TemplateName+" - "+value1.TemplateType+'</li>')
 										});
 										
 										
@@ -5630,11 +5630,11 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 						}
 						//old_po = value1.po_number;
 						coun++;
-						$('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="'+value1.type+'-'+value1.id+'" data-company="'+value1.company_id+'" class="check-list">'+value1.TemplateName+" - "+value1.TemplateType+'</li>')
+						$('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="'+value1.type+'-'+value1.id+'" data-company="'+value1.company_id+'" class="check-list">'+value1.color_code+' '+value1.TemplateName+" - "+value1.TemplateType+'</li>')
                          new_po_div_status++;
 					}
 					else {
-						$('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="'+value1.type+'-'+value1.id+'" data-company="'+value1.company_id+'" class="list-group-item">'+value1.TemplateName+" - "+value1.TemplateType+'</li>')
+						$('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="'+value1.type+'-'+value1.id+'" data-company="'+value1.company_id+'" class="list-group-item">'+value1.color_code+' '+value1.TemplateName+" - "+value1.TemplateType+'</li>')
 					}
 					
 				});

@@ -690,6 +690,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 				
 				jsbarcodetescotslean(barcode_change, 'barcode', svgDoc)
 				
+				svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
 				
 				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
 			} else {
@@ -701,6 +702,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 				
 				jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
 				
+				svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
 				
 				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
 
@@ -1034,7 +1036,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 				}
 					jsbarcodetescoean(barcode_change, 'barcode', svgDoc)
 				
-				
+				svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
 				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
 			} else if ((name == "TCL1-sticker") || (name == "THL1-sticker")) {
 
@@ -1045,7 +1047,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 				}
 					jsbarcodetesco(barcode_change, 'barcode', svgDoc)
 				
-				
+				svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
 				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
 
 			}

@@ -123,11 +123,11 @@ function orderStatus() {
                                                 }
                                                 old_po = value1.po_number
                                                 coun++;
-                                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="check-list">' + value1.TemplateName + '</li>')
+                                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="check-list">'+value1.color_code+' ' + value1.TemplateName + '</li>')
                                                 new_po_div_status++;
 
                                             } else {
-                                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="list-group-item">' + value1.TemplateName + '</li>')
+                                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="list-group-item">'+value1.color_code+' ' + value1.TemplateName + '</li>')
                                             }
 
                                         });
@@ -700,7 +700,7 @@ function orchestraStatusTable(data, path) {
     for (var key in columnsIn) {
         if (key != "tableName" && key != "tableID" && key != "po_file" && key != "pi_required" && key != "po_required" && key != "uvc" && key != "template_id" && key != "customer_id" && key != "order_flag" && key != "delivery_day_count" && key != "is_order_count_empty" && key != "color_code") {
             if (key == "TemplateName") {
-                th += "<th style='text-align: center;'>Reference No</th>";
+                th += "<th style='text-align: center;'>Template Name</th>";
             }else if (key == "BuyerPONo") {
                 th += "<th style='text-align: center;'>BuyerPO No</th>";
             }else if (key == "ArtworkType") {
@@ -789,6 +789,8 @@ function orchestraStatusTable(data, path) {
                         span_style = '<span title="Repeat Order" class="batch-reorder">R</span>'
                     }
                     tr += '<td align="center" data-id="' + value.tableID + '" data-artwork="' + value.ArtworkType + '" data-season="' + value.Season + '" data-uvc="' + value.UVC + '" data-table="' + value.tableName + '" data-color_code="' + value.color_code + '" data-template="' + value.TemplateName.replace(/ /g, "") + '"><a class="" href="javascript:void(0)" onclick="updateArtworkOrc(this)">' + span_style + '' + value.UVC + '</a></td>';
+                }else if (key == "TemplateName") {
+                    tr += '<td align="center"> '+ value.color_code +' '+value.TemplateName+' </td>';
                 } else if (key == "Actions") {
                     var po_file = value['po_file'];
                     if (po_file != null) {
