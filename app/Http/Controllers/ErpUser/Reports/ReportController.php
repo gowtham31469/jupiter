@@ -540,7 +540,7 @@ public function setUpDatatable(Request $request)
 
                     $eventHistory = EventHistory::whereIn('history_id',$result)
                     ->whereIn('action_id',$statusId)
-                    ->whereNotIn('action_id',6)
+                    ->where('action_id','!=',6)
                     ->pluck('history_id')
                     ->toArray();
                     }
