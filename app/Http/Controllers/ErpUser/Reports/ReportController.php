@@ -538,12 +538,14 @@ public function setUpDatatable(Request $request)
                     array_push($statusId, "2");
                     array_push($statusId, "4");
 
+                    $Jcverified = EventHistory::where('action_id',6)->pluck('history_id')->toArray();
+
                     $eventHistory = EventHistory::whereIn('history_id',$result)
                     ->whereIn('action_id',$statusId)
-                    // ->where('action_id','!=',6)
-                    ->whereNotIn('action_id',[6])
                     ->pluck('history_id')
                     ->toArray();
+
+                    dd($Jcverified,$eventHistory,array_diff($eventHistory, $Jcverified));
                     }
 
                     else
