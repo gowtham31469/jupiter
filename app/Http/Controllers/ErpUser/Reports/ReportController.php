@@ -537,7 +537,8 @@ public function setUpDatatable(Request $request)
 
                     if($request->role == "JC Manager")
                     {
-                    if (($key = array_search(5, $statusId)) !== false)
+                      
+                    if (count($statusId) == 1 && ($key = array_search(5, $statusId)) !== false)
                      {
                     unset($statusId[$key]);
                     array_push($statusId, "2");
@@ -552,6 +553,7 @@ public function setUpDatatable(Request $request)
 
                     $eventHistory = array_diff($allJc, $Jcverified);
                     }
+               
                     }
 
                     if($request->role == "PO Manager")
@@ -559,7 +561,7 @@ public function setUpDatatable(Request $request)
                      if (($key = array_search(2, $statusId)) !== false)
                         {
                             array_push($statusId, "4");
-                            
+
                             $eventHistory = EventHistory::whereIn('history_id',$result)
                             ->whereIn('action_id',$statusId)
                             ->pluck('history_id')
