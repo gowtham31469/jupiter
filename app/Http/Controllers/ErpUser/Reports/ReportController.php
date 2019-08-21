@@ -535,6 +535,7 @@ public function setUpDatatable(Request $request)
                     if (($key = array_search(5, $statusId)) !== false) {
                     unset($statusId[$key]);
                     array_push($statusId, "2");
+                    array_push($statusId, "4");
                     }
                     }
 
