@@ -508,9 +508,11 @@ public function setUpDatatable(Request $request)
                     $queryRes->map(function ($queryRes,$key) {
                     $queryRes->No =$key+1;
                     if($queryRes->place_of_supply==1)
-                    {
-                    $queryRes->CGST = ($queryRes->tax/2)/100 * $queryRes->Base_Val;
-                    $queryRes->SGST = ($queryRes->tax/2)/100 * $queryRes->Base_Val;
+                    {  
+                    $val=number_format((float)($queryRes->tax/2)/100 * $queryRes->Base_Val, 2, '.', '');
+                    
+                    $queryRes->CGST = $val;
+                    $queryRes->SGST = $val;
                     $queryRes->IGST = "-";
                     }
                     else{
@@ -528,18 +530,45 @@ public function setUpDatatable(Request $request)
             default:
                     $statusId = $request->status;
 
-                    if($request->role == "JC Manager")
-                    {
-                    if (($key = array_search(5, $statusId)) !== false) {
-                    unset($statusId[$key]);
-                    array_push($statusId, "2");
-                    }
-                    }
-
                     $eventHistory = EventHistory::whereIn('history_id',$result)
                     ->whereIn('action_id',$statusId)
                     ->pluck('history_id')
+                    ->toArray();  
+
+                    if($request->role == "JC Manager")
+                    {
+                      
+                    if (count($statusId) == 1 && ($key = array_search(5, $statusId)) !== false)
+                     {
+                    unset($statusId[$key]);
+                    array_push($statusId, "2");
+                    array_push($statusId, "4");
+
+                    $Jcverified = EventHistory::where('action_id',6)->pluck('history_id')->toArray();
+
+                    $allJc = EventHistory::whereIn('history_id',$result)
+                    ->whereIn('action_id',$statusId)
+                    ->pluck('history_id')
                     ->toArray();
+
+                    $eventHistory = array_diff($allJc, $Jcverified);
+                    }
+               
+                    }
+
+                    if($request->role == "PO Manager")
+                    {
+                     if (($key = array_search(2, $statusId)) !== false)
+                        {
+                            array_push($statusId, "4");
+
+                            $eventHistory = EventHistory::whereIn('history_id',$result)
+                            ->whereIn('action_id',$statusId)
+                            ->pluck('history_id')
+                            ->toArray(); 
+                        }
+                    }
+
 
                     $queryRes = History::whereIn('history.id',$eventHistory)
                     ->leftJoin("erp_order_details",'erp_order_details.id', '=', 
@@ -555,7 +584,7 @@ public function setUpDatatable(Request $request)
                         'invoice_created_date as Inv.Dt','buyer_name as Buyer','season as Season',
                         'country as Country','buyer_po as ByrPo','order_quantity as Quantity','erp_status.status_name as Status','reason as Reason'])
                         ->get();
-
+                       
                     $queryRes->map(function ($queryRes,$key) {
                     $queryRes->No =$key+1;
                     $queryRes->Awb ='-';
