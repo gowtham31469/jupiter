@@ -1235,6 +1235,7 @@ function updateArtwork(obj) {
 
                         } else {
                             e.preventDefault();
+							$('#submit').prop('disabled',true)
                             setEditOrderStatus()
                         }
                     })

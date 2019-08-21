@@ -54,6 +54,37 @@ class AddParcelDetailsIdToTagsnlabelsTable extends Migration
      */
     public function down()
     {
-        //
+         Schema::table('orchestra_heat_transfer_orders', function (Blueprint $table) {
+	        $table->dropColumn('orchestra_parcel_details_id');
+		$table->dropColumn('season_code');
+        });
+	Schema::table('orchestra_hang_tag_orders', function (Blueprint $table) {
+	        $table->dropColumn('orchestra_parcel_details_id');
+		$table->dropColumn('season_code');
+        });
+	Schema::table('orchestra_solid_carton_sticker_orders', function (Blueprint $table) {
+	        $table->dropColumn('orchestra_parcel_details_id');
+		$table->dropColumn('season_code');
+        });
+	Schema::table('orchestra_solid_poly_bag_sticker_orders', function (Blueprint $table) {
+	        $table->dropColumn('orchestra_parcel_details_id');
+		$table->dropColumn('season_code');
+        });
+	Schema::table('orchestra_special_tag_orders', function (Blueprint $table) {
+	        $table->dropColumn('orchestra_parcel_details_id');
+		$table->dropColumn('season_code');
+        });
+	Schema::table('orchestra_standard_carton_sticker_orders', function (Blueprint $table) {
+	        $table->dropColumn('orchestra_parcel_details_id');
+		$table->dropColumn('season_code');
+        });
+	Schema::table('orchestra_standard_poly_bag_sticker_orders', function (Blueprint $table) {
+	        $table->dropColumn('orchestra_parcel_details_id');
+		$table->dropColumn('season_code');
+        });
+	Schema::table('orchestra_wash_care_label_orders', function (Blueprint $table) {
+	        $table->dropColumn('orchestra_parcel_details_id');
+		$table->dropColumn('season_code');
+        });
     }
 }
