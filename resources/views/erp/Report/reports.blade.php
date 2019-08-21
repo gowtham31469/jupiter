@@ -143,15 +143,16 @@
 		}
 		.pading1{padding: 1%;}
 		.clrGrey{
-				color:gray;  
-				border: 1px solid black;
+/*				color:gray;  
+				border: 1px solid black;*/
 				right: -34%;
 				top: 0;
-				padding: 3.5%;
-				margin-left: -19%;
+				/*padding: 3.5%;*/
+				/*margin-left: -19%;*/
 				position: absolute;
 
 			}
+
 		.paddingSmaller{padding: 0.5%;}
 		.bordr1px{border: 1px solid;}
 		.togBtn{
@@ -174,7 +175,7 @@
 
 
 <div class="container-fluid setMarginTop4">
-	<h4 class="text-center">REPORT GENERATION</h4>
+	<h4 class="text-center">Report Generation</h4>
 	<div class="row card">
 		<div class="col-md-5">
 			<h5 id="dateLabel">Set the date interval</h5>
@@ -297,7 +298,7 @@
 				</div>
 				<div class="col-md-2">
 					<h4 class="text-center">
-						<a href="" id="moreOtions" class="clrGrey" >More options</a>
+						<a href="" id="moreOtions" class="btn btn-primary clrGrey" >More options</a>
 						{{-- <a href="" id="gen_report" class="clrGrey1" >Generate Report</a> --}}
 					</h4>
 				</div>
