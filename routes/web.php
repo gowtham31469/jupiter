@@ -791,7 +791,7 @@ Route::get('customer/orchestra/get-erp-status', 'Customer\Orchestra\OrderControl
 Route::post('customer/orchestra/template-management/template-view', 'Customer\Orchestra\TemplateManagementCntrl@templateView');
 
 // Routes for report generation
-Route::get('erp/report-generator','ErpUser\Reports\ReportController@index')->name('erp/report-generator');
+Route::get('reportGenerator','ErpUser\Reports\ReportController@index')->name('reportGenerator');
 Route::get('level1Filter','ErpUser\Reports\ReportController@level1Filter');
 Route::get('level2Filter','ErpUser\Reports\ReportController@level2Filter');
 Route::get('getTableFields','ErpUser\Reports\ReportController@getTableFields');
