@@ -3,7 +3,18 @@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.css"/>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.dataTables.min.css">
+@section('navbar')
+<style>
+    .navbar-nav > li > a {
+    line-height: 12px !important;
+    }
+</style>
+<ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
 
+<li><a href="{{ url('reportGenerator') }}" class="active">Get Reports</a></li>
+</ul>
+
+@endsection
 <style type="text/css">
 	input:focus{
 	outline: none !important;
@@ -158,7 +169,7 @@
 		.dataTables_scrollBody thead tr
 		{visibility:collapse;}
 		.container-fluid{min-height: 800px;}
-		#_preferences{transition: visibility 0s, opacity 0.5s linear;}
+		/*#_preferences{transition: visibility 0s, opacity 0.5s linear;}*/
 </style>
 
 
