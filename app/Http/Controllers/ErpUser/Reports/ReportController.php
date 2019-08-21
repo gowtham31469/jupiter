@@ -532,17 +532,29 @@ public function setUpDatatable(Request $request)
 
                     if($request->role == "JC Manager")
                     {
-                    if (($key = array_search(5, $statusId)) !== false) {
+                    if (($key = array_search(5, $statusId)) !== false)
+                     {
                     unset($statusId[$key]);
                     array_push($statusId, "2");
                     array_push($statusId, "4");
-                    }
-                    }
 
                     $eventHistory = EventHistory::whereIn('history_id',$result)
                     ->whereIn('action_id',$statusId)
+                    ->where('action_id','!=',6)
                     ->pluck('history_id')
                     ->toArray();
+                    }
+
+                    else
+                    {
+                    $eventHistory = EventHistory::whereIn('history_id',$result)
+                    ->whereIn('action_id',$statusId)
+                    ->pluck('history_id')
+                    ->toArray();  
+                    }
+                    }
+
+                   
 
                     $queryRes = History::whereIn('history.id',$eventHistory)
                     ->leftJoin("erp_order_details",'erp_order_details.id', '=', 
