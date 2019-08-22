@@ -1,4 +1,4 @@
-function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,template_name,order_flag)
+const genarateTescoPI = (id,tableName,pi_status,style_no,template_id,buyer_po,template_name,order_flag) =>
 {
     $('#uvc_number').text(style_no)
     var csrf_token = $('meta[name="csrf-token"]').attr('content');

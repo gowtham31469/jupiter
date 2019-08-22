@@ -2,7 +2,7 @@
  * call the method for getting all the details for profoma invoice generation
  * @return {[type]} [description]
  */
-function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,template_name,order_flag)
+const genarateTescoPI = (id,tableName,pi_status,style_no,template_id,buyer_po,template_name,order_flag) => 
 {
     $('#uvc_number').text(style_no)
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -42,7 +42,7 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
                     $('.advnc').text(data.data.bank_details.payment_terms)
                     $('.freight').text(data.data.bank_details.freight_terms)
                     $('.pi_number').text(data.data.company_details.pi_number)
-                    $('.pi-date').text(moment(data.data.company_details.pi_date).format('DD/MM/YYYY'))
+                    $('.pi-date').text(data.data.company_details.pi_date)
                     if (data.data.company_details.rev_number!=0)
                     {
                        $('.rev').removeClass('hidden')
