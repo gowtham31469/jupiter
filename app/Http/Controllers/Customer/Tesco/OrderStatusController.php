@@ -294,15 +294,14 @@ class OrderStatusController extends Controller
             $pi_obj    = new ProformaInvoice();
             $pi_status = $request->pi_status;
 
-            // if ($pi_status == "true")
-            // {
-            //     $data      = $pi_obj->getApprovedTescoPI($request);
-                
-            // }
-            // else
-            // {
+            if ($pi_status == "true")
+            {
+                $data      = $pi_obj->getApprovedTescoPI($request);
+            }
+            else
+            {
                 $data      = $pi_obj->getTescoPIDetails($request);
-            // }
+            }
             
             $result    = response()->json(['error'=> false,'message' =>'success','data'=>$data],200);
         }
