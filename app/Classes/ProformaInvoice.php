@@ -475,7 +475,7 @@ class ProformaInvoice
 
       $pdfdata =$pdf->output( public_path('storage/app/public/pi/'.$pi_name.'.pdf'), 'F');
 
-      $attatchment =  public_path('storage/app/public/pi/'.$pi_name.'.pdf');
+      $attachment =  public_path('storage/app/public/pi/'.$pi_name.'.pdf');
       return "/storage/app/public/pi/".$pi_name.".pdf";
     }
 
@@ -525,7 +525,7 @@ class ProformaInvoice
 
       $pdfdata =$pdf->output( public_path('storage/app/public/pi/'.$pi_name.'.pdf'), 'F');
 
-      $attatchment =  public_path('storage/app/public/pi/'.$pi_name.'.pdf');
+      $attachment =  public_path('storage/app/public/pi/'.$pi_name.'.pdf');
       return "/storage/app/public/pi/".$pi_name.".pdf";
     }
 }
