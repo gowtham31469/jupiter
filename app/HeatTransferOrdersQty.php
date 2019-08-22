@@ -16,5 +16,5 @@ class HeatTransferOrdersQty extends Authenticatable
      */
 
     protected $table = 'orchestra_heat_transfer_orders_qty';
-    protected $fillable =['oht_id','size','uvc_tco','quantity'];
+    protected $fillable =['oht_id','size','uvc_tco','quantity','parcel_id'];
 }
