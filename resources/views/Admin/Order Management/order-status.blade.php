@@ -35,6 +35,15 @@
 		border: 1px solid #ddd;
 	}
     .html2canvas-container { width: 3000px !important; height: 3000px !important; }
+	/* Hide HTML5 Up and Down arrows. */
+	input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+
+	input[type="number"] {
+		-moz-appearance: textfield;
+	}
 </style>
 <div class="col-sm-12 col-md-12 main">
   
