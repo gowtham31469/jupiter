@@ -346,6 +346,10 @@ Route::post('admin/orchestra/order-management/remove_main_label', 'Admin\Orchest
 Route::post('admin/orchestra/order-management/remove_wash_label', 'Admin\Orchestra\OrderManagementCntrl@removeWashLabel');
 Route::post('admin/orchestra/order-management/set_wash_label', 'Admin\Orchestra\OrderManagementCntrl@setWashLabel');
 Route::post('admin/orchestra/order-management/set_solid_stickers', 'Admin\Orchestra\OrderManagementCntrl@setSolidStickers');
+Route::post('admin/orchestra/order-management/set_solid_stickers_os', 'Admin\Orchestra\OrderManagementCntrl@setSolidStickersOs');
+Route::post('admin/orchestra/order-management/set_solid_poly_bag_stickers_os', 'Admin\Orchestra\OrderManagementCntrl@setSolidPolyBagStickersOs');
+Route::post('admin/orchestra/order-management/set_standard_carton_stickers_os', 'Admin\Orchestra\OrderManagementCntrl@setStandardCartonStickersOs');
+Route::post('admin/orchestra/order-management/set_standard_poly_bag_stickers_os', 'Admin\Orchestra\OrderManagementCntrl@setStandardPolyBagStickersOs');
 Route::post('admin/orchestra/order-management/set_standard_stickers', 'Admin\Orchestra\OrderManagementCntrl@setStandardStickers');
 
 Route::get('admin/orchestra/order-management/get-existing-label-orders-po', 'Admin\Orchestra\OrderManagementCntrl@getExistingLabelOrdersPo');
