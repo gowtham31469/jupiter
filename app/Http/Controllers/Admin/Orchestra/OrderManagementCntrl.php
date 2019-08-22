@@ -2383,7 +2383,7 @@ class OrderManagementCntrl extends Controller
             
             $pi_obj      =   new ProformaInvoice();
             $data        =   $pi_obj->getOrchestraPIDetails($request);
-            $attatchment =   $pi_obj->getOrchestraAttachment($data,$request);
+            $attachment =   $pi_obj->getOrchestraAttachment($data,$request);
             
             $erpOrders   =   [];
             $total_qnty  =   0 ; 
@@ -2416,7 +2416,7 @@ class OrderManagementCntrl extends Controller
                     'place_of_supply'  => $data['bank_details']->place_of_supply,
                     'revision_no'      => $data['item_details'][0]->pi_rev_no,
                     'rep_order_id'     => $rep_order_id,
-                    'pi_file'          => $attatchment
+                    'pi_file'          => $attachment
                     
                 ]);
 
@@ -2460,7 +2460,7 @@ class OrderManagementCntrl extends Controller
                         ->update([
                             'pi_status' => "PI Approved",
                             'pi_id' => $pi_details->id,
-                            'pi_file' => $attatchment, 
+                            'pi_file' => $attachment, 
                             'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                         ]);
             /** @var array [Pass array of values to updateTescoErpOrders function] */
