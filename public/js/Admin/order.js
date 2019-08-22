@@ -4478,7 +4478,7 @@ function sizelabels(data) {
         } else {
             $size_label_count = "";
         }
-        tr += '<tr><input type="hidden" value="' + value.Color_Code + '" class="size_id"><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)"  type="number" class="form-control  input-sm tot_qty_tablesize" value="' + $size_label_count + '" required placeholder="Size Label Count"><div class="help-block with-errors"></div></div></td></tr>'; 
+        tr += '<tr><input type="hidden" value="' + value.Color_Code + '" class="size_id"><input type="hidden" value="' + value.id + '" class="main_id"><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)"  type="number" class="form-control  input-sm tot_qty_tablesize" value="' + $size_label_count + '" required placeholder="Size Label Count"><div class="help-block with-errors"></div></div></td></tr>'; 
         ttots += parseInt($size_label_count);
         $qu++;
     });
@@ -4676,7 +4676,7 @@ function heatTransfer(data) {
         } else {
             $heat_transfer_count = "";
         }
-        tr += '<tr><input type="hidden" value="' + value.Color_Code + '" class="size_id"><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)"  type="number" class="form-control  input-sm tot_qty_tableheat" value="' + $heat_transfer_count + '" required placeholder="Heat Transfer Count"><div class="help-block with-errors"></div></div></td></tr>';
+        tr += '<tr><input type="hidden" value="' + value.Color_Code + '" class="size_id"><input type="hidden" value="' + value.id + '" class="main_id"><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)"  type="number" class="form-control  input-sm tot_qty_tableheat" value="' + $heat_transfer_count + '" required placeholder="Heat Transfer Count"><div class="help-block with-errors"></div></div></td></tr>';
         ttots += parseInt($heat_transfer_count);
         $qu++;
     });
@@ -4802,7 +4802,7 @@ function hangtagmodal(data) {
         } else {
             $hang_tag_count = "";
         }
-        tr += '<tr><input type="hidden" value="' + value.Color_Code + '" class="size_id"><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)"  type="number" class="form-control  input-sm tot_qty_tablehang" value="' + $hang_tag_count + '" required placeholder="Hang Tag Count"><div class="help-block with-errors"></div></div></td></tr>';
+        tr += '<tr><input type="hidden" value="' + value.Color_Code + '" class="size_id"><input type="hidden" value="' + value.id + '" class="main_id"><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)"  type="number" class="form-control  input-sm tot_qty_tablehang" value="' + $hang_tag_count + '" required placeholder="Hang Tag Count"><div class="help-block with-errors"></div></div></td></tr>';
         ttots += parseInt($hang_tag_count);
         $qu++;
     });
@@ -8145,12 +8145,14 @@ function setHangTag(id,colour) {
 	var uvc_tco = [];
 	var size = [];
 	var size_id = [];
+	var main_id = [];
 	$('#hangtagform tbody tr').each(function () {
 		if ($(this).find('.tot_qty_tablehang').val() != undefined) {
 			tot_qty_tablehang.push($(this).find('.tot_qty_tablehang').val())
 			uvc_tco.push($(this).find('.uvc_tco').text())
 			size.push($(this).find('.size').text())
 			size_id.push($(this).find('.size_id').val())
+			main_id.push($(this).find('.main_id').val())
 		}
 
 	})
@@ -8158,6 +8160,7 @@ function setHangTag(id,colour) {
 	uvc_tco_fin = uvc_tco.join(',');
 	size_fin = size.join(',');
 	size_id_fin = size_id.join(',');
+	main_id_fin = main_id.join(',');
 	var buyer = localStorage.getItem("buyer");
 //	alert()
 //	alert($('#parcel_id').val());
@@ -8175,6 +8178,7 @@ function setHangTag(id,colour) {
 			in:onesizein,
 			colour: colour,
 			size_id: size_id_fin,
+			main_id: main_id_fin,
 			uvc_tco: uvc_tco_fin,
 			uvc: $('#uvc_id').val(),
 			parcel_id: $('#parcel_id').val(),
@@ -8277,12 +8281,14 @@ function setHeatTransfer(id,colour) {
 	var uvc_tco = [];
 	var size = [];
 	var size_id = [];
+	var main_id = [];
 	$('#heat_transferform tbody tr').each(function () {
 		if ($(this).find('.tot_qty_tableheat').val() != undefined) {
 			tot_qty_tableheat.push($(this).find('.tot_qty_tableheat').val())
 			uvc_tco.push($(this).find('.uvc_tco').text())
 			size.push($(this).find('.size').text())
 			size_id.push($(this).find('.size_id').val())
+			main_id.push($(this).find('.main_id').val())
 		}
 
 	})
@@ -8290,6 +8296,7 @@ function setHeatTransfer(id,colour) {
 	uvc_tco_fin = uvc_tco.join(',');
 	size_fin = size.join(',');
 	size_id_fin = size_id.join(',');
+	main_id_fin = main_id.join(',');
 	var buyer = localStorage.getItem("buyer");
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
@@ -8302,6 +8309,7 @@ function setHeatTransfer(id,colour) {
 			id: id,
 			colour: colour,
 			size_id: size_id_fin,
+			main_id: main_id_fin,
 			uvc_tco: uvc_tco_fin,
 			uvc: $('#uvc_id').val(),
 			parcel_id: $('#parcel_id').val(),
@@ -8404,12 +8412,14 @@ function setSizeLabel(id,colour) {
 	var uvc_tco = [];
 	var size = [];
 	var size_id = [];
+	var main_id = [];
 	$('#size_labelform tbody tr').each(function () {
 		if ($(this).find('.tot_qty_tablesize').val() != undefined) {
 			tot_qty_tablesize.push($(this).find('.tot_qty_tablesize').val())
 			uvc_tco.push($(this).find('.uvc_tco').text())
 			size.push($(this).find('.size').text())
 			size_id.push($(this).find('.size_id').val())
+			main_id.push($(this).find('.main_id').val())
 		}
 
 	})
@@ -8417,6 +8427,7 @@ function setSizeLabel(id,colour) {
 	uvc_tco_fin = uvc_tco.join(',');
 	size_fin = size.join(',');
 	size_id_fin = size_id.join(',');
+	main_id_fin = main_id.join(',');
 	var buyer = localStorage.getItem("buyer");
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
@@ -8429,6 +8440,7 @@ function setSizeLabel(id,colour) {
 			id: id,
 			colour: colour,
 			size_id: size_id_fin,
+			main_id: main_id_fin,
 			uvc_tco: uvc_tco_fin,
 			uvc: $('#uvc_id').val(),
 			parcel_id: $('#parcel_id').val(),

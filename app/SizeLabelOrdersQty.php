@@ -16,5 +16,5 @@ class SizeLabelOrdersQty extends Authenticatable
      */
 
     protected $table = 'orchestra_size_label_orders_qty';
-    protected $fillable =['osl_id','size','uvc_tco','quantity'];
+    protected $fillable =['osl_id','size','uvc_tco','quantity','parcel_id'];
 }

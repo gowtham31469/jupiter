@@ -129,7 +129,7 @@ class OrderManagementCntrl extends Controller
 		
         $data['sticker_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id',DB::raw("'-' as \"Season\""),'BuyerPONo','SupplierName','NomApple as Style_Name','Quantity','IsSTD as Type',DB::raw("'Stickers' as \"OrderType\""),'sticker_order_status as Order Status',DB::raw("'-' as \"Disney\""))->whereNotIn('UVC_TCO', $UVC_TCO_array1)->groupBy('id','UVC')->get();
 
-        $data['label_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id','Season_Code as Season',DB::raw("'-' as \"BuyerPONo\""),'SupplierName','Theme as Description','NomApple as Style_Name','Licence_Code as Disney',DB::raw("'-' as \"Type\""),'Quantity',DB::raw("'Labels' as \"OrderType\""),'order_status as Order Status')->whereNotIn('UVC_TCO', $UVC_TCO_array1)->groupBy('id','UVC')->get();
+        $data['label_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id','Season_Code as Season',DB::raw("'-' as \"BuyerPONo\""),'SupplierName','Theme as Description','NomApple as Style_Name','Licence_Code as Disney','IsSTD as Type','Quantity',DB::raw("'Labels' as \"OrderType\""),'order_status as Order Status')->whereNotIn('UVC_TCO', $UVC_TCO_array1)->groupBy('id','UVC')->get();
         
         echo json_encode($data);
     } 
@@ -183,7 +183,7 @@ class OrderManagementCntrl extends Controller
                                         ->leftJoin('orchestra_size_chart','orchestra_parcel_details.Size_Label','=','orchestra_size_chart.age')
                                         ->where('orchestra_parcel_details.UVC',$uvc)
                                         ->groupBy('orchestra_parcel_details.id','Size_Label','orchestra_size_chart.cm')
-                                        ->orderBy('orchestra_parcel_details.SKU_Code','asc')
+                                        ->orderBy('orchestra_parcel_details.id','asc')
                                         ->get();
 		
 		$data['color_wcl'] = DB::table('orchestra_parcel_details')->select('orchestra_parcel_details.Color_Code')->where('orchestra_parcel_details.UVC',$uvc)->groupBy('orchestra_parcel_details.Color_Code') ->orderBy('orchestra_parcel_details.Color_Code','asc')->get();
@@ -522,7 +522,7 @@ class OrderManagementCntrl extends Controller
 		$data['orchestra_hang_tag_orders_id']=DB::table('orchestra_hang_tag_orders')->where('uvc',$uvc)->pluck('id');
         if(count($data['orchestra_hang_tag_orders']) > 0)
         {
-            $data['orchestra_hang_tag_orders_qty']=DB::table('orchestra_hang_tag_orders_qty')->select('*')->whereIn('oht_id',$data['orchestra_hang_tag_orders_id'])->get();
+            $data['orchestra_hang_tag_orders_qty']=DB::table('orchestra_hang_tag_orders_qty')->select('*')->whereIn('oht_id',$data['orchestra_hang_tag_orders_id'])->orderBy('orchestra_hang_tag_orders_qty.parcel_id','asc')->get();
         }
         else
         {
@@ -543,7 +543,7 @@ class OrderManagementCntrl extends Controller
 		$data['orchestra_heat_transfer_orders_id']=DB::table('orchestra_heat_transfer_orders')->where('uvc',$uvc)->pluck('id');
         if(count($data['orchestra_heat_transfer_orders']) > 0)
         {
-            $data['orchestra_heat_transfer_orders_qty']=DB::table('orchestra_heat_transfer_orders_qty')->select('*')->whereIn('oht_id',$data['orchestra_heat_transfer_orders_id'])->get();
+            $data['orchestra_heat_transfer_orders_qty']=DB::table('orchestra_heat_transfer_orders_qty')->select('*')->whereIn('oht_id',$data['orchestra_heat_transfer_orders_id'])->orderBy('orchestra_heat_transfer_orders_qty.parcel_id','asc')->get();
         }
         else
         {
@@ -565,7 +565,7 @@ class OrderManagementCntrl extends Controller
 		$data['orchestra_size_label_orders_id']=DB::table('orchestra_size_label_orders')->where('uvc',$uvc)->pluck('id');
         if(count($data['orchestra_size_label_orders']) > 0)
         {
-            $data['orchestra_size_label_orders_qty']=DB::table('orchestra_size_label_orders_qty')->select('*')->whereIn('osl_id',$data['orchestra_size_label_orders_id'])->get();
+            $data['orchestra_size_label_orders_qty']=DB::table('orchestra_size_label_orders_qty')->select('*')->whereIn('osl_id',$data['orchestra_size_label_orders_id'])->orderBy('orchestra_size_label_orders_qty.parcel_id','asc')->get();
         }
         else
         {
@@ -832,6 +832,7 @@ class OrderManagementCntrl extends Controller
         $uvc_tco = explode(',',$request->uvc_tco);
         $size = explode(',',$request->size);
         $size_id = explode(',',$request->size_id);
+        $main_id = explode(',',$request->main_id);
         $uvc =$request->uvc;
         $parcel_id =$request->parcel_id;
         $colour = $request->colour;
@@ -898,6 +899,7 @@ class OrderManagementCntrl extends Controller
 									'oht_id' => $id,
 									'size'      => $size[$i],
 									'uvc_tco'      => $uvc_tco[$i],
+									'parcel_id'      => $main_id[$i],
 									'quantity'    => $value
 						 ]);
 						$i++;
@@ -937,6 +939,7 @@ class OrderManagementCntrl extends Controller
 										'oht_id' => $inserted->id,
 										'size'      => $size[$i],
 										'uvc_tco'      => $uvc_tco[$i],
+										'parcel_id'      => $main_id[$i],
 										'quantity'    => $value
 						]);
 					}
@@ -965,6 +968,7 @@ class OrderManagementCntrl extends Controller
         $uvc_tco = explode(',',$request->uvc_tco);
         $size = explode(',',$request->size);
         $size_id = explode(',',$request->size_id);
+        $main_id = explode(',',$request->main_id);
         $uvc =$request->uvc;
         $parcel_id =$request->parcel_id;
         $colour = $request->colour;
@@ -1026,6 +1030,7 @@ class OrderManagementCntrl extends Controller
                                         'oht_id' => $id,
                                         'size'      => $size[$i],
                                         'uvc_tco'      => $uvc_tco[$i],
+										'parcel_id'      => $main_id[$i],
                                         'quantity'    => $value
                              ]);
                     $i++;
@@ -1062,6 +1067,7 @@ class OrderManagementCntrl extends Controller
 										'oht_id' => $inserted->id,
 										'size'      => $size[$i],
 										'uvc_tco'      => $uvc_tco[$i],
+										'parcel_id'      => $main_id[$i],
 										'quantity'    => $value
 							 ]);
 					}
@@ -1208,6 +1214,7 @@ class OrderManagementCntrl extends Controller
         $uvc_tco = explode(',',$request->uvc_tco);
         $size = explode(',',$request->size);
         $size_id = explode(',',$request->size_id);
+        $main_id = explode(',',$request->main_id);
         $uvc =$request->uvc;
         $parcel_id =$request->parcel_id;
         $colour = $request->colour;
@@ -1269,6 +1276,7 @@ class OrderManagementCntrl extends Controller
                                         'osl_id' => $id,
                                         'size'      => $size[$i],
                                         'uvc_tco'      => $uvc_tco[$i],
+										'parcel_id'      => $main_id[$i],
                                         'quantity'    => $value
                              ]);
                     $i++;
@@ -1305,6 +1313,7 @@ class OrderManagementCntrl extends Controller
                                     'osl_id' => $inserted->id,
                                     'size'      => $size[$i],
                                     'uvc_tco'      => $uvc_tco[$i],
+									'parcel_id'      => $main_id[$i],
                                     'quantity'    => $value
                          ]);
 				}
@@ -1862,8 +1871,8 @@ class OrderManagementCntrl extends Controller
                      StandardPolyStickersQty::create([
                                         'ospbs_id' => $poly_id,
                                         'size'      => "",
-                                        'quantity'    => $final_order_qty_sets,
-                                        'quantity_sets'    => $final_order_qty_sets
+                                        'quantity'    => $final_order_qty,
+                                        'quantity_sets'    => $final_order_qty
                      ]);
 
 			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
@@ -1897,8 +1906,8 @@ class OrderManagementCntrl extends Controller
 				StandardPolyStickersQty::create([
                                         'ospbs_id' => $inserted_poly->id,
                                         'size'      => "",
-                                        'quantity'    => $final_order_qty_sets,
-                                        'quantity_sets'    => $final_order_qty_sets
+                                        'quantity'    => $final_order_qty,
+                                        'quantity_sets'    => $final_order_qty
                              ]);
 			
 			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
@@ -1938,8 +1947,8 @@ class OrderManagementCntrl extends Controller
                      StandardCartonStickersQty::create([
                                         'oscs_id' => $carton_id,
                                         'size'      => "",
-                                        'quantity'    => $final_order_qty,
-                                        'quantity_sets'    => $final_order_qty
+                                        'quantity'    => $final_order_qty_sets,
+                                        'quantity_sets'    => $final_order_qty_sets
                      ]);
 			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
                         ->update([
@@ -1972,8 +1981,8 @@ class OrderManagementCntrl extends Controller
 				StandardCartonStickersQty::create([
                                         'oscs_id' => $inserted->id,
                                         'size'      => "",
-                                        'quantity'    => $final_order_qty,
-                                        'quantity_sets'    => $final_order_qty
+                                        'quantity'    => $final_order_qty_sets,
+                                        'quantity_sets'    => $final_order_qty_sets
                       ]);
 			
 			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
@@ -2549,7 +2558,7 @@ class OrderManagementCntrl extends Controller
             
             $pi_obj      =   new ProformaInvoice();
             $data        =   $pi_obj->getOrchestraPIDetails($request);
-            $attachment =   $pi_obj->getOrchestraAttachment($data,$request);
+            $attatchment =   $pi_obj->getOrchestraAttachment($data,$request);
             
             $erpOrders   =   [];
             $total_qnty  =   0 ; 
@@ -2582,7 +2591,7 @@ class OrderManagementCntrl extends Controller
                     'place_of_supply'  => $data['bank_details']->place_of_supply,
                     'revision_no'      => $data['item_details'][0]->pi_rev_no,
                     'rep_order_id'     => $rep_order_id,
-                    'pi_file'          => $attachment
+                    'pi_file'          => $attatchment
                     
                 ]);
 
@@ -2626,7 +2635,7 @@ class OrderManagementCntrl extends Controller
                         ->update([
                             'pi_status' => "PI Approved",
                             'pi_id' => $pi_details->id,
-                            'pi_file' => $attachment, 
+                            'pi_file' => $attatchment, 
                             'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                         ]);
             /** @var array [Pass array of values to updateTescoErpOrders function] */

@@ -466,7 +466,7 @@ class OrderStatusCntrl extends Controller
 		$data['orchestra_hang_tag_orders']=DB::table('orchestra_hang_tag_orders')->select('*',DB::raw("'Hang Tag' as \"TemplateName\""))->where('id',$row_id)->get();
         if(count($data['orchestra_hang_tag_orders']) > 0)
         {
-            $data['orchestra_hang_tag_orders_qty']=DB::table('orchestra_hang_tag_orders_qty')->select('*')->where('oht_id',$data['orchestra_hang_tag_orders']{0}->id)->orderBy('orchestra_hang_tag_orders_qty.id','asc')->get();
+            $data['orchestra_hang_tag_orders_qty']=DB::table('orchestra_hang_tag_orders_qty')->select('*')->where('oht_id',$data['orchestra_hang_tag_orders']{0}->id)->orderBy('orchestra_hang_tag_orders_qty.parcel_id','asc')->get();
 			
 			if(count($data['orchestra_hang_tag_orders']) > 0)
         	{
@@ -507,7 +507,7 @@ class OrderStatusCntrl extends Controller
 		$data['orchestra_heat_transfer_orders']=DB::table('orchestra_heat_transfer_orders')->select('*',DB::raw("'Heat Transfer' as \"TemplateName\""))->where('id',$row_id)->get();
         if(count($data['orchestra_heat_transfer_orders']) > 0)
         {
-            $data['orchestra_heat_transfer_orders_qty']=DB::table('orchestra_heat_transfer_orders_qty')->select('*')->where('oht_id',$data['orchestra_heat_transfer_orders']{0}->id)->orderBy('orchestra_heat_transfer_orders_qty.id','asc')->get();
+            $data['orchestra_heat_transfer_orders_qty']=DB::table('orchestra_heat_transfer_orders_qty')->select('*')->where('oht_id',$data['orchestra_heat_transfer_orders']{0}->id)->orderBy('orchestra_heat_transfer_orders_qty.parcel_id','asc')->get();
 			
 			if(count($data['orchestra_heat_transfer_orders_qty']) > 0)
         	{
@@ -549,7 +549,7 @@ class OrderStatusCntrl extends Controller
 		$data['orchestra_size_label_orders']=DB::table('orchestra_size_label_orders')->select('*',DB::raw("'Size Label' as \"TemplateName\""))->where('id',$row_id)->get();
         if(count($data['orchestra_size_label_orders']) > 0)
         {
-            $data['orchestra_size_label_orders_qty']=DB::table('orchestra_size_label_orders_qty')->select('*')->where('osl_id',$data['orchestra_size_label_orders']{0}->id)->orderBy('orchestra_size_label_orders_qty.id','asc')->get();
+            $data['orchestra_size_label_orders_qty']=DB::table('orchestra_size_label_orders_qty')->select('*')->where('osl_id',$data['orchestra_size_label_orders']{0}->id)->orderBy('orchestra_size_label_orders_qty.parcel_id','asc')->get();
 			
 			if(count($data['orchestra_size_label_orders_qty']) > 0)
         	{
