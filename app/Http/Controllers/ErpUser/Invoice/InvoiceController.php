@@ -459,15 +459,15 @@ class InvoiceController extends Controller
             $pdfdata =$pdf->output( public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf'), 'F');
 
             Invoices::where('id', $inv_id)->update(['eway_no'=> $eway_no ,'invoice_file'=>'/storage/app/public/invoices/invoices_'.$inv_id.'.pdf']);
-            $attatchment =  public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf');
+            $attachment =  public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf');
             //Mail notiication
             // $useremail = "aswathy@wizroots.com";
             $useremail = $inv_details[0]->email;
-            Mail::send('mails.invoice', ['title' => 'Invoice','to_email' => $useremail], function ($message) use ($useremail,$attatchment)
+            Mail::send('mails.invoice', ['title' => 'Invoice','to_email' => $useremail], function ($message) use ($useremail,$attachment)
                     {
                         $message->from('admin@jga.com', 'JGA');
                         $message->subject('Invoice');
-                        $message->attach($attatchment);
+                        $message->attach($attachment);
                         $message->to($useremail);
                     });
 
@@ -563,7 +563,7 @@ class InvoiceController extends Controller
      
             $pdfdata =$pdf->output( public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf'), 'F');
 
-            $attatchment =  public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf');
+            $attachment =  public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf');
             return "/storage/app/public/invoices/invoices_".$inv_id.".pdf";
         } 
         catch (\Exception $e)

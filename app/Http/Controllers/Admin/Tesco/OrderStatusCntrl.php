@@ -311,7 +311,7 @@ class OrderStatusCntrl extends Controller
             $sub_total  =   0 ;
             $pi_obj     =   new ProformaInvoice();
             $data       =   $pi_obj->getTescoPIDetails($request);
-            $attatchment =  $pi_obj->getTescoAttachment($data,$request);
+            $attachment =  $pi_obj->getTescoAttachment($data,$request);
             
             $erpOrders  =   [];
             $erp_obj    =   new ErpOrders();
@@ -346,7 +346,7 @@ class OrderStatusCntrl extends Controller
                     'template_type'    => $data['bank_details']->template_type,
                     'revision_no'      => $data['item_details'][0]->pi_rev_no,
                     'rep_order_id'     => $rep_order_id,
-                     'pi_file'         => $attatchment
+                     'pi_file'         => $attachment
                     
                 ]);
                 foreach ($data['item_details'] as $key => $value)
@@ -404,7 +404,7 @@ class OrderStatusCntrl extends Controller
                                             ->update([
                                                'pi_status' => "PI Approved",
                                                'pi_id' => $pi_details->id,
-                                               'pi_file' => $attatchment,
+                                               'pi_file' => $attachment,
                                                'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                                             ]);
                     }
@@ -424,7 +424,7 @@ class OrderStatusCntrl extends Controller
                                             ->update([
                                                'pi_status' => "PI Approved",
                                                'pi_id' => $pi_details->id,
-                                               'pi_file' => $attatchment,   
+                                               'pi_file' => $attachment,   
                                                'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                                             ]);
                     }
@@ -445,7 +445,7 @@ class OrderStatusCntrl extends Controller
                                     ->update([
                                        'pi_status' => "PI Approved",
                                        'pi_id' => $pi_details->id,
-                                       'pi_file' => $attatchment, 
+                                       'pi_file' => $attachment, 
                                        'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                                     ]);
                 /** @var array [Pass array of values to updateTescoErpOrders function] */
