@@ -267,8 +267,7 @@ class JobManagerController extends Controller
 			/** Get erp order details table ids from erp orders table id */
 			foreach($erp_orders_ids as $row => $erp_orders_id)
 			{
-				$order_detail_id_array = DB::table('erp_order_details')
-									->where('erp_order_details.erp_order_id', $erp_orders_id)
+				$order_detail_id_array = ErpOrderDetails::where('erp_order_details.erp_order_id', $erp_orders_id)
 									->where('erp_order_details.reference_name', $selected_ref_arrays[$row])
 									->where('erp_order_details.buyer_po_number', $buyer_pos[$row])
 									->where('erp_order_details.order_type', $order_type[$row])
@@ -310,7 +309,7 @@ class JobManagerController extends Controller
 				/** Create separate ratio/single templates array  */
 				if($order_details->template_type == "ratio")
 				{
-					$ratio_templates[$order_details->reference_name][] = DB::table('erp_order_details')->select('erp_order_details.order_quantity', $order_details->order_qnty_table_name.'.ratio_pack_type', $order_details->order_qnty_table_name.'.id as qty_table_id',  'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number', 'erp_order_details.order_type', 'erp_order_details.created_at')
+					$ratio_templates[$order_details->reference_name][] = ErpOrderDetails::select('erp_order_details.order_quantity', $order_details->order_qnty_table_name.'.ratio_pack_type', $order_details->order_qnty_table_name.'.id as qty_table_id',  'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number', 'erp_order_details.order_type', 'erp_order_details.created_at')
 						->join($order_details->order_qnty_table_name, 'erp_order_details.order_qnty_table_id', $order_details->order_qnty_table_name.'.id')
 						->join('erp_orders', 'erp_order_details.erp_order_id', 'erp_orders.id')
 						->where('erp_order_details.id', '=', $order_detail_id)
