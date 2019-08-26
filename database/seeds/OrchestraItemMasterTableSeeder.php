@@ -18,8 +18,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     'parent_id' => 0,   // id : 1
                     'item_name' => "Labels",
                     'ref_no' => "",
-                    'tag_name' => "",
-                    'material_id' => 1,
+                    'tag_name' => ""
                 ]);
 
         
@@ -29,8 +28,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     'parent_id' => 1,   //id : 2
                     'item_name' => "Printed Labels",
                     'ref_no' => "",
-                    'tag_name' => "",
-                    'sub_material_id' => 2,
+                    'tag_name' => ""
                 ]);
 
         
@@ -186,8 +184,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'parent_id' => 1,    
                         'item_name' => "Woven Labels",
                         'ref_no' => "",
-                        'tag_name' => "",
-                        'sub_material_id' => 16,
+                        'tag_name' => ""
                     ]);
 
                 \App\OrchestraItemMaster::create([
@@ -636,8 +633,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'parent_id' => 1,    
                         'item_name' => "Heat Tranfers",
                         'ref_no' => "",
-                        'tag_name' => "",
-                        'sub_material_id' => 62,
+                        'tag_name' => ""
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 63,
@@ -1050,9 +1046,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'parent_id' => 0,    
                         'item_name' => "Printed Boards",
                         'ref_no' => "",
-                        'tag_name' => "",
-                        'material_id' => 103,
-                        
+                        'tag_name' => ""
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 104,
@@ -1068,8 +1062,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'parent_id' => 104,    
                         'item_name' => "Tags",
                         'ref_no' => "",
-                        'tag_name' => "",
-                        'sub_material_id' => 105,
+                        'tag_name' => ""
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 106,
@@ -1567,8 +1560,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'parent_id' => 154,    
                         'item_name' => "Hang Tags",
                         'ref_no' => "",
-                        'tag_name' => "disney",
-                        'sub_material_id' => 155,
+                        'tag_name' => "disney"
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 156,
@@ -1723,8 +1715,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'parent_id' => 170,    
                         'item_name' => "Hang Tag",
                         'ref_no' => "",
-                        'tag_name' => "marvel",
-                        'sub_material_id' => 171,
+                        'tag_name' => "marvel"
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 172,
@@ -1761,8 +1752,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'parent_id' => 174,    
                         'item_name' => "Hang Tag",
                         'ref_no' => "",
-                        'tag_name' => "starwars",
-                        'sub_material_id' => 175,
+                        'tag_name' => "starwars"
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 176,
@@ -1803,8 +1793,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'parent_id' => 178,    
                         'item_name' => "Hang Tag",
                         'ref_no' => "",
-                        'tag_name' => "",
-                        'sub_material_id' => 179,
+                        'tag_name' => ""
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 180,
@@ -1844,8 +1833,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'parent_id' => 182,    
                         'item_name' => "Hang Tag",
                         'ref_no' => "",
-                        'tag_name' => "",
-                        'sub_material_id' => 183,
+                        'tag_name' => ""
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 184,
@@ -1906,8 +1894,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'parent_id' => 188,    
                         'item_name' => "Hang Tag",
                         'ref_no' => "",
-                        'tag_name' => "",
-                        'sub_material_id' => 189,
+                        'tag_name' => ""
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 190,

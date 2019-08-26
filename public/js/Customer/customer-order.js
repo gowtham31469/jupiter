@@ -840,7 +840,7 @@ function table(data,path){
                 {    
                     if (value[key]==1)
                     {    
-                       tr += '<td align="center"><a href="javascript:void(0)" onclick=genaratePI("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+action_status+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="javascript:void(0)" ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" onclick=showPOUpload("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+value.qntytable+'")></i></a></td>';
+                       tr += '<td align="center"><a href="javascript:void(0)" onclick=genarateOrchetraPI("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+action_status+'","'+value.BuyerPONo+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="javascript:void(0)" ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" onclick=showPOUpload("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+value.qntytable+'")></i></a></td>';
                     }
                     else
                     {
