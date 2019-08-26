@@ -599,9 +599,8 @@ class PoManagerController extends Controller
 					$template_id = $main_table === 'orchestra_hang_tag_orders'?$order_details->template_front_id:$order_details->template_id;
 
 					$template_data = DB::table('orchestra_item_master')
-									->join('orchestra_template', 'orchestra_template.item_id', 'orchestra_item_master.id')
 									->where('orchestra_item_master.id', $template_id)
-									->select('orchestra_template.material_id', 'orchestra_item_master.item_name', 'orchestra_template.sub_material_id')->first();
+									->select('orchestra_item_master.material_id', 'orchestra_item_master.item_name', 'orchestra_item_master.sub_material_id')->first();
 					$material_name  = DB::table('orchestra_item_master')->where('id', '=', $template_data->material_id)->value('item_name');
 					$material_sub  = DB::table('orchestra_item_master')->where('id', '=', $template_data->sub_material_id)->value('item_name');
 					
