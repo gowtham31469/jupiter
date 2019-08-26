@@ -369,6 +369,15 @@ background: rgba(0,0,0,0.2);
 	.left-panel.active {
     margin-right: 0%;
 }
+/* Hide HTML5 Up and Down arrows. */
+input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
 </style>
 <div class="col-sm-12 col-md-12 main">
 	<div class="top-content">

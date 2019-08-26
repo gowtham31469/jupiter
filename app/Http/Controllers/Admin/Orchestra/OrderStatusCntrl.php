@@ -65,8 +65,132 @@ class OrderStatusCntrl extends Controller
             $table_name =   $request->table_name;
             $uvc		=   $request->uvc;
             $season 	=   $request->season;
-            $color_code 	=   $request->color_code;
-            $data['order_details'] = DB::table('orchestra_parcel_details')
+            $color_code =   $request->color_code;
+            $po 		=   $request->buyer;
+			if($table_name == "orchestra_solid_carton_sticker_orders" || $table_name == "orchestra_solid_poly_bag_sticker_orders" || $table_name == "orchestra_standard_carton_sticker_orders" || $table_name == "orchestra_standard_poly_bag_sticker_orders" )
+			{
+				$data['order_details'] = DB::table('orchestra_parcel_details')
+                                        ->select('orchestra_parcel_details.*','orchestra_parcel_details.Size_Range_Label as Age','orchestra_parcel_details.Start_Print_Date	 as HangTag_Print_Date','orchestra_size_chart.cm',DB::raw("sum(orchestra_parcel_details.\"Quantity\") as \"Sum\""), DB::raw("'null' as \"PrixEurope\""), DB::raw("'null' as \"PrixClubEurope\""), DB::raw("'null' as \"Prix_Vente_Arabie_Saoudite\""), DB::raw("'null' as \"Prix_Club_Arabie_Saoudite\""), DB::raw("'null' as \"Prix_Vente_Canada\""), DB::raw("'null' as \"Prix_Club_Canada\""), DB::raw("'null' as \"Prix_Vente_Suisse\""), DB::raw("'null' as \"Prix_Club_Suisse\""), DB::raw("'null' as \"Prix_Vente_Maroc\""), DB::raw("'null' as \"Prix_Club_Maroc\""), DB::raw("'null' as \"Prix_Vente_Ile_Maurice\""), DB::raw("'null' as \"Prix_Club_Ile_Maurice\""), DB::raw("'null' as \"Prix_Vente_ALGERIE\""), DB::raw("'null' as \"Prix_Club_ALGERIE\""), DB::raw("'null' as \"Prix_Vente_USA\""), DB::raw("'null' as \"Prix_Club_USA\""))
+                                        ->leftJoin('orchestra_size_chart','orchestra_parcel_details.Size_Label','=','orchestra_size_chart.age')
+                                        ->where('orchestra_parcel_details.UVC',$uvc)->where('orchestra_parcel_details.Season_Code',$season)
+                                        ->groupBy('orchestra_parcel_details.id','Size_Label','orchestra_size_chart.cm')
+                                        ->orderBy('orchestra_parcel_details.id')
+                                        ->get();
+				
+				$data['orchestra_age_group']= DB::table('orchestra_age_group')->select('*')->get();   
+				
+				$data['orchestra_parcel_quantity_details'] = DB::table('orchestra_parcel_quantity_details')->select(DB::raw('distinct on ("UVC_TCO") "UVC_TCO"'),'UVC','Size','BarcodeForPricesTags','Quantity','Color')->where('BuyerPONo',$po)->where('orchestra_parcel_quantity_details.UVC',$uvc)->get();
+
+				$data['orchestra_parcel_details']= DB::table('orchestra_parcel_details')->leftJoin('orchestra_color_code','orchestra_color_code.code','orchestra_parcel_details.Color_Code')->select('*','Standard_Code as ParcelCode','orchestra_color_code.english as colour_Code')->where('orchestra_parcel_details.UVC',$uvc)->where('BuyerPONo',$po)->groupBy('orchestra_parcel_details.id','orchestra_color_code.id','BuyerPONo')->get();
+				
+				if($data['orchestra_parcel_details']{0}->IsSTD == 1)
+				{
+					$orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','179')->get();
+					$data['carton_template']=$orchestra_template{0}->template_file;
+					$data['carton_template_id']=179;
+
+					$factory_code = $data['orchestra_parcel_details']{0}->FactoryCode;
+					$customer_id = DB::table('customers')->select('*')->where('factory_code',$factory_code)->get();
+					if(count($customer_id) > 0)
+					{
+						$carton_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',179)->get();
+
+						if(count($carton_moq) > 0)
+						{
+							$data['carton_moq']=$carton_moq{0}->moq;
+						}
+						else
+						{
+							$data['carton_moq']=1;
+						}
+					}
+					else
+					{
+						$data['carton_moq']=1;
+					}
+
+					$orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','180')->get();
+					$data['polybag_template']=$orchestra_template{0}->template_file;
+					$data['template_name']="Standard";
+					$data['polybag_template_id']=180;
+					if(count($customer_id) > 0)
+					{
+						$polybag_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',180)->get();
+
+						if(count($polybag_moq) > 0)
+						{
+							$data['polybag_moq']=$polybag_moq{0}->moq;
+						}
+						else
+						{
+							$data['polybag_moq']=1;
+						}
+					}
+					else
+					{
+						$data['polybag_moq']=1;
+					}
+				}
+				else
+				{
+					$orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','177')->get();
+					$data['carton_template']=$orchestra_template{0}->template_file;
+					$data['carton_template_id']=177;
+
+					$factory_code = $data['orchestra_parcel_details']{0}->FactoryCode;
+					$customer_id = DB::table('customers')->select('*')->where('factory_code',$factory_code)->get();
+
+					if(count($customer_id) > 0)
+					{
+						$carton_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',177)->get();
+
+						if(count($carton_moq) > 0)
+						{
+							$data['carton_moq']=$carton_moq{0}->moq;
+						}
+						else
+						{
+							$data['carton_moq']=1;
+						}
+
+
+					}
+					else
+					{
+						$data['carton_moq']=1;
+					}
+
+
+					$orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','178')->get();
+					$data['polybag_template']=$orchestra_template{0}->template_file;
+					$data['template_name']="Solid";
+					$data['polybag_template_id']=178;
+
+					if(count($customer_id) > 0)
+					{
+						$polybag_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',178)->get();
+
+						if(count($polybag_moq) > 0)
+						{
+							$data['polybag_moq']=$polybag_moq{0}->moq;
+						}
+						else
+						{
+							$data['polybag_moq']=1;
+						}
+					}
+					else
+					{
+						$data['polybag_moq']=1;
+					}
+
+
+				}
+				
+			}
+			else
+			{
+				$data['order_details'] = DB::table('orchestra_parcel_details')
                                         ->select('orchestra_parcel_details.*','orchestra_parcel_details.Size_Range_Label as Age','orchestra_parcel_details.Start_Print_Date	 as HangTag_Print_Date','orchestra_size_chart.cm',DB::raw("sum(orchestra_parcel_details.\"Quantity\") as \"Sum\""), DB::raw("'null' as \"PrixEurope\""), DB::raw("'null' as \"PrixClubEurope\""), DB::raw("'null' as \"Prix_Vente_Arabie_Saoudite\""), DB::raw("'null' as \"Prix_Club_Arabie_Saoudite\""), DB::raw("'null' as \"Prix_Vente_Canada\""), DB::raw("'null' as \"Prix_Club_Canada\""), DB::raw("'null' as \"Prix_Vente_Suisse\""), DB::raw("'null' as \"Prix_Club_Suisse\""), DB::raw("'null' as \"Prix_Vente_Maroc\""), DB::raw("'null' as \"Prix_Club_Maroc\""), DB::raw("'null' as \"Prix_Vente_Ile_Maurice\""), DB::raw("'null' as \"Prix_Club_Ile_Maurice\""), DB::raw("'null' as \"Prix_Vente_ALGERIE\""), DB::raw("'null' as \"Prix_Club_ALGERIE\""), DB::raw("'null' as \"Prix_Vente_USA\""), DB::raw("'null' as \"Prix_Club_USA\""))
                                         ->leftJoin('orchestra_size_chart','orchestra_parcel_details.Size_Label','=','orchestra_size_chart.age')
                                         ->where('orchestra_parcel_details.UVC',$uvc)
@@ -74,8 +198,10 @@ class OrderStatusCntrl extends Controller
                                         ->groupBy('orchestra_parcel_details.id','Size_Label','orchestra_size_chart.cm')
                                         ->orderBy('orchestra_parcel_details.id')
                                         ->get();
-		
-
+				
+				//print_r($data['order_details']);
+			}
+			
             // get price details for po data
             foreach($data['order_details'] as $key => $value)
             {
@@ -340,7 +466,7 @@ class OrderStatusCntrl extends Controller
 		$data['orchestra_hang_tag_orders']=DB::table('orchestra_hang_tag_orders')->select('*',DB::raw("'Hang Tag' as \"TemplateName\""))->where('id',$row_id)->get();
         if(count($data['orchestra_hang_tag_orders']) > 0)
         {
-            $data['orchestra_hang_tag_orders_qty']=DB::table('orchestra_hang_tag_orders_qty')->select('*')->where('oht_id',$data['orchestra_hang_tag_orders']{0}->id)->orderBy('orchestra_hang_tag_orders_qty.id','asc')->get();
+            $data['orchestra_hang_tag_orders_qty']=DB::table('orchestra_hang_tag_orders_qty')->select('*')->where('oht_id',$data['orchestra_hang_tag_orders']{0}->id)->orderBy('orchestra_hang_tag_orders_qty.parcel_id','asc')->get();
 			
 			if(count($data['orchestra_hang_tag_orders']) > 0)
         	{
@@ -381,7 +507,7 @@ class OrderStatusCntrl extends Controller
 		$data['orchestra_heat_transfer_orders']=DB::table('orchestra_heat_transfer_orders')->select('*',DB::raw("'Heat Transfer' as \"TemplateName\""))->where('id',$row_id)->get();
         if(count($data['orchestra_heat_transfer_orders']) > 0)
         {
-            $data['orchestra_heat_transfer_orders_qty']=DB::table('orchestra_heat_transfer_orders_qty')->select('*')->where('oht_id',$data['orchestra_heat_transfer_orders']{0}->id)->orderBy('orchestra_heat_transfer_orders_qty.id','asc')->get();
+            $data['orchestra_heat_transfer_orders_qty']=DB::table('orchestra_heat_transfer_orders_qty')->select('*')->where('oht_id',$data['orchestra_heat_transfer_orders']{0}->id)->orderBy('orchestra_heat_transfer_orders_qty.parcel_id','asc')->get();
 			
 			if(count($data['orchestra_heat_transfer_orders_qty']) > 0)
         	{
@@ -423,7 +549,7 @@ class OrderStatusCntrl extends Controller
 		$data['orchestra_size_label_orders']=DB::table('orchestra_size_label_orders')->select('*',DB::raw("'Size Label' as \"TemplateName\""))->where('id',$row_id)->get();
         if(count($data['orchestra_size_label_orders']) > 0)
         {
-            $data['orchestra_size_label_orders_qty']=DB::table('orchestra_size_label_orders_qty')->select('*')->where('osl_id',$data['orchestra_size_label_orders']{0}->id)->orderBy('orchestra_size_label_orders_qty.id','asc')->get();
+            $data['orchestra_size_label_orders_qty']=DB::table('orchestra_size_label_orders_qty')->select('*')->where('osl_id',$data['orchestra_size_label_orders']{0}->id)->orderBy('orchestra_size_label_orders_qty.parcel_id','asc')->get();
 			
 			if(count($data['orchestra_size_label_orders_qty']) > 0)
         	{
@@ -441,10 +567,10 @@ class OrderStatusCntrl extends Controller
             $data['orchestra_size_label_orders_qty']="";
         }
 			
-		$data['orchestra_solid_carton_sticker_orders']=DB::table('orchestra_solid_carton_sticker_orders')->select('*',DB::raw("'Size Label' as \"TemplateName\""))->where('id',$row_id)->get();
+		$data['orchestra_solid_carton_sticker_orders']=DB::table('orchestra_solid_carton_sticker_orders')->select('*',DB::raw("'Solid Carton Stickers' as \"TemplateName\""))->where('id',$row_id)->get();
         if(count($data['orchestra_solid_carton_sticker_orders']) > 0)
         {
-            $data['orchestra_solid_carton_sticker_orders_qty']=DB::table('orchestra_solid_carton_sticker_orders_qty')->select('*')->where('osl_id',$data['orchestra_solid_carton_sticker_orders']{0}->id)->orderBy('orchestra_solid_carton_sticker_orders_qty.id','asc')->get();
+            $data['orchestra_solid_carton_sticker_orders_qty']=DB::table('orchestra_solid_carton_sticker_orders_qty')->select('*')->where('oscs_id',$data['orchestra_solid_carton_sticker_orders']{0}->id)->orderBy('orchestra_solid_carton_sticker_orders_qty.id','asc')->get();
 			
 			if(count($data['orchestra_solid_carton_sticker_orders_qty']) > 0)
         	{
@@ -462,10 +588,10 @@ class OrderStatusCntrl extends Controller
             $data['orchestra_solid_carton_sticker_orders_qty']="";
         }
 			
-		$data['orchestra_solid_poly_bag_sticker_orders']=DB::table('orchestra_solid_poly_bag_sticker_orders')->select('*',DB::raw("'Size Label' as \"TemplateName\""))->where('id',$row_id)->get();
+		$data['orchestra_solid_poly_bag_sticker_orders']=DB::table('orchestra_solid_poly_bag_sticker_orders')->select('*',DB::raw("'Solid Poly Bag Stickers' as \"TemplateName\""))->where('id',$row_id)->get();
         if(count($data['orchestra_solid_poly_bag_sticker_orders']) > 0)
         {
-            $data['orchestra_solid_poly_bag_sticker_orders_qty']=DB::table('orchestra_solid_poly_bag_sticker_orders_qty')->select('*')->where('osl_id',$data['orchestra_solid_poly_bag_sticker_orders']{0}->id)->orderBy('orchestra_solid_poly_bag_sticker_orders_qty.id','asc')->get();
+            $data['orchestra_solid_poly_bag_sticker_orders_qty']=DB::table('orchestra_solid_poly_bag_sticker_orders_qty')->select('*')->where('ospbs_id',$data['orchestra_solid_poly_bag_sticker_orders']{0}->id)->orderBy('orchestra_solid_poly_bag_sticker_orders_qty.id','asc')->get();
 			
 			if(count($data['orchestra_solid_poly_bag_sticker_orders_qty']) > 0)
         	{
@@ -482,6 +608,45 @@ class OrderStatusCntrl extends Controller
         {
             $data['orchestra_solid_poly_bag_sticker_orders_qty']="";
         }
+		
+		$data['orchestra_standard_carton_sticker_orders']=DB::table('orchestra_standard_carton_sticker_orders')->select('*',DB::raw("'Standard Carton Stickers' as \"TemplateName\""))->where('id',$row_id)->get();
+        if(count($data['orchestra_standard_carton_sticker_orders']) > 0)
+        {
+             $data['orchestra_standard_carton_sticker_orders_qty']=DB::table('orchestra_standard_carton_sticker_orders_qty')->select('*')->where('oscs_id',$data['orchestra_standard_carton_sticker_orders']{0}->id)->orderBy('orchestra_standard_carton_sticker_orders_qty.id','asc')->get();
+			
+			if(count($data['orchestra_standard_carton_sticker_orders_qty']) > 0)
+        	{
+				$data['standard_carton_erp_details']= DB::table('erp_order_details')->where('order_qnty_table_name','ilike','orchestra_standard_carton_sticker_orders_qty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $data['orchestra_standard_carton_sticker_orders_qty']{0}->id)->select('erp_order_details.id','erp_status.status_name')->first();
+			}
+			else
+			{
+				$data['orchestra_standard_carton_sticker_orders_qty']="";
+			}
+			
+        }
+        else
+        {
+            $data['orchestra_standard_carton_sticker_orders_qty']="";
+        }
+        
+        $data['orchestra_standard_poly_bag_sticker_orders']=DB::table('orchestra_standard_poly_bag_sticker_orders')->select('*',DB::raw("'Standard Poly Bag Stickers' as \"TemplateName\""))->where('id',$row_id)->get();
+        if(count($data['orchestra_standard_poly_bag_sticker_orders']) > 0)
+        {
+             $data['orchestra_standard_poly_bag_sticker_orders_qty']=DB::table('orchestra_standard_poly_bag_sticker_orders_qty')->select('*')->where('ospbs_id',$data['orchestra_standard_poly_bag_sticker_orders']{0}->id)->orderBy('orchestra_standard_poly_bag_sticker_orders_qty.id','asc')->get();
+			
+			if(count($data['orchestra_standard_poly_bag_sticker_orders_qty']) > 0)
+        	{
+				$data['standard_poly_erp_details']= DB::table('erp_order_details')->where('order_qnty_table_name','ilike','orchestra_standard_poly_bag_sticker_orders_qty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $data['orchestra_standard_poly_bag_sticker_orders_qty']{0}->id)->select('erp_order_details.id','erp_status.status_name')->first();
+			}
+			else
+			{
+				$data['orchestra_standard_poly_bag_sticker_orders_qty']="";
+			}
+        }
+        else
+        {
+             $data['orchestra_standard_poly_bag_sticker_orders_qty']="";
+        }	
 		$data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->select('*','orchestra_wash_care_label_orders.template_name as TemplateName')->where('id',$row_id)->get();
         foreach($data['orchestra_wash_care_label_orders'] as $value1)
         {

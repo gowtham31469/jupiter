@@ -346,6 +346,10 @@ Route::post('admin/orchestra/order-management/remove_main_label', 'Admin\Orchest
 Route::post('admin/orchestra/order-management/remove_wash_label', 'Admin\Orchestra\OrderManagementCntrl@removeWashLabel');
 Route::post('admin/orchestra/order-management/set_wash_label', 'Admin\Orchestra\OrderManagementCntrl@setWashLabel');
 Route::post('admin/orchestra/order-management/set_solid_stickers', 'Admin\Orchestra\OrderManagementCntrl@setSolidStickers');
+Route::post('admin/orchestra/order-management/set_solid_stickers_os', 'Admin\Orchestra\OrderManagementCntrl@setSolidStickersOs');
+Route::post('admin/orchestra/order-management/set_solid_poly_bag_stickers_os', 'Admin\Orchestra\OrderManagementCntrl@setSolidPolyBagStickersOs');
+Route::post('admin/orchestra/order-management/set_standard_carton_stickers_os', 'Admin\Orchestra\OrderManagementCntrl@setStandardCartonStickersOs');
+Route::post('admin/orchestra/order-management/set_standard_poly_bag_stickers_os', 'Admin\Orchestra\OrderManagementCntrl@setStandardPolyBagStickersOs');
 Route::post('admin/orchestra/order-management/set_standard_stickers', 'Admin\Orchestra\OrderManagementCntrl@setStandardStickers');
 
 Route::get('admin/orchestra/order-management/get-existing-label-orders-po', 'Admin\Orchestra\OrderManagementCntrl@getExistingLabelOrdersPo');
@@ -633,6 +637,7 @@ Route::get('admin/audit-trail', 'Admin\AuditTrail\AuditTrailController@index');
 Route::get('admin/audit-trail/get-comparison-details', 'Admin\AuditTrail\AuditTrailController@getComparisonDataById');
 /* ERP Related Routes */
 Route::group(['prefix' => 'erp'], function () {
+	Route::get('report-generator','ErpUser\Reports\ReportController@index')->name('report-generator');
 	Route::get('/', 'ErpUser\Admin\UserController@index')->name('erp');
 	Route::get('/home', 'ErpUser\Admin\UserController@index')->name('home');
 	Route::get('/login', 'ErpuserAuth\LoginController@showLoginForm')->name('erp.login');
@@ -792,8 +797,8 @@ Route::post('customer/orchestra/template-management/template-view', 'Customer\Or
 
 // Routes for report generation
 Route::get('reportGenerator','ErpUser\Reports\ReportController@index')->name('reportGenerator');
-Route::get('level1Filter','ErpUser\Reports\ReportController@level1Filter');
-Route::get('level2Filter','ErpUser\Reports\ReportController@level2Filter');
+Route::post('/level1Filter','ErpUser\Reports\ReportController@level1Filter');
+Route::post('/level2Filter','ErpUser\Reports\ReportController@level2Filter');
 Route::get('getTableFields','ErpUser\Reports\ReportController@getTableFields');
 Route::post('setUpDatatable', 'ErpUser\Reports\ReportController@setUpDatatable' )->name('setUpDatatable');
 

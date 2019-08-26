@@ -11,7 +11,8 @@
 </style>
 <ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
 
-<li><a href="{{ url('reportGenerator') }}" class="active">Get Reports</a></li>
+<li><a href="#" onClick="window.location.reload();return false;" class="active">Get Reports</a></li>
+
 </ul>
 
 @endsection
@@ -28,7 +29,8 @@
 	border-radius: 0px;
 	margin-top: 0px;
 	}
-	#reportTitle{margin-left: 34%;}
+	#reportTitle{    position: absolute;
+    left: 45%;}
 	.mrgBtm{margin-bottom: 5%;}
 	.card:hover {
 	box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
@@ -66,7 +68,7 @@
 		margin-top: 12%;
 		float: right;
 	}
-	#filter2,#filter1{margin-top: 34%;height: 29px;}
+	#filter2,#filter1{margin-top: 52%;height: 29px;}
 	.btn .caret, .btn-group>.btn:first-child {height: 30px!important;}
 	.bootstrap-select>.dropdown-toggle.bs-placeholder{height: 30px!important;}
 	.filter-option{font-size: smaller !important;}
@@ -74,8 +76,9 @@
 	.checklist2{min-height: 250px;cursor: pointer;max-height: 350px;overflow: auto;}
 	.checkbox-inline i{margin-left: 15px;}
 	#filter3{    
-	margin-top: 32%;
-    height: 29px;}
+	margin-top: 55%;
+    height: 29px;
+    border-radius: 0px;}
 	#checklist li{padding: .4%;font: 15px;}
 	#reportTable{
 		min-width: 100%;
@@ -143,16 +146,16 @@
 		}
 		.pading1{padding: 1%;}
 		.clrGrey{
-/*				color:gray;  
-				border: 1px solid black;*/
-				right: -34%;
-				top: 0;
-				/*padding: 3.5%;*/
-				/*margin-left: -19%;*/
-				position: absolute;
+    border-radius: 0px;
+    right: -34%;
+    top: 1%;
+    /* padding: 3.5%; */
+    /* margin-left: -19%; */
+    position: absolute;
+    height: 34px;
 
 			}
-
+		.setMargin{margin-left: 1%;}	
 		.paddingSmaller{padding: 0.5%;}
 		.bordr1px{border: 1px solid;}
 		.togBtn{
@@ -164,19 +167,24 @@
 			color: black;
 			right: 0;"
 		}
+.bootstrap-select .dropdown-toggle:focus {
+    outline: 0 !important;
+}
 		.dataTables_wrapper.no-footer .dataTables_scrollBody {
 		border-bottom:1px solid #ddd !important; 
 		}
 		.dataTables_scrollBody thead tr
 		{visibility:collapse;}
-		.container-fluid{min-height: 800px;}
+		/*.container-fluid{min-height: 800px;}*/
+		.l1{margin-top: 8.4%;}
+		.l2{margin-top: 4%;}
 		/*#_preferences{transition: visibility 0s, opacity 0.5s linear;}*/
 </style>
 
 
 <div class="container-fluid setMarginTop4">
 	<h4 class="text-center">Report Generation</h4>
-	<div class="row card">
+	{{-- <div class="row card">
 		<div class="col-md-5">
 			<h5 id="dateLabel">Set the date interval</h5>
 			<table border="0" cellpadding="0" cellspacing="0">
@@ -213,9 +221,9 @@
 
 			{!! Form::select('role_Status[]', $invoice,null,['class' => 'selectpicker all_status _invoice hidden','required','data-size'=>"10",'data-actions-box'=>"true","title"=>'Select Status [ Invoice ]','id'=>'_invoice']) !!}
 		</div>
-	</div>
+	</div> --}}
 
-	<div class="row setMarginTop2  card" id="_preferences">
+	{{-- <div class="row setMarginTop2  card" id="_preferences">
 		<div class="col-md-12">
 			<div class="row paddingSmaller">
 				<div class="col-md-11">
@@ -287,27 +295,150 @@
 				<div class="col-md-1"><button class=" btn btn-primary btn-sm" id="filter3">Get Report</button></div>
 			</div>
 		</div>
+	</div> --}}
+
+
+	<div class="row">
+		<div class="col-md-3">
+			<div class="row card">
+
+				<label id="dateLabel">Set the date interval</label>
+			<table border="0" cellpadding="0" cellspacing="0">
+				<tr class="row">
+					<td class="col-md-6" style="padding: 0;">
+						<input class="dateGap" type="text" id="txtFrom" placeholder="Start date" autocomplete="off"/>
+					</td>
+				{{-- 	<td>
+						&nbsp;-&nbsp;&nbsp;
+					</td>
+ --}}					<td class="col-md-6">
+						<input class="dateGap" type="text" id="txtTo" placeholder="End date" autocomplete="off"/>
+					</td>
+					<td>
+						&emsp;
+					</td>
+				</tr>
+			</table>
+	
+			<label class="l1">Select one of the following roles</label>
+			<select class="selectpicker roleSelection" name="roleSelection" title="Select Role">
+			@foreach($allActions as $key=> $action)
+	{{-- 		<label><input type="radio" class="roleSelection" name="roleSelection" data-target="{{ $action_as_id[$key] }}" value="{{ $action  }}">&nbsp; {{ $action }} &emsp;</label> --}}
+			<option value="{{ $action_as_id[$key] }}"> {{ $action }}</option>
+			@endforeach
+</select>
+				<label class="select_Status hidden l2">Select status</label>
+
+			{!! Form::select('role_Status[]', $po,null,['class' => 'selectpicker all_status _poMgr hidden','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Status [ PO Mngr ]','id'=>'_poMgr']) !!}
+
+			{!! Form::select('role_Status[]', $jc,null,['class' => 'selectpicker all_status _jcMgr hidden','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Status [ JC Mngr ]','id'=>'_jcMgr']) !!}
+
+			{!! Form::select('role_Status[]', $order,null,['class' => 'selectpicker all_status _order hidden','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Status [ Order ]','id'=>'_order']) !!}
+
+			{!! Form::select('role_Status[]', $invoice,null,['class' => 'selectpicker all_status _invoice hidden','required','data-size'=>"10",'data-actions-box'=>"true","title"=>'Select Status [ Invoice ]','id'=>'_invoice']) !!}
+
+	</div>
+		</div>
+		<div class="col-md-9">
+			<div class="row setMargin card" id="_preferences">
+		<div class="col-md-12">
+			<div class="row paddingSmaller">
+				<div class="col-md-11">
+					<div class="row">
+						<div class="col-md-3">
+							<label>Buyer</label>
+							{!! Form::select('sel_1[]', $buyers,null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Buyer','id'=>'buyer']) !!}
+						</div>
+						<div class="col-md-3">
+							<label>Template</label>
+							{!! Form::select('sel_1[]',$templates,null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Template','id'=>'template']) !!}
+						</div>
+						<div class="col-md-3">
+							<label>Season</label>
+							{!! Form::select('sel_1[]',$seasons,null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Season','id'=>'season']) !!}
+						</div>
+						<div class="col-md-3">
+							<label>Country</label>
+							{!! Form::select('sel_1[]',$countries,null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Country','id'=>'country']) !!}
+						</div>
+					</div>
+				</div>
+				<div class="col-md-1"><button class="btn btn-default input-sm" id="filter1">Next</button></div>
+			</div>
+			<div class="row level2filter hidden paddingSmaller">
+				<div class="col-md-11">
+					<div class="row">
+						<div class="col-md-3">
+							<label>Customer</label>
+							<select id="customer" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select Customer" multiple></select>
+						</div>
+						<div class="col-md-3">
+							<label>Material</label>
+							<select id="material" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select Material" multiple></select>
+						</div>
+						<div class="col-md-3">
+							<label>Style</label>
+							<select id="style" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select Style" multiple data-live-search="true"></select>
+						</div>
+						<div class="col-md-3">
+							<label>Mat-Sub</label>
+							<select id="mat_sub" class="selectpicker filterLevel2" data-actions-box="true" data-size="10" title="Select Mat-sub" multiple data-live-search="true"></select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-1"><button class="btn btn-default input-sm" id="filter2">Next</button></div>
+			</div>
+			<div class="row level3filter hidden paddingSmaller">
+				<div class="col-md-11">
+					<div class="row">
+						<div class="col-md-3">
+							<label>Reference</label>
+							<select id="reference" class="selectpicker filterLevel3" data-actions-box="true" data-size="10" title="Select Reference" multiple data-live-search="true"></select>
+						</div>
+						<div class="col-md-3">
+							<label>PO</label>
+							<select id="po" class="selectpicker filterLevel3" data-actions-box="true" data-size="10" title="Select PO" multiple data-live-search="true"></select>
+						</div>
+						<div class="col-md-3">
+							<label>Buyer PO</label>
+							<select id="buyer_po" class="selectpicker filterLevel3" data-actions-box="true" data-size="10" title="Select Buyer PO" multiple data-live-search="true"></select>
+						</div>
+						<div class="col-md-3">
+							<label>OCN</label>
+							<select id="ocn" class="selectpicker filterLevel3" data-actions-box="true" data-size="10" title="Select OCN" multiple data-live-search="true"></select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-1">
+					<button class=" btn btn-primary btn-sm" id="filter3">Get Report</button>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+		</div>
 	</div>
 
 	<div class="row ReportSection hidden reportSec">
 		<hr>  
-		<div class="panel-heading">
-			<div class="row">
+		{{-- <div class="panel-heading"> --}}
+			<h4 class="text-center" id="reportTitle">Consolidated Data</h4>
+		{{-- 	<div class="row">
 				<div class="col-md-9">
-					<h4 class="text-center" id="reportTitle">Consolidated Data</h4>
-				</div>
-				<div class="col-md-2">
+					
+				</div> --}}
+			{{-- 	<div class="col-md-2">
 					<h4 class="text-center">
 						<a href="" id="moreOtions" class="btn btn-primary clrGrey" >More options</a>
-						{{-- <a href="" id="gen_report" class="clrGrey1" >Generate Report</a> --}}
+						<a href="" id="gen_report" class="clrGrey1" >Generate Report</a>
 					</h4>
 				</div>
 				<div class="col-md-1" id="toggleBtn" data-icon="down">
 					<i class="fa fa-angle-down togBtn" aria-hidden="true" data-toggle="collapse" data-target="#filter-panel" id="toggleFa">
 					</i>
-				</div>
-			</div>
-		</div>
+				</div> --}}
+			{{-- </div> --}}
+		{{-- </div> --}}
 
 		<div class="row">
 			<div class="col-md-12">
@@ -417,6 +548,7 @@
 
     <script type="text/javascript">
 			$(document).ready(function($) {
+				 $(this).scrollTop(0);
 				$( init );
 				function init() {
 					$( ".droppable-area1, .droppable-area2" ).sortable({
@@ -425,17 +557,26 @@
 					}).disableSelection();
 				}
 
-				$('input[type=radio][name=roleSelection]').change(function() {
+				
+
+				$('.roleSelection').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+
+					selectToOpen=$(this).val()
 					$(".select_Status").removeClass('hidden')
-					$(".all_status").each(function(index, el) {
-						$(this).addClass('hidden')
-						$(this).val('')
+				
+					$("[class*="+$(this).val()+"]").removeClass("hidden").addClass('open');
+						
+						$(".all_status").each(function(index, el) {
+							if(!($(this).hasClass(selectToOpen)))
+							{
+								$(this).addClass('hidden')
+							}
+							$(this).val('')
 					});
+						
 					$('.selectpicker').selectpicker('refresh');
-					$('.'+$(this).data('target')).addClass('open').removeClass('hidden')
 					$("#moreOtions").addClass('hidden')
 					$("#_preferences").css('display', 'block');
-					// $("#filter-panel").removeClass('collapse')
 
 				});
 
@@ -477,7 +618,7 @@
 
 				function triggerLevel1()
 				{	
-					console.log($('input[name=roleSelection]:checked').val())
+					console.log($(".roleSelection option:selected").val());
 					$('.selectpicker').removeClass('open');
 					/* Act on the event */
 					if($("#txtFrom").val().length > 0 && $("#txtTo").val().length > 0)
@@ -501,15 +642,16 @@
 							});
 
 							$.ajax({
-								type : 'get',
-								url : '/level1Filter',
+								type : 'post',
+								url: "{{ url('/level1Filter') }}",
 								data:{
 									'buyer': $("#buyer").val(),
 									'country': countries,
 									'season': seasons,
 									'template': templates,
 									'date_start' : $("#txtFrom").val(),
-									'date_end' : $("#txtTo").val()
+									'date_end' : $("#txtTo").val(),
+									'_token': "{{ csrf_token() }}",
 								},
 
 								success:function(data)
@@ -608,8 +750,8 @@
 						});
 
 						$.ajax({
-							type : 'get',
-							url : 'level2Filter',
+							type : 'post',
+							url: "{{ url('/level2Filter') }}",
 							data:{
 								'buyer': $("#buyer").val(),
 								'materials': material,
@@ -620,7 +762,8 @@
 								'season': seasons,
 								'template': templates,
 								'date_start' : $("#txtFrom").val(),
-								'date_end' : $("#txtTo").val()
+								'date_end' : $("#txtTo").val(),
+								'_token': "{{ csrf_token() }}",
 							},
 
 							success:function(data)
@@ -629,6 +772,8 @@
 								$('#po').html('')
 								$('#buyer_po').html('')
 								$('#ocn').html('')
+
+								console.log(data)
 
 								if(data.length > 0)
 								{
@@ -699,9 +844,12 @@
 				function triggerLevel3()
 				{
 					$('.selectpicker').removeClass('open');
-					if($(".roleSelection").is(':checked'))
+					if($(".roleSelection option:selected").val().length > 0)
+					// if()
 					{
-						if($('#'+$('input[name=roleSelection]:checked').data('target')).val().length > 0)
+						// if($('#'+$('input[name=roleSelection]:checked').data('target')).val().length > 0) 
+						selectedRoles=$(".roleSelection option:selected").val()
+					    if($("#"+selectedRoles).val().length > 0)
 						{
 							if($("#reference").val().length > 0 && $("#po").val().length > 0 && $("#buyer_po").val().length > 0 && $("#ocn").val().length > 0 && $("#customer").val().length > 0 && $("#material").val().length > 0 && $("#style").val().length > 0 && $("#mat_sub").val().length > 0 && $("#buyer").val().length > 0 && $("#season").val().length > 0 && $("#template").val().length > 0 && $("#country").val().length > 0)
 							{
@@ -709,8 +857,10 @@
 									type : 'get',
 									url : '/getTableFields',
 									data:{
-										'role' : $('input[name=roleSelection]:checked').val(),
-										'status' : $('#'+$('input[name=roleSelection]:checked').data('target')).val(),
+										// 'role' : $('input[name=roleSelection]:checked').val(),
+										// 'status' : $('#'+$('input[name=roleSelection]:checked').data('target')).val(),
+										'role' : $(".roleSelection option:selected").html(),
+										'status' : $("#"+selectedRoles).val(),
 									},
 									success:function(data)
 									{	
@@ -737,7 +887,7 @@
 						}
 					}
 					else{
-						$('.snackbar_span').html("Please Select One Of The Radio Buttons.");
+						$('.snackbar_span').html("Please select one of the roles.");
 						showSnackbar();
 					}
 				}
@@ -805,8 +955,10 @@
 							"type": "POST",
 							"data":{
 								_token: "{{csrf_token()}}",
-								role : $('input[name=roleSelection]:checked').val(),
-								status :  $('#'+$('input[name=roleSelection]:checked').data('target')).val(),
+								// role : $('input[name=roleSelection]:checked').val(),
+								// status :  $('#'+$('input[name=roleSelection]:checked').data('target')).val(),
+								role : $(".roleSelection option:selected").html(),
+							    status : $("#"+selectedRoles).val(),
 								references : reference,
 								pos : po,
 								buyer_pos : buyer_po,
@@ -827,10 +979,11 @@
 					});
 
 					// $("#filter-panel").removeClass('collapse in').addClass('collapse')
-					$("#_preferences").css('display', 'none');
-					$("#reportTitle").html("Consolidated Report [ "+$('input[name=roleSelection]:checked').val()+" ]")
+					// $("#_preferences").css('display', 'none');
+					$("#reportTitle").html("Consolidated Report [ "+$(".roleSelection option:selected").html()+" ]")
 					// $("#moreOtions").removeClass('disabled_now')
 					$("#moreOtions").removeClass('hidden')
+					$('.dt-buttons').append('<button class="dt-button buttons-excel buttons-html5" tabindex="0" aria-controls="reportTable" type="button" id="moreOtions"><span>More Options</span></button>')
 					$('html,body').animate({
 						scrollTop: $(window).scrollTop() + 500
 					});
@@ -908,25 +1061,25 @@
 				});
 
 				//logic to animate the expand and collapse icon
-				$(document).on('click', '#toggleBtn', function(event) {
-					event.preventDefault();
-					/* Act on the event */
-					// if($(this).data('icon')=="up")
-						if($("#_preferences").css('display')=='block')
-					{
-						$("#toggleFa").removeClass('fa fa-angle-up').addClass('fa fa-angle-down')
-						$(this).data('icon',"down")
-						$("#_preferences").css('display', 'none');
-					}
-					else
-					{
-						$("#toggleFa").removeClass('fa fa-angle-down').addClass('fa fa-angle-up')
-						$(this).data('icon',"up")
-						$("#_preferences").css('display', 'block');
+				// $(document).on('click', '#toggleBtn', function(event) {
+				// 	event.preventDefault();
+				// 	/* Act on the event */
+				// 	if($(this).data('icon')=="up")
+				// 		if($("#_preferences").css('display')=='block')
+				// 	{
+				// 		$("#toggleFa").removeClass('fa fa-angle-up').addClass('fa fa-angle-down')
+				// 		$(this).data('icon',"down")
+				// 		$("#_preferences").css('display', 'none');
+				// 	}
+				// 	else
+				// 	{
+				// 		$("#toggleFa").removeClass('fa fa-angle-down').addClass('fa fa-angle-up')
+				// 		$(this).data('icon',"up")
+				// 		$("#_preferences").css('display', 'block');
 				
 						
-					}
-				});
+				// 	}
+				// });
 			});
 	</script>
 @endsection 

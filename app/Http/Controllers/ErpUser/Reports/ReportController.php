@@ -136,7 +136,6 @@ public function level2Filter(Request $request)
     ->whereBetween('created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
     ->select('reference','po','buyer_po','ocn')
     ->get();
-
     return response()->json($result);
 }
 
@@ -553,7 +552,7 @@ public function setUpDatatable(Request $request)
 
                     $eventHistory = array_diff($allJc, $Jcverified);
                     }
-               
+
                     }
 
                     if($request->role == "PO Manager")

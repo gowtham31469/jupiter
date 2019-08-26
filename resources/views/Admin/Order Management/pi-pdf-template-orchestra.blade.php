@@ -31,22 +31,22 @@
             </tr>
             <tr>
                 <td width="150"><h3><strong>Billing Address</strong></h3></td>
-                <td width="172"></td>
+                <td width="140"></td>
                 <td width="140"><h3><strong>Shipping Address</strong></h3></td>
             </tr>
             <tr>
                 <td width="150">{{$bank_details->company_name}}</td>
-                <td width="172"></td>
-                <td width="140">{{$bank_details->company_name}}</td>
+                <td width="140"></td>
+                <td width="140s">{{$bank_details->company_name}}</td>
             </tr>
             <tr>
-                <td width="150">{{$bill_to->address}}</td>
-                <td width="172"></td>
-                <td width="140">{{$ship_to->address}}</td>
+                <td width="150">{{$bill_to->address}}-{{$bill_to->pincode}}</td>
+                <td width="140"></td>
+                <td width="140">{{$ship_to->address}}-{{$ship_to->pincode}}</td>
             </tr>
             <tr>
                 <td width="150">GSTIN : {{$bank_details->gstin_number}}</td>
-                <td width="172"></td>
+                <td width="140"></td>
                 <td width="140"></td>
             </tr>
             <tr>

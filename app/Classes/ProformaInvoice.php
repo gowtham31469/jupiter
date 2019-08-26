@@ -27,7 +27,7 @@ class ProformaInvoice
         $table_name =   $request->table_name;
         $uvc        =   $request->uvc;
         $buyer_id   =   $request->buyer_id;
-        $pi_id      =   DB::table('profoma_invoices')->max('id');
+        $pi_id      =   DB::table('profoma_invoices')->max('id')+1;
         $today      =   Carbon::now('Asia/Kolkata');
 
         if ($table_name === 'orchestra_hang_tag_orders') 
@@ -55,7 +55,7 @@ class ProformaInvoice
           $data['company_details']->pi_number = "SP00".$pi_id;
         }
 
-        $data['company_details']->pi_date = $today->toDateString();
+        $data['company_details']->pi_date = $today->format('d/m/Y');;
         $customer_details       = DB::table($table_name)
                                   ->join('customers',$table_name.'.customer_id','=','customers.id')
                                   ->join('orchestra_item_master','orchestra_item_master.id','=',$table_name.'.'.$temp_id_field)
@@ -77,12 +77,12 @@ class ProformaInvoice
         $data['bill_to']        = DB::table('customer_bill_address')
                                   ->where('customer_bill_address.customer_id',$customer_details->id)
                                   ->where('customer_bill_address.is_billing_address',1)
-                                  ->select('address','country')
+                                  ->select('address','country', 'pincode')
                                   ->first();                 
         $data['ship_to']        = DB::table('customer_bill_address')
                                   ->where('customer_bill_address.customer_id',$customer_details->id)
                                   ->where('customer_bill_address.is_shipping_address',1)
-                                  ->select('address','country')
+                                  ->select('address','country', 'pincode')
                                   ->first();
         // get the first letter of each word for a given string
         $result_str  =  str_replace("_"," ",str_replace("_orders","",$table_name));
@@ -141,7 +141,87 @@ class ProformaInvoice
 
         return $data;
 	}
+    /**
+     * Get approved orchestra PI Data
+     *
+     * @param [type] $request
+     * @return void
+     */
+    public function getApprovedOrchestraPI($request)
+    {
+        $buyer_id       = $request->buyer_id;
+        $style_no       = $request->uvc;
+        $buyer_po       = $request->buyer_po;
+        
+        $pi_details = DB::table('profoma_invoices')
+          ->where('buyer_id',$buyer_id)
+          ->where('uvc_style_no',$style_no)
+          ->where('buyer_po_no',$buyer_po)
+          ->select('profoma_invoices.*')
+          ->first();
+        
+        $data['company_details'] =  DB::table('orchestra_item_master')
+                                       ->join('company','company.id','=','orchestra_item_master.company_id')
+                                       ->where('orchestra_item_master.id',$pi_details->company_id)
+                                       ->select('company.*')
+                                       ->first();
 
+        if ($pi_details->company_id == 1)
+        {
+          $data['company_details']->pi_number = "JGA00".$pi_details->id;
+        }
+        else{
+         $data['company_details']->pi_number = "SP00".$pi_details->id;
+        }
+        $data['company_details']->rev_number = $pi_details->revision_no;
+
+        $created_at = Carbon::parse($pi_details->created_at);
+
+        $data['company_details']->pi_date    = $created_at->format('d/m/Y');
+        $customer_details       = DB::table('customers')
+                                  ->join('payment_terms','customers.payment_terms','=','payment_terms.id')
+                                  ->join('freight_terms','customers.freight_type','=','freight_terms.id')
+                                  ->where('customers.id',$pi_details->customer_id)
+                                  ->select('customers.*','payment_terms.payment_terms','freight_terms.freight_terms')
+                                  ->first();
+
+        if ($customer_details)
+        {
+          if ($customer_details->nominated_forwarder!=null)
+          {
+           $customer_details->freight_terms =  DB::table('nominated_forwarders')->pluck('forwarder')->first();
+           // $customer_details['template_type'] = $pi_details->template_type;
+          }
+        }                        
+        $data['bank_details']   = $customer_details;
+        $data['bank_details']->template_type = $pi_details->template_type;
+        $data['bill_to']        = DB::table('customer_bill_address')
+                                  ->where('customer_bill_address.customer_id',$customer_details->id)
+                                  ->where('customer_bill_address.is_billing_address',1)
+                                  ->select('address','country', 'pincode')
+                                  ->first();                 
+        $data['ship_to']        = DB::table('customer_bill_address')
+                                  ->where('customer_bill_address.customer_id',$customer_details->id)
+                                  ->where('customer_bill_address.is_shipping_address',1)
+                                  ->select('address','country', 'pincode')
+                                  ->first();
+        $data['item_details']    = DB::table('profoma_invoice_item_details')
+                                    ->where('profoma_invoice_item_details.pi_id',$pi_details->id)
+                                    ->select('size','quantity','style as uvc','material as material_name','unit_cost as unit_price','profoma_invoice_item_details.tax','ref_no','profoma_invoice_item_details.template_id as item_id')
+                                    ->get();
+                                 
+        foreach ($data['item_details'] as $key => $value) {
+          $value->po_no = $pi_details->buyer_po_no;
+        }
+        
+        $data['price_list'] = array();
+        foreach ($data['item_details'] as $key => $value) {
+          array_push($data['price_list'], ['volume_to' => $value->quantity, 'price' => $value->unit_price,'tax' => $value->tax ,'item_id'=>$value->item_id]);
+          
+        }
+       return $data;
+
+    }
     /**
      * method for getting all the details for tesco PI generation
      * @param  [type] $request [id]
@@ -152,7 +232,8 @@ class ProformaInvoice
         $id         =   $request['id'];
         $table_name =   $request['tableName'];
         $buyer_id   =   $request->buyer_id;
-        $pi_id      =   DB::table('profoma_invoices')->max('id');
+        $pi_id      =   DB::table('profoma_invoices')->max('id')+1;
+        
         $today      =   Carbon::now('Asia/Kolkata');
         
         $data['company_details'] =  DB::table('tesco_item_master')
@@ -169,7 +250,7 @@ class ProformaInvoice
           $data['company_details']->pi_number = "SP00".$pi_id;
         }
         // $data['company_details']->rev_number = 0;
-        $data['company_details']->pi_date = $today->toDateString();
+        $data['company_details']->pi_date = $today->format('d/m/Y');;
         
         $customer_details       = DB::table($table_name)
                                   ->join('customers',$table_name.'.tesco_supplier_id','=','customers.id')
@@ -344,11 +425,8 @@ class ProformaInvoice
         $table_id       = $request->id;
         $template_name  = $request->template_name;
         $order_flag     = $request->order_flag;
-        $pi_status      = $request->pi_status;
         $buyer_id       = $request->buyer_id;
-        $pi_status      = $request->pi_status;
         $style_no       = $request->style_no;
-        $template_id    = $request->template_id;
         $buyer_po       = $request->buyer_po;
         if ($order_flag == "reOrder") {
            $rep_order_id   =  str_replace(' ', '', $template_name)."_".$table_id;
@@ -357,7 +435,7 @@ class ProformaInvoice
             ->where('uvc_style_no',$style_no)
             ->where('buyer_po_no',$buyer_po)
             ->where('rep_order_id',$rep_order_id)
-            ->select('profoma_invoices.*',DB::raw("to_char(profoma_invoices.created_at,'DD-MM-YYYY') as pi_date"))
+            ->select('profoma_invoices.*')
             ->first();
         }
         else{
@@ -365,7 +443,7 @@ class ProformaInvoice
             ->where('buyer_id',$buyer_id)
             ->where('uvc_style_no',$style_no)
             ->where('buyer_po_no',$buyer_po)
-            ->select('profoma_invoices.*',DB::raw("to_char(profoma_invoices.created_at,'DD-MM-YYYY') as pi_date"))
+            ->select('profoma_invoices.*')
             ->first();
         }
                
@@ -384,7 +462,9 @@ class ProformaInvoice
         }
         $data['company_details']->rev_number = $pi_details->revision_no;
         
-        $data['company_details']->pi_date    = $pi_details->pi_date;
+        $created_at = Carbon::parse($pi_details->created_at);
+        
+        $data['company_details']->pi_date    = $created_at->format('d/m/Y');
         $customer_details       = DB::table('customers')
                                   ->join('payment_terms','customers.payment_terms','=','payment_terms.id')
                                   ->join('freight_terms','customers.freight_type','=','freight_terms.id')
@@ -405,16 +485,16 @@ class ProformaInvoice
         $data['bill_to']        = DB::table('customer_bill_address')
                                   ->where('customer_bill_address.customer_id',$customer_details->id)
                                   ->where('customer_bill_address.is_billing_address',1)
-                                  ->select('address','country')
+                                  ->select('address','country', 'pincode')
                                   ->first();                 
         $data['ship_to']        = DB::table('customer_bill_address')
                                   ->where('customer_bill_address.customer_id',$customer_details->id)
                                   ->where('customer_bill_address.is_shipping_address',1)
-                                  ->select('address','country')
+                                  ->select('address','country', 'pincode')
                                   ->first();
         $data['item_details']    = DB::table('profoma_invoice_item_details')
                                     ->where('profoma_invoice_item_details.pi_id',$pi_details->id)
-                                    ->select('size','quantity','style','material as material_name','unit_cost as unit_price','profoma_invoice_item_details.tax','item_name as as ref_no','profoma_invoice_item_details.template_id as item_id')
+                                    ->select('size','quantity','style','material as material_name','unit_cost as unit_price','profoma_invoice_item_details.tax','ref_no','profoma_invoice_item_details.template_id as item_id')
                                     ->get();
         foreach ($data['item_details'] as $key => $value) {
           $value->style = $pi_details->uvc_style_no;
@@ -475,7 +555,7 @@ class ProformaInvoice
 
       $pdfdata =$pdf->output( public_path('storage/app/public/pi/'.$pi_name.'.pdf'), 'F');
 
-      $attatchment =  public_path('storage/app/public/pi/'.$pi_name.'.pdf');
+      $attachment =  public_path('storage/app/public/pi/'.$pi_name.'.pdf');
       return "/storage/app/public/pi/".$pi_name.".pdf";
     }
 
@@ -525,7 +605,7 @@ class ProformaInvoice
 
       $pdfdata =$pdf->output( public_path('storage/app/public/pi/'.$pi_name.'.pdf'), 'F');
 
-      $attatchment =  public_path('storage/app/public/pi/'.$pi_name.'.pdf');
+      $attachment =  public_path('storage/app/public/pi/'.$pi_name.'.pdf');
       return "/storage/app/public/pi/".$pi_name.".pdf";
     }
 }

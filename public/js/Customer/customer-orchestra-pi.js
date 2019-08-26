@@ -7,10 +7,11 @@
  * @return profoma invoice
  */
 
-const genarateOrchetraPI = (id,table_name,uvc,pi_status) => 
+const genarateOrchetraPI = (id, table_name, uvc, pi_status, buyer_po) => 
 {
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     var buyer_id = localStorage.getItem("buyer_id");
+    var buyer_po_no = buyer_po === '-'?null:buyer_po
     $.ajax({
         url: base_url + "/customer/orchestra/order-management/show-orchestra-pi",
         type: "Post",
@@ -19,8 +20,10 @@ const genarateOrchetraPI = (id,table_name,uvc,pi_status) =>
             _token: csrf_token,
             table_name: table_name,
             buyer_id : buyer_id,
+            pi_status:pi_status,
             id:id,
-            uvc:uvc
+            uvc:uvc,
+            buyer_po:buyer_po_no
         },
         tryCount: 0,
         retryLimit: 2,
@@ -43,7 +46,7 @@ const genarateOrchetraPI = (id,table_name,uvc,pi_status) =>
                     $('.advnc').text(data.data.bank_details.payment_terms)
                     $('.freight').text(data.data.bank_details.freight_terms)
                     $('.pi_number').text(data.data.company_details.pi_number)
-                    $('.pi-date').text(moment(data.data.company_details.pi_date).format('DD/MM/YYYY'));
+                    $('.pi-date').text(data.data.company_details.pi_date);
 
                     // check if revision number is 0 or not.
                     if (data.data.company_details.rev_number!=0)
