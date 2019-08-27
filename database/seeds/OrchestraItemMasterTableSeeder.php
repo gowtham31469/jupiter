@@ -643,16 +643,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'ref_no' => "",
                         'tag_name' => "",
                     ]);
-                    \App\OrchestraItemMaster::create([
-                        'id'  => 64,
-                        'company_id' => 1,
-                        'parent_id' => 63,    
-                        'item_name' => "L09",
-                        'ref_no' => "",
-                        'tag_name' => "heat_transfer",
-                        'material_id' => 1,
-                        'sub_material_id' => 62,
-                    ]);
+                    
                     \App\OrchestraItemMaster::create([
                         'id'  => 65,
                         'company_id' => 1,
@@ -1460,16 +1451,16 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'material_id' => 103,
                         'sub_material_id' => 105,
                     ]);
-                    \App\OrchestraItemMaster::create([
-                        'id'  => 147,
-                        'company_id' => 2,
-                        'parent_id' => 142,    
-                        'item_name' => "T11D",
-                        'ref_no' => "",
-                        'tag_name' => "special",
-                        'material_id' => 103,
-                        'sub_material_id' => 105,
-                    ]);
+                    // \App\OrchestraItemMaster::create([
+                    //     'id'  => 147,
+                    //     'company_id' => 2,
+                    //     'parent_id' => 142,    
+                    //     'item_name' => "T11D",
+                    //     'ref_no' => "",
+                    //     'tag_name' => "special",
+                    //     'material_id' => 103,
+                    //     'sub_material_id' => 105,
+                    // ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 148,
                         'company_id' => 2,
@@ -2010,6 +2001,26 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'sub_material_id' => 200,
                     ]);
 
+                    \App\OrchestraItemMaster::create([
+                        'id'  => 201,
+                        'company_id' => 1,
+                        'parent_id' => 63,    
+                        'item_name' => "L09 Print Label Dark",
+                        'ref_no' => "",
+                        'tag_name' => "heat_transfer",
+                        'material_id' => 1,
+                        'sub_material_id' => 62,
+                    ]);
+                    \App\OrchestraItemMaster::create([
+                        'id'  => 202,
+                        'company_id' => 1,
+                        'parent_id' => 63,    
+                        'item_name' => "L09 Print Label Light",
+                        'ref_no' => "",
+                        'tag_name' => "heat_transfer",
+                        'material_id' => 1,
+                        'sub_material_id' => 62,
+                    ]);
                     
     } //run fucntion ends here
 } // class ends here

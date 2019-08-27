@@ -45,6 +45,7 @@
 		-webkit-box-shadow: none;
 		box-shadow: none;
 		border-radius: 0;
+		width: -moz-available;
 	}
 	.setMarginTop4{margin-top: 4%;width: 97%;}
 	.setMarginTop2{margin-top: 2%;}
@@ -156,7 +157,7 @@
 
 			}
 		.setMargin{margin-left: 1%;}	
-		.paddingSmaller{padding: 0.5%;}
+		.paddingSmaller{padding: 0.3%;}
 		.bordr1px{border: 1px solid;}
 		.togBtn{
 			font-size: 21px;
@@ -176,9 +177,30 @@
 		.dataTables_scrollBody thead tr
 		{visibility:collapse;}
 		/*.container-fluid{min-height: 800px;}*/
-		.l1{margin-top: 8.4%;}
+		.l1{margin-top: 4.5%;}
 		.l2{margin-top: 4%;}
 		/*#_preferences{transition: visibility 0s, opacity 0.5s linear;}*/
+		/*.connected-sortable{scrollbar-width: thin;scrollbar-color: red aliceblue;}*/
+
+		.connected-sortable::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #F5F5F5;
+}
+
+.connected-sortable::-webkit-scrollbar
+{
+	width: 7px;
+	background-color: #F5F5F5;
+}
+
+.connected-sortable::-webkit-scrollbar-thumb
+{
+	background-color: #000000;
+	border: 2px solid #555555;
+	border-radius: 10px;
+}
+.btn-sm{border-radius: 0;}
 </style>
 
 
@@ -303,22 +325,26 @@
 			<div class="row card">
 
 				<label id="dateLabel">Set the date interval</label>
-			<table border="0" cellpadding="0" cellspacing="0">
-				<tr class="row">
-					<td class="col-md-6" style="padding: 0;">
+			{{-- <table>
+				<tr class="row" style="display: inline-table;">
+					<td class="col-md-3" style="padding: 0;">
 						<input class="dateGap" type="text" id="txtFrom" placeholder="Start date" autocomplete="off"/>
 					</td>
-				{{-- 	<td>
-						&nbsp;-&nbsp;&nbsp;
-					</td>
- --}}					<td class="col-md-6">
+				<td class="col-md-3">
 						<input class="dateGap" type="text" id="txtTo" placeholder="End date" autocomplete="off"/>
 					</td>
-					<td>
-						&emsp;
-					</td>
 				</tr>
-			</table>
+			</table> --}}
+
+			<div class="row">
+				<div class="col-md-6">
+					<input class="dateGap" type="text" id="txtFrom" placeholder="Start Date" autocomplete="off"/>
+				</div>	
+				{{-- <div class="col-md-2" style="background-color: grey;"></div> --}}
+				<div class="col-md-6">
+					<input class="dateGap" type="text" id="txtTo" placeholder="End Date" autocomplete="off"/>
+				</div>
+			</div>
 	
 			<label class="l1">Select one of the following roles</label>
 			<select class="selectpicker roleSelection" name="roleSelection" title="Select Role">
@@ -466,20 +492,20 @@
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-md-6">
-								<h4 class="modal-title text-center">Available Fields</h4>
+								<h5 class="modal-title text-center">Available Fields</h5>
 								<ul class="connected-sortable droppable-area2 checklist1">
 								</ul>
 							</div>
 							<div class="col-md-6">
-								<h4 class="modal-title text-center">Fields Currently Displayed</h4>
+								<h5 class="modal-title text-center">Fields Currently Displayed</h5>
 								<ul class="connected-sortable droppable-area1 checklist2">
 								</ul>
 							</div>
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn-primary" id="update_table">Update</button>
-						<button type="button" class="btn-default" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary btn-sm" id="update_table">Update</button>
+						<button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
 					</div>
 				</div>
 

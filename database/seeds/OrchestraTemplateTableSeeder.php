@@ -1831,5 +1831,163 @@ class OrchestraTemplateTableSeeder extends Seeder
             'flag' => 0,
             'hierarchy_id' => 2,
             ]);
+
+            \App\OrchestraTemplate::create([
+            'item_id' => 201,
+            'template_name' => "L09 Print Label Dark",
+            'template_description' => "L09 Print Label Dark",
+            'template_file' => "/storage/app/template/Orchestra/Labels/HEAT_TRANSFER/ORC DEPT H.TRANSFER/L09 - Print Label DARK COLOR.jpg",
+            'disney' => 0,
+            'tax' => 0,
+            'flag' => 0,
+            'hierarchy_id' => 62,
+            ]);
+
+            \App\OrchestraTemplate::create([
+            'item_id' => 202,
+            'template_name' => "L09 Print Label Light",
+            'template_description' => "L09 Print Label Light",
+            'template_file' => "/storage/app/template/Orchestra/Labels/HEAT_TRANSFER/ORC DEPT H.TRANSFER/L09 - Print Label LIGHT COLOR.jpg",
+            'disney' => 0,
+            'tax' => 0,
+            'flag' => 0,
+            'hierarchy_id' => 62,
+            ]);
+
+            //Special Tags
+
+            \App\OrchestraTemplate::create([
+            'item_id' => 139,
+            'template_name' => "T10A",
+            'template_description' => "T10A",
+            'template_file' => "/storage/app/template/Orchestra/Tags/Special_Tags/Merged/T10A.jpg",
+            'disney' => 0,
+            'tax' => 0,
+            'flag' => 0,
+            'hierarchy_id' => 62,
+            ]);
+
+            \App\OrchestraTemplate::create([
+            'item_id' => 133,
+            'template_name' => "T10C",
+            'template_description' => "T10C",
+            'template_file' => "/storage/app/template/Orchestra/Tags/Special_Tags/Merged/T10C.jpg",
+            'disney' => 0,
+            'tax' => 0,
+            'flag' => 0,
+            'hierarchy_id' => 62,
+            ]);
+
+            \App\OrchestraTemplate::create([
+            'item_id' => 132,
+            'template_name' => "T10M2",
+            'template_description' => "T10M2",
+            'template_file' => "/storage/app/template/Orchestra/Tags/Special_Tags/Merged/T10M2.jpg",
+            'disney' => 0,
+            'tax' => 0,
+            'flag' => 0,
+            'hierarchy_id' => 62,
+            ]);
+
+            \App\OrchestraTemplate::create([
+            'item_id' => 138,
+            'template_name' => "T10P",
+            'template_description' => "T10P",
+            'template_file' => "/storage/app/template/Orchestra/Tags/Special_Tags/Merged/T10P.jpg",
+            'disney' => 0,
+            'tax' => 0,
+            'flag' => 0,
+            'hierarchy_id' => 62,
+            ]);
+
+            \App\OrchestraTemplate::create([
+            'item_id' => 130,
+            'template_name' => "T10Q",
+            'template_description' => "T10Q",
+            'template_file' => "/storage/app/template/Orchestra/Tags/Special_Tags/Merged/T10Q.jpg",
+            'disney' => 0,
+            'tax' => 0,
+            'flag' => 0,
+            'hierarchy_id' => 62,
+            ]);
+
+            \App\OrchestraTemplate::create([
+            'item_id' => 131,
+            'template_name' => "T10R",
+            'template_description' => "T10R",
+            'template_file' => "/storage/app/template/Orchestra/Tags/Special_Tags/Merged/T10R.jpg",
+            'disney' => 0,
+            'tax' => 0,
+            'flag' => 0,
+            'hierarchy_id' => 62,
+            ]);
+
+            \App\OrchestraTemplate::create([
+            'item_id' => 140,
+            'template_name' => "T10W",
+            'template_description' => "T10W",
+            'template_file' => "/storage/app/template/Orchestra/Tags/Special_Tags/Merged/T10W.jpg",
+            'disney' => 0,
+            'tax' => 0,
+            'flag' => 0,
+            'hierarchy_id' => 62,
+            ]);
+
+            \App\OrchestraTemplate::create([
+            'item_id' => 141,
+            'template_name' => "T10Z",
+            'template_description' => "T10Z",
+            'template_file' => "/storage/app/template/Orchestra/Tags/Special_Tags/Merged/T10Z.jpg",
+            'disney' => 0,
+            'tax' => 0,
+            'flag' => 0,
+            'hierarchy_id' => 62,
+            ]);
+
+            \App\OrchestraTemplate::create([
+            'item_id' => 129,
+            'template_name' => "T10H",
+            'template_description' => "T10H",
+            'template_file' => "/storage/app/template/Orchestra/Tags/Special_Tags/Merged/T10H.jpg",
+            'disney' => 0,
+            'tax' => 0,
+            'flag' => 0,
+            'hierarchy_id' => 62,
+            ]);
+
+            \App\OrchestraTemplate::create([
+            'item_id' => 129,
+            'template_name' => "T10V",
+            'template_description' => "T10V",
+            'template_file' => "/storage/app/template/Orchestra/Tags/Special_Tags/Merged/T10V.jpg",
+            'disney' => 0,
+            'tax' => 0,
+            'flag' => 0,
+            'hierarchy_id' => 62,
+            ]);
+
+            \App\OrchestraTemplate::create([
+            'item_id' => 129,
+            'template_name' => "T10Y",
+            'template_description' => "T10Y",
+            'template_file' => "/storage/app/template/Orchestra/Tags/Special_Tags/Merged/T10Y.jpg",
+            'disney' => 0,
+            'tax' => 0,
+            'flag' => 0,
+            'hierarchy_id' => 62,
+            ]);
+
+            \App\OrchestraTemplate::create([
+            'item_id' => 127,
+            'template_name' => "T10R1",
+            'template_description' => "T10R1",
+            'template_file' => "/storage/app/template/Orchestra/Tags/Special_Tags/Merged/T10R1.jpg",
+            'disney' => 0,
+            'tax' => 0,
+            'flag' => 0,
+            'hierarchy_id' => 62,
+            ]);
+
+            
     }
 }
