@@ -2396,7 +2396,7 @@ class OrderManagementCntrl extends Controller
             $class_obj = new ERPOrderStatusCheck();
             $erp_order_details = $class_obj->OrchestraERPStatus($data_array);
             
-            if($erp_order_details[0] != null)
+            if(sizeof($erp_order_details) > 0 && $erp_order_details[0] != null)
             {
                 if($erp_order_details{0}->status_name != 'Hold For JC Queue' &&  $erp_order_details{0}->status_name != 'Moved To ERP' )
                 {
@@ -2470,7 +2470,7 @@ class OrderManagementCntrl extends Controller
             $class_obj = new ERPOrderStatusCheck();
             $erp_order_details = $class_obj->OrchestraERPStatus($data_array);
 
-            if($erp_order_details[0] != null)
+            if(sizeof($erp_order_details) > 0 && $erp_order_details[0] != null)
             {
                 if($erp_order_details{0}->status_name != 'Hold For JC Queue' &&  $erp_order_details{0}->status_name != 'Moved To ERP' )
                 {
