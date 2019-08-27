@@ -1864,7 +1864,7 @@ class OrchestraTemplateTableSeeder extends Seeder
             'disney' => 0,
             'tax' => 0,
             'flag' => 0,
-            'hierarchy_id' => 62,
+            'hierarchy_id' => 105,
             ]);
 
             \App\OrchestraTemplate::create([
@@ -1875,7 +1875,7 @@ class OrchestraTemplateTableSeeder extends Seeder
             'disney' => 0,
             'tax' => 0,
             'flag' => 0,
-            'hierarchy_id' => 62,
+            'hierarchy_id' => 105,
             ]);
 
             \App\OrchestraTemplate::create([
@@ -1886,7 +1886,7 @@ class OrchestraTemplateTableSeeder extends Seeder
             'disney' => 0,
             'tax' => 0,
             'flag' => 0,
-            'hierarchy_id' => 62,
+            'hierarchy_id' => 105,
             ]);
 
             \App\OrchestraTemplate::create([
@@ -1897,7 +1897,7 @@ class OrchestraTemplateTableSeeder extends Seeder
             'disney' => 0,
             'tax' => 0,
             'flag' => 0,
-            'hierarchy_id' => 62,
+            'hierarchy_id' => 105,
             ]);
 
             \App\OrchestraTemplate::create([
@@ -1908,7 +1908,7 @@ class OrchestraTemplateTableSeeder extends Seeder
             'disney' => 0,
             'tax' => 0,
             'flag' => 0,
-            'hierarchy_id' => 62,
+            'hierarchy_id' => 105,
             ]);
 
             \App\OrchestraTemplate::create([
@@ -1919,7 +1919,7 @@ class OrchestraTemplateTableSeeder extends Seeder
             'disney' => 0,
             'tax' => 0,
             'flag' => 0,
-            'hierarchy_id' => 62,
+            'hierarchy_id' => 105,
             ]);
 
             \App\OrchestraTemplate::create([
@@ -1930,7 +1930,7 @@ class OrchestraTemplateTableSeeder extends Seeder
             'disney' => 0,
             'tax' => 0,
             'flag' => 0,
-            'hierarchy_id' => 62,
+            'hierarchy_id' => 105,
             ]);
 
             \App\OrchestraTemplate::create([
@@ -1941,7 +1941,7 @@ class OrchestraTemplateTableSeeder extends Seeder
             'disney' => 0,
             'tax' => 0,
             'flag' => 0,
-            'hierarchy_id' => 62,
+            'hierarchy_id' => 105,
             ]);
 
             \App\OrchestraTemplate::create([
@@ -1952,7 +1952,7 @@ class OrchestraTemplateTableSeeder extends Seeder
             'disney' => 0,
             'tax' => 0,
             'flag' => 0,
-            'hierarchy_id' => 62,
+            'hierarchy_id' => 105,
             ]);
 
             \App\OrchestraTemplate::create([
@@ -1963,7 +1963,7 @@ class OrchestraTemplateTableSeeder extends Seeder
             'disney' => 0,
             'tax' => 0,
             'flag' => 0,
-            'hierarchy_id' => 62,
+            'hierarchy_id' => 105,
             ]);
 
             \App\OrchestraTemplate::create([
@@ -1974,7 +1974,7 @@ class OrchestraTemplateTableSeeder extends Seeder
             'disney' => 0,
             'tax' => 0,
             'flag' => 0,
-            'hierarchy_id' => 62,
+            'hierarchy_id' => 105,
             ]);
 
             \App\OrchestraTemplate::create([
@@ -1985,7 +1985,7 @@ class OrchestraTemplateTableSeeder extends Seeder
             'disney' => 0,
             'tax' => 0,
             'flag' => 0,
-            'hierarchy_id' => 62,
+            'hierarchy_id' => 105,
             ]);
 
             
