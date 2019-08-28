@@ -269,7 +269,7 @@ class OrderManagementCntrl extends Controller
             // Licence_Code = DI for disney
             if($total_qty{0}->Licence_Code === 'DI')
             {
-                $orchestra_template = DB::table('orchestra_template')->select('*')->where('id','5')->get();
+                $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','5')->get();
                 $data['orchestra_template']=$orchestra_template{0}->template_file;
                 $data['orchestra_template_id']=5;
                 
@@ -304,7 +304,7 @@ class OrderManagementCntrl extends Controller
 				
 				
                 
-                $orchestra_template_front = DB::table('orchestra_template')->select('*')->where('item_id','2')->where('disney',1)->get();
+                $orchestra_template_front = DB::table('orchestra_template')->select('*')->where('item_id','5')->where('disney',1)->get();
                 $data['orchestra_template_front']=$orchestra_template_front;
 				
 				 $treeviewData= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','103')->orWhere('tag_name','disney')->orderBy('item_name', 'asc')->get()->toArray();
@@ -330,7 +330,7 @@ class OrderManagementCntrl extends Controller
             }
             else
             {
-                $orchestra_template = DB::table('orchestra_template')->select('*')->where('id','4')->get();
+                $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','4')->get();
                 $data['orchestra_template']=$orchestra_template{0}->template_file;
                 $data['orchestra_template_id']=4;
                 
@@ -362,7 +362,7 @@ class OrderManagementCntrl extends Controller
 					$data['wash_moq']=1;
 				}
                 
-                $orchestra_template_front = DB::table('orchestra_template')->select('*')->where('item_id','2')->where('disney', 0)->get();
+                $orchestra_template_front = DB::table('orchestra_template')->select('*')->where('item_id','4')->where('disney', 0)->get();
                 $data['orchestra_template_front']=$orchestra_template_front;
 				
 				
@@ -695,7 +695,7 @@ class OrderManagementCntrl extends Controller
         
         if($data['orchestra_parcel_details']{0}->IsSTD == 1)
         {
-            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','179')->get();
+            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','101')->get();
             $data['carton_template']=$orchestra_template{0}->template_file;
             $data['carton_template_id']=179;
 			
@@ -719,7 +719,7 @@ class OrderManagementCntrl extends Controller
 				$data['carton_moq']=1;
 			}
 			
-            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','180')->get();
+            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','102')->get();
             $data['polybag_template']=$orchestra_template{0}->template_file;
             $data['template_name']="Standard";
             $data['polybag_template_id']=180;
@@ -743,7 +743,7 @@ class OrderManagementCntrl extends Controller
         }
         else
         {
-            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','177')->get();
+            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','99')->get();
             $data['carton_template']=$orchestra_template{0}->template_file;
             $data['carton_template_id']=177;
 			
@@ -771,7 +771,7 @@ class OrderManagementCntrl extends Controller
 			}
 			
 			
-            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','178')->get();
+            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','100')->get();
             $data['polybag_template']=$orchestra_template{0}->template_file;
             $data['template_name']="Solid";
             $data['polybag_template_id']=178;

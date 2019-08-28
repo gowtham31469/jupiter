@@ -922,7 +922,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'id'  => 94,
                         'company_id' => 1,
                         'parent_id' => 90,    
-                        'item_name' => "Garment Size Strip",
+                        'item_name' => "Garment Friendly",
                         'ref_no' => "",
                         'tag_name' => "",
                     ]);
@@ -940,7 +940,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'id'  => 96,
                         'company_id' => 1,
                         'parent_id' => 90,    
-                        'item_name' => "Best Price",
+                        'item_name' => "Price Stickers",
                         'ref_no' => "",
                         'tag_name' => "",
 
@@ -1549,7 +1549,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'id'  => 155,
                         'company_id' => 2,
                         'parent_id' => 154,    
-                        'item_name' => "Hang Tags",
+                        'item_name' => "Swing Tags",
                         'ref_no' => "",
                         'tag_name' => "disney"
                     ]);
@@ -1704,7 +1704,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'id'  => 171,
                         'company_id' => 2,
                         'parent_id' => 170,    
-                        'item_name' => "Hang Tag",
+                        'item_name' => "Swing Tags",
                         'ref_no' => "",
                         'tag_name' => "marvel"
                     ]);
@@ -1722,7 +1722,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'id'  => 173,
                         'company_id' => 2,
                         'parent_id' => 171,    
-                        'item_name' => "Girl - DM2",
+                        'item_name' => "Girl - DM1",
                         'ref_no' => "",
                         'tag_name' => "marvel",
                         'material_id' => 103,
@@ -1741,7 +1741,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'id'  => 175,
                         'company_id' => 2,
                         'parent_id' => 174,    
-                        'item_name' => "Hang Tag",
+                        'item_name' => "Swing Tags",
                         'ref_no' => "",
                         'tag_name' => "starwars"
                     ]);
@@ -1782,7 +1782,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'id'  => 179,
                         'company_id' => 2,
                         'parent_id' => 178,    
-                        'item_name' => "Hang Tag",
+                        'item_name' => "Swing Tags",
                         'ref_no' => "",
                         'tag_name' => ""
                     ]);
@@ -1822,7 +1822,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'id'  => 183,
                         'company_id' => 2,
                         'parent_id' => 182,    
-                        'item_name' => "Hang Tag",
+                        'item_name' => "Swing Tags",
                         'ref_no' => "",
                         'tag_name' => ""
                     ]);
@@ -1883,7 +1883,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'id'  => 189,
                         'company_id' => 2,
                         'parent_id' => 188,    
-                        'item_name' => "Hang Tag",
+                        'item_name' => "Swing Tags",
                         'ref_no' => "",
                         'tag_name' => ""
                     ]);
@@ -1914,7 +1914,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'id'  => 192,
                         'company_id' => 2,
                         'parent_id' => 191,    
-                        'item_name' => "Hang Tag",
+                        'item_name' => "Swing Tags",
                         'ref_no' => "",
                         'tag_name' => "hang",
                         'material_id' => 103,
@@ -1982,24 +1982,24 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
 
 
-                    \App\OrchestraItemMaster::create([
-                        'id'  => 199,
-                        'company_id' => 2,
-                        'parent_id' => 103,    
-                        'item_name' => "Price Tag",
-                        'ref_no' => "",
-                        'tag_name' => "",
-                    ]);
-                    \App\OrchestraItemMaster::create([
-                        'id'  => 200,
-                        'company_id' => 2,
-                        'parent_id' => 199,    
-                        'item_name' => "PT",
-                        'ref_no' => "",
-                        'tag_name' => "",
-                        'material_id' => 103,
-                        'sub_material_id' => 200,
-                    ]);
+//                    \App\OrchestraItemMaster::create([
+//                        'id'  => 199,
+//                        'company_id' => 2,
+//                        'parent_id' => 103,    
+//                        'item_name' => "Price Tag",
+//                        'ref_no' => "",
+//                        'tag_name' => "",
+//                    ]);
+//                    \App\OrchestraItemMaster::create([
+//                        'id'  => 200,
+//                        'company_id' => 2,
+//                        'parent_id' => 199,    
+//                        'item_name' => "PT",
+//                        'ref_no' => "",
+//                        'tag_name' => "",
+//                        'material_id' => 103,
+//                        'sub_material_id' => 200,
+//                    ]);
 
                     \App\OrchestraItemMaster::create([
                         'id'  => 201,
