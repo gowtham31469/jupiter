@@ -639,6 +639,7 @@ Route::get('admin/audit-trail', 'Admin\AuditTrail\AuditTrailController@index');
 Route::get('admin/audit-trail/get-comparison-details', 'Admin\AuditTrail\AuditTrailController@getComparisonDataById');
 /* ERP Related Routes */
 Route::group(['prefix' => 'erp'], function () {
+	Route::get('report-generator','ErpUser\Reports\ReportController@index')->name('report-generator');
 	Route::get('/', 'ErpUser\Admin\UserController@index')->name('erp');
 	Route::get('/home', 'ErpUser\Admin\UserController@index')->name('home');
 	Route::get('/login', 'ErpuserAuth\LoginController@showLoginForm')->name('erp.login');
@@ -798,8 +799,8 @@ Route::post('customer/orchestra/template-management/template-view', 'Customer\Or
 
 // Routes for report generation
 Route::get('reportGenerator','ErpUser\Reports\ReportController@index')->name('reportGenerator');
-Route::get('level1Filter','ErpUser\Reports\ReportController@level1Filter');
-Route::get('level2Filter','ErpUser\Reports\ReportController@level2Filter');
+Route::post('/level1Filter','ErpUser\Reports\ReportController@level1Filter');
+Route::post('/level2Filter','ErpUser\Reports\ReportController@level2Filter');
 Route::get('getTableFields','ErpUser\Reports\ReportController@getTableFields');
 Route::post('setUpDatatable', 'ErpUser\Reports\ReportController@setUpDatatable' )->name('setUpDatatable');
 

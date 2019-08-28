@@ -350,20 +350,11 @@ class ErpOrders
 				$action_id      = DB::table('actions')->where('action', 'ilike', 'PO Manager Verification Pending')->value('id');
 
 				$template_data = DB::table('orchestra_item_master')
-									->join('orchestra_template', 'orchestra_template.item_id', 'orchestra_item_master.id')
 									->where('orchestra_item_master.id', $template_id)
-									->select('orchestra_template.hierarchy_id', 'orchestra_item_master.item_name')->first();
-				$hierarchy_id = $template_data->hierarchy_id;
+									->select('orchestra_item_master.material_id', 'orchestra_item_master.item_name', 'orchestra_item_master.sub_material_id')->first();
+				$material_name  = DB::table('orchestra_item_master')->where('id', '=', $template_data->material_id)->value('item_name');
+				$material_sub  = DB::table('orchestra_item_master')->where('id', '=', $template_data->sub_material_id)->value('item_name');
 
-				$template_level = DB::table('orchestra_item_master as t1')
-									->select('t1.item_name as material_sub', 't3.item_name as material')
-									->leftJoin('orchestra_item_master as t2', 't2.id','=','t1.parent_id')
-									->leftJoin('orchestra_item_master as t3', 't3.id','=','t2.parent_id')
-									->where('t1.id', $hierarchy_id)
-									->first();
-				
-				$material_name  = $template_level->material;
-				$material_sub   = $template_level->material_sub;
 				$material_ref   = $template_data->item_name;
 				$buyer_po       = $orders->po;
 				$style          = $orders->uvc;

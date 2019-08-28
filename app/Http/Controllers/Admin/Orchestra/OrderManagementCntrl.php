@@ -2503,7 +2503,7 @@ class OrderManagementCntrl extends Controller
             $class_obj = new ERPOrderStatusCheck();
             $erp_order_details = $class_obj->OrchestraERPStatus($data_array);
             
-            if($erp_order_details[0] != null)
+            if(sizeof($erp_order_details) > 0 && $erp_order_details[0] != null)
             {
                 if($erp_order_details{0}->status_name != 'Hold For JC Queue' &&  $erp_order_details{0}->status_name != 'Moved To ERP' )
                 {
@@ -2577,7 +2577,7 @@ class OrderManagementCntrl extends Controller
             $class_obj = new ERPOrderStatusCheck();
             $erp_order_details = $class_obj->OrchestraERPStatus($data_array);
 
-            if($erp_order_details[0] != null)
+            if(sizeof($erp_order_details) > 0 && $erp_order_details[0] != null)
             {
                 if($erp_order_details{0}->status_name != 'Hold For JC Queue' &&  $erp_order_details{0}->status_name != 'Moved To ERP' )
                 {
@@ -2637,7 +2637,17 @@ class OrderManagementCntrl extends Controller
         try
         {
             $pi_obj = new ProformaInvoice();
-            $data   = $pi_obj->getOrchestraPIDetails($request);
+            $pi_status = $request->pi_status;
+
+            if ($pi_status === "true")
+            {
+                $data   = $pi_obj->getApprovedOrchestraPI($request);
+            }
+            else
+            {
+                $data   = $pi_obj->getOrchestraPIDetails($request);
+            }
+            
             $result = response()->json(['error'=> false,'message' =>'success','data'=>$data],200);
         }
         catch (\Exception $e)

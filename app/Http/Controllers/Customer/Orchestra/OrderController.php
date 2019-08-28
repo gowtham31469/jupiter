@@ -1980,7 +1980,16 @@ class OrderController extends Controller
         try
         {
             $pi_obj = new ProformaInvoice();
-            $data   = $pi_obj->getOrchestraPIDetails($request);
+            $pi_status = $request->pi_status;
+
+            if ($pi_status === "true")
+            {
+                $data   = $pi_obj->getApprovedOrchestraPI($request);
+            }
+            else
+            {
+                $data   = $pi_obj->getOrchestraPIDetails($request);
+            }
             $result = response()->json(['error'=> false,'message' =>'success','data'=>$data],200);
         }
         catch (\Exception $e)
