@@ -1080,6 +1080,7 @@ function updateArtworkOrc(obj) {
 				else if(at == "WashCareLabel")
 				{
 					washcarelabelsOs(data, "")
+					$('.top-content').append('<input type="hidden" value="' + data.orchestra_wash_care_label_orders[0].po + '" id="po_select">');
 					if (data.wash_erp_details != null) {
 							if (data.wash_erp_details.status_name !== 'Hold For JC Queue' && data.wash_erp_details.status_name !== 'Moved To ERP') {
 								$('.tot_qty_tablewash').prop("disabled", true);
@@ -3818,6 +3819,7 @@ function setWashLabelOs(index, dataid, id) {
                 cleaning_select: cleaning_select,
 				parcel_id: $('#parcel_id').val(),
 				season_code: $('#season_code').val(),
+				po_select: $('#po_select').val(),
                 made_in_select: made_in_select,
                 care_instruction_select: care_instruction_select_fin,
                 composition: wash_finals,
