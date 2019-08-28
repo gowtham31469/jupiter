@@ -561,18 +561,18 @@ public function setUpDatatable(Request $request)
                     ->pluck('history_id')
                     ->toArray(); 
 
-                    if($request->role == "PO Manager")
-                    {
-                     if (($key = array_search(2, $statusId)) !== false)
-                        {
-                            array_push($statusId, "4");
+                    // if($request->role == "PO Manager")
+                    // {
+                    //  if (($key = array_search(2, $statusId)) !== false)
+                    //     {
+                    //         array_push($statusId, "4");
 
-                            $eventHistory = EventHistory::whereIn('history_id',$result)
-                            ->whereIn('action_id',$statusId)
-                            ->pluck('history_id')
-                            ->toArray(); 
-                        }
-                    }
+                    //         $eventHistory = EventHistory::whereIn('history_id',$result)
+                    //         ->whereIn('action_id',$statusId)
+                    //         ->pluck('history_id')
+                    //         ->toArray(); 
+                    //     }
+                    // }
 
                     $queryRes = History::whereIn('history.id',$eventHistory)
                     ->leftJoin("erp_order_details",'erp_order_details.id', '=', 
