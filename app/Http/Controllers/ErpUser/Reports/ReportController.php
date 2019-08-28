@@ -18,6 +18,7 @@ use App\InvExtraCharges;
 use App\Classes\Invoice;
 use App\InvoiceAddress;
 use App\TescoTaxCode;
+use Carbon\Carbon;
 use DB;
 use Auth;
 class ReportController extends Controller
@@ -94,7 +95,6 @@ public function index()
     $order = Action::where('type','Order')->pluck('action','id')->toArray();
     $invoice = Action::where('type','Invoice')->pluck('action','id')->toArray();
     $invoice=$invoice+$tax;
-    // dd($invoice);
     $templates = array_unique(History::all()->sortBy('template')->pluck('template')->toArray());
     $seasons = array_unique(History::all()->sortBy('season')->pluck('season')->toArray());
     $countries = array_unique(History::all()->sortBy('country')->pluck('country')->toArray());
@@ -106,10 +106,11 @@ public function level1Filter(Request $request)
 {
 
     $result = History::whereIn('buyer_id',$request->buyer)
+    ->leftJoin("event_history",'history.id', '=', 'event_history.history_id')
     ->whereIn('season',$request->season)
     ->whereIn('template',$request->template)
     ->whereIn('country',$request->country)
-    ->whereBetween('created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
+    ->whereBetween('event_history.created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
     ->select('material','customer_id','style','mat_sub')
     ->get();
 
@@ -126,6 +127,7 @@ public function level1Filter(Request $request)
 public function level2Filter(Request $request)
 {  
     $result = History::whereIn('buyer_id',$request->buyer)
+    ->leftJoin("event_history",'history.id', '=', 'event_history.history_id')
     ->whereIn('season',$request->season)
     ->whereIn('template',$request->template)
     ->whereIn('country',$request->country)
@@ -133,7 +135,7 @@ public function level2Filter(Request $request)
     ->whereIn('material',$request->materials)
     ->whereIn('style',$request->styles)
     ->whereIn('mat_sub',$request->mat_subs)
-    ->whereBetween('created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
+    ->whereBetween('event_history.created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
     ->select('reference','po','buyer_po','ocn')
     ->get();
     return response()->json($result);
@@ -142,41 +144,41 @@ public function level2Filter(Request $request)
 public function getTableFields(Request $request)
 {   
 
-    $def_po1 = ["No","Order.Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference"];
-    $ext_po1 = ["A/w Date", "PO.dt","JC.No","JC.Dt","Inv.No","Inv.Dt","Buyer","Season","Country","ByrPo","Quantity","Reason","Reapprove.Dt","DispMode","Awb","Status"];
+    $def_po1 = ["No","Order_Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference"];
+    $ext_po1 = ["AW_Dt", "PO_Dt","JC.No","JC_Dt","Inv.No","Inv_Dt","Buyer","Season","Country","ByrPo","Quantity","Reason","Reapproved_Dt","DispMode","Awb","Status"];
 
-    $def_po2 = ["No","Order.Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference"];
-    $ext_po2 = ["A/w Date", "PO.dt","JC.No","JC.Dt","Inv.No","Inv.Dt","Buyer","Season","Country","ByrPo","Quantity","Reason","Reapprove.Dt","DispMode","Awb","Status"];
+    $def_po2 = ["No","Order_Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference"];
+    $ext_po2 = ["AW_Dt", "PO_Dt","JC.No","JC_Dt","Inv.No","Inv_Dt","Buyer","Season","Country","ByrPo","Quantity","Reason","Reapproved_Dt","DispMode","Awb","Status"];
 
-    $def_po3 = ["No","Order.Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference","Reason"];
-    $ext_po3 = ["A/w Date", "PO.dt","JC.No","JC.Dt","Inv.No","Inv.Dt","Buyer","Season","Country","ByrPo","Quantity","Reapprove.Dt","DispMode","Awb","Status"];
+    $def_po3 = ["No","Order_Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference","Reason"];
+    $ext_po3 = ["AW_Dt", "PO_Dt","JC.No","JC_Dt","Inv.No","Inv_Dt","Buyer","Season","Country","ByrPo","Quantity","Reapproved_Dt","DispMode","Awb","Status"];
 
-    $def_po4 = ["No","Order.Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference","Reapprove.Dt"];
-    $ext_po4 = ["A/w Date", "PO.dt","JC.No","JC.Dt","Inv.No","Inv.Dt","Buyer","Season","Country","ByrPo","Quantity","DispMode","Awb","Status","Reason"];
+    $def_po4 = ["No","Order_Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference","Reapproved_Dt"];
+    $ext_po4 = ["AW_Dt", "PO_Dt","JC.No","JC_Dt","Inv.No","Inv_Dt","Buyer","Season","Country","ByrPo","Quantity","DispMode","Awb","Status","Reason"];
 
-    $def_jc1 = ["No","Order.Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference"];
-    $ext_jc1 = ["A/w Date", "PO.dt","JC.Dt","Inv.No","Inv.Dt","Buyer","Season","Country","ByrPo","Quantity","Reapprove.Dt","DispMode","Awb","Status","Reason"];
+    $def_jc1 = ["No","Order_Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference"];
+    $ext_jc1 = ["AW_Dt", "PO_Dt","JC_Dt","Inv.No","Inv_Dt","Buyer","Season","Country","ByrPo","Quantity","Reapproved_Dt","DispMode","Awb","Status","Reason"];
 
-    $def_jc2 = ["No","Order.Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference"];
-    $ext_jc2 = ["A/w Date", "PO.dt","JC.Dt","Inv.No","Inv.Dt","Buyer","Season","Country","ByrPo","Quantity","Reapprove.Dt","DispMode","Awb","Status","Reason"];
+    $def_jc2 = ["No","Order_Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference"];
+    $ext_jc2 = ["AW_Dt", "PO_Dt","JC_Dt","Inv.No","Inv_Dt","Buyer","Season","Country","ByrPo","Quantity","Reapproved_Dt","DispMode","Awb","Status","Reason"];
 
-    $def_order1 = ["No","Order.Dt","ErpId","JC.No","Inv.No","Inv.Dt","Customer","Material","Style","P.O","OCN","Reference","Quantity"];
-    $ext_order1 = ["A/w Date", "PO.dt","JC.Dt","Buyer","Season","Country","ByrPo","Reapprove.Dt","DispMode","Awb","Reason","Status"];
+    $def_order1 = ["No","Order_Dt","ErpId","JC.No","Inv.No","Inv_Dt","Customer","Material","Style","P.O","OCN","Reference","Quantity"];
+    $ext_order1 = ["AW_Dt", "PO_Dt","JC_Dt","Buyer","Season","Country","ByrPo","Reapproved_Dt","DispMode","Awb","Reason","Status"];
 
-    $def_order2 = ["No","Order.Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference","Quantity"];
-    $ext_order2 = ["A/w Date", "PO.dt","Inv.No","Inv.Dt","JC.Dt","Buyer","Season","Country","ByrPo","Reapprove.Dt","DispMode","Awb","Reason","Status"];
+    $def_order2 = ["No","Order_Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference","Quantity"];
+    $ext_order2 = ["AW_Dt", "PO_Dt","Inv.No","Inv_Dt","JC_Dt","Buyer","Season","Country","ByrPo","Reapproved_Dt","DispMode","Awb","Reason","Status"];
 
-    $def_order3 = ["No","Order.Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference","Quantity","Reason"];
-    $ext_order3 = ["A/w Date", "PO.dt","Inv.No","Inv.Dt","JC.Dt","Buyer","Season","Country","ByrPo","Reapprove.Dt","DispMode","Awb","Status"];
+    $def_order3 = ["No","Order_Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference","Quantity","Reason"];
+    $ext_order3 = ["AW_Dt", "PO_Dt","Inv.No","Inv_Dt","JC_Dt","Buyer","Season","Country","ByrPo","Reapproved_Dt","DispMode","Awb","Status"];
 
-    $def_order4 = ["No","Order.Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference","Quantity","Reason"];
-    $ext_order4 = ["A/w Date", "PO.dt","Inv.No","Inv.Dt","JC.Dt","Buyer","Season","Country","ByrPo","Reapprove.Dt","DispMode","Awb","Status"];
+    $def_order4 = ["No","Order_Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference","Quantity","Reason"];
+    $ext_order4 = ["AW_Dt", "PO_Dt","Inv.No","Inv_Dt","JC_Dt","Buyer","Season","Country","ByrPo","Reapproved_Dt","DispMode","Awb","Status"];
 
-    $def_order5 = ["No","Order.Dt","ErpId","JC.No","Inv.No","Inv.Dt","Customer","Material","Style","P.O","OCN","Reference","Quantity"];
-    $ext_order5 = ["A/w Date", "PO.dt","JC.Dt","Buyer","Season","Country","ByrPo","Reapprove.Dt","DispMode","Awb","Reason","Status"];
+    $def_order5 = ["No","Order_Dt","ErpId","JC.No","Inv.No","Inv_Dt","Customer","Material","Style","P.O","OCN","Reference","Quantity"];
+    $ext_order5 = ["AW_Dt", "PO_Dt","JC_Dt","Buyer","Season","Country","ByrPo","Reapproved_Dt","DispMode","Awb","Reason","Status"];
 
-    $def_order6 = ["No","Order.Dt","ErpId","JC.No","Inv.No","Inv.Dt","Customer","Material","Style","P.O","OCN","Reference","Quantity"];
-    $ext_order6 = ["A/w Date", "PO.dt","JC.Dt","Buyer","Season","Country","ByrPo","Reapprove.Dt","DispMode","Awb","Reason","Status"];
+    $def_order6 = ["No","Order_Dt","ErpId","JC.No","Inv.No","Inv_Dt","Customer","Material","Style","P.O","OCN","Reference","Quantity"];
+    $ext_order6 = ["AW_Dt", "PO_Dt","JC_Dt","Buyer","Season","Country","ByrPo","Reapproved_Dt","DispMode","Awb","Reason","Status"];
 
     $def_invoice1 =["No","Inv.No","Date","Customer","Base_Val","CGST","SGST","Inv.Val"];
     $ext_invoice1 = ["IGST"];
@@ -430,6 +432,7 @@ public function getTableFields(Request $request)
 public function setUpDatatable(Request $request)
 {
       $result = History::whereIn('buyer_id',$request->buyer)
+        ->leftJoin("event_history",'history.id', '=', 'event_history.history_id')
         ->whereIn('season',$request->season)
         ->whereIn('template',$request->template)
         ->whereIn('country',$request->country)
@@ -441,8 +444,8 @@ public function setUpDatatable(Request $request)
         ->whereIn('po',$request->pos)
         ->whereIn('buyer_po',$request->buyer_pos)
         ->whereIn('ocn',$request->ocns)
-        ->whereBetween('created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
-        ->pluck('id')
+        ->whereBetween('event_history.created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
+        ->pluck('history.id')
         ->toArray();
 
      
@@ -506,10 +509,12 @@ public function setUpDatatable(Request $request)
                     }
                     $queryRes->map(function ($queryRes,$key) {
                     $queryRes->No =$key+1;
+                    $num=($queryRes->tax/2)/100 * $queryRes->Base_Val;    
+                    $val=number_format($num, 2, '.', '');
+                    $queryRes->Date=(new Carbon($queryRes->Date))->format('d-m-Y');
+
                     if($queryRes->place_of_supply==1)
                     {  
-                    $val=number_format((float)($queryRes->tax/2)/100 * $queryRes->Base_Val, 2, '.', '');
-                    
                     $queryRes->CGST = $val;
                     $queryRes->SGST = $val;
                     $queryRes->IGST = "-";
@@ -517,7 +522,7 @@ public function setUpDatatable(Request $request)
                     else{
                     $queryRes->CGST = "-";
                     $queryRes->SGST = "-";
-                    $queryRes->IGST = ($queryRes->tax)/100 * $queryRes->Base_Val;
+                    $queryRes->IGST = $val;
                     }
                     });
 
@@ -529,11 +534,6 @@ public function setUpDatatable(Request $request)
             default:
                     $statusId = $request->status;
 
-                    $eventHistory = EventHistory::whereIn('history_id',$result)
-                    ->whereIn('action_id',$statusId)
-                    ->pluck('history_id')
-                    ->toArray();  
-
                     if($request->role == "JC Manager")
                     {
                       
@@ -543,17 +543,21 @@ public function setUpDatatable(Request $request)
                     array_push($statusId, "2");
                     array_push($statusId, "4");
 
-                    $Jcverified = EventHistory::where('action_id',6)->pluck('history_id')->toArray();
+                    // $Jcverified = EventHistory::where('action_id',6)->pluck('history_id')->toArray();
 
-                    $allJc = EventHistory::whereIn('history_id',$result)
+                    // $allJc = EventHistory::whereIn('history_id',$result)
+                    // ->whereIn('action_id',$statusId)
+                    // ->pluck('history_id')
+                    // ->toArray();
+
+                    // $eventHistory = array_diff($allJc, $Jcverified);
+                    }
+                    }
+
+                    $eventHistory = EventHistory::whereIn('history_id',$result)
                     ->whereIn('action_id',$statusId)
                     ->pluck('history_id')
-                    ->toArray();
-
-                    $eventHistory = array_diff($allJc, $Jcverified);
-                    }
-
-                    }
+                    ->toArray(); 
 
                     if($request->role == "PO Manager")
                     {
@@ -568,23 +572,32 @@ public function setUpDatatable(Request $request)
                         }
                     }
 
-
                     $queryRes = History::whereIn('history.id',$eventHistory)
                     ->leftJoin("erp_order_details",'erp_order_details.id', '=', 
                                 'history.erp_order_details_id')
                     ->leftJoin("customers",'customers.id', '=', 'history.customer_id')
                     ->leftJoin("buyers",'buyers.id', '=', 'history.buyer_id')
-                    ->leftJoin("erp_status",'erp_order_details.status','=','erp_status.id')
-                    ->select(['erp_order_details.order_date as Order.Dt', 'erp_order_id as ErpId',
+                    ->leftJoin("event_history",'history.id', '=', 'event_history.history_id')
+                    ->leftJoin("actions",'actions.id', '=', 'event_history.action_id')
+                    ->whereIn('actions.id',$statusId)
+                    ->select(['erp_order_details.order_date as Order_Dt', 'erp_order_id as ErpId',
                         'company_name as Customer','material as Material','style as Style','history.po as P.O',
-                        'ocn as OCN','reference as Reference','po_reapproved_date as Reapprove.Dt',
-                        'erp_order_details.aw_date as A/w Date','erp_order_details.created_at as PO.dt',
-                        'jc_number as JC.No','jc_created_date as JC.Dt','invoice_number as Inv.No',
-                        'invoice_created_date as Inv.Dt','buyer_name as Buyer','season as Season',
-                        'country as Country','buyer_po as ByrPo','order_quantity as Quantity','erp_status.status_name as Status','reason as Reason'])
+                        'ocn as OCN','reference as Reference','po_reapproved_date as Reapproved_Dt',
+                        'erp_order_details.aw_date as AW_Dt','erp_order_details.created_at as PO_Dt',
+                        'jc_number as JC.No','jc_created_date as JC_Dt','invoice_number as Inv.No',
+                        'invoice_created_date as Inv_Dt','buyer_name as Buyer','season as Season',
+                        'country as Country','buyer_po as ByrPo','order_quantity as Quantity','actions.action as Status','reason as Reason'])
                         ->get();
                        
                     $queryRes->map(function ($queryRes,$key) {
+                    $queryRes->Order_Dt=(new Carbon($queryRes->Order_Dt))->format('d-m-Y');
+                    $queryRes->JC_Dt=(new Carbon($queryRes->JC_Dt))->format('d-m-Y');
+                    $queryRes->JC_Dt=(new Carbon($queryRes->JC_Dt))->format('d-m-Y');
+                    $queryRes->AW_Dt=(new Carbon($queryRes->AW_Dt))->format('d-m-Y');
+                    $queryRes->PO_Dt=(new Carbon($queryRes->PO_Dt))->format('d-m-Y');
+                    $queryRes->Inv_Dt=(new Carbon($queryRes->Inv_Dt))->format('d-m-Y');
+                    $queryRes->Reapproved_Dt=(new Carbon($queryRes->Reapproved_Dt))->format('d-m-Y');
+
                     $queryRes->No =$key+1;
                     $queryRes->Awb ='-';
                     $queryRes->DispMode ='-';
