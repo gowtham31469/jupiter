@@ -514,7 +514,7 @@ public function setUpDatatable(Request $request)
                     $queryRes->Date=(new Carbon($queryRes->Date))->format('d-m-Y');
                     $queryRes->Inv_Val = number_format($queryRes->Inv_Val, 2, '.', '');
                     $queryRes->Base_Val = number_format($queryRes->Base_Val, 2, '.', '');
-                    
+
                     if($queryRes->place_of_supply==1)
                     {  
                     $queryRes->CGST = $val;
@@ -588,7 +588,7 @@ public function setUpDatatable(Request $request)
                         'erp_order_details.aw_date as AW_Dt','erp_order_details.created_at as PO_Dt',
                         'jc_number as JC.No','jc_created_date as JC_Dt','invoice_number as Inv.No',
                         'invoice_created_date as Inv_Dt','buyer_name as Buyer','season as Season',
-                        'country as Country','buyer_po as ByrPo','order_quantity as Quantity','actions.action as Status','reason as Reason'])
+                        'country as Country','buyer_po as ByrPo','order_quantity as Quantity','actions.action as Status','event_history.reason as Reason'])
                         ->get();
                        
                     $queryRes->map(function ($queryRes,$key) {
