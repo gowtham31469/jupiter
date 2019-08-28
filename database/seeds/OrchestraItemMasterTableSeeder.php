@@ -184,7 +184,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'parent_id' => 1,    
                         'item_name' => "Woven Labels",
                         'ref_no' => "",
-                        'tag_name' => ""
+                        'tag_name' => "MS"
                     ]);
 
                 \App\OrchestraItemMaster::create([
@@ -193,7 +193,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'parent_id' => 16,    
                         'item_name' => "Orchestra Department Label",
                         'ref_no' => "",
-                        'tag_name' => "",
+                        'tag_name' => "MS",
                     ]);
                 \App\OrchestraItemMaster::create([
                         'id'  =>18,
@@ -223,7 +223,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'parent_id' => 16,    
                         'item_name' => "Disney Label",
                         'ref_no' => "",
-                        'tag_name' => "",
+                        'tag_name' => "MS",
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  =>21,
@@ -231,7 +231,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'parent_id' => 20,    
                         'item_name' => "Baby",
                         'ref_no' => "",
-                        'tag_name' => "",
+                        'tag_name' => "MS",
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  =>22,
@@ -303,7 +303,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'parent_id' => 20,    
                         'item_name' => "Boy",
                         'ref_no' => "",
-                        'tag_name' => "",
+                        'tag_name' => "MS",
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  =>29,
@@ -372,7 +372,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'parent_id' => 20,    
                         'item_name' => "Girl",
                         'ref_no' => "",
-                        'tag_name' => "",
+                        'tag_name' => "MS",
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  =>36,
@@ -440,7 +440,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'parent_id' => 16,    
                         'item_name' => "Marvel",
                         'ref_no' => "",
-                        'tag_name' => "",
+                        'tag_name' => "MS",
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  =>43,
@@ -468,7 +468,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'parent_id' => 16,    
                         'item_name' => "Star Wars",
                         'ref_no' => "",
-                        'tag_name' => "",
+                        'tag_name' => "MS",
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  =>46,
@@ -496,7 +496,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'parent_id' => 16,    
                         'item_name' => "Smiley",
                         'ref_no' => "",
-                        'tag_name' => "",
+                        'tag_name' => "MS",
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  =>49,
@@ -544,7 +544,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'parent_id' => 16,    
                         'item_name' => "Warner",
                         'ref_no' => "",
-                        'tag_name' => "",
+                        'tag_name' => "MS",
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  =>54,

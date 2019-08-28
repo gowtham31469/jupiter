@@ -113,6 +113,8 @@ Route::post('admin/template-management/add-template', 'Admin\TemplateManagement\
 Route::post('admin/template-management/template-view', 'Admin\TemplateManagement\TemplateController@templateView');
 Route::get('admin/template-management/get-company-list', 'Admin\TemplateManagement\TemplateController@getCompanyList');
 
+Route::post('admin/orchestra/template-management/template-list-view', 'Admin\Orchestra\TemplateManagementCntrl@templateListView');
+
 Route::post('admin/orchestra/template-management/template-view', 'Admin\Orchestra\TemplateManagementCntrl@templateView');
 
 Route::post('/admin/template-management/base64_to_jpeg', 'Admin\TemplateManagement\TemplateController@base64ToJpeg');
