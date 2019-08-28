@@ -86,6 +86,8 @@ Route::get('admin/order-management/non-artwork-orders', 'Admin\OrderManagement\O
 Route::get('admin/order-management/reorder', 'Admin\OrderManagement\OrderController@reorder');
 Route::post('admin/orchestra/order-management/compositions-details', 'Admin\Orchestra\OrderManagementCntrl@compositionDetails');
 
+Route::post('admin/orchestra/order-management/po_select_wcl', 'Admin\Orchestra\OrderManagementCntrl@poSelectWcl');
+
 Route::post('admin/order-management/print-pdf', 'Admin\OrderManagement\OrderController@printPdf');
 Route::post('admin/order-management/print-pdf-arr', 'Admin\OrderManagement\OrderController@printPdfArr');
 Route::post('admin/order-management/print-pdf-small', 'Admin\OrderManagement\OrderController@printPdfSmall');
