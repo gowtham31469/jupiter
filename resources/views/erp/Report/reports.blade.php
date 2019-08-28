@@ -69,7 +69,7 @@
 		margin-top: 12%;
 		float: right;
 	}
-	#filter2,#filter1{margin-top: 52%;height: 29px;}
+	#filter2,#filter1{margin-top: 53%;height: 29px;}
 	.btn .caret, .btn-group>.btn:first-child {height: 30px!important;}
 	.bootstrap-select>.dropdown-toggle.bs-placeholder{height: 30px!important;}
 	.filter-option{font-size: smaller !important;}
@@ -176,7 +176,7 @@
 		}
 		.dataTables_scrollBody thead tr
 		{visibility:collapse;}
-		/*.container-fluid{min-height: 800px;}*/
+		.container-fluid{min-height: 902px;}
 		.l1{margin-top: 4.5%;}
 		.l2{margin-top: 4%;}
 		/*#_preferences{transition: visibility 0s, opacity 0.5s linear;}*/
@@ -460,7 +460,8 @@
 
     <script type="text/javascript">
 			$(document).ready(function($) {
-				 $(this).scrollTop(0);
+				 // $(this).scrollTop(0);
+				$("html, body").animate({ scrollTop: 0 }, "fast");
 				$( init );
 				function init() {
 					$( ".droppable-area1, .droppable-area2" ).sortable({
@@ -896,9 +897,10 @@
 					// $("#moreOtions").removeClass('disabled_now')
 					$("#moreOtions").removeClass('hidden')
 					$('.dt-buttons').append('<button class="dt-button buttons-excel buttons-html5" tabindex="0" aria-controls="reportTable" type="button" id="moreOtions"><span>More Options</span></button>')
-					$('html,body').animate({
-						scrollTop: $(window).scrollTop() + 500
-					});
+
+						$('html, body').animate({
+						scrollTop: $("div.reportSec").offset().top
+						}, 500)
 				}
 
 				//The default and extra fields are updated and pushed to corresponding arrays
