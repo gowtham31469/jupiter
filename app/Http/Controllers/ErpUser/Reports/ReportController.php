@@ -180,16 +180,16 @@ public function getTableFields(Request $request)
     $def_order6 = ["No","Order_Dt","ErpId","JC.No","Inv.No","Inv_Dt","Customer","Material","Style","P.O","OCN","Reference","Quantity"];
     $ext_order6 = ["AW_Dt", "PO_Dt","JC_Dt","Buyer","Season","Country","ByrPo","Reapproved_Dt","DispMode","Awb","Reason","Status"];
 
-    $def_invoice1 =["No","Inv.No","Date","Customer","Base_Val","CGST","SGST","Inv.Val"];
+    $def_invoice1 =["No","Inv.No","Date","Customer","Base_Val","CGST","SGST","Inv_Val"];
     $ext_invoice1 = ["IGST"];
 
-    $def_invoice2 =["No","Inv.No","Date","Customer","Base_Val","IGST","Inv.Val"];
+    $def_invoice2 =["No","Inv.No","Date","Customer","Base_Val","IGST","Inv_Val"];
     $ext_invoice2 = ["CGST","SGST"];
 
-    // $def_invoice3 =["No","Inv.No","Date","Customer","Ass.Val","CGST","SGST","IGST","Inv.Val"];
+    // $def_invoice3 =["No","Inv.No","Date","Customer","Ass.Val","CGST","SGST","IGST","Inv_Val"];
     // $ext_invoice3 = [];
 
-    // $def_invoice4 =["No","Inv.No","Date","Customer","Ass.Val","CGST","SGST","IGST","Inv.Val"];
+    // $def_invoice4 =["No","Inv.No","Date","Customer","Ass.Val","CGST","SGST","IGST","Inv_Val"];
     // $ext_invoice4 = [];
 
     $defaultValues =[];
@@ -411,7 +411,7 @@ public function getTableFields(Request $request)
 
                 default:
                         
-                $defaultValues =["No","Inv.No","Date","Customer","Base_Val","CGST","SGST","IGST","Inv.Val"];
+                $defaultValues =["No","Inv.No","Date","Customer","Base_Val","CGST","SGST","IGST","Inv_Val"];
                 $extraValues = [];
                 break;
             }
@@ -476,7 +476,7 @@ public function setUpDatatable(Request $request)
                                     ->join('buyers','invoice.buyer_id','buyers.id')
                                     ->whereBetween('invoice.created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
                                     ->select('invoice.invoice_id as Inv.No','invoice.created_at as Date',
-                                             'company_name as Customer','grand_total as Inv.Val','tax',
+                                             'company_name as Customer','grand_total as Inv_Val','tax',
                                              'invoice.place_of_supply','base_amnt as Base_Val')
                                     ->distinct('invoice.id')
                                     ->get();
@@ -503,7 +503,7 @@ public function setUpDatatable(Request $request)
                                     ->join('buyers','invoice.buyer_id','buyers.id')
                                     ->whereBetween('invoice.created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
                                     ->select('invoice.invoice_id as Inv.No','invoice.created_at as Date',
-                                             'company_name as Customer','grand_total as Inv.Val','tax','invoice.place_of_supply','base_amnt as Base_Val')
+                                             'company_name as Customer','grand_total as Inv_Val','tax','invoice.place_of_supply','base_amnt as Base_Val')
                                     ->distinct('invoice.id')
                                     ->get();
                     }
@@ -512,7 +512,9 @@ public function setUpDatatable(Request $request)
                     $num=($queryRes->tax/2)/100 * $queryRes->Base_Val;    
                     $val=number_format($num, 2, '.', '');
                     $queryRes->Date=(new Carbon($queryRes->Date))->format('d-m-Y');
-
+                    $queryRes->Inv_Val = number_format($queryRes->Inv_Val, 2, '.', '');
+                    $queryRes->Base_Val = number_format($queryRes->Base_Val, 2, '.', '');
+                    
                     if($queryRes->place_of_supply==1)
                     {  
                     $queryRes->CGST = $val;
