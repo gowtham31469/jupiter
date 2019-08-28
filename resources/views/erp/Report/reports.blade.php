@@ -45,7 +45,7 @@
 		-webkit-box-shadow: none;
 		box-shadow: none;
 		border-radius: 0;
-		width: -moz-available;
+		width: 100%;
 	}
 	.setMarginTop4{margin-top: 4%;width: 97%;}
 	.setMarginTop2{margin-top: 2%;}
