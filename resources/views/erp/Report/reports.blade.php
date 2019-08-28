@@ -30,7 +30,7 @@
 	margin-top: 0px;
 	}
 	#reportTitle{    position: absolute;
-    left: 45%;}
+    left: 44.5%;}
 	.mrgBtm{margin-bottom: 5%;}
 	.card:hover {
 	box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
