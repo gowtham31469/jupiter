@@ -25,7 +25,6 @@ class ProformaInvoice
 	{
 		    $id         =   $request->id;
         $table_name =   $request->table_name;
-        $uvc        =   $request->uvc;
         $buyer_id   =   $request->buyer_id;
         $pi_id      =   DB::table('profoma_invoices')->max('id')+1;
         $today      =   Carbon::now('Asia/Kolkata');
@@ -305,21 +304,19 @@ class ProformaInvoice
           $data['tables'][$table_name]= $table_name.'_quanty';
           $item_id_array = array();
           $price_array = array();
-          $templates = array();
+          
           array_push($item_id_array, $request->template_id);
           if ($item_details[0]->order_flag!="reOrder" && $item_details[0]->order_flag!="repeatOrder"){
               if ($table_name == "tesco_tcl1_orders" || $table_name == "tesco_tcl2_orders" || $table_name == "tesco_tsl1_orders") {
                 $table_array = array('tesco_tcl1_orders','tesco_tcl2_orders','tesco_tsl1_orders');
                 $qnty_id_array = array('tesco_tcl1_orders_quanty','tesco_tcl2_orders_quanty','tesco_tsl1_orders_quanty');
                 $template_array = array_combine($table_array, $qnty_id_array);
-                $count = 3;
 
               }
               if ($table_name == "tesco_tcl4_orders" || $table_name == "tesco_tsl3_orders") {
                 $table_array = array('tesco_tcl4_orders','tesco_tsl3_orders');
                 $qnty_id_array = array('tesco_tcl4_orders_quanty','tesco_tsl3_orders_quanty');
                 $template_array = array_combine($table_array, $qnty_id_array);
-                $count = 2;
               }
               if (!empty($template_array)) {
                   unset($template_array[$table_name]);
@@ -372,12 +369,7 @@ class ProformaInvoice
                    }
                    array_push($item_id_array, $value->item_id);
                 }
-                // if ($count == sizeof($item_details)) {
-                //   $data['item_details'] = $item_details;
-                // }
-                // else{
-                //   $data['item_details'] = [];
-                // }
+
                 $data['item_details'] = $item_details;
               }
           }  
