@@ -269,7 +269,7 @@ function template_list() {
 						var template_id = data.node.id;
 						var csrf_token = $('meta[name="csrf-token"]').attr('content');
 						$.ajax({
-							url: base_url + "/admin/" + buyer + "/template-management/template-view",
+							url: base_url + "/admin/" + buyer + "/template-management/template-list-view",
 							type: "Post",
 							dataType: "json",
 							data: {
@@ -315,17 +315,18 @@ function template_list() {
 													if( data[0].template_file.substr(data[0].template_file.length - 3) == "svg")
 													{
 														if (data.length > 1) {
-														$('.viewDiv').html("");
+														$('.viewDiv').html('<div class="row">');
 														$.each(data, function (index, value) {
-															$('.viewDiv').append('<div class="row"><object style="display:inline-block" id="svg2" class="center-block svg2" data="' + value.template_file + '" type="image/svg+xml"></object></div>')
+															$('.viewDiv').append('<object style="display:inline-block" id="svg2" class="center-block svg2" data="' + value.template_file + '" type="image/svg+xml"></object>')
 														});
+														$('.viewDiv').append('</div>');
 													} else {
 														$('.viewDiv').html('<div class="row"><object id="svg2" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object></div>')
 													}
 													}
 													else
 													{
-														$('.viewDiv').html('<img style="    width: 100px;object-fit:cover" src="' + data[0].template_file + '" class="img-responsive" alt="Template File">');
+														$('.viewDiv').html('<img style="    width: 100px;margin-left: 50%;object-fit:cover" src="' + data[0].template_file + '" class="img-responsive" alt="Template File">');
 													}
 													
 

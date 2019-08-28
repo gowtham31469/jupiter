@@ -433,7 +433,7 @@ class OrderManagementCntrl extends Controller
 
                }
 		
-		$treeviewmain_label= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','1')->orWhere('id','2')->orWhere('id','10')->orWhere('id','13')->orWhere('tag_name','main')->orWhere('tag_name','main_size')->orderBy('item_name', 'asc')->get()->toArray();
+		$treeviewmain_label= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','1')->orWhere('id','2')->orWhere('id','10')->orWhere('id','13')->orWhere('tag_name','main')->orWhere('tag_name','MS')->orWhere('tag_name','main_size')->orderBy('item_name', 'asc')->get()->toArray();
             if($treeviewmain_label){
                         $childs = array();
                         foreach($treeviewmain_label as &$item) 
@@ -454,7 +454,7 @@ class OrderManagementCntrl extends Controller
 
                }
 		
-		$treeviewsize_label= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','1')->orWhere('id','2')->orWhere('id','10')->orWhere('id','13')->orWhere('tag_name','size')->orWhere('tag_name','main_size')->orderBy('item_name', 'asc')->get()->toArray();
+		$treeviewsize_label= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','1')->orWhere('id','2')->orWhere('id','10')->orWhere('id','13')->orWhere('tag_name','size')->orWhere('tag_name','MS')->orWhere('tag_name','main_size')->orderBy('item_name', 'asc')->get()->toArray();
             if($treeviewsize_label){
                         $childs = array();
                         foreach($treeviewsize_label as &$item) 
