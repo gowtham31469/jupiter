@@ -509,11 +509,11 @@ public function setUpDatatable(Request $request)
                     }
                     $queryRes->map(function ($queryRes,$key) {
                     $queryRes->No =$key+1;
-                    $num=($queryRes->tax/2)/100 * $queryRes->Base_Val;    
-                    $val=number_format($num, 2, '.', '');
-                    $queryRes->Date=(new Carbon($queryRes->Date))->format('d-m-Y');
-                    $queryRes->Inv_Val = number_format($queryRes->Inv_Val, 2, '.', '');
-                    $queryRes->Base_Val = number_format($queryRes->Base_Val, 2, '.', '');
+                    $val=($queryRes->tax/2)/100 * $queryRes->Base_Val;    
+                    // $val=number_format($num, 2, '.', '');
+                    // $queryRes->Date=(new Carbon($queryRes->Date))->format('d-m-Y');
+                    // $queryRes->Inv_Val = number_format($queryRes->Inv_Val, 2, '.', '');
+                    // $queryRes->Base_Val = number_format($queryRes->Base_Val, 2, '.', '');
 
                     if($queryRes->place_of_supply==1)
                     {  
