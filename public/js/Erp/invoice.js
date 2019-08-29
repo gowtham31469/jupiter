@@ -780,8 +780,8 @@
         var invoiceNo = $('#invoice-no').val();
         var invoiceDate = $('#invoice-date').val();
         var delivery_at = $('.preview-delivery-at').find('.d_address').attr('data-id');
-        var base = Math.round(totalAmount());
-        // console.log(base);
+        var base = totalAmount();
+        
         $.ajax({
             url: "/erp/save-invoice",
             type: 'POST',
