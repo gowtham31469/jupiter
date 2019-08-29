@@ -452,7 +452,7 @@
 						$(".filterLevel3").selectpicker('refresh');
 						$("#filter1").removeClass('hidden');
 						$("#moreOtions").addClass('hidden')
-					$("#_preferences").css('display', 'block');
+					    $("#_preferences").css('display', 'block');
 					}
 				});
 			});
