@@ -22,7 +22,7 @@ function viewWcl(id){
 	             });
 	             table += '</tbody></table>';
 	             $('.quantity').html(table);
-				 $('.sample-artwork').html('<object style="height: calc( 100vh - 125px );"  id="washcare_svg_front" data="' + data.orchestra_wash_template_front + '" type="image/svg+xml"></object> <object style="height: calc( 100vh - 125px );margin-left: 10px;"  id="washcare_svg_back"  data="' + data.orchestra_wash_template_back + '" type="image/svg+xml"></object><object style="height: calc( 100vh - 125px );width: 250px;margin-left: 10px;"  id="washcare_svg_middle" data="' + data.orchestra_wash_template_middle + '" type="image/svg+xml"></object>><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div>');
+				 $('.sample-artwork').html('<object style="height: calc( 100vh - 125px );"  id="washcare_svg_front" data="' + data.orchestra_wash_template_front + '" type="image/svg+xml"></object> <object style="height: calc( 100vh - 125px );margin-left: 10px;"  id="washcare_svg_back"  data="' + data.orchestra_wash_template_back + '" type="image/svg+xml"></object><object style="height: calc( 100vh - 125px );width: 250px;margin-left: 10px;"  id="washcare_svg_middle" data="' + data.orchestra_wash_template_middle + '" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div>');
 				 var mySVG = document.getElementById("washcare_svg_front");
 				 var svgDoc;
 				 var mySVG1 = document.getElementById("washcare_svg_back");
