@@ -249,6 +249,7 @@ class InvoiceController extends Controller
                                 ->first();         
 
             if ($orders) {
+                // dd($request->base_amt);
                 $invoiceData = Invoices::create([
                                 'customer_id'    => $orders[0]['customer_id'],
                                 'buyer_id'       => $orders[0]['buyer_id'],
