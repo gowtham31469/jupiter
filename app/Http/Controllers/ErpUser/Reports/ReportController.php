@@ -511,19 +511,22 @@ public function setUpDatatable(Request $request)
                     }
                     $queryRes->map(function ($queryRes,$key) {
                     $queryRes->No =$key+1;
-                    $val=(($queryRes->tax/2)/100) * $queryRes->Base_Val;    
-                    $val=number_format($val, 2, '.', '');
+                  
                     $queryRes->Date=(new Carbon($queryRes->Date))->format('d-m-Y');
                     // $queryRes->Inv_Val = number_format($queryRes->Inv_Val, 2, '.', '');
                     // $queryRes->Base_Val = number_format($queryRes->Base_Val, 2, '.', '');
 
                     if($queryRes->place_of_supply==1)
                     {  
+                    $val=(($queryRes->tax/2)/100) * $queryRes->Base_Val;    
+                    $val=number_format($val, 2, '.', '');
                     $queryRes->CGST = $val;
                     $queryRes->SGST = $val;
                     $queryRes->IGST = "-";
                     }
                     else{
+                    $val=(($queryRes->tax)/100) * $queryRes->Base_Val;    
+                    $val=number_format($val, 2, '.', '');
                     $queryRes->CGST = "-";
                     $queryRes->SGST = "-";
                     $queryRes->IGST = $val;
