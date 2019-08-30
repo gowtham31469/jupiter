@@ -257,7 +257,7 @@ class OrderManagementController extends Controller
 					}
 					$main_table  = str_replace("_qty","",$order_qty_table);
 					
-					$order_details  = DB::table($order_qty_table)->select($main_table.'.*')->where($order_qty_table.'.id', $qty_row_id)->join($main_table, $main_table.'.id', $order_qty_table.'.'.$qnty_id.'_id')
+					$order_details  = DB::table($order_qty_table)->select($main_table.'.*')->where($order_qty_table.'.id', $order_qnty_table_id)->join($main_table, $main_table.'.id', $order_qty_table.'.'.$qnty_id.'_id')
 									->first();
 					
 					// template front and back id storing in orchestra_hang_tag_orders table
@@ -518,7 +518,7 @@ class OrderManagementController extends Controller
 									 ->join('erp_orders', 'erp_order_details.erp_order_id', 'erp_orders.id')
 									 ->select('erp_order_details.*', 'erp_orders.customer_id', 'erp_orders.buyer_id')
 									 ->get();
-
+									 
 				\App\ErpOrders::where('id', $request->id)->update([
 					'status'	=> 4
 				]);
@@ -548,6 +548,8 @@ class OrderManagementController extends Controller
 											->where($order_qty_table.'.id', $order_qnty_table_id)
 											->join($main_table, $main_table.'.id', $order_qty_table.'.'.$qnty_id)
 											->first();
+						$order_qty_field = $qnty_id;
+						$order_status_field = 'order_status';
 						$season         = $order_details->season_code;
 						$country        = $order_details->zone;
 						$style_zone     = strtolower($country).'_style_ref';
@@ -578,8 +580,10 @@ class OrderManagementController extends Controller
 							$qnty_id .= strtolower($word[0]);
 						}
 						$main_table  = str_replace("_qty","",$order_qty_table);
+						$order_qty_field = $qnty_id.'_id';
+						$order_status_field = 'status';
 						
-						$order_details  = DB::table($order_qty_table)->select($main_table.'.*')->where($order_qty_table.'.id', $qty_row_id)->join($main_table, $main_table.'.id', $order_qty_table.'.'.$qnty_id.'_id')
+						$order_details  = DB::table($order_qty_table)->select($main_table.'.*')->where($order_qty_table.'.id', $order_qnty_table_id)->join($main_table, $main_table.'.id', $order_qty_table.'.'.$qnty_id.'_id')
 										->first();
 						
 						// template front and back id storing in orchestra_hang_tag_orders table
@@ -631,9 +635,9 @@ class OrderManagementController extends Controller
 						'updated_at'  => $this->current_date,
 					]);
 
-					$main_table_id = DB::table($order_qty_table)->where('id',$order_qnty_table_id)->value($qnty_id);
+					$main_table_id = DB::table($order_qty_table)->where('id',$order_qnty_table_id)->value($order_qty_field);
 
-					DB::table($main_table)->where('id',$main_table_id)->update(['order_status' => "Order Cancelled"]);
+					DB::table($main_table)->where('id',$main_table_id)->update([$order_status_field => "Order Cancelled"]);
 				}
 
 				\App\ErpOrderDetails::where('erp_order_id', $request->id)->where('erp_order_details.status', '<>', $erp_status_id)->update([
