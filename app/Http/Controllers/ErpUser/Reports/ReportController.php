@@ -431,6 +431,7 @@ public function getTableFields(Request $request)
 
 public function setUpDatatable(Request $request)
 {
+
       $result = History::whereIn('buyer_id',$request->buyer)
         ->leftJoin("event_history",'history.id', '=', 'event_history.history_id')
         ->whereIn('season',$request->season)
@@ -474,6 +475,15 @@ public function setUpDatatable(Request $request)
                                     ->join('customers','invoice.customer_id','customers.id')
                                     // ->join('invoice_details','invoice_details.invoice_id','invoice.id')
                                     ->join('buyers','invoice.buyer_id','buyers.id')
+
+
+                                    ->whereIn('invoice_details.reference_no',$request->references)
+                                    ->whereIn('invoice.buyer_id',$request->buyer)
+                                    ->whereIn('invoice.customer_id',$request->customers)
+                                    ->whereIn('invoice_details.style_no',$request->styles)
+                                    ->whereIn('invoice_details.ocn_no',$request->ocns)
+
+
                                     ->whereBetween('invoice.created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
                                     ->select('invoice.invoice_id as Inv.No','invoice.created_at as Date',
                                              'company_name as Customer','grand_total as Inv_Val','tax',
@@ -501,6 +511,13 @@ public function setUpDatatable(Request $request)
                                     ->join('customers','invoice.customer_id','customers.id')
                                     ->join('invoice_details','invoice_details.invoice_id','invoice.id')
                                     ->join('buyers','invoice.buyer_id','buyers.id')
+
+                                    ->whereIn('invoice_details.reference_no',$request->references)
+                                    ->whereIn('invoice.buyer_id',$request->buyer)
+                                    ->whereIn('invoice.customer_id',$request->customers)
+                                    ->whereIn('invoice_details.style_no',$request->styles)
+                                    ->whereIn('invoice_details.ocn_no',$request->ocns)
+
                                     ->whereBetween('invoice.created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
                                     ->select('invoice.invoice_id as Inv.No',
                                             'invoice.created_at as Date','company_name as Customer',
