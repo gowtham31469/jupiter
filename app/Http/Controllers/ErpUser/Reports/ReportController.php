@@ -475,7 +475,7 @@ public function setUpDatatable(Request $request)
                                     ->join('customers','invoice.customer_id','customers.id')
                                     // ->join('invoice_details','invoice_details.invoice_id','invoice.id')
                                     ->join('buyers','invoice.buyer_id','buyers.id')
-
+                                    ->join()
 
                                     ->whereIn('invoice_details.reference_no',$request->references)
                                     ->whereIn('invoice.buyer_id',$request->buyer)
@@ -483,6 +483,7 @@ public function setUpDatatable(Request $request)
                                     ->whereIn('invoice_details.style_no',$request->styles)
                                     ->whereIn('invoice_details.ocn_no',$request->ocns)
                                     ->whereIn('invoice.po_no',$request->pos)
+                                    ->whereIn('invoice_details.buyer_po_number',$request->buyer_pos)
 
                                     ->whereBetween('invoice.created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
                                     ->select('invoice.invoice_id as Inv.No','invoice.created_at as Date',
@@ -518,6 +519,7 @@ public function setUpDatatable(Request $request)
                                     ->whereIn('invoice_details.style_no',$request->styles)
                                     ->whereIn('invoice_details.ocn_no',$request->ocns)
                                     ->whereIn('invoice.po_no',$request->pos)
+                                    ->whereIn('invoice_details.buyer_po_number',$request->buyer_pos)
 
                                     ->whereBetween('invoice.created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
                                     ->select('invoice.invoice_id as Inv.No',
