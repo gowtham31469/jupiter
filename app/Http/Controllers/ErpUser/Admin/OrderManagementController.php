@@ -257,7 +257,7 @@ class OrderManagementController extends Controller
 					}
 					$main_table  = str_replace("_qty","",$order_qty_table);
 					
-					$order_details  = DB::table($order_qty_table)->select($main_table.'.*')->where($order_qty_table.'.id', $qty_row_id)->join($main_table, $main_table.'.id', $order_qty_table.'.'.$qnty_id.'_id')
+					$order_details  = DB::table($order_qty_table)->select($main_table.'.*')->where($order_qty_table.'.id', $order_qnty_table_id)->join($main_table, $main_table.'.id', $order_qty_table.'.'.$qnty_id.'_id')
 									->first();
 					
 					// template front and back id storing in orchestra_hang_tag_orders table
@@ -579,7 +579,7 @@ class OrderManagementController extends Controller
 						}
 						$main_table  = str_replace("_qty","",$order_qty_table);
 						
-						$order_details  = DB::table($order_qty_table)->select($main_table.'.*')->where($order_qty_table.'.id', $qty_row_id)->join($main_table, $main_table.'.id', $order_qty_table.'.'.$qnty_id.'_id')
+						$order_details  = DB::table($order_qty_table)->select($main_table.'.*')->where($order_qty_table.'.id', $order_qnty_table_id)->join($main_table, $main_table.'.id', $order_qty_table.'.'.$qnty_id.'_id')
 										->first();
 						
 						// template front and back id storing in orchestra_hang_tag_orders table
