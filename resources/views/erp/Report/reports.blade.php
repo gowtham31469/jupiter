@@ -531,7 +531,7 @@
 
 				function triggerLevel1()
 				{	
-					console.log($(".roleSelection option:selected").val());
+					// console.log($(".roleSelection option:selected").val());
 					$('.selectpicker').removeClass('open');
 					/* Act on the event */
 					if($("#txtFrom").val().length > 0 && $("#txtTo").val().length > 0)
