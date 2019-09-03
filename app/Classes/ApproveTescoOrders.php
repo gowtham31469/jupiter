@@ -32,7 +32,6 @@ class ApproveTescoOrders
 {
 
   private $current_date;
-  private $buyer_id;
   /**
    * Create a new controller instance.
    *
