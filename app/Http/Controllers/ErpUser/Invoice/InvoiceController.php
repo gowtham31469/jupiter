@@ -21,6 +21,8 @@ use App\Classes\Invoice;
 use App\InvoiceAddress;
 use Elibyy\TCPDF\Facades\TCPDF;
 use App\Classes\invoiceTCPDF;
+use App\EventHistory;
+use App\History;
 use Carbon\Carbon;
 
 class InvoiceController extends Controller
@@ -265,7 +267,15 @@ class InvoiceController extends Controller
                                 'bill_to'        =>  $billTo_id,
                                 'base_amnt'       =>  $request->base_amt
                             ]);
-                
+
+                $historyId=History::where('erp_order_details_id',DB::table('erp_order_details')->where('erp_order_id',explode(0, $invoiceData->erp_id)[1])->first()->id)->first()->id;
+
+                $invAction = EventHistory::create([
+                            'action_id'    => $place_of_supply == 1 ? 14 : 15 ,
+                            'history_id'   => $historyId,
+                            'created_by'   => Auth::guard('erpuser')->id(),
+                        ]);
+
                 $invoice_id =  "INV-00".$invoiceData->id;
                 if ($eChargesArr) {
                     foreach ($eChargesArr as $objts) {
