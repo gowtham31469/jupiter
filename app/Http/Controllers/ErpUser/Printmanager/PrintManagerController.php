@@ -255,6 +255,7 @@ class PrintManagerController extends Controller
     {
         try {
 				$buyer_id    = $request['selected_buyer_id'];
+
 				$customer_id = $request['selected_customer_id'];
 				$erp_id = $request['erp_id'];
 
@@ -270,11 +271,33 @@ class PrintManagerController extends Controller
 				else
 				{
 					
-					
-					$jobcard_id_list  = ErpOrderDetails::join('erp_status','erp_status.id','erp_order_details.status')->join('tesco_template', 'tesco_template.item_id', 'erp_order_details.template_id')->where('erp_order_details.erp_order_id', '=', $erp_id)
+					$buyer = strtolower(DB::table('buyers')->where('id',$buyer_id)->first()->buyer_name);
+				
+					$jobcard_id_list  = ErpOrderDetails::join('erp_status','erp_status.id','erp_order_details.status')->join($buyer.'_template', $buyer.'_template.item_id', 'erp_order_details.template_id')->where('erp_order_details.erp_order_id', '=', $erp_id)
 											->where('erp_order_details.status','!=',4)
-											->select(DB::raw('distinct on (erp_order_details.erp_order_id,buyer_po_number,style_no,reference_name) erp_order_details.erp_order_id'),'erp_order_details.*','erp_status.status_name','tesco_template.template_file')->groupBy('erp_order_details.id','erp_order_details.buyer_po_number','erp_order_details.style_no','erp_order_details.reference_name','erp_status.status_name','tesco_template.template_file')
+											->select(DB::raw('distinct on (erp_order_details.erp_order_id,buyer_po_number,style_no,reference_name) erp_order_details.erp_order_id'),'erp_order_details.*','erp_status.status_name',$buyer.'_template.template_file')->groupBy('erp_order_details.id','erp_order_details.buyer_po_number','erp_order_details.style_no','erp_order_details.reference_name','erp_status.status_name',$buyer.'_template.template_file')
 											->get();
+
+					
+
+					if($buyer=="orchestra")
+					{
+						$jobcard_id_list->map(function ($jobcard_id_list,$key) {
+                    		
+                    		$jobcard_id_list->zone='-';
+
+                    		if($jobcard_id_list->style_no==null)
+                    		{
+                    			$jobcard_id_list->style_no='-';
+                    		}
+
+                    		if($jobcard_id_list->buyer_po_number==null)
+                    		{
+                    			$jobcard_id_list->buyer_po_number='-';
+                    		}
+                	    });
+					}
+
 					return response()->json(['error'=> false,'message' =>'Success', 'erp_orders_list' => $jobcard_id_list], 200);
 				}
 				    
