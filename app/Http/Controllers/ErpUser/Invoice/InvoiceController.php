@@ -268,14 +268,6 @@ class InvoiceController extends Controller
                                 'base_amnt'       =>  $request->base_amt
                             ]);
 
-                $historyId=History::where('erp_order_details_id',DB::table('erp_order_details')->where('erp_order_id',explode(0, $invoiceData->erp_id)[1])->first()->id)->first()->id;
-
-                $invAction = EventHistory::create([
-                            'action_id'    => $place_of_supply == 1 ? 14 : 15 ,
-                            'history_id'   => $historyId,
-                            'created_by'   => Auth::guard('erpuser')->id(),
-                        ]);
-
                 $invoice_id =  "INV-00".$invoiceData->id;
                 if ($eChargesArr) {
                     foreach ($eChargesArr as $objts) {
@@ -337,6 +329,17 @@ class InvoiceController extends Controller
                         'invoice_id'=>$invoiceData->id,
                         'erp_order_id'=>$orders[0]['erpid']
                     ]);
+
+
+                $historyId = History::where('erp_order_details_id',ErpOrderDetails::where('erp_order_id',$orders[0]['erpid'])->first()->id)->first()->id;
+
+                $invAction = EventHistory::create([
+                'action_id'    => $place_of_supply == 1 ? 14 : 15 ,
+                'history_id'   => $historyId,
+                'created_by'   => Auth::guard('erpuser')->id(),
+                ]);
+
+
                 }
                 $erpStatus = ($par_count !=0 && $ful_count!=0) ? 6:$status;
                 Erp::where('erp_id',$orders[0]['erp_id'])
