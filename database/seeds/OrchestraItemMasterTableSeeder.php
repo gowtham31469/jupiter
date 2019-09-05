@@ -1051,7 +1051,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'id'  => 105,
                         'company_id' => 2,
                         'parent_id' => 104,    
-                        'item_name' => "Tags",
+                        'item_name' => "Swing Tags",
                         'ref_no' => "",
                         'tag_name' => ""
                     ]);
