@@ -270,7 +270,7 @@ class JobManagerController extends Controller
 			{
 				$order_detail_id_array = ErpOrderDetails::where('erp_order_details.erp_order_id', $erp_orders_id)
 									->where('erp_order_details.reference_name', $selected_ref_arrays[$row])
-									->where('erp_order_details.buyer_po_number', $buyer_pos[$row])
+									//->where('erp_order_details.buyer_po_number', $buyer_pos[$row])
 									->where('erp_order_details.order_type', $order_type[$row])
 									->where('erp_order_details.created_at', $created_at[$row])
 									->pluck('erp_order_details.id')->all();
