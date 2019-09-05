@@ -427,7 +427,7 @@ class PoManagerController extends Controller
 						}
 
 						// insert  into history table with action id
-						$res = $this->insertHistoryData($value, $action_id, $erp_user);
+						$res = $this->insertHistoryData($value, $action_id, $erp_user, $commenttext);
 					} else {
                         return response()->json(['error' => true, 'message' => 'Price details should be within a range'], 422);
 					}
@@ -479,7 +479,7 @@ class PoManagerController extends Controller
 						}
 
 						// insert  into history table with action id
-						$res = $this->insertHistoryData($value, $action_id, $erp_user);
+						$res = $this->insertHistoryData($value, $action_id, $erp_user, $commenttext);
 					} else {
                         return response()->json(['error' => true, 'message' => 'Price details should be within a range'], 422);
 					}
@@ -520,7 +520,7 @@ class PoManagerController extends Controller
 				// insert  into history table with action id
 				foreach ($orderlist as $value) {
 
-					$this->insertHistoryData($value, $action_id, $erp_user);	
+					$this->insertHistoryData($value, $action_id, $erp_user, $commenttext);	
 				}	
 				$to_email =  DB::table('tesco_error_report_emails')->select('*')->where('id', 1)->first();
 
@@ -542,7 +542,7 @@ class PoManagerController extends Controller
 	 * @author praveen <praveen@wizroots.com>
 	 * @param mixed $data, $action_id, $erp_user
 	 */
-	public function insertHistoryData($data, $action_id, $erp_user)
+	public function insertHistoryData($data, $action_id, $erp_user, $commenttext)
 	{
 		try {
 				$buyer_id       = $data->buyer_id;
@@ -641,6 +641,7 @@ class PoManagerController extends Controller
 					'history_id'  => $history_id->id,
 					'action_id'   => $action_id,
 					'created_by'  => $erp_user,
+					'reason'      => $commenttext,
 					'created_at'  => $this->current_date,
 					'updated_at'  => $this->current_date,
 				]);

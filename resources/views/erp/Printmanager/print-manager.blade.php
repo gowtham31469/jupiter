@@ -594,6 +594,7 @@ function getJobcardIDList(evt)
                 },
                 statusCode: {
                     200: function(data) {
+                    	console.log(data)
                         var html = '<option value="">SELECT A ERP ID</option>';
                         /** [ jobcard id list selectpicker value populating ] */
                         $.each(data.jobcard_id_list, function (key, item) {
@@ -664,6 +665,7 @@ function getErpOrderList()
                 },
                 statusCode: {
                     200: function(data) {
+                    	console.log(data)
                         var i=1;
 						var html="";
 						$.each(data.erp_orders_list, function (key, item) {

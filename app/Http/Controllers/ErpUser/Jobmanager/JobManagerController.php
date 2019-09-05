@@ -94,6 +94,7 @@ class JobManagerController extends Controller
 			{
 				$arr_template =  DB::table($value->template_table)
 								->where('hierarchy_id',$value->templates)
+								->where('flag',1)
 								->pluck('item_id');
 				if($arr_template)
 				{
@@ -322,7 +323,7 @@ class JobManagerController extends Controller
 								->where('erp_order_details.id', '=', $order_detail_id)
 								->first();
 					
-					// to differnciate reorder and repeatorder having same values
+					// to differenciate reorder and repeatorder having same values
 					$created_time = str_replace(':','', Carbon::parse($single_temp_data->created_at, 'Asia/Kolkata')->toTimeString());
 					$created_dt   = str_replace('-','', Carbon::parse($single_temp_data->created_at, 'Asia/Kolkata')->toDateString());
 					$created_at_key = $created_dt.$created_time;

@@ -21,6 +21,8 @@ use App\Classes\Invoice;
 use App\InvoiceAddress;
 use Elibyy\TCPDF\Facades\TCPDF;
 use App\Classes\invoiceTCPDF;
+use App\EventHistory;
+use App\History;
 use Carbon\Carbon;
 
 class InvoiceController extends Controller
@@ -249,6 +251,7 @@ class InvoiceController extends Controller
                                 ->first();         
 
             if ($orders) {
+                // dd($request->base_amt);
                 $invoiceData = Invoices::create([
                                 'customer_id'    => $orders[0]['customer_id'],
                                 'buyer_id'       => $orders[0]['buyer_id'],
@@ -264,7 +267,7 @@ class InvoiceController extends Controller
                                 'bill_to'        =>  $billTo_id,
                                 'base_amnt'       =>  $request->base_amt
                             ]);
-                
+
                 $invoice_id =  "INV-00".$invoiceData->id;
                 if ($eChargesArr) {
                     foreach ($eChargesArr as $objts) {
@@ -326,6 +329,17 @@ class InvoiceController extends Controller
                         'invoice_id'=>$invoiceData->id,
                         'erp_order_id'=>$orders[0]['erpid']
                     ]);
+
+
+                $historyId = History::where('erp_order_details_id',ErpOrderDetails::where('erp_order_id',$orders[0]['erpid'])->first()->id)->first()->id;
+
+                $invAction = EventHistory::create([
+                'action_id'    => $place_of_supply == 1 ? 14 : 15 ,
+                'history_id'   => $historyId,
+                'created_by'   => Auth::guard('erpuser')->id(),
+                ]);
+
+
                 }
                 $erpStatus = ($par_count !=0 && $ful_count!=0) ? 6:$status;
                 Erp::where('erp_id',$orders[0]['erp_id'])

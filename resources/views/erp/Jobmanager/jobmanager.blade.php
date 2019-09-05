@@ -288,7 +288,11 @@
 									<td>{{$vals->company_name}}</td>
 									<td data-buyer-id="{{$vals->buyer_id}}">{{$vals->buyer_name}}</td>
 									<td>{{$vals->po_no}}</td>
-									<td>{{$vals->buyer_po_number}}</td>
+									@if ($vals->buyer_po_number != '')
+									    <td>{{$vals->buyer_po_number}}</td>
+									@else
+										<td>-</td>
+									@endif
 									<td>{{$vals->style_no}}</td>
 									<td>{{$vals->reference_name}}</td>
 									@if ($vals->delivery_date != '')

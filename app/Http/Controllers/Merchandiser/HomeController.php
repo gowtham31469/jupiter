@@ -11,13 +11,17 @@ use View;
 use DB;
 use Auth;
 use App\WashLabelOrders;
-use Datetime;
+use App\WashLabelOrdersQty;
+use Carbon\Carbon;
+use App\ErpOrders as Erp;
+use App\ErpOrderDetails as ErpOrderDetails;
 /**
  * Merchandiser Page controller
  * @author <Praveen>
  */
 class HomeController extends Controller
 {
+    private $current_date;
     /**
      * Create a new controller instance.
      *
@@ -26,6 +30,9 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->middleware('merchandiser_auth');
+
+        // get the current time
+        $this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
     }
 
     /**
@@ -130,15 +137,55 @@ class HomeController extends Controller
       {
         try {
         	      $id        = $request['id'];
-		          $comment   = $request['comment'];
-		          $date = new DateTime();         
-		          $approved_date = $date->format('Y-m-d');
-		          WashLabelOrders::where('id',$id)
-		           ->update([
-		             'merchandiser_comment' => $comment,
-		             'approved_date'        => $approved_date,
-		             'status'               => "Order Approved"
-		          ]);
+                $comment   = $request['comment'];
+                $buyer_id = DB::table("buyers")->where('buyer_name','ilike','Orchestra')->pluck('id')->first();
+                
+                WashLabelOrders::where('id',$id)
+                ->update([
+                  'merchandiser_comment' => $comment,
+                  'approved_date'        => $this->current_date,
+                  'status'               => "Order Approved"
+                ]);
+                $order_details  = WashLabelOrders::where('id',$id)
+                                  ->select('id','status as order_status','customer_id','po_number','pi_id', 'order_created_at', 'order_approved_at')
+                                  ->first();
+
+                $order_qty_details  = WashLabelOrdersQty::where('owcl_id', $order_details->id)
+                ->select('id', DB::raw("'orchestra_wash_care_label_orders_qty' as \"table_name\""))->get();
+
+                $order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', $order_details->order_status)->first();
+
+                $customer_data  = DB::table('customers')->select('pi_required', 'po_required')->where('id', $order_details->customer_id)->first();
+
+                if ($customer_data->pi_required === 1 && $customer_data->po_required === 0) 
+                {
+                  $po_number     = $order_details->pi_id;
+                }
+                else if($customer_data->po_required === 1)
+                {
+                  $po_number     = $order_details->po_number;
+                }         
+                
+                $erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$order_details->customer_id)->where('po_no', $po_number)->first();
+                
+                if ($erp_orders) 
+                {
+                  // update order status in erp_order_details table
+                    foreach ($order_qty_details as $key => $value) 
+                    {
+                      $erp_order_qty = ErpOrderDetails::where('order_qnty_table_name',$value->table_name)->where('order_qnty_table_id',$value->id)->first();
+
+                      if ($erp_order_qty) 
+                      {
+                        ErpOrderDetails::where('id',$erp_order_qty->id)
+                              ->update([
+                                        'order_status_id'  => $order_status_id->id,
+                                        'order_date'       => $order_details->order_created_at,
+                                        'aw_date'          => $order_details->order_approved_at
+                                      ]);
+                      }
+                    }
+                }
 
              $result = response()->json(['error'=> false,'message' =>'Success'],200);
 
@@ -159,12 +206,11 @@ class HomeController extends Controller
         try {
         	      $id        = $request['id'];
 		          $comment   = $request['comment'];
-		          $date = new DateTime();         
-		          $rejected_date = $date->format('Y-m-d');
+		          
 		          WashLabelOrders::where('id',$id)
 		           ->update([
 		             'merchandiser_comment' => $comment,
-		             'rejected_date'        => $rejected_date,
+		             'rejected_date'        => $this->current_date,
 		             'status'               => "Order Rejected"
 		          ]);
 

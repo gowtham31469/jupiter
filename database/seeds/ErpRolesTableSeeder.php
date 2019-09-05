@@ -14,7 +14,7 @@ class ErpRolesTableSeeder extends Seeder
         if(!count(\App\ErpRoles::all()) ){
 			
 			/*	Roles Array	*/
-			$roles = array('PO MANAGER', 'JOB CARD MANAGER', 'INVOICE MANAGER');
+			$roles = array('PO MANAGER', 'JOB CARD MANAGER', 'INVOICE MANAGER','PRINT MANAGER');
 			foreach($roles as $role){
 				\App\ErpRoles::create([
 					'name' => $role
