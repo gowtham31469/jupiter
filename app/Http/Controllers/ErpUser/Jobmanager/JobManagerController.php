@@ -266,31 +266,24 @@ class JobManagerController extends Controller
 				$final_chunk        = array();
 				$order_detail_ids   = array();
 				$erp_id_array       = array();
+				$customer_po_array  = array();
 
 				/** Get erp order details table ids from erp orders table id */
 				foreach($erp_orders_ids as $row => $erp_orders_id)
 				{
-					
-					$this->buyer_name = Erp::where('erp_orders.id', '=', $erp_orders_id)->join('buyers', 'buyers.id', '=', 'erp_orders.buyer_id')->value('buyer_name');
-					
 					// buyer po number is not mandatory for orchestra.
 					// So splitting query using conditional statements.
 					$order_detail_id_array = ErpOrderDetails::where('erp_order_details.erp_order_id', $erp_orders_id)
 				     	                      ->where('erp_order_details.order_type', $order_type[$row])
 											  ->where('erp_order_details.uuid', $uuid[$row])
 											  ->where('erp_order_details.reference_name', $selected_ref_arrays[$row]);
-					if($this->buyer_name === "Tesco") {
+					if($buyer_pos[$row] != "") {
 						$order_detail_id_array = $order_detail_id_array->where('erp_order_details.buyer_po_number', $buyer_pos[$row])
 						               ->pluck('erp_order_details.id')->all();
 					} else {
 						$order_detail_id_array = $order_detail_id_array->pluck('erp_order_details.id')->all();
 					}
-					// $order_detail_id_array = ErpOrderDetails::where('erp_order_details.erp_order_id', $erp_orders_id)
-					// 					->where('erp_order_details.reference_name', $selected_ref_arrays[$row])
-					// 					->where('erp_order_details.buyer_po_number', $buyer_pos[$row])
-					// 					->where('erp_order_details.order_type', $order_type[$row])
-					// 					->where('erp_order_details.created_at', $created_at[$row])
-					// 					->pluck('erp_order_details.id')->all();
+					
 					$order_detail_ids = array_unique(array_merge($order_detail_ids,$order_detail_id_array));
 				}
 				sort($order_detail_ids);
@@ -322,17 +315,13 @@ class JobManagerController extends Controller
 
 					!in_array($order_details->template_id, $temp_id_array)?array_push($temp_id_array,$order_details->template_id):$temp_id_array;
 
-					!in_array($order_details->reference_name, $distinct_ref_array)?array_push($distinct_ref_array,$order_details->reference_name):$distinct_ref_array
-					;
+					!in_array($order_details->reference_name, $distinct_ref_array)?array_push($distinct_ref_array,$order_details->reference_name):$distinct_ref_array;
+
+					!in_array($order_details->po_no, $customer_po_array)?array_push($customer_po_array,$order_details->po_no):$customer_po_array;
 
 					/** Create separate ratio/single templates array  */
 					if($order_details->template_type == "ratio")
 					{
-						// $ratio_templates[$order_details->reference_name][] = ErpOrderDetails::select('erp_order_details.order_quantity', $order_details->order_qnty_table_name.'.ratio_pack_type', $order_details->order_qnty_table_name.'.id as qty_table_id',  'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number', 'erp_order_details.order_type', 'erp_order_details.uuid')
-						// 	->join($order_details->order_qnty_table_name, 'erp_order_details.order_qnty_table_id', $order_details->order_qnty_table_name.'.id')
-						// 	->join('erp_orders', 'erp_order_details.erp_order_id', 'erp_orders.id')
-						// 	->where('erp_order_details.id', '=', $order_detail_id)
-						// 	->first();
 						if($this->buyer_name === "Tesco") {
 							$query_result = ErpOrderDetails::select('erp_order_details.order_quantity', $order_details->order_qnty_table_name.'.ratio_pack_type', $order_details->order_qnty_table_name.'.id as qty_table_id',  'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number', 'erp_order_details.order_type', 'erp_order_details.uuid');
 						} else {
@@ -351,9 +340,6 @@ class JobManagerController extends Controller
 									->first();
 
 						// to differenciate reorder and repeatorder having same values
-						// $created_time = str_replace(':','', Carbon::parse($single_temp_data->created_at, 'Asia/Kolkata')->toTimeString());
-						// $created_dt   = str_replace('-','', Carbon::parse($single_temp_data->created_at, 'Asia/Kolkata')->toDateString());
-						// $created_at_key = $created_dt.$created_time;
 						$unique_id = $single_temp_data->uuid;
 
 						$erp_id_array[$single_temp_data->reference_name][] = $single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$unique_id;
@@ -496,13 +482,14 @@ class JobManagerController extends Controller
 				$template_data['style_array']      = $style_array;
 				$template_data['refnum_array']     = $distinct_ref_array;
 				$template_data['color']            = $print_color_array;
-				$template_data['material']		     = $material_array;
+				$template_data['material']		   = $material_array;
 				$template_data['article']          = $article_array;
-				$template_data['length']   		     = $length_array;
+				$template_data['length']   		   = $length_array;
 				$template_data['width']            = $width_array;
 				$template_data['ratio']            = $ratio_templates;
 				$template_data['single']           = $final_chunk;
 				$template_data['order_detail_ids'] = $order_detail_ids;
+				$template_data['customer_po_array']= $customer_po_array;
 			} else {
 				return response()->json(['error'=> true,'message' =>'Jobcard for Spectrra Printers currently not available !!'],406);
 			}
@@ -523,6 +510,7 @@ class JobManagerController extends Controller
 	public function storeJobcardData(Request $request)
 	{
 		try {
+			dd($request);
 				$company_id      = $request['company_id'];
 				$workorder_id    = $request['workorder_id'];
 				$created_date    = $request['created_date'] == ''?NULL:Carbon::parse($request['created_date'],'Asia/Kolkata')->toDateString();

@@ -404,12 +404,19 @@ function generateJobcard(){
                                                             return a.qty_table_id - b.qty_table_id;
                                                         });
                                                         $.each(template, function(ratio_table_row, row){
+                                                            if (row.hasOwnProperty('ratio_pack_type')) {
+                                                                var ratio_pack_type = ' '+row.ratio_pack_type;
+                                                            } else {
+                                                                var ratio_pack_type = '';
+                                                            }
                                                             total += parseInt(row.order_quantity);
+                                                            let buyer_po_number = (row.buyer_po_number === null||"") ?'-':row.buyer_po_number;
+                                                            let ocn_number = (row.ocn_number === null||"") ?'-':row.ocn_number;
                                                             ratio_table_html += '<tr class="tr-'+row.reference_name.replace(/ /g, '-')+'" id='+row.erp_order_details_id+' data-template-id='+row.template_id+'>\
-                                                            <td id="ratio_tr_refname_'+ratio_table_row+'">'+row.reference_name+' '+row.ratio_pack_type+'</td>\
-                                                            <td id="ratio_tr_buyer_po_'+ratio_table_row+'">'+row.buyer_po_number+'</td>\
+                                                            <td id="ratio_tr_refname_'+ratio_table_row+'">'+row.reference_name+''+ratio_pack_type+'</td>\
+                                                            <td id="ratio_tr_buyer_po_'+ratio_table_row+'">'+buyer_po_number+'</td>\
                                                             <td id="ratio_tr_erp_id_'+ratio_table_row+'">'+row.erp_id+'</td>\
-                                                            <td id="ratio_tr_ocn_'+ratio_table_row+'">'+row.ocn_number+'</td>\
+                                                            <td id="ratio_tr_ocn_'+ratio_table_row+'">'+ocn_number+'</td>\
                                                             <td id="ratio_tr_qty_'+ratio_table_row+'">'+row.order_quantity+'</td>\
                                                             <td></td>\
                                                             </tr>';
@@ -448,13 +455,15 @@ function generateJobcard(){
                                                             <tr>\
                                                                 <th width="80px">B.PO.NO</th>';
                                 $.each(erpid.order_data, function(index, common_data){
-                                    single_table_html += '<td colspan="2" class="single-buyer-po-'+index+'">'+common_data.buyer_po_number+'</td>';
+                                    let buyer_po_no = (common_data.buyer_po_number === null||"") ?'-':common_data.buyer_po_number;
+                                    single_table_html += '<td colspan="2" class="single-buyer-po-'+index+'">'+buyer_po_no+'</td>';
                                 });
                                 single_table_html += '</tr>\
                                                             <tr>\
                                                                 <th width="80px">OCN</th>';
                                 $.each(erpid.order_data, function(index, common_data){
-                                    single_table_html += '<td colspan="2" class="single-ocn-'+index+'">'+common_data.ocn_number+'</td>';
+                                    let ocn_no = (common_data.ocn_number === null||"") ?'-':common_data.ocn_number;
+                                    single_table_html += '<td colspan="2" class="single-ocn-'+index+'">'+ocn_no+'</td>';
                                 });
 
                                 single_table_html += '</tr>\
@@ -1216,11 +1225,13 @@ function storeJobcard()
                                     <tbody>';
                                         var ratio_total = 0;
                                         $.each(table_data, function(key, value){
+                                            let buyer_po = (value["buyer_po_number"] === null||"") ?'-':value["buyer_po_number"];
+                                            let ocn_num = (value["ocn_number"] === null||"") ?'-':value["ocn_number"];
                                             ratio_table += '<tr class="tr-'+table.replace('_', ' ')+'"  data-template-id="'+value["template_id"]+'">\
                                                                 <td id="edit_ratio_tr_refname_'+key+'">'+value["reference_name"]+'</td>\
-                                                                <td id="edit_ratio_tr_buyer_po_'+key+'">'+value["buyer_po_number"]+'</td>\
+                                                                <td id="edit_ratio_tr_buyer_po_'+key+'">'+buyer_po+'</td>\
                                                                 <td id="edit_ratio_tr_erp_id_'+key+'">'+value["erp_id"]+'</td>\
-                                                                <td id="edit_ratio_tr_ocn_'+key+'">'+value["ocn_number"]+'</td>\
+                                                                <td id="edit_ratio_tr_ocn_'+key+'">'+ocn_num+'</td>\
                                                                 <td id="edit_ratio_tr_qty_'+key+'">'+value["order_quantity"]+'</td>\
                                                                 <td></td>\
                                                             </tr>';
