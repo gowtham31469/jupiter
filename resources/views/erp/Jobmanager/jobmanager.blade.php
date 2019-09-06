@@ -275,7 +275,7 @@
 							<tbody>
 								@foreach($orders as $vals)
 								@php $ref_name = str_replace(" ","",$vals->reference_name) @endphp
-								<tr id="{{$vals->id}}" data-refname="{{ $vals->reference_name }}" data-buyer-po="{{ $vals->buyer_po_number }}" data-order-type="{{ $vals->order_type }}" data-created-at="{{ $vals->created_at }}" data-style-no="{{ $vals->style_no }}" data-template-file="{{ $vals->template_file }}" data-iteration="{{ $loop->iteration }}" data-zone="{{ $vals->zone }}">
+								<tr id="{{$vals->id}}" data-refname="{{ $vals->reference_name }}" data-buyer-po="{{ $vals->buyer_po_number }}" data-order-type="{{ $vals->order_type }}" data-created-at="{{ $vals->created_at }}" data-style-no="{{ $vals->style_no }}" data-template-file="{{ $vals->template_file }}" data-iteration="{{ $loop->iteration }}" data-zone="{{ $vals->zone }}" data-uuid="{{ $vals->uuid }}">
 									<td>
 										<div class="form-check">
 										<a href="javascript:void(0)">

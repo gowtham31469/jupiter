@@ -241,20 +241,20 @@ function generateJobcard(){
         });
         order_type_array   = order_type_array.join(',');
 
-        created_at_array = [];
-        /** [ Create array of created_at selected ] */
+        uuid_array = [];
+        /** [ Create array of uuid selected ] */
         $('.row-checkbox', allPages).each(function (i, item) {
             if ($(this).is(':checked')) {
-                created_at_array.push($(this).closest('tr').data('created-at')); 
+                uuid_array.push($(this).closest('tr').data('uuid')); 
             }
         });
-        created_at_array   = created_at_array.join(',');
+        uuid_array   = uuid_array.join(',');
 
         $.ajax({
             url:base_url + "/erp/job-manager/get-jobcard-order-details",
             dataType:"json",
             method:"get",
-            data:{orders:orders, ref_array:ref_array, buyer_po_array:buyer_po_array,order_type_array:order_type_array,created_at_array:created_at_array},
+            data:{orders:orders, ref_array:ref_array, buyer_po_array:buyer_po_array,order_type_array:order_type_array,uuid_array:uuid_array},
             tryCount : 0,
             retryLimit : 2,
             beforeSend: function () {
@@ -983,14 +983,14 @@ function storeJobcard()
     });
     order_type_array   = order_type_array.join(',');
 
-    created_at_array = [];
-    /** [ Create array of created_at selected ] */
+    uuid_array = [];
+    /** [ Create array of uuid selected ] */
     $('.row-checkbox', allPages).each(function (i, item) {
         if ($(this).is(':checked')) {
-            created_at_array.push($(this).closest('tr').data('created-at')); 
+            uuid_array.push($(this).closest('tr').data('uuid')); 
         }
     });
-    created_at_array   = created_at_array.join(',');
+    uuid_array   = uuid_array.join(',');
     
     jsonArray = [];
     /** [ Create json object of selected orders ] */
@@ -1005,12 +1005,12 @@ function storeJobcard()
             erp_order_details_obj.erp_id     = $(this).closest('tr').attr('id');
             erp_order_details_obj.style_no   = $(this).closest('tr').data('style-no');
             erp_order_details_obj.temp_file  = $(this).closest('tr').data('template-file');
+            erp_order_details_obj.uuid       = $(this).closest('tr').data('uuid');
 
             jsonArray.push(erp_order_details_obj);
         }
     });
 
-    // pushing created_at array into json object
     final_json_obj['erp_order_details'] = jsonArray;
 
     $.ajax({
@@ -1067,7 +1067,7 @@ function storeJobcard()
             selected_ref_array:selected_ref_array,
             selected_buyer_po_array:selected_buyer_po_array,
             order_type_array:order_type_array,
-            created_at_array:created_at_array
+            uuid_array:uuid_array
         },
         tryCount: 0,
         retryLimit: 2,

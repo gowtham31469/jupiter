@@ -127,8 +127,8 @@ class JobManagerController extends Controller
 											->where('erp_order_details.order_status_id', '=', $order_status_id)
 											->whereIn('erp_orders.buyer_id', $buyers)
 											->orderBy('erp_order_details.erp_order_id', 'asc')
-											->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id',$this->buyer_name.'_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at')
-											->select('erp_orders.*','erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name', 'buyers.id as buyer_id',$this->buyer_name.'_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at')
+											->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id',$this->buyer_name.'_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at','erp_order_details.uuid')
+											->select('erp_orders.*','erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name', 'buyers.id as buyer_id',$this->buyer_name.'_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at', 'erp_order_details.uuid')
 											->get();
 					
 					if(count($erp_order_details) > 0)
@@ -171,7 +171,6 @@ class JobManagerController extends Controller
 		$buyer_no = $request['buyer_no'];
 		$id = $request['id'];
 		$order_type = $request['order_type'];
-		$created_at = $request['created_at'];
 		$order_details  = 	DB::table('erp_order_details')
 									->where('erp_order_details.style_no',$style_no)
 									->where('erp_order_details.erp_order_id',$id)
@@ -243,7 +242,7 @@ class JobManagerController extends Controller
 				$selected_ref_arrays= explode(',', $request['ref_array']);
 				$buyer_pos          = explode(',', $request['buyer_po_array']);
 				$order_type         = explode(',', $request['order_type_array']);
-				$created_at         = explode(',', $request['created_at_array']);
+				$uuid               = explode(',', $request['uuid_array']);
 				$buyers_array       = array();
 				$customers_array    = array();
 				$company_array      = array();
@@ -278,7 +277,7 @@ class JobManagerController extends Controller
 					// So splitting query using conditional statements.
 					$order_detail_id_array = ErpOrderDetails::where('erp_order_details.erp_order_id', $erp_orders_id)
 				     	                      ->where('erp_order_details.order_type', $order_type[$row])
-											  ->where('erp_order_details.created_at', $created_at[$row])
+											  ->where('erp_order_details.uuid', $uuid[$row])
 											  ->where('erp_order_details.reference_name', $selected_ref_arrays[$row]);
 					if($this->buyer_name === "Tesco") {
 						$order_detail_id_array = $order_detail_id_array->where('erp_order_details.buyer_po_number', $buyer_pos[$row])
@@ -568,7 +567,7 @@ class JobManagerController extends Controller
 			    $selected_ref    = explode(',', $request['selected_ref_array']);
 				$buyer_pos       = explode(',', $request['selected_buyer_po_array']);
 				$order_types     = explode(',', $request['order_type_array']);
-				$created_at      = explode(',', $request['created_at_array']);
+				$uuid            = explode(',', $request['uuid_array']);
 
 				$current_timestamp = Carbon::now('Asia/Kolkata')->toDateTimeString();
 
@@ -668,7 +667,7 @@ class JobManagerController extends Controller
 							->where('erp_order_details.reference_name', 'ilike', $selected_ref[$row])
 							->where('erp_order_details.buyer_po_number', 'ilike', $buyer_pos[$row])
 							->where('erp_order_details.order_type', 'ilike', $order_types[$row])
-							->where('erp_order_details.created_at', '=', $created_at[$row])
+							->where('erp_order_details.uuid', 'ilike', $uuid[$row])
 							->update([
 								'status'  => $erp_status_id,
 								'jc_number' => $workorder_id,
@@ -682,7 +681,7 @@ class JobManagerController extends Controller
 											->where('erp_order_details.reference_name', 'ilike', $selected_ref[$row])
 											->where('erp_order_details.buyer_po_number', 'ilike', $buyer_pos[$row])
 											->where('erp_order_details.order_type', 'ilike', $order_types[$row])
-											->where('erp_order_details.created_at', '=', $created_at[$row])
+											->where('erp_order_details.uuid', 'ilike', $uuid[$row])
 											->get();
 							$template       = 'Available';
 							$action_id  = DB::table('actions')->where('action', 'ilike', 'JC Created')->value('id');
