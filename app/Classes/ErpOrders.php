@@ -350,7 +350,8 @@ class ErpOrders
 						'order_status_id'       => $order_status_id->id,
 						'order_date'            => $orders->order_created_at,
 						'aw_date'               => $orders->order_approved_at,
-						'uuid'                  => $unique_id
+						'uuid'                  => $unique_id,
+						'template_type'         => $orders->template_type,
 					]);
 				}
 

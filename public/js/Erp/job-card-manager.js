@@ -405,7 +405,7 @@ function generateJobcard(){
                                                         });
                                                         $.each(template, function(ratio_table_row, row){
                                                             total += parseInt(row.order_quantity);
-                                                            ratio_table_html += '<tr class="tr-'+row.reference_name.replace(' ', '-')+'" id='+row.erp_order_details_id+' data-template-id='+row.template_id+'>\
+                                                            ratio_table_html += '<tr class="tr-'+row.reference_name.replace(/ /g, '-')+'" id='+row.erp_order_details_id+' data-template-id='+row.template_id+'>\
                                                             <td id="ratio_tr_refname_'+ratio_table_row+'">'+row.reference_name+' '+row.ratio_pack_type+'</td>\
                                                             <td id="ratio_tr_buyer_po_'+ratio_table_row+'">'+row.buyer_po_number+'</td>\
                                                             <td id="ratio_tr_erp_id_'+ratio_table_row+'">'+row.erp_id+'</td>\
@@ -491,7 +491,7 @@ function generateJobcard(){
                                 });
 
                                 single_table_html += '<tr>\
-                                                      <th class="highlight_row total-text" data-ref-name = "'+template_name[0].replace(' ', '_')+'">TOTAL</th>';
+                                                      <th class="highlight_row total-text" data-ref-name = "'+template_name[0].replace(/ /g, '_')+'">TOTAL</th>';
                                 var total_col = 0;
                                 $.each(erpid.order_data, function(index, common_data){
                                     single_table_html += '<td class="total-quantity-col-'+total_col+'"><strong>'+sum[total_col]+'</strong></td>\
@@ -499,8 +499,8 @@ function generateJobcard(){
                                     total_col++;
                                 });
                                 
-                                single_table_html += '<td><strong class="total-qty-'+template_name[0].replace(' ', '_')+'">'+parseInt(total_quantity_final)+'</strong></td>\
-                                                        <td class="total-excess-col-table-'+table+' total-excess-'+template_name[0].replace(' ', '_')+'"></td>\
+                                single_table_html += '<td><strong class="total-qty-'+template_name[0].replace(/ /g, '_')+'">'+parseInt(total_quantity_final)+'</strong></td>\
+                                                        <td class="total-excess-col-table-'+table+' total-excess-'+template_name[0].replace(/ /g, '_')+'"></td>\
                                                         <td></td>\
                                                         <td></td>\
                                                     </tr>';
@@ -512,23 +512,23 @@ function generateJobcard(){
                                 {
                                     meters_div_html +='<div class="col-md-12">\
                                                 <div class="col-md-3">\
-                                                    <label for="act_excess_'+template_name[0].replace(' ', '_')+'" >ACT EXCESS % ('+template_name[0]+'):</label>\
-                                                    <span class="act-excess" data-act-excess-ref="'+template_name[0]+'" id="act_excess_'+template_name[0].replace(' ', '_')+'"></span>\
+                                                    <label for="act_excess_'+template_name[0].replace(/ /g, '_')+'" >ACT EXCESS % ('+template_name[0]+'):</label>\
+                                                    <span class="act-excess" data-act-excess-ref="'+template_name[0]+'" id="act_excess_'+template_name[0].replace(/ /g, '_')+'"></span>\
                                                 </div>\
                                                 <div class="col-md-3">\
-                                                    <label for="sticker_mtr_'+template_name[0].replace(' ', '_')+'" >STKRS MTRS ('+template_name[0]+'):</label>\
-                                                    <span class="sticker-mtrs" id="sticker_mtr_'+template_name[0].replace(' ', '_')+'"></span>\
+                                                    <label for="sticker_mtr_'+template_name[0].replace(/ /g, '_')+'" >STKRS MTRS ('+template_name[0]+'):</label>\
+                                                    <span class="sticker-mtrs" id="sticker_mtr_'+template_name[0].replace(/ /g, '_')+'"></span>\
                                                 </div>\
                                                 <div class="col-md-3">\
                                                 <div class="form-group has-feedback">\
-                                                    <label for="settings_'+template_name[0].replace(' ', '_')+'" >SETTINGS ('+template_name[0]+') :</label>\
-                                                    <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" class="form-control input-sm settings"  name="settings_'+template_name[0].replace(' ', '_')+'" placeholder="SETTINGS" id="settings_'+template_name[0].replace(' ', '_')+'" onkeyup="return totalMeters()" max="99999"  data-max-error="Value should be <= 99999">\
+                                                    <label for="settings_'+template_name[0].replace(/ /g, '_')+'" >SETTINGS ('+template_name[0]+') :</label>\
+                                                    <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" class="form-control input-sm settings"  name="settings_'+template_name[0].replace(/ /g, '_')+'" placeholder="SETTINGS" id="settings_'+template_name[0].replace(/ /g, '_')+'" onkeyup="return totalMeters()" max="99999"  data-max-error="Value should be <= 99999">\
                                                     <div class="help-block with-errors"></div>\
                                                 </div>\
                                                 </div>\
                                                 <div class="col-md-3">\
-                                                <label for="total_mtrs_'+template_name[0].replace(' ', '_')+'" >TOTAL MTRS ('+template_name[0]+'):</label>\
-                                                <span id="total_mtrs_'+template_name[0].replace(' ', '_')+'" class="total-meters"></span>\
+                                                <label for="total_mtrs_'+template_name[0].replace(/ /g, '_')+'" >TOTAL MTRS ('+template_name[0]+'):</label>\
+                                                <span id="total_mtrs_'+template_name[0].replace(/ /g, '_')+'" class="total-meters"></span>\
                                                 </div>\
                                             </div>';
                                 }
@@ -803,7 +803,7 @@ function storeJobcard()
     $('.ratio-list-table').each(function (i, table) {
      var my_object    = new Object();
      var array_list   = [];
-         ref_name     = $(this).data('ratio-ref-table').replace(' ', '_');
+         ref_name     = $(this).data('ratio-ref-table').replace(/ /g, '_');
 
       $(table).find('tbody tr:not(:last)').each(function (index, row) {
         my_object = {}; 
@@ -844,7 +844,7 @@ function storeJobcard()
         var ocn_array      = [];
         var temp_id_object = {};
         var temp_id_array  = [];
-        single_ref_name    = $(table).find('tbody tr:eq(0) td:last-child').data('single-ref-name').replace(' ', '_');
+        single_ref_name    = $(table).find('tbody tr:eq(0) td:last-child').data('single-ref-name').replace(/ /g, '_');
         
         // create erp_id array
         $(table).find('tbody tr:eq(0) td:not(:last)').each(function (i, item) {
@@ -1094,7 +1094,7 @@ function storeJobcard()
                         created_at    = $(this).closest('tr').data('created-at');
                         style_no      = $(this).closest('tr').data('style-no');
                         loop          = $(this).closest('tr').data('iteration');
-                        modal_name    = refname.replace(' ', '');
+                        modal_name    = refname.replace(/ /g, '');
 
                         openmodaltescopreview(modal_name, loop, style_no, buyer_po_no, id, order_type, created_at, isEdit);
                     }
@@ -1342,23 +1342,23 @@ function storeJobcard()
                     $.each(data.jobcard_data.additional_details, function(key, item){
                         edit_meters_div_html +='<div class="col-md-12">\
                                             <div class="col-md-3">\
-                                                <label for="edit_act_excess_'+item.ref_name.replace(' ', '_')+'" >ACT EXCESS % ('+item.ref_name+'):</label>\
-                                                <span class="edit-act-excess" data-act-excess-ref="'+item.ref_name+'" id="edit_act_excess_'+item.ref_name.replace(' ', '_')+'">'+item.actual_excess+'</span>\
+                                                <label for="edit_act_excess_'+item.ref_name.replace(/ /g, '_')+'" >ACT EXCESS % ('+item.ref_name+'):</label>\
+                                                <span class="edit-act-excess" data-act-excess-ref="'+item.ref_name+'" id="edit_act_excess_'+item.ref_name.replace(/ /g, '_')+'">'+item.actual_excess+'</span>\
                                             </div>\
                                             <div class="col-md-3">\
-                                                <label for="edit_sticker_mtr_'+item.ref_name.replace(' ', '_')+'" >STKRS MTRS ('+item.ref_name+'):</label>\
-                                                <span class="edit-sticker-mtrs" id="edit_sticker_mtr_'+item.ref_name.replace(' ', '_')+'">'+item.mtrs_for_stickers+'</span>\
+                                                <label for="edit_sticker_mtr_'+item.ref_name.replace(/ /g, '_')+'" >STKRS MTRS ('+item.ref_name+'):</label>\
+                                                <span class="edit-sticker-mtrs" id="edit_sticker_mtr_'+item.ref_name.replace(/ /g, '_')+'">'+item.mtrs_for_stickers+'</span>\
                                             </div>\
                                             <div class="col-md-3">\
                                             <div class="form-group has-feedback">\
-                                                <label for="edit_settings_'+item.ref_name.replace(' ', '_')+'" >SETTINGS ('+item.ref_name+') :</label>\
-                                                <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" max="99999" data-max-error="Value should be <= 99999" class="form-control input-sm edit-settings" name="edit_settings_'+item.ref_name.replace(' ', '_')+'" placeholder="SETTINGS" id="edit_settings_'+item.ref_name.replace(' ', '_')+'" onkeyup="return totalMetersEdit()" value="'+item.settings+'" >\
+                                                <label for="edit_settings_'+item.ref_name.replace(/ /g, '_')+'" >SETTINGS ('+item.ref_name+') :</label>\
+                                                <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" max="99999" data-max-error="Value should be <= 99999" class="form-control input-sm edit-settings" name="edit_settings_'+item.ref_name.replace(/ /g, '_')+'" placeholder="SETTINGS" id="edit_settings_'+item.ref_name.replace(/ /g, '_')+'" onkeyup="return totalMetersEdit()" value="'+item.settings+'" >\
                                                 <div class="help-block with-errors"></div>\
                                             </div>\
                                             </div>\
                                             <div class="col-md-3">\
-                                            <label for="edit_total_mtrs_'+item.ref_name.replace(' ', '_')+'" >TOTAL MTRS ('+item.ref_name+'):</label>\
-                                            <span id="edit_total_mtrs_'+item.ref_name.replace(' ', '_')+'" class="edit-total-meters">'+item.total_mtrs+'</span>\
+                                            <label for="edit_total_mtrs_'+item.ref_name.replace(/ /g, '_')+'" >TOTAL MTRS ('+item.ref_name+'):</label>\
+                                            <span id="edit_total_mtrs_'+item.ref_name.replace(/ /g, '_')+'" class="edit-total-meters">'+item.total_mtrs+'</span>\
                                             </div>\
                                         </div>';
                     });
@@ -1603,7 +1603,7 @@ function updateJobcard(formData)
     $('.edit-ratio-list-table').each(function (i, table) {
      var my_object    = new Object();
      var array_list   = [];
-         ref_name     = $(this).data('ratio-ref-table').replace(' ', '_');
+         ref_name     = $(this).data('ratio-ref-table').replace(/ /g, '_');
 
       $(table).find('tbody tr:not(:last)').each(function (index, row) {
         my_object = {}; 
@@ -1644,7 +1644,7 @@ function updateJobcard(formData)
         var ocn_array      = [];
         var temp_id_object = {};
         var temp_id_array  = [];
-        single_ref_name    = $(table).find('tbody tr:eq(0) td:last-child').data('single-ref-name').replace(' ', '_');
+        single_ref_name    = $(table).find('tbody tr:eq(0) td:last-child').data('single-ref-name').replace(/ /g, '_');
         
         // create erp_id array
         $(table).find('tbody tr:eq(0) td:not(:last)').each(function (i, item) {
@@ -1839,7 +1839,7 @@ function updateJobcard(formData)
                     refname    = $(this).attr('data-ref-name'); 
                     id         = $(this).attr('data-erp-id');
                     style_no   = $(this).attr('data-style-no');
-                    modal_name = refname.replace(' ', '');
+                    modal_name = refname.replace(/ /g, '');
 
                     openmodaltescopreview(modal_name, loop, style_no, buyer_po_no, id, order_type, created_at, isEdit);
                     loop++;
