@@ -937,7 +937,8 @@ class OrderManagementCntrl extends Controller
 										'season_code'    => $season_code,
 										'pi_status'           => $pi_status,
 										'po_status'           => $po_status,
-					 					'color_code'           => $value1['Color_Code']
+					 					'color_code'          => $value1['Color_Code'],
+					 					'template_type'       => "single"
 							 ]);
 				$i=0;
 				foreach($tot_qty_table as $value)
@@ -1065,7 +1066,8 @@ class OrderManagementCntrl extends Controller
 									'customer_id'    => $factory{0}->id,
 									'pi_status'           => $pi_status,
 									'po_status'           => $po_status,
-					 				'color_code'           => $value1['Color_Code']
+					 				'color_code'           => $value1['Color_Code'],
+					 				'template_type'       => "single"
                          ]);
 				$i=0;
 				foreach($tot_qty_table as $value)
@@ -1191,6 +1193,7 @@ class OrderManagementCntrl extends Controller
 									'customer_id'    => $factory{0}->id,
 									'pi_status'           => $pi_status,
 									'po_status'           => $po_status,
+					 				'template_type'       => "ratio"
                          ]);
            
                  MainLabelOrdersQty::create([
@@ -1311,7 +1314,8 @@ class OrderManagementCntrl extends Controller
 									'customer_id'    => $factory{0}->id,
 									'pi_status'           => $pi_status,
 									'po_status'           => $po_status,
-					 				'color_code'           => $value1['Color_Code']
+					 				'color_code'           => $value1['Color_Code'],
+					 				'template_type'       => "single"
                          ]);
             $i=0;
             foreach($tot_qty_table as $value)
@@ -1436,6 +1440,7 @@ class OrderManagementCntrl extends Controller
 									'season_code'    => $season_code,
 				 					'pi_status'           => $pi_status,
 				 					'po_status'           => $po_status,
+					 				'template_type'       => "ratio"
                          ]);
             
                  SpecialTagOrdersQty::create([
@@ -1699,6 +1704,7 @@ class OrderManagementCntrl extends Controller
 				  				'pi_status'           => $pi_status,
 				 				'po_status'           => $po_status,
                                 'group_id'    => $age,
+					 			'template_type'       => "single"
                      ]);
                 $j=0;
                 foreach($tot_qty_poly as $value)
@@ -1769,6 +1775,7 @@ class OrderManagementCntrl extends Controller
 				   				'pi_status'           => $pi_status,
 				 				'po_status'           => $po_status,
                                 'group_id'    => $age,
+					 			'template_type'       => "single"
                      ]);
                 $i=0;
                 foreach($tot_qty_carton as $value)
@@ -1910,6 +1917,7 @@ class OrderManagementCntrl extends Controller
 						  		'pi_status'           => $pi_status,
 								'po_status'           => $po_status,
                                 'group_id'    => $age,
+					 			'template_type'       => "ratio"
                      ]);
 			
 				StandardPolyStickersQty::create([
@@ -1985,6 +1993,7 @@ class OrderManagementCntrl extends Controller
 				   				'pi_status'           => $pi_status,
 				   				'po_status'           => $po_status,
                                 'group_id'    => $age,
+					 			'template_type'       => "ratio"
                      ]);
 			
 				StandardCartonStickersQty::create([
