@@ -16,5 +16,5 @@ class WashLabelOrders extends Authenticatable
      */
 
     protected $table = 'orchestra_wash_care_label_orders';
-    protected $fillable =['uvc','template_id','merchandisers_id','washing_id','whitening_id','dryer_id','ironing_id','cleaning_id','made_in_id','care_instruction_id','template_name','delivery_date','orchestra_parcel_details_id','season_code','svg_path','status','pi_status','po_status','cm','in','approved_date','merchandiser_comment','rejected_date','customer_id','color_code','po','card_flag'];
+    protected $fillable =['uvc','template_id','merchandisers_id','washing_id','whitening_id','dryer_id','ironing_id','cleaning_id','made_in_id','care_instruction_id','template_name','delivery_date','orchestra_parcel_details_id','season_code','svg_path','status','pi_status','po_status','cm','in','approved_date','merchandiser_comment','rejected_date','customer_id','color_code','po','card_flag','template_type'];
 }
