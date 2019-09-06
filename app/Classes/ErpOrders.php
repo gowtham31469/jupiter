@@ -101,6 +101,8 @@ class ErpOrders
 	{
 		if ($order_details)
 		{
+			// unique id for array creation
+			$unique_id = 'ERP'.$erp_orders->id.str_random(25);
 			foreach ($order_details as $key => $vals) {
 
 				$style_no       = ($orders->zone == "CE") ? $orders->ce_style_ref : $orders->uk_style_ref ;
@@ -138,7 +140,8 @@ class ErpOrders
 						'created_at'            => $this->created_at,
 						'order_status_id'       => $order_status_id->id,
 						'order_date'            => $orders->order_created_at,
-						'aw_date'               => $orders->order_approved_at
+						'aw_date'               => $orders->order_approved_at,
+						'uuid'                  => $unique_id
 					]);
 				}
 
@@ -300,7 +303,10 @@ class ErpOrders
 	function insertOrchestraOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders_id, $table_name, $order_status_id, $customer_po_no)
 	{
 		if ($order_details)
-		{
+		{   
+			// unique id for array creation
+			$unique_id = 'ERP'.$erp_orders->id.str_random(25);
+
 			foreach ($order_details as $key => $vals) {
 
 				// template front and back id storing in orchestra_hang_tag_orders table
@@ -343,7 +349,8 @@ class ErpOrders
 						'created_at'            => $this->created_at,
 						'order_status_id'       => $order_status_id->id,
 						'order_date'            => $orders->order_created_at,
-						'aw_date'               => $orders->order_approved_at
+						'aw_date'               => $orders->order_approved_at,
+						'uuid'                  => $unique_id
 					]);
 				}
 
