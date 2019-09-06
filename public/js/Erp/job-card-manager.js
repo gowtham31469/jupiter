@@ -1383,7 +1383,7 @@ function storeJobcard()
                             var incr = 0;
                             // hidden erp_order_details data.
                             $.each(artwork_data, function(index, erp_data){
-                                erp_details_div_html += '<div hidden class="edit-erp-details" data-erp-id="'+erp_data.erp_id+'" data-ref-name="'+erp_data.refname+'" data-order-type="'+erp_data.order_type+'" data-buyer-po="'+erp_data.buyer_po+'" data-created-at="'+erp_data.created_at+'"  data-style-no="'+erp_data.style_no+'" data-template-file="'+erp_data.temp_file+'"></div><object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal'+incr+'" class="center-block tesco_svg'+incr+'" data="'+erp_data.temp_file+'" type="image/svg+xml"></object>'
+                                erp_details_div_html += '<div hidden class="edit-erp-details" data-erp-id="'+erp_data.erp_id+'" data-ref-name="'+erp_data.refname+'" data-order-type="'+erp_data.order_type+'" data-buyer-po="'+erp_data.buyer_po+'" data-created-at="'+erp_data.created_at+'"  data-style-no="'+erp_data.style_no+'" data-template-file="'+erp_data.temp_file+'" data-uuid="'+erp_data.uuid+'"></div><object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal'+incr+'" class="center-block tesco_svg'+incr+'" data="'+erp_data.temp_file+'" type="image/svg+xml"></object>'
                                 incr++;
                             });
                             
@@ -1757,6 +1757,7 @@ function updateJobcard(formData)
         erp_order_details_obj.erp_id     = $(this).attr('data-erp-id');
         erp_order_details_obj.style_no   = $(this).attr('data-style-no');
         erp_order_details_obj.temp_file  = $(this).attr('data-template-file');
+        erp_order_details_obj.uuid       = $(this).attr('data-uuid');
 
         jsonArray.push(erp_order_details_obj);
     });
