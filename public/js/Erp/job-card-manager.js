@@ -537,7 +537,7 @@ function generateJobcard(){
                                                 </div>\
                                                 <div class="col-md-3">\
                                                 <label for="total_mtrs_'+template_name[0].replace(/ /g, '_')+'" >TOTAL MTRS ('+template_name[0]+'):</label>\
-                                                <span id="total_mtrs_'+template_name[0].replace(/ /g, '_')+'" class="total-meters"></span>\
+                                                <span id="total_mtrs_'+template_name[0].replace(/ /g, '_')+'" data-tem-ref-name="'+template_name[0].replace(/ /g, '_')+'" class="total-meters"></span>\
                                                 </div>\
                                             </div>';
                                 }
@@ -744,8 +744,7 @@ function mtrsForStickers()
 function totalMeters()
 {
     $('.total-meters').each(function(){
-       let total_mtrs_id = $(this).attr('id').split("_");
-       let ref_name = total_mtrs_id[2]+'_'+total_mtrs_id[3];
+       let ref_name = $(this).attr('data-tem-ref-name');
        let mtrs_for_stickers = $('#sticker_mtr_'+ref_name).text() === ''?0:$('#sticker_mtr_'+ref_name).text();
        let settings = $('#settings_'+ref_name).val() === ''?0:$('#settings_'+ref_name).val();
        if (!isNaN(settings) && !isNaN(mtrs_for_stickers)) {
@@ -1369,7 +1368,7 @@ function storeJobcard()
                                             </div>\
                                             <div class="col-md-3">\
                                             <label for="edit_total_mtrs_'+item.ref_name.replace(/ /g, '_')+'" >TOTAL MTRS ('+item.ref_name+'):</label>\
-                                            <span id="edit_total_mtrs_'+item.ref_name.replace(/ /g, '_')+'" class="edit-total-meters">'+item.total_mtrs+'</span>\
+                                            <span id="edit_total_mtrs_'+item.ref_name.replace(/ /g, '_')+'" data-edit-tem-ref-name="'+item.ref_name.replace(/ /g, '_')+'" class="edit-total-meters">'+item.total_mtrs+'</span>\
                                             </div>\
                                         </div>';
                     });
@@ -1544,8 +1543,7 @@ function mtrsForStickersEdit()
 function totalMetersEdit()
 {
     $('.edit-total-meters').each(function(){
-       let total_mtrs_id = $(this).attr('id').split("_");
-       let ref_name = total_mtrs_id[3]+'_'+total_mtrs_id[4];
+       let ref_name = $(this).attr('data-edit-tem-ref-name');
        let mtrs_for_stickers = $('#edit_sticker_mtr_'+ref_name).text() === ''?0:$('#edit_sticker_mtr_'+ref_name).text();
        let settings = $('#edit_settings_'+ref_name).val() === ''?0:$('#edit_settings_'+ref_name).val();
        if (!isNaN(settings) && !isNaN(mtrs_for_stickers)) {
