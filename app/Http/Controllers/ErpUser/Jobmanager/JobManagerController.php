@@ -510,7 +510,7 @@ class JobManagerController extends Controller
 	public function storeJobcardData(Request $request)
 	{
 		try {
-			dd($request);
+			dd($request['company_id']);
 				$company_id      = $request['company_id'];
 				$workorder_id    = $request['workorder_id'];
 				$created_date    = $request['created_date'] == ''?NULL:Carbon::parse($request['created_date'],'Asia/Kolkata')->toDateString();

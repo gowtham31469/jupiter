@@ -191,7 +191,7 @@ function showFilter() {
 }
 
 /**
- * Job card generation 
+ * Job card generation for JGA company
  * @author <Praveen> [praveen@wizroots.com]
  */
 function generateJobcard(){
@@ -636,7 +636,7 @@ function selectOrders(event)
 
 /** ---------------------- Excess calculation functions for create jobcard begins ----------------------**/
 /**
- * Dynamic Excess calculation based on excess value entered.
+ * Dynamic Excess calculation based on excess value entered.(for JGA company)
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
@@ -653,7 +653,7 @@ function calculateExcess(evt)
 }
 
 /**
- * Dynamic Total Excess calculation based on calculated excess value.
+ * Dynamic Total Excess calculation based on calculated excess value.(for JGA company)
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
@@ -676,7 +676,7 @@ function totalExcess()
 }
 
 /**
- * Dynamic Actual Excess calculation based on excess value and total quantity.
+ * Dynamic Actual Excess calculation based on excess value and total quantity.(for JGA company)
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
@@ -706,7 +706,7 @@ function actualExcess()
 }
 
 /**
- * Dynamic Mtrs for sticker calculation.
+ * Dynamic Mtrs for sticker calculation.(for JGA company)
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
@@ -737,7 +737,7 @@ function mtrsForStickers()
 }
 
 /**
- * Dynamic Total Meters calculation.
+ * Dynamic Total Meters calculation.(for JGA company)
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
@@ -756,7 +756,7 @@ function totalMeters()
 }
 /** ----------------- Excess calculation functions for create jobcard ends ----------------------**/
 /**
- * Store jobcard
+ * Store jobcard(for JGA company)
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
@@ -1129,7 +1129,7 @@ function storeJobcard()
 }
 
 /**
-   * Function for get jobcard details for editing
+   * Function for get jobcard details for editing(for JGA company)
    * @param id
    * @author <praveen>
    *
@@ -1436,7 +1436,7 @@ function storeJobcard()
 
   /** ---------------------- Excess calculation functions for edit jobcard begins ----------------------**/
 /**
- * Dynamic Excess calculation based on excess value entered.
+ * Dynamic Excess calculation based on excess value entered.(for JGA company)
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
@@ -1453,7 +1453,7 @@ function calculateExcessEdit(evt)
 }
 
 /**
- * Dynamic Total Excess calculation based on calculated excess value.
+ * Dynamic Total Excess calculation based on calculated excess value.(for JGA company)
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
@@ -1476,7 +1476,7 @@ function editTotalExcess()
 }
 
 /**
- * Dynamic Actual Excess calculation based on excess value and total quantity.
+ * Dynamic Actual Excess calculation based on excess value and total quantity.(for JGA company)
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
@@ -1506,7 +1506,7 @@ function actualExcessEdit()
 }
 
 /**
- * Dynamic Mtrs for sticker calculation.
+ * Dynamic Mtrs for sticker calculation.(for JGA company)
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
@@ -1537,7 +1537,7 @@ function mtrsForStickersEdit()
 }
 
 /**
- * Dynamic Total Meters calculation.
+ * Dynamic Total Meters calculation.(for JGA company)
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
@@ -1557,7 +1557,7 @@ function totalMetersEdit()
 /** ----------------- Excess calculation functions for edit jobcard ends ----------------------**/
 
 /**
- * Update jobcard
+ * Update jobcard(for JGA company)
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
