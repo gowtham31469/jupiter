@@ -16,5 +16,5 @@ class SolidPolyStickerOrders extends Authenticatable
      */
 
     protected $table = 'orchestra_solid_poly_bag_sticker_orders';
-    protected $fillable =['uvc','template_id','po','height','delivery_date','svg_path','status','group_id','pi_status','po_status','customer_id','orchestra_parcel_details_id','season_code','color_code'];
+    protected $fillable =['uvc','template_id','po','height','delivery_date','svg_path','status','group_id','pi_status','po_status','customer_id','orchestra_parcel_details_id','season_code','color_code','template_type'];
 }

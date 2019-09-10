@@ -326,6 +326,7 @@ class ErpOrders
 					DB::table('erp_order_details')->where('order_qnty_table_name',$qnty_table)->where('order_qnty_table_id',$vals->id)->delete();
 					$erp_order_details_id = ErpOrderDetails::insertGetId([
 						'erp_order_id'     		=> $erp_orders->id,
+						'style_no'         		=> $orders->uvc,
 						'order_quantity'   		=> $vals->quantity,
 						'pending_orders'		=> $vals->quantity,
 						'size'         	   		=> $vals->size,

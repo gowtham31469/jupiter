@@ -541,6 +541,7 @@
 							countries = [];
 							seasons = [];
 							templates = [];
+							_invSelectd = 0;
 
 							$.each($("#country option:selected"), function(){            
 								countries.push($(this).html());
@@ -554,6 +555,13 @@
 								templates.push($(this).html());
 							});
 
+							if($(".roleSelection option:selected").val().length > 0)
+							{
+								if($(".roleSelection option:selected").val() == "_invoice")
+								{
+									_invSelectd = 1;
+								}
+							}
 							$.ajax({
 								type : 'post',
 								url: "{{ url('/level1Filter') }}",
@@ -564,6 +572,7 @@
 									'template': templates,
 									'date_start' : $("#txtFrom").val(),
 									'date_end' : $("#txtTo").val(),
+									'invoiceStatus' : _invSelectd,
 									'_token': "{{ csrf_token() }}",
 								},
 

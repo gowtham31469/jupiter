@@ -285,7 +285,24 @@ function parseSingleType(data) {
                     var tab = JSON.parse(data.details.table);
                     var size = tab[0].data[1][3].text;
                     singleObj.styleNumber =  style[1].trim();
-                    singleObj.shortDescription =  ele[2].text.replace(size, '').trim();
+					if(ele[3].text === size)
+					{
+                    	singleObj.shortDescription =  ele[2].text.trim();
+						singleObj.originalDescription = ele[2].text+ele[3].text;
+					}
+					else
+					{
+						if(ele[2].text.slice(-size.length) == size)
+						{
+							singleObj.shortDescription = ele[2].text.slice(0,-size.length)
+						}
+						else
+						{
+							singleObj.shortDescription = ele[2].text.trim();
+						}
+						singleObj.originalDescription = ele[2].text;
+						
+					}
                     break;
             }
         });
@@ -367,7 +384,7 @@ function parseRatioType(data) {
                 ratioObj.styleNumber =  ele[1].text.trim();
                 break;
             case 4:
-                ele[1].text = ele[1].text.replace('12/18', '').trim();
+                //ele[1].text = ele[1].text.replace('12/18', '').trim();
 				//var short_desc = ele[1].text.split('  ');
 				//ratioObj.shortDescription = (short_desc.length === 1) ? ele[1].text.trim() : ele[1].text.replace(short_desc[1], '').trim();
 				var short_desc = ele[1].text.trim();
@@ -459,6 +476,11 @@ function renderParsedValues(parsedObj) {
    // $('#tesco_eqos').val(parsedObj.supplierCode);
     $('#tesco_season_code').val(parsedObj.seasonCode);
     $('#tesco_description').val(parsedObj.shortDescription);
+	if(typeof parsedObj.originalDescription !== 'undefined') {
+		$('#tesco_description').prev().text($('#tesco_description').prev().text()+'(Full Description: '+parsedObj.originalDescription+')');
+		
+//		$('#tesco_description').append('<input type="hidden" id="tesco_full_description" value="'+parsedObj.originalDescription+'">');
+  	}
 
     if(type === 'single') {
         $.each(parsedObj.orderQuantity, function(i, j) {

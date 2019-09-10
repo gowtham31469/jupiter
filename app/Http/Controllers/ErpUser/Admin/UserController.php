@@ -241,7 +241,7 @@ class UserController extends Controller
 				break;
 				
 			case "Orchestra":
-				$treeviewData= DB::table("orchestra_item_master")->select('id','item_name as text','parent_id')->whereIn('parent_id', [0,1])->get()->toArray();
+				$treeviewData= DB::table("orchestra_item_master")->select('id','item_name as text','parent_id')->whereIn('parent_id', [0,1,90,103,104,154,170,174,178,182,188,191])->get()->toArray();
 				break;
 				
 			default:

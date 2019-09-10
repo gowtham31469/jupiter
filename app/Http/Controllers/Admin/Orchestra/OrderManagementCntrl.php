@@ -262,7 +262,7 @@ class OrderManagementCntrl extends Controller
                 }
             }
 
-            $data['barcode'] = DB::table('orchestra_parcel_details')->select('*')->where('UVC',$uvc)->groupBy('id','BuyerPONo')->get();
+            $data['barcode'] = DB::table('orchestra_parcel_details')->select('*')->where('UVC',$uvc)->groupBy('id','BuyerPONo')->orderBy('orchestra_parcel_details.BuyerPONo','asc')->get();
         
            $total_qty = DB::table('orchestra_parcel_details')->select('*',DB::raw("sum(\"Quantity\") as total_qty"))->where('UVC',$uvc)->groupBy('id','UVC')->get();
             $data['total_qty']=$total_qty{0}->total_qty;
@@ -579,7 +579,16 @@ class OrderManagementCntrl extends Controller
 //            $value->qty=$orchestra_main_label_orders_qty;
 //        }
         
-        $data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->select('*','orchestra_wash_care_label_orders.template_name as TemplateName')->where('uvc',$uvc)->get();
+       if($data['order_details']{0}->FactoryCode == "HF-FREEUSD")
+	   {
+				$data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->select(DB::raw('distinct on ("card_flag") "card_flag"'),'*','orchestra_wash_care_label_orders.template_name as TemplateName')->where('uvc',$uvc)->orderBy('orchestra_wash_care_label_orders.card_flag','asc')->orderBy('orchestra_wash_care_label_orders.po','asc')->get();
+		   
+		   $data['orchestra_wash_care_label_orders_po']=DB::table('orchestra_wash_care_label_orders')->select('*','orchestra_wash_care_label_orders.template_name as TemplateName')->where('uvc',$uvc)->orderBy('orchestra_wash_care_label_orders.po','asc')->get();
+	   }
+	   else
+	   {
+			$data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->select('*','orchestra_wash_care_label_orders.template_name as TemplateName')->where('uvc',$uvc)->orderBy('orchestra_wash_care_label_orders.po','asc')->get();
+	   }
         foreach($data['orchestra_wash_care_label_orders'] as $value1)
         {
             $orchestra_wash_label_orders_qty=DB::table('orchestra_wash_care_label_orders_qty')->select('*')->where('owcl_id',$value1->id)->get();
@@ -928,7 +937,8 @@ class OrderManagementCntrl extends Controller
 										'season_code'    => $season_code,
 										'pi_status'           => $pi_status,
 										'po_status'           => $po_status,
-					 					'color_code'           => $value1['Color_Code']
+					 					'color_code'          => $value1['Color_Code'],
+					 					'template_type'       => "single"
 							 ]);
 				$i=0;
 				foreach($tot_qty_table as $value)
@@ -1056,7 +1066,8 @@ class OrderManagementCntrl extends Controller
 									'customer_id'    => $factory{0}->id,
 									'pi_status'           => $pi_status,
 									'po_status'           => $po_status,
-					 				'color_code'           => $value1['Color_Code']
+					 				'color_code'           => $value1['Color_Code'],
+					 				'template_type'       => "single"
                          ]);
 				$i=0;
 				foreach($tot_qty_table as $value)
@@ -1182,6 +1193,7 @@ class OrderManagementCntrl extends Controller
 									'customer_id'    => $factory{0}->id,
 									'pi_status'           => $pi_status,
 									'po_status'           => $po_status,
+					 				'template_type'       => "ratio"
                          ]);
            
                  MainLabelOrdersQty::create([
@@ -1302,7 +1314,8 @@ class OrderManagementCntrl extends Controller
 									'customer_id'    => $factory{0}->id,
 									'pi_status'           => $pi_status,
 									'po_status'           => $po_status,
-					 				'color_code'           => $value1['Color_Code']
+					 				'color_code'           => $value1['Color_Code'],
+					 				'template_type'       => "single"
                          ]);
             $i=0;
             foreach($tot_qty_table as $value)
@@ -1427,6 +1440,7 @@ class OrderManagementCntrl extends Controller
 									'season_code'    => $season_code,
 				 					'pi_status'           => $pi_status,
 				 					'po_status'           => $po_status,
+					 				'template_type'       => "ratio"
                          ]);
             
                  SpecialTagOrdersQty::create([
@@ -1690,6 +1704,7 @@ class OrderManagementCntrl extends Controller
 				  				'pi_status'           => $pi_status,
 				 				'po_status'           => $po_status,
                                 'group_id'    => $age,
+					 			'template_type'       => "single"
                      ]);
                 $j=0;
                 foreach($tot_qty_poly as $value)
@@ -1760,6 +1775,7 @@ class OrderManagementCntrl extends Controller
 				   				'pi_status'           => $pi_status,
 				 				'po_status'           => $po_status,
                                 'group_id'    => $age,
+					 			'template_type'       => "single"
                      ]);
                 $i=0;
                 foreach($tot_qty_carton as $value)
@@ -1901,6 +1917,7 @@ class OrderManagementCntrl extends Controller
 						  		'pi_status'           => $pi_status,
 								'po_status'           => $po_status,
                                 'group_id'    => $age,
+					 			'template_type'       => "ratio"
                      ]);
 			
 				StandardPolyStickersQty::create([
@@ -1976,6 +1993,7 @@ class OrderManagementCntrl extends Controller
 				   				'pi_status'           => $pi_status,
 				   				'po_status'           => $po_status,
                                 'group_id'    => $age,
+					 			'template_type'       => "ratio"
                      ]);
 			
 				StandardCartonStickersQty::create([
@@ -2177,6 +2195,7 @@ class OrderManagementCntrl extends Controller
         $id =$request->id;
 		$cm =$request->cm;
 		$in =$request->in;
+		$card_flag =$request->card_flag;
         $parcel_id =$request->parcel_id;
         $season_code =$request->season_code;
         $washing_select = $request->washing_select; 
@@ -2241,6 +2260,7 @@ class OrderManagementCntrl extends Controller
                         'cleaning_id'      => $cleaning_select,
                         'made_in_id'      => $made_in_select,
 					    'color_code'      => $color_code,
+					    'card_flag'      => $card_flag,
                         'po'    => $po_select,
                         'care_instruction_id'      => $care_instruction_select,
                         'customer_id'    => $factory{0}->id,
@@ -2318,6 +2338,7 @@ class OrderManagementCntrl extends Controller
                                 'cleaning_id'      => $cleaning_select,
                                 'made_in_id'      => $made_in_select,
 				   				'color_code'      => $color_code,
+								'card_flag'      => $card_flag,
 				   				'po'      => $po_select,
                                 'care_instruction_id'      => $care_instruction_select,
                         		'customer_id'    => $factory{0}->id,
@@ -2392,6 +2413,7 @@ class OrderManagementCntrl extends Controller
                                 'cleaning_id'      => $cleaning_select,
                                 'made_in_id'      => $made_in_select,
 				   				'color_code'      => $color_code,
+				   				'card_flag'      => $card_flag,
 				   				'po'      => $po_select,
                                 'care_instruction_id'      => $care_instruction_select,
                         		'customer_id'    => $factory{0}->id,
@@ -2464,8 +2486,9 @@ class OrderManagementCntrl extends Controller
 		$parcel_id    = $request->parcel_id;
 		$season_code    = $request->season_code; 
 		$uvc_id    = $request->uvc_id;
+		$card_flag    = $request->card_flag;
 		
-	    $data['orchestra_wash_care_label_orders'] = DB::table('orchestra_wash_care_label_orders')->select('*')->where('uvc',$uvc_id)->where('season_code',$season_code)->where('po',$po)->get();
+	    $data['orchestra_wash_care_label_orders'] = DB::table('orchestra_wash_care_label_orders')->select('*')->where('uvc',$uvc_id)->where('season_code',$season_code)->where('po',$po)->where('card_flag',$card_flag)->get();
 		
 		if(count($data['orchestra_wash_care_label_orders']) > 0)
 		{
