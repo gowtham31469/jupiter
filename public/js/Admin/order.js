@@ -3869,7 +3869,7 @@ function washcarelabels(data, dataid,color_code,new_flag) {
 		var parcel_id = $('#parcel_id').val();
 		var season_code = $('#season_code').val();
 		var uvc_id = $('#uvc_id').val();
-		var card_flag = $('#card_flag'+dataid).val();
+		var card_flag = $('#time_flag' + dataid).val();
 		var csrf_token = $('meta[name="csrf-token"]').attr('content');
 		$.ajax({
 			url: base_url + "/admin/" + buyer + "/order-management/po_select_wcl",
