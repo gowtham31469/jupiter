@@ -259,6 +259,7 @@ class JobManagerController extends Controller
 						$res->reference_name = "Std Carton Stickers";
 						$res->age_group = OrchestraAgeGroup::where('id',$res->group_id)->first()->color;
 						});
+				break;
 
 				case 'orchestra_standard_poly_bag_sticker_orders':
 
@@ -464,7 +465,7 @@ class JobManagerController extends Controller
 								->where('erp_order_details.id', '=', $order_detail_id)
 								->first();
 					
-					// to differnciate reorder and repeatorder having same values
+					// to differenciate reorder and repeatorder having same values
 					$created_time = str_replace(':','', Carbon::parse($single_temp_data->created_at, 'Asia/Kolkata')->toTimeString());
 					$created_dt   = str_replace('-','', Carbon::parse($single_temp_data->created_at, 'Asia/Kolkata')->toDateString());
 					$created_at_key = $created_dt.$created_time;

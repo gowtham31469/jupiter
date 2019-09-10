@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrchestraStdCartonStickerQty extends Model
 {
-    protected $table = 'orchestra_standard_poly_bag_sticker_orders_qty';
+    protected $table = 'orchestra_standard_carton_sticker_orders_qty';
 	
     public function stdpolysticker()
     {
