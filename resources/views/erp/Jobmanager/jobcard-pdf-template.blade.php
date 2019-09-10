@@ -195,14 +195,17 @@ th {
                 @if (!empty($template_type_data))
                     @foreach ($template_type_data as $table => $table_data)
                         <table cellspacing="0" cellpadding="1" border="0.2"  nobr="true" class="single-list-table" align="center">
-                        @php $ref_name = explode('_', $table); @endphp
+                        @php $ref_name       = explode('_', $table); 
+                             array_pop($ref_name);
+                             $reference_name = implode(" ",$ref_name);
+                        @endphp
                             <tbody id="single_list_table_body">
                                 <tr nobr="true" class="single-section">
                                     <th nobr="true"><strong>ID.NO</strong></th>
                                     @foreach ($table_data['erp_id'] as $key => $value)
                                         <td colspan="2" nobr="true">{{ $value }}</td>
                                     @endforeach
-                                    <td colspan="4" style="line-height:90px;" rowspan="3" nobr="true"><strong >REFNUM &nbsp;: {{ $ref_name[0].' '.$ref_name[1] }}</strong></td>
+                                    <td colspan="4" style="line-height:90px;" rowspan="3" nobr="true"><strong >REFNUM &nbsp;: {{ $reference_name }}</strong></td>
                                 </tr>
                                 <tr class="single-section" nobr="true">
                                     <th nobr="true"><strong>B.PO.NO</strong></th>

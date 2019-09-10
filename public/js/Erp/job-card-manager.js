@@ -1113,23 +1113,34 @@ function storeJobcard()
 
                 /** [ Store file path into localstorage ] */
                 localStorage.setItem('file_path',data.file_path)
-             
-                var isEdit        = false;
-                $('.row-checkbox', allPages).each(function (i, item) {
-                  
-                    if ($(this).is(':checked')) {
-                        refname       = $(this).closest('tr').data('refname'); 
-                        id            = $(this).closest('tr').attr('id');
-                        buyer_po_no   = $(this).closest('tr').data('buyer-po');
-                        order_type    = $(this).closest('tr').data('order-type');
-                        created_at    = $(this).closest('tr').data('created-at');
-                        style_no      = $(this).closest('tr').data('style-no');
-                        loop          = $(this).closest('tr').data('iteration');
-                        modal_name    = refname.replace(/ /g, '');
+                // generate and attach artworks with jobcard
+                if(data.buyer_name.toLowerCase() === 'tesco')
+                {
+                    var isEdit        = false;
+                    $('.row-checkbox', allPages).each(function (i, item) {
+                    
+                        if ($(this).is(':checked')) {
+                            refname       = $(this).closest('tr').data('refname'); 
+                            id            = $(this).closest('tr').attr('id');
+                            buyer_po_no   = $(this).closest('tr').data('buyer-po');
+                            order_type    = $(this).closest('tr').data('order-type');
+                            created_at    = $(this).closest('tr').data('created-at');
+                            style_no      = $(this).closest('tr').data('style-no');
+                            loop          = $(this).closest('tr').data('iteration');
+                            modal_name    = refname.replace(/ /g, '');
 
-                        openmodaltescopreview(modal_name, loop, style_no, buyer_po_no, id, order_type, created_at, isEdit);
-                    }
-                });
+                            openmodaltescopreview(modal_name, loop, style_no, buyer_po_no, id, order_type, created_at, isEdit);
+                        }
+                    });
+                }
+                else 
+                {
+                    var resp = JSON.stringify(data.file_path); 
+                    window.open(
+                        base_url+JSON.parse(resp),
+                        '_blank' // <- This is what makes it open in a new window.
+                    ); 
+                }
               
             },
             400: function() {
@@ -1292,7 +1303,12 @@ function storeJobcard()
                             var table_count = 0;
                             var single_table = '';
                             $.each(template_type_data, function(table, table_data){
-                                var template = table.split("_");
+                                var lastIndex = table.lastIndexOf("_");
+
+                                var template = table.substring(0, lastIndex).replace(',','_');
+                                
+                                //var template = table.split("_");
+                                
                                 single_table += '<table class="table table-bordered table-responsive edit-single-list-table" style="font-size: 12px;" id="single_list_table_'+table_count+'" border="0.2">\
                                         <tbody id="single_list_table_body">\
                                         <tr>\
@@ -1300,7 +1316,7 @@ function storeJobcard()
                                             $.each(table_data.erp_id, function(key, value){
                                                 single_table += '<td colspan="2" data-template-id="'+table_data.temp_id[key]+'" class="single-erpid-'+key+'">'+value+'</td>';
                                             });
-                                            single_table += '<td colspan="4" class="highlight_row" rowspan="3" data-single-ref-name="'+template[0]+' '+template[1]+'">REFNUM &nbsp;: '+template[0]+' '+template[1]+'</td>\
+                                            single_table += '<td colspan="4" class="highlight_row" rowspan="3" data-single-ref-name="'+template.replace('_',' ')+'">REFNUM &nbsp;: '+template.replace('_',' ')+'</td>\
                                         </tr>\
                                         <tr>\
                                             <th width="80px">B.PO.NO</th>';
@@ -1356,7 +1372,7 @@ function storeJobcard()
                                           table_row++;
                                         });
                                         single_table += '<tr>\
-                                                            <th class="highlight_row edit-total-text" data-ref-name="'+template[0]+'_'+template[1]+'">TOTAL</th>';
+                                                            <th class="highlight_row edit-total-text" data-ref-name="'+template+'">TOTAL</th>';
                                         
                                         var qty_total_col = 0;
                                         $.each(table_data.erp_id, function(key, value){
@@ -1365,8 +1381,8 @@ function storeJobcard()
                                             qty_total_col++;
                                         });
                                                             
-                                        single_table += '<td><strong class="edit-total-qty-'+template[0]+'_'+template[1]+'">'+parseInt(total_quantity_final)+'</strong></td>\
-                                                <td class="edit-total-excess-col-table-'+table_count+' edit-total-excess-'+template[0]+'_'+template[1]+'"><strong>'+Math.round(isNaN(total_excess_final) ? '0' : total_excess_final)+'</strong></td>\
+                                        single_table += '<td><strong class="edit-total-qty-'+template+'">'+parseInt(total_quantity_final)+'</strong></td>\
+                                                <td class="edit-total-excess-col-table-'+table_count+' edit-total-excess-'+template+'"><strong>'+Math.round(isNaN(total_excess_final) ? '0' : total_excess_final)+'</strong></td>\
                                                 <td></td>\
                                                 <td></td>\
                                             </tr>\
@@ -1879,19 +1895,33 @@ function updateJobcard(formData)
                 /** [ Store file path into localstorage ] */
                 localStorage.setItem('file_path',data.file_path)
                 var loop = 0;
-                var isEdit = true;
-                $('.edit-erp-details').each(function (i, item) {
-                    created_at = $(this).attr('data-created-at'); 
-                    order_type = $(this).attr('data-order-type'); 
-                    buyer_po_no= $(this).attr('data-buyer-po'); 
-                    refname    = $(this).attr('data-ref-name'); 
-                    id         = $(this).attr('data-erp-id');
-                    style_no   = $(this).attr('data-style-no');
-                    modal_name = refname.replace(/ /g, '');
 
-                    openmodaltescopreview(modal_name, loop, style_no, buyer_po_no, id, order_type, created_at, isEdit);
-                    loop++;
-                });
+                // generate and attach artworks with jobcard
+                if(data.buyer_name.toLowerCase() === 'tesco')
+                {
+                    var isEdit = true;
+                    $('.edit-erp-details').each(function (i, item) {
+                        created_at = $(this).attr('data-created-at'); 
+                        order_type = $(this).attr('data-order-type'); 
+                        buyer_po_no= $(this).attr('data-buyer-po'); 
+                        refname    = $(this).attr('data-ref-name'); 
+                        id         = $(this).attr('data-erp-id');
+                        style_no   = $(this).attr('data-style-no');
+                        modal_name = refname.replace(/ /g, '');
+
+                        openmodaltescopreview(modal_name, loop, style_no, buyer_po_no, id, order_type, created_at, isEdit);
+                        loop++;
+                    });
+                }
+                else 
+                {
+                    var resp = JSON.stringify(data.file_path); 
+                    window.open(
+                        base_url+JSON.parse(resp),
+                        '_blank' // <- This is what makes it open in a new window.
+                    );  
+                }
+                
             },
             400: function() {
                 $('.snackbar_span').html("Parameter is missing !!!");

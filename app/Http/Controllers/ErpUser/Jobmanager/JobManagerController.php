@@ -229,7 +229,7 @@ class JobManagerController extends Controller
 		return response()->json(['error'=> true,'order_details' =>$order_details],200);
 	}
 	/**
-     * Get order deatils for job card template creation by selected ids.
+     * Get order details for job card template creation by selected ids.
      * @param order details id
      * @author Praveen <praveen@wizroots.com>
      * @return \Illuminate\Http\Response
@@ -510,7 +510,6 @@ class JobManagerController extends Controller
 	public function storeJobcardData(Request $request)
 	{
 		try {
-			// dd($request['company_id']);
 				$company_id      = $request['company_id'];
 				$workorder_id    = $request['workorder_id'];
 				$created_date    = $request['created_date'] == ''?NULL:Carbon::parse($request['created_date'],'Asia/Kolkata')->toDateString();
@@ -654,27 +653,34 @@ class JobManagerController extends Controller
 						/** Update jobcard created status erp order details table */
 						foreach($erp_orders_ids as $row => $erp_orders_id)
 						{
-							DB::table('erp_order_details')
-							->where('erp_order_details.erp_order_id', $erp_orders_id)
-							->where('erp_order_details.reference_name', 'ilike', $selected_ref[$row])
-							->where('erp_order_details.buyer_po_number', 'ilike', $buyer_pos[$row])
+							/** Get updated data and update in history table */
+							// buyer po is optional for orchestra orders 
+							$update_query = ErpOrderDetails::where('erp_order_details.erp_order_id', $erp_orders_id)
 							->where('erp_order_details.order_type', 'ilike', $order_types[$row])
 							->where('erp_order_details.uuid', 'ilike', $uuid[$row])
-							->update([
-								'status'  => $erp_status_id,
-								'jc_number' => $workorder_id,
-								'jc_created_by' => Auth::guard('erpuser')->id(),
-								'jc_created_date' => $current_timestamp
-							]);
-							
-							/** Get updated data and update in history table */
-						    $jobcard_data = DB::table('erp_order_details')
-											->where('erp_order_details.erp_order_id', $erp_orders_id)
-											->where('erp_order_details.reference_name', 'ilike', $selected_ref[$row])
-											->where('erp_order_details.buyer_po_number', 'ilike', $buyer_pos[$row])
-											->where('erp_order_details.order_type', 'ilike', $order_types[$row])
-											->where('erp_order_details.uuid', 'ilike', $uuid[$row])
-											->get();
+							->where('erp_order_details.reference_name', 'ilike', $selected_ref[$row]);
+
+							if($buyer_pos[$row] != "") {
+								$update_query->where('erp_order_details.buyer_po_number', 'ilike', $buyer_pos[$row])
+								->update([
+									'status'  => $erp_status_id,
+									'jc_number' => $workorder_id,
+									'jc_created_by' => Auth::guard('erpuser')->id(),
+									'jc_created_date' => $current_timestamp
+								]);
+
+								$jobcard_data = $update_query->where('erp_order_details.buyer_po_number', 'ilike', $buyer_pos[$row])->get();
+							} else {
+								$update_query->update([
+									'status'  => $erp_status_id,
+									'jc_number' => $workorder_id,
+									'jc_created_by' => Auth::guard('erpuser')->id(),
+									'jc_created_date' => $current_timestamp
+								]);
+
+								$jobcard_data = $update_query->get();
+							}
+
 							$template       = 'Available';
 							$action_id  = DB::table('actions')->where('action', 'ilike', 'JC Created')->value('id');
 							
@@ -916,7 +922,7 @@ class JobManagerController extends Controller
 							'file_path'   => $file_path,
 							'updated_at'  => $current_timestamp
 						]);
-						return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path],200);	
+						return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path, 'buyer_name' => $buyer->buyer_name],200);	
 					}
 					else
 					{
@@ -1845,7 +1851,7 @@ class JobManagerController extends Controller
 						'file_path'   => $file_path,
 						'updated_at'  => $current_timestamp
 					]);
-					return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path],200);	
+					return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path, 'buyer_name' => $buyer->buyer_name],200);	
 					
 				}
 				else
