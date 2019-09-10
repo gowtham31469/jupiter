@@ -293,6 +293,16 @@ function generateJobcard(){
                         {
                             $('#buyer').text(data.template_data.buyer.buyer_name)
                             $('#buyer').attr('data-buyer-id', data.template_data.buyer.buyer_id)
+
+                            // show tint color and customer po for orchestra jc modal
+                            if(data.template_data.buyer.buyer_name.toLowerCase() === 'orchestra')
+                            {
+                                $(".common-data-div").removeClass("hidden");
+                            } 
+                            else 
+                            {
+                                $(".common-data-div").addClass("hidden");
+                            }
                         }
 
                         if(data.template_data.style_array.length === 1)
@@ -373,6 +383,15 @@ function generateJobcard(){
                         else
                         {
                             $('#cus_del_date').val('')
+                        }
+
+                        if(data.template_data.customer_po_array.length === 1)
+                        {
+                            $('#customer_po').text(data.template_data.customer_po_array[0])
+                        }
+                        else
+                        {
+                            $('#customer_po').val('')
                         }
 
                         /** append erp_details_ids  as hidden */
@@ -800,6 +819,8 @@ function storeJobcard()
     var roll_issued_by  = $( '#roll_issued_by' ).val() === ''?null:$('#roll_issued_by').val();
     var cutter          = $( '#cutter' ).val() === ''?null:$('#cutter').val();
     var cartons         = $( '#cartons' ).val() === ''?null:$('#cartons').val();
+    var tint_color      = $( '#tint_color' ).val() === ''?null:$('#tint_color').val();
+    var customer_po     = $( '#customer_po' ).text() === ''?null:$('#customer_po').text();
 
     var final_json_obj =   {
         "ratio": {},
@@ -1075,7 +1096,9 @@ function storeJobcard()
             selected_ref_array:selected_ref_array,
             selected_buyer_po_array:selected_buyer_po_array,
             order_type_array:order_type_array,
-            uuid_array:uuid_array
+            uuid_array:uuid_array,
+            tint_color:tint_color,
+            customer_po:customer_po
         },
         tryCount: 0,
         retryLimit: 2,
@@ -1197,6 +1220,18 @@ function storeJobcard()
                  $('#edit_roll_issued_by').val(data.jobcard_data.roll_issued_by);
                  $('#edit_cutter').val(data.jobcard_data.cutter);
                  $('#edit_cartons').val(data.jobcard_data.cartons);
+                 $('#edit_tint_color').val(data.jobcard_data.tint_color);
+                 $('#edit_customer_po').text(data.jobcard_data.customer_po_num);
+
+                  // show tint color and customer po for orchestra jc modal
+                  if(data.jobcard_data.buyer_name.toLowerCase() === 'orchestra')
+                  {
+                      $(".edit-common-data-div").removeClass("hidden");
+                  } 
+                  else 
+                  {
+                      $(".edit-common-data-div").addClass("hidden");
+                  }
 
                  /** [ Refresh  bootstrap selectpicker ] */
                  $('#edit_finish_type').selectpicker('refresh');
@@ -1600,6 +1635,8 @@ function updateJobcard(formData)
     var roll_issued_by  = $( '#edit_roll_issued_by' ).val() === ''?null:$('#edit_roll_issued_by').val();
     var cutter          = $( '#edit_cutter' ).val() === ''?null:$('#edit_cutter').val();
     var cartons         = $( '#edit_cartons' ).val() === ''?null:$('#edit_cartons').val();
+    var tint_color      = $( '#edit_tint_color' ).val() === ''?null:$('#edit_tint_color').val();
+    var customer_po     = $( '#edit_customer_po' ).text() === ''?null:$('#edit_customer_po').text();
     var jobcard_id      = $( '#jobcard_id' ).val();
 
     var final_json_obj =   {
@@ -1824,7 +1861,9 @@ function updateJobcard(formData)
             sticker_mtr:sticker_mtr,
             settings:settings,
             total_mtrs:total_mtrs,
-            jobcard_id:jobcard_id
+            jobcard_id:jobcard_id,
+            tint_color:tint_color,
+            customer_po:customer_po
         },
         tryCount: 0,
         retryLimit: 2,

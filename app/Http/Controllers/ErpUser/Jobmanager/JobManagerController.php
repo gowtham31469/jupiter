@@ -510,7 +510,7 @@ class JobManagerController extends Controller
 	public function storeJobcardData(Request $request)
 	{
 		try {
-			dd($request['company_id']);
+			// dd($request['company_id']);
 				$company_id      = $request['company_id'];
 				$workorder_id    = $request['workorder_id'];
 				$created_date    = $request['created_date'] == ''?NULL:Carbon::parse($request['created_date'],'Asia/Kolkata')->toDateString();
@@ -551,6 +551,8 @@ class JobManagerController extends Controller
 				$cutter          = $request['cutter'];
 				$cartons         = $request['cartons'];
 				$final_json_obj  = $request['final_json_obj'];
+				$tint_color      = $request['tint_color'];
+				$customer_po_num = $request['customer_po'];
 				$erp_orders_ids  = explode(',', $request['erp_orders_ids']);
 			    $selected_ref    = explode(',', $request['selected_ref_array']);
 				$buyer_pos       = explode(',', $request['selected_buyer_po_array']);
@@ -607,7 +609,9 @@ class JobManagerController extends Controller
 						'cartons'                => $cartons,
 						'template_quantity_json' => $final_json_obj,
 						'created_at'             => $current_timestamp,
-						'updated_at'             => $current_timestamp
+						'updated_at'             => $current_timestamp,
+						'tint_color'             => $tint_color,
+						'customer_po_num'        => $customer_po_num
 					  ]);
 					
 					/** Store jobcard settings and excess details**/
@@ -809,7 +813,7 @@ class JobManagerController extends Controller
 						$formated_cus_del_date = $cus_del_date == ''?NULL:Carbon::parse($cus_del_date)->format('d-m-Y');
 						
 						$pdf = new JobcardPDFHeaderFooter(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-						$pdf->setData($company, $workorder_id, $formated_created_date, $article, $material, $compiled_by, $barcode_read, $operator, $checker, $authorized_by, $axicon_verifier, $approved_by, $packer, $format_approval_date, $roll_issued_by, $cutter, $cartons, $single_ref, $act_excess, $sticker_mtr, $settings, $total_mtrs);		
+						$pdf->setData($company, $workorder_id, $formated_created_date, $article, $material, $compiled_by, $barcode_read, $operator, $checker, $authorized_by, $axicon_verifier, $approved_by, $packer, $format_approval_date, $roll_issued_by, $cutter, $cartons, $single_ref, $act_excess, $sticker_mtr, $settings, $total_mtrs, $tint_color, $customer_po_num);		
 
 						$pdf->SetPrintHeader(true);
 						$pdf->SetPrintFooter(true);  
@@ -848,51 +852,53 @@ class JobManagerController extends Controller
 						// set some text to print
 						$view = View::make('erp/Jobmanager/jobcard-pdf-template')
 								->with([
-										'buyer' 		     => $buyer,
+										'buyer' 		   => $buyer,
 										'customer' 		   => $customer,
-										'company'		     => $company,
-										'workorder_id'   => $workorder_id,
-										'created_date'   => $formated_created_date,
+										'company'		   => $company,
+										'workorder_id'     => $workorder_id,
+										'created_date'     => $formated_created_date,
 										'article'	       => $article,
 										'material'		   => $material,
 										'style_no'		   => $style_no,
-										'order_type'     => $order_type,
+										'order_type'       => $order_type,
 										'reference'		   => $reference,
-										'disp_mode'	     => $erp_dispatch_mode,
+										'disp_mode'	       => $erp_dispatch_mode,
 										'order_date'	   => $formated_order_date,
-										'length'		     => $length,
+										'length'		   => $length,
 										'repeat_gap'	   => $repeat_gap,
-										'machine'		     => $erp_machine,
-										'cus_del_date' 	 => $formated_cus_del_date,
+										'machine'		   => $erp_machine,
+										'cus_del_date' 	   => $formated_cus_del_date,
 										'roll_width'	   => $roll_width,
 										'width'	  		   => $width,
-										'film_no'		     => $film_no, 
-										'invoice_date'   => $formated_inv_date,
+										'film_no'		   => $film_no, 
+										'invoice_date'     => $formated_inv_date,
 										'length_side'	   => $length_side,
 										'excess'	       => $excess,
 										'teeth_no'		   => $erp_teeth_no,
 										'inv_no'	       => $inv_no,
 										'no_sticker'	   => $no_sticker,
 										'finish_type'	   => $erp_finish_type,
-										'print_color'    => $print_color,
-										'compiled_by'    => $compiled_by,
-										'barcode_read'   => $barcode_read,
-										'operator'       => $operator,
-										'checker'        => $checker,
-										'authorized_by'  => $authorized_by,
-										'axicon_verifier'=> $axicon_verifier,
+										'print_color'      => $print_color,
+										'compiled_by'      => $compiled_by,
+										'barcode_read'     => $barcode_read,
+										'operator'         => $operator,
+										'checker'          => $checker,
+										'authorized_by'    => $authorized_by,
+										'axicon_verifier'  => $axicon_verifier,
 										'approved_by'	   => $approved_by,
-										'packer'		     => $packer,
-										'approval_date'  => $format_approval_date,
-										'roll_issued_by' => $roll_issued_by,
-										'cutter'		     => $cutter,
+										'packer'		   => $packer,
+										'approval_date'    => $format_approval_date,
+										'roll_issued_by'   => $roll_issued_by,
+										'cutter'		   => $cutter,
 										'cartons' 		   => $cartons,
-										'final_json_obj' => json_decode($final_json_obj, true),
+										'final_json_obj'   => json_decode($final_json_obj, true),
 										'single_ref'	   => $single_ref,
 										'act_excess'	   => $act_excess,
 										'sticker_mtr'	   => $sticker_mtr,
 										'settings'		   => $settings,
-										'total_mtrs' 	   => $total_mtrs
+										'total_mtrs' 	   => $total_mtrs,
+										'tint_color'       => $tint_color,
+										'customer_po'      => $customer_po_num
 								]);
 
 						//append content to header
@@ -1624,6 +1630,8 @@ class JobManagerController extends Controller
 				$cartons         = $request['cartons'];
 				$final_json_obj  = $request['final_json_obj'];
 				$jobcard_id 	 = $request['jobcard_id'];
+				$tint_color      = $request['tint_color'];
+				$customer_po_num = $request['customer_po'];
 				
 				$current_timestamp = Carbon::now('Asia/Kolkata')->toDateTimeString();
 
@@ -1671,7 +1679,9 @@ class JobManagerController extends Controller
 						'cutter'                 => $cutter,
 						'cartons'                => $cartons,
 						'template_quantity_json' => $final_json_obj,
-						'updated_at'             => $current_timestamp
+						'updated_at'             => $current_timestamp,
+						'tint_color'             => $tint_color,
+						'customer_po_num'        => $customer_po_num
 					]);
 					
 					if (!empty($request['single_ref'])) 
@@ -1729,7 +1739,7 @@ class JobManagerController extends Controller
 					$formated_cus_del_date = $cus_del_date == ''?NULL:Carbon::parse($cus_del_date)->format('d-m-Y');
 					
 					$pdf = new JobcardPDFHeaderFooter(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-					$pdf->setData($company, $workorder_id, $formated_created_date, $article, $material, $compiled_by, $barcode_read, $operator, $checker, $authorized_by, $axicon_verifier, $approved_by, $packer, $format_approval_date, $roll_issued_by, $cutter, $cartons, $single_ref, $act_excess, $sticker_mtr, $settings, $total_mtrs);	
+					$pdf->setData($company, $workorder_id, $formated_created_date, $article, $material, $compiled_by, $barcode_read, $operator, $checker, $authorized_by, $axicon_verifier, $approved_by, $packer, $format_approval_date, $roll_issued_by, $cutter, $cartons, $single_ref, $act_excess, $sticker_mtr, $settings, $total_mtrs, $tint_color, $customer_po_num);	
 
 					$pdf->SetPrintHeader(true);
 					$pdf->SetPrintFooter(true);  
@@ -1767,51 +1777,53 @@ class JobManagerController extends Controller
 					// set some text to print
 					$view = View::make('erp/Jobmanager/jobcard-pdf-template')
 								->with([
-										'buyer' 		     => $buyer,
+										'buyer' 		   => $buyer,
 										'customer' 		   => $customer,
-										'company'		     => $company,
-										'workorder_id'   => $workorder_id,
-										'created_date'   => $formated_created_date,
+										'company'		   => $company,
+										'workorder_id'     => $workorder_id,
+										'created_date'     => $formated_created_date,
 										'article'	       => $article,
 										'material'		   => $material,
 										'style_no'		   => $style_no,
-										'order_type'     => $order_type,
+										'order_type'       => $order_type,
 										'reference'		   => $reference,
-										'disp_mode'	     => $erp_dispatch_mode,
+										'disp_mode'	       => $erp_dispatch_mode,
 										'order_date'	   => $formated_order_date,
-										'length'		     => $length,
+										'length'		   => $length,
 										'repeat_gap'	   => $repeat_gap,
-										'machine'		     => $erp_machine,
-										'cus_del_date' 	 => $formated_cus_del_date,
+										'machine'		   => $erp_machine,
+										'cus_del_date' 	   => $formated_cus_del_date,
 										'roll_width'	   => $roll_width,
 										'width'	  		   => $width,
-										'film_no'		     => $film_no, 
-										'invoice_date'   => $formated_inv_date,
+										'film_no'		   => $film_no, 
+										'invoice_date'     => $formated_inv_date,
 										'length_side'	   => $length_side,
 										'excess'	       => $excess,
 										'teeth_no'		   => $erp_teeth_no,
 										'inv_no'	       => $inv_no,
 										'no_sticker'	   => $no_sticker,
 										'finish_type'	   => $erp_finish_type,
-										'print_color'    => $print_color,
-										'compiled_by'    => $compiled_by,
-										'barcode_read'   => $barcode_read,
-										'operator'       => $operator,
-										'checker'        => $checker,
-										'authorized_by'  => $authorized_by,
-										'axicon_verifier'=> $axicon_verifier,
+										'print_color'      => $print_color,
+										'compiled_by'      => $compiled_by,
+										'barcode_read'     => $barcode_read,
+										'operator'         => $operator,
+										'checker'          => $checker,
+										'authorized_by'    => $authorized_by,
+										'axicon_verifier'  => $axicon_verifier,
 										'approved_by'	   => $approved_by,
-										'packer'		     => $packer,
-										'approval_date'  => $format_approval_date,
-										'roll_issued_by' => $roll_issued_by,
-										'cutter'		     => $cutter,
+										'packer'		   => $packer,
+										'approval_date'    => $format_approval_date,
+										'roll_issued_by'   => $roll_issued_by,
+										'cutter'		   => $cutter,
 										'cartons' 		   => $cartons,
-										'final_json_obj' => json_decode($final_json_obj, true),
+										'final_json_obj'   => json_decode($final_json_obj, true),
 										'single_ref'	   => $single_ref,
 										'act_excess'	   => $act_excess,
 										'sticker_mtr'	   => $sticker_mtr,
 										'settings'		   => $settings,
-										'total_mtrs' 	   => $total_mtrs
+										'total_mtrs' 	   => $total_mtrs,
+										'tint_color'       => $tint_color,
+										'customer_po'      => $customer_po_num
 								]);
 
 					//append content to header

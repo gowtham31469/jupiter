@@ -554,24 +554,33 @@
 									</div>
 								</div>
 								<div class="col-md-3">
-								</div>
-								<div class="col-md-3">
 								    <div class="form-group has-feedback">
 										{!! Form::label('finish_type', 'FINISH TYPE :', ['class' => 'form_label']) !!}
 										{{ Form::select('finish_type',(['' => '-- Select Finish Type --']+ $finish_types),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'finish_type','required')) }}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
-							</div>
-							<div class="col-md-12">
-							   <div class="col-md-3">
+								<div class="col-md-3">
 									<div class="form-group has-feedback">
 										{!! Form::label('print_color', 'PRINT COLORS :', ['class' => 'form_label']) !!}
-										{!! Form::text('print_color',$value = '', array('class' => 'form-control input-sm','placeholder' => 'COLORS', 'maxlength' => '20')) !!}
+										{!! Form::text('print_color',$value = '', array('class' => 'form-control input-sm','placeholder' => 'PRINT COLORS', 'maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
-									</div>	
+									</div>
+								</div>
+							</div>
+							<div class="col-md-12 common-data-div hidden">
+							   <div class="col-md-3">
+									<div class="form-group has-feedback">
+										{!! Form::label('tint_color', 'TINT COLORS :', ['class' => 'form_label']) !!}
+										{!! Form::text('tint_color',$value = '', array('class' => 'form-control input-sm','placeholder' => 'TINT COLORS', 'maxlength' => '20')) !!}
+										<div class="help-block with-errors"></div>
+									</div>		
 							   </div>
-							   <div class="col-md-9">
+							   <div class="col-md-3">
+									{!! Form::label('customer_po', 'CUSTOMER PO :', ['class' => 'form_label']) !!}
+								    <span id="customer_po"></span>
+							   </div>
+							   <div class="col-md-6">
 							   </div>
 							</div>
 						</div>
