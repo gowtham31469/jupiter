@@ -281,9 +281,10 @@ class PrintManagerController extends Controller
 					
 
 					if($buyer=="orchestra")
-					{
+					{	
+						
 						$jobcard_id_list->map(function ($jobcard_id_list,$key) {
-                    		
+                    		$jobcard_id_list->buyer='orchestra';
                     		$jobcard_id_list->zone='-';
 
                     		if($jobcard_id_list->style_no==null)
@@ -295,6 +296,12 @@ class PrintManagerController extends Controller
                     		{
                     			$jobcard_id_list->buyer_po_number='-';
                     		}
+                	    });
+					}
+					else
+					{
+						$jobcard_id_list->map(function ($jobcard_id_list,$key) {
+                    		$jobcard_id_list->buyer='tesco';
                 	    });
 					}
 

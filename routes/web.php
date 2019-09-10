@@ -739,6 +739,13 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::get('job-manager/get-jobcards-list', 'ErpUser\Jobmanager\JobManagerController@getJobcardsListByBuyerCustomerJobcardId'); 
 	Route::post('job-manager/pdf-merge', 'ErpUser\Jobmanager\JobManagerController@pdfMerge'); 
 
+	/* Orchestra Print Manager*/
+
+	Route::post('job-manager/orchestra/print-pdf-small', 'ErpUser\Jobmanager\JobManagerController@printPdfSmall');
+
+	Route::post('job-manager/orchestra/print-pdf', 'ErpUser\Jobmanager\JobManagerController@printPdf');
+	Route::post('job-manager/orchestra/print-pdf-table', 'ErpUser\Jobmanager\JobManagerController@printPdfTable');
+
 	/* Routes for ERP-Settings Management */
 	Route::get('/settings', 'ErpUser\ERPSettings\ERPSettingsController@home')->name('erp-settings');
 	Route::get('/settings/dispatch-mode', 'ErpUser\ERPSettings\ERPSettingsController@getDispatchMode')->name('erp-dispatch-mode');
