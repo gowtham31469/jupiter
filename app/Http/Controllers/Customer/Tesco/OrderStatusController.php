@@ -239,7 +239,7 @@ class OrderStatusController extends Controller
             $class_obj = new ERPOrderStatusCheck();
             $erp_order_details = $class_obj->ERPStatus($data_array);
 
-            if($erp_order_details[0] != null)
+            if(sizeof($erp_order_details) > 0 && $erp_order_details[0] != null)
             {
                 if($erp_order_details{0}->status_name != 'Hold For JC Queue' &&  $erp_order_details{0}->status_name != 'Moved To ERP' )
                 {
@@ -248,7 +248,7 @@ class OrderStatusController extends Controller
                 
             }
 
-            if ($po_details->po_file =="" || $po_details->po_file=="null")
+            if ($po_details->po_file === null || $po_details->po_file === "null")
             {
                 $po_status = "PO Pending";
             }
@@ -264,7 +264,13 @@ class OrderStatusController extends Controller
                                   'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                                 ]);
             if ($po_status == "PO Uploaded") {
-               $erp_obj->updateTescoErpOrders($request);
+                /** @var array [Pass array of values to updateTescoErpOrders function] */
+                $data_array_2 = [];
+                $data_array_2['id'] = $template_id;
+                $data_array_2['tableName'] = $table_name;
+                $data_array_2['buyer_id'] = $request->buyer_id;
+                $data_array_2['created_by'] = Auth::guard('web_customer')->id();
+                $erp_obj->updateTescoErpOrders($data_array_2);
             }
 
             return response()->json(['error'=> false,'message' =>'Purchase Order Number added Successfully'],200);
@@ -288,15 +294,14 @@ class OrderStatusController extends Controller
             $pi_obj    = new ProformaInvoice();
             $pi_status = $request->pi_status;
 
-            // if ($pi_status == "true")
-            // {
-            //     $data      = $pi_obj->getApprovedTescoPI($request);
-                
-            // }
-            // else
-            // {
+            if ($pi_status == "true")
+            {
+                $data      = $pi_obj->getApprovedTescoPI($request);
+            }
+            else
+            {
                 $data      = $pi_obj->getTescoPIDetails($request);
-            // }
+            }
             
             $result    = response()->json(['error'=> false,'message' =>'success','data'=>$data],200);
         }
@@ -323,7 +328,7 @@ class OrderStatusController extends Controller
             $sub_total  =   0 ;
             $pi_obj     =   new ProformaInvoice();
             $data       =   $pi_obj->getTescoPIDetails($request);
-            $attatchment =  $pi_obj->getTescoAttachment($data,$request);
+            $attachment =  $pi_obj->getTescoAttachment($data,$request);
 
             $erpOrders  =   [];
             $erp_obj    =   new ErpOrders();
@@ -358,7 +363,7 @@ class OrderStatusController extends Controller
                     'template_type'  => $data['bank_details']->template_type,
                     'revision_no'  => $data['item_details'][0]->pi_rev_no,
                     'rep_order_id'     => $rep_order_id,
-                    'pi_file'         => $attatchment
+                    'pi_file'         => $attachment
                     
                 ]);
                 foreach ($data['item_details'] as $key => $value)
@@ -416,7 +421,7 @@ class OrderStatusController extends Controller
                                             ->update([
                                                'pi_status' => "PI Approved",
                                                'pi_id' => $pi_details->id,
-                                               'pi_file' => $attatchment,
+                                               'pi_file' => $attachment,
                                                'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                                             ]);
                     }
@@ -436,13 +441,15 @@ class OrderStatusController extends Controller
                                             ->update([
                                                 'pi_status' => "PI Approved",
                                                 'pi_id' => $pi_details->id,
-                                                'pi_file' => $attatchment,   
+                                                'pi_file' => $attachment,   
                                                 'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                                              ]);
                     }
+                    /** @var array [Pass array of values to updateTescoErpOrders function] */
                     $erpOrders['tableName'] = $table;
                     $erpOrders['id']        = $tableID;
                     $erpOrders['buyer_id']  = $buyer_id;
+                    $erpOrders['created_by']= Auth::guard('web_customer')->id();
                     $customer_data  = DB::table('customers')->where('id',$data['bank_details']->id)->first();
                     if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
                         $erp_obj->updateTescoErpOrders($erpOrders);
@@ -455,12 +462,15 @@ class OrderStatusController extends Controller
                                     ->update([
                                         'pi_status' => "PI Approved",
                                         'pi_id' => $pi_details->id,
-                                        'pi_file' => $attatchment, 
+                                        'pi_file' => $attachment, 
                                         'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                                      ]);
+  
+                /** @var array [Pass array of values to updateTescoErpOrders function] */
                 $erpOrders['tableName'] = $table_name;
                 $erpOrders['id']        = $row_id;
-                $erpOrders['buyer_id']  = $buyer_id;   
+                $erpOrders['buyer_id']  = $buyer_id;
+                $erpOrders['created_by']= Auth::guard('web_customer')->id(); 
                 $customer_data  = DB::table('customers')->where('id',$data['bank_details']->id)->first();
 
                 if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
@@ -800,6 +810,7 @@ class OrderStatusController extends Controller
                 $data_array['tableName'] = $value[0];
                 $data_array['buyer_id'] = $tesco_buyer_id->id;
                 $data_array['id'] = $value[1];
+                $data_array['created_by']= Auth::guard('web_customer')->id(); 
                 $updated_erp_table = $erp_obj->updateTescoErpOrders($data_array);
             }
             $result = response()->json(['error'=> false,'message' =>'success'],200); 
@@ -821,8 +832,10 @@ class OrderStatusController extends Controller
     {
         try
         {
+			$erp_obj   =   new ErpOrders();
             $id        =   explode(',',$request->id);
             $po        =   $request->po;
+            $erp_orders = DB::table('erp_orders')->where('po_no',$po)->select('*')->first();
             
             foreach($id as $val)
             {
@@ -831,9 +844,18 @@ class OrderStatusController extends Controller
                 DB::table($value[0])->where('id',$value[1])
                    ->update([
                         'purchase_order_no' => $po,
+                        'po_file' => $erp_orders->po_file,
                         'po_status' => "PO Pending",
                         'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                   ]);
+				 /** @var array [Pass array of values to updateTescoErpOrders function] */
+                $data_array = [];   
+                $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
+                $data_array['tableName'] = $value[0];
+                $data_array['buyer_id'] = $tesco_buyer_id->id;
+                $data_array['id'] = $value[1];
+                $data_array['created_by']= Auth::guard('web_customer')->id(); 
+                $updated_erp_table = $erp_obj->updateTescoErpOrders($data_array);
             }
             $result = response()->json(['error'=> false,'message' =>'success'],200);
         }
@@ -852,9 +874,9 @@ class OrderStatusController extends Controller
             $table_name   =   $request->tableName; 
             $po_file      =   DB::table($table_name)->where('id',$row_id)
                ->pluck('po_file')->first();
-            if ($po_file=="null" || $po_file=="" || $po_file==null)
+            if ($po_file === "null" || $po_file === "" || $po_file === null)
             {
-               $po_file=="null";
+               $po_file = "null";
             }
             $result = response()->json(['error'=> false,'message' =>'success','po_file'=>$po_file],200);
         }
@@ -951,6 +973,8 @@ class OrderStatusController extends Controller
         $template_id     = $request['edit_id'];
         $template_name   = $request['template_name'];
         $zone            = $request['zone'];
+        $zone            = $request['zone'];
+        $created_by      = Auth::guard('web_customer')->id();
 
         if($template_name == "TCL1")
         {
@@ -1044,7 +1068,7 @@ class OrderStatusController extends Controller
         else
         {
             if ($temp_data->order_flag == "newOrder" && $template_name != "THL3" && $template_name != "THL1") {
-                $orderObj->updateTescoOrders($table_name, $temp_data, $request, $customer_id);
+                $orderObj->updateTescoOrders($table_name, $temp_data, $request, $customer_id, $created_by);
               }
             
             DB::table($table_name)->where('id',$template_id)
@@ -1132,8 +1156,12 @@ class OrderStatusController extends Controller
                 $erp_details_status =  $erp_order_details[0]->status_name;
                 $erp_order_id =  $erp_order_details[0]->erp_order_id;
 
-                // delete from erp_order_details table
                 foreach($erp_order_details as $erp_order_detail){
+                    // delete from history table and insert new rows.
+                    $history_table_id =  DB::table('history')->where('erp_order_details_id',$erp_order_detail->id)->value('id');
+                    DB::table('event_history')->where('history_id',$history_table_id)->delete();
+                    DB::table('history')->where('id',$history_table_id)->delete();
+                    // delete from erp_order_details table
                     DB::table('erp_order_details')->where('id',$erp_order_detail->id)->delete();
                 }
                 
@@ -1145,6 +1173,7 @@ class OrderStatusController extends Controller
                 $data_array['id'] = $template_id;
                 $data_array['erp_details_status'] = $erp_details_status;
                 $data_array['erp_order_id'] = $erp_order_id;
+                $data_array['created_by'] = $created_by;
 
                 // pass $table_name, $template_id, $erp_details_status and $erp_order_id
                 $result = $edit_erp_obj->updateTescoErpOrderDetails($data_array);
@@ -1250,7 +1279,7 @@ class OrderStatusController extends Controller
             $class_obj = new ERPOrderStatusCheck();
             $erp_order_details = $class_obj->ERPStatus($data_array);
 
-            if($erp_order_details[0] != null)
+            if(sizeof($erp_order_details) > 0 && $erp_order_details[0] != null)
             {
                 if($erp_order_details{0}->status_name != 'Hold For JC Queue' &&  $erp_order_details{0}->status_name != 'Moved To ERP' )
                 {
@@ -1259,7 +1288,7 @@ class OrderStatusController extends Controller
                 
             }
             
-            if ($po_details->purchase_order_no =="" || $po_details->purchase_order_no=="null")
+            if ($po_details->purchase_order_no === null || $po_details->purchase_order_no === "null")
             {
                 $po_status = "PO Pending";
             }
@@ -1274,7 +1303,13 @@ class OrderStatusController extends Controller
                           'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                         ]);
             if ($po_status == "PO Uploaded") {
-                $erp_obj->updateTescoErpOrders($request);
+                /** @var array [Pass array of values to updateTescoErpOrders function] */
+                $data_array_2 = [];   
+                $data_array_2['tableName'] = $table_name;
+                $data_array_2['buyer_id'] = $request->buyer_id;
+                $data_array_2['id'] = $row_id;
+                $data_array_2['created_by']= Auth::guard('web_customer')->id(); 
+                $erp_obj->updateTescoErpOrders($data_array_2);
             }
             if ($data)
             {
@@ -1387,7 +1422,7 @@ class OrderStatusController extends Controller
         try {
             // $pi_obj     =   new ProfomaInvoice();
             // $data       =   $pi_obj->getTescoPIDetails($request);
-            // $attatchment =  $pi_obj->getAttachment($data,$request);
+            // $attachment =  $pi_obj->getAttachment($data,$request);
             $id         =  $request['id'];
             $table_name =  $request['tableName'];            
             $result     =  DB::table($table_name)->where('id',$id)->value('pi_file');   
