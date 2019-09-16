@@ -89,6 +89,7 @@ class PoManagerController extends Controller
 		 {
 			 $arr_template =  DB::table($value->template_table)
 							 ->where('hierarchy_id',$value->templates)
+							 ->where('flag',1)
 							 ->pluck('item_id');
 			 if($arr_template)
 			 {
