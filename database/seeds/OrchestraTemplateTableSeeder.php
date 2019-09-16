@@ -11,6 +11,7 @@ class OrchestraTemplateTableSeeder extends Seeder
      */
     public function run()
     {
+        
         \App\OrchestraTemplate::create([
             'item_id' => 4,
             'template_name' => "Orchestra Label",
