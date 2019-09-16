@@ -555,6 +555,7 @@ function orderStatus() {
                         null,
                         null,
                         null,
+                        null,
                     ],
                     initComplete: function () {
                         $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first').append(' <button class="filterbtn" type="button" onClick="showFilter()"><i class="fa fa-filter" aria-hidden="true"></i></button>');
