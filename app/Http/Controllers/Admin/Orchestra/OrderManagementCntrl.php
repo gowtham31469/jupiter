@@ -281,6 +281,17 @@ class OrderManagementCntrl extends Controller
 				
 				$factory_code = $data['order_details']{0}->FactoryCode;
 				$customer_id = DB::table('customers')->select('*')->where('factory_code',$factory_code)->get();
+				
+				$customer_active = DB::table('customers')->select('*')->where('factory_code',$factory_code)->where('is_active',1)->get();
+				
+				if(count($customer_active) > 0)
+				{
+					$data['customer_active'] = "active";
+				}
+				else
+				{
+					$data['customer_active'] = "inactive";
+				}
 
 				if(count($customer_id) > 0)
 				{
@@ -341,6 +352,18 @@ class OrderManagementCntrl extends Controller
 				
 				$factory_code = $data['order_details']{0}->FactoryCode;
 				$customer_id = DB::table('customers')->select('*')->where('factory_code',$factory_code)->get();
+				
+				$customer_active = DB::table('customers')->select('*')->where('factory_code',$factory_code)->where('is_active',1)->get();
+				
+				if(count($customer_active) > 0)
+				{
+					$data['customer_active'] = "active";
+				}
+				else
+				{
+					$data['customer_active'] = "inactive";
+				}
+				
 
 				if(count($customer_id) > 0)
 				{
@@ -666,6 +689,7 @@ class OrderManagementCntrl extends Controller
             $orchestra_solid_carton_sticker_orders_qty=DB::table('orchestra_solid_carton_sticker_orders_qty')->select('*')->where('oscs_id',$value->id)->get();
             $value->qty=$orchestra_solid_carton_sticker_orders_qty;
         }
+		
         
         $data['orchestra_solid_poly_bag_sticker_orders']=DB::table('orchestra_solid_poly_bag_sticker_orders')->select('*')->where('uvc',$uvc)->where('po',$po)->get();
         if(count($data['orchestra_solid_poly_bag_sticker_orders']) > 0)
@@ -710,6 +734,18 @@ class OrderManagementCntrl extends Controller
 			
 			$factory_code = $data['orchestra_parcel_details']{0}->FactoryCode;
 			$customer_id = DB::table('customers')->select('*')->where('factory_code',$factory_code)->get();
+			
+			$customer_active = DB::table('customers')->select('*')->where('factory_code',$factory_code)->where('is_active',1)->get();
+				
+			if(count($customer_active) > 0)
+			{
+				$data['customer_active'] = "active";
+			}
+			else
+			{
+				$data['customer_active'] = "inactive";
+			}
+			
 			if(count($customer_id) > 0)
 			{
                 $carton_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',101)->get();
@@ -758,6 +794,17 @@ class OrderManagementCntrl extends Controller
 			
 			$factory_code = $data['orchestra_parcel_details']{0}->FactoryCode;
 			$customer_id = DB::table('customers')->select('*')->where('factory_code',$factory_code)->get();
+			
+			$customer_active = DB::table('customers')->select('*')->where('factory_code',$factory_code)->where('is_active',1)->get();
+				
+			if(count($customer_active) > 0)
+			{
+				$data['customer_active'] = "active";
+			}
+			else
+			{
+				$data['customer_active'] = "inactive";
+			}
 			
 			if(count($customer_id) > 0)
 			{

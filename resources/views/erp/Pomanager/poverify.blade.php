@@ -661,7 +661,7 @@ transform: scale(1);
 		if ($('#comment_box').val() != null && $('#comment_box').val() != "") {
 			var comment = true;
 			var commenttext = $('#comment_box').val();
-			i++;
+			//i++;
 		} else {
 			var comment = false;
 			var commenttext = $('#comment_box').val();

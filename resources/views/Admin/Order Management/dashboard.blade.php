@@ -1610,7 +1610,7 @@
 							}
 							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_thl3_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>THL 3</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+approved_date+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
-						$('#aowp_modal .modal-body').html('<table class="table aowp_orders"><thead><tr><th><input name="select_all" value="1" id="example-select-all-aowp" type="checkbox" /></th><th class="text-center">Customer Name</th><th class="text-center">Buyer</th><th>Style No</th><th>Product</th><th>Reference No</th><th>Zone</th><th>A/W Date</th><th>A/W Approved Date</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');  
+						$('#aowp_modal .modal-body').html('<table class="table aowp_orders" style="width:100%"><thead><tr><th><input name="select_all" value="1" id="example-select-all-aowp" type="checkbox" /></th><th class="text-center">Customer Name</th><th class="text-center">Buyer</th><th>Style No</th><th>Product</th><th>Reference No</th><th>Zone</th><th>A/W Date</th><th>A/W Approved Date</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');  
 						$('#aowp_modal').modal("show")
 						   var table = $('.aowp_orders').DataTable({
 								dom: 'Bfrtip',
