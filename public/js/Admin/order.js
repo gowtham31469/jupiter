@@ -2103,7 +2103,8 @@ function printHangDiv(data,disney) {
 						type: 'GET',
 						async: false,
 						data: {
-							size: $(this).find('.size').text()
+							size: $(this).find('.size').text(),
+							uvc_tco:uvc_tco
 						},
 						tryCount: 0,
 						retryLimit: 2,
@@ -2119,17 +2120,85 @@ function printHangDiv(data,disney) {
 							svgDoc.getElementById("size_french").innerHTML = size[1];
 							svgDoc.getElementById("size_english").innerHTML = size1;
 							
+							if(data.opqt.length > 0)
+							{
+								$(data.opqt).each(function(index,value){
+								switch(value.Currency)
+								{
+										case "EUR":
+										var svg_price =	value.Price.split(',');
+										var svg_club_price = value.Club_Price.split(',');
+										svgDoc.getElementById("price1").innerHTML = svg_price[0];
+										svgDoc.getElementById("price2").innerHTML = ","+svg_price[1];
+										svgDoc.getElementById("club_price1").innerHTML = svg_club_price[0];
+										svgDoc.getElementById("club_price2").innerHTML = ","+ 	svg_club_price[1];
+										break;
+										case "CAD":
+										svgDoc1.getElementById("canada_price").innerHTML = value.Price;
+										svgDoc1.getElementById("canada_club_price").innerHTML = value.Club_Price;
+										break;
+										case "CHF":
+										svgDoc1.getElementById("swiss_price").innerHTML = value.Price;
+										svgDoc1.getElementById("swiss_club_price").innerHTML = value.Club_Price;
+										break;
+										case "DZD":
+										svgDoc1.getElementById("algeria_price").innerHTML = value.Price;
+										svgDoc1.getElementById("algeria_club_price").innerHTML = value.Club_Price;
+										break;
+										case "MAD":
+										svgDoc1.getElementById("morocco_price").innerHTML = value.Price;
+										svgDoc1.getElementById("morroco_club_price").innerHTML = value.Club_Price;
+										break;
+										case "MUR":
+										svgDoc1.getElementById("morris_price").innerHTML = value.Price;
+										svgDoc1.getElementById("morris_club_price").innerHTML = value.Club_Price;
+										break;
+										case "SAR":
+										svgDoc1.getElementById("saudi_club_price").innerHTML = value.Price;
+										break;
+										case "USD":
+										svgDoc1.getElementById("us_price").innerHTML = value.Price;
+										svgDoc1.getElementById("us_club_price").innerHTML = value.Club_Price;
+										break;
+										default:
+										break;
+									}
+								})
+							}
+							else
+							{
+								svgDoc.getElementById("price1").innerHTML = "";
+								svgDoc.getElementById("price2").innerHTML = "";
+								svgDoc.getElementById("club_price1").innerHTML = "";
+								svgDoc.getElementById("club_price2").innerHTML = "";
+								svgDoc1.getElementById("canada_price").innerHTML = "";
+								svgDoc1.getElementById("canada_club_price").innerHTML = "";
+								svgDoc1.getElementById("swiss_price").innerHTML = "";
+								svgDoc1.getElementById("swiss_club_price").innerHTML = "";
+								svgDoc1.getElementById("algeria_price").innerHTML = "";
+								svgDoc1.getElementById("algeria_club_price").innerHTML = "";
+								svgDoc1.getElementById("morocco_price").innerHTML = "";
+								svgDoc1.getElementById("morroco_club_price").innerHTML = "";
+								svgDoc1.getElementById("morris_price").innerHTML = "";
+								svgDoc1.getElementById("morris_club_price").innerHTML = "";
+								svgDoc1.getElementById("saudi_club_price").innerHTML = "";
+								svgDoc1.getElementById("us_price").innerHTML = "";
+								svgDoc1.getElementById("us_club_price").innerHTML = "";
+							}
+							
+							
+							
 							if(data.size_chart.length > 0)
 							{
 								svgDoc1.getElementById("cm").innerHTML =  data.size_chart[0].size;
-								if(data.size_chart[0].size.length == 2)
-								{
-								   svgDoc1.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 106.096 52.0822)');
-								}
-								else
-								{
-								   svgDoc1.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 102.096 52.0822)');
-								}
+//								if(data.size_chart[0].size.length == 2)
+//								{
+//								   svgDoc1.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 106.096 52.0822)');
+//								}
+//								else
+//								{
+//								   svgDoc1.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 102.096 52.0822)');
+//								}
 								
 							}
 							else
