@@ -281,6 +281,17 @@ class OrderManagementCntrl extends Controller
 				
 				$factory_code = $data['order_details']{0}->FactoryCode;
 				$customer_id = DB::table('customers')->select('*')->where('factory_code',$factory_code)->get();
+				
+				$customer_active = DB::table('customers')->select('*')->where('factory_code',$factory_code)->where('is_active',1)->get();
+				
+				if(count($customer_active) > 0)
+				{
+					$data['customer_active'] = "active";
+				}
+				else
+				{
+					$data['customer_active'] = "inactive";
+				}
 
 				if(count($customer_id) > 0)
 				{
@@ -341,6 +352,18 @@ class OrderManagementCntrl extends Controller
 				
 				$factory_code = $data['order_details']{0}->FactoryCode;
 				$customer_id = DB::table('customers')->select('*')->where('factory_code',$factory_code)->get();
+				
+				$customer_active = DB::table('customers')->select('*')->where('factory_code',$factory_code)->where('is_active',1)->get();
+				
+				if(count($customer_active) > 0)
+				{
+					$data['customer_active'] = "active";
+				}
+				else
+				{
+					$data['customer_active'] = "inactive";
+				}
+				
 
 				if(count($customer_id) > 0)
 				{
@@ -646,7 +669,7 @@ class OrderManagementCntrl extends Controller
         
          $data['orchestra_parcel_quantity_details'] = DB::table('orchestra_parcel_quantity_details')->select(DB::raw('distinct on ("UVC_TCO") "UVC_TCO"'),'UVC','Size','BarcodeForPricesTags','Quantity','Color')->where('BuyerPONo',$po)->get();
         
-         $data['orchestra_parcel_details']= DB::table('orchestra_parcel_details')->leftJoin('orchestra_color_code','orchestra_color_code.code','orchestra_parcel_details.Color_Code')->select('orchestra_parcel_details.*','Standard_Code as ParcelCode','orchestra_color_code.english as colour_Code')->where('BuyerPONo',$po)->groupBy('orchestra_parcel_details.id','orchestra_color_code.id','BuyerPONo')->get();
+         $data['orchestra_parcel_details']= DB::table('orchestra_parcel_details as alias')->leftJoin('orchestra_color_code','orchestra_color_code.code','alias.Color_Code')->select(DB::raw('distinct on (alias."Size") "Size"'),DB::raw("(SELECT SUM(\"Quantity\") FROM orchestra_parcel_details WHERE \"Size\" = alias.\"Size\" and \"BuyerPONo\"='".$po."') as \"Sum\""),'alias.*','Standard_Code as ParcelCode','orchestra_color_code.english as colour_Code')->where('BuyerPONo',$po)->groupBy('alias.id','orchestra_color_code.id','BuyerPONo')->get();
         
 		$data['color_wcl'] = DB::table('orchestra_parcel_details')->select('orchestra_parcel_details.Color_Code')->where('orchestra_parcel_details.UVC',$uvc)->groupBy('orchestra_parcel_details.Color_Code') ->orderBy('orchestra_parcel_details.Color_Code','asc')->get();
 		
@@ -666,6 +689,7 @@ class OrderManagementCntrl extends Controller
             $orchestra_solid_carton_sticker_orders_qty=DB::table('orchestra_solid_carton_sticker_orders_qty')->select('*')->where('oscs_id',$value->id)->get();
             $value->qty=$orchestra_solid_carton_sticker_orders_qty;
         }
+		
         
         $data['orchestra_solid_poly_bag_sticker_orders']=DB::table('orchestra_solid_poly_bag_sticker_orders')->select('*')->where('uvc',$uvc)->where('po',$po)->get();
         if(count($data['orchestra_solid_poly_bag_sticker_orders']) > 0)
@@ -710,6 +734,18 @@ class OrderManagementCntrl extends Controller
 			
 			$factory_code = $data['orchestra_parcel_details']{0}->FactoryCode;
 			$customer_id = DB::table('customers')->select('*')->where('factory_code',$factory_code)->get();
+			
+			$customer_active = DB::table('customers')->select('*')->where('factory_code',$factory_code)->where('is_active',1)->get();
+				
+			if(count($customer_active) > 0)
+			{
+				$data['customer_active'] = "active";
+			}
+			else
+			{
+				$data['customer_active'] = "inactive";
+			}
+			
 			if(count($customer_id) > 0)
 			{
                 $carton_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',101)->get();
@@ -758,6 +794,17 @@ class OrderManagementCntrl extends Controller
 			
 			$factory_code = $data['orchestra_parcel_details']{0}->FactoryCode;
 			$customer_id = DB::table('customers')->select('*')->where('factory_code',$factory_code)->get();
+			
+			$customer_active = DB::table('customers')->select('*')->where('factory_code',$factory_code)->where('is_active',1)->get();
+				
+			if(count($customer_active) > 0)
+			{
+				$data['customer_active'] = "active";
+			}
+			else
+			{
+				$data['customer_active'] = "inactive";
+			}
 			
 			if(count($customer_id) > 0)
 			{

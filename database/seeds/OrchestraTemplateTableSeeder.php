@@ -788,6 +788,7 @@ class OrchestraTemplateTableSeeder extends Seeder
             'flag' => 0,
             'hierarchy_id' => 175,
             ]);
+            
 
             \App\OrchestraTemplate::create([
             'item_id' => 176,
