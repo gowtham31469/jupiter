@@ -1140,6 +1140,10 @@ function storeJobcard()
                         base_url+JSON.parse(resp),
                         '_blank' // <- This is what makes it open in a new window.
                     ); 
+                    $('.snackbar_span').html("Jobcard Created Successfully");
+                    showSnackbar();
+                    $('.modal').modal('hide');
+                    location.reload();
                 }
               
             },
@@ -1920,6 +1924,10 @@ function updateJobcard(formData)
                         base_url+JSON.parse(resp),
                         '_blank' // <- This is what makes it open in a new window.
                     );  
+                    $('.snackbar_span').html("Jobcard Created Successfully");
+                    showSnackbar();
+                    $('.modal').modal('hide');
+                    location.reload();
                 }
                 
             },
