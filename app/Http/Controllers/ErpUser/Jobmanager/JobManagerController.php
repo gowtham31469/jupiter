@@ -90,7 +90,8 @@ class JobManagerController extends Controller
 									->join('buyers','erpusers_template_mapping.buyer','buyers.id')
 									->where('erpusers_template_mapping.company',session()->get('company'))
 									->where('erpusers_template_mapping.erp_user',$erp_user_id)
-									->select('erpusers_template_mapping.*','buyers.template_table','buyers.item_master_table','buyers.id as buyer_id')
+									->select('erpusers_template_mapping.buyer as buyer_id', 'erpusers_template_mapping.templates', 'buyers.template_table','buyers.item_master_table')
+									->distinct('erpusers_template_mapping.templates')
 									->get();
 			}
 			else
@@ -98,7 +99,8 @@ class JobManagerController extends Controller
 				$templates   = 		DB::table('erpusers_template_mapping')
 									->join('buyers','erpusers_template_mapping.buyer','buyers.id')
 									->where('erpusers_template_mapping.company',session()->get('company'))
-									->select('erpusers_template_mapping.*','buyers.template_table','buyers.item_master_table','buyers.id as buyer_id')
+									->select('erpusers_template_mapping.buyer as buyer_id', 'erpusers_template_mapping.templates', 'buyers.template_table','buyers.item_master_table')
+									->distinct('erpusers_template_mapping.templates')
 									->get();
 			}
 			
@@ -108,7 +110,8 @@ class JobManagerController extends Controller
 			{
 				$arr_template =  DB::table($value->template_table)
 								->where('hierarchy_id',$value->templates)
-								->where('flag',1)
+								//->where('flag',1)
+								->distinct('hierarchy_id')
 								->pluck('item_id');
 				if($arr_template)
 				{
@@ -118,8 +121,6 @@ class JobManagerController extends Controller
 			}
 			
 			$orders_erp = array();
-			
-			dd($templates);
 			foreach($new_orders as $key => $values)
 			{
 				$split_key = explode('-', $key);
@@ -138,17 +139,17 @@ class JobManagerController extends Controller
 											->where('erp_order_details.deleted_at', null)
 											->where('erp_order_details.status', '=', $erp_status_id)
 											->where('erp_order_details.order_status_id', '=', $order_status_id)
-											->whereIn('erp_orders.buyer_id', $buyers)
+											->where('buyers.id', $buyer_id)
 											->orderBy('erp_order_details.erp_order_id', 'asc')
-											->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id',$this->buyer_name.'_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at','erp_order_details.uuid')
-											->select('erp_orders.*','erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name', 'buyers.id as buyer_id',$this->buyer_name.'_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at', 'erp_order_details.uuid')
-											->get();
-											
+											->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id',$this->buyer_name.'_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at','erp_order_details.uuid', 'erp_order_details.zone')
+											->select('erp_orders.id', 'erp_orders.customer_id', 'erp_orders.buyer_id', 'erp_orders.po_no', 'erp_orders.po_file', 'erp_orders.status', 'erp_orders.erp_id','erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name', 'buyers.id as buyer_id',$this->buyer_name.'_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at', 'erp_order_details.uuid', 'erp_order_details.zone')
+											->get()->toArray();
+		
 					if(count($erp_order_details) > 0)
 					{
 						foreach($erp_order_details as $erp_order_det)
 						{
-							$orders_erp[] = $erp_order_det;
+							$orders_erp[$erp_order_det['uuid']] = $erp_order_det;
 						}
 						
 					}
@@ -165,6 +166,7 @@ class JobManagerController extends Controller
 			$erp_teeth_no = DB::table('erp_teeth_no')->where('is_enabled','=',true)->pluck('teeth_no','id')->all();
 
 			asort($orders_erp);
+			
 			return view('erp.Jobmanager.jobmanager', ['orders' => $orders_erp, 'companies' => $companies, 'disp_modes' => $erp_dispatch_mode, 'finish_types' => $erp_finish_type, 'machines' => $erp_machines, 'teeth_nos' => $erp_teeth_no]);
 		}
 		catch (\Exception $e)
