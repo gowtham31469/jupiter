@@ -894,7 +894,6 @@ class OrderManagementCntrl extends Controller
         $colour = $request->colour;
         $season_code =$request->season_code;
 		$cm =$request->cm;
-		$in =$request->in;
         $id =$request->id;
 		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('customers.*')->get();
 		//print_r($factory);
@@ -940,7 +939,6 @@ class OrderManagementCntrl extends Controller
                         'status'    => $status,
                         'customer_id'    => $factory{0}->id,
 					    'cm'    => $cm,
-					    'in'    => $in,
 					    'orchestra_parcel_details_id'    => $parcel_id,
 					    'season_code'    => $season_code,
 					    'pi_status'           => $pi_status,
@@ -979,7 +977,6 @@ class OrderManagementCntrl extends Controller
 										'status'    => $status,
 										'customer_id'    => $factory{0}->id,
 										'cm'    => $cm,
-										'in'    => $in,
 										'orchestra_parcel_details_id'    => $parcel_id,
 										'season_code'    => $season_code,
 										'pi_status'           => $pi_status,
@@ -2241,7 +2238,6 @@ class OrderManagementCntrl extends Controller
         $po_select =$request->po_select;
         $id =$request->id;
 		$cm =$request->cm;
-		$in =$request->in;
 		$card_flag =$request->card_flag;
         $parcel_id =$request->parcel_id;
         $season_code =$request->season_code;
@@ -2313,7 +2309,6 @@ class OrderManagementCntrl extends Controller
                         'customer_id'    => $factory{0}->id,
                         'svg_path'    => "", 
 					    'cm'    => $cm, 
-					    'in'    => $in, 
                         'status'    => "Buyer Approval Pending",
 						'orchestra_parcel_details_id'    => $parcel_id,
 						'season_code'    => $season_code,
@@ -2391,7 +2386,6 @@ class OrderManagementCntrl extends Controller
                         		'customer_id'    => $factory{0}->id,
                                 'svg_path'    => "", 
 				   				'cm'    => $cm, 
-				   				'in'    => $in, 
                                 'status'    => "Buyer Approval Pending",
 								'orchestra_parcel_details_id'    => $parcel_id,
 								'season_code'    => $season_code,
@@ -2466,7 +2460,6 @@ class OrderManagementCntrl extends Controller
                         		'customer_id'    => $factory{0}->id,
                                 'svg_path'    => "", 
 				   				'cm'    => $cm, 
-				   				'in'    => $in, 
                                 'status'    => "Buyer Approval Pending",
 								'orchestra_parcel_details_id'    => $parcel_id,
 								'season_code'    => $season_code,

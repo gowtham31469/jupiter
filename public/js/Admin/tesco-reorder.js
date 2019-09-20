@@ -927,6 +927,7 @@ function jsbarcodetescotsl(code, id, svgDoc) {
  */
 function setTescoReorder(type,id,liid)
 {
+	$('.submitbutton').attr('disabled','disabled')
 	var item = $('.li-item.active').find('a').text();
 	var po=$('.purchase_order_number').val();
 	var count=[];

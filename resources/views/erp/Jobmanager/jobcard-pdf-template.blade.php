@@ -108,15 +108,39 @@ th {
                 <td width="15%" style="border-right:1px solid #6f7072;" id="teeth_no">{{ $teeth_no }}</td>
             </tr>
             <tr nobr="true">
-                <th  style="border-left:1px solid #6f7072;border-bottom:1px solid #6f7072;"></th>
-                <td  style="border-bottom:1px solid #6f7072;" id="print_color"></td>
-                <th  style="border-bottom:1px solid #6f7072;">NoOfSticker</th>
-                <td  style="border-bottom:1px solid #6f7072;" id="no_sticker">{{ $no_sticker }}</td>
-                <th width="10%" style="border-bottom:1px solid #6f7072;">Material</th>
-                <td width="15%" style="border-bottom:1px solid #6f7072;" id="material">{{ $material }}</td>
-                <th width="10%" style="border-bottom:1px solid #6f7072;">FinishType</th>
-                <td width="15%" style="border-right:1px solid #6f7072;border-bottom:1px solid #6f7072;" id="finish_type">{{ $finish_type }}</td>
+                @if(ucwords($buyer->buyer_name) === 'Tesco')
+                    <th  style="border-left:1px solid #6f7072;border-bottom:1px solid #6f7072;"></th>
+                    <td  style="border-bottom:1px solid #6f7072;" id="tint_color"></td>
+                    <th  style="border-bottom:1px solid #6f7072;">NoOfSticker</th>
+                    <td  style="border-bottom:1px solid #6f7072;" id="no_sticker">{{ $no_sticker }}</td>
+                    <th width="10%" style="border-bottom:1px solid #6f7072;">Material</th>
+                    <td width="15%" style="border-bottom:1px solid #6f7072;" id="material">{{ $material }}</td>
+                    <th width="10%" style="border-bottom:1px solid #6f7072;">FinishType</th>
+                    <td width="15%" style="border-right:1px solid #6f7072;border-bottom:1px solid #6f7072;" id="finish_type">{{ $finish_type }}</td>
+                @else
+                    <th  style="border-left:1px solid #6f7072;">TintColors</th>
+                    <td  id="tint_color">{{ ucwords($tint_color) }}</td>
+                    <th >NoOfSticker</th>
+                    <td id="no_sticker">{{ $no_sticker }}</td>
+                    <th width="10%">Material</th>
+                    <td width="15%" id="material">{{ $material }}</td>
+                    <th width="10%">FinishType</th>
+                    <td width="15%" style="border-right:1px solid #6f7072;" id="finish_type">{{ $finish_type }}</td>
+                @endif
             </tr>
+            @if(ucwords($buyer->buyer_name) === 'Orchestra')
+                <tr nobr="true">
+                    <th  style="border-left:1px solid #6f7072;border-bottom:1px solid #6f7072;">CustPO</th>
+                    <td  style="border-bottom:1px solid #6f7072;" id="customer_po">{{ ucwords($customer_po) }}</td>
+                    <th  style="border-bottom:1px solid #6f7072;"></th>
+                    <td  style="border-bottom:1px solid #6f7072;"></td>
+                    <th width="10%" style="border-bottom:1px solid #6f7072;"></th>
+                    <td width="15%" style="border-bottom:1px solid #6f7072;"></td>
+                    <th width="10%" style="border-bottom:1px solid #6f7072;"></th>
+                    <td width="15%" style="border-right:1px solid #6f7072;border-bottom:1px solid #6f7072;"></td>
+                </tr>
+            @endif
+           
     </table>
 
     <table>
@@ -171,14 +195,17 @@ th {
                 @if (!empty($template_type_data))
                     @foreach ($template_type_data as $table => $table_data)
                         <table cellspacing="0" cellpadding="1" border="0.2"  nobr="true" class="single-list-table" align="center">
-                        @php $ref_name = explode('_', $table); @endphp
+                        @php $ref_name       = explode('_', $table); 
+                             array_pop($ref_name);
+                             $reference_name = implode(" ",$ref_name);
+                        @endphp
                             <tbody id="single_list_table_body">
                                 <tr nobr="true" class="single-section">
                                     <th nobr="true"><strong>ID.NO</strong></th>
                                     @foreach ($table_data['erp_id'] as $key => $value)
                                         <td colspan="2" nobr="true">{{ $value }}</td>
                                     @endforeach
-                                    <td colspan="4" style="line-height:90px;" rowspan="3" nobr="true"><strong >REFNUM &nbsp;: {{ $ref_name[0].' '.$ref_name[1] }}</strong></td>
+                                    <td colspan="4" style="line-height:90px;" rowspan="3" nobr="true"><strong >REFNUM &nbsp;: {{ $reference_name }}</strong></td>
                                 </tr>
                                 <tr class="single-section" nobr="true">
                                     <th nobr="true"><strong>B.PO.NO</strong></th>
