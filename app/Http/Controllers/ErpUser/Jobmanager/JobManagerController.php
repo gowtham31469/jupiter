@@ -6,6 +6,16 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
+use App\OrchestraSolidPolySticker;
+use App\OrchestraSolidPolyStickerQty;
+use App\OrchestraSolidCartonSticker;
+use App\OrchestraSolidCartonStickerQty;
+use App\OrchestraParcelDetails;
+use App\OrchestraStdCartonStickerQty;
+use App\OrchestraStdCartonSticker;
+use App\OrchestraStdPolyStickerQty;
+use App\OrchestraStdPolySticker;
+use App\OrchestraAgeGroup;
 use Response;
 use View;
 use Auth;
@@ -184,7 +194,139 @@ class JobManagerController extends Controller
 		$buyer_no = $request['buyer_no'];
 		$id = $request['id'];
 		$order_type = $request['order_type'];
-		$order_details  = 	DB::table('erp_order_details')
+		$created_at = $request['created_at'];
+
+		if($request->buyer=="orchestra")
+		{
+			$order_details  = 	DB::table('erp_order_details')
+									->where('erp_order_details.style_no',$style_no)
+									->where('erp_order_details.erp_order_id',$id)
+									->where('erp_order_details.reference_name',$ref_name)
+									->where('erp_order_details.buyer_po_number',$buyer_no)
+									->where('erp_order_details.status','!=',4)
+									->where('erp_order_details.deleted_at', null)
+									->orderBy('erp_order_details.id', 'desc')
+									->select('*')
+									->get();
+
+			$order_Qty_table = $order_details[0]->order_qnty_table_name;
+			$ordertable = substr($order_Qty_table,0,strrpos($order_Qty_table,"_"));
+			
+			$stringArr=explode("_", $order_Qty_table);
+			$target_id='';
+
+			for($i=0; $i <sizeof($stringArr)-2 ; $i++) { 
+			$target_id.=$stringArr[$i][0];
+			}
+			$target_id=$target_id."_id";
+
+
+			$parentTable_id = DB::table($order_Qty_table)
+							->where('id',$order_details[0]->order_qnty_table_id)
+							->first()->$target_id;
+
+			switch ($ordertable) 
+			{
+				case 'orchestra_solid_poly_bag_sticker_orders':
+
+					$res = OrchestraSolidPolySticker::with(['solidpolystickerqty' => 
+						function($query)
+						{  
+							$query->groupBy('size')
+								  ->groupBy('orchestra_solid_poly_bag_sticker_orders_qty.id');
+						}])->get();
+
+						$res->map(function ($res) {
+						$res->reference_name = "Solid Polybag Stickers";
+						$res->age_group = OrchestraAgeGroup::where('id',$res->group_id)->first()->color;
+						});
+				break;
+
+
+				case 'orchestra_solid_carton_sticker_orders':
+
+					$res = OrchestraSolidCartonSticker::with(['solidcartonstickerqty' => 
+						function($query)
+						{  
+							$query->groupBy('size')
+								  ->groupBy('orchestra_solid_carton_sticker_orders_qty.id');
+						}])->get();
+					
+						$res->map(function ($res) {
+						$res->theme = OrchestraParcelDetails::where('id',$res->orchestra_parcel_details_id)->first()->Theme;
+						$res->reference_name = "Solid Carton Stickers";
+						$res->age_group = OrchestraAgeGroup::where('id',$res->group_id)->first()->color;
+						});
+						
+				break;
+
+				case 'orchestra_standard_carton_sticker_orders':
+
+					$res = OrchestraStdCartonSticker::with(['stdcartonstickerqty' => 
+						function($query)
+						{  
+							$query->groupBy('size')
+								  ->groupBy('orchestra_standard_carton_sticker_orders_qty.id');
+						}])->get();
+					
+						$res->map(function ($res) {
+						$res->theme = OrchestraParcelDetails::where('id',$res->orchestra_parcel_details_id)->first()->Theme;
+						$res->reference_name = "Std Carton Stickers";
+						$res->age_group = OrchestraAgeGroup::where('id',$res->group_id)->first()->color;
+						});
+				break;
+
+				case 'orchestra_standard_poly_bag_sticker_orders':
+
+					$res = OrchestraStdPolySticker::with(['stdpolystickerqty' => 
+						function($query)
+						{  
+							$query->groupBy('size')
+								  ->groupBy('orchestra_standard_poly_bag_sticker_orders_qty.id');
+						}])->get();
+						
+				
+						$sizeArr=OrchestraParcelDetails::where('UVC',$res[0]->uvc)
+												->where('Season_Code',$res[0]->season_code)
+												->select('Quantity','Size')
+												->orderBy('Size','asc')
+												->get()->groupBy('Size')
+												->toArray();
+								$qtyAr=[];				
+								$sizAr=[];				
+							foreach ($sizeArr as $key => $value)
+							 {
+									$qty=0;				
+									foreach ($value as $key1 => $value1) {
+											$qty+=$value1['Quantity'];		
+												}	
+												array_push($qtyAr, $qty);
+												array_push($sizAr, $key);
+							 }					
+
+
+						$res->map(function ($res) use($sizeArr,$qtyAr,$sizAr) {
+						$res->theme = OrchestraParcelDetails::where('id',$res->orchestra_parcel_details_id)->first()->Theme;
+						$res->reference_name = "Std Poly Stickers";
+						$res->age_group = OrchestraAgeGroup::where('id',$res->group_id)->first()->color;
+						$res->sizeArr = $sizAr;
+						$res->qtyArr = $qtyAr;
+						});
+						
+				break;
+
+				default:
+				# code...
+				break;
+			}
+	
+			// dd($res);
+		return response()->json(['error'=> false,'order_details' =>$res],200);
+		}
+
+
+		else{
+				$order_details  = 	DB::table('erp_order_details')
 									->where('erp_order_details.style_no',$style_no)
 									->where('erp_order_details.erp_order_id',$id)
 									->where('erp_order_details.reference_name',$ref_name)
@@ -203,10 +345,9 @@ class JobManagerController extends Controller
 									->select('*')
 									->get();
 			
-			
 			$order_table = str_replace("_quanty","",$value->order_qnty_table_name);
 			$order_id  = strtolower(str_replace(" ","",$ref_name).'_order_id');
-			
+
 			$order_omp  = 	DB::table($order_table)
 				->join('tesco_department',$order_table.'.tesco_department_id', 'tesco_department.id')
 				->join('tesco_brand',$order_table.'.tesco_brand_id', 'tesco_brand.id')
@@ -238,8 +379,11 @@ class JobManagerController extends Controller
 			$value->tag_at_source     = $order_omp{0}->tag_at_source;
 			
 		}
-		
 		return response()->json(['error'=> true,'order_details' =>$order_details],200);
+		}
+	
+		
+		
 	}
 	/**
      * Get order details for job card template creation by selected ids.
@@ -2252,6 +2396,196 @@ class JobManagerController extends Controller
 				echo  "array size= ".sizeof($order_details_data);
 			}
 		}
+	
+
+ public function printPdfTable(Request $request)
+    {
+         $name=$request->name;
+         $svg=urldecode($request->svg);
+         define ('PDF_FONT_NAME_MAIN', 'calibrib');
+         define ('PDF_FONT_NAME_DATA', 'calibrib');
+//          print_r($svg);
+        PDF::setImageScale(1);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('calibrib');
+        PDF::AddPage();
+		
+		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
+        //PDF::RoundedRect(95, 255, 40, 30, 0.1, '1111', null, $style6);
+        //PDF::RoundedRect(140, 255, 40, 30, 0.1, '1111', 'null', $style6);
+        PDF::RoundedRect(10, 10, 150, 100, 0.000001, '1111', null, $style6);
+        PDF::RoundedRect(12.5, 12.5, 145, 95, 0.000001, '1111', null, $style6);
+		
+		//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+		//PDF::RoundedRect(12.5, 12.5, 145, 95, 0, '0000');
+        $td_size="";
+        $td_col="";
+        $total=0;
+        $size=explode(',',$request->size);
+        $qty=explode(',',$request->qty);
+        $i=0;
+		$index_arr=array();
+        foreach($size as $val)
+        {
+			  if (!in_array($val, $index_arr)) 
+			  { 
+				   if($val != "")
+					{
+					    array_push($index_arr,$val);
+						$td_size.="<td><br><br>".$val."</td>";
+						$td_col.="<td>".$qty[$i]."</td>";
+					} 
+			  } 
+           
+            $total+=$qty[$i];
+            $i++;
+        }
+          $tbl = '<table  border="1" style="text-align:center;">
+		  			<tr style="line-height:0.53">
+                          <td style="font-size:14px;text-align:center;line-height:0.45"><br><br>Size:</td>
+                          '.$td_size.'
+                          <td><br><br>Total<br></td>
+                          </tr>
+                      <tr>
+                          <td style="font-size:7.5px;line-height:2">ERCU</td>
+                          '.$td_col.'
+                          <td>'.$total.'</td>
+                          </tr>
+            </table>';
+        PDF::SetFillColor(255, 255, 255);
+        PDF::SetTextColor(0, 0, 0);
+        
+        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::writeHTMLCell(147, '', '11.5', '55', $tbl, '', 1, 1, true, '', true);
+        
+  
+        
+        $style = array(
+            'position' => '',
+            'align' => 'C',
+            'stretch' => false,
+            'fitwidth' => true,
+            'cellfitalign' => '',
+            'border' => false,
+            'hpadding' => 'auto',
+            'vpadding' => 'auto',
+            'fgcolor' => array(0,0,0),
+            'bgcolor' => false, //array(255,255,255),
+            'text' => true,
+            'font' => 'calibrib',
+            'fontsize' => 12,
+            'stretchtext' => 4
+        );
+         ///PDF::write1DBarcode('3531114195599', 'EAN13', '60', '72', '', 32, 0.45, $style, 'N');
+
+       
+        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.$name.'.pdf'));
+        
+    }
+
+	public function printPdf(Request $request)
+    {
+		 $name=$request->name;
+         $svg=urldecode($request->svg);
+         define ('PDF_FONT_NAME_MAIN', 'calibrib');
+         define ('PDF_FONT_NAME_DATA', 'calibrib');
+//          print_r($svg);
+        PDF::setImageScale(1);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('calibrib');
+        PDF::AddPage();
+		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
+        //PDF::RoundedRect(95, 255, 40, 30, 0.1, '1111', null, $style6);
+        //PDF::RoundedRect(140, 255, 40, 30, 0.1, '1111', 'null', $style6);
+        PDF::RoundedRect(10, 10, 150, 100, 0.000001, '1111', null, $style6);
+        PDF::RoundedRect(12.5, 12.5, 145, 95, 0.000001, '1111', null, $style6);
+        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.$name.'.pdf'));
+    } 
+
+
+
+
+	public function printPdfSmall(Request $request)
+    {
+		 
+		  $name=$request->name;
+		 $svgarr = explode(',_',$request->svg);
+         //$svg=urldecode($request->svg);
+         define ('PDF_FONT_NAME_MAIN', 'calibrib');
+         define ('PDF_FONT_NAME_DATA', 'calibrib');
+//          print_r($svg);
+        PDF::setImageScale(1.66);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('calibrib');
+		PDF::AddPage('P', 'A4');
+		//PDF::RoundedRect(10, 10, 100, 70, 0, '0000');
+		//PDF::RoundedRect(12.5, 12.5, 95, 65, 0, '0000');
+		 
+		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
+        PDF::RoundedRect(10, 10, 100, 70, 0.000001, '1111', null, $style6);
+        PDF::RoundedRect(12.5, 12.5, 95, 65, 0.000001, '1111', null, $style6);
+		 
+//		PDF::SetAutoPageBreak(TRUE);
+		$i=0;
+		$j=0;
+		$yy=12.5;
+		foreach($svgarr as $value)
+        {
+			$svg=urldecode($value);
+			
+			if($i == 3)
+			{
+				PDF::AddPage('P', 'A4');
+				//PDF::RoundedRect(10, 10, 100, 70, 0, '0000');
+				//PDF::RoundedRect(12.5, 12.5, 95, 65, 0, '0000');
+				
+				PDF::RoundedRect(10, 10, 100, 70, 0.000001, '1111', null, $style6);
+        		PDF::RoundedRect(12.5, 12.5, 95, 65, 0.000001, '1111', null, $style6);
+				$yy=12.5;
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				$i = 0;
+			}
+			else  if($i == 0)
+			{
+				//PDF::RoundedRect(10, 100, 100, 70, 0, '0000');
+				//PDF::RoundedRect(12.5, 102.5, 95, 65, 0, '0000');
+				
+				PDF::RoundedRect(10, 100, 100, 70, 0.000001, '1111', null, $style6);
+        		PDF::RoundedRect(12.5, 102.5, 95, 65, 0.000001, '1111', null, $style6);
+				$yy=12.5;
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				
+			}
+			else if($i == 1)
+			{
+				//PDF::RoundedRect(10, 100, 100, 70, 0, '0000');
+				//PDF::RoundedRect(12.5, 102.5, 95, 65, 0, '0000');
+				PDF::RoundedRect(10, 100, 100, 70, 0.000001, '1111', null, $style6);
+        		PDF::RoundedRect(12.5, 102.5, 95, 65, 0.000001, '1111', null, $style6);
+				$yy += 90;
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			}
+			else
+			{
+				//PDF::RoundedRect(10, 190, 100, 70, 0, '0000');
+				//PDF::RoundedRect(12.5, 192.5, 95, 65, 0, '0000');
+				PDF::RoundedRect(10, 190, 100, 70, 0.000001, '1111', null, $style6);
+        		PDF::RoundedRect(12.5, 192.5, 95, 65, 0.000001, '1111', null, $style6);
+				$yy += 90;
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			}
+			$i++;
+			$j++;
+		 }
+        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.$name.'.pdf'));
+    }
 
 		/**
 		 * Function to update uuid value for existing data in erp_order_details table.

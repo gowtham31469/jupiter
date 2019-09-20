@@ -679,6 +679,24 @@ function getErpOrderList()
 							}
 							var partial_status = item.partial_status == 0 ? "NO":"YES"; 
 							$ref_name = item.reference_name.replace(" ","") 
+
+							if(item.buyer=="orchestra")
+							{
+								   html += `<tr id="`+item.id+`">
+										<td>`+i+`</td>
+										<td>`+item.style_no+`</td>
+										<td>`+item.buyer_po_number+`</td>
+										<td>`+item.zone+`</td>
+										<td>`+item.reference_name+`</td>
+										<td>`+partial_status +`</td>
+										<td><span class="label `+status+`">`+item.status_name+`</span></td>
+										<td>`+item.created_at.split(" ")[0]+`</td>
+										<td><object style="opacity:0;width:0px;height:0px" id="orchestra_svg_modal`+i+`" class="center-block tesco_svg`+i+`" data="`+item.template_file+`" type="image/svg+xml"></object><a class="print_download" href="javascript:void(0)" onclick="DownloadArtwork('`+item.reference_name+`','`+i+`','`+item.template_file+`','`+item.style_no+`','`+item.buyer_po_number+`','`+item.erp_order_id+`','`+item.order_type+`','`+item.created_at+`','print_orchestra')" ><i class="fa fa-edit"  title="Download Print" data-original-title="Download Print"></i></a>
+										</td>
+										</tr>`;
+							}
+                            else{
+
                             html += `<tr id="`+item.id+`">
 										<td>`+i+`</td>
 										<td>`+item.style_no+`</td>
@@ -688,8 +706,9 @@ function getErpOrderList()
 										<td>`+partial_status +`</td>
 										<td><span class="label `+status+`">`+item.status_name+`</span></td>
 										<td>`+item.created_at.split(" ")[0]+`</td>
-										<td><object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal`+i+`" class="center-block tesco_svg`+i+`" data="`+item.template_file+`" type="image/svg+xml"></object><a class="print_download" href="javascript:void(0)" onclick="DownloadArtwork('`+$ref_name+`','`+i+`','`+item.template_file+`','`+item.style_no+`','`+item.buyer_po_number+`','`+item.erp_order_id+`','`+item.order_type+`','`+item.created_at+`','print')" ><i class="fa fa-edit"  title="Download Print" data-original-title="Download Print"></i></a><a style="margin-left: 10px;" class="proof_download" href="javascript:void(0)" onclick="DownloadArtwork('`+$ref_name+`','`+i+`','`+item.template_file+`','`+item.style_no+`','`+item.buyer_po_number+`','`+item.erp_order_id+`','`+item.order_type+`','`+item.created_at+`','proof')"><i class="fa fa-edit"  title="Download Proof" data-original-title="Download Proof"></i></a></td>
+										<td><object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal`+i+`" class="center-block tesco_svg`+i+`" data="`+item.template_file+`" type="image/svg+xml"></object><a class="print_download" href="javascript:void(0)" onclick="DownloadArtwork('`+$ref_name+`','`+i+`','`+item.template_file+`','`+item.style_no+`','`+item.buyer_po_number+`','`+item.erp_order_id+`','`+item.order_type+`','`+item.created_at+`','print')" ><i class="fa fa-edit"  title="Download Print" data-original-title="Download Print"></i></a><a style="margin-left: 10px;" class="proof_download" href="javascript:void(0)" onclick="DownloadArtwork('`+$ref_name+`','`+i+`','`+item.template_file+`','`+item.style_no+`','`+item.buyer_po_number+`','`+item.erp_order_id+`','`+item.order_type+`','`+item.created_at+`','proof')"><i class="fa fa-edit"  title="Download Proof" data-original-title="Download Proof"></i></a>	</td>
 										</tr>`;
+                            }
 							i++;
                         });
                         $('#jobcard_list_table_body').html(html);           
