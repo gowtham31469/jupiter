@@ -1285,7 +1285,7 @@
 							}
 							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_thl3_orders-'+value.id+'" class="checkbox"></td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td>'+value.sum+'</td><td>'+delivery_date+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
-						$('#new_orders_modal .modal-body').html('<table class="table new_orders"><thead><tr><th><input name="select_all" value="1" id="example-select-all-new" type="checkbox" /></th><th class="text-center">Order Date</th><th class="text-center">Customer Name</th><th class="text-center">Buyer</th><th>Style No</th><th>Reference No</th><th>Zone</th><th class="text-center">Quantity</th><th class="text-center">Delivery Date</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');
+						$('#new_orders_modal .modal-body').html('<table class="table new_orders" style="width:100%"><thead><tr><th><input name="select_all" value="1" id="example-select-all-new" type="checkbox" /></th><th class="text-center">Order Date</th><th class="text-center">Customer Name</th><th class="text-center">Buyer</th><th>Style No</th><th>Reference No</th><th>Zone</th><th class="text-center">Quantity</th><th class="text-center">Delivery Date</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');
 						$('#new_orders_modal').modal("show")
 						   var table = $('.new_orders').DataTable({
 								dom: 'Bfrtip',
@@ -2007,7 +2007,7 @@
 							}	
 							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_thl3_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>THL 3</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+pending_days+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
-						$('#pen_orders_modal .modal-body').html('<table class="table pending_orders"><thead><tr><th><input name="select_all" value="1" id="example-select-all-pen" type="checkbox" /></th><th class="text-center">Customer Name</th><th class="text-center">Buyer</th><th>Style No</th><th>Product</th><th>Reference No</th><th>Zone</th><th>A/W Date</th><th>Pending Days</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');  
+						$('#pen_orders_modal .modal-body').html('<table class="table pending_orders" style="width:100%"><thead><tr><th><input name="select_all" value="1" id="example-select-all-pen" type="checkbox" /></th><th class="text-center">Customer Name</th><th class="text-center">Buyer</th><th>Style No</th><th>Product</th><th>Reference No</th><th>Zone</th><th>A/W Date</th><th>Pending Days</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');  
 						$('#pen_orders_modal').modal("show")   
 			
 			
