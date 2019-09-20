@@ -738,6 +738,7 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::get('job-manager/get-jobcard-id-list', 'ErpUser\Jobmanager\JobManagerController@getJobcardIdListByBuyerCustomerId'); 
 	Route::get('job-manager/get-jobcards-list', 'ErpUser\Jobmanager\JobManagerController@getJobcardsListByBuyerCustomerJobcardId'); 
 	Route::post('job-manager/pdf-merge', 'ErpUser\Jobmanager\JobManagerController@pdfMerge'); 
+	Route::get('job-manager/script-update-uuid', 'ErpUser\Jobmanager\JobManagerController@scriptUpdateUUID');
 
 	/* Orchestra Print Manager*/
 
