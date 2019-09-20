@@ -2591,22 +2591,22 @@ class JobManagerController extends Controller
 		 * Function to update uuid value for existing data in erp_order_details table.
 		 * @author <Praveen>
 		 */
-		public function scriptUpdateUUID()
-		{
-			$orders = DB::table('erp_orders')->get();
-			$order_details = DB::table('erp_order_details')->get();
-			// unique id for array creation
-			$unique_id = 'ERP'.$erp_orders->id.str_random(25);
-			foreach($order_details as $value)
-			{
+		// public function scriptUpdateUUID()
+		// {
+		// 	$orders = DB::table('erp_orders')->get();
+		// 	$order_details = DB::table('erp_order_details')->get();
+		// 	// unique id for array creation
+		// 	$unique_id = 'ERP'.$erp_orders->id.str_random(25);
+		// 	foreach($order_details as $value)
+		// 	{
 				
-				ErpOrderDetails::where('id',$value->id)
-					->update([
-								'uuid'  => $order_status_id->id
-							]);
+		// 		ErpOrderDetails::where('id',$value->id)
+		// 			->update([
+		// 						'uuid'  => $order_status_id->id
+		// 					]);
 				
-			}
-			return "success";
-		}
+		// 	}
+		// 	return "success";
+		// }
 
 }
