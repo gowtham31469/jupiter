@@ -140,9 +140,10 @@ class JobManagerController extends Controller
 											->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id',$this->buyer_name.'_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at','erp_order_details.uuid', 'erp_order_details.zone')
 											->select('erp_orders.id', 'erp_orders.customer_id', 'erp_orders.buyer_id', 'erp_orders.po_no', 'erp_orders.po_file', 'erp_orders.status', 'erp_orders.erp_id','erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name', 'buyers.id as buyer_id',$this->buyer_name.'_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at', 'erp_order_details.uuid', 'erp_order_details.zone')
 											->get()->toArray();
-		
+					
 					if(count($erp_order_details) > 0)
 					{
+						$erp_order_details[0]['delivery_date'] = Carbon::parse($erp_order_details[0]['delivery_date'])->format('d-m-Y');
 						foreach($erp_order_details as $erp_order_det)
 						{
 							$orders_erp[$erp_order_det['uuid']] = $erp_order_det;
