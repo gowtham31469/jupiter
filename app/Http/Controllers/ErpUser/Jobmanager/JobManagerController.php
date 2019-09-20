@@ -15,6 +15,8 @@ use App\OrchestraStdCartonStickerQty;
 use App\OrchestraStdCartonSticker;
 use App\OrchestraStdPolyStickerQty;
 use App\OrchestraStdPolySticker;
+use App\OrchestraHangTagQty;
+use App\OrchestraHangTag;
 use App\OrchestraAgeGroup;
 use Response;
 use View;
@@ -174,6 +176,7 @@ class JobManagerController extends Controller
      */
 	public function getOrderDetails(Request $request)
 	{
+
 		$ref_name = $request['ref_name'];
 		$style_no = $request['style_no'];
 		$buyer_no = $request['buyer_no'];
@@ -187,7 +190,7 @@ class JobManagerController extends Controller
 									->where('erp_order_details.style_no',$style_no)
 									->where('erp_order_details.erp_order_id',$id)
 									->where('erp_order_details.reference_name',$ref_name)
-									->where('erp_order_details.buyer_po_number',$buyer_no)
+									// ->where('erp_order_details.buyer_po_number',$buyer_no)
 									->where('erp_order_details.status','!=',4)
 									->where('erp_order_details.deleted_at', null)
 									->orderBy('erp_order_details.id', 'desc')
@@ -205,13 +208,68 @@ class JobManagerController extends Controller
 			}
 			$target_id=$target_id."_id";
 
-
 			$parentTable_id = DB::table($order_Qty_table)
 							->where('id',$order_details[0]->order_qnty_table_id)
 							->first()->$target_id;
 
 			switch ($ordertable) 
-			{
+			{	
+
+				case 'orchestra_hang_tag_orders':
+   							   
+					// $res  = OrchestraHangTag::with(array('hangtagqty' => function($query) 
+					// {
+					// $query->leftJoin('orchestra_size_chart as chart', 'chart.age', 'orchestra_hang_tag_orders_qty.size');
+					// }))
+					// ->where('orchestra_hang_tag_orders.id',$parentTable_id)
+					// ->get();
+
+
+					$res = OrchestraHangTag::with(array('hangtagqty' => function($query) {
+								$query->leftJoin('orchestra_size_chart as osc', 'osc.age', 'orchestra_hang_tag_orders_qty.size')
+								->leftJoin('orchestra_parcel_details as opd', 'opd.SKU_Code', 'orchestra_hang_tag_orders_qty.uvc_tco')
+								->select('orchestra_hang_tag_orders_qty.*','osc.*','Size_Range_Label');
+								}))
+								->where('id', '=', $parentTable_id)
+								->get();
+
+
+					$res->map(function ($res) use($parentTable_id) {
+					foreach($res->hangtagqty as $key => $value) 
+					{
+					$CountryCodes =array(0=>'DZD',1=>'CAD',2=>'CHF',3=>'MAD',4=>'MUR',5=>'USD',6=>'EUR');
+					$price = ['algeria_price','canada_price','swiss_price','morocco_price'
+							,'morris_price','us_price','eur_price'];
+					$clubPrice = ['algeria_club_price','canada_club_price','swiss_club_price','morroco_club_price'
+							,'morris_club_price','us_club_price','eur_club_price'];
+					$PriceArr = array();
+
+					foreach($CountryCodes as $key => $country)
+					{ 
+					$q= OrchestraHangTag::leftJoin('orchestra_parcel_quantity_details', function ($join) use($value,$country,$parentTable_id)
+					{
+					$join->on('orchestra_hang_tag_orders.uvc', '=', 'orchestra_parcel_quantity_details.UVC')
+					->select('Price','Club_Price')
+					->where('Currency',$country)
+					->where('Size', $value->size);
+					})->where('orchestra_hang_tag_orders.id', '=', $parentTable_id)
+					->select('Price','Club_Price')
+					->get();
+
+					array_push($PriceArr, array($price[$key]=>$q->first()->Price, $clubPrice[$key] => $q->first()->Club_Price));
+					}
+
+					$value->prices =  $PriceArr;
+					$PriceArr = array();
+					}
+					});
+
+
+					$res['reference_name'] = "Orchestra HangTag";
+					$res['theme'] = OrchestraParcelDetails::where('id',$res[0]->orchestra_parcel_details_id)->first()->Theme;
+
+				break;
+			
 				case 'orchestra_solid_poly_bag_sticker_orders':
 
 					$res = OrchestraSolidPolySticker::with(['solidpolystickerqty' => 
@@ -2535,5 +2593,85 @@ class JobManagerController extends Controller
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
     }
+
+
+	/**
+	 * Print Preview For Hang Tag
+	 *
+	 * @return pdf
+	 */
+	
+	public function printHangPdf(Request $request)
+    {
+        $svgarrfront=explode(',_',$request->svg); 
+		//$svg1=urldecode($request->svg1); 
+		$svgarr=explode(',_',$request->svgRoot); 
+        define ('PDF_FONT_NAME_MAIN', 'calibrib');
+        define ('PDF_FONT_NAME_DATA', 'calibrib');
+        PDF::setImageScale(1);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('alternategothic2bt');
+        PDF::AddPage();
+		//PDF::RoundedRect(10, 10, 61, 131, 0, '0000');
+		//PDF::SetFillColor(255, 255, 255);
+        //PDF::SetTextColor(0, 0, 0);
+        //PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, '49', '117', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+        PDF::SetFont('arial');
+		$count=0;
+		$xx=12.5;
+		$i=0;
+		$yy=12.5;
+		$arr_mer=array_merge($svgarrfront,$svgarr);
+		$fir=0;
+		$sec = count($arr_mer) / 2;
+		foreach($arr_mer as $value)
+		{
+			$svg=urldecode($value);
+			//PDF::RoundedRect(80, 10, 61, 131, 0, '0000');
+			//PDF::ImageSVG('@' . $svg,  $x=$xx, $y=12.5, '49', '117', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			
+			
+			if($count%2==0)  
+			{  
+				PDF::ImageSVG('@' . urldecode($arr_mer[$fir]),  $x=$xx, $y=$yy, '49', '117', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				$fir++;
+			}  
+			else  
+			{  
+				PDF::ImageSVG('@' . urldecode($arr_mer[$sec]),  $x=$xx, $y=$yy, '49', '117', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				$sec++;
+			}   
+			
+			$xx += 65;
+			$i++;
+			
+			if($i == 3)
+			{
+				//PDF::AddPage();
+				//$i=0;
+				$xx=12.5;
+				$yy=150;
+			}
+			
+			if($i == 6)
+			{
+				PDF::AddPage();
+				$i=0;
+				$xx=12.5;
+				$yy=12.5;
+			}
+			$count++;
+		}
+		
+        PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
+		
+		exec("gs -dSAFER -dBATCH -dNOPAUSE -dNOCACHE -sDEVICE=pdfwrite -sColorConversionStrategy=CMYK -dProcessColorModel=/DeviceCMYK -sOutputFile=".public_path('/storage/app/template/solid1_cmyk.pdf')." ".public_path('/storage/app/template/solid1.pdf'));
+        
+//        print_r(url('/storage/app/template/'.$name.'_cmyk.pdf'));
+		
+        print_r(url('/storage/app/template/solid1.pdf'));
+    } 	
 
 }

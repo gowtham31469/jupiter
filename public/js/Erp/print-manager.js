@@ -159,16 +159,206 @@ function jsbarcodesolidcartonB(code, id, svgDoc) {
 }
 
 
-function DownloadArtwork(modal, i,template_file,style_no,buyer_no,id,order_type,created_at,status) {
 
+
+function printHangDiv(front,back,disney,name,style_no,buyer_no,id,order_type,created_at,buyer) {
+ 
+	var a = document.getElementById(front)
+	var svgDoc = a.contentDocument;
+	var svgRoot = svgDoc.documentElement;
+
+	var a1 = document.getElementById(back)
+	var svgDoc1 = a1.contentDocument;
+	var svgRoot1 = svgDoc1.documentElement;
+	
+	var index_arr=[];
+	var svgarr = [];
+	var svgarr_front = [];
+	var i=0;
+	var ajax=0;
+
+	$.ajax({
+				url: base_url + "/erp/job-manager/get-order-details",
+				type: "Post",
+				dataType: "json",
+				data: {
+					_token: csrf_token,
+					ref_name: name,
+					style_no: style_no,
+					buyer_no: buyer_no,
+					id: id,
+					created_at: created_at,
+					order_type:order_type,
+					buyer:buyer,
+				},
+				beforeSend: function() {
+
+				},
+				success: function(data) {
+					console.log(data)
+					details = data.order_details[0].hangtagqty;
+					Refname =data.reference_name;
+					$.each(details, function(index, val) {
+
+							svgDoc1.getElementById("uvc_tco").innerHTML = val.uvc_tco
+							svgDoc1.getElementById("size_french").innerHTML = val.size.split(" ")[1];
+							svgDoc1.getElementById("size").innerHTML = val.size.split(" ")[0];
+							svgDoc.getElementById("size_french").innerHTML = val.size.split(" ")[1];
+							svgDoc.getElementById("size").innerHTML = val.size.split(" ")[0];
+							svgDoc1.getElementById("cm").innerHTML = val.cm;
+							svgDoc1.getElementById("theme").innerHTML = data.order_details.theme;
+							svgDoc1.getElementById("size_list").innerHTML = val.Size_Range_Label.split(" ")[1]+"-"+val.Size_Range_Label.split(" ")[3];
+							if(val.size.split(" ")[1]=="MOIS")
+							{
+								svgDoc1.getElementById("size_english").innerHTML = 'MONTHS';
+								svgDoc.getElementById("size_english").innerHTML = 'MONTHS';
+							}
+							else
+							{
+								svgDoc1.getElementById("size_english").innerHTML = 'YEARS';
+								svgDoc.getElementById("size_english").innerHTML = 'YEARS';
+							}
+
+							$.each(val.prices, function(ind, vl) {
+								temp=vl
+								$.each(temp,function(i,v)
+								{	
+										if(i=='eur_price')
+										{	
+											svgDoc.getElementById("price1").innerHTML = v.split(",")[0];
+											svgDoc.getElementById("price2").innerHTML = v.split(",")[1];
+										}
+										else if(i=='eur_club_price')
+										{	
+											svgDoc.getElementById("club_price1").innerHTML = v.split(",")[0];
+											svgDoc.getElementById("club_price2").innerHTML = v.split(",")[1];
+										}
+										else{
+											svgDoc1.getElementById(i).innerHTML=v
+											svgDoc1.getElementById("saudi_club_price").innerHTML=''
+										}
+										
+								})
+
+							if(disney != "DI")
+							{
+								jsbarcode_hang(val.barcode, "barcode1", svgDoc1)
+								svgDoc1.getElementById("barcode1").setAttribute('transform', 'matrix(1.0971 0 0 1 10 50)');
+							}
+							else
+							{
+								
+                               jsbarcode_hang_disney(val.barcode, "barcode1", svgDoc1)
+								if(Refname == "COD2")
+								{
+						   			svgDoc1.getElementById("barcode1").setAttribute('transform', 'matrix(1.0971 0 0 1 -5 -15)');
+								}
+								else if(Refname == "DBB1")
+								{
+									svgDoc1.getElementById("barcode1").setAttribute('transform', 'matrix(1.0971 0 0 1 0 -20)');
+								}
+								else
+								{
+									svgDoc1.getElementById("barcode1").setAttribute('transform', 'matrix(1.0971 0 0 1 0 -15)');
+								}
+							}
+							});
+							
+
+							
+						
+							var s = new XMLSerializer();
+							var d = svgRoot1;
+							var str = s.serializeToString(d);
+							var svg = encodeURI(str)
+							svgarr.push(svg)
+							
+							var s_front = new XMLSerializer();
+							var d_front = svgRoot;
+							var str_front = s_front.serializeToString(d_front);
+							var svg_front = encodeURI(str_front)
+							svgarr_front.push(svg_front)
+							
+							ajax++;
+					});
+
+					if(details.length == ajax)
+					{
+
+						var svg_fin = svgarr.join(',_');
+						var svg_fin_front = svgarr_front.join(',_');
+						//PopupWash(svg_fin,svgRoot1_back,svgRoot1_middle, dataid,svgDoc1);
+						
+						PopupHang(svg_fin_front, svg_fin,svgDoc,svgDoc1,disney);
+					}
+				},
+			});
+
+
+
+	
+
+	
+	
+}
+
+
+function PopupHang(svgRoot, svgRoot1,svgDoc,svgDoc1,disney) {
+//	var s = new XMLSerializer();
+//	var d = svgRoot;
+//	var str = s.serializeToString(d);
+//	var svg = encodeURI(str)
+
+//	var s1 = new XMLSerializer();
+//	var d1 = svgRoot1;
+//	var str1 = s1.serializeToString(d1);
+//	var svg1 = encodeURI(str1)
+
+	var success = false;
+	var url = "";
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/erp/job-manager/print-hang-pdf",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			svg: svgRoot,
+			svgRoot: svgRoot1
+		},
+		async: false,
+		success: function (data) {
+			
+			success = true;
+			url = data;
+		},
+		error: function (data) {
+
+		},
+	})
+	if (success) { //AND THIS CHANGED
+		window.open(url)
+	}
+}
+
+
+function DownloadArtwork(modal,i,template_file,style_no,buyer_no,id,order_type,created_at,status,type) {
 	switch(status) {
 	  case "proof":
 	    	genarateArtworkProofManager("tesco_svg_modal" + i, modal,style_no,buyer_no,id,order_type,created_at,status,"tesco");
 	    break;
 
 	  case "print_orchestra":
+	    if(type == "hang_tag")
+	    {
+	    	printHangDiv('orchestra_modal_front'+ i,'orchestra_modal_back'+ i,"DI",modal,style_no,buyer_no,id,order_type,created_at,"orchestra")
+	  	}
+	  	else
+	  	{
+
 	   		genarateArtworkOrchestra("orchestra_svg_modal" + i, modal,style_no,buyer_no,id,order_type,created_at,status,"orchestra");
-	    break;
+	  
+	  	}
+		    break;
 
 	  case "print":
 	   		genarateArtworkPrintManager("tesco_svg_modal" + i, modal,style_no,buyer_no,id,order_type,created_at,status,"tesco");
@@ -330,7 +520,6 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 							var svg_fin = svgarr.join(',_');
 							PopupArrOrchestra(svg_fin, "SOLID-CARTON",svgDoc);
 						break;
-					
 						default:
 						// code block
 					}
@@ -1932,6 +2121,60 @@ function jsbarcodetesco(code, id, svgDoc) {
 	svgDoc.getElementById(id).innerHTML = svg_xml;
 }
 
+
+
+function jsbarcode_hang(code, id, svgDoc) {
+	JsBarcode("#ean-13", code, {
+        format: "ean13",
+        width: 5.99,
+        height: 320,
+		lineColor: "cmyk(0%, 0%, 0%, 100%)",
+        fontSize: 55
+    });
+    var svg = document.getElementById('svgdiv').querySelector('svg'),
+        canvas = document.createElement('canvas'),
+        body = document.getElementsByTagName('body')[0],
+        canvasTmp,
+        svg_xml,
+        ctx,
+        img;
+    // if our "svg" doesn't have 'xmlns' attribute we must add it
+    //    svg.setAttribute('width', '188.931023622px');
+    svg.setAttribute('font-size', '70px');
+    svg.setAttribute('font-family', 'ocr-b-10bt');
+    svg.setAttribute('width', '80px');
+    svg.setAttribute('height', '100px');
+    canvas.id = 'canvas';
+    canvas.width = svg.getBoundingClientRect().width;
+    canvas.height = svg.getBoundingClientRect().height;
+
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
+
+	/* Time to play ;) */
+
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
+
+	// JavaScript (HTML) image
+	img = new Image();
+
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
+
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+	// img.src - contains base64 URI from svg
+
+	//remove temporary canvas
+	canvasTmp.remove();
+
+	svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+
 /**
  * This Function is used to invoke Ean 13 JSBarcode.
  * 
@@ -2076,6 +2319,66 @@ function jsbarcodetescotslean(code, id, svgDoc) {
 
 	svgDoc.getElementById(id).innerHTML = svg_xml;
 }
+
+
+/**
+ * This Function is used to invoke Hang Tag JSBarcode.
+ * 
+ * @return barcode
+ */
+
+function jsbarcode_hang_disney(code, id, svgDoc) {
+	JsBarcode("#ean-13", code, {
+        format: "ean13",
+        width: 5.99,
+        height: 286,
+		lineColor: "cmyk(0%, 0%, 0%, 100%)",
+        fontSize: 55
+    });
+    var svg = document.getElementById('svgdiv').querySelector('svg'),
+        canvas = document.createElement('canvas'),
+        body = document.getElementsByTagName('body')[0],
+        canvasTmp,
+        svg_xml,
+        ctx,
+        img;
+    // if our "svg" doesn't have 'xmlns' attribute we must add it
+    //    svg.setAttribute('width', '188.931023622px');
+    svg.setAttribute('font-size', '70px');
+    svg.setAttribute('font-family', 'ocr-b-10bt');
+    svg.setAttribute('width', '88px');
+    svg.setAttribute('height', '80px');
+    canvas.id = 'canvas';
+    canvas.width = svg.getBoundingClientRect().width;
+    canvas.height = svg.getBoundingClientRect().height;
+
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
+
+	/* Time to play ;) */
+
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
+
+	// JavaScript (HTML) image
+	img = new Image();
+
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
+
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+	// img.src - contains base64 URI from svg
+
+	//remove temporary canvas
+	canvasTmp.remove();
+
+	svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+
 
 /**
  * This Function is used to invoke JSBarcode.
