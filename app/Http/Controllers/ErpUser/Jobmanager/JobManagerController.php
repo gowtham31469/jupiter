@@ -54,10 +54,6 @@ class JobManagerController extends Controller
 									->where('erpuser_company_mapping.erp_user',$erp_user_id)
 									->select('erpuser_company_mapping.*','company.name', 'company.logo')
 									->get();
-			$buyers      = 	DB::table('erpuser_buyer')
-									->where('erpuser_buyer.erp_user',$erp_user_id)
-									->pluck('erpuser_buyer.buyer')
-									->all();
 
 			if($companies)
 			{

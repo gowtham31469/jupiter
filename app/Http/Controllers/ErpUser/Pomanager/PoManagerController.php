@@ -44,11 +44,6 @@ class PoManagerController extends Controller
 			$new_orders_count=0;
 			$hold_orders_count=0;
 			
-			$buyers = DB::table('erpuser_buyer')
-								->where('erpuser_buyer.erp_user',$customer_id)
-								->pluck('erpuser_buyer.buyer')
-								->all();
-			
 			$companies = 	DB::table('erpuser_company_mapping')
 										->join('company','erpuser_company_mapping.company','company.id')
 										->where('erpuser_company_mapping.erp_user',$customer_id)
@@ -111,7 +106,7 @@ class PoManagerController extends Controller
 										 ->join('customers','erp_orders.customer_id','customers.id')
 										 ->join('erp_status','erp_orders.status','erp_status.id')
 										 ->where('erp_order_details.template_id',$valuess)
-										 ->whereIn('erp_orders.buyer_id', $buyers)
+										 ->where('buyers.id', $buyer_id)
 										 ->where('erp_orders.status',1)
 										 ->orWhere('erp_orders.status',2)
 										 ->groupBy('erp_orders.id','customers.company_name','erp_status.status_name','erp_order_details.created_at')
