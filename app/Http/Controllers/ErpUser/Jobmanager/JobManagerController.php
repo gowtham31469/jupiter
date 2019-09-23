@@ -2591,22 +2591,27 @@ class JobManagerController extends Controller
 		 * Function to update uuid value for existing data in erp_order_details table.
 		 * @author <Praveen>
 		 */
-		// public function scriptUpdateUUID()
-		// {
-		// 	$orders = DB::table('erp_orders')->get();
-		// 	$order_details = DB::table('erp_order_details')->get();
-		// 	// unique id for array creation
-		// 	$unique_id = 'ERP'.$erp_orders->id.str_random(25);
-		// 	foreach($order_details as $value)
-		// 	{
+		public function scriptUpdateUUID()
+		{
+			$orders = DB::table('erp_orders')->get();
+			// $order_details = DB::table('erp_order_details')->select('id')->groupBy('erp_order_id', 'style_no', 'order_qnty_table_name', 'created_at', 'buyer_po_number', 'order_type')->get();
+
+		//	dd($order_details);
+			// unique id for array creation
+			
+			foreach($orders as $value)
+			{
+				$unique_id = 'ERP'.$value->id.str_random(25);
+				$order_details[$value->id.'-'.$unique_id] = DB::table('erp_order_details')->where('erp_order_id', $value->id)->groupBy( 'erp_order_id', 'style_no', 'order_qnty_table_name', 'created_at', 'buyer_po_number', 'order_type')->pluck('erp_order_id');
+				//$order_details[$value->id.'-'.$unique_id] = ErpOrderDetails::select('id')->where('erp_order_id', $value->id)->groupBy('erp_order_id', 'style_no', 'order_qnty_table_name', 'created_at', 'buyer_po_number', 'order_type');
+				// ErpOrderDetails::where('id',$value->id)
+				// 	->update([
+				// 				'uuid'  => $order_status_id->id
+				// 			]);
 				
-		// 		ErpOrderDetails::where('id',$value->id)
-		// 			->update([
-		// 						'uuid'  => $order_status_id->id
-		// 					]);
-				
-		// 	}
-		// 	return "success";
-		// }
+			}
+			dd($order_details);
+			return "success";
+		}
 
 }
