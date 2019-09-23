@@ -465,7 +465,7 @@
         Dropzone.options.poUpload = {   
 
             // Prevents Dropzone from uploading dropped files immediately
-            url: base_url + "/customer/" + buyer + "/set-po-file",
+            url: base_url + "/customer/" + localStorage.getItem("buyer") + "/set-po-file",
             autoProcessQueue: false,
             maxFilesize: 500,
             maxFiles: 1,
@@ -540,6 +540,7 @@
     /** To refresh modal and form data**/
     $(".modal").on("hidden.bs.modal", function() {
         myDropzone.removeAllFiles();
+        myDropzone.options.url = base_url + "/customer/" + localStorage.getItem("buyer") + "/set-po-file";
     });
     var date = new Date();
     var today = new Date(date.getFullYear(), date.getMonth());
