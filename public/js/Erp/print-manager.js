@@ -161,8 +161,7 @@ function jsbarcodesolidcartonB(code, id, svgDoc) {
 
 
 
-function printHangDiv(front,back,disney,name,style_no,buyer_no,id,order_type,created_at,buyer) {
- 
+function printHangDiv(front,back,disney,name,style_no,buyer_no,id,order_type,created_at,status,buyer) {
 	var a = document.getElementById(front)
 	var svgDoc = a.contentDocument;
 	var svgRoot = svgDoc.documentElement;
@@ -195,7 +194,9 @@ function printHangDiv(front,back,disney,name,style_no,buyer_no,id,order_type,cre
 
 				},
 				success: function(data) {
-					// console.log(data)
+					console.log("-------")
+					console.log(data)
+						console.log("-------")
 					details = data.order_details[0].hangtagqty;
 					Refname =data.reference_name;
 					$.each(details, function(index, val) {
