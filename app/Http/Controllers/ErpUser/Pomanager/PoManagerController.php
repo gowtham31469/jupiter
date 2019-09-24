@@ -87,9 +87,10 @@ class PoManagerController extends Controller
 		 $i=1;
 		 foreach($templates as $value)
 		 {
-			 $arr_template =  DB::table($value->template_table)
-							 ->where('hierarchy_id',$value->templates)
-							 ->pluck('item_id');
+			$arr_template =  DB::table($value->template_table)
+							->where('hierarchy_id',$value->templates)
+							//->where('flag',1)
+							->distinct('hierarchy_id')->pluck('item_id');
 			 if($arr_template)
 			 {
 				$new_orders[$value->buyer_id."-".$i] = $arr_template;
