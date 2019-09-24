@@ -1856,8 +1856,17 @@ class JobManagerController extends Controller
 			
 			 $i++;
 		}
-        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-        print_r(url('/storage/app/template/'.$name.'.pdf'));
+		$j=0;
+		if(count($svgarr) == $i)
+		{
+			foreach($svgarr as $value)
+			{
+				unlink(public_path('/storage/app/template/barcode_'.$j.'.png'));
+				$j++;
+			}
+		}
+		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+		print_r(url('/storage/app/template/'.$name.'.pdf'));
 		
 		
 		
@@ -1949,6 +1958,15 @@ class JobManagerController extends Controller
 //			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 39.7, 2, 42, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 //			
 			$i++;
+		}
+		$j=0;
+		if(count($svgarr) == $i)
+		{
+			foreach($svgarr as $value)
+			{
+				unlink(public_path('/storage/app/template/barcode_'.$j.'.png'));
+				$j++;
+			}
 		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
