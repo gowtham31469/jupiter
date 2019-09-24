@@ -194,6 +194,7 @@ class JobManagerController extends Controller
 	public function getOrderDetails(Request $request)
 	{
 
+
 		$ref_name = $request['ref_name'];
 		$style_no = $request['style_no'];
 		$buyer_no = $request['buyer_no'];
@@ -214,10 +215,10 @@ class JobManagerController extends Controller
 									->select('*')
 									->get();
 
-								
+							// dd($order_details[0]);
 			$order_Qty_table = $order_details[0]->order_qnty_table_name;
 			$ordertable = substr($order_Qty_table,0,strrpos($order_Qty_table,"_"));
-			
+				
 			$stringArr=explode("_", $order_Qty_table);
 			$target_id='';
 
@@ -229,20 +230,41 @@ class JobManagerController extends Controller
 			$parentTable_id = DB::table($order_Qty_table)
 							->where('id',$order_details[0]->order_qnty_table_id)
 							->first()->$target_id;
-
+	// dd($parentTable_id);
 			switch ($ordertable) 
 			{	
 
 				case 'orchestra_wash_care_label_orders' :
 
-					$res= OrchestraWashCare::with(['washcarelabelQty' => function($type) use($parentTable_id){
-					$type->where('orchestra_wash_care_label_orders_qty.owcl_id',$parentTable_id);
-					}])
-					->get();
+					// $res= OrchestraWashCare::with(['washcarelabelQty' => function($type) use($parentTable_id){
+					// $type->where('orchestra_wash_care_label_orders_qty.owcl_id',$parentTable_id);
+					// }])
+					// ->get();
+
+						$res = OrchestraWashCare::with(['washcarelabelQty' => function ($query) {
+						$query->leftJoin('orchestra_size_chart as osc', 'osc.age', 'orchestra_wash_care_label_orders_qty.size');
+						}])->where('orchestra_wash_care_label_orders.id',$parentTable_id)->get();
 					
 					$res->map(function ($res) use($parentTable_id) {
 						$res->reference_name = "Orchestra WashCare";
 						$res->parentId = $parentTable_id;
+
+						$res->cofreet_symbol1 = DB::table('orchestra_care_symbols')->where('id',$res->washing_id)->first()->cofreet_symbols;
+						$res->astm_symbol1 = DB::table('orchestra_care_symbols')->where('id',$res->washing_id)->first()->astms_symbol;
+
+						$res->cofreet_symbol2 = DB::table('orchestra_care_symbols')->where('id',$res->whitening_id)->first()->cofreet_symbols;
+						$res->astm_symbol2 = DB::table('orchestra_care_symbols')->where('id',$res->whitening_id)->first()->astms_symbol;
+
+						$res->cofreet_symbol3 = DB::table('orchestra_care_symbols')->where('id',$res->dryer_id)->first()->cofreet_symbols;
+						$res->astm_symbol3 = DB::table('orchestra_care_symbols')->where('id',$res->dryer_id)->first()->astms_symbol;
+
+						$res->cofreet_symbol4 = DB::table('orchestra_care_symbols')->where('id',$res->ironing_id)->first()->cofreet_symbols;
+						$res->astm_symbol4 = DB::table('orchestra_care_symbols')->where('id',$res->ironing_id)->first()->astms_symbol;
+
+						$res->cofreet_symbol5 = DB::table('orchestra_care_symbols')->where('id',$res->cleaning_id)->first()->cofreet_symbols;
+						$res->astm_symbol5 = DB::table('orchestra_care_symbols')->where('id',$res->cleaning_id)->first()->astms_symbol;
+
+
 						// $res->age_group = OrchestraAgeGroup::where('id',$res->group_id)->first()->color;
 						});
 

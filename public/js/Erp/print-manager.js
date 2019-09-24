@@ -353,10 +353,37 @@ function printWashDiv(data,data_back,data_middle,name,style_no,buyer_no,id,order
 					details = data.order_details[0].washcarelabel_qty;
 					Refname =data.reference_name;
 					parentId= data.order_details[0].parentId;
-			
+					res = data.order_details[0] 	
+
 					$.each(details, function(index, val) {
-						console.log(val)
-							// svgDoc1.getElementById("uvc_tco").innerHTML = val.uvc_tco
+
+					svgDoc1.getElementById("parcel_code1").innerHTML = val.uvc_tco
+					svgDoc1.getElementById("parcel_code2").innerHTML = val.uvc_tco
+					svgDoc1.getElementById("size1").innerHTML = val.size
+					svgDoc1.getElementById("size2").innerHTML = val.size
+
+					svgDoc1.getElementById("cofreet_symbol1").setAttribute('xlink:href',res.cofreet_symbol1);
+					svgDoc1.getElementById("cofreet_symbol2").setAttribute('xlink:href',res.cofreet_symbol2);
+					svgDoc1.getElementById("cofreet_symbol3").setAttribute('xlink:href',res.cofreet_symbol3);
+					svgDoc1.getElementById("cofreet_symbol4").setAttribute('xlink:href',res.cofreet_symbol4);
+					svgDoc1.getElementById("cofreet_symbol5").setAttribute('xlink:href',res.cofreet_symbol5);
+
+					svgDoc1.getElementById("astm_symbol1").setAttribute('xlink:href',res.astm_symbol1);
+					svgDoc1.getElementById("astm_symbol2").setAttribute('xlink:href',res.astm_symbol2);
+					svgDoc1.getElementById("astm_symbol3").setAttribute('xlink:href',res.astm_symbol3);
+					svgDoc1.getElementById("astm_symbol4").setAttribute('xlink:href',res.astm_symbol4);
+					svgDoc1.getElementById("astm_symbol5").setAttribute('xlink:href',res.astm_symbol5);
+					
+							if(val.cm != null )
+							{
+								svgDoc1.getElementById("size_in_fr_en1").innerHTML = val.cm+" cm"
+								svgDoc1.getElementById("size_in_fr_en2").innerHTML = val.cm+" cm"
+							}
+							else
+							{
+								svgDoc1.getElementById("size_in_fr_en1").innerHTML = ''
+								svgDoc1.getElementById("size_in_fr_en2").innerHTML = ''
+							}
 							// svgDoc1.getElementById("size_french").innerHTML = val.size.split(" ")[1];
 							// svgDoc1.getElementById("size").innerHTML = val.size.split(" ")[0];
 							// svgDoc.getElementById("size_french").innerHTML = val.size.split(" ")[1];
@@ -376,14 +403,14 @@ function printWashDiv(data,data_back,data_middle,name,style_no,buyer_no,id,order
 							// }
 
 							
-
-							
+							svgDoc1.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -38 135) rotate(270)');
+							jsbarcodewash(val.barcode, 'barcode', svgDoc1)
 						
-							// var s = new XMLSerializer();
-							// var d = svgRoot1;
-							// var str = s.serializeToString(d);
-							// var svg = encodeURI(str)
-							// svgarr.push(svg)
+							var s = new XMLSerializer();
+							var d = svgRoot1;
+							var str = s.serializeToString(d);
+							var svg = encodeURI(str)
+							svgarr.push(svg)
 							
 							// var s_front = new XMLSerializer();
 							// var d_front = svgRoot;
@@ -394,18 +421,14 @@ function printWashDiv(data,data_back,data_middle,name,style_no,buyer_no,id,order
 							ajax++;
 					});
 
-					// if(details.length == ajax)
-					// {
-
-					// 	var svg_fin = svgarr.join(',_');
-					// 	var svg_fin_front = svgarr_front.join(',_');
-						
-					// 	PopupHang(svg_fin_front, svg_fin,svgDoc,svgDoc1,disney);
-					// }
-
 					if(details.length == ajax)
 					{
-					PopupWash(svgRoot1,svgRoot1_back,svgRoot1_middle,svgDoc1,parentId);
+
+						var svg_fin = svgarr.join(',_');
+						// var svg_fin_front = svgarr_front.join(',_');
+						
+						// PopupHang(svg_fin, svg_fin,svgDoc,svgDoc1,disney);
+						PopupWash(svg_fin,svgRoot1_back,svgRoot1_middle,svgDoc1,parentId);
 					}
 				},
 			});
@@ -421,9 +444,10 @@ function printWashDiv(data,data_back,data_middle,name,style_no,buyer_no,id,order
 function PopupWash(data,data_back,data_middle,svgDoc1,pid) {
 
 	var s = new XMLSerializer();
-	var d = data;
-	var str = s.serializeToString(d);
-	var svg = encodeURI(str)
+	// var d = data;
+	// var str = s.serializeToString(d);
+	// var svg = encodeURI(str)
+
 
 	var d_back = data_back;
 	var str_back = s.serializeToString(d_back);
@@ -444,7 +468,7 @@ function PopupWash(data,data_back,data_middle,svgDoc1,pid) {
         type: "post",
         data: {
             _token: csrf_token,
-            svg: svg,
+            svg: data,
             svg_back: svg_back,
             svg_middle: svg_middle,
             parentId : pid,
@@ -464,6 +488,64 @@ function PopupWash(data,data_back,data_middle,svgDoc1,pid) {
     }
 }
 
+
+/**
+ * This Function is used to invoke JSBarcode for Wash Care Labels.
+ * 
+ * @return barcode
+ */
+
+function jsbarcodewash(code, id, svgDoc) {
+    JsBarcode("#ean-13", code, {
+        format: "ean13",
+        width: 5.99,
+        height: 290,
+		lineColor: "cmyk(0%, 0%, 0%, 100%)",
+        fontSize: 55
+    });
+    var svg = document.getElementById('svgdiv').querySelector('svg'),
+        canvas = document.createElement('canvas'),
+        body = document.getElementsByTagName('body')[0],
+        canvasTmp,
+        svg_xml,
+        ctx,
+        img;
+    // if our "svg" doesn't have 'xmlns' attribute we must add it
+    //    svg.setAttribute('width', '188.931023622px');
+    svg.setAttribute('font-size', '70px');
+    svg.setAttribute('font-family', 'ocr-b-10bt');
+    svg.setAttribute('width', '92.1px');
+    svg.setAttribute('height', '133px');
+    canvas.id = 'canvas';
+    canvas.width = svg.getBoundingClientRect().width;
+    canvas.height = svg.getBoundingClientRect().height;
+
+    body.appendChild(canvas);
+    canvasTmp = document.getElementById('canvas');
+
+    /* Time to play ;) */
+
+    // https://developer.mozilla.org/en/XMLSerializer
+    svg_xml = (new XMLSerializer()).serializeToString(svg);
+    ctx = canvasTmp.getContext('2d');
+
+    // JavaScript (HTML) image
+    img = new Image();
+
+    img.onload = function () {
+        ctx.drawImage(img, 0, 0);
+    };
+
+    // https://developer.mozilla.org/en/DOM/window.btoa
+    img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+    // img.src - contains base64 URI from svg
+
+    //remove temporary canvas
+    canvasTmp.remove();
+
+    svgDoc.getElementById(id).innerHTML = svg_xml;
+}
 function PopupHang(svgRoot, svgRoot1,svgDoc,svgDoc1,disney) {
 //	var s = new XMLSerializer();
 //	var d = svgRoot;

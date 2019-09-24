@@ -253,6 +253,7 @@ class PrintManagerController extends Controller
 	
 	public function getErpOrderListByBuyerCustomerId(Request $request)
     {
+    	// dd($request->all());
         try {
 				$buyer_id    = $request['selected_buyer_id'];
 
@@ -277,11 +278,11 @@ class PrintManagerController extends Controller
 											->where('erp_order_details.status','!=',4)
 											->select(DB::raw('distinct on (erp_order_details.erp_order_id,buyer_po_number,style_no,reference_name) erp_order_details.erp_order_id'),'erp_order_details.*','erp_status.status_name',$buyer.'_template.template_file')->groupBy('erp_order_details.id','erp_order_details.buyer_po_number','erp_order_details.style_no','erp_order_details.reference_name','erp_status.status_name',$buyer.'_template.template_file')
 											->get();
-
-
+// dd($jobcard_id_list);
 					if($buyer=="orchestra")
 					{	
 						
+
 						$jobcard_id_list->map(function ($jobcard_id_list,$key) {
                     		$jobcard_id_list->buyer='orchestra';
                     		$jobcard_id_list->zone='-';
@@ -298,7 +299,7 @@ class PrintManagerController extends Controller
                 	    });
 
 					
-
+// dd($jobcard_id_list);
                 	    if($jobcard_id_list->first()->order_qnty_table_name ==  "orchestra_hang_tag_orders_qty")
                 	    {
 

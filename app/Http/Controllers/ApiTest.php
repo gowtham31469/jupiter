@@ -40,6 +40,14 @@ class ApiTest extends Controller
 {
    public function testApi(Request $request)
    {
+
+
+$t = OrchestraWashCare::with(['washcarelabelQty' => function ($query) {
+        $query->leftJoin('orchestra_size_chart as osc', 'osc.age', 'orchestra_wash_care_label_orders_qty.size');
+    }])->where('orchestra_wash_care_label_orders.id',65)->get();
+
+               return($t->toArray());
+
 $composition = DB::table('orchestra_wash_care_composition')
                   ->where('owcl_id',65)
                   ->select('parts_id','composition_id')
