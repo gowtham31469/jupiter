@@ -18,6 +18,8 @@ use App\OrchestraStdPolySticker;
 use App\OrchestraHangTagQty;
 use App\OrchestraHangTag;
 use App\OrchestraAgeGroup;
+use App\OrchestraWashCare;
+use App\OrchestraWashCareQty;
 use Response;
 use View;
 use Auth;
@@ -197,6 +199,7 @@ class JobManagerController extends Controller
 									->select('*')
 									->get();
 
+								
 			$order_Qty_table = $order_details[0]->order_qnty_table_name;
 			$ordertable = substr($order_Qty_table,0,strrpos($order_Qty_table,"_"));
 			
@@ -214,6 +217,23 @@ class JobManagerController extends Controller
 
 			switch ($ordertable) 
 			{	
+
+				case 'orchestra_wash_care_label_orders' :
+
+					$res= OrchestraWashCare::with(['washcarelabelQty' => function($type) use($parentTable_id){
+					$type->where('orchestra_wash_care_label_orders_qty.owcl_id',$parentTable_id);
+					}])
+					->get();
+					
+					$res->map(function ($res) use($parentTable_id) {
+						$res->reference_name = "Orchestra WashCare";
+						$res->parentId = $parentTable_id;
+						// $res->age_group = OrchestraAgeGroup::where('id',$res->group_id)->first()->color;
+						});
+
+					// dd($res);
+				break;
+
 
 				case 'orchestra_hang_tag_orders':
    							   
@@ -2673,5 +2693,146 @@ class JobManagerController extends Controller
 		
         print_r(url('/storage/app/template/solid1.pdf'));
     } 	
+
+
+   public function printWashPdf(Request $request)
+    {			
+
+		$svgarr = explode(',_',$request->svg);
+        //$svg=urldecode($request->svg);
+		
+		// $made_in_select=$request->made_in_select;
+
+
+	
+		$selectedWashCare = OrchestraWashCare::where('id',$request->parentId)->first();
+		
+
+		// dd($selectedWashCare);
+
+		$orchestra_countries = DB::table('orchestra_countries')->select('*')->where('id',$selectedWashCare->made_in_id)->get();
+		
+				// dd($orchestra_countries);
+		// $care_instruction_select = explode(',',$request->care_instruction_select_fin); 
+		
+		$orchestra_care_instruction = DB::table('orchestra_care_instruction')
+					->select('*')->where('id',$selectedWashCare->care_instruction_id)->get();
+		
+
+		// dd($orchestra_care_instruction);
+		//print_r($orchestra_countries);
+		
+		//print_r($orchestra_countries);
+		
+        $svg=urldecode($request->svg); 
+        $svg_back=urldecode($request->svg_back); 
+        $svg_middle=urldecode($request->svg_middle); 
+        define ('PDF_FONT_NAME_MAIN', 'calibri');
+        define ('PDF_FONT_NAME_DATA', 'calibri');
+        PDF::setImageScale(1);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('tahoma', '',  1.5, '', true);
+        PDF::AddPage();
+        //PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+		//PDF::SetFillColor(255, 255, 255);
+        //PDF::SetTextColor(0, 0, 0);
+		
+	
+		$tbl='<p  style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri;line-height:1.25">Fabriqué en - Made in - <br> Fabricado en - <br>Fabricado em - <br>Fabbricato in - <br>Vervaardigd in  - <br>Hergestellt in -<br><span style="font-family:Tahoma">  ﺻﻨﻊ ب </span>-<br> παράγεται στην</p>';
+		
+		$tbl1='<p  style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$orchestra_countries{0}->french.' - '.$orchestra_countries{0}->english.' - '.$orchestra_countries{0}->spanish.' - '.$orchestra_countries{0}->portuguese.' - <br>'.$orchestra_countries{0}->italian.' - '.$orchestra_countries{0}->dutch.' - '.$orchestra_countries{0}->german.' - <br><span style="font-family:Tahoma">'.$orchestra_countries{0}->arabic.'</span> - '.$orchestra_countries{0}->greek.'</p>';
+		$tbl2="";
+		foreach($orchestra_care_instruction as $value)
+		{
+			$tbl2.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$value->french.' - '.$value->english.' - '.$value->spanish.' - '.$value->portuguese.' - '.$value->italian.' - '.$value->dutch.' - '.$value->german.' - <span style="font-family:Tahoma">'.$value->arabic.'</span> - '.$value->greek.'</p><br><br>';
+		}
+		// dd($parentTable_id);
+		//print_r($tbl2);
+		$tbl3="";
+		$composition = DB::table('orchestra_wash_care_composition')
+						->where('owcl_id',$request->parentId)
+						->select('parts_id','composition_id')
+						->get()->toArray();
+		// dd($composition);
+		// $composition = json_decode($request->composition);
+		//print_r($composition);
+		foreach($composition as $key => $value)
+		{
+			// dd($value->parts_id);
+			// $express_value = explode('_',$value[0]);
+			// if($express_value[0] != "Select Option")
+			{
+					// $exp_value = explode('_',$value[0]);
+					$orchestra_parts = DB::table('orchestra_parts')->select('*')->where('id',$value->parts_id)->get();
+				
+					$tbl3.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%)">'.$orchestra_parts{0}->french.' - '.$orchestra_parts{0}->english.' - '.$orchestra_parts{0}->spanish.' - '.$orchestra_parts{0}->portuguese.' - '.$orchestra_parts{0}->italian.' - '.$orchestra_parts{0}->dutch.' - '.$orchestra_parts{0}->german.' - <span>'.$orchestra_parts{0}->arabic.'</span> - '.$orchestra_parts{0}->greek.'</p><br><br>';
+			}
+			// foreach($value as $key1 => $value1)
+   //          {
+			// 	$exp_val = explode('_',$value1);
+			// 	$orchestra_compositions = DB::table('orchestra_compositions')->select('*')->where('english',$exp_val[1])->get();
+				
+			// 	$tbl3.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$exp_val[2].'% '.$orchestra_compositions{0}->french.' - '.$orchestra_compositions{0}->english.' - '.$orchestra_compositions{0}->spanish.' - '.$orchestra_compositions{0}->portuguese.' - '.$orchestra_compositions{0}->italian.' - '.$orchestra_compositions{0}->dutch.' - '.$orchestra_compositions{0}->german.' - <span style="font-family:Tahoma">'.$orchestra_compositions{0}->arabic.'</span> - '.$orchestra_compositions{0}->greek.'</p><br><br>';
+			// }
+		}
+		$xx=12.5;
+		$i=0;
+		foreach($svgarr as $value)
+		{
+			$svg=urldecode($value);
+        	PDF::ImageSVG('@' . $svg, $x=$xx, $y=12.5, '25.5', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			PDF::SetFillColor(255, 255, 255);
+			PDF::SetTextColor(0, 0, 0);
+			PDF::writeHTMLCell('25.5', '40', $xx, '135', $tbl, '', 0, 0, true, 'C', true);
+			PDF::writeHTMLCell('25.5', '40', $xx, '153.5', $tbl1, '', 0, 0, true, 'C', true);
+			$xx += 37.5;
+			$i++;
+			
+			if($i == 5)
+			{
+				PDF::AddPage();
+				$i=0;
+				$xx=12.5;
+			}
+		}
+		PDF::ImageSVG('@' . $svg_back, $xx, $y=12.5, '25.5', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		PDF::writeHTMLCell('22', '40', $xx + 2.25, '25', $tbl2, '', 0, 0, true, 'C', true);
+		PDF::writeHTMLCell('25', '40', $xx + 1, '110', $tbl3, '', 0, 0, true, 'C', true);
+		PDF::AddPage();
+		PDF::ImageSVG('@' . $svg_middle, $x=50, $y=12.5, '55.5', '82.5', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+		//print_r($i);
+//		if($i == 0)
+//		{
+//			PDF::ImageSVG('@' . $svg_back, $x=12.5, $y=12.5, '25', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+//      		PDF::ImageSVG('@' . $svg_middle, $x=50, $y=12.5, '55', '82.5', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+//			PDF::writeHTMLCell('22', '40', '14', '25', $tbl2, '', 1, 1, true, 'C', true);
+//			PDF::writeHTMLCell('25', '40', '13.5', '110', $tbl3, '', 1, 1, true, 'C', true);
+//
+//		}
+//		else if($i == 1)
+//		{
+//			PDF::ImageSVG('@' . $svg_back, $x=$xx, $y=12.5, '25', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+//      		PDF::ImageSVG('@' . $svg_middle, $x=$xx+37.5, $y=12.5, '55', '82.5', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+//			PDF::writeHTMLCell('22', '40', $xx+1.5, '25', $tbl2, '', 1, 1, true, 'C', true);
+//			PDF::writeHTMLCell('25', '40', $xx+0.5, '110', $tbl3, '', 1, 1, true, 'C', true);
+//		}
+//		else if($i == 2)
+//		{
+//			PDF::ImageSVG('@' . $svg_back, $x=$xx, $y=12.5, '25', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+//      		PDF::ImageSVG('@' . $svg_middle, $x=$xx+37.5, $y=12.5, '55', '82.5', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+//			PDF::writeHTMLCell('22', '40', $xx+1.5, '25', $tbl2, '', 1, 1, true, 'C', true);
+//			PDF::writeHTMLCell('25', '40', $xx+0.5, '110', $tbl3, '', 1, 1, true, 'C', true);
+//		}
+		
+      
+		
+//		PDF::writeHTMLCell('8', '10', '16.2', '61', $tbl, '', 1, 1, true, 'C', true);
+		
+	
+        PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
+        print_r(url('/storage/app/template/solid1.pdf'));
+    }
 
 }

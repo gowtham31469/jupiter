@@ -18,6 +18,8 @@ use App\OrchestraStdPolyStickerQty;
 use App\OrchestraStdPolySticker;
 use App\OrchestraHangTagQty;
 use App\OrchestraHangTag;
+use App\OrchestraWashCare;
+use App\OrchestraWashCareQty;
 use App\OrchestraAgeGroup;
 use Response;
 use View;
@@ -38,6 +40,30 @@ class ApiTest extends Controller
 {
    public function testApi(Request $request)
    {
+$composition = DB::table('orchestra_wash_care_composition')
+                  ->where('owcl_id',65)
+                  ->select('parts_id','composition_id')
+                  ->get()->toArray();
+dd($composition[0]->parts_id);
+      // $p= OrchestraWashCare::with(['washcarelabelQty', function ($q) 
+      //          {
+      //           $q->where('orchestra_wash_care_label_orders_qty.owcl_id',65);
+      //          }])->get();
+      // return $p;
+
+
+   $t = OrchestraWashCare::with(['washcarelabelQty' => function($type){
+                  $type->where('orchestra_wash_care_label_orders_qty.owcl_id',65);
+               }])->get();
+
+   return $t;
+   $res = OrchestraWashCare::with(array('washcarelabelQty' => function($query) {
+   $query->where('orchestra_wash_care_label_orders_qty.owcl_id',65);
+   }))
+   ->get();
+
+   // return $res;
+
 
       $r= DB::table('orchestra_hang_tag_orders_qty')
                ->leftJoin('orchestra_parcel_quantity_details','orchestra_hang_tag_orders_qty.uvc_tco','orchestra_parcel_quantity_details.UVC_TCO')

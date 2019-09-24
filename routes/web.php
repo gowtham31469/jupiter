@@ -744,6 +744,10 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::post('job-manager/orchestra/print-pdf', 'ErpUser\Jobmanager\JobManagerController@printPdf');
 	Route::post('job-manager/orchestra/print-pdf-table', 'ErpUser\Jobmanager\JobManagerController@printPdfTable');
 
+
+	Route::post('job-manager/orchestra/print-wash-pdf', 'ErpUser\Jobmanager\JobManagerController@printWashPdf');
+
+
 	Route::post('job-manager/print-hang-pdf', 'ErpUser\Jobmanager\JobManagerController@printHangPdf');
 	/* Routes for ERP-Settings Management */
 	Route::get('/settings', 'ErpUser\ERPSettings\ERPSettingsController@home')->name('erp-settings');

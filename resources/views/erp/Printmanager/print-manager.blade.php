@@ -700,6 +700,25 @@ function getErpOrderList()
 										</td>
 										</tr>`;
 								}
+
+							else if(item.order_qnty_table_name == "orchestra_wash_care_label_orders_qty")
+								{
+									html += `<tr id="`+item.id+`">
+										<td>`+i+`</td>
+										<td>`+item.style_no+`</td>
+										<td>`+item.buyer_po_number+`</td>
+										<td>`+item.zone+`</td>
+										<td>`+item.reference_name+`</td>
+										<td>`+partial_status +`</td>
+										<td><span class="label `+status+`">`+item.status_name+`</span></td>
+										<td>`+item.created_at.split(" ")[0]+`</td>
+										<td><object style="opacity:0;width:0px;height:0px" id="washcare_front`+i+`" class="center-block tesco_svg`+i+`" data="`+item.template_file+`" type="image/svg+xml"></object>
+										    <object style="opacity:0;width:0px;height:0px" id="washcare_back`+i+`" class="center-block tesco_svg`+i+`" data="`+item.backPath+`" type="image/svg+xml"></object>
+										    <object style="opacity:0;width:0px;height:0px" id="washcare_middle`+i+`" class="center-block tesco_svg`+i+`" data="`+item.middlePath+`" type="image/svg+xml"></object>
+										    <a class="print_download" href="javascript:void(0)" onclick="DownloadArtwork('`+item.reference_name+`','`+i+`','`+item.template_file+`','`+item.style_no+`','`+item.buyer_po_number+`','`+item.erp_order_id+`','`+item.order_type+`','`+item.created_at+`','print_orchestra','wash_care')" ><i class="fa fa-edit"  title="Download Print" data-original-title="Download Print"></i></a>
+										</td>
+										</tr>`;
+								}
 								else{
 
 									html += `<tr id="`+item.id+`">

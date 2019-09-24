@@ -195,7 +195,7 @@ function printHangDiv(front,back,disney,name,style_no,buyer_no,id,order_type,cre
 
 				},
 				success: function(data) {
-					console.log(data)
+					// console.log(data)
 					details = data.order_details[0].hangtagqty;
 					Refname =data.reference_name;
 					$.each(details, function(index, val) {
@@ -303,6 +303,167 @@ function printHangDiv(front,back,disney,name,style_no,buyer_no,id,order_type,cre
 }
 
 
+
+/**
+ * This Function is used Print Wash Care Labels.
+ *  
+ * @return Pdf
+ */
+
+function printWashDiv(data,data_back,data_middle,name,style_no,buyer_no,id,order_type,created_at,status,buyer) {
+
+	var a1 = document.getElementById(data);
+	var svgDoc1 = a1.contentDocument;
+	var svgRoot1 = svgDoc1.documentElement;
+
+	var a1_back = document.getElementById(data_back);
+	var svgDoc1_back = a1_back.contentDocument;
+	var svgRoot1_back = svgDoc1_back.documentElement;
+	
+	var a1_middle = document.getElementById(data_middle);
+	var svgDoc1_middle = a1_middle.contentDocument;
+	var svgRoot1_middle = svgDoc1_middle.documentElement;
+
+	var index_arr=[];
+	var svgarr = [];
+	var svgarr_front = [];
+	var i=0;
+	var ajax=0;
+
+	$.ajax({
+				url: base_url + "/erp/job-manager/get-order-details",
+				type: "Post",
+				dataType: "json",
+				data: {
+					_token: csrf_token,
+					ref_name: name,
+					style_no: style_no,
+					buyer_no: buyer_no,
+					id: id,
+					created_at: created_at,
+					order_type:order_type,
+					buyer:buyer,
+				},
+				beforeSend: function() {
+
+				},
+				success: function(data) {
+					
+		
+					details = data.order_details[0].washcarelabel_qty;
+					Refname =data.reference_name;
+					parentId= data.order_details[0].parentId;
+			
+					$.each(details, function(index, val) {
+						console.log(val)
+							// svgDoc1.getElementById("uvc_tco").innerHTML = val.uvc_tco
+							// svgDoc1.getElementById("size_french").innerHTML = val.size.split(" ")[1];
+							// svgDoc1.getElementById("size").innerHTML = val.size.split(" ")[0];
+							// svgDoc.getElementById("size_french").innerHTML = val.size.split(" ")[1];
+							// svgDoc.getElementById("size").innerHTML = val.size.split(" ")[0];
+							// svgDoc1.getElementById("cm").innerHTML = val.cm;
+							// svgDoc1.getElementById("theme").innerHTML = data.order_details.theme;
+							// svgDoc1.getElementById("size_list").innerHTML = val.Size_Range_Label.split(" ")[1]+"-"+val.Size_Range_Label.split(" ")[3];
+							// if(val.size.split(" ")[1]=="MOIS")
+							// {
+							// 	svgDoc1.getElementById("size_english").innerHTML = 'MONTHS';
+							// 	svgDoc.getElementById("size_english").innerHTML = 'MONTHS';
+							// }
+							// else
+							// {
+							// 	svgDoc1.getElementById("size_english").innerHTML = 'YEARS';
+							// 	svgDoc.getElementById("size_english").innerHTML = 'YEARS';
+							// }
+
+							
+
+							
+						
+							// var s = new XMLSerializer();
+							// var d = svgRoot1;
+							// var str = s.serializeToString(d);
+							// var svg = encodeURI(str)
+							// svgarr.push(svg)
+							
+							// var s_front = new XMLSerializer();
+							// var d_front = svgRoot;
+							// var str_front = s_front.serializeToString(d_front);
+							// var svg_front = encodeURI(str_front)
+							// svgarr_front.push(svg_front)
+							
+							ajax++;
+					});
+
+					// if(details.length == ajax)
+					// {
+
+					// 	var svg_fin = svgarr.join(',_');
+					// 	var svg_fin_front = svgarr_front.join(',_');
+						
+					// 	PopupHang(svg_fin_front, svg_fin,svgDoc,svgDoc1,disney);
+					// }
+
+					if(details.length == ajax)
+					{
+					PopupWash(svgRoot1,svgRoot1_back,svgRoot1_middle,svgDoc1,parentId);
+					}
+				},
+			});
+	
+	// if(i == ajax)
+	// {
+	// 	PopupWash(svgRoot1,svgRoot1_back,svgRoot1_middle,svgDoc1);
+	// }
+	
+}
+
+
+function PopupWash(data,data_back,data_middle,svgDoc1,pid) {
+
+	var s = new XMLSerializer();
+	var d = data;
+	var str = s.serializeToString(d);
+	var svg = encodeURI(str)
+
+	var d_back = data_back;
+	var str_back = s.serializeToString(d_back);
+	var svg_back = encodeURI(str_back)
+
+	var d_middle = data_middle;
+	var str_middle = s.serializeToString(d_middle);
+	var svg_middle = encodeURI(str_middle)
+
+    var success = false;
+    var url = "";
+
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+
+    $.ajax({
+
+        url: base_url + "/erp/job-manager/orchestra/print-wash-pdf",
+        type: "post",
+        data: {
+            _token: csrf_token,
+            svg: svg,
+            svg_back: svg_back,
+            svg_middle: svg_middle,
+            parentId : pid,
+        },
+        async: false,
+        success: function (data) {
+			svgDoc1.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -21 125.454) rotate(270)');
+            success = true;
+            url = data;
+        },
+        error: function (data) {
+
+        },
+    })
+    if (success) { //AND THIS CHANGED
+        window.open(url)
+    }
+}
+
 function PopupHang(svgRoot, svgRoot1,svgDoc,svgDoc1,disney) {
 //	var s = new XMLSerializer();
 //	var d = svgRoot;
@@ -350,7 +511,12 @@ function DownloadArtwork(modal,i,template_file,style_no,buyer_no,id,order_type,c
 	  case "print_orchestra":
 	    if(type == "hang_tag")
 	    {
-	    	printHangDiv('orchestra_modal_front'+ i,'orchestra_modal_back'+ i,"DI",modal,style_no,buyer_no,id,order_type,created_at,"orchestra")
+	    	printHangDiv('orchestra_modal_front'+ i,'orchestra_modal_back'+ i,"DI",modal,style_no,buyer_no,id,order_type,created_at,status,"orchestra")
+	  	}
+	  	else if(type == "wash_care")
+	  	{
+   			printWashDiv('washcare_front'+ i,'washcare_back'+ i,'washcare_middle'+i,modal,style_no,buyer_no,id,order_type,created_at,status,"orchestra")
+
 	  	}
 	  	else
 	  	{
@@ -408,9 +574,16 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 					localStorage.setItem("zone", zone);
 
 					details = data['order_details'][0];
-					console.log(details)
+					// console.log(details)
 					switch(details.reference_name) 
 					{
+
+
+						// case "Orchestra WashCare":
+						
+						// 	printWashDiv('washcare_svg_front1','washcare_svg_back1','washcare_svg_middle1',details['washcarelabel_qty']);
+
+						// break
 
 						case "Std Carton Stickers":
 							$(details['stdcartonstickerqty']).each(function(index,value){
@@ -2120,6 +2293,9 @@ function jsbarcodetesco(code, id, svgDoc) {
 	canvasTmp.remove();
 	svgDoc.getElementById(id).innerHTML = svg_xml;
 }
+
+
+
 
 
 

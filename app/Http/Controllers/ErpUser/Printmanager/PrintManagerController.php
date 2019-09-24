@@ -331,6 +331,14 @@ class PrintManagerController extends Controller
                 	    });
                 	    }
 
+                	     if($jobcard_id_list->first()->order_qnty_table_name ==  "orchestra_wash_care_label_orders_qty")
+                	    {
+                	    	$jobcard_id_list->map(function ($jobcard_id_list,$key) {
+                    		$jobcard_id_list->backPath='/storage/app/template/Orchestra/WCL/sticker2.svg';
+                    		$jobcard_id_list->middlePath='/storage/app/template/Orchestra/WCL/sticker3.svg';
+                	    });
+                	    }
+
 					}
 					else
 					{
