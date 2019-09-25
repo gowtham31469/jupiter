@@ -2053,15 +2053,18 @@ class OrderManagementCntrl extends Controller
             
              $i++;
         }
-        $j=0;
-        if(count($svgarr) == $i)
-        {
-          foreach($svgarr as $value)
-          {
-            unlink(public_path('/storage/app/template/barcode_'.$j.'.png'));
-            $j++;
-          }
-        }
+        if($name != "TCL4-sticker" && $name != "TCL2-sticker")
+		{
+			$j=0;
+			if(count($svgarr) == $i)
+			{
+				foreach($svgarr as $value)
+				{
+					unlink(public_path('/storage/app/template/barcode_'.$j.'.png'));
+					$j++;
+				}
+			}
+		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
         

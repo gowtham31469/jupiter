@@ -194,7 +194,7 @@ class OrderManagementCntrl extends Controller
                                         ->orderBy('orchestra_parcel_details.id','asc')
                                         ->get();
 		
-		$data['tu'] = DB::table('orchestra_tu_meta_data')->select('orchestra_tu_meta_data.*')->where('orchestra_tu_meta_data.meta_data',$data['order_details']{0}->Size)->get();
+		//$data['tu'] = DB::table('orchestra_tu_meta_data')->select('orchestra_tu_meta_data.*')->where('orchestra_tu_meta_data.meta_data',$data['order_details']{0}->Size)->get();
 		
 		
 		$data['color_wcl'] = DB::table('orchestra_parcel_details')->select('orchestra_parcel_details.Color_Code')->where('orchestra_parcel_details.UVC',$uvc)->groupBy('orchestra_parcel_details.Color_Code') ->orderBy('orchestra_parcel_details.Color_Code','asc')->get();
