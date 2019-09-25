@@ -149,7 +149,6 @@ class OrderController extends Controller
             $data = Redis::get('customer-order-status:orchestra');
             
             echo  $data;
-            echo json_encode($data);
     }
   /**
      * Show the label orders details.
