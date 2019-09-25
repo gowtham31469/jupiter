@@ -142,11 +142,11 @@ class OrderController extends Controller
 
             /***********REDIS***************/
             /** set order-status data into redis */ 
-            Redis::set('customer-order-status:orchestra:', json_encode($data));
+            Redis::set('customer-order-status:orchestra', json_encode($data));
 
             /***********REDIS***************/
             /** get order-status data from redis */
-            $data = Redis::get('customer-order-status:orchestra:');
+            $data = Redis::get('customer-order-status:orchestra');
             
             echo  $data;
             echo json_encode($data);

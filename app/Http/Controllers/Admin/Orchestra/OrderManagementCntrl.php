@@ -168,11 +168,11 @@ class OrderManagementCntrl extends Controller
 
             /***********REDIS***************/
             /** set order-status data into redis */ 
-            Redis::set('admin-order-status:orchestra:', json_encode($data));
+            Redis::set('admin-order-status:orchestra', json_encode($data));
 
             /***********REDIS***************/
             /** get order-status data from redis */
-            $data = Redis::get('admin-order-status:orchestra:');
+            $data = Redis::get('admin-order-status:orchestra');
             
             echo  $data;
     }
