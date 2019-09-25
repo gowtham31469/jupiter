@@ -1856,15 +1856,19 @@ class JobManagerController extends Controller
 			
 			 $i++;
 		}
-		$j=0;
-		if(count($svgarr) == $i)
+		if($name != "TCL4-sticker" && $name != "TCL2-sticker")
 		{
-			foreach($svgarr as $value)
+			$j=0;
+			if(count($svgarr) == $i)
 			{
-				unlink(public_path('/storage/app/template/barcode_'.$j.'.png'));
-				$j++;
+				foreach($svgarr as $value)
+				{
+					unlink(public_path('/storage/app/template/barcode_'.$j.'.png'));
+					$j++;
+				}
 			}
 		}
+		
 		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
 		print_r(url('/storage/app/template/'.$name.'.pdf'));
 		
