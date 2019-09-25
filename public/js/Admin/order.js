@@ -2110,15 +2110,53 @@ function printHangDiv(data,disney) {
 						retryLimit: 2,
 						success: function (data) {
 							//console.log(data)
+							if(size[0] == "TAILLE")
+							{
+								svgDoc1.getElementById("size").innerHTML = "";
+								svgDoc1.getElementById("size_french").innerHTML = "";
+								svgDoc1.getElementById("size_english").innerHTML = "";
+								svgDoc1.getElementById("uvc_tco").innerHTML = uvc_tco;
+								svgDoc1.getElementById("size_list").innerHTML = "TAILLE UNIQUE";
+								svgDoc1.getElementById("cm").innerHTML = "ONE SIZE";
+								svgDoc1.getElementById("cm_in_text").innerHTML = "";
+								//if()
+								svgDoc1.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 92.096 52.0822)');
+								svgDoc1.getElementById("tu_one_size").removeAttribute("visibility");
+								svgDoc.getElementById("size").innerHTML = "";
+								svgDoc.getElementById("size_french").innerHTML = "";
+								svgDoc.getElementById("size_english").innerHTML = "";
+								svgDoc.getElementById("tu_one_size").removeAttribute("visibility");
+							}
+							else
+							{
+								if(data.size_chart.length > 0)
+								{
+									svgDoc1.getElementById("cm").innerHTML =  data.size_chart[0].size;
+	//								if(data.size_chart[0].size.length == 2)
+	//								{
+	//								   svgDoc1.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 106.096 52.0822)');
+	//								}
+	//								else
+	//								{
+	//								   svgDoc1.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 102.096 52.0822)');
+	//								}
+									
+								}
+								else
+								{
+									svgDoc1.getElementById("cm").innerHTML = "";
+								}
 
-							svgDoc1.getElementById("size").innerHTML = size[0];
-							svgDoc1.getElementById("size_french").innerHTML = size[1];
-							svgDoc1.getElementById("size_english").innerHTML = size1;
-							svgDoc1.getElementById("uvc_tco").innerHTML = uvc_tco;
+								svgDoc1.getElementById("size").innerHTML = size[0];
+								svgDoc1.getElementById("size_french").innerHTML = size[1];
+								svgDoc1.getElementById("size_english").innerHTML = size1;
+								svgDoc1.getElementById("uvc_tco").innerHTML = uvc_tco;
+								
+								svgDoc.getElementById("size").innerHTML = size[0];
+								svgDoc.getElementById("size_french").innerHTML = size[1];
+								svgDoc.getElementById("size_english").innerHTML = size1;
+							}
 							
-							svgDoc.getElementById("size").innerHTML = size[0];
-							svgDoc.getElementById("size_french").innerHTML = size[1];
-							svgDoc.getElementById("size_english").innerHTML = size1;
 							
 							if(data.opqt.length > 0)
 							{
@@ -2189,23 +2227,7 @@ function printHangDiv(data,disney) {
 							
 							
 							
-							if(data.size_chart.length > 0)
-							{
-								svgDoc1.getElementById("cm").innerHTML =  data.size_chart[0].size;
-//								if(data.size_chart[0].size.length == 2)
-//								{
-//								   svgDoc1.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 106.096 52.0822)');
-//								}
-//								else
-//								{
-//								   svgDoc1.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 102.096 52.0822)');
-//								}
-								
-							}
-							else
-							{
-								svgDoc1.getElementById("cm").innerHTML = "";
-							}
+						
 							var node = $("#tree1").jstree('get_selected', true)[0].text;
 							//alert(node)
 							if(disney != "DI")
@@ -2224,6 +2246,11 @@ function printHangDiv(data,disney) {
 								else if(node == "DBB1" || node == "DBB2" || node == "DBB3")
 								{
 									svgDoc1.getElementById("barcode1").setAttribute('transform', 'matrix(1.0971 0 0 1 0 -20)');
+									if(size[0] == "TAILLE")
+									{
+										svgDoc1.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 92.096 47.0822)');
+									}
+									//svgDoc1.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 92.096 47.0822)');
 								}
 								else
 								{
@@ -5237,7 +5264,8 @@ function hangtagmodal(data) {
     });
     //Show Template when tree loads 
     $("#tree1").on("loaded.jstree", function (e, data) {
-        $('#tree1').jstree(true).select_node($template_front_id);
+		$('#tree1').jstree(true).select_node($template_front_id);
+		var node = $("#tree1").jstree('get_selected', true)[0].text;
         var ids = $(this).parent().parent().parent().parent().parent().attr('id');
         if ($template_front_id != "") {
             var buyer = localStorage.getItem("buyer");
@@ -5273,9 +5301,10 @@ function hangtagmodal(data) {
 							
 								if(order_details[0].Size == "TAILLE UNIQUE")
 								{
-									svgDoc.getElementById("size").innerHTML = "TU";
+									svgDoc.getElementById("size").innerHTML = "";
 									svgDoc.getElementById("size_french").innerHTML = "";
 									svgDoc.getElementById("size_english").innerHTML = "";
+									svgDoc.getElementById("tu_one_size").removeAttribute("visibility");
 								}
 								else if(order_details[0].Size == "TAILLE L")
 								{
@@ -5327,9 +5356,22 @@ function hangtagmodal(data) {
 							
 								if(order_details[0].Size == "TAILLE UNIQUE")
 								{
-									svgDoc.getElementById("size").innerHTML = "TU";
-									svgDoc.getElementById("size_french").innerHTML = "";
-									svgDoc.getElementById("size_english").innerHTML = "";
+									svgDoc.getElementById("size").innerHTML = "";
+								svgDoc.getElementById("size_french").innerHTML = "";
+								svgDoc.getElementById("size_english").innerHTML = "";
+								
+								svgDoc.getElementById("size_list").innerHTML = "TAILLE UNIQUE";
+								svgDoc.getElementById("cm").innerHTML = "ONE SIZE";
+								svgDoc.getElementById("cm_in_text").innerHTML = "";
+								if(node == "DBB1" || node == "DBB2" || node == "DBB3")
+								{
+									svgDoc.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 92.096 47.0822)');
+								}
+								else
+								{
+									svgDoc.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 92.096 52.0822)');
+								}
+								svgDoc.getElementById("tu_one_size").removeAttribute("visibility");
 								}
 								else if(order_details[0].Size == "TAILLE L")
 								{
@@ -5402,9 +5444,22 @@ function hangtagmodal(data) {
 							
 							if(order_details[0].Size == "TAILLE UNIQUE")
 							{
-								svgDoc.getElementById("size").innerHTML = "TU";
+								svgDoc.getElementById("size").innerHTML = "";
 								svgDoc.getElementById("size_french").innerHTML = "";
 								svgDoc.getElementById("size_english").innerHTML = "";
+								
+								svgDoc.getElementById("size_list").innerHTML = "TAILLE UNIQUE";
+								svgDoc.getElementById("cm").innerHTML = "ONE SIZE";
+								svgDoc.getElementById("cm_in_text").innerHTML = "";
+								if(node == "DBB1" || node == "DBB2" || node == "DBB3")
+								{
+									svgDoc.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 92.096 47.0822)');
+								}
+								else
+								{
+									svgDoc.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 92.096 52.0822)');
+								}
+								svgDoc.getElementById("tu_one_size").removeAttribute("visibility");
 							}
 							else if(order_details[0].Size == "TAILLE L")
 							{
@@ -5485,7 +5540,8 @@ function hangtagmodal(data) {
     });
     //Show Template when Click tree node 
     $('#tree1').on('activate_node.jstree', function (e, data) {
-        var ids = $(this).parent().parent().parent().parent().parent().attr('id');
+		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
+		var node = $("#tree1").jstree('get_selected', true)[0].text;
         if (data.instance.is_leaf(data.node)) {
             var buyer = localStorage.getItem("buyer");
             var template_id = data.node.id;
@@ -5582,7 +5638,14 @@ function hangtagmodal(data) {
 									svgDoc.getElementById("size_list").innerHTML = "TAILLE UNIQUE";
 									svgDoc.getElementById("cm").innerHTML = "ONE SIZE";
 									svgDoc.getElementById("cm_in_text").innerHTML = "";
-									svgDoc.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 92.096 52.0822)');
+									if(node == "DBB1" || node == "DBB2" || node == "DBB3")
+									{
+										svgDoc.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 92.096 47.0822)');
+									}
+									else
+									{
+										svgDoc.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 92.096 52.0822)');
+									}
 								svgDoc.getElementById("tu_one_size").removeAttribute("visibility");
 								}
 								else if(order_details[0].Size == "TAILLE L")
@@ -5663,7 +5726,14 @@ function hangtagmodal(data) {
 								svgDoc.getElementById("size_list").innerHTML = "TAILLE UNIQUE";
 								svgDoc.getElementById("cm").innerHTML = "ONE SIZE";
 								svgDoc.getElementById("cm_in_text").innerHTML = "";
-								svgDoc.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 92.096 52.0822)');
+								if(node == "DBB1" || node == "DBB2" || node == "DBB3")
+								{
+									svgDoc.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 92.096 47.0822)');
+								}
+								else
+								{
+									svgDoc.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 92.096 52.0822)');
+								}
 								svgDoc.getElementById("tu_one_size").removeAttribute("visibility");
 							}
 							else if(order_details[0].Size == "TAILLE L")
