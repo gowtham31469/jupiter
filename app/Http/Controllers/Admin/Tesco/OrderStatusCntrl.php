@@ -113,11 +113,11 @@ class OrderStatusCntrl extends Controller
                             ->get();
               /***********REDIS***************/
               /** set order-status data into redis */ 
-              Redis::set('order-status:', json_encode($data));
+              Redis::set('admin-order-status:tesco:', json_encode($data));
 
               /***********REDIS***************/
               /** get order-status data from redis */
-              $data = Redis::get('order-status:');
+              $data = Redis::get('admin-order-status:tesco:');
               $data = json_decode($data);
 	     	$result = response()->json(['error'=> false,'message' =>'success','data'=>$data],200);            
         }

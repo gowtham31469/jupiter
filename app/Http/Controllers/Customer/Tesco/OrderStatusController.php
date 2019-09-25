@@ -23,6 +23,7 @@ use Auth;
 use Carbon\Carbon;
 use App\Classes\EditErpOrders;
 use App\Classes\ERPOrderStatusCheck;
+use Illuminate\Support\Facades\Redis;
 
 class OrderStatusController extends Controller
 {
@@ -210,7 +211,14 @@ class OrderStatusController extends Controller
                             ->get();
 	    }
             
+            /***********REDIS***************/
+            /** set order-status data into redis */ 
+            Redis::set('customer-order-status:tesco:', json_encode($data));
 
+            /***********REDIS***************/
+            /** get order-status data from redis */
+            $data = Redis::get('customer-order-status:tesco:');
+            $data = json_decode($data);
             $result = response()->json(['error'=> false,'message' =>'success','data'=>$data],200);            
         }
         catch (\Exception $e)
