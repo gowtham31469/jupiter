@@ -608,7 +608,6 @@
 <script>
     localStorage.removeItem("page_navigation");
     var buyer_count = $('#invisible__count_id').val();
-    var buyer = localStorage.getItem("buyer");
     $(function() {
         $('[data-toggle="tooltip"]').tooltip()
         $('.po').attr("disabled", "disabled");
@@ -631,8 +630,7 @@
              localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
              $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
              $('#buyerSelectionModalCenter').modal('hide');
-             var buyer = localStorage.getItem("buyer");
-             if (buyer === 'orchestra') {
+             if (localStorage.getItem("buyer") === 'orchestra') {
                  orderStatus();
              } else {
                  tescoOrderStatus();
@@ -685,10 +683,9 @@
        else 
        {
            $('.selected-buyer').text('Selected Buyer : '+localStorage.getItem("buyer"));
-           var buyer = localStorage.getItem("buyer");
-           if (buyer === 'orchestra') {
+           if (localStorage.getItem("buyer") === 'orchestra') {
                orderStatus();
-           } else if (buyer === 'tesco')  {
+           } else if (localStorage.getItem("buyer") === 'tesco')  {
                tescoOrderStatus();
            }
 		   else {
@@ -709,8 +706,7 @@
          else 
          {
              $('.selected-buyer').text('Selected Buyer : '+localStorage.getItem("buyer"));
-             var buyer = localStorage.getItem("buyer");
-             if (buyer === 'orchestra') {
+             if (localStorage.getItem("buyer") === 'orchestra') {
                  orderStatus();
              } else {
                  tescoOrderStatus();
@@ -722,7 +718,7 @@
     Dropzone.options.poUpload = {
 
         // Prevents Dropzone from uploading dropped files immediately
-        url: base_url + "/admin/" + buyer + "/set-po-file",
+        url: base_url + "/admin/" + localStorage.getItem("buyer") + "/set-po-file",
         autoProcessQueue: false,
         maxFilesize: 500,
         maxFiles: 1,
@@ -764,14 +760,14 @@
                 var po_link = base_url+response.po_file;
                 var row_id  = $('#rowID').val();
                 var tab_nm  = $('#tableName').val();
-                $('#'+tab_nm+'_'+row_id+' .po-style').attr('onclick',buyer+'POUpload(this,"'+row_id+'","'+response.po_file+'","'+tab_nm+'")');
-                var po_num = $('#'+tab_nm+'_'+row_id+' .'+buyer+'-po-'+row_id).val();
+                $('#'+tab_nm+'_'+row_id+' .po-style').attr('onclick',localStorage.getItem("buyer")+'POUpload(this,"'+row_id+'","'+response.po_file+'","'+tab_nm+'")');
+                var po_num = $('#'+tab_nm+'_'+row_id+' .'+localStorage.getItem("buyer")+'-po-'+row_id).val();
                 if(po_num != null && po_num != '' && po_num != 'undefined') {
-                    $('#'+tab_nm+'_'+row_id+' .'+buyer+'-po-'+row_id).val();
+                    $('#'+tab_nm+'_'+row_id+' .'+localStorage.getItem("buyer")+'-po-'+row_id).val();
                     $('#'+tab_nm+'_'+row_id).find('.po_class').html("PO Uploaded");
                     $('#'+tab_nm+'_'+row_id).find('.po_class').removeClass("label-POPending").addClass('label-POUploaded');
                 }
-                $('#'+tab_nm+'_'+row_id).find('.'+buyer+'-po-submit').attr('onclick',buyer+'SetPO(this,"'+row_id+'","'+tab_nm+'","'+response.po_file+'")');
+                $('#'+tab_nm+'_'+row_id).find('.'+localStorage.getItem("buyer")+'-po-submit').attr('onclick',localStorage.getItem("buyer")+'SetPO(this,"'+row_id+'","'+tab_nm+'","'+response.po_file+'")');
                 $('#'+tab_nm+'_'+row_id).find('.po-view').css('border-color', '#FFFFFF');
                 $('#po-file-upload').modal('hide')
                 $('#snackbar').css('background-color','#00b6ff');
@@ -794,6 +790,7 @@
     /** To refresh modal and form data**/
     $(".modal").on("hidden.bs.modal", function() {
         myDropzone.removeAllFiles();
+        myDropzone.options.url = base_url + "/admin/" + localStorage.getItem("buyer") + "/set-po-file";
     });
     var date = new Date();
     var today = new Date(date.getFullYear(), date.getMonth());

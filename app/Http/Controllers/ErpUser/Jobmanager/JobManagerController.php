@@ -2098,5 +2098,222 @@ class JobManagerController extends Controller
 				echo  "array size= ".sizeof($order_details_data);
 			}
 		}
+	
+
+ public function printPdfTable(Request $request)
+    {
+         $name=$request->name;
+         $svg=urldecode($request->svg);
+         define ('PDF_FONT_NAME_MAIN', 'calibrib');
+         define ('PDF_FONT_NAME_DATA', 'calibrib');
+//          print_r($svg);
+        PDF::setImageScale(1);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('calibrib');
+        PDF::AddPage();
+		
+		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
+        //PDF::RoundedRect(95, 255, 40, 30, 0.1, '1111', null, $style6);
+        //PDF::RoundedRect(140, 255, 40, 30, 0.1, '1111', 'null', $style6);
+        PDF::RoundedRect(10, 10, 150, 100, 0.000001, '1111', null, $style6);
+        PDF::RoundedRect(12.5, 12.5, 145, 95, 0.000001, '1111', null, $style6);
+		
+		//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+		//PDF::RoundedRect(12.5, 12.5, 145, 95, 0, '0000');
+        $td_size="";
+        $td_col="";
+        $total=0;
+        $size=explode(',',$request->size);
+        $qty=explode(',',$request->qty);
+        $i=0;
+		$index_arr=array();
+        foreach($size as $val)
+        {
+			  if (!in_array($val, $index_arr)) 
+			  { 
+				   if($val != "")
+					{
+					    array_push($index_arr,$val);
+						$td_size.="<td><br><br>".$val."</td>";
+						$td_col.="<td>".$qty[$i]."</td>";
+					} 
+			  } 
+           
+            $total+=$qty[$i];
+            $i++;
+        }
+          $tbl = '<table  border="1" style="text-align:center;">
+		  			<tr style="line-height:0.53">
+                          <td style="font-size:14px;text-align:center;line-height:0.45"><br><br>Size:</td>
+                          '.$td_size.'
+                          <td><br><br>Total<br></td>
+                          </tr>
+                      <tr>
+                          <td style="font-size:7.5px;line-height:2">ERCU</td>
+                          '.$td_col.'
+                          <td>'.$total.'</td>
+                          </tr>
+            </table>';
+        PDF::SetFillColor(255, 255, 255);
+        PDF::SetTextColor(0, 0, 0);
+        
+        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::writeHTMLCell(147, '', '11.5', '55', $tbl, '', 1, 1, true, '', true);
+        
+  
+        
+        $style = array(
+            'position' => '',
+            'align' => 'C',
+            'stretch' => false,
+            'fitwidth' => true,
+            'cellfitalign' => '',
+            'border' => false,
+            'hpadding' => 'auto',
+            'vpadding' => 'auto',
+            'fgcolor' => array(0,0,0),
+            'bgcolor' => false, //array(255,255,255),
+            'text' => true,
+            'font' => 'calibrib',
+            'fontsize' => 12,
+            'stretchtext' => 4
+        );
+         ///PDF::write1DBarcode('3531114195599', 'EAN13', '60', '72', '', 32, 0.45, $style, 'N');
+
+       
+        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.$name.'.pdf'));
+        
+    }
+
+	public function printPdf(Request $request)
+    {
+		 $name=$request->name;
+         $svg=urldecode($request->svg);
+         define ('PDF_FONT_NAME_MAIN', 'calibrib');
+         define ('PDF_FONT_NAME_DATA', 'calibrib');
+//          print_r($svg);
+        PDF::setImageScale(1);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('calibrib');
+        PDF::AddPage();
+		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
+        //PDF::RoundedRect(95, 255, 40, 30, 0.1, '1111', null, $style6);
+        //PDF::RoundedRect(140, 255, 40, 30, 0.1, '1111', 'null', $style6);
+        PDF::RoundedRect(10, 10, 150, 100, 0.000001, '1111', null, $style6);
+        PDF::RoundedRect(12.5, 12.5, 145, 95, 0.000001, '1111', null, $style6);
+        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.$name.'.pdf'));
+    } 
+
+
+
+
+	public function printPdfSmall(Request $request)
+    {
+		 
+		  $name=$request->name;
+		 $svgarr = explode(',_',$request->svg);
+         //$svg=urldecode($request->svg);
+         define ('PDF_FONT_NAME_MAIN', 'calibrib');
+         define ('PDF_FONT_NAME_DATA', 'calibrib');
+//          print_r($svg);
+        PDF::setImageScale(1.66);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('calibrib');
+		PDF::AddPage('P', 'A4');
+		//PDF::RoundedRect(10, 10, 100, 70, 0, '0000');
+		//PDF::RoundedRect(12.5, 12.5, 95, 65, 0, '0000');
+		 
+		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
+        PDF::RoundedRect(10, 10, 100, 70, 0.000001, '1111', null, $style6);
+        PDF::RoundedRect(12.5, 12.5, 95, 65, 0.000001, '1111', null, $style6);
+		 
+//		PDF::SetAutoPageBreak(TRUE);
+		$i=0;
+		$j=0;
+		$yy=12.5;
+		foreach($svgarr as $value)
+        {
+			$svg=urldecode($value);
+			
+			if($i == 3)
+			{
+				PDF::AddPage('P', 'A4');
+				//PDF::RoundedRect(10, 10, 100, 70, 0, '0000');
+				//PDF::RoundedRect(12.5, 12.5, 95, 65, 0, '0000');
+				
+				PDF::RoundedRect(10, 10, 100, 70, 0.000001, '1111', null, $style6);
+        		PDF::RoundedRect(12.5, 12.5, 95, 65, 0.000001, '1111', null, $style6);
+				$yy=12.5;
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				$i = 0;
+			}
+			else  if($i == 0)
+			{
+				//PDF::RoundedRect(10, 100, 100, 70, 0, '0000');
+				//PDF::RoundedRect(12.5, 102.5, 95, 65, 0, '0000');
+				
+				PDF::RoundedRect(10, 100, 100, 70, 0.000001, '1111', null, $style6);
+        		PDF::RoundedRect(12.5, 102.5, 95, 65, 0.000001, '1111', null, $style6);
+				$yy=12.5;
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				
+			}
+			else if($i == 1)
+			{
+				//PDF::RoundedRect(10, 100, 100, 70, 0, '0000');
+				//PDF::RoundedRect(12.5, 102.5, 95, 65, 0, '0000');
+				PDF::RoundedRect(10, 100, 100, 70, 0.000001, '1111', null, $style6);
+        		PDF::RoundedRect(12.5, 102.5, 95, 65, 0.000001, '1111', null, $style6);
+				$yy += 90;
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			}
+			else
+			{
+				//PDF::RoundedRect(10, 190, 100, 70, 0, '0000');
+				//PDF::RoundedRect(12.5, 192.5, 95, 65, 0, '0000');
+				PDF::RoundedRect(10, 190, 100, 70, 0.000001, '1111', null, $style6);
+        		PDF::RoundedRect(12.5, 192.5, 95, 65, 0.000001, '1111', null, $style6);
+				$yy += 90;
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			}
+			$i++;
+			$j++;
+		 }
+        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.$name.'.pdf'));
+    }
+
+		/**
+		 * Function to update uuid value for existing data in erp_order_details table.
+		 * @author <Praveen>
+		 */
+		public function scriptUpdateUUID()
+		{
+			$orders = DB::table('erp_orders')->get();
+			// $order_details = DB::table('erp_order_details')->select('id')->groupBy('erp_order_id', 'style_no', 'order_qnty_table_name', 'created_at', 'buyer_po_number', 'order_type')->get();
+
+		//	dd($order_details);
+			// unique id for array creation
+			
+			foreach($orders as $value)
+			{
+				$unique_id = 'ERP'.$value->id.str_random(25);
+				$order_details[$value->id.'-'.$unique_id] = DB::table('erp_order_details')->where('erp_order_id', $value->id)->groupBy( 'erp_order_id', 'style_no', 'order_qnty_table_name', 'created_at', 'buyer_po_number', 'order_type')->pluck('erp_order_id');
+				//$order_details[$value->id.'-'.$unique_id] = ErpOrderDetails::select('id')->where('erp_order_id', $value->id)->groupBy('erp_order_id', 'style_no', 'order_qnty_table_name', 'created_at', 'buyer_po_number', 'order_type');
+				// ErpOrderDetails::where('id',$value->id)
+				// 	->update([
+				// 				'uuid'  => $order_status_id->id
+				// 			]);
+				
+			}
+			dd($order_details);
+			return "success";
+		}
 
 }
