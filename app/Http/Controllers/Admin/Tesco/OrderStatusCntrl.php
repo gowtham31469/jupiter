@@ -24,6 +24,7 @@ use Carbon\Carbon;
 use App\Classes\EditErpOrders;
 use App\Classes\ERPOrderStatusCheck;
 use Auth;
+use Illuminate\Support\Facades\Redis;
 
 class OrderStatusCntrl extends Controller
 {
@@ -110,7 +111,14 @@ class OrderStatusCntrl extends Controller
                             ->whereNotIn('tesco_tsl3_orders.order_status',['Saved','Order Cancelled'])
                             ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_tsl3_orders.uk_style_ref','tesco_tsl3_orders.ce_style_ref','tesco_tsl3_orders.po_number as BuyerPO','tesco_tsl3_orders.zone as Zone',DB::raw("'".$tsl3."'".' as "TemplateName"'),'tesco_tsl3_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_tsl3_orders.created_at as OrderDate',DB::raw('to_char(tesco_tsl3_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_tsl3_orders.order_status as Artwork Status','tesco_tsl3_orders.pi_status as PI Status','tesco_tsl3_orders.po_status as PO Status','tesco_tsl3_orders.purchase_order_no as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'".$tesco_tsl3_orders."'".' as "tableName"'),'tesco_tsl3_orders.id as tableID','tesco_tsl3_orders.po_file','customers.pi_required','customers.po_required','tesco_tsl3_orders.template_id','tesco_tsl3_orders.order_flag','customers.delivery_day_count','is_order_count_empty')
                             ->get();
+              /***********REDIS***************/
+              /** set order-status data into redis */ 
+              Redis::set('order-status:', json_encode($data));
 
+              /***********REDIS***************/
+              /** get order-status data from redis */
+              $data = Redis::get('order-status:');
+              $data = json_decode($data);
 	     	$result = response()->json(['error'=> false,'message' =>'success','data'=>$data],200);            
         }
         catch (\Exception $e)
