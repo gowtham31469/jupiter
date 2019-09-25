@@ -4397,8 +4397,8 @@ function washcarelabels(data, dataid,color_code,new_flag) {
 			
 			svgDoc.getElementById("size_in_fr_en1").innerHTML = "";
         	svgDoc.getElementById("size_in_fr_en2").innerHTML = "";
-			svgDoc.getElementById("size1").innerHTML =data.tu[0].meta_value;
-			svgDoc.getElementById("size2").innerHTML =data.tu[0].meta_value;
+			svgDoc.getElementById("size1").innerHTML ="TAILLE UNIQUE";
+			svgDoc.getElementById("size2").innerHTML ="TAILLE UNIQUE";
 		}
 		else if(data.order_details[0].Size == "TAILLE L")
 		{

@@ -1856,15 +1856,19 @@ class JobManagerController extends Controller
 			
 			 $i++;
 		}
-		$j=0;
-		if(count($svgarr) == $i)
+		if($name != "TCL4-sticker" && $name != "TCL2-sticker")
 		{
-			foreach($svgarr as $value)
+			$j=0;
+			if(count($svgarr) == $i)
 			{
-				unlink(public_path('/storage/app/template/barcode_'.$j.'.png'));
-				$j++;
+				foreach($svgarr as $value)
+				{
+					unlink(public_path('/storage/app/template/barcode_'.$j.'.png'));
+					$j++;
+				}
 			}
 		}
+		
 		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
 		print_r(url('/storage/app/template/'.$name.'.pdf'));
 		
@@ -2295,21 +2299,25 @@ class JobManagerController extends Controller
 		 */
 		public function scriptUpdateUUID()
 		{
-			$order_details = DB::table('erp_order_details')->select('erp_order_id', 'style_no', 'order_qnty_table_name', 'created_at', 'buyer_po_number', 'order_type')->groupBy('erp_order_id', 'style_no', 'order_qnty_table_name', 'created_at', 'buyer_po_number', 'order_type')->get();
+			$orders = DB::table('erp_orders')->get();
+			// $order_details = DB::table('erp_order_details')->select('id')->groupBy('erp_order_id', 'style_no', 'order_qnty_table_name', 'created_at', 'buyer_po_number', 'order_type')->get();
+
+		//	dd($order_details);
+			// unique id for array creation
 			
-			foreach($order_details as $value)
+			foreach($orders as $value)
 			{
-				// unique id for array creation
-				$unique_id = 'ERP'.$value->erp_order_id.str_random(25);
-			
-				ErpOrderDetails::where(['erp_order_id' => $value->erp_order_id, 'style_no' => $value->style_no, 'order_qnty_table_name'=> $value->order_qnty_table_name, 'created_at'=> $value->created_at, 'buyer_po_number'=> $value->buyer_po_number, 'order_type'=> $value->order_type])
-					->update([
-								'uuid'  => $unique_id
-							]);
+				$unique_id = 'ERP'.$value->id.str_random(25);
+				$order_details[$value->id.'-'.$unique_id] = DB::table('erp_order_details')->where('erp_order_id', $value->id)->groupBy( 'erp_order_id', 'style_no', 'order_qnty_table_name', 'created_at', 'buyer_po_number', 'order_type')->pluck('erp_order_id');
+				//$order_details[$value->id.'-'.$unique_id] = ErpOrderDetails::select('id')->where('erp_order_id', $value->id)->groupBy('erp_order_id', 'style_no', 'order_qnty_table_name', 'created_at', 'buyer_po_number', 'order_type');
+				// ErpOrderDetails::where('id',$value->id)
+				// 	->update([
+				// 				'uuid'  => $order_status_id->id
+				// 			]);
 				
 			}
-			
-			return "uuid updated successfully !!!!";
+			dd($order_details);
+			return "success";
 		}
 
 }
