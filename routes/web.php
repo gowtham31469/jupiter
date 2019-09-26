@@ -15,9 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/test', function () {
-    return view('tst');
-});
+Route::get('testApi', 'ApiTest@testApi')->name('testApi');
 
 
 Route::get('getTemplateDetails', 'Admin\TemplateManagement\TemplateController@getTemplateDetails')->name('getTemplateDetails');
@@ -747,6 +745,11 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::post('job-manager/orchestra/print-pdf', 'ErpUser\Jobmanager\JobManagerController@printPdf');
 	Route::post('job-manager/orchestra/print-pdf-table', 'ErpUser\Jobmanager\JobManagerController@printPdfTable');
 
+
+	Route::post('job-manager/orchestra/print-wash-pdf', 'ErpUser\Jobmanager\JobManagerController@printWashPdf');
+
+
+	Route::post('job-manager/print-hang-pdf', 'ErpUser\Jobmanager\JobManagerController@printHangPdf');
 	/* Routes for ERP-Settings Management */
 	Route::get('/settings', 'ErpUser\ERPSettings\ERPSettingsController@home')->name('erp-settings');
 	Route::get('/settings/dispatch-mode', 'ErpUser\ERPSettings\ERPSettingsController@getDispatchMode')->name('erp-dispatch-mode');
@@ -817,5 +820,8 @@ Route::post('setUpDatatable', 'ErpUser\Reports\ReportController@setUpDatatable' 
 Route::get('print-manager/get-customers-list', 'ErpUser\Printmanager\PrintManagerController@getCustomersListByBuyerId'); 
 Route::get('print-manager/get-style-list', 'ErpUser\Printmanager\PrintManagerController@getStyleListByBuyerCustomerId'); 
 Route::get('print-manager/get-erporder-list', 'ErpUser\Printmanager\PrintManagerController@getErpOrderListByBuyerCustomerId'); 
+
+
+
 
 
