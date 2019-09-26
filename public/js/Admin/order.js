@@ -2100,15 +2100,51 @@ function printHangDiv(data,disney) {
 						retryLimit: 2,
 						success: function (data) {
 							//console.log(data)
+							if(size[0] == "TAILLE")
+							{
+								svgDoc1.getElementById("size").innerHTML = "";
+								svgDoc1.getElementById("size_french").innerHTML = "";
+								svgDoc1.getElementById("size_english").innerHTML = "";
+								svgDoc1.getElementById("uvc_tco").innerHTML = uvc_tco;
+								svgDoc1.getElementById("size_list").innerHTML = "TAILLE UNIQUE";
+								svgDoc1.getElementById("cm").innerHTML = "ONE SIZE";
+								
+								svgDoc1.getElementById("tu_one_size").removeAttribute("visibility");
+								svgDoc.getElementById("size").innerHTML = "";
+								svgDoc.getElementById("size_french").innerHTML = "";
+								svgDoc.getElementById("size_english").innerHTML = "";
+								svgDoc.getElementById("tu_one_size").removeAttribute("visibility");
+							}
+							else
+							{
+								if(data.size_chart.length > 0)
+								{
+									svgDoc1.getElementById("cm").innerHTML =  data.size_chart[0].size+" CM";
+	//								if(data.size_chart[0].size.length == 2)
+	//								{
+	//								   svgDoc1.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 106.096 52.0822)');
+	//								}
+	//								else
+	//								{
+	//								   svgDoc1.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 102.096 52.0822)');
+	//								}
+									
+								}
+								else
+								{
+									svgDoc1.getElementById("cm").innerHTML = "";
+								}
 
-							svgDoc1.getElementById("size").innerHTML = size[0];
-							svgDoc1.getElementById("size_french").innerHTML = size[1];
-							svgDoc1.getElementById("size_english").innerHTML = size1;
-							svgDoc1.getElementById("uvc_tco").innerHTML = uvc_tco;
+								svgDoc1.getElementById("size").innerHTML = size[0];
+								svgDoc1.getElementById("size_french").innerHTML = size[1];
+								svgDoc1.getElementById("size_english").innerHTML = size1;
+								svgDoc1.getElementById("uvc_tco").innerHTML = uvc_tco;
+								
+								svgDoc.getElementById("size").innerHTML = size[0];
+								svgDoc.getElementById("size_french").innerHTML = size[1];
+								svgDoc.getElementById("size_english").innerHTML = size1;
+							}
 							
-							svgDoc.getElementById("size").innerHTML = size[0];
-							svgDoc.getElementById("size_french").innerHTML = size[1];
-							svgDoc.getElementById("size_english").innerHTML = size1;
 							
 							if(data.opqt.length > 0)
 							{
@@ -2176,9 +2212,7 @@ function printHangDiv(data,disney) {
 								svgDoc1.getElementById("us_price").innerHTML = "";
 								svgDoc1.getElementById("us_club_price").innerHTML = "";
 							}
-							
-							
-							
+			
 							if(data.size_chart.length > 0)
 							{
 								svgDoc1.getElementById("cm").innerHTML =  data.size_chart[0].size;
@@ -2215,6 +2249,7 @@ function printHangDiv(data,disney) {
 								else if(node == "DBB1")
 								{
 									svgDoc1.getElementById("barcode1").setAttribute('transform', 'matrix(1.0971 0 0 1 0 -20)');
+									//svgDoc1.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 92.096 47.0822)');
 								}
 								else
 								{
@@ -2996,7 +3031,7 @@ function label_order_details(uvc) {
             $('.made_in_select'+washcare).selectpicker('val',$('.made_in_select'+index).selectpicker('val'));
 			
 			//$('#washcarelabelform' + washcare+' .washonesizein').val($('#washcarelabelform' + index+' .washonesizein').val())
-			$('#washcarelabelform' + washcare+' .washonesizecm').val($('#washcarelabelform' + index+' .washonesizecm').val())
+			//$('#washcarelabelform' + washcare+' .washonesizecm').val($('#washcarelabelform' + index+' .washonesizecm').val())
             $('.care_instruction_select'+washcare).selectpicker('val',$('.care_instruction_select'+index).selectpicker('val'));
             
             $('#composition_remove_qty'+washcare).html($('#composition_remove_qty'+index).html())
@@ -3240,7 +3275,7 @@ function label_order_details(uvc) {
             $('.made_in_select'+washcare).selectpicker('val',$('.made_in_select'+old_id).selectpicker('val'));
 			
 			//$('#washcarelabelform' + washcare+' .washonesizein').val($('#washcarelabelform' + old_id+' .washonesizein').val())
-			$('#washcarelabelform' + washcare+' .washonesizecm').val($('#washcarelabelform' + old_id+' .washonesizecm').val())
+			//$('#washcarelabelform' + washcare+' .washonesizecm').val($('#washcarelabelform' + old_id+' .washonesizecm').val())
             $('.care_instruction_select'+washcare).selectpicker('val',$('.care_instruction_select'+old_id).selectpicker('val'));
             
             $('#composition_remove_qty'+washcare).html($('#composition_remove_qty'+old_id).html())
@@ -3499,7 +3534,7 @@ function label_order_details(uvc) {
             $('.made_in_select'+washcare).selectpicker('val',$('.made_in_select'+old_id).selectpicker('val'));
 			
 			//$('#washcarelabelform' + washcare+' .washonesizein').val($('#washcarelabelform' + old_id+' .washonesizein').val())
-			$('#washcarelabelform' + washcare+' .washonesizecm').val($('#washcarelabelform' + old_id+' .washonesizecm').val())
+			//$('#washcarelabelform' + washcare+' .washonesizecm').val($('#washcarelabelform' + old_id+' .washonesizecm').val())
             $('.care_instruction_select'+washcare).selectpicker('val',$('.care_instruction_select'+old_id).selectpicker('val'));
             
             $('#composition_remove_qty'+washcare).html($('#composition_remove_qty'+old_id).html())
@@ -3872,7 +3907,8 @@ function washcarelabels(data, dataid,color_code,new_flag) {
             $wash_cm = "";
 			$wash_in = "";
         }
-		var sizebox='<div class="form-group has-feedback"><label>Enter Size in Cm</label><input onkeypress="return checkNumbersOnly(event)" type="text" maxlength="3" class="form-control input-sm washonesizecm" value="'+$wash_cm+'" required="" placeholder="Enter Size in Cm"><div class="help-block with-errors"></div></div>';
+		//<div class="form-group has-feedback"><label>Enter Size in Cm</label><input onkeypress="return checkNumbersOnly(event)" type="text" maxlength="3" class="form-control input-sm washonesizecm" value="'+$wash_cm+'" required="" placeholder="Enter Size in Cm"><div class="help-block with-errors"></div></div>
+		var sizebox='';
 	}
 	else
 	{
@@ -3951,17 +3987,17 @@ function washcarelabels(data, dataid,color_code,new_flag) {
 //
 //		
 //    });
-	$('#washcarelabelform' + dataid+' .washonesizecm').keyup(function () {
-		//alert(dataid)
-		var cm=$(this).val();
-		//var inches=$('#washcarelabelform' + dataid+' .washonesizein').val();
-        var mySVG = document.getElementById("washcare_svg_front" + dataid);
-		var svgDoc;
-		svgDoc = mySVG.contentDocument;
-		svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm";
-		svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm";
-		
-    });
+//	$('#washcarelabelform' + dataid+' .washonesizecm').keyup(function () {
+//		//alert(dataid)
+//		var cm=$(this).val();
+//		//var inches=$('#washcarelabelform' + dataid+' .washonesizein').val();
+//        var mySVG = document.getElementById("washcare_svg_front" + dataid);
+//		var svgDoc;
+//		svgDoc = mySVG.contentDocument;
+//		svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm";
+//		svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm";
+//		
+//    });
 	
 	$('#po_select'+ dataid).change(function(){
 		var po = $(this).val();
@@ -4351,12 +4387,12 @@ function washcarelabels(data, dataid,color_code,new_flag) {
 		if(data.order_details[0].Size == "TAILLE UNIQUE")
 		{
 			//var inches=$('#washcarelabelform' + dataid+' .washonesizein').val()
-			var cm=$('#washcarelabelform' + dataid+' .washonesizecm').val()
+			//var cm=$('#washcarelabelform' + dataid+' .washonesizecm').val()
 			
-			svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm";
-        svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm";
-			svgDoc.getElementById("size1").innerHTML ="TU";
-			svgDoc.getElementById("size2").innerHTML ="TU";
+			svgDoc.getElementById("size_in_fr_en1").innerHTML = "";
+        	svgDoc.getElementById("size_in_fr_en2").innerHTML = "";
+			svgDoc.getElementById("size1").innerHTML ="TAILLE UNIQUE";
+			svgDoc.getElementById("size2").innerHTML ="TAILLE UNIQUE";
 		}
 		else if(data.order_details[0].Size == "TAILLE L")
 		{
@@ -5095,7 +5131,8 @@ function hangtagmodal(data) {
             $hang_cm = "";
 			$hang_in = "";
         }
-		var sizebox='<div class="form-group has-feedback"><label>Enter Size in Cm</label><input onkeypress="return checkNumbersOnly(event)" type="text" maxlength="3" class="form-control input-sm onesizecm" value="'+$hang_cm+'" required="" placeholder="Enter Size in Cm"><div class="help-block with-errors"></div></div>';
+		//<div class="form-group has-feedback"><label>Enter Size in Cm</label><input onkeypress="return checkNumbersOnly(event)" type="text" maxlength="3" class="form-control input-sm onesizecm" value="'+$hang_cm+'" required="" placeholder="Enter Size in Cm"><div class="help-block with-errors"></div></div>
+		var sizebox='';
 	}
 	else
 	{
@@ -5166,15 +5203,15 @@ function hangtagmodal(data) {
 //
 //		
 //    });
-	$('#hangtagform .onesizecm').keyup(function () {
-		
-		var cm=$(this).val();
-        var mySVG = document.getElementById("svg2");
-		var svgDoc;
-		svgDoc = mySVG.contentDocument;
-		svgDoc.getElementById("cm").innerHTML = cm;
-		
-    });
+//	$('#hangtagform .onesizecm').keyup(function () {
+//		
+//		var cm=$(this).val();
+//        var mySVG = document.getElementById("svg2");
+//		var svgDoc;
+//		svgDoc = mySVG.contentDocument;
+//		svgDoc.getElementById("cm").innerHTML = cm;
+//		
+//    });
 
     $("#clickmehang").click(function () {
         // $('.sample-artwork').html("")
@@ -5223,7 +5260,8 @@ function hangtagmodal(data) {
     });
     //Show Template when tree loads 
     $("#tree1").on("loaded.jstree", function (e, data) {
-        $('#tree1').jstree(true).select_node($template_front_id);
+		$('#tree1').jstree(true).select_node($template_front_id);
+		var node = $("#tree1").jstree('get_selected', true)[0].text;
         var ids = $(this).parent().parent().parent().parent().parent().attr('id');
         if ($template_front_id != "") {
             var buyer = localStorage.getItem("buyer");
@@ -5259,9 +5297,10 @@ function hangtagmodal(data) {
 							
 								if(order_details[0].Size == "TAILLE UNIQUE")
 								{
-									svgDoc.getElementById("size").innerHTML = "TU";
+									svgDoc.getElementById("size").innerHTML = "";
 									svgDoc.getElementById("size_french").innerHTML = "";
 									svgDoc.getElementById("size_english").innerHTML = "";
+									svgDoc.getElementById("tu_one_size").removeAttribute("visibility");
 								}
 								else if(order_details[0].Size == "TAILLE L")
 								{
@@ -5313,9 +5352,14 @@ function hangtagmodal(data) {
 							
 								if(order_details[0].Size == "TAILLE UNIQUE")
 								{
-									svgDoc.getElementById("size").innerHTML = "TU";
-									svgDoc.getElementById("size_french").innerHTML = "";
-									svgDoc.getElementById("size_english").innerHTML = "";
+									svgDoc.getElementById("size").innerHTML = "";
+								svgDoc.getElementById("size_french").innerHTML = "";
+								svgDoc.getElementById("size_english").innerHTML = "";
+								
+								svgDoc.getElementById("size_list").innerHTML = "TAILLE UNIQUE";
+								svgDoc.getElementById("cm").innerHTML = "ONE SIZE";
+								
+								svgDoc.getElementById("tu_one_size").removeAttribute("visibility");
 								}
 								else if(order_details[0].Size == "TAILLE L")
 								{
@@ -5363,7 +5407,7 @@ function hangtagmodal(data) {
                         mySVG.addEventListener("load", function () {
                             svgDoc = mySVG.contentDocument;
 							
-							svgDoc.getElementById("cm").innerHTML = $('.onesizecm').val();
+							//svgDoc.getElementById("cm").innerHTML = $('.onesizecm').val();
 							//svgDoc.getElementById("in").innerHTML = $('.onesizein').val();
 							
                             var svgItem = svgDoc.getElementById("uvc_tco");
@@ -5388,9 +5432,14 @@ function hangtagmodal(data) {
 							
 							if(order_details[0].Size == "TAILLE UNIQUE")
 							{
-								svgDoc.getElementById("size").innerHTML = "TU";
+								svgDoc.getElementById("size").innerHTML = "";
 								svgDoc.getElementById("size_french").innerHTML = "";
 								svgDoc.getElementById("size_english").innerHTML = "";
+								
+								svgDoc.getElementById("size_list").innerHTML = "TAILLE UNIQUE";
+								svgDoc.getElementById("cm").innerHTML = "ONE SIZE";
+								
+								svgDoc.getElementById("tu_one_size").removeAttribute("visibility");
 							}
 							else if(order_details[0].Size == "TAILLE L")
 							{
@@ -5402,7 +5451,7 @@ function hangtagmodal(data) {
 							{
 								svgDoc.getElementById("size").innerHTML = size[0];
 								
-								svgDoc.getElementById("cm").innerHTML = order_details[0].cm;
+								svgDoc.getElementById("cm").innerHTML = order_details[0].cm+" CM";
 								//svgDoc.getElementById("in").innerHTML = order_details[0].in;
 								if (size[1] == "ANS") {
 									svgDoc.getElementById("size_french").innerHTML = size[1];
@@ -5471,7 +5520,8 @@ function hangtagmodal(data) {
     });
     //Show Template when Click tree node 
     $('#tree1').on('activate_node.jstree', function (e, data) {
-        var ids = $(this).parent().parent().parent().parent().parent().attr('id');
+		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
+		var node = $("#tree1").jstree('get_selected', true)[0].text;
         if (data.instance.is_leaf(data.node)) {
             var buyer = localStorage.getItem("buyer");
             var template_id = data.node.id;
@@ -5506,9 +5556,10 @@ function hangtagmodal(data) {
 							
 								if(order_details[0].Size == "TAILLE UNIQUE")
 								{
-									svgDoc.getElementById("size").innerHTML = "TU";
+									svgDoc.getElementById("size").innerHTML = "";
 									svgDoc.getElementById("size_french").innerHTML = "";
 									svgDoc.getElementById("size_english").innerHTML = "";
+									svgDoc.getElementById("tu_one_size").removeAttribute("visibility");
 								}
 								else if(order_details[0].Size == "TAILLE L")
 								{
@@ -5560,9 +5611,14 @@ function hangtagmodal(data) {
 							
 								if(order_details[0].Size == "TAILLE UNIQUE")
 								{
-									svgDoc.getElementById("size").innerHTML = "TU";
+									svgDoc.getElementById("size").innerHTML = "";
 									svgDoc.getElementById("size_french").innerHTML = "";
 									svgDoc.getElementById("size_english").innerHTML = "";
+
+									svgDoc.getElementById("size_list").innerHTML = "TAILLE UNIQUE";
+									svgDoc.getElementById("cm").innerHTML = "ONE SIZE";
+									
+								svgDoc.getElementById("tu_one_size").removeAttribute("visibility");
 								}
 								else if(order_details[0].Size == "TAILLE L")
 								{
@@ -5610,7 +5666,7 @@ function hangtagmodal(data) {
                         mySVG.addEventListener("load", function () {
                             svgDoc = mySVG.contentDocument;
 							
-							svgDoc.getElementById("cm").innerHTML = $('.onesizecm').val();
+							//svgDoc.getElementById("cm").innerHTML = $('.onesizecm').val();
 							//svgDoc.getElementById("in").innerHTML = $('.onesizein').val();
 							
                             var svgItem = svgDoc.getElementById("uvc_tco");
@@ -5635,9 +5691,14 @@ function hangtagmodal(data) {
 							
 							if(order_details[0].Size == "TAILLE UNIQUE")
 							{
-								svgDoc.getElementById("size").innerHTML = "TU";
+								svgDoc.getElementById("size").innerHTML = "";
 								svgDoc.getElementById("size_french").innerHTML = "";
 								svgDoc.getElementById("size_english").innerHTML = "";
+								
+								svgDoc.getElementById("size_list").innerHTML = "TAILLE UNIQUE";
+								svgDoc.getElementById("cm").innerHTML = "ONE SIZE";
+							
+								svgDoc.getElementById("tu_one_size").removeAttribute("visibility");
 							}
 							else if(order_details[0].Size == "TAILLE L")
 							{
@@ -5649,7 +5710,7 @@ function hangtagmodal(data) {
 							{
 								svgDoc.getElementById("size").innerHTML = size[0];
 								
-								svgDoc.getElementById("cm").innerHTML = order_details[0].cm;
+								svgDoc.getElementById("cm").innerHTML = order_details[0].cm+" CM";
 								//svgDoc.getElementById("in").innerHTML = order_details[0].in;
 								if (size[1] == "ANS") {
 									svgDoc.getElementById("size_french").innerHTML = size[1];
@@ -6490,7 +6551,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
             $('.made_in_select'+washcare).selectpicker('val',$('.made_in_select').selectpicker('val'));
            
 			//$('#washcarelabelform' + washcare+' .washonesizein').val($('#washcarelabelform .washonesizein').val())
-			$('#washcarelabelform' + washcare+' .washonesizecm').val($('#washcarelabelform .washonesizecm').val())
+			//$('#washcarelabelform' + washcare+' .washonesizecm').val($('#washcarelabelform .washonesizecm').val())
 			$('.care_instruction_select'+washcare).selectpicker('val',$('.care_instruction_select').selectpicker('val'));
             
             $('#composition_remove_qty'+washcare).html($('#composition_remove_qty').html())
@@ -7309,7 +7370,7 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
 		if(datas.order_details[0].Size == "TAILLE UNIQUE")
 		{
 			//var inches=$('#washcarelabelform' + dataid+' .washonesizein').val()
-			var cm=$('#washcarelabelform' + dataid+' .washonesizecm').val()
+			//var cm=$('#washcarelabelform' + dataid+' .washonesizecm').val()
 			
 			svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm";
         svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm";
@@ -7532,7 +7593,7 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
 								if(datas.order_details[0].Size == "TAILLE UNIQUE")
 								{
 									//var inches=$('#washcarelabelform' + dataid+' .washonesizein').val()
-									var cm=$('#washcarelabelform' + dataid+' .washonesizecm').val()
+									//var cm=$('#washcarelabelform' + dataid+' .washonesizecm').val()
 
 									svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm";
 								svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm";
@@ -8465,7 +8526,7 @@ function setHangTag(id,colour) {
 	var template_id = $('#hangtagform').find('#tree1').jstree('get_selected', true);
 	template_front_id = template_id[0].id;
 	var template_back_id = $('#hang_tag_id').val();
-	var onesizecm = $('.onesizecm').val();
+	//var onesizecm = $('.onesizecm').val();
 	//var onesizein = $('.onesizein').val();
 	
 	var tot_qty_tablehang = [];
@@ -8501,7 +8562,7 @@ function setHangTag(id,colour) {
 			template_back_id: template_back_id,
 			tot_qty_table: tot_qty_tablehang_fin,
 			id: id,
-			cm:onesizecm,
+			//cm:onesizecm,
 			//in:onesizein,
 			colour: colour,
 			size_id: size_id_fin,
@@ -8891,7 +8952,7 @@ function setWashLabel(index, dataid, id) {
 		{
 			template_front_id=4;
 		}
-		var washonesizecm = $('#washcarelabelform' + dataid+' .washonesizecm').val();
+		//var washonesizecm = $('#washcarelabelform' + dataid+' .washonesizecm').val();
 		//var washonesizein = $('#washcarelabelform' + dataid+' .washonesizein').val();
 		var po_select 	  = $('#po_select' + dataid).val();
 		$('#'+po_select+'_'+dataid).val("1");
@@ -8942,7 +9003,7 @@ function setWashLabel(index, dataid, id) {
                 whitening_select: whitening_select,
                 po_select: po_select,
 				//in:washonesizein,
-				cm:washonesizecm,
+				//cm:washonesizecm,
                 dryer_select: dryer_select,
                 ironing_select: ironing_select,
                 card_flag: time_flag,
@@ -9258,7 +9319,7 @@ function clonewashcarelabels(index,color_code)
             $('.made_in_select'+washcare).selectpicker('val',$('.made_in_select'+index).selectpicker('val'));
 	
 			//$('#washcarelabelform' + washcare+' .washonesizein').val($('#washcarelabelform' + index+' .washonesizein').val())
-			$('#washcarelabelform' + washcare+' .washonesizecm').val($('#washcarelabelform' + index+' .washonesizecm').val())
+			//$('#washcarelabelform' + washcare+' .washonesizecm').val($('#washcarelabelform' + index+' .washonesizecm').val())
 			
 			
 	

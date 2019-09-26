@@ -2913,20 +2913,21 @@ class JobManagerController extends Controller
 		 */
 		public function scriptUpdateUUID()
 		{
-			$orders = DB::table('erp_orders')->get();
-			$order_details = DB::table('erp_order_details')->get();
-			// unique id for array creation
-			$unique_id = 'ERP'.$erp_orders->id.str_random(25);
+			$order_details = DB::table('erp_order_details')->select('erp_order_id', 'style_no', 'order_qnty_table_name', 'created_at', 'buyer_po_number', 'order_type')->groupBy('erp_order_id', 'style_no', 'order_qnty_table_name', 'created_at', 'buyer_po_number', 'order_type')->get();
+			
 			foreach($order_details as $value)
 			{
-				
-				ErpOrderDetails::where('id',$value->id)
+				// unique id for array creation
+				$unique_id = 'ERP'.$value->erp_order_id.str_random(25);
+			
+				ErpOrderDetails::where(['erp_order_id' => $value->erp_order_id, 'style_no' => $value->style_no, 'order_qnty_table_name'=> $value->order_qnty_table_name, 'created_at'=> $value->created_at, 'buyer_po_number'=> $value->buyer_po_number, 'order_type'=> $value->order_type])
 					->update([
-								'uuid'  => $order_status_id->id
+								'uuid'  => $unique_id
 							]);
 				
 			}
-			return "success";
+			
+			return "uuid updated successfully !!!!";
 		}
 
 }

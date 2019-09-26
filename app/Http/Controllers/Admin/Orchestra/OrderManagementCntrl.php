@@ -41,6 +41,7 @@ use Carbon\Carbon;
 use App\OrchestraParcelDetails;
 use App\OrchestraParcelQuantityDetails;
 use Auth;
+use Illuminate\Support\Facades\Redis;
 
 class OrderManagementCntrl extends Controller
 {
@@ -165,8 +166,15 @@ class OrderManagementCntrl extends Controller
 
             $data['orchestra_standard_poly_bag_sticker_orders'] = DB::table('orchestra_standard_poly_bag_sticker_orders')->join('orchestra_parcel_details','orchestra_parcel_details.UVC','=','orchestra_standard_poly_bag_sticker_orders.uvc')->join('orchestra_item_master','orchestra_item_master.id','=','orchestra_standard_poly_bag_sticker_orders.template_id')->leftjoin('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->select(DB::raw('distinct on (orchestra_standard_poly_bag_sticker_orders.uvc,orchestra_standard_poly_bag_sticker_orders.po) "UVC"'),DB::raw("orchestra_standard_poly_bag_sticker_orders.season_code as \"Season\""),DB::raw("orchestra_standard_poly_bag_sticker_orders.po as \"BuyerPONo\""),DB::raw("'Standard Poly Bag Stickers' as \"ArtworkType\""),DB::raw("'Standard Poly Bag Stickers' as \"TemplateName\""),'customers.id as customer_id','orchestra_parcel_details.SupplierName as SupplierName',DB::raw("to_char(orchestra_standard_poly_bag_sticker_orders.created_at,"."'".$ddmmyy."'".") as \"OrderDate\""),DB::raw("to_char(orchestra_standard_poly_bag_sticker_orders.delivery_date,"."'".$ddmmyy."'".") as \"DeliveryDate\""),'orchestra_standard_poly_bag_sticker_orders.status as Artwork Status','orchestra_standard_poly_bag_sticker_orders.pi_status as PI Status','orchestra_standard_poly_bag_sticker_orders.po_status as PO Status','orchestra_standard_poly_bag_sticker_orders.po_number as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'orchestra_standard_poly_bag_sticker_orders' as \"tableName\""),'orchestra_standard_poly_bag_sticker_orders.color_code','orchestra_standard_poly_bag_sticker_orders.id  as tableID','orchestra_standard_poly_bag_sticker_orders.po_file','customers.pi_required','customers.po_required','orchestra_standard_poly_bag_sticker_orders.template_id','orchestra_standard_poly_bag_sticker_orders.order_flag','customers.delivery_day_count','orchestra_standard_poly_bag_sticker_orders.is_order_count_empty')->where('orchestra_parcel_details.IsSTD',1)->groupBy('orchestra_standard_poly_bag_sticker_orders.uvc','orchestra_parcel_details.UVC','orchestra_standard_poly_bag_sticker_orders.po','orchestra_parcel_details.SupplierName','orchestra_standard_poly_bag_sticker_orders.created_at','orchestra_standard_poly_bag_sticker_orders.delivery_date','orchestra_standard_poly_bag_sticker_orders.status','orchestra_standard_poly_bag_sticker_orders.pi_status','orchestra_standard_poly_bag_sticker_orders.po_status','orchestra_standard_poly_bag_sticker_orders.po_number','orchestra_standard_poly_bag_sticker_orders.id','customers.pi_required','customers.id')->get();
 
-     
-            echo json_encode($data);
+            /***********REDIS***************/
+            /** set order-status data into redis */ 
+            Redis::set('admin-order-status:orchestra', json_encode($data));
+
+            /***********REDIS***************/
+            /** get order-status data from redis */
+            $data = Redis::get('admin-order-status:orchestra');
+            
+            echo  $data;
     }
 	
 	/**
@@ -185,6 +193,9 @@ class OrderManagementCntrl extends Controller
                                         ->groupBy('orchestra_parcel_details.id','Size_Label','orchestra_size_chart.cm')
                                         ->orderBy('orchestra_parcel_details.id','asc')
                                         ->get();
+		
+		//$data['tu'] = DB::table('orchestra_tu_meta_data')->select('orchestra_tu_meta_data.*')->where('orchestra_tu_meta_data.meta_data',$data['order_details']{0}->Size)->get();
+		
 		
 		$data['color_wcl'] = DB::table('orchestra_parcel_details')->select('orchestra_parcel_details.Color_Code')->where('orchestra_parcel_details.UVC',$uvc)->groupBy('orchestra_parcel_details.Color_Code') ->orderBy('orchestra_parcel_details.Color_Code','asc')->get();
 		
@@ -893,7 +904,6 @@ class OrderManagementCntrl extends Controller
         $parcel_id =$request->parcel_id;
         $colour = $request->colour;
         $season_code =$request->season_code;
-		$cm =$request->cm;
         $id =$request->id;
 		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('customers.*')->get();
 		//print_r($factory);
@@ -938,7 +948,6 @@ class OrderManagementCntrl extends Controller
                         'svg_path'    => "", 
                         'status'    => $status,
                         'customer_id'    => $factory{0}->id,
-					    'cm'    => $cm,
 					    'orchestra_parcel_details_id'    => $parcel_id,
 					    'season_code'    => $season_code,
 					    'pi_status'           => $pi_status,
@@ -976,7 +985,6 @@ class OrderManagementCntrl extends Controller
 										'svg_path'    => "", 
 										'status'    => $status,
 										'customer_id'    => $factory{0}->id,
-										'cm'    => $cm,
 										'orchestra_parcel_details_id'    => $parcel_id,
 										'season_code'    => $season_code,
 										'pi_status'           => $pi_status,
@@ -2237,7 +2245,6 @@ class OrderManagementCntrl extends Controller
         $uvc =$request->uvc;
         $po_select =$request->po_select;
         $id =$request->id;
-		$cm =$request->cm;
 		$card_flag =$request->card_flag;
         $parcel_id =$request->parcel_id;
         $season_code =$request->season_code;
@@ -2308,7 +2315,6 @@ class OrderManagementCntrl extends Controller
                         'care_instruction_id'      => $care_instruction_select,
                         'customer_id'    => $factory{0}->id,
                         'svg_path'    => "", 
-					    'cm'    => $cm, 
                         'status'    => "Buyer Approval Pending",
 						'orchestra_parcel_details_id'    => $parcel_id,
 						'season_code'    => $season_code,
@@ -2385,7 +2391,6 @@ class OrderManagementCntrl extends Controller
                                 'care_instruction_id'      => $care_instruction_select,
                         		'customer_id'    => $factory{0}->id,
                                 'svg_path'    => "", 
-				   				'cm'    => $cm, 
                                 'status'    => "Buyer Approval Pending",
 								'orchestra_parcel_details_id'    => $parcel_id,
 								'season_code'    => $season_code,
@@ -2459,7 +2464,6 @@ class OrderManagementCntrl extends Controller
                                 'care_instruction_id'      => $care_instruction_select,
                         		'customer_id'    => $factory{0}->id,
                                 'svg_path'    => "", 
-				   				'cm'    => $cm, 
                                 'status'    => "Buyer Approval Pending",
 								'orchestra_parcel_details_id'    => $parcel_id,
 								'season_code'    => $season_code,
