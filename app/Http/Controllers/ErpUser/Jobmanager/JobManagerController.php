@@ -208,7 +208,7 @@ class JobManagerController extends Controller
 									->where('erp_order_details.style_no',$style_no)
 									->where('erp_order_details.erp_order_id',$id)
 									->where('erp_order_details.reference_name',$ref_name)
-									// ->where('erp_order_details.buyer_po_number',$buyer_no)
+									->where('erp_order_details.buyer_po_number',$buyer_no)
 									->where('erp_order_details.status','!=',4)
 									->where('erp_order_details.deleted_at', null)
 									->orderBy('erp_order_details.id', 'desc')
