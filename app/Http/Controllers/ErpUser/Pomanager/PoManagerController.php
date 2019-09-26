@@ -64,7 +64,7 @@ class PoManagerController extends Controller
 				session()->put('company', $company_id->id);
 				session()->put('company_name', strtolower( str_replace(' ','',$company_id->name)) );
 			}
-			
+	
 			if($customer_id != 1)
 			{
 				$templates   = 		DB::table('erpusers_template_mapping')
@@ -100,7 +100,6 @@ class PoManagerController extends Controller
 		
 		 $orders_erp = array();
 		
-		
 		 foreach($new_orders as $key => $values)
 		 {
 			foreach($values as $valuess)
@@ -117,7 +116,7 @@ class PoManagerController extends Controller
 										 ->groupBy('erp_orders.id','customers.company_name','erp_status.status_name','erp_order_details.created_at')
 										 ->select('erp_orders.*','customers.company_name','erp_status.status_name','erp_order_details.created_at as po_created_date')
 										 ->get();
-										
+						// dd($erp_order_details);			
 				if(count($erp_order_details) > 0)
 				{
 					foreach($erp_order_details as $erp_order_det)
@@ -151,7 +150,6 @@ class PoManagerController extends Controller
 					$hold_orders_count++;
 				}
 		}
-
 		return view('erp.Pomanager.poverify',['orders' => $orders_erp,'companies' => $companies,'new_orders' => $new_orders_count,'hold_orders' => $hold_orders_count]);
 	} 
 	

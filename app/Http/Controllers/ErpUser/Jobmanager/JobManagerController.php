@@ -15,7 +15,11 @@ use App\OrchestraStdCartonStickerQty;
 use App\OrchestraStdCartonSticker;
 use App\OrchestraStdPolyStickerQty;
 use App\OrchestraStdPolySticker;
+use App\OrchestraHangTagQty;
+use App\OrchestraHangTag;
 use App\OrchestraAgeGroup;
+use App\OrchestraWashCare;
+use App\OrchestraWashCareQty;
 use Response;
 use View;
 use Auth;
@@ -36,24 +40,24 @@ class JobManagerController extends Controller
 {
 	private $current_date;
 	private $buyer_name;
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
+	/**
+	 * Create a new controller instance.
+	 *
+	 * @return void
+	 */
+	public function __construct()
+	{
 		$this->middleware('erpuser');
 		// get the current time
 		$this->current_date = Carbon::now('Asia/Kolkata')->format('d-m-Y');
 
 	}
 		
-    /**
-     * Show the Jobcard  Manager List View.
-     * @author [Gowtham] <[gowtham@wizroots.com]>
-     * @return \Illuminate\Http\Response
-     */
+	/**
+	 * Show the Jobcard  Manager List View.
+	 * @author [Gowtham] <[gowtham@wizroots.com]>
+	 * @return \Illuminate\Http\Response
+	 */
 	public function index()
 	{
 		try {
@@ -125,7 +129,7 @@ class JobManagerController extends Controller
 				}
 				$i++;
 			}
-			
+				// dd($new_orders);
 			$orders_erp = array();
 			foreach($new_orders as $key => $values)
 			{
@@ -139,8 +143,8 @@ class JobManagerController extends Controller
 											->join('customers', 'erp_orders.customer_id', 'customers.id')
 											->join('buyers', 'erp_orders.buyer_id', 'buyers.id')
 											->join('erp_status', 'erp_orders.status', 'erp_status.id')
-						                    ->join($this->buyer_name.'_template', $this->buyer_name.'_template.item_id', 'erp_order_details.template_id')
-											->where('erp_order_details.template_id', '=', $valuess)
+											->join($this->buyer_name.'_template', $this->buyer_name.'_template.item_id', 'erp_order_details.template_id')
+											// ->where('erp_order_details.template_id', '=', $valuess)
 											// ->where('erp_orders.status', '=', $erp_status_id)
 											->where('erp_order_details.deleted_at', null)
 											->where('erp_order_details.status', '=', $erp_status_id)
@@ -182,13 +186,15 @@ class JobManagerController extends Controller
 		}
 	}
 	/**
-     * Get order deatils.
-     * @param order details id
-     * @author Gowtham <gowtham@wizroots.com>
-     * @return \Illuminate\Http\Response
-     */
+	 * Get order deatils.
+	 * @param order details id
+	 * @author Gowtham <gowtham@wizroots.com>
+	 * @return \Illuminate\Http\Response
+	 */
 	public function getOrderDetails(Request $request)
 	{
+
+
 		$ref_name = $request['ref_name'];
 		$style_no = $request['style_no'];
 		$buyer_no = $request['buyer_no'];
@@ -209,9 +215,10 @@ class JobManagerController extends Controller
 									->select('*')
 									->get();
 
+							// dd($order_details[0]);
 			$order_Qty_table = $order_details[0]->order_qnty_table_name;
 			$ordertable = substr($order_Qty_table,0,strrpos($order_Qty_table,"_"));
-			
+				
 			$stringArr=explode("_", $order_Qty_table);
 			$target_id='';
 
@@ -220,13 +227,106 @@ class JobManagerController extends Controller
 			}
 			$target_id=$target_id."_id";
 
-
 			$parentTable_id = DB::table($order_Qty_table)
 							->where('id',$order_details[0]->order_qnty_table_id)
 							->first()->$target_id;
 
 			switch ($ordertable) 
-			{
+			{	
+
+				case 'orchestra_wash_care_label_orders' :
+
+					// $res= OrchestraWashCare::with(['washcarelabelQty' => function($type) use($parentTable_id){
+					// $type->where('orchestra_wash_care_label_orders_qty.owcl_id',$parentTable_id);
+					// }])
+					// ->get();
+
+						$res = OrchestraWashCare::with(['washcarelabelQty' => function ($query) {
+						$query->leftJoin('orchestra_size_chart as osc', 'osc.age', 'orchestra_wash_care_label_orders_qty.size');
+						}])->where('orchestra_wash_care_label_orders.id',$parentTable_id)->get();
+					
+					$res->map(function ($res) use($parentTable_id) {
+						$res->reference_name = "Orchestra WashCare";
+						$res->parentId = $parentTable_id;
+
+						$res->cofreet_symbol1 = DB::table('orchestra_care_symbols')->where('id',$res->washing_id)->first()->cofreet_symbols;
+						$res->astm_symbol1 = DB::table('orchestra_care_symbols')->where('id',$res->washing_id)->first()->astms_symbol;
+
+						$res->cofreet_symbol2 = DB::table('orchestra_care_symbols')->where('id',$res->whitening_id)->first()->cofreet_symbols;
+						$res->astm_symbol2 = DB::table('orchestra_care_symbols')->where('id',$res->whitening_id)->first()->astms_symbol;
+
+						$res->cofreet_symbol3 = DB::table('orchestra_care_symbols')->where('id',$res->dryer_id)->first()->cofreet_symbols;
+						$res->astm_symbol3 = DB::table('orchestra_care_symbols')->where('id',$res->dryer_id)->first()->astms_symbol;
+
+						$res->cofreet_symbol4 = DB::table('orchestra_care_symbols')->where('id',$res->ironing_id)->first()->cofreet_symbols;
+						$res->astm_symbol4 = DB::table('orchestra_care_symbols')->where('id',$res->ironing_id)->first()->astms_symbol;
+
+						$res->cofreet_symbol5 = DB::table('orchestra_care_symbols')->where('id',$res->cleaning_id)->first()->cofreet_symbols;
+						$res->astm_symbol5 = DB::table('orchestra_care_symbols')->where('id',$res->cleaning_id)->first()->astms_symbol;
+
+
+						// $res->age_group = OrchestraAgeGroup::where('id',$res->group_id)->first()->color;
+						});
+
+					// dd($res);
+				break;
+
+
+				case 'orchestra_hang_tag_orders':
+							   
+					// $res  = OrchestraHangTag::with(array('hangtagqty' => function($query) 
+					// {
+					// $query->leftJoin('orchestra_size_chart as chart', 'chart.age', 'orchestra_hang_tag_orders_qty.size');
+					// }))
+					// ->where('orchestra_hang_tag_orders.id',$parentTable_id)
+					// ->get();
+
+
+					$res = OrchestraHangTag::with(array('hangtagqty' => function($query) {
+								$query->leftJoin('orchestra_size_chart as osc', 'osc.age', 'orchestra_hang_tag_orders_qty.size')
+								->leftJoin('orchestra_parcel_details as opd', 'opd.SKU_Code', 'orchestra_hang_tag_orders_qty.uvc_tco')
+								->select('orchestra_hang_tag_orders_qty.*','osc.*','Size_Range_Label');
+								}))
+								->where('id', '=', $parentTable_id)
+								->get();
+
+
+					$res->map(function ($res) use($parentTable_id) {
+					foreach($res->hangtagqty as $key => $value) 
+					{
+					$CountryCodes =array(0=>'DZD',1=>'CAD',2=>'CHF',3=>'MAD',4=>'MUR',5=>'USD',6=>'EUR');
+					$price = ['algeria_price','canada_price','swiss_price','morocco_price'
+							,'morris_price','us_price','eur_price'];
+					$clubPrice = ['algeria_club_price','canada_club_price','swiss_club_price','morroco_club_price'
+							,'morris_club_price','us_club_price','eur_club_price'];
+					$PriceArr = array();
+
+					foreach($CountryCodes as $key => $country)
+					{ 
+					$q= OrchestraHangTag::leftJoin('orchestra_parcel_quantity_details', function ($join) use($value,$country,$parentTable_id)
+					{
+					$join->on('orchestra_hang_tag_orders.uvc', '=', 'orchestra_parcel_quantity_details.UVC')
+					->select('Price','Club_Price')
+					->where('Currency',$country)
+					->where('Size', $value->size);
+					})->where('orchestra_hang_tag_orders.id', '=', $parentTable_id)
+					->select('Price','Club_Price')
+					->get();
+
+					array_push($PriceArr, array($price[$key]=>$q->first()->Price, $clubPrice[$key] => $q->first()->Club_Price));
+					}
+
+					$value->prices =  $PriceArr;
+					$PriceArr = array();
+					}
+					});
+
+
+					$res['reference_name'] = "Orchestra HangTag";
+					$res['theme'] = OrchestraParcelDetails::where('id',$res[0]->orchestra_parcel_details_id)->first()->Theme;
+
+				break;
+			
 				case 'orchestra_solid_poly_bag_sticker_orders':
 
 					$res = OrchestraSolidPolySticker::with(['solidpolystickerqty' => 
@@ -386,15 +486,15 @@ class JobManagerController extends Controller
 		
 	}
 	/**
-     * Get order details for job card template creation by selected ids.
-     * @param order details id
-     * @author Praveen <praveen@wizroots.com>
-     * @return \Illuminate\Http\Response
-     */
-    public function getOrderDetailsByIds(Request $request)
-    {
-      try {
-		    if(session()->get('company_name') === "jupitergarmentsaccessories"){
+	 * Get order details for job card template creation by selected ids.
+	 * @param order details id
+	 * @author Praveen <praveen@wizroots.com>
+	 * @return \Illuminate\Http\Response
+	 */
+	public function getOrderDetailsByIds(Request $request)
+	{
+	  try {
+			if(session()->get('company_name') === "jupitergarmentsaccessories"){
 				$erp_orders_ids     = explode(',', $request['orders']);
 				$selected_ref_arrays= explode(',', $request['ref_array']);
 				$buyer_pos          = explode(',', $request['buyer_po_array']);
@@ -431,12 +531,12 @@ class JobManagerController extends Controller
 					// buyer po number is not mandatory for orchestra.
 					// So splitting query using conditional statements.
 					$order_detail_id_array = ErpOrderDetails::where('erp_order_details.erp_order_id', $erp_orders_id)
-				     	                      ->where('erp_order_details.order_type', $order_type[$row])
+											  ->where('erp_order_details.order_type', $order_type[$row])
 											  ->where('erp_order_details.uuid', $uuid[$row])
 											  ->where('erp_order_details.reference_name', $selected_ref_arrays[$row]);
 					if($buyer_pos[$row] != "") {
 						$order_detail_id_array = $order_detail_id_array->where('erp_order_details.buyer_po_number', $buyer_pos[$row])
-						               ->pluck('erp_order_details.id')->all();
+									   ->pluck('erp_order_details.id')->all();
 					} else {
 						$order_detail_id_array = $order_detail_id_array->pluck('erp_order_details.id')->all();
 					}
@@ -653,17 +753,17 @@ class JobManagerController extends Controller
 
 			return response()->json(['error'=> false,'message' =>'Success', 'template_data' => $template_data],200);
   
-          } catch (\Exception $e)
-          {
-            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-          }
+		  } catch (\Exception $e)
+		  {
+			return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+		  }
 	}
 	
 	/**
-     * To store Jobcard data.
-     * @author [Praveen] <[praveen@wizroots.com]>
-     * @return \Illuminate\Http\Response , pdf file path
-     */
+	 * To store Jobcard data.
+	 * @author [Praveen] <[praveen@wizroots.com]>
+	 * @return \Illuminate\Http\Response , pdf file path
+	 */
 	public function storeJobcardData(Request $request)
 	{
 		try {
@@ -710,7 +810,7 @@ class JobManagerController extends Controller
 				$tint_color      = $request['tint_color'];
 				$customer_po_num = $request['customer_po'];
 				$erp_orders_ids  = explode(',', $request['erp_orders_ids']);
-			    $selected_ref    = explode(',', $request['selected_ref_array']);
+				$selected_ref    = explode(',', $request['selected_ref_array']);
 				$buyer_pos       = explode(',', $request['selected_buyer_po_array']);
 				$order_types     = explode(',', $request['order_type_array']);
 				$uuid            = explode(',', $request['uuid_array']);
@@ -867,7 +967,7 @@ class JobManagerController extends Controller
 														->first();
 									
 									$material_name  = $template_level->material;
-                                    $material_sub   = $template_level->material_sub;
+									$material_sub   = $template_level->material_sub;
 									$material_ref   = $template_level->ref;
 									$customer_po    = $order_details->purchase_order_no;
 									$buyer_po       = $order_details->po_number;
@@ -940,15 +1040,15 @@ class JobManagerController extends Controller
 								]);
 								
 							}
-					        
+							
 						}
 
 						/** Update jobcard created status erp orders table(iff, all the orders in the order details table have same status. ie, after creating jobcard for all orders) */
 						foreach($erp_orders_ids as $row => $erp_orders_id)
 						{
 							$erp_order_table_status = DB::table('erp_order_details')
-							    ->where('erp_order_details.erp_order_id', $erp_orders_id)
-							    ->pluck('status')->all();
+								->where('erp_order_details.erp_order_id', $erp_orders_id)
+								->pluck('status')->all();
 							
 							if(count(array_unique($erp_order_table_status)) === 1)
 							{
@@ -994,7 +1094,7 @@ class JobManagerController extends Controller
 						// if ($pdf->last_page_flag)
 						// {
 								// set auto page breaks
-						    $pdf->SetAutoPageBreak(TRUE, 40);
+							$pdf->SetAutoPageBreak(TRUE, 40);
 		
 						// }
 						// else 
@@ -1103,11 +1203,11 @@ class JobManagerController extends Controller
    * @return pdf
    */
   
-    public function printDivTesco(Request $request)
-    {
+	public function printDivTesco(Request $request)
+	{
 		 $company_id = $request->id;
 		 $customer = DB::table("erp_orders")
-			 			->join('customers', 'erp_orders.customer_id', 'customers.id')
+						->join('customers', 'erp_orders.customer_id', 'customers.id')
 						->select('customers.short_name')
 						->where('erp_orders.id',$company_id)
 						->get();
@@ -1123,19 +1223,19 @@ class JobManagerController extends Controller
 			  $this->template_desc = "RATIO STICKER";
 		  }
 		  else if($request->name == "TCL2-sticker")
-	      {
+		  {
 			   $this->template_desc = "RATIO BD STICKER"; 
 		  }
 		  else if($request->name == "TCL4-sticker")
-	      {
+		  {
 			   $this->template_desc =  "SINGLES BD STICKER";
 		  }
 		  else if($request->name == "THL1-sticker")
-	      {
-			    $this->template_desc = "RATIO STICKER";
+		  {
+				$this->template_desc = "RATIO STICKER";
 		  }
 		  else if($request->name == "THL3-sticker")
-	      {
+		  {
 			   $this->template_desc = "SINGLES RATIO BD STICKER";
 		  }
 		  $this->tesco_po_number = $request->tesco_po_number;
@@ -1305,7 +1405,7 @@ class JobManagerController extends Controller
 		
 				$svgarr = explode(',_',$request->svg);
 				$name=$request->name;
-		       // $svg=urldecode($request->svg);
+			   // $svg=urldecode($request->svg);
 				PDF::setImageScale(1);
 				PDF::SetFont('frankgothcnbt');
 				PDF::AddPage();
@@ -1347,18 +1447,18 @@ class JobManagerController extends Controller
 				$file_path =  "/storage/app/template/".$random.'-'.$name."."."pdf";	
 				
 				return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$random.'-'.$name.'.pdf')],200);	
-    } 
+	} 
 	 /**
    * Print Preview For Stickers
    *
    * @return pdf
    */
   
-    public function printDivTescoSmall(Request $request)
-    {
+	public function printDivTescoSmall(Request $request)
+	{
 		 $company_id = $request->id;
 		 $customer = DB::table("erp_orders")
-			 			->join('customers', 'erp_orders.customer_id', 'customers.id')
+						->join('customers', 'erp_orders.customer_id', 'customers.id')
 						->select('customers.short_name')
 						->where('erp_orders.id',$company_id)
 						->get();
@@ -1375,7 +1475,7 @@ class JobManagerController extends Controller
 			  $this->template_desc = "RATIO POLYBAG STICKER";
 		  }
 		  else if($request->name == "TSL3-sticker")
-	      {
+		  {
 			   $this->template_desc = "SINGLE POLYBAG STICKER "; 
 		  }
 		  $this->tesco_po_number = $request->tesco_po_number;
@@ -1543,9 +1643,9 @@ class JobManagerController extends Controller
 		});
 		$svgarr = explode(',_',$request->svg);
 		$name=$request->name;
-    //$svg=urldecode($request->svg);
-    PDF::setImageScale(1);
-    PDF::SetFont('frankgothcnbt');	
+	//$svg=urldecode($request->svg);
+	PDF::setImageScale(1);
+	PDF::SetFont('frankgothcnbt');	
 		PDF::AddPage();
 		$i=0;
 		$yy=0;
@@ -1592,11 +1692,11 @@ class JobManagerController extends Controller
 				
 		} 
 		/**
-     * Function to Merge Jobcard pdf and artwork
-     * @author <Praveen>
-     * @param array PDF files
-     * @return filepath
-     */
+	 * Function to Merge Jobcard pdf and artwork
+	 * @author <Praveen>
+	 * @param array PDF files
+	 * @return filepath
+	 */
 		public function pdfMerge(Request $request)
 		{
 			try {
@@ -1621,40 +1721,40 @@ class JobManagerController extends Controller
 				
 		}
 	/**
-     * Function to get tesco tsl template UK , CE size chart based on size entered.
-     * @author <Praveen>
-     * @param [string] $[size] [<Size entered>], [string] $[zone] [<zone selected>]
-     * @return equivalent uk,ce size for size entered
-     */
-    public function getTescoTSLSizechart(Request $request)
-    {
-       try {
-             $zone = $request['zone'];
-             $size = $request['size'];
+	 * Function to get tesco tsl template UK , CE size chart based on size entered.
+	 * @author <Praveen>
+	 * @param [string] $[size] [<Size entered>], [string] $[zone] [<zone selected>]
+	 * @return equivalent uk,ce size for size entered
+	 */
+	public function getTescoTSLSizechart(Request $request)
+	{
+	   try {
+			 $zone = $request['zone'];
+			 $size = $request['size'];
 
-           if($zone == 'UK')
-           {
-               $size = DB::table('tesco_size_chart')->select('uk as size')->where('po_size', 'ilike', $size)->where('is_enabled','=',1)->get();
-           }
-           else
-           {
-               $size = DB::table('tesco_size_chart')->select('ce as size')->where('po_size', 'ilike', $size)->where('is_enabled','=',1)->get();
-           }
-           
-           return response()->json(['size_chart' => $size]);
-       } catch (\Exception $e) {
-           return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-       }
-    }
+		   if($zone == 'UK')
+		   {
+			   $size = DB::table('tesco_size_chart')->select('uk as size')->where('po_size', 'ilike', $size)->where('is_enabled','=',1)->get();
+		   }
+		   else
+		   {
+			   $size = DB::table('tesco_size_chart')->select('ce as size')->where('po_size', 'ilike', $size)->where('is_enabled','=',1)->get();
+		   }
+		   
+		   return response()->json(['size_chart' => $size]);
+	   } catch (\Exception $e) {
+		   return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+	   }
+	}
 
 	/**
-     * Function to get all jobcards list.
-     * @author <Praveen>
-     * @return equivalent list of jobcards
-     */
-    public function getJobcards()
-    {
-        try {
+	 * Function to get all jobcards list.
+	 * @author <Praveen>
+	 * @return equivalent list of jobcards
+	 */
+	public function getJobcards()
+	{
+		try {
 				$customer_id = Auth::guard('erpuser')->id();
 				
 				$companies   = 	DB::table('erpuser_company_mapping')
@@ -1700,14 +1800,14 @@ class JobManagerController extends Controller
 	}
 	
 	/**
-     * Function to get jobcard details by id.
-     * @author <Praveen>
+	 * Function to get jobcard details by id.
+	 * @author <Praveen>
 	 * @param  $id
-     * @return equivalent jobcard details
-     */  
-    public function getJobcardDetailsById(Request $request)
-    {
-        try {
+	 * @return equivalent jobcard details
+	 */  
+	public function getJobcardDetailsById(Request $request)
+	{
+		try {
 				$id = $request['id'];
 
 				$customer_id = Auth::guard('erpuser')->id();
@@ -1731,7 +1831,7 @@ class JobManagerController extends Controller
 					$jobcard_data->invoice_date      =	$jobcard_data->invoice_date == ''?NULL:Carbon::parse($jobcard_data->invoice_date)->format('d-m-Y');
 					$jobcard_data->approval_date     =	$jobcard_data->approval_date == ''?NULL:Carbon::parse($jobcard_data->approval_date)->format('d-m-Y');
 
-				    $jobcard_details  = DB::table('jobcard_excess_details')
+					$jobcard_details  = DB::table('jobcard_excess_details')
 										->select('jobcard_excess_details.ref_name', 'jobcard_excess_details.mtrs_for_stickers', 'jobcard_excess_details.actual_excess', 'jobcard_excess_details.settings', 'jobcard_excess_details.total_mtrs')
 										->where('jobcard_excess_details.jobcard_main_table_id', '=', $jobcard_data->id)
 										->get();
@@ -1744,13 +1844,13 @@ class JobManagerController extends Controller
 			}
 	}
 	/**
-     * Function to update jobcard details by id.
-     * @author <Praveen>
+	 * Function to update jobcard details by id.
+	 * @author <Praveen>
 	 * @param  $json_data
-     * @return equivalent pdf file path
-     */
-    public function updateJobcardById(Request $request)
-    {
+	 * @return equivalent pdf file path
+	 */
+	public function updateJobcardById(Request $request)
+	{
 		try {
 				$company_id      = $request['company_id'];
 				$workorder_id    = $request['workorder_id'];
@@ -2024,14 +2124,14 @@ class JobManagerController extends Controller
 
 
 	/**
-     * Function to get customers list by  buyer id.
-     * @author <Praveen>
+	 * Function to get customers list by  buyer id.
+	 * @author <Praveen>
 	 * @param  $buyer_id
-     * @return equivalent customer list
-     */  
-    public function getCustomersListByBuyerId(Request $request)
-    {
-        try {
+	 * @return equivalent customer list
+	 */  
+	public function getCustomersListByBuyerId(Request $request)
+	{
+		try {
 				$buyer_id = $request['selected_buyer_id'];
 
 				if(session()->get('company') == "" || session()->get('company') == null)
@@ -2053,7 +2153,7 @@ class JobManagerController extends Controller
 										->all();
 					return response()->json(['error'=> false,'message' =>'Success', 'customers_list' => $customers_list], 200);
 				}
-				    
+					
 	
 			} catch (\Exctesteption $e) {
 				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
@@ -2061,14 +2161,14 @@ class JobManagerController extends Controller
 	}
 
 	/**
-     * Function to get jobcard id list by  buyer id and customer id.
-     * @author <Praveen>
+	 * Function to get jobcard id list by  buyer id and customer id.
+	 * @author <Praveen>
 	 * @param  $buyer_id, $customer_id
-     * @return equivalent jobcard ids list
-     */  
-    public function getJobcardIdListByBuyerCustomerId(Request $request)
-    {
-        try {
+	 * @return equivalent jobcard ids list
+	 */  
+	public function getJobcardIdListByBuyerCustomerId(Request $request)
+	{
+		try {
 				$buyer_id    = $request['selected_buyer_id'];
 				$customer_id = $request['selected_customer_id'];
 
@@ -2091,7 +2191,7 @@ class JobManagerController extends Controller
 											->all();
 					return response()->json(['error'=> false,'message' =>'Success', 'jobcard_id_list' => $jobcard_id_list], 200);
 				}
-				    
+					
 	
 			} catch (\Exctesteption $e) {
 				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
@@ -2099,14 +2199,14 @@ class JobManagerController extends Controller
 	}
 
 	/**
-     * Function to get jobcards list by  buyer id, customer id and jobcard id.
-     * @author <Praveen>
+	 * Function to get jobcards list by  buyer id, customer id and jobcard id.
+	 * @author <Praveen>
 	 * @param  $buyer_id, $customer_id, $jobcard_id
-     * @return equivalent jobcard list
-     */  
-    public function getJobcardsListByBuyerCustomerJobcardId(Request $request)
-    {
-        try {
+	 * @return equivalent jobcard list
+	 */  
+	public function getJobcardsListByBuyerCustomerJobcardId(Request $request)
+	{
+		try {
 				$buyer_id    = $request['selected_buyer_id'];
 				$customer_id = $request['selected_customer_id'];
 				$jobcard_id  = $request['selected_jobcard_id'];
@@ -2133,22 +2233,22 @@ class JobManagerController extends Controller
 											->first();
 					return response()->json(['error'=> false,'message' =>'Success', 'jobcards_list' => $jobcards_list], 200);
 				}
-				    
+					
 	
 			} catch (\Exctesteption $e) {
 				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
 			}
 	}
 	 public function generateDivTesco(Request $request)
-    {
-		    $svgarr = explode(',_',$request->svg);
-        $name=$request->name;
-        $svg=urldecode($request->svg);
-        define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
-        define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
-        PDF::setPrintHeader(false);
-        PDF::setPrintFooter(false);
-        PDF::SetFont('frankgothcnbt');
+	{
+			$svgarr = explode(',_',$request->svg);
+		$name=$request->name;
+		$svg=urldecode($request->svg);
+		define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
+		define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
+		PDF::setPrintHeader(false);
+		PDF::setPrintFooter(false);
+		PDF::SetFont('frankgothcnbt');
 		PDF::SetAutoPageBreak(TRUE);
 		$i=0;
 		foreach($svgarr as $value)
@@ -2172,8 +2272,8 @@ class JobManagerController extends Controller
 			
 			 $i++;
 		}
-        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-        print_r(url('/storage/app/template/'.$name.'.pdf'));
+		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+		print_r(url('/storage/app/template/'.$name.'.pdf'));
 		
 		
 		
@@ -2201,7 +2301,7 @@ class JobManagerController extends Controller
 //		PDF::deletePage(1);
 //        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
 //        print_r(url('/storage/app/template/'.$name.'.pdf'));
-    } 
+	} 
 	
 	
 		 /**
@@ -2210,17 +2310,17 @@ class JobManagerController extends Controller
    * @return pdf
    */
   
-    public function generateDivTescoSmall(Request $request)
-    {
+	public function generateDivTescoSmall(Request $request)
+	{
 		$svgarr = explode(',_',$request->svg);
-    	$name=$request->name;
-        $svg=urldecode($request->svg);
-        define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
-        define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
-        PDF::setImageScale(1.66);
-        PDF::setPrintHeader(false);
-        PDF::setPrintFooter(false);
-        PDF::SetFont('frankgothcnbt');
+		$name=$request->name;
+		$svg=urldecode($request->svg);
+		define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
+		define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
+		PDF::setImageScale(1.66);
+		PDF::setPrintHeader(false);
+		PDF::setPrintFooter(false);
+		PDF::SetFont('frankgothcnbt');
 		PDF::SetFont('myriad');
 		PDF::SetAutoPageBreak(TRUE);
 		$i=0;
@@ -2266,17 +2366,17 @@ class JobManagerController extends Controller
 //			
 			$i++;
 		}
-        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-        print_r(url('/storage/app/template/'.$name.'.pdf'));
-    } 
+		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+		print_r(url('/storage/app/template/'.$name.'.pdf'));
+	} 
 	
 	 /**
-     * This Function is used to generate barcode using java.
-     *
-     * @return path of barcode
-     */
-  	public function generateBarcodeTsl1(Request $request)
-    {
+	 * This Function is used to generate barcode using java.
+	 *
+	 * @return path of barcode
+	 */
+	public function generateBarcodeTsl1(Request $request)
+	{
 		$name=$request['name'];
 		$type=$request['type'];
 		$barcode=$request['barcode'];
@@ -2284,16 +2384,16 @@ class JobManagerController extends Controller
 		$tabula       = Config::get('tabula.bar_jar');
 		
 		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 33 13');
-        $info    = json_encode($info, true);
+		$info    = json_encode($info, true);
 		return $info;
-    }
+	}
 	/**
-     * This Function is used to generate barcode using java.
-     *
-     * @return path of barcode
-     */
-  	public function generateBarcodeTsl3(Request $request)
-    {
+	 * This Function is used to generate barcode using java.
+	 *
+	 * @return path of barcode
+	 */
+	public function generateBarcodeTsl3(Request $request)
+	{
 		$name=$request['name'];
 		$type=$request['type'];
 		$barcode=$request['barcode'];
@@ -2301,16 +2401,16 @@ class JobManagerController extends Controller
 		$tabula       = Config::get('tabula.bar_jar');
 		
 		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 33 13');
-        $info    = json_encode($info, true);
+		$info    = json_encode($info, true);
 		return $info;
-    }
+	}
 	/**
-     * This Function is used to generate barcode using java.
-     *
-     * @return path of barcode
-     */
-  	public function generateBarcodeEanBig(Request $request)
-    {
+	 * This Function is used to generate barcode using java.
+	 *
+	 * @return path of barcode
+	 */
+	public function generateBarcodeEanBig(Request $request)
+	{
 		$name=$request['name'];
 		$type=$request['type'];
 		$barcode=$request['barcode'];
@@ -2318,16 +2418,16 @@ class JobManagerController extends Controller
 		$tabula       = Config::get('tabula.bar_jar_big');
 		
 		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 50 16');
-        $info    = json_encode($info, true);
+		$info    = json_encode($info, true);
 		return $info;
-    }
+	}
 	/**
-     * This Function is used to generate barcode using java.
-     *
-     * @return path of barcode
-     */
-  	public function generateBarcodeItfBig(Request $request)
-    {
+	 * This Function is used to generate barcode using java.
+	 *
+	 * @return path of barcode
+	 */
+	public function generateBarcodeItfBig(Request $request)
+	{
 		$name=$request['name'];
 		$type=$request['type'];
 		$barcode=$request['barcode'];
@@ -2335,29 +2435,29 @@ class JobManagerController extends Controller
 		$tabula       = Config::get('tabula.bar_jar_big');
 		
 		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 50 16');
-        $info    = json_encode($info, true);
+		$info    = json_encode($info, true);
 		return $info;
-    }
+	}
 
 
-    public function scriptCheckOrder(){
-    	$erpOrderDetails = DB::table('erp_order_details')->select('order_qnty_table_name','order_qnty_table_id')->get();
-    	$count = 0 ; 
-    	foreach ($erpOrderDetails as $value) {
-    		$orderData = DB::table($value->order_qnty_table_name)->where('id',$value->order_qnty_table_id)->first();
-    		
-    		if(!empty($orderData)){
-    			echo "\n";
-    			echo "Exists";
-    			echo $orderData->id;
-    			echo $value->order_qnty_table_name;
-    		}
-    		else{
-    			echo "Not exists\n";
-    			echo $value->order_qnty_table_id;
-    			echo $value->order_qnty_table_name;
-    		}
-    	}
+	public function scriptCheckOrder(){
+		$erpOrderDetails = DB::table('erp_order_details')->select('order_qnty_table_name','order_qnty_table_id')->get();
+		$count = 0 ; 
+		foreach ($erpOrderDetails as $value) {
+			$orderData = DB::table($value->order_qnty_table_name)->where('id',$value->order_qnty_table_id)->first();
+			
+			if(!empty($orderData)){
+				echo "\n";
+				echo "Exists";
+				echo $orderData->id;
+				echo $value->order_qnty_table_name;
+			}
+			else{
+				echo "Not exists\n";
+				echo $value->order_qnty_table_id;
+				echo $value->order_qnty_table_name;
+			}
+		}
 		}
 		
 		/**
@@ -2399,144 +2499,144 @@ class JobManagerController extends Controller
 	
 
  public function printPdfTable(Request $request)
-    {
-         $name=$request->name;
-         $svg=urldecode($request->svg);
-         define ('PDF_FONT_NAME_MAIN', 'calibrib');
-         define ('PDF_FONT_NAME_DATA', 'calibrib');
+	{
+		 $name=$request->name;
+		 $svg=urldecode($request->svg);
+		 define ('PDF_FONT_NAME_MAIN', 'calibrib');
+		 define ('PDF_FONT_NAME_DATA', 'calibrib');
 //          print_r($svg);
-        PDF::setImageScale(1);
-        PDF::setPrintHeader(false);
-        PDF::setPrintFooter(false);
-        PDF::SetFont('calibrib');
-        PDF::AddPage();
+		PDF::setImageScale(1);
+		PDF::setPrintHeader(false);
+		PDF::setPrintFooter(false);
+		PDF::SetFont('calibrib');
+		PDF::AddPage();
 		
 		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
-        //PDF::RoundedRect(95, 255, 40, 30, 0.1, '1111', null, $style6);
-        //PDF::RoundedRect(140, 255, 40, 30, 0.1, '1111', 'null', $style6);
-        PDF::RoundedRect(10, 10, 150, 100, 0.000001, '1111', null, $style6);
-        PDF::RoundedRect(12.5, 12.5, 145, 95, 0.000001, '1111', null, $style6);
+		//PDF::RoundedRect(95, 255, 40, 30, 0.1, '1111', null, $style6);
+		//PDF::RoundedRect(140, 255, 40, 30, 0.1, '1111', 'null', $style6);
+		PDF::RoundedRect(10, 10, 150, 100, 0.000001, '1111', null, $style6);
+		PDF::RoundedRect(12.5, 12.5, 145, 95, 0.000001, '1111', null, $style6);
 		
 		//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
 		//PDF::RoundedRect(12.5, 12.5, 145, 95, 0, '0000');
-        $td_size="";
-        $td_col="";
-        $total=0;
-        $size=explode(',',$request->size);
-        $qty=explode(',',$request->qty);
-        $i=0;
+		$td_size="";
+		$td_col="";
+		$total=0;
+		$size=explode(',',$request->size);
+		$qty=explode(',',$request->qty);
+		$i=0;
 		$index_arr=array();
-        foreach($size as $val)
-        {
+		foreach($size as $val)
+		{
 			  if (!in_array($val, $index_arr)) 
 			  { 
 				   if($val != "")
 					{
-					    array_push($index_arr,$val);
+						array_push($index_arr,$val);
 						$td_size.="<td><br><br>".$val."</td>";
 						$td_col.="<td>".$qty[$i]."</td>";
 					} 
 			  } 
-           
-            $total+=$qty[$i];
-            $i++;
-        }
-          $tbl = '<table  border="1" style="text-align:center;">
-		  			<tr style="line-height:0.53">
-                          <td style="font-size:14px;text-align:center;line-height:0.45"><br><br>Size:</td>
-                          '.$td_size.'
-                          <td><br><br>Total<br></td>
-                          </tr>
-                      <tr>
-                          <td style="font-size:7.5px;line-height:2">ERCU</td>
-                          '.$td_col.'
-                          <td>'.$total.'</td>
-                          </tr>
-            </table>';
-        PDF::SetFillColor(255, 255, 255);
-        PDF::SetTextColor(0, 0, 0);
-        
-        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-        PDF::writeHTMLCell(147, '', '11.5', '55', $tbl, '', 1, 1, true, '', true);
-        
+		   
+			$total+=$qty[$i];
+			$i++;
+		}
+		  $tbl = '<table  border="1" style="text-align:center;">
+					<tr style="line-height:0.53">
+						  <td style="font-size:14px;text-align:center;line-height:0.45"><br><br>Size:</td>
+						  '.$td_size.'
+						  <td><br><br>Total<br></td>
+						  </tr>
+					  <tr>
+						  <td style="font-size:7.5px;line-height:2">ERCU</td>
+						  '.$td_col.'
+						  <td>'.$total.'</td>
+						  </tr>
+			</table>';
+		PDF::SetFillColor(255, 255, 255);
+		PDF::SetTextColor(0, 0, 0);
+		
+		PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		PDF::writeHTMLCell(147, '', '11.5', '55', $tbl, '', 1, 1, true, '', true);
+		
   
-        
-        $style = array(
-            'position' => '',
-            'align' => 'C',
-            'stretch' => false,
-            'fitwidth' => true,
-            'cellfitalign' => '',
-            'border' => false,
-            'hpadding' => 'auto',
-            'vpadding' => 'auto',
-            'fgcolor' => array(0,0,0),
-            'bgcolor' => false, //array(255,255,255),
-            'text' => true,
-            'font' => 'calibrib',
-            'fontsize' => 12,
-            'stretchtext' => 4
-        );
-         ///PDF::write1DBarcode('3531114195599', 'EAN13', '60', '72', '', 32, 0.45, $style, 'N');
+		
+		$style = array(
+			'position' => '',
+			'align' => 'C',
+			'stretch' => false,
+			'fitwidth' => true,
+			'cellfitalign' => '',
+			'border' => false,
+			'hpadding' => 'auto',
+			'vpadding' => 'auto',
+			'fgcolor' => array(0,0,0),
+			'bgcolor' => false, //array(255,255,255),
+			'text' => true,
+			'font' => 'calibrib',
+			'fontsize' => 12,
+			'stretchtext' => 4
+		);
+		 ///PDF::write1DBarcode('3531114195599', 'EAN13', '60', '72', '', 32, 0.45, $style, 'N');
 
-       
-        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-        print_r(url('/storage/app/template/'.$name.'.pdf'));
-        
-    }
+	   
+		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+		print_r(url('/storage/app/template/'.$name.'.pdf'));
+		
+	}
 
 	public function printPdf(Request $request)
-    {
+	{
 		 $name=$request->name;
-         $svg=urldecode($request->svg);
-         define ('PDF_FONT_NAME_MAIN', 'calibrib');
-         define ('PDF_FONT_NAME_DATA', 'calibrib');
+		 $svg=urldecode($request->svg);
+		 define ('PDF_FONT_NAME_MAIN', 'calibrib');
+		 define ('PDF_FONT_NAME_DATA', 'calibrib');
 //          print_r($svg);
-        PDF::setImageScale(1);
-        PDF::setPrintHeader(false);
-        PDF::setPrintFooter(false);
-        PDF::SetFont('calibrib');
-        PDF::AddPage();
+		PDF::setImageScale(1);
+		PDF::setPrintHeader(false);
+		PDF::setPrintFooter(false);
+		PDF::SetFont('calibrib');
+		PDF::AddPage();
 		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
-        //PDF::RoundedRect(95, 255, 40, 30, 0.1, '1111', null, $style6);
-        //PDF::RoundedRect(140, 255, 40, 30, 0.1, '1111', 'null', $style6);
-        PDF::RoundedRect(10, 10, 150, 100, 0.000001, '1111', null, $style6);
-        PDF::RoundedRect(12.5, 12.5, 145, 95, 0.000001, '1111', null, $style6);
-        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-        print_r(url('/storage/app/template/'.$name.'.pdf'));
-    } 
+		//PDF::RoundedRect(95, 255, 40, 30, 0.1, '1111', null, $style6);
+		//PDF::RoundedRect(140, 255, 40, 30, 0.1, '1111', 'null', $style6);
+		PDF::RoundedRect(10, 10, 150, 100, 0.000001, '1111', null, $style6);
+		PDF::RoundedRect(12.5, 12.5, 145, 95, 0.000001, '1111', null, $style6);
+		PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+		print_r(url('/storage/app/template/'.$name.'.pdf'));
+	} 
 
 
 
 
 	public function printPdfSmall(Request $request)
-    {
+	{
 		 
 		  $name=$request->name;
 		 $svgarr = explode(',_',$request->svg);
-         //$svg=urldecode($request->svg);
-         define ('PDF_FONT_NAME_MAIN', 'calibrib');
-         define ('PDF_FONT_NAME_DATA', 'calibrib');
+		 //$svg=urldecode($request->svg);
+		 define ('PDF_FONT_NAME_MAIN', 'calibrib');
+		 define ('PDF_FONT_NAME_DATA', 'calibrib');
 //          print_r($svg);
-        PDF::setImageScale(1.66);
-        PDF::setPrintHeader(false);
-        PDF::setPrintFooter(false);
-        PDF::SetFont('calibrib');
+		PDF::setImageScale(1.66);
+		PDF::setPrintHeader(false);
+		PDF::setPrintFooter(false);
+		PDF::SetFont('calibrib');
 		PDF::AddPage('P', 'A4');
 		//PDF::RoundedRect(10, 10, 100, 70, 0, '0000');
 		//PDF::RoundedRect(12.5, 12.5, 95, 65, 0, '0000');
 		 
 		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
-        PDF::RoundedRect(10, 10, 100, 70, 0.000001, '1111', null, $style6);
-        PDF::RoundedRect(12.5, 12.5, 95, 65, 0.000001, '1111', null, $style6);
+		PDF::RoundedRect(10, 10, 100, 70, 0.000001, '1111', null, $style6);
+		PDF::RoundedRect(12.5, 12.5, 95, 65, 0.000001, '1111', null, $style6);
 		 
 //		PDF::SetAutoPageBreak(TRUE);
 		$i=0;
 		$j=0;
 		$yy=12.5;
 		foreach($svgarr as $value)
-        {
+		{
 			$svg=urldecode($value);
 			
 			if($i == 3)
@@ -2546,7 +2646,7 @@ class JobManagerController extends Controller
 				//PDF::RoundedRect(12.5, 12.5, 95, 65, 0, '0000');
 				
 				PDF::RoundedRect(10, 10, 100, 70, 0.000001, '1111', null, $style6);
-        		PDF::RoundedRect(12.5, 12.5, 95, 65, 0.000001, '1111', null, $style6);
+				PDF::RoundedRect(12.5, 12.5, 95, 65, 0.000001, '1111', null, $style6);
 				$yy=12.5;
 				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 				$i = 0;
@@ -2557,7 +2657,7 @@ class JobManagerController extends Controller
 				//PDF::RoundedRect(12.5, 102.5, 95, 65, 0, '0000');
 				
 				PDF::RoundedRect(10, 100, 100, 70, 0.000001, '1111', null, $style6);
-        		PDF::RoundedRect(12.5, 102.5, 95, 65, 0.000001, '1111', null, $style6);
+				PDF::RoundedRect(12.5, 102.5, 95, 65, 0.000001, '1111', null, $style6);
 				$yy=12.5;
 				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 				
@@ -2567,7 +2667,7 @@ class JobManagerController extends Controller
 				//PDF::RoundedRect(10, 100, 100, 70, 0, '0000');
 				//PDF::RoundedRect(12.5, 102.5, 95, 65, 0, '0000');
 				PDF::RoundedRect(10, 100, 100, 70, 0.000001, '1111', null, $style6);
-        		PDF::RoundedRect(12.5, 102.5, 95, 65, 0.000001, '1111', null, $style6);
+				PDF::RoundedRect(12.5, 102.5, 95, 65, 0.000001, '1111', null, $style6);
 				$yy += 90;
 				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			}
@@ -2576,17 +2676,237 @@ class JobManagerController extends Controller
 				//PDF::RoundedRect(10, 190, 100, 70, 0, '0000');
 				//PDF::RoundedRect(12.5, 192.5, 95, 65, 0, '0000');
 				PDF::RoundedRect(10, 190, 100, 70, 0.000001, '1111', null, $style6);
-        		PDF::RoundedRect(12.5, 192.5, 95, 65, 0.000001, '1111', null, $style6);
+				PDF::RoundedRect(12.5, 192.5, 95, 65, 0.000001, '1111', null, $style6);
 				$yy += 90;
 				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			}
 			$i++;
 			$j++;
 		 }
-        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-        print_r(url('/storage/app/template/'.$name.'.pdf'));
-    }
+		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+		print_r(url('/storage/app/template/'.$name.'.pdf'));
+	}
 
+	/**
+	 * Print Preview For Hang Tag
+	 *
+	 * @return pdf
+	 */
+	
+	public function printHangPdf(Request $request)
+	{
+		$svgarrfront=explode(',_',$request->svg); 
+		//$svg1=urldecode($request->svg1); 
+		$svgarr=explode(',_',$request->svgRoot); 
+		define ('PDF_FONT_NAME_MAIN', 'calibrib');
+		define ('PDF_FONT_NAME_DATA', 'calibrib');
+		PDF::setImageScale(1);
+		PDF::setPrintHeader(false);
+		PDF::setPrintFooter(false);
+		PDF::SetFont('alternategothic2bt');
+		PDF::AddPage();
+		//PDF::RoundedRect(10, 10, 61, 131, 0, '0000');
+		//PDF::SetFillColor(255, 255, 255);
+		//PDF::SetTextColor(0, 0, 0);
+		//PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, '49', '117', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+		PDF::SetFont('arial');
+		$count=0;
+		$xx=12.5;
+		$i=0;
+		$yy=12.5;
+		$arr_mer=array_merge($svgarrfront,$svgarr);
+		$fir=0;
+		$sec = count($arr_mer) / 2;
+		foreach($arr_mer as $value)
+		{
+			$svg=urldecode($value);
+			//PDF::RoundedRect(80, 10, 61, 131, 0, '0000');
+			//PDF::ImageSVG('@' . $svg,  $x=$xx, $y=12.5, '49', '117', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			
+			
+			if($count%2==0)  
+			{  
+				PDF::ImageSVG('@' . urldecode($arr_mer[$fir]),  $x=$xx, $y=$yy, '49', '117', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				$fir++;
+			}  
+			else  
+			{  
+				PDF::ImageSVG('@' . urldecode($arr_mer[$sec]),  $x=$xx, $y=$yy, '49', '117', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				$sec++;
+			}   
+			
+			$xx += 65;
+			$i++;
+			
+			if($i == 3)
+			{
+				//PDF::AddPage();
+				//$i=0;
+				$xx=12.5;
+				$yy=150;
+			}
+			
+			if($i == 6)
+			{
+				PDF::AddPage();
+				$i=0;
+				$xx=12.5;
+				$yy=12.5;
+			}
+			$count++;
+		}
+		
+		PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
+		
+		exec("gs -dSAFER -dBATCH -dNOPAUSE -dNOCACHE -sDEVICE=pdfwrite -sColorConversionStrategy=CMYK -dProcessColorModel=/DeviceCMYK -sOutputFile=".public_path('/storage/app/template/solid1_cmyk.pdf')." ".public_path('/storage/app/template/solid1.pdf'));
+		
+//        print_r(url('/storage/app/template/'.$name.'_cmyk.pdf'));
+		
+		print_r(url('/storage/app/template/solid1.pdf'));
+	} 	
+
+
+   public function printWashPdf(Request $request)
+	{			
+
+		$svgarr = explode(',_',$request->svg);
+		//$svg=urldecode($request->svg);
+		
+		// $made_in_select=$request->made_in_select;
+
+
+	
+		$selectedWashCare = OrchestraWashCare::where('id',$request->parentId)->first();
+		
+
+		// dd($selectedWashCare);
+
+		$orchestra_countries = DB::table('orchestra_countries')->select('*')->where('id',$selectedWashCare->made_in_id)->get();
+		
+				// dd($orchestra_countries);
+		// $care_instruction_select = explode(',',$request->care_instruction_select_fin); 
+		
+		$orchestra_care_instruction = DB::table('orchestra_care_instruction')
+					->select('*')->where('id',$selectedWashCare->care_instruction_id)->get();
+		
+
+		// dd($orchestra_care_instruction);
+		//print_r($orchestra_countries);
+		
+		//print_r($orchestra_countries);
+		
+		$svg=urldecode($request->svg); 
+		$svg_back=urldecode($request->svg_back); 
+		$svg_middle=urldecode($request->svg_middle); 
+		define ('PDF_FONT_NAME_MAIN', 'calibri');
+		define ('PDF_FONT_NAME_DATA', 'calibri');
+		PDF::setImageScale(1);
+		PDF::setPrintHeader(false);
+		PDF::setPrintFooter(false);
+		PDF::SetFont('tahoma', '',  1.5, '', true);
+		PDF::AddPage();
+		//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+		//PDF::SetFillColor(255, 255, 255);
+		//PDF::SetTextColor(0, 0, 0);
+		
+		
+	
+		$tbl='<p  style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri;line-height:1.25">Fabriqué en - Made in - <br> Fabricado en - <br>Fabricado em - <br>Fabbricato in - <br>Vervaardigd in  - <br>Hergestellt in -<br><span style="font-family:Tahoma">  ﺻﻨﻊ ب </span>-<br> παράγεται στην</p>';
+		
+		$tbl1='<p  style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$orchestra_countries{0}->french.' - '.$orchestra_countries{0}->english.' - '.$orchestra_countries{0}->spanish.' - '.$orchestra_countries{0}->portuguese.' - <br>'.$orchestra_countries{0}->italian.' - '.$orchestra_countries{0}->dutch.' - '.$orchestra_countries{0}->german.' - <br><span style="font-family:Tahoma">'.$orchestra_countries{0}->arabic.'</span> - '.$orchestra_countries{0}->greek.'</p>';
+		$tbl2="";
+		foreach($orchestra_care_instruction as $value)
+		{
+			$tbl2.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$value->french.' - '.$value->english.' - '.$value->spanish.' - '.$value->portuguese.' - '.$value->italian.' - '.$value->dutch.' - '.$value->german.' - <span style="font-family:Tahoma">'.$value->arabic.'</span> - '.$value->greek.'</p><br><br>';
+		}
+		// dd($parentTable_id);
+		//print_r($tbl2);
+		$tbl3="";
+		$composition = DB::table('orchestra_wash_care_composition')
+						->where('owcl_id',$request->parentId)
+						->select('parts_id','composition_id')
+						->get()->toArray();
+		// dd($composition);
+		// $composition = json_decode($request->composition);
+		//print_r($composition);
+		foreach($composition as $key => $value)
+		{
+			// dd($value->parts_id);
+			// $express_value = explode('_',$value[0]);
+			// if($express_value[0] != "Select Option")
+			{
+					// $exp_value = explode('_',$value[0]);
+					$orchestra_parts = DB::table('orchestra_parts')->select('*')->where('id',$value->parts_id)->get();
+				
+					$tbl3.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%)">'.$orchestra_parts{0}->french.' - '.$orchestra_parts{0}->english.' - '.$orchestra_parts{0}->spanish.' - '.$orchestra_parts{0}->portuguese.' - '.$orchestra_parts{0}->italian.' - '.$orchestra_parts{0}->dutch.' - '.$orchestra_parts{0}->german.' - <span>'.$orchestra_parts{0}->arabic.'</span> - '.$orchestra_parts{0}->greek.'</p><br><br>';
+			}
+			// foreach($value as $key1 => $value1)
+   //          {
+			// 	$exp_val = explode('_',$value1);
+			// 	$orchestra_compositions = DB::table('orchestra_compositions')->select('*')->where('english',$exp_val[1])->get();
+				
+			// 	$tbl3.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$exp_val[2].'% '.$orchestra_compositions{0}->french.' - '.$orchestra_compositions{0}->english.' - '.$orchestra_compositions{0}->spanish.' - '.$orchestra_compositions{0}->portuguese.' - '.$orchestra_compositions{0}->italian.' - '.$orchestra_compositions{0}->dutch.' - '.$orchestra_compositions{0}->german.' - <span style="font-family:Tahoma">'.$orchestra_compositions{0}->arabic.'</span> - '.$orchestra_compositions{0}->greek.'</p><br><br>';
+			// }
+		}
+		$xx=12.5;
+		$i=0;
+		foreach($svgarr as $value)
+		{
+			$svg=urldecode($value);
+			PDF::ImageSVG('@' . $svg, $x=$xx, $y=12.5, '25.5', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			PDF::SetFillColor(255, 255, 255);
+			PDF::SetTextColor(0, 0, 0);
+			PDF::writeHTMLCell('25.5', '40', $xx, '135', $tbl, '', 0, 0, true, 'C', true);
+			PDF::writeHTMLCell('25.5', '40', $xx, '153.5', $tbl1, '', 0, 0, true, 'C', true);
+			$xx += 37.5;
+			$i++;
+			
+			if($i == 5)
+			{
+				PDF::AddPage();
+				$i=0;
+				$xx=12.5;
+			}
+		}
+		PDF::ImageSVG('@' . $svg_back, $xx, $y=12.5, '25.5', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		PDF::writeHTMLCell('22', '40', $xx + 2.25, '25', $tbl2, '', 0, 0, true, 'C', true);
+		PDF::writeHTMLCell('25', '40', $xx + 1, '110', $tbl3, '', 0, 0, true, 'C', true);
+		PDF::AddPage();
+		PDF::ImageSVG('@' . $svg_middle, $x=50, $y=12.5, '55.5', '82.5', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+		//print_r($i);
+//		if($i == 0)
+//		{
+//			PDF::ImageSVG('@' . $svg_back, $x=12.5, $y=12.5, '25', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+//      		PDF::ImageSVG('@' . $svg_middle, $x=50, $y=12.5, '55', '82.5', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+//			PDF::writeHTMLCell('22', '40', '14', '25', $tbl2, '', 1, 1, true, 'C', true);
+//			PDF::writeHTMLCell('25', '40', '13.5', '110', $tbl3, '', 1, 1, true, 'C', true);
+//
+//		}
+//		else if($i == 1)
+//		{
+//			PDF::ImageSVG('@' . $svg_back, $x=$xx, $y=12.5, '25', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+//      		PDF::ImageSVG('@' . $svg_middle, $x=$xx+37.5, $y=12.5, '55', '82.5', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+//			PDF::writeHTMLCell('22', '40', $xx+1.5, '25', $tbl2, '', 1, 1, true, 'C', true);
+//			PDF::writeHTMLCell('25', '40', $xx+0.5, '110', $tbl3, '', 1, 1, true, 'C', true);
+//		}
+//		else if($i == 2)
+//		{
+//			PDF::ImageSVG('@' . $svg_back, $x=$xx, $y=12.5, '25', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+//      		PDF::ImageSVG('@' . $svg_middle, $x=$xx+37.5, $y=12.5, '55', '82.5', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+//			PDF::writeHTMLCell('22', '40', $xx+1.5, '25', $tbl2, '', 1, 1, true, 'C', true);
+//			PDF::writeHTMLCell('25', '40', $xx+0.5, '110', $tbl3, '', 1, 1, true, 'C', true);
+//		}
+		
+	  
+		
+//		PDF::writeHTMLCell('8', '10', '16.2', '61', $tbl, '', 1, 1, true, 'C', true);
+		
+	
+		PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
+		print_r(url('/storage/app/template/solid1.pdf'));
+	}
 		/**
 		 * Function to update uuid value for existing data in erp_order_details table.
 		 * @author <Praveen>
