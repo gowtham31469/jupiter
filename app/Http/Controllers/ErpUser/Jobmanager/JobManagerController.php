@@ -129,7 +129,7 @@ class JobManagerController extends Controller
 				}
 				$i++;
 			}
-			
+				// dd($new_orders);
 			$orders_erp = array();
 			foreach($new_orders as $key => $values)
 			{
@@ -144,7 +144,7 @@ class JobManagerController extends Controller
 											->join('buyers', 'erp_orders.buyer_id', 'buyers.id')
 											->join('erp_status', 'erp_orders.status', 'erp_status.id')
 											->join($this->buyer_name.'_template', $this->buyer_name.'_template.item_id', 'erp_order_details.template_id')
-											->where('erp_order_details.template_id', '=', $valuess)
+											// ->where('erp_order_details.template_id', '=', $valuess)
 											// ->where('erp_orders.status', '=', $erp_status_id)
 											->where('erp_order_details.deleted_at', null)
 											->where('erp_order_details.status', '=', $erp_status_id)
@@ -230,7 +230,7 @@ class JobManagerController extends Controller
 			$parentTable_id = DB::table($order_Qty_table)
 							->where('id',$order_details[0]->order_qnty_table_id)
 							->first()->$target_id;
-	// dd($parentTable_id);
+
 			switch ($ordertable) 
 			{	
 
@@ -2809,6 +2809,7 @@ class JobManagerController extends Controller
 		//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
 		//PDF::SetFillColor(255, 255, 255);
 		//PDF::SetTextColor(0, 0, 0);
+		
 		
 	
 		$tbl='<p  style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri;line-height:1.25">Fabriqué en - Made in - <br> Fabricado en - <br>Fabricado em - <br>Fabbricato in - <br>Vervaardigd in  - <br>Hergestellt in -<br><span style="font-family:Tahoma">  ﺻﻨﻊ ب </span>-<br> παράγεται στην</p>';

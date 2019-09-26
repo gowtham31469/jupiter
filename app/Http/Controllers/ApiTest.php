@@ -42,6 +42,13 @@ class ApiTest extends Controller
    {
 
 
+
+DB::table('orchestra_item_master')->where('parent_id', 2)
+            ->update(['company_id' => 2]);
+
+dd("done");
+
+
 $t = OrchestraWashCare::with(['washcarelabelQty' => function ($query) {
         $query->leftJoin('orchestra_size_chart as osc', 'osc.age', 'orchestra_wash_care_label_orders_qty.size');
     }])->where('orchestra_wash_care_label_orders.id',65)->get();

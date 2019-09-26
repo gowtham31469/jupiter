@@ -64,7 +64,7 @@ class PoManagerController extends Controller
 				session()->put('company', $company_id->id);
 				session()->put('company_name', strtolower( str_replace(' ','',$company_id->name)) );
 			}
-			
+	
 			if($customer_id != 1)
 			{
 				$templates   = 		DB::table('erpusers_template_mapping')
@@ -100,7 +100,6 @@ class PoManagerController extends Controller
 		
 		 $orders_erp = array();
 		
-		
 		 foreach($new_orders as $key => $values)
 		 {
 			foreach($values as $valuess)
@@ -110,14 +109,14 @@ class PoManagerController extends Controller
 				$erp_order_details = Erp::join('erp_order_details','erp_order_details.erp_order_id','erp_orders.id')
 										 ->join('customers','erp_orders.customer_id','customers.id')
 										 ->join('erp_status','erp_orders.status','erp_status.id')
-										 ->where('erp_order_details.template_id',$valuess)
+										 // ->where('erp_order_details.template_id',$valuess)
 										 ->whereIn('erp_orders.buyer_id', $buyers)
 										 ->where('erp_orders.status',1)
 										 ->orWhere('erp_orders.status',2)
 										 ->groupBy('erp_orders.id','customers.company_name','erp_status.status_name','erp_order_details.created_at')
 										 ->select('erp_orders.*','customers.company_name','erp_status.status_name','erp_order_details.created_at as po_created_date')
 										 ->get();
-										
+						// dd($erp_order_details);			
 				if(count($erp_order_details) > 0)
 				{
 					foreach($erp_order_details as $erp_order_det)
@@ -151,7 +150,6 @@ class PoManagerController extends Controller
 					$hold_orders_count++;
 				}
 		}
-
 		return view('erp.Pomanager.poverify',['orders' => $orders_erp,'companies' => $companies,'new_orders' => $new_orders_count,'hold_orders' => $hold_orders_count]);
 	} 
 	

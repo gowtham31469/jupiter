@@ -959,7 +959,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
 
                     \App\OrchestraItemMaster::create([
                         'id'  => 98,
-                        'company_id' => 2,
+                        'company_id' => 1,
                         'parent_id' => 90,    
                         'item_name' => "Carton & Polybag Stickers",
                         'ref_no' => "",
@@ -967,7 +967,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 99,
-                        'company_id' => 2,
+                        'company_id' => 1,
                         'parent_id' => 98,    
                         'item_name' => "Solid Carton Stickers",
                         'ref_no' => "",
@@ -977,7 +977,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 100,
-                        'company_id' => 2,
+                        'company_id' => 1,
                         'parent_id' => 98,    
                         'item_name' => "Solid Polybag Stickers",
                         'ref_no' => "",
@@ -988,7 +988,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 101,
-                        'company_id' => 2,
+                        'company_id' => 1,
                         'parent_id' => 98,    
                         'item_name' => "Standard Carton Stickers",
                         'ref_no' => "",
@@ -998,7 +998,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                     ]);
                     \App\OrchestraItemMaster::create([
                         'id'  => 102,
-                        'company_id' => 2,
+                        'company_id' => 1,
                         'parent_id' => 98,    
                         'item_name' => "Standard Polybag Stickers",
                         'ref_no' => "",

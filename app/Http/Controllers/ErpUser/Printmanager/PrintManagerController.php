@@ -299,7 +299,11 @@ class PrintManagerController extends Controller
                 	    });
 
 					
-// dd($jobcard_id_list);
+
+ if($jobcard_id_list->first()->order_qnty_table_name ==  "orchestra_heat_transfer_orders_qty")
+                	    {
+                	    	return response()->json(['error'=> false,'message' =>'Print is currently not available for heat transfer orders', 'erp_orders_list' => []], 200);
+                	    }
                 	    if($jobcard_id_list->first()->order_qnty_table_name ==  "orchestra_hang_tag_orders_qty")
                 	    {
 
