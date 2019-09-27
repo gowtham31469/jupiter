@@ -819,7 +819,7 @@ class OrderStatusController extends Controller
                 $data_array['buyer_id'] = $tesco_buyer_id->id;
                 $data_array['id'] = $value[1];
                 $data_array['created_by']= Auth::guard('web_customer')->id(); 
-                $updated_erp_table = $erp_obj->updateTescoErpOrders($data_array);
+                $erp_obj->updateTescoErpOrders($data_array);
             }
             $result = response()->json(['error'=> false,'message' =>'success'],200); 
            
@@ -889,7 +889,7 @@ class OrderStatusController extends Controller
                         $data_array['buyer_id'] = $tesco_buyer_id->id;
                         $data_array['id'] = $value[1];
                         $data_array['created_by']= Auth::guard('web_customer')->id(); 
-                        $updated_erp_table = $erp_obj->updateTescoErpOrders($data_array);
+                        $erp_obj->updateTescoErpOrders($data_array);
                   }
             }
             $result = response()->json(['error'=> false,'message' =>'success'],200);
