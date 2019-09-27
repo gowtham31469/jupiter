@@ -347,6 +347,7 @@ Route::post('admin/orchestra/order-management/set_size_label', 'Admin\Orchestra\
 Route::post('admin/orchestra/order-management/remove_main_label', 'Admin\Orchestra\OrderManagementCntrl@removeMainLabel');
 Route::post('admin/orchestra/order-management/remove_wash_label', 'Admin\Orchestra\OrderManagementCntrl@removeWashLabel');
 Route::post('admin/orchestra/order-management/set_wash_label', 'Admin\Orchestra\OrderManagementCntrl@setWashLabel');
+Route::post('admin/orchestra/order-management/set_wash_labelos', 'Admin\Orchestra\OrderManagementCntrl@setWashLabelOs');
 Route::post('admin/orchestra/order-management/set_solid_stickers', 'Admin\Orchestra\OrderManagementCntrl@setSolidStickers');
 Route::post('admin/orchestra/order-management/set_solid_stickers_os', 'Admin\Orchestra\OrderManagementCntrl@setSolidStickersOs');
 Route::post('admin/orchestra/order-management/set_solid_poly_bag_stickers_os', 'Admin\Orchestra\OrderManagementCntrl@setSolidPolyBagStickersOs');
@@ -790,17 +791,42 @@ Route::post('customer/orchestra/order-management/order-status', 'Customer\Orches
 Route::post('customer/orchestra/order-management/label-order-details', 'Customer\Orchestra\OrderController@labelOrderDetails');
 Route::post('customer/orchestra/order-management/sticker-order-details', 'Customer\Orchestra\OrderController@stickerOrderDetails');
 Route::post('customer/orchestra/order-management/set_hang_tag', 'Customer\Orchestra\OrderController@setHangTag');
+
+Route::post('customer/orchestra/order-management/set_heat_transfer', 'Customer\Orchestra\OrderController@setHeatTransfer');
+
 Route::post('customer/orchestra/order-management/set_special_tag', 'Customer\Orchestra\OrderController@setSpecialTag');
 Route::post('customer/orchestra/order-management/set_main_label', 'Customer\Orchestra\OrderController@setMainLabel');
+
+Route::post('customer/orchestra/order-management/set_size_label', 'Customer\Orchestra\OrderController@setSizeLabel');
+
 Route::post('customer/orchestra/order-management/remove_main_label', 'Customer\Orchestra\OrderController@removeMainLabel');
 Route::post('customer/orchestra/order-management/remove_wash_label', 'Customer\Orchestra\OrderController@removeWashLabel');
 Route::post('customer/orchestra/order-management/set_wash_label', 'Customer\Orchestra\OrderController@setWashLabel');
+Route::post('customer/orchestra/order-management/set_wash_labelos', 'Customer\Orchestra\OrderController@setWashLabelOs');
+
 Route::post('customer/orchestra/order-management/set_solid_stickers', 'Customer\Orchestra\OrderController@setSolidStickers');
 Route::post('customer/orchestra/order-management/set_standard_stickers', 'Customer\Orchestra\OrderController@setStandardStickers');
+
+
+
+Route::post('customer/orchestra/order-management/reorder', 'Customer\Orchestra\OrderController@reOrder');
+Route::post('customer/orchestra/order-management/reorder-artwork', 'Customer\Orchestra\OrderController@reOrderArtwork');
+Route::post('customer/orchestra/order-management/extra-quantity', 'Customer\Orchestra\OrderController@extraQuantity');
+
+
+Route::post('customer/orchestra/order-management/po_select_wcl', 'Customer\Orchestra\OrderController@poSelectWcl');
+
+Route::post('customer/orchestra/order-management/set_solid_stickers_os', 'Customer\Orchestra\OrderController@setSolidStickersOs');
+Route::post('customer/orchestra/order-management/set_solid_poly_bag_stickers_os', 'Customer\Orchestra\OrderController@setSolidPolyBagStickersOs');
+Route::post('customer/orchestra/order-management/set_standard_carton_stickers_os', 'Customer\Orchestra\OrderController@setStandardCartonStickersOs');
+Route::post('customer/orchestra/order-management/set_standard_poly_bag_stickers_os', 'Customer\Orchestra\OrderController@setStandardPolyBagStickersOs');
+
+
 Route::get('customer/orchestra/order-management/get-existing-label-orders-po', 'Customer\Orchestra\OrderController@getExistingLabelOrdersPo');
 Route::get('customer/orchestra/order-management/get-existing-standard-sticker-orders-po', 'Customer\Orchestra\OrderController@getExistingStandardStickerOrdersPo');
 Route::get('customer/orchestra/order-management/get-existing-solid-sticker-orders-po', 'Customer\Orchestra\OrderController@getExistingSolidStickerOrdersPo');
 Route::get('customer/orchestra/order-management/get-existing-label-orders-status-po', 'Customer\Orchestra\OrderController@getExistingLabelOrderStatusPo');
+
 Route::post('customer/orchestra/order-management/set-po-number', 'Customer\Orchestra\OrderController@setPONumber');
 Route::post('customer/orchestra/set-po-file', 'Customer\Orchestra\OrderController@setCustomerPOFile');
 Route::Post('customer/orchestra/order-management/map-label-orders-po', 'Customer\Orchestra\OrderController@mapLabelOrdersPo');

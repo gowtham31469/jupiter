@@ -110,7 +110,8 @@ function orderStatus() {
                                         $('#new_po_file_error_status').addClass('hidden')
                                         $('#new_po_error_length_status').addClass('hidden');
                                         $('#po-file-upload-group').find('#exist_artwork_div_status ul').html("");
-                                        var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_poly_bag_sticker_orders)))))));
+                                         var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_poly_bag_sticker_orders.concat(data.orchestra_size_label_orders.concat(data.orchestra_heat_transfer_orders)))))))));
+										
                                         var coun = 0;
                                         var options = "<option>Select PO</option>";
                                         var old_po = ""
@@ -2020,6 +2021,7 @@ function jsbarcodestdpolyOs(code, id, svgDoc) {
 
 function hangtagmodalOs(data) {
     var order_details = data.order_details;
+    var orchestra_hang_tag_orders_data = data.orchestra_hang_tag_orders;
     var tr = "";
     $qu = 0;
     if (data.orchestra_hang_tag_orders != "") {
@@ -2043,6 +2045,7 @@ function hangtagmodalOs(data) {
 		$save_button_class="";
     }
     var ttots = 0;
+    var ttots_sum = 0;
     $.each(data.order_details, function (index, value) {
         if (data.orchestra_hang_tag_orders != "") {
 
@@ -2050,8 +2053,9 @@ function hangtagmodalOs(data) {
         } else {
             $hang_tag_count = "";
         }
-        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)"  type="number" class="form-control  input-sm tot_qty_tablehang" value="' + $hang_tag_count + '" required placeholder="Hang Tag Count"><div class="help-block with-errors"></div></div></td></tr>';
+        tr += '<tr><input type="hidden" value="' + value.Color_Code + '" class="size_id"><input type="hidden" value="' + value.id + '" class="main_id"><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)"  type="number" class="form-control  input-sm tot_qty_tablehang" data-required-error="Required" value="' + $hang_tag_count + '" required placeholder="Hang Tag Count"><div class="help-block with-errors"></div></div></td></tr>';
         ttots += parseInt($hang_tag_count);
+		ttots_sum += parseInt(value.Sum);
         $qu++;
     });
 	
@@ -2064,7 +2068,8 @@ function hangtagmodalOs(data) {
             $hang_cm = "";
 			$hang_in = "";
         }
-		var sizebox='<div class="form-group has-feedback"><label>Enter Size in Cm</label><input onkeypress="return checkNumbersOnly(event)" type="text" maxlength="3" class="form-control input-sm onesizecm" value="'+$hang_cm+'" required="" placeholder="Enter Size in Cm"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label>Enter Size in inches</label><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control input-sm onesizein" maxlength="3" value="'+$hang_in+'" placeholder="Enter Size in inches"><div class="help-block with-errors"></div></div>';
+		//<div class="form-group has-feedback"><label>Enter Size in Cm</label><input onkeypress="return checkNumbersOnly(event)" type="text" maxlength="3" class="form-control input-sm onesizecm" value="'+$hang_cm+'" required="" placeholder="Enter Size in Cm"><div class="help-block with-errors"></div></div>
+		var sizebox='';
 	}
 	else
 	{
@@ -2083,7 +2088,7 @@ function hangtagmodalOs(data) {
     $.each(data.orchestra_template_front, function (index, value) {
         option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
     });
-    $('.top-content').append('<form id="hangtagform" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="left-panelos col-md-8"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="hang_template_error" class="hidden" style="color:red">Please Select the Template</label>  <div><input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree1" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top: 15px;"></div><div class="help-block with-errors"></div></div>'+sizebox+'</div><div class="col-md-4"><h4>Front</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr><div class="section-1 sections"><div class="sample-artwork" style="text-align:center"></div></div></div><div class="col-md-4"><h4>Back</h4><hr><div class="section-1 sections text-center" ><input type="hidden" value="' + data.orchestra_template_id + '" id="hang_tag_id"><div class="sample_back"></div><label style="margin-top:15px">Hang Tag Print Date : ' + data.order_details[0].HangTag_Print_Date + '</label><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max scroll"> <h4>Quantity Info for Hang Tag</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal" id="hang_tag_table"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentagehang" onkeypress="return checkNumbersOnly(event)"  style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td >' + data.total_qty + '</td><td class="text-center tot_qty_tablehang_fin">' + ttots + '</td></tr></tbody></table></div> <span id="error_msg_alert" style="color:red;"></span><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_hang_button" style="margin-left:10px">Update</button> <button class="btn btn-default pull-right input-sm" type="button" id="hangclose">Close</button><button type="button" class="btn btn-primary '+$print_button_class+'" id="print_hang_button" onclick=printHangDiv("svg2","'+data.order_details[0].Licence_Code+'")>Print</button> </div> </div>  <div class="backdrop"></div></form>');
+    $('.top-content').append('<form id="hangtagform" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="left-panelos col-md-8"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="hang_template_error" class="hidden" style="color:red">Please Select the Template</label>  <div><input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree1" style="height: calc(100vh - 260px);overflow-y: scroll;margin-top: 15px;"></div><div class="help-block with-errors"></div></div>'+sizebox+'</div><div class="col-md-4"><h4>Front</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr><div class="section-1 sections"><div class="sample-artwork" style="text-align:center"></div></div></div><div class="col-md-4"><h4>Back</h4><hr><div class="section-1 sections text-center" ><input type="hidden" value="' + data.orchestra_template_id + '" id="hang_tag_id"><div class="sample_back"></div><label style="margin-top:15px">Hang Tag Print Date : ' + data.order_details[0].HangTag_Print_Date + '</label><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max scroll"> <h4>Quantity Info for Hang Tag</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal" id="hang_tag_table"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty</th><th><label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentagehang" onkeypress="return checkNumbersOnly(event)"  style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td >' + ttots_sum + '</td><td class="text-center tot_qty_tablehang_fin">' + ttots + '</td></tr></tbody></table></div><span id="error_msg_alert" style="color:red;"></span> <button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_hang_button" style="margin-left:10px">Update</button> <button class="btn btn-default pull-right input-sm" type="button" id="hangclose">Close</button><button type="button" class="btn btn-primary '+$print_button_class+'" id="print_hang_button" onclick=printHangDiv("svg2","'+data.order_details[0].Licence_Code+'")>Print</button> </div> </div>  <div class="backdrop"></div></form>');
 
 
 //$('.left').removeClass('disabled')
@@ -2097,7 +2102,7 @@ function hangtagmodalOs(data) {
         $('#hangtagform .tot_qty_tablehang_fin').text(tot_qty_tablehang_carton_final);
     });
 	
-	$('.extra_percentagehang').keyup(function () {
+	 $('.extra_percentagehang').keyup(function () {
 		
         
         var tot_qty_tablehang_carton_final = 0;
@@ -2123,25 +2128,25 @@ function hangtagmodalOs(data) {
 
     })
 	
-	$('#hangtagform .onesizein').keyup(function () {
-		
-		var inches=$(this).val();
-        var mySVG = document.getElementById("svg2");
-		var svgDoc;
-		svgDoc = mySVG.contentDocument;
-		svgDoc.getElementById("in").innerHTML = inches;
-
-		
-    });
-	$('#hangtagform .onesizecm').keyup(function () {
-		
-		var cm=$(this).val();
-        var mySVG = document.getElementById("svg2");
-		var svgDoc;
-		svgDoc = mySVG.contentDocument;
-		svgDoc.getElementById("cm").innerHTML = cm;
-		
-    });
+//	$('#hangtagform .onesizein').keyup(function () {
+//		
+//		var inches=$(this).val();
+//        var mySVG = document.getElementById("svg2");
+//		var svgDoc;
+//		svgDoc = mySVG.contentDocument;
+//		svgDoc.getElementById("in").innerHTML = inches;
+//
+//		
+//    });
+//	$('#hangtagform .onesizecm').keyup(function () {
+//		
+//		var cm=$(this).val();
+//        var mySVG = document.getElementById("svg2");
+//		var svgDoc;
+//		svgDoc = mySVG.contentDocument;
+//		svgDoc.getElementById("cm").innerHTML = cm;
+//		
+//    });
 
     $("#clickmehang").click(function () {
         // $('.sample-artwork').html("")
@@ -2156,7 +2161,6 @@ function hangtagmodalOs(data) {
         $("#hangtagform .right-panelos").removeClass('active');
         $("#hangtagform .backdrop").removeClass('active');
         $('#hangtagform .scalable').removeClass('active');
-		//$('.top-content').html('');
     })
 
     $('#tree1').jstree({
@@ -2191,7 +2195,8 @@ function hangtagmodalOs(data) {
     });
     //Show Template when tree loads 
     $("#tree1").on("loaded.jstree", function (e, data) {
-        $('#tree1').jstree(true).select_node($template_front_id);
+		$('#tree1').jstree(true).select_node($template_front_id);
+		var node = $("#tree1").jstree('get_selected', true)[0].text;
         var ids = $(this).parent().parent().parent().parent().parent().attr('id');
         if ($template_front_id != "") {
             var buyer = localStorage.getItem("buyer");
@@ -2227,9 +2232,10 @@ function hangtagmodalOs(data) {
 							
 								if(order_details[0].Size == "TAILLE UNIQUE")
 								{
-									svgDoc.getElementById("size").innerHTML = "TU";
+									svgDoc.getElementById("size").innerHTML = "";
 									svgDoc.getElementById("size_french").innerHTML = "";
 									svgDoc.getElementById("size_english").innerHTML = "";
+									svgDoc.getElementById("tu_one_size").removeAttribute("visibility");
 								}
 								else if(order_details[0].Size == "TAILLE L")
 								{
@@ -2281,9 +2287,14 @@ function hangtagmodalOs(data) {
 							
 								if(order_details[0].Size == "TAILLE UNIQUE")
 								{
-									svgDoc.getElementById("size").innerHTML = "TU";
-									svgDoc.getElementById("size_french").innerHTML = "";
-									svgDoc.getElementById("size_english").innerHTML = "";
+									svgDoc.getElementById("size").innerHTML = "";
+								svgDoc.getElementById("size_french").innerHTML = "";
+								svgDoc.getElementById("size_english").innerHTML = "";
+								
+								svgDoc.getElementById("size_list").innerHTML = "TAILLE UNIQUE";
+								svgDoc.getElementById("cm").innerHTML = "ONE SIZE";
+								
+								svgDoc.getElementById("tu_one_size").removeAttribute("visibility");
 								}
 								else if(order_details[0].Size == "TAILLE L")
 								{
@@ -2331,7 +2342,7 @@ function hangtagmodalOs(data) {
                         mySVG.addEventListener("load", function () {
                             svgDoc = mySVG.contentDocument;
 							
-							svgDoc.getElementById("cm").innerHTML = $('.onesizecm').val();
+							//svgDoc.getElementById("cm").innerHTML = $('.onesizecm').val();
 							//svgDoc.getElementById("in").innerHTML = $('.onesizein').val();
 							
                             var svgItem = svgDoc.getElementById("uvc_tco");
@@ -2356,9 +2367,14 @@ function hangtagmodalOs(data) {
 							
 							if(order_details[0].Size == "TAILLE UNIQUE")
 							{
-								svgDoc.getElementById("size").innerHTML = "TU";
+								svgDoc.getElementById("size").innerHTML = "";
 								svgDoc.getElementById("size_french").innerHTML = "";
 								svgDoc.getElementById("size_english").innerHTML = "";
+								
+								svgDoc.getElementById("size_list").innerHTML = "TAILLE UNIQUE";
+								svgDoc.getElementById("cm").innerHTML = "ONE SIZE";
+								
+								svgDoc.getElementById("tu_one_size").removeAttribute("visibility");
 							}
 							else if(order_details[0].Size == "TAILLE L")
 							{
@@ -2370,7 +2386,7 @@ function hangtagmodalOs(data) {
 							{
 								svgDoc.getElementById("size").innerHTML = size[0];
 								
-								svgDoc.getElementById("cm").innerHTML = order_details[0].cm;
+								svgDoc.getElementById("cm").innerHTML = order_details[0].cm+" CM";
 								//svgDoc.getElementById("in").innerHTML = order_details[0].in;
 								if (size[1] == "ANS") {
 									svgDoc.getElementById("size_french").innerHTML = size[1];
@@ -2382,7 +2398,8 @@ function hangtagmodalOs(data) {
 									{
 										svgDoc.getElementById("size_english").innerHTML = "YEARS";
 									}
-									svgDoc.getElementById("size_list").innerHTML = order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-");
+									
+									svgDoc.getElementById("size_list").innerHTML = order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-").split(',')[0];
 
 								} else {
 									svgDoc.getElementById("size_french").innerHTML = size[1];
@@ -2394,8 +2411,8 @@ function hangtagmodalOs(data) {
 									{
 										svgDoc.getElementById("size_english").innerHTML = "MONTHS";
 									}
-									
-									svgDoc.getElementById("size_list").innerHTML = order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-")+"M";
+									//alert(order_details[0].Age);
+									svgDoc.getElementById("size_list").innerHTML = order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-").split(',')[0]+"M";
 								}
 							}
                            if (data.treeviewData[0].disney != 1) {
@@ -2417,6 +2434,7 @@ function hangtagmodalOs(data) {
                         $('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
 						$('#' + ids).find('.sample_back').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
                     }
+					
 
                 },
                 error: function (data) {
@@ -2430,7 +2448,8 @@ function hangtagmodalOs(data) {
     });
     //Show Template when Click tree node 
     $('#tree1').on('activate_node.jstree', function (e, data) {
-        var ids = $(this).parent().parent().parent().parent().parent().attr('id');
+		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
+		var node = $("#tree1").jstree('get_selected', true)[0].text;
         if (data.instance.is_leaf(data.node)) {
             var buyer = localStorage.getItem("buyer");
             var template_id = data.node.id;
@@ -2465,9 +2484,10 @@ function hangtagmodalOs(data) {
 							
 								if(order_details[0].Size == "TAILLE UNIQUE")
 								{
-									svgDoc.getElementById("size").innerHTML = "TU";
+									svgDoc.getElementById("size").innerHTML = "";
 									svgDoc.getElementById("size_french").innerHTML = "";
 									svgDoc.getElementById("size_english").innerHTML = "";
+									svgDoc.getElementById("tu_one_size").removeAttribute("visibility");
 								}
 								else if(order_details[0].Size == "TAILLE L")
 								{
@@ -2519,9 +2539,14 @@ function hangtagmodalOs(data) {
 							
 								if(order_details[0].Size == "TAILLE UNIQUE")
 								{
-									svgDoc.getElementById("size").innerHTML = "TU";
+									svgDoc.getElementById("size").innerHTML = "";
 									svgDoc.getElementById("size_french").innerHTML = "";
 									svgDoc.getElementById("size_english").innerHTML = "";
+
+									svgDoc.getElementById("size_list").innerHTML = "TAILLE UNIQUE";
+									svgDoc.getElementById("cm").innerHTML = "ONE SIZE";
+									
+								svgDoc.getElementById("tu_one_size").removeAttribute("visibility");
 								}
 								else if(order_details[0].Size == "TAILLE L")
 								{
@@ -2569,7 +2594,7 @@ function hangtagmodalOs(data) {
                         mySVG.addEventListener("load", function () {
                             svgDoc = mySVG.contentDocument;
 							
-							svgDoc.getElementById("cm").innerHTML = $('.onesizecm').val();
+							//svgDoc.getElementById("cm").innerHTML = $('.onesizecm').val();
 							//svgDoc.getElementById("in").innerHTML = $('.onesizein').val();
 							
                             var svgItem = svgDoc.getElementById("uvc_tco");
@@ -2594,9 +2619,14 @@ function hangtagmodalOs(data) {
 							
 							if(order_details[0].Size == "TAILLE UNIQUE")
 							{
-								svgDoc.getElementById("size").innerHTML = "TU";
+								svgDoc.getElementById("size").innerHTML = "";
 								svgDoc.getElementById("size_french").innerHTML = "";
 								svgDoc.getElementById("size_english").innerHTML = "";
+								
+								svgDoc.getElementById("size_list").innerHTML = "TAILLE UNIQUE";
+								svgDoc.getElementById("cm").innerHTML = "ONE SIZE";
+							
+								svgDoc.getElementById("tu_one_size").removeAttribute("visibility");
 							}
 							else if(order_details[0].Size == "TAILLE L")
 							{
@@ -2608,7 +2638,7 @@ function hangtagmodalOs(data) {
 							{
 								svgDoc.getElementById("size").innerHTML = size[0];
 								
-								svgDoc.getElementById("cm").innerHTML = order_details[0].cm;
+								svgDoc.getElementById("cm").innerHTML = order_details[0].cm+" CM";
 								//svgDoc.getElementById("in").innerHTML = order_details[0].in;
 								if (size[1] == "ANS") {
 									svgDoc.getElementById("size_french").innerHTML = size[1];
@@ -2620,7 +2650,8 @@ function hangtagmodalOs(data) {
 									{
 										svgDoc.getElementById("size_english").innerHTML = "YEARS";
 									}
-									svgDoc.getElementById("size_list").innerHTML = order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-");
+									//alert(order_details[0].Age.match(/[0-9]+/g).toString());
+									svgDoc.getElementById("size_list").innerHTML = order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-").split(',')[0];
 
 								} else {
 									svgDoc.getElementById("size_french").innerHTML = size[1];
@@ -2632,8 +2663,8 @@ function hangtagmodalOs(data) {
 									{
 										svgDoc.getElementById("size_english").innerHTML = "MONTHS";
 									}
-									
-									svgDoc.getElementById("size_list").innerHTML = order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-")+"M";
+									//alert(order_details[0].Age.match(/[0-9]+/g).toString());
+									svgDoc.getElementById("size_list").innerHTML = order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-").split(',')[0]+"M";
 								}
 							}
                            if (data.treeviewData[0].disney != 1) {
@@ -2667,6 +2698,9 @@ function hangtagmodalOs(data) {
         }
     });
 
+	
+	
+	
     $('#hangtagform').validator().on('submit', function (e) {
         if (e.isDefaultPrevented()) {
 
@@ -2724,7 +2758,6 @@ function specialtagsOs(data) {
       
         $template_id = data.orchestra_special_tag_orders[0].template_id;
         $exist_id = data.orchestra_special_tag_orders[0].id;
-        $special_tag_count=data.orchestra_special_tag_orders[0].final_qty;
         
         var str=data.orchestra_special_tag_orders[0].status;
         $status=str.replace(/ /g, "");
@@ -2734,16 +2767,17 @@ function specialtagsOs(data) {
      
         $template_id = "";
         $exist_id = "";
-        $special_tag_count="";
         $status="";
         $status_text="";
         $save_button_class="";
     }
-    
+    var st="";
     var option = "<option value=''>Select Option</option>";
     $.each(data.orchestra_template_front, function (index, value) {
         option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
     });
+	$special_tag_count=data.orchestra_special_tag_orders_qty[0].quantity;
+	
     $('.top-content').append('<form id="specialtagform" data-toggle= "validator"><div class="left-panelos col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="special_template_error" style="color:red" class="hidden">Please select the template</label>  <div><input type="text" id="tree2_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree2" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max"> <h4>Quantity Info for Special Tag</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Final order qty</label><input class="form-control input-sm special_qty" value="' + $special_tag_count + '" onkeypress="return checkorcMOQ(this)" placeholder="Special Tag Count" type="number" required><div class="help-block with-errors"></div></div><span id="error_msg_alert" style="color:red;"></span><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_special_button" style="margin-left:10px">Update</button> <button class="btn btn-default pull-right input-sm" type="button" id="specialclose">Close</button>  </div></div> </div>  <div class="backdrop"></div></form>');
 	//$('.left').removeClass('disabled')
     $('#specialtagform .tot_qty_table').keyup(function () {
@@ -2774,7 +2808,7 @@ function specialtagsOs(data) {
 
 
 
-    treestructurespecial(data.treeviewspecial, "tree2", $template_id);
+    treestructurespecialOs(data.treeviewspecial, "tree2", $template_id);
 
     $('#specialtagform').validator().on('submit', function (e) {
         if (e.isDefaultPrevented()) {
@@ -2786,6 +2820,118 @@ function specialtagsOs(data) {
     })
 }
 
+
+function treestructurespecialOs(data, tree, template_id) {
+
+	$('#' + tree).jstree({
+		'core': {
+			'data': data
+		},
+		"types": {
+			"default": {
+				"icon": "fa fa-folder"
+			}
+		},
+		"plugins": ["types", "search", "conditionalselect"],
+		 conditionalselect: function (node) {
+                        return this.is_leaf(node);
+         }
+	});
+	$('#expand').bind("click", function () {
+		$('#' + tree).jstree("open_all");
+	});
+	$('#collapse').bind("click", function () {
+		$('#' + tree).jstree("close_all");
+	});
+	var to = false;
+	$('#' + tree + '_q').keyup(function () {
+		if (to) {
+			clearTimeout(to);
+		}
+		to = setTimeout(function () {
+			var v = $('#' + tree + '_q').val();
+			$('#' + tree).jstree(true).search(v);
+		}, 250);
+	});
+
+	$("#" + tree).on("loaded.jstree", function (e, data) {
+
+		$('#' + tree).jstree(true).select_node(template_id);
+		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
+		if (template_id != "") {
+			var buyer = localStorage.getItem("buyer");
+			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			$.ajax({
+				url: base_url + "/admin/" + buyer + "/template-management/template-view",
+				type: "Post",
+				dataType: "json",
+				data: {
+					template_id: template_id,
+                    customer_id: $('#customer_id').val(),
+					_token: csrf_token
+				},
+				beforeSend: function () {
+					$(".loader").show();
+				},
+				success: function (data) {
+					$('.special_qty').attr('min',data.moq)
+					$('#specialtagform').validator('update')
+					if (data.treeviewData.length > 0) {
+						$('#' + ids).find('.sample-artwork').html('<img src="' + data.treeviewData[0].template_file + '" style="width:300px;height:400px;">')
+					} else {
+						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
+					}
+
+				},
+				error: function (data) {
+
+				},
+				complete: function () {
+					$(".loader").hide();
+				}
+			})
+		}
+	});
+
+	$('#' + tree).on('activate_node.jstree', function (e, data) {
+		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
+		if (data.instance.is_leaf(data.node)) {
+			var buyer = localStorage.getItem("buyer");
+			var template_id = data.node.id;
+			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			$.ajax({
+				url: base_url + "/admin/" + buyer + "/template-management/template-view",
+				type: "Post",
+				dataType: "json",
+				data: {
+					template_id: template_id,
+                    customer_id: $('#customer_id').val(),
+					_token: csrf_token
+				},
+				beforeSend: function () {
+					$(".loader").show();
+				},
+				success: function (data) {
+					$('.special_qty').attr('min',data.moq)
+					$('#specialtagform').validator('update')
+					if (data.treeviewData.length > 0) {
+						$('#' + ids).find('.sample-artwork').html('<img src="' + data.treeviewData[0].template_file + '" style="width:300px;height:400px;">')
+					} else {
+						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
+					}
+
+
+				},
+				error: function (data) {
+
+				},
+				complete: function () {
+					$(".loader").hide();
+				}
+			})
+		}
+	});
+}
 function heatTransferOs(data) {
 
     var tr = "";
@@ -2811,6 +2957,7 @@ function heatTransferOs(data) {
         $save_button_class="";
     }
     var ttots = 0;
+	var ttots_sum = 0;
     $.each(data.order_details, function (index, value) {
         if (data.orchestra_heat_transfer_orders != "") {
 
@@ -2818,16 +2965,27 @@ function heatTransferOs(data) {
         } else {
             $heat_transfer_count = "";
         }
-        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)"  type="number" class="form-control  input-sm tot_qty_tableheat" value="' + $heat_transfer_count + '" required placeholder="Heat Transfer Count"><div class="help-block with-errors"></div></div></td></tr>';
+        tr += '<tr><input type="hidden" value="' + value.Color_Code + '" class="size_id"><input type="hidden" value="' + value.id + '" class="main_id"><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)"  type="number" class="form-control  input-sm tot_qty_tableheat" data-required-error="Required" value="' + $heat_transfer_count + '" required placeholder="HT Count"><div class="help-block with-errors"></div></div></td></tr>';
         ttots += parseInt($heat_transfer_count);
+		ttots_sum += parseInt(value.Sum);
         $qu++;
     });
+	 if(isNaN(ttots))
+        {
+            ttots=0;
+        }
+    else
+        {
+            ttots=ttots;
+        }
     
     var option = "<option value=''>Select Option</option>";
     $.each(data.orchestra_template_front, function (index, value) {
         option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
     });
-    $('.top-content').append('<form id="heat_transferform" data-toggle= "validator"><div class="left-panelos col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="heat_transfer_template_error" style="color:red" class="hidden">Please select the template</label>  <div><input type="text" id="treeht_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="treeht" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max scroll"> <h4>Quantity Info for Heat Transfer</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal" id="heat_transfer_table"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentageheat" onkeypress="return checkNumbersOnly(event)"  style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td >' + data.total_qty + '</td><td class="text-center tot_qty_tableheat_fin">' + ttots + '</td></tr></tbody></table></div> <span id="error_msg_alert" style="color:red;"></span><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_heat_transfer_button" style="margin-left:10px">Update</button> <button class="btn btn-default pull-right input-sm" type="button" id="heat_transferclose">Close</button></div> </div>  <div class="backdrop"></div></form>');
+
+    $('.top-content').append('<form id="heat_transferform" data-toggle= "validator"><div class="left-panelos col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="heat_transfer_template_error" style="color:red" class="hidden">Please select the template</label>  <div><input type="text" id="treeht_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="treeht" style="height: calc(100vh - 205px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max scroll"> <h4>Quantity Info for Heat Transfer</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal" id="heat_transfer_table"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty</th><th><label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentageheat" onkeypress="return checkNumbersOnly(event)"  style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td >' + ttots_sum + '</td><td class="text-center tot_qty_tableheat_fin">' + ttots + '</td></tr></tbody></table></div><span id="error_msg_alert" style="color:red;"></span> <button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_heat_transfer_button" style="margin-left:10px">Save</button> <button class="btn btn-default pull-right input-sm" type="button" id="heat_transferclose">Close</button></div> </div>  <div class="backdrop"></div></form>');
+
 	//$('.left').removeClass('disabled')
     $('#heat_transferform .tot_qty_tableheat').keyup(function () {
         var tot_qty_tableheat_carton_final = 0;
@@ -2839,7 +2997,7 @@ function heatTransferOs(data) {
         $('#heat_transferform .tot_qty_tableheat_fin').text(tot_qty_tableheat_carton_final);
     });
 	
-	$('.extra_percentageheat').keyup(function () {
+	 $('.extra_percentageheat').keyup(function () {
 		
         
         var tot_qty_tableheat_carton_final = 0;
@@ -2878,23 +3036,133 @@ function heatTransferOs(data) {
         $("#heat_transferform .right-panelos").removeClass('active');
         $("#heat_transferform .backdrop").removeClass('active');
         $('#heat_transferform .scalable').removeClass('active');
-		//$('.top-content').html('');
     })
 
 
 
-    treestructureheat_transfer(data.treeviewheat_transfer, "treeht", $template_id);
+    treestructureheat_transferOs(data.treeviewheat_transfer, "treeht", $template_id);
 
     $('#heat_transferform').validator().on('submit', function (e) {
         if (e.isDefaultPrevented()) {
 
         } else {
             e.preventDefault();
-            setheat_transferStatusOs()
+            setheat_transferStatus(data.color_wcl)
         }
     })
 }
 
+function treestructureheat_transferOs(data, tree, template_id) {
+
+	$('#' + tree).jstree({
+		'core': {
+			'data': data
+		},
+		"types": {
+			"default": {
+				"icon": "fa fa-folder"
+			}
+		},
+		"plugins": ["types", "search", "conditionalselect"],
+		 conditionalselect: function (node) {
+                        return this.is_leaf(node);
+         }
+	});
+	$('#expand').bind("click", function () {
+		$('#' + tree).jstree("open_all");
+	});
+	$('#collapse').bind("click", function () {
+		$('#' + tree).jstree("close_all");
+	});
+	var to = false;
+	$('#' + tree + '_q').keyup(function () {
+		if (to) {
+			clearTimeout(to);
+		}
+		to = setTimeout(function () {
+			var v = $('#' + tree + '_q').val();
+			$('#' + tree).jstree(true).search(v);
+		}, 250);
+	});
+
+	$("#" + tree).on("loaded.jstree", function (e, data) {
+
+		$('#' + tree).jstree(true).select_node(template_id);
+		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
+		if (template_id != "") {
+			var buyer = localStorage.getItem("buyer");
+			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			$.ajax({
+				url: base_url + "/admin/" + buyer + "/template-management/template-view",
+				type: "Post",
+				dataType: "json",
+				data: {
+					template_id: template_id,
+                    customer_id: $('#customer_id').val(),
+					_token: csrf_token
+				},
+				beforeSend: function () {
+					$(".loader").show();
+				},
+				success: function (data) {
+					$('.tot_qty_tableheat').attr('min',data.moq)
+					$('#specialtagform').validator('update')
+					if (data.treeviewData.length > 0) {
+						$('#' + ids).find('.sample-artwork').html('<img src="' + data.treeviewData[0].template_file + '" style="width:300px;height:300px;">')
+					} else {
+						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
+					}
+
+				},
+				error: function (data) {
+
+				},
+				complete: function () {
+					$(".loader").hide();
+				}
+			})
+		}
+	});
+
+	$('#' + tree).on('activate_node.jstree', function (e, data) {
+		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
+		if (data.instance.is_leaf(data.node)) {
+			var buyer = localStorage.getItem("buyer");
+			var template_id = data.node.id;
+			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			$.ajax({
+				url: base_url + "/admin/" + buyer + "/template-management/template-view",
+				type: "Post",
+				dataType: "json",
+				data: {
+					template_id: template_id,
+                    customer_id: $('#customer_id').val(),
+					_token: csrf_token
+				},
+				beforeSend: function () {
+					$(".loader").show();
+				},
+				success: function (data) {
+					$('.tot_qty_tableheat').attr('min',data.moq)
+					$('#specialtagform').validator('update')
+					if (data.treeviewData.length > 0) {
+						$('#' + ids).find('.sample-artwork').html('<img src="' + data.treeviewData[0].template_file + '" style="width:300px;height:300px;">')
+					} else {
+						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
+					}
+
+
+				},
+				error: function (data) {
+
+				},
+				complete: function () {
+					$(".loader").hide();
+				}
+			})
+		}
+	});
+}
 function sizelabelsOs(data) {
 
     var tr = "";
@@ -2920,6 +3188,7 @@ function sizelabelsOs(data) {
         $save_button_class="";
     }
     var ttots = 0;
+    var ttots_sum = 0;
     $.each(data.order_details, function (index, value) {
         if (data.orchestra_size_label_orders != "") {
 
@@ -2927,16 +3196,28 @@ function sizelabelsOs(data) {
         } else {
             $size_label_count = "";
         }
-        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)"  type="number" class="form-control  input-sm tot_qty_tablesize" value="' + $size_label_count + '" required placeholder="Size Label Count"><div class="help-block with-errors"></div></div></td></tr>'; 
+        tr += '<tr><input type="hidden" value="' + value.Color_Code + '" class="size_id"><input type="hidden" value="' + value.id + '" class="main_id"><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)"  type="number" class="form-control  input-sm tot_qty_tablesize" data-required-error="Required" value="' + $size_label_count + '" required placeholder="Size Label Count"><div class="help-block with-errors"></div></div></td></tr>'; 
         ttots += parseInt($size_label_count);
+		ttots_sum += parseInt(value.Sum);
         $qu++;
     });
+	
+	 if(isNaN(ttots))
+        {
+            ttots=0;
+        }
+    else
+        {
+            ttots=ttots;
+        }
     
     var option = "<option value=''>Select Option</option>";
     $.each(data.orchestra_template_front, function (index, value) {
         option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
     });
-    $('.top-content').append('<form id="size_labelform" data-toggle= "validator"><div class="left-panelos col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="size_label_template_error" style="color:red" class="hidden">Please select the template</label>  <div><input type="text" id="treesl_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="treesl" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max scroll"> <h4>Quantity Info for Heat Transfer</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal" id="size_label_table"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentagesize" onkeypress="return checkNumbersOnly(event)"  style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td >' + data.total_qty + '</td><td class="text-center tot_qty_tablesize_fin">' + ttots + '</td></tr></tbody></table></div> <span id="error_msg_alert" style="color:red;"></span><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_size_label_button" style="margin-left:10px">Update</button> <button class="btn btn-default pull-right input-sm" type="button" id="size_labelclose">Close</button></div> </div>  <div class="backdrop"></div></form>');
+
+    $('.top-content').append('<form id="size_labelform" data-toggle= "validator"><div class="left-panelos col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-5 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="size_label_template_error" style="color:red" class="hidden">Please select the template</label>  <div><input type="text" id="treesl_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="treesl" style="height: calc(100vh - 205px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-7"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max scroll"> <h4>Quantity Info for Size Label</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal" id="size_label_table"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty</th><th><label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentagesize" onkeypress="return checkNumbersOnly(event)"  style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td >' + ttots_sum + '</td><td class="text-center tot_qty_tablesize_fin">' + ttots + '</td></tr></tbody></table></div><span id="error_msg_alert" style="color:red;"></span> <button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_size_label_button" style="margin-left:10px">Save</button> <button class="btn btn-default pull-right input-sm" type="button" id="size_labelclose">Close</button></div> </div>  <div class="backdrop"></div></form>');
+
 	//$('.left').removeClass('disabled')
     $('#size_labelform .tot_qty_tablesize').keyup(function () {
         var tot_qty_tablesize_carton_final = 0;
@@ -2947,7 +3228,7 @@ function sizelabelsOs(data) {
         })
         $('#size_labelform .tot_qty_tablesize_fin').text(tot_qty_tablesize_carton_final);
     });
-	
+
 	 $('.extra_percentagesize').keyup(function () {
 		
         
@@ -2974,6 +3255,7 @@ function sizelabelsOs(data) {
 
     })
 	
+	
     $("#clickmesize_label").click(function () {
         // $('.sample-artwork').html("")
         $("#size_labelform .backdrop").toggleClass('active');
@@ -2987,21 +3269,138 @@ function sizelabelsOs(data) {
         $("#size_labelform .right-panelos").removeClass('active');
         $("#size_labelform .backdrop").removeClass('active');
         $('#size_labelform .scalable').removeClass('active');
-		//$('.top-content').html('');
     })
 
 
 
-    treestructuresize_label(data.treeviewsize_label, "treesl", $template_id);
+    treestructuresize_labelOs(data.treeviewsize_label, "treesl", $template_id,data.orchestra_size_label_orders);
 
     $('#size_labelform').validator().on('submit', function (e) {
         if (e.isDefaultPrevented()) {
 
         } else {
             e.preventDefault();
-            setSizeLabelStatusOs()
+            setSizeLabelStatusOs(data.color_wcl)
         }
     })
+}
+
+
+/**
+ * This Function is used to invoke Jstree For Size Labels.
+ * 
+ * @return tree
+ */
+function treestructuresize_labelOs(data, tree, template_id,orchestra_size_label_orders) {
+
+	$('#' + tree).jstree({
+		'core': {
+			'data': data
+		},
+		"types": {
+			"default": {
+				"icon": "fa fa-folder"
+			}
+		},
+		"plugins": ["types", "search", "conditionalselect"],
+		 conditionalselect: function (node) {
+                        return this.is_leaf(node);
+         }
+	});
+	$('#expand').bind("click", function () {
+		$('#' + tree).jstree("open_all");
+	});
+	$('#collapse').bind("click", function () {
+		$('#' + tree).jstree("close_all");
+	});
+	var to = false;
+	$('#' + tree + '_q').keyup(function () {
+		if (to) {
+			clearTimeout(to);
+		}
+		to = setTimeout(function () {
+			var v = $('#' + tree + '_q').val();
+			$('#' + tree).jstree(true).search(v);
+		}, 250);
+	});
+
+	$("#" + tree).on("loaded.jstree", function (e, data) {
+
+		$('#' + tree).jstree(true).select_node(template_id);
+		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
+		if (template_id != "") {
+			var buyer = localStorage.getItem("buyer");
+			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			$.ajax({
+				url: base_url + "/admin/" + buyer + "/template-management/template-view",
+				type: "Post",
+				dataType: "json",
+				data: {
+					template_id: template_id,
+                    customer_id: $('#customer_id').val(),
+					_token: csrf_token
+				},
+				beforeSend: function () {
+					$(".loader").show();
+				},
+				success: function (data) {
+					$('.tot_qty_tablesize').attr('min',data.moq)
+					$('#specialtagform').validator('update')
+					if (data.treeviewData.length > 0) {
+						$('#' + ids).find('.sample-artwork').html('<img src="' + data.treeviewData[0].template_file + '" style="width:150px;height:400px;">')
+					} else {
+						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
+					}
+
+				},
+				error: function (data) {
+
+				},
+				complete: function () {
+					$(".loader").hide();
+				}
+			})
+		}
+	});
+
+	$('#' + tree).on('activate_node.jstree', function (e, data) {
+		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
+		if (data.instance.is_leaf(data.node)) {
+			var buyer = localStorage.getItem("buyer");
+			var template_id = data.node.id;
+			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			$.ajax({
+				url: base_url + "/admin/" + buyer + "/template-management/template-view",
+				type: "Post",
+				dataType: "json",
+				data: {
+					template_id: template_id,
+                    customer_id: $('#customer_id').val(),
+					_token: csrf_token
+				},
+				beforeSend: function () {
+					$(".loader").show();
+				},
+				success: function (data) {
+					$('.tot_qty_tablesize').attr('min',data.moq)
+					$('#specialtagform').validator('update')
+					if (data.treeviewData.length > 0) {
+						$('#' + ids).find('.sample-artwork').html('<img src="' + data.treeviewData[0].template_file + '" style="width:150px;height:400px;">')
+					} else {
+						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
+					}
+
+
+				},
+				error: function (data) {
+
+				},
+				complete: function () {
+					$(".loader").hide();
+				}
+			})
+		}
+	});
 }
 
 function mainlabelsOs(data) {
@@ -3063,7 +3462,7 @@ function mainlabelsOs(data) {
 
 
 
-    treestructuremain_label(data.treeviewmain_label, "treeml", $template_id);
+    treestructuremain_labelOs(data.treeviewmain_label, "treeml", $template_id);
 
     $('#main_labelform').validator().on('submit', function (e) {
         if (e.isDefaultPrevented()) {
@@ -3076,6 +3475,118 @@ function mainlabelsOs(data) {
 }
 
 
+function treestructuremain_labelOs(data, tree, template_id) {
+
+	$('#' + tree).jstree({
+		'core': {
+			'data': data
+		},
+		"types": {
+			"default": {
+				"icon": "fa fa-folder"
+			}
+		},
+		"plugins": ["types", "search", "conditionalselect"],
+		 conditionalselect: function (node) {
+                        return this.is_leaf(node);
+         }
+	});
+	$('#expand').bind("click", function () {
+		$('#' + tree).jstree("open_all");
+	});
+	$('#collapse').bind("click", function () {
+		$('#' + tree).jstree("close_all");
+	});
+	var to = false;
+	$('#' + tree + '_q').keyup(function () {
+		if (to) {
+			clearTimeout(to);
+		}
+		to = setTimeout(function () {
+			var v = $('#' + tree + '_q').val();
+			$('#' + tree).jstree(true).search(v);
+		}, 250);
+	});
+
+	$("#" + tree).on("loaded.jstree", function (e, data) {
+
+		$('#' + tree).jstree(true).select_node(template_id);
+		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
+		if (template_id != "") {
+			var buyer = localStorage.getItem("buyer");
+			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			$.ajax({
+				url: base_url + "/admin/" + buyer + "/template-management/template-view",
+				type: "Post",
+				dataType: "json",
+				data: {
+					template_id: template_id,
+                    customer_id: $('#customer_id').val(),
+					_token: csrf_token
+				},
+				beforeSend: function () {
+					$(".loader").show();
+				},
+				success: function (data) {
+					$('.main_label_qty').attr('min',data.moq)
+					$('#main_labelform').validator('update')
+					if (data.treeviewData.length > 0) {
+						$('#' + ids).find('.sample-artwork').html('<img src="' + data.treeviewData[0].template_file + '" style="width:150px;height:150px;object-fit:cover">')
+					} else {
+						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
+					}
+
+
+				},
+				error: function (data) {
+
+				},
+				complete: function () {
+					$(".loader").hide();
+				}
+			})
+		}
+	});
+
+	$('#' + tree).on('activate_node.jstree', function (e, data) {
+		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
+		if (data.instance.is_leaf(data.node)) {
+			var buyer = localStorage.getItem("buyer");
+			var template_id = data.node.id;
+			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			$.ajax({
+				url: base_url + "/admin/" + buyer + "/template-management/template-view",
+				type: "Post",
+				dataType: "json",
+				data: {
+					template_id: template_id,
+                    customer_id: $('#customer_id').val(),
+					_token: csrf_token
+				},
+				beforeSend: function () {
+					$(".loader").show();
+				},
+				success: function (data) {
+					$('.main_label_qty').attr('min',data.moq)
+					$('#main_labelform').validator('update')
+					if (data.treeviewData.length > 0) {
+						$('#' + ids).find('.sample-artwork').html('<img src="' + data.treeviewData[0].template_file + '" style="width:150px;height:400px;">')
+					} else {
+						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
+					}
+
+
+				},
+				error: function (data) {
+
+				},
+				complete: function () {
+					$(".loader").hide();
+				}
+			})
+		}
+	});
+}
 function washcarelabelsOs(data, dataid) {
     var washing_option = "<option value=''>Select Option</option>";
     var whitening_option = "<option value=''>Select Option</option>";
@@ -3804,7 +4315,7 @@ function setWashLabelOs(index, dataid, id) {
         var buyer = localStorage.getItem("buyer");
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
-            url: base_url + "/admin/" + buyer + "/order-management/set_wash_label",
+            url: base_url + "/admin/" + buyer + "/order-management/set_wash_labelos",
             type: "Post",
             data: {
                 
@@ -4056,17 +4567,23 @@ function setSizeLabelOs(id) {
 	var tot_qty_tablesize = [];
 	var uvc_tco = [];
 	var size = [];
+	var size_id = [];
+	var main_id = [];
 	$('#size_labelform tbody tr').each(function () {
 		if ($(this).find('.tot_qty_tablesize').val() != undefined) {
 			tot_qty_tablesize.push($(this).find('.tot_qty_tablesize').val())
 			uvc_tco.push($(this).find('.uvc_tco').text())
 			size.push($(this).find('.size').text())
+			size_id.push($(this).find('.size_id').val())
+			main_id.push($(this).find('.main_id').val())
 		}
 
 	})
 	tot_qty_tablesize_fin = tot_qty_tablesize.join(',');
 	uvc_tco_fin = uvc_tco.join(',');
 	size_fin = size.join(',');
+	size_id_fin = size_id.join(',');
+	main_id_fin = main_id.join(',');
 	var buyer = localStorage.getItem("buyer");
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
@@ -4077,6 +4594,8 @@ function setSizeLabelOs(id) {
 			template_id: template_id,
 			tot_qty_table: tot_qty_tablesize_fin,
 			id: id,
+			size_id: size_id_fin,
+			main_id: main_id_fin,
 			uvc_tco: uvc_tco_fin,
 			uvc: $('#uvc_id').val(),
 			parcel_id: $('#parcel_id').val(),
@@ -4310,17 +4829,23 @@ function setHeatTransferOs(id) {
 	var tot_qty_tableheat = [];
 	var uvc_tco = [];
 	var size = [];
+	var size_id = [];
+	var main_id = [];
 	$('#heat_transferform tbody tr').each(function () {
 		if ($(this).find('.tot_qty_tableheat').val() != undefined) {
 			tot_qty_tableheat.push($(this).find('.tot_qty_tableheat').val())
 			uvc_tco.push($(this).find('.uvc_tco').text())
 			size.push($(this).find('.size').text())
+			size_id.push($(this).find('.size_id').val())
+			main_id.push($(this).find('.main_id').val())
 		}
 
 	})
 	tot_qty_tableheat_fin = tot_qty_tableheat.join(',');
 	uvc_tco_fin = uvc_tco.join(',');
 	size_fin = size.join(',');
+	size_id_fin = size_id.join(',');
+	main_id_fin = main_id.join(',');
 	var buyer = localStorage.getItem("buyer");
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
@@ -4331,6 +4856,8 @@ function setHeatTransferOs(id) {
 			template_id: template_id,
 			tot_qty_table: tot_qty_tableheat_fin,
 			id: id,
+			size_id: size_id_fin,
+			main_id: main_id_fin,
 			uvc_tco: uvc_tco_fin,
 			uvc: $('#uvc_id').val(),
 			parcel_id: $('#parcel_id').val(),
@@ -4386,17 +4913,26 @@ function setHangTagOs(id) {
 	var tot_qty_tablehang = [];
 	var uvc_tco = [];
 	var size = [];
+	var size_id = [];
+	var main_id = [];
 	$('#hangtagform tbody tr').each(function () {
 		if ($(this).find('.tot_qty_tablehang').val() != undefined) {
 			tot_qty_tablehang.push($(this).find('.tot_qty_tablehang').val())
 			uvc_tco.push($(this).find('.uvc_tco').text())
 			size.push($(this).find('.size').text())
+			size_id.push($(this).find('.size_id').val())
+			main_id.push($(this).find('.main_id').val())
 		}
 
 	})
+	console.log(tot_qty_tablehang)
+	console.log(uvc_tco)
+	console.log(size)
 	tot_qty_tablehang_fin = tot_qty_tablehang.join(',');
 	uvc_tco_fin = uvc_tco.join(',');
 	size_fin = size.join(',');
+	size_id_fin = size_id.join(',');
+	main_id_fin = main_id.join(',');
 	var buyer = localStorage.getItem("buyer");
 //	alert()
 //	alert($('#parcel_id').val());
@@ -4412,6 +4948,8 @@ function setHangTagOs(id) {
 			id: id,
 			cm:onesizecm,
 			in:onesizein,
+			size_id: size_id_fin,
+			main_id: main_id_fin,
 			uvc_tco: uvc_tco_fin,
 			uvc: $('#uvc_id').val(),
 			parcel_id: $('#parcel_id').val(),

@@ -2519,6 +2519,217 @@ class OrderManagementCntrl extends Controller
        
            
     }
+    public function setWashLabelOs(Request $request)
+    {
+        
+        //$delivery_date = $request->delivery_date;
+        $template_front_id = $request->template_front_id; 
+        $template_name = $request->template_name;
+        $tot_qty_table = explode(',',$request->tot_qty_table);
+        $uvc_tco = explode(',',$request->uvc_tco);
+        $size = explode(',',$request->size);
+        $uvc =$request->uvc;
+        $po_select =$request->po_select;
+        $id =$request->id;
+		$card_flag =$request->card_flag;
+        $parcel_id =$request->parcel_id;
+        $season_code =$request->season_code;
+        $washing_select = $request->washing_select; 
+        $whitening_select = $request->whitening_select; 
+        $dryer_select = $request->dryer_select; 
+        $ironing_select= $request->ironing_select; 
+        $cleaning_select= $request->cleaning_select; 
+        $merchandisers= $request->merchandisers; 
+        $made_in_select = $request->made_in_select; 
+        $care_instruction_select = $request->care_instruction_select; 
+		$color_code = $request->color_code; 
+		
+		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('customers.*')->get();
+		
+		if(count($factory) > 0)
+		{
+			
+			$pi_required=$factory{0}->pi_required;
+			if($pi_required == 1)
+			{
+				$pi_status="PI Approval Pending";
+				if($factory{0}->po_required == 1)
+				{
+					$po_status="PO Pending";
+				}
+				else
+				{
+					$po_status="";
+				}
+				
+			}
+			else
+			{
+				$po_status="PO Pending";
+				$pi_status="";
+			}
+			
+		}
+		else
+		{
+			
+			$po_status="";
+			$pi_status="";
+		}
+		
+        if($id != "null")
+        {
+			
+				WashLabelOrders::where('id',$id)
+                   ->update([
+                        'uvc' => $uvc,
+                        'template_id'      => $template_front_id,
+                        //'merchandisers_id'      => $merchandisers,
+                        'template_name'      => $template_name,
+                        'washing_id'      => $washing_select,
+                        'whitening_id'      => $whitening_select,
+                        'dryer_id'      => $dryer_select,
+                        'ironing_id'      => $ironing_select,
+                        'cleaning_id'      => $cleaning_select,
+                        'made_in_id'      => $made_in_select,
+					    'color_code'      => $color_code,
+					    'card_flag'      => $card_flag,
+                        'po'    => $po_select,
+                        'care_instruction_id'      => $care_instruction_select,
+                        'customer_id'    => $factory{0}->id,
+                        'svg_path'    => "", 
+                        'status'    => "Buyer Approval Pending",
+						'orchestra_parcel_details_id'    => $parcel_id,
+						'season_code'    => $season_code,
+					    'pi_status'           => $pi_status,
+					   	'po_status'           => $po_status,
+                  ]);
+                $deleted = WashLabelOrdersQty::where('owcl_id', '=', $id)
+                            ->delete();
+                $i=0;
+                foreach($tot_qty_table as $value)
+                {
+                     WashLabelOrdersQty::create([
+                                        'owcl_id' => $id,
+                                        'size'      => $size[$i],
+                                        'uvc_tco'      => $uvc_tco[$i],
+                                        'quantity'    => $value
+                             ]);
+                    $i++;
+                }
+         $deleted = WashCareComposition::where('owcl_id', '=', $id)
+                            ->delete();
+         $k=1;
+         $composition = json_decode($request->composition);
+            foreach($composition as $key => $value)
+            {
+                foreach($value as $key1 => $value1)
+                {
+                    $exp_val = explode('_',$value1);
+                    if($exp_val[0] == "Select Option")
+                    {
+                        $parts_id=0;
+                    }
+                    else
+                    {
+                        $parts_id=$exp_val[0];
+                    }
+                    $orchestra_compositions = DB::table('orchestra_compositions')->select('*')->where('english',$exp_val[1])->get();
+                    $composition_id=$orchestra_compositions{0}->id;
+                    $percent=$exp_val[2];
+                    WashCareComposition::create([
+                                        'owcl_id' => $id,
+                                        'parts_id'      => $parts_id,
+                                        'composition_id'      => $composition_id,
+                                        'percentage'    => $percent,
+                                        'page_id'    => $k,
+                             ]);
+                }
+                $k++;
+            }
+			
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
+                        ->update([
+                          'order_status' => "Order Placed"
+
+            ]);
+			return $id;
+              
+        }
+        else
+        {
+               $inserted = WashLabelOrders::create([
+                                'uvc' => $uvc,
+                                'template_id'      => $template_front_id,
+                                'merchandisers_id'      => $merchandisers,
+                                'template_name'      => $template_name,
+                                'washing_id'      => $washing_select,
+                                'whitening_id'      => $whitening_select,
+                                'dryer_id'      => $dryer_select,
+                                'ironing_id'      => $ironing_select,
+                                'cleaning_id'      => $cleaning_select,
+                                'made_in_id'      => $made_in_select,
+				   				'color_code'      => $color_code,
+				   				'card_flag'      => $card_flag,
+				   				'po'      => $po_select,
+                                'care_instruction_id'      => $care_instruction_select,
+                        		'customer_id'    => $factory{0}->id,
+                                'svg_path'    => "", 
+                                'status'    => "Buyer Approval Pending",
+								'orchestra_parcel_details_id'    => $parcel_id,
+								'season_code'    => $season_code,
+				   				'pi_status'           => $pi_status,
+				   				'po_status'           => $po_status,
+                     ]);
+                $i=0;
+                foreach($tot_qty_table as $value)
+                {
+                     WashLabelOrdersQty::create([
+                                        'owcl_id' => $inserted->id,
+                                        'size'      => $size[$i],
+                                        'uvc_tco'      => $uvc_tco[$i],
+                                        'quantity'    => $value
+                             ]);
+                    $i++;
+                }
+         $k=1;
+         $composition = json_decode($request->composition);
+            foreach($composition as $key => $value)
+            {
+                foreach($value as $key1 => $value1)
+                {
+                    $exp_val = explode('_',$value1);
+                    if($exp_val[0] == "Select Option")
+                    {
+                        $parts_id=0;
+                    }
+                    else
+                    {
+                        $parts_id=$exp_val[0];
+                    }
+                    $orchestra_compositions = DB::table('orchestra_compositions')->select('*')->where('english',$exp_val[1])->get();
+                    $composition_id=$orchestra_compositions{0}->id;
+                    $percent=$exp_val[2];
+                    WashCareComposition::create([
+                                        'owcl_id' => $inserted->id,
+                                        'parts_id'      => $parts_id,
+                                        'composition_id'      => $composition_id,
+                                        'percentage'    => $percent,
+                                        'page_id'    => $k,
+                             ]);
+                }
+                $k++;
+            }
+			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
+                        ->update([
+                          'order_status' => "Order Placed"
+
+            ]);
+			return  $inserted->id;
+        }
+       
+           
+    }
 	/**
      * method to get WCL details for the selected PO
      * @param Request $request [po,parcel_id, season_code,uvc_id]
@@ -2942,6 +3153,10 @@ class OrderManagementCntrl extends Controller
         $data['orchestra_special_tag_orders']=DB::table('orchestra_special_tag_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_special_tag_orders.template_id')->select('orchestra_special_tag_orders.*','orchestra_item_master.company_id',DB::raw("'Special Tag' as \"TemplateName\""),DB::raw("'Special Tag' as \"TemplateType\""),DB::raw("'orchestra_special_tag_orders' as \"type\""))->where('uvc',$uvc)->get();
 
         $data['orchestra_main_label_orders']=DB::table('orchestra_main_label_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_main_label_orders.template_id')->select('orchestra_main_label_orders.*','orchestra_item_master.company_id',DB::raw("'Main Label' as \"TemplateName\""),DB::raw("'Main Label' as \"TemplateType\""),DB::raw("'orchestra_main_label_orders' as \"type\""))->where('uvc',$uvc)->get();
+		
+		$data['orchestra_size_label_orders']=DB::table('orchestra_size_label_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_size_label_orders.template_id')->select('orchestra_size_label_orders.*','orchestra_item_master.company_id',DB::raw("'Size Label' as \"TemplateName\""),DB::raw("'Size Label' as \"TemplateType\""),DB::raw("'orchestra_size_label_orders' as \"type\""))->where('uvc',$uvc)->get();
+		
+		$data['orchestra_heat_transfer_orders']=DB::table('orchestra_heat_transfer_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_heat_transfer_orders.template_id')->select('orchestra_heat_transfer_orders.*','orchestra_item_master.company_id',DB::raw("'Heat Transfer' as \"TemplateName\""),DB::raw("'Heat Transfer' as \"TemplateType\""),DB::raw("'orchestra_heat_transfer_orders' as \"type\""))->where('uvc',$uvc)->get();
 
         $data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_wash_care_label_orders.template_id')->select('orchestra_wash_care_label_orders.*','orchestra_item_master.company_id','orchestra_wash_care_label_orders.template_name as TemplateName',DB::raw("'Wash Care Labels' as \"TemplateType\""),DB::raw("'orchestra_wash_care_label_orders' as \"type\""))->where('uvc',$uvc)->get();
 
@@ -2996,6 +3211,10 @@ class OrderManagementCntrl extends Controller
 		  $data['orchestra_special_tag_orders']=DB::table('orchestra_special_tag_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_special_tag_orders.template_id')->select('orchestra_special_tag_orders.*','orchestra_item_master.company_id', DB::raw("'Special Tag' as \"TemplateName\""),DB::raw("'Special Tag' as \"TemplateType\""),DB::raw("'orchestra_special_tag_orders' as \"tableName\""))->where('uvc',$uvc)->get();
 		
 		  $data['orchestra_main_label_orders']=DB::table('orchestra_main_label_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_main_label_orders.template_id')->select('orchestra_main_label_orders.*','orchestra_item_master.company_id',DB::raw("'Main Label' as \"TemplateName\""),DB::raw("'Main Label' as \"TemplateType\""),DB::raw("'orchestra_main_label_orders' as \"tableName\""))->where('uvc',$uvc)->get();
+		
+		  $data['orchestra_size_label_orders']=DB::table('orchestra_size_label_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_size_label_orders.template_id')->select('orchestra_size_label_orders.*','orchestra_item_master.company_id',DB::raw("'Size Label' as \"TemplateName\""),DB::raw("'Size Label' as \"TemplateType\""),DB::raw("'orchestra_size_label_orders' as \"tableName\""))->where('uvc',$uvc)->get();		
+		
+		  $data['orchestra_heat_transfer_orders']=DB::table('orchestra_heat_transfer_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_heat_transfer_orders.template_id')->select('orchestra_heat_transfer_orders.*','orchestra_item_master.company_id',DB::raw("'Heat Transfer' as \"TemplateName\""),DB::raw("'Heat Transfer' as \"TemplateType\""),DB::raw("'orchestra_heat_transfer_orders' as \"tableName\""))->where('uvc',$uvc)->get();
 		
 		  $data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_wash_care_label_orders.template_id')->select('orchestra_wash_care_label_orders.*','orchestra_item_master.company_id','orchestra_wash_care_label_orders.template_name as TemplateName',DB::raw("'Wash Care Labels' as \"TemplateType\""),DB::raw("'orchestra_wash_care_label_orders' as \"tableName\""))->where('uvc',$uvc)->get();
 		
