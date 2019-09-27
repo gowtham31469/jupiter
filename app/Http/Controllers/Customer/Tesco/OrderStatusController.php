@@ -843,27 +843,54 @@ class OrderStatusController extends Controller
 			$erp_obj   =   new ErpOrders();
             $id        =   explode(',',$request->id);
             $po        =   $request->po;
-            $erp_orders = DB::table('erp_orders')->where('po_no',$po)->select('*')->first();
+            $erp_orders = DB::table('erp_orders')->where('po_no',$po)->select('po_file')->first();
             
             foreach($id as $val)
             {
                 $value    =  explode('-',$val);
-            
+                $order_po_file = DB::table($value[0])->where('id',$value[1])->select('po_file')->first();
+
+                // po file status and po file path
+                if(sizeof($erp_orders) > 0)
+                {
+                    $status = "PO Uploaded";
+                    $po_file = $erp_orders->po_file;
+                }
+                else 
+                {
+                    // if po is already uploaded, set status as po uploaded
+                    if(sizeof($order_po_file) > 0)
+                    {
+                        $status = "PO Uploaded";
+                        $po_file = $order_po_file->po_file;
+                    }
+                    else
+                    {
+                        $status = "PO Pending";
+                        $po_file = $order_po_file;
+                    }
+                    
+                }
+
                 DB::table($value[0])->where('id',$value[1])
                    ->update([
                         'purchase_order_no' => $po,
-                        'po_file' => $erp_orders->po_file,
-                        'po_status' => "PO Pending",
+                        'po_file' => $po_file,
+                        'po_status' => $status,
                         'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                   ]);
-				 /** @var array [Pass array of values to updateTescoErpOrders function] */
-                $data_array = [];   
-                $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
-                $data_array['tableName'] = $value[0];
-                $data_array['buyer_id'] = $tesco_buyer_id->id;
-                $data_array['id'] = $value[1];
-                $data_array['created_by']= Auth::guard('web_customer')->id(); 
-                $updated_erp_table = $erp_obj->updateTescoErpOrders($data_array);
+                
+                  if($status === "PO Uploaded")
+                  {
+                        /** @var array [Pass array of values to updateTescoErpOrders function] */
+                        $data_array = [];   
+                        $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
+                        $data_array['tableName'] = $value[0];
+                        $data_array['buyer_id'] = $tesco_buyer_id->id;
+                        $data_array['id'] = $value[1];
+                        $data_array['created_by']= Auth::guard('web_customer')->id(); 
+                        $updated_erp_table = $erp_obj->updateTescoErpOrders($data_array);
+                  }
             }
             $result = response()->json(['error'=> false,'message' =>'success'],200);
         }
