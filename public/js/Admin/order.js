@@ -178,7 +178,7 @@ function orderStatus() {
 												coun++;
 											}
 											
-											$('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="'+value1.type+'-'+value1.id+'" data-company="'+value1.company_id+'" class="list-group-item">Z'+value1.TemplateName+" - "+value1.TemplateType+'</li>')
+											$('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="'+value1.type+'-'+value1.id+'" data-company="'+value1.company_id+'" class="list-group-item">'+value1.TemplateName+" - "+value1.TemplateType+'</li>')
 										});
 										
 										
@@ -3781,7 +3781,7 @@ function washcarelabels(data, dataid,color_code,new_flag) {
 				$save_button_class = "hidden";
 				$print_button_class = "";
 				$disable_option_select = "disabled";
-				$disable_qty_select = "";
+				$disable_qty_select = "disabled";
 			}
 			
 			//$save_button_class = "hidden";
@@ -3879,6 +3879,33 @@ function washcarelabels(data, dataid,color_code,new_flag) {
 					$wash_label_count = "";
 				}
 			   tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + (value.Size).replace("ANS", '') + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)" type="number" min="'+data.wash_moq+'" data-required-error="Required" '+ $disable_qty_select +' class="form-control input-sm tot_qty_tablewash" value="' + $wash_label_count + '" required placeholder="WCL Count"><div class="help-block with-errors"></div></div></td></tr>';
+			 	$qu++;
+			    ttots += parseInt($wash_label_count);
+				totaloq += parseInt(value.Quantity);
+		}
+		else
+		{
+			if (data.orchestra_wash_care_label_orders != "") {
+					if (dataid != "") {
+						dataid1 = dataid;
+					} else {
+						dataid1 = 0;
+					}
+					if (data.orchestra_wash_care_label_orders.length > dataid1) {
+						
+					  
+						   $wash_label_count = data.orchestra_wash_care_label_orders[dataid1]['qty'][$qu].quantity;
+						   
+						
+						
+					} else {
+						$wash_label_count = "";
+					}
+
+				} else {
+					$wash_label_count = "";
+				}
+			 tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + (value.Size).replace("ANS", '') + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)" type="number" min="'+data.wash_moq+'" data-required-error="Required" '+ $disable_qty_select +' class="form-control input-sm tot_qty_tablewash" value="' + $wash_label_count + '" required placeholder="WCL Count"><div class="help-block with-errors"></div></div></td></tr>';
 			 	$qu++;
 			    ttots += parseInt($wash_label_count);
 				totaloq += parseInt(value.Quantity);

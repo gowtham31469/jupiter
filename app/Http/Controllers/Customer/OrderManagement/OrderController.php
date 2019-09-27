@@ -573,12 +573,15 @@ class OrderController extends Controller
     {
        try {
              
-             $size = $request['size'];
+		   $size = $request['size'];
+		   $uvc_tco = $request['uvc_tco'];
 
-               $size = DB::table('orchestra_size_chart')->select('cm as size')->where('age', 'ilike', $size)->where('is_enabled','=',1)->get();
+		   $size = DB::table('orchestra_size_chart')->select('cm as size')->where('age', 'ilike', $size)->where('is_enabled','=',1)->get();
+		   
+		   $orchestra_parcel_quantity_details = DB::table('orchestra_parcel_quantity_details')->select('*')->where('UVC_TCO', $uvc_tco)->get();
            
-           
-           return response()->json(['size_chart' => $size]);
+           return response()->json(['size_chart' => $size,'opqt' => $orchestra_parcel_quantity_details]);
+		   
        } catch (\Exception $e) {
            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
        }
