@@ -875,6 +875,7 @@ class OrderController extends Controller
         $template_back_id = $request->template_back_id;
         $tot_qty_table = explode(',',$request->tot_qty_table);
         $uvc_tco = explode(',',$request->uvc_tco);
+        $barcode = explode(',',$request->barcode);
         $size = explode(',',$request->size);
         $size_id = explode(',',$request->size_id);
         $main_id = explode(',',$request->main_id);
@@ -940,6 +941,7 @@ class OrderController extends Controller
 									'oht_id' => $id,
 									'size'      => $size[$i],
 									'uvc_tco'      => $uvc_tco[$i],
+									'barcode'      => $barcode[$i],
 									'parcel_id'      => $main_id[$i],
 									'quantity'    => $value
 						 ]);
@@ -979,6 +981,7 @@ class OrderController extends Controller
 										'oht_id' => $inserted->id,
 										'size'      => $size[$i],
 										'uvc_tco'      => $uvc_tco[$i],
+										'barcode'      => $barcode[$i],
 										'parcel_id'      => $main_id[$i],
 										'quantity'    => $value
 						]);
@@ -1504,9 +1507,12 @@ class OrderController extends Controller
         $tot_qty_poly = explode(',',$request->tot_qty_poly);
         $tot_qty_carton = explode(',',$request->tot_qty_carton); 
         $size = explode(',',$request->size);
+        $barcode = explode(',',$request->barcode);
+        $uvc_tco = explode(',',$request->uvc_tco);
         $uvc =$request->uvc;
         $parcel_id =$request->parcel_id;
         $season_code =$request->season_code;
+        $color_code =$request->color_code;
         $height =$request->height; 
         $age =$request->age;
         $po =$request->po;
@@ -1557,6 +1563,7 @@ class OrderController extends Controller
                         'status'           => $status,
 						'orchestra_parcel_details_id'    => $parcel_id,
 						'season_code'    => $season_code,
+						'color_code'    => $color_code,
 					    'pi_status'           => $pi_status,
 				 		'po_status'           => $po_status,
                         'group_id'    => $age,
@@ -1571,6 +1578,8 @@ class OrderController extends Controller
                      SolidPolyStickerOrdersQty::create([
                                         'ospbs_id' => $poly_id,
                                         'size'      => $size[$j],
+                                        'barcode'      => $barcode[$j],
+                                        'uvc_tco'      => $uvc_tco[$j],
                                         'quantity'    => $value,
                                         'quantity_sets'    => $value
                              ]);
@@ -1595,6 +1604,7 @@ class OrderController extends Controller
                                 'status'    => $status,
 								'orchestra_parcel_details_id'    => $parcel_id,
 								'season_code'    => $season_code,
+								'color_code'    => $color_code,
 				  				'pi_status'           => $pi_status,
 				 				'po_status'           => $po_status,
                                 'group_id'    => $age,
@@ -1606,6 +1616,8 @@ class OrderController extends Controller
                      SolidPolyStickerOrdersQty::create([
                                         'ospbs_id' => $inserted_poly->id,
                                         'size'      => $size[$j],
+                                        'barcode'      => $barcode[$j],
+                                        'uvc_tco'      => $uvc_tco[$j],
                                         'quantity'    => $value,
                                         'quantity_sets'    => $value
                              ]);
@@ -1630,6 +1642,7 @@ class OrderController extends Controller
                         'status'           => $status,
 						'orchestra_parcel_details_id'    => $parcel_id,
 						'season_code'    => $season_code,
+						'color_code'    => $color_code,
 					    'pi_status'           => $pi_status,
 				 		'po_status'           => $po_status,
                         'group_id'    => $age,
@@ -1642,6 +1655,8 @@ class OrderController extends Controller
                      SolidCartonStickerOrdersQty::create([
                                         'oscs_id' => $carton_id,
                                         'size'      => $size[$i],
+                                        'barcode'      => $barcode[$i],
+                                        'uvc_tco'      => $uvc_tco[$i],
                                         'quantity'      => $value,
                                         'quantity_sets'    => $value
                              ]);
@@ -1666,6 +1681,7 @@ class OrderController extends Controller
                                 'status'    => $status,
 								'orchestra_parcel_details_id'    => $parcel_id,
 								'season_code'    => $season_code,
+								'color_code'    => $color_code,
 				   				'pi_status'           => $pi_status,
 				 				'po_status'           => $po_status,
                                 'group_id'    => $age,
@@ -1677,6 +1693,8 @@ class OrderController extends Controller
                      SolidCartonStickerOrdersQty::create([
                                         'oscs_id' => $inserted->id,
                                         'size'      => $size[$i],
+                                        'barcode'      => $barcode[$i],
+                                        'uvc_tco'      => $uvc_tco[$i],
                                         'quantity'    => $value,
                                         'quantity_sets'    => $value
                              ]);
@@ -1702,10 +1720,14 @@ class OrderController extends Controller
     {
         //$delivery_date = $request->delivery_date;
         $carton_template_id = $request->carton_template_id; 
+        $size = explode(',',$request->size);
+        $barcode = explode(',',$request->barcode);
+        $uvc_tco = explode(',',$request->uvc_tco);
         $polybag_template_id = $request->polybag_template_id;
         $uvc =$request->uvc;
         $parcel_id =$request->parcel_id;
         $season_code =$request->season_code;
+        $color_code =$request->color_code;
         $height =$request->height; 
         $age =$request->age;
         $po =$request->po;
@@ -1769,6 +1791,7 @@ class OrderController extends Controller
                         'status'           => $status,
 						'orchestra_parcel_details_id'    => $parcel_id,
 						'season_code'    => $season_code,
+						'color_code'    => $color_code,
 					   	'pi_status'           => $pi_status,
 					   	'po_status'           => $po_status,
                         'group_id'    => $age,
@@ -1777,13 +1800,19 @@ class OrderController extends Controller
 					$deleted = StandardPolyStickersQty::where('ospbs_id', '=', $poly_id)
                             ->delete();
             
-               
+                $j=0;
+                foreach($size as $value)
+                {
                      StandardPolyStickersQty::create([
                                         'ospbs_id' => $poly_id,
-                                        'size'      => "",
+                                        'size'      => $size[$j],
+                                        'barcode'      => $barcode[$j],
+                                        'uvc_tco'      => $uvc_tco[$j],
                                         'quantity'    => $final_order_qty,
                                         'quantity_sets'    => $final_order_qty
                      ]);
+					$j++;
+				}
 
 			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
                         ->update([
@@ -1808,18 +1837,25 @@ class OrderController extends Controller
                                 'status'    => $status,
 								'orchestra_parcel_details_id'    => $parcel_id,
 								'season_code'    => $season_code,
+								'color_code'    => $color_code,
 						  		'pi_status'           => $pi_status,
 								'po_status'           => $po_status,
                                 'group_id'    => $age,
 					 			'template_type'       => "ratio"
                      ]);
-			
-				StandardPolyStickersQty::create([
+				$j=0;
+                foreach($size as $value)
+                {
+					StandardPolyStickersQty::create([
                                         'ospbs_id' => $inserted_poly->id,
-                                        'size'      => "",
+                                        'size'      => $size[$j],
+                                        'barcode'      => $barcode[$j],
+                                        'uvc_tco'      => $uvc_tco[$j],
                                         'quantity'    => $final_order_qty,
                                         'quantity_sets'    => $final_order_qty
-                             ]);
+                    ]);
+					$j++;
+				}
 			
 			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
                         ->update([
@@ -1846,21 +1882,28 @@ class OrderController extends Controller
                         'status'           => $status,
 						'orchestra_parcel_details_id'    => $parcel_id,
 						'season_code'    => $season_code,
+						'color_code'    => $color_code,
 					    'pi_status'           => $pi_status,
 					   	'po_status'           => $po_status,
                         'group_id'    => $age,
                   ]);
 			
-			$deleted = StandardCartonStickersQty::where('oscs_id', '=', $carton_id)
+				$deleted = StandardCartonStickersQty::where('oscs_id', '=', $carton_id)
                             ->delete();
-            
+				$j=0;
+                foreach($size as $value)
+                {
                
                      StandardCartonStickersQty::create([
                                         'oscs_id' => $carton_id,
-                                        'size'      => "",
+                                        'size'      => $size[$j],
+                                        'barcode'      => $barcode[$j],
+                                        'uvc_tco'      => $uvc_tco[$j],
                                         'quantity'    => $final_order_qty_sets,
                                         'quantity_sets'    => $final_order_qty_sets
                      ]);
+					$j++;
+				}
 			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
                         ->update([
                           'sticker_order_status' => "Order Placed"
@@ -1884,18 +1927,28 @@ class OrderController extends Controller
                                 'status'    => $status,
 								'orchestra_parcel_details_id'    => $parcel_id,
 								'season_code'    => $season_code,
+								'color_code'    => $color_code,
 				   				'pi_status'           => $pi_status,
 				   				'po_status'           => $po_status,
                                 'group_id'    => $age,
 					 			'template_type'       => "ratio"
                      ]);
 			
-				StandardCartonStickersQty::create([
+				$j=0;
+                foreach($size as $value)
+                {
+			
+					StandardCartonStickersQty::create([
                                         'oscs_id' => $inserted->id,
-                                        'size'      => "",
+                                        'size'      => $size[$j],
+                                        'barcode'      => $barcode[$j],
+                                        'uvc_tco'      => $uvc_tco[$j],
                                         'quantity'    => $final_order_qty_sets,
                                         'quantity_sets'    => $final_order_qty_sets
-                      ]);
+                    ]);
+					$j++;
+					
+				}
 			
 			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
                         ->update([
@@ -2083,6 +2136,7 @@ class OrderController extends Controller
         $template_name = $request->template_name;
         $tot_qty_table = explode(',',$request->tot_qty_table);
         $uvc_tco = explode(',',$request->uvc_tco);
+        $barcode = explode(',',$request->barcode);
         $size = explode(',',$request->size);
         $uvc =$request->uvc;
         $po_select =$request->po_select;
@@ -2172,6 +2226,7 @@ class OrderController extends Controller
                                         'owcl_id' => $id,
                                         'size'      => $size[$i],
                                         'uvc_tco'      => $uvc_tco[$i],
+                                        'barcode'      => $barcode[$i],
                                         'quantity'    => $value
                              ]);
                     $i++;
@@ -2246,6 +2301,7 @@ class OrderController extends Controller
                                         'owcl_id' => $inserted->id,
                                         'size'      => $size[$i],
                                         'uvc_tco'      => $uvc_tco[$i],
+                                        'barcode'      => $barcode[$i],
                                         'quantity'    => $value
                              ]);
                     $i++;
@@ -2319,6 +2375,7 @@ class OrderController extends Controller
                                         'owcl_id' => $inserted->id,
                                         'size'      => $size[$i],
                                         'uvc_tco'      => $uvc_tco[$i],
+                                        'barcode'      => $barcode[$i],
                                         'quantity'    => $value
                              ]);
                     $i++;

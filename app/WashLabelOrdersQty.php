@@ -16,5 +16,5 @@ class WashLabelOrdersQty extends Authenticatable
      */
 
     protected $table = 'orchestra_wash_care_label_orders_qty';
-    protected $fillable =['owcl_id','size','uvc_tco','quantity'];
+    protected $fillable =['owcl_id','size','barcode','uvc_tco','quantity'];
 }
