@@ -16,5 +16,5 @@ class HangTagOrdersQty extends Authenticatable
      */
 
     protected $table = 'orchestra_hang_tag_orders_qty';
-    protected $fillable =['oht_id','size','uvc_tco','quantity','svg_path','status','parcel_id'];
+    protected $fillable =['oht_id','size','uvc_tco','barcode','quantity','svg_path','status','parcel_id'];
 }

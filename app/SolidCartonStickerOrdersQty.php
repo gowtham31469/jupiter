@@ -16,5 +16,5 @@ class SolidCartonStickerOrdersQty extends Authenticatable
      */
 
     protected $table = 'orchestra_solid_carton_sticker_orders_qty';
-    protected $fillable =['oscs_id','size','quantity','quantity_sets'];
+    protected $fillable =['oscs_id','size','barcode','uvc_tco','quantity','quantity_sets'];
 }
