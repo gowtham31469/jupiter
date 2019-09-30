@@ -46,6 +46,7 @@ use Illuminate\Support\Facades\Redis;
 class OrderManagementCntrl extends Controller
 {
     private $modules_permission;
+    private $edit_erp_obj;
     /**
      * Create a new controller instance.
      *
@@ -54,6 +55,7 @@ class OrderManagementCntrl extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->edit_erp_obj    = new EditErpOrders();
     }
 
     /**
@@ -845,7 +847,7 @@ class OrderManagementCntrl extends Controller
 			
 			if(count($customer_id) > 0)
 			{
-				$polybag_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',178)->get();
+				$polybag_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',100)->get();
 
 				if(count($polybag_moq) > 0)
 				{
@@ -897,6 +899,7 @@ class OrderManagementCntrl extends Controller
         $template_back_id = $request->template_back_id;
         $tot_qty_table = explode(',',$request->tot_qty_table);
         $uvc_tco = explode(',',$request->uvc_tco);
+        $barcode = explode(',',$request->barcode);
         $size = explode(',',$request->size);
         $size_id = explode(',',$request->size_id);
         $main_id = explode(',',$request->main_id);
@@ -906,7 +909,7 @@ class OrderManagementCntrl extends Controller
         $season_code =$request->season_code;
         $id =$request->id;
 		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('customers.*')->get();
-		//print_r($factory);
+		
 		if(count($factory) > 0)
 		{
 			
@@ -940,39 +943,83 @@ class OrderManagementCntrl extends Controller
 		
         if($id != "null")
         {
-            	HangTagOrders::where('id',$id)
-                   ->update([
-                        'uvc' => $uvc,
-                        'template_front_id'      => $template_front_id,
-                        'template_back_id'      => $template_back_id,
-                        'svg_path'    => "", 
-                        'status'    => $status,
-                        'customer_id'    => $factory{0}->id,
-					    'orchestra_parcel_details_id'    => $parcel_id,
-					    'season_code'    => $season_code,
-					    'pi_status'           => $pi_status,
-					   	'po_status'           => $po_status,
-                  ]);
-                $deleted = HangTagOrdersQty::where('oht_id', '=', $id)
-                            ->delete();
-                $i=0;
-                foreach($tot_qty_table as $value)
-                {
-						HangTagOrdersQty::create([
-									'oht_id' => $id,
-									'size'      => $size[$i],
-									'uvc_tco'      => $uvc_tco[$i],
-									'parcel_id'      => $main_id[$i],
-									'quantity'    => $value
-						 ]);
-						$i++;
-                }
-			
-				DB::table("orchestra_parcel_details")->where('UVC',$uvc)
-                        ->update([
-                          'order_status' => "Order Placed"
+            // get quantity_table ids.
+            $quantity_table_ids = DB::table('orchestra_hang_tag_orders_qty')->select('id')->where('oht_id',$id)->get();
 
+            HangTagOrders::where('id',$id)
+                ->update([
+                    'uvc' => $uvc,
+                    'template_front_id'      => $template_front_id,
+                    'template_back_id'      => $template_back_id,
+                    'svg_path'    => "", 
+                    'status'    => $status,
+                    'customer_id'    => $factory{0}->id,
+                    'orchestra_parcel_details_id'    => $parcel_id,
+                    'season_code'    => $season_code,
+                    'pi_status'           => $pi_status,
+                    'po_status'           => $po_status,
                 ]);
+            $deleted = HangTagOrdersQty::where('oht_id', '=', $id)
+                        ->delete();
+            $i=0;
+            foreach($tot_qty_table as $value)
+            {
+                    HangTagOrdersQty::create([
+                                'oht_id' => $id,
+                                'size'      => $size[$i],
+                                'uvc_tco'      => $uvc_tco[$i],
+                                'barcode'      => $barcode[$i],
+                                'parcel_id'      => $main_id[$i],
+                                'quantity'    => $value
+                        ]);
+                    $i++;
+            }
+        
+            DB::table("orchestra_parcel_details")->where('UVC',$uvc)
+                    ->update([
+                        'order_status' => "Order Placed"
+
+            ]);
+
+            // fetch erp_order_details table details for each quantity_table ids.
+            foreach($quantity_table_ids as $quantity_table_id)
+            {
+                $quantity_id = $quantity_table_id->id;
+                $erp_order_details[] = DB::table('erp_order_details')->where('order_qnty_table_name','ilike', 'orchestra_hang_tag_orders_qty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $quantity_id)->select('erp_order_details.id','erp_status.status_name', 'erp_order_details.erp_order_id')->first();
+            }
+        
+            if(!is_null($erp_order_details[0]))
+            {
+                $erp_details_status =  $erp_order_details[0]->status_name;
+                $erp_order_id =  $erp_order_details[0]->erp_order_id;
+                
+                foreach($erp_order_details as $erp_order_detail){
+                    // delete from history table and insert new rows.
+                    $history_table_id =  DB::table('history')->where('erp_order_details_id',$erp_order_detail->id)->value('id');
+                    DB::table('event_history')->where('history_id',$history_table_id)->delete();
+                    DB::table('history')->where('id',$history_table_id)->delete();
+                    // delete from erp_order_details table
+                    DB::table('erp_order_details')->where('id',$erp_order_detail->id)->delete();
+                }
+                
+                /** @var array [Pass array of values to updateOrchestraErpOrderDetails function] */
+                $data_array = [];   
+                $orchestra_buyer_id               = DB::table('buyers')->select('id')->where('buyer_name','=','Orchestra')->first();
+                $data_array['main_table']         = 'orchestra_hang_tag_orders';
+                $data_array['main_table_id']      = $id;
+                $data_array['quantity_table']     = 'orchestra_hang_tag_orders_qty';
+                $data_array['quantity_id_field']  = 'oht_id';
+                $data_array['buyer_id']           = $orchestra_buyer_id->id;
+                $data_array['erp_details_status'] = $erp_details_status;
+                $data_array['erp_order_id']       = $erp_order_id;
+
+                // update erp_order_details and erp_orders table 
+                $result = $this->edit_erp_obj->updateOrchestraErpOrderDetails($data_array);
+            }
+            else
+            {
+                $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
         }
         else
         {
@@ -1001,6 +1048,7 @@ class OrderManagementCntrl extends Controller
 										'oht_id' => $inserted->id,
 										'size'      => $size[$i],
 										'uvc_tco'      => $uvc_tco[$i],
+										'barcode'      => $barcode[$i],
 										'parcel_id'      => $main_id[$i],
 										'quantity'    => $value
 						]);
@@ -1013,8 +1061,11 @@ class OrderManagementCntrl extends Controller
                           'order_status' => "Order Placed"
 
             ]);
+
+            $result = response()->json(['error'=> false,'message' =>'success'],200);
         }
-           
+          
+        return $result;
     }
 	/**
      * This Function is used to save the Heat Transfer Details.
@@ -1037,7 +1088,7 @@ class OrderManagementCntrl extends Controller
         $season_code =$request->season_code;
         $id =$request->id;
 		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('customers.*')->get();
-		//print_r($factory);
+		
 		if(count($factory) > 0)
 		{
 			
@@ -1071,38 +1122,81 @@ class OrderManagementCntrl extends Controller
 		
         if($id != "null")
         {
-            	HeatTransferOrders::where('id',$id)
-                   ->update([
-                        'uvc' => $uvc,
-                        'template_id'      => $template_id,
-                        'svg_path'    => "", 
-                        'status'    => $status,
-					    'orchestra_parcel_details_id'    => $parcel_id,
-					    'season_code'    => $season_code,
-                        'customer_id'    => $factory{0}->id,
-					    'pi_status'           => $pi_status,
-					   	'po_status'           => $po_status
-                  ]);
-                $deleted = HeatTransferOrdersQty::where('oht_id', '=', $id)
-                            ->delete();
-                $i=0;
-                foreach($tot_qty_table as $value)
-                {
-                     		HeatTransferOrdersQty::create([
-                                        'oht_id' => $id,
-                                        'size'      => $size[$i],
-                                        'uvc_tco'      => $uvc_tco[$i],
-										'parcel_id'      => $main_id[$i],
-                                        'quantity'    => $value
-                             ]);
-                    $i++;
-                }
-			
-				DB::table("orchestra_parcel_details")->where('UVC',$uvc)
-                        ->update([
-                          'order_status' => "Order Placed"
+            // get quantity_table ids.
+            $quantity_table_ids = DB::table('orchestra_heat_transfer_orders_qty')->select('id')->where('oht_id',$id)->get();
 
+            HeatTransferOrders::where('id',$id)
+                ->update([
+                    'uvc' => $uvc,
+                    'template_id'      => $template_id,
+                    'svg_path'    => "", 
+                    'status'    => $status,
+                    'orchestra_parcel_details_id'    => $parcel_id,
+                    'season_code'    => $season_code,
+                    'customer_id'    => $factory{0}->id,
+                    'pi_status'           => $pi_status,
+                    'po_status'           => $po_status
                 ]);
+            $deleted = HeatTransferOrdersQty::where('oht_id', '=', $id)
+                        ->delete();
+            $i=0;
+            foreach($tot_qty_table as $value)
+            {
+                        HeatTransferOrdersQty::create([
+                                    'oht_id' => $id,
+                                    'size'      => $size[$i],
+                                    'uvc_tco'      => $uvc_tco[$i],
+                                    'parcel_id'      => $main_id[$i],
+                                    'quantity'    => $value
+                            ]);
+                $i++;
+            }
+        
+            DB::table("orchestra_parcel_details")->where('UVC',$uvc)
+                    ->update([
+                        'order_status' => "Order Placed"
+
+            ]);
+
+            // fetch erp_order_details table details for each quantity_table ids.
+            foreach($quantity_table_ids as $quantity_table_id)
+            {
+                $quantity_id = $quantity_table_id->id;
+                $erp_order_details[] = DB::table('erp_order_details')->where('order_qnty_table_name','ilike', 'orchestra_heat_transfer_orders_qty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $quantity_id)->select('erp_order_details.id','erp_status.status_name', 'erp_order_details.erp_order_id')->first();
+            }
+        
+            if(!is_null($erp_order_details[0]))
+            {
+                $erp_details_status =  $erp_order_details[0]->status_name;
+                $erp_order_id =  $erp_order_details[0]->erp_order_id;
+                
+                foreach($erp_order_details as $erp_order_detail){
+                    // delete from history table and insert new rows.
+                    $history_table_id =  DB::table('history')->where('erp_order_details_id',$erp_order_detail->id)->value('id');
+                    DB::table('event_history')->where('history_id',$history_table_id)->delete();
+                    DB::table('history')->where('id',$history_table_id)->delete();
+                    // delete from erp_order_details table
+                    DB::table('erp_order_details')->where('id',$erp_order_detail->id)->delete();
+                }
+                
+                /** @var array [Pass array of values to updateOrchestraErpOrderDetails function] */
+                $data_array = [];   
+                $orchestra_buyer_id               = DB::table('buyers')->select('id')->where('buyer_name','=','Orchestra')->first();
+                $data_array['main_table']         = 'orchestra_heat_transfer_orders';
+                $data_array['main_table_id']      = $id;
+                $data_array['quantity_table']     = 'orchestra_heat_transfer_orders_qty';
+                $data_array['quantity_id_field']  = 'oht_id';
+                $data_array['buyer_id']           = $orchestra_buyer_id->id;
+                $data_array['erp_details_status'] = $erp_details_status;
+                $data_array['erp_order_id']       = $erp_order_id;
+
+                // update erp_order_details and erp_orders table 
+                $result = $this->edit_erp_obj->updateOrchestraErpOrderDetails($data_array);
+            }
+            else
+            {
+                $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
         }
         else
         {
@@ -1142,7 +1236,10 @@ class OrderManagementCntrl extends Controller
                           'order_status' => "Order Placed"
 
             ]);
+            $result = response()->json(['error'=> false,'message' =>'success'],200);
         }
+
+        return $result;
            
     }
 	
@@ -1164,8 +1261,9 @@ class OrderManagementCntrl extends Controller
         $season_code =$request->season_code;
         $colour =$request->colour;
         $id =$request->id;
-		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('customers.*')->get();
-		//print_r($factory);
+
+        $factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('customers.*')->get();
+		
 		if(count($factory) > 0)
 		{
 			
@@ -1199,34 +1297,78 @@ class OrderManagementCntrl extends Controller
 		
         if($id != "null")
         {
-				MainLabelOrders::where('id',$id)
-                   ->update([
-                        'uvc' => $uvc,
-                        'template_id'      => $template_id,
-                        'svg_path'    => "", 
-                        'status'    => $status,
-					    'orchestra_parcel_details_id'    => $parcel_id,
-					    'season_code'    => $season_code,
-                        'customer_id'    => $factory{0}->id,
-					    'pi_status'           => $pi_status,
-					   	'po_status'           => $po_status,
-                  ]);
-                $deleted = MainLabelOrdersQty::where('oml_id', '=', $id)
-                            ->delete();
-                
-                
-                     MainLabelOrdersQty::create([
-                                        'oml_id' => $id,
-                                        'size'      => "",
-                                        'uvc_tco'      => "",
-                                        'quantity'    => $tot_qty_table
-                             ]);
-			
-				DB::table("orchestra_parcel_details")->where('UVC',$uvc)
-                        ->update([
-                          'order_status' => "Order Placed"
-
+            // get quantity_table ids.
+            $quantity_table_ids = DB::table('orchestra_main_label_orders_qty')->select('id')->where('oml_id',$id)->get();
+         
+            MainLabelOrders::where('id',$id)
+                ->update([
+                    'uvc' => $uvc,
+                    'template_id'      => $template_id,
+                    'svg_path'    => "", 
+                    'status'    => $status,
+                    'orchestra_parcel_details_id'    => $parcel_id,
+                    'season_code'    => $season_code,
+                    'customer_id'    => $factory{0}->id,
+                    'pi_status'           => $pi_status,
+                    'po_status'           => $po_status,
                 ]);
+            $deleted = MainLabelOrdersQty::where('oml_id', '=', $id)
+                        ->delete();
+            
+            
+            MainLabelOrdersQty::create([
+                            'oml_id' => $id,
+                            'size'      => "",
+                            'uvc_tco'      => "",
+                            'quantity'    => $tot_qty_table
+                    ]);
+        
+            DB::table("orchestra_parcel_details")->where('UVC',$uvc)
+                    ->update([
+                        'order_status' => "Order Placed"
+
+            ]);
+
+            // fetch erp_order_details table details for each quantity_table ids.
+            foreach($quantity_table_ids as $quantity_table_id)
+            {
+                $quantity_id = $quantity_table_id->id;
+                $erp_order_details[] = DB::table('erp_order_details')->where('order_qnty_table_name','ilike', 'orchestra_main_label_orders_qty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $quantity_id)->select('erp_order_details.id','erp_status.status_name', 'erp_order_details.erp_order_id')->first();
+            }
+        
+            if(!is_null($erp_order_details[0]))
+            {
+                $erp_details_status =  $erp_order_details[0]->status_name;
+                $erp_order_id =  $erp_order_details[0]->erp_order_id;
+                
+                foreach($erp_order_details as $erp_order_detail){
+                    // delete from history table and insert new rows.
+                    $history_table_id =  DB::table('history')->where('erp_order_details_id',$erp_order_detail->id)->value('id');
+                    DB::table('event_history')->where('history_id',$history_table_id)->delete();
+                    DB::table('history')->where('id',$history_table_id)->delete();
+                    // delete from erp_order_details table
+                    DB::table('erp_order_details')->where('id',$erp_order_detail->id)->delete();
+                }
+                
+                /** @var array [Pass array of values to updateOrchestraErpOrderDetails function] */
+                $data_array = [];   
+                $orchestra_buyer_id               = DB::table('buyers')->select('id')->where('buyer_name','=','Orchestra')->first();
+                $data_array['main_table']         = 'orchestra_main_label_orders';
+                $data_array['main_table_id']      = $id;
+                $data_array['quantity_table']     = 'orchestra_main_label_orders_qty';
+                $data_array['quantity_id_field']  = 'oml_id';
+                $data_array['buyer_id']           = $orchestra_buyer_id->id;
+                $data_array['erp_details_status'] = $erp_details_status;
+                $data_array['erp_order_id']       = $erp_order_id;
+
+                // update erp_order_details and erp_orders table 
+                $result = $this->edit_erp_obj->updateOrchestraErpOrderDetails($data_array);
+            }
+            else
+            {
+                $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            
         }
         else
         {
@@ -1261,7 +1403,9 @@ class OrderManagementCntrl extends Controller
                           'order_status' => "Order Placed"
 
             ]);
+            $result = response()->json(['error'=> false,'message' =>'success'],200);
         }
+        return $result;
            
     }
 	/**
@@ -1284,7 +1428,8 @@ class OrderManagementCntrl extends Controller
         $colour = $request->colour;
         $season_code =$request->season_code;
         $id =$request->id;
-		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('customers.*')->get();
+        $factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('customers.*')->get();
+
 		//print_r($factory);
 		if(count($factory) > 0)
 		{
@@ -1319,38 +1464,81 @@ class OrderManagementCntrl extends Controller
 		
         if($id != "null")
         {
-            	SizeLabelOrders::where('id',$id)
-                   ->update([
-                        'uvc' => $uvc,
-                        'template_id'      => $template_id,
-                        'svg_path'    => "", 
-                        'status'    => $status,
-					    'orchestra_parcel_details_id'    => $parcel_id,
-					    'season_code'    => $season_code,
-                        'customer_id'    => $factory{0}->id,
-					    'pi_status'           => $pi_status,
-					   	'po_status'           => $po_status
-                  ]);
-                $deleted = SizeLabelOrdersQty::where('osl_id', '=', $id)
-                            ->delete();
-                $i=0;
-                foreach($tot_qty_table as $value)
-                {
-                     	SizeLabelOrdersQty::create([
-                                        'osl_id' => $id,
-                                        'size'      => $size[$i],
-                                        'uvc_tco'      => $uvc_tco[$i],
-										'parcel_id'      => $main_id[$i],
-                                        'quantity'    => $value
-                             ]);
-                    $i++;
-                }
-			
-				DB::table("orchestra_parcel_details")->where('UVC',$uvc)
-                        ->update([
-                          'order_status' => "Order Placed"
+            // get quantity_table ids.
+            $quantity_table_ids = DB::table('orchestra_size_label_orders_qty')->select('id')->where('osl_id',$id)->get();
 
+            SizeLabelOrders::where('id',$id)
+                ->update([
+                    'uvc' => $uvc,
+                    'template_id'      => $template_id,
+                    'svg_path'    => "", 
+                    'status'    => $status,
+                    'orchestra_parcel_details_id'    => $parcel_id,
+                    'season_code'    => $season_code,
+                    'customer_id'    => $factory{0}->id,
+                    'pi_status'           => $pi_status,
+                    'po_status'           => $po_status
                 ]);
+            $deleted = SizeLabelOrdersQty::where('osl_id', '=', $id)
+                        ->delete();
+            $i=0;
+            foreach($tot_qty_table as $value)
+            {
+                SizeLabelOrdersQty::create([
+                                'osl_id' => $id,
+                                'size'      => $size[$i],
+                                'uvc_tco'      => $uvc_tco[$i],
+                                'parcel_id'      => $main_id[$i],
+                                'quantity'    => $value
+                        ]);
+                $i++;
+            }
+        
+            DB::table("orchestra_parcel_details")->where('UVC',$uvc)
+                    ->update([
+                        'order_status' => "Order Placed"
+
+            ]);
+
+            // fetch erp_order_details table details for each quantity_table ids.
+            foreach($quantity_table_ids as $quantity_table_id)
+            {
+                $quantity_id = $quantity_table_id->id;
+                $erp_order_details[] = DB::table('erp_order_details')->where('order_qnty_table_name','ilike', 'orchestra_size_label_orders_qty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $quantity_id)->select('erp_order_details.id','erp_status.status_name', 'erp_order_details.erp_order_id')->first();
+            }
+        
+            if(!is_null($erp_order_details[0]))
+            {
+                $erp_details_status =  $erp_order_details[0]->status_name;
+                $erp_order_id =  $erp_order_details[0]->erp_order_id;
+                
+                foreach($erp_order_details as $erp_order_detail){
+                    // delete from history table and insert new rows.
+                    $history_table_id =  DB::table('history')->where('erp_order_details_id',$erp_order_detail->id)->value('id');
+                    DB::table('event_history')->where('history_id',$history_table_id)->delete();
+                    DB::table('history')->where('id',$history_table_id)->delete();
+                    // delete from erp_order_details table
+                    DB::table('erp_order_details')->where('id',$erp_order_detail->id)->delete();
+                }
+                
+                /** @var array [Pass array of values to updateOrchestraErpOrderDetails function] */
+                $data_array = [];   
+                $orchestra_buyer_id               = DB::table('buyers')->select('id')->where('buyer_name','=','Orchestra')->first();
+                $data_array['main_table']         = 'orchestra_size_label_orders';
+                $data_array['main_table_id']      = $id;
+                $data_array['quantity_table']     = 'orchestra_size_label_orders_qty';
+                $data_array['quantity_id_field']  = 'osl_id';
+                $data_array['buyer_id']           = $orchestra_buyer_id->id;
+                $data_array['erp_details_status'] = $erp_details_status;
+                $data_array['erp_order_id']       = $erp_order_id;
+
+                // update erp_order_details and erp_orders table 
+                $result = $this->edit_erp_obj->updateOrchestraErpOrderDetails($data_array);
+            }
+            else
+            {
+                $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
         }
         else
         {
@@ -1390,8 +1578,10 @@ class OrderManagementCntrl extends Controller
                           'order_status' => "Order Placed"
 
             ]);
+            $result = response()->json(['error'=> false,'message' =>'success'],200);
         }
-           
+
+        return $result;
     }
 	
 	/**
@@ -1413,7 +1603,8 @@ class OrderManagementCntrl extends Controller
 		$colour =$request->colour;
         $uvc =$request->uvc;
         $id =$request->id;
-		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('customers.*')->get();
+        $factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('customers.*')->get();
+
 		if(count($factory) > 0)
 		{
 			
@@ -1446,34 +1637,77 @@ class OrderManagementCntrl extends Controller
 		}
         if($id != "null")
         {
-            	SpecialTagOrders::where('id',$id)
-                   ->update([
-                        'uvc' => $uvc,
-                        'template_id'      => $template_front_id, 
-                        'svg_path'    => "",
-					    'final_qty'    => $tot_qty_table, 
-                        'customer_id'    => $factory{0}->id,
-                        'status'    => $status,
-						'orchestra_parcel_details_id'    => $parcel_id,
-						'season_code'    => $season_code,
-					    'pi_status'           => $pi_status,
-				 		'po_status'           => $po_status,
-                  ]);
-                $deleted = SpecialTagOrdersQty::where('ost_id', '=', $id)
-                            ->delete();
-                
-                
-                     SpecialTagOrdersQty::create([
-                                        'ost_id' => $id,
-                                        //'size'      => $size[$i],
-                                        //'uvc_tco'      => $uvc_tco[$i],
-                                        'quantity'    => $tot_qty_table
-                             ]);
+            // get quantity_table ids.
+            $quantity_table_ids = DB::table('orchestra_special_tag_orders_qty')->select('id')->where('ost_id',$id)->get();
+
+            SpecialTagOrders::where('id',$id)
+                ->update([
+                    'uvc' => $uvc,
+                    'template_id'      => $template_front_id, 
+                    'svg_path'    => "",
+                    'final_qty'    => $tot_qty_table, 
+                    'customer_id'    => $factory{0}->id,
+                    'status'    => $status,
+                    'orchestra_parcel_details_id'    => $parcel_id,
+                    'season_code'    => $season_code,
+                    'pi_status'           => $pi_status,
+                    'po_status'           => $po_status,
+                ]);
+            $deleted = SpecialTagOrdersQty::where('ost_id', '=', $id)
+                        ->delete();
+            
+            
+            SpecialTagOrdersQty::create([
+                            'ost_id' => $id,
+                            //'size'      => $size[$i],
+                            //'uvc_tco'      => $uvc_tco[$i],
+                            'quantity'    => $tot_qty_table
+                    ]);
 			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
                         ->update([
                           'order_status' => "Order Placed"
 
             ]);
+
+            // fetch erp_order_details table details for each quantity_table ids.
+            foreach($quantity_table_ids as $quantity_table_id)
+            {
+                $quantity_id = $quantity_table_id->id;
+                $erp_order_details[] = DB::table('erp_order_details')->where('order_qnty_table_name','ilike', 'orchestra_special_tag_orders_qty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $quantity_id)->select('erp_order_details.id','erp_status.status_name', 'erp_order_details.erp_order_id')->first();
+            }
+        
+            if(!is_null($erp_order_details[0]))
+            {
+                $erp_details_status =  $erp_order_details[0]->status_name;
+                $erp_order_id =  $erp_order_details[0]->erp_order_id;
+                
+                foreach($erp_order_details as $erp_order_detail){
+                    // delete from history table and insert new rows.
+                    $history_table_id =  DB::table('history')->where('erp_order_details_id',$erp_order_detail->id)->value('id');
+                    DB::table('event_history')->where('history_id',$history_table_id)->delete();
+                    DB::table('history')->where('id',$history_table_id)->delete();
+                    // delete from erp_order_details table
+                    DB::table('erp_order_details')->where('id',$erp_order_detail->id)->delete();
+                }
+                
+                /** @var array [Pass array of values to updateOrchestraErpOrderDetails function] */
+                $data_array = [];   
+                $orchestra_buyer_id               = DB::table('buyers')->select('id')->where('buyer_name','=','Orchestra')->first();
+                $data_array['main_table']         = 'orchestra_special_tag_orders';
+                $data_array['main_table_id']      = $id;
+                $data_array['quantity_table']     = 'orchestra_special_tag_orders_qty';
+                $data_array['quantity_id_field']  = 'ost_id';
+                $data_array['buyer_id']           = $orchestra_buyer_id->id;
+                $data_array['erp_details_status'] = $erp_details_status;
+                $data_array['erp_order_id']       = $erp_order_id;
+
+                // update erp_order_details and erp_orders table 
+                $result = $this->edit_erp_obj->updateOrchestraErpOrderDetails($data_array);
+            }
+            else
+            {
+                $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
         }
         else
         {
@@ -1495,7 +1729,7 @@ class OrderManagementCntrl extends Controller
 					 				'template_type'       => "ratio"
                          ]);
             
-                 SpecialTagOrdersQty::create([
+                SpecialTagOrdersQty::create([
                                     'ost_id' => $inserted->id,
                                     //'size'      => $size[$i],
                                     //'uvc_tco'      => $uvc_tco[$i],
@@ -1508,8 +1742,10 @@ class OrderManagementCntrl extends Controller
                           'order_status' => "Order Placed"
 
             ]);
+            $result = response()->json(['error'=> false,'message' =>'success'],200);
         }
-           
+        
+        return $result;
     } 
 	
 	/**
@@ -1662,9 +1898,12 @@ class OrderManagementCntrl extends Controller
         $tot_qty_poly = explode(',',$request->tot_qty_poly);
         $tot_qty_carton = explode(',',$request->tot_qty_carton); 
         $size = explode(',',$request->size);
+        $barcode = explode(',',$request->barcode);
+        $uvc_tco = explode(',',$request->uvc_tco);
         $uvc =$request->uvc;
         $parcel_id =$request->parcel_id;
         $season_code =$request->season_code;
+        $color_code =$request->color_code;
         $height =$request->height; 
         $age =$request->age;
         $po =$request->po;
@@ -1715,6 +1954,7 @@ class OrderManagementCntrl extends Controller
                         'status'           => $status,
 						'orchestra_parcel_details_id'    => $parcel_id,
 						'season_code'    => $season_code,
+						'color_code'    => $color_code,
 					    'pi_status'           => $pi_status,
 				 		'po_status'           => $po_status,
                         'group_id'    => $age,
@@ -1729,6 +1969,8 @@ class OrderManagementCntrl extends Controller
                      SolidPolyStickerOrdersQty::create([
                                         'ospbs_id' => $poly_id,
                                         'size'      => $size[$j],
+                                        'barcode'      => $barcode[$j],
+                                        'uvc_tco'      => $uvc_tco[$j],
                                         'quantity'    => $value,
                                         'quantity_sets'    => $value
                              ]);
@@ -1753,6 +1995,7 @@ class OrderManagementCntrl extends Controller
                                 'status'    => $status,
 								'orchestra_parcel_details_id'    => $parcel_id,
 								'season_code'    => $season_code,
+								'color_code'    => $color_code,
 				  				'pi_status'           => $pi_status,
 				 				'po_status'           => $po_status,
                                 'group_id'    => $age,
@@ -1764,6 +2007,8 @@ class OrderManagementCntrl extends Controller
                      SolidPolyStickerOrdersQty::create([
                                         'ospbs_id' => $inserted_poly->id,
                                         'size'      => $size[$j],
+                                        'barcode'      => $barcode[$j],
+                                        'uvc_tco'      => $uvc_tco[$j],
                                         'quantity'    => $value,
                                         'quantity_sets'    => $value
                              ]);
@@ -1788,6 +2033,7 @@ class OrderManagementCntrl extends Controller
                         'status'           => $status,
 						'orchestra_parcel_details_id'    => $parcel_id,
 						'season_code'    => $season_code,
+						'color_code'    => $color_code,
 					    'pi_status'           => $pi_status,
 				 		'po_status'           => $po_status,
                         'group_id'    => $age,
@@ -1800,6 +2046,8 @@ class OrderManagementCntrl extends Controller
                      SolidCartonStickerOrdersQty::create([
                                         'oscs_id' => $carton_id,
                                         'size'      => $size[$i],
+                                        'barcode'      => $barcode[$i],
+                                        'uvc_tco'      => $uvc_tco[$i],
                                         'quantity'      => $value,
                                         'quantity_sets'    => $value
                              ]);
@@ -1824,6 +2072,7 @@ class OrderManagementCntrl extends Controller
                                 'status'    => $status,
 								'orchestra_parcel_details_id'    => $parcel_id,
 								'season_code'    => $season_code,
+								'color_code'    => $color_code,
 				   				'pi_status'           => $pi_status,
 				 				'po_status'           => $po_status,
                                 'group_id'    => $age,
@@ -1835,6 +2084,8 @@ class OrderManagementCntrl extends Controller
                      SolidCartonStickerOrdersQty::create([
                                         'oscs_id' => $inserted->id,
                                         'size'      => $size[$i],
+                                        'barcode'      => $barcode[$i],
+                                        'uvc_tco'      => $uvc_tco[$i],
                                         'quantity'    => $value,
                                         'quantity_sets'    => $value
                              ]);
@@ -1860,10 +2111,14 @@ class OrderManagementCntrl extends Controller
     {
         //$delivery_date = $request->delivery_date;
         $carton_template_id = $request->carton_template_id; 
+        $size = explode(',',$request->size);
+        $barcode = explode(',',$request->barcode);
+        $uvc_tco = explode(',',$request->uvc_tco);
         $polybag_template_id = $request->polybag_template_id;
         $uvc =$request->uvc;
         $parcel_id =$request->parcel_id;
         $season_code =$request->season_code;
+        $color_code =$request->color_code;
         $height =$request->height; 
         $age =$request->age;
         $po =$request->po;
@@ -1927,6 +2182,7 @@ class OrderManagementCntrl extends Controller
                         'status'           => $status,
 						'orchestra_parcel_details_id'    => $parcel_id,
 						'season_code'    => $season_code,
+						'color_code'    => $color_code,
 					   	'pi_status'           => $pi_status,
 					   	'po_status'           => $po_status,
                         'group_id'    => $age,
@@ -1935,13 +2191,19 @@ class OrderManagementCntrl extends Controller
 					$deleted = StandardPolyStickersQty::where('ospbs_id', '=', $poly_id)
                             ->delete();
             
-               
+                $j=0;
+                foreach($size as $value)
+                {
                      StandardPolyStickersQty::create([
                                         'ospbs_id' => $poly_id,
-                                        'size'      => "",
+                                        'size'      => $size[$j],
+                                        'barcode'      => $barcode[$j],
+                                        'uvc_tco'      => $uvc_tco[$j],
                                         'quantity'    => $final_order_qty,
                                         'quantity_sets'    => $final_order_qty
                      ]);
+					$j++;
+				}
 
 			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
                         ->update([
@@ -1966,18 +2228,25 @@ class OrderManagementCntrl extends Controller
                                 'status'    => $status,
 								'orchestra_parcel_details_id'    => $parcel_id,
 								'season_code'    => $season_code,
+								'color_code'    => $color_code,
 						  		'pi_status'           => $pi_status,
 								'po_status'           => $po_status,
                                 'group_id'    => $age,
 					 			'template_type'       => "ratio"
                      ]);
-			
-				StandardPolyStickersQty::create([
+				$j=0;
+                foreach($size as $value)
+                {
+					StandardPolyStickersQty::create([
                                         'ospbs_id' => $inserted_poly->id,
-                                        'size'      => "",
+                                        'size'      => $size[$j],
+                                        'barcode'      => $barcode[$j],
+                                        'uvc_tco'      => $uvc_tco[$j],
                                         'quantity'    => $final_order_qty,
                                         'quantity_sets'    => $final_order_qty
-                             ]);
+                    ]);
+					$j++;
+				}
 			
 			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
                         ->update([
@@ -2004,21 +2273,28 @@ class OrderManagementCntrl extends Controller
                         'status'           => $status,
 						'orchestra_parcel_details_id'    => $parcel_id,
 						'season_code'    => $season_code,
+						'color_code'    => $color_code,
 					    'pi_status'           => $pi_status,
 					   	'po_status'           => $po_status,
                         'group_id'    => $age,
                   ]);
 			
-			$deleted = StandardCartonStickersQty::where('oscs_id', '=', $carton_id)
+				$deleted = StandardCartonStickersQty::where('oscs_id', '=', $carton_id)
                             ->delete();
-            
+				$j=0;
+                foreach($size as $value)
+                {
                
                      StandardCartonStickersQty::create([
                                         'oscs_id' => $carton_id,
-                                        'size'      => "",
+                                        'size'      => $size[$j],
+                                        'barcode'      => $barcode[$j],
+                                        'uvc_tco'      => $uvc_tco[$j],
                                         'quantity'    => $final_order_qty_sets,
                                         'quantity_sets'    => $final_order_qty_sets
                      ]);
+					$j++;
+				}
 			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
                         ->update([
                           'sticker_order_status' => "Order Placed"
@@ -2042,18 +2318,28 @@ class OrderManagementCntrl extends Controller
                                 'status'    => $status,
 								'orchestra_parcel_details_id'    => $parcel_id,
 								'season_code'    => $season_code,
+								'color_code'    => $color_code,
 				   				'pi_status'           => $pi_status,
 				   				'po_status'           => $po_status,
                                 'group_id'    => $age,
 					 			'template_type'       => "ratio"
                      ]);
 			
-				StandardCartonStickersQty::create([
+				$j=0;
+                foreach($size as $value)
+                {
+			
+					StandardCartonStickersQty::create([
                                         'oscs_id' => $inserted->id,
-                                        'size'      => "",
+                                        'size'      => $size[$j],
+                                        'barcode'      => $barcode[$j],
+                                        'uvc_tco'      => $uvc_tco[$j],
                                         'quantity'    => $final_order_qty_sets,
                                         'quantity_sets'    => $final_order_qty_sets
-                      ]);
+                    ]);
+					$j++;
+					
+				}
 			
 			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
                         ->update([
@@ -2106,8 +2392,11 @@ class OrderManagementCntrl extends Controller
 			$status="";
 			$po_status="";
 			$pi_status="";
-		}
-		
+        }
+        
+		// get quantity_table ids.
+        $quantity_table_ids = DB::table('orchestra_solid_carton_sticker_orders')->select('id')->where('oscs_id',$carton_id)->get();
+
 		SolidCartonStickerOrders::where('id',$carton_id)
                    ->update([
                         'uvc'              => $uvc,
@@ -2133,8 +2422,47 @@ class OrderManagementCntrl extends Controller
 								'quantity_sets'    => $value
 					 ]);
 			$i++;
-		}
-	}
+        }
+        
+        // fetch erp_order_details table details for each quantity_table ids.
+        foreach($quantity_table_ids as $quantity_table_id)
+        {
+            $quantity_id = $quantity_table_id->id;
+            $erp_order_details[] = DB::table('erp_order_details')->where('order_qnty_table_name','ilike', 'orchestra_solid_carton_sticker_orders_qty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $quantity_id)->select('erp_order_details.id','erp_status.status_name', 'erp_order_details.erp_order_id')->first();
+        }
+    
+        if(!is_null($erp_order_details[0]))
+        {
+            $erp_details_status =  $erp_order_details[0]->status_name;
+            $erp_order_id =  $erp_order_details[0]->erp_order_id;
+            
+            foreach($erp_order_details as $erp_order_detail){
+                // delete from history table and insert new rows.
+                $history_table_id =  DB::table('history')->where('erp_order_details_id',$erp_order_detail->id)->value('id');
+                DB::table('event_history')->where('history_id',$history_table_id)->delete();
+                DB::table('history')->where('id',$history_table_id)->delete();
+                // delete from erp_order_details table
+                DB::table('erp_order_details')->where('id',$erp_order_detail->id)->delete();
+            }
+            
+            /** @var array [Pass array of values to updateOrchestraErpOrderDetails function] */
+            $data_array = [];   
+            $orchestra_buyer_id               = DB::table('buyers')->select('id')->where('buyer_name','=','Orchestra')->first();
+            $data_array['main_table']         = 'orchestra_solid_carton_sticker_orders';
+            $data_array['main_table_id']      = $carton_id;
+            $data_array['quantity_table']     = 'orchestra_solid_carton_sticker_orders_qty';
+            $data_array['quantity_id_field']  = 'oscs_id';
+            $data_array['buyer_id']           = $orchestra_buyer_id->id;
+            $data_array['erp_details_status'] = $erp_details_status;
+            $data_array['erp_order_id']       = $erp_order_id;
+
+            // update erp_order_details and erp_orders table 
+            $this->edit_erp_obj->updateOrchestraErpOrderDetails($data_array);
+        }
+        return response()->json(['error'=> false,'message' =>'success'],200);
+    }
+    
+
 	public function setSolidPolyBagStickersOs(Request $request)
 	{
         $tot_qty_poly = explode(',',$request->tot_qty_poly); 
@@ -2145,7 +2473,9 @@ class OrderManagementCntrl extends Controller
         $height =$request->height; 
         $age =$request->age;
         $poly_id =$request->poly_id;
-		
+        
+        // get quantity_table ids.
+        $quantity_table_ids = DB::table('orchestra_solid_poly_bag_sticker_orders_qty')->select('id')->where('ospbs_id',$poly_id)->get();
 		
 		SolidPolyStickerOrders::where('id',$poly_id)
                    ->update([
@@ -2164,8 +2494,47 @@ class OrderManagementCntrl extends Controller
 								'quantity_sets'    => $value
 					 ]);
 			$i++;
-		}
-	}
+        }
+        
+        // fetch erp_order_details table details for each quantity_table ids.
+        foreach($quantity_table_ids as $quantity_table_id)
+        {
+            $quantity_id = $quantity_table_id->id;
+            $erp_order_details[] = DB::table('erp_order_details')->where('order_qnty_table_name','ilike', 'orchestra_solid_poly_bag_sticker_orders_qty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $quantity_id)->select('erp_order_details.id','erp_status.status_name', 'erp_order_details.erp_order_id')->first();
+        }
+    
+        if(!is_null($erp_order_details[0]))
+        {
+            $erp_details_status =  $erp_order_details[0]->status_name;
+            $erp_order_id =  $erp_order_details[0]->erp_order_id;
+            
+            foreach($erp_order_details as $erp_order_detail){
+                // delete from history table and insert new rows.
+                $history_table_id =  DB::table('history')->where('erp_order_details_id',$erp_order_detail->id)->value('id');
+                DB::table('event_history')->where('history_id',$history_table_id)->delete();
+                DB::table('history')->where('id',$history_table_id)->delete();
+                // delete from erp_order_details table
+                DB::table('erp_order_details')->where('id',$erp_order_detail->id)->delete();
+            }
+            
+            /** @var array [Pass array of values to updateOrchestraErpOrderDetails function] */
+            $data_array = [];   
+            $orchestra_buyer_id               = DB::table('buyers')->select('id')->where('buyer_name','=','Orchestra')->first();
+            $data_array['main_table']         = 'orchestra_solid_poly_bag_sticker_orders';
+            $data_array['main_table_id']      = $poly_id;
+            $data_array['quantity_table']     = 'orchestra_solid_poly_bag_sticker_orders_qty';
+            $data_array['quantity_id_field']  = 'ospbs_id';
+            $data_array['buyer_id']           = $orchestra_buyer_id->id;
+            $data_array['erp_details_status'] = $erp_details_status;
+            $data_array['erp_order_id']       = $erp_order_id;
+
+            // update erp_order_details and erp_orders table 
+            $this->edit_erp_obj->updateOrchestraErpOrderDetails($data_array);
+        }
+        return response()->json(['error'=> false,'message' =>'success'],200);
+    }
+    
+
 	public function setStandardCartonStickersOs(Request $request)
 	{
         $uvc =$request->uvc;
@@ -2177,8 +2546,11 @@ class OrderManagementCntrl extends Controller
         $no_of_carton =$request->no_of_carton;
         $total_polybag =$request->total_polybag;
         $final_order_qty_sets =$request->final_order_qty_sets;
-		
-		 StandardCartonStickers::where('id',$carton_id)
+
+		// get quantity_table ids.
+        $quantity_table_ids = DB::table('orchestra_standard_carton_sticker_orders_qty')->select('id')->where('oscs_id',$carton_id)->get();
+
+		StandardCartonStickers::where('id',$carton_id)
                    ->update([
                         'height'           => $height,
                         'no_of_carton'    => $no_of_carton, 
@@ -2187,18 +2559,57 @@ class OrderManagementCntrl extends Controller
                         'group_id'    => $age,
                   ]);
 			
-			 $deleted = StandardCartonStickersQty::where('oscs_id', '=', $carton_id)
-                            ->delete();
+        $deleted = StandardCartonStickersQty::where('oscs_id', '=', $carton_id)
+                    ->delete();
+    
+        
+        StandardCartonStickersQty::create([
+                        'oscs_id' => $carton_id,
+                        'size'      => "",
+                        'quantity'    => $final_order_qty_sets,
+                        'quantity_sets'    => $final_order_qty_sets
+        ]);
+
+        // fetch erp_order_details table details for each quantity_table ids.
+        foreach($quantity_table_ids as $quantity_table_id)
+        {
+            $quantity_id = $quantity_table_id->id;
+            $erp_order_details[] = DB::table('erp_order_details')->where('order_qnty_table_name','ilike', 'orchestra_standard_carton_sticker_orders_qty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $quantity_id)->select('erp_order_details.id','erp_status.status_name', 'erp_order_details.erp_order_id')->first();
+        }
+    
+        if(!is_null($erp_order_details[0]))
+        {
+            $erp_details_status =  $erp_order_details[0]->status_name;
+            $erp_order_id =  $erp_order_details[0]->erp_order_id;
             
-               
-			 StandardCartonStickersQty::create([
-								'oscs_id' => $carton_id,
-								'size'      => "",
-								'quantity'    => $final_order_qty_sets,
-								'quantity_sets'    => $final_order_qty_sets
-			 ]);
+            foreach($erp_order_details as $erp_order_detail){
+                // delete from history table and insert new rows.
+                $history_table_id =  DB::table('history')->where('erp_order_details_id',$erp_order_detail->id)->value('id');
+                DB::table('event_history')->where('history_id',$history_table_id)->delete();
+                DB::table('history')->where('id',$history_table_id)->delete();
+                // delete from erp_order_details table
+                DB::table('erp_order_details')->where('id',$erp_order_detail->id)->delete();
+            }
+            
+            /** @var array [Pass array of values to updateOrchestraErpOrderDetails function] */
+            $data_array = [];   
+            $orchestra_buyer_id               = DB::table('buyers')->select('id')->where('buyer_name','=','Orchestra')->first();
+            $data_array['main_table']         = 'orchestra_standard_carton_sticker_orders';
+            $data_array['main_table_id']      = $carton_id;
+            $data_array['quantity_table']     = 'orchestra_standard_carton_sticker_orders_qty';
+            $data_array['quantity_id_field']  = 'oscs_id';
+            $data_array['buyer_id']           = $orchestra_buyer_id->id;
+            $data_array['erp_details_status'] = $erp_details_status;
+            $data_array['erp_order_id']       = $erp_order_id;
+
+            // update erp_order_details and erp_orders table 
+            $this->edit_erp_obj->updateOrchestraErpOrderDetails($data_array);
+        }
+        return response()->json(['error'=> false,'message' =>'success'],200);
 			
-	}
+    }
+    
+
 	public function setStandardPolyBagStickersOs(Request $request)
 	{
         $uvc =$request->uvc;
@@ -2208,6 +2619,9 @@ class OrderManagementCntrl extends Controller
         $age =$request->age;
         $poly_id =$request->poly_id;
         $final_order_qty_sets =$request->final_order_qty_sets;
+
+        // get quantity_table ids.
+        $quantity_table_ids = DB::table('orchestra_standard_poly_bag_sticker_orders_qty')->select('id')->where('ospbs_id',$poly_id)->get();
 		
 		StandardPolyStickers::where('id',$poly_id)
                    ->update([
@@ -2215,16 +2629,53 @@ class OrderManagementCntrl extends Controller
                         'group_id'    => $age,
                   ]);
 			
-			$deleted = StandardPolyStickersQty::where('ospbs_id', '=', $poly_id)
-					->delete();
+        $deleted = StandardPolyStickersQty::where('ospbs_id', '=', $poly_id)
+                ->delete();
 
 
-			 StandardPolyStickersQty::create([
-								'ospbs_id' => $poly_id,
-								'size'      => "",
-								'quantity'    => $final_order_qty_sets,
-								'quantity_sets'    => $final_order_qty_sets
-			 ]);
+        StandardPolyStickersQty::create([
+                        'ospbs_id' => $poly_id,
+                        'size'      => "",
+                        'quantity'    => $final_order_qty_sets,
+                        'quantity_sets'    => $final_order_qty_sets
+        ]);
+
+        // fetch erp_order_details table details for each quantity_table ids.
+        foreach($quantity_table_ids as $quantity_table_id)
+        {
+            $quantity_id = $quantity_table_id->id;
+            $erp_order_details[] = DB::table('erp_order_details')->where('order_qnty_table_name','ilike', 'orchestra_standard_poly_bag_sticker_orders_qty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $quantity_id)->select('erp_order_details.id','erp_status.status_name', 'erp_order_details.erp_order_id')->first();
+        }
+    
+        if(!is_null($erp_order_details[0]))
+        {
+            $erp_details_status =  $erp_order_details[0]->status_name;
+            $erp_order_id =  $erp_order_details[0]->erp_order_id;
+            
+            foreach($erp_order_details as $erp_order_detail){
+                // delete from history table and insert new rows.
+                $history_table_id =  DB::table('history')->where('erp_order_details_id',$erp_order_detail->id)->value('id');
+                DB::table('event_history')->where('history_id',$history_table_id)->delete();
+                DB::table('history')->where('id',$history_table_id)->delete();
+                // delete from erp_order_details table
+                DB::table('erp_order_details')->where('id',$erp_order_detail->id)->delete();
+            }
+            
+            /** @var array [Pass array of values to updateOrchestraErpOrderDetails function] */
+            $data_array = [];   
+            $orchestra_buyer_id               = DB::table('buyers')->select('id')->where('buyer_name','=','Orchestra')->first();
+            $data_array['main_table']         = 'orchestra_standard_poly_bag_sticker_orders';
+            $data_array['main_table_id']      = $poly_id;
+            $data_array['quantity_table']     = 'orchestra_standard_poly_bag_sticker_orders_qty';
+            $data_array['quantity_id_field']  = 'ospbs_id';
+            $data_array['buyer_id']           = $orchestra_buyer_id->id;
+            $data_array['erp_details_status'] = $erp_details_status;
+            $data_array['erp_order_id']       = $erp_order_id;
+
+            // update erp_order_details and erp_orders table 
+            $this->edit_erp_obj->updateOrchestraErpOrderDetails($data_array);
+        }
+        return response()->json(['error'=> false,'message' =>'success'],200);
 	}
 	
 	/**
@@ -2241,6 +2692,7 @@ class OrderManagementCntrl extends Controller
         $template_name = $request->template_name;
         $tot_qty_table = explode(',',$request->tot_qty_table);
         $uvc_tco = explode(',',$request->uvc_tco);
+        $barcode = explode(',',$request->barcode);
         $size = explode(',',$request->size);
         $uvc =$request->uvc;
         $po_select =$request->po_select;
@@ -2330,6 +2782,7 @@ class OrderManagementCntrl extends Controller
                                         'owcl_id' => $id,
                                         'size'      => $size[$i],
                                         'uvc_tco'      => $uvc_tco[$i],
+                                        'barcode'      => $barcode[$i],
                                         'quantity'    => $value
                              ]);
                     $i++;
@@ -2404,6 +2857,7 @@ class OrderManagementCntrl extends Controller
                                         'owcl_id' => $inserted->id,
                                         'size'      => $size[$i],
                                         'uvc_tco'      => $uvc_tco[$i],
+                                        'barcode'      => $barcode[$i],
                                         'quantity'    => $value
                              ]);
                     $i++;
@@ -2477,6 +2931,7 @@ class OrderManagementCntrl extends Controller
                                         'owcl_id' => $inserted->id,
                                         'size'      => $size[$i],
                                         'uvc_tco'      => $uvc_tco[$i],
+                                        'barcode'      => $barcode[$i],
                                         'quantity'    => $value
                              ]);
                     $i++;
@@ -2579,48 +3034,51 @@ class OrderManagementCntrl extends Controller
 		
         if($id != "null")
         {
-			
-				WashLabelOrders::where('id',$id)
-                   ->update([
-                        'uvc' => $uvc,
-                        'template_id'      => $template_front_id,
-                        //'merchandisers_id'      => $merchandisers,
-                        'template_name'      => $template_name,
-                        'washing_id'      => $washing_select,
-                        'whitening_id'      => $whitening_select,
-                        'dryer_id'      => $dryer_select,
-                        'ironing_id'      => $ironing_select,
-                        'cleaning_id'      => $cleaning_select,
-                        'made_in_id'      => $made_in_select,
-					    'color_code'      => $color_code,
-					    'card_flag'      => $card_flag,
-                        'po'    => $po_select,
-                        'care_instruction_id'      => $care_instruction_select,
-                        'customer_id'    => $factory{0}->id,
-                        'svg_path'    => "", 
-                        'status'    => "Buyer Approval Pending",
-						'orchestra_parcel_details_id'    => $parcel_id,
-						'season_code'    => $season_code,
-					    'pi_status'           => $pi_status,
-					   	'po_status'           => $po_status,
-                  ]);
-                $deleted = WashLabelOrdersQty::where('owcl_id', '=', $id)
-                            ->delete();
-                $i=0;
-                foreach($tot_qty_table as $value)
-                {
-                     WashLabelOrdersQty::create([
-                                        'owcl_id' => $id,
-                                        'size'      => $size[$i],
-                                        'uvc_tco'      => $uvc_tco[$i],
-                                        'quantity'    => $value
-                             ]);
-                    $i++;
-                }
-         $deleted = WashCareComposition::where('owcl_id', '=', $id)
-                            ->delete();
-         $k=1;
-         $composition = json_decode($request->composition);
+                
+            // get quantity_table ids.
+            $quantity_table_ids = DB::table('orchestra_wash_care_label_orders_qty')->select('id')->where('owcl_id',$id)->get();
+        
+            WashLabelOrders::where('id',$id)
+            ->update([
+                    'uvc' => $uvc,
+                    'template_id'      => $template_front_id,
+                    //'merchandisers_id'      => $merchandisers,
+                    'template_name'      => $template_name,
+                    'washing_id'      => $washing_select,
+                    'whitening_id'      => $whitening_select,
+                    'dryer_id'      => $dryer_select,
+                    'ironing_id'      => $ironing_select,
+                    'cleaning_id'      => $cleaning_select,
+                    'made_in_id'      => $made_in_select,
+                    'color_code'      => $color_code,
+                    'card_flag'      => $card_flag,
+                    'po'    => $po_select,
+                    'care_instruction_id'      => $care_instruction_select,
+                    'customer_id'    => $factory{0}->id,
+                    'svg_path'    => "", 
+                    'status'    => "Buyer Approval Pending",
+                    'orchestra_parcel_details_id'    => $parcel_id,
+                    'season_code'    => $season_code,
+                    'pi_status'           => $pi_status,
+                    'po_status'           => $po_status,
+            ]);
+            $deleted = WashLabelOrdersQty::where('owcl_id', '=', $id)
+                        ->delete();
+            $i=0;
+            foreach($tot_qty_table as $value)
+            {
+                WashLabelOrdersQty::create([
+                                    'owcl_id' => $id,
+                                    'size'      => $size[$i],
+                                    'uvc_tco'      => $uvc_tco[$i],
+                                    'quantity'    => $value
+                        ]);
+                $i++;
+            }
+            $deleted = WashCareComposition::where('owcl_id', '=', $id)
+                                ->delete();
+            $k=1;
+            $composition = json_decode($request->composition);
             foreach($composition as $key => $value)
             {
                 foreach($value as $key1 => $value1)
@@ -2653,6 +3111,42 @@ class OrderManagementCntrl extends Controller
                           'order_status' => "Order Placed"
 
             ]);
+
+            // fetch erp_order_details table details for each quantity_table ids.
+            foreach($quantity_table_ids as $quantity_table_id)
+            {
+                $quantity_id = $quantity_table_id->id;
+                $erp_order_details[] = DB::table('erp_order_details')->where('order_qnty_table_name','ilike', 'orchestra_wash_care_label_orders_qty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $quantity_id)->select('erp_order_details.id','erp_status.status_name', 'erp_order_details.erp_order_id')->first();
+            }
+        
+            if(!is_null($erp_order_details[0]))
+            {
+                $erp_details_status =  $erp_order_details[0]->status_name;
+                $erp_order_id =  $erp_order_details[0]->erp_order_id;
+                
+                foreach($erp_order_details as $erp_order_detail){
+                    // delete from history table and insert new rows.
+                    $history_table_id =  DB::table('history')->where('erp_order_details_id',$erp_order_detail->id)->value('id');
+                    DB::table('event_history')->where('history_id',$history_table_id)->delete();
+                    DB::table('history')->where('id',$history_table_id)->delete();
+                    // delete from erp_order_details table
+                    DB::table('erp_order_details')->where('id',$erp_order_detail->id)->delete();
+                }
+                
+                /** @var array [Pass array of values to updateOrchestraErpOrderDetails function] */
+                $data_array = [];   
+                $orchestra_buyer_id               = DB::table('buyers')->select('id')->where('buyer_name','=','Orchestra')->first();
+                $data_array['main_table']         = 'orchestra_wash_care_label_orders';
+                $data_array['main_table_id']      = $id;
+                $data_array['quantity_table']     = 'orchestra_wash_care_label_orders_qty';
+                $data_array['quantity_id_field']  = 'owcl_id';
+                $data_array['buyer_id']           = $orchestra_buyer_id->id;
+                $data_array['erp_details_status'] = $erp_details_status;
+                $data_array['erp_order_id']       = $erp_order_id;
+
+                // update erp_order_details and erp_orders table 
+                $this->edit_erp_obj->updateOrchestraErpOrderDetails($data_array);
+            }
 			return $id;
               
         }
@@ -2806,7 +3300,7 @@ class OrderManagementCntrl extends Controller
                         'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                         ]);
             if ($po_status == "PO Uploaded") {
-                /** @var array [Pass array of values to updateOrchestraErpOrders function] */
+                /** @var array [Pass array of values to updateTescoErpOrders function] */
                 $request_array = [];
                 $request_array['id'] = $template_id;
                 $request_array['tableName'] = $table_name; 
@@ -2880,7 +3374,7 @@ class OrderManagementCntrl extends Controller
 
                         ]);
             if ($po_status == "PO Uploaded") {
-                /** @var array [Pass array of values to updateOrchestraErpOrders function] */
+                /** @var array [Pass array of values to updateTescoErpOrders function] */
                 $request_array = [];
                 $request_array['id'] = $row_id;
                 $request_array['tableName'] = $table_name; 
@@ -3033,7 +3527,7 @@ class OrderManagementCntrl extends Controller
                             'pi_file' => $attatchment, 
                             'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                         ]);
-            /** @var array [Pass array of values to updateOrchestraErpOrders function] */
+            /** @var array [Pass array of values to updateTescoErpOrders function] */
             $erpOrders['tableName'] = $table_name;
             $erpOrders['id']        = $row_id;
             $erpOrders['buyer_id']  = $buyer_id;  
@@ -3238,56 +3732,19 @@ class OrderManagementCntrl extends Controller
     {
 		 $id        =   explode(',',$request->id);
 		 $po        =   $request->po;
-         $erp_obj   =   new ErpOrders();
-         $erp_orders = DB::table('erp_orders')->where('po_no',$po)->select('po_file')->first();
+		 $po_file        =   $request->po_file;
 		
 		foreach($id as $val)
 		{
-                $value    =  explode('-',$val);
-                $order_po_file = DB::table($value[0])->where('id',$value[1])->select('po_file')->first();
-
-                // po file status and po file path
-                if(sizeof($erp_orders) > 0)
-                {
-                    $status = "PO Uploaded";
-                    $po_file = $erp_orders->po_file;
-                }
-                else 
-                {
-                    // if po is already uploaded, set status as po uploaded
-                    if(sizeof($order_po_file) > 0)
-                    {
-                        $status = "PO Uploaded";
-                        $po_file = $order_po_file->po_file;
-                    }
-                    else
-                    {
-                        $status = "PO Pending";
-                        $po_file = $order_po_file;
-                    }
-                    
-                }
+				$value    =  explode('-',$val);
 			
 				DB::table($value[0])->where('id',$value[1])
                 ->update([
-                    'po_number'      => $po,
-                    'po_file'        => $po_file,
-                    'po_status'      => $status,
+                    'po_number' => $po,
+                    'po_status' => "PO Pending",
+                    'po_file' => $po_file,
                     'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                 ]);
-
-
-                if($status === "PO Uploaded")
-                {
-                    /** @var array [Pass array of values to updateOrchestraErpOrders function] */
-                    $orchestra_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Orchestra')->first();
-                    $request_array = [];
-                    $request_array['id'] = $value[1];
-                    $request_array['tableName'] = $value[0]; 
-                    $request_array['buyer_id'] = $orchestra_buyer_id->id;  
-                    $request_array['created_by'] = Auth::guard('web')->id();
-                    $erp_obj->updateOrchestraErpOrders($request_array);
-                }
 		}
 		return response()->json(['error'=> false,'message' =>'success'],200);
     }
@@ -3323,11 +3780,11 @@ class OrderManagementCntrl extends Controller
                     $value    =  explode('-',$val);
 
                     /** @var array [Pass array of values to updateOrchestraErpOrders function] */
-                    $orchestra_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Orchestra')->first();
+                    $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Orchestra')->first();
                     $request_array = [];
                     $request_array['id'] = $value[1];
                     $request_array['tableName'] = $value[0]; 
-                    $request_array['buyer_id'] = $orchestra_buyer_id->id;  
+                    $request_array['buyer_id'] = $tesco_buyer_id->id;  
                     $request_array['created_by'] = Auth::guard('web')->id();
 
                     DB::table($value[0])->where('id',$value[1])
@@ -3347,11 +3804,11 @@ class OrderManagementCntrl extends Controller
                     $value = explode('-',$val);
 
                     /** @var array [Pass array of values to updateOrchestraErpOrders function] */
-                    $orchestra_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Orchestra')->first();
+                    $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Orchestra')->first();
                     $request_array = [];
                     $request_array['id'] = $value[1];
                     $request_array['tableName'] = $value[0]; 
-                    $request_array['buyer_id'] = $orchestra_buyer_id->id;  
+                    $request_array['buyer_id'] = $tesco_buyer_id->id;  
                     $request_array['created_by'] = Auth::guard('web')->id();
 
                     DB::table($value[0])->where('id',$value[1])

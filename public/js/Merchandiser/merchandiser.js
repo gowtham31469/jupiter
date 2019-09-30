@@ -45,10 +45,32 @@ function viewWcl(id){
 					}
 					svgDoc.getElementById("parcel_code1").innerHTML = data.order_details[0].UVC_TCO;
 					svgDoc.getElementById("parcel_code2").innerHTML = data.order_details[0].UVC_TCO;
-					svgDoc.getElementById("size_in_fr_en1").innerHTML = data.order_details[0].cm + "cm / " + data.order_details[0].in + "in";
-					svgDoc.getElementById("size_in_fr_en2").innerHTML = data.order_details[0].cm + "cm / " + data.order_details[0].in + "in";
-					svgDoc.getElementById("size1").innerHTML = data.order_details[0].Size.replace(" ", "").toLowerCase() + "/" + size1;
-					svgDoc.getElementById("size2").innerHTML = data.order_details[0].Size.replace(" ", "").toLowerCase() + "/" + size1;
+					 
+					if(data.order_details[0].Size == "TAILLE UNIQUE")
+					{
+						//var inches=$('#washcarelabelform' + dataid+' .washonesizein').val()
+						//var cm=$('#washcarelabelform' + dataid+' .washonesizecm').val()
+
+						svgDoc.getElementById("size_in_fr_en1").innerHTML = "";
+						svgDoc.getElementById("size_in_fr_en2").innerHTML = "";
+						svgDoc.getElementById("size1").innerHTML ="TAILLE UNIQUE";
+						svgDoc.getElementById("size2").innerHTML ="TAILLE UNIQUE";
+					}
+					else if(data.order_details[0].Size == "TAILLE L")
+					{
+						svgDoc.getElementById("size1").innerHTML = "TAILLE L";
+						svgDoc.getElementById("size2").innerHTML = "TAILLE L";
+						svgDoc.getElementById("size_in_fr_en1").innerHTML = "";
+						svgDoc.getElementById("size_in_fr_en2").innerHTML = "";
+					}
+					else
+					{
+						svgDoc.getElementById("size_in_fr_en1").innerHTML = data.order_details[0].cm + "cm";
+					svgDoc.getElementById("size_in_fr_en2").innerHTML = data.order_details[0].cm + "cm";
+						  svgDoc.getElementById("size1").innerHTML = data.order_details[0].Size.replace(" ", "").toLowerCase() + "/" + size1;
+						  svgDoc.getElementById("size2").innerHTML = data.order_details[0].Size.replace(" ", "").toLowerCase() + "/" + size1;
+					}
+
 					svgDoc.getElementById("madeinforeign").setAttribute('y', '403');
 					
 					var code = data.order_details[0].BarcodeForPricesTags.toString();
@@ -181,8 +203,8 @@ function jsbarcodewash(code, id, svgDoc) {
     JsBarcode("#ean-13", code, {
         format: "ean13",
         width: 5.99,
-        height: 288,
-		lineColor: "#1F1A17",
+        height: 290,
+		lineColor: "cmyk(0%, 0%, 0%, 100%)",
         fontSize: 55
     });
     var svg = document.getElementById('svgdiv').querySelector('svg'),
@@ -196,8 +218,8 @@ function jsbarcodewash(code, id, svgDoc) {
     //    svg.setAttribute('width', '188.931023622px');
     svg.setAttribute('font-size', '70px');
     svg.setAttribute('font-family', 'ocr-b-10bt');
-    svg.setAttribute('width', '92.5px');
-    svg.setAttribute('height', '120px');
+    svg.setAttribute('width', '92.1px');
+    svg.setAttribute('height', '133px');
     canvas.id = 'canvas';
     canvas.width = svg.getBoundingClientRect().width;
     canvas.height = svg.getBoundingClientRect().height;
