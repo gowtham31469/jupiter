@@ -173,4 +173,89 @@ class EditErpOrders
 			}
 		}
 	}
+
+	/**
+	 * updateOrchestraErpOrderDetails Function
+	 *
+	 * @param [type] $data_array
+	 * @return void
+	 * @author Praveen <praveen@wizroots.com>
+	 */
+	public function updateOrchestraErpOrderDetails($data_array)
+	{
+		try
+		{			
+			$main_table_name   = $data_array['main_table']; 
+			$main_table_id     = $data_array['main_table_id']; 
+			$quantity_table    = $data_array['quantity_table']; 
+			$buyer_id		   = $data_array['buyer_id'];
+			$template_id	   = $data_array['template_id'];
+			$quantity_id_field = $data_array['quantity_id_field'];
+			
+			$this->created_at = Carbon::now('Asia/Kolkata')->toDateTimeString();
+
+			// template front and back id storing in orchestra_hang_tag_orders table
+			if($main_table_name === 'orchestra_hang_tag_orders')
+			{
+				$orders = DB::table($main_table_name)->where($main_table_name.'.id',$main_table_id)
+							->join('orchestra_item_master',$main_table_name.'.template_front_id','=','orchestra_item_master.id')
+							->select('orchestra_item_master.*', $main_table_name.'.*')->first();
+			}
+			else   
+			{
+				$orders = DB::table($main_table_name)->where($main_table_name.'.id',$main_table_id)
+							->join('orchestra_item_master',$main_table_name.'.template_id','=','orchestra_item_master.id')
+							->select('orchestra_item_master.*', $main_table_name.'.*')->first();
+			}
+            
+            $order_details  = DB::table($quantity_table)->where($quantity_id_field,$main_table_id)
+            				->get();
+			$order_status   = $orders->status;
+
+			$customer_data  = DB::table('customers')->where('id',$orders->customer_id)->first();
+
+			if ($customer_data->pi_required === 1 && $customer_data->po_required === 0) {
+				$po_no     = $orders->pi_id;
+				$po_file   = $orders->pi_file;
+			}
+			else if($customer_data->po_required === 1){
+				$po_no     = $orders->po_number;
+				$po_file   = $orders->po_file;
+			}
+
+			$order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', $order_status)->first();
+			
+			$erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$orders->customer_id)->where('po_no',$po_no)->first();
+						
+
+			if ($erp_orders) {
+			
+				Erp::where('id',$erp_orders->id)->update(['status'=>1, 'po_file' => $po_file]);
+					$status = 1;
+				$this->insertOrchestraOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders->id, $table_name, $order_status_id, $po_no);
+			}
+			else
+			{
+				$erp_orders = Erp::create([
+								'buyer_id'         => $buyer_id,
+								'customer_id'      => $orders->customer_id,
+								'po_no'            => $po_no,
+								'po_file'          => $po_file,
+								'status'		   => 1,
+								'created_at'       => $this->created_at
+							 ]);
+				$erp_id = "ERPID-0".$erp_orders->id;
+				Erp::where('id',$erp_orders->id)->update(['erp_id'=>$erp_id]);
+				$status = 1;
+
+				$this->insertOrchestraOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders->id, $table_name, $order_status_id, $po_no);
+			}
+			$result = response()->json(['error'=> false,'message' =>'success'],200);
+		}
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+	}
 }
