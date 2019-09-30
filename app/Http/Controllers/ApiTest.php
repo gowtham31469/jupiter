@@ -43,8 +43,8 @@ class ApiTest extends Controller
 
 
 
-DB::table('orchestra_item_master')->where('parent_id', 2)
-            ->update(['company_id' => 2]);
+DB::table('orchestra_parcel_details')
+            ->update(['order_status' => NULL,'sticker_order_status'=> NULL]);
 
 dd("done");
 

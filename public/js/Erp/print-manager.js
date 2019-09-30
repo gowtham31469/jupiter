@@ -709,6 +709,7 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 
 						case "Std Poly Stickers":
 							$(details['stdpolystickerqty']).each(function(index,value){
+								console.log(value)
 								svgDoc.getElementById("round").style.fill = details.age_group
 								svgDoc.getElementById("parcel_code").innerHTML = value.uvc_tco
 								svgDoc.getElementById("theme").innerHTML = details.theme
