@@ -81,19 +81,21 @@ class OrderStatusCntrl extends Controller
 				
 				$data['orchestra_parcel_quantity_details'] = DB::table('orchestra_parcel_quantity_details')->select(DB::raw('distinct on ("UVC_TCO") "UVC_TCO"'),'UVC','Size','BarcodeForPricesTags','Quantity','Color')->where('BuyerPONo',$po)->where('orchestra_parcel_quantity_details.UVC',$uvc)->get();
 
-				$data['orchestra_parcel_details']= DB::table('orchestra_parcel_details')->leftJoin('orchestra_color_code','orchestra_color_code.code','orchestra_parcel_details.Color_Code')->select('*','Standard_Code as ParcelCode','orchestra_color_code.english as colour_Code')->where('orchestra_parcel_details.UVC',$uvc)->where('BuyerPONo',$po)->groupBy('orchestra_parcel_details.id','orchestra_color_code.id','BuyerPONo')->get();
+				$data['orchestra_parcel_details']= DB::table('orchestra_parcel_details as alias')->leftJoin('orchestra_color_code','orchestra_color_code.code','alias.Color_Code')->select(DB::raw('distinct on (alias."Size") "Size"'),DB::raw("(SELECT SUM(\"Quantity\") FROM orchestra_parcel_details WHERE \"Size\" = alias.\"Size\" and \"BuyerPONo\"='".$po."') as \"Sum\""),'alias.*','Standard_Code as ParcelCode','orchestra_color_code.english as colour_Code')->where('BuyerPONo',$po)->groupBy('alias.id','orchestra_color_code.id','BuyerPONo')->get();
+				
+				//print_r($data['orchestra_parcel_details']);
 				
 				if($data['orchestra_parcel_details']{0}->IsSTD == 1)
 				{
-					$orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','179')->get();
+					$orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','101')->get();
 					$data['carton_template']=$orchestra_template{0}->template_file;
-					$data['carton_template_id']=179;
+					$data['carton_template_id']=101;
 
 					$factory_code = $data['orchestra_parcel_details']{0}->FactoryCode;
 					$customer_id = DB::table('customers')->select('*')->where('factory_code',$factory_code)->get();
 					if(count($customer_id) > 0)
 					{
-						$carton_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',179)->get();
+						$carton_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',101)->get();
 
 						if(count($carton_moq) > 0)
 						{
@@ -109,13 +111,13 @@ class OrderStatusCntrl extends Controller
 						$data['carton_moq']=1;
 					}
 
-					$orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','180')->get();
+					$orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','102')->get();
 					$data['polybag_template']=$orchestra_template{0}->template_file;
 					$data['template_name']="Standard";
-					$data['polybag_template_id']=180;
+					$data['polybag_template_id']=102;
 					if(count($customer_id) > 0)
 					{
-						$polybag_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',180)->get();
+						$polybag_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',102)->get();
 
 						if(count($polybag_moq) > 0)
 						{
@@ -133,16 +135,16 @@ class OrderStatusCntrl extends Controller
 				}
 				else
 				{
-					$orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','177')->get();
+					$orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','99')->get();
 					$data['carton_template']=$orchestra_template{0}->template_file;
-					$data['carton_template_id']=177;
+					$data['carton_template_id']=99;
 
 					$factory_code = $data['orchestra_parcel_details']{0}->FactoryCode;
 					$customer_id = DB::table('customers')->select('*')->where('factory_code',$factory_code)->get();
 
 					if(count($customer_id) > 0)
 					{
-						$carton_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',177)->get();
+						$carton_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',99)->get();
 
 						if(count($carton_moq) > 0)
 						{
@@ -161,14 +163,14 @@ class OrderStatusCntrl extends Controller
 					}
 
 
-					$orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','178')->get();
+					$orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','100')->get();
 					$data['polybag_template']=$orchestra_template{0}->template_file;
 					$data['template_name']="Solid";
-					$data['polybag_template_id']=178;
+					$data['polybag_template_id']=100;
 
 					if(count($customer_id) > 0)
 					{
-						$polybag_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',178)->get();
+						$polybag_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',100)->get();
 
 						if(count($polybag_moq) > 0)
 						{
