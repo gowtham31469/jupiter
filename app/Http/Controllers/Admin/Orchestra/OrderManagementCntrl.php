@@ -42,7 +42,6 @@ use App\OrchestraParcelDetails;
 use App\OrchestraParcelQuantityDetails;
 use Auth;
 use Illuminate\Support\Facades\Redis;
-use App\Classes\EditErpOrders;
 
 class OrderManagementCntrl extends Controller
 {
@@ -846,7 +845,7 @@ class OrderManagementCntrl extends Controller
 			
 			if(count($customer_id) > 0)
 			{
-				$polybag_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',178)->get();
+				$polybag_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',100)->get();
 
 				if(count($polybag_moq) > 0)
 				{
@@ -1158,7 +1157,6 @@ class OrderManagementCntrl extends Controller
 	
     public function setMainLabel(Request $request)
     {
-        $edit_erp_obj    = new EditErpOrders();
         //$delivery_date = $request->delivery_date;
         $template_id = $request->template_id;
         $tot_qty_table = $request->tot_qty_table;
@@ -1170,7 +1168,7 @@ class OrderManagementCntrl extends Controller
         $colour =$request->colour;
         $id =$request->id;
 		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('customers.*')->get();
-		
+		//print_r($factory);
 		if(count($factory) > 0)
 		{
 			
@@ -1232,56 +1230,10 @@ class OrderManagementCntrl extends Controller
                           'order_status' => "Order Placed"
 
                 ]);
-                
-            // get quantity_table ids.
-            $quantity_table_ids = DB::table('orchestra_main_label_orders_qty')->select('id')->where('oml_id',$id)->get();
-
-            // fetch erp_order_details table details for each quantity_table ids.
-            foreach($quantity_table_ids as $quantity_table_id)
-            {
-                $quantity_id = $quantity_table_id->id;
-                $erp_order_details[] = DB::table('erp_order_details')->where('order_qnty_table_name','ilike', 'orchestra_main_label_orders_qty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $quantity_id)->select('erp_order_details.id','erp_status.status_name', 'erp_order_details.erp_order_id')->first();
-            }
-        
-            if(!is_null($erp_order_details[0]))
-            {
-                $erp_details_status =  $erp_order_details[0]->status_name;
-                $erp_order_id =  $erp_order_details[0]->erp_order_id;
-                
-                foreach($erp_order_details as $erp_order_detail){
-                    // delete from history table and insert new rows.
-                    $history_table_id =  DB::table('history')->where('erp_order_details_id',$erp_order_detail->id)->value('id');
-                    DB::table('event_history')->where('history_id',$history_table_id)->delete();
-                    DB::table('history')->where('id',$history_table_id)->delete();
-                    // delete from erp_order_details table
-                    DB::table('erp_order_details')->where('id',$erp_order_detail->id)->delete();
-                }
-                
-                /** @var array [Pass array of values to updateOrchestraErpOrderDetails function] */
-                $data_array = [];   
-                $orchestra_buyer_id               = DB::table('buyers')->select('id')->where('buyer_name','=','Orchestra')->first();
-                $data_array['main_table']         = 'orchestra_main_label_orders';
-                $data_array['main_table_id']      = $id;
-                $data_array['quantity_table']     = 'orchestra_main_label_orders_qty';
-                $data_array['quantity_id_field']  = 'oml_id';
-                $data_array['buyer_id']           = $orchestra_buyer_id->id;
-                $data_array['template_id']        = $template_id;
-                $data_array['erp_details_status'] = $erp_details_status;
-                $data_array['erp_order_id']       = $erp_order_id;
-                $data_array['created_by']         = Auth::guard('web')->id();
-
-                // update erp_order_details and erp_orders table 
-                $result = $edit_erp_obj->updateOrchestraErpOrderDetails($data_array);
-            }
-            else
-            {
-                $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-
-            
         }
         else
         {
+			//print_r($colour[0]);
 			$i=0;
 			foreach($tot_qty_table as $value)
             {
@@ -2911,7 +2863,7 @@ class OrderManagementCntrl extends Controller
                         'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                         ]);
             if ($po_status == "PO Uploaded") {
-                /** @var array [Pass array of values to updateOrchestraErpOrders function] */
+                /** @var array [Pass array of values to updateTescoErpOrders function] */
                 $request_array = [];
                 $request_array['id'] = $template_id;
                 $request_array['tableName'] = $table_name; 
@@ -2985,7 +2937,7 @@ class OrderManagementCntrl extends Controller
 
                         ]);
             if ($po_status == "PO Uploaded") {
-                /** @var array [Pass array of values to updateOrchestraErpOrders function] */
+                /** @var array [Pass array of values to updateTescoErpOrders function] */
                 $request_array = [];
                 $request_array['id'] = $row_id;
                 $request_array['tableName'] = $table_name; 
@@ -3138,7 +3090,7 @@ class OrderManagementCntrl extends Controller
                             'pi_file' => $attatchment, 
                             'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                         ]);
-            /** @var array [Pass array of values to updateOrchestraErpOrders function] */
+            /** @var array [Pass array of values to updateTescoErpOrders function] */
             $erpOrders['tableName'] = $table_name;
             $erpOrders['id']        = $row_id;
             $erpOrders['buyer_id']  = $buyer_id;  
@@ -3343,56 +3295,19 @@ class OrderManagementCntrl extends Controller
     {
 		 $id        =   explode(',',$request->id);
 		 $po        =   $request->po;
-         $erp_obj   =   new ErpOrders();
-         $erp_orders = DB::table('erp_orders')->where('po_no',$po)->select('po_file')->first();
+		 $po_file        =   $request->po_file;
 		
 		foreach($id as $val)
 		{
-                $value    =  explode('-',$val);
-                $order_po_file = DB::table($value[0])->where('id',$value[1])->select('po_file')->first();
-
-                // po file status and po file path
-                if(sizeof($erp_orders) > 0)
-                {
-                    $status = "PO Uploaded";
-                    $po_file = $erp_orders->po_file;
-                }
-                else 
-                {
-                    // if po is already uploaded, set status as po uploaded
-                    if(sizeof($order_po_file) > 0)
-                    {
-                        $status = "PO Uploaded";
-                        $po_file = $order_po_file->po_file;
-                    }
-                    else
-                    {
-                        $status = "PO Pending";
-                        $po_file = $order_po_file;
-                    }
-                    
-                }
+				$value    =  explode('-',$val);
 			
 				DB::table($value[0])->where('id',$value[1])
                 ->update([
-                    'po_number'      => $po,
-                    'po_file'        => $po_file,
-                    'po_status'      => $status,
+                    'po_number' => $po,
+                    'po_status' => "PO Pending",
+                    'po_file' => $po_file,
                     'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                 ]);
-
-
-                if($status === "PO Uploaded")
-                {
-                    /** @var array [Pass array of values to updateOrchestraErpOrders function] */
-                    $orchestra_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Orchestra')->first();
-                    $request_array = [];
-                    $request_array['id'] = $value[1];
-                    $request_array['tableName'] = $value[0]; 
-                    $request_array['buyer_id'] = $orchestra_buyer_id->id;  
-                    $request_array['created_by'] = Auth::guard('web')->id();
-                    $erp_obj->updateOrchestraErpOrders($request_array);
-                }
 		}
 		return response()->json(['error'=> false,'message' =>'success'],200);
     }
@@ -3428,11 +3343,11 @@ class OrderManagementCntrl extends Controller
                     $value    =  explode('-',$val);
 
                     /** @var array [Pass array of values to updateOrchestraErpOrders function] */
-                    $orchestra_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Orchestra')->first();
+                    $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Orchestra')->first();
                     $request_array = [];
                     $request_array['id'] = $value[1];
                     $request_array['tableName'] = $value[0]; 
-                    $request_array['buyer_id'] = $orchestra_buyer_id->id;  
+                    $request_array['buyer_id'] = $tesco_buyer_id->id;  
                     $request_array['created_by'] = Auth::guard('web')->id();
 
                     DB::table($value[0])->where('id',$value[1])
@@ -3452,11 +3367,11 @@ class OrderManagementCntrl extends Controller
                     $value = explode('-',$val);
 
                     /** @var array [Pass array of values to updateOrchestraErpOrders function] */
-                    $orchestra_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Orchestra')->first();
+                    $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Orchestra')->first();
                     $request_array = [];
                     $request_array['id'] = $value[1];
                     $request_array['tableName'] = $value[0]; 
-                    $request_array['buyer_id'] = $orchestra_buyer_id->id;  
+                    $request_array['buyer_id'] = $tesco_buyer_id->id;  
                     $request_array['created_by'] = Auth::guard('web')->id();
 
                     DB::table($value[0])->where('id',$value[1])

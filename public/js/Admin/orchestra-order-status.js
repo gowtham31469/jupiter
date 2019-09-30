@@ -1216,6 +1216,7 @@ function SolidCartonStickersOs(data)
         var tcarttot = 0;
         var ttots = 0;
         $.each(data.orchestra_parcel_details, function (index, value) {
+			console.log($qu)
 
             if (data.orchestra_solid_carton_sticker_orders != "") {
                 $carton_count = data.orchestra_solid_carton_sticker_orders_qty[$qu].quantity;
@@ -1223,7 +1224,7 @@ function SolidCartonStickersOs(data)
                 $carton_count = "";
             }
 
-            tr += '<tr><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="qty">' + value.Quantity + '</td><td class="text-center"><div class="form-group has-feedback has-success"><input  min="'+data.carton_moq+'" style="margin-bottom: 0px;" onkeypress="return checkorcMOQ(this)"  required type="number" value="' + $carton_count + '" class="form-control tot_qty_table_carton input-sm"><div class="help-block with-errors"></div></div></td></tr>';
+            tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="qty">' + value.Quantity + '</td><td class="text-center"><div class="form-group has-feedback has-success"><input  min="'+data.carton_moq+'" style="margin-bottom: 0px;" onkeypress="return checkorcMOQ(this)"  required type="number" value="' + $carton_count + '" class="form-control tot_qty_table_carton input-sm"><div class="help-block with-errors"></div></div></td></tr>';
 			if($carton_count != "")
 			{
 				tcarttot += parseInt($carton_count);
@@ -1237,7 +1238,7 @@ function SolidCartonStickersOs(data)
         option += "<option data-color=" + value.color + " value=" + value.id + " style='background-color:" + value.color + "'>" + value.age_group_name + "</option>";
     });
 	
-    $('.top-content').append('<form id="solid_cartonform" data-toggle= "validator"><div class="left-panelos col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4"> <h4>Options</h4> <hr><div class="scroll"> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Age Group</label><select data-live-search="true" class="form-control input-sm age_group" id="age" required>' + option + '</select><div class="help-block with-errors"></div></div> <input type="hidden" value="'+$parcelVolume+'" id="parcelVolume"><label for="edit_merchandiser_buyer" class="form_label">Height</label><div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"><object id="svg2" style="width: 527px;height: 347px;border:2px solid" class="center-block svg2" data="' + data.carton_template + '" type="image/svg+xml"></object><div id="svgdiv" style="display:none"><svg id="ean-13"></svg></div></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max scroll"> <h4>Quantity Info for Solid Carton Stickers</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal" id="solid_carton_table"><thead><tr><th>Size</th><th>Barcode</th><th>Item Qty</th><th>Parcel Sticker Qty</th></tr></thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="2">Total:</td><td >' + ttots + '</td><td class="text-center tot_qty_tablecarton_fin">' + tcarttot + '</td></tr></tbody></table></div> <span id="error_msg_alert" style="color:red;"></span><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_solid_carton_button" style="margin-left:10px">Update</button> <button class="btn btn-default pull-right input-sm" type="button" id="solid_cartonclose">Close</button></div> </div>  <div class="backdrop"></div></form>');
+    $('.top-content').append('<form id="solid_cartonform" data-toggle= "validator"><div class="left-panelos col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4"> <h4>Options</h4> <hr><div class="scroll"> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Age Group</label><select data-live-search="true" class="form-control input-sm age_group" id="age" required>' + option + '</select><div class="help-block with-errors"></div></div> <input type="hidden" value="'+$parcelVolume+'" id="parcelVolume"><label for="edit_merchandiser_buyer" class="form_label">Height</label><div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"><object id="svg2" style="width: 527px;height: 347px;border:2px solid" class="center-block svg2" data="' + data.carton_template + '" type="image/svg+xml"></object><div id="svgdiv" style="display:none"><svg id="ean-13"></svg></div></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max scroll"> <h4>Quantity Info for Solid Carton Stickers</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal" id="solid_carton_table"><thead><tr><th>UVC_TCO</th><th>Size</th><th>Barcode</th><th>Item Qty</th><th>Parcel Sticker Qty</th></tr></thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="2">Total:</td><td >' + ttots + '</td><td class="text-center tot_qty_tablecarton_fin">' + tcarttot + '</td></tr></tbody></table></div> <span id="error_msg_alert" style="color:red;"></span><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_solid_carton_button" style="margin-left:10px">Update</button> <button class="btn btn-default pull-right input-sm" type="button" id="solid_cartonclose">Close</button></div> </div>  <div class="backdrop"></div></form>');
 	$('#age').val($age);
 	
 	barcode_cartonOs('svg2', data)
@@ -1327,7 +1328,7 @@ function SolidPolyBagStickersOs(data)
                 $poly_count = "";
             }
 
-            tr += '<tr><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="qty">' + value.Quantity + '</td><td class="text-center"><div class="form-group has-feedback has-success"><input  min="'+data.polybag_moq+'" style="margin-bottom: 0px;" onkeypress="return checkorcMOQ(this)"  required type="number" value="' + $poly_count + '" class="form-control tot_qty_table_poly input-sm"><div class="help-block with-errors"></div></div></td></tr>';
+            tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="qty">' + value.Quantity + '</td><td class="text-center"><div class="form-group has-feedback has-success"><input  min="'+data.polybag_moq+'" style="margin-bottom: 0px;" onkeypress="return checkorcMOQ(this)"  required type="number" value="' + $poly_count + '" class="form-control tot_qty_table_poly input-sm"><div class="help-block with-errors"></div></div></td></tr>';
 			if($poly_count != "")
 			{
 				tcarttot += parseInt($poly_count);
@@ -1341,7 +1342,7 @@ function SolidPolyBagStickersOs(data)
         option += "<option data-color=" + value.color + " value=" + value.id + " style='background-color:" + value.color + "'>" + value.age_group_name + "</option>";
     });
 	
-    $('.top-content').append('<form id="solid_poly_bagform" data-toggle= "validator"><div class="left-panelos col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4"> <h4>Options</h4> <hr><div class="scroll"> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Age Group</label><select data-live-search="true" class="form-control input-sm age_group" id="age" required>' + option + '</select><div class="help-block with-errors"></div></div> <input type="hidden" value="'+$parcelVolume+'" id="parcelVolume"><label for="edit_merchandiser_buyer" class="form_label hidden">Height</label><div class="input-group hidden"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"><object id="svg2" style="width: 527px;height: 347px;border:2px solid" class="center-block svg2" data="' + data.polybag_template + '" type="image/svg+xml"></object><div id="svgdiv" style="display:none"><svg id="ean-13"></svg></div></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max scroll"> <h4>Quantity Info for Solid Poly Bag Stickers</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal" id="solid_poly_bag_table"><thead><tr><th>Size</th><th>Barcode</th><th>Item Qty</th><th>Polybag Sticker Qty</th></tr></thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="2">Total:</td><td >' + ttots + '</td><td class="text-center tot_qty_tablepoly_fin">' + tcarttot + '</td></tr></tbody></table></div> <span id="error_msg_alert" style="color:red;"></span><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_solid_poly_bag_button" style="margin-left:10px">Update</button> <button class="btn btn-default pull-right input-sm" type="button" id="solid_poly_bagclose">Close</button></div> </div>  <div class="backdrop"></div></form>');
+    $('.top-content').append('<form id="solid_poly_bagform" data-toggle= "validator"><div class="left-panelos col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4"> <h4>Options</h4> <hr><div class="scroll"> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Age Group</label><select data-live-search="true" class="form-control input-sm age_group" id="age" required>' + option + '</select><div class="help-block with-errors"></div></div> <input type="hidden" value="'+$parcelVolume+'" id="parcelVolume"><label for="edit_merchandiser_buyer" class="form_label hidden">Height</label><div class="input-group hidden"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"><object id="svg2" style="width: 527px;height: 347px;border:2px solid" class="center-block svg2" data="' + data.polybag_template + '" type="image/svg+xml"></object><div id="svgdiv" style="display:none"><svg id="ean-13"></svg></div></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max scroll"> <h4>Quantity Info for Solid Poly Bag Stickers</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal" id="solid_poly_bag_table"><thead><tr><th>UVC_TCO</th><th>Size</th><th>Barcode</th><th>Item Qty</th><th>Polybag Sticker Qty</th></tr></thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="2">Total:</td><td >' + ttots + '</td><td class="text-center tot_qty_tablepoly_fin">' + tcarttot + '</td></tr></tbody></table></div> <span id="error_msg_alert" style="color:red;"></span><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_solid_poly_bag_button" style="margin-left:10px">Update</button> <button class="btn btn-default pull-right input-sm" type="button" id="solid_poly_bagclose">Close</button></div> </div>  <div class="backdrop"></div></form>');
 	$('#age').val($age);
 	
 	barcode_polybagOs('svg2', data)
@@ -1417,6 +1418,12 @@ function StandardCartonStickersOs(data)
         $save_button_class="";
 		$age =0;
     }
+	var tr = "";
+	var thead = '<thead><tr><th>UVC_TCO	</th><th>Size</th><th>Ratio</th><th>Barcode<br/><sub>(for parcel/carton & polybag)</sub></th></tr></thead>';
+        $.each(data.orchestra_parcel_details, function (index, value) {
+            tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="qty">' + value.Sum + '</td><td class="barcode">' + data.orchestra_parcel_details[0].ParcelBarCode + '</td></tr>';
+
+     });
 	
     
     var option = "";
@@ -4301,17 +4308,20 @@ function setWashLabelOs(index, dataid, id) {
         var tot_qty_tablewash = [];
         var uvc_tco = [];
         var size = [];
+        var barcode = [];
         $('#' + index + ' tbody tr').each(function () {
             if ($(this).find('.tot_qty_tablewash').val() != undefined) {
                 tot_qty_tablewash.push($(this).find('.tot_qty_tablewash').val())
                 uvc_tco.push($(this).find('.uvc_tco').text())
                 size.push($(this).find('.size').text())
+                barcode.push($(this).find('.size').text())
             }
 
         })
         tot_qty_tablewash_fin = tot_qty_tablewash.join(',');
         uvc_tco_fin = uvc_tco.join(',');
         size_fin = size.join(',');
+        barcode_fin = barcode.join(',');
         var buyer = localStorage.getItem("buyer");
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
@@ -4337,6 +4347,7 @@ function setWashLabelOs(index, dataid, id) {
                 composition: wash_finals,
                 tot_qty_table: tot_qty_tablewash_fin,
                 uvc_tco: uvc_tco_fin,
+                barcode: barcode_fin,
                 merchandisers: merchandisers,
                 uvc: $('#uvc_id').val(),
                 size: size_fin,
@@ -4915,10 +4926,12 @@ function setHangTagOs(id) {
 	var size = [];
 	var size_id = [];
 	var main_id = [];
+	var barcode = [];
 	$('#hangtagform tbody tr').each(function () {
 		if ($(this).find('.tot_qty_tablehang').val() != undefined) {
 			tot_qty_tablehang.push($(this).find('.tot_qty_tablehang').val())
 			uvc_tco.push($(this).find('.uvc_tco').text())
+			barcode.push($(this).find('.barcode').text())
 			size.push($(this).find('.size').text())
 			size_id.push($(this).find('.size_id').val())
 			main_id.push($(this).find('.main_id').val())
@@ -4933,6 +4946,7 @@ function setHangTagOs(id) {
 	size_fin = size.join(',');
 	size_id_fin = size_id.join(',');
 	main_id_fin = main_id.join(',');
+	barcode_fin = barcode.join(',');
 	var buyer = localStorage.getItem("buyer");
 //	alert()
 //	alert($('#parcel_id').val());
@@ -4951,6 +4965,7 @@ function setHangTagOs(id) {
 			size_id: size_id_fin,
 			main_id: main_id_fin,
 			uvc_tco: uvc_tco_fin,
+			barcode: barcode_fin,
 			uvc: $('#uvc_id').val(),
 			parcel_id: $('#parcel_id').val(),
 			season_code: $('#season_code').val(),
