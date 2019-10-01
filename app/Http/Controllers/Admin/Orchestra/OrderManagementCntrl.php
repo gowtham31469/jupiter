@@ -3010,6 +3010,7 @@ class OrderManagementCntrl extends Controller
         $template_name = $request->template_name;
         $tot_qty_table = explode(',',$request->tot_qty_table);
         $uvc_tco = explode(',',$request->uvc_tco);
+        $barcode = explode(',',$request->barcode);
         $size = explode(',',$request->size);
         $uvc =$request->uvc;
         $po_select =$request->po_select;
@@ -3098,7 +3099,8 @@ class OrderManagementCntrl extends Controller
                 WashLabelOrdersQty::create([
                                     'owcl_id' => $id,
                                     'size'      => $size[$i],
-                                    'uvc_tco'      => $uvc_tco[$i],
+									'uvc_tco'      => $uvc_tco[$i],
+									'barcode'      => $barcode[$i],
                                     'quantity'    => $value
                         ]);
                 $i++;
@@ -3210,6 +3212,7 @@ class OrderManagementCntrl extends Controller
                                         'owcl_id' => $inserted->id,
                                         'size'      => $size[$i],
                                         'uvc_tco'      => $uvc_tco[$i],
+                                        'barcode'      => $barcode[$i],
                                         'quantity'    => $value
                              ]);
                     $i++;
