@@ -2356,6 +2356,8 @@ class OrderManagementCntrl extends Controller
 	{
         $tot_qty_carton = explode(',',$request->tot_qty_carton); 
         $size = explode(',',$request->size);
+		$barcode = explode(',',$request->barcode);
+        $uvc_tco = explode(',',$request->uvc_tco);
         $uvc =$request->uvc;
         $parcel_id =$request->parcel_id;
         $season_code =$request->season_code;
@@ -2419,6 +2421,8 @@ class OrderManagementCntrl extends Controller
 			 SolidCartonStickerOrdersQty::create([
 								'oscs_id' => $carton_id,
 								'size'      => $size[$i],
+								'barcode'      => $barcode[$i],
+								'uvc_tco'      => $uvc_tco[$i],
 								'quantity'      => $value,
 								'quantity_sets'    => $value
 					 ]);
@@ -2468,6 +2472,8 @@ class OrderManagementCntrl extends Controller
 	{
         $tot_qty_poly = explode(',',$request->tot_qty_poly); 
         $size = explode(',',$request->size);
+        $barcode = explode(',',$request->barcode);
+        $uvc_tco = explode(',',$request->uvc_tco);
         $uvc =$request->uvc;
         $parcel_id =$request->parcel_id;
         $season_code =$request->season_code;
@@ -2491,6 +2497,8 @@ class OrderManagementCntrl extends Controller
 			SolidPolyStickerOrdersQty::create([
 								'ospbs_id' => $poly_id,
 								'size'      => $size[$i],
+								'barcode'      => $barcode[$i],
+								'uvc_tco'      => $uvc_tco[$i],
 								'quantity'      => $value,
 								'quantity_sets'    => $value
 					 ]);
@@ -2539,6 +2547,9 @@ class OrderManagementCntrl extends Controller
 	public function setStandardCartonStickersOs(Request $request)
 	{
         $uvc =$request->uvc;
+		$size = explode(',',$request->size);
+        $barcode = explode(',',$request->barcode);
+        $uvc_tco = explode(',',$request->uvc_tco);
         $parcel_id =$request->parcel_id;
         $season_code =$request->season_code;
         $height =$request->height; 
@@ -2563,13 +2574,19 @@ class OrderManagementCntrl extends Controller
         $deleted = StandardCartonStickersQty::where('oscs_id', '=', $carton_id)
                     ->delete();
     
-        
-        StandardCartonStickersQty::create([
-                        'oscs_id' => $carton_id,
-                        'size'      => "",
-                        'quantity'    => $final_order_qty_sets,
-                        'quantity_sets'    => $final_order_qty_sets
-        ]);
+        $j=0;
+		foreach($size as $value)
+		{
+			StandardCartonStickersQty::create([
+							'oscs_id' => $carton_id,
+							'size'      => $size[$j],
+							'barcode'      => $barcode[$j],
+							'uvc_tco'      => $uvc_tco[$j],
+							'quantity'    => $final_order_qty_sets,
+							'quantity_sets'    => $final_order_qty_sets
+			]);
+			$j++;
+		}
 
         // fetch erp_order_details table details for each quantity_table ids.
         foreach($quantity_table_ids as $quantity_table_id)
@@ -2614,6 +2631,9 @@ class OrderManagementCntrl extends Controller
 	public function setStandardPolyBagStickersOs(Request $request)
 	{
         $uvc =$request->uvc;
+        $size = explode(',',$request->size);
+        $barcode = explode(',',$request->barcode);
+        $uvc_tco = explode(',',$request->uvc_tco);
         $parcel_id =$request->parcel_id;
         $season_code =$request->season_code;
         $height =$request->height; 
@@ -2634,12 +2654,19 @@ class OrderManagementCntrl extends Controller
                 ->delete();
 
 
-        StandardPolyStickersQty::create([
-                        'ospbs_id' => $poly_id,
-                        'size'      => "",
-                        'quantity'    => $final_order_qty_sets,
-                        'quantity_sets'    => $final_order_qty_sets
-        ]);
+        $j=0;
+		foreach($size as $value)
+		{
+			 StandardPolyStickersQty::create([
+								'ospbs_id' => $poly_id,
+								'size'      => $size[$j],
+								'barcode'      => $barcode[$j],
+								'uvc_tco'      => $uvc_tco[$j],
+								'quantity'    => $final_order_qty,
+								'quantity_sets'    => $final_order_qty
+			 ]);
+			$j++;
+		}
 
         // fetch erp_order_details table details for each quantity_table ids.
         foreach($quantity_table_ids as $quantity_table_id)
@@ -2983,6 +3010,7 @@ class OrderManagementCntrl extends Controller
         $template_name = $request->template_name;
         $tot_qty_table = explode(',',$request->tot_qty_table);
         $uvc_tco = explode(',',$request->uvc_tco);
+        $barcode = explode(',',$request->barcode);
         $size = explode(',',$request->size);
         $uvc =$request->uvc;
         $po_select =$request->po_select;
@@ -3071,7 +3099,8 @@ class OrderManagementCntrl extends Controller
                 WashLabelOrdersQty::create([
                                     'owcl_id' => $id,
                                     'size'      => $size[$i],
-                                    'uvc_tco'      => $uvc_tco[$i],
+									'uvc_tco'      => $uvc_tco[$i],
+									'barcode'      => $barcode[$i],
                                     'quantity'    => $value
                         ]);
                 $i++;
@@ -3183,6 +3212,7 @@ class OrderManagementCntrl extends Controller
                                         'owcl_id' => $inserted->id,
                                         'size'      => $size[$i],
                                         'uvc_tco'      => $uvc_tco[$i],
+                                        'barcode'      => $barcode[$i],
                                         'quantity'    => $value
                              ]);
                     $i++;

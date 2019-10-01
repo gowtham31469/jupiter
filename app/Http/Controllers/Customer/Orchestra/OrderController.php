@@ -2191,11 +2191,13 @@ class OrderController extends Controller
        
            
     }
-	
+
 	public function setSolidStickersOs(Request $request)
 	{
         $tot_qty_carton = explode(',',$request->tot_qty_carton); 
         $size = explode(',',$request->size);
+		$barcode = explode(',',$request->barcode);
+        $uvc_tco = explode(',',$request->uvc_tco);
         $uvc =$request->uvc;
         $parcel_id =$request->parcel_id;
         $season_code =$request->season_code;
@@ -2233,9 +2235,9 @@ class OrderController extends Controller
 			$status="";
 			$po_status="";
 			$pi_status="";
-		}
+        }
         
-        // get quantity_table ids.
+		// get quantity_table ids.
         $quantity_table_ids = DB::table('orchestra_solid_carton_sticker_orders_qty')->select('id')->where('oscs_id',$carton_id)->get();
 
 		SolidCartonStickerOrders::where('id',$carton_id)
@@ -2259,6 +2261,8 @@ class OrderController extends Controller
 			 SolidCartonStickerOrdersQty::create([
 								'oscs_id' => $carton_id,
 								'size'      => $size[$i],
+								'barcode'      => $barcode[$i],
+								'uvc_tco'      => $uvc_tco[$i],
 								'quantity'      => $value,
 								'quantity_sets'    => $value
 					 ]);
@@ -2308,16 +2312,18 @@ class OrderController extends Controller
 	{
         $tot_qty_poly = explode(',',$request->tot_qty_poly); 
         $size = explode(',',$request->size);
+        $barcode = explode(',',$request->barcode);
+        $uvc_tco = explode(',',$request->uvc_tco);
         $uvc =$request->uvc;
         $parcel_id =$request->parcel_id;
         $season_code =$request->season_code;
         $height =$request->height; 
         $age =$request->age;
         $poly_id =$request->poly_id;
+        
+        // get quantity_table ids.
+        $quantity_table_ids = DB::table('orchestra_solid_poly_bag_sticker_orders_qty')->select('id')->where('ospbs_id',$poly_id)->get();
 		
-		 // get quantity_table ids.
-         $quantity_table_ids = DB::table('orchestra_solid_poly_bag_sticker_orders_qty')->select('id')->where('ospbs_id',$poly_id)->get();
-
 		SolidPolyStickerOrders::where('id',$poly_id)
                    ->update([
                         'height'           => $height,
@@ -2331,12 +2337,14 @@ class OrderController extends Controller
 			SolidPolyStickerOrdersQty::create([
 								'ospbs_id' => $poly_id,
 								'size'      => $size[$i],
+								'barcode'      => $barcode[$i],
+								'uvc_tco'      => $uvc_tco[$i],
 								'quantity'      => $value,
 								'quantity_sets'    => $value
 					 ]);
 			$i++;
         }
-
+        
         // fetch erp_order_details table details for each quantity_table ids.
         foreach($quantity_table_ids as $quantity_table_id)
         {
@@ -2379,6 +2387,9 @@ class OrderController extends Controller
 	public function setStandardCartonStickersOs(Request $request)
 	{
         $uvc =$request->uvc;
+		$size = explode(',',$request->size);
+        $barcode = explode(',',$request->barcode);
+        $uvc_tco = explode(',',$request->uvc_tco);
         $parcel_id =$request->parcel_id;
         $season_code =$request->season_code;
         $height =$request->height; 
@@ -2387,29 +2398,35 @@ class OrderController extends Controller
         $no_of_carton =$request->no_of_carton;
         $total_polybag =$request->total_polybag;
         $final_order_qty_sets =$request->final_order_qty_sets;
-        
-        // get quantity_table ids.
+
+		// get quantity_table ids.
         $quantity_table_ids = DB::table('orchestra_standard_carton_sticker_orders_qty')->select('id')->where('oscs_id',$carton_id)->get();
 
-        StandardCartonStickers::where('id',$carton_id)
-                ->update([
-                    'height'           => $height,
-                    'no_of_carton'    => $no_of_carton, 
-                    'total_polybag'    => $total_polybag, 
-                    'final_order_qty_sets'    => $final_order_qty_sets, 
-                    'group_id'    => $age,
-                ]);
-        
+		StandardCartonStickers::where('id',$carton_id)
+                   ->update([
+                        'height'           => $height,
+                        'no_of_carton'    => $no_of_carton, 
+                        'total_polybag'    => $total_polybag, 
+                        'final_order_qty_sets'    => $final_order_qty_sets, 
+                        'group_id'    => $age,
+                  ]);
+			
         $deleted = StandardCartonStickersQty::where('oscs_id', '=', $carton_id)
                     ->delete();
     
-        
-        StandardCartonStickersQty::create([
-                        'oscs_id' => $carton_id,
-                        'size'      => "",
-                        'quantity'    => $final_order_qty_sets,
-                        'quantity_sets'    => $final_order_qty_sets
-        ]);
+        $j=0;
+		foreach($size as $value)
+		{
+			StandardCartonStickersQty::create([
+							'oscs_id' => $carton_id,
+							'size'      => $size[$j],
+							'barcode'      => $barcode[$j],
+							'uvc_tco'      => $uvc_tco[$j],
+							'quantity'    => $final_order_qty_sets,
+							'quantity_sets'    => $final_order_qty_sets
+			]);
+			$j++;
+		}
 
         // fetch erp_order_details table details for each quantity_table ids.
         foreach($quantity_table_ids as $quantity_table_id)
@@ -2454,16 +2471,19 @@ class OrderController extends Controller
 	public function setStandardPolyBagStickersOs(Request $request)
 	{
         $uvc =$request->uvc;
+        $size = explode(',',$request->size);
+        $barcode = explode(',',$request->barcode);
+        $uvc_tco = explode(',',$request->uvc_tco);
         $parcel_id =$request->parcel_id;
         $season_code =$request->season_code;
         $height =$request->height; 
         $age =$request->age;
         $poly_id =$request->poly_id;
         $final_order_qty_sets =$request->final_order_qty_sets;
-        
+
         // get quantity_table ids.
         $quantity_table_ids = DB::table('orchestra_standard_poly_bag_sticker_orders_qty')->select('id')->where('ospbs_id',$poly_id)->get();
-
+		
 		StandardPolyStickers::where('id',$poly_id)
                    ->update([
                         'final_order_qty_sets'    => $final_order_qty_sets, 
@@ -2474,12 +2494,19 @@ class OrderController extends Controller
                 ->delete();
 
 
-        StandardPolyStickersQty::create([
-                        'ospbs_id' => $poly_id,
-                        'size'      => "",
-                        'quantity'    => $final_order_qty_sets,
-                        'quantity_sets'    => $final_order_qty_sets
-        ]);
+        $j=0;
+		foreach($size as $value)
+		{
+			 StandardPolyStickersQty::create([
+								'ospbs_id' => $poly_id,
+								'size'      => $size[$j],
+								'barcode'      => $barcode[$j],
+								'uvc_tco'      => $uvc_tco[$j],
+								'quantity'    => $final_order_qty,
+								'quantity_sets'    => $final_order_qty
+			 ]);
+			$j++;
+		}
 
         // fetch erp_order_details table details for each quantity_table ids.
         foreach($quantity_table_ids as $quantity_table_id)
@@ -2823,6 +2850,7 @@ class OrderController extends Controller
         $template_name = $request->template_name;
         $tot_qty_table = explode(',',$request->tot_qty_table);
         $uvc_tco = explode(',',$request->uvc_tco);
+        $barcode = explode(',',$request->barcode);
         $size = explode(',',$request->size);
         $uvc =$request->uvc;
         $po_select =$request->po_select;
@@ -2875,10 +2903,12 @@ class OrderController extends Controller
 		
         if($id != "null")
         {
-			// get quantity_table ids.
+                
+            // get quantity_table ids.
             $quantity_table_ids = DB::table('orchestra_wash_care_label_orders_qty')->select('id')->where('owcl_id',$id)->get();
+        
             WashLabelOrders::where('id',$id)
-                ->update([
+            ->update([
                     'uvc' => $uvc,
                     'template_id'      => $template_front_id,
                     //'merchandisers_id'      => $merchandisers,
@@ -2900,18 +2930,19 @@ class OrderController extends Controller
                     'season_code'    => $season_code,
                     'pi_status'           => $pi_status,
                     'po_status'           => $po_status,
-                ]);
+            ]);
             $deleted = WashLabelOrdersQty::where('owcl_id', '=', $id)
                         ->delete();
             $i=0;
             foreach($tot_qty_table as $value)
             {
-                    WashLabelOrdersQty::create([
+                WashLabelOrdersQty::create([
                                     'owcl_id' => $id,
                                     'size'      => $size[$i],
-                                    'uvc_tco'      => $uvc_tco[$i],
+									'uvc_tco'      => $uvc_tco[$i],
+									'barcode'      => $barcode[$i],
                                     'quantity'    => $value
-                            ]);
+                        ]);
                 $i++;
             }
             $deleted = WashCareComposition::where('owcl_id', '=', $id)
@@ -2950,7 +2981,7 @@ class OrderController extends Controller
                           'order_status' => "Order Placed"
 
             ]);
-            
+
             // fetch erp_order_details table details for each quantity_table ids.
             foreach($quantity_table_ids as $quantity_table_id)
             {
@@ -3021,6 +3052,7 @@ class OrderController extends Controller
                                         'owcl_id' => $inserted->id,
                                         'size'      => $size[$i],
                                         'uvc_tco'      => $uvc_tco[$i],
+                                        'barcode'      => $barcode[$i],
                                         'quantity'    => $value
                              ]);
                     $i++;
