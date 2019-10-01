@@ -42,6 +42,7 @@ use App\OrchestraParcelDetails;
 use App\OrchestraParcelQuantityDetails;
 use Auth;
 use Illuminate\Support\Facades\Redis;
+use App\Classes\EditErpOrders;
 
 class OrderManagementCntrl extends Controller
 {
@@ -2395,7 +2396,7 @@ class OrderManagementCntrl extends Controller
         }
         
 		// get quantity_table ids.
-        $quantity_table_ids = DB::table('orchestra_solid_carton_sticker_orders')->select('id')->where('oscs_id',$carton_id)->get();
+        $quantity_table_ids = DB::table('orchestra_solid_carton_sticker_orders_qty')->select('id')->where('oscs_id',$carton_id)->get();
 
 		SolidCartonStickerOrders::where('id',$carton_id)
                    ->update([
