@@ -108,14 +108,14 @@ function tescoOrders(callback) {
 				if (CEUniqueNames.length > 0) {
 					options += "<optgroup label='CE'>";
 					for (i = 0; i < CEUniqueNames.length; i++) {
-						options += "<option>" + CEUniqueNames[i] + "</option>";
+						options += "<option data-zone='ce'>" + CEUniqueNames[i] + "</option>";
 					}
 					options += "</optgroup>";
 				}
 				if (UKUniqueNames.length > 0) {
 					options += "<optgroup label='UK'>";
 					for (i = 0; i < UKUniqueNames.length; i++) {
-						options += "<option>" + UKUniqueNames[i] + "</option>";
+						options += "<option data-zone='uk'>" + UKUniqueNames[i] + "</option>";
 					}
 					options += "</optgroup>";
 				}
@@ -523,11 +523,12 @@ function tescoOrders(callback) {
 						var po_num = $('#artwork_list').val();
 						var style_number = $('#po_number').val();
 						var artwork = $('#artwork_list').find(':selected').text();
+						var zone = $('#po_number').find(':selected').data('zone');
 						localStorage.setItem('style_number_back',style_number)
 						localStorage.setItem('artwork_back',artwork)
 						localStorage.setItem('po_num_back',po_num)
 						localStorage.setItem("back_flag","view");
-						viewOrder(po_num, artwork);
+						viewOrder(po_num, artwork, style_number, zone);
 					}
 				})
 				callback();

@@ -1251,10 +1251,13 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 				$(newObj).each(function (index1, value1) {
 					if (value1.po_number != "" && value1.po_number != null) {
 						options += "<option>" + value1.po_number + "</option>";
-
+						$('#po-file-upload-div').find('#exist_artwork_div ul').append('<li data-id="'+value1.type+'-'+value1.id+'" data-company="'+value1.company_id+'" class="check-list">'+value1.TemplateName+" - "+value1.TemplateType+'</li>')
 						coun++;
 					}
-					$('#po-file-upload-div').find('#exist_artwork_div ul').append('<li data-id="'+value1.type+'-'+value1.id+'" data-company="'+value1.company_id+'" class="list-group-item">'+value1.TemplateName+" - "+value1.TemplateType+'</li>')
+					else
+					{
+						$('#po-file-upload-div').find('#exist_artwork_div ul').append('<li data-id="'+value1.type+'-'+value1.id+'" data-company="'+value1.company_id+'" class="list-group-item">'+value1.TemplateName+" - "+value1.TemplateType+'</li>')
+					}
 				});
 				
 				
@@ -1370,7 +1373,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 				
 				//End bootstrap checkbox 
 				
-		$('#selectpo').html('<label>Select PO</label><select id="select_po" class="form-control">' + options + '</select>')
+		$('#selectpo').html('<label>Select PO</label><select id="select_po" style="width:96%" class="form-control">' + options + '</select>')
 				if (coun == 0) {
 					$('#map_po').addClass('hidden');
 					$('#new_po1').addClass('hidden');
@@ -1570,10 +1573,13 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 				$(newObj).each(function (index1, value1) {
 					if (value1.po_number != "" && value1.po_number != null) {
 						options += "<option>" + value1.po_number + "</option>";
-
+						$('#po-file-upload-div').find('#exist_artwork_div ul').append('<li data-id="'+value1.type+'-'+value1.id+'" data-company="'+value1.company_id+'" class="check-list">'+value1.TemplateName+" - "+value1.TemplateType+'</li>')
 						coun++;
 					}
-					$('#po-file-upload-div').find('#exist_artwork_div ul').append('<li data-id="'+value1.type+'-'+value1.id+'" data-company="'+value1.company_id+'" class="list-group-item">'+value1.TemplateName+" - "+value1.TemplateType+'</li>')
+					else
+					{
+						$('#po-file-upload-div').find('#exist_artwork_div ul').append('<li data-id="'+value1.type+'-'+value1.id+'" data-company="'+value1.company_id+'" class="list-group-item">'+value1.TemplateName+" - "+value1.TemplateType+'</li>')
+					}
 				});
 				
 				
@@ -1689,7 +1695,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 				
 				//End bootstrap checkbox 
 				
-		$('#selectpo').html('<label>Select PO</label><select id="select_po" class="form-control">' + options + '</select>')
+		$('#selectpo').html('<label>Select PO</label><select id="select_po" style="width:96%" class="form-control">' + options + '</select>')
 				if (coun == 0) {
 					$('#map_po').addClass('hidden');
 					$('#new_po1').addClass('hidden');

@@ -55,7 +55,7 @@ function loadTemplatePreview() {
  * AJAX method to fetch the order details.
  * @return {[type]} [description]
  */
-function viewOrder(pNumber,aWork) {
+function viewOrder(pNumber,aWork, style_number, zone) {
     try {
         $.ajax({
             url: base_url + "/admin/tesco/view-order",
@@ -66,7 +66,7 @@ function viewOrder(pNumber,aWork) {
             beforeSend: function () {
                 $(".loader").show();
             },
-            data: {'po_number':pNumber, 'artwork':aWork},
+            data: {'po_number':pNumber, 'artwork':aWork, 'style_number':style_number, "zone":zone},
             tryCount: 0,
             retryLimit: 2,
             dataType: 'JSON',
