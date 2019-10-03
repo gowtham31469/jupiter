@@ -125,7 +125,7 @@ class InvoiceController extends Controller
 							->orderBy('erp_order_details.id', 'asc')
                             ->get();
             if ($orderlist[0]->freight_id == 3) {
-                $orderlist[0]->delvry_thru  = DB::table('nominated_forwarder')->where('id',$orderlist[0]->nominated_forwarder)->value('forwarder');       
+                $orderlist[0]->delvry_thru  = DB::table('nominated_forwarders')->where('id',$orderlist[0]->nominated_forwarder)->value('forwarder');       
             }               
             $company_details =  DB::table('company')
                                 ->where('id',session()->get('company'))
@@ -180,6 +180,7 @@ class InvoiceController extends Controller
      */
     public function setInvoice(Request $request)
     {
+
         ini_set('max_input_vars', 5000);
         try 
         {
@@ -294,7 +295,7 @@ class InvoiceController extends Controller
                     }
                     else{
                         $ful_count++;
-                    }
+                    }                       
                     InvoiceDetails::create([
                         'invoice_id'    =>  $invoiceData->id,
                         'order_no'      =>  $value['id'],
@@ -308,13 +309,13 @@ class InvoiceController extends Controller
                         'size'          =>  $size,                        
                         'reference_no'  =>  $value['ref_no'],
                         'custom_ref_name'  =>  $value['reference_name'],
-                        'ocn_no'        =>  $value['ocn_number'], 
+                        'ocn_no'        =>  $value['ocn_number'] ? $value['ocn_number'] : '-', 
                         'item_name'     =>  $value['item_name'], 
                         'item'          =>  $value['item_name'], 
                         'buyer_po_number' =>  $value['buyer_po_number'],          
                         'company_id'    =>  session()->get('company'),
                     ]);
-                    
+                    // dd(/$a);
                     ErpOrderDetails::where('id',$value['id'])
                         ->update([
                             'delivered_quantity'   => ( $value['order_quantity'] - $pendingQnty ),

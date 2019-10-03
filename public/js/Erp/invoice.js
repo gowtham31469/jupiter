@@ -161,17 +161,18 @@
             var dlvryBx= (chkbx != "checked") ? "disabled" : "";
             
             if (itemName==value.item_name) {
-
+                var _ocn = value.ocn_number==null?'-':value.ocn_number;
                 tr += '<tr class="trClass" id="'+value.id+'">';
-                tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" '+chkbx+'/></td><td class="order_id">'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><div class="form-group has-feedback"><input type="number" value="" class="form-control delivery-qnty" style="text-align: center;" required data-id="'+value.id+'" min="1" '+dlvryBx+'  onkeyup="updateAmount.call(this,'+uniqueTax+')"></div></td><td class="rate">'+value.rate+'</td><td style="border-width: 1px !important;" class="amnt">'+(value.pending_qnty * value.rate).toFixed(2)+'</td>';
+                tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" '+chkbx+'/></td><td class="order_id">'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+_ocn+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><div class="form-group has-feedback"><input type="number" value="" class="form-control delivery-qnty" style="text-align: center;" required data-id="'+value.id+'" min="1" '+dlvryBx+'  onkeyup="updateAmount.call(this,'+uniqueTax+')"></div></td><td class="rate">'+value.rate+'</td><td style="border-width: 1px !important;" class="amnt">'+(value.pending_qnty * value.rate).toFixed(2)+'</td>';
                 tr += '</tr>';
                 
             }
             else{
                 var hsnCode = value.hsn_code==null?'-':value.hsn_code;
+                var _ocn = value.ocn_number==null?'-':value.ocn_number;
                 tr += '<tr class="trClass" id="'+value.id+'">';
                 tr += '<tr><td></td><td colspan="13"><strong style="float: left;">ITEM: '+value.item_name+'  HSNCode: '+hsnCode+'</strong></td></tr><tr class="trClass" id="'+value.id+'">';
-                tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" '+chkbx+'/></td><td class="order_id">'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><div class="form-group has-feedback"><input type="number" min="1" step="1" value="" class="form-control delivery-qnty" style="text-align: center;" required data-id="'+value.id+'" min="1" '+dlvryBx+' onkeyup="updateAmount.call(this,'+uniqueTax+')"></div></td><td class="rate">'+value.rate+'</td><td class="amnt" style="border-width: 1px !important;">'+(value.pending_qnty * value.rate).toFixed(2)+'</td>';
+                tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" '+chkbx+'/></td><td class="order_id">'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+_ocn+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><div class="form-group has-feedback"><input type="number" min="1" step="1" value="" class="form-control delivery-qnty" style="text-align: center;" required data-id="'+value.id+'" min="1" '+dlvryBx+' onkeyup="updateAmount.call(this,'+uniqueTax+')"></div></td><td class="rate">'+value.rate+'</td><td class="amnt" style="border-width: 1px !important;">'+(value.pending_qnty * value.rate).toFixed(2)+'</td>';
                 tr += '</tr>';
                  itemName =value.item_name
             }
@@ -620,14 +621,16 @@
                 pending_qnty = value.pending_qnty - delQnty
 
                 if (itemName==value.item_name) {
+                    var _ocn = value.ocn_number==null?'-':value.ocn_number;
                     tr += '<tr class="trClass" id="'+value.id+'">';
-                    tr += '<td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+' </td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td style="border-width: 1px !important;" class="amnt">'+(delQnty * value.rate).toFixed(2)+'</td>';
+                    tr += '<td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+_ocn+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+' </td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td style="border-width: 1px !important;" class="amnt">'+(delQnty * value.rate).toFixed(2)+'</td>';
                     tr += '</tr>';
                 }
                 else{
                     var hsnCode = value.hsn_code==null?'-':value.hsn_code;
+                    var _ocn = value.ocn_number==null?'-':value.ocn_number;
                     tr += '<tr><td></td><td colspan="13"><strong style="float: left;">ITEM: '+value.item_name+'  HSNCode: '+hsnCode+'</strong></td></tr>';
-                    tr += '<tr class="trClass" id="'+value.id+'"><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+' </td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td class="amnt" style="border-width: 1px !important;">'+(delQnty * value.rate).toFixed(2)+'</td>';
+                    tr += '<tr class="trClass" id="'+value.id+'"><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+_ocn+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+' </td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td class="amnt" style="border-width: 1px !important;">'+(delQnty * value.rate).toFixed(2)+'</td>';
                     tr += '</tr>';
                     itemName =value.item_name
                 }               
