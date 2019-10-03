@@ -861,26 +861,13 @@
 					var t = $('#reportTable').dataTable( {
 						processing: true,
 						serverSide: true,
-						"deferLoading": true,
 						// sScrollX: '100%',	
 						// order: [[ 5, "asc" ]],
 						"scrollX": true,
 						dom: 'lBfrtip',
-						lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
-						 buttons: [
-        {
-            extend: 'excel',
-            text: '<span class="fa fa-file-excel-o"></span> Excel Export',
-            exportOptions: {
-                modifier: {
-                    search: 'applied',
-                    order: 'applied'
-                }
-            }
-        }
-    ],
+						// lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
 						// buttons: ['copy', 'csv', 'excel', 'pdf'],
-						// buttons: ['copy', 'csv','excel'],
+						buttons: ['copy', 'csv','excel'],
 						fixedHeader: {
 							header: true,
 						},
