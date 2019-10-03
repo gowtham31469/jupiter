@@ -109,7 +109,7 @@ public function level1Filter(Request $request)
     ->leftJoin("event_history",'history.id', '=', 'event_history.history_id')
     ->whereIn('season',$request->season)
     ->whereIn('template',$request->template)
-    ->whereIn('country',$request->country)
+    // ->whereIn('country',$request->country)
     ->whereBetween('event_history.created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
     ->select('material','customer_id','style','mat_sub')
     ->get();
