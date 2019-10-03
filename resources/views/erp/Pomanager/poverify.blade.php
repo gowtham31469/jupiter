@@ -781,6 +781,10 @@ transform: scale(1);
 					{
 						var size = "-";
 					}
+					if(index.buyer_po_number==null)
+					{
+						index.buyer_po_number='-'
+					}
 					$('#order-details-table tbody').append(`
 						<tr id="` + index.id + `">
                           	<td class="">` + i + `</td>

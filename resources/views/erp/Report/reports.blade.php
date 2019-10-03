@@ -269,9 +269,17 @@
 							<label>Season</label>
 							{!! Form::select('sel_1[]',$seasons,null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Season','id'=>'season']) !!}
 						</div>
+
 						<div class="col-md-3">
 							<label>Country</label>
+							
+
+							@if($countries[0] == null)
+							{!! Form::select('sel_1[]',['0'=>'No countries added yet'],0,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Country','id'=>'country','disabled']) !!}
+							@else
 							{!! Form::select('sel_1[]',$countries,null,['class' => 'selectpicker filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Country','id'=>'country']) !!}
+							@endif
+
 						</div>
 					</div>
 				</div>
@@ -865,9 +873,21 @@
 						// order: [[ 5, "asc" ]],
 						"scrollX": true,
 						dom: 'lBfrtip',
-						// lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+						lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
 						// buttons: ['copy', 'csv', 'excel', 'pdf'],
-						buttons: ['copy', 'csv','excel'],
+						// buttons: ['copy', 'csv','excel'],
+						buttons: [
+        {
+            extend: 'excel',
+            text: '<span class="fa fa-file-excel-o"></span> Excel Export',
+            exportOptions: {
+                modifier: {
+                    search: 'applied',
+                    order: 'applied'
+                }
+            }
+        }
+    ],
 						fixedHeader: {
 							header: true,
 						},

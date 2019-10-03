@@ -21,30 +21,62 @@ use App\OrchestraHangTag;
 use App\OrchestraWashCare;
 use App\OrchestraWashCareQty;
 use App\OrchestraAgeGroup;
+use App\Buyer;
+use App\Customer;
+use App\History;
+use App\Action;
+use App\EventHistory;
+use App\ErpOrderDetails;
+use App\ErpOrdersInvoice; 
+use App\Invoices;
+use App\InvoiceDetails;
+use App\InvExtraCharges;
+use App\Classes\Invoice;
+use App\InvoiceAddress;
+use App\TescoTaxCode;
+use Carbon\Carbon;
 use Response;
 use View;
 use Auth;
 use DB;
 use Session;
 use App\ErpOrders as Erp;
-use App\ErpOrderDetails as ErpOrderDetails;
-use Carbon\Carbon;
 use PDF;
 use App\Classes\JobcardPDFHeaderFooter;
 use App\Classes\FPDF_Merge;
 use File;
 use Config;
-use App\History;
 
 class ApiTest extends Controller
 {
    public function testApi(Request $request)
    {
 
+$countries = array_unique(History::all()->sortBy('country')->pluck('country')->toArray());
+dd($countries);
+
+$res = OrchestraSolidCartonSticker::with(['solidcartonstickerqty' => 
+            function($query)
+            {  
+              $query->groupBy('size')
+                  ->groupBy('orchestra_solid_carton_sticker_orders_qty.id');
+            }])
+            ->where('orchestra_solid_carton_sticker_orders.id',2)
+            ->get();
+          
+            $res->map(function ($res) {
+            $res->theme = OrchestraParcelDetails::where('id',$res->orchestra_parcel_details_id)->first()->Theme;
+            $res->reference_name = "Solid Carton Stickers";
+            $res->age_group = OrchestraAgeGroup::where('id',$res->group_id)->first()->color;
+            });
+          
+
+          dd($res);
 
 
-DB::table('orchestra_item_master')->where('parent_id', 2)
-            ->update(['company_id' => 2]);
+
+DB::table('orchestra_parcel_details')
+            ->update(['order_status' => NULL,'sticker_order_status'=> NULL]);
 
 dd("done");
 
