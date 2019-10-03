@@ -2662,8 +2662,8 @@ class OrderManagementCntrl extends Controller
 								'size'      => $size[$j],
 								'barcode'      => $barcode[$j],
 								'uvc_tco'      => $uvc_tco[$j],
-								'quantity'    => $final_order_qty,
-								'quantity_sets'    => $final_order_qty
+								'quantity'    => $final_order_qty_sets,
+								'quantity_sets'    => $final_order_qty_sets
 			 ]);
 			$j++;
 		}
