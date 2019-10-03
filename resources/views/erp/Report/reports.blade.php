@@ -861,6 +861,7 @@
 					var t = $('#reportTable').dataTable( {
 						processing: true,
 						serverSide: true,
+						"deferLoading": true,
 						// sScrollX: '100%',	
 						// order: [[ 5, "asc" ]],
 						"scrollX": true,
