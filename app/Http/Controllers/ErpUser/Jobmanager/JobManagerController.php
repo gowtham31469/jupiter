@@ -334,7 +334,9 @@ class JobManagerController extends Controller
 						{  
 							$query->groupBy('size')
 								  ->groupBy('orchestra_solid_poly_bag_sticker_orders_qty.id');
-						}])->get();
+						}])
+						->where('orchestra_solid_poly_bag_sticker_orders.id', '=', $parentTable_id)
+						->get();
 
 						$res->map(function ($res) {
 						$res->reference_name = "Solid Polybag Stickers";
@@ -350,7 +352,9 @@ class JobManagerController extends Controller
 						{  
 							$query->groupBy('size')
 								  ->groupBy('orchestra_solid_carton_sticker_orders_qty.id');
-						}])->get();
+						}])
+					->where('orchestra_solid_carton_sticker_orders.id', '=', $parentTable_id)
+					->get();
 					
 						$res->map(function ($res) {
 						$res->theme = OrchestraParcelDetails::where('id',$res->orchestra_parcel_details_id)->first()->Theme;
@@ -367,7 +371,9 @@ class JobManagerController extends Controller
 						{  
 							$query->groupBy('size')
 								  ->groupBy('orchestra_standard_carton_sticker_orders_qty.id');
-						}])->get();
+						}])
+						->where('orchestra_standard_carton_sticker_orders.id', '=', $parentTable_id)
+						->get();
 					
 						$res->map(function ($res) {
 						$res->theme = OrchestraParcelDetails::where('id',$res->orchestra_parcel_details_id)->first()->Theme;
@@ -383,7 +389,9 @@ class JobManagerController extends Controller
 						{  
 							$query->groupBy('size')
 								  ->groupBy('orchestra_standard_poly_bag_sticker_orders_qty.id');
-						}])->get();
+						}])
+					    ->where('orchestra_standard_poly_bag_sticker_orders.id', '=', $parentTable_id)
+						->get();
 						
 				
 						$sizeArr=OrchestraParcelDetails::where('UVC',$res[0]->uvc)
