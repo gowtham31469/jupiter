@@ -343,6 +343,9 @@ Route::post('admin/orchestra/reject-orchestra-pi', 'Admin\Orchestra\OrderManagem
 Route::post('admin/orchestra/download-orchestra-pi', 'Admin\Orchestra\OrderManagementCntrl@downloadOrchestraPI');
 
 Route::post('admin/orchestra/order-management/set_hang_tag', 'Admin\Orchestra\OrderManagementCntrl@setHangTag');
+
+Route::post('admin/orchestra/order-management/remove_hang_tag', 'Admin\Orchestra\OrderManagementCntrl@removeHangTag');
+
 Route::post('admin/orchestra/order-management/set_heat_transfer', 'Admin\Orchestra\OrderManagementCntrl@setHeatTransfer');
 Route::post('admin/orchestra/order-management/set_special_tag', 'Admin\Orchestra\OrderManagementCntrl@setSpecialTag');
 Route::post('admin/orchestra/order-management/set_main_label', 'Admin\Orchestra\OrderManagementCntrl@setMainLabel');
@@ -794,6 +797,8 @@ Route::post('customer/orchestra/order-management/order-status', 'Customer\Orches
 Route::post('customer/orchestra/order-management/label-order-details', 'Customer\Orchestra\OrderController@labelOrderDetails');
 Route::post('customer/orchestra/order-management/sticker-order-details', 'Customer\Orchestra\OrderController@stickerOrderDetails');
 Route::post('customer/orchestra/order-management/set_hang_tag', 'Customer\Orchestra\OrderController@setHangTag');
+
+Route::post('customer/orchestra/order-management/remove_hang_tag', 'Customer\Orchestra\OrderController@removeHangTag');
 
 Route::post('customer/orchestra/order-management/set_heat_transfer', 'Customer\Orchestra\OrderController@setHeatTransfer');
 

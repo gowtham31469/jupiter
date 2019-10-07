@@ -554,9 +554,13 @@ class OrderManagementCntrl extends Controller
 //                        $data['treeviewmain']=$tree;
 //
 //               }
-                $code=$data['order_details']{0}->Family_Code;
-                $data['orchestra_hang_tag_orders']=DB::table('orchestra_hang_tag_orders')->select('*',DB::raw("'Hang Tag' as \"TemplateName\""))->where('uvc',$uvc)->get();
-		$data['orchestra_hang_tag_orders_id']=DB::table('orchestra_hang_tag_orders')->where('uvc',$uvc)->pluck('id');
+		
+        $code=$data['order_details']{0}->Family_Code;
+		
+        $data['orchestra_hang_tag_orders']=DB::table('orchestra_hang_tag_orders')->select('*',DB::raw("'Hang Tag' as \"TemplateName\""))->where('uvc',$uvc)->where('status','!=','Order Cancelled')->get();
+		
+		$data['orchestra_hang_tag_orders_id']=DB::table('orchestra_hang_tag_orders')->where('uvc',$uvc)->where('status','!=','Order Cancelled')->pluck('id');
+		
         if(count($data['orchestra_hang_tag_orders']) > 0)
         {
             $data['orchestra_hang_tag_orders_qty']=DB::table('orchestra_hang_tag_orders_qty')->select('*')->whereIn('oht_id',$data['orchestra_hang_tag_orders_id'])->orderBy('orchestra_hang_tag_orders_qty.parcel_id','asc')->get();
@@ -1068,6 +1072,22 @@ class OrderManagementCntrl extends Controller
           
         return $result;
     }
+	/**
+     * This Function is used to remove Hang Tag Details.
+     *
+     * @return Void
+     */
+	public function removeHangTag(Request $request)
+	{
+		$id =$request->id;
+		
+	    HangTagOrders::where('id',$id)
+                ->update([
+                    'status' => "Order Cancelled"
+                ]);
+		
+		$result = response()->json(['error'=> false,'message' =>'success'],200);
+	}
 	/**
      * This Function is used to save the Heat Transfer Details.
      *
