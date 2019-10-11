@@ -1243,6 +1243,10 @@ p.dropdown-toggle i {
     margin-left: 5px;
 }
 
+.invoice_actions button {
+    margin-left: 5px;
+}
+
 a.notification {
     padding-top: 12px !important;
     font-size: 18px;
