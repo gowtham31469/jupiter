@@ -157,9 +157,14 @@ class JobManagerController extends Controller
 					
 					if(count($erp_order_details) > 0)
 					{
-						$erp_order_details[0]['delivery_date'] = Carbon::parse($erp_order_details[0]['delivery_date'])->format('d-m-Y');
 						foreach($erp_order_details as $erp_order_det)
 						{
+							// format delivery date to dd-mm-yyyy
+							if($erp_order_det["delivery_date"] != null)
+							{
+                                 $erp_order_det["delivery_date"] = Carbon::parse($erp_order_det["delivery_date"])->format('d-m-Y');
+							}
+
 							$orders_erp[$erp_order_det['uuid']] = $erp_order_det;
 						}
 						
