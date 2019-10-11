@@ -13,6 +13,7 @@ use DB;
 use Session;
 use App\ErpOrders as Erp;
 use App\ErpOrderDetails as ErpOrderDetails;
+use Carbon\Carbon;
 
 class PrintManagerController extends Controller
 {
@@ -295,6 +296,13 @@ class PrintManagerController extends Controller
                     		if($jobcard_id_list->buyer_po_number==null)
                     		{
                     			$jobcard_id_list->buyer_po_number='-';
+							}
+							
+							// format created_at date to dd-mm-yyyy
+							if($jobcard_id_list->created_at!= null)
+                    		{
+								$date = Carbon::parse($jobcard_id_list->created_at)->toDateString();
+                    			$jobcard_id_list->created_date = Carbon::parse($date)->format('d-m-Y');
                     		}
                 	    });
 
@@ -348,7 +356,14 @@ class PrintManagerController extends Controller
 					else
 					{
 						$jobcard_id_list->map(function ($jobcard_id_list,$key) {
-                    		$jobcard_id_list->buyer='tesco';
+							$jobcard_id_list->buyer='tesco';
+							
+							// format created_at date to dd-mm-yyyy
+							if($jobcard_id_list->created_at!= null)
+                    		{
+								$date = Carbon::parse($jobcard_id_list->created_at)->toDateString();
+                    			$jobcard_id_list->created_date = Carbon::parse($date)->format('d-m-Y');
+                    		}
                 	    });
 					}
 
