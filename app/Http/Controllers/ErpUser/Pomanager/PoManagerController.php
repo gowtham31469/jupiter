@@ -121,6 +121,12 @@ class PoManagerController extends Controller
 				{
 					foreach($erp_order_details as $erp_order_det)
 					{
+						// format po created date to dd-mm-yyyy
+						if($erp_order_det["po_created_date"] != null)
+						{
+							 $erp_order_det["po_created_date"] = Carbon::parse($erp_order_det["po_created_date"])->format('d-m-Y');
+						}
+
 						if (array_key_exists($erp_order_det->id,$orders_erp))
 						{
 							if($orders_erp[$erp_order_det->id]['po_created_date'] < $erp_order_det['po_created_date'])
