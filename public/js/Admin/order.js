@@ -2045,6 +2045,57 @@ function printDiv(data, isstd,uvc) {
 }
 
 /**
+ * This Function is used Cancel Hang Tag .
+ *  
+ * @return Boolean Value
+ */
+
+function cancelHangDiv(){
+	var id = $('#hangtagform').find('#exist_id').val();
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	var buyer = localStorage.getItem("buyer");
+	$.ajax({
+		url: base_url + "/admin/" + buyer + "/order-management/remove_hang_tag",
+		type: "Post",
+		data: {
+			id: id,
+			_token: csrf_token
+		},
+		beforeSend: function () {
+			$(".loader").show();
+		},
+		success: function (data) {
+			$('#hang_template_error').addClass('hidden')
+			$("#hangtagform .left-panelorc").removeClass('active');
+			$("#hangtagform .right-panel").removeClass('active');
+			$("#hangtagform .backdrop").removeClass('active');
+			$('#hangtagform .scalable').removeClass('active');
+			$('#print_hang_button').addClass('hidden');
+			$('#cancel_hang_button').addClass('hidden');
+			$('#save_hang_button').removeClass('hidden');
+			$('.extra_percentagehang').removeAttr('disabled');
+			$('.tot_qty_tablehang').removeAttr('disabled');
+			$('.tot_qty_tablehang').val('');
+			$('.extra_percentagehang').val('');
+			$('#hangtagform').find('.sample-artwork').html('');
+			$('.hang-card').find('span').text('');
+			$('.hang-card').find('span').removeClass('label-OrderApproved');
+			$('#hangtagform').find('span').text('');
+			$('#hangtagform').find('span').removeClass('label-OrderApproved');
+			$('#hangtagform').find('.sample_back').html('');
+			$('#tree1 >ul > li').each( function() {
+			   enable( 'tree1',this.id );        
+			})
+			$("#tree1").jstree(true).deselect_all();
+			$('#tree1').jstree('close_all');
+		},
+		error: function (data) {
+
+		}
+	})
+}
+
+/**
  * This Function is used Print Hang Tag .
  *  
  * @return Pdf
@@ -5190,7 +5241,7 @@ function hangtagmodal(data) {
         option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
     });
 
-    $('.top-content').append('<form id="hangtagform" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="left-panelorc col-md-8"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="hang_template_error" class="hidden" style="color:red">Please Select the Template</label>  <div><input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree1" style="height: calc(100vh - 260px);overflow-y: scroll;margin-top: 15px;"></div><div class="help-block with-errors"></div></div>'+sizebox+'</div><div class="col-md-4"><h4>Front</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr><div class="section-1 sections"><div class="sample-artwork" style="text-align:center"></div></div></div><div class="col-md-4"><h4>Back</h4><hr><div class="section-1 sections text-center" ><input type="hidden" value="' + data.orchestra_template_id + '" id="hang_tag_id"><div class="sample_back"></div><label style="margin-top:15px">Hang Tag Print Date : ' + data.order_details[0].HangTag_Print_Date + '</label><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div></div></div></div><div class="right-panel col-md-4"> <div class="div-max scroll"> <h4>Quantity Info for Hang Tag</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal" id="hang_tag_table"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty</th><th><label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentagehang" onkeypress="return checkNumbersOnly(event)"  style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td >' + ttots_sum + '</td><td class="text-center tot_qty_tablehang_fin">' + ttots + '</td></tr></tbody></table></div> <button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_hang_button" style="margin-left:10px">Save</button> <button class="btn btn-default pull-right input-sm" type="button" id="hangclose">Close</button><button type="button" class="btn btn-primary '+$print_button_class+'" id="print_hang_button" onclick=printHangDiv("svg2","'+data.order_details[0].Licence_Code+'")>Print</button> </div> </div>  <div class="backdrop"></div></form>');
+    $('.top-content').append('<form id="hangtagform" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="left-panelorc col-md-8"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="hang_template_error" class="hidden" style="color:red">Please Select the Template</label>  <div><input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree1" style="height: calc(100vh - 260px);overflow-y: scroll;margin-top: 15px;"></div><div class="help-block with-errors"></div></div>'+sizebox+'</div><div class="col-md-4"><h4>Front</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr><div class="section-1 sections"><div class="sample-artwork" style="text-align:center"></div></div></div><div class="col-md-4"><h4>Back</h4><hr><div class="section-1 sections text-center" ><input type="hidden" value="' + data.orchestra_template_id + '" id="hang_tag_id"><div class="sample_back"></div><label style="margin-top:15px">Hang Tag Print Date : ' + data.order_details[0].HangTag_Print_Date + '</label><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div></div></div></div><div class="right-panel col-md-4"> <div class="div-max scroll"> <h4>Quantity Info for Hang Tag</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal" id="hang_tag_table"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty</th><th><label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentagehang" onkeypress="return checkNumbersOnly(event)"  style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td >' + ttots_sum + '</td><td class="text-center tot_qty_tablehang_fin">' + ttots + '</td></tr></tbody></table></div> <button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_hang_button" style="margin-left:10px">Save</button> <button class="btn btn-default pull-right input-sm" type="button" id="hangclose">Close</button><button type="button" class="btn btn-primary '+$print_button_class+'" id="print_hang_button" onclick=printHangDiv("svg2","'+data.order_details[0].Licence_Code+'")>Print</button> <button type="button" class="btn btn-danger '+$print_button_class+'" id="cancel_hang_button" style="float: right;margin-right: 10px;" onclick=cancelHangDiv()>Cancel</button></div> </div>  <div class="backdrop"></div></form>');
 
 
 
@@ -5866,6 +5917,15 @@ function disable(id,node_id) {
     disable( id,child_id );
   })
 } 
+
+function enable(id,node_id) {
+  var node = $("#"+id).jstree().get_node( node_id );
+  $("#"+id).jstree().enable_node(node); 
+  node.children.forEach( function(child_id) {            
+    enable( id,child_id );
+  })
+} 
+
 /**
  * This Function is Sub Function of #label_order_details.
  * To Create the cards in label order details page
@@ -8621,6 +8681,7 @@ function setHangTag(id,colour) {
 		},
 		success: function (data) {
 			$('#print_hang_button').removeClass('hidden')
+			$('#cancel_hang_button').removeClass('hidden')
 			$('#save_hang_button').addClass('hidden')
 			$('#tree1 >ul > li').each( function() {
 			   disable( 'tree1',this.id );        
