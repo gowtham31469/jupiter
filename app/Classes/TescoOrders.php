@@ -110,7 +110,8 @@ class TescoOrders
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
               }
             }
@@ -198,7 +199,8 @@ class TescoOrders
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
               }
             }
@@ -286,7 +288,8 @@ class TescoOrders
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
               }
               
@@ -375,7 +378,8 @@ class TescoOrders
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
               }
             }
@@ -463,7 +467,8 @@ class TescoOrders
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
               }
             }
@@ -551,7 +556,8 @@ class TescoOrders
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
               }
               
@@ -640,7 +646,8 @@ class TescoOrders
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
               }
               

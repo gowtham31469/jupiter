@@ -1903,7 +1903,14 @@ function updateArtwork(obj) {
                     $('#tesco_description').val(data.order_details.short_description);
                     $('#tesco_season_code').val(data.order_details.season_code);
                     $('#tesco_manufacture_date').val(data.order_details.manufacture_date);
-
+                    if(data.order_details.full_description != null)
+                    {
+                        $('#tesco_description').prev().text($('#tesco_description').prev().text()+'(Full Description: '+data.order_details.full_description+')');
+                    }
+                    else 
+                    {
+                        $('#tesco_description').prev().text('Short Description');
+                    }
 
                     var tag_at_source = data.order_details.tag_at_source == 0 ? "no" : "yes";
                     var rfid = data.order_details.rfid_compliant == 0 ? "no" : "yes";

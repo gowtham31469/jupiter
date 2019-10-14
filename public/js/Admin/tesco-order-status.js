@@ -1106,7 +1106,14 @@ function updateArtwork(obj) {
                     $('#tesco_department').selectpicker('val', data.order_details.tesco_department_id);
                     $('#tesco_rfid').selectpicker('val', rfid);
                     $('#tesco_tag_at_source').selectpicker('val', tag_at_source);
-
+                    if(data.order_details.full_description != null)
+                    {
+                        $('#tesco_description').prev().text($('#tesco_description').prev().text()+'(Full Description: '+data.order_details.full_description+')');
+                    }
+                    else 
+                    {
+                        $('#tesco_description').prev().text('Short Description');
+                    }
 
 
                     //					if(data.order_details.order_flag != "newOrder")

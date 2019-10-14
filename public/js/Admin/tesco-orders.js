@@ -631,7 +631,8 @@ function createOrders(parsedObj = false, oType = false) {
                                     <div class="col-md-3">\
                                         <div class="form-group has-feedback">\
                                             <label for="tesco_description">Short Description</label>\
-                                            <input type="text" class="form-control" name="tesco_description" id="tesco_description" required="" placeholder="Enter Description" maxlength="45" onkeyup="dynamicSVGTemplates()">\
+											<input type="text" class="form-control" name="tesco_description" id="tesco_description" required="" placeholder="Enter Description" maxlength="45" onkeyup="dynamicSVGTemplates()">\
+											<input type="hidden" id="tesco_full_description" value="">\
                                             <div class="help-block with-errors"></div>\
                                         </div>\
                                     </div>\
@@ -4536,6 +4537,7 @@ function tescoOrderCommonData() {
 	type             = localStorage.getItem("template type");
 	data             = JSON.parse(localStorage.getItem("data"));
 	ocn_no           = $('#tesco_ocn').val();
+	full_description = $('#tesco_full_description').val();
 }
 
 /**
@@ -4630,7 +4632,8 @@ function storeCERatioTCL1TCL2TSL1() {
 				tcl1_last_id: tcl1_last_id,
 				tcl2_last_id: tcl2_last_id,
 				tsl1_last_id: tsl1_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -4738,7 +4741,8 @@ function storeCERatioTHL1() {
 				templates: data,
 				thl1_last_id: thl1_last_id,
 				is_insert: is_insert,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -4867,7 +4871,8 @@ function storeCESingleTCL4TSL3() {
 				is_insert: is_insert,
 				tcl4_last_id: tcl4_last_id,
 				tsl3_last_id: tsl3_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -4984,7 +4989,8 @@ function storeCESingleTHL3() {
 				templates: data,
 				is_insert: is_insert,
 				thl3_last_id: thl3_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -5115,7 +5121,8 @@ function storeUKRatioTCL1TCL2TSL1() {
 				tcl1_last_id: tcl1_last_id,
 				tcl2_last_id: tcl2_last_id,
 				tsl1_last_id: tsl1_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -5223,7 +5230,8 @@ function storeUKRatioTHL1() {
 				templates: data,
 				is_insert: is_insert,
 				thl1_last_id: thl1_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -5351,7 +5359,8 @@ function storeUKSingleTCL4TSL3() {
 				is_insert: is_insert,
 				tcl4_last_id: tcl4_last_id,
 				tsl3_last_id: tsl3_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -5468,7 +5477,8 @@ function storeUKSingleTHL3() {
 				templates: data,
 				is_insert: is_insert,
 				thl3_last_id: thl3_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -6379,7 +6389,8 @@ function saveCERatioTCL1TCL2TSL1() {
 				tcl1_last_id: tcl1_last_id,
 				tcl2_last_id: tcl2_last_id,
 				tsl1_last_id: tsl1_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -6487,7 +6498,8 @@ function saveCERatioTHL1() {
 				templates: data,
 				is_insert: is_insert,
 				thl1_last_id: thl1_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -6614,7 +6626,8 @@ function saveCESingleTCL4TSL3() {
 				is_insert: is_insert,
 				tcl4_last_id: tcl4_last_id,
 				tsl3_last_id: tsl3_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -6730,7 +6743,8 @@ function saveCESingleTHL3() {
 				templates: data,
 				is_insert: is_insert,
 				thl3_last_id: thl3_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -6860,7 +6874,8 @@ function saveUKRatioTCL1TCL2TSL1() {
 				tcl1_last_id: tcl1_last_id,
 				tcl2_last_id: tcl2_last_id,
 				tsl1_last_id: tsl1_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -6967,7 +6982,8 @@ function saveUKRatioTHL1() {
 				templates: data,
 				is_insert: is_insert,
 				thl1_last_id: thl1_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -7094,7 +7110,8 @@ function saveUKSingleTCL4TSL3() {
 				is_insert: is_insert,
 				tcl4_last_id: tcl4_last_id,
 				tsl3_last_id: tsl3_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -7210,7 +7227,8 @@ function saveUKSingleTHL3() {
 				templates: data,
 				is_insert: is_insert,
 				thl3_last_id: thl3_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description
 			},
 			tryCount: 0,
 			retryLimit: 2,
