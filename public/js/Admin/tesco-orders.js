@@ -894,7 +894,8 @@ function createOrders(parsedObj = false, oType = false) {
                                                     <tr>\
                                                         <th rowspan="2">Line No.</th>\
                                                         <th rowspan="2">ORMS TPN</th>\
-                                                        <th rowspan="2">ITF Barcode</th>\
+														<th rowspan="2">ITF Barcode</th>\
+														<th rowspan="2">QR Code</th>\
                                                         <th rowspan="2">Cases Per Carton</th>';
 						$.each(data.templates, function (i, item) {
 							html += '<th colspan="1">' + item.template_name + '</th>';
@@ -918,6 +919,13 @@ function createOrders(parsedObj = false, oType = false) {
                                                 <td>\
                                                     <div class="form-group has-feedback">\
                                                         <input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." id="ce_ratio_itf_1" onkeyup="dynamicSVGTemplates()" name="ce_ratio_itf_1" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode">\
+                                                        <div class="help-block with-errors"></div>\
+                                                        <div class="barcode-error"></div>\
+                                                    </div>\
+												</td>\
+												<td>\
+                                                    <div class="form-group has-feedback">\
+                                                        <input type="text" class="form-control input-sm ce_ratio_qr" id="ce_ratio_qr_1" name="ce_ratio_qr_1" placeholder="Enter QR Code">\
                                                         <div class="help-block with-errors"></div>\
                                                         <div class="barcode-error"></div>\
                                                     </div>\
@@ -961,7 +969,8 @@ function createOrders(parsedObj = false, oType = false) {
                                                 <tr>\
                                                     <th rowspan="2">Line No.</th>\
                                                     <th rowspan="2">ORMS TPN</th>\
-                                                    <th rowspan="2">EAN Barcode</th>\
+													<th rowspan="2">EAN Barcode</th>\
+													<th rowspan="2">QR Code</th>\
                                                     <th rowspan="2">Case Size</th>\
                                                     <th rowspan="2">Size</th>';
 						$.each(data.templates, function (i, item) {
@@ -987,6 +996,13 @@ function createOrders(parsedObj = false, oType = false) {
                                                 <td>\
                                                     <div class="form-group has-feedback">\
                                                         <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_1" name="ce_single_ean_1" onkeyup="dynamicSVGTemplates()" required="" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." placeholder="Enter EAN Barcode">\
+                                                        <div class="help-block with-errors"></div>\
+                                                        <div class="barcode-error"></div>\
+                                                    </div>\
+												</td>\
+												<td>\
+                                                    <div class="form-group has-feedback">\
+                                                        <input type="text" class="form-control input-sm ce_single_qr" id="ce_single_qr_1" name="ce_single_qr_1" placeholder="Enter QR Code">\
                                                         <div class="help-block with-errors"></div>\
                                                         <div class="barcode-error"></div>\
                                                     </div>\
@@ -2900,7 +2916,14 @@ function addCESingle(rem, e) {
                             <div class="barcode-error-ean"></div>\
                             <div class="help-block with-errors"></div>\
                         </div>\
-                    </td>\
+					</td>\
+					<td>\
+						<div class="form-group has-feedback">\
+							<input type="text" class="form-control input-sm ce_single_qr" id="ce_single_qr_' + val + '" name="ce_single_qr_' + val + '" placeholder="Enter QR Code">\
+							<div class="help-block with-errors"></div>\
+							<div class="barcode-error"></div>\
+						</div>\
+					</td>\
                     <td>\
                         <div class="form-group has-feedback">\
                             <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_' + val + '" name="ce_single_case_size_' + val + '" required="" placeholder="Enter Case Size" maxlength="4">\
@@ -2974,7 +2997,14 @@ function addCERatio(rem, e) {
                             <div class="barcode-error-itf"></div>\
                             <div class="help-block with-errors"></div>\
                         </div>\
-                    </td>\
+					</td>\
+					<td>\
+						<div class="form-group has-feedback">\
+							<input type="text" class="form-control input-sm ce_ratio_qr" id="ce_ratio_qr_' + val + '" name="ce_ratio_qr_' + val + '" placeholder="Enter QR Code">\
+							<div class="help-block with-errors"></div>\
+							<div class="barcode-error"></div>\
+						</div>\
+					</td>\
                     <td>\
                         <div class="form-group has-feedback">\
                             <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="ce_ratio_cpc_' + val + '" name="ce_ratio_cpc_' + val + '" onkeypress="return isNumber(event)" placeholder="Enter Cases Per Carton" maxlength="4">\
@@ -4559,6 +4589,7 @@ function storeCERatioTCL1TCL2TSL1() {
 		var tcl1_last_id = $('#TCL1_id').val();
 		var tcl2_last_id = $('#TCL2_id').val();
 		var tsl1_last_id = $('#TSL1_id').val();
+		var qr_code = [];
 
 		/** [ Create array of ce ratio orms tpn ] */
 		$('.ce_ratio_orms_tpn').each(function (i, item) {
@@ -4602,6 +4633,13 @@ function storeCERatioTCL1TCL2TSL1() {
 		});
 		count_TSL1 = count_TSL1.join(',');
 
+		/** [ Create array of ce ratio qr code ] */
+		$('.ce_ratio_qr').each(function (i, item) {
+			qr_code[i] = $(item).val();
+
+		});
+		qr_code = qr_code.join(',');
+
 		$.ajax({
 			url: base_url + "/admin/tesco/set-ce-ratio-template-orders",
 			type: 'POST',
@@ -4633,7 +4671,8 @@ function storeCERatioTCL1TCL2TSL1() {
 				tcl2_last_id: tcl2_last_id,
 				tsl1_last_id: tsl1_last_id,
 				ocn_no: ocn_no,
-				full_description:full_description
+				full_description:full_description,
+				qr_code:qr_code
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -4686,6 +4725,7 @@ function storeCERatioTHL1() {
 		var count_THL1 = [];
 		var is_insert = $('.save-btn').data('insert');
 		var thl1_last_id = $('#THL1_id').val();
+		var qr_code = [];
 
 		/** [ Create array of ce ratio orms tpn ] */
 		$('.ce_ratio_orms_tpn').each(function (i, item) {
@@ -4715,6 +4755,13 @@ function storeCERatioTHL1() {
 		});
 		count_THL1 = count_THL1.join(',');
 
+		/** [ Create array of ce ratio qr code ] */
+		$('.ce_ratio_qr').each(function (i, item) {
+			qr_code[i] = $(item).val();
+
+		});
+		qr_code = qr_code.join(',');
+
 		$.ajax({
 			url: base_url + "/admin/tesco/set-ce-ratio-template-orders",
 			type: 'POST',
@@ -4742,7 +4789,8 @@ function storeCERatioTHL1() {
 				thl1_last_id: thl1_last_id,
 				is_insert: is_insert,
 				ocn_no: ocn_no,
-				full_description:full_description
+				full_description:full_description,
+				qr_code:qr_code
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -4799,6 +4847,7 @@ function storeCESingleTCL4TSL3() {
 		var is_insert = $('.save-btn').data('insert');
 		var tcl4_last_id = $('#TCL4_id').val();
 		var tsl3_last_id = $('#TSL3_id').val();
+		var qr_code = [];
 
 		/** [ Create array of ce single orms tpn ] */
 		$('.ce_single_orms_tpn').each(function (i, item) {
@@ -4842,6 +4891,13 @@ function storeCESingleTCL4TSL3() {
 		});
 		count_TSL3 = count_TSL3.join(',');
 
+		/** [ Create array of ce single qr code ] */
+		$('.ce_single_qr').each(function (i, item) {
+			qr_code[i] = $(item).val();
+
+		});
+		qr_code = qr_code.join(',');
+
 		$.ajax({
 			url: base_url + "/admin/tesco/set-ce-single-template-orders",
 			type: 'POST',
@@ -4872,7 +4928,8 @@ function storeCESingleTCL4TSL3() {
 				tcl4_last_id: tcl4_last_id,
 				tsl3_last_id: tsl3_last_id,
 				ocn_no: ocn_no,
-				full_description:full_description
+				full_description:full_description,
+				qr_code:qr_code
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -4926,6 +4983,7 @@ function storeCESingleTHL3() {
 		var count_THL3 = [];
 		var is_insert = $('.save-btn').data('insert');
 		var thl3_last_id = $('#THL3_id').val();
+		var qr_code = [];
 
 		/** [ Create array of ce single orms tpn ] */
 		$('.ce_single_orms_tpn').each(function (i, item) {
@@ -4962,6 +5020,13 @@ function storeCESingleTHL3() {
 		});
 		count_THL3 = count_THL3.join(',');
 
+		/** [ Create array of ce single qr code ] */
+		$('.ce_single_qr').each(function (i, item) {
+			qr_code[i] = $(item).val();
+
+		});
+		qr_code = qr_code.join(',');
+
 		$.ajax({
 			url: base_url + "/admin/tesco/set-ce-single-template-orders",
 			type: 'POST',
@@ -4990,7 +5055,8 @@ function storeCESingleTHL3() {
 				is_insert: is_insert,
 				thl3_last_id: thl3_last_id,
 				ocn_no: ocn_no,
-				full_description:full_description
+				full_description:full_description,
+				qr_code:qr_code
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -6316,6 +6382,7 @@ function saveCERatioTCL1TCL2TSL1() {
 		var tcl1_last_id = $('#TCL1_id').val();
 		var tcl2_last_id = $('#TCL2_id').val();
 		var tsl1_last_id = $('#TSL1_id').val();
+		var qr_code = [];
 
 		/** [ Create array of ce ratio orms tpn ] */
 		$('.ce_ratio_orms_tpn').each(function (i, item) {
@@ -6359,6 +6426,13 @@ function saveCERatioTCL1TCL2TSL1() {
 		});
 		count_TSL1 = count_TSL1.join(',');
 
+		/** [ Create array of ce ratio qr code ] */
+		$('.ce_ratio_qr').each(function (i, item) {
+			qr_code[i] = $(item).val();
+
+		});
+		qr_code = qr_code.join(',');
+
 		$.ajax({
 			url: base_url + "/admin/tesco/save-ce-ratio-template-orders",
 			type: 'PUT',
@@ -6390,7 +6464,8 @@ function saveCERatioTCL1TCL2TSL1() {
 				tcl2_last_id: tcl2_last_id,
 				tsl1_last_id: tsl1_last_id,
 				ocn_no: ocn_no,
-				full_description:full_description
+				full_description:full_description,
+				qr_code:qr_code
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -6443,6 +6518,7 @@ function saveCERatioTHL1() {
 		var count_THL1 = [];
 		var is_insert = $('.save-btn').data('insert');
 		var thl1_last_id = $('#THL1_id').val();
+		var qr_code = [];
 
 		/** [ Create array of ce ratio orms tpn ] */
 		$('.ce_ratio_orms_tpn').each(function (i, item) {
@@ -6472,6 +6548,13 @@ function saveCERatioTHL1() {
 		});
 		count_THL1 = count_THL1.join(',');
 
+		/** [ Create array of ce ratio qr code ] */
+		$('.ce_ratio_qr').each(function (i, item) {
+			qr_code[i] = $(item).val();
+
+		});
+		qr_code = qr_code.join(',');
+
 		$.ajax({
 			url: base_url + "/admin/tesco/save-ce-ratio-template-orders",
 			type: 'PUT',
@@ -6499,7 +6582,8 @@ function saveCERatioTHL1() {
 				is_insert: is_insert,
 				thl1_last_id: thl1_last_id,
 				ocn_no: ocn_no,
-				full_description:full_description
+				full_description:full_description,
+				qr_code:qr_code
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -6554,6 +6638,7 @@ function saveCESingleTCL4TSL3() {
 		var is_insert = $('.save-btn').data('insert');
 		var tcl4_last_id = $('#TCL4_id').val();
 		var tsl3_last_id = $('#TSL3_id').val();
+		var qr_code = [];
 
 		/** [ Create array of ce single orms tpn ] */
 		$('.ce_single_orms_tpn').each(function (i, item) {
@@ -6597,6 +6682,13 @@ function saveCESingleTCL4TSL3() {
 		});
 		count_TSL3 = count_TSL3.join(',');
 
+		/** [ Create array of ce single qr code ] */
+		$('.ce_single_qr').each(function (i, item) {
+			qr_code[i] = $(item).val();
+
+		});
+		qr_code = qr_code.join(',');
+
 		$.ajax({
 			url: base_url + "/admin/tesco/save-ce-single-template-orders",
 			type: 'PUT',
@@ -6627,7 +6719,8 @@ function saveCESingleTCL4TSL3() {
 				tcl4_last_id: tcl4_last_id,
 				tsl3_last_id: tsl3_last_id,
 				ocn_no: ocn_no,
-				full_description:full_description
+				full_description:full_description,
+				qr_code:qr_code
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -6680,6 +6773,7 @@ function saveCESingleTHL3() {
 		var count_THL3 = [];
 		var is_insert = $('.save-btn').data('insert');
 		var thl3_last_id = $('#THL3_id').val();
+		var qr_code = [];
 
 		/** [ Create array of ce single orms tpn ] */
 		$('.ce_single_orms_tpn').each(function (i, item) {
@@ -6716,6 +6810,13 @@ function saveCESingleTHL3() {
 		});
 		count_THL3 = count_THL3.join(',');
 
+		/** [ Create array of ce single qr code ] */
+		$('.ce_single_qr').each(function (i, item) {
+			qr_code[i] = $(item).val();
+
+		});
+		qr_code = qr_code.join(',');
+
 		$.ajax({
 			url: base_url + "/admin/tesco/save-ce-single-template-orders",
 			type: 'PUT',
@@ -6744,7 +6845,8 @@ function saveCESingleTHL3() {
 				is_insert: is_insert,
 				thl3_last_id: thl3_last_id,
 				ocn_no: ocn_no,
-				full_description:full_description
+				full_description:full_description,
+				qr_code:qr_code
 			},
 			tryCount: 0,
 			retryLimit: 2,
