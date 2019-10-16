@@ -927,7 +927,6 @@ function createOrders(parsedObj = false, oType = false) {
                                                     <div class="form-group has-feedback">\
                                                         <input type="text" class="form-control input-sm ce_ratio_qr" id="ce_ratio_qr_1" name="ce_ratio_qr_1" placeholder="Enter QR Code">\
                                                         <div class="help-block with-errors"></div>\
-                                                        <div class="barcode-error"></div>\
                                                     </div>\
                                                 </td>\
                                                 <td>\
@@ -1004,7 +1003,6 @@ function createOrders(parsedObj = false, oType = false) {
                                                     <div class="form-group has-feedback">\
                                                         <input type="text" class="form-control input-sm ce_single_qr" id="ce_single_qr_1" name="ce_single_qr_1" placeholder="Enter QR Code">\
                                                         <div class="help-block with-errors"></div>\
-                                                        <div class="barcode-error"></div>\
                                                     </div>\
                                                 </td>\
                                                 <td>\
@@ -2921,7 +2919,6 @@ function addCESingle(rem, e) {
 						<div class="form-group has-feedback">\
 							<input type="text" class="form-control input-sm ce_single_qr" id="ce_single_qr_' + val + '" name="ce_single_qr_' + val + '" placeholder="Enter QR Code">\
 							<div class="help-block with-errors"></div>\
-							<div class="barcode-error"></div>\
 						</div>\
 					</td>\
                     <td>\
@@ -3002,7 +2999,6 @@ function addCERatio(rem, e) {
 						<div class="form-group has-feedback">\
 							<input type="text" class="form-control input-sm ce_ratio_qr" id="ce_ratio_qr_' + val + '" name="ce_ratio_qr_' + val + '" placeholder="Enter QR Code">\
 							<div class="help-block with-errors"></div>\
-							<div class="barcode-error"></div>\
 						</div>\
 					</td>\
                     <td>\
