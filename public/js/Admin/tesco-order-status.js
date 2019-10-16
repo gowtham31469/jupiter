@@ -1149,13 +1149,13 @@ function updateArtwork(obj) {
                         var barcode_tr = "ITF Barcode";
                         var tpnd_tr = "ORMS TPND";
                         var th_tr = "";
-                        var qr_code = "<th width='150'>QR Code</th>";
+                        var qr_code = "<th width='130'>QR Code</th>";
                     } else if ((TemplateName == "TCL4" && zone == "CE") || (TemplateName == "TSL3" && zone == "CE") || (TemplateName == "THL3" && zone == "CE")) {
                         var qty = "Case Size";
                         var barcode_tr = "EAN Barcode";
                         var tpnd_tr = "ORMS TPND";
                         var th_tr = "<th>Size</th>";
-                        var qr_code = "<th width='150'>QR Code</th>";
+                        var qr_code = "<th width='130'>QR Code</th>";
                     } else if ((TemplateName == "TCL4" && zone == "UK") || (TemplateName == "TSL3" && zone == "UK") || (TemplateName == "THL3" && zone == "UK")) {
                         var qty = "Case Size";
                         var barcode_tr = "EAN Barcode";
@@ -1195,7 +1195,7 @@ function updateArtwork(obj) {
                             var tpn_th = "Enter ORMS TPND";
                             var tpn_len = "13";
                             var unit_len = "6";
-                            var qr_code_td = '<td class="qr_code"><div class="form-group has-feedback"> <input  disabled type="text" class="form-control input-sm ce_ratio_qr" id="ce_ratio_qr_' + i + '"  name="ce_ratio_qr_' + i + '" value="' + value.qr_code + '" placeholder="Enter QR Code"><div class="help-block with-errors"></div></div></td>';
+                            var qr_code_td = '<td class="qr_code"><div class="form-group has-feedback"> <input  disabled type="text" class="form-control input-sm ce_single_qr" id="ce_single_qr_' + i + '"  name="ce_single_qr_' + i + '" value="' + value.qr_code + '" placeholder="Enter QR Code"><div class="help-block with-errors"></div></div></td>';
                         } else if ((TemplateName == "TCL4" && zone == "UK") || (TemplateName == "TSL3" && zone == "UK") || (TemplateName == "THL3" && zone == "UK")) {
                             var unit_qty = value.case_size;
                             var barcode_td = value.ean_barcode;
@@ -1227,7 +1227,7 @@ function updateArtwork(obj) {
                         tr += '<tr><td class="tpnd"><div class="form-group has-feedback"> <input disabled type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="os_tpnd_' + i + '" data-minlength="' + tpn_len + '" maxlength="' + tpn_len + '" data-required-error="Mandatory Field." data-minlength-error="Enter ' + tpn_len + ' digits."  name="os_tpnd_' + i + '" onkeypress="return isNumber(event)" value="' + tpnd + '" placeholder="' + tpn_th + '" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td class="barcode"><div class="form-group has-feedback"> <input  disabled type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="' + maxlength + '" maxlength="' + maxlength + '" data-required-error="Mandatory Field." data-minlength-error="Enter ' + maxlength + ' digits." id="os_barcode_' + i + '" onkeyup="dynamicSVGTemplates()" name="os_barcode_' + i + '" onkeypress="return isNumber(event)" value="' + barcode_td + '" placeholder="Enter ITF Barcode"><label class="barcode_error hidden" style="color:red;margin-left: -55px;position: absolute;">Enter Valid Barcode</label><div class="help-block with-errors"></div></div></td>'+qr_code_td+'<td class="size"><div class="form-group has-feedback"> <input disabled type="text" maxlength="' + unit_len + '" class="form-control input-sm ce_ratio_cpc" required="" id="os_case_qty_' + i + '" name="os_case_qty_' + i + '" onkeypress="return isNumber(event)" value="' + unit_qty + '" placeholder="Enter ' + qty + '" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>' + th_td + '<td> <div class="form-group has-feedback has-success"> <input disabled min="' + moq + '" onInput="checkLength(6,this)" type="number" class="form-control  input-sm tot_qty_table" value="' + value.count + '" required placeholder="Quantity" data-min-error="Quantity Should be >= ' + moq + '."> <div class="help-block with-errors"></div></div></td></tr>';
                         i++;
                     })
-                    $('.edit-qty-table-div').html('<hr><h4 class="text-center">Order Quantity - ' + TemplateName + '</h4><button type="button" onclick=addRowOs(this,"' + TemplateName + '","' + data.order_details.zone + '","' + moq + '") data-id="1" id="add_row" class="btn btn-default add-row-btn" disabled><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px;margin-top: 15px;"> <thead> <tr> <th width="180">' + tpnd_tr + '</th><th width="180">' + barcode_tr + '</th>'+qr_code+'<th>' + qty + '</th>' + th_tr + ' <th>Quantity</th> <th>Actions</th></tr></thead> <tbody style="font-size: 11px">' + tr + '</tbody></table>')
+                    $('.edit-qty-table-div').html('<hr><h4 class="text-center">Order Quantity - ' + TemplateName + '</h4><button type="button" onclick=addRowOs(this,"' + TemplateName + '","' + data.order_details.zone + '","' + moq + '") data-id="1" id="add_row" class="btn btn-default add-row-btn" disabled><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px;margin-top: 15px;"> <thead> <tr> <th width="135">' + tpnd_tr + '</th><th width="135">' + barcode_tr + '</th>'+qr_code+'<th>' + qty + '</th>' + th_tr + ' <th>Quantity</th> <th>Actions</th></tr></thead> <tbody style="font-size: 11px">' + tr + '</tbody></table>')
 
                     $('#edit_template_name').val(TemplateName)
                     $('#edit_zone').val(data.order_details.zone)
@@ -1404,6 +1404,7 @@ function setEditOrderStatus() {
     var edit_id = $('#edit_id').val()
     var order_type = $('#order_type').val()
     var tesco_ocn = $('#tesco_ocn').val()
+    var qr_code = [];
 
 
     /** [ Create array of ce ratio orms tpn ] */
@@ -1484,6 +1485,29 @@ function setEditOrderStatus() {
         single_size = single_size.join(',');
     }
 
+    // QR code is only for CE stickers
+    if(zone === 'CE')
+    {
+        if ((template_name == "TCL1") || (template_name == "TCL2") || (template_name == "TSL1") || (template_name == "THL1")) 
+        {
+            /** [ Create array of ce ratio qr code ] */
+            $('.ce_ratio_qr').each(function (i, item) {
+                qr_code[i] = $(item).val();
+
+            });
+            qr_code = qr_code.join(',');
+        } 
+        else if ((template_name == "TCL4") || (template_name == "TSL3") || (template_name == "THL3")) 
+        {
+        /** [ Create array of ce single qr code ] */
+            $('.ce_single_qr').each(function (i, item) {
+                qr_code[i] = $(item).val();
+
+            });
+            qr_code = qr_code.join(',');
+        }
+    }
+
     if (barcode_checks == 0) {
         $.ajax({
             url: base_url + "/admin/tesco/set-tesco-order-status",
@@ -1511,7 +1535,8 @@ function setEditOrderStatus() {
                 edit_id: edit_id,
                 template_name: template_name,
                 single_size: single_size,
-                tesco_ocn: tesco_ocn
+                tesco_ocn: tesco_ocn,
+                qr_code:qr_code
             },
             statusCode: {
                 /** [Show response status based on HTTP status code] */
@@ -1564,7 +1589,7 @@ function addRowOs(obj, TemplateName, zone, moq) {
         var tpn_th = "Enter ORMS TPND";
         var tpn_len = "13";
         var unit_len = "6";
-        var qr_code_td = '<td class="qr_code"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_qr" id="ce_ratio_qr_' + i + '"  name="ce_ratio_qr_' + i + '" value="" placeholder="Enter QR Code"><div class="help-block with-errors"></div></div></td>';
+        var qr_code_td = '<td class="qr_code"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_qr" id="ce_single_qr_' + i + '"  name="ce_single_qr_' + i + '" value="" placeholder="Enter QR Code"><div class="help-block with-errors"></div></div></td>';
     } else if ((TemplateName == "TCL4" && zone == "UK") || (TemplateName == "TSL3" && zone == "UK") || (TemplateName == "THL3" && zone == "UK")) {
         var qty = "Case Size";
         var th_td = '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" required="" id="os_single_size_' + i + '" name="os_single_size_' + i + '"  value="" placeholder="Enter Size" maxlength="9"><div class="help-block with-errors"></div></div></td>';

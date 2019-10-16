@@ -877,6 +877,7 @@ class OrderStatusCntrl extends Controller
 		$template_name   = $request['template_name'];
         $zone            = $request['zone'];
         $created_by      = Auth::guard('web')->id();
+        $qr_code         = explode(',', $request['qr_code']);
 
 		if($template_name == "TCL1")
 		{
@@ -1010,7 +1011,8 @@ class OrderStatusCntrl extends Controller
                          'cases_per_carton'  => $case_size[$i],
                          'count'         	 => $count[$i],
                          'size'  			 => null,
-                         'ratio_pack_type'   => $this->ratio_pack_type[$i]
+                         'ratio_pack_type'   => $this->ratio_pack_type[$i],
+                         'qr_code'           => $qr_code[$i]
                      ]);
                  }
                  else if(($template_name == "TCL4" && $zone=="CE") || ($template_name == "TSL3" && $zone=="CE") || ($template_name == "THL3" && $zone=="CE"))
@@ -1021,7 +1023,8 @@ class OrderStatusCntrl extends Controller
                          $foreign_key       => $template_id,
                          'case_size'        => $case_size[$i],
                          'count'         	=> $count[$i],
-                         'size'  			=> $single_size[$i]
+                         'size'  			=> $single_size[$i],
+                         'qr_code'          => $qr_code[$i]
                          ]);
                  }
                  else if(($template_name == "TCL4" && $zone=="UK") || ($template_name == "TSL3" && $zone=="UK") || ($template_name == "THL3" && $zone=="UK"))
