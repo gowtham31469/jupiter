@@ -207,7 +207,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="col-md-3 nopadding">
-                                     <span>Recievers Signature</span>
+                                     <span>Receivers Signature</span>
                                     </div>
                                     <div class="col-md-3 nopadding">
                                         <span>Prepared By</span>

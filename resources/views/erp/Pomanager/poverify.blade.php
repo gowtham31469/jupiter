@@ -500,6 +500,12 @@ transform: scale(1);
 @endsection @section('jqueryIncludes')
 <script>
 	$(document).ready(function() {
+
+	/** To refresh modal while hidden **/
+	$('.modal').on('hidden.bs.modal', function (e) {
+        $('#comment_box').val("");
+	})
+
 	//$('.company-nav-div .profile-dropdown-admin').addClass('hidden')
 	
 	//$("#orderDetailsModal").niceScroll();

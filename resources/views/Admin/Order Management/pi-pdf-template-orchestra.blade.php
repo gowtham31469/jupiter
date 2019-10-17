@@ -202,13 +202,13 @@
                 <td><strong>BANK DETAILS: </strong></td>
             </tr>
             <tr>
-                <td>BANK</td><td>{{$company_details->bank}}</td>
+                <td>BANK</td><td width="150">{{$company_details->bank}}</td>
             </tr>
             <tr>
                 <td>A/C No</td><td>{{$company_details->account_no}}</td>
             </tr>
             <tr>
-                <td>A/C NAME</td><td>{{$company_details->account_holder}}</td>
+                <td>A/C NAME</td><td width="150">{{$company_details->account_holder}}</td>
             </tr>
             <tr>
                 <td>IFSC CODE</td><td>{{$company_details->ifsc_code}}</td>
