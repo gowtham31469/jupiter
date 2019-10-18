@@ -98,7 +98,7 @@ public function index()
     $templates = array_unique(History::all()->sortBy('template')->pluck('template')->toArray());
     $seasons = array_unique(History::all()->sortBy('season')->pluck('season')->toArray());
     $countries = array_unique(History::all()->sortBy('country')->pluck('country')->toArray());
-    dd($countries);
+    dd(array_filter($countries));
     return view('erp.Report.reportgenerator',compact('buyers','actions','po','jc','jc','order','invoice','allActions','action_as_id','countries','seasons','templates'));
 
 }
