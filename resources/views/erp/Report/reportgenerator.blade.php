@@ -406,8 +406,11 @@ function triggerLevel2()
 					{ 
 						if($.inArray( value['ocn'], temp7 )==-1)	
 						{
-							$('#ocn').append($("<option></option>")
+							if(value['ocn'] != null && value['ocn'] != ',')
+							{
+								$('#ocn').append($("<option></option>")
 								.text(value['ocn'])); 
+							}
 						}
 						temp7.push(value['ocn'])
 					});
@@ -509,7 +512,8 @@ function create_table(def,extra)
 				customize: function( xlsx ) {
                 var sheet = xlsx.xl.worksheets['sheet1.xml'];
                 	$('c:nth-child(n)', sheet).attr('s','50');
-                	$('row:first c', sheet).attr('s','51');
+                	$('row:first c', sheet).attr('s','7');
+                	$('row:eq(1) c', sheet).attr('s','7');
             }
 		  }
 		],
