@@ -496,6 +496,7 @@ function create_table(def,extra)
 		  {
 		extend: 'excel',
 		text: 'Export to Excel',
+		// className: 'excelButton',
 		title : "Consolidated Report [ "+$(".roleSelection option:selected").html()+" ] " + date_today,
 				action: function ( e, dt, node, config ) 
 				{
@@ -507,8 +508,7 @@ function create_table(def,extra)
 				},
 				customize: function( xlsx ) {
                 var sheet = xlsx.xl.worksheets['sheet1.xml'];
- 
-                $('row c[r^="*"]', sheet).attr( 's', '50' );
+                	$('c:nth-child(n)', sheet).attr('s','50');
             }
 		  }
 		],
