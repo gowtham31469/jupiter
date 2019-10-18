@@ -95,10 +95,9 @@ public function index()
     $order = Action::where('type','Order')->pluck('action','id')->toArray();
     $invoice = Action::where('type','Invoice')->pluck('action','id')->toArray();
     $invoice=$invoice+$tax;
-    $templates = array_unique(History::all()->sortBy('template')->pluck('template')->toArray());
-    $seasons = array_unique(History::all()->sortBy('season')->pluck('season')->toArray());
-    $countries = array_unique(History::all()->sortBy('country')->pluck('country')->toArray());
-    dd(array_filter($countries));
+    $templates = array_filter(array_unique(History::all()->sortBy('template')->pluck('template')->toArray()));
+    $seasons =array_filter(array_unique(History::all()->sortBy('season')->pluck('season')->toArray()));
+    $countries = array_filter(array_unique(History::all()->sortBy('country')->pluck('country')->toArray()));
     return view('erp.Report.reportgenerator',compact('buyers','actions','po','jc','jc','order','invoice','allActions','action_as_id','countries','seasons','templates'));
 
 }
