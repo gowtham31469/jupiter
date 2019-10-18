@@ -345,12 +345,17 @@ Route::post('admin/orchestra/download-orchestra-pi', 'Admin\Orchestra\OrderManag
 Route::post('admin/orchestra/order-management/set_hang_tag', 'Admin\Orchestra\OrderManagementCntrl@setHangTag');
 
 Route::post('admin/orchestra/order-management/remove_hang_tag', 'Admin\Orchestra\OrderManagementCntrl@removeHangTag');
+Route::post('admin/orchestra/order-management/remove_special_tag', 'Admin\Orchestra\OrderManagementCntrl@removeSpecialTag');
+Route::post('admin/orchestra/order-management/remove_heat_transfer', 'Admin\Orchestra\OrderManagementCntrl@removeHeatTransfer');
+Route::post('admin/orchestra/order-management/remove_main_label', 'Admin\Orchestra\OrderManagementCntrl@removeMainLabel');
+Route::post('admin/orchestra/order-management/remove_size_label', 'Admin\Orchestra\OrderManagementCntrl@removeSizeLabel');
+
+Route::post('admin/orchestra/order-management/remove_wcl', 'Admin\Orchestra\OrderManagementCntrl@removeWCL');
 
 Route::post('admin/orchestra/order-management/set_heat_transfer', 'Admin\Orchestra\OrderManagementCntrl@setHeatTransfer');
 Route::post('admin/orchestra/order-management/set_special_tag', 'Admin\Orchestra\OrderManagementCntrl@setSpecialTag');
 Route::post('admin/orchestra/order-management/set_main_label', 'Admin\Orchestra\OrderManagementCntrl@setMainLabel');
 Route::post('admin/orchestra/order-management/set_size_label', 'Admin\Orchestra\OrderManagementCntrl@setSizeLabel');
-Route::post('admin/orchestra/order-management/remove_main_label', 'Admin\Orchestra\OrderManagementCntrl@removeMainLabel');
 Route::post('admin/orchestra/order-management/remove_wash_label', 'Admin\Orchestra\OrderManagementCntrl@removeWashLabel');
 Route::post('admin/orchestra/order-management/set_wash_label', 'Admin\Orchestra\OrderManagementCntrl@setWashLabel');
 Route::post('admin/orchestra/order-management/set_wash_labelos', 'Admin\Orchestra\OrderManagementCntrl@setWashLabelOs');
@@ -800,6 +805,14 @@ Route::post('customer/orchestra/order-management/set_hang_tag', 'Customer\Orches
 
 Route::post('customer/orchestra/order-management/remove_hang_tag', 'Customer\Orchestra\OrderController@removeHangTag');
 
+Route::post('customer/orchestra/order-management/remove_special_tag', 'Customer\Orchestra\OrderController@removeSpecialTag');
+Route::post('customer/orchestra/order-management/remove_heat_transfer', 'Customer\Orchestra\OrderController@removeHeatTransfer');
+Route::post('customer/orchestra/order-management/remove_main_label', 'Customer\Orchestra\OrderController@removeMainLabel');
+Route::post('customer/orchestra/order-management/remove_size_label', 'Customer\Orchestra\OrderController@removeSizeLabel');
+
+Route::post('customer/orchestra/order-management/remove_wcl', 'Customer\Orchestra\OrderController@removeWCL');
+
+
 Route::post('customer/orchestra/order-management/set_heat_transfer', 'Customer\Orchestra\OrderController@setHeatTransfer');
 
 Route::post('customer/orchestra/order-management/set_special_tag', 'Customer\Orchestra\OrderController@setSpecialTag');
@@ -807,7 +820,6 @@ Route::post('customer/orchestra/order-management/set_main_label', 'Customer\Orch
 
 Route::post('customer/orchestra/order-management/set_size_label', 'Customer\Orchestra\OrderController@setSizeLabel');
 
-Route::post('customer/orchestra/order-management/remove_main_label', 'Customer\Orchestra\OrderController@removeMainLabel');
 Route::post('customer/orchestra/order-management/remove_wash_label', 'Customer\Orchestra\OrderController@removeWashLabel');
 Route::post('customer/orchestra/order-management/set_wash_label', 'Customer\Orchestra\OrderController@setWashLabel');
 Route::post('customer/orchestra/order-management/set_wash_labelos', 'Customer\Orchestra\OrderController@setWashLabelOs');
