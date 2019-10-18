@@ -19,7 +19,7 @@ $(document).ready(function($) {
 	}
 	$('.multiselect')
 	.multiselect({
-		allSelectedText: 'All Selected',
+		allSelectedText: 'All',
 		maxHeight: 200,
 		buttonWidth: 123,
 		includeSelectAllOption: true,

@@ -292,7 +292,7 @@
 							$('.filterLevel2').multiselect('destroy');
 
 							$('.filterLevel2').multiselect({
-							allSelectedText: 'All Selected',
+							allSelectedText: 'All',
 							maxHeight: 200,
 							buttonWidth: 123,
 							includeSelectAllOption: true,
@@ -420,7 +420,7 @@ function triggerLevel2()
 				$('.filterLevel3').multiselect('destroy');
 
 				$('.filterLevel3').multiselect({
-				allSelectedText: 'All Selected',
+				allSelectedText: 'All',
 				maxHeight: 200,
 				buttonWidth: 123,
 				includeSelectAllOption: true,
@@ -508,7 +508,7 @@ function create_table(def,extra)
 				customize: function( xlsx ) {
                 var sheet = xlsx.xl.worksheets['sheet1.xml'];
  
-                $('row c[r^="G"]', sheet).attr( 's', '50' );
+                $('row c[r^="*"]', sheet).attr( 's', '50' );
             }
 		  }
 		],
