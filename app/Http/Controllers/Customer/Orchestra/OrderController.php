@@ -537,6 +537,7 @@ class OrderController extends Controller
 //                        $data['treeviewmain']=$tree;
 //
 //               }
+		
         $code=$data['order_details']{0}->Family_Code;
 		
         $data['orchestra_hang_tag_orders']=DB::table('orchestra_hang_tag_orders')->select('*',DB::raw("'Hang Tag' as \"TemplateName\""))->where('uvc',$uvc)->where('status','!=','Order Cancelled')->get();
@@ -551,8 +552,11 @@ class OrderController extends Controller
         {
             $data['orchestra_hang_tag_orders_qty']="";
         }
-         $data['orchestra_special_tag_orders']=DB::table('orchestra_special_tag_orders')->select('*',DB::raw("'Special Tag' as \"TemplateName\""))->where('uvc',$uvc)->get();
-		$data['orchestra_special_tag_orders_id']=DB::table('orchestra_special_tag_orders')->where('uvc',$uvc)->pluck('id');
+		
+         $data['orchestra_special_tag_orders']=DB::table('orchestra_special_tag_orders')->select('*',DB::raw("'Special Tag' as \"TemplateName\""))->where('uvc',$uvc)->where('status','!=','Order Cancelled')->get();
+		
+		$data['orchestra_special_tag_orders_id']=DB::table('orchestra_special_tag_orders')->where('uvc',$uvc)->where('status','!=','Order Cancelled')->pluck('id');
+		
         if(count($data['orchestra_special_tag_orders']) > 0)
         {
             $data['orchestra_special_tag_orders_qty']=DB::table('orchestra_special_tag_orders_qty')->select('*')->whereIn('ost_id',$data['orchestra_special_tag_orders_id'])->get();
@@ -562,8 +566,10 @@ class OrderController extends Controller
             $data['orchestra_special_tag_orders_qty']="";
         }     
 		
-		$data['orchestra_heat_transfer_orders']=DB::table('orchestra_heat_transfer_orders')->select('*',DB::raw("'Heat Transfer' as \"TemplateName\""))->where('uvc',$uvc)->get();
-		$data['orchestra_heat_transfer_orders_id']=DB::table('orchestra_heat_transfer_orders')->where('uvc',$uvc)->pluck('id');
+		$data['orchestra_heat_transfer_orders']=DB::table('orchestra_heat_transfer_orders')->select('*',DB::raw("'Heat Transfer' as \"TemplateName\""))->where('uvc',$uvc)->where('status','!=','Order Cancelled')->get();
+		
+		$data['orchestra_heat_transfer_orders_id']=DB::table('orchestra_heat_transfer_orders')->where('uvc',$uvc)->where('status','!=','Order Cancelled')->pluck('id');
+		
         if(count($data['orchestra_heat_transfer_orders']) > 0)
         {
             $data['orchestra_heat_transfer_orders_qty']=DB::table('orchestra_heat_transfer_orders_qty')->select('*')->whereIn('oht_id',$data['orchestra_heat_transfer_orders_id'])->orderBy('orchestra_heat_transfer_orders_qty.parcel_id','asc')->get();
@@ -573,8 +579,10 @@ class OrderController extends Controller
             $data['orchestra_heat_transfer_orders_qty']="";
         }
 		
-		$data['orchestra_main_label_orders']=DB::table('orchestra_main_label_orders')->select('*',DB::raw("'Main Label' as \"TemplateName\""))->where('uvc',$uvc)->get();
-		$data['orchestra_main_label_orders_id']=DB::table('orchestra_main_label_orders')->where('uvc',$uvc)->pluck('id');
+		$data['orchestra_main_label_orders']=DB::table('orchestra_main_label_orders')->select('*',DB::raw("'Main Label' as \"TemplateName\""))->where('uvc',$uvc)->where('status','!=','Order Cancelled')->get();
+		
+		$data['orchestra_main_label_orders_id']=DB::table('orchestra_main_label_orders')->where('uvc',$uvc)->where('status','!=','Order Cancelled')->pluck('id');
+		
         if(count($data['orchestra_main_label_orders']) > 0)
         {
             $data['orchestra_main_label_orders_qty']=DB::table('orchestra_main_label_orders_qty')->select('*')->whereIn('oml_id',$data['orchestra_main_label_orders_id'])->get();
@@ -584,8 +592,9 @@ class OrderController extends Controller
             $data['orchestra_main_label_orders_qty']="";
         }
         
-		$data['orchestra_size_label_orders']=DB::table('orchestra_size_label_orders')->select('*',DB::raw("'Size Label' as \"TemplateName\""))->where('uvc',$uvc)->get();
-		$data['orchestra_size_label_orders_id']=DB::table('orchestra_size_label_orders')->where('uvc',$uvc)->pluck('id');
+		$data['orchestra_size_label_orders']=DB::table('orchestra_size_label_orders')->select('*',DB::raw("'Size Label' as \"TemplateName\""))->where('uvc',$uvc)->where('status','!=','Order Cancelled')->get();
+		
+		$data['orchestra_size_label_orders_id']=DB::table('orchestra_size_label_orders')->where('uvc',$uvc)->where('status','!=','Order Cancelled')->pluck('id');
         if(count($data['orchestra_size_label_orders']) > 0)
         {
             $data['orchestra_size_label_orders_qty']=DB::table('orchestra_size_label_orders_qty')->select('*')->whereIn('osl_id',$data['orchestra_size_label_orders_id'])->orderBy('orchestra_size_label_orders_qty.parcel_id','asc')->get();
@@ -604,13 +613,13 @@ class OrderController extends Controller
         
        if($data['order_details']{0}->FactoryCode == "HF-FREEUSD")
 	   {
-				$data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->select(DB::raw('distinct on ("card_flag") "card_flag"'),'*','orchestra_wash_care_label_orders.template_name as TemplateName')->where('uvc',$uvc)->orderBy('orchestra_wash_care_label_orders.card_flag','asc')->orderBy('orchestra_wash_care_label_orders.po','asc')->get();
+				$data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->select(DB::raw('distinct on ("card_flag") "card_flag"'),'*','orchestra_wash_care_label_orders.template_name as TemplateName')->where('uvc',$uvc)->where('status','!=','Order Cancelled')->orderBy('orchestra_wash_care_label_orders.card_flag','asc')->orderBy('orchestra_wash_care_label_orders.po','asc')->get();
 		   
-		   $data['orchestra_wash_care_label_orders_po']=DB::table('orchestra_wash_care_label_orders')->select('*','orchestra_wash_care_label_orders.template_name as TemplateName')->where('uvc',$uvc)->orderBy('orchestra_wash_care_label_orders.po','asc')->get();
+		   $data['orchestra_wash_care_label_orders_po']=DB::table('orchestra_wash_care_label_orders')->select('*','orchestra_wash_care_label_orders.template_name as TemplateName')->where('uvc',$uvc)->where('status','!=','Order Cancelled')->orderBy('orchestra_wash_care_label_orders.po','asc')->get();
 	   }
 	   else
 	   {
-			$data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->select('*','orchestra_wash_care_label_orders.template_name as TemplateName')->where('uvc',$uvc)->orderBy('orchestra_wash_care_label_orders.po','asc')->get();
+			$data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->select('*','orchestra_wash_care_label_orders.template_name as TemplateName')->where('uvc',$uvc)->where('status','!=','Order Cancelled')->orderBy('orchestra_wash_care_label_orders.po','asc')->get();
 	   }
         foreach($data['orchestra_wash_care_label_orders'] as $value1)
         {
@@ -1055,6 +1064,7 @@ class OrderController extends Controller
         return $result;
            
     }
+	
 	/**
      * This Function is used to remove Hang Tag Details.
      *
@@ -1065,6 +1075,90 @@ class OrderController extends Controller
 		$id =$request->id;
 		
 	    HangTagOrders::where('id',$id)
+                ->update([
+                    'status' => "Order Cancelled"
+                ]);
+		
+		$result = response()->json(['error'=> false,'message' =>'success'],200);
+	}
+	/**
+     * This Function is used to delete the Main Label Details.
+     *
+     * @return Void
+     */
+	
+    public function removeMainLabel(Request $request)
+    {
+        $id =$request->id;
+		
+	    MainLabelOrders::where('id',$id)
+                ->update([
+                    'status' => "Order Cancelled"
+                ]);
+		
+		$result = response()->json(['error'=> false,'message' =>'success'],200);
+    }
+	/**
+     * This Function is used to delete the Main Label Details.
+     *
+     * @return Void
+     */
+	
+    public function removeWCL(Request $request)
+    {
+        $id =$request->id;
+		
+	    WashLabelOrders::where('id',$id)
+                ->update([
+                    'status' => "Order Cancelled"
+                ]);
+		
+		$result = response()->json(['error'=> false,'message' =>'success'],200);
+    }
+	
+	/**
+     * This Function is used to remove Special Tag Details.
+     *
+     * @return Void
+     */
+	public function removeSpecialTag(Request $request)
+	{
+		$id =$request->id;
+		
+	    SpecialTagOrders::where('id',$id)
+                ->update([
+                    'status' => "Order Cancelled"
+                ]);
+		
+		$result = response()->json(['error'=> false,'message' =>'success'],200);
+	}
+	
+	/**
+     * This Function is used to remove Special Tag Details.
+     *
+     * @return Void
+     */
+	public function removeHeatTransfer(Request $request)
+	{
+		$id =$request->id;
+		
+	    HeatTransferOrders::where('id',$id)
+                ->update([
+                    'status' => "Order Cancelled"
+                ]);
+		
+		$result = response()->json(['error'=> false,'message' =>'success'],200);
+	}
+	/**
+     * This Function is used to remove Special Tag Details.
+     *
+     * @return Void
+     */
+	public function removeSizeLabel(Request $request)
+	{
+		$id =$request->id;
+		
+	    SizeLabelOrders::where('id',$id)
                 ->update([
                     'status' => "Order Cancelled"
                 ]);
@@ -3499,15 +3593,7 @@ class OrderController extends Controller
          }
          return $result;
     }
-	/**
-     * This Function is used to delete the Extra Main and size Label Details.
-     *
-     * @return Void
-     */
-    public function removeMainLabel(Request $request)
-    {
-         $deleted = MainLabelOrders::where('id', '=', $request->id)->delete();
-    }
+	
 	
 	/**
      * This Function is used to delete the Extra Wash Care Label Details.
