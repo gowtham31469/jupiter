@@ -509,6 +509,7 @@ function create_table(def,extra)
 				customize: function( xlsx ) {
                 var sheet = xlsx.xl.worksheets['sheet1.xml'];
                 	$('c:nth-child(n)', sheet).attr('s','50');
+                	$('row:first c', sheet).attr('s','51');
             }
 		  }
 		],
