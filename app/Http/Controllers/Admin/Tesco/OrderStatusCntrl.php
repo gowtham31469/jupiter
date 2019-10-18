@@ -877,7 +877,7 @@ class OrderStatusCntrl extends Controller
 		$template_name   = $request['template_name'];
         $zone            = $request['zone'];
         $created_by      = Auth::guard('web')->id();
-        $qr_code         = explode(',', $request['qr_code']);
+        $qr_code         = explode('|', $request['qr_code']);
 
 		if($template_name == "TCL1")
 		{

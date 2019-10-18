@@ -692,7 +692,7 @@ class OrderManagementCntrl extends Controller
             $orms_tpn         = explode(',',$request['orms_tpn']);
             $itf_code         = explode(',',$request['itf_code']);
             $cases_per_carton = explode(',',$request['cases_per_carton']);
-            $qr_code          = explode(',',$request['qr_code']);
+            $qr_code          = explode('|',$request['qr_code']);
             $templates        = $request['templates'];
             $last_insertions  = [];
             $already_exists   = [];
@@ -1050,7 +1050,7 @@ class OrderManagementCntrl extends Controller
             $ean_code         = explode(',',$request['ean_code']);
             $case_size        = explode(',',$request['case_size']);
             $size             = explode(',',$request['size']);
-            $qr_code          = explode(',',$request['qr_code']);
+            $qr_code          = explode('|',$request['qr_code']);
             $templates        = $request['templates'];
             $last_insertions  = [];
             $already_exists   = [];
@@ -3234,7 +3234,7 @@ class OrderManagementCntrl extends Controller
               $orms_tpn         = explode(',',$request['orms_tpn']);
               $itf_code         = explode(',',$request['itf_code']);
               $cases_per_carton = explode(',',$request['cases_per_carton']);
-              $qr_code          = explode(',',$request['qr_code']);
+              $qr_code          = explode('|',$request['qr_code']);
               $templates        = $request['templates'];
               $last_insertions  = [];
               $already_exists   = [];
@@ -3535,7 +3535,7 @@ class OrderManagementCntrl extends Controller
             $ean_code         = explode(',',$request['ean_code']);
             $case_size        = explode(',',$request['case_size']);
             $size             = explode(',',$request['size']);
-            $qr_code          = explode(',',$request['qr_code']);
+            $qr_code          = explode('|',$request['qr_code']);
             $templates        = $request['templates'];
             $last_insertions  = [];
             $already_exists   = [];

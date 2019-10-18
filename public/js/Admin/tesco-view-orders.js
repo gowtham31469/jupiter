@@ -167,10 +167,6 @@ function mapStoredValues(oDetails) {
                     } else {
                         $('#uk_single_tpnd_'+index).val(j.tpnd);
                     }
-
-                    if(zone === 'ce') {
-                        $('#ce_single_qr_'+index).val(j.qr_code);
-                    }
                     
                     $('#'+zone+'_single_ean_'+index).val(j.ean_barcode);
                     $('#'+zone+'_single_case_size_'+index).val(j.case_size);
@@ -190,10 +186,6 @@ function mapStoredValues(oDetails) {
                     } else {
                         $('#'+zone+'_ratio_tpnd_'+index).val(j.tpnd);
                         $('#'+zone+'_ratio_upc_'+index).val(j.units_per_carton);
-                    }
-
-                    if(zone === 'ce') {
-                        $('#ce_ratio_qr_'+index).val(j.qr_code);
                     }
                     
                     if(ele.order_quantity.length !== (i+1)) {

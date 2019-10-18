@@ -685,7 +685,7 @@ class TescoOrders
       $template_id     = $request['edit_id'];
       $template_name   = $request['template_name'];
       $zone            = $request['zone'];
-      $qr_code         = explode(',', $request['qr_code']);
+      $qr_code         = explode('|', $request['qr_code']);
      
       if ($table_name == "tesco_tcl1_orders" || $table_name == "tesco_tcl2_orders" || $table_name == "tesco_tsl1_orders") {
           $table_array = array('tesco_tcl1_orders','tesco_tcl2_orders','tesco_tsl1_orders');
