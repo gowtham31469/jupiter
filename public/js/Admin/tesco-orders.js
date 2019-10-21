@@ -917,7 +917,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                 </td>\
                                                 <td>\
                                                     <div class="form-group has-feedback">\
-                                                        <input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." id="ce_ratio_itf_1" onkeyup="dynamicSVGTemplates()" name="ce_ratio_itf_1" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode">\
+                                                        <input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." id="ce_ratio_itf_1" onkeyup="dynamicSVGTemplates()" name="ce_ratio_itf_1" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode" onblur="qrCodeTesco()">\
                                                         <div class="help-block with-errors"></div>\
                                                         <div class="barcode-error"></div>\
                                                     </div>\
@@ -1064,7 +1064,10 @@ function createOrders(parsedObj = false, oType = false) {
                                                    <button type="button" class="btn btn-primary print-btn" onclick=printDivTesco("tesco_svg_modal' + i + '","' + item.template_name.replace(' ', '') + '") style="display:none;" id="proof_' + item.template_name.replace(' ', '') + '_btn">Generate Proof</button><button type="button" class="btn btn-primary print-btn" onclick=GenerateDivTesco("tesco_svg_modal' + i + '","' + item.template_name.replace(' ', '') + '") style="display:none;" id="print_' + item.template_name.replace(' ', '') + '_btn">Generate Print</button>\
                                                    <div id="svgdiv" style="position:absolute;visibility:hidden">\
                                                      <svg id="ean-13"></svg>\
-                                                   </div>\
+												   </div>\
+												   <div id="qr_svg_div" style="position:absolute;visibility:hidden">\
+                                                     <svg id="qr_svg"></svg>\
+												   </div>\
                                                  </div>\
                                                </div>\
                                              </div>\
@@ -7727,4 +7730,31 @@ function selectNewOrder()
 		$('#ce_retek').prop('required', false);
 	}
 	reOrderTesco()
+}
+
+function qrCodeTesco()
+{
+	var po_number = $('#tesco_po_number').val();
+	var tpnd = $('#ce_ratio_orms_tpn_1').val();
+	var ce_ratio_itf = $('#ce_ratio_itf_1').val();
+	var qr_code = po_number+','+ce_ratio_itf+'/'+(tpnd.substr(tpnd.length - 3))+','+tpnd;
+
+		
+
+	var mySVG = document.getElementById("tesco_svg0");
+	var svgDoc = mySVG.contentDocument;
+
+	//var svgElement = document.createElement("div");
+url = qr_code;
+s = QRCode.generateSVG(url, {
+		ecclevel: "H",
+		fillcolor: "#FFFFFF",
+		textcolor: "#373737",
+		margin: 2,
+		modulesize: 8
+	});
+//svgElement.appendChild(s);
+svgDoc.getElementById("qrcode").appendChild(s);
+	
+	
 }

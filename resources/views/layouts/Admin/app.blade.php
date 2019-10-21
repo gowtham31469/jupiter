@@ -27,12 +27,6 @@
     <link rel="stylesheet" href="{{ asset('css/bootstrap-select.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/easy-autocomplete.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/easy-autocomplete.themes.min.css') }}">
-	
-<!--
-    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/v4-shims.js"></script>
--->
-
 
 </head>
 <body>
@@ -79,14 +73,16 @@
       <!-- Bootstrap Date-Picker Plugin -->
     <script type="text/javascript" src="{{ asset('js/bootstrap-datepicker.js') }}"></script>
     <script src="{{ asset('js/jquery.nicescroll-ajax.js') }}" type="text/javascript"></script>
-
-	<!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/i18n/defaults-*.min.js"></script> -->
 	
-<!-- Latest compiled and minified JavaScript -->
-<script src="{{ asset('js/bootstrap-select.min.js') }}"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="{{ asset('js/bootstrap-select.min.js') }}"></script>
 
-<script src="{{ asset('js/jquery.easy-autocomplete.min.js') }}"></script>
-<script src="{{ asset('js/toastr.js') }}"></script>
+    <script src="{{ asset('js/jquery.easy-autocomplete.min.js') }}"></script>
+    <script src="{{ asset('js/toastr.js') }}"></script>
+    <script src="{{ asset('js/qrcode.js') }}"></script>
+    <script src="{{ asset('js/VanillaQR.min.js') }}"></script>
+    <script src="{{ asset('js/qrjs2.min.js') }}"></script>
+    
 <script>
     var base_url = "<?php echo  url('/') ?>";
 
