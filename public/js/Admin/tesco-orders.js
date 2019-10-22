@@ -1065,9 +1065,6 @@ function createOrders(parsedObj = false, oType = false) {
                                                    <div id="svgdiv" style="position:absolute;visibility:hidden">\
                                                      <svg id="ean-13"></svg>\
 												   </div>\
-												   <div id="qr_svg_div" style="position:absolute;visibility:hidden">\
-                                                     <svg id="qr_svg"></svg>\
-												   </div>\
                                                  </div>\
                                                </div>\
                                              </div>\
