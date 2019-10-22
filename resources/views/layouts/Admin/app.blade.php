@@ -79,8 +79,6 @@
 
     <script src="{{ asset('js/jquery.easy-autocomplete.min.js') }}"></script>
     <script src="{{ asset('js/toastr.js') }}"></script>
-    <script src="{{ asset('js/qrcode.js') }}"></script>
-    <script src="{{ asset('js/VanillaQR.min.js') }}"></script>
     <script src="{{ asset('js/qrjs2.min.js') }}"></script>
     
 <script>

@@ -70,10 +70,11 @@
 </g>
 <text transform="matrix(1 0 0 1.0348 195.1739 174.2266)" style="fill:cmyk(0%, 0%, 0%, 100%); font-family:FranklinGothicBT-RomanCondensed, FrankGoth Cn BT; font-size:7.7312px;">P</text>
 <text transform="matrix(1 0 0 1.0348 199.3487 174.2266)" style="fill:cmyk(0%, 0%, 0%, 100%); font-family:FranklinGothicBT-RomanCondensed, FrankGoth Cn BT; font-size:7.7312px;">ackaging Supplier : JUPITER ACCESSORIES</text>
-<g id="qrcode" x="211.35" y="9.59"  width="48.19" height="48.19"/>
+<g id="qrcode" transform="matrix(1 0 0 1 220 10.001)" x="211.35" y="9.59"  width="48.19" height="48.19"/>
 <text transform="matrix(1 0 0 1 18.627 222.5)" style="fill:cmyk(0%, 0%, 0%, 100%); font-family:FranklinGothicBT-RomanCondensed, FrankGoth Cn BT; font-size:10px;">MANUFACTURED DATE:</text>
 <text transform="matrix(1 0 0 1 115 222.5)" style="fill:cmyk(0%, 0%, 0%, 100%); font-family:FranklinGothicBT-RomanCondensed, FrankGoth Cn BT; font-size:10px;" id="manufactured_date">JULY, 2019</text>
-<g width="391" height="178" transform="matrix(0.3625 0 0 0.2548 30 129.001)" id="barcode"></g>
+<g width="391" height="178" transform="matrix(1 0 0 1 212.349 10.227)" id="barcode"></g>
+<text transform="matrix(1 0 0 1 66 204.0012)" style="font-family:Myriad, Myriad Roman, Arial, sans-serif; font-size:10.5px;" id="barcode_number">05057545816134</text>
 
 <text xmlns="http://www.w3.org/2000/svg" transform="matrix(1 0 0 1 76.6108 162.606)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:140px;opacity: 0.1;" id="watermark"></text>
 </svg>

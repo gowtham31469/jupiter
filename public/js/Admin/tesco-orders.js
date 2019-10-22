@@ -591,7 +591,7 @@ function createOrders(parsedObj = false, oType = false) {
 							  html += '<div class="col-md-3">\
 																<div class="form-group has-feedback">\
 																	<label for="tesco_po_number">PO Number</label>\
-																	<input type="text" class="form-control" data-minlength="7" data-required-error="Mandatory Field." data-minlength-error="Enter 7 digits." name="tesco_po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number" onkeyup="dynamicSVGTemplates()" maxlength="7">\
+																	<input type="text" class="form-control" data-minlength="7" data-required-error="Mandatory Field." data-minlength-error="Enter 7 digits." name="tesco_po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number" onkeyup="dynamicSVGTemplates()" maxlength="7" onblur="qrCodeTesco()">\
 																	<div class="help-block with-errors"></div>\
 																</div>\
 															</div>';
@@ -911,7 +911,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                 <td class="slno">1</td>\
                                                 <td>\
                                                     <div class="form-group has-feedback">\
-                                                        <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="ce_ratio_orms_tpn_1" data-minlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." name="ce_ratio_orms_tpn_1" onkeypress="return isNumber(event)" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()" maxlength="13">\
+                                                        <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="ce_ratio_orms_tpn_1" data-minlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." name="ce_ratio_orms_tpn_1" onkeypress="return isNumber(event)" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()" maxlength="13"  onblur="qrCodeTesco()">\
                                                         <div class="help-block with-errors"></div>\
                                                     </div>\
                                                 </td>\
@@ -980,13 +980,13 @@ function createOrders(parsedObj = false, oType = false) {
                                                 <td class="slno">1</td>\
                                                 <td>\
                                                     <div class="form-group has-feedback">\
-                                                        <input type="text" class="form-control input-sm ce_single_orms_tpn" onkeypress="return isNumber(event)" id="ce_single_orms_tpn_1" data-minlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits."  name="ce_single_orms_tpn_1" required="" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()" maxlength="13">\
+                                                        <input type="text" class="form-control input-sm ce_single_orms_tpn" onkeypress="return isNumber(event)" id="ce_single_orms_tpn_1" data-minlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits."  name="ce_single_orms_tpn_1" required="" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()" maxlength="13" onblur="qrCodeTesco()">\
                                                         <div class="help-block with-errors"></div>\
                                                     </div>\
                                                 </td>\
                                                 <td>\
                                                     <div class="form-group has-feedback">\
-                                                        <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_1" name="ce_single_ean_1" onkeyup="dynamicSVGTemplates()" required="" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." placeholder="Enter EAN Barcode">\
+                                                        <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_1" name="ce_single_ean_1" onkeyup="dynamicSVGTemplates()" required="" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." placeholder="Enter EAN Barcode" onblur="qrCodeTesco()">\
                                                         <div class="help-block with-errors"></div>\
                                                         <div class="barcode-error"></div>\
                                                     </div>\
@@ -7731,27 +7731,41 @@ function selectNewOrder()
 
 function qrCodeTesco()
 {
+	var template_type = localStorage.getItem("template type");
+	
+	if(template_type === 'single')
+	{
+		var tpnd = $('#ce_single_orms_tpn_1').val();
+	    var barcode = $('#ce_single_ean_1').val();
+	}
+	else 
+	{
+		var tpnd = $('#ce_ratio_orms_tpn_1').val();
+	    var barcode = $('#ce_ratio_itf_1').val();
+	}
 	var po_number = $('#tesco_po_number').val();
-	var tpnd = $('#ce_ratio_orms_tpn_1').val();
-	var ce_ratio_itf = $('#ce_ratio_itf_1').val();
-	var qr_code = po_number+','+ce_ratio_itf+'/'+(tpnd.substr(tpnd.length - 3))+','+tpnd;
+	
+	var qr_code = po_number+','+barcode+'/'+(tpnd.substr(tpnd.length - 3))+','+tpnd;
 
-		
+	console.log(qr_code);
 
 	var mySVG = document.getElementById("tesco_svg0");
 	var svgDoc = mySVG.contentDocument;
 
 	//var svgElement = document.createElement("div");
-url = qr_code;
-s = QRCode.generateSVG(url, {
-		ecclevel: "H",
-		fillcolor: "#FFFFFF",
-		textcolor: "#373737",
-		margin: 2,
-		modulesize: 8
-	});
-//svgElement.appendChild(s);
-svgDoc.getElementById("qrcode").appendChild(s);
+	url = qr_code;
+	svg = QRCode.generateSVG(url, {
+			ecclevel: "M",
+			fillcolor: "#FFFFFF",
+			textcolor: "#000000",
+			margin: 2,
+			modulesize: 8
+		});
+	//svgElement.appendChild(svg);
+
+	svg.setAttribute('width', '50px');
+	svg.setAttribute('height', '50px');
+	svgDoc.getElementById("qrcode").appendChild(svg);
 	
 	
 }
