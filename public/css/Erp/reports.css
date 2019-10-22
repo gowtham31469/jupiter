@@ -242,5 +242,9 @@ font-weight: 400;
     right: 50%;
     z-index: 100;
 }
+#_prefModal{
+	margin-left: -52%;
+    margin-top: 1%;
+}
 /*.btn .caret, .btn-group>.btn:first-child {height: unset!important;}*/
 /*.multiselect .btn-default{height: 25px !important;}*/
