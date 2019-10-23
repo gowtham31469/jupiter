@@ -95,10 +95,10 @@ public function index()
     $order = Action::where('type','Order')->pluck('action','id')->toArray();
     $invoice = Action::where('type','Invoice')->pluck('action','id')->toArray();
     $invoice=$invoice+$tax;
-    $templates = array_unique(History::all()->sortBy('template')->pluck('template')->toArray());
-    $seasons = array_unique(History::all()->sortBy('season')->pluck('season')->toArray());
-    $countries = array_unique(History::all()->sortBy('country')->pluck('country')->toArray());
-    return view('erp.Report.reports',compact('buyers','actions','po','jc','jc','order','invoice','allActions','action_as_id','countries','seasons','templates'));
+    $templates = array_filter(array_unique(History::all()->sortBy('template')->pluck('template')->toArray()));
+    $seasons =array_filter(array_unique(History::all()->sortBy('season')->pluck('season')->toArray()));
+    $countries = array_filter(array_unique(History::all()->sortBy('country')->pluck('country')->toArray()));
+    return view('erp.Report.reportgenerator',compact('buyers','actions','po','jc','jc','order','invoice','allActions','action_as_id','countries','seasons','templates'));
 
 }
 
@@ -612,10 +612,15 @@ public function setUpDatatable(Request $request)
                         'jc_number as JC.No','jc_created_date as JC_Dt','invoice_number as Inv.No',
                         'invoice_created_date as Inv_Dt','buyer_name as Buyer','season as Season',
                         'country as Country','buyer_po as ByrPo','order_quantity as Quantity','actions.action as Status','event_history.reason as Reason'])
+                        ->orderBy('Order_Dt','asc')
+                        ->orderBy('ErpId','asc')
                         ->get();
                        
                     $queryRes->map(function ($queryRes,$key) {
-                    $queryRes->Order_Dt=(new Carbon($queryRes->Order_Dt))->format('d-m-Y');
+                        if($queryRes->Order_Dt)
+                        {
+                           $queryRes->Order_Dt=(new Carbon($queryRes->Order_Dt))->format('d-m-Y'); 
+                        }
                     $queryRes->JC_Dt=(new Carbon($queryRes->JC_Dt))->format('d-m-Y');
                     $queryRes->JC_Dt=(new Carbon($queryRes->JC_Dt))->format('d-m-Y');
                     $queryRes->AW_Dt=(new Carbon($queryRes->AW_Dt))->format('d-m-Y');
