@@ -286,10 +286,13 @@ class PrintController extends Controller
 				}
 		
 				$k=0;
-				foreach($svgarr as $value)
+				if(count($svgarr) == $j)
 				{
-					unlink(public_path('/storage/app/template/demo_'.$k.'.png'));
-					$k++;
+					foreach($svgarr as $value)
+					{
+						unlink(public_path('/storage/app/template/demo_'.$k.'.png'));
+						$k++;
+					}
 				}
 				PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
 				print_r(url('/storage/app/template/'.$name.'.pdf'));
@@ -550,10 +553,13 @@ class PrintController extends Controller
 
 		}
 		$k=0;
-		foreach($svgarr as $value)
+		if(count($svgarr) == $j)
 		{
-			unlink(public_path('/storage/app/template/demo_'.$k.'.png'));
-			$k++;
+			foreach($svgarr as $value)
+			{
+				unlink(public_path('/storage/app/template/demo_'.$k.'.png'));
+				$k++;
+			}
 		}
 		
        
