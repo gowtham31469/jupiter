@@ -272,7 +272,7 @@ class PrintController extends Controller
 					{
 						$yy += 100;
 					}
-					$j++;
+					
 			
 					
 					$svg=urldecode($value);
@@ -281,7 +281,15 @@ class PrintController extends Controller
 					PDF::writeHTMLCell(127, 80, 15, $yy+1, $html, '', 0, 0, false, 'L', false);
 				
 					$i++;
+					$j++;
 					
+				}
+		
+				$k=0;
+				foreach($svgarr as $value)
+				{
+					unlink(public_path('/storage/app/template/demo_'.$j.'.png'));
+					$k++;
 				}
 				PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
 				print_r(url('/storage/app/template/'.$name.'.pdf'));
@@ -524,7 +532,7 @@ class PrintController extends Controller
 			{
 				$xx+=70;
 			}
-			$j++;
+			
 			
 			
 			file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
@@ -538,7 +546,14 @@ class PrintController extends Controller
 //			shell_exec("inkscape -z -e ".public_path('/storage/app/template/demo_'.$j.'.png')." -w 1024 -h 653 ".public_path('/storage/app/template/demo_'.$j.'.svg')."");
 //			PDF::Image(public_path('/storage/app/template/demo_'.$j.'.png'), $xx, $yy, 40, 30, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
 			$i++;
+			$j++;
 
+		}
+		$k=0;
+		foreach($svgarr as $value)
+		{
+			unlink(public_path('/storage/app/template/demo_'.$j.'.png'));
+			$k++;
 		}
 		
        
