@@ -360,11 +360,11 @@ background: rgba(0,0,0,0.2);
 		border-bottom: 2px solid;
 	}
 	
-/*
+
 	.left-panel.active {
     margin-right: 0%;
 }
-*/
+
 </style>
 <input type="hidden" id="status_flag">
 <div class="col-sm-12 col-md-12 main">
