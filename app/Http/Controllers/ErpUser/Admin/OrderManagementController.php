@@ -100,6 +100,8 @@ class OrderManagementController extends Controller
 				$qnty_table     = $erp_order_details->order_qnty_table_name;
 				$customer_id    = $erp_order_details->customer_id;
 
+				$customer       = DB::table('customers')->select('pi_required', 'po_required')->where('id', '=', $customer_id)->first();
+
 				if($buyer->buyer_name === 'Tesco'){
 
 					$main_table     = str_replace("_quanty","",$qnty_table);
@@ -124,7 +126,14 @@ class OrderManagementController extends Controller
 					$material_name  = $template_level->material;
 					$material_sub   = $template_level->material_sub;
 					$material_ref   = $template_level->ref;
-					$customer_po    = $order_details->purchase_order_no;
+
+					if ($customer->pi_required == 1 && $customer->po_required== 0) {
+						$customer_po  = $order_details->pi_id;
+					}
+					else if($customer->po_required== 1){
+						$customer_po  = $order_details->purchase_order_no;
+					}
+
 					$buyer_po       = $order_details->po_number;
 					$style          = $order_details->$style_zone;
 					$ocn_number     = $order_details->ocn_number;
@@ -153,7 +162,14 @@ class OrderManagementController extends Controller
 					$material_sub  = DB::table('orchestra_item_master')->where('id', '=', $template_data->sub_material_id)->value('item_name');
 
 					$material_ref   = $template_data->item_name;
-					$customer_po    = $order_details->po_number;
+
+					if ($customer->pi_required == 1 && $customer->po_required== 0) {
+						$customer_po  = $order_details->pi_id;
+					}
+					else if($customer->po_required== 1){
+						$customer_po  = $order_details->po_number;
+					}
+
 					$buyer_po       = $order_details->po;
 					$style          = $order_details->uvc;
 					$ocn_number     = null;
@@ -212,6 +228,7 @@ class OrderManagementController extends Controller
 				$buyer               = DB::table('buyers')->select('buyer_name')->where('id', '=', $buyer_id)->first();
 				$template            = 'Available';
 				$customer_id         = $erp_order_details->customer_id;
+				$customer            = DB::table('customers')->select('pi_required', 'po_required')->where('id', '=', $customer_id)->first();
 
 				// make orders cancelled in artwork table
 				if($buyer->buyer_name === 'Tesco')
@@ -238,7 +255,14 @@ class OrderManagementController extends Controller
 					$material_name  = $template_level->material;
 					$material_sub   = $template_level->material_sub;
 					$material_ref   = $template_level->ref;
-					$customer_po    = $order_details->purchase_order_no;
+
+					if ($customer->pi_required == 1 && $customer->po_required== 0) {
+						$customer_po  = $order_details->pi_id;
+					}
+					else if($customer->po_required== 1){
+						$customer_po  = $order_details->purchase_order_no;
+					}
+
 					$buyer_po       = $order_details->po_number;
 					$style          = $order_details->$style_zone;
 					$ocn_number     = $order_details->ocn_number;
@@ -270,7 +294,14 @@ class OrderManagementController extends Controller
 					$material_sub  = DB::table('orchestra_item_master')->where('id', '=', $template_data->sub_material_id)->value('item_name');
 
 					$material_ref   = $template_data->item_name;
-					$customer_po    = $order_details->po_number;
+					
+					if ($customer->pi_required == 1 && $customer->po_required== 0) {
+						$customer_po  = $order_details->pi_id;
+					}
+					else if($customer->po_required== 1){
+						$customer_po  = $order_details->po_number;
+					}
+
 					$buyer_po       = $order_details->po;
 					$style          = $order_details->uvc;
 					$ocn_number     = null;
@@ -412,6 +443,8 @@ class OrderManagementController extends Controller
 					$qnty_table     = $erp_data->order_qnty_table_name;
 					$customer_id    = $erp_data->customer_id;
 
+					$customer       = DB::table('customers')->select('pi_required', 'po_required')->where('id', '=', $customer_id)->first();
+
 					if($buyer->buyer_name === 'Tesco'){
 
 						$main_table     = str_replace("_quanty","",$qnty_table);
@@ -436,7 +469,14 @@ class OrderManagementController extends Controller
 						$material_name  = $template_level->material;
 						$material_sub   = $template_level->material_sub;
 						$material_ref   = $template_level->ref;
-						$customer_po    = $order_details->purchase_order_no;
+						
+						if ($customer->pi_required == 1 && $customer->po_required== 0) {
+							$customer_po  = $order_details->pi_id;
+						}
+						else if($customer->po_required== 1){
+							$customer_po  = $order_details->purchase_order_no;
+						}
+
 						$buyer_po       = $order_details->po_number;
 						$style          = $order_details->$style_zone;
 						$ocn_number     = $order_details->ocn_number;
@@ -465,7 +505,14 @@ class OrderManagementController extends Controller
 						$material_sub  = DB::table('orchestra_item_master')->where('id', '=', $template_data->sub_material_id)->value('item_name');
 
 						$material_ref   = $template_data->item_name;
-						$customer_po    = $order_details->po_number;
+						
+						if ($customer->pi_required == 1 && $customer->po_required== 0) {
+							$customer_po  = $order_details->pi_id;
+						}
+						else if($customer->po_required== 1){
+							$customer_po  = $order_details->po_number;
+						}
+
 						$buyer_po       = $order_details->po;
 						$style          = $order_details->uvc;
 						$ocn_number     = null;
@@ -538,6 +585,8 @@ class OrderManagementController extends Controller
 					$template            = 'Available';
 					$customer_id         = $erp_data->customer_id;
 
+					$customer 			 = DB::table('customers')->select('pi_required', 'po_required')->where('id', '=', $customer_id)->first();
+
 					// make orders cancelled in artwork table
 					if($buyer->buyer_name === 'Tesco')
 					{
@@ -565,7 +614,14 @@ class OrderManagementController extends Controller
 						$material_name  = $template_level->material;
 						$material_sub   = $template_level->material_sub;
 						$material_ref   = $template_level->ref;
-						$customer_po    = $order_details->purchase_order_no;
+						
+						if ($customer->pi_required == 1 && $customer->po_required== 0) {
+							$customer_po  = $order_details->pi_id;
+						}
+						else if($customer->po_required== 1){
+							$customer_po  = $order_details->purchase_order_no;
+						}
+
 						$buyer_po       = $order_details->po_number;
 						$style          = $order_details->$style_zone;
 						$ocn_number     = $order_details->ocn_number;
@@ -596,7 +652,14 @@ class OrderManagementController extends Controller
 						$material_sub  = DB::table('orchestra_item_master')->where('id', '=', $template_data->sub_material_id)->value('item_name');
 						
 						$material_ref   = $template_data->item_name;
-						$customer_po    = $order_details->po_number;
+						
+						if ($customer->pi_required == 1 && $customer->po_required== 0) {
+							$customer_po  = $order_details->pi_id;
+						}
+						else if($customer->po_required== 1){
+							$customer_po  = $order_details->po_number;
+						}
+
 						$buyer_po       = $order_details->po;
 						$style          = $order_details->uvc;
 						$ocn_number     = null;
