@@ -252,7 +252,7 @@ class PrintController extends Controller
 				PDF::AddPage();
 				$i=0;
 				$yy=60;
-				$j=1;
+				$j=0;
 				PDF::SetXY(10, 50);
 				foreach($svgarr as $value)
 				{
@@ -288,7 +288,7 @@ class PrintController extends Controller
 				$k=0;
 				foreach($svgarr as $value)
 				{
-					unlink(public_path('/storage/app/template/demo_'.$j.'.png'));
+					unlink(public_path('/storage/app/template/demo_'.$k.'.png'));
 					$k++;
 				}
 				PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
@@ -506,7 +506,7 @@ class PrintController extends Controller
 		PDF::AddPage();
 		$i=0;
 		$yy=0;
-		$j=1;
+		$j=0;
 		PDF::SetXY(10, 50);
 		foreach($svgarr as $value)
 		{
@@ -552,7 +552,7 @@ class PrintController extends Controller
 		$k=0;
 		foreach($svgarr as $value)
 		{
-			unlink(public_path('/storage/app/template/demo_'.$j.'.png'));
+			unlink(public_path('/storage/app/template/demo_'.$k.'.png'));
 			$k++;
 		}
 		
