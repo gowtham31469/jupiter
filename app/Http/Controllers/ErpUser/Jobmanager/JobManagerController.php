@@ -833,6 +833,7 @@ class JobManagerController extends Controller
 				if(isset($company_id) && isset($workorder_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($machine) && isset($cus_del_date)  && isset($finish_type)  && isset($compiled_by) && isset($final_json_obj) && isset($material))
 				{
 					$buyer    = DB::table('buyers')->select('buyer_name')->where('id', '=', $buyer_id)->first();
+					$customer = DB::table('customers')->select('short_name as customer_name', 'pi_required', 'po_required')->where('id', '=', $customer_id)->first();
 
 					// Get Erp status table id for 'Jobcard Created' status.
 					$erp_status_id = DB::table('erp_status')->where('status_name', 'ilike', 'Jobcard Created')->value('id');
@@ -982,7 +983,14 @@ class JobManagerController extends Controller
 									$material_name  = $template_level->material;
 									$material_sub   = $template_level->material_sub;
 									$material_ref   = $template_level->ref;
-									$customer_po    = $order_details->purchase_order_no;
+									
+									if ($customer->pi_required == 1 && $customer->po_required== 0) {
+										$customer_po  = $order_details->pi_id;
+									}
+									else if($customer->po_required== 1){
+										$customer_po  = $order_details->purchase_order_no;
+									}
+
 									$buyer_po       = $order_details->po_number;
 									$style          = $order_details->$style_zone;
 									$ocn_number     = $order_details->ocn_number;
@@ -1011,7 +1019,14 @@ class JobManagerController extends Controller
 									$material_sub  = DB::table('orchestra_item_master')->where('id', '=', $template_data->sub_material_id)->value('item_name');
 									
 									$material_ref   = $template_data->item_name;
-									$customer_po    = $order_details->po_number;
+
+									if ($customer->pi_required == 1 && $customer->po_required== 0) {
+										$customer_po  = $order_details->pi_id;
+									}
+									else if($customer->po_required== 1){
+										$customer_po  = $order_details->po_number;
+									}
+									
 									$buyer_po       = $order_details->po;
 									$style          = $order_details->uvc;
 									$ocn_number     = null;
@@ -1073,7 +1088,6 @@ class JobManagerController extends Controller
 							}
 						}
 
-						$customer = DB::table('customers')->select('short_name as customer_name')->where('id', '=', $customer_id)->first();
 						$company  = DB::table('company')->select('name as company', 'address as company_address', 'logo as company_logo')->where('id', '=', $company_id)->first();
 
 						$erp_dispatch_mode = DB::table('erp_dispatch_mode')->where('id','=', $disp_mode)->value('disp_mode');
