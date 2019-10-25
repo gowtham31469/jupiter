@@ -1080,6 +1080,8 @@ class OrderController extends Controller
                 ]);
 		
 		$result = response()->json(['error'=> false,'message' =>'success'],200);
+		
+		return $result;
 	}
 	/**
      * This Function is used to delete the Main Label Details.
@@ -1097,6 +1099,8 @@ class OrderController extends Controller
                 ]);
 		
 		$result = response()->json(['error'=> false,'message' =>'success'],200);
+		
+		return $result;
     }
 	/**
      * This Function is used to delete the Main Label Details.
@@ -1108,12 +1112,18 @@ class OrderController extends Controller
     {
         $id =$request->id;
 		
+		$wcl = DB::table("orchestra_wash_care_label_orders")->where('id',$id)->select('*')->first();
+		
 	    WashLabelOrders::where('id',$id)
                 ->update([
                     'status' => "Order Cancelled"
                 ]);
 		
-		$result = response()->json(['error'=> false,'message' =>'success'],200);
+		$orchestra_wcl = DB::table("orchestra_wash_care_label_orders")->where('uvc',$wcl->uvc)->where('color_code',$wcl->color_code)->where('status','!=','Order Cancelled')->where('season_code',$wcl->season_code)->select('*')->get();
+		
+		$result = response()->json(['error'=> false,'message' =>'success','orchestra_wcl' => $orchestra_wcl],200);
+		
+		return $result;
     }
 	
 	/**
@@ -1131,6 +1141,8 @@ class OrderController extends Controller
                 ]);
 		
 		$result = response()->json(['error'=> false,'message' =>'success'],200);
+		
+		return $result;
 	}
 	
 	/**
@@ -1148,6 +1160,8 @@ class OrderController extends Controller
                 ]);
 		
 		$result = response()->json(['error'=> false,'message' =>'success'],200);
+		
+		return $result;
 	}
 	/**
      * This Function is used to remove Special Tag Details.
@@ -1164,6 +1178,8 @@ class OrderController extends Controller
                 ]);
 		
 		$result = response()->json(['error'=> false,'message' =>'success'],200);
+		
+		return $result;
 	}
 	/**
      * This Function is used to save the Heat Transfer Details.

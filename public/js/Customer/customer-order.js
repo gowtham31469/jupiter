@@ -2306,7 +2306,7 @@ function cancelWashDiv(dataid,factorycode){
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	var buyer = localStorage.getItem("buyer");
 	$.ajax({
-		url: base_url + "/customer/" + buyer + "/order-management/remove_wcl",
+		url: base_url + "/admin/" + buyer + "/order-management/remove_wcl",
 		type: "Post",
 		data: {
 			id: id,
@@ -2319,7 +2319,39 @@ function cancelWashDiv(dataid,factorycode){
 			
 			if(factorycode == "HF-FREEUSD")
 			{
-				
+				if(data.orchestra_wcl.length == 0)
+				{
+					$('#wcl_name'+dataid).removeAttr('disabled');
+					$('#wcl_name'+dataid).val('');
+					$('.washing_select'+dataid).removeAttr('disabled');
+					$('.washing_select'+dataid).val('');
+					$('.whitening_select'+dataid).removeAttr('disabled');
+					$('.whitening_select'+dataid).val('');
+					$('.dryer_select'+dataid).removeAttr('disabled');
+					$('.dryer_select'+dataid).val('');
+					$('.ironing_select'+dataid).removeAttr('disabled');
+					$('.ironing_select'+dataid).val('');
+					$('.cleaning_select'+dataid).removeAttr('disabled');
+					$('.cleaning_select'+dataid).val('');
+					$('.made_in_select'+dataid).removeAttr('disabled');
+					$('.made_in_select'+dataid).val('');
+					$('.care_instruction_select'+dataid).removeAttr('disabled');
+					$('.care_instruction_select'+dataid).val('');
+					$('.composition_select'+dataid).removeAttr('disabled');
+					$('.composition_select'+dataid).val('');
+					$('.composition_percent'+dataid).removeAttr('disabled');
+					$('.composition_percent'+dataid).val('');
+					$('.add_to_list'+dataid).removeAttr('disabled');
+					$('#composition_remove_qty'+dataid).html('');
+					$('.wash-card'+dataid).find('span').text('');
+					$('.wash-card'+dataid).find('.washlabelname'+dataid).text('Washcare Label');
+					$('.wash-card'+dataid).find('span').removeClass('label-OrderApproved');
+					$('#washcarelabelform'+dataid).find('span').text('');
+					$('#washcarelabelform'+dataid).find('span').removeClass('label-OrderApproved');
+					$('.selectpicker').selectpicker('refresh');
+					$('#washcare_label_card'+dataid).addClass('hidden');
+					$('#clone_washcare_label_card'+dataid).addClass('hidden');
+				}
 			}
 			else
 			{
@@ -2346,6 +2378,7 @@ function cancelWashDiv(dataid,factorycode){
 				$('.add_to_list'+dataid).removeAttr('disabled');
 				$('#composition_remove_qty'+dataid).html('');
 				$('.wash-card'+dataid).find('span').text('');
+				$('.wash-card'+dataid).find('.washlabelname'+dataid).text('Washcare Label');
 				$('.wash-card'+dataid).find('span').removeClass('label-OrderApproved');
 				$('#washcarelabelform'+dataid).find('span').text('');
 				$('#washcarelabelform'+dataid).find('span').removeClass('label-OrderApproved');
@@ -2360,10 +2393,10 @@ function cancelWashDiv(dataid,factorycode){
 			$('#cancel_wash_button_'+dataid).addClass('hidden');
 			$('#print_wash_button_'+dataid).addClass('hidden');
 			$('#save_wash_button_'+dataid).removeClass('hidden');
-			$('.tot_qty_tablewash').removeAttr('disabled');
-			$('.tot_qty_tablewash').val('');
-			$('.extra_percentagewash').removeAttr('disabled');
-			$('.extra_percentagewash').val('');
+			$('#washcarelabelform'+dataid).find('.tot_qty_tablewash').removeAttr('disabled');
+			$('#washcarelabelform'+dataid).find('.tot_qty_tablewash').val('');
+			$('#washcarelabelform'+dataid).find('.extra_percentagewash').removeAttr('disabled');
+			$('#washcarelabelform'+dataid).find('.extra_percentagewash').val('');
 			
 		},
 		error: function (data) {
