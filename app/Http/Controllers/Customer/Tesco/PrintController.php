@@ -252,7 +252,7 @@ class PrintController extends Controller
 				PDF::AddPage();
 				$i=0;
 				$yy=60;
-				$j=1;
+				$j=0;
 				PDF::SetXY(10, 50);
 				foreach($svgarr as $value)
 				{
@@ -262,26 +262,44 @@ class PrintController extends Controller
 					{
 						$yy=60;
 						PDF::AddPage();
+						PDF::RoundedRect(15, 60, 127, 80, 0, '0000');
 						$i = 0;
 					}
 					else if($i == 0)
 					{
+						PDF::RoundedRect(15, 60, 127, 80, 0, '0000');
 						$yy=60;
 					}
 					else
 					{
+						PDF::RoundedRect(15, 160, 127, 80, 0, '0000');
 						$yy += 100;
 					}
-					$j++;
+					
 			
 					
 					$svg=urldecode($value);
-					file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
-					$html = '<img style="width:480px;height:302.36220472px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
+					file_put_contents(public_path('/storage/app/template/big_sticker'.$j.'.svg'), $svg);
+					
+					exec('inkscape -z -e '.public_path('/storage/app/template/big_sticker'.$j.'.png').' -w 1000 -h 1000 '.public_path('/storage/app/template/big_sticker'.$j.'.svg'));
+					
+					$html = '<img style="width:480px;height:302.36220472px;border:1px solid #333" src="'.public_path('/storage/app/template/big_sticker'.$j.'.png').'">';
 					PDF::writeHTMLCell(127, 80, 15, $yy+1, $html, '', 0, 0, false, 'L', false);
 				
 					$i++;
+					$j++;
 					
+				}
+		
+				$k=0;
+				if(count($svgarr) == $j)
+				{
+					foreach($svgarr as $value)
+					{
+						unlink(public_path('/storage/app/template/big_sticker'.$k.'.png'));
+						unlink(public_path('/storage/app/template/big_sticker'.$k.'.svg'));
+						$k++;
+					}
 				}
 				PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
 				print_r(url('/storage/app/template/'.$name.'.pdf'));
@@ -498,7 +516,7 @@ class PrintController extends Controller
 		PDF::AddPage();
 		$i=0;
 		$yy=0;
-		$j=1;
+		$j=0;
 		PDF::SetXY(10, 50);
 		foreach($svgarr as $value)
 		{
@@ -508,28 +526,35 @@ class PrintController extends Controller
 			{
 				$xx=15;
 				$yy+=50;
+				PDF::RoundedRect($xx , $yy - 1 , 42, 32, 0, '0000');
 			}
 			else if($i == 0)
 			{
 				$yy=50;
 				$xx=15;
+				PDF::RoundedRect($xx , $yy - 1 , 42, 32, 0, '0000');
 			}
 			else if($i == 12)
 			{
 				PDF::AddPage();
 				$xx=15;
 				$yy=50;
+				PDF::RoundedRect($xx , $yy - 1 , 42, 32, 0, '0000');
 			}
 			else 
 			{
 				$xx+=70;
+				PDF::RoundedRect($xx , $yy - 1 , 42, 32, 0, '0000');
 			}
-			$j++;
 			
 			
-			file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
+			
+			file_put_contents(public_path('/storage/app/template/small_sticker'.$j.'.svg'), $svg);
 			// PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
-			$html = '<img style="width:151.18110236px;height:113.38582677px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
+			
+			exec('inkscape -z -e '.public_path('/storage/app/template/small_sticker'.$j.'.png').' -w 1000 -h 1000 '.public_path('/storage/app/template/small_sticker'.$j.'.svg'));
+			
+			$html = '<img style="width:151.18110236px;height:113.38582677px;border:1px solid #333" src="'.public_path('/storage/app/template/small_sticker'.$j.'.png').'">';
 			PDF::writeHTMLCell(42, 32, $xx, $yy, $html, '', 0, 0, false, 'L', false);
 			
 //			
@@ -538,7 +563,19 @@ class PrintController extends Controller
 //			shell_exec("inkscape -z -e ".public_path('/storage/app/template/demo_'.$j.'.png')." -w 1024 -h 653 ".public_path('/storage/app/template/demo_'.$j.'.svg')."");
 //			PDF::Image(public_path('/storage/app/template/demo_'.$j.'.png'), $xx, $yy, 40, 30, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
 			$i++;
+			$j++;
 
+		}
+		
+		$k=0;
+		if(count($svgarr) == $j)
+		{
+			foreach($svgarr as $value)
+			{
+				unlink(public_path('/storage/app/template/small_sticker'.$k.'.png'));
+				unlink(public_path('/storage/app/template/small_sticker'.$k.'.svg'));
+				$k++;
+			}
 		}
 		
        
