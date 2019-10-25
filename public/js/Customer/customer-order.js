@@ -2061,6 +2061,11 @@ function cancelHangDiv(){
 			$(".loader").show();
 		},
 		success: function (data) {
+			if(data.update_po_disable == 0)
+			{
+				$('#po-file-upload-button').css('display','none')
+			}
+			$('#hangtagform').find('#exist_id').val("")
 			$('#hang_template_error').addClass('hidden')
 			$("#hangtagform .left-panelorc").removeClass('active');
 			$("#hangtagform .right-panel").removeClass('active');
@@ -2111,6 +2116,11 @@ function cancelSpecialDiv(){
 			$(".loader").show();
 		},
 		success: function (data) {
+			if(data.update_po_disable == 0)
+			{
+				$('#po-file-upload-button').css('display','none')
+			}
+			$('#specialtagform').find('#exist_id').val("")
 			$('#special_template_error').addClass('hidden')
 			$("#specialtagform .left-panelorc").removeClass('active');
 			$("#specialtagform .right-panel").removeClass('active');
@@ -2158,6 +2168,11 @@ function cancelHeatDiv(){
 			$(".loader").show();
 		},
 		success: function (data) {
+			if(data.update_po_disable == 0)
+			{
+				$('#po-file-upload-button').css('display','none')
+			}
+			$('#heat_transferform').find('#exist_id').val("")
 			$('#heat_transfer_template_error').addClass('hidden')
 			$("#heat_transferform .left-panelorc").removeClass('active');
 			$("#heat_transferform .right-panel").removeClass('active');
@@ -2207,6 +2222,11 @@ function cancelMainDiv(){
 			$(".loader").show();
 		},
 		success: function (data) {
+			if(data.update_po_disable == 0)
+			{
+				$('#po-file-upload-button').css('display','none')
+			}
+			$('#main_labelform').find('#exist_id').val("")
 			$('#main_label_template_error').addClass('hidden')
 			$("#main_labelform .left-panelorc").removeClass('active');
 			$("#main_labelform .right-panel").removeClass('active');
@@ -2254,6 +2274,11 @@ function cancelSizeDiv(){
 			$(".loader").show();
 		},
 		success: function (data) {
+			if(data.update_po_disable == 0)
+			{
+				$('#po-file-upload-button').css('display','none')
+			}
+			$('#size_labelform').find('#exist_id').val("")
 			$('#size_label_template_error').addClass('hidden')
 			$("#size_labelform .left-panelorc").removeClass('active');
 			$("#size_labelform .right-panel").removeClass('active');
@@ -2306,7 +2331,7 @@ function cancelWashDiv(dataid,factorycode){
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	var buyer = localStorage.getItem("buyer");
 	$.ajax({
-		url: base_url + "/admin/" + buyer + "/order-management/remove_wcl",
+		url: base_url + "/customer/" + buyer + "/order-management/remove_wcl",
 		type: "Post",
 		data: {
 			id: id,
@@ -2316,6 +2341,11 @@ function cancelWashDiv(dataid,factorycode){
 			$(".loader").show();
 		},
 		success: function (data) {
+			
+			if(data.update_po_disable == 0)
+			{
+				$('#po-file-upload-button').css('display','none')
+			}
 			
 			if(factorycode == "HF-FREEUSD")
 			{
@@ -8964,6 +8994,7 @@ function setHangTag(id,colour) {
 			$(".loader").show();
 		},
 		success: function (data) {
+			$('#hangtagform').find('#exist_id').val(data.id)
 			$('#print_hang_button').removeClass('hidden')
 			$('#cancel_hang_button').removeClass('hidden')
 			$('#save_hang_button').addClass('hidden')
@@ -9034,6 +9065,7 @@ function setSpecialTag(id,colour) {
             $(".loader").show();
         },
         success: function (data) {
+			$('#specialtagform').find('#exist_id').val(data.id)
 			$('#save_special_button').addClass('hidden')
 			$('#tree2 >ul > li').each( function() {
 			   disable( 'tree2',this.id );        
@@ -9105,6 +9137,7 @@ function setHeatTransfer(id,colour) {
 			$(".loader").show();
 		},
 		success: function (data) {
+			$('#heat_transferform').find('#exist_id').val(data.id)
 			$('#save_heat_transfer_button').addClass('hidden')
 			$('#treeht >ul > li').each( function() {
 			   disable( 'treeht',this.id );        
@@ -9174,6 +9207,7 @@ function setMainLabel(id,colour) {
             $(".loader").show();
         },
         success: function (data) {
+			$('#main_labelform').find('#exist_id').val(data.id)
 			$('#save_main_label_button').addClass('hidden')
 			$('.snackbar_span').html('This is only for to place main label. Size label you want to place seperately');
 			showSnackbar();
@@ -9247,6 +9281,7 @@ function setSizeLabel(id,colour) {
 			$(".loader").show();
 		},
 		success: function (data) {
+			$('#size_labelform').find('#exist_id').val(data.id)
 			$('#save_size_label_button').addClass('hidden')
 			$('#treesl >ul > li').each( function() {
 			   disable( 'treesl',this.id );        
