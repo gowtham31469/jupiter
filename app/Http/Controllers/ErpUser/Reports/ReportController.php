@@ -596,37 +596,62 @@ public function setUpDatatable(Request $request)
                     //         ->toArray(); 
                     //     }
                     // }
-
-                    $queryRes = History::whereIn('history.id',$eventHistory)
-                    ->leftJoin("erp_order_details",'erp_order_details.id', '=', 
-                                'history.erp_order_details_id')
-                    ->leftJoin("customers",'customers.id', '=', 'history.customer_id')
-                    ->leftJoin("buyers",'buyers.id', '=', 'history.buyer_id')
-                    ->leftJoin("event_history",'history.id', '=', 'event_history.history_id')
-                    ->leftJoin("actions",'actions.id', '=', 'event_history.action_id')
-                    ->whereIn('actions.id',$statusId)
-                    ->select(['erp_order_details.order_date as Order_Dt', 'erp_order_id as ErpId',
-                        'company_name as Customer','material as Material','style as Style','history.po as P.O',
-                        'ocn as OCN','reference as Reference','po_reapproved_date as Reapproved_Dt',
-                        'erp_order_details.aw_date as AW_Dt','erp_order_details.created_at as PO_Dt',
-                        'jc_number as JC.No','jc_created_date as JC_Dt','invoice_number as Inv.No',
-                        'invoice_created_date as Inv_Dt','buyer_name as Buyer','season as Season',
-                        'country as Country','buyer_po as ByrPo','order_quantity as Quantity','actions.action as Status','event_history.reason as Reason'])
-                        ->orderBy('Order_Dt','asc')
+                $ddmmyy="DD/MM/YYYY";
+                $queryRes = History::whereIn('history.id',$eventHistory)
+                ->leftJoin("erp_order_details",'erp_order_details.id', '=', 
+                            'history.erp_order_details_id')
+                ->leftJoin("customers",'customers.id', '=', 'history.customer_id')
+                ->leftJoin("buyers",'buyers.id', '=', 'history.buyer_id')
+                ->leftJoin("event_history",'history.id', '=', 'event_history.history_id')
+                ->leftJoin("actions",'actions.id', '=', 'event_history.action_id')
+                ->whereIn('actions.id',$statusId)
+                ->select([
+                    DB::raw('distinct on ("erp_order_id") "erp_order_id" as "ErpId"'),
+                    DB::raw('to_char(erp_order_details.order_date,'."'".$ddmmyy."'".') as "Order_Dt"'),
+                    DB::raw('to_char(po_reapproved_date,'."'".$ddmmyy."'".') as "Reapproved_Dt"'),
+                    DB::raw('to_char(jc_created_date,'."'".$ddmmyy."'".') as "JC_Dt"'),
+                    DB::raw('to_char(erp_order_details.aw_date,'."'".$ddmmyy."'".') as "AW_Dt"'),
+                    DB::raw('to_char(invoice_created_date,'."'".$ddmmyy."'".') as "Inv_Dt"'),
+                    DB::raw('to_char(erp_order_details.created_at,'."'".$ddmmyy."'".') as "PO_Dt"'),
+                    // 'erp_order_details.order_date as Order_Dt', 
+                    'company_name as Customer',
+                    'material as Material',
+                    'style as Style',
+                    'history.po as P.O',
+                    'ocn as OCN',
+                    'reference as Reference',
+                    // 'po_reapproved_date as Reapproved_Dt',
+                    // 'erp_order_details.aw_date as AW_Dt',
+                    // 'erp_order_details.created_at as PO_Dt',
+                    'jc_number as JC.No',
+                    // 'jc_created_date as JC_Dt',
+                    'invoice_number as Inv.No',
+                    // 'invoice_created_date as Inv_Dt',
+                    'buyer_name as Buyer',
+                    'season as Season',
+                    'country as Country',
+                    'buyer_po as ByrPo',
+                    'order_quantity as Quantity',
+                    'actions.action as Status',
+                    'event_history.reason as Reason'
+                ])
                         ->orderBy('ErpId','asc')
+                        ->orderBy('Order_Dt','desc')
                         ->get();
                        
+                       // return $queryRes;
+
                     $queryRes->map(function ($queryRes,$key) {
-                        if($queryRes->Order_Dt)
-                        {
-                           $queryRes->Order_Dt=(new Carbon($queryRes->Order_Dt))->format('d-m-Y'); 
-                        }
-                    $queryRes->JC_Dt=(new Carbon($queryRes->JC_Dt))->format('d-m-Y');
-                    $queryRes->JC_Dt=(new Carbon($queryRes->JC_Dt))->format('d-m-Y');
-                    $queryRes->AW_Dt=(new Carbon($queryRes->AW_Dt))->format('d-m-Y');
-                    $queryRes->PO_Dt=(new Carbon($queryRes->PO_Dt))->format('d-m-Y');
-                    $queryRes->Inv_Dt=(new Carbon($queryRes->Inv_Dt))->format('d-m-Y');
-                    $queryRes->Reapproved_Dt=(new Carbon($queryRes->Reapproved_Dt))->format('d-m-Y');
+                        // if($queryRes->Order_Dt)
+                        // {
+                        //    $queryRes->Order_Dt=(new Carbon($queryRes->Order_Dt))->format('d-m-Y'); 
+                        // }
+                    // $queryRes->JC_Dt=(new Carbon($queryRes->JC_Dt))->format('d-m-Y');
+                    // $queryRes->JC_Dt=(new Carbon($queryRes->JC_Dt))->format('d-m-Y');
+                    // $queryRes->AW_Dt=(new Carbon($queryRes->AW_Dt))->format('d-m-Y');
+                    // $queryRes->PO_Dt=(new Carbon($queryRes->PO_Dt))->format('d-m-Y');
+                    // $queryRes->Inv_Dt=(new Carbon($queryRes->Inv_Dt))->format('d-m-Y');
+                    // $queryRes->Reapproved_Dt=(new Carbon($queryRes->Reapproved_Dt))->format('d-m-Y');
 
                     $queryRes->No =$key+1;
                     $queryRes->Awb ='-';
