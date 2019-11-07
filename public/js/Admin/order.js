@@ -2065,6 +2065,11 @@ function cancelHangDiv(){
 			$(".loader").show();
 		},
 		success: function (data) {
+			if(data.update_po_disable == 0)
+			{
+				$('#po-file-upload-button').css('display','none')
+			}
+			$('#hangtagform').find('#exist_id').val("")
 			$('#hang_template_error').addClass('hidden')
 			$("#hangtagform .left-panelorc").removeClass('active');
 			$("#hangtagform .right-panel").removeClass('active');
@@ -2115,6 +2120,11 @@ function cancelSpecialDiv(){
 			$(".loader").show();
 		},
 		success: function (data) {
+			if(data.update_po_disable == 0)
+			{
+				$('#po-file-upload-button').css('display','none')
+			}
+			$('#specialtagform').find('#exist_id').val("")
 			$('#special_template_error').addClass('hidden')
 			$("#specialtagform .left-panelorc").removeClass('active');
 			$("#specialtagform .right-panel").removeClass('active');
@@ -2162,6 +2172,11 @@ function cancelHeatDiv(){
 			$(".loader").show();
 		},
 		success: function (data) {
+			if(data.update_po_disable == 0)
+			{
+				$('#po-file-upload-button').css('display','none')
+			}
+			$('#heat_transferform').find('#exist_id').val("")
 			$('#heat_transfer_template_error').addClass('hidden')
 			$("#heat_transferform .left-panelorc").removeClass('active');
 			$("#heat_transferform .right-panel").removeClass('active');
@@ -2211,6 +2226,11 @@ function cancelMainDiv(){
 			$(".loader").show();
 		},
 		success: function (data) {
+			if(data.update_po_disable == 0)
+			{
+				$('#po-file-upload-button').css('display','none')
+			}
+			$('#main_labelform').find('#exist_id').val("")
 			$('#main_label_template_error').addClass('hidden')
 			$("#main_labelform .left-panelorc").removeClass('active');
 			$("#main_labelform .right-panel").removeClass('active');
@@ -2258,6 +2278,11 @@ function cancelSizeDiv(){
 			$(".loader").show();
 		},
 		success: function (data) {
+			if(data.update_po_disable == 0)
+			{
+				$('#po-file-upload-button').css('display','none')
+			}
+			$('#size_labelform').find('#exist_id').val("")
 			$('#size_label_template_error').addClass('hidden')
 			$("#size_labelform .left-panelorc").removeClass('active');
 			$("#size_labelform .right-panel").removeClass('active');
@@ -2319,10 +2344,46 @@ function cancelWashDiv(dataid,factorycode){
 			$(".loader").show();
 		},
 		success: function (data) {
+			if(data.update_po_disable == 0)
+			{
+				$('#po-file-upload-button').css('display','none')
+			}
 			
 			if(factorycode == "HF-FREEUSD")
 			{
-				
+				if(data.orchestra_wcl.length == 0)
+				{
+					$('#wcl_name'+dataid).removeAttr('disabled');
+					$('#wcl_name'+dataid).val('');
+					$('.washing_select'+dataid).removeAttr('disabled');
+					$('.washing_select'+dataid).val('');
+					$('.whitening_select'+dataid).removeAttr('disabled');
+					$('.whitening_select'+dataid).val('');
+					$('.dryer_select'+dataid).removeAttr('disabled');
+					$('.dryer_select'+dataid).val('');
+					$('.ironing_select'+dataid).removeAttr('disabled');
+					$('.ironing_select'+dataid).val('');
+					$('.cleaning_select'+dataid).removeAttr('disabled');
+					$('.cleaning_select'+dataid).val('');
+					$('.made_in_select'+dataid).removeAttr('disabled');
+					$('.made_in_select'+dataid).val('');
+					$('.care_instruction_select'+dataid).removeAttr('disabled');
+					$('.care_instruction_select'+dataid).val('');
+					$('.composition_select'+dataid).removeAttr('disabled');
+					$('.composition_select'+dataid).val('');
+					$('.composition_percent'+dataid).removeAttr('disabled');
+					$('.composition_percent'+dataid).val('');
+					$('.add_to_list'+dataid).removeAttr('disabled');
+					$('#composition_remove_qty'+dataid).html('');
+					$('.wash-card'+dataid).find('span').text('');
+					$('.wash-card'+dataid).find('.washlabelname'+dataid).text('Washcare Label');
+					$('.wash-card'+dataid).find('span').removeClass('label-OrderApproved');
+					$('#washcarelabelform'+dataid).find('span').text('');
+					$('#washcarelabelform'+dataid).find('span').removeClass('label-OrderApproved');
+					$('.selectpicker').selectpicker('refresh');
+					$('#washcare_label_card'+dataid).addClass('hidden');
+					$('#clone_washcare_label_card'+dataid).addClass('hidden');
+				}
 			}
 			else
 			{
@@ -2349,6 +2410,7 @@ function cancelWashDiv(dataid,factorycode){
 				$('.add_to_list'+dataid).removeAttr('disabled');
 				$('#composition_remove_qty'+dataid).html('');
 				$('.wash-card'+dataid).find('span').text('');
+				$('.wash-card'+dataid).find('.washlabelname'+dataid).text('Washcare Label');
 				$('.wash-card'+dataid).find('span').removeClass('label-OrderApproved');
 				$('#washcarelabelform'+dataid).find('span').text('');
 				$('#washcarelabelform'+dataid).find('span').removeClass('label-OrderApproved');
@@ -2363,10 +2425,10 @@ function cancelWashDiv(dataid,factorycode){
 			$('#cancel_wash_button_'+dataid).addClass('hidden');
 			$('#print_wash_button_'+dataid).addClass('hidden');
 			$('#save_wash_button_'+dataid).removeClass('hidden');
-			$('.tot_qty_tablewash').removeAttr('disabled');
-			$('.tot_qty_tablewash').val('');
-			$('.extra_percentagewash').removeAttr('disabled');
-			$('.extra_percentagewash').val('');
+			$('#washcarelabelform'+dataid).find('.tot_qty_tablewash').removeAttr('disabled');
+			$('#washcarelabelform'+dataid).find('.tot_qty_tablewash').val('');
+			$('#washcarelabelform'+dataid).find('.extra_percentagewash').removeAttr('disabled');
+			$('#washcarelabelform'+dataid).find('.extra_percentagewash').val('');
 			
 		},
 		error: function (data) {
@@ -8944,6 +9006,8 @@ function setHangTag(id,colour) {
 			$(".loader").show();
 		},
 		success: function (data) {
+			
+			$('#hangtagform').find('#exist_id').val(data.id)
 			$('#print_hang_button').removeClass('hidden')
 			$('#cancel_hang_button').removeClass('hidden')
 			$('#save_hang_button').addClass('hidden')
@@ -9014,6 +9078,7 @@ function setSpecialTag(id,colour) {
             $(".loader").show();
         },
         success: function (data) {
+			$('#specialtagform').find('#exist_id').val(data.id)
 			$('#save_special_button').addClass('hidden')
 			$('#tree2 >ul > li').each( function() {
 			   disable( 'tree2',this.id );        
@@ -9085,6 +9150,7 @@ function setHeatTransfer(id,colour) {
 			$(".loader").show();
 		},
 		success: function (data) {
+			$('#heat_transferform').find('#exist_id').val(data.id)
 			$('#save_heat_transfer_button').addClass('hidden')
 			$('#treeht >ul > li').each( function() {
 			   disable( 'treeht',this.id );        
@@ -9154,6 +9220,7 @@ function setMainLabel(id,colour) {
             $(".loader").show();
         },
         success: function (data) {
+			$('#main_labelform').find('#exist_id').val(data.id)
 			$('#save_main_label_button').addClass('hidden')
 			$('.snackbar_span').html('This is only for to place main label. Size label you want to place seperately');
 			showSnackbar();
@@ -9227,6 +9294,7 @@ function setSizeLabel(id,colour) {
 			$(".loader").show();
 		},
 		success: function (data) {
+			$('#size_labelform').find('#exist_id').val(data.id)
 			$('#save_size_label_button').addClass('hidden')
 			$('#treesl >ul > li').each( function() {
 			   disable( 'treesl',this.id );        
