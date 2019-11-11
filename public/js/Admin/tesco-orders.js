@@ -322,7 +322,31 @@ function tescoOrders(callback) {
 										"parent_id": "3",
 										"type": "single",
 										"zone": "CE"
-                                        }]
+									    }, {
+										"id": "19,20,21",
+										"text": "TCL 1 , TCL 2 & TSL 1 with QR",
+										"parent_id": "3",
+										"type": "ratio",
+										"zone": "CE"
+										}, {
+										"id": "22,23",
+										"text": "TCL 4 & TSL 3 with QR",
+										"parent_id": "3",
+										"type": "single",
+										"zone": "CE"
+										}, {
+										"id": "24",
+										"text": "THL 1 with QR",
+										"parent_id": "3",
+										"type": "ratio",
+										"zone": "CE"
+										}, {
+										"id": "25",
+										"text": "THL 3 with QR",
+										"parent_id": "3",
+										"type": "single",
+										"zone": "CE"
+										}]
                                     }, {
 									"id": "4",
 									"text": "UK",
