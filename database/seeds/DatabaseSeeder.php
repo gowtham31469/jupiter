@@ -29,7 +29,5 @@ class DatabaseSeeder extends Seeder
 			ERVEItemMasterTableSeeder::class,
 			OSTINItemMasterTableSeeder::class,
 		]);
-        $this->call(TescoTemplateTableSeeder::class);
-        $this->call(TescoItemMasterTableSeeder::class);
     }
 }
