@@ -606,7 +606,8 @@ public function setUpDatatable(Request $request)
                 ->leftJoin("actions",'actions.id', '=', 'event_history.action_id')
                 ->whereIn('actions.id',$statusId)
                 ->select([
-                    DB::raw('distinct on ("erp_order_id") "erp_order_id" as "ErpId"'),
+                    DB::raw('distinct on ("erp_order_id","reference") "erp_order_id" as "ErpId","reference" as "Reference"'),
+                    // DB::raw('distinct on ("erp_order_id") "erp_order_id"'),
                     DB::raw('to_char(erp_order_details.order_date,'."'".$ddmmyy."'".') as "Order_Dt"'),
                     DB::raw('to_char(po_reapproved_date,'."'".$ddmmyy."'".') as "Reapproved_Dt"'),
                     DB::raw('to_char(jc_created_date,'."'".$ddmmyy."'".') as "JC_Dt"'),
@@ -619,7 +620,7 @@ public function setUpDatatable(Request $request)
                     'style as Style',
                     'history.po as P.O',
                     'ocn as OCN',
-                    'reference as Reference',
+                    // 'reference as Reference',
                     // 'po_reapproved_date as Reapproved_Dt',
                     // 'erp_order_details.aw_date as AW_Dt',
                     // 'erp_order_details.created_at as PO_Dt',
@@ -636,6 +637,7 @@ public function setUpDatatable(Request $request)
                     'event_history.reason as Reason'
                 ])
                         ->orderBy('ErpId','asc')
+                        ->orderBy('Reference','asc')
                         ->orderBy('Order_Dt','desc')
                         ->get();
                        
