@@ -24,7 +24,8 @@ class TescoItemMasterTableSeeder extends Seeder
                 'parent_id' => 0,
                 'item_name' => 'Stickers',
                 'ref_no' => 'Ref-01',
-                'tag_name' => ''
+                'tag_name' => '',
+                'is_qrcode_required' => 0
             ),
             1 => 
             array (
@@ -33,7 +34,8 @@ class TescoItemMasterTableSeeder extends Seeder
                 'parent_id' => 1,
                 'item_name' => 'Carton & Polybag Stickers',
                 'ref_no' => 'Ref-02',
-                'tag_name' => ''
+                'tag_name' => '',
+                'is_qrcode_required' => 0
             ),
             2 => 
             array (
@@ -42,7 +44,8 @@ class TescoItemMasterTableSeeder extends Seeder
                 'parent_id' => 2,
                 'item_name' => 'CE',
                 'ref_no' => 'Ref-03',
-                'tag_name' => ''
+                'tag_name' => '',
+                'is_qrcode_required' => 0
             ),
             3 => 
             array (
@@ -51,7 +54,8 @@ class TescoItemMasterTableSeeder extends Seeder
                 'parent_id' => 2,
                 'item_name' => 'UK',
                 'ref_no' => 'Ref-04',
-                'tag_name' => ''
+                'tag_name' => '',
+                'is_qrcode_required' => 0
             ),
             4 => 
             array (
@@ -60,7 +64,8 @@ class TescoItemMasterTableSeeder extends Seeder
                 'parent_id' => 3,
                 'item_name' => 'TCL 1',
                 'ref_no' => 'TCL 1',
-                'tag_name' => ''
+                'tag_name' => '',
+                'is_qrcode_required' => 0
             ),
             5 => 
             array (
@@ -69,7 +74,8 @@ class TescoItemMasterTableSeeder extends Seeder
                 'parent_id' => 3,
                 'item_name' => 'TCL 2',
                 'ref_no' => 'TCL 2',
-                'tag_name' => ''
+                'tag_name' => '',
+                'is_qrcode_required' => 0
             ),
             6 => 
             array (
@@ -78,7 +84,8 @@ class TescoItemMasterTableSeeder extends Seeder
                 'parent_id' => 3,
                 'item_name' => 'TSL 1',
                 'ref_no' => 'TSL 1',
-                'tag_name' => ''
+                'tag_name' => '',
+                'is_qrcode_required' => 0
             ),
             7 => 
             array (
@@ -87,7 +94,8 @@ class TescoItemMasterTableSeeder extends Seeder
                 'parent_id' => 3,
                 'item_name' => 'TCL 4',
                 'ref_no' => 'TCL 4',
-                'tag_name' => ''
+                'tag_name' => '',
+                'is_qrcode_required' => 0
             ),
             8 => 
             array (
@@ -96,7 +104,8 @@ class TescoItemMasterTableSeeder extends Seeder
                 'parent_id' => 3,
                 'item_name' => 'TSL 3',
                 'ref_no' => 'TSL 3',
-                'tag_name' => ''
+                'tag_name' => '',
+                'is_qrcode_required' => 0
             ),
             9 => 
             array (
@@ -105,7 +114,8 @@ class TescoItemMasterTableSeeder extends Seeder
                 'parent_id' => 3,
                 'item_name' => 'THL 3',
                 'ref_no' => 'THL 3',
-                'tag_name' => ''
+                'tag_name' => '',
+                'is_qrcode_required' => 0
             ),
             10 => 
             array (
@@ -114,7 +124,8 @@ class TescoItemMasterTableSeeder extends Seeder
                 'parent_id' => 4,
                 'item_name' => 'TCL 1',
                 'ref_no' => 'TCL 1',
-                'tag_name' => ''
+                'tag_name' => '',
+                'is_qrcode_required' => 0
             ),
             11 => 
             array (
@@ -123,7 +134,8 @@ class TescoItemMasterTableSeeder extends Seeder
                 'parent_id' => 4,
                 'item_name' => 'TCL 2',
                 'ref_no' => 'TCL 2',
-                'tag_name' => ''
+                'tag_name' => '',
+                'is_qrcode_required' => 0
             ),
             12 => 
             array (
@@ -132,7 +144,8 @@ class TescoItemMasterTableSeeder extends Seeder
                 'parent_id' => 4,
                 'item_name' => 'TSL 1',
                 'ref_no' => 'TSL 1',
-                'tag_name' => ''
+                'tag_name' => '',
+                'is_qrcode_required' => 0
             ),
             13 => 
             array (
@@ -141,7 +154,8 @@ class TescoItemMasterTableSeeder extends Seeder
                 'parent_id' => 4,
                 'item_name' => 'TCL 4',
                 'ref_no' => 'TCL 4',
-                'tag_name' => ''
+                'tag_name' => '',
+                'is_qrcode_required' => 0
             ),
             14 => 
             array (
@@ -150,7 +164,8 @@ class TescoItemMasterTableSeeder extends Seeder
                 'parent_id' => 4,
                 'item_name' => 'TSL 3',
                 'ref_no' => 'TSL 3',
-                'tag_name' => ''
+                'tag_name' => '',
+                'is_qrcode_required' => 0
             ),
             15 => 
             array (
@@ -159,7 +174,8 @@ class TescoItemMasterTableSeeder extends Seeder
                 'parent_id' => 4,
                 'item_name' => 'THL 3',
                 'ref_no' => 'THL 3',
-                'tag_name' => ''
+                'tag_name' => '',
+                'is_qrcode_required' => 0
             ),
             16 => 
             array (
@@ -168,7 +184,8 @@ class TescoItemMasterTableSeeder extends Seeder
                 'parent_id' => 3,
                 'item_name' => 'THL 1',
                 'ref_no' => 'THL 1',
-                'tag_name' => ''
+                'tag_name' => '',
+                'is_qrcode_required' => 0
             ),
             17 => 
             array (
@@ -177,7 +194,8 @@ class TescoItemMasterTableSeeder extends Seeder
                 'parent_id' => 4,
                 'item_name' => 'THL 1',
                 'ref_no' => 'THL 1',
-                'tag_name' => ''
+                'tag_name' => '',
+                'is_qrcode_required' => 0
             ),
             19 => 
             array (
@@ -186,7 +204,8 @@ class TescoItemMasterTableSeeder extends Seeder
                 'parent_id' => 3,
                 'item_name' => 'TCL 1 - QR',
                 'ref_no' => 'TCL 1 - QR',
-                'tag_name' => ''
+                'tag_name' => '',
+                'is_qrcode_required' => 1
             ),
             20 => 
             array (
@@ -195,7 +214,8 @@ class TescoItemMasterTableSeeder extends Seeder
                 'parent_id' => 3,
                 'item_name' => 'TCL 2 - QR',
                 'ref_no' => 'TCL 2 - QR',
-                'tag_name' => ''
+                'tag_name' => '',
+                'is_qrcode_required' => 1
             ),
             21 => 
             array (
@@ -204,7 +224,8 @@ class TescoItemMasterTableSeeder extends Seeder
                 'parent_id' => 3,
                 'item_name' => 'TSL 1 - QR',
                 'ref_no' => 'TSL 1 - QR',
-                'tag_name' => ''
+                'tag_name' => '',
+                'is_qrcode_required' => 1
             ),
             22 => 
             array (
@@ -213,7 +234,8 @@ class TescoItemMasterTableSeeder extends Seeder
                 'parent_id' => 3,
                 'item_name' => 'TCL 4 - QR',
                 'ref_no' => 'TCL 4 - QR',
-                'tag_name' => ''
+                'tag_name' => '',
+                'is_qrcode_required' => 1
             ),
             23 => 
             array (
@@ -222,7 +244,8 @@ class TescoItemMasterTableSeeder extends Seeder
                 'parent_id' => 3,
                 'item_name' => 'TSL 3 - QR',
                 'ref_no' => 'TSL 3 - QR',
-                'tag_name' => ''
+                'tag_name' => '',
+                'is_qrcode_required' => 1
             ),
             24 => 
             array (
@@ -231,7 +254,8 @@ class TescoItemMasterTableSeeder extends Seeder
                 'parent_id' => 3,
                 'item_name' => 'THL 3 - QR',
                 'ref_no' => 'THL 3 - QR',
-                'tag_name' => ''
+                'tag_name' => '',
+                'is_qrcode_required' => 1
             ),
             25 => 
             array (
@@ -240,7 +264,8 @@ class TescoItemMasterTableSeeder extends Seeder
                 'parent_id' => 3,
                 'item_name' => 'THL 1 - QR',
                 'ref_no' => 'THL 1 - QR',
-                'tag_name' => ''
+                'tag_name' => '',
+                'is_qrcode_required' => 1
             ),
         ));
         
