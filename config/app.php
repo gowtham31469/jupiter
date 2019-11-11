@@ -178,6 +178,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 		Elibyy\TCPDF\ServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        Orangehill\Iseed\IseedServiceProvider::class,
     ],
 
     /*
