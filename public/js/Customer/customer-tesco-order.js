@@ -334,6 +334,30 @@ function tescoOrders(callback) {
                                         "parent_id": 3,
                                         "type":"single",
                                         "zone": "CE"
+                                        }, {
+                                        "id": "19,20,21",
+                                        "text": "TCL 1 , TCL 2 & TSL 1 with QR",
+                                        "parent_id": "3",
+                                        "type": "ratio",
+                                        "zone": "CE"
+                                        }, {
+                                        "id": "22,23",
+                                        "text": "TCL 4 & TSL 3 with QR",
+                                        "parent_id": "3",
+                                        "type": "single",
+                                        "zone": "CE"
+                                        }, {
+                                        "id": "24",
+                                        "text": "THL 1 with QR",
+                                        "parent_id": "3",
+                                        "type": "ratio",
+                                        "zone": "CE"
+                                        }, {
+                                        "id": "25",
+                                        "text": "THL 3 with QR",
+                                        "parent_id": "3",
+                                        "type": "single",
+                                        "zone": "CE"
                                         }]
                                     }, {
                                     "id": 4,
@@ -4021,23 +4045,27 @@ function storeCERatioTCL1TCL2TSL1()
         var tcl1_last_id      = $('#TCL1_id').val();
         var tcl2_last_id      = $('#TCL2_id').val();
         var tsl1_last_id      = $('#TSL1_id').val();
-
-        /** [ Create array of ce ratio orms tpn ] */
-        $('.ce_ratio_orms_tpn').each(function(i, item)
-        {
-            orms_tpn[i]    = $(item).val();
-            
-        });
-        orms_tpn   = orms_tpn.join(',');
+        var qr_code           = [];
+		var itf_code_array    = [];
 
         /** [ Create array of ce ratio itf barcode ] */
-        $('.ce_ratio_itf').each(function(i, item)
-        {
-            itf_code[i]    = $(item).val();
-            
-        });
-        itf_code = itf_code.join(',');
+		$('.ce_ratio_itf').each(function (i, item) {
+			itf_code[i] = $(item).val();
+            itf_code_array.push($(item).val()); 
+		});
+		itf_code = itf_code.join(',');
 
+		/** [ Create array of ce ratio orms tpn and ce ratio qr code ] */
+		$('.ce_ratio_orms_tpn').each(function (i, item) {
+			orms_tpn[i] = $(item).val();
+			 
+			// qr code format : {Buyer PO No,Barcode/last 3 digits of tpnd no,tpnd no}
+			qr_code[i] = po_number+','+itf_code_array[i]+'/'+($(item).val().substr($(item).val().length - 3))+','+$(item).val(); 
+
+		});
+		orms_tpn = orms_tpn.join(',');
+        qr_code = qr_code.join('|');
+        
         /** [ Create array of ce ratio case per carton ] */
         $('.ce_ratio_cpc').each(function(i, item)
         {
@@ -4074,7 +4102,36 @@ function storeCERatioTCL1TCL2TSL1()
                  url: base_url + "/customer/tesco/set-ce-ratio-template-orders",
                  type: 'POST',
                  data: {
-                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,count_TCL1:count_TCL1,count_TCL2:count_TCL2,count_TSL1:count_TSL1,templates:data,is_insert:is_insert,tcl1_last_id:tcl1_last_id,tcl2_last_id:tcl2_last_id,tsl1_last_id:tsl1_last_id,created_by:created_by,ocn_no: ocn_no,full_description:full_description
+                     _token: csrf_token,
+                     po_number:po_number,
+                     uk_style:uk_style,
+                     ce_style:ce_style,
+                     season_code:season_code,
+                     description:description,
+                     eqos:eqos,
+                     manufacture_date:manufacture_date,
+                     department:department,
+                     brand:brand,
+                     supplier:supplier,
+                     rfid:rfid,
+                     tag_at_source:tag_at_source,
+                     zone:zone,
+                     type:type,
+                     orms_tpn:orms_tpn,
+                     itf_code:itf_code,
+                     cases_per_carton:cases_per_carton,
+                     count_TCL1:count_TCL1,
+                     count_TCL2:count_TCL2,
+                     count_TSL1:count_TSL1,
+                     templates:data,
+                     is_insert:is_insert,
+                     tcl1_last_id:tcl1_last_id,
+                     tcl2_last_id:tcl2_last_id,
+                     tsl1_last_id:tsl1_last_id,
+                     created_by:created_by,
+                     ocn_no: ocn_no,
+                     full_description:full_description,
+                     qr_code:qr_code
                  },
                  tryCount : 0,
                  retryLimit : 2,
@@ -4129,22 +4186,26 @@ function storeCERatioTHL1()
         var count_THL1        = [];
         var is_insert         = $('.save-btn').data('insert');
         var thl1_last_id      = $('#THL1_id').val();
-
-        /** [ Create array of ce ratio orms tpn ] */
-        $('.ce_ratio_orms_tpn').each(function(i, item)
-        {
-            orms_tpn[i]    = $(item).val();
-            
-        });
-        orms_tpn   = orms_tpn.join(',');
+        var qr_code           = [];
+		var itf_code_array    = [];
 
         /** [ Create array of ce ratio itf barcode ] */
-        $('.ce_ratio_itf').each(function(i, item)
-        {
-            itf_code[i]    = $(item).val();
-            
-        });
-        itf_code = itf_code.join(',');
+		$('.ce_ratio_itf').each(function (i, item) {
+			itf_code[i] = $(item).val();
+            itf_code_array.push($(item).val()); 
+		});
+		itf_code = itf_code.join(',');
+
+		/** [ Create array of ce ratio orms tpn and ce ratio qr code ] */
+		$('.ce_ratio_orms_tpn').each(function (i, item) {
+			orms_tpn[i] = $(item).val();
+			 
+			// qr code format : {Buyer PO No,Barcode/last 3 digits of tpnd no,tpnd no}
+			qr_code[i] = po_number+','+itf_code_array[i]+'/'+($(item).val().substr($(item).val().length - 3))+','+$(item).val(); 
+
+		});
+		orms_tpn = orms_tpn.join(',');
+		qr_code = qr_code.join('|');
 
         /** [ Create array of ce ratio case per carton ] */
         $('.ce_ratio_cpc').each(function(i, item)
@@ -4166,7 +4227,32 @@ function storeCERatioTHL1()
                  url: base_url + "/customer/tesco/set-ce-ratio-template-orders",
                  type: 'POST',
                  data: {
-                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,count_THL1:count_THL1,templates:data,thl1_last_id:thl1_last_id,is_insert:is_insert,created_by:created_by,ocn_no: ocn_no,full_description:full_description
+                     _token: csrf_token,
+                     po_number:po_number,
+                     uk_style:uk_style,
+                     ce_style:ce_style,
+                     season_code:season_code,
+                     description:description,
+                     eqos:eqos,
+                     manufacture_date:manufacture_date,
+                     department:department,
+                     brand:brand,
+                     supplier:supplier,
+                     rfid:rfid,
+                     tag_at_source:tag_at_source,
+                     zone:zone,
+                     type:type,
+                     orms_tpn:orms_tpn,
+                     itf_code:itf_code,
+                     cases_per_carton:cases_per_carton,
+                     count_THL1:count_THL1,
+                     templates:data,
+                     thl1_last_id:thl1_last_id,
+                     is_insert:is_insert,
+                     created_by:created_by,
+                     ocn_no: ocn_no,
+                     full_description:full_description,
+                     qr_code:qr_code
                  },
                  tryCount : 0,
                  retryLimit : 2,
@@ -4224,22 +4310,27 @@ function storeCESingleTCL4TSL3()
         var is_insert         = $('.save-btn').data('insert');
         var tcl4_last_id      = $('#TCL4_id').val();
         var tsl3_last_id      = $('#TSL3_id').val();
-
-        /** [ Create array of ce single orms tpn ] */
-        $('.ce_single_orms_tpn').each(function(i, item)
-        {
-            orms_tpn[i]    = $(item).val();
-            
-        });
-        orms_tpn   = orms_tpn.join(',');
+        var qr_code           = [];
+		var ean_code_array    = [];
 
         /** [ Create array of ce single ean barcode ] */
-        $('.ce_single_ean').each(function(i, item)
-        {
-            ean_code[i]    = $(item).val();
-            
-        });
-        ean_code = ean_code.join(',');
+		$('.ce_single_ean').each(function (i, item) {
+			ean_code[i] = $(item).val();
+			ean_code_array.push($(item).val()); 
+
+		});
+		ean_code = ean_code.join(',');
+
+		/** [ Create array of ce single orms tpn and ce single qr code] */
+		$('.ce_single_orms_tpn').each(function (i, item) {
+			orms_tpn[i] = $(item).val();
+
+			// qr code format : {Buyer PO No,Barcode/last 3 digits of tpnd no,tpnd no}
+			qr_code[i] = po_number+','+ean_code_array[i]+'/'+($(item).val().substr($(item).val().length - 3))+','+$(item).val(); 
+
+		});
+		orms_tpn = orms_tpn.join(',');
+		qr_code = qr_code.join('|');
 
         /** [ Create array of ce single case size ] */
         $('.ce_single_case_size').each(function(i, item)
@@ -4277,7 +4368,35 @@ function storeCESingleTCL4TSL3()
                  url: base_url + "/customer/tesco/set-ce-single-template-orders",
                  type: 'POST',
                  data: {
-                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,ean_code:ean_code,case_size:case_size,size:size,count_TCL4:count_TCL4,count_TSL3:count_TSL3,templates:data,is_insert:is_insert,tcl4_last_id:tcl4_last_id,tsl3_last_id:tsl3_last_id,created_by:created_by,ocn_no: ocn_no,full_description:full_description
+                     _token: csrf_token,
+                     po_number:po_number,
+                     uk_style:uk_style,
+                     ce_style:ce_style,
+                     season_code:season_code,
+                     description:description,
+                     eqos:eqos,
+                     manufacture_date:manufacture_date,
+                     department:department,
+                     brand:brand,
+                     supplier:supplier,
+                     rfid:rfid,
+                     tag_at_source:tag_at_source,
+                     zone:zone,
+                     type:type,
+                     orms_tpn:orms_tpn,
+                     ean_code:ean_code,
+                     case_size:case_size,
+                     size:size,
+                     count_TCL4:count_TCL4,
+                     count_TSL3:count_TSL3,
+                     templates:data,
+                     is_insert:is_insert,
+                     tcl4_last_id:tcl4_last_id,
+                     tsl3_last_id:tsl3_last_id,
+                     created_by:created_by,
+                     ocn_no: ocn_no,
+                     full_description:full_description,
+                     qr_code:qr_code
                  },
                  tryCount : 0,
                  retryLimit : 2,
@@ -4332,22 +4451,27 @@ function storeCESingleTHL3()
         var count_THL3        = [];
         var is_insert         = $('.save-btn').data('insert');
         var thl3_last_id      = $('#THL3_id').val();
-
-        /** [ Create array of ce single orms tpn ] */
-        $('.ce_single_orms_tpn').each(function(i, item)
-        {
-            orms_tpn[i]    = $(item).val();
-            
-        });
-        orms_tpn   = orms_tpn.join(',');
+        var qr_code           = [];
+		var ean_code_array    = [];
 
         /** [ Create array of ce single ean barcode ] */
-        $('.ce_single_ean').each(function(i, item)
-        {
-            ean_code[i]    = $(item).val();
-            
-        });
-        ean_code = ean_code.join(',');
+		$('.ce_single_ean').each(function (i, item) {
+			ean_code[i] = $(item).val();
+			ean_code_array.push($(item).val());
+
+		});
+		ean_code = ean_code.join(',');
+
+		/** [ Create array of ce single orms tpn and ce single qr code] */
+		$('.ce_single_orms_tpn').each(function (i, item) {
+			orms_tpn[i] = $(item).val();
+
+			// qr code format : {Buyer PO No,Barcode/last 3 digits of tpnd no,tpnd no}
+			qr_code[i] = po_number+','+ean_code_array[i]+'/'+($(item).val().substr($(item).val().length - 3))+','+$(item).val(); 
+
+		});
+		orms_tpn = orms_tpn.join(',');
+		qr_code = qr_code.join('|');
 
         /** [ Create array of ce single case size ] */
         $('.ce_single_case_size').each(function(i, item)
@@ -4377,7 +4501,33 @@ function storeCESingleTHL3()
                  url: base_url + "/customer/tesco/set-ce-single-template-orders",
                  type: 'POST',
                  data: {
-                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,ean_code:ean_code,case_size:case_size,size:size,count_THL3:count_THL3,templates:data,is_insert:is_insert,thl3_last_id:thl3_last_id,created_by:created_by,ocn_no: ocn_no,full_description:full_description
+                     _token: csrf_token,
+                     po_number:po_number,
+                     uk_style:uk_style,
+                     ce_style:ce_style,
+                     season_code:season_code,
+                     description:description,
+                     eqos:eqos,
+                     manufacture_date:manufacture_date,
+                     department:department,
+                     brand:brand,
+                     supplier:supplier,
+                     rfid:rfid,
+                     tag_at_source:tag_at_source,
+                     zone:zone,
+                     type:type,
+                     orms_tpn:orms_tpn,
+                     ean_code:ean_code,
+                     case_size:case_size,
+                     size:size,
+                     count_THL3:count_THL3,
+                     templates:data,
+                     is_insert:is_insert,
+                     thl3_last_id:thl3_last_id,
+                     created_by:created_by,
+                     ocn_no: ocn_no,
+                     full_description:full_description,
+                     qr_code:qr_code
                  },
                  tryCount : 0,
                  retryLimit : 2,
@@ -5637,22 +5787,27 @@ function saveCERatioTCL1TCL2TSL1()
         var tcl1_last_id      = $('#TCL1_id').val();
         var tcl2_last_id      = $('#TCL2_id').val();
         var tsl1_last_id      = $('#TSL1_id').val();
-
-        /** [ Create array of ce ratio orms tpn ] */
-        $('.ce_ratio_orms_tpn').each(function(i, item)
-        {
-            orms_tpn[i]    = $(item).val();
-            
-        });
-        orms_tpn   = orms_tpn.join(',');
+        var qr_code           = [];
+		var itf_code_array    = [];
 
         /** [ Create array of ce ratio itf barcode ] */
-        $('.ce_ratio_itf').each(function(i, item)
-        {
-            itf_code[i]    = $(item).val();
-            
-        });
-        itf_code = itf_code.join(',');
+		$('.ce_ratio_itf').each(function (i, item) {
+			itf_code[i] = $(item).val();
+			itf_code_array.push($(item).val());
+
+		});
+		itf_code = itf_code.join(',');
+
+		/** [ Create array of ce ratio orms tpn ] */
+		$('.ce_ratio_orms_tpn').each(function (i, item) {
+			orms_tpn[i] = $(item).val();
+
+			// qr code format : {Buyer PO No,Barcode/last 3 digits of tpnd no,tpnd no}
+			qr_code[i] = po_number+','+itf_code_array[i]+'/'+($(item).val().substr($(item).val().length - 3))+','+$(item).val(); 
+
+		});
+		orms_tpn = orms_tpn.join(',');
+		qr_code = qr_code.join('|');
 
         /** [ Create array of ce ratio case per carton ] */
         $('.ce_ratio_cpc').each(function(i, item)
@@ -5690,7 +5845,36 @@ function saveCERatioTCL1TCL2TSL1()
                  url: base_url + "/customer/tesco/save-ce-ratio-template-orders",
                  type: 'PUT',
                  data: {
-                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,count_TCL1:count_TCL1,count_TCL2:count_TCL2,count_TSL1:count_TSL1,templates:data,is_insert:is_insert,tcl1_last_id:tcl1_last_id,tcl2_last_id:tcl2_last_id,tsl1_last_id:tsl1_last_id,created_by:created_by,ocn_no: ocn_no,full_description:full_description
+                     _token: csrf_token,
+                     po_number:po_number,
+                     uk_style:uk_style,
+                     ce_style:ce_style,
+                     season_code:season_code,
+                     description:description,
+                     eqos:eqos,
+                     manufacture_date:manufacture_date,
+                     department:department,
+                     brand:brand,
+                     supplier:supplier,
+                     rfid:rfid,
+                     tag_at_source:tag_at_source,
+                     zone:zone,
+                     type:type,
+                     orms_tpn:orms_tpn,
+                     itf_code:itf_code,
+                     cases_per_carton:cases_per_carton,
+                     count_TCL1:count_TCL1,
+                     count_TCL2:count_TCL2,
+                     count_TSL1:count_TSL1,
+                     templates:data,
+                     is_insert:is_insert,
+                     tcl1_last_id:tcl1_last_id,
+                     tcl2_last_id:tcl2_last_id,
+                     tsl1_last_id:tsl1_last_id,
+                     created_by:created_by,
+                     ocn_no: ocn_no,
+                     full_description:full_description,
+                     qr_code:qr_code
                  },
                  tryCount : 0,
                  retryLimit : 2,
@@ -5743,22 +5927,27 @@ function saveCERatioTHL1()
         var count_THL1        = [];
         var is_insert         = $('.save-btn').data('insert');
         var thl1_last_id      = $('#THL1_id').val();
-
-        /** [ Create array of ce ratio orms tpn ] */
-        $('.ce_ratio_orms_tpn').each(function(i, item)
-        {
-            orms_tpn[i]    = $(item).val();
-            
-        });
-        orms_tpn   = orms_tpn.join(',');
+        var qr_code           = [];
+		var itf_code_array    = [];
 
         /** [ Create array of ce ratio itf barcode ] */
-        $('.ce_ratio_itf').each(function(i, item)
-        {
-            itf_code[i]    = $(item).val();
-            
-        });
-        itf_code = itf_code.join(',');
+		$('.ce_ratio_itf').each(function (i, item) {
+			itf_code[i] = $(item).val();
+			itf_code_array.push($(item).val());
+
+		});
+		itf_code = itf_code.join(',');
+
+		/** [ Create array of ce ratio orms tpn ] */
+		$('.ce_ratio_orms_tpn').each(function (i, item) {
+			orms_tpn[i] = $(item).val();
+
+			// qr code format : {Buyer PO No,Barcode/last 3 digits of tpnd no,tpnd no}
+			qr_code[i] = po_number+','+itf_code_array[i]+'/'+($(item).val().substr($(item).val().length - 3))+','+$(item).val(); 
+
+		});
+		orms_tpn = orms_tpn.join(',');
+		qr_code = qr_code.join('|');
 
         /** [ Create array of ce ratio case per carton ] */
         $('.ce_ratio_cpc').each(function(i, item)
@@ -5780,7 +5969,32 @@ function saveCERatioTHL1()
                  url: base_url + "/customer/tesco/save-ce-ratio-template-orders",
                  type: 'PUT',
                  data: {
-                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,count_THL1:count_THL1,templates:data,is_insert:is_insert,thl1_last_id:thl1_last_id,created_by:created_by,ocn_no: ocn_no,full_description:full_description
+                     _token: csrf_token,
+                     po_number:po_number,
+                     uk_style:uk_style,
+                     ce_style:ce_style,
+                     season_code:season_code,
+                     description:description,
+                     eqos:eqos,
+                     manufacture_date:manufacture_date,
+                     department:department,
+                     brand:brand,
+                     supplier:supplier,
+                     rfid:rfid,
+                     tag_at_source:tag_at_source,
+                     zone:zone,
+                     type:type,
+                     orms_tpn:orms_tpn,
+                     itf_code:itf_code,
+                     cases_per_carton:cases_per_carton,
+                     count_THL1:count_THL1,
+                     templates:data,
+                     is_insert:is_insert,
+                     thl1_last_id:thl1_last_id,
+                     created_by:created_by,
+                     ocn_no: ocn_no,
+                     full_description:full_description,
+                     qr_code:qr_code
                  },
                  tryCount : 0,
                  retryLimit : 2,
@@ -5836,22 +6050,27 @@ function saveCESingleTCL4TSL3()
         var is_insert         = $('.save-btn').data('insert');
         var tcl4_last_id      = $('#TCL4_id').val();
         var tsl3_last_id      = $('#TSL3_id').val();
-
-        /** [ Create array of ce single orms tpn ] */
-        $('.ce_single_orms_tpn').each(function(i, item)
-        {
-            orms_tpn[i]    = $(item).val();
-            
-        });
-        orms_tpn   = orms_tpn.join(',');
+        var qr_code           = [];
+		var ean_code_array    = [];
 
         /** [ Create array of ce single ean barcode ] */
-        $('.ce_single_ean').each(function(i, item)
-        {
-            ean_code[i]    = $(item).val();
-            
-        });
-        ean_code = ean_code.join(',');
+		$('.ce_single_ean').each(function (i, item) {
+			ean_code[i] = $(item).val();
+			ean_code_array.push($(item).val());
+
+		});
+		ean_code = ean_code.join(',');
+
+		/** [ Create array of ce single orms tpn and qr code ] */
+		$('.ce_single_orms_tpn').each(function (i, item) {
+			orms_tpn[i] = $(item).val();
+
+			// qr code format : {Buyer PO No,Barcode/last 3 digits of tpnd no,tpnd no}
+			qr_code[i] = po_number+','+ean_code_array[i]+'/'+($(item).val().substr($(item).val().length - 3))+','+$(item).val(); 
+
+		});
+		orms_tpn = orms_tpn.join(',');
+		qr_code = qr_code.join('|');
 
         /** [ Create array of ce single case size ] */
         $('.ce_single_case_size').each(function(i, item)
@@ -5889,7 +6108,35 @@ function saveCESingleTCL4TSL3()
                  url: base_url + "/customer/tesco/save-ce-single-template-orders",
                  type: 'PUT',
                  data: {
-                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,ean_code:ean_code,case_size:case_size,size:size,count_TCL4:count_TCL4,count_TSL3:count_TSL3,templates:data,is_insert:is_insert,tcl4_last_id:tcl4_last_id,tsl3_last_id:tsl3_last_id,created_by:created_by,ocn_no: ocn_no,full_description:full_description
+                     _token: csrf_token,
+                     po_number:po_number,
+                     uk_style:uk_style,
+                     ce_style:ce_style,
+                     season_code:season_code,
+                     description:description,
+                     eqos:eqos,
+                     manufacture_date:manufacture_date,
+                     department:department,
+                     brand:brand,
+                     supplier:supplier,
+                     rfid:rfid,
+                     tag_at_source:tag_at_source,
+                     zone:zone,
+                     type:type,
+                     orms_tpn:orms_tpn,
+                     ean_code:ean_code,
+                     case_size:case_size,
+                     size:size,
+                     count_TCL4:count_TCL4,
+                     count_TSL3:count_TSL3,
+                     templates:data,
+                     is_insert:is_insert,
+                     tcl4_last_id:tcl4_last_id,
+                     tsl3_last_id:tsl3_last_id,
+                     created_by:created_by,
+                     ocn_no: ocn_no,
+                     full_description:full_description,
+                     qr_code:qr_code
                  },
                  tryCount : 0,
                  retryLimit : 2,
@@ -5943,22 +6190,27 @@ function saveCESingleTHL3()
         var count_THL3        = [];
         var is_insert         = $('.save-btn').data('insert');
         var thl3_last_id      = $('#THL3_id').val();
-
-        /** [ Create array of ce single orms tpn ] */
-        $('.ce_single_orms_tpn').each(function(i, item)
-        {
-            orms_tpn[i]    = $(item).val();
-            
-        });
-        orms_tpn   = orms_tpn.join(',');
+        var qr_code           = [];
+		var ean_code_array    = [];
 
         /** [ Create array of ce single ean barcode ] */
-        $('.ce_single_ean').each(function(i, item)
-        {
-            ean_code[i]    = $(item).val();
-            
-        });
-        ean_code = ean_code.join(',');
+		$('.ce_single_ean').each(function (i, item) {
+			ean_code[i] = $(item).val();
+			ean_code_array.push($(item).val());
+
+		});
+		ean_code = ean_code.join(',');
+
+		/** [ Create array of ce single orms tpn and qr code ] */
+		$('.ce_single_orms_tpn').each(function (i, item) {
+			orms_tpn[i] = $(item).val();
+
+			// qr code format : {Buyer PO No,Barcode/last 3 digits of tpnd no,tpnd no}
+			qr_code[i] = po_number+','+ean_code_array[i]+'/'+($(item).val().substr($(item).val().length - 3))+','+$(item).val(); 
+
+		});
+		orms_tpn = orms_tpn.join(',');
+		qr_code = qr_code.join('|');
 
         /** [ Create array of ce single case size ] */
         $('.ce_single_case_size').each(function(i, item)
@@ -5988,7 +6240,33 @@ function saveCESingleTHL3()
                  url: base_url + "/customer/tesco/save-ce-single-template-orders",
                  type: 'PUT',
                  data: {
-                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,ean_code:ean_code,case_size:case_size,size:size,count_THL3:count_THL3,templates:data,is_insert:is_insert,thl3_last_id:thl3_last_id,created_by:created_by,ocn_no: ocn_no,full_description:full_description
+                     _token: csrf_token,
+                     po_number:po_number,
+                     uk_style:uk_style,
+                     ce_style:ce_style,
+                     season_code:season_code,
+                     description:description,
+                     eqos:eqos,
+                     manufacture_date:manufacture_date,
+                     department:department,
+                     brand:brand,
+                     supplier:supplier,
+                     rfid:rfid,
+                     tag_at_source:tag_at_source,
+                     zone:zone,
+                     type:type,
+                     orms_tpn:orms_tpn,
+                     ean_code:ean_code,
+                     case_size:case_size,
+                     size:size,
+                     count_THL3:count_THL3,
+                     templates:data,
+                     is_insert:is_insert,
+                     thl3_last_id:thl3_last_id,
+                     created_by:created_by,
+                     ocn_no: ocn_no,
+                     full_description:full_description,
+                     qr_code:qr_code
                  },
                  tryCount : 0,
                  retryLimit : 2,
