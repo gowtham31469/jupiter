@@ -994,7 +994,8 @@ class OrderStatusCntrl extends Controller
                                        'tesco_metadata_supplier_id'    => $request['supplier'],
                                        'rfid_compliant'       => $request['rfid'],
                                        'tag_at_source'        => $request['tag_at_source'],
-                                       'is_order_count_empty' => $order_qnty
+                                       'is_order_count_empty' => $order_qnty,
+                                       'ocn_number'           => $request['tesco_ocn'],
                                      ]);	
             
              DB::table($qty_table_name)->where($foreign_key,$template_id)->delete();

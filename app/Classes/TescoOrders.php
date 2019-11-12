@@ -732,6 +732,7 @@ class TescoOrders
                     'tesco_metadata_supplier_id' => $request['supplier'],
                     'rfid_compliant'       => $request['rfid'],
                     'tag_at_source'        => $request['tag_at_source'],
+                    'ocn_number'           => $request['tesco_ocn'],
                   ]);
        // get quantity_table ids.
        $quantity_data = DB::table($qunty_tbl)
