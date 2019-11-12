@@ -1875,6 +1875,7 @@ function updateArtwork(obj) {
     var id = $(obj).parent().attr('data-id');
     var table_name = $(obj).parent().attr('data-table1');
     var TemplateName = $(obj).parent().attr('data-template');
+    $('#tesco_ocn').prop('disabled', true);
 
     td_row = $(obj).parent().parent();
 
@@ -1920,6 +1921,7 @@ function updateArtwork(obj) {
                     $('#tesco_department').selectpicker('val', data.order_details.tesco_department_id);
                     $('#tesco_rfid').selectpicker('val', rfid);
                     $('#tesco_tag_at_source').selectpicker('val', tag_at_source);
+                    $('#tesco_ocn').val(data.order_details.ocn_number);
 
                     //Disable option for Customer
 
@@ -1936,6 +1938,7 @@ function updateArtwork(obj) {
                     $('#tesco_department').prop('disabled', true);
                     $('#tesco_rfid').prop('disabled', true);
                     $('#tesco_tag_at_source').prop('disabled', true);
+                    $('#tesco_ocn').prop('disabled', true);
 
 
                     $('.artwork_tesco').html('<object style="border: 2px #333 solid;" id="svg_tesco_os" class="center-block svg2" data="' + data.template_file[0].template_file + '" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden;position: absolute;"><svg id="ean-13"></svg></div>')
@@ -2130,16 +2133,10 @@ function setEditOrderStatus() {
     var type = $('#edit_template_type').val()
     var template_name = $('#edit_template_name').val()
     var edit_id = $('#edit_id').val()
+    var tesco_ocn = $('#tesco_ocn').val();
+    var qr_code = [];
+    var barcode_array = [];
 
-
-
-
-    /** [ Create array of ce ratio orms tpn ] */
-    $('.orms_tpnd').each(function (i, item) {
-        tpnd[i] = $(item).val();
-
-    });
-    tpnd = tpnd.join(',');
     /** [ Create array of ce ratio itf barcode ] */
     $('.ce_ratio_itf').each(function (i, item) {
         if ((template_name == "TCL1" && zone == "CE") || (template_name == "TCL2" && zone == "CE") || (template_name == "TSL1" && zone == "CE") || (template_name == "THL1" && zone == "CE")) {
@@ -2185,6 +2182,7 @@ function setEditOrderStatus() {
         }
 
         barcode[i] = $(item).val();
+        barcode_array.push($(item).val());
     });
     barcode = barcode.join(',');
     /** [ Create array of ce ratio case per carton ] */
@@ -2211,6 +2209,19 @@ function setEditOrderStatus() {
         });
         single_size = single_size.join(',');
     }
+
+    /** [ Create array of ce ratio orms tpn ] */
+    $('.orms_tpnd').each(function (i, item) {
+    tpnd[i] = $(item).val();
+
+    // qr code format : {Buyer PO No,Barcode/last 3 digits of tpnd no,tpnd no}
+    qr_code[i] = po_number+','+barcode_array[i]+'/'+($(item).val().substr($(item).val().length - 3))+','+$(item).val(); 
+
+    });
+    tpnd = tpnd.join(',');
+    qr_code = qr_code.join('|');
+
+
     if (barcode_checks == 0) {
         $.ajax({
             url: base_url + "/customer/tesco/set-tesco-order-status",
@@ -2237,7 +2248,9 @@ function setEditOrderStatus() {
                 count: count,
                 edit_id: edit_id,
                 template_name: template_name,
-                single_size: single_size
+                single_size: single_size,
+                tesco_ocn: tesco_ocn,
+                qr_code:qr_code
             },
             statusCode: {
                 /** [Show response status based on HTTP status code] */
@@ -2549,6 +2562,7 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
         var tag_at_source = $('#tesco_tag_at_source option:selected').text();
         var season_code = $('#tesco_season_code').val();
         var manufacture_date = $('#tesco_manufacture_date').val();
+        var tesco_ocn = $('#tesco_ocn').val();
 
 
         if (po_number != '') {

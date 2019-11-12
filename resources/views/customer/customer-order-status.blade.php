@@ -356,6 +356,11 @@
                             @endforeach
                         </select>
                     </div>
+                    <div class="form-group has-feedback">
+                        <label for="tesco_ocn">OCN Code</label>
+                        <input type="text" class="form-control" name="tesco_ocn" id="tesco_ocn" required="" placeholder="Enter OCN Code">
+                        <div class="help-block with-errors"></div>
+                    </div>
                          <div class="form-group has-feedback">
                         <label for="tesco_rfid">RFID Compliant</label> 
                         <select class="selectpicker" id="tesco_rfid" name="tesco_rfid" required="" onchange="dynamicSVGTemplates()">
