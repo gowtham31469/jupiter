@@ -66,10 +66,10 @@
 					<div class="modal-body model1">
 						<div class="row rowSep">
 							<div class="col-md-2" style="margin-right: 2%;">
-								<input class="dateGap" type="text" id="txtFrom" placeholder="Start Date" autocomplete="off" value="2019-09-01" />
+								<input class="dateGap" type="text" id="txtFrom" placeholder="Start Date" autocomplete="off"/>
 							</div>
 							<div class="col-md-2" style="margin-right: 3.1%;">
-								<input class="dateGap" type="text" id="txtTo" placeholder="End Date" autocomplete="off" value="2019-11-30" />
+								<input class="dateGap" type="text" id="txtTo" placeholder="End Date" autocomplete="off"/>
 							</div>
 
 							<div class="col-md-3 movLft">
