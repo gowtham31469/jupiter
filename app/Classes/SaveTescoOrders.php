@@ -88,7 +88,8 @@ class SaveTescoOrders
                           'pi_status'            => "",
                           'po_status'            => "",
                           'order_placed_by'      => $created_by,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
               }
            }
@@ -172,7 +173,8 @@ class SaveTescoOrders
                           'pi_status'            => "",
                           'po_status'            => "",
                           'order_placed_by'      => $created_by,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
               }
            }
@@ -255,7 +257,8 @@ class SaveTescoOrders
                           'pi_status'            => "",
                           'po_status'            => "",
                           'order_placed_by'      => $created_by,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
               }
               
@@ -339,7 +342,8 @@ class SaveTescoOrders
                           'pi_status'            => "",
                           'po_status'            => "",
                           'order_placed_by'      => $created_by,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
               }
             }
@@ -422,7 +426,8 @@ class SaveTescoOrders
                           'pi_status'            => "",
                           'po_status'            => "",
                           'order_placed_by'      => $created_by,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
                 }
            }
@@ -505,7 +510,8 @@ class SaveTescoOrders
                           'pi_status'            => "",
                           'po_status'            => "",
                           'order_placed_by'      => $created_by,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
                 }
             }
@@ -588,7 +594,8 @@ class SaveTescoOrders
                           'pi_status'            => "",
                           'po_status'            => "",
                           'order_placed_by'      => $created_by,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
                 }
               

@@ -322,7 +322,31 @@ function tescoOrders(callback) {
 										"parent_id": "3",
 										"type": "single",
 										"zone": "CE"
-                                        }]
+									    }, {
+										"id": "19,20,21",
+										"text": "TCL 1 , TCL 2 & TSL 1 with QR",
+										"parent_id": "3",
+										"type": "ratio",
+										"zone": "CE"
+										}, {
+										"id": "22,23",
+										"text": "TCL 4 & TSL 3 with QR",
+										"parent_id": "3",
+										"type": "single",
+										"zone": "CE"
+										}, {
+										"id": "24",
+										"text": "THL 1 with QR",
+										"parent_id": "3",
+										"type": "ratio",
+										"zone": "CE"
+										}, {
+										"id": "25",
+										"text": "THL 3 with QR",
+										"parent_id": "3",
+										"type": "single",
+										"zone": "CE"
+										}]
                                     }, {
 									"id": "4",
 									"text": "UK",
@@ -632,7 +656,8 @@ function createOrders(parsedObj = false, oType = false) {
                                     <div class="col-md-3">\
                                         <div class="form-group has-feedback">\
                                             <label for="tesco_description">Short Description</label>\
-                                            <input type="text" class="form-control" name="tesco_description" id="tesco_description" required="" placeholder="Enter Description" maxlength="45" onkeyup="dynamicSVGTemplates()">\
+											<input type="text" class="form-control" name="tesco_description" id="tesco_description" required="" placeholder="Enter Description" maxlength="45" onkeyup="dynamicSVGTemplates()">\
+											<input type="hidden" id="tesco_full_description" value="">\
                                             <div class="help-block with-errors"></div>\
                                         </div>\
                                     </div>\
@@ -894,7 +919,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                     <tr>\
                                                         <th rowspan="2">Line No.</th>\
                                                         <th rowspan="2">ORMS TPN</th>\
-                                                        <th rowspan="2">ITF Barcode</th>\
+														<th rowspan="2">ITF Barcode</th>\
                                                         <th rowspan="2">Cases Per Carton</th>';
 						$.each(data.templates, function (i, item) {
 							html += '<th colspan="1">' + item.template_name + '</th>';
@@ -921,7 +946,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                         <div class="help-block with-errors"></div>\
                                                         <div class="barcode-error"></div>\
                                                     </div>\
-                                                </td>\
+												</td>\
                                                 <td>\
                                                     <div class="form-group has-feedback">\
                                                         <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="ce_ratio_cpc_1" name="ce_ratio_cpc_1" onkeypress="return isNumber(event)" placeholder="Enter Cases Per Carton" onkeyup="dynamicSVGTemplates()" maxlength="5">\
@@ -961,7 +986,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                 <tr>\
                                                     <th rowspan="2">Line No.</th>\
                                                     <th rowspan="2">ORMS TPN</th>\
-                                                    <th rowspan="2">EAN Barcode</th>\
+													<th rowspan="2">EAN Barcode</th>\
                                                     <th rowspan="2">Case Size</th>\
                                                     <th rowspan="2">Size</th>';
 						$.each(data.templates, function (i, item) {
@@ -980,7 +1005,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                 <td class="slno">1</td>\
                                                 <td>\
                                                     <div class="form-group has-feedback">\
-                                                        <input type="text" class="form-control input-sm ce_single_orms_tpn" onkeypress="return isNumber(event)" id="ce_single_orms_tpn_1" data-minlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits."  name="ce_single_orms_tpn_1" required="" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()" maxlength="13">\
+                                                        <input type="text" class="form-control input-sm ce_single_orms_tpn" onkeypress="return isNumber(event)" id="ce_single_orms_tpn_1" data-minlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits."  name="ce_single_orms_tpn_1" required="" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()" maxlength="13" >\
                                                         <div class="help-block with-errors"></div>\
                                                     </div>\
                                                 </td>\
@@ -990,7 +1015,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                         <div class="help-block with-errors"></div>\
                                                         <div class="barcode-error"></div>\
                                                     </div>\
-                                                </td>\
+												</td>\
                                                 <td>\
                                                     <div class="form-group has-feedback">\
                                                         <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_1" name="ce_single_case_size_1" required="" placeholder="Enter Case Size" onkeyup="dynamicSVGTemplates()" maxlength="6">\
@@ -1064,7 +1089,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                    <button type="button" class="btn btn-primary print-btn" onclick=printDivTesco("tesco_svg_modal' + i + '","' + item.template_name.replace(' ', '') + '") style="display:none;" id="proof_' + item.template_name.replace(' ', '') + '_btn">Generate Proof</button><button type="button" class="btn btn-primary print-btn" onclick=GenerateDivTesco("tesco_svg_modal' + i + '","' + item.template_name.replace(' ', '') + '") style="display:none;" id="print_' + item.template_name.replace(' ', '') + '_btn">Generate Print</button>\
                                                    <div id="svgdiv" style="position:absolute;visibility:hidden">\
                                                      <svg id="ean-13"></svg>\
-                                                   </div>\
+												   </div>\
                                                  </div>\
                                                </div>\
                                              </div>\
@@ -2900,7 +2925,7 @@ function addCESingle(rem, e) {
                             <div class="barcode-error-ean"></div>\
                             <div class="help-block with-errors"></div>\
                         </div>\
-                    </td>\
+					</td>\
                     <td>\
                         <div class="form-group has-feedback">\
                             <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_' + val + '" name="ce_single_case_size_' + val + '" required="" placeholder="Enter Case Size" maxlength="4">\
@@ -2974,7 +2999,7 @@ function addCERatio(rem, e) {
                             <div class="barcode-error-itf"></div>\
                             <div class="help-block with-errors"></div>\
                         </div>\
-                    </td>\
+					</td>\
                     <td>\
                         <div class="form-group has-feedback">\
                             <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="ce_ratio_cpc_' + val + '" name="ce_ratio_cpc_' + val + '" onkeypress="return isNumber(event)" placeholder="Enter Cases Per Carton" maxlength="4">\
@@ -4537,6 +4562,7 @@ function tescoOrderCommonData() {
 	type             = localStorage.getItem("template type");
 	data             = JSON.parse(localStorage.getItem("data"));
 	ocn_no           = $('#tesco_ocn').val();
+	full_description = $('#tesco_full_description').val();
 }
 
 /**
@@ -4558,20 +4584,26 @@ function storeCERatioTCL1TCL2TSL1() {
 		var tcl1_last_id = $('#TCL1_id').val();
 		var tcl2_last_id = $('#TCL2_id').val();
 		var tsl1_last_id = $('#TSL1_id').val();
-
-		/** [ Create array of ce ratio orms tpn ] */
-		$('.ce_ratio_orms_tpn').each(function (i, item) {
-			orms_tpn[i] = $(item).val();
-
-		});
-		orms_tpn = orms_tpn.join(',');
+		var qr_code = [];
+		var itf_code_array = [];
 
 		/** [ Create array of ce ratio itf barcode ] */
 		$('.ce_ratio_itf').each(function (i, item) {
 			itf_code[i] = $(item).val();
-
+            itf_code_array.push($(item).val()); 
 		});
 		itf_code = itf_code.join(',');
+
+		/** [ Create array of ce ratio orms tpn and ce ratio qr code ] */
+		$('.ce_ratio_orms_tpn').each(function (i, item) {
+			orms_tpn[i] = $(item).val();
+			 
+			// qr code format : {Buyer PO No,Barcode/last 3 digits of tpnd no,tpnd no}
+			qr_code[i] = po_number+','+itf_code_array[i]+'/'+($(item).val().substr($(item).val().length - 3))+','+$(item).val(); 
+
+		});
+		orms_tpn = orms_tpn.join(',');
+		qr_code = qr_code.join('|');
 
 		/** [ Create array of ce ratio case per carton ] */
 		$('.ce_ratio_cpc').each(function (i, item) {
@@ -4631,7 +4663,9 @@ function storeCERatioTCL1TCL2TSL1() {
 				tcl1_last_id: tcl1_last_id,
 				tcl2_last_id: tcl2_last_id,
 				tsl1_last_id: tsl1_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description,
+				qr_code:qr_code
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -4685,20 +4719,26 @@ function storeCERatioTHL1() {
 		var count_THL1 = [];
 		var is_insert = $('.save-btn').data('insert');
 		var thl1_last_id = $('#THL1_id').val();
-
-		/** [ Create array of ce ratio orms tpn ] */
-		$('.ce_ratio_orms_tpn').each(function (i, item) {
-			orms_tpn[i] = $(item).val();
-
-		});
-		orms_tpn = orms_tpn.join(',');
+		var qr_code = [];
+		var itf_code_array = [];
 
 		/** [ Create array of ce ratio itf barcode ] */
 		$('.ce_ratio_itf').each(function (i, item) {
 			itf_code[i] = $(item).val();
-
+            itf_code_array.push($(item).val()); 
 		});
 		itf_code = itf_code.join(',');
+
+		/** [ Create array of ce ratio orms tpn and ce ratio qr code ] */
+		$('.ce_ratio_orms_tpn').each(function (i, item) {
+			orms_tpn[i] = $(item).val();
+			 
+			// qr code format : {Buyer PO No,Barcode/last 3 digits of tpnd no,tpnd no}
+			qr_code[i] = po_number+','+itf_code_array[i]+'/'+($(item).val().substr($(item).val().length - 3))+','+$(item).val(); 
+
+		});
+		orms_tpn = orms_tpn.join(',');
+		qr_code = qr_code.join('|');
 
 		/** [ Create array of ce ratio case per carton ] */
 		$('.ce_ratio_cpc').each(function (i, item) {
@@ -4740,7 +4780,9 @@ function storeCERatioTHL1() {
 				templates: data,
 				thl1_last_id: thl1_last_id,
 				is_insert: is_insert,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description,
+				qr_code:qr_code
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -4798,20 +4840,27 @@ function storeCESingleTCL4TSL3() {
 		var is_insert = $('.save-btn').data('insert');
 		var tcl4_last_id = $('#TCL4_id').val();
 		var tsl3_last_id = $('#TSL3_id').val();
-
-		/** [ Create array of ce single orms tpn ] */
-		$('.ce_single_orms_tpn').each(function (i, item) {
-			orms_tpn[i] = $(item).val();
-
-		});
-		orms_tpn = orms_tpn.join(',');
+		var qr_code = [];
+		var ean_code_array = [];
 
 		/** [ Create array of ce single ean barcode ] */
 		$('.ce_single_ean').each(function (i, item) {
 			ean_code[i] = $(item).val();
+			ean_code_array.push($(item).val()); 
 
 		});
 		ean_code = ean_code.join(',');
+
+		/** [ Create array of ce single orms tpn and ce single qr code] */
+		$('.ce_single_orms_tpn').each(function (i, item) {
+			orms_tpn[i] = $(item).val();
+
+			// qr code format : {Buyer PO No,Barcode/last 3 digits of tpnd no,tpnd no}
+			qr_code[i] = po_number+','+ean_code_array[i]+'/'+($(item).val().substr($(item).val().length - 3))+','+$(item).val(); 
+
+		});
+		orms_tpn = orms_tpn.join(',');
+		qr_code = qr_code.join('|');
 
 		/** [ Create array of ce single case size ] */
 		$('.ce_single_case_size').each(function (i, item) {
@@ -4870,7 +4919,9 @@ function storeCESingleTCL4TSL3() {
 				is_insert: is_insert,
 				tcl4_last_id: tcl4_last_id,
 				tsl3_last_id: tsl3_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description,
+				qr_code:qr_code
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -4925,20 +4976,27 @@ function storeCESingleTHL3() {
 		var count_THL3 = [];
 		var is_insert = $('.save-btn').data('insert');
 		var thl3_last_id = $('#THL3_id').val();
-
-		/** [ Create array of ce single orms tpn ] */
-		$('.ce_single_orms_tpn').each(function (i, item) {
-			orms_tpn[i] = $(item).val();
-
-		});
-		orms_tpn = orms_tpn.join(',');
+		var qr_code = [];
+		var ean_code_array = [];
 
 		/** [ Create array of ce single ean barcode ] */
 		$('.ce_single_ean').each(function (i, item) {
 			ean_code[i] = $(item).val();
+			ean_code_array.push($(item).val());
 
 		});
 		ean_code = ean_code.join(',');
+
+		/** [ Create array of ce single orms tpn and ce single qr code] */
+		$('.ce_single_orms_tpn').each(function (i, item) {
+			orms_tpn[i] = $(item).val();
+
+			// qr code format : {Buyer PO No,Barcode/last 3 digits of tpnd no,tpnd no}
+			qr_code[i] = po_number+','+ean_code_array[i]+'/'+($(item).val().substr($(item).val().length - 3))+','+$(item).val(); 
+
+		});
+		orms_tpn = orms_tpn.join(',');
+		qr_code = qr_code.join('|');
 
 		/** [ Create array of ce single case size ] */
 		$('.ce_single_case_size').each(function (i, item) {
@@ -4988,7 +5046,9 @@ function storeCESingleTHL3() {
 				templates: data,
 				is_insert: is_insert,
 				thl3_last_id: thl3_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description,
+				qr_code:qr_code
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -5120,7 +5180,8 @@ function storeUKRatioTCL1TCL2TSL1() {
 				tcl1_last_id: tcl1_last_id,
 				tcl2_last_id: tcl2_last_id,
 				tsl1_last_id: tsl1_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -5229,7 +5290,8 @@ function storeUKRatioTHL1() {
 				templates: data,
 				is_insert: is_insert,
 				thl1_last_id: thl1_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -5358,7 +5420,8 @@ function storeUKSingleTCL4TSL3() {
 				is_insert: is_insert,
 				tcl4_last_id: tcl4_last_id,
 				tsl3_last_id: tsl3_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -5476,7 +5539,8 @@ function storeUKSingleTHL3() {
 				templates: data,
 				is_insert: is_insert,
 				thl3_last_id: thl3_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -6321,20 +6385,27 @@ function saveCERatioTCL1TCL2TSL1() {
 		var tcl1_last_id = $('#TCL1_id').val();
 		var tcl2_last_id = $('#TCL2_id').val();
 		var tsl1_last_id = $('#TSL1_id').val();
+		var qr_code = [];
+		var itf_code_array = [];
+
+		/** [ Create array of ce ratio itf barcode ] */
+		$('.ce_ratio_itf').each(function (i, item) {
+			itf_code[i] = $(item).val();
+			itf_code_array.push($(item).val());
+
+		});
+		itf_code = itf_code.join(',');
 
 		/** [ Create array of ce ratio orms tpn ] */
 		$('.ce_ratio_orms_tpn').each(function (i, item) {
 			orms_tpn[i] = $(item).val();
 
+			// qr code format : {Buyer PO No,Barcode/last 3 digits of tpnd no,tpnd no}
+			qr_code[i] = po_number+','+itf_code_array[i]+'/'+($(item).val().substr($(item).val().length - 3))+','+$(item).val(); 
+
 		});
 		orms_tpn = orms_tpn.join(',');
-
-		/** [ Create array of ce ratio itf barcode ] */
-		$('.ce_ratio_itf').each(function (i, item) {
-			itf_code[i] = $(item).val();
-
-		});
-		itf_code = itf_code.join(',');
+		qr_code = qr_code.join('|');
 
 		/** [ Create array of ce ratio case per carton ] */
 		$('.ce_ratio_cpc').each(function (i, item) {
@@ -6394,7 +6465,9 @@ function saveCERatioTCL1TCL2TSL1() {
 				tcl1_last_id: tcl1_last_id,
 				tcl2_last_id: tcl2_last_id,
 				tsl1_last_id: tsl1_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description,
+				qr_code:qr_code
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -6447,20 +6520,27 @@ function saveCERatioTHL1() {
 		var count_THL1 = [];
 		var is_insert = $('.save-btn').data('insert');
 		var thl1_last_id = $('#THL1_id').val();
+		var qr_code = [];
+		var itf_code_array = [];
+
+		/** [ Create array of ce ratio itf barcode ] */
+		$('.ce_ratio_itf').each(function (i, item) {
+			itf_code[i] = $(item).val();
+			itf_code_array.push($(item).val());
+
+		});
+		itf_code = itf_code.join(',');
 
 		/** [ Create array of ce ratio orms tpn ] */
 		$('.ce_ratio_orms_tpn').each(function (i, item) {
 			orms_tpn[i] = $(item).val();
 
+			// qr code format : {Buyer PO No,Barcode/last 3 digits of tpnd no,tpnd no}
+			qr_code[i] = po_number+','+itf_code_array[i]+'/'+($(item).val().substr($(item).val().length - 3))+','+$(item).val(); 
+
 		});
 		orms_tpn = orms_tpn.join(',');
-
-		/** [ Create array of ce ratio itf barcode ] */
-		$('.ce_ratio_itf').each(function (i, item) {
-			itf_code[i] = $(item).val();
-
-		});
-		itf_code = itf_code.join(',');
+		qr_code = qr_code.join('|');
 
 		/** [ Create array of ce ratio case per carton ] */
 		$('.ce_ratio_cpc').each(function (i, item) {
@@ -6502,7 +6582,9 @@ function saveCERatioTHL1() {
 				templates: data,
 				is_insert: is_insert,
 				thl1_last_id: thl1_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description,
+				qr_code:qr_code
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -6557,20 +6639,27 @@ function saveCESingleTCL4TSL3() {
 		var is_insert = $('.save-btn').data('insert');
 		var tcl4_last_id = $('#TCL4_id').val();
 		var tsl3_last_id = $('#TSL3_id').val();
-
-		/** [ Create array of ce single orms tpn ] */
-		$('.ce_single_orms_tpn').each(function (i, item) {
-			orms_tpn[i] = $(item).val();
-
-		});
-		orms_tpn = orms_tpn.join(',');
+		var qr_code = [];
+		var ean_code_array = [];
 
 		/** [ Create array of ce single ean barcode ] */
 		$('.ce_single_ean').each(function (i, item) {
 			ean_code[i] = $(item).val();
+			ean_code_array.push($(item).val());
 
 		});
 		ean_code = ean_code.join(',');
+
+		/** [ Create array of ce single orms tpn and qr code ] */
+		$('.ce_single_orms_tpn').each(function (i, item) {
+			orms_tpn[i] = $(item).val();
+
+			// qr code format : {Buyer PO No,Barcode/last 3 digits of tpnd no,tpnd no}
+			qr_code[i] = po_number+','+ean_code_array[i]+'/'+($(item).val().substr($(item).val().length - 3))+','+$(item).val(); 
+
+		});
+		orms_tpn = orms_tpn.join(',');
+		qr_code = qr_code.join('|');
 
 		/** [ Create array of ce single case size ] */
 		$('.ce_single_case_size').each(function (i, item) {
@@ -6629,7 +6718,9 @@ function saveCESingleTCL4TSL3() {
 				is_insert: is_insert,
 				tcl4_last_id: tcl4_last_id,
 				tsl3_last_id: tsl3_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description,
+				qr_code:qr_code
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -6682,20 +6773,27 @@ function saveCESingleTHL3() {
 		var count_THL3 = [];
 		var is_insert = $('.save-btn').data('insert');
 		var thl3_last_id = $('#THL3_id').val();
-
-		/** [ Create array of ce single orms tpn ] */
-		$('.ce_single_orms_tpn').each(function (i, item) {
-			orms_tpn[i] = $(item).val();
-
-		});
-		orms_tpn = orms_tpn.join(',');
+		var qr_code = [];
+		var ean_code_array = [];
 
 		/** [ Create array of ce single ean barcode ] */
 		$('.ce_single_ean').each(function (i, item) {
 			ean_code[i] = $(item).val();
+			ean_code_array.push($(item).val());
 
 		});
 		ean_code = ean_code.join(',');
+
+		/** [ Create array of ce single orms tpn and qr code ] */
+		$('.ce_single_orms_tpn').each(function (i, item) {
+			orms_tpn[i] = $(item).val();
+
+			// qr code format : {Buyer PO No,Barcode/last 3 digits of tpnd no,tpnd no}
+			qr_code[i] = po_number+','+ean_code_array[i]+'/'+($(item).val().substr($(item).val().length - 3))+','+$(item).val(); 
+
+		});
+		orms_tpn = orms_tpn.join(',');
+		qr_code = qr_code.join('|');
 
 		/** [ Create array of ce single case size ] */
 		$('.ce_single_case_size').each(function (i, item) {
@@ -6745,7 +6843,9 @@ function saveCESingleTHL3() {
 				templates: data,
 				is_insert: is_insert,
 				thl3_last_id: thl3_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description,
+				qr_code:qr_code
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -6875,7 +6975,8 @@ function saveUKRatioTCL1TCL2TSL1() {
 				tcl1_last_id: tcl1_last_id,
 				tcl2_last_id: tcl2_last_id,
 				tsl1_last_id: tsl1_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -6982,7 +7083,8 @@ function saveUKRatioTHL1() {
 				templates: data,
 				is_insert: is_insert,
 				thl1_last_id: thl1_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -7109,7 +7211,8 @@ function saveUKSingleTCL4TSL3() {
 				is_insert: is_insert,
 				tcl4_last_id: tcl4_last_id,
 				tsl3_last_id: tsl3_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -7225,7 +7328,8 @@ function saveUKSingleTHL3() {
 				templates: data,
 				is_insert: is_insert,
 				thl3_last_id: thl3_last_id,
-				ocn_no: ocn_no
+				ocn_no: ocn_no,
+				full_description:full_description
 			},
 			tryCount: 0,
 			retryLimit: 2,

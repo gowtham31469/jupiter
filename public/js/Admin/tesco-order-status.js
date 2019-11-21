@@ -1058,8 +1058,8 @@ function updateArtwork(obj) {
     $('#tesco_department').prop('disabled', true);
     $('#tesco_rfid').prop('disabled', true);
     $('#tesco_tag_at_source').prop('disabled', true);
-    // $('#ce_ratio_orms_tpn').prop('disabled',true);
-    // $(obj).closest('tr').find('.ce_ratio_orms_tpn').prop('disabled',true);
+    // $('#orms_tpnd').prop('disabled',true);
+    // $(obj).closest('tr').find('.orms_tpnd').prop('disabled',true);
     $("#create_tesco_order_status_form input").prop("disabled", true);
 
     $("form#create_tesco_order_status_form")[0].reset();
@@ -1106,7 +1106,14 @@ function updateArtwork(obj) {
                     $('#tesco_department').selectpicker('val', data.order_details.tesco_department_id);
                     $('#tesco_rfid').selectpicker('val', rfid);
                     $('#tesco_tag_at_source').selectpicker('val', tag_at_source);
-
+                    if(data.order_details.full_description != null)
+                    {
+                        $('#tesco_description').prev().text($('#tesco_description').prev().text()+'(Full Description: '+data.order_details.full_description+')');
+                    }
+                    else 
+                    {
+                        $('#tesco_description').prev().text('Short Description');
+                    }
 
 
                     //					if(data.order_details.order_flag != "newOrder")
@@ -1209,10 +1216,12 @@ function updateArtwork(obj) {
                             var delete_td = '<a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRowOs(this)"></i></a>';
                         }
 
-                        tr += '<tr><td class="tpnd"><div class="form-group has-feedback"> <input disabled type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="os_tpnd_' + i + '" data-minlength="' + tpn_len + '" maxlength="' + tpn_len + '" data-required-error="Mandatory Field." data-minlength-error="Enter ' + tpn_len + ' digits."  name="os_tpnd_' + i + '" onkeypress="return isNumber(event)" value="' + tpnd + '" placeholder="' + tpn_th + '" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td class="barcode"><div class="form-group has-feedback"> <input  disabled type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="' + maxlength + '" maxlength="' + maxlength + '" data-required-error="Mandatory Field." data-minlength-error="Enter ' + maxlength + ' digits." id="os_barcode_' + i + '" onkeyup="dynamicSVGTemplates()" name="os_barcode_' + i + '" onkeypress="return isNumber(event)" value="' + barcode_td + '" placeholder="Enter ITF Barcode"><label class="barcode_error hidden" style="color:red;margin-left: -55px;position: absolute;">Enter Valid Barcode</label><div class="help-block with-errors"></div></div></td><td class="size"><div class="form-group has-feedback"> <input disabled type="text" maxlength="' + unit_len + '" class="form-control input-sm ce_ratio_cpc" required="" id="os_case_qty_' + i + '" name="os_case_qty_' + i + '" onkeypress="return isNumber(event)" value="' + unit_qty + '" placeholder="Enter ' + qty + '" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>' + th_td + '<td> <div class="form-group has-feedback has-success"> <input disabled min="' + moq + '" onInput="checkLength(6,this)" type="number" class="form-control  input-sm tot_qty_table" value="' + value.count + '" required placeholder="Quantity" data-min-error="Quantity Should be >= ' + moq + '."> <div class="help-block with-errors"></div></div></td></tr>';
+                        tr += '<tr><td class="tpnd"><div class="form-group has-feedback"> <input disabled type="text" class="form-control input-sm orms_tpnd" required="" id="os_tpnd_' + i + '" data-minlength="' + tpn_len + '" maxlength="' + tpn_len + '" data-required-error="Mandatory Field." data-minlength-error="Enter ' + tpn_len + ' digits."  name="os_tpnd_' + i + '" onkeypress="return isNumber(event)" value="' + tpnd + '" placeholder="' + tpn_th + '" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td class="barcode"><div class="form-group has-feedback"> <input  disabled type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="' + maxlength + '" maxlength="' + maxlength + '" data-required-error="Mandatory Field." data-minlength-error="Enter ' + maxlength + ' digits." id="os_barcode_' + i + '" onkeyup="dynamicSVGTemplates()" name="os_barcode_' + i + '" onkeypress="return isNumber(event)" value="' + barcode_td + '" placeholder="Enter ITF Barcode"><label class="barcode_error hidden" style="color:red;margin-left: -55px;position: absolute;">Enter Valid Barcode</label><div class="help-block with-errors"></div></div></td><td class="size"><div class="form-group has-feedback"> <input disabled type="text" maxlength="' + unit_len + '" class="form-control input-sm ce_ratio_cpc" required="" id="os_case_qty_' + i + '" name="os_case_qty_' + i + '" onkeypress="return isNumber(event)" value="' + unit_qty + '" placeholder="Enter ' + qty + '" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>' + th_td + '<td> <div class="form-group has-feedback has-success"> <input disabled min="' + moq + '" onInput="checkLength(6,this)" type="number" class="form-control  input-sm tot_qty_table" value="' + value.count + '" required placeholder="Quantity" data-min-error="Quantity Should be >= ' + moq + '."> <div class="help-block with-errors"></div></div></td></tr>';
+                        row_id = i;
                         i++;
+                        
                     })
-                    $('.edit-qty-table-div').html('<hr><h4 class="text-center">Order Quantity - ' + TemplateName + '</h4><button type="button" onclick=addRowOs(this,"' + TemplateName + '","' + data.order_details.zone + '","' + moq + '") data-id="1" id="add_row" class="btn btn-default add-row-btn" disabled><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px;margin-top: 15px;"> <thead> <tr> <th width="180">' + tpnd_tr + '</th><th width="180">' + barcode_tr + '</th> <th>' + qty + '</th>' + th_tr + ' <th>Quantity</th> <th>Actions</th></tr></thead> <tbody style="font-size: 11px">' + tr + '</tbody></table>')
+                    $('.edit-qty-table-div').html('<hr><h4 class="text-center">Order Quantity - ' + TemplateName + '</h4><button type="button" onclick=addRowOs(this,"' + TemplateName + '","' + data.order_details.zone + '","' + moq + '") data-row-id="'+row_id+'" id="add_row" class="btn btn-default add-row-btn" disabled><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px;margin-top: 15px;"> <thead> <tr> <th width="180">' + tpnd_tr + '</th><th width="180">' + barcode_tr + '</th><th>' + qty + '</th>' + th_tr + ' <th>Quantity</th> <th>Actions</th></tr></thead> <tbody style="font-size: 11px">' + tr + '</tbody></table>')
 
                     $('#edit_template_name').val(TemplateName)
                     $('#edit_zone').val(data.order_details.zone)
@@ -1389,14 +1398,9 @@ function setEditOrderStatus() {
     var edit_id = $('#edit_id').val()
     var order_type = $('#order_type').val()
     var tesco_ocn = $('#tesco_ocn').val()
+    var qr_code = [];
+    var barcode_array = [];
 
-
-    /** [ Create array of ce ratio orms tpn ] */
-    $('.ce_ratio_orms_tpn').each(function (i, item) {
-        tpnd[i] = $(item).val();
-
-    });
-    tpnd = tpnd.join(',');
     /** [ Create array of ce ratio itf barcode ] */
     $('.ce_ratio_itf').each(function (i, item) {
         if ((template_name == "TCL1" && zone == "CE") || (template_name == "TCL2" && zone == "CE") || (template_name == "TSL1" && zone == "CE") || (template_name == "THL1" && zone == "CE")) {
@@ -1442,6 +1446,7 @@ function setEditOrderStatus() {
         }
 
         barcode[i] = $(item).val();
+        barcode_array.push($(item).val());
     });
     barcode = barcode.join(',');
     /** [ Create array of ce ratio case per carton ] */
@@ -1468,6 +1473,17 @@ function setEditOrderStatus() {
         });
         single_size = single_size.join(',');
     }
+
+    /** [ Create array of ce ratio orms tpn  and ce qr code ] */
+    $('.orms_tpnd').each(function (i, item) {
+        tpnd[i] = $(item).val();
+
+        // qr code format : {Buyer PO No,Barcode/last 3 digits of tpnd no,tpnd no}
+        qr_code[i] = po_number+','+barcode_array[i]+'/'+($(item).val().substr($(item).val().length - 3))+','+$(item).val(); 
+
+    });
+    tpnd = tpnd.join(','); 
+    qr_code = qr_code.join('|');
 
     if (barcode_checks == 0) {
         $.ajax({
@@ -1496,7 +1512,8 @@ function setEditOrderStatus() {
                 edit_id: edit_id,
                 template_name: template_name,
                 single_size: single_size,
-                tesco_ocn: tesco_ocn
+                tesco_ocn: tesco_ocn,
+                qr_code:qr_code
             },
             statusCode: {
                 /** [Show response status based on HTTP status code] */
@@ -1533,8 +1550,8 @@ function setEditOrderStatus() {
  */
 function addRowOs(obj, TemplateName, zone, moq) {
     var maxlength = $('#os_barcode_1').attr('maxlength')
-    var i = parseInt($(obj).attr('data-id')) + 1;
-    $(obj).attr('data-id', i);
+    var i = parseInt($(obj).attr('data-row-id')) + 1;
+    $(obj).attr('data-row-id', i);
 
     if ((TemplateName == "TCL1" && zone == "CE") || (TemplateName == "TCL2" && zone == "CE") || (TemplateName == "TSL1" && zone == "CE") || (TemplateName == "THL1" && zone == "CE")) {
         var qty = "Cases per carton";
@@ -1563,7 +1580,7 @@ function addRowOs(obj, TemplateName, zone, moq) {
     }
 
 
-    $('.edit-qty-table-div table tbody').append('<tr><td class="tpnd"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="os_tpnd_' + i + '" name="os_tpnd_' + i + '" data-minlength="' + tpn_len + '" maxlength="' + tpn_len + '" data-required-error="Mandatory Field." data-minlength-error="Enter ' + tpn_len + ' digits." onkeypress="return isNumber(event)" value="" placeholder="' + tpn_th + '" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td class="barcode"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="' + maxlength + '" maxlength="' + maxlength + '" data-required-error="Mandatory Field." data-minlength-error="Enter ' + maxlength + ' digits." id="os_barcode_' + i + '" onkeyup="dynamicSVGTemplates()" name="os_barcode_' + i + '" onkeypress="return isNumber(event)" value="" placeholder="Enter ITF Barcode"><label class="barcode_error hidden" style="color:red;margin-left: -55px;position: absolute;">Enter Valid Barcode</label><div class="help-block with-errors"></div></div></td><td class="size"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="os_case_qty_' + i + '" name="os_case_qty_' + i + '" maxlength="' + unit_len + '" onkeypress="return isNumber(event)" value="" placeholder="Enter ' + qty + '" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>' + th_td + '<td> <div class="form-group has-feedback has-success"><input min="' + moq + '" onInput="checkLength(6,this)" type="number" class="form-control  input-sm tot_qty_table" value="" required placeholder="Quantity" data-min-error="Quantity Should be >= ' + moq + '."><div class="help-block with-errors"></div></div></td><td><a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRowOs(this)"></i></a></td></tr>');
+    $('.edit-qty-table-div table tbody').append('<tr><td class="tpnd"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm orms_tpnd" required="" id="os_tpnd_' + i + '" name="os_tpnd_' + i + '" data-minlength="' + tpn_len + '" maxlength="' + tpn_len + '" data-required-error="Mandatory Field." data-minlength-error="Enter ' + tpn_len + ' digits." onkeypress="return isNumber(event)" value="" placeholder="' + tpn_th + '" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td class="barcode"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="' + maxlength + '" maxlength="' + maxlength + '" data-required-error="Mandatory Field." data-minlength-error="Enter ' + maxlength + ' digits." id="os_barcode_' + i + '" onkeyup="dynamicSVGTemplates()" name="os_barcode_' + i + '" onkeypress="return isNumber(event)" value="" placeholder="Enter ITF Barcode"><label class="barcode_error hidden" style="color:red;margin-left: -55px;position: absolute;">Enter Valid Barcode</label><div class="help-block with-errors"></div></div></td><td class="size"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="os_case_qty_' + i + '" name="os_case_qty_' + i + '" maxlength="' + unit_len + '" onkeypress="return isNumber(event)" value="" placeholder="Enter ' + qty + '" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>' + th_td + '<td> <div class="form-group has-feedback has-success"><input min="' + moq + '" onInput="checkLength(6,this)" type="number" class="form-control  input-sm tot_qty_table" value="" required placeholder="Quantity" data-min-error="Quantity Should be >= ' + moq + '."><div class="help-block with-errors"></div></div></td><td><a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRowOs(this)"></i></a></td></tr>');
     $('#create_tesco_order_status_form').validator('update');
 }
 

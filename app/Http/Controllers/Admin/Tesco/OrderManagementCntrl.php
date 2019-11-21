@@ -692,6 +692,7 @@ class OrderManagementCntrl extends Controller
             $orms_tpn         = explode(',',$request['orms_tpn']);
             $itf_code         = explode(',',$request['itf_code']);
             $cases_per_carton = explode(',',$request['cases_per_carton']);
+            $qr_code          = explode('|',$request['qr_code']);
             $templates        = $request['templates'];
             $last_insertions  = [];
             $already_exists   = [];
@@ -773,7 +774,8 @@ class OrderManagementCntrl extends Controller
                                 'itf_barcode'      => $itf_code[$i],
                                 'cases_per_carton' => $cases_per_carton[$i],
                                 'count'            => $count_TCL1[$i],
-                                'ratio_pack_type'  => $this->ratio_pack_type[$i]
+                                'ratio_pack_type'  => $this->ratio_pack_type[$i],
+                                'qr_code'          => $qr_code[$i]
                               ]);
                            $i++;
                          }
@@ -794,7 +796,8 @@ class OrderManagementCntrl extends Controller
                                 'itf_barcode'      => $itf_code[$i],
                                 'cases_per_carton' => $cases_per_carton[$i],
                                 'count'            => $count_TCL1[$i],
-                                'ratio_pack_type'  => $this->ratio_pack_type[$i]
+                                'ratio_pack_type'  => $this->ratio_pack_type[$i],
+                                'qr_code'          => $qr_code[$i]
                               ]);
                            $i++;
                          }
@@ -840,7 +843,8 @@ class OrderManagementCntrl extends Controller
                                   'itf_barcode'      => $itf_code[$i],
                                   'cases_per_carton' => $cases_per_carton[$i],
                                   'count'            => $count_TCL2[$i],
-                                  'ratio_pack_type'  => $this->ratio_pack_type[$i]
+                                  'ratio_pack_type'  => $this->ratio_pack_type[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -861,7 +865,8 @@ class OrderManagementCntrl extends Controller
                                   'itf_barcode'      => $itf_code[$i],
                                   'cases_per_carton' => $cases_per_carton[$i],
                                   'count'            => $count_TCL2[$i],
-                                  'ratio_pack_type'  => $this->ratio_pack_type[$i]
+                                  'ratio_pack_type'  => $this->ratio_pack_type[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -908,7 +913,8 @@ class OrderManagementCntrl extends Controller
                                   'itf_barcode'      => $itf_code[$i],
                                   'cases_per_carton' => $cases_per_carton[$i],
                                   'count'            => $count_TSL1[$i],
-                                  'ratio_pack_type'  => $this->ratio_pack_type[$i]
+                                  'ratio_pack_type'  => $this->ratio_pack_type[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -929,7 +935,8 @@ class OrderManagementCntrl extends Controller
                                   'itf_barcode'      => $itf_code[$i],
                                   'cases_per_carton' => $cases_per_carton[$i],
                                   'count'            => $count_TSL1[$i],
-                                  'ratio_pack_type'  => $this->ratio_pack_type[$i]
+                                  'ratio_pack_type'  => $this->ratio_pack_type[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -979,7 +986,8 @@ class OrderManagementCntrl extends Controller
                               'itf_barcode'      => $itf_code[$i],
                               'cases_per_carton' => $cases_per_carton[$i],
                               'count'            => $count_THL1[$i],
-                              'ratio_pack_type'  => $this->ratio_pack_type[$i]
+                              'ratio_pack_type'  => $this->ratio_pack_type[$i],
+                              'qr_code'          => $qr_code[$i]
                             ]);
                          $i++;
                        }
@@ -1000,7 +1008,8 @@ class OrderManagementCntrl extends Controller
                               'itf_barcode'      => $itf_code[$i],
                               'cases_per_carton' => $cases_per_carton[$i],
                               'count'            => $count_THL1[$i],
-                              'ratio_pack_type'  => $this->ratio_pack_type[$i]
+                              'ratio_pack_type'  => $this->ratio_pack_type[$i],
+                              'qr_code'          => $qr_code[$i]
                             ]);
                          $i++;
                        }
@@ -1041,6 +1050,7 @@ class OrderManagementCntrl extends Controller
             $ean_code         = explode(',',$request['ean_code']);
             $case_size        = explode(',',$request['case_size']);
             $size             = explode(',',$request['size']);
+            $qr_code          = explode('|',$request['qr_code']);
             $templates        = $request['templates'];
             $last_insertions  = [];
             $already_exists   = [];
@@ -1120,7 +1130,8 @@ class OrderManagementCntrl extends Controller
                                   'ean_barcode'      => $ean_code[$i],
                                   'size'             => $size[$i],
                                   'case_size'        => $case_size[$i],
-                                  'count'            => $count_TCL4[$i]
+                                  'count'            => $count_TCL4[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -1141,7 +1152,8 @@ class OrderManagementCntrl extends Controller
                                   'ean_barcode'      => $ean_code[$i],
                                   'size'             => $size[$i],
                                   'case_size'        => $case_size[$i],
-                                  'count'            => $count_TCL4[$i]
+                                  'count'            => $count_TCL4[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -1188,7 +1200,8 @@ class OrderManagementCntrl extends Controller
                                   'ean_barcode'      => $ean_code[$i],
                                   'size'             => $size[$i],
                                   'case_size'        => $case_size[$i],
-                                  'count'            => $count_TSL3[$i]
+                                  'count'            => $count_TSL3[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -1209,7 +1222,8 @@ class OrderManagementCntrl extends Controller
                                   'ean_barcode'      => $ean_code[$i],
                                   'size'             => $size[$i],
                                   'case_size'        => $case_size[$i],
-                                  'count'            => $count_TSL3[$i]
+                                  'count'            => $count_TSL3[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -1259,7 +1273,8 @@ class OrderManagementCntrl extends Controller
                                   'ean_barcode'      => $ean_code[$i],
                                   'size'             => $size[$i],
                                   'case_size'        => $case_size[$i],
-                                  'count'            => $count_THL3[$i]
+                                  'count'            => $count_THL3[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -1280,7 +1295,8 @@ class OrderManagementCntrl extends Controller
                                   'ean_barcode'      => $ean_code[$i],
                                   'size'             => $size[$i],
                                   'case_size'        => $case_size[$i],
-                                  'count'            => $count_THL3[$i]
+                                  'count'            => $count_THL3[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -3279,6 +3295,7 @@ class OrderManagementCntrl extends Controller
               $orms_tpn         = explode(',',$request['orms_tpn']);
               $itf_code         = explode(',',$request['itf_code']);
               $cases_per_carton = explode(',',$request['cases_per_carton']);
+              $qr_code          = explode('|',$request['qr_code']);
               $templates        = $request['templates'];
               $last_insertions  = [];
               $already_exists   = [];
@@ -3343,7 +3360,8 @@ class OrderManagementCntrl extends Controller
                                 'orms_tpn'         => $tpn,
                                 'itf_barcode'      => $itf_code[$i],
                                 'cases_per_carton' => $cases_per_carton[$i],
-                                'count'            => $count_TCL1[$i]
+                                'count'            => $count_TCL1[$i],
+                                'qr_code'          => $qr_code[$i]
                               ]);
                            $i++;
                          }
@@ -3360,7 +3378,8 @@ class OrderManagementCntrl extends Controller
                                 'orms_tpn'         => $tpn,
                                 'itf_barcode'      => $itf_code[$i],
                                 'cases_per_carton' => $cases_per_carton[$i],
-                                'count'            => $count_TCL1[$i]
+                                'count'            => $count_TCL1[$i],
+                                'qr_code'          => $qr_code[$i]
                               ]);
                            $i++;
                          }
@@ -3401,7 +3420,8 @@ class OrderManagementCntrl extends Controller
                                   'orms_tpn'         => $tpn,
                                   'itf_barcode'      => $itf_code[$i],
                                   'cases_per_carton' => $cases_per_carton[$i],
-                                  'count'            => $count_TCL2[$i]
+                                  'count'            => $count_TCL2[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -3418,7 +3438,8 @@ class OrderManagementCntrl extends Controller
                                   'orms_tpn'         => $tpn,
                                   'itf_barcode'      => $itf_code[$i],
                                   'cases_per_carton' => $cases_per_carton[$i],
-                                  'count'            => $count_TCL2[$i]
+                                  'count'            => $count_TCL2[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -3459,7 +3480,8 @@ class OrderManagementCntrl extends Controller
                                   'orms_tpn'         => $tpn,
                                   'itf_barcode'      => $itf_code[$i],
                                   'cases_per_carton' => $cases_per_carton[$i],
-                                  'count'            => $count_TSL1[$i]
+                                  'count'            => $count_TSL1[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -3476,7 +3498,8 @@ class OrderManagementCntrl extends Controller
                                   'orms_tpn'         => $tpn,
                                   'itf_barcode'      => $itf_code[$i],
                                   'cases_per_carton' => $cases_per_carton[$i],
-                                  'count'            => $count_TSL1[$i]
+                                  'count'            => $count_TSL1[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -3520,7 +3543,8 @@ class OrderManagementCntrl extends Controller
                                 'orms_tpn'         => $tpn,
                                 'itf_barcode'      => $itf_code[$i],
                                 'cases_per_carton' => $cases_per_carton[$i],
-                                'count'            => $count_THL1[$i]
+                                'count'            => $count_THL1[$i],
+                                'qr_code'          => $qr_code[$i]
                               ]);
                            $i++;
                          }
@@ -3537,7 +3561,8 @@ class OrderManagementCntrl extends Controller
                                 'orms_tpn'         => $tpn,
                                 'itf_barcode'      => $itf_code[$i],
                                 'cases_per_carton' => $cases_per_carton[$i],
-                                'count'            => $count_THL1[$i]
+                                'count'            => $count_THL1[$i],
+                                'qr_code'          => $qr_code[$i]
                               ]);
                            $i++;
                          }
@@ -3571,6 +3596,7 @@ class OrderManagementCntrl extends Controller
             $ean_code         = explode(',',$request['ean_code']);
             $case_size        = explode(',',$request['case_size']);
             $size             = explode(',',$request['size']);
+            $qr_code          = explode('|',$request['qr_code']);
             $templates        = $request['templates'];
             $last_insertions  = [];
             $already_exists   = [];
@@ -3633,7 +3659,8 @@ class OrderManagementCntrl extends Controller
                                   'ean_barcode'      => $ean_code[$i],
                                   'size'             => $size[$i],
                                   'case_size'        => $case_size[$i],
-                                  'count'            => $count_TCL4[$i]
+                                  'count'            => $count_TCL4[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -3653,7 +3680,8 @@ class OrderManagementCntrl extends Controller
                                   'ean_barcode'      => $ean_code[$i],
                                   'size'             => $size[$i],
                                   'case_size'        => $case_size[$i],
-                                  'count'            => $count_TCL4[$i]
+                                  'count'            => $count_TCL4[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -3694,7 +3722,8 @@ class OrderManagementCntrl extends Controller
                                 'ean_barcode'      => $ean_code[$i],
                                 'size'             => $size[$i],
                                 'case_size'        => $case_size[$i],
-                                'count'            => $count_TSL3[$i]
+                                'count'            => $count_TSL3[$i],
+                                'qr_code'          => $qr_code[$i]
                               ]);
                            $i++;
                          }
@@ -3714,7 +3743,8 @@ class OrderManagementCntrl extends Controller
                                 'ean_barcode'      => $ean_code[$i],
                                 'size'             => $size[$i],
                                 'case_size'        => $case_size[$i],
-                                'count'            => $count_TSL3[$i]
+                                'count'            => $count_TSL3[$i],
+                                'qr_code'          => $qr_code[$i]
                               ]);
                            $i++;
                          }
@@ -3758,7 +3788,8 @@ class OrderManagementCntrl extends Controller
                               'ean_barcode'      => $ean_code[$i],
                               'size'             => $size[$i],
                               'case_size'        => $case_size[$i],
-                              'count'            => $count_THL3[$i]
+                              'count'            => $count_THL3[$i],
+                              'qr_code'          => $qr_code[$i]
                             ]);
                          $i++;
                        }
@@ -3778,7 +3809,8 @@ class OrderManagementCntrl extends Controller
                               'ean_barcode'      => $ean_code[$i],
                               'size'             => $size[$i],
                               'case_size'        => $case_size[$i],
-                              'count'            => $count_THL3[$i]
+                              'count'            => $count_THL3[$i],
+                              'qr_code'          => $qr_code[$i]
                             ]);
                          $i++;
                        }

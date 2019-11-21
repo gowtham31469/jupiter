@@ -1008,8 +1008,8 @@ class OrderStatusController extends Controller
         $template_id     = $request['edit_id'];
         $template_name   = $request['template_name'];
         $zone            = $request['zone'];
-        $zone            = $request['zone'];
         $created_by      = Auth::guard('web_customer')->id();
+        $qr_code         = explode('|', $request['qr_code']);
 
         if($template_name == "TCL1")
         {
@@ -1123,7 +1123,8 @@ class OrderStatusController extends Controller
                                 'tesco_supplier_id'    => $customer_id,
                                 'rfid_compliant'       => $request['rfid'],
                                 'tag_at_source'        => $request['tag_at_source'],
-                                'is_order_count_empty' => $order_qnty
+                                'is_order_count_empty' => $order_qnty,
+                                'ocn_number'           => $request['tesco_ocn'],
                             ]);
 
             DB::table($qty_table_name)->where($foreign_key,$template_id)->delete();
@@ -1140,7 +1141,8 @@ class OrderStatusController extends Controller
                         'cases_per_carton'   => $case_size[$i],
                         'count'              => $count[$i],
                         'size'               => null,
-                        'ratio_pack_type'    => $this->ratio_pack_type[$i] 
+                        'ratio_pack_type'    => $this->ratio_pack_type[$i],
+                        'qr_code'           => $qr_code[$i]
                         ]);
                 }
                 else if(($template_name == "TCL4" && $zone=="CE") || ($template_name == "TSL3" && $zone=="CE") || ($template_name == "THL3" && $zone=="CE"))
@@ -1151,7 +1153,8 @@ class OrderStatusController extends Controller
                         $foreign_key         => $template_id,
                         'case_size'          => $case_size[$i],
                         'count'              => $count[$i],
-                        'size'               => $single_size[$i]
+                        'size'               => $single_size[$i],
+                        'qr_code'           => $qr_code[$i]
                         ]);
                 }
                 else if(($template_name == "TCL4" && $zone=="UK") || ($template_name == "TSL3" && $zone=="UK") || ($template_name == "THL3" && $zone=="UK"))
