@@ -1176,7 +1176,7 @@ class CustomerManagementController extends Controller
                                 ->select('tesco_template.*','tesco_item_master.ref_no','company.name as company_name')
                                 ->join('tesco_item_master','tesco_item_master.id','=','tesco_template.item_id')
                                 ->join('company','company.id','=','tesco_item_master.company_id')
-                                ->where('item_id',$request['template_id'])->orderBy('orchestra_template.id','asc')
+                                ->where('item_id',$request['template_id'])->orderBy('tesco_template.id','asc')
                                 ->get();
          
          return json_encode($treeviewData);
