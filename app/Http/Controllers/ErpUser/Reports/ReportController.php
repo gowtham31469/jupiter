@@ -505,7 +505,7 @@ public function setUpDatatable(Request $request)
                             break;
                     }
                 
-
+                  $ddmmyy="DD/MM/YYYY";  
                   $queryRes   = Invoices::whereIn('invoice.id',$invoiceIds)
                                     ->join('customers','invoice.customer_id','customers.id')
                                     ->join('invoice_details','invoice_details.invoice_id','invoice.id')
@@ -521,18 +521,20 @@ public function setUpDatatable(Request $request)
 
                                     ->whereBetween('invoice.created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
                                     ->select('invoice.invoice_id as Inv.No',
-                                            'invoice.created_at as Date','company_name as Customer',
+                                            // 'invoice.created_at as Date',
+                                            'company_name as Customer',
                                             'grand_total as Inv_Val','tax','invoice.place_of_supply',
-                                            'base_amnt as Base_Val')
+                                            'base_amnt as Base_Val',
+                                    DB::raw('to_char(invoice.created_at,'."'".$ddmmyy."'".') as "Date"'),)
                                     ->distinct('invoice.id')
                                     ->get();
                     }
                     $queryRes->map(function ($queryRes,$key) {
                     $queryRes->No =$key+1;
                   
-                    $queryRes->Date=(new Carbon($queryRes->Date))->format('d-m-Y');
-                    // $queryRes->Inv_Val = number_format($queryRes->Inv_Val, 2, '.', '');
-                    // $queryRes->Base_Val = number_format($queryRes->Base_Val, 2, '.', '');
+                    // $queryRes->Date=(new Carbon($queryRes->Date))->format('d-m-Y');
+                    $queryRes->Inv_Val = number_format($queryRes->Inv_Val, 2, '.', '');
+                    $queryRes->Base_Val = number_format($queryRes->Base_Val, 2, '.', '');
 
                     if($queryRes->place_of_supply==1)
                     {  
