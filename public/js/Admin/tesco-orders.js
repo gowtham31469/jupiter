@@ -515,7 +515,7 @@ function tescoOrders(callback) {
 								formData.append('ce_retek_purchase_order', ce_retek_purchase_order);
 								formData.append('type', localStorage.getItem("template type"));
 								formData.append('zone', localStorage.getItem("zone"));
-								formData.append('template_name', localStorage.getItem("template_group"));
+								formData.append('template_name', localStorage.getItem("template_group").replace(" with QR", ""));
 								uploadPurchaseOrder(formData, localStorage.getItem("zone"));
 							} else {
 								createOrders();
@@ -2837,7 +2837,12 @@ function nonArtworkOrders()
  */
 
 function PopupTesco(data, name) {
-
+	var tcl1_id = $('#TCL1_id').val();
+	var tcl2_id = $('#TCL2_id').val();
+	var tcl4_id = $('#TCL4_id').val();
+	var thl1_id = $('#THL1_id').val();
+	var thl3_id = $('#THL3_id').val();
+	var qr_flag = $('#qr_flag').val();
 	//	var s = new XMLSerializer();
 	//	var d = data;
 	//	var str = s.serializeToString(d);
@@ -2852,6 +2857,12 @@ function PopupTesco(data, name) {
 		data: {
 			_token: csrf_token,
 			svg: data,
+			tcl1_id: tcl1_id,
+			tcl2_id: tcl2_id,
+			tcl4_id: tcl4_id,
+			thl1_id: thl1_id,
+			thl3_id: thl3_id,
+			qr_flag: qr_flag,
 			name: name
 		},
 		tryCount: 0,

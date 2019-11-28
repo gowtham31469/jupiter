@@ -1988,6 +1988,7 @@ class OrderManagementCntrl extends Controller
         PDF::setPrintHeader(false);
         PDF::setPrintFooter(false);
         PDF::SetFont('frankgothcnbt');
+		PDF::SetFont('franklingothicdemicond');
         PDF::AddPage('P', 'A4');
         //PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
 		// set auto page breaks
@@ -1995,7 +1996,43 @@ class OrderManagementCntrl extends Controller
 		$i=0;
 		$j=0;
 		$yy=12.5;
+		$qr_y=13;
 //		PDF::AddPage('L', array(80,127));
+		
+		$qr_flag=$request->qr_flag;
+		if($name == "TCL1-sticker")
+		{
+			$tcl1_id=$request->tcl1_id;
+			
+			$qr_code = DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$tcl1_id)->select('*')->get();
+			
+		}
+		else if($name == "TCL2-sticker")
+		{
+			$tcl2_id=$request->tcl2_id;
+			
+			$qr_code = DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$tcl2_id)->select('*')->get();
+		}
+		
+		else if($name == "TCL4-sticker")
+		{
+			$tcl4_id=$request->tcl4_id;
+			
+			$qr_code = DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$tcl4_id)->select('*')->get();
+		}
+		else if($name == "THL1-sticker")
+		{
+			$thl1_id=$request->thl1_id;
+			
+			$qr_code = DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$thl1_id)->select('*')->get();
+		}
+		else if($name == "THL3-sticker")
+		{
+			$thl3_id=$request->thl3_id;
+			
+			$qr_code = DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$thl3_id)->select('*')->get();
+		}
+		
 		foreach($svgarr as $value)
 		{
 			$svg=urldecode($value);
@@ -2003,17 +2040,53 @@ class OrderManagementCntrl extends Controller
 			// PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
 			$html = '<img style="width:480px;height:302.36220472px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
 			PDF::writeHTMLCell(129, 82.5, 12.5, $yy, $html, '', 0, 0, false, 'L', false);
+			
+			
+			if($qr_flag == 1)
+			{
+				// new style
+				$style = array(
+					'border' => false,
+					'padding' => 0,
+					'bgcolor' => false
+				);
+				if($name == "TCL1-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 73, 13, 17, 17, $style, 'N');
+				}
+				else if($name == "TCL2-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 73, 13, 17, 17, $style, 'N');
+				}
+				else if($name == "TCL4-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 73, $qr_y, 17, 17, $style, 'N');
+				}
+				else if($name == "THL1-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 73, 15, 17, 17, $style, 'N');
+				}
+				else if($name == "THL3-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 73, $qr_y, 17, 17, $style, 'N');
+				}
+				
+			}
+			
 			if($i == 3)
 			{
 				PDF::AddPage('P', 'A4');
 				$yy=92.5;
+				$qr_y=93;
 				$i = 0;
 			}
 			else
 			{
 				$yy += 85;
+				$qr_y+= 85;
 			}
 			//print_r($yy);
+			
 			 $i++;
 			$j++;
 		}
@@ -2136,7 +2209,7 @@ class OrderManagementCntrl extends Controller
 				}
 				else if($name == "THL3-sticker")
 				{
-					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 76, 5, 17, 17, $style, 'N');
+					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 75, 5, 17, 17, $style, 'N');
 				}
 				
 			}
