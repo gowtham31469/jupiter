@@ -129,7 +129,7 @@ class OrderManagementCntrl extends Controller
            foreach ($templates as $value) 
            {
                $template_details[] = DB::table('tesco_template')
-                           ->select('tesco_item_master.id','tesco_template.template_name','tesco_template.template_file','company.name as company')
+                           ->select('tesco_item_master.id','tesco_template.template_name','tesco_template.template_file','tesco_item_master.is_qrcode_required','company.name as company')
                            ->join('tesco_item_master','tesco_template.item_id','=','tesco_item_master.id')
                            ->join('company','company.id','=','tesco_item_master.company_id')
                            ->where('tesco_item_master.id','=',$value)
@@ -2038,8 +2038,44 @@ class OrderManagementCntrl extends Controller
         PDF::setPrintHeader(false);
         PDF::setPrintFooter(false);
         PDF::SetFont('frankgothcnbt');
+		PDF::SetFont('franklingothicdemicond');
         PDF::SetAutoPageBreak(TRUE);
         $i=0;
+		
+		$qr_flag=$request->qr_flag;
+		if($name == "TCL1-sticker")
+		{
+			$tcl1_id=$request->tcl1_id;
+			
+			$qr_code = DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$tcl1_id)->select('*')->get();
+			
+		}
+		else if($name == "TCL2-sticker")
+		{
+			$tcl2_id=$request->tcl2_id;
+			
+			$qr_code = DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$tcl2_id)->select('*')->get();
+		}
+		
+		else if($name == "TCL4-sticker")
+		{
+			$tcl4_id=$request->tcl4_id;
+			
+			$qr_code = DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$tcl4_id)->select('*')->get();
+		}
+		else if($name == "THL1-sticker")
+		{
+			$thl1_id=$request->thl1_id;
+			
+			$qr_code = DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$thl1_id)->select('*')->get();
+		}
+		else if($name == "THL3-sticker")
+		{
+			$thl3_id=$request->thl3_id;
+			
+			$qr_code = DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$thl3_id)->select('*')->get();
+		}
+		
         foreach($svgarr as $value)
         {
              PDF::SetMargins(0, 0, 0, false);
@@ -2051,13 +2087,43 @@ class OrderManagementCntrl extends Controller
             {
                  if($name != "THL3-sticker")
                  {
-                     PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+                     if($qr_flag == 1)
+					 {
+						 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+					 }
+					 else
+					 {
+						 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+					 }
                  }
                 else
                 {
                      PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -2, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
                 }
             }
+			
+			if($qr_flag == 1)
+			{
+				// new style
+				$style = array(
+					'border' => false,
+					'padding' => 0,
+					'bgcolor' => false
+				);
+				if($name == "TCL1-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 73.5, 5, 17, 17, $style, 'N');
+				}
+				else if($name == "TCL2-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 74.5, 8.5, 17, 17, $style, 'N');
+				}
+				else if($name == "TCL4-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 73.5, 8.5, 17, 17, $style, 'N');
+				}
+				
+			}
 			
 // new style
 //			$style = array(

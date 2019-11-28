@@ -610,7 +610,7 @@ function createOrders(parsedObj = false, oType = false) {
                                     <div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>\
                                 </div>\
                                 <br>\
-                                <form method="POST" id="create_tesco_order_form" data-toggle="validator" role="form" novalidate="true">';
+                                <form method="POST" id="create_tesco_order_form" data-toggle="validator" role="form" novalidate="true"><input type="hidden" id="qr_flag" value="'+data.templates[0].is_qrcode_required+'">';
 				         /** Buyer PO number length , for CE 7 digits and for UK 9 digits*/
 						if (zone === "CE") {
 							  html += '<div class="col-md-3">\
@@ -1473,11 +1473,71 @@ function printDivTesco(data, name) {
 						success: function (data) {
 							/** [ Dynamically change svg short description ] */
 							if (description != '' && data.size_chart.length != 0) {
-								svgDoc.getElementById("description").innerHTML = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+								var desc_size = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+								if($('#qr_flag').val() == 1)
+								{
+									if(desc_size.length <= 23)
+									{
+										svgDoc.getElementById("description").innerHTML = desc_size;
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 138)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 160)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 138)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 160)");
+									}
+									else
+									{
+										str = wordWrap(desc_size, 23);
+										svgDoc.getElementById("description").innerHTML = str;
+										
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 163)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 176)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 163)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 176)");
+									}
+								}
+								else
+								{
+									svgDoc.getElementById("description").innerHTML = desc_size;
+								}
 							} else if (data.size_chart.length != 0) {
 								svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
 							} else if (description != '') {
-								svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+								var desc_size = description.toUpperCase();
+								
+								if($('#qr_flag').val() == 1)
+								{
+									if(desc_size.length <= 23)
+									{
+										svgDoc.getElementById("description").innerHTML = desc_size;
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 138)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 160)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 138)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 160)");
+									}
+									else
+									{
+										str = wordWrap(desc_size, 23);
+										svgDoc.getElementById("description").innerHTML = str;
+										
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 163)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 176)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 163)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 176)");
+									}
+								}
+								else
+								{
+									svgDoc.getElementById("description").innerHTML = desc_size;
+								}
+								
 							} else {
 								svgDoc.getElementById("description").innerHTML = '';
 							}
@@ -1498,12 +1558,42 @@ function printDivTesco(data, name) {
 						}
 					})
 				} else {
-					/** [ Dynamically change svg short description ] */
-					if (description != '') {
-						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
-					} else {
-						svgDoc.getElementById("description").innerHTML = '';
-					}
+						/** [ Dynamically change svg short description ] */
+						if (description != '') {
+							if($('#qr_flag').val() == 1)
+							{
+								var desc_size = description.toUpperCase();
+								if(desc_size.length <= 23)
+								{
+									svgDoc.getElementById("description").innerHTML = desc_size;
+									svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 138)");
+									svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
+									svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 160)");
+									svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 138)");
+									svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
+									svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 160)");
+								}
+								else
+								{
+									str = wordWrap(desc_size, 23);
+									svgDoc.getElementById("description").innerHTML = str;
+
+									svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
+									svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 163)");
+									svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 176)");
+									svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
+									svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 163)");
+									svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 176)");
+								}
+							}
+							else
+							{
+								/** [ Dynamically change svg short description ] */
+								svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+							}					
+						} else {
+							svgDoc.getElementById("description").innerHTML = '';
+						}
 					var s = new XMLSerializer();
 					var d = svgRoot;
 					var str = s.serializeToString(d);
@@ -1815,11 +1905,71 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 						success: function (data) {
 							/** [ Dynamically change svg short description ] */
 							if (description != '' && data.size_chart.length != 0) {
-								svgDoc.getElementById("description").innerHTML = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+								var desc_size = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+								if($('#qr_flag').val() == 1)
+								{
+									if(desc_size.length <= 23)
+									{
+										svgDoc.getElementById("description").innerHTML = desc_size;
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 138)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 160)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 138)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 160)");
+									}
+									else
+									{
+										str = wordWrap(desc_size, 23);
+										svgDoc.getElementById("description").innerHTML = str;
+										
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 163)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 176)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 163)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 176)");
+									}
+								}
+								else
+								{
+									svgDoc.getElementById("description").innerHTML = desc_size;
+								}
 							} else if (data.size_chart.length != 0) {
 								svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
 							} else if (description != '') {
-								svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+								var desc_size = description.toUpperCase();
+								
+								if($('#qr_flag').val() == 1)
+								{
+									if(desc_size.length <= 23)
+									{
+										svgDoc.getElementById("description").innerHTML = desc_size;
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 138)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 160)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 138)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 160)");
+									}
+									else
+									{
+										str = wordWrap(desc_size, 23);
+										svgDoc.getElementById("description").innerHTML = str;
+										
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 163)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 176)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 163)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 176)");
+									}
+								}
+								else
+								{
+									svgDoc.getElementById("description").innerHTML = desc_size;
+								}
+								
 							} else {
 								svgDoc.getElementById("description").innerHTML = '';
 							}
@@ -1842,10 +1992,40 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 				} else {
 					/** [ Dynamically change svg short description ] */
 					if (description != '') {
-						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
-					} else {
-						svgDoc.getElementById("description").innerHTML = '';
-					}
+							if($('#qr_flag').val() == 1)
+							{
+								var desc_size = description.toUpperCase();
+								if(desc_size.length <= 23)
+								{
+									svgDoc.getElementById("description").innerHTML = desc_size;
+									svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 138)");
+									svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
+									svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 160)");
+									svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 138)");
+									svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
+									svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 160)");
+								}
+								else
+								{
+									str = wordWrap(desc_size, 23);
+									svgDoc.getElementById("description").innerHTML = str;
+
+									svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
+									svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 163)");
+									svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 176)");
+									svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
+									svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 163)");
+									svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 176)");
+								}
+							}
+							else
+							{
+								/** [ Dynamically change svg short description ] */
+								svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+							}					
+						} else {
+							svgDoc.getElementById("description").innerHTML = '';
+						}
 					var s = new XMLSerializer();
 					var d = svgRoot;
 					var str = s.serializeToString(d);
@@ -2267,11 +2447,71 @@ function GenerateDivTesco(data, name) {
 						success: function (data) {
 							/** [ Dynamically change svg short description ] */
 							if (description != '' && data.size_chart.length != 0) {
-								svgDoc.getElementById("description").innerHTML = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+								var desc_size = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+								if($('#qr_flag').val() == 1)
+								{
+									if(desc_size.length <= 23)
+									{
+										svgDoc.getElementById("description").innerHTML = desc_size;
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 138)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 160)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 138)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 160)");
+									}
+									else
+									{
+										str = wordWrap(desc_size, 23);
+										svgDoc.getElementById("description").innerHTML = str;
+										
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 163)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 176)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 163)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 176)");
+									}
+								}
+								else
+								{
+									svgDoc.getElementById("description").innerHTML = desc_size;
+								}
 							} else if (data.size_chart.length != 0) {
 								svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
 							} else if (description != '') {
-								svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+								var desc_size = description.toUpperCase();
+								
+								if($('#qr_flag').val() == 1)
+								{
+									if(desc_size.length <= 23)
+									{
+										svgDoc.getElementById("description").innerHTML = desc_size;
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 138)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 160)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 138)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 160)");
+									}
+									else
+									{
+										str = wordWrap(desc_size, 23);
+										svgDoc.getElementById("description").innerHTML = str;
+										
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 163)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 176)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 163)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 176)");
+									}
+								}
+								else
+								{
+									svgDoc.getElementById("description").innerHTML = desc_size;
+								}
+								
 							} else {
 								svgDoc.getElementById("description").innerHTML = '';
 							}
@@ -2294,10 +2534,40 @@ function GenerateDivTesco(data, name) {
 				} else {
 					/** [ Dynamically change svg short description ] */
 					if (description != '') {
-						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
-					} else {
-						svgDoc.getElementById("description").innerHTML = '';
-					}
+							if($('#qr_flag').val() == 1)
+							{
+								var desc_size = description.toUpperCase();
+								if(desc_size.length <= 23)
+								{
+									svgDoc.getElementById("description").innerHTML = desc_size;
+									svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 138)");
+									svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
+									svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 160)");
+									svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 138)");
+									svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
+									svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 160)");
+								}
+								else
+								{
+									str = wordWrap(desc_size, 23);
+									svgDoc.getElementById("description").innerHTML = str;
+
+									svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
+									svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 163)");
+									svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 176)");
+									svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
+									svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 163)");
+									svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 176)");
+								}
+							}
+							else
+							{
+								/** [ Dynamically change svg short description ] */
+								svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+							}					
+						} else {
+							svgDoc.getElementById("description").innerHTML = '';
+						}
 					var s = new XMLSerializer();
 					var d = svgRoot;
 					var str = s.serializeToString(d);
@@ -2555,7 +2825,12 @@ function PopupTescoSmallSet(data, name) {
  */
 
 function PopupTescoGenerate(data, name,svgDoc) {
-
+	var tcl1_id = $('#TCL1_id').val();
+	var tcl2_id = $('#TCL2_id').val();
+	var tcl4_id = $('#TCL4_id').val();
+	var thl1_id = $('#THL1_id').val();
+	var thl3_id = $('#THL3_id').val();
+	var qr_flag = $('#qr_flag').val();
 	var url = "";
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
@@ -2564,6 +2839,12 @@ function PopupTescoGenerate(data, name,svgDoc) {
 		data: {
 			_token: csrf_token,
 			svg: data,
+			tcl1_id: tcl1_id,
+			tcl2_id: tcl2_id,
+			tcl4_id: tcl4_id,
+			thl1_id: thl1_id,
+			thl3_id: thl3_id,
+			qr_flag: qr_flag,
 			name: name
 		},
 		tryCount: 0,
@@ -3711,6 +3992,10 @@ function dynamicSVGTemplatescard(id, item) {
 				/** [ Dynamically change svg CE ratio tpnd number ] */
 				if (tpnd != '') {
 					svgDoc.getElementById("tpnd").innerHTML = tpnd;
+					if($('#qr_flag').val() == 1)
+					{
+						svgDoc.getElementById("tpnd_last_digit").innerHTML = tpnd.substr(tpnd.length - 3);
+					}		
 				} else {
 					svgDoc.getElementById("tpnd").innerHTML = '';
 				}
@@ -3740,7 +4025,56 @@ function dynamicSVGTemplatescard(id, item) {
 				}
 				/** [ Dynamically change svg short description ] */
 				if (description != '') {
-					svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+					if($('#qr_flag').val() == 1)
+					{
+						if(description.length <= 20)
+						{
+							svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+							if (item.template_name === "TCL 1")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 125)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 137)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 88.1544, 125)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 88.1544, 137)");
+							}
+							else if (item.template_name === "TCL 2")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+								svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+								svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+							}
+							
+						}
+						else
+						{
+							str = wordWrap(description, 23);
+							svgDoc.getElementById("description").innerHTML = str;
+							if (item.template_name === "TCL 1")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 133)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 146)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 88.1544, 133)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 88.1544, 146)");
+							}
+							else if (item.template_name === "TCL 2")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+								svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+								svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+							}
+						}
+					}
+					else
+					{
+						/** [ Dynamically change svg short description ] */
+						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+					}					
 				} else {
 					svgDoc.getElementById("description").innerHTML = '';
 				}
@@ -3753,6 +4087,10 @@ function dynamicSVGTemplatescard(id, item) {
 				/** [ Dynamically change svg CE single tpnd number ] */
 				if (orms_tpn != '') {
 					svgDoc.getElementById("tpnd").innerHTML = orms_tpn;
+					if($('#qr_flag').val() == 1)
+					{
+						svgDoc.getElementById("tpnd_last_digit").innerHTML = orms_tpn.substr(orms_tpn.length - 3);
+					}
 				} else {
 					svgDoc.getElementById("tpnd").innerHTML = '';
 				}
@@ -3800,11 +4138,71 @@ function dynamicSVGTemplatescard(id, item) {
 						success: function (data) {
 							/** [ Dynamically change svg short description ] */
 							if (description != '' && data.size_chart.length != 0) {
-								svgDoc.getElementById("description").innerHTML = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+								var desc_size = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+								if($('#qr_flag').val() == 1)
+								{
+									if(desc_size.length <= 23)
+									{
+										svgDoc.getElementById("description").innerHTML = desc_size;
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 138)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 160)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 138)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 160)");
+									}
+									else
+									{
+										str = wordWrap(desc_size, 23);
+										svgDoc.getElementById("description").innerHTML = str;
+										
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 163)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 176)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 163)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 176)");
+									}
+								}
+								else
+								{
+									svgDoc.getElementById("description").innerHTML = desc_size;
+								}
 							} else if (data.size_chart.length != 0) {
 								svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
 							} else if (description != '') {
-								svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+								var desc_size = description.toUpperCase();
+								
+								if($('#qr_flag').val() == 1)
+								{
+									if(desc_size.length <= 23)
+									{
+										svgDoc.getElementById("description").innerHTML = desc_size;
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 138)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 160)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 138)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 160)");
+									}
+									else
+									{
+										str = wordWrap(desc_size, 23);
+										svgDoc.getElementById("description").innerHTML = str;
+										
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 163)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 176)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 163)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 176)");
+									}
+								}
+								else
+								{
+									svgDoc.getElementById("description").innerHTML = desc_size;
+								}
+								
 							} else {
 								svgDoc.getElementById("description").innerHTML = '';
 							}
@@ -3830,7 +4228,37 @@ function dynamicSVGTemplatescard(id, item) {
 				} else {
 					/** [ Dynamically change svg short description ] */
 					if (description != '') {
-						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+						if($('#qr_flag').val() == 1)
+						{
+							var desc_size = description.toUpperCase();
+							if(desc_size.length <= 23)
+							{
+								svgDoc.getElementById("description").innerHTML = desc_size;
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 138)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
+								svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 160)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 138)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
+								svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 160)");
+							}
+							else
+							{
+								str = wordWrap(desc_size, 23);
+								svgDoc.getElementById("description").innerHTML = str;
+
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 163)");
+								svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 176)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 163)");
+								svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 176)");
+							}
+						}
+						else
+						{
+							/** [ Dynamically change svg short description ] */
+							svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+						}					
 					} else {
 						svgDoc.getElementById("description").innerHTML = '';
 					}
@@ -7766,4 +8194,32 @@ function selectNewOrder()
 		$('#ce_retek').prop('required', false);
 	}
 	reOrderTesco()
+}
+
+function wordWrap(str, maxWidth) {
+    var newLineStr = ""; done = false; res = '';
+    do {                    
+        found = false;
+        // Inserts new line at first whitespace of the line
+        for (i = maxWidth - 1; i >= 0; i--) {
+            if (testWhite(str.charAt(i))) {
+                res = res + "<tspan style='fill:cmyk(0%, 0%, 0%, 100%); font-family:FranklinGothicBT-RomanCondensed, FrankGoth Cn BT; font-size:10.0001px;'  x='0' y='0'>" +[str.slice(0, i), newLineStr].join('') + "</tspan>";
+                str = str.slice(i + 1);
+                found = true;
+                break;
+            }
+        }
+        // Inserts new line at maxWidth position, the word is too long to wrap
+        if (!found) {
+            res +="<tspan style='fill:cmyk(0%, 0%, 0%, 100%); font-family:FranklinGothicBT-RomanCondensed, FrankGoth Cn BT; font-size:10.0001px;'>" + [str.slice(0, maxWidth), newLineStr].join('')+ "</tspan>";
+            str = str.slice(maxWidth);
+        }
+        if (str.length < maxWidth)
+            done = true;
+    } while (!done);
+    return res + "<tspan style='fill:cmyk(0%, 0%, 0%, 100%); font-family:FranklinGothicBT-RomanCondensed, FrankGoth Cn BT; font-size:10.0001px;' x='0' y='12'>"+str+"</tspan>";
+}
+function testWhite(x) {
+    var white = new RegExp(/^\s$/);
+    return white.test(x.charAt(0));
 }

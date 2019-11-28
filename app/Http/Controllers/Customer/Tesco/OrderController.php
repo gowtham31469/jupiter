@@ -166,7 +166,7 @@ class OrderController extends Controller
              foreach ($templates as $template_id) 
              {
                  $template_details[] = DB::table('tesco_template')
-                             ->select('tesco_item_master.id','tesco_template.template_name','tesco_template.template_file','company.name as company')
+                             ->select('tesco_item_master.id','tesco_template.template_name','tesco_template.template_file','tesco_item_master.is_qrcode_required','company.name as company')
                              ->join('tesco_item_master','tesco_template.item_id','=','tesco_item_master.id')
                              ->join('company','company.id','=','tesco_item_master.company_id')
                              ->where('tesco_item_master.id','=',$template_id)
