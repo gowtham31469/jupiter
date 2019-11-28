@@ -1471,6 +1471,7 @@ function printDivTesco(data, name) {
 						tryCount: 0,
 						retryLimit: 2,
 						success: function (data) {
+							
 							/** [ Dynamically change svg short description ] */
 							if (description != '' && data.size_chart.length != 0) {
 								var desc_size = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
@@ -1479,24 +1480,46 @@ function printDivTesco(data, name) {
 									if(desc_size.length <= 23)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
-										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 138)");
-										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
-										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 160)");
-										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 138)");
-										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
-										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 160)");
+										if(name === "THL3-sticker")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+										}
 									}
 									else
 									{
 										str = wordWrap(desc_size, 23);
 										svgDoc.getElementById("description").innerHTML = str;
 										
-										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
-										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 163)");
-										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 176)");
-										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
-										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 163)");
-										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 176)");
+										if(name === "THL3-sticker")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136.2173)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150.5557)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136.2173)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150.5557)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+										}
 									}
 								}
 								else
@@ -1513,24 +1536,46 @@ function printDivTesco(data, name) {
 									if(desc_size.length <= 23)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
-										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 138)");
-										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
-										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 160)");
-										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 138)");
-										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
-										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 160)");
+										if(name === "THL3-sticker")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+										}
 									}
 									else
 									{
 										str = wordWrap(desc_size, 23);
 										svgDoc.getElementById("description").innerHTML = str;
 										
-										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
-										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 163)");
-										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 176)");
-										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
-										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 163)");
-										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 176)");
+										if(name === "THL3-sticker")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136.2173)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150.5557)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136.2173)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150.5557)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+										}
 									}
 								}
 								else
@@ -1566,24 +1611,46 @@ function printDivTesco(data, name) {
 								if(desc_size.length <= 23)
 								{
 									svgDoc.getElementById("description").innerHTML = desc_size;
-									svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 138)");
-									svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
-									svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 160)");
-									svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 138)");
-									svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
-									svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 160)");
+									if(name === "THL3-sticker")
+									{
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+
+									}
+									else
+									{
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+									}
 								}
 								else
 								{
 									str = wordWrap(desc_size, 23);
 									svgDoc.getElementById("description").innerHTML = str;
 
-									svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
-									svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 163)");
-									svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 176)");
-									svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
-									svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 163)");
-									svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 176)");
+									if(name === "THL3-sticker")
+									{
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136.2173)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150.5557)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136.2173)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150.5557)");
+
+									}
+									else
+									{
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+									}
 								}
 							}
 							else
@@ -1903,6 +1970,7 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 						tryCount: 0,
 						retryLimit: 2,
 						success: function (data) {
+							
 							/** [ Dynamically change svg short description ] */
 							if (description != '' && data.size_chart.length != 0) {
 								var desc_size = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
@@ -1911,24 +1979,46 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 									if(desc_size.length <= 23)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
-										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 138)");
-										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
-										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 160)");
-										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 138)");
-										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
-										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 160)");
+										if(name === "THL3-sticker")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+										}
 									}
 									else
 									{
 										str = wordWrap(desc_size, 23);
 										svgDoc.getElementById("description").innerHTML = str;
 										
-										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
-										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 163)");
-										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 176)");
-										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
-										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 163)");
-										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 176)");
+										if(name === "THL3-sticker")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136.2173)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150.5557)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136.2173)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150.5557)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+										}
 									}
 								}
 								else
@@ -1945,24 +2035,46 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 									if(desc_size.length <= 23)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
-										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 138)");
-										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
-										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 160)");
-										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 138)");
-										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
-										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 160)");
+										if(name === "THL3-sticker")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+										}
 									}
 									else
 									{
 										str = wordWrap(desc_size, 23);
 										svgDoc.getElementById("description").innerHTML = str;
 										
-										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
-										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 163)");
-										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 176)");
-										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
-										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 163)");
-										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 176)");
+										if(name === "THL3-sticker")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136.2173)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150.5557)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136.2173)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150.5557)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+										}
 									}
 								}
 								else
@@ -1998,24 +2110,46 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 								if(desc_size.length <= 23)
 								{
 									svgDoc.getElementById("description").innerHTML = desc_size;
-									svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 138)");
-									svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
-									svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 160)");
-									svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 138)");
-									svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
-									svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 160)");
+									if(name === "THL3-sticker")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+										}
 								}
 								else
 								{
 									str = wordWrap(desc_size, 23);
 									svgDoc.getElementById("description").innerHTML = str;
 
-									svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
-									svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 163)");
-									svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 176)");
-									svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
-									svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 163)");
-									svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 176)");
+									if(name === "THL3-sticker")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136.2173)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150.5557)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136.2173)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150.5557)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+										}
 								}
 							}
 							else
@@ -2445,6 +2579,7 @@ function GenerateDivTesco(data, name) {
 						tryCount: 0,
 						retryLimit: 2,
 						success: function (data) {
+							
 							/** [ Dynamically change svg short description ] */
 							if (description != '' && data.size_chart.length != 0) {
 								var desc_size = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
@@ -2453,24 +2588,46 @@ function GenerateDivTesco(data, name) {
 									if(desc_size.length <= 23)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
-										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 138)");
-										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
-										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 160)");
-										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 138)");
-										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
-										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 160)");
+										if(name === "THL3-sticker")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+										}
 									}
 									else
 									{
 										str = wordWrap(desc_size, 23);
 										svgDoc.getElementById("description").innerHTML = str;
 										
-										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
-										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 163)");
-										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 176)");
-										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
-										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 163)");
-										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 176)");
+										if(name === "THL3-sticker")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136.2173)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150.5557)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136.2173)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150.5557)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+										}
 									}
 								}
 								else
@@ -2487,24 +2644,46 @@ function GenerateDivTesco(data, name) {
 									if(desc_size.length <= 23)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
-										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 138)");
-										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
-										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 160)");
-										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 138)");
-										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
-										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 160)");
+										if(name === "THL3-sticker")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+										}
 									}
 									else
 									{
 										str = wordWrap(desc_size, 23);
 										svgDoc.getElementById("description").innerHTML = str;
 										
-										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
-										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 163)");
-										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 176)");
-										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
-										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 163)");
-										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 176)");
+										if(name === "THL3-sticker")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136.2173)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150.5557)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136.2173)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150.5557)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+										}
 									}
 								}
 								else
@@ -2540,24 +2719,46 @@ function GenerateDivTesco(data, name) {
 								if(desc_size.length <= 23)
 								{
 									svgDoc.getElementById("description").innerHTML = desc_size;
-									svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 138)");
-									svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
-									svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 160)");
-									svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 138)");
-									svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
-									svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 160)");
+									if(name === "THL3-sticker")
+									{
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+
+									}
+									else
+									{
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+									}
 								}
 								else
 								{
 									str = wordWrap(desc_size, 23);
 									svgDoc.getElementById("description").innerHTML = str;
 
-									svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
-									svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 163)");
-									svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 176)");
-									svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
-									svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 163)");
-									svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 176)");
+									if(name === "THL3-sticker")
+									{
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136.2173)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150.5557)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136.2173)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150.5557)");
+
+									}
+									else
+									{
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+									}
 								}
 							}
 							else
@@ -4046,6 +4247,13 @@ function dynamicSVGTemplatescard(id, item) {
 								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
 								svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
 							}
+							else if(item.template_name === "THL 1")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 125)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 137)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 125)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 137)");
+							}
 							
 						}
 						else
@@ -4067,6 +4275,13 @@ function dynamicSVGTemplatescard(id, item) {
 								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
 								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
 								svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+							}
+							else if(item.template_name === "THL 1")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 133)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 146)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 133)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 146)");
 							}
 						}
 					}
@@ -4144,24 +4359,48 @@ function dynamicSVGTemplatescard(id, item) {
 									if(desc_size.length <= 23)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
-										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 138)");
-										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
-										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 160)");
-										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 138)");
-										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
-										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 160)");
+										
+										if(item.template_name === "THL 3")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+										}
+										
 									}
 									else
 									{
 										str = wordWrap(desc_size, 23);
 										svgDoc.getElementById("description").innerHTML = str;
+										if(item.template_name === "THL 3")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136.2173)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150.5557)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136.2173)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150.5557)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+										}
 										
-										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
-										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 163)");
-										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 176)");
-										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
-										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 163)");
-										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 176)");
 									}
 								}
 								else
@@ -4178,24 +4417,46 @@ function dynamicSVGTemplatescard(id, item) {
 									if(desc_size.length <= 23)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
-										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 138)");
-										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
-										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 160)");
-										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 138)");
-										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
-										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 160)");
+										if(item.template_name === "THL 3")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+										}
 									}
 									else
 									{
 										str = wordWrap(desc_size, 23);
 										svgDoc.getElementById("description").innerHTML = str;
 										
-										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
-										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 163)");
-										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 176)");
-										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
-										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 163)");
-										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 176)");
+										if(item.template_name === "THL 3")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136.2173)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150.5557)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136.2173)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150.5557)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+										}
 									}
 								}
 								else
@@ -4234,24 +4495,46 @@ function dynamicSVGTemplatescard(id, item) {
 							if(desc_size.length <= 23)
 							{
 								svgDoc.getElementById("description").innerHTML = desc_size;
-								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 138)");
-								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
-								svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 160)");
-								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 138)");
-								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
-								svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 160)");
+								if(item.template_name === "THL 3")
+								{
+									svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+									svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
+									svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+									svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+
+								}
+								else
+								{
+									svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+									svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+									svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+									svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+									svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+									svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+								}
 							}
 							else
 							{
 								str = wordWrap(desc_size, 23);
 								svgDoc.getElementById("description").innerHTML = str;
 
-								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 150)");
-								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 163)");
-								svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 2, 176)");
-								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 150)");
-								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 163)");
-								svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 85.1544, 176)");
+								if(item.template_name === "THL 3")
+								{
+									svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136.2173)");
+									svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150.5557)");
+									svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136.2173)");
+									svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150.5557)");
+
+								}
+								else
+								{
+									svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+									svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+									svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+									svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+									svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+									svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+								}
 							}
 						}
 						else

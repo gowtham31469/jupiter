@@ -2089,7 +2089,15 @@ class OrderManagementCntrl extends Controller
                  {
                      if($qr_flag == 1)
 					 {
-						 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+						 if($name == "THL1-sticker")
+                 		 {
+							 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 55, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+						 }
+						 else
+						 {
+							 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+						 }
+						 
 					 }
 					 else
 					 {
@@ -2098,7 +2106,7 @@ class OrderManagementCntrl extends Controller
                  }
                 else
                 {
-                     PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -2, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+                     PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'),-4, 55, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
                 }
             }
 			
@@ -2120,7 +2128,15 @@ class OrderManagementCntrl extends Controller
 				}
 				else if($name == "TCL4-sticker")
 				{
-					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 73.5, 8.5, 17, 17, $style, 'N');
+					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 74, 8.5, 17, 17, $style, 'N');
+				}
+				else if($name == "THL1-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 74, 5, 17, 17, $style, 'N');
+				}
+				else if($name == "THL3-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 76, 5, 17, 17, $style, 'N');
 				}
 				
 			}
