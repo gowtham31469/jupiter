@@ -868,6 +868,8 @@ class OrderStatusCntrl extends Controller
             $quantity_details = DB::table($table_name.'_quanty')
                                 ->where($qnty_id,$order_details->id)->orderBy('id')->get();
 			$template_file=DB::table('tesco_template')->where('item_id',$order_details->template_id)->select('*')->get();
+			
+			$tesco_item_master=DB::table('tesco_item_master')->where('id',$order_details->template_id)->select('*')->get();
 
             $moq     =    DB::table('price_taxation')->where('template_id',$order_details->template_id)->where('customer_id',$order_details->tesco_supplier_id)->where('buyer_id',2)->value('moq');
 
@@ -880,7 +882,7 @@ class OrderStatusCntrl extends Controller
 
             if ($order_details && $quantity_details)
             {
-                $result = response()->json(['error'=> false,'message' =>'success','order_details'=>$order_details,'quantity_details'=>$quantity_details,'template_file'=>$template_file,'moq' => $moq, 'erp_details' => $erp_order_details],200);
+                $result = response()->json(['error'=> false,'message' =>'success','order_details'=>$order_details,'quantity_details'=>$quantity_details,'template_file'=>$template_file,'tesco_item_master'=>$tesco_item_master,'moq' => $moq, 'erp_details' => $erp_order_details],200);
             }
             else
             {
