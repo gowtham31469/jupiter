@@ -1417,10 +1417,19 @@ function printDivTesco(data, name) {
 				svgDoc.getElementById("pieces_in_ratio").innerHTML = $(this).find('.ce_ratio_cpc').val();
 
 				svgDoc.getElementById("tpnd").innerHTML = $(this).find('.ce_ratio_orms_tpn').val();
+				
+				if($('#qr_flag').val() == 1)
+				{
+					svgDoc.getElementById("tpnd_last_digit").innerHTML = $(this).find('.ce_ratio_orms_tpn').val().substr($(this).find('.ce_ratio_orms_tpn').val().length - 3);
+				}	
 			} else if ((name == "TCL4-sticker" && zone == "CE") || (name == "THL3-sticker" && zone == "CE")) {
 				svgDoc.getElementById("unit_per_case").innerHTML = $(this).find('.ce_single_case_size').val();
 
 				svgDoc.getElementById("tpnd").innerHTML = $(this).find('.ce_single_orms_tpn').val();
+				if($('#qr_flag').val() == 1)
+				{
+					svgDoc.getElementById("tpnd_last_digit").innerHTML = $(this).find('.ce_single_orms_tpn').val().substr($(this).find('.ce_single_orms_tpn').val().length - 3);
+				}	
 			} else if ((name == "TCL4-sticker" && zone == "UK") || (name == "THL3-sticker" && zone == "UK")) {
 				svgDoc.getElementById("unit_per_case").innerHTML = $(this).find('.uk_single_case_size').val();
 
@@ -1916,10 +1925,18 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 				svgDoc.getElementById("pieces_in_ratio").innerHTML = $(this).find('.ce_ratio_cpc').val();
 
 				svgDoc.getElementById("tpnd").innerHTML = $(this).find('.ce_ratio_orms_tpn').val();
+				if($('#qr_flag').val() == 1)
+				{
+					svgDoc.getElementById("tpnd_last_digit").innerHTML = $(this).find('.ce_ratio_orms_tpn').val().substr($(this).find('.ce_ratio_orms_tpn').val().length - 3);
+				}	
 			} else if ((name == "TCL4-sticker" && zone == "CE") || (name == "THL3-sticker" && zone == "CE")) {
 				svgDoc.getElementById("unit_per_case").innerHTML = $(this).find('.ce_single_case_size').val();
 
 				svgDoc.getElementById("tpnd").innerHTML = $(this).find('.ce_single_orms_tpn').val();
+				if($('#qr_flag').val() == 1)
+				{
+					svgDoc.getElementById("tpnd_last_digit").innerHTML = $(this).find('.ce_single_orms_tpn').val().substr($(this).find('.ce_single_orms_tpn').val().length - 3);
+				}	
 			} else if ((name == "TCL4-sticker" && zone == "UK") || (name == "THL3-sticker" && zone == "UK")) {
 				svgDoc.getElementById("unit_per_case").innerHTML = $(this).find('.uk_single_case_size').val();
 
@@ -2470,10 +2487,18 @@ function GenerateDivTesco(data, name) {
 				svgDoc.getElementById("pieces_in_ratio").innerHTML = $(this).find('.ce_ratio_cpc').val();
 
 				svgDoc.getElementById("tpnd").innerHTML = $(this).find('.ce_ratio_orms_tpn').val();
+				if($('#qr_flag').val() == 1)
+				{
+					svgDoc.getElementById("tpnd_last_digit").innerHTML = $(this).find('.ce_ratio_orms_tpn').val().substr($(this).find('.ce_ratio_orms_tpn').val().length - 3);
+				}
 			} else if ((name == "TCL4-sticker" && zone == "CE") || (name == "THL3-sticker" && zone == "CE")) {
 				svgDoc.getElementById("unit_per_case").innerHTML = $(this).find('.ce_single_case_size').val();
 
 				svgDoc.getElementById("tpnd").innerHTML = $(this).find('.ce_single_orms_tpn').val();
+				if($('#qr_flag').val() == 1)
+				{
+					svgDoc.getElementById("tpnd_last_digit").innerHTML = $(this).find('.ce_single_orms_tpn').val().substr($(this).find('.ce_single_orms_tpn').val().length - 3);
+				}
 			} else if ((name == "TCL4-sticker" && zone == "UK") || (name == "THL3-sticker" && zone == "UK")) {
 				svgDoc.getElementById("unit_per_case").innerHTML = $(this).find('.uk_single_case_size').val();
 
