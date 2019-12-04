@@ -1266,6 +1266,7 @@ function updateArtwork(obj) {
             200: function (data) {
                 if (data.order_details != 0) {
                     $('#tesco_po_number').val(data.order_details.po_number);
+					$('#qr_flag').val(data.tesco_item_master[0].is_qrcode_required);
                     $('#tesco_uk_style').val(data.order_details.uk_style_ref);
                     $('#tesco_ce_style').val(data.order_details.ce_style_ref);
                     $('#tesco_eqos').val(data.order_details.eqos_site_code);
@@ -2032,6 +2033,10 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
                 /** [ Dynamically change svg CE ratio tpnd number ] */
                 if (tpnd != '') {
                     svgDoc.getElementById("tpnd").innerHTML = tpnd;
+					if($('#qr_flag').val() == 1)
+					{
+						svgDoc.getElementById("tpnd_last_digit").innerHTML = tpnd.substr(tpnd.length - 3);
+					}
                 } else {
                     svgDoc.getElementById("tpnd").innerHTML = '';
                 }
@@ -2050,10 +2055,73 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
                 }
                 /** [ Dynamically change svg short description ] */
                 if (description != '') {
-                    svgDoc.getElementById("description").innerHTML = description.toUpperCase();
-                } else {
-                    svgDoc.getElementById("description").innerHTML = '';
-                }
+					if($('#qr_flag').val() == 1)
+					{
+						if(description.length <= 20)
+						{
+							svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+							if (template_name === "TCL1")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 125)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 137)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 88.1544, 125)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 88.1544, 137)");
+							}
+							else if (template_name === "TCL2")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+								svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+								svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+							}
+							else if(template_name === "THL1")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 125)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 137)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 125)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 137)");
+							}
+							
+						}
+						else
+						{
+							str = oswordWrap(description, 23);
+							svgDoc.getElementById("description").innerHTML = str;
+							if (template_name === "TCL1")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 133)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 146)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 88.1544, 133)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 88.1544, 146)");
+							}
+							else if (template_name === "TCL2")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+								svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+								svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+							}
+							else if(template_name === "THL1")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 133)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 146)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 133)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 146)");
+							}
+						}
+					}
+					else
+					{
+						/** [ Dynamically change svg short description ] */
+						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+					}					
+				} else {
+					svgDoc.getElementById("description").innerHTML = '';
+				}
             } else {
                 /**  [ if CE single template ] */
                 var orms_tpn = $('#os_tpnd_1').val();
@@ -2063,6 +2131,10 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
                 /** [ Dynamically change svg CE single tpnd number ] */
                 if (orms_tpn != '') {
                     svgDoc.getElementById("tpnd").innerHTML = orms_tpn;
+					if($('#qr_flag').val() == 1)
+					{
+						svgDoc.getElementById("tpnd_last_digit").innerHTML = orms_tpn.substr(orms_tpn.length - 3);
+					}
                 } else {
                     svgDoc.getElementById("tpnd").innerHTML = '';
                 }
@@ -2099,14 +2171,118 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
                         success: function (data) {
                             /** [ Dynamically change svg short description ] */
                             if (description != '' && data.size_chart.length != 0) {
-                                svgDoc.getElementById("description").innerHTML = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
-                            } else if (data.size_chart.length != 0) {
-                                svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
-                            } else if (description != '') {
-                                svgDoc.getElementById("description").innerHTML = description.toUpperCase();
-                            } else {
-                                svgDoc.getElementById("description").innerHTML = '';
-                            }
+								var desc_size = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+								if($('#qr_flag').val() == 1)
+								{
+									if(desc_size.length <= 23)
+									{
+										svgDoc.getElementById("description").innerHTML = desc_size;
+										if(template_name === "THL3")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+										}
+									}
+									else
+									{
+										str = oswordWrap(desc_size, 23);
+										svgDoc.getElementById("description").innerHTML = str;
+										
+										if(template_name === "THL3")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136.2173)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150.5557)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136.2173)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150.5557)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+										}
+									}
+								}
+								else
+								{
+									svgDoc.getElementById("description").innerHTML = desc_size;
+								}
+							} else if (data.size_chart.length != 0) {
+								svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
+							} else if (description != '') {
+								var desc_size = description.toUpperCase();
+								
+								if($('#qr_flag').val() == 1)
+								{
+									if(desc_size.length <= 23)
+									{
+										svgDoc.getElementById("description").innerHTML = desc_size;
+										if(template_name === "THL3")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+										}
+									}
+									else
+									{
+										str = oswordWrap(desc_size, 23);
+										svgDoc.getElementById("description").innerHTML = str;
+										
+										if(template_name === "THL3")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136.2173)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150.5557)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136.2173)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150.5557)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+										}
+									}
+								}
+								else
+								{
+									svgDoc.getElementById("description").innerHTML = desc_size;
+								}
+								
+							} else {
+								svgDoc.getElementById("description").innerHTML = '';
+							}
                         },
                         error: function (errorXHR, errorStatus, errorThrown) {
                             this.tryCount++;
@@ -3207,6 +3383,36 @@ function editArtwork() {
     $('#add_row').removeClass('disabled');
     $('#submit').removeClass("hidden");
 
+}
+
+
+function oswordWrap(str, maxWidth) {
+    var newLineStr = ""; done = false; res = '';
+    do {                    
+        found = false;
+        // Inserts new line at first whitespace of the line
+        for (i = maxWidth - 1; i >= 0; i--) {
+            if (testWhite(str.charAt(i))) {
+                res = res + "<tspan style='fill:cmyk(0%, 0%, 0%, 100%); font-family:FranklinGothicBT-RomanCondensed, FrankGoth Cn BT; font-size:10.0001px;'  x='0' y='0'>" +[str.slice(0, i), newLineStr].join('') + "</tspan>";
+                str = str.slice(i + 1);
+                found = true;
+                break;
+            }
+        }
+        // Inserts new line at maxWidth position, the word is too long to wrap
+        if (!found) {
+            res +="<tspan style='fill:cmyk(0%, 0%, 0%, 100%); font-family:FranklinGothicBT-RomanCondensed, FrankGoth Cn BT; font-size:10.0001px;'>" + [str.slice(0, maxWidth), newLineStr].join('')+ "</tspan>";
+            str = str.slice(maxWidth);
+        }
+        if (str.length < maxWidth)
+            done = true;
+    } while (!done);
+    return res + "<tspan style='fill:cmyk(0%, 0%, 0%, 100%); font-family:FranklinGothicBT-RomanCondensed, FrankGoth Cn BT; font-size:10.0001px;' x='0' y='12'>"+str+"</tspan>";
+}
+
+function testWhite(x) {
+    var white = new RegExp(/^\s$/);
+    return white.test(x.charAt(0));
 }
 
 

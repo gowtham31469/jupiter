@@ -4264,7 +4264,7 @@ function dynamicSVGTemplatescard(id, item) {
 				if (description != '') {
 					if($('#qr_flag').val() == 1)
 					{
-						if(description.length <= 20)
+						if(description.length <= 23)
 						{
 							svgDoc.getElementById("description").innerHTML = description.toUpperCase();
 							if (item.template_name === "TCL 1")

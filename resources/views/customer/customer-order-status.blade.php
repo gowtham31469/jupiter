@@ -282,7 +282,7 @@
                     <div class="col-md-4">
                 <h4 class="text-center osorderdetails">Order Details</h4>
                 <div class="scroll" style="height: calc(100vh - 80px);">
-                    
+                    	<input type="hidden" id="qr_flag">
                         <input type="hidden" id="edit_template_name">
                         <input type="hidden" id="edit_zone">
                         <input type="hidden" id="edit_template_type">
