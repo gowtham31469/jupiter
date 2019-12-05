@@ -450,7 +450,9 @@ class JobManagerController extends Controller
 									->orderBy('erp_order_details.id', 'desc')
 									->select('*')
 									->get();
-		
+			
+		$tesco_item_master=DB::table('tesco_item_master')->where('id',$order_details{0}->template_id)->select('*')->get();
+			
 		foreach($order_details as $value)
 		{
 			$order_details_omp  = 	DB::table($value->order_qnty_table_name)
@@ -492,7 +494,7 @@ class JobManagerController extends Controller
 			$value->tag_at_source     = $order_omp{0}->tag_at_source;
 			
 		}
-		return response()->json(['error'=> true,'order_details' =>$order_details],200);
+		return response()->json(['error'=> true,'order_details' =>$order_details,'tesco_item_master' =>$tesco_item_master],200);
 		}
 	
 		

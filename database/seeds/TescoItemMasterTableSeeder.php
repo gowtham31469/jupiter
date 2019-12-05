@@ -252,8 +252,8 @@ class TescoItemMasterTableSeeder extends Seeder
                 'id' => 24,
                 'company_id' => 1,
                 'parent_id' => 3,
-                'item_name' => 'THL 3',
-                'ref_no' => 'THL 3',
+                'item_name' => 'THL 1',
+                'ref_no' => 'THL 1',
                 'tag_name' => '',
                 'is_qrcode_required' => 1
             ),
@@ -262,8 +262,8 @@ class TescoItemMasterTableSeeder extends Seeder
                 'id' => 25,
                 'company_id' => 1,
                 'parent_id' => 3,
-                'item_name' => 'THL 1',
-                'ref_no' => 'THL 1',
+                'item_name' => 'THL 3',
+                'ref_no' => 'THL 3',
                 'tag_name' => '',
                 'is_qrcode_required' => 1
             ),

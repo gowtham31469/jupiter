@@ -2304,8 +2304,29 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
                     })
                 } else {
                     /** [ Dynamically change svg short description & size chart ] */
-                    if (description != '') {
-                        svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                     if (description != '') {
+                        if (description.length > 24) {
+                            if (/\S/.test(description.charAt(24))) {
+                                //No Space
+                                if (description.indexOf(" ") == "-1") {
+                                    svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+                                    svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+                                } else {
+                                    svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+                                    svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+                                }
+
+                            } else {
+                                //Space
+                                svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+                                svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+                            }
+                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+                        } else {
+                            svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                            svgDoc.getElementById("description1").innerHTML = "";
+                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 65.1)");
+                        }
                     } else {
                         svgDoc.getElementById("description").innerHTML = '';
                     }
