@@ -2164,7 +2164,7 @@ class OrderManagementCntrl extends Controller
 					 {
 						 if($name == "THL1-sticker")
                  		 {
-							 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 54.5, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+							 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 						 }
 						 else
 						 {
@@ -2179,7 +2179,7 @@ class OrderManagementCntrl extends Controller
                  }
                 else
                 {
-                     PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'),-4, 54.5, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+                     PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'),-4, 53.5, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
                 }
             }
 			
