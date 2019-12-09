@@ -1404,7 +1404,7 @@ function printDivTesco(data, name) {
 
 		if (ajax_count == document.getElementById("table_row").rows.length) {
 			var svg_fin = svgarr.join(',_');
-			PopupTescoSmall(svg_fin, name);
+			PopupTescoSmall(svg_fin, name,zone);
 		}
 
 
@@ -1693,7 +1693,7 @@ function printDivTesco(data, name) {
 
 		if (ajax_count == document.getElementById("table_row").rows.length) {
 			var svg_fin = svgarr.join(',_');
-			PopupTesco(svg_fin, name);
+			PopupTesco(svg_fin, name,zone);
 		}
 
 	}
@@ -2861,13 +2861,50 @@ function nonArtworkOrders()
  * @return Pdf
  */
 
-function PopupTesco(data, name) {
+function PopupTesco(data, name,zone) {
+	var tesco_po_number = $('#tesco_po_number').val();
+	if(zone == "CE")
+	{
+		var style = $('#tesco_ce_style').val();
+	}
+	else
+	{
+		var style = $('#tesco_uk_style').val();
+	}
+	
+	
+	if(name == "TCL1-sticker")
+	{
+		var id = $('#TCL1_id').val();
+		var db = "tesco_tcl1_orders";
+	}
+	else if(name == "TCL2-sticker")
+	{
+		var id = $('#TCL2_id').val();
+		var db = "tesco_tcl2_orders";
+	}
+	else if(name == "TCL4-sticker")
+	{
+		var id = $('#TCL4_id').val();
+		var db = "tesco_tcl4_orders";
+	}
+	else if(name == "THL1-sticker")
+	{
+		var id = $('#THL1_id').val();
+		var db = "tesco_thl1_orders";
+	}
+	else if(name == "THL3-sticker")
+	{
+		var id = $('#THL3_id').val();
+		var db = "tesco_thl3_orders";
+	}
 	var tcl1_id = $('#TCL1_id').val();
 	var tcl2_id = $('#TCL2_id').val();
 	var tcl4_id = $('#TCL4_id').val();
 	var thl1_id = $('#THL1_id').val();
 	var thl3_id = $('#THL3_id').val();
 	var qr_flag = $('#qr_flag').val();
+	var tesco_description = $('#tesco_description').val();
 	//	var s = new XMLSerializer();
 	//	var d = data;
 	//	var str = s.serializeToString(d);
@@ -2888,7 +2925,13 @@ function PopupTesco(data, name) {
 			thl1_id: thl1_id,
 			thl3_id: thl3_id,
 			qr_flag: qr_flag,
-			name: name
+			name: name,
+			zone:zone,
+			style:style,
+			tesco_po_number:tesco_po_number,
+			tesco_description:tesco_description,
+			id:id,
+			db:db
 		},
 		tryCount: 0,
 		retryLimit: 2,
@@ -2925,8 +2968,29 @@ function PopupTesco(data, name) {
  * @return Pdf
  */
 
-function PopupTescoSmall(data, name) {
-
+function PopupTescoSmall(data, name,zone) {
+	if(name == "TSL1-sticker")
+	{
+		var id = $('#TSL1_id').val();
+		var db = "tesco_tsl1_orders";
+	}
+	else if(name == "TSL3-sticker")
+	{
+		var id = $('#TSL3_id').val();
+		var db = "tesco_tsl3_orders";
+	}
+	var tesco_po_number = $('#tesco_po_number').val();
+	if(zone == "CE")
+	{
+		var style = $('#tesco_ce_style').val();
+	}
+	else
+	{
+		var style = $('#tesco_uk_style').val();
+	}
+	
+	
+	var tesco_description = $('#tesco_description').val();
 	var url = "";
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
@@ -2935,7 +2999,13 @@ function PopupTescoSmall(data, name) {
 		data: {
 			_token: csrf_token,
 			svg: data,
-			name: name
+			name: name,
+			zone:zone,
+			style:style,
+			tesco_po_number:tesco_po_number,
+			tesco_description:tesco_description,
+			id:id,
+			db:db
 		},
 		tryCount: 0,
 		retryLimit: 2,

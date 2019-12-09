@@ -1435,78 +1435,98 @@ class JobManagerController extends Controller
 		
 				$svgarr = explode(',_',$request->svg);
 				$name=$request->name;
-			   // $svg=urldecode($request->svg);
+		        $svg=urldecode($request->svg);
 				PDF::setImageScale(1);
 				PDF::SetFont('frankgothcnbt');
 				PDF::AddPage();
 				$i=0;
 				$yy=60;
-				$j=1;
-		$qr_y=18;
+				$qr_y=67.5;
+				$j=0;
 				PDF::SetXY(10, 50);
 		
 		
-		$qr_flag=$request->qr_flag;
-		$id=$request->id;
-		$qr_code=explode(',_',$request->qr_code_fin);
+				$qr_flag=$request->qr_flag;
+				$id=$request->id;
+				$qr_code=explode(',_',$request->qr_code_fin);
 		
 				foreach($svgarr as $value)
 				{
-					//$svg=urldecode($value);
+					$svg=urldecode($value);
 					PDF::SetFillColor(255,255,255);
 					if($i == 2)
 					{
 						$yy=60;
+						$qr_y=67.5;
 						PDF::AddPage();
+						PDF::RoundedRect(15, 60, 127, 80, 0, '0000');
 						$i = 0;
 					}
 					else if($i == 0)
 					{
+						PDF::RoundedRect(15, 60, 127, 80, 0, '0000');
 						$yy=60;
+						$qr_y=67.5;
 					}
 					else
 					{
+						PDF::RoundedRect(15, 160, 127, 80, 0, '0000');
 						$yy += 100;
+						$qr_y+=100;
 					}
-					$j++;
+					
 			
 					
-					//$svg=urldecode($value);
-					file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $value);
-					$html = '<img style="width:480px;height:302.36220472px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
-					PDF::writeHTMLCell(127, 80, 15, $yy+1, $html, '', 0, 0, false, 'L', false);
-					if($qr_flag == 1)
-					{
-						// new style
-						$style = array(
-							'border' => false,
-							'padding' => 0,
-							'bgcolor' => false
-						);
-						if($name == "TCL1-sticker")
-						{
-							PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 88, 65, 17, 17, $style, 'N');
-						}
-						else if($name == "TCL2-sticker")
-						{
-							PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 89.5, 69, 17, 17, $style, 'N');
-						}
-						else if($name == "TCL4-sticker")
-						{
-							PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 89, $qr_y+1.5, 17, 17, $style, 'N');
-						}
-						else if($name == "THL1-sticker")
-						{
-							PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 89, 66, 17, 17, $style, 'N');
-						}
-						else if($name == "THL3-sticker")
-						{
-							PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 90, $qr_y-2, 17, 17, $style, 'N');
-						}
-
-					}
-					$i++;
+					$svg=urldecode($value);
+					file_put_contents(public_path('/storage/app/template/big_sticker'.$j.'.svg'), $svg);
 					
+					$html = '<img style="width:480px;height:302.36220472px;" src="'.public_path('/storage/app/template/big_sticker'.$j.'.svg').'">';
+					PDF::writeHTMLCell(127, 80, 15, $yy+1, $html, '', 0, 0, false, 'L', false);
+				
+					if($qr_flag == 1)
+			{
+				// new style
+				$style = array(
+					'border' => false,
+					'padding' => 0,
+					'bgcolor' => false
+				);
+				if($name == "TCL1-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 88, 65, 17, 17, $style, 'N');
+				}
+				else if($name == "TCL2-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 89.5, 69, 17, 17, $style, 'N');
+				}
+				else if($name == "TCL4-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 89, $qr_y+1.5, 17, 17, $style, 'N');
+				}
+				else if($name == "THL1-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 89, 66, 17, 17, $style, 'N');
+				}
+				else if($name == "THL3-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 90, $qr_y-2, 17, 17, $style, 'N');
+				}
+				
+			}
+					
+					$i++;
+					$j++;
+					
+				}
+		
+				$k=0;
+				if(count($svgarr) == $j)
+				{
+					foreach($svgarr as $value)
+					{
+						unlink(public_path('/storage/app/template/big_sticker'.$k.'.svg'));
+						$k++;
+					}
 				}
 				$random = number_format(Carbon::now('Asia/Kolkata')->timestamp * rand(),0,'','');
 				PDF::Output( public_path('/storage/app/template/'.$random.'-'.$name.'.pdf'), 'F');
@@ -2315,6 +2335,7 @@ class JobManagerController extends Controller
 		PDF::setPrintHeader(false);
 		PDF::setPrintFooter(false);
 		PDF::SetFont('frankgothcnbt');
+		PDF::SetFont('franklingothicdemicond');
 		PDF::SetAutoPageBreak(TRUE);
 		$i=0;
 		 
@@ -2351,7 +2372,14 @@ class JobManagerController extends Controller
                  }
                 else
                 {
-                     PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'),-4, 53.5, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+                    if($qr_flag == 1)
+					{
+						PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'),-4, 53.5, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+					}
+					else
+					{
+						PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -2, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+					}
                 }
             }
 			
@@ -2387,6 +2415,19 @@ class JobManagerController extends Controller
 			}
 			
 			 $i++;
+		}
+		 
+		if($name != "TCL4-sticker" && $name != "TCL2-sticker")
+		{
+			$j=0;
+			if(count($svgarr) == $i)
+			{
+				foreach($svgarr as $value)
+				{
+					unlink(public_path('/storage/app/template/barcode_'.$j.'.png'));
+					$j++;
+				}
+			}
 		}
 		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
 		print_r(url('/storage/app/template/'.$name.'.pdf'));
@@ -2481,6 +2522,15 @@ class JobManagerController extends Controller
 //			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 39.7, 2, 42, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 //			
 			$i++;
+		}
+		$j=0;
+		if(count($svgarr) == $i)
+		{
+			foreach($svgarr as $value)
+			{
+				unlink(public_path('/storage/app/template/barcode_'.$j.'.png'));
+				$j++;
+			}
 		}
 		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
 		print_r(url('/storage/app/template/'.$name.'.pdf'));
