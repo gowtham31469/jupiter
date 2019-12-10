@@ -110,7 +110,8 @@ class TescoOrders
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
               }
             }
@@ -198,7 +199,8 @@ class TescoOrders
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
               }
             }
@@ -286,7 +288,8 @@ class TescoOrders
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
               }
               
@@ -375,7 +378,8 @@ class TescoOrders
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
               }
             }
@@ -463,7 +467,8 @@ class TescoOrders
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
               }
             }
@@ -551,7 +556,8 @@ class TescoOrders
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
               }
               
@@ -640,7 +646,8 @@ class TescoOrders
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
               }
               
@@ -678,6 +685,7 @@ class TescoOrders
       $template_id     = $request['edit_id'];
       $template_name   = $request['template_name'];
       $zone            = $request['zone'];
+      $qr_code         = explode('|', $request['qr_code']);
      
       if ($table_name == "tesco_tcl1_orders" || $table_name == "tesco_tcl2_orders" || $table_name == "tesco_tsl1_orders") {
           $table_array = array('tesco_tcl1_orders','tesco_tcl2_orders','tesco_tsl1_orders');
@@ -728,6 +736,7 @@ class TescoOrders
                     'tesco_metadata_supplier_id' => $request['supplier'],
                     'rfid_compliant'       => $request['rfid'],
                     'tag_at_source'        => $request['tag_at_source'],
+                    'ocn_number'           => $request['tesco_ocn'],
                   ]);
        // get quantity_table ids.
        $quantity_data = DB::table($qunty_tbl)
@@ -752,7 +761,8 @@ class TescoOrders
                     'cases_per_carton'   => $case_size[$i],
                     'size'               => null,
                     'count'              => $quantity,
-                    'ratio_pack_type'    => $this->ratio_pack_type[$i]
+                    'ratio_pack_type'    => $this->ratio_pack_type[$i],
+                    'qr_code'            => $qr_code[$i]
                   ]);
             }
             else if(($template_name == "TCL4" && $zone=="CE") || ($template_name == "TSL3" && $zone=="CE"))
@@ -763,7 +773,8 @@ class TescoOrders
                       'case_size'       => $case_size[$i],
                       $qnty_id          => $table_data->id,
                       'size'            => $single_size[$i],
-                      'count'           => $quantity
+                      'count'           => $quantity,
+                      'qr_code'         => $qr_code[$i]
                     ]);
             }
             else if(($template_name == "TCL4" && $zone=="UK") || ($template_name == "TSL3" && $zone=="UK"))

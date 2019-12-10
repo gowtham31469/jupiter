@@ -39,87 +39,10 @@ function template_list() {
 
 			if (buyer == "tesco") {
 				$('.descriptionDiv').addClass('hidden')
+
 				$('#tree1').jstree({
-                    'core': {
-                        'data': [{
-                            "id": 1,
-                            "text": "Stickers",
-                            "parent_id": 0,
-                            "children": [{
-                                "id": 2,
-                                "text": "Carton & Polybag Stickers",
-                                "parent_id": 1,
-                                "children": [{
-                                    "id": 3,
-                                    "text": "CE",
-                                    "parent_id": 2,
-                                    "children": [
-                                    {
-                                        "id": "5",
-                                        "text": "TCL 1",
-                                        "parent_id": 3
-                                    },{
-                                        "id": "6",
-                                        "text": "TCL 2",
-                                        "parent_id": 3
-                                    },{
-                                        "id": "7",
-                                        "text": "TSL 1",
-                                        "parent_id": 3
-                                    }, {
-                                        "id": "8",
-                                        "text": "TCL 4",
-                                        "parent_id": 3
-                                    }, {
-                                        "id": "9",
-                                        "text": "TSL 3",
-                                        "parent_id": 3
-                                    }, {
-                                        "id": "10",
-                                        "text": "THL 1",
-                                        "parent_id": 3
-                                    },{
-                                        "id": "11",
-                                        "text": "THL 3",
-                                        "parent_id": 3
-                                    }]
-                                }, {
-                                    "id": 4,
-                                    "text": "UK",
-                                    "parent_id": 2,
-                                    "children": [
-                                    {
-                                        "id": "12",
-                                        "text": "TCL 1",
-                                        "parent_id": 4
-                                    },{
-                                        "id": "13",
-                                        "text": "TCL 2",
-                                        "parent_id": 4
-                                    },{
-                                        "id": "14",
-                                        "text": "TSL 1",
-                                        "parent_id": 4
-                                    }, {
-                                        "id": "15",
-                                        "text": "TCL 4",
-                                        "parent_id": 4
-                                    }, {
-                                        "id": "16",
-                                        "text": "TSL 3",
-                                        "parent_id": 4
-                                    }, {
-                                        "id": "17",
-                                        "text": "THL 1",
-                                        "parent_id": 4
-                                    },{
-                                        "id": "18",
-                                        "text": "THL 3",
-                                        "parent_id": 4
-                                    }]
-                                }]
-                            }]
-                        }]
+					'core': {
+						'data': data
 					},
 					"types": {
 						"default": {
@@ -127,7 +50,12 @@ function template_list() {
 						}
 					},
 					"plugins": ["types", "search"]
+				}).on('loaded.jstree', function () {
+					$('#tree1').jstree('open_all');
+				}).bind("refresh.jstree", function (e, data) 
+					{ $(this).jstree("open_all");
 				});
+
 				$('#expand').bind("click", function () {
 					$('#tree1').jstree("open_all");
 				});

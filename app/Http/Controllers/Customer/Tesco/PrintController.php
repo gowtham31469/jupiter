@@ -252,8 +252,44 @@ class PrintController extends Controller
 				PDF::AddPage();
 				$i=0;
 				$yy=60;
+				$qr_y=67.5;
 				$j=0;
 				PDF::SetXY(10, 50);
+		
+				$qr_flag=$request->qr_flag;
+				if($name == "TCL1-sticker")
+				{
+					$tcl1_id=$request->tcl1_id;
+
+					$qr_code = DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$tcl1_id)->select('*')->get();
+
+				}
+				else if($name == "TCL2-sticker")
+				{
+					$tcl2_id=$request->tcl2_id;
+
+					$qr_code = DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$tcl2_id)->select('*')->get();
+				}
+
+				else if($name == "TCL4-sticker")
+				{
+					$tcl4_id=$request->tcl4_id;
+
+					$qr_code = DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$tcl4_id)->select('*')->get();
+				}
+				else if($name == "THL1-sticker")
+				{
+					$thl1_id=$request->thl1_id;
+
+					$qr_code = DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$thl1_id)->select('*')->get();
+				}
+				else if($name == "THL3-sticker")
+				{
+					$thl3_id=$request->thl3_id;
+
+					$qr_code = DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$thl3_id)->select('*')->get();
+				}
+		
 				foreach($svgarr as $value)
 				{
 					$svg=urldecode($value);
@@ -261,45 +297,61 @@ class PrintController extends Controller
 					if($i == 2)
 					{
 						$yy=60;
+						$qr_y=67.5;
 						PDF::AddPage();
-						PDF::RoundedRect(15, 60, 127, 80, 0, '0000');
 						$i = 0;
 					}
 					else if($i == 0)
 					{
-						PDF::RoundedRect(15, 60, 127, 80, 0, '0000');
 						$yy=60;
+						$qr_y=67.5;
 					}
 					else
 					{
-						PDF::RoundedRect(15, 160, 127, 80, 0, '0000');
 						$yy += 100;
+						$qr_y+=100;
 					}
-					
+					$j++;
 			
 					
 					$svg=urldecode($value);
-					file_put_contents(public_path('/storage/app/template/big_sticker'.$j.'.svg'), $svg);
-					
-					exec('inkscape -z -e '.public_path('/storage/app/template/big_sticker'.$j.'.png').' -w 1000 -h 1000 '.public_path('/storage/app/template/big_sticker'.$j.'.svg'));
-					
-					$html = '<img style="width:480px;height:302.36220472px;border:1px solid #333" src="'.public_path('/storage/app/template/big_sticker'.$j.'.png').'">';
+					file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
+					$html = '<img style="width:480px;height:302.36220472px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
 					PDF::writeHTMLCell(127, 80, 15, $yy+1, $html, '', 0, 0, false, 'L', false);
 				
-					$i++;
-					$j++;
-					
-				}
-		
-				$k=0;
-				if(count($svgarr) == $j)
+					if($qr_flag == 1)
+			{
+				// new style
+				$style = array(
+					'border' => false,
+					'padding' => 0,
+					'bgcolor' => false
+				);
+				if($name == "TCL1-sticker")
 				{
-					foreach($svgarr as $value)
-					{
-						unlink(public_path('/storage/app/template/big_sticker'.$k.'.png'));
-						unlink(public_path('/storage/app/template/big_sticker'.$k.'.svg'));
-						$k++;
-					}
+					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 88, 65, 17, 17, $style, 'N');
+				}
+				else if($name == "TCL2-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 89.5, 69, 17, 17, $style, 'N');
+				}
+				else if($name == "TCL4-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 89, $qr_y+1.5, 17, 17, $style, 'N');
+				}
+				else if($name == "THL1-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 89, 66, 17, 17, $style, 'N');
+				}
+				else if($name == "THL3-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 90, $qr_y-2, 17, 17, $style, 'N');
+				}
+				
+			}
+					
+					$i++;
+					
 				}
 				PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
 				print_r(url('/storage/app/template/'.$name.'.pdf'));
@@ -516,7 +568,7 @@ class PrintController extends Controller
 		PDF::AddPage();
 		$i=0;
 		$yy=0;
-		$j=0;
+		$j=1;
 		PDF::SetXY(10, 50);
 		foreach($svgarr as $value)
 		{
@@ -526,35 +578,28 @@ class PrintController extends Controller
 			{
 				$xx=15;
 				$yy+=50;
-				PDF::RoundedRect($xx , $yy - 1 , 42, 32, 0, '0000');
 			}
 			else if($i == 0)
 			{
 				$yy=50;
 				$xx=15;
-				PDF::RoundedRect($xx , $yy - 1 , 42, 32, 0, '0000');
 			}
 			else if($i == 12)
 			{
 				PDF::AddPage();
 				$xx=15;
 				$yy=50;
-				PDF::RoundedRect($xx , $yy - 1 , 42, 32, 0, '0000');
 			}
 			else 
 			{
 				$xx+=70;
-				PDF::RoundedRect($xx , $yy - 1 , 42, 32, 0, '0000');
 			}
+			$j++;
 			
 			
-			
-			file_put_contents(public_path('/storage/app/template/small_sticker'.$j.'.svg'), $svg);
+			file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
 			// PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
-			
-			exec('inkscape -z -e '.public_path('/storage/app/template/small_sticker'.$j.'.png').' -w 1000 -h 1000 '.public_path('/storage/app/template/small_sticker'.$j.'.svg'));
-			
-			$html = '<img style="width:151.18110236px;height:113.38582677px;border:1px solid #333" src="'.public_path('/storage/app/template/small_sticker'.$j.'.png').'">';
+			$html = '<img style="width:151.18110236px;height:113.38582677px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
 			PDF::writeHTMLCell(42, 32, $xx, $yy, $html, '', 0, 0, false, 'L', false);
 			
 //			
@@ -563,19 +608,7 @@ class PrintController extends Controller
 //			shell_exec("inkscape -z -e ".public_path('/storage/app/template/demo_'.$j.'.png')." -w 1024 -h 653 ".public_path('/storage/app/template/demo_'.$j.'.svg')."");
 //			PDF::Image(public_path('/storage/app/template/demo_'.$j.'.png'), $xx, $yy, 40, 30, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
 			$i++;
-			$j++;
 
-		}
-		
-		$k=0;
-		if(count($svgarr) == $j)
-		{
-			foreach($svgarr as $value)
-			{
-				unlink(public_path('/storage/app/template/small_sticker'.$k.'.png'));
-				unlink(public_path('/storage/app/template/small_sticker'.$k.'.svg'));
-				$k++;
-			}
 		}
 		
        
