@@ -252,8 +252,44 @@ class PrintController extends Controller
 				PDF::AddPage();
 				$i=0;
 				$yy=60;
-				$j=1;
+				$qr_y=67.5;
+				$j=0;
 				PDF::SetXY(10, 50);
+		
+				$qr_flag=$request->qr_flag;
+				if($name == "TCL1-sticker")
+				{
+					$tcl1_id=$request->tcl1_id;
+
+					$qr_code = DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$tcl1_id)->select('*')->get();
+
+				}
+				else if($name == "TCL2-sticker")
+				{
+					$tcl2_id=$request->tcl2_id;
+
+					$qr_code = DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$tcl2_id)->select('*')->get();
+				}
+
+				else if($name == "TCL4-sticker")
+				{
+					$tcl4_id=$request->tcl4_id;
+
+					$qr_code = DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$tcl4_id)->select('*')->get();
+				}
+				else if($name == "THL1-sticker")
+				{
+					$thl1_id=$request->thl1_id;
+
+					$qr_code = DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$thl1_id)->select('*')->get();
+				}
+				else if($name == "THL3-sticker")
+				{
+					$thl3_id=$request->thl3_id;
+
+					$qr_code = DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$thl3_id)->select('*')->get();
+				}
+		
 				foreach($svgarr as $value)
 				{
 					$svg=urldecode($value);
@@ -261,16 +297,19 @@ class PrintController extends Controller
 					if($i == 2)
 					{
 						$yy=60;
+						$qr_y=67.5;
 						PDF::AddPage();
 						$i = 0;
 					}
 					else if($i == 0)
 					{
 						$yy=60;
+						$qr_y=67.5;
 					}
 					else
 					{
 						$yy += 100;
+						$qr_y+=100;
 					}
 					$j++;
 			
@@ -280,6 +319,37 @@ class PrintController extends Controller
 					$html = '<img style="width:480px;height:302.36220472px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
 					PDF::writeHTMLCell(127, 80, 15, $yy+1, $html, '', 0, 0, false, 'L', false);
 				
+					if($qr_flag == 1)
+			{
+				// new style
+				$style = array(
+					'border' => false,
+					'padding' => 0,
+					'bgcolor' => false
+				);
+				if($name == "TCL1-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 88, 65, 17, 17, $style, 'N');
+				}
+				else if($name == "TCL2-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 89.5, 69, 17, 17, $style, 'N');
+				}
+				else if($name == "TCL4-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 89, $qr_y+1.5, 17, 17, $style, 'N');
+				}
+				else if($name == "THL1-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 89, 66, 17, 17, $style, 'N');
+				}
+				else if($name == "THL3-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 90, $qr_y-2, 17, 17, $style, 'N');
+				}
+				
+			}
+					
 					$i++;
 					
 				}

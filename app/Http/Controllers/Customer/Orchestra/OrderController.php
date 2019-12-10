@@ -684,7 +684,7 @@ class OrderController extends Controller
 		
         $data['orchestra_age_group']= DB::table('orchestra_age_group')->select('*')->get();      
         
-        $data['orchestra_solid_carton_sticker_orders']=DB::table('orchestra_solid_carton_sticker_orders')->select('*')->where('uvc',$uvc)->where('po',$po)->where('status','!=','Order Cancelled')->get();
+        $data['orchestra_solid_carton_sticker_orders']=DB::table('orchestra_solid_carton_sticker_orders')->select('*')->where('uvc',$uvc)->where('po',$po)->get();
         if(count($data['orchestra_solid_carton_sticker_orders']) > 0)
         {
             $data['carton_id']=$data['orchestra_solid_carton_sticker_orders'][0]->id;
@@ -700,7 +700,7 @@ class OrderController extends Controller
         }
 		
         
-        $data['orchestra_solid_poly_bag_sticker_orders']=DB::table('orchestra_solid_poly_bag_sticker_orders')->select('*')->where('uvc',$uvc)->where('po',$po)->where('status','!=','Order Cancelled')->get();
+        $data['orchestra_solid_poly_bag_sticker_orders']=DB::table('orchestra_solid_poly_bag_sticker_orders')->select('*')->where('uvc',$uvc)->where('po',$po)->get();
         if(count($data['orchestra_solid_poly_bag_sticker_orders']) > 0)
         {
              $data['poly_id']=$data['orchestra_solid_poly_bag_sticker_orders'][0]->id;
@@ -715,7 +715,7 @@ class OrderController extends Controller
             $value1->qty=$orchestra_solid_poly_bag_sticker_orders_qty;
         }
         
-        $data['orchestra_standard_carton_sticker_orders']=DB::table('orchestra_standard_carton_sticker_orders')->select('*')->where('uvc',$uvc)->where('po',$po)->where('status','!=','Order Cancelled')->get();
+        $data['orchestra_standard_carton_sticker_orders']=DB::table('orchestra_standard_carton_sticker_orders')->select('*')->where('uvc',$uvc)->where('po',$po)->get();
         if(count($data['orchestra_standard_carton_sticker_orders']) > 0)
         {
             $data['std_carton_id']=$data['orchestra_standard_carton_sticker_orders'][0]->id;
@@ -725,7 +725,7 @@ class OrderController extends Controller
             $data['std_carton_id']="null";
         }
         
-        $data['orchestra_standard_poly_bag_sticker_orders']=DB::table('orchestra_standard_poly_bag_sticker_orders')->select('*')->where('uvc',$uvc)->where('po',$po)->where('status','!=','Order Cancelled')->get();
+        $data['orchestra_standard_poly_bag_sticker_orders']=DB::table('orchestra_standard_poly_bag_sticker_orders')->select('*')->where('uvc',$uvc)->where('po',$po)->get();
         if(count($data['orchestra_standard_poly_bag_sticker_orders']) > 0)
         {
              $data['std_poly_id']=$data['orchestra_standard_poly_bag_sticker_orders'][0]->id;
@@ -1080,12 +1080,7 @@ class OrderController extends Controller
                     'status' => "Order Cancelled"
                 ]);
 		
-        $hang_tag = HangTagOrders::where('id',$id)->select('*')->first();
-        
-        HangTagOrders::where('uvc',$hang_tag->uvc)
-                ->update([
-                    'status' => "Order Cancelled"
-                ]);
+		$hang_tag = HangTagOrders::where('id',$id)->select('*')->first();
 		
 		$orchestra_hang = HangTagOrders::where('uvc',$hang_tag->uvc)->where('status','!=','Order Cancelled')->where('season_code',$hang_tag->season_code)->select('*')->get();
 		
@@ -1120,12 +1115,7 @@ class OrderController extends Controller
                     'status' => "Order Cancelled"
                 ]);
 		
-        $main_label = MainLabelOrders::where('id',$id)->select('*')->first();
-        
-        MainLabelOrders::where('uvc',$main_label->uvc)
-                ->update([
-                    'status' => "Order Cancelled"
-                ]);
+		$main_label = MainLabelOrders::where('id',$id)->select('*')->first();
 		
 		$orchestra_hang = HangTagOrders::where('uvc',$main_label->uvc)->where('status','!=','Order Cancelled')->where('season_code',$main_label->season_code)->select('*')->get();
 		
@@ -1197,12 +1187,7 @@ class OrderController extends Controller
                     'status' => "Order Cancelled"
                 ]);
 		
-        $special_tag = SpecialTagOrders::where('id',$id)->select('*')->first();
-        
-        SpecialTagOrders::where('uvc',$special_tag->uvc)
-                ->update([
-                    'status' => "Order Cancelled"
-                ]);
+		$special_tag = SpecialTagOrders::where('id',$id)->select('*')->first();
 		
 		$orchestra_hang = HangTagOrders::where('uvc',$special_tag->uvc)->where('status','!=','Order Cancelled')->where('season_code',$special_tag->season_code)->select('*')->get();
 		
@@ -1237,12 +1222,7 @@ class OrderController extends Controller
                     'status' => "Order Cancelled"
                 ]);
 		
-        $heat_transfer = HeatTransferOrders::where('id',$id)->select('*')->first();
-        
-        HeatTransferOrders::where('uvc',$heat_transfer->uvc)
-                ->update([
-                    'status' => "Order Cancelled"
-                ]);
+		$heat_transfer = HeatTransferOrders::where('id',$id)->select('*')->first();
 		
 		$orchestra_hang = HangTagOrders::where('uvc',$heat_transfer->uvc)->where('status','!=','Order Cancelled')->where('season_code',$heat_transfer->season_code)->select('*')->get();
 		
@@ -1276,12 +1256,7 @@ class OrderController extends Controller
                     'status' => "Order Cancelled"
                 ]);
 		
-        $size_label = SizeLabelOrders::where('id',$id)->select('*')->first();
-        
-        SizeLabelOrders::where('uvc',$size_label->uvc)
-                ->update([
-                    'status' => "Order Cancelled"
-                ]);
+		$size_label = SizeLabelOrders::where('id',$id)->select('*')->first();
 		
 		$orchestra_hang = HangTagOrders::where('uvc',$size_label->uvc)->where('status','!=','Order Cancelled')->where('season_code',$size_label->season_code)->select('*')->get();
 		
@@ -1298,54 +1273,6 @@ class OrderController extends Controller
 		$update_po_disable = count($orchestra_hang) + count($orchestra_main) + count($orchestra_wash) + count($orchestra_special) + count($orchestra_heat) + count($orchestra_size);
 		
 		$result = response()->json(['error'=> false,'message' =>'success','update_po_disable' => $update_po_disable],200);
-		
-		return $result;
-    }
-    /**
-     * This Function is used to remove Standard Stickers.
-     *
-     * @return Void
-     */
-	public function removeStandardStickers(Request $request)
-	{
-        $carton_id=$request->carton_id;
-        $poly_id=$request->poly_id;
-		
-        StandardCartonStickers::where('id',$carton_id)
-        ->update([
-            'status' => "Order Cancelled"
-        ]);
-
-        StandardPolyStickers::where('id',$poly_id)
-        ->update([
-            'status' => "Order Cancelled"
-        ]);
-		
-		$result = response()->json(['error'=> false,'message' =>'success'],200);
-		
-		return $result;
-    }
-     /**
-     * This Function is used to remove Solid Stickers.
-     *
-     * @return Void
-     */
-	public function removeSolidStickers(Request $request)
-	{
-		$carton_id=$request->carton_id;
-        $poly_id=$request->poly_id;
-		
-	    SolidCartonStickerOrders::where('id',$carton_id)
-                ->update([
-                    'status' => "Order Cancelled"
-                ]);
-
-        SolidPolyStickerOrders::where('id',$poly_id)
-                ->update([
-                    'status' => "Order Cancelled"
-                ]);
-		
-		$result = response()->json(['error'=> false,'message' =>'success'],200);
 		
 		return $result;
 	}
@@ -2125,7 +2052,6 @@ class OrderController extends Controller
                           'sticker_order_status' => "Order Placed"
 
             ]);
-            $insert_poly_id = "";
         }
         else
         {
@@ -2163,7 +2089,6 @@ class OrderController extends Controller
                           'sticker_order_status' => "Order Placed"
 
             ]);
-            $insert_poly_id = $inserted_poly->id;
         }
         if($carton_id != "null")
         {
@@ -2204,7 +2129,6 @@ class OrderController extends Controller
                           'sticker_order_status' => "Order Placed"
 
             ]);
-            $insert_carton_id = "";
         }
         else
         {
@@ -2242,10 +2166,7 @@ class OrderController extends Controller
                           'sticker_order_status' => "Order Placed"
 
             ]);
-            $insert_carton_id = $inserted->id;
         }
-
-        return response()->json(['error'=> false,'message' =>'success','poly_id' => $insert_poly_id,'carton_id' => $insert_carton_id],200);
        
            
     }
@@ -2359,7 +2280,6 @@ class OrderController extends Controller
                           'sticker_order_status' => "Order Placed"
 
             ]);
-            $insert_poly_id = "";
         }
         else
         {
@@ -2403,7 +2323,6 @@ class OrderController extends Controller
                           'sticker_order_status' => "Order Placed"
 
             ]);
-            $insert_poly_id = $inserted_poly->id;
                 
         }
         if($carton_id != "null")
@@ -2451,7 +2370,6 @@ class OrderController extends Controller
                           'sticker_order_status' => "Order Placed"
 
             ]);
-            $insert_carton_id = "";
         }
         else
         {
@@ -2498,10 +2416,8 @@ class OrderController extends Controller
                           'sticker_order_status' => "Order Placed"
 
             ]);
-            $insert_carton_id = $inserted->id;
         }
-
-        return response()->json(['error'=> false,'message' =>'success','poly_id' => $insert_poly_id,'carton_id' => $insert_carton_id],200);
+       
            
     }
 
@@ -2926,7 +2842,7 @@ class OrderController extends Controller
 		
         if($id != "null")
         {
-			$po_wcl = WashLabelOrders::where('uvc',$uvc)->where('season_code',$season_code)->where('po',$po_select)->where('status','!=','Order Cancelled')->select('*')->get();
+			$po_wcl = WashLabelOrders::where('uvc',$uvc)->where('season_code',$season_code)->where('po',$po_select)->select('*')->get();
 			
 			if(count($po_wcl) > 0)
 			{
@@ -3421,7 +3337,7 @@ class OrderController extends Controller
 		$uvc_id    = $request->uvc_id;
 		$card_flag    = $request->card_flag;
 		
-	    $data['orchestra_wash_care_label_orders'] = DB::table('orchestra_wash_care_label_orders')->select('*')->where('uvc',$uvc_id)->where('season_code',$season_code)->where('po',$po)->where('status','!=','Order Cancelled')->where('card_flag',$card_flag)->get();
+	    $data['orchestra_wash_care_label_orders'] = DB::table('orchestra_wash_care_label_orders')->select('*')->where('uvc',$uvc_id)->where('season_code',$season_code)->where('po',$po)->where('card_flag',$card_flag)->get();
 		
 		if(count($data['orchestra_wash_care_label_orders']) > 0)
 		{
