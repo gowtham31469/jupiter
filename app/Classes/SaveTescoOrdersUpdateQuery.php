@@ -51,7 +51,8 @@ class SaveTescoOrdersUpdateQuery
                           'pi_status'            => "",
                           'po_status'            => "",
                           'order_placed_by'      => $created_by,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
             
         } catch (\Exception $e)
@@ -91,7 +92,8 @@ class SaveTescoOrdersUpdateQuery
                           'pi_status'            => "",
                           'po_status'            => "",
                           'order_placed_by'      => $created_by,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
             
         } catch (\Exception $e)
@@ -131,7 +133,8 @@ class SaveTescoOrdersUpdateQuery
                           'pi_status'            => "",
                           'po_status'            => "",
                           'order_placed_by'      => $created_by,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
             
         } catch (\Exception $e)
@@ -171,7 +174,8 @@ class SaveTescoOrdersUpdateQuery
                           'pi_status'            => "",
                           'po_status'            => "",
                           'order_placed_by'      => $created_by,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
             
         } catch (\Exception $e)
@@ -212,7 +216,8 @@ class SaveTescoOrdersUpdateQuery
                             'po_status'            => "",
                             'is_order_count_empty' => "",
                             'order_placed_by'      => $created_by,
-                            'ocn_number'           => $request['ocn_no']
+                            'ocn_number'           => $request['ocn_no'],
+                            'full_description'     => $request['full_description']
                           ]);
             
         } catch (\Exception $e)
@@ -252,7 +257,8 @@ class SaveTescoOrdersUpdateQuery
                           'pi_status'            => "",
                           'po_status'            => "",
                           'order_placed_by'      => $created_by,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
             
         } catch (\Exception $e)
@@ -292,7 +298,8 @@ class SaveTescoOrdersUpdateQuery
                           'pi_status'            => "",
                           'po_status'            => "",
                           'order_placed_by'      => $created_by,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
             
             

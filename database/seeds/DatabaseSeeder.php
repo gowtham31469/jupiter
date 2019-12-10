@@ -28,6 +28,8 @@ class DatabaseSeeder extends Seeder
 			LIDLItemMasterTableSeeder::class,
 			ERVEItemMasterTableSeeder::class,
 			OSTINItemMasterTableSeeder::class,
+			TescoTemplateTableSeeder::class,
+			TescoItemMasterTableSeeder::class,
 		]);
     }
 }
