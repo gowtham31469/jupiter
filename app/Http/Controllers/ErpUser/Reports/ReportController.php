@@ -520,12 +520,13 @@ public function setUpDatatable(Request $request)
                                 ->whereIn('invoice_details.buyer_po_number',$request->buyer_pos)
 
                                 ->whereBetween('invoice.created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
-                                ->select('invoice.invoice_id as Inv.No',
+                                ->select(DB::raw('to_char(invoice.created_at,'."'".$ddmmyy."'".') as "Date"'),
+                                    'invoice.invoice_id as Inv.No',
                                         // 'invoice.created_at as Date',
                                         'company_name as Customer',
                                         'grand_total as Inv_Val','tax','invoice.place_of_supply',
                                         'base_amnt as Base_Val',
-                                DB::raw('to_char(invoice.created_at,'."'".$ddmmyy."'".') as "Date"'),)
+                                )
                                 ->distinct('invoice.id')
                                 ->get();
                     }
