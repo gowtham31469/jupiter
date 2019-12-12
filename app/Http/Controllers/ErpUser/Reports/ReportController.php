@@ -525,7 +525,7 @@ public function setUpDatatable(Request $request)
                                         // 'invoice.created_at as Date',
                                         'company_name as Customer',
                                         'grand_total as Inv_Val','tax','invoice.place_of_supply',
-                                        'base_amnt as Base_Val',
+                                        'base_amnt as Base_Val'
                                 )
                                 ->distinct('invoice.id')
                                 ->get();
