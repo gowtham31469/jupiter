@@ -450,7 +450,9 @@ class JobManagerController extends Controller
 									->orderBy('erp_order_details.id', 'desc')
 									->select('*')
 									->get();
-		
+			
+		$tesco_item_master=DB::table('tesco_item_master')->where('id',$order_details{0}->template_id)->select('*')->get();
+			
 		foreach($order_details as $value)
 		{
 			$order_details_omp  = 	DB::table($value->order_qnty_table_name)
@@ -471,6 +473,7 @@ class JobManagerController extends Controller
 			
 			$value->tpnd              = $order_details_omp{0}->tpnd;
 			$value->itf_barcode       = $order_details_omp{0}->itf_barcode;
+			$value->qr_code       	  = $order_details_omp{0}->qr_code;
 			$value->units_per_carton  = $order_details_omp{0}->units_per_carton;
 			$value->cases_per_carton  = $order_details_omp{0}->cases_per_carton;
 			$value->ean_barcode       = $order_details_omp{0}->ean_barcode;
@@ -492,7 +495,7 @@ class JobManagerController extends Controller
 			$value->tag_at_source     = $order_omp{0}->tag_at_source;
 			
 		}
-		return response()->json(['error'=> true,'order_details' =>$order_details],200);
+		return response()->json(['error'=> true,'order_details' =>$order_details,'tesco_item_master' =>$tesco_item_master],200);
 		}
 	
 		
@@ -1432,42 +1435,98 @@ class JobManagerController extends Controller
 		
 				$svgarr = explode(',_',$request->svg);
 				$name=$request->name;
-			   // $svg=urldecode($request->svg);
+		        $svg=urldecode($request->svg);
 				PDF::setImageScale(1);
 				PDF::SetFont('frankgothcnbt');
 				PDF::AddPage();
 				$i=0;
 				$yy=60;
-				$j=1;
+				$qr_y=67.5;
+				$j=0;
 				PDF::SetXY(10, 50);
+		
+		
+				$qr_flag=$request->qr_flag;
+				$id=$request->id;
+				$qr_code=explode(',_',$request->qr_code_fin);
+		
 				foreach($svgarr as $value)
 				{
-					//$svg=urldecode($value);
+					$svg=urldecode($value);
 					PDF::SetFillColor(255,255,255);
 					if($i == 2)
 					{
 						$yy=60;
+						$qr_y=67.5;
 						PDF::AddPage();
+						PDF::RoundedRect(15, 60, 127, 80, 0, '0000');
 						$i = 0;
 					}
 					else if($i == 0)
 					{
+						PDF::RoundedRect(15, 60, 127, 80, 0, '0000');
 						$yy=60;
+						$qr_y=67.5;
 					}
 					else
 					{
+						PDF::RoundedRect(15, 160, 127, 80, 0, '0000');
 						$yy += 100;
+						$qr_y+=100;
 					}
-					$j++;
+					
 			
 					
-					//$svg=urldecode($value);
-					file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $value);
-					$html = '<img style="width:480px;height:302.36220472px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
+					$svg=urldecode($value);
+					file_put_contents(public_path('/storage/app/template/big_sticker'.$j.'.svg'), $svg);
+					
+					$html = '<img style="width:480px;height:302.36220472px;" src="'.public_path('/storage/app/template/big_sticker'.$j.'.svg').'">';
 					PDF::writeHTMLCell(127, 80, 15, $yy+1, $html, '', 0, 0, false, 'L', false);
 				
-					$i++;
+					if($qr_flag == 1)
+			{
+				// new style
+				$style = array(
+					'border' => false,
+					'padding' => 0,
+					'bgcolor' => false
+				);
+				if($name == "TCL1-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 88, 65, 17, 17, $style, 'N');
+				}
+				else if($name == "TCL2-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 89.5, 69, 17, 17, $style, 'N');
+				}
+				else if($name == "TCL4-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 89, $qr_y+1.5, 17, 17, $style, 'N');
+				}
+				else if($name == "THL1-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 89, 66, 17, 17, $style, 'N');
+				}
+				else if($name == "THL3-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 90, $qr_y-2, 17, 17, $style, 'N');
+				}
+				
+			}
 					
+					$i++;
+					$j++;
+					
+				}
+		
+				$k=0;
+				if(count($svgarr) == $j)
+				{
+					foreach($svgarr as $value)
+					{
+						unlink(public_path('/storage/app/template/big_sticker'.$k.'.svg'));
+						$k++;
+					}
 				}
 				$random = number_format(Carbon::now('Asia/Kolkata')->timestamp * rand(),0,'','');
 				PDF::Output( public_path('/storage/app/template/'.$random.'-'.$name.'.pdf'), 'F');
@@ -2276,8 +2335,13 @@ class JobManagerController extends Controller
 		PDF::setPrintHeader(false);
 		PDF::setPrintFooter(false);
 		PDF::SetFont('frankgothcnbt');
+		PDF::SetFont('franklingothicdemicond');
 		PDF::SetAutoPageBreak(TRUE);
 		$i=0;
+		 
+		$qr_flag=$request->qr_flag;
+		$qr_code=explode(',_',$request->qr_code_fin);
+		 
 		foreach($svgarr as $value)
 		{
 			 PDF::SetMargins(0, 0, 0, false);
@@ -2286,18 +2350,84 @@ class JobManagerController extends Controller
 			 PDF::setImageScale(1.66);
 			 PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=127, $h=80, $link='', $align='', $palign='', $border=0, $fitonpage=true);
 			if($name != "TCL2-sticker" && $name != "TCL4-sticker")
+            {
+                 if($name != "THL3-sticker")
+                 {
+                     if($qr_flag == 1)
+					 {
+						 if($name == "THL1-sticker")
+                 		 {
+							 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+						 }
+						 else
+						 {
+							 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+						 }
+						 
+					 }
+					 else
+					 {
+						 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+					 }
+                 }
+                else
+                {
+                    if($qr_flag == 1)
+					{
+						PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'),-4, 53.5, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+					}
+					else
+					{
+						PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -2, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+					}
+                }
+            }
+			
+			if($qr_flag == 1)
 			{
-				 if($name != "THL3-sticker")
-				 {
-					 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-				 }
-				else
+				// new style
+				$style = array(
+					'border' => false,
+					'padding' => 0,
+					'bgcolor' => false
+				);
+				if($name == "TCL1-sticker")
 				{
-					 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -2, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+					PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 73.5, 5, 17, 17, $style, 'N');
 				}
+				else if($name == "TCL2-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 74.5, 8.5, 17, 17, $style, 'N');
+				}
+				else if($name == "TCL4-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 74, 8.5, 17, 17, $style, 'N');
+				}
+				else if($name == "THL1-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 74, 5, 17, 17, $style, 'N');
+				}
+				else if($name == "THL3-sticker")
+				{
+					PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 75, 5, 17, 17, $style, 'N');
+				}
+				
 			}
 			
 			 $i++;
+		}
+		 
+		if($name != "TCL4-sticker" && $name != "TCL2-sticker")
+		{
+			$j=0;
+			if(count($svgarr) == $i)
+			{
+				foreach($svgarr as $value)
+				{
+					unlink(public_path('/storage/app/template/barcode_'.$j.'.png'));
+					$j++;
+				}
+			}
 		}
 		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
 		print_r(url('/storage/app/template/'.$name.'.pdf'));
@@ -2392,6 +2522,15 @@ class JobManagerController extends Controller
 //			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 39.7, 2, 42, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 //			
 			$i++;
+		}
+		$j=0;
+		if(count($svgarr) == $i)
+		{
+			foreach($svgarr as $value)
+			{
+				unlink(public_path('/storage/app/template/barcode_'.$j.'.png'));
+				$j++;
+			}
 		}
 		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
 		print_r(url('/storage/app/template/'.$name.'.pdf'));

@@ -967,7 +967,9 @@ class OrderStatusController extends Controller
             $quantity_details = DB::table($table_name.'_quanty')
                                 ->where($qnty_id,$order_details->id)->orderBy('id')->get();
             $template_file=DB::table('tesco_template')->where('item_id',$order_details->template_id)->select('*')->get();
-
+			
+			$tesco_item_master=DB::table('tesco_item_master')->where('id',$order_details->template_id)->select('*')->get();
+			
             $moq     =    DB::table('price_taxation')->where('template_id',$order_details->template_id)->where('customer_id',$order_details->tesco_supplier_id)->where('buyer_id',2)->value('moq');
 
             // fetch erp_order_details table status
@@ -979,7 +981,7 @@ class OrderStatusController extends Controller
 
             if ($order_details && $quantity_details)
             {
-                $result = response()->json(['error'=> false,'message' =>'success','order_details'=>$order_details,'quantity_details'=>$quantity_details,'template_file'=>$template_file,'moq' => $moq, 'erp_details' => $erp_order_details],200);
+                $result = response()->json(['error'=> false,'message' =>'success','order_details'=>$order_details,'quantity_details'=>$quantity_details,'template_file'=>$template_file,'tesco_item_master'=>$tesco_item_master,'moq' => $moq, 'erp_details' => $erp_order_details],200);
             }
             else
             {
@@ -1008,8 +1010,8 @@ class OrderStatusController extends Controller
         $template_id     = $request['edit_id'];
         $template_name   = $request['template_name'];
         $zone            = $request['zone'];
-        $zone            = $request['zone'];
         $created_by      = Auth::guard('web_customer')->id();
+        $qr_code         = explode('|', $request['qr_code']);
 
         if($template_name == "TCL1")
         {
@@ -1123,7 +1125,8 @@ class OrderStatusController extends Controller
                                 'tesco_supplier_id'    => $customer_id,
                                 'rfid_compliant'       => $request['rfid'],
                                 'tag_at_source'        => $request['tag_at_source'],
-                                'is_order_count_empty' => $order_qnty
+                                'is_order_count_empty' => $order_qnty,
+                                'ocn_number'           => $request['tesco_ocn'],
                             ]);
 
             DB::table($qty_table_name)->where($foreign_key,$template_id)->delete();
@@ -1140,7 +1143,8 @@ class OrderStatusController extends Controller
                         'cases_per_carton'   => $case_size[$i],
                         'count'              => $count[$i],
                         'size'               => null,
-                        'ratio_pack_type'    => $this->ratio_pack_type[$i] 
+                        'ratio_pack_type'    => $this->ratio_pack_type[$i],
+                        'qr_code'           => $qr_code[$i]
                         ]);
                 }
                 else if(($template_name == "TCL4" && $zone=="CE") || ($template_name == "TSL3" && $zone=="CE") || ($template_name == "THL3" && $zone=="CE"))
@@ -1151,7 +1155,8 @@ class OrderStatusController extends Controller
                         $foreign_key         => $template_id,
                         'case_size'          => $case_size[$i],
                         'count'              => $count[$i],
-                        'size'               => $single_size[$i]
+                        'size'               => $single_size[$i],
+                        'qr_code'           => $qr_code[$i]
                         ]);
                 }
                 else if(($template_name == "TCL4" && $zone=="UK") || ($template_name == "TSL3" && $zone=="UK") || ($template_name == "THL3" && $zone=="UK"))

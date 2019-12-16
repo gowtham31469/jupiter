@@ -417,7 +417,8 @@
               result[index] += parseFloat($(val).text());
             });
         }); 
-        // console.log("+++++"+result[12])
+
+        console.log("+++++"+result[12])
         return result[12];
     }
     /**

@@ -282,7 +282,7 @@
                     <div class="col-md-4">
                 <h4 class="text-center osorderdetails">Order Details</h4>
                 <div class="scroll" style="height: calc(100vh - 80px);">
-                    
+                    	<input type="hidden" id="qr_flag">
                         <input type="hidden" id="edit_template_name">
                         <input type="hidden" id="edit_zone">
                         <input type="hidden" id="edit_template_type">
@@ -355,6 +355,11 @@
                                 </option>
                             @endforeach
                         </select>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label for="tesco_ocn">OCN Code</label>
+                        <input type="text" class="form-control" name="tesco_ocn" id="tesco_ocn" required="" placeholder="Enter OCN Code">
+                        <div class="help-block with-errors"></div>
                     </div>
                          <div class="form-group has-feedback">
                         <label for="tesco_rfid">RFID Compliant</label> 
