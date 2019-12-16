@@ -1,15 +1,21 @@
 @extends('layouts.Erp.app')
 @section('content')
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+{{-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.css"/>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.dataTables.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" />
-<link rel="stylesheet" href="{{ asset('css/Erp/reports.css') }}">
+ --}}
+<link rel="stylesheet" href="{{ asset('css/Erp/report/jquery-ui.css') }}">
+<link rel="stylesheet" href="{{ asset('css/Erp/report/datatables.min.css') }}">
+<link rel="stylesheet" href="{{ asset('css/Erp/report/buttons.dataTables.min.css') }}">
+<link rel="stylesheet" href="{{ asset('css/Erp/report/bootstrap-multiselect.css') }}">
+<link rel="stylesheet" href="{{ asset('css/Erp/report/reports.css') }}">
 @section('navbar')
 <style>
 	.navbar-nav > li > a {
 		line-height: 12px !important;
 	}
+	 table.dataTable tbody td {text-align: left;}
 </style>
 <ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
 	<li><a href="#" onClick="window.location.reload();return false;" class="active">Get Reports</a></li>
@@ -179,16 +185,26 @@
 </div>
 
 @section('jqueryIncludes')
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.min.js"></script>
+{{-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> --}}
+{{-- <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script> --}}
+{{-- <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script> --}}
+{{-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script> --}}
+{{-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script> --}}
+{{-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script> --}}
+{{-- <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script> --}}
+{{-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.min.js"></script>
+ --}}
+<script type="text/javascript" src="{{ asset('js/Erp/report/jquery-ui.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/Erp/report/datatables.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/Erp/report/dataTables.buttons.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/Erp/report/jszip.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/Erp/report/pdfmake.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/Erp/report/vfs_fonts.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/Erp/report/buttons.html5.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/Erp/report/bootstrap-multiselect.min.js') }}"></script>
 
-<script type="text/javascript" src="{{ asset('js/Erp/report.js') }}"></script>
+
+<script type="text/javascript" src="{{ asset('js/Erp/report/report.js') }}"></script>
 <script type="text/javascript">
 
 	function triggerLevel1()

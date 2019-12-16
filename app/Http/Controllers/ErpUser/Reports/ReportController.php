@@ -147,37 +147,37 @@ public function getTableFields(Request $request)
     $def_po1 = ["No","Order_Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference","OrderType"];
     $ext_po1 = ["AW_Dt", "PO_Dt","JC.No","JC_Dt","Inv.No","Inv_Dt","Buyer","Season","Country","ByrPo","Quantity","Reason","Reapproved_Dt","DispMode","Awb","Status"];
 
-    $def_po2 = ["No","Order_Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference"];
+    $def_po2 = ["No","Order_Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference","OrderType"];
     $ext_po2 = ["AW_Dt", "PO_Dt","JC.No","JC_Dt","Inv.No","Inv_Dt","Buyer","Season","Country","ByrPo","Quantity","Reason","Reapproved_Dt","DispMode","Awb","Status"];
 
-    $def_po3 = ["No","Order_Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference","Reason"];
+    $def_po3 = ["No","Order_Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference","Reason","OrderType"];
     $ext_po3 = ["AW_Dt", "PO_Dt","JC.No","JC_Dt","Inv.No","Inv_Dt","Buyer","Season","Country","ByrPo","Quantity","Reapproved_Dt","DispMode","Awb","Status"];
 
-    $def_po4 = ["No","Order_Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference","Reapproved_Dt"];
+    $def_po4 = ["No","Order_Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference","Reapproved_Dt","OrderType"];
     $ext_po4 = ["AW_Dt", "PO_Dt","JC.No","JC_Dt","Inv.No","Inv_Dt","Buyer","Season","Country","ByrPo","Quantity","DispMode","Awb","Status","Reason"];
 
-    $def_jc1 = ["No","Order_Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference"];
+    $def_jc1 = ["No","Order_Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference","OrderType"];
     $ext_jc1 = ["AW_Dt", "PO_Dt","JC_Dt","Inv.No","Inv_Dt","Buyer","Season","Country","ByrPo","Quantity","Reapproved_Dt","DispMode","Awb","Status","Reason"];
 
-    $def_jc2 = ["No","Order_Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference"];
+    $def_jc2 = ["No","Order_Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference","OrderType"];
     $ext_jc2 = ["AW_Dt", "PO_Dt","JC_Dt","Inv.No","Inv_Dt","Buyer","Season","Country","ByrPo","Quantity","Reapproved_Dt","DispMode","Awb","Status","Reason"];
 
-    $def_order1 = ["No","Order_Dt","ErpId","JC.No","Inv.No","Inv_Dt","Customer","Material","Style","P.O","OCN","Reference","Quantity"];
+    $def_order1 = ["No","Order_Dt","ErpId","JC.No","Inv.No","Inv_Dt","Customer","Material","Style","P.O","OCN","Reference","Quantity","OrderType"];
     $ext_order1 = ["AW_Dt", "PO_Dt","JC_Dt","Buyer","Season","Country","ByrPo","Reapproved_Dt","DispMode","Awb","Reason","Status"];
 
-    $def_order2 = ["No","Order_Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference","Quantity"];
+    $def_order2 = ["No","Order_Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference","Quantity","OrderType"];
     $ext_order2 = ["AW_Dt", "PO_Dt","Inv.No","Inv_Dt","JC_Dt","Buyer","Season","Country","ByrPo","Reapproved_Dt","DispMode","Awb","Reason","Status"];
 
-    $def_order3 = ["No","Order_Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference","Quantity","Reason"];
+    $def_order3 = ["No","Order_Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference","Quantity","Reason","OrderType"];
     $ext_order3 = ["AW_Dt", "PO_Dt","Inv.No","Inv_Dt","JC_Dt","Buyer","Season","Country","ByrPo","Reapproved_Dt","DispMode","Awb","Status"];
 
-    $def_order4 = ["No","Order_Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference","Quantity","Reason"];
+    $def_order4 = ["No","Order_Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference","Quantity","Reason","OrderType"];
     $ext_order4 = ["AW_Dt", "PO_Dt","Inv.No","Inv_Dt","JC_Dt","Buyer","Season","Country","ByrPo","Reapproved_Dt","DispMode","Awb","Status"];
 
-    $def_order5 = ["No","Order_Dt","ErpId","JC.No","Inv.No","Inv_Dt","Customer","Material","Style","P.O","OCN","Reference","Quantity"];
+    $def_order5 = ["No","Order_Dt","ErpId","JC.No","Inv.No","Inv_Dt","Customer","Material","Style","P.O","OCN","Reference","Quantity","OrderType"];
     $ext_order5 = ["AW_Dt", "PO_Dt","JC_Dt","Buyer","Season","Country","ByrPo","Reapproved_Dt","DispMode","Awb","Reason","Status"];
 
-    $def_order6 = ["No","Order_Dt","ErpId","JC.No","Inv.No","Inv_Dt","Customer","Material","Style","P.O","OCN","Reference","Quantity"];
+    $def_order6 = ["No","Order_Dt","ErpId","JC.No","Inv.No","Inv_Dt","Customer","Material","Style","P.O","OCN","Reference","Quantity","OrderType"];
     $ext_order6 = ["AW_Dt", "PO_Dt","JC_Dt","Buyer","Season","Country","ByrPo","Reapproved_Dt","DispMode","Awb","Reason","Status"];
 
     $def_invoice1 =["No","Inv.No","Date","Customer","Base_Val","CGST","SGST","Inv_Val"];
