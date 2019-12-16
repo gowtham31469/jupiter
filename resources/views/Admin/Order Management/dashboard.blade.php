@@ -1157,7 +1157,7 @@
 							}
 							if(value.delivery_date != null && value.delivery_date!= "")
 							{
-								var delivery_date = value.delivery_date;
+								var delivery_date = value.delivery_date.split('-').reverse().join('-')
 							}
 							else
 							{
@@ -1177,7 +1177,7 @@
 							}
 							if(value.delivery_date != null && value.delivery_date!= "")
 							{
-								var delivery_date = value.delivery_date;
+								var delivery_date = value.delivery_date.split('-').reverse().join('-')
 							}
 							else
 							{
@@ -1197,7 +1197,7 @@
 							}
 							if(value.delivery_date != null && value.delivery_date!= "")
 							{
-								var delivery_date = value.delivery_date;
+								var delivery_date = value.delivery_date.split('-').reverse().join('-')
 							}
 							else
 							{
@@ -1217,7 +1217,7 @@
 							}
 							if(value.delivery_date != null && value.delivery_date!= "")
 							{
-								var delivery_date = value.delivery_date;
+								var delivery_date = value.delivery_date.split('-').reverse().join('-')
 							}
 							else
 							{
@@ -1237,7 +1237,7 @@
 							}
 							if(value.delivery_date != null && value.delivery_date!= "")
 							{
-								var delivery_date = value.delivery_date;
+								var delivery_date = value.delivery_date.split('-').reverse().join('-')
 							}
 							else
 							{
@@ -1257,7 +1257,7 @@
 							}
 							if(value.delivery_date != null && value.delivery_date!= "")
 							{
-								var delivery_date = value.delivery_date;
+								var delivery_date = value.delivery_date.split('-').reverse().join('-')
 							}
 							else
 							{
@@ -1277,7 +1277,7 @@
 							}	
 							if(value.delivery_date != null && value.delivery_date!= "")
 							{
-								var delivery_date = value.delivery_date;
+								var delivery_date = value.delivery_date.split('-').reverse().join('-')
 							}
 							else
 							{

@@ -124,6 +124,12 @@ function template_list() {
 												$('#company_' + temp_id).val(value[0].company_id)
 												$('#tax_' + temp_id).val(value[0].tax)
 												$('#material_' + temp_id).val(value[0].material_id)
+												
+												if(value[0].tax == 0)
+												{
+													$('#tax_'+value[0].id).val("")
+												}
+												
 											});
 
 										    /* Template details edit form */
@@ -138,6 +144,7 @@ function template_list() {
 										           saveTescoTax(temp_id);
 										        }
 										      })
+											
 										}
 
 									},
@@ -292,7 +299,10 @@ function template_list() {
 											$('#company_' + data[0].id).val(data[0].company_id)
 											$('#tax_' + temp_id).val(data[0].tax)
 											$('#material_' + temp_id).val(data[0].material_id)
-
+											if(data[0].tax == 0)
+											{
+												$('#tax_'+data[0].id).val("")
+											}
 										}
 									},
 									error: function (errorXHR, errorStatus, errorThrown) {},
@@ -446,7 +456,10 @@ function template_list() {
 											$('#company_' + data[0].id).val(data[0].company_id)
 											$('#tax_' + temp_id).val(data[0].tax)
 											$('#material_' + temp_id).val(data[0].material_id)
-
+											if(data[0].tax == 0)
+											{
+												$('#tax_'+data[0].id).val("")
+											}
 										}
 									},
 									error: function (errorXHR, errorStatus, errorThrown) {},
