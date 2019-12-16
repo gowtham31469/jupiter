@@ -531,7 +531,7 @@ function tescoOrders(callback) {
                                 formData.append('ce_retek_purchase_order', ce_retek_purchase_order);
                                 formData.append('type', localStorage.getItem("template type"));
                                 formData.append('zone', localStorage.getItem("zone"));
-                                formData.append('template_name', localStorage.getItem("template_group"));
+                                formData.append('template_name', localStorage.getItem("template_group").replace(" with QR", ""));
                                 uploadPurchaseOrder(formData, localStorage.getItem("zone"));
                             } else {
                                 createOrders();
