@@ -144,40 +144,40 @@ public function level2Filter(Request $request)
 public function getTableFields(Request $request)
 {   
 
-    $def_po1 = ["No","Order_Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference"];
+    $def_po1 = ["No","Order_Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference","OrderType"];
     $ext_po1 = ["AW_Dt", "PO_Dt","JC.No","JC_Dt","Inv.No","Inv_Dt","Buyer","Season","Country","ByrPo","Quantity","Reason","Reapproved_Dt","DispMode","Awb","Status"];
 
-    $def_po2 = ["No","Order_Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference"];
+    $def_po2 = ["No","Order_Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference","OrderType"];
     $ext_po2 = ["AW_Dt", "PO_Dt","JC.No","JC_Dt","Inv.No","Inv_Dt","Buyer","Season","Country","ByrPo","Quantity","Reason","Reapproved_Dt","DispMode","Awb","Status"];
 
-    $def_po3 = ["No","Order_Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference","Reason"];
+    $def_po3 = ["No","Order_Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference","Reason","OrderType"];
     $ext_po3 = ["AW_Dt", "PO_Dt","JC.No","JC_Dt","Inv.No","Inv_Dt","Buyer","Season","Country","ByrPo","Quantity","Reapproved_Dt","DispMode","Awb","Status"];
 
-    $def_po4 = ["No","Order_Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference","Reapproved_Dt"];
+    $def_po4 = ["No","Order_Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference","Reapproved_Dt","OrderType"];
     $ext_po4 = ["AW_Dt", "PO_Dt","JC.No","JC_Dt","Inv.No","Inv_Dt","Buyer","Season","Country","ByrPo","Quantity","DispMode","Awb","Status","Reason"];
 
-    $def_jc1 = ["No","Order_Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference"];
+    $def_jc1 = ["No","Order_Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference","OrderType"];
     $ext_jc1 = ["AW_Dt", "PO_Dt","JC_Dt","Inv.No","Inv_Dt","Buyer","Season","Country","ByrPo","Quantity","Reapproved_Dt","DispMode","Awb","Status","Reason"];
 
-    $def_jc2 = ["No","Order_Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference"];
+    $def_jc2 = ["No","Order_Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference","OrderType"];
     $ext_jc2 = ["AW_Dt", "PO_Dt","JC_Dt","Inv.No","Inv_Dt","Buyer","Season","Country","ByrPo","Quantity","Reapproved_Dt","DispMode","Awb","Status","Reason"];
 
-    $def_order1 = ["No","Order_Dt","ErpId","JC.No","Inv.No","Inv_Dt","Customer","Material","Style","P.O","OCN","Reference","Quantity"];
+    $def_order1 = ["No","Order_Dt","ErpId","JC.No","Inv.No","Inv_Dt","Customer","Material","Style","P.O","OCN","Reference","Quantity","OrderType"];
     $ext_order1 = ["AW_Dt", "PO_Dt","JC_Dt","Buyer","Season","Country","ByrPo","Reapproved_Dt","DispMode","Awb","Reason","Status"];
 
-    $def_order2 = ["No","Order_Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference","Quantity"];
+    $def_order2 = ["No","Order_Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference","Quantity","OrderType"];
     $ext_order2 = ["AW_Dt", "PO_Dt","Inv.No","Inv_Dt","JC_Dt","Buyer","Season","Country","ByrPo","Reapproved_Dt","DispMode","Awb","Reason","Status"];
 
-    $def_order3 = ["No","Order_Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference","Quantity","Reason"];
+    $def_order3 = ["No","Order_Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference","Quantity","Reason","OrderType"];
     $ext_order3 = ["AW_Dt", "PO_Dt","Inv.No","Inv_Dt","JC_Dt","Buyer","Season","Country","ByrPo","Reapproved_Dt","DispMode","Awb","Status"];
 
-    $def_order4 = ["No","Order_Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference","Quantity","Reason"];
+    $def_order4 = ["No","Order_Dt","ErpId","JC.No","Customer","Material","Style","P.O","OCN","Reference","Quantity","Reason","OrderType"];
     $ext_order4 = ["AW_Dt", "PO_Dt","Inv.No","Inv_Dt","JC_Dt","Buyer","Season","Country","ByrPo","Reapproved_Dt","DispMode","Awb","Status"];
 
-    $def_order5 = ["No","Order_Dt","ErpId","JC.No","Inv.No","Inv_Dt","Customer","Material","Style","P.O","OCN","Reference","Quantity"];
+    $def_order5 = ["No","Order_Dt","ErpId","JC.No","Inv.No","Inv_Dt","Customer","Material","Style","P.O","OCN","Reference","Quantity","OrderType"];
     $ext_order5 = ["AW_Dt", "PO_Dt","JC_Dt","Buyer","Season","Country","ByrPo","Reapproved_Dt","DispMode","Awb","Reason","Status"];
 
-    $def_order6 = ["No","Order_Dt","ErpId","JC.No","Inv.No","Inv_Dt","Customer","Material","Style","P.O","OCN","Reference","Quantity"];
+    $def_order6 = ["No","Order_Dt","ErpId","JC.No","Inv.No","Inv_Dt","Customer","Material","Style","P.O","OCN","Reference","Quantity","OrderType"];
     $ext_order6 = ["AW_Dt", "PO_Dt","JC_Dt","Buyer","Season","Country","ByrPo","Reapproved_Dt","DispMode","Awb","Reason","Status"];
 
     $def_invoice1 =["No","Inv.No","Date","Customer","Base_Val","CGST","SGST","Inv_Val"];
@@ -507,6 +507,29 @@ public function setUpDatatable(Request $request)
                 
                   $ddmmyy="DD/MM/YYYY";  
                   $queryRes   = Invoices::whereIn('invoice.id',$invoiceIds)
+
+                                    // ->join('customers','invoice.customer_id','customers.id')
+                                    // ->join('invoice_details','invoice_details.invoice_id','invoice.id')
+                                    // ->join('buyers','invoice.buyer_id','buyers.id')
+
+                                    // ->whereIn('invoice_details.reference_no',$request->references)
+                                    // ->whereIn('invoice.buyer_id',$request->buyer)
+                                    // ->whereIn('invoice.customer_id',$request->customers)
+                                    // ->whereIn('invoice_details.style_no',$request->styles)
+                                    // ->whereIn('invoice_details.ocn_no',$request->ocns)
+                                    // ->whereIn('invoice.po_no',$request->pos)
+                                    // ->whereIn('invoice_details.buyer_po_number',$request->buyer_pos)
+
+                                    // ->whereBetween('invoice.created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
+                                    // ->select('invoice.invoice_id as Inv.No',
+                                    //         // 'invoice.created_at as Date',
+                                    //         'company_name as Customer',
+                                    //         'grand_total as Inv_Val','tax','invoice.place_of_supply',
+                                    //         'base_amnt as Base_Val',
+                                    // DB::raw('to_char(invoice.created_at,'."'".$ddmmyy."'".') as "Date"'),)
+                                    // ->distinct('invoice.id')
+                                    // ->get();
+
                                 ->join('customers','invoice.customer_id','customers.id')
                                 ->join('invoice_details','invoice_details.invoice_id','invoice.id')
                                 ->join('buyers','invoice.buyer_id','buyers.id')
@@ -529,6 +552,7 @@ public function setUpDatatable(Request $request)
                                 )
                                 ->distinct('invoice.id')
                                 ->get();
+// >>>>>>> d59299edad6af6b8f5afa67d67da7dfc7fed3ef9
                     }
                     $queryRes->map(function ($queryRes,$key) {
                     $queryRes->No =$key+1;
@@ -609,7 +633,7 @@ public function setUpDatatable(Request $request)
                 ->leftJoin("actions",'actions.id', '=', 'event_history.action_id')
                 ->whereIn('actions.id',$statusId)
                 ->select([
-                    DB::raw('distinct on ("erp_order_id","reference") "erp_order_id" as "ErpId","reference" as "Reference"'),
+                    DB::raw('distinct on ("erp_order_id","reference","order_type") "erp_order_id" as "ErpId","reference" as "Reference","order_type" as "OrderType"'),
                     // DB::raw('distinct on ("erp_order_id") "erp_order_id"'),
                     DB::raw('to_char(erp_order_details.order_date,'."'".$ddmmyy."'".') as "Order_Dt"'),
                     DB::raw('to_char(po_reapproved_date,'."'".$ddmmyy."'".') as "Reapproved_Dt"'),
@@ -641,6 +665,7 @@ public function setUpDatatable(Request $request)
                 ])
                         ->orderBy('ErpId','asc')
                         ->orderBy('Reference','asc')
+                        ->orderBy('OrderType','asc')
                         ->orderBy('Order_Dt','desc')
                         ->get();
                        
