@@ -261,6 +261,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at) 
 
 	} else {
 		var svgarr = [];
+		var qr_code_arr = [];
 		var ajax_count = 0;
 		var b = " ";
 		var position = 3;
@@ -283,6 +284,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at) 
 
 				},
 				success: function(data) {
+					var generate_data = data;
 					$(data.order_details).each(function (key, val) {
 						var zone=val.zone;
 						localStorage.setItem("zone", zone);
@@ -379,10 +381,18 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at) 
 				svgDoc.getElementById("pieces_in_ratio").innerHTML = val.cases_per_carton;
 
 				svgDoc.getElementById("tpnd").innerHTML = val.orms_tpn;
+				if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
+				{
+					svgDoc.getElementById("tpnd_last_digit").innerHTML = val.orms_tpn.substr(val.orms_tpn.length - 3);
+				}
 			} else if ((name == "TCL4-sticker" && zone == "CE") || (name == "THL3-sticker" && zone == "CE")) {
 				svgDoc.getElementById("unit_per_case").innerHTML = val.case_size;
 
 				svgDoc.getElementById("tpnd").innerHTML =val.orms_tpn;
+				if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
+				{
+					svgDoc.getElementById("tpnd_last_digit").innerHTML = val.orms_tpn.substr(val.orms_tpn.length - 3);
+				}
 			} else if ((name == "TCL4-sticker" && zone == "UK") || (name == "THL3-sticker" && zone == "UK")) {
 				svgDoc.getElementById("unit_per_case").innerHTML = val.case_size;
 
@@ -435,11 +445,115 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at) 
 						success: function (data) {
 							/** [ Dynamically change svg short description ] */
 							if (description != '' && data.size_chart.length != 0) {
-								svgDoc.getElementById("description").innerHTML = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+								var desc_size = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+								if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
+								{
+									if(desc_size.length <= 23)
+									{
+										svgDoc.getElementById("description").innerHTML = desc_size;
+										if(name2 === "THL3")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+										}
+									}
+									else
+									{
+										str = oswordWrap(desc_size, 23);
+										svgDoc.getElementById("description").innerHTML = str;
+										
+										if(name2 === "THL3")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 135)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 148)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 135)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 148)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+										}
+									}
+								}
+								else
+								{
+									svgDoc.getElementById("description").innerHTML = desc_size;
+								}
 							} else if (data.size_chart.length != 0) {
 								svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
 							} else if (description != '') {
-								svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+								var desc_size = description.toUpperCase();
+								
+								if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
+								{
+									if(desc_size.length <= 23)
+									{
+										svgDoc.getElementById("description").innerHTML = desc_size;
+										if(name2 === "THL3")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+										}
+									}
+									else
+									{
+										str = oswordWrap(desc_size, 23);
+										svgDoc.getElementById("description").innerHTML = str;
+										
+										if(name2 === "THL3")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 135)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 148)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 135)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 148)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+										}
+									}
+								}
+								else
+								{
+									svgDoc.getElementById("description").innerHTML = desc_size;
+								}
+								
 							} else {
 								svgDoc.getElementById("description").innerHTML = '';
 							}
@@ -447,6 +561,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at) 
 							var d = svgRoot;
 							var str = s.serializeToString(d);
 							svgarr.push(str)
+							qr_code_arr.push(val.qr_code)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
 							this.tryCount++;
@@ -462,28 +577,145 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at) 
 				} else {
 					/** [ Dynamically change svg short description ] */
 					if (description != '') {
-						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
-					} else {
-						svgDoc.getElementById("description").innerHTML = '';
-					}
+							if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
+							{
+								var desc_size = description.toUpperCase();
+								if(desc_size.length <= 23)
+								{
+									svgDoc.getElementById("description").innerHTML = desc_size;
+									if(name2 === "THL3")
+									{
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+
+									}
+									else
+									{
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+									}
+								}
+								else
+								{
+									str = wordWrap(desc_size, 23);
+									svgDoc.getElementById("description").innerHTML = str;
+
+									if(name2 === "THL3")
+									{
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 135)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 148)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 135)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 148)");
+
+									}
+									else
+									{
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+									}
+								}
+							}
+							else
+							{
+								/** [ Dynamically change svg short description ] */
+								svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+							}					
+						} else {
+							svgDoc.getElementById("description").innerHTML = '';
+						}
 					var s = new XMLSerializer();
 					var d = svgRoot;
 					var str = s.serializeToString(d);
 
 					svgarr.push(str)
+					qr_code_arr.push(val.qr_code)
 
 				}
 			} else {
 				if (description != '') {
-						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
-					} else {
-						svgDoc.getElementById("description").innerHTML = '';
+					if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
+					{
+						if(description.length <= 20)
+						{
+							svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+							if (name2 === "TCL1")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 125)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 137)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 88.1544, 125)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 88.1544, 137)");
+							}
+							else if (name2 === "TCL2")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+								svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+								svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+							}
+							else if(name2 === "THL1")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 125)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 137)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 125)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 137)");
+							}
+							
+						}
+						else
+						{
+							str = oswordWrap(description, 23);
+							svgDoc.getElementById("description").innerHTML = str;
+							if (name2 === "TCL1")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 133)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 146)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 88.1544, 133)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 88.1544, 146)");
+							}
+							else if (name2 === "TCL2")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+								svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+								svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+							}
+							else if(name2 === "THL1")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 135)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 148)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 135)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 148)");
+							}
+						}
 					}
+					else
+					{
+						/** [ Dynamically change svg short description ] */
+						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+					}					
+				} else {
+					svgDoc.getElementById("description").innerHTML = '';
+				}
 				var s = new XMLSerializer();
 				var d = svgRoot;
 				var str = s.serializeToString(d);
 
 				svgarr.push(str)
+				qr_code_arr.push(val.qr_code)
 			}
 
 
@@ -493,8 +725,9 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at) 
 		})
 			if (ajax_count == data.order_details.length) {
 				var svg_fin = svgarr.join(',_');
+				var qr_code_fin = qr_code_arr.join(',_');
 				var zone = localStorage.getItem("zone");
-				PopupTesco(svg_fin, name,zone,style_no,buyer_no,id,created_at);
+				PopupTesco(svg_fin, name,zone,style_no,buyer_no,id,created_at,generate_data.tesco_item_master[0].is_qrcode_required,qr_code_fin);
 			}
 				},
 				error: function(data) {
@@ -519,7 +752,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at) 
  * @return Pdf
  */
 
-function PopupTesco(data, name,zone,style_no,buyer_no,id,created_at) {
+function PopupTesco(data, name,zone,style_no,buyer_no,id,created_at,qr_flag,qr_code_fin) {
 
 	//	var s = new XMLSerializer();
 	//	var d = data;
@@ -559,9 +792,11 @@ function PopupTesco(data, name,zone,style_no,buyer_no,id,created_at) {
 			name:name,
 			zone:zone,
 			style:style_no,
+			qr_code_fin: qr_code_fin,
 			tesco_po_number:buyer_no,
 			id:id,
 			created_at:created_at,
+			qr_flag:qr_flag,
 			db:db
 		},
 		tryCount: 0,

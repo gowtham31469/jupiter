@@ -507,27 +507,52 @@ public function setUpDatatable(Request $request)
                 
                   $ddmmyy="DD/MM/YYYY";  
                   $queryRes   = Invoices::whereIn('invoice.id',$invoiceIds)
-                                    ->join('customers','invoice.customer_id','customers.id')
-                                    ->join('invoice_details','invoice_details.invoice_id','invoice.id')
-                                    ->join('buyers','invoice.buyer_id','buyers.id')
 
-                                    ->whereIn('invoice_details.reference_no',$request->references)
-                                    ->whereIn('invoice.buyer_id',$request->buyer)
-                                    ->whereIn('invoice.customer_id',$request->customers)
-                                    ->whereIn('invoice_details.style_no',$request->styles)
-                                    ->whereIn('invoice_details.ocn_no',$request->ocns)
-                                    ->whereIn('invoice.po_no',$request->pos)
-                                    ->whereIn('invoice_details.buyer_po_number',$request->buyer_pos)
+                                    // ->join('customers','invoice.customer_id','customers.id')
+                                    // ->join('invoice_details','invoice_details.invoice_id','invoice.id')
+                                    // ->join('buyers','invoice.buyer_id','buyers.id')
 
-                                    ->whereBetween('invoice.created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
-                                    ->select('invoice.invoice_id as Inv.No',
-                                            // 'invoice.created_at as Date',
-                                            'company_name as Customer',
-                                            'grand_total as Inv_Val','tax','invoice.place_of_supply',
-                                            'base_amnt as Base_Val',
-                                    DB::raw('to_char(invoice.created_at,'."'".$ddmmyy."'".') as "Date"'),)
-                                    ->distinct('invoice.id')
-                                    ->get();
+                                    // ->whereIn('invoice_details.reference_no',$request->references)
+                                    // ->whereIn('invoice.buyer_id',$request->buyer)
+                                    // ->whereIn('invoice.customer_id',$request->customers)
+                                    // ->whereIn('invoice_details.style_no',$request->styles)
+                                    // ->whereIn('invoice_details.ocn_no',$request->ocns)
+                                    // ->whereIn('invoice.po_no',$request->pos)
+                                    // ->whereIn('invoice_details.buyer_po_number',$request->buyer_pos)
+
+                                    // ->whereBetween('invoice.created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
+                                    // ->select('invoice.invoice_id as Inv.No',
+                                    //         // 'invoice.created_at as Date',
+                                    //         'company_name as Customer',
+                                    //         'grand_total as Inv_Val','tax','invoice.place_of_supply',
+                                    //         'base_amnt as Base_Val',
+                                    // DB::raw('to_char(invoice.created_at,'."'".$ddmmyy."'".') as "Date"'),)
+                                    // ->distinct('invoice.id')
+                                    // ->get();
+
+                                ->join('customers','invoice.customer_id','customers.id')
+                                ->join('invoice_details','invoice_details.invoice_id','invoice.id')
+                                ->join('buyers','invoice.buyer_id','buyers.id')
+
+                                ->whereIn('invoice_details.reference_no',$request->references)
+                                ->whereIn('invoice.buyer_id',$request->buyer)
+                                ->whereIn('invoice.customer_id',$request->customers)
+                                ->whereIn('invoice_details.style_no',$request->styles)
+                                ->whereIn('invoice_details.ocn_no',$request->ocns)
+                                ->whereIn('invoice.po_no',$request->pos)
+                                ->whereIn('invoice_details.buyer_po_number',$request->buyer_pos)
+
+                                ->whereBetween('invoice.created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
+                                ->select(DB::raw('to_char(invoice.created_at,'."'".$ddmmyy."'".') as "Date"'),
+                                    'invoice.invoice_id as Inv.No',
+                                        // 'invoice.created_at as Date',
+                                        'company_name as Customer',
+                                        'grand_total as Inv_Val','tax','invoice.place_of_supply',
+                                        'base_amnt as Base_Val'
+                                )
+                                ->distinct('invoice.id')
+                                ->get();
+// >>>>>>> d59299edad6af6b8f5afa67d67da7dfc7fed3ef9
                     }
                     $queryRes->map(function ($queryRes,$key) {
                     $queryRes->No =$key+1;
