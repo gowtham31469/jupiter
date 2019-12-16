@@ -144,7 +144,7 @@ public function level2Filter(Request $request)
 public function getTableFields(Request $request)
 {   
 
-    $def_po1 = ["No","Order_Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference"];
+    $def_po1 = ["No","Order_Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference","OrderType"];
     $ext_po1 = ["AW_Dt", "PO_Dt","JC.No","JC_Dt","Inv.No","Inv_Dt","Buyer","Season","Country","ByrPo","Quantity","Reason","Reapproved_Dt","DispMode","Awb","Status"];
 
     $def_po2 = ["No","Order_Dt","ErpId","Customer","Material","Style","P.O","OCN","Reference"];
@@ -633,7 +633,7 @@ public function setUpDatatable(Request $request)
                 ->leftJoin("actions",'actions.id', '=', 'event_history.action_id')
                 ->whereIn('actions.id',$statusId)
                 ->select([
-                    DB::raw('distinct on ("erp_order_id","reference") "erp_order_id" as "ErpId","reference" as "Reference"'),
+                    DB::raw('distinct on ("erp_order_id","reference","order_type") "erp_order_id" as "ErpId","reference" as "Reference","order_type" as "OrderType"'),
                     // DB::raw('distinct on ("erp_order_id") "erp_order_id"'),
                     DB::raw('to_char(erp_order_details.order_date,'."'".$ddmmyy."'".') as "Order_Dt"'),
                     DB::raw('to_char(po_reapproved_date,'."'".$ddmmyy."'".') as "Reapproved_Dt"'),
@@ -665,6 +665,7 @@ public function setUpDatatable(Request $request)
                 ])
                         ->orderBy('ErpId','asc')
                         ->orderBy('Reference','asc')
+                        ->orderBy('OrderType','asc')
                         ->orderBy('Order_Dt','desc')
                         ->get();
                        
