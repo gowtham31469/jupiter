@@ -209,18 +209,27 @@ class JobManagerController extends Controller
 
 		if($request->buyer=="orchestra")
 		{
+			// dd($buyer_no);
 			$order_details  = 	DB::table('erp_order_details')
-									->where('erp_order_details.style_no',$style_no)
-									->where('erp_order_details.erp_order_id',$id)
-									->where('erp_order_details.reference_name',$ref_name)
-									->where('erp_order_details.buyer_po_number',$buyer_no)
-									->where('erp_order_details.status','!=',4)
-									->where('erp_order_details.deleted_at', null)
-									->orderBy('erp_order_details.id', 'desc')
-									->select('*')
-									->get();
+							->where('erp_order_details.style_no',$style_no)
+							->where('erp_order_details.erp_order_id',$id)
+							->where('erp_order_details.reference_name',$ref_name)
 
-							// dd($order_details[0]);
+							->where(function($query) use($buyer_no) 
+							{
+							$query->when($buyer_no!="null", function ($q) use($buyer_no) 
+							{
+							return $q->where('erp_order_details.buyer_po_number',$buyer_no);
+							});
+							})
+
+							->where('erp_order_details.status','!=',4)
+							->where('erp_order_details.deleted_at', null)
+							->orderBy('erp_order_details.id', 'desc')
+							->select('*')
+							->get();
+
+							// dd($order_details);
 			$order_Qty_table = $order_details[0]->order_qnty_table_name;
 			$ordertable = substr($order_Qty_table,0,strrpos($order_Qty_table,"_"));
 				
@@ -235,7 +244,6 @@ class JobManagerController extends Controller
 			$parentTable_id = DB::table($order_Qty_table)
 							->where('id',$order_details[0]->order_qnty_table_id)
 							->first()->$target_id;
-
 			switch ($ordertable) 
 			{	
 
@@ -325,7 +333,6 @@ class JobManagerController extends Controller
 					$PriceArr = array();
 					}
 					});
-
 
 					$res['reference_name'] = "Orchestra HangTag";
 					$res['theme'] = OrchestraParcelDetails::where('id',$res[0]->orchestra_parcel_details_id)->first()->Theme;

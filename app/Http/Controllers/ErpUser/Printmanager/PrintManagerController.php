@@ -293,10 +293,10 @@ class PrintManagerController extends Controller
                     			$jobcard_id_list->style_no='-';
                     		}
 
-                    		if($jobcard_id_list->buyer_po_number==null)
-                    		{
-                    			$jobcard_id_list->buyer_po_number='-';
-							}
+       //              		if($jobcard_id_list->buyer_po_number==null)
+       //              		{
+       //              			$jobcard_id_list->buyer_po_number='-';
+							// }
 							
 							// format created_at date to dd-mm-yyyy
 							if($jobcard_id_list->created_at!= null)
