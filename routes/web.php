@@ -350,6 +350,10 @@ Route::post('admin/orchestra/order-management/remove_heat_transfer', 'Admin\Orch
 Route::post('admin/orchestra/order-management/remove_main_label', 'Admin\Orchestra\OrderManagementCntrl@removeMainLabel');
 Route::post('admin/orchestra/order-management/remove_size_label', 'Admin\Orchestra\OrderManagementCntrl@removeSizeLabel');
 
+Route::post('admin/orchestra/order-management/remove_standard_stickers', 'Admin\Orchestra\OrderManagementCntrl@removeStandardStickers');
+Route::post('admin/orchestra/order-management/remove_solid_stickers', 'Admin\Orchestra\OrderManagementCntrl@removeSolidStickers');
+
+
 Route::post('admin/orchestra/order-management/remove_wcl', 'Admin\Orchestra\OrderManagementCntrl@removeWCL');
 
 Route::post('admin/orchestra/order-management/set_heat_transfer', 'Admin\Orchestra\OrderManagementCntrl@setHeatTransfer');
@@ -809,6 +813,10 @@ Route::post('customer/orchestra/order-management/remove_special_tag', 'Customer\
 Route::post('customer/orchestra/order-management/remove_heat_transfer', 'Customer\Orchestra\OrderController@removeHeatTransfer');
 Route::post('customer/orchestra/order-management/remove_main_label', 'Customer\Orchestra\OrderController@removeMainLabel');
 Route::post('customer/orchestra/order-management/remove_size_label', 'Customer\Orchestra\OrderController@removeSizeLabel');
+
+Route::post('customer/orchestra/order-management/remove_standard_stickers', 'Customer\Orchestra\OrderController@removeStandardStickers');
+Route::post('customer/orchestra/order-management/remove_solid_stickers', 'Customer\Orchestra\OrderController@removeSolidStickers');
+
 
 Route::post('customer/orchestra/order-management/remove_wcl', 'Customer\Orchestra\OrderController@removeWCL');
 
