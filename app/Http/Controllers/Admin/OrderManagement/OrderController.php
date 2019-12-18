@@ -53,12 +53,14 @@ class OrderController extends Controller
 			$new_count['tcl1'] = DB::table('tesco_tcl1_orders')
 									->whereRaw('created_at > current_date - 1')
 									->where('new_ord_flag',0)
+									->where('order_status','!=','Order Cancelled')
 									->where('is_order_count_empty',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$new_count['tcl2'] = DB::table('tesco_tcl2_orders')
 									->whereRaw('created_at > current_date - 1')
 									->where('new_ord_flag',0)
+									->where('order_status','!=','Order Cancelled')
 									->where('is_order_count_empty',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
@@ -66,30 +68,35 @@ class OrderController extends Controller
 									->whereRaw('created_at > current_date - 1')
 									->where('new_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->where('order_status','!=','Order Cancelled')
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$new_count['thl1'] = DB::table('tesco_thl1_orders')
 									->whereRaw('created_at > current_date - 1')
 									->where('new_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->where('order_status','!=','Order Cancelled')
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$new_count['thl3'] = DB::table('tesco_thl3_orders')
 									->whereRaw('created_at > current_date - 1')
 									->where('new_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->where('order_status','!=','Order Cancelled')
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$new_count['tsl1'] = DB::table('tesco_tsl1_orders')
 									->whereRaw('created_at > current_date - 1')
 									->where('new_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->where('order_status','!=','Order Cancelled')
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$new_count['tsl3'] = DB::table('tesco_tsl3_orders')
 									->whereRaw('created_at > current_date - 1')
 									->where('new_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->where('order_status','!=','Order Cancelled')
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			

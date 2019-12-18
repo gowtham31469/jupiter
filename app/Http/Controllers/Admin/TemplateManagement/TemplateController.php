@@ -106,7 +106,15 @@ class TemplateController extends Controller
 	public function templateHierarchy(Request $request)
 {
 	    $buyer = $request->buyer;
-        $treeviewData= DB::table($buyer."_item_master")->select('id','parent_id', DB::raw("(CASE WHEN is_qrcode_required = 0 THEN item_name ELSE CONCAT(item_name,' with QR ') END) as text"))->orderBy('id', 'asc')->get()->toArray();
+		if($buyer == "tesco")
+		{
+			$treeviewData= DB::table($buyer."_item_master")->select('id','parent_id', DB::raw("(CASE WHEN is_qrcode_required = 0 THEN item_name ELSE CONCAT(item_name,' with QR ') END) as text"))->orderBy('id', 'asc')->get()->toArray();
+		}
+		else
+		{
+			$treeviewData= DB::table($buyer."_item_master")->select('id','parent_id','item_name as text')->orderBy('id', 'asc')->get()->toArray();
+		}
+        
          
         if($treeviewData){
                 $childs = array();
