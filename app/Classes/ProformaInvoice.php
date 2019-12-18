@@ -473,7 +473,7 @@ class ProformaInvoice
       $pdf->AddPage('P', 'A4');
       $pdf->SetXY(14, 35);
       $pdf->writeHTML($dynView->render());
-dd("DAsd");
+
       $pdfdata =$pdf->output( public_path('storage/app/public/pi/'.$pi_name.'.pdf'), 'F');
 
       $attatchment =  public_path('storage/app/public/pi/'.$pi_name.'.pdf');
