@@ -415,7 +415,7 @@ class ProformaInvoice
                                   ->first();
         $data['item_details']    = DB::table('profoma_invoice_item_details')
                                     ->where('profoma_invoice_item_details.pi_id',$pi_details->id)
-                                    ->select('size','quantity','style','material as material_name','unit_cost as unit_price','profoma_invoice_item_details.tax','item_name as as ref_no','profoma_invoice_item_details.template_id as item_id')
+                                    ->select('size','quantity','style','material as material_name','unit_cost as unit_price','profoma_invoice_item_details.tax','ref_no','profoma_invoice_item_details.template_id as item_id')
                                     ->get();
         foreach ($data['item_details'] as $key => $value) {
           $value->style = $pi_details->uvc_style_no;
