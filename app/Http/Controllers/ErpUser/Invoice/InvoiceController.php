@@ -21,9 +21,13 @@ use App\Classes\Invoice;
 use App\InvoiceAddress;
 use Elibyy\TCPDF\Facades\TCPDF;
 use App\Classes\invoiceTCPDF;
+use App\EventHistory;
+use App\History;
+use Carbon\Carbon;
 
 class InvoiceController extends Controller
 {
+    private $current_date;
     /**
      * Create a new controller instance.
      *
@@ -31,9 +35,11 @@ class InvoiceController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('erpuser');
-   
-    }
+		$this->middleware('erpuser');
+		// get the current time
+		$this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
+
+	}
 
     /** 
      * @return invoice list view
@@ -119,7 +125,7 @@ class InvoiceController extends Controller
 							->orderBy('erp_order_details.id', 'asc')
                             ->get();
             if ($orderlist[0]->freight_id == 3) {
-                $orderlist[0]->delvry_thru  = DB::table('nominated_forwarder')->where('id',$orderlist[0]->nominated_forwarder)->value('forwarder');       
+                $orderlist[0]->delvry_thru  = DB::table('nominated_forwarders')->where('id',$orderlist[0]->nominated_forwarder)->value('forwarder');       
             }               
             $company_details =  DB::table('company')
                                 ->where('id',session()->get('company'))
@@ -174,6 +180,7 @@ class InvoiceController extends Controller
      */
     public function setInvoice(Request $request)
     {
+
         ini_set('max_input_vars', 5000);
         try 
         {
@@ -245,6 +252,7 @@ class InvoiceController extends Controller
                                 ->first();         
 
             if ($orders) {
+                // dd($request->base_amt);
                 $invoiceData = Invoices::create([
                                 'customer_id'    => $orders[0]['customer_id'],
                                 'buyer_id'       => $orders[0]['buyer_id'],
@@ -258,8 +266,9 @@ class InvoiceController extends Controller
                                 'place_of_supply'=>  $place_of_supply,
                                 'delivery_at'    =>  $delivery_at,
                                 'bill_to'        =>  $billTo_id,
+                                'base_amnt'       =>  $request->base_amt
                             ]);
-                
+
                 $invoice_id =  "INV-00".$invoiceData->id;
                 if ($eChargesArr) {
                     foreach ($eChargesArr as $objts) {
@@ -286,7 +295,7 @@ class InvoiceController extends Controller
                     }
                     else{
                         $ful_count++;
-                    }
+                    }                       
                     InvoiceDetails::create([
                         'invoice_id'    =>  $invoiceData->id,
                         'order_no'      =>  $value['id'],
@@ -300,24 +309,38 @@ class InvoiceController extends Controller
                         'size'          =>  $size,                        
                         'reference_no'  =>  $value['ref_no'],
                         'custom_ref_name'  =>  $value['reference_name'],
-                        'ocn_no'        =>  $value['ocn_number'], 
+                        'ocn_no'        =>  $value['ocn_number'] ? $value['ocn_number'] : '-', 
                         'item_name'     =>  $value['item_name'], 
                         'item'          =>  $value['item_name'], 
                         'buyer_po_number' =>  $value['buyer_po_number'],          
                         'company_id'    =>  session()->get('company'),
                     ]);
-                    
+                    // dd(/$a);
                     ErpOrderDetails::where('id',$value['id'])
                         ->update([
-                            'delivered_quantity' => ( $value['order_quantity'] - $pendingQnty ),
-                            'pending_orders'     => $pendingQnty,
-                            'status'             => $status
+                            'delivered_quantity'   => ( $value['order_quantity'] - $pendingQnty ),
+                            'pending_orders'       => $pendingQnty,
+                            'status'               => $status,
+                            'invoice_number'       => $invoice_id,
+                            'invoice_created_by'   => Auth::guard('erpuser')->id(),
+                            'invoice_created_date' => $this->current_date
                             ]);                  
 
                     ErpOrdersInvoice::create([
                         'invoice_id'=>$invoiceData->id,
                         'erp_order_id'=>$orders[0]['erpid']
                     ]);
+
+
+                $historyId = History::where('erp_order_details_id',ErpOrderDetails::where('erp_order_id',$orders[0]['erpid'])->first()->id)->first()->id;
+
+                $invAction = EventHistory::create([
+                'action_id'    => $place_of_supply == 1 ? 14 : 15 ,
+                'history_id'   => $historyId,
+                'created_by'   => Auth::guard('erpuser')->id(),
+                ]);
+
+
                 }
                 $erpStatus = ($par_count !=0 && $ful_count!=0) ? 6:$status;
                 Erp::where('erp_id',$orders[0]['erp_id'])
@@ -451,15 +474,15 @@ class InvoiceController extends Controller
             $pdfdata =$pdf->output( public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf'), 'F');
 
             Invoices::where('id', $inv_id)->update(['eway_no'=> $eway_no ,'invoice_file'=>'/storage/app/public/invoices/invoices_'.$inv_id.'.pdf']);
-            $attatchment =  public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf');
+            $attachment =  public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf');
             //Mail notiication
             // $useremail = "aswathy@wizroots.com";
             $useremail = $inv_details[0]->email;
-            Mail::send('mails.invoice', ['title' => 'Invoice','to_email' => $useremail], function ($message) use ($useremail,$attatchment)
+            Mail::send('mails.invoice', ['title' => 'Invoice','to_email' => $useremail], function ($message) use ($useremail,$attachment)
                     {
                         $message->from('admin@jga.com', 'JGA');
                         $message->subject('Invoice');
-                        $message->attach($attatchment);
+                        $message->attach($attachment);
                         $message->to($useremail);
                     });
 
@@ -555,7 +578,7 @@ class InvoiceController extends Controller
      
             $pdfdata =$pdf->output( public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf'), 'F');
 
-            $attatchment =  public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf');
+            $attachment =  public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf');
             return "/storage/app/public/invoices/invoices_".$inv_id.".pdf";
         } 
         catch (\Exception $e)

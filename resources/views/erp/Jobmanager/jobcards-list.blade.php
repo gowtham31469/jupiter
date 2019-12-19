@@ -340,25 +340,34 @@
 									</div>
 								</div>
 								<div class="col-md-3">
-								</div>
-								<div class="col-md-3">
-								    <div class="form-group has-feedback">
+									<div class="form-group has-feedback">
 										{!! Form::label('edit_finish_type', 'FINISH TYPE :', ['class' => 'form_label']) !!}
 										{{ Form::select('edit_finish_type',(['' => '-- Select Finish Type --']+ $finish_types),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'edit_finish_type','required')) }}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
-							</div>
-							<div class="col-md-12">
-							   <div class="col-md-3">
-								    <div class="form-group has-feedback">
+								<div class="col-md-3">
+									<div class="form-group has-feedback">
 										{!! Form::label('edit_print_color', 'PRINT COLORS :', ['class' => 'form_label']) !!}
-										{!! Form::text('edit_print_color',$value = '', array('class' => 'form-control input-sm','placeholder' => 'STYLENUM', 'maxlength' => '20')) !!}
+										{!! Form::text('edit_print_color',$value = '', array('class' => 'form-control input-sm','placeholder' => 'PRINT COLORS', 'maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
 									</div>
-							   </div>
-							   <div class="col-md-9">
-							   </div>
+								</div>
+							</div>
+							<div class="col-md-12 edit-common-data-div hidden">
+								<div class="col-md-3">
+									<div class="form-group has-feedback">
+										{!! Form::label('edit_tint_color', 'TINT COLORS :', ['class' => 'form_label']) !!}
+										{!! Form::text('edit_tint_color',$value = '', array('class' => 'form-control input-sm','placeholder' => 'TINT COLORS', 'maxlength' => '20')) !!}
+										<div class="help-block with-errors"></div>
+									</div>		
+								</div>
+								<div class="col-md-3">
+									{!! Form::label('edit_customer_po', 'CUSTOMER PO :', ['class' => 'form_label']) !!}
+									<span id="edit_customer_po"></span>
+								</div>
+								<div class="col-md-6">
+								</div>
 							</div>
 						</div>
 						<hr>

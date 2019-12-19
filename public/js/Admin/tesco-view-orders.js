@@ -55,7 +55,7 @@ function loadTemplatePreview() {
  * AJAX method to fetch the order details.
  * @return {[type]} [description]
  */
-function viewOrder(pNumber,aWork) {
+function viewOrder(pNumber,aWork, style_number, zone) {
     try {
         $.ajax({
             url: base_url + "/admin/tesco/view-order",
@@ -66,7 +66,7 @@ function viewOrder(pNumber,aWork) {
             beforeSend: function () {
                 $(".loader").show();
             },
-            data: {'po_number':pNumber, 'artwork':aWork},
+            data: {'po_number':pNumber, 'artwork':aWork, 'style_number':style_number, "zone":zone},
             tryCount: 0,
             retryLimit: 2,
             dataType: 'JSON',
@@ -151,6 +151,12 @@ function mapStoredValues(oDetails) {
             $('#tesco_rfid').val(ele.rfid_compliant === 1  ? 'yes' : 'no');
             $('#tesco_tag_at_source').val(ele.tag_at_source === 1  ? 'yes' : 'no');
             $('#tesco_ocn').val(ele.ocn_number);
+            
+            if(ele.full_description != null)
+            {
+                $('#tesco_full_description').val(ele.full_description);
+                $('#tesco_description').prev().text($('#tesco_description').prev().text()+'(Full Description: '+ele.full_description+')');
+            }
 
             if(ele.template_type === 'single') {
                 $.each(ele.order_quantity, function(i, j) {
@@ -181,6 +187,7 @@ function mapStoredValues(oDetails) {
                         $('#'+zone+'_ratio_tpnd_'+index).val(j.tpnd);
                         $('#'+zone+'_ratio_upc_'+index).val(j.units_per_carton);
                     }
+                    
                     if(ele.order_quantity.length !== (i+1)) {
                         $('.add-row-btn').trigger('click');
                     }

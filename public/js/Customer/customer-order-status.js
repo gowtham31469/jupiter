@@ -84,638 +84,6 @@ $(document).ready(function () {
 });
 
 
-/**
- * Orchestra Order status page
- */
-function orderStatus() {
-    $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
-    $('.top-content').html('');
-    $('.template-error').html('');
-    var buyer = localStorage.getItem("buyer");
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    $.ajax({
-        url: base_url + "/customer/" + buyer + "/order-status",
-        type: "POST",
-        dataType: "json",
-        data: {
-            _token: csrf_token
-        },
-        beforeSend: function () {
-            $(".loader").show();
-            $(".loader").css('margin-top', '12%');
-        },
-        statusCode: {
-            /** [Show response status based on HTTP status code] */
-            200: function (data) {
-                var path = base_url + "/customer/" + buyer + "/order-management/order-status";
-                var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_poly_bag_sticker_orders)))))));
-
-                var newObj1 = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_poly_bag_sticker_orders)))))));
-
-                $('.main-content').html("<button style='margin-bottom:10px' id='po-file-upload-button' class='btn btn-sm btn-primary pull-right' type='button'>Update PO</button>");
-                newObj.sort(function (obj1, obj2) {
-                    var date1 = obj1.OrderDate;
-                    var date2 = obj2.OrderDate;
-                    if (date1 > date2) return -1;
-                    if (date1 < date2) return 1;
-                    return 0;
-                });
-                $('.main-content').append(orchestraStatusTable(newObj, path));
-                $('.top-content').html("")
-                var uniqueNames = [];
-
-                newObj1.sort(function (obj1, obj2) {
-                    var date1 = obj1.OrderDate;
-                    var date2 = obj2.OrderDate;
-                    if (date1 > date2) return -1;
-                    if (date1 < date2) return 1;
-                    return 0;
-                });
-
-                // push uvc into array and show it in uvc selectio dropdown
-                for (i = 0; i < newObj1.length; i++) {
-                    if (uniqueNames.indexOf(newObj1[i].UVC) === -1) {
-                        uniqueNames.push(newObj1[i].UVC);
-                    }
-                }
-                var options = "<option>Select UVC</option>";
-                for (i = 0; i < uniqueNames.length; i++) {
-                    options += "<option>" + uniqueNames[i] + "</option>";
-                }
-
-                $('#po-file-upload-button').click(function () {
-                    $('#po-file-upload-group').modal("show")
-                    $('#uvc_select_div').html('<label>Select UVC</label><select id="uvc_selection" class="form-control selectpicker" data-live-search="true">' + options + '</select>')
-                    $('#uvc_selection').selectpicker('refresh');
-                    $('#new_po_div_status').addClass('hidden');
-                    $('#new_po1_status').addClass('hidden');
-                    $('#map_po_status').addClass('hidden');
-                    $('#update_new_po_status').addClass('hidden');
-                    $('#update_po_status').addClass('hidden');
-                    $('#new_pos_status').addClass('hidden');
-                    $('#map_po_div_status').addClass('hidden');
-                    $('#new_po_no_status').val("")
-                    $('#new_po_file_status').val("")
-                    $('#exist_artwork_div_status').addClass('hidden')
-                    $('#new_po_error_status').addClass('hidden')
-                    $('#new_po_file_error_status').addClass('hidden')
-                    $('#new_po_error_length_status').addClass('hidden');
-                    $('#uvc_selection').change(function () {
-                        if ($(this).val() != "Select UVC") {
-                            $('#new_po_div_status').addClass('hidden');
-                            $('#new_po1_status').addClass('hidden');
-                            $('#map_po_status').addClass('hidden');
-                            $('#update_new_po_status').addClass('hidden');
-                            $('#update_po_status').addClass('hidden');
-                            $('#new_pos_status').addClass('hidden');
-                            $('#map_po_div_status').addClass('hidden');
-                            $('#exist_artwork_div_status').removeClass('hidden')
-
-                            var selected = $(this).find('option:selected');
-                            var uvc = selected.val();
-                            $.ajax({
-                                url: base_url + "/customer/" + buyer + "/order-management/get-existing-label-orders-status-po",
-                                type: "get",
-                                dataType: "json",
-                                data: {
-                                    uvc: uvc
-                                },
-                                beforeSend: function () {
-
-                                },
-                                statusCode: {
-                                    /** [Show response status based on HTTP status code] */
-                                    200: function (data) {
-                                        $('#check_error_status').addClass('hidden')
-                                        $('#new_po_error_status').addClass('hidden')
-                                        $('#new_po_file_error_status').addClass('hidden')
-                                        $('#new_po_error_length_status').addClass('hidden');
-                                        $('#po-file-upload-group').find('#exist_artwork_div_status ul').html("");
-                                        var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_poly_bag_sticker_orders)))))));
-                                        var coun = 0;
-                                        var options = "<option>Select PO</option>";
-                                        var old_po = ""
-                                        var new_po_div_status = 0;
-                                        $(newObj).each(function (index1, value1) {
-
-                                            if (value1.po_number != "" && value1.po_number != null) {
-                                                if (old_po != value1.po_number) {
-                                                    options += "<option>" + value1.po_number + "</option>";
-                                                }
-                                                old_po = value1.po_number
-                                                coun++;
-                                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="check-list">' + value1.TemplateName + '</li>')
-                                                new_po_div_status++;
-
-                                            } else {
-                                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="list-group-item">' + value1.TemplateName + '</li>')
-                                            }
-
-                                        });
-
-                                        $('.list-group.checked-list-box .list-group-item').each(function () {
-
-                                            // Settings
-                                            var $widget = $(this),
-                                                $checkbox = $('<input type="checkbox" class="hidden" />'),
-                                                color = ($widget.data('color') ? $widget.data('color') : "primary"),
-                                                style = ($widget.data('style') == "button" ? "btn-" : "list-group-item-"),
-                                                settings = {
-                                                    on: {
-                                                        icon: 'glyphicon glyphicon-check'
-                                                    },
-                                                    off: {
-                                                        icon: 'glyphicon glyphicon-unchecked'
-                                                    }
-                                                };
-                                            $widget.css('cursor', 'pointer')
-                                            $widget.append($checkbox);
-
-                                            // Event Handlers
-                                            $widget.on('click', function () {
-                                                $checkbox.prop('checked', !$checkbox.is(':checked'));
-                                                $checkbox.triggerHandler('change');
-                                                updateDisplay();
-                                            });
-                                            $checkbox.on('change', function () {
-                                                updateDisplay();
-                                            });
-
-
-                                            // Actions
-                                            function updateDisplay() {
-                                                var isChecked = $checkbox.is(':checked');
-
-                                                // Set the button's state
-                                                $widget.data('state', (isChecked) ? "on" : "off");
-
-                                                // Set the button's icon
-                                                $widget.find('.state-icon')
-                                                    .removeClass()
-                                                    .addClass('state-icon ' + settings[$widget.data('state')].icon);
-
-                                                // Update the button's color
-                                                if (isChecked) {
-                                                    $widget.addClass(style + color + ' active');
-                                                } else {
-                                                    $widget.removeClass(style + color + ' active');
-                                                }
-                                            }
-
-                                            // Initialization
-                                            function init() {
-
-                                                if ($widget.data('checked') == true) {
-                                                    $checkbox.prop('checked', !$checkbox.is(':checked'));
-                                                }
-
-                                                updateDisplay();
-
-                                                // Inject the icon if applicable
-                                                if ($widget.find('.state-icon').length == 0) {
-                                                    $widget.prepend('<span class="state-icon ' + settings[$widget.data('state')].icon + '"></span>');
-                                                }
-                                            }
-                                            init();
-                                        });
-
-                                        $('#get-checked-data').on('click', function (event) {
-                                            event.preventDefault();
-                                            var checkedItems = {},
-                                                counter = 0;
-                                            $("#check-list-box li.active").each(function (idx, li) {
-                                                checkedItems[counter] = $(li).text();
-                                                counter++;
-                                            });
-                                            $('#display-json').html(JSON.stringify(checkedItems, null, '\t'));
-                                        });
-
-
-                                        //company wise
-                                        $('.list-group-item').click(function () {
-                                            $count_li = 0;
-                                            $('.list-group li').each(function (key, val) {
-                                                if ($(this).hasClass('active')) {
-                                                    $count_li++;
-                                                }
-                                            });
-                                            if ($count_li > 0) {
-                                                var company_id = $(this).data('company');
-                                                $('.list-group li').each(function (key, val) {
-                                                    if ($(this).data('company') != company_id) {
-                                                        $(this).addClass('hidden');
-                                                    }
-                                                })
-                                            } else {
-                                                $('.list-group li').each(function (key, val) {
-                                                    $(this).removeClass('hidden');
-                                                })
-                                            }
-
-                                        })
-
-
-                                        $('#selectpo_status').html('<label>Select PO</label><select id="select_po_status" class="form-control">' + options + '</select>')
-                                        if (coun == 0) {
-                                            $('#map_po_status').addClass('hidden');
-                                            $('#new_po1_status').addClass('hidden');
-                                            $('#new_po_div_status').removeClass('hidden');
-                                            $('#new_pos_status').removeClass('hidden');
-                                        } else {
-                                            $('#map_po_status').removeClass('hidden');
-                                            $('#new_po1_status').removeClass('hidden');
-                                            $('#new_pos_status').addClass('hidden');
-                                        }
-                                        $('#new_po1_status').click(function () {
-                                            var sList = 0;
-                                            $('#exist_artwork_div_status input[type=checkbox]').each(function () {
-                                                if (this.checked) {
-                                                    sList++;
-                                                }
-                                            });
-
-                                            if (sList > 0) {
-
-                                                $('#update_new_po_status').removeClass('hidden')
-                                                $('#update_po_status').addClass('hidden')
-                                                $('#new_pos_status').addClass('hidden')
-                                                $('#new_po_div_status').removeClass('hidden')
-                                                $('#map_po_div_status').addClass('hidden')
-                                                $('#exist_artwork_div_status').removeClass('hidden')
-
-                                            } else {
-                                                $('#check_error_status').removeClass('hidden')
-                                            }
-
-                                        });
-                                        $('#map_po_status').click(function () {
-
-                                            var sList = 0;
-                                            $('#exist_artwork_div_status input[type=checkbox]').each(function () {
-                                                if (this.checked) {
-                                                    sList++;
-                                                }
-                                            });
-
-                                            if (sList > 0) {
-                                                $('#update_po_status').removeClass('hidden')
-                                                $('#update_new_po_status').addClass('hidden')
-                                                $('#new_pos_status').addClass('hidden')
-                                                $('#map_po_div_status').removeClass('hidden')
-                                                $('#new_po_div_status').addClass('hidden')
-                                                $('#exist_artwork_div_status').removeClass('hidden')
-                                                $('#check_error_status').addClass('hidden')
-
-                                            } else {
-                                                $('#check_error_status').removeClass('hidden')
-                                            }
-
-                                        });
-                                        $('#update_new_po_status').click(function () {
-
-                                            var sList = 0;
-                                            $('#exist_artwork_div_status input[type=checkbox]').each(function () {
-                                                if (this.checked) {
-                                                    sList++;
-                                                }
-                                            });
-
-                                            if (sList > 0) {
-                                                $('#check_error_status').addClass('hidden')
-                                                if ($('#new_po_no_status').val() != "" && $('#new_po_file_status').val() != "") {
-
-                                                    if ($('#new_po_no_status').val().length > 9) {
-                                                        $('#new_po_error_length_status').removeClass('hidden');
-                                                        $('#new_po_error_status').addClass('hidden');
-                                                        $('#new_po_file_error_status').addClass('hidden');
-                                                    } else {
-                                                        var a = [];
-                                                        $('#exist_artwork_div_status input[type=checkbox]').each(function () {
-                                                            if (this.checked) {
-                                                                a.push($(this).parent().attr('data-id'));
-                                                            }
-                                                        });
-                                                        var aa = a.join(',');
-                                                        var new_po_file = $('#new_po_file_status').prop('files')[0];
-                                                        var new_po_no = $('#new_po_no_status').val();
-                                                        var csrf_token = $('meta[name="csrf-token"]').attr('content');
-                                                        var form_data = new FormData();
-                                                        form_data.append('id', aa);
-                                                        form_data.append('po_file', new_po_file);
-                                                        form_data.append('po', new_po_no);
-                                                        form_data.append('_token', csrf_token);
-                                                        $.ajax({
-                                                            url: base_url + "/customer/" + buyer + "/order-management/update-label-orders-po",
-                                                            dataType: 'text',
-                                                            cache: false,
-                                                            contentType: false,
-                                                            processData: false,
-                                                            data: form_data,
-                                                            type: 'post',
-                                                            success: function (data) {
-                                                                orderStatus()
-                                                                $('#po-file-upload-group').modal('hide')
-                                                                $('.snackbar_span').html('PO Updated Successfully');
-                                                                showSnackbar();
-                                                            },
-                                                            error: function () {
-                                                                console.log('somethig is wrong, please try later');
-                                                            }
-
-                                                        });
-                                                    }
-
-                                                } else {
-                                                    if ($('#new_po_no_status').val() == "" && $('#new_po_file_status').val() == "") {
-                                                        $('#new_po_error_status').removeClass('hidden')
-                                                        $('#new_po_file_error_status').removeClass('hidden')
-                                                        $('#new_po_error_length_status').addClass('hidden');
-                                                    } else if ($('#new_po_file_status').val() == "") {
-                                                        $('#new_po_file_error_status').removeClass('hidden')
-                                                        $('#new_po_error_status').addClass('hidden')
-                                                        $('#new_po_error_length_status').addClass('hidden');
-                                                    } else if ($('#new_po_no_status').val() == "") {
-                                                        $('#new_po_error_status').removeClass('hidden')
-                                                        $('#new_po_file_error_status').addClass('hidden')
-                                                        $('#new_po_error_length_status').addClass('hidden');
-                                                    }
-
-                                                }
-                                            } else {
-                                                $('#check_error_status').removeClass('hidden')
-                                            }
-                                        });
-
-                                        $('#new_pos_status').click(function () {
-                                            var sList = 0;
-                                            $('#exist_artwork_div_status input[type=checkbox]').each(function () {
-                                                if (this.checked) {
-                                                    sList++;
-                                                }
-                                            });
-
-                                            if (sList > 0) {
-                                                $('#check_error_status').addClass('hidden')
-                                                if ($('#new_po_no_status').val() != "" && $('#new_po_file_status').val() != "") {
-                                                    if ($('#new_po_no_status').val().length > 9) {
-                                                        $('#new_po_error_length_status').removeClass('hidden');
-
-                                                        $('#new_po_error_status').addClass('hidden');
-                                                        $('#new_po_file_error_status').addClass('hidden');
-                                                    } else {
-                                                        var a = [];
-                                                        $('#exist_artwork_div_status input[type=checkbox]').each(function () {
-                                                            if (this.checked) {
-                                                                a.push($(this).parent().attr('data-id'));
-                                                            }
-                                                        });
-                                                        var aa = a.join(',');
-                                                        var new_po_file = $('#new_po_file_status').prop('files')[0];
-                                                        var new_po_no = $('#new_po_no_status').val();
-                                                        var csrf_token = $('meta[name="csrf-token"]').attr('content');
-                                                        var form_data = new FormData();
-                                                        form_data.append('id', aa);
-                                                        form_data.append('po_file', new_po_file);
-                                                        form_data.append('po', new_po_no);
-                                                        form_data.append('_token', csrf_token);
-                                                        $.ajax({
-                                                            url: base_url + "/customer/" + buyer + "/order-management/update-label-orders-po",
-                                                            dataType: 'text',
-                                                            cache: false,
-                                                            contentType: false,
-                                                            processData: false,
-                                                            data: form_data,
-                                                            type: 'post',
-                                                            success: function (data) {
-                                                                orderStatus()
-                                                                $('#po-file-upload-group').modal('hide')
-                                                                $('.snackbar_span').html('PO Updated Successfully');
-                                                                showSnackbar();
-                                                            },
-                                                            error: function () {
-                                                                console.log('somethig is wrong, please try later');
-                                                            }
-
-                                                        });
-                                                    }
-
-                                                } else {
-                                                    if ($('#new_po_no_status').val() == "" && $('#new_po_file_status').val() == "") {
-                                                        $('#new_po_error_status').removeClass('hidden')
-                                                        $('#new_po_file_error_status').removeClass('hidden')
-                                                        $('#new_po_error_length_status').addClass('hidden');
-                                                    } else if ($('#new_po_file_status').val() == "") {
-                                                        $('#new_po_file_error_status').removeClass('hidden')
-                                                        $('#new_po_error_status').addClass('hidden')
-                                                        $('#new_po_error_length_status').addClass('hidden');
-                                                    } else if ($('#new_po_no_status').val() == "") {
-                                                        $('#new_po_error_status').removeClass('hidden')
-                                                        $('#new_po_file_error_status').addClass('hidden')
-                                                        $('#new_po_error_length_status').addClass('hidden');
-                                                    }
-                                                }
-
-                                            } else {
-                                                $('#check_error_status').removeClass('hidden')
-                                            }
-                                        });
-                                        $('#update_po_status').click(function () {
-
-                                            var sList = 0;
-                                            $('#exist_artwork_div_status input[type=checkbox]').each(function () {
-                                                if (this.checked) {
-                                                    sList++;
-                                                }
-                                            });
-
-                                            if (sList > 0) {
-                                                $('#check_error_status').addClass('hidden')
-
-                                                if ($('#select_po_status').val() != "Select PO") {
-                                                    var a = [];
-                                                    $('#exist_artwork_div_status input[type=checkbox]').each(function () {
-                                                        if (this.checked) {
-                                                            a.push($(this).parent().attr('data-id'));
-                                                        }
-                                                    });
-                                                    var aa = a.join(',');
-                                                    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-                                                    $.ajax({
-                                                        url: base_url + "/customer/" + buyer + "/order-management/map-label-orders-po",
-                                                        type: "Post",
-                                                        dataType: "json",
-                                                        data: {
-                                                            _token: csrf_token,
-                                                            id: aa,
-                                                            po: $('#select_po_status').val()
-                                                        },
-                                                        beforeSend: function () {
-
-                                                        },
-                                                        success: function (data) {
-                                                            orderStatus()
-                                                            $('#po-file-upload-group').modal('hide')
-                                                            $('.snackbar_span').html('PO Updated Successfully');
-                                                            showSnackbar();
-                                                        },
-                                                        error: function (data) {
-
-                                                        },
-                                                        complete: function () {
-                                                            $(".loader").hide();
-                                                        }
-                                                    })
-                                                } else {
-                                                    $('#select_error_status').removeClass('hidden')
-                                                }
-                                            } else {
-                                                $('#check_error_status').removeClass('hidden')
-                                            }
-
-                                        });
-
-                                        if (newObj.length == new_po_div_status) {
-                                            $('#new_po_div_status').addClass('hidden')
-                                            $('#new_po1_status').addClass('hidden')
-                                            $('#map_po_status').addClass('hidden')
-                                        }
-
-                                    },
-                                    400: function () {
-                                        $('.snackbar_span').html('Something went wrong');
-                                        showSnackbar();
-                                    }
-                                },
-                                error: function (data) {},
-                                complete: function () {
-                                    $(".loader").hide();
-                                }
-                            })
-                        }
-                    });
-
-                });
-
-                var $tableSel = $('#datatable-tesco-orders');
-                $tableSel.DataTable({
-                    "pageLength": 25,
-                    "order": [
-                        [7, "desc"]
-                    ],
-                    "aoColumns": [
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        {
-                            "sType": "date-uk"
-                        },
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                    ],
-                    initComplete: function () {
-                        $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first').append(' <button class="filterbtn" type="button" onClick="showFilter()"><i class="fa fa-filter" aria-hidden="true"></i></button>');
-                        $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first .dataTables_filter').css('display', 'inline-block');
-                        $('.main-content > .dataTables_wrapper > .row > .col-sm-12:first').append('<div class="filter-window"><h5><strong>Order Status Filter</strong></h5> <div class="row"> <div class="col-md-3"><input type="text" class="form-control" style="width:100%" name="daterange" /></div><div class="col-md-3"><select class="selectpicker" id="supplierName"> <option disabled selected>Select Customer</option></select></div><div class="col-md-3"><select class="selectpicker" id="styleNumber"> <option disabled selected>Select UVC</option></select></div><div class="col-md-3"><select class="selectpicker" id="selectTemplate"> <option disabled selected>Select Template Name</option> </select></div></div><div class="filter-actions"><button class="btn btn-primary input-sm pull-right" id="reset">Clear Filter</button><button id="closeFilter" class="btn btn-default input-sm pull-right" onclick="showFilter()">Close</button><div class="clearfix"></div></div></div>');
-                        //For Custom Filters
-                        this.api().columns().every(function (i) {
-                            var column = this;
-                            if (i === 0 || i === 5 || i === 3) {
-                                var select;
-                                switch (i) {
-                                    case 0:
-                                        select = $('#styleNumber')
-                                        break;
-                                    case 5:
-                                        select = $('#supplierName')
-                                        break;
-                                    case 3:
-                                        select = $('#selectTemplate')
-                                        break;
-                                }
-                                select.on('change', function () {
-                                    var val = $.fn.dataTable.util.escapeRegex(
-                                        $(this).val()
-                                    );
-
-                                    column
-                                        .search(val ? '^' + val + '$' : '', true, false)
-                                        .draw();
-                                });
-
-                                select.append('<option value=""> </option>');
-                                column.data().unique().sort().each(function (d, j) {
-                                    cleanText = d.replace(/<\/?[^>]+(>|$)/g, "");
-                                    select.append('<option value="' + cleanText + '">' + cleanText + '</option>')
-                                });
-                            }
-                        });
-                    }
-                });
-
-                $("#reset").on("click", function () {
-                    $('#styleNumber').val('').change();
-                    $('#supplierName').val('').change();
-                    $('#selectTemplate').val('').change();
-                    $.fn.dataTableExt.afnFiltering.length = 0;
-                    $tableSel.dataTable().fnDraw();
-                    $('input[name="daterange"]').val('Filter by Order Date');
-                    $('input[name="daterange"]').datepicker("refresh");
-                    $('.selectpicker').selectpicker('val', 1);
-                    $('.selectpicker').selectpicker('refresh');
-
-                });
-
-                $('.selectpicker').selectpicker();
-                $('input[name="daterange"]').daterangepicker({
-
-                    },
-                    function (start, end, label) {
-                        $.fn.dataTableExt.afnFiltering.length = 0;
-                        $tableSel.dataTable().fnDraw();
-                        filterByDate(6, start, end); // We call our filter function
-                        $tableSel.dataTable().fnDraw(); // Manually redraw the table after filtering
-                    });
-
-                $('input[name="daterange"]').val('Filter by Order Date');
-
-
-                // Clear the filter. Unlike normal filters in Datatables,
-                // custom filters need to be removed from the afnFiltering array.
-                $('.cancelBtn').on('click', function (e) {
-                    e.preventDefault();
-                    $.fn.dataTableExt.afnFiltering.length = 0;
-                    $tableSel.dataTable().fnDraw();
-                });
-                $('.pi-view').tooltip('show')
-                $('.pi-view').tooltip('toggle')
-                $('.po-view').tooltip('show')
-                $('.po-view').tooltip('toggle')
-                $("#datatable-tesco-orders_filter input").addClass('form-control input-sm');
-                $("#datatable-tesco-orders_filter input").attr('placeholder', 'Data Search');
-                $('#datatable-tesco-orders_length select').addClass('form-control input-sm');
-            },
-            400: function () {
-                $('.snackbar_span').html('Something went wrong');
-                showSnackbar();
-            }
-        },
-        error: function (data) {
-
-        },
-        complete: function () {
-            $(".loader").hide();
-            $(".loader").css('margin-top', '0%');
-        }
-    })
-}
-
 function showFilter() {
     $('.filter-window').toggle();
 }
@@ -1875,6 +1243,7 @@ function updateArtwork(obj) {
     var id = $(obj).parent().attr('data-id');
     var table_name = $(obj).parent().attr('data-table1');
     var TemplateName = $(obj).parent().attr('data-template');
+    $('#tesco_ocn').prop('disabled', true);
 
     td_row = $(obj).parent().parent();
 
@@ -1897,13 +1266,21 @@ function updateArtwork(obj) {
             200: function (data) {
                 if (data.order_details != 0) {
                     $('#tesco_po_number').val(data.order_details.po_number);
+					$('#qr_flag').val(data.tesco_item_master[0].is_qrcode_required);
                     $('#tesco_uk_style').val(data.order_details.uk_style_ref);
                     $('#tesco_ce_style').val(data.order_details.ce_style_ref);
                     $('#tesco_eqos').val(data.order_details.eqos_site_code);
                     $('#tesco_description').val(data.order_details.short_description);
                     $('#tesco_season_code').val(data.order_details.season_code);
                     $('#tesco_manufacture_date').val(data.order_details.manufacture_date);
-
+                    if(data.order_details.full_description != null)
+                    {
+                        $('#tesco_description').prev().text($('#tesco_description').prev().text()+'(Full Description: '+data.order_details.full_description+')');
+                    }
+                    else 
+                    {
+                        $('#tesco_description').prev().text('Short Description');
+                    }
 
                     var tag_at_source = data.order_details.tag_at_source == 0 ? "no" : "yes";
                     var rfid = data.order_details.rfid_compliant == 0 ? "no" : "yes";
@@ -1913,6 +1290,7 @@ function updateArtwork(obj) {
                     $('#tesco_department').selectpicker('val', data.order_details.tesco_department_id);
                     $('#tesco_rfid').selectpicker('val', rfid);
                     $('#tesco_tag_at_source').selectpicker('val', tag_at_source);
+                    $('#tesco_ocn').val(data.order_details.ocn_number);
 
                     //Disable option for Customer
 
@@ -1929,6 +1307,7 @@ function updateArtwork(obj) {
                     $('#tesco_department').prop('disabled', true);
                     $('#tesco_rfid').prop('disabled', true);
                     $('#tesco_tag_at_source').prop('disabled', true);
+                    $('#tesco_ocn').prop('disabled', true);
 
 
                     $('.artwork_tesco').html('<object style="border: 2px #333 solid;" id="svg_tesco_os" class="center-block svg2" data="' + data.template_file[0].template_file + '" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden;position: absolute;"><svg id="ean-13"></svg></div>')
@@ -2006,11 +1385,12 @@ function updateArtwork(obj) {
                             var delete_td = '<a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRowOs(this)"></i></a>';
                         }
 
-                        tr += '<tr><td class="tpnd"><div class="form-group has-feedback"> <input type="text" disabled class="form-control input-sm ce_ratio_orms_tpn" required="" id="os_tpnd_' + i + '" data-minlength="' + tpn_len + '" maxlength="' + tpn_len + '" data-required-error="Mandatory Field." data-minlength-error="Enter ' + tpn_len + ' digits." name="os_tpnd_' + i + '" onkeypress="return isNumber(event)" value="' + tpnd + '" placeholder="' + tpn_th + '" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td class="barcode"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_itf" disabled required="" data-minlength="' + maxlength + '" maxlength="' + maxlength + '" data-required-error="Mandatory Field." data-minlength-error="Enter ' + maxlength + ' digits." id="os_barcode_' + i + '" onkeyup="dynamicSVGTemplates()" name="os_barcode_' + i + '" onkeypress="return isNumber(event)" value="' + barcode_td + '" placeholder="Enter ITF Barcode"><label class="barcode_error hidden" style="color:red;margin-left: -55px;position: absolute;">Enter Valid Barcode</label><div class="help-block with-errors"></div></div></td><td class="size"><div class="form-group has-feedback"> <input disabled type="text" maxlength="' + unit_len + '" class="form-control input-sm ce_ratio_cpc" required="" id="os_case_qty_' + i + '" name="os_case_qty_' + i + '" onkeypress="return isNumber(event)" value="' + unit_qty + '" placeholder="Enter ' + qty + '" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>' + th_td + '<td> <div class="form-group has-feedback has-success"><input disabled min="' + moq + '" onInput="checkLength(6,this)" type="number" class="form-control  input-sm tot_qty_table" value="' + value.count + '" required placeholder="Quantity" data-min-error="Quantity Should be >= ' + moq + '."><div class="help-block with-errors"></div></div></td></tr>';
+                        tr += '<tr><td class="tpnd"><div class="form-group has-feedback"> <input type="text" disabled class="form-control input-sm orms_tpnd" required="" id="os_tpnd_' + i + '" data-minlength="' + tpn_len + '" maxlength="' + tpn_len + '" data-required-error="Mandatory Field." data-minlength-error="Enter ' + tpn_len + ' digits." name="os_tpnd_' + i + '" onkeypress="return isNumber(event)" value="' + tpnd + '" placeholder="' + tpn_th + '" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td class="barcode"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_itf" disabled required="" data-minlength="' + maxlength + '" maxlength="' + maxlength + '" data-required-error="Mandatory Field." data-minlength-error="Enter ' + maxlength + ' digits." id="os_barcode_' + i + '" onkeyup="dynamicSVGTemplates()" name="os_barcode_' + i + '" onkeypress="return isNumber(event)" value="' + barcode_td + '" placeholder="Enter ITF Barcode"><label class="barcode_error hidden" style="color:red;margin-left: -55px;position: absolute;">Enter Valid Barcode</label><div class="help-block with-errors"></div></div></td><td class="size"><div class="form-group has-feedback"> <input disabled type="text" maxlength="' + unit_len + '" class="form-control input-sm ce_ratio_cpc" required="" id="os_case_qty_' + i + '" name="os_case_qty_' + i + '" onkeypress="return isNumber(event)" value="' + unit_qty + '" placeholder="Enter ' + qty + '" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>' + th_td + '<td> <div class="form-group has-feedback has-success"><input disabled min="' + moq + '" onInput="checkLength(6,this)" type="number" class="form-control  input-sm tot_qty_table" value="' + value.count + '" required placeholder="Quantity" data-min-error="Quantity Should be >= ' + moq + '."><div class="help-block with-errors"></div></div></td></tr>';
+                        row_id = i;
                         i++;
                     })
 
-                    $('.edit-qty-table-div').html('<hr><h4 class="text-center">Order Quantity - ' + TemplateName + '</h4><button type="button" onclick=addRowOs(this,"' + TemplateName + '","' + data.order_details.zone + '","' + moq + '") data-id="1" id="add_row" class="btn btn-default add-row-btn" disabled><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px;margin-top: 15px;"> <thead> <tr> <th width="180">' + tpnd_tr + '</th><th width="180">' + barcode_tr + '</th> <th>' + qty + '</th>' + th_tr + ' <th>Quantity</th> <th>Actions</th></tr></thead> <tbody style="font-size: 11px">' + tr + '</tbody></table>')
+                    $('.edit-qty-table-div').html('<hr><h4 class="text-center">Order Quantity - ' + TemplateName + '</h4><button type="button" onclick=addRowOs(this,"' + TemplateName + '","' + data.order_details.zone + '","' + moq + '") data-row-id="'+row_id+'" id="add_row" class="btn btn-default add-row-btn" disabled><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px;margin-top: 15px;"> <thead> <tr> <th width="180">' + tpnd_tr + '</th><th width="180">' + barcode_tr + '</th> <th>' + qty + '</th>' + th_tr + ' <th>Quantity</th> <th>Actions</th></tr></thead> <tbody style="font-size: 11px">' + tr + '</tbody></table>')
 
                     $('#edit_template_name').val(TemplateName)
                     $('#edit_zone').val(data.order_details.zone)
@@ -2020,7 +1400,7 @@ function updateArtwork(obj) {
                     $('.osorderdetails').text(" Order Details - " + TemplateName)
                     $('.osartwork').text(" Artwork - " + TemplateName)
                     if (data.order_details.edit_permission == 1) {
-                        $('.osfooter').html('<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm hidden" id="submit" type="submit">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit" style="width: 55px;margin-left: 10px;" onclick ="editArtwork()" type="button">Edit</button><span id="error_msg_alert" style="color:red;"></span><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
+                        $('.osfooter').html('<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm hidden" id="submit" type="submit" disabled="true">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit" style="width: 55px;margin-left: 10px;" onclick ="editArtwork()" type="button">Edit</button><span id="error_msg_alert" style="color:red;"></span><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
                     } else {
                         $('.osfooter').html('<span id="error_msg_alert" style="color:red;"></span><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
                     }
@@ -2032,7 +1412,7 @@ function updateArtwork(obj) {
 
                         } else {
                             e.preventDefault();
-							$('#submit').prop('disabled',true)
+			    $('#submit').prop('disabled',true)
                             setEditOrderStatus()
                         }
                     })
@@ -2122,16 +1502,10 @@ function setEditOrderStatus() {
     var type = $('#edit_template_type').val()
     var template_name = $('#edit_template_name').val()
     var edit_id = $('#edit_id').val()
+    var tesco_ocn = $('#tesco_ocn').val();
+    var qr_code = [];
+    var barcode_array = [];
 
-
-
-
-    /** [ Create array of ce ratio orms tpn ] */
-    $('.ce_ratio_orms_tpn').each(function (i, item) {
-        tpnd[i] = $(item).val();
-
-    });
-    tpnd = tpnd.join(',');
     /** [ Create array of ce ratio itf barcode ] */
     $('.ce_ratio_itf').each(function (i, item) {
         if ((template_name == "TCL1" && zone == "CE") || (template_name == "TCL2" && zone == "CE") || (template_name == "TSL1" && zone == "CE") || (template_name == "THL1" && zone == "CE")) {
@@ -2177,6 +1551,7 @@ function setEditOrderStatus() {
         }
 
         barcode[i] = $(item).val();
+        barcode_array.push($(item).val());
     });
     barcode = barcode.join(',');
     /** [ Create array of ce ratio case per carton ] */
@@ -2203,6 +1578,19 @@ function setEditOrderStatus() {
         });
         single_size = single_size.join(',');
     }
+
+    /** [ Create array of ce ratio orms tpn ] */
+    $('.orms_tpnd').each(function (i, item) {
+    tpnd[i] = $(item).val();
+
+    // qr code format : {Buyer PO No,Barcode/last 3 digits of tpnd no,tpnd no}
+    qr_code[i] = po_number+','+barcode_array[i]+'/'+($(item).val().substr($(item).val().length - 3))+','+$(item).val(); 
+
+    });
+    tpnd = tpnd.join(',');
+    qr_code = qr_code.join('|');
+
+
     if (barcode_checks == 0) {
         $.ajax({
             url: base_url + "/customer/tesco/set-tesco-order-status",
@@ -2229,7 +1617,9 @@ function setEditOrderStatus() {
                 count: count,
                 edit_id: edit_id,
                 template_name: template_name,
-                single_size: single_size
+                single_size: single_size,
+                tesco_ocn: tesco_ocn,
+                qr_code:qr_code
             },
             statusCode: {
                 /** [Show response status based on HTTP status code] */
@@ -2264,8 +1654,8 @@ function setEditOrderStatus() {
  */
 function addRowOs(obj, TemplateName, zone, moq) {
     var maxlength = $('#os_barcode_1').attr('maxlength')
-    var i = parseInt($(obj).attr('data-id')) + 1;
-    $(obj).attr('data-id', i);
+    var i = parseInt($(obj).attr('data-row-id')) + 1;
+    $(obj).attr('data-row-id', i);
 
     if ((TemplateName == "TCL1" && zone == "CE") || (TemplateName == "TCL2" && zone == "CE") || (TemplateName == "TSL1" && zone == "CE") || (TemplateName == "THL1" && zone == "CE")) {
         var qty = "Cases per carton";
@@ -2294,7 +1684,7 @@ function addRowOs(obj, TemplateName, zone, moq) {
     }
 
 
-    $('.edit-qty-table-div table tbody').append('<tr><td class="tpnd"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="os_tpnd_' + i + '" data-minlength="' + tpn_len + '" maxlength="' + tpn_len + '" data-required-error="Mandatory Field." data-minlength-error="Enter ' + tpn_len + ' digits." name="os_tpnd_' + i + '" onkeypress="return isNumber(event)" value="" placeholder="' + tpn_th + '" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td class="barcode"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="' + maxlength + '" maxlength="' + maxlength + '" data-required-error="Mandatory Field." data-minlength-error="Enter ' + maxlength + ' digits." id="os_barcode_' + i + '" onkeyup="dynamicSVGTemplates()" name="os_barcode_' + i + '" onkeypress="return isNumber(event)" value="" placeholder="Enter ITF Barcode"><label class="barcode_error hidden" style="color:red;margin-left: -55px;position: absolute;">Enter Valid Barcode</label><div class="help-block with-errors"></div></div></td><td class="size"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="os_case_qty_' + i + '" name="os_case_qty_' + i + '" maxlength="' + unit_len + '" onkeypress="return isNumber(event)" value="" placeholder="Enter ' + qty + '" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>' + th_td + '<td> <div class="form-group has-feedback has-success"><input min="' + moq + '" onInput="checkLength(6,this)" type="number" class="form-control  input-sm tot_qty_table" value="" required placeholder="Quantity" data-min-error="Quantity Should be >= ' + moq + '."><div class="help-block with-errors"></div></div></td><td><a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRowOs(this)"></i></a></td></tr>');
+    $('.edit-qty-table-div table tbody').append('<tr><td class="tpnd"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm orms_tpnd" required="" id="os_tpnd_' + i + '" data-minlength="' + tpn_len + '" maxlength="' + tpn_len + '" data-required-error="Mandatory Field." data-minlength-error="Enter ' + tpn_len + ' digits." name="os_tpnd_' + i + '" onkeypress="return isNumber(event)" value="" placeholder="' + tpn_th + '" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td class="barcode"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="' + maxlength + '" maxlength="' + maxlength + '" data-required-error="Mandatory Field." data-minlength-error="Enter ' + maxlength + ' digits." id="os_barcode_' + i + '" onkeyup="dynamicSVGTemplates()" name="os_barcode_' + i + '" onkeypress="return isNumber(event)" value="" placeholder="Enter ITF Barcode"><label class="barcode_error hidden" style="color:red;margin-left: -55px;position: absolute;">Enter Valid Barcode</label><div class="help-block with-errors"></div></div></td><td class="size"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="os_case_qty_' + i + '" name="os_case_qty_' + i + '" maxlength="' + unit_len + '" onkeypress="return isNumber(event)" value="" placeholder="Enter ' + qty + '" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>' + th_td + '<td> <div class="form-group has-feedback has-success"><input min="' + moq + '" onInput="checkLength(6,this)" type="number" class="form-control  input-sm tot_qty_table" value="" required placeholder="Quantity" data-min-error="Quantity Should be >= ' + moq + '."><div class="help-block with-errors"></div></div></td><td><a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRowOs(this)"></i></a></td></tr>');
     $('#create_tesco_order_status_form').validator('update');
 }
 
@@ -2541,6 +1931,7 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
         var tag_at_source = $('#tesco_tag_at_source option:selected').text();
         var season_code = $('#tesco_season_code').val();
         var manufacture_date = $('#tesco_manufacture_date').val();
+        var tesco_ocn = $('#tesco_ocn').val();
 
 
         if (po_number != '') {
@@ -2642,6 +2033,10 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
                 /** [ Dynamically change svg CE ratio tpnd number ] */
                 if (tpnd != '') {
                     svgDoc.getElementById("tpnd").innerHTML = tpnd;
+					if($('#qr_flag').val() == 1)
+					{
+						svgDoc.getElementById("tpnd_last_digit").innerHTML = tpnd.substr(tpnd.length - 3);
+					}
                 } else {
                     svgDoc.getElementById("tpnd").innerHTML = '';
                 }
@@ -2660,10 +2055,73 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
                 }
                 /** [ Dynamically change svg short description ] */
                 if (description != '') {
-                    svgDoc.getElementById("description").innerHTML = description.toUpperCase();
-                } else {
-                    svgDoc.getElementById("description").innerHTML = '';
-                }
+					if($('#qr_flag').val() == 1)
+					{
+						if(description.length <= 20)
+						{
+							svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+							if (template_name === "TCL1")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 125)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 137)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 88.1544, 125)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 88.1544, 137)");
+							}
+							else if (template_name === "TCL2")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+								svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+								svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+							}
+							else if(template_name === "THL1")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 125)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 137)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 125)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 137)");
+							}
+							
+						}
+						else
+						{
+							str = oswordWrap(description, 23);
+							svgDoc.getElementById("description").innerHTML = str;
+							if (template_name === "TCL1")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 133)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 146)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 88.1544, 133)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 88.1544, 146)");
+							}
+							else if (template_name === "TCL2")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+								svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+								svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+							}
+							else if(template_name === "THL1")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 133)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 146)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 133)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 146)");
+							}
+						}
+					}
+					else
+					{
+						/** [ Dynamically change svg short description ] */
+						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+					}					
+				} else {
+					svgDoc.getElementById("description").innerHTML = '';
+				}
             } else {
                 /**  [ if CE single template ] */
                 var orms_tpn = $('#os_tpnd_1').val();
@@ -2673,6 +2131,10 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
                 /** [ Dynamically change svg CE single tpnd number ] */
                 if (orms_tpn != '') {
                     svgDoc.getElementById("tpnd").innerHTML = orms_tpn;
+					if($('#qr_flag').val() == 1)
+					{
+						svgDoc.getElementById("tpnd_last_digit").innerHTML = orms_tpn.substr(orms_tpn.length - 3);
+					}
                 } else {
                     svgDoc.getElementById("tpnd").innerHTML = '';
                 }
@@ -2709,14 +2171,118 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
                         success: function (data) {
                             /** [ Dynamically change svg short description ] */
                             if (description != '' && data.size_chart.length != 0) {
-                                svgDoc.getElementById("description").innerHTML = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
-                            } else if (data.size_chart.length != 0) {
-                                svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
-                            } else if (description != '') {
-                                svgDoc.getElementById("description").innerHTML = description.toUpperCase();
-                            } else {
-                                svgDoc.getElementById("description").innerHTML = '';
-                            }
+								var desc_size = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+								if($('#qr_flag').val() == 1)
+								{
+									if(desc_size.length <= 23)
+									{
+										svgDoc.getElementById("description").innerHTML = desc_size;
+										if(template_name === "THL3")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+										}
+									}
+									else
+									{
+										str = oswordWrap(desc_size, 23);
+										svgDoc.getElementById("description").innerHTML = str;
+										
+										if(template_name === "THL3")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136.2173)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150.5557)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136.2173)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150.5557)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+										}
+									}
+								}
+								else
+								{
+									svgDoc.getElementById("description").innerHTML = desc_size;
+								}
+							} else if (data.size_chart.length != 0) {
+								svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
+							} else if (description != '') {
+								var desc_size = description.toUpperCase();
+								
+								if($('#qr_flag').val() == 1)
+								{
+									if(desc_size.length <= 23)
+									{
+										svgDoc.getElementById("description").innerHTML = desc_size;
+										if(template_name === "THL3")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+										}
+									}
+									else
+									{
+										str = oswordWrap(desc_size, 23);
+										svgDoc.getElementById("description").innerHTML = str;
+										
+										if(template_name === "THL3")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136.2173)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150.5557)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136.2173)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150.5557)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+										}
+									}
+								}
+								else
+								{
+									svgDoc.getElementById("description").innerHTML = desc_size;
+								}
+								
+							} else {
+								svgDoc.getElementById("description").innerHTML = '';
+							}
                         },
                         error: function (errorXHR, errorStatus, errorThrown) {
                             this.tryCount++;
@@ -2738,8 +2304,29 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
                     })
                 } else {
                     /** [ Dynamically change svg short description & size chart ] */
-                    if (description != '') {
-                        svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                     if (description != '') {
+                        if (description.length > 24) {
+                            if (/\S/.test(description.charAt(24))) {
+                                //No Space
+                                if (description.indexOf(" ") == "-1") {
+                                    svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+                                    svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+                                } else {
+                                    svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+                                    svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+                                }
+
+                            } else {
+                                //Space
+                                svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+                                svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+                            }
+                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+                        } else {
+                            svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                            svgDoc.getElementById("description1").innerHTML = "";
+                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 65.1)");
+                        }
                     } else {
                         svgDoc.getElementById("description").innerHTML = '';
                     }
@@ -3820,282 +3407,33 @@ function editArtwork() {
 }
 
 
-
-/**
- * [method append data to orchestraStatusTable ]
- * @param  {[type]} data [description]
- * @param  {[type]} path [description]
- * @return {[type]}      [description]
- */
-function orchestraStatusTable(data, path) {
-    var th = "";
-    var tr = "";
-    var columnsIn = data[0];
-    for (var key in columnsIn) {
-        if (key != "tableName" && key != "tableID" && key != "po_file" && key != "pi_required" && key != "po_required" && key != "uvc" && key != "template_id" && key != "customer_id" && key != "order_flag" && key != "delivery_day_count" && key != "is_order_count_empty") {
-            if (key == "TemplateName") {
-                th += "<th style='text-align: center;'>Reference No</th>";
-            }else if (key == "BuyerPONo") {
-                th += "<th style='text-align: center;'>BuyerPO No</th>";
-            }else if (key == "ArtworkType") {
-                th += "<th style='text-align: center;'>Artwork Type</th>";
-            }else if (key == "SupplierName") {
-                th += "<th style='text-align: center;'>Supplier Name</th>";
-            } else if (key == "OrderDate") {
-                th += "<th style='text-align: center;'>Order Date</th>";
-            } else if (key == "DeliveryDate") {
-                th += "<th style='text-align: center;'>Delivery Date</th>";
-            } else {
-                th += "<th style='text-align: center;'>" + key + "</th>";
+function oswordWrap(str, maxWidth) {
+    var newLineStr = ""; done = false; res = '';
+    do {                    
+        found = false;
+        // Inserts new line at first whitespace of the line
+        for (i = maxWidth - 1; i >= 0; i--) {
+            if (testWhite(str.charAt(i))) {
+                res = res + "<tspan style='fill:cmyk(0%, 0%, 0%, 100%); font-family:FranklinGothicBT-RomanCondensed, FrankGoth Cn BT; font-size:10.0001px;'  x='0' y='0'>" +[str.slice(0, i), newLineStr].join('') + "</tspan>";
+                str = str.slice(i + 1);
+                found = true;
+                break;
             }
         }
-
-    }
-    $.each(data, function (index, value) {
-        var action_status = false;
-        tr += '<tr class="trClass" id="' + value.tableName + '_' + value.tableID + '">';
-        for (var key in columnsIn) {
-            if (key != "id") {
-
-                if (key == "PO Number" && value['po_required'] == 1 && value['is_order_count_empty'] == 0) {
-                    var po_file = value['po_file'];
-                    let customer_po_number = value[key] === null ? '' : value[key];
-                    tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" onkeypress="return AvoidSpace(event)" name="orchestra-po" id="orchestra-po-' + value.tableID + '" class="form-control input-sm orchestra-po" placeholder="Enter PO" maxlength="11" value="' + customer_po_number + '"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default orchestra-po-submit" onclick=orchestraSetPO(this,"' + value.tableID + '","' + value.tableName + '","' + po_file + '")><span class="fa fa-check"></span></button></span></div></div></td>';
-                } else if (key == "OrderDate") {
-                    if (value['is_order_count_empty'] == 0) {
-                        var orderDate = value[key];
-                        tr += '<td align="center">' + orderDate + '</td>';
-                    } else {
-                        tr += '<td align="center"> - </td>';
-                    }
-
-
-                } else if (key == "PI Status") {
-                    var str = value[key];
-                    if (str != null && str != "" && value['is_order_count_empty'] == 0) {
-                        if (str == "PI Approved") {
-                            action_status = true;
-                        }
-                        $status = str.replace(/ /g, "");
-                        $status_text = '<span class="pi_class label label-' + $status + '">' + value[key] + '</span>';
-                    } else {
-                        $status_text = " - ";
-                    }
-
-
-                    tr += '<td align="center">' + $status_text + '</td>';
-
-                } else if (key == "Artwork Status") {
-                    if (value['is_order_count_empty'] == 0) {
-                        var str = value[key];
-                        $status = str.replace(/ /g, "");
-
-                        tr += '<td align="center"><span class="label label-' + $status + '">' + value[key] + '</span></td>';
-                    } else {
-                        tr += '<td align="center"><span class="label label-CreateOrder">Create Order</span></td>';
-                    }
-
-                } else if (key == "PO Status") {
-                    var str = value[key];
-                    var status_text = " - "
-                    if (value['po_required'] == 1 && value['is_order_count_empty'] == 0) {
-                        if (str != null && str != "") {
-                            status = str.replace(/ /g, "");
-                            status_text = '<span class="po_class label label-' + status + '">' + value[key] + '</span>';
-                        } else {
-                            str = "PO Pending"
-                            status = str.replace(/ /g, "");
-                            status_text = '<span class="po_class label label-' + status + '">' + str + '</span>';
-                        }
-                    } else {
-                        status_text = " - ";
-                    }
-
-                    tr += '<td align="center class="po_status">' + status_text + '</td>';
-
-                } else if (key == "UVC") {
-                    var order_flag = value.order_flag;
-                    var span_style = '';
-                    if (order_flag == "reOrder") {
-                        span_style = '<span title="Additional Quantity" class="batch-additional">A</span>'
-                    }
-                    if (order_flag == "repeatOrder") {
-                        span_style = '<span title="Repeat Order" class="batch-reorder">R</span>'
-                    }
-                    var style_no = value.UVC;
-                    tr += '<td align="center" data-id="' + value.tableID + '" data-table="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '"><a class="" href="javascript:void(0)" onclick="">' + span_style + '' + style_no + '</a></td>';
-                } else if (key == "Actions") {
-                    var po_file = value['po_file'];
-                    if (po_file != null) {
-                        style_po = "style='border-color:#FFFFFF'"
-                    } else {
-                        style_po = "style='border-color:#FF0000'"
-                    }
-                    var pi_required = value['pi_required'];
-                    var po_required = value['po_required'];
-                    if (value["Artwork Status"] != "Order Cancelled" && value['is_order_count_empty'] == 0) {
-                        if (pi_required == 1 && po_required == 1) {
-                            tr += '<td align="center"><a class="pi_generation hidden" href="javascript:void(0)" onclick=genarateOrchetraPI("' + value.tableID + '","' + value.tableName + '","' + value.UVC + '","' + action_status + '")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="javascript:void(0)" onclick=orchestraPOUpload(this,"' + value.tableID + '","' + po_file + '","' + value.tableName + '") class="po-style" ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" ' + style_po + '></i></a></td>';
-                        } else if (po_required == 1 && pi_required == 0) {
-
-                            tr += '<td align="center"><a href="javascript:void(0)" class="po-style" onclick=orchestraPOUpload(this,"' + value.tableID + '","' + po_file + '","' + value.tableName + '") ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" ' + style_po + '></i></a></td>';
-                        } else if (pi_required == 1 && po_required == 0) {
-
-                            tr += '<td align="center"><a class="pi_generation hidden" href="javascript:void(0)" onclick=genarateOrchetraPI("' + value.tableID + '","' + value.tableName + '","' + value.UVC + '","' + action_status + '")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a></td>';
-                        }
-                    } else {
-                        tr += '<td align="center"> - </td>';
-                    }
-                } else if (key == "DeliveryDate") {
-
-                    if (value['is_order_count_empty'] == 0) {
-                        if (value[key] == null) {
-                            tr += '<td><span style=display:none;>' + value.OrderDate + '</span><input class="form-control input-sm datepicker_recurring_start" data-id="' + value.delivery_day_count + '" style="width: 107px; border-color: rgb(244, 67, 54);" placeholder="Delivery Date" onchange=updateDeliveryDate(this,"' + value.tableID + '","' + value.tableName + '")  readonly></td>';
-                        } else {
-
-                            tr += '<td><span style=display:none;>' + value.OrderDate + '</span><input value="' + value[key] + '"class="form-control input-sm datepicker_recurring_start" data-id="' + value.delivery_day_count + '" style="width: 107px;" placeholder="Delivery Date" onchange=updateDeliveryDate(this,"' + value.tableID + '","' + value.tableName + '") readonly></td>';
-                        }
-                    } else {
-                        tr += '<td><span style=display:none;>' + value.OrderDate + '</span> - </td>';
-                    }
-                } else if (key != "tableName" && key != "tableID" && key != "po_file" && key != "pi_required" && key != "po_required" && key != "uk_style_ref" && key != "ce_style_ref" && key != "template_id" && key != "customer_id" && key != "order_flag" && key != "delivery_day_count" && key != "is_order_count_empty") {
-                    if (value[key] == "" || value[key] == null) {
-                        tr += '<td> - </td>';
-                    } else {
-                        tr += '<td>' + value[key] + '</td>';
-                    }
-                }
-            }
+        // Inserts new line at maxWidth position, the word is too long to wrap
+        if (!found) {
+            res +="<tspan style='fill:cmyk(0%, 0%, 0%, 100%); font-family:FranklinGothicBT-RomanCondensed, FrankGoth Cn BT; font-size:10.0001px;'>" + [str.slice(0, maxWidth), newLineStr].join('')+ "</tspan>";
+            str = str.slice(maxWidth);
         }
-        tr += '</tr>';
-    })
-    return '<table id="datatable-orchestra-orders" class="table table-hover table-striped table-bordered" style="width: 100%"><thead><tr>' + th + '</tr></thead><tbody>' + tr + '</tbody></table></div></div></div></div></div></div>';
+        if (str.length < maxWidth)
+            done = true;
+    } while (!done);
+    return res + "<tspan style='fill:cmyk(0%, 0%, 0%, 100%); font-family:FranklinGothicBT-RomanCondensed, FrankGoth Cn BT; font-size:10.0001px;' x='0' y='12'>"+str+"</tspan>";
+}
+
+function testWhite(x) {
+    var white = new RegExp(/^\s$/);
+    return white.test(x.charAt(0));
 }
 
 
-/**
- * [orchestraSetPO for updating orchestra customer po]
- * @param  {[type]} obj [description]
- * @param  {[type]} id  [description]
- * @return {[type]}     [description]
- */
-function orchestraSetPO(obj, id, tableName, po_file) {
-    $('.orchestra-po').css('border-color', '');
-    var po_number = $(obj).closest('tr').find('.orchestra-po').val();
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    var buyer_id = localStorage.getItem("buyer_id");
-    if (po_number != "") {
-        $.ajax({
-            url: base_url + "/customer/orchestra/order-management/set-po-number",
-            type: "Post",
-            dataType: "json",
-            data: {
-                _token: csrf_token,
-                po_number: po_number,
-                tableName: tableName,
-                id: id,
-                buyer_id: buyer_id
-            },
-            beforeSend: function () {
-                $(".loader").show();
-            },
-            statusCode: {
-                /** [Show response status based on HTTP status code] */
-                200: function (data) {
-                    $('#snackbar').css('background-color', '#00b6ff');
-                    $('.snackbar_span').html(data.message);
-                    $ponumber = $(obj).closest('tr').find('.orchestra-po').val();
-                    if ($(obj).closest('tr').find('.po_class').text() == "PO Pending" && po_file != "null") {
-                        $(obj).closest('tr').find('.po_class').html("PO Uploaded")
-                        $(obj).closest('tr').find('.po_class').removeClass("label-POPending").addClass('label-POUploaded');
-                    }
-                    showSnackbar();
-                    if (po_number == "") {
-                        $(obj).closest('tr').find('.orchestra-po').attr('disabled');
-                        $(obj).closest('tr').find('.orchestra-po').attr('placeholder', "Enter PO");
-                    }
-
-                },
-                403: function (data) {
-                    $('#snackbar').css('background-color', '#00b6ff');
-                    $('.snackbar_span').html(data.responseJSON.message);
-                    showSnackbar();
-                },
-                400: function () {
-                    $('#snackbar').css('background-color', '#00b6ff');
-                    $('.snackbar_span').html(data.responseJSON.message);
-                    showSnackbar();
-                }
-            },
-            error: function (data) {},
-            complete: function () {
-                $(".loader").hide();
-            }
-        })
-    } else {
-        $(obj).closest('tr').find('.orchestra-po').focus();
-        $(obj).closest('tr').find('.orchestra-po').css('border-color', '#F44336');
-        $('.snackbar_span').html('Please enter a valid PO number');
-        showSnackbar();
-    }
-}
-
-/**
- * [orchestraPOUpload  for customer po file upload]
- * @param  {[type]} obj [description]
- * @param  {[type]} id  [description]
- * @return {[type]}     [description]
- */
-const orchestraPOUpload = (obj, id, po_file, tableName) => {
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    $.ajax({
-        url: base_url + "/customer/orchestra/get-erp-status",
-        type: 'get',
-        data: {
-            table_name: tableName,
-            id: id,
-            _token: csrf_token
-        },
-        beforeSend: function () {
-            $(".loader").show();
-        },
-        success: function (data) {
-            // erp_details array null , if order is not moved to erp tables
-            // only editable, if order status is "Hold For JC Queue" OR "Moved To ERP"
-            if (data.erp_details[0] != null) {
-                if (data.erp_details[0].status_name !== 'Hold For JC Queue' && data.erp_details[0].status_name !== 'Moved To ERP') {
-                    $('.update-po-file').hide();
-
-                    $('#error_msg_span').html('ERP Order Status : <strong>' + data.erp_details[0].status_name + '</strong>. You are not permitted to upload any more po files for this order.')
-                } else {
-                    $('.update-po-file').show();
-                    $('#error_msg_span').html('');
-                }
-            } else {
-                $('.update-po-file').show();
-                $('#error_msg_span').html('');
-            }
-        },
-        error: function (data) {
-
-        },
-        complete: function () {
-            $(".loader").hide();
-            if (po_file == "null") {
-                $('#po_upload').removeClass('hidden')
-                $('.upload-po').removeClass('hidden')
-                $('#po_file').addClass('hidden')
-            } else {
-                $('#po_upload').addClass('hidden')
-                $('.upload-po').addClass('hidden')
-                $('#po_file').removeClass('hidden')
-            }
-            var po_link = base_url + po_file
-            $('#po_link').attr("href", po_link);
-            $('#rowID').val(id);
-            $('#tableName').val(tableName);
-            $('#buyer_id').val(localStorage.getItem("buyer_id"));
-            $('#po-file-upload').modal('show')
-        }
-    })
-}

@@ -16,5 +16,5 @@ class SolidPolyStickerOrdersQty extends Authenticatable
      */
 
     protected $table = 'orchestra_solid_poly_bag_sticker_orders_qty';
-    protected $fillable =['ospbs_id','size','quantity','quantity_sets'];
+    protected $fillable =['ospbs_id','size','barcode','uvc_tco','quantity','quantity_sets'];
 }

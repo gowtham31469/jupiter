@@ -42,7 +42,15 @@
         color: #444;
         line-height: 45px;
     }
-
+	.check-list
+	{
+		position: relative;
+		display: block;
+		padding: 10px 15px;
+		margin-bottom: -1px;
+		background-color: #fff;
+		border: 1px solid #ddd;
+	}
     .washing_select+.select2-container .select2-selection--single,
     .cleaning_select+.select2-container .select2-selection--single,
     .ironing_select+.select2-container .select2-selection--single,
@@ -361,6 +369,15 @@ background: rgba(0,0,0,0.2);
 	.left-panel.active {
     margin-right: 0%;
 }
+/* Hide HTML5 Up and Down arrows. */
+input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
 </style>
 <div class="col-sm-12 col-md-12 main">
 	<div class="top-content">
@@ -606,7 +623,7 @@ background: rgba(0,0,0,0.2);
 
 
 
-<div class="left-panel col-md-12" style="display: none;">
+<div class="left-panel tesco-left col-md-12" style="display: none;">
 	<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
 	<div class="div-max">
 		<div class="col-md-7">
@@ -706,6 +723,59 @@ background: rgba(0,0,0,0.2);
                 <div class="modal-footer">
                     <div style="float:right" class="pi_actions">
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="po-file-upload-group" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="gridSystemModalLabel">Purchase Order</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="uvc_select_div">
+                    </div>
+                    <div id="exist_artwork_div_status" class="hidden">
+                        <h4>Artworks : </h4>
+                        <label style='color:red' id='check_error_status' class='hidden'>Please select atleast one artwork</label>
+                        <ul class="list-group checked-list-box">
+                        </ul>
+                        <button type="button" id="new_po1_status" class="btn btn-primary hidden">New PO</button>
+                        <button type="button" id="map_po_status" class="btn btn-primary hidden">Map PO</button>
+                        <hr/>
+                    </div>
+
+                    <div id="map_po_div_status" class="hidden">
+                        <h4>Map to Existing PO : </h4>
+                        <label style="color:red" id="select_error_status" class="hidden">Please Select PO</label>
+                        <div class="form-group" id="po_select_div">
+                            <label>Select PO</label>
+                        </div>
+                    </div>
+
+                    <div id="new_po_div_status" class="hidden">
+                        <h4>New PO : </h4>
+                        <label style='color:red' id='new_po_error_status' class='hidden'>Please Enter PO Number</label>
+						 <label style='color:red' id='new_po_error_length_status' class='hidden'>Max 9 characters</label>
+                        <div class="form-group">
+                            <label>PO Number</label>
+                            <input id="new_po_no_status" style="width: 40%;" type="text" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label style='color:red' id='new_po_file_error_status' class='hidden'>Please upload Po File</label>
+                            <br><label >PO File</label>
+                            <input type="file" accept="application/pdf" id="new_po_file_status">
+                            <p class="help-block"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+                    <button type="button" id="update_new_po_status" class="btn btn-primary hidden">Update</button>
+                    <button type="button" id="update_po_status" class="btn btn-primary btn-sm hidden">Update</button>
+                    <button type="button" id="new_pos_status" class="btn btn-primary btn-sm hidden">Update</button>
                 </div>
             </div>
         </div>

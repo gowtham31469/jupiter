@@ -1,4 +1,4 @@
-function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,template_name,order_flag)
+const genarateTescoPI = (id,tableName,pi_status,style_no,template_id,buyer_po,template_name,order_flag) =>
 {
     $('#uvc_number').text(style_no)
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -8,7 +8,7 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
         url: base_url + "/customer/tesco/order-management/show-tesco-pi",
         type: "Post",
         dataType: "json",
-        data: {
+        data: { 
             _token: csrf_token,
             tableName: tableName,
             buyer_id :buyer_id,
@@ -50,9 +50,9 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
                     }
                     
 
-                    $('#company_details').html('<strong style="font-size:11px;">'+data.data.company_details.name+'</strong><br/>'+data.data.company_details.address+'<br/>PH : '+data.data.company_details.office_phone+', '+data.data.company_details.phone+'<br/>GST : '+data.data.company_details.gstin)
-                    $('#bill_to').html('<h4>Billing Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.bill_to.address+'</br> GSTIN :'+data.data.bank_details.gstin_number+ '</p>')
-                    $('#ship_to').html('<h4>Shipping Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.ship_to.address+'</p>')
+                    $('#company_details').html('<h4><strong>'+data.data.company_details.name+'</strong></h4>'+data.data.company_details.address+'<br/>PH : '+data.data.company_details.office_phone+', '+data.data.company_details.phone+'<br/>GST : '+data.data.company_details.gstin)
+                    $('#bill_to').html('<h4>Billing Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.bill_to.address+'-'+data.data.bill_to.pincode+'</br> GSTIN :'+data.data.bank_details.gstin_number+ '</p>')
+                    $('#ship_to').html('<h4>Shipping Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.ship_to.address+'-'+data.data.ship_to.pincode+'</p>')
                     $('#bank_details').html(' <strong>BANK DETAILS: </strong><table class="table table-condensed" style="width:50%;"><tr><td>Bank</td><td>'+data.data.company_details.bank+'</td></tr><tr><td>A/C No</td><td>'+data.data.company_details.account_no+'</td></tr><tr><td>A/C NAME</td><td>'+data.data.company_details.account_holder+'</td></tr><tr><td>IFSC CODE</td><td>'+data.data.company_details.ifsc_code+'</td></tr></table>')
                
                
@@ -132,18 +132,18 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
 
                         if(noPrice < 1) {
 
-                            tr += '</tbody></table></div><hr><h4 class="text-right"> Total Quantity : '+totalqnty+' </h4><hr><h4 class="text-right"> Sub-Total : ₹ '+subtotal.toFixed(2)+' </h4><hr/><div class="text-right">'
+                            tr += '</tbody></table></div><hr><h4 class="text-right"> Total Quantity : '+totalqnty+' </h4><hr><h4 class="text-right"> Sub-Total : &#x20b9; '+subtotal.toFixed(2)+' </h4><hr/><div class="text-right">'
                             if (data.data.bank_details.place_of_supply==1)
                             {
-                              tr += '<h4> CGST : (<span>'+(totalcgst).toFixed(2)+'</span>)</h4><h4> SGST : (<span>'+(totalcgst).toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p  style="text-transform: capitalize" id="bilamnt">'+RsPaise(billamnt.toFixed(2))+'  </p></div><hr /></div>'
+                              tr += '<h4> CGST : &#x20b9; (<span>'+(totalcgst).toFixed(2)+'</span>)</h4><h4> SGST : &#x20b9; (<span>'+(totalcgst).toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : &#x20b9; '+billamnt.toFixed(2)+' </h4><p  style="text-transform: capitalize" id="bilamnt">'+RsPaise(billamnt.toFixed(2))+'  </p></div><hr /></div>'
                             }
                             else if (data.data.bank_details.place_of_supply==2)
                             {
-                                tr += '<h4> IGST : (<span>'+totaligst.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p style="text-transform: capitalize" id="bilamnt">'+RsPaise(billamnt.toFixed(2))+' </p></div><hr /></div>'
+                                tr += '<h4> IGST : &#x20b9; (<span>'+totaligst.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : &#x20b9; '+billamnt.toFixed(2)+' </h4><p style="text-transform: capitalize" id="bilamnt">'+RsPaise(billamnt.toFixed(2))+' </p></div><hr /></div>'
                             }
                             else
                             {
-                                 tr += '<h4> Taxes : (<span>'+amount.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹'+billamnt.toFixed(2)+' </h4><p style="text-transform: capitalize">'+RsPaise(billamnt.toFixed(2))+'  </p></div><hr /></div>'
+                                 tr += '<h4> Taxes : &#x20b9; (<span>'+amount.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : &#x20b9;'+billamnt.toFixed(2)+' </h4><p style="text-transform: capitalize">'+RsPaise(billamnt.toFixed(2))+'  </p></div><hr /></div>'
                             }
                             $('#item_details').html(tr)
                             if (pi_status=="true")
@@ -156,25 +156,7 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
                             }
                             var logo = base_url+data.data.company_details.logo
                             $('#company-logo').attr('src',logo);
-                            $('#profoma-invoice').modal("show")
-
-                            //Download Pi using JSPDF
-                            // $('.downloadPi').click(function () {
-                            //     var myOffscreenEl = document.getElementById("proforma-invoice"),
-                            //         useWidth      = myOffscreenEl.style.width,
-                            //         useHeight     = myOffscreenEl.style.height;
-                            //         myOffscreenEl.style.backgroundColor = 'white';
-                            //     var opt = {
-                            //       // margin:       [20, 15, 23, 15],
-                            //       margin:       [28, 23, 31, 23],
-                            //       filename:     'Proforma-Invoice.pdf',
-                            //       image:        { type: 'jpeg', quality: 0.98 },
-                            //       html2canvas:  { dpi: 300, letterRendering: true },
-                            //       jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' },
-                                 
-                            //     }
-                            //     html2pdf(myOffscreenEl,opt);
-                            // });
+                            $('#profoma-invoice').modal("show");
                            
                         } else {
                             $('.snackbar_span').html('Price details should be within a range !!');
@@ -184,7 +166,7 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
                     }
                     else
                     {
-                        $('.snackbar_span').html('Price Details are Missing !!');
+                        $('.snackbar_span').html('Price details should be within a range !!');
                         showSnackbar();
                     }
                 } 

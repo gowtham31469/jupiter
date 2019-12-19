@@ -282,7 +282,7 @@
                     <div class="col-md-4">
                 <h4 class="text-center osorderdetails">Order Details</h4>
                 <div class="scroll" style="height: calc(100vh - 80px);">
-                    
+                    	<input type="hidden" id="qr_flag">
                         <input type="hidden" id="edit_template_name">
                         <input type="hidden" id="edit_zone">
                         <input type="hidden" id="edit_template_type">
@@ -355,6 +355,11 @@
                                 </option>
                             @endforeach
                         </select>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label for="tesco_ocn">OCN Code</label>
+                        <input type="text" class="form-control" name="tesco_ocn" id="tesco_ocn" required="" placeholder="Enter OCN Code">
+                        <div class="help-block with-errors"></div>
                     </div>
                          <div class="form-group has-feedback">
                         <label for="tesco_rfid">RFID Compliant</label> 
@@ -455,16 +460,18 @@
 	<script  type="text/javascript" src="{{ asset('js/moment.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/daterangepicker.js') }}"></script>
     <script src="{{ asset('js/html2pdf.bundle.min.js') }}"></script>
-<!--    <script src="{{ asset('js/Admin/order.js') }}"></script>-->
     <script src="{{ asset('js/Customer/customer-order-status.js') }}"></script>
+    <script src="{{ asset('js/Customer/orchestra-order-status.js') }}"></script>
     <script src="{{ asset('js/Customer/customer-pi.js') }}"></script>
+    <script src="{{ asset('js/Customer/customer-orchestra-pi.js') }}"></script>
+    
     <script type="text/javascript">
 		$('#status_flag').val("orderStatus")
         var buyer = localStorage.getItem("buyer");
         Dropzone.options.poUpload = {   
 
             // Prevents Dropzone from uploading dropped files immediately
-            url: base_url + "/customer/" + buyer + "/set-po-file",
+            url: base_url + "/customer/" + localStorage.getItem("buyer") + "/set-po-file",
             autoProcessQueue: false,
             maxFilesize: 500,
             maxFiles: 1,
@@ -539,6 +546,7 @@
     /** To refresh modal and form data**/
     $(".modal").on("hidden.bs.modal", function() {
         myDropzone.removeAllFiles();
+        myDropzone.options.url = base_url + "/customer/" + localStorage.getItem("buyer") + "/set-po-file";
     });
     var date = new Date();
     var today = new Date(date.getFullYear(), date.getMonth());

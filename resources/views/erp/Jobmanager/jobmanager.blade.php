@@ -273,31 +273,35 @@
 								</tr>
 							</thead>
 							<tbody>
-								@foreach($orders as $vals)
-								@php $ref_name = str_replace(" ","",$vals->reference_name) @endphp
-								<tr id="{{$vals->id}}" data-refname="{{ $vals->reference_name }}" data-buyer-po="{{ $vals->buyer_po_number }}" data-order-type="{{ $vals->order_type }}" data-created-at="{{ $vals->created_at }}" data-style-no="{{ $vals->style_no }}" data-template-file="{{ $vals->template_file }}" data-iteration="{{ $loop->iteration }}" data-zone="{{ $vals->zone }}">
+								@foreach($orders as $key => $value)
+								@php $ref_name = str_replace(" ","",$value['reference_name']) @endphp
+								<tr id="{{$value['id']}}" data-refname="{{ $value['reference_name'] }}" data-buyer-po="{{ $value['buyer_po_number'] }}" data-order-type="{{ $value['order_type'] }}" data-created-at="{{ $value['created_at'] }}" data-style-no="{{ $value['style_no'] }}" data-template-file="{{ $value['template_file'] }}" data-iteration="{{ $loop->iteration }}" data-zone="{{ $value['zone'] }}" data-uuid="{{ $value['uuid'] }}">
 									<td>
 										<div class="form-check">
 										<a href="javascript:void(0)">
 											<label>
-												<input class="row-checkbox" type="checkbox" data-customer-name="{{$vals->company_name}}" style="margin-right: 10px;" onchange="return selectOrders(this)" data-buyer-name="{{$vals->buyer_name}}"> <span class="label-text" class="hidden-val">{{ $loop->iteration }}</label>
+												<input class="row-checkbox" type="checkbox" data-customer-name="{{$value['company_name']}}" style="margin-right: 10px;" onchange="return selectOrders(this)" data-buyer-name="{{$value['buyer_name']}}"> <span class="label-text" class="hidden-val">{{ $loop->iteration }}</label>
 										</a>
 										</div>
 									</td>
-									<td>{{$vals->erp_id}}</td>
-									<td>{{$vals->company_name}}</td>
-									<td data-buyer-id="{{$vals->buyer_id}}">{{$vals->buyer_name}}</td>
-									<td>{{$vals->po_no}}</td>
-									<td>{{$vals->buyer_po_number}}</td>
-									<td>{{$vals->style_no}}</td>
-									<td>{{$vals->reference_name}}</td>
-									@if ($vals->delivery_date != '')
-										<td>{{$vals->delivery_date}}</td>
+									<td>{{$value['erp_id']}}</td>
+									<td>{{$value['company_name']}}</td>
+									<td data-buyer-id="{{$value['buyer_id']}}">{{$value['buyer_name']}}</td>
+									<td>{{$value['po_no']}}</td>
+									@if ($value['buyer_po_number'] != '')
+									    <td>{{$value['buyer_po_number']}}</td>
+									@else
+										<td>-</td>
+									@endif
+									<td>{{$value['style_no']}}</td>
+									<td>{{$value['reference_name']}}</td>
+									@if ($value['delivery_date'] != '')
+										<td>{{$value['delivery_date']}}</td>
 									@else
 										<td>-</td>
 									@endif
 									
-									<td> <object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal{{$loop->iteration}}" class="center-block tesco_svg{{$loop->iteration}}" data="{{$vals->template_file}}" type="image/svg+xml"></object><a class="artork_download" href="javascript:void(0)" onclick="openmodaltesco('{{$ref_name}}','{{ $loop->iteration }}','{{$vals->template_file}}','{{$vals->style_no}}','{{$vals->buyer_po_number}}','{{$vals->id}}','{{$vals->order_type}}','{{$vals->created_at}}')"><i class="fa fa-file-pdf-o fa-button preview-pdf" data-placement="left" title="Download Artwork" data-original-title="Download Artwork"></i></a></td>
+									<td> <object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal{{$loop->iteration}}" class="center-block tesco_svg{{$loop->iteration}}" data="{{$value['template_file']}}" type="image/svg+xml"></object><a class="artork_download" href="javascript:void(0)" onclick="openmodaltesco('{{$ref_name}}','{{ $loop->iteration }}','{{$value['template_file']}}','{{$value['style_no']}}','{{$value['buyer_po_number']}}','{{$value['id']}}','{{$value['order_type']}}','{{$value['created_at']}}')"><i class="fa fa-file-pdf-o fa-button preview-pdf" data-placement="left" title="Download Artwork" data-original-title="Download Artwork"></i></a></td>
 								</tr>
 								@endforeach
 							</tbody>
@@ -550,24 +554,33 @@
 									</div>
 								</div>
 								<div class="col-md-3">
-								</div>
-								<div class="col-md-3">
 								    <div class="form-group has-feedback">
 										{!! Form::label('finish_type', 'FINISH TYPE :', ['class' => 'form_label']) !!}
 										{{ Form::select('finish_type',(['' => '-- Select Finish Type --']+ $finish_types),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'finish_type','required')) }}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
-							</div>
-							<div class="col-md-12">
-							   <div class="col-md-3">
+								<div class="col-md-3">
 									<div class="form-group has-feedback">
 										{!! Form::label('print_color', 'PRINT COLORS :', ['class' => 'form_label']) !!}
-										{!! Form::text('print_color',$value = '', array('class' => 'form-control input-sm','placeholder' => 'STYLENUM', 'maxlength' => '20')) !!}
+										{!! Form::text('print_color',$value = '', array('class' => 'form-control input-sm','placeholder' => 'PRINT COLORS', 'maxlength' => '20')) !!}
 										<div class="help-block with-errors"></div>
-									</div>	
+									</div>
+								</div>
+							</div>
+							<div class="col-md-12 common-data-div hidden">
+							   <div class="col-md-3">
+									<div class="form-group has-feedback">
+										{!! Form::label('tint_color', 'TINT COLORS :', ['class' => 'form_label']) !!}
+										{!! Form::text('tint_color',$value = '', array('class' => 'form-control input-sm','placeholder' => 'TINT COLORS', 'maxlength' => '20')) !!}
+										<div class="help-block with-errors"></div>
+									</div>		
 							   </div>
-							   <div class="col-md-9">
+							   <div class="col-md-3">
+									{!! Form::label('customer_po', 'CUSTOMER PO :', ['class' => 'form_label']) !!}
+								    <span id="customer_po"></span>
+							   </div>
+							   <div class="col-md-6">
 							   </div>
 							</div>
 						</div>

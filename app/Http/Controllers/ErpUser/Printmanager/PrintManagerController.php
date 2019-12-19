@@ -13,6 +13,7 @@ use DB;
 use Session;
 use App\ErpOrders as Erp;
 use App\ErpOrderDetails as ErpOrderDetails;
+use Carbon\Carbon;
 
 class PrintManagerController extends Controller
 {
@@ -253,8 +254,10 @@ class PrintManagerController extends Controller
 	
 	public function getErpOrderListByBuyerCustomerId(Request $request)
     {
+    	// dd($request->all());
         try {
 				$buyer_id    = $request['selected_buyer_id'];
+
 				$customer_id = $request['selected_customer_id'];
 				$erp_id = $request['erp_id'];
 
@@ -270,11 +273,100 @@ class PrintManagerController extends Controller
 				else
 				{
 					
-					
-					$jobcard_id_list  = ErpOrderDetails::join('erp_status','erp_status.id','erp_order_details.status')->join('tesco_template', 'tesco_template.item_id', 'erp_order_details.template_id')->where('erp_order_details.erp_order_id', '=', $erp_id)
+					$buyer = strtolower(DB::table('buyers')->where('id',$buyer_id)->first()->buyer_name);
+				
+					$jobcard_id_list  = ErpOrderDetails::join('erp_status','erp_status.id','erp_order_details.status')->join($buyer.'_template', $buyer.'_template.item_id', 'erp_order_details.template_id')->where('erp_order_details.erp_order_id', '=', $erp_id)
 											->where('erp_order_details.status','!=',4)
-											->select(DB::raw('distinct on (erp_order_details.erp_order_id,buyer_po_number,style_no,reference_name) erp_order_details.erp_order_id'),'erp_order_details.*','erp_status.status_name','tesco_template.template_file')->groupBy('erp_order_details.id','erp_order_details.buyer_po_number','erp_order_details.style_no','erp_order_details.reference_name','erp_status.status_name','tesco_template.template_file')
+											->select(DB::raw('distinct on (erp_order_details.erp_order_id,buyer_po_number,style_no,reference_name) erp_order_details.erp_order_id'),'erp_order_details.*','erp_status.status_name',$buyer.'_template.template_file')->groupBy('erp_order_details.id','erp_order_details.buyer_po_number','erp_order_details.style_no','erp_order_details.reference_name','erp_status.status_name',$buyer.'_template.template_file')
 											->get();
+// dd($jobcard_id_list);
+					if($buyer=="orchestra")
+					{	
+						
+
+						$jobcard_id_list->map(function ($jobcard_id_list,$key) {
+                    		$jobcard_id_list->buyer='orchestra';
+                    		$jobcard_id_list->zone='-';
+
+                    		if($jobcard_id_list->style_no==null)
+                    		{
+                    			$jobcard_id_list->style_no='-';
+                    		}
+
+       //              		if($jobcard_id_list->buyer_po_number==null)
+       //              		{
+       //              			$jobcard_id_list->buyer_po_number='-';
+							// }
+							
+							// format created_at date to dd-mm-yyyy
+							if($jobcard_id_list->created_at!= null)
+                    		{
+								$date = Carbon::parse($jobcard_id_list->created_at)->toDateString();
+                    			$jobcard_id_list->created_date = Carbon::parse($date)->format('d-m-Y');
+                    		}
+                	    });
+
+					
+
+ if($jobcard_id_list->first()->order_qnty_table_name ==  "orchestra_heat_transfer_orders_qty")
+                	    {
+                	    	return response()->json(['error'=> false,'message' =>'Print is currently not available for heat transfer orders', 'erp_orders_list' => []], 200);
+                	    }
+                	    if($jobcard_id_list->first()->order_qnty_table_name ==  "orchestra_hang_tag_orders_qty")
+                	    {
+
+                	    
+                	    	// $key = $jobcard_id_list->first()->order_qnty_table_id
+                	    	// ->first()->oht_id;
+                	    	$fkey = DB::table('orchestra_hang_tag_orders_qty')
+                	    	->where('id',$jobcard_id_list->first()->order_qnty_table_id)
+                	    	->first()
+                	    	->oht_id;
+
+                	    	$row = DB::table('orchestra_hang_tag_orders')
+                	    	->where('id',$fkey)->first();
+
+                	    	$jobcard_id_list->map(function ($jobcard_id_list,$key) use ($row){
+                    		
+                    		$jobcard_id_list->frontPath = DB::table('orchestra_template')
+                    		->where('item_id',$row->template_front_id)
+                    		->where('flag',1)
+                    		->first()
+                    		->template_file;
+
+                    		$jobcard_id_list->backPath = DB::table('orchestra_template')
+                    		->where('item_id',$row->template_back_id)
+                    		->where('flag',0)
+                    		->first()
+                    		->template_file;
+
+                    		$jobcard_id_list->ownId = $row->id;
+                	    });
+                	    }
+
+                	     if($jobcard_id_list->first()->order_qnty_table_name ==  "orchestra_wash_care_label_orders_qty")
+                	    {
+                	    	$jobcard_id_list->map(function ($jobcard_id_list,$key) {
+                    		$jobcard_id_list->backPath='/storage/app/template/Orchestra/WCL/sticker2.svg';
+                    		$jobcard_id_list->middlePath='/storage/app/template/Orchestra/WCL/sticker3.svg';
+                	    });
+                	    }
+
+					}
+					else
+					{
+						$jobcard_id_list->map(function ($jobcard_id_list,$key) {
+							$jobcard_id_list->buyer='tesco';
+							
+							// format created_at date to dd-mm-yyyy
+							if($jobcard_id_list->created_at!= null)
+                    		{
+								$date = Carbon::parse($jobcard_id_list->created_at)->toDateString();
+                    			$jobcard_id_list->created_date = Carbon::parse($date)->format('d-m-Y');
+                    		}
+                	    });
+					}
+
 					return response()->json(['error'=> false,'message' =>'Success', 'erp_orders_list' => $jobcard_id_list], 200);
 				}
 				    

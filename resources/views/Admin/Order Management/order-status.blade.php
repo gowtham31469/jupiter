@@ -11,6 +11,11 @@
         background: rgba(0, 0, 0, 0.56);
         margin-right: 0% !important;
         transition: 0.5s ease all;
+    } 
+	.left-panelorc.active {
+        background: rgba(0, 0, 0, 0.56);
+        margin-right: 0% !important;
+        transition: 0.5s ease all;
     }
 	.tot_qty_table {
 		 height: 30px; 
@@ -30,20 +35,30 @@
 		border: 1px solid #ddd;
 	}
     .html2canvas-container { width: 3000px !important; height: 3000px !important; }
+	/* Hide HTML5 Up and Down arrows. */
+	input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+
+	input[type="number"] {
+		-moz-appearance: textfield;
+	}
 </style>
 <div class="col-sm-12 col-md-12 main">
-    <div class="top-content">
-        <div class="buyer-nav-div hidden">
-           <a class="dropdown-toggle profile-dropdown-admin selected-buyer" style="text-transform:capitalize;cursor: pointer;">Select Buyer</a>
-        </div>
-        {{ Form::hidden('invisible', $buyer_count, array('id' => 'invisible__count_id')) }}
-        <div class="clearfix"></div>
-    </div>
+  
 
     <div class="main-content">
         <div class="select-buyer">
             
         </div>
+    </div>
+	  <div class="top-content">
+        <div class="buyer-nav-div hidden">
+           <a class="dropdown-toggle profile-dropdown-admin selected-buyer" style="text-transform:capitalize;cursor: pointer;">Select Buyer</a>
+        </div>
+        {{ Form::hidden('invisible', $buyer_count, array('id' => 'invisible__count_id')) }}
+        <div class="clearfix"></div>
     </div>
     <div class="modal fade po-details" id="po-file-upload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
@@ -275,7 +290,7 @@
 				<div class="col-md-4">
             <h4 class="text-center osorderdetails">Order Details</h4>
             <div class="scroll" style="height: calc(100vh - 80px);">
-				
+				<input type="hidden" id="qr_flag">
 				<input type="hidden" id="edit_template_name">
 				<input type="hidden" id="edit_zone">
 				<input type="hidden" id="edit_template_type">
@@ -402,6 +417,139 @@
             </div>
         </div> 
     </div>
+
+   <!-- <div class="left-panelorc col-md-12" style="display: none;">
+        <div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
+        <div class="div-max">          
+			<form method="POST" id="create_tesco_order_status_form" data-toggle="validator" role="form" novalidate="true">
+				<div class="col-md-4">
+            <h4 class="text-center osorderdetails">Order Details</h4>
+            <div class="scroll" style="height: calc(100vh - 80px);">
+				
+				<input type="hidden" id="edit_template_name">
+				<input type="hidden" id="edit_zone">
+				<input type="hidden" id="edit_template_type">
+				<input type="hidden" id="edit_id">
+				<input type="hidden" id="order_type">
+				<div class="form-group has-feedback">
+                    <label for="tesco_uk_style">PO Number.</label>
+                    <input type="text" maxlength="9" class="form-control" name="tesco_po_number" id="tesco_po_number" required="" onkeyup="dynamicSVGTemplates()">
+                    <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group has-feedback">
+                    <label for="tesco_uk_style">UK Style Ref.</label>
+                    <input type="text" class="form-control" name="tesco_uk_style" id="tesco_uk_style" placeholder="Enter UK Style Ref." maxlength="10" required="" onkeyup="dynamicSVGTemplates()">
+                    <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group has-feedback">
+                    <label for="tesco_ce_style">CE Style Ref.</label>
+                    <input type="text" class="form-control" name="tesco_ce_style" id="tesco_ce_style" maxlength="10" placeholder="Enter CE Style Ref." required="" onkeyup="dynamicSVGTemplates()">
+                    <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group has-feedback">
+                    <label for="tesco_season_code">Season Code</label>
+                    <input type="text" class="form-control" name="tesco_season_code" id="tesco_season_code" required="" placeholder="Enter Season Code" onkeyup="dynamicSVGTemplates()" data-minlength="4" maxlength="4" data-required-error="Mandatory Field." data-minlength-error="Enter 4 digits."  maxlength="4">
+                    <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group has-feedback">
+                    <label for="tesco_description">Short Description</label>
+                    <input type="text" class="form-control" name="tesco_description" id="tesco_description" required="" placeholder="Enter Description" maxlength="45" onkeyup="dynamicSVGTemplates()">
+                    <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group has-feedback">
+                    <label for="tesco_eqos">EQOS Site Code</label>
+                    <input type="text" class="form-control" name="tesco_eqos" id="tesco_eqos" required="" placeholder="Enter EQOS Site Code" maxlength="10" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()">
+                    <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group has-feedback">
+                    <label for="tesco_manufacture_date">Manufactured Date</label>
+                    <div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1">
+                        <input value="" id="tesco_manufacture_date" name="tesco_manufacture_date" type="text" class="form-control" required="" placeholder="Select Manufactured Date" onchange="dynamicSVGTemplates()">
+                        <div class="input-group-addon">
+                            <span class="glyphicon glyphicon-th"> </span > 
+                        </div > 
+                    </div >
+                    <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group has-feedback">
+                    <label for="tesco_department">Department</label>
+                    <select class="selectpicker"  data-live-search="true" id="tesco_department" name="tesco_department" required="" onchange="dynamicSVGTemplates()">
+                        <option selected value="">Select Department</option>
+                        @foreach($tesco_department as $dept)
+                            <option title="{{$dept->department}}" value="{{$dept->id}}">{{$dept->department}}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group has-feedback">
+                    <label for="tesco_brand">Brand</label> 
+                    <select class="selectpicker" data-live-search="true" id="tesco_brand" name="tesco_brand" onchange="dynamicSVGTemplates()" required="">
+                        <option value="">Select Brand</option>
+                        @foreach($tesco_brand as $brand)
+                            <option title="{{$brand->brand}}" value="{{$brand->id}}">{{$brand->brand}}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group has-feedback">
+                    <label for="tesco_supplier">Customer</label> 
+                    <select class="selectpicker" data-live-search="true" id="tesco_supplier" name="tesco_supplier" required="" onchange="dynamicSVGTemplates()">
+                        <option value="">Select Customer</option> @foreach($tesco_suppliers as $suppliers)
+                            <option title="{{$suppliers->supplier_name}}" value="{{$suppliers->id}}">{{$suppliers->supplier_name}}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group has-feedback">
+                    <label for="tesco_ocn">OCN Code</label>
+                    <input type="text" class="form-control" name="tesco_ocn" id="tesco_ocn" required="" placeholder="Enter OCN Code">
+                    <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group has-feedback">
+                    <label for="tesco_rfid">RFID Compliant</label> 
+                    <select class="selectpicker" id="tesco_rfid" name="tesco_rfid" required="" onchange="dynamicSVGTemplates()">
+                        <option value="">Select RFID Compliant</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option> 
+                    </select>
+                </div>
+                <div class="form-group has-feedback">
+                    <label for="tesco_tag_at_source">Tag At Source</label> 
+                    <select class="selectpicker" id="tesco_tag_at_source" name="tesco_tag_at_source" required="" onchange="dynamicSVGTemplates()">
+                        <option value="">Select Tag At Source</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option> 
+                    </select>
+                </div>
+            </div>
+            </div>
+            <div class="col-md-8">
+            <div class="scroll" style="height: calc(100vh - 40px);">
+                <p class="enlarge-btn"></p>
+                
+                <h4 class="text-center osartwork" style="padding-left: 164px;">Artwork</h4> 
+
+                <div class="row">
+                    <div class=" col-md-6 col-md-offset-3 artwork_tesco">
+                    </div>
+                    <div class="preview"></div>
+                    <div class="col-md-12">
+                        <div class="edit-qty-table-div"></div>
+    					<div class="osfooter">
+    					
+    					</div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </form>
+            <div class="loader">
+                <div class=" fa-3x">
+                    <i class="fa fa-spinner fa-pulse"></i>
+                </div>
+            </div>
+        </div> 
+    </div>-->
     {{-- Show snackbar html code --}}
 <div id="snackbar"><span class="snackbar_span"></span></div>
 <!-- Buyer selection Modal -->
@@ -460,7 +608,6 @@
 <script>
     localStorage.removeItem("page_navigation");
     var buyer_count = $('#invisible__count_id').val();
-    var buyer = localStorage.getItem("buyer");
     $(function() {
         $('[data-toggle="tooltip"]').tooltip()
         $('.po').attr("disabled", "disabled");
@@ -483,8 +630,7 @@
              localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
              $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
              $('#buyerSelectionModalCenter').modal('hide');
-             var buyer = localStorage.getItem("buyer");
-             if (buyer === 'orchestra') {
+             if (localStorage.getItem("buyer") === 'orchestra') {
                  orderStatus();
              } else {
                  tescoOrderStatus();
@@ -537,10 +683,9 @@
        else 
        {
            $('.selected-buyer').text('Selected Buyer : '+localStorage.getItem("buyer"));
-           var buyer = localStorage.getItem("buyer");
-           if (buyer === 'orchestra') {
+           if (localStorage.getItem("buyer") === 'orchestra') {
                orderStatus();
-           } else if (buyer === 'tesco')  {
+           } else if (localStorage.getItem("buyer") === 'tesco')  {
                tescoOrderStatus();
            }
 		   else {
@@ -561,8 +706,7 @@
          else 
          {
              $('.selected-buyer').text('Selected Buyer : '+localStorage.getItem("buyer"));
-             var buyer = localStorage.getItem("buyer");
-             if (buyer === 'orchestra') {
+             if (localStorage.getItem("buyer") === 'orchestra') {
                  orderStatus();
              } else {
                  tescoOrderStatus();
@@ -574,7 +718,7 @@
     Dropzone.options.poUpload = {
 
         // Prevents Dropzone from uploading dropped files immediately
-        url: base_url + "/admin/" + buyer + "/set-po-file",
+        url: base_url + "/admin/" + localStorage.getItem("buyer") + "/set-po-file",
         autoProcessQueue: false,
         maxFilesize: 500,
         maxFiles: 1,
@@ -616,14 +760,14 @@
                 var po_link = base_url+response.po_file;
                 var row_id  = $('#rowID').val();
                 var tab_nm  = $('#tableName').val();
-                $('#'+tab_nm+'_'+row_id+' .po-style').attr('onclick',buyer+'POUpload(this,"'+row_id+'","'+response.po_file+'","'+tab_nm+'")');
-                var po_num = $('#'+tab_nm+'_'+row_id+' .'+buyer+'-po-'+row_id).val();
+                $('#'+tab_nm+'_'+row_id+' .po-style').attr('onclick',localStorage.getItem("buyer")+'POUpload(this,"'+row_id+'","'+response.po_file+'","'+tab_nm+'")');
+                var po_num = $('#'+tab_nm+'_'+row_id+' .'+localStorage.getItem("buyer")+'-po-'+row_id).val();
                 if(po_num != null && po_num != '' && po_num != 'undefined') {
-                    $('#'+tab_nm+'_'+row_id+' .'+buyer+'-po-'+row_id).val();
+                    $('#'+tab_nm+'_'+row_id+' .'+localStorage.getItem("buyer")+'-po-'+row_id).val();
                     $('#'+tab_nm+'_'+row_id).find('.po_class').html("PO Uploaded");
                     $('#'+tab_nm+'_'+row_id).find('.po_class').removeClass("label-POPending").addClass('label-POUploaded');
                 }
-                $('#'+tab_nm+'_'+row_id).find('.'+buyer+'-po-submit').attr('onclick',buyer+'SetPO(this,"'+row_id+'","'+tab_nm+'","'+response.po_file+'")');
+                $('#'+tab_nm+'_'+row_id).find('.'+localStorage.getItem("buyer")+'-po-submit').attr('onclick',localStorage.getItem("buyer")+'SetPO(this,"'+row_id+'","'+tab_nm+'","'+response.po_file+'")');
                 $('#'+tab_nm+'_'+row_id).find('.po-view').css('border-color', '#FFFFFF');
                 $('#po-file-upload').modal('hide')
                 $('#snackbar').css('background-color','#00b6ff');
@@ -646,6 +790,7 @@
     /** To refresh modal and form data**/
     $(".modal").on("hidden.bs.modal", function() {
         myDropzone.removeAllFiles();
+        myDropzone.options.url = base_url + "/admin/" + localStorage.getItem("buyer") + "/set-po-file";
     });
     var date = new Date();
     var today = new Date(date.getFullYear(), date.getMonth());

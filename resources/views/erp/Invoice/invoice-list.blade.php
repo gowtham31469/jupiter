@@ -230,7 +230,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="col-md-3 nopadding">
-                 <span>Recievers Signature</span>
+                 <span>Receivers Signature</span>
                 </div>
                 <div class="col-md-3 nopadding">
                     <span>Prepared By</span>
@@ -448,7 +448,7 @@ function showInvoice(obj){
           $('#credit-val').text(data.inv_details[0].credit_limit);
           $('#company_details').html('<h4>'+data.company_details.name+'</h4>'+data.company_details.address+'<p>PH : '+data.company_details.office_phone+', '+data.company_details.phone+'</br> <strong>GSTIN : '+data.company_details.gstin+'</strong></p>')
 
-          $('#bill_to').html('<span>Buyer</span><br><h4>'+data.inv_details[0].company_name+'</h4><span>'+data.bill_to.address+'</span></br><span> GSTIN :'+data.inv_details[0].gstin_number+ '</span>')
+          $('#bill_to').html('<span>Buyer</span><br><h4>'+data.inv_details[0].company_name+'</h4><span>'+data.bill_to.address+','+data.bill_to.pincode+'</span></br><span> GSTIN :'+data.inv_details[0].gstin_number+ '</span>')
           var itemName ="";
           $(data.inv_details).each(function(index, value)
           {   
@@ -510,12 +510,17 @@ function showInvoice(obj){
           $('.inv-extra-charges').html('<table class="table table-bordered text-center inv-extra-charges" style="margin-top: -22px;"><thead><tr><th colspan="2">Description</th><th>Amount (₹)</th></tr></thead><tbody>'+taxTr+'<tr><td colspan="2"><strong>SubTotal</strong></td><td><strong class="preview-sub-extra">'+parseFloat(exAmnt).toFixed(2)+'</strong></td></tr><tr class="'+rndClass+'"><td colspan="2"><strong>Round Off</strong></td><td><strong id="preview-round-off">'+parseFloat(roundOff).toFixed(2)+'</strong></td></tr><tr></tr><tr><td colspan="2" style="border-width: 1px !important;"><strong>Grand Total</strong></td><td class="grand-total" style="border-width: 1px !important;"><strong>'+parseFloat(data.inv_details[0].grand_total).toFixed(2)+'</strong></td></tr><tr></tr></tbody></table>')
           $('.amnt-in-words').text(RsPaise($('.grand-total').text()))
 
-          $('.delivery-at').html('<p>'+data.ship_to.address+'</p>')
+          $('.delivery-at').html('<p>'+data.ship_to.address+','+data.ship_to.pincode+'</p>')
           $('.invoice_actions').html('<button data-dismiss="modal" class=" btn btn-default btn-xs">Close</button><button class="btn btn-primary btn-xs" onclick="editInvoice()">Save & Send</button><button class="btn btn-default btn-xs downloadIn" id="downloadIn" onclick="downloadInvoice()">View as PDF</button>')
         },
        
         complete: function() {
           $(".loader").hide();
+          /** [ Backdrop for bootstrap modal ] */
+          $('#editModal').modal({
+              backdrop: 'static',
+              keyboard: false
+          });
           $('#editModal').modal('show');
         }
       });

@@ -191,7 +191,7 @@ function showFilter() {
 }
 
 /**
- * Job card generation 
+ * Job card generation for JGA company
  * @author <Praveen> [praveen@wizroots.com]
  */
 function generateJobcard(){
@@ -241,20 +241,20 @@ function generateJobcard(){
         });
         order_type_array   = order_type_array.join(',');
 
-        created_at_array = [];
-        /** [ Create array of created_at selected ] */
+        uuid_array = [];
+        /** [ Create array of uuid selected ] */
         $('.row-checkbox', allPages).each(function (i, item) {
             if ($(this).is(':checked')) {
-                created_at_array.push($(this).closest('tr').data('created-at')); 
+                uuid_array.push($(this).closest('tr').data('uuid')); 
             }
         });
-        created_at_array   = created_at_array.join(',');
+        uuid_array   = uuid_array.join(',');
 
         $.ajax({
             url:base_url + "/erp/job-manager/get-jobcard-order-details",
             dataType:"json",
             method:"get",
-            data:{orders:orders, ref_array:ref_array, buyer_po_array:buyer_po_array,order_type_array:order_type_array,created_at_array:created_at_array},
+            data:{orders:orders, ref_array:ref_array, buyer_po_array:buyer_po_array,order_type_array:order_type_array,uuid_array:uuid_array},
             tryCount : 0,
             retryLimit : 2,
             beforeSend: function () {
@@ -293,6 +293,16 @@ function generateJobcard(){
                         {
                             $('#buyer').text(data.template_data.buyer.buyer_name)
                             $('#buyer').attr('data-buyer-id', data.template_data.buyer.buyer_id)
+
+                            // show tint color and customer po for orchestra jc modal
+                            if(data.template_data.buyer.buyer_name.toLowerCase() === 'orchestra')
+                            {
+                                $(".common-data-div").removeClass("hidden");
+                            } 
+                            else 
+                            {
+                                $(".common-data-div").addClass("hidden");
+                            }
                         }
 
                         if(data.template_data.style_array.length === 1)
@@ -375,6 +385,15 @@ function generateJobcard(){
                             $('#cus_del_date').val('')
                         }
 
+                        if(data.template_data.customer_po_array.length === 1)
+                        {
+                            $('#customer_po').text(data.template_data.customer_po_array[0])
+                        }
+                        else
+                        {
+                            $('#customer_po').val('')
+                        }
+
                         /** append erp_details_ids  as hidden */
                         var hidden_html = '';
                         $.each(data.template_data.order_detail_ids, function(index, erp_details_id){
@@ -404,12 +423,19 @@ function generateJobcard(){
                                                             return a.qty_table_id - b.qty_table_id;
                                                         });
                                                         $.each(template, function(ratio_table_row, row){
+                                                            if (row.hasOwnProperty('ratio_pack_type')) {
+                                                                var ratio_pack_type = ' '+row.ratio_pack_type;
+                                                            } else {
+                                                                var ratio_pack_type = '';
+                                                            }
                                                             total += parseInt(row.order_quantity);
-                                                            ratio_table_html += '<tr class="tr-'+row.reference_name.replace(' ', '-')+'" id='+row.erp_order_details_id+' data-template-id='+row.template_id+'>\
-                                                            <td id="ratio_tr_refname_'+ratio_table_row+'">'+row.reference_name+' '+row.ratio_pack_type+'</td>\
-                                                            <td id="ratio_tr_buyer_po_'+ratio_table_row+'">'+row.buyer_po_number+'</td>\
+                                                            let buyer_po_number = (row.buyer_po_number === null||"") ?'-':row.buyer_po_number;
+                                                            let ocn_number = (row.ocn_number === null||"") ?'-':row.ocn_number;
+                                                            ratio_table_html += '<tr class="tr-'+row.reference_name.replace(/ /g, '-')+'" id='+row.erp_order_details_id+' data-template-id='+row.template_id+'>\
+                                                            <td id="ratio_tr_refname_'+ratio_table_row+'">'+row.reference_name+''+ratio_pack_type+'</td>\
+                                                            <td id="ratio_tr_buyer_po_'+ratio_table_row+'">'+buyer_po_number+'</td>\
                                                             <td id="ratio_tr_erp_id_'+ratio_table_row+'">'+row.erp_id+'</td>\
-                                                            <td id="ratio_tr_ocn_'+ratio_table_row+'">'+row.ocn_number+'</td>\
+                                                            <td id="ratio_tr_ocn_'+ratio_table_row+'">'+ocn_number+'</td>\
                                                             <td id="ratio_tr_qty_'+ratio_table_row+'">'+row.order_quantity+'</td>\
                                                             <td></td>\
                                                             </tr>';
@@ -448,13 +474,15 @@ function generateJobcard(){
                                                             <tr>\
                                                                 <th width="80px">B.PO.NO</th>';
                                 $.each(erpid.order_data, function(index, common_data){
-                                    single_table_html += '<td colspan="2" class="single-buyer-po-'+index+'">'+common_data.buyer_po_number+'</td>';
+                                    let buyer_po_no = (common_data.buyer_po_number === null||"") ?'-':common_data.buyer_po_number;
+                                    single_table_html += '<td colspan="2" class="single-buyer-po-'+index+'">'+buyer_po_no+'</td>';
                                 });
                                 single_table_html += '</tr>\
                                                             <tr>\
                                                                 <th width="80px">OCN</th>';
                                 $.each(erpid.order_data, function(index, common_data){
-                                    single_table_html += '<td colspan="2" class="single-ocn-'+index+'">'+common_data.ocn_number+'</td>';
+                                    let ocn_no = (common_data.ocn_number === null||"") ?'-':common_data.ocn_number;
+                                    single_table_html += '<td colspan="2" class="single-ocn-'+index+'">'+ocn_no+'</td>';
                                 });
 
                                 single_table_html += '</tr>\
@@ -491,7 +519,7 @@ function generateJobcard(){
                                 });
 
                                 single_table_html += '<tr>\
-                                                      <th class="highlight_row total-text" data-ref-name = "'+template_name[0].replace(' ', '_')+'">TOTAL</th>';
+                                                      <th class="highlight_row total-text" data-ref-name = "'+template_name[0].replace(/ /g, '_')+'">TOTAL</th>';
                                 var total_col = 0;
                                 $.each(erpid.order_data, function(index, common_data){
                                     single_table_html += '<td class="total-quantity-col-'+total_col+'"><strong>'+sum[total_col]+'</strong></td>\
@@ -499,8 +527,8 @@ function generateJobcard(){
                                     total_col++;
                                 });
                                 
-                                single_table_html += '<td><strong class="total-qty-'+template_name[0].replace(' ', '_')+'">'+parseInt(total_quantity_final)+'</strong></td>\
-                                                        <td class="total-excess-col-table-'+table+' total-excess-'+template_name[0].replace(' ', '_')+'"></td>\
+                                single_table_html += '<td><strong class="total-qty-'+template_name[0].replace(/ /g, '_')+'">'+parseInt(total_quantity_final)+'</strong></td>\
+                                                        <td class="total-excess-col-table-'+table+' total-excess-'+template_name[0].replace(/ /g, '_')+'"></td>\
                                                         <td></td>\
                                                         <td></td>\
                                                     </tr>';
@@ -512,23 +540,23 @@ function generateJobcard(){
                                 {
                                     meters_div_html +='<div class="col-md-12">\
                                                 <div class="col-md-3">\
-                                                    <label for="act_excess_'+template_name[0].replace(' ', '_')+'" >ACT EXCESS % ('+template_name[0]+'):</label>\
-                                                    <span class="act-excess" data-act-excess-ref="'+template_name[0]+'" id="act_excess_'+template_name[0].replace(' ', '_')+'"></span>\
+                                                    <label for="act_excess_'+template_name[0].replace(/ /g, '_')+'" >ACT EXCESS % ('+template_name[0]+'):</label>\
+                                                    <span class="act-excess" data-act-excess-ref="'+template_name[0]+'" id="act_excess_'+template_name[0].replace(/ /g, '_')+'"></span>\
                                                 </div>\
                                                 <div class="col-md-3">\
-                                                    <label for="sticker_mtr_'+template_name[0].replace(' ', '_')+'" >STKRS MTRS ('+template_name[0]+'):</label>\
-                                                    <span class="sticker-mtrs" id="sticker_mtr_'+template_name[0].replace(' ', '_')+'"></span>\
+                                                    <label for="sticker_mtr_'+template_name[0].replace(/ /g, '_')+'" >STKRS MTRS ('+template_name[0]+'):</label>\
+                                                    <span class="sticker-mtrs" id="sticker_mtr_'+template_name[0].replace(/ /g, '_')+'"></span>\
                                                 </div>\
                                                 <div class="col-md-3">\
                                                 <div class="form-group has-feedback">\
-                                                    <label for="settings_'+template_name[0].replace(' ', '_')+'" >SETTINGS ('+template_name[0]+') :</label>\
-                                                    <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" class="form-control input-sm settings"  name="settings_'+template_name[0].replace(' ', '_')+'" placeholder="SETTINGS" id="settings_'+template_name[0].replace(' ', '_')+'" onkeyup="return totalMeters()" max="99999"  data-max-error="Value should be <= 99999">\
+                                                    <label for="settings_'+template_name[0].replace(/ /g, '_')+'" >SETTINGS ('+template_name[0]+') :</label>\
+                                                    <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" class="form-control input-sm settings"  name="settings_'+template_name[0].replace(/ /g, '_')+'" placeholder="SETTINGS" id="settings_'+template_name[0].replace(/ /g, '_')+'" onkeyup="return totalMeters()" max="99999"  data-max-error="Value should be <= 99999">\
                                                     <div class="help-block with-errors"></div>\
                                                 </div>\
                                                 </div>\
                                                 <div class="col-md-3">\
-                                                <label for="total_mtrs_'+template_name[0].replace(' ', '_')+'" >TOTAL MTRS ('+template_name[0]+'):</label>\
-                                                <span id="total_mtrs_'+template_name[0].replace(' ', '_')+'" class="total-meters"></span>\
+                                                <label for="total_mtrs_'+template_name[0].replace(/ /g, '_')+'" >TOTAL MTRS ('+template_name[0]+'):</label>\
+                                                <span id="total_mtrs_'+template_name[0].replace(/ /g, '_')+'" data-tem-ref-name="'+template_name[0].replace(/ /g, '_')+'" class="total-meters"></span>\
                                                 </div>\
                                             </div>';
                                 }
@@ -553,7 +581,7 @@ function generateJobcard(){
                     $('#jobcardCreationModalCenter').modal({
                         backdrop: 'static',
                         keyboard: false
-                    })
+                    });
 
                     /** [ Validate create_jobcard form using bootstrap validator ] */
                     $('#create_jobcard').validator('update');
@@ -627,7 +655,7 @@ function selectOrders(event)
 
 /** ---------------------- Excess calculation functions for create jobcard begins ----------------------**/
 /**
- * Dynamic Excess calculation based on excess value entered.
+ * Dynamic Excess calculation based on excess value entered.(for JGA company)
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
@@ -644,7 +672,7 @@ function calculateExcess(evt)
 }
 
 /**
- * Dynamic Total Excess calculation based on calculated excess value.
+ * Dynamic Total Excess calculation based on calculated excess value.(for JGA company)
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
@@ -667,7 +695,7 @@ function totalExcess()
 }
 
 /**
- * Dynamic Actual Excess calculation based on excess value and total quantity.
+ * Dynamic Actual Excess calculation based on excess value and total quantity.(for JGA company)
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
@@ -697,7 +725,7 @@ function actualExcess()
 }
 
 /**
- * Dynamic Mtrs for sticker calculation.
+ * Dynamic Mtrs for sticker calculation.(for JGA company)
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
@@ -728,15 +756,14 @@ function mtrsForStickers()
 }
 
 /**
- * Dynamic Total Meters calculation.
+ * Dynamic Total Meters calculation.(for JGA company)
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
 function totalMeters()
 {
     $('.total-meters').each(function(){
-       let total_mtrs_id = $(this).attr('id').split("_");
-       let ref_name = total_mtrs_id[2]+'_'+total_mtrs_id[3];
+       let ref_name = $(this).attr('data-tem-ref-name');
        let mtrs_for_stickers = $('#sticker_mtr_'+ref_name).text() === ''?0:$('#sticker_mtr_'+ref_name).text();
        let settings = $('#settings_'+ref_name).val() === ''?0:$('#settings_'+ref_name).val();
        if (!isNaN(settings) && !isNaN(mtrs_for_stickers)) {
@@ -747,7 +774,7 @@ function totalMeters()
 }
 /** ----------------- Excess calculation functions for create jobcard ends ----------------------**/
 /**
- * Store jobcard
+ * Store jobcard(for JGA company)
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
@@ -792,6 +819,8 @@ function storeJobcard()
     var roll_issued_by  = $( '#roll_issued_by' ).val() === ''?null:$('#roll_issued_by').val();
     var cutter          = $( '#cutter' ).val() === ''?null:$('#cutter').val();
     var cartons         = $( '#cartons' ).val() === ''?null:$('#cartons').val();
+    var tint_color      = $( '#tint_color' ).val() === ''?null:$('#tint_color').val();
+    var customer_po     = $( '#customer_po' ).text() === ''?null:$('#customer_po').text();
 
     var final_json_obj =   {
         "ratio": {},
@@ -803,7 +832,7 @@ function storeJobcard()
     $('.ratio-list-table').each(function (i, table) {
      var my_object    = new Object();
      var array_list   = [];
-         ref_name     = $(this).data('ratio-ref-table').replace(' ', '_');
+         ref_name     = $(this).data('ratio-ref-table').replace(/ /g, '_');
 
       $(table).find('tbody tr:not(:last)').each(function (index, row) {
         my_object = {}; 
@@ -844,7 +873,7 @@ function storeJobcard()
         var ocn_array      = [];
         var temp_id_object = {};
         var temp_id_array  = [];
-        single_ref_name    = $(table).find('tbody tr:eq(0) td:last-child').data('single-ref-name').replace(' ', '_');
+        single_ref_name    = $(table).find('tbody tr:eq(0) td:last-child').data('single-ref-name').replace(/ /g, '_');
         
         // create erp_id array
         $(table).find('tbody tr:eq(0) td:not(:last)').each(function (i, item) {
@@ -983,14 +1012,14 @@ function storeJobcard()
     });
     order_type_array   = order_type_array.join(',');
 
-    created_at_array = [];
-    /** [ Create array of created_at selected ] */
+    uuid_array = [];
+    /** [ Create array of uuid selected ] */
     $('.row-checkbox', allPages).each(function (i, item) {
         if ($(this).is(':checked')) {
-            created_at_array.push($(this).closest('tr').data('created-at')); 
+            uuid_array.push($(this).closest('tr').data('uuid')); 
         }
     });
-    created_at_array   = created_at_array.join(',');
+    uuid_array   = uuid_array.join(',');
     
     jsonArray = [];
     /** [ Create json object of selected orders ] */
@@ -1005,12 +1034,12 @@ function storeJobcard()
             erp_order_details_obj.erp_id     = $(this).closest('tr').attr('id');
             erp_order_details_obj.style_no   = $(this).closest('tr').data('style-no');
             erp_order_details_obj.temp_file  = $(this).closest('tr').data('template-file');
+            erp_order_details_obj.uuid       = $(this).closest('tr').data('uuid');
 
             jsonArray.push(erp_order_details_obj);
         }
     });
 
-    // pushing created_at array into json object
     final_json_obj['erp_order_details'] = jsonArray;
 
     $.ajax({
@@ -1067,7 +1096,9 @@ function storeJobcard()
             selected_ref_array:selected_ref_array,
             selected_buyer_po_array:selected_buyer_po_array,
             order_type_array:order_type_array,
-            created_at_array:created_at_array
+            uuid_array:uuid_array,
+            tint_color:tint_color,
+            customer_po:customer_po
         },
         tryCount: 0,
         retryLimit: 2,
@@ -1082,23 +1113,38 @@ function storeJobcard()
 
                 /** [ Store file path into localstorage ] */
                 localStorage.setItem('file_path',data.file_path)
-             
-                var isEdit        = false;
-                $('.row-checkbox', allPages).each(function (i, item) {
-                  
-                    if ($(this).is(':checked')) {
-                        refname       = $(this).closest('tr').data('refname'); 
-                        id            = $(this).closest('tr').attr('id');
-                        buyer_po_no   = $(this).closest('tr').data('buyer-po');
-                        order_type    = $(this).closest('tr').data('order-type');
-                        created_at    = $(this).closest('tr').data('created-at');
-                        style_no      = $(this).closest('tr').data('style-no');
-                        loop          = $(this).closest('tr').data('iteration');
-                        modal_name    = refname.replace(' ', '');
+                // generate and attach artworks with jobcard
+                if(data.buyer_name.toLowerCase() === 'tesco')
+                {
+                    var isEdit        = false;
+                    $('.row-checkbox', allPages).each(function (i, item) {
+                    
+                        if ($(this).is(':checked')) {
+                            refname       = $(this).closest('tr').data('refname'); 
+                            id            = $(this).closest('tr').attr('id');
+                            buyer_po_no   = $(this).closest('tr').data('buyer-po');
+                            order_type    = $(this).closest('tr').data('order-type');
+                            created_at    = $(this).closest('tr').data('created-at');
+                            style_no      = $(this).closest('tr').data('style-no');
+                            loop          = $(this).closest('tr').data('iteration');
+                            modal_name    = refname.replace(/ /g, '');
 
-                        openmodaltescopreview(modal_name, loop, style_no, buyer_po_no, id, order_type, created_at, isEdit);
-                    }
-                });
+                            openmodaltescopreview(modal_name, loop, style_no, buyer_po_no, id, order_type, created_at, isEdit);
+                        }
+                    });
+                }
+                else 
+                {
+                    var resp = JSON.stringify(data.file_path); 
+                    window.open(
+                        base_url+JSON.parse(resp),
+                        '_blank' // <- This is what makes it open in a new window.
+                    ); 
+                    $('.snackbar_span').html("Jobcard Created Successfully");
+                    showSnackbar();
+                    $('.modal').modal('hide');
+                    location.reload();
+                }
               
             },
             400: function() {
@@ -1120,7 +1166,7 @@ function storeJobcard()
 }
 
 /**
-   * Function for get jobcard details for editing
+   * Function for get jobcard details for editing(for JGA company)
    * @param id
    * @author <praveen>
    *
@@ -1189,6 +1235,18 @@ function storeJobcard()
                  $('#edit_roll_issued_by').val(data.jobcard_data.roll_issued_by);
                  $('#edit_cutter').val(data.jobcard_data.cutter);
                  $('#edit_cartons').val(data.jobcard_data.cartons);
+                 $('#edit_tint_color').val(data.jobcard_data.tint_color);
+                 $('#edit_customer_po').text(data.jobcard_data.customer_po_num);
+
+                  // show tint color and customer po for orchestra jc modal
+                  if(data.jobcard_data.buyer_name.toLowerCase() === 'orchestra')
+                  {
+                      $(".edit-common-data-div").removeClass("hidden");
+                  } 
+                  else 
+                  {
+                      $(".edit-common-data-div").addClass("hidden");
+                  }
 
                  /** [ Refresh  bootstrap selectpicker ] */
                  $('#edit_finish_type').selectpicker('refresh');
@@ -1216,11 +1274,13 @@ function storeJobcard()
                                     <tbody>';
                                         var ratio_total = 0;
                                         $.each(table_data, function(key, value){
+                                            let buyer_po = (value["buyer_po_number"] === null||"") ?'-':value["buyer_po_number"];
+                                            let ocn_num = (value["ocn_number"] === null||"") ?'-':value["ocn_number"];
                                             ratio_table += '<tr class="tr-'+table.replace('_', ' ')+'"  data-template-id="'+value["template_id"]+'">\
                                                                 <td id="edit_ratio_tr_refname_'+key+'">'+value["reference_name"]+'</td>\
-                                                                <td id="edit_ratio_tr_buyer_po_'+key+'">'+value["buyer_po_number"]+'</td>\
+                                                                <td id="edit_ratio_tr_buyer_po_'+key+'">'+buyer_po+'</td>\
                                                                 <td id="edit_ratio_tr_erp_id_'+key+'">'+value["erp_id"]+'</td>\
-                                                                <td id="edit_ratio_tr_ocn_'+key+'">'+value["ocn_number"]+'</td>\
+                                                                <td id="edit_ratio_tr_ocn_'+key+'">'+ocn_num+'</td>\
                                                                 <td id="edit_ratio_tr_qty_'+key+'">'+value["order_quantity"]+'</td>\
                                                                 <td></td>\
                                                             </tr>';
@@ -1247,7 +1307,12 @@ function storeJobcard()
                             var table_count = 0;
                             var single_table = '';
                             $.each(template_type_data, function(table, table_data){
-                                var template = table.split("_");
+                                var lastIndex = table.lastIndexOf("_");
+
+                                var template = table.substring(0, lastIndex).replace(',','_');
+                                
+                                //var template = table.split("_");
+                                
                                 single_table += '<table class="table table-bordered table-responsive edit-single-list-table" style="font-size: 12px;" id="single_list_table_'+table_count+'" border="0.2">\
                                         <tbody id="single_list_table_body">\
                                         <tr>\
@@ -1255,7 +1320,7 @@ function storeJobcard()
                                             $.each(table_data.erp_id, function(key, value){
                                                 single_table += '<td colspan="2" data-template-id="'+table_data.temp_id[key]+'" class="single-erpid-'+key+'">'+value+'</td>';
                                             });
-                                            single_table += '<td colspan="4" class="highlight_row" rowspan="3" data-single-ref-name="'+template[0]+' '+template[1]+'">REFNUM &nbsp;: '+template[0]+' '+template[1]+'</td>\
+                                            single_table += '<td colspan="4" class="highlight_row" rowspan="3" data-single-ref-name="'+template.replace('_',' ')+'">REFNUM &nbsp;: '+template.replace('_',' ')+'</td>\
                                         </tr>\
                                         <tr>\
                                             <th width="80px">B.PO.NO</th>';
@@ -1311,7 +1376,7 @@ function storeJobcard()
                                           table_row++;
                                         });
                                         single_table += '<tr>\
-                                                            <th class="highlight_row edit-total-text" data-ref-name="'+template[0]+'_'+template[1]+'">TOTAL</th>';
+                                                            <th class="highlight_row edit-total-text" data-ref-name="'+template+'">TOTAL</th>';
                                         
                                         var qty_total_col = 0;
                                         $.each(table_data.erp_id, function(key, value){
@@ -1320,8 +1385,8 @@ function storeJobcard()
                                             qty_total_col++;
                                         });
                                                             
-                                        single_table += '<td><strong class="edit-total-qty-'+template[0]+'_'+template[1]+'">'+parseInt(total_quantity_final)+'</strong></td>\
-                                                <td class="edit-total-excess-col-table-'+table_count+' edit-total-excess-'+template[0]+'_'+template[1]+'"><strong>'+Math.round(isNaN(total_excess_final) ? '0' : total_excess_final)+'</strong></td>\
+                                        single_table += '<td><strong class="edit-total-qty-'+template+'">'+parseInt(total_quantity_final)+'</strong></td>\
+                                                <td class="edit-total-excess-col-table-'+table_count+' edit-total-excess-'+template+'"><strong>'+Math.round(isNaN(total_excess_final) ? '0' : total_excess_final)+'</strong></td>\
                                                 <td></td>\
                                                 <td></td>\
                                             </tr>\
@@ -1342,23 +1407,23 @@ function storeJobcard()
                     $.each(data.jobcard_data.additional_details, function(key, item){
                         edit_meters_div_html +='<div class="col-md-12">\
                                             <div class="col-md-3">\
-                                                <label for="edit_act_excess_'+item.ref_name.replace(' ', '_')+'" >ACT EXCESS % ('+item.ref_name+'):</label>\
-                                                <span class="edit-act-excess" data-act-excess-ref="'+item.ref_name+'" id="edit_act_excess_'+item.ref_name.replace(' ', '_')+'">'+item.actual_excess+'</span>\
+                                                <label for="edit_act_excess_'+item.ref_name.replace(/ /g, '_')+'" >ACT EXCESS % ('+item.ref_name+'):</label>\
+                                                <span class="edit-act-excess" data-act-excess-ref="'+item.ref_name+'" id="edit_act_excess_'+item.ref_name.replace(/ /g, '_')+'">'+item.actual_excess+'</span>\
                                             </div>\
                                             <div class="col-md-3">\
-                                                <label for="edit_sticker_mtr_'+item.ref_name.replace(' ', '_')+'" >STKRS MTRS ('+item.ref_name+'):</label>\
-                                                <span class="edit-sticker-mtrs" id="edit_sticker_mtr_'+item.ref_name.replace(' ', '_')+'">'+item.mtrs_for_stickers+'</span>\
+                                                <label for="edit_sticker_mtr_'+item.ref_name.replace(/ /g, '_')+'" >STKRS MTRS ('+item.ref_name+'):</label>\
+                                                <span class="edit-sticker-mtrs" id="edit_sticker_mtr_'+item.ref_name.replace(/ /g, '_')+'">'+item.mtrs_for_stickers+'</span>\
                                             </div>\
                                             <div class="col-md-3">\
                                             <div class="form-group has-feedback">\
-                                                <label for="edit_settings_'+item.ref_name.replace(' ', '_')+'" >SETTINGS ('+item.ref_name+') :</label>\
-                                                <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" max="99999" data-max-error="Value should be <= 99999" class="form-control input-sm edit-settings" name="edit_settings_'+item.ref_name.replace(' ', '_')+'" placeholder="SETTINGS" id="edit_settings_'+item.ref_name.replace(' ', '_')+'" onkeyup="return totalMetersEdit()" value="'+item.settings+'" >\
+                                                <label for="edit_settings_'+item.ref_name.replace(/ /g, '_')+'" >SETTINGS ('+item.ref_name+') :</label>\
+                                                <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" max="99999" data-max-error="Value should be <= 99999" class="form-control input-sm edit-settings" name="edit_settings_'+item.ref_name.replace(/ /g, '_')+'" placeholder="SETTINGS" id="edit_settings_'+item.ref_name.replace(/ /g, '_')+'" onkeyup="return totalMetersEdit()" value="'+item.settings+'" >\
                                                 <div class="help-block with-errors"></div>\
                                             </div>\
                                             </div>\
                                             <div class="col-md-3">\
-                                            <label for="edit_total_mtrs_'+item.ref_name.replace(' ', '_')+'" >TOTAL MTRS ('+item.ref_name+'):</label>\
-                                            <span id="edit_total_mtrs_'+item.ref_name.replace(' ', '_')+'" class="edit-total-meters">'+item.total_mtrs+'</span>\
+                                            <label for="edit_total_mtrs_'+item.ref_name.replace(/ /g, '_')+'" >TOTAL MTRS ('+item.ref_name+'):</label>\
+                                            <span id="edit_total_mtrs_'+item.ref_name.replace(/ /g, '_')+'" data-edit-tem-ref-name="'+item.ref_name.replace(/ /g, '_')+'" class="edit-total-meters">'+item.total_mtrs+'</span>\
                                             </div>\
                                         </div>';
                     });
@@ -1383,7 +1448,7 @@ function storeJobcard()
                             var incr = 0;
                             // hidden erp_order_details data.
                             $.each(artwork_data, function(index, erp_data){
-                                erp_details_div_html += '<div hidden class="edit-erp-details" data-erp-id="'+erp_data.erp_id+'" data-ref-name="'+erp_data.refname+'" data-order-type="'+erp_data.order_type+'" data-buyer-po="'+erp_data.buyer_po+'" data-created-at="'+erp_data.created_at+'"  data-style-no="'+erp_data.style_no+'" data-template-file="'+erp_data.temp_file+'"></div><object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal'+incr+'" class="center-block tesco_svg'+incr+'" data="'+erp_data.temp_file+'" type="image/svg+xml"></object>'
+                                erp_details_div_html += '<div hidden class="edit-erp-details" data-erp-id="'+erp_data.erp_id+'" data-ref-name="'+erp_data.refname+'" data-order-type="'+erp_data.order_type+'" data-buyer-po="'+erp_data.buyer_po+'" data-created-at="'+erp_data.created_at+'"  data-style-no="'+erp_data.style_no+'" data-template-file="'+erp_data.temp_file+'" data-uuid="'+erp_data.uuid+'"></div><object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal'+incr+'" class="center-block tesco_svg'+incr+'" data="'+erp_data.temp_file+'" type="image/svg+xml"></object>'
                                 incr++;
                             });
                             
@@ -1425,7 +1490,7 @@ function storeJobcard()
 
   /** ---------------------- Excess calculation functions for edit jobcard begins ----------------------**/
 /**
- * Dynamic Excess calculation based on excess value entered.
+ * Dynamic Excess calculation based on excess value entered.(for JGA company)
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
@@ -1442,7 +1507,7 @@ function calculateExcessEdit(evt)
 }
 
 /**
- * Dynamic Total Excess calculation based on calculated excess value.
+ * Dynamic Total Excess calculation based on calculated excess value.(for JGA company)
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
@@ -1465,7 +1530,7 @@ function editTotalExcess()
 }
 
 /**
- * Dynamic Actual Excess calculation based on excess value and total quantity.
+ * Dynamic Actual Excess calculation based on excess value and total quantity.(for JGA company)
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
@@ -1495,7 +1560,7 @@ function actualExcessEdit()
 }
 
 /**
- * Dynamic Mtrs for sticker calculation.
+ * Dynamic Mtrs for sticker calculation.(for JGA company)
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
@@ -1526,15 +1591,14 @@ function mtrsForStickersEdit()
 }
 
 /**
- * Dynamic Total Meters calculation.
+ * Dynamic Total Meters calculation.(for JGA company)
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
 function totalMetersEdit()
 {
     $('.edit-total-meters').each(function(){
-       let total_mtrs_id = $(this).attr('id').split("_");
-       let ref_name = total_mtrs_id[3]+'_'+total_mtrs_id[4];
+       let ref_name = $(this).attr('data-edit-tem-ref-name');
        let mtrs_for_stickers = $('#edit_sticker_mtr_'+ref_name).text() === ''?0:$('#edit_sticker_mtr_'+ref_name).text();
        let settings = $('#edit_settings_'+ref_name).val() === ''?0:$('#edit_settings_'+ref_name).val();
        if (!isNaN(settings) && !isNaN(mtrs_for_stickers)) {
@@ -1546,7 +1610,7 @@ function totalMetersEdit()
 /** ----------------- Excess calculation functions for edit jobcard ends ----------------------**/
 
 /**
- * Update jobcard
+ * Update jobcard(for JGA company)
  * @author <Praveen> [praveen@wizroots.com]
  * 
  */
@@ -1591,6 +1655,8 @@ function updateJobcard(formData)
     var roll_issued_by  = $( '#edit_roll_issued_by' ).val() === ''?null:$('#edit_roll_issued_by').val();
     var cutter          = $( '#edit_cutter' ).val() === ''?null:$('#edit_cutter').val();
     var cartons         = $( '#edit_cartons' ).val() === ''?null:$('#edit_cartons').val();
+    var tint_color      = $( '#edit_tint_color' ).val() === ''?null:$('#edit_tint_color').val();
+    var customer_po     = $( '#edit_customer_po' ).text() === ''?null:$('#edit_customer_po').text();
     var jobcard_id      = $( '#jobcard_id' ).val();
 
     var final_json_obj =   {
@@ -1603,7 +1669,7 @@ function updateJobcard(formData)
     $('.edit-ratio-list-table').each(function (i, table) {
      var my_object    = new Object();
      var array_list   = [];
-         ref_name     = $(this).data('ratio-ref-table').replace(' ', '_');
+         ref_name     = $(this).data('ratio-ref-table').replace(/ /g, '_');
 
       $(table).find('tbody tr:not(:last)').each(function (index, row) {
         my_object = {}; 
@@ -1644,7 +1710,7 @@ function updateJobcard(formData)
         var ocn_array      = [];
         var temp_id_object = {};
         var temp_id_array  = [];
-        single_ref_name    = $(table).find('tbody tr:eq(0) td:last-child').data('single-ref-name').replace(' ', '_');
+        single_ref_name    = $(table).find('tbody tr:eq(0) td:last-child').data('single-ref-name').replace(/ /g, '_');
         
         // create erp_id array
         $(table).find('tbody tr:eq(0) td:not(:last)').each(function (i, item) {
@@ -1757,6 +1823,7 @@ function updateJobcard(formData)
         erp_order_details_obj.erp_id     = $(this).attr('data-erp-id');
         erp_order_details_obj.style_no   = $(this).attr('data-style-no');
         erp_order_details_obj.temp_file  = $(this).attr('data-template-file');
+        erp_order_details_obj.uuid       = $(this).attr('data-uuid');
 
         jsonArray.push(erp_order_details_obj);
     });
@@ -1814,7 +1881,9 @@ function updateJobcard(formData)
             sticker_mtr:sticker_mtr,
             settings:settings,
             total_mtrs:total_mtrs,
-            jobcard_id:jobcard_id
+            jobcard_id:jobcard_id,
+            tint_color:tint_color,
+            customer_po:customer_po
         },
         tryCount: 0,
         retryLimit: 2,
@@ -1830,19 +1899,37 @@ function updateJobcard(formData)
                 /** [ Store file path into localstorage ] */
                 localStorage.setItem('file_path',data.file_path)
                 var loop = 0;
-                var isEdit = true;
-                $('.edit-erp-details').each(function (i, item) {
-                    created_at = $(this).attr('data-created-at'); 
-                    order_type = $(this).attr('data-order-type'); 
-                    buyer_po_no= $(this).attr('data-buyer-po'); 
-                    refname    = $(this).attr('data-ref-name'); 
-                    id         = $(this).attr('data-erp-id');
-                    style_no   = $(this).attr('data-style-no');
-                    modal_name = refname.replace(' ', '');
 
-                    openmodaltescopreview(modal_name, loop, style_no, buyer_po_no, id, order_type, created_at, isEdit);
-                    loop++;
-                });
+                // generate and attach artworks with jobcard
+                if(data.buyer_name.toLowerCase() === 'tesco')
+                {
+                    var isEdit = true;
+                    $('.edit-erp-details').each(function (i, item) {
+                        created_at = $(this).attr('data-created-at'); 
+                        order_type = $(this).attr('data-order-type'); 
+                        buyer_po_no= $(this).attr('data-buyer-po'); 
+                        refname    = $(this).attr('data-ref-name'); 
+                        id         = $(this).attr('data-erp-id');
+                        style_no   = $(this).attr('data-style-no');
+                        modal_name = refname.replace(/ /g, '');
+
+                        openmodaltescopreview(modal_name, loop, style_no, buyer_po_no, id, order_type, created_at, isEdit);
+                        loop++;
+                    });
+                }
+                else 
+                {
+                    var resp = JSON.stringify(data.file_path); 
+                    window.open(
+                        base_url+JSON.parse(resp),
+                        '_blank' // <- This is what makes it open in a new window.
+                    );  
+                    $('.snackbar_span').html("Jobcard Created Successfully");
+                    showSnackbar();
+                    $('.modal').modal('hide');
+                    location.reload();
+                }
+                
             },
             400: function() {
                 $('.snackbar_span').html("Parameter is missing !!!");
@@ -2311,6 +2398,7 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
 
 } else {
     var svgarr = [];
+	var qr_code_arr = [];
     var ajax_count = 0;
     var b = " ";
     var position = 3;
@@ -2334,6 +2422,7 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
 
             },
             success: function(data) {
+				var generate_data = data;
                 $(data.order_details).each(function (key, val) {
                     var zone=val.zone;
                     localStorage.setItem("zone", zone);
@@ -2430,10 +2519,18 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
                         svgDoc.getElementById("pieces_in_ratio").innerHTML = val.cases_per_carton;
 
                         svgDoc.getElementById("tpnd").innerHTML = val.orms_tpn;
+						if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
+						{
+							svgDoc.getElementById("tpnd_last_digit").innerHTML = val.orms_tpn.substr(val.orms_tpn.length - 3);
+						}
                     } else if ((name == "TCL4-sticker" && zone == "CE") || (name == "THL3-sticker" && zone == "CE")) {
                         svgDoc.getElementById("unit_per_case").innerHTML = val.case_size;
 
                         svgDoc.getElementById("tpnd").innerHTML =val.orms_tpn;
+						if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
+						{
+							svgDoc.getElementById("tpnd_last_digit").innerHTML = val.orms_tpn.substr(val.orms_tpn.length - 3);
+						}
                     } else if ((name == "TCL4-sticker" && zone == "UK") || (name == "THL3-sticker" && zone == "UK")) {
                         svgDoc.getElementById("unit_per_case").innerHTML = val.case_size;
 
@@ -2486,18 +2583,123 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
                                 success: function (data) {
                                     /** [ Dynamically change svg short description ] */
                                     if (description != '' && data.size_chart.length != 0) {
-                                        svgDoc.getElementById("description").innerHTML = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
-                                    } else if (data.size_chart.length != 0) {
-                                        svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
-                                    } else if (description != '') {
-                                        svgDoc.getElementById("description").innerHTML = description.toUpperCase();
-                                    } else {
-                                        svgDoc.getElementById("description").innerHTML = '';
-                                    }
+								var desc_size = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+								if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
+								{
+									if(desc_size.length <= 23)
+									{
+										svgDoc.getElementById("description").innerHTML = desc_size;
+										if(name2 === "THL3")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+										}
+									}
+									else
+									{
+										str = oswordWrap(desc_size, 23);
+										svgDoc.getElementById("description").innerHTML = str;
+										
+										if(name2 === "THL3")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 135)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 148)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 135)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 148)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+										}
+									}
+								}
+								else
+								{
+									svgDoc.getElementById("description").innerHTML = desc_size;
+								}
+							} else if (data.size_chart.length != 0) {
+								svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
+							} else if (description != '') {
+								var desc_size = description.toUpperCase();
+								
+								if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
+								{
+									if(desc_size.length <= 23)
+									{
+										svgDoc.getElementById("description").innerHTML = desc_size;
+										if(name2 === "THL3")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+										}
+									}
+									else
+									{
+										str = oswordWrap(desc_size, 23);
+										svgDoc.getElementById("description").innerHTML = str;
+										
+										if(name2 === "THL3")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 135)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 148)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 135)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 148)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+										}
+									}
+								}
+								else
+								{
+									svgDoc.getElementById("description").innerHTML = desc_size;
+								}
+								
+							} else {
+								svgDoc.getElementById("description").innerHTML = '';
+							}
                                     var s = new XMLSerializer();
                                     var d = svgRoot;
                                     var str = s.serializeToString(d);
                                     svgarr.push(str)
+									qr_code_arr.push(val.qr_code)
                                 },
                                 error: function (errorXHR, errorStatus, errorThrown) {
                                     this.tryCount++;
@@ -2512,36 +2714,154 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
                             })
                         } else {
                             /** [ Dynamically change svg short description ] */
-                            if (description != '') {
-                                svgDoc.getElementById("description").innerHTML = description.toUpperCase();
-                            } else {
-                                svgDoc.getElementById("description").innerHTML = '';
-                            }
+                           if (description != '') {
+							if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
+							{
+								var desc_size = description.toUpperCase();
+								if(desc_size.length <= 23)
+								{
+									svgDoc.getElementById("description").innerHTML = desc_size;
+									if(name2 === "THL3")
+									{
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+
+									}
+									else
+									{
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+									}
+								}
+								else
+								{
+									str = wordWrap(desc_size, 23);
+									svgDoc.getElementById("description").innerHTML = str;
+
+									if(name2 === "THL3")
+									{
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 135)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 148)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 135)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 148)");
+
+									}
+									else
+									{
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+									}
+								}
+							}
+							else
+							{
+								/** [ Dynamically change svg short description ] */
+								svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+							}					
+						} else {
+							svgDoc.getElementById("description").innerHTML = '';
+						}
                             var s = new XMLSerializer();
                             var d = svgRoot;
                             var str = s.serializeToString(d);
 
                             svgarr.push(str)
+							qr_code_arr.push(val.qr_code)
 
                         }
                     } else {
-                        if (description != '') {
-                                svgDoc.getElementById("description").innerHTML = description.toUpperCase();
-                            } else {
-                                svgDoc.getElementById("description").innerHTML = '';
-                            }
+                       if (description != '') {
+					if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
+					{
+						if(description.length <= 20)
+						{
+							svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+							if (name2 === "TCL1")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 125)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 137)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 88.1544, 125)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 88.1544, 137)");
+							}
+							else if (name2 === "TCL2")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+								svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+								svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+							}
+							else if(name2 === "THL1")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 125)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 137)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 125)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 137)");
+							}
+							
+						}
+						else
+						{
+							str = oswordWrap(description, 23);
+							svgDoc.getElementById("description").innerHTML = str;
+							if (name2 === "TCL1")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 133)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 146)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 88.1544, 133)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 88.1544, 146)");
+							}
+							else if (name2 === "TCL2")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+								svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+								svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+							}
+							else if(name2 === "THL1")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 135)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 148)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 135)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 148)");
+							}
+						}
+					}
+					else
+					{
+						/** [ Dynamically change svg short description ] */
+						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+					}					
+				} else {
+					svgDoc.getElementById("description").innerHTML = '';
+				}
                         var s = new XMLSerializer();
                         var d = svgRoot;
                         var str = s.serializeToString(d);
 
                         svgarr.push(str)
+						qr_code_arr.push(val.qr_code)
                     }
                     ajax_count++;
                 })
                 if (ajax_count == data.order_details.length) {
                     var svg_fin = svgarr.join(',_');
+					var qr_code_fin = qr_code_arr.join(',_');
                     var zone = localStorage.getItem("zone");
-                    PDFTescoPreview(svg_fin, name,zone,style_no,buyer_no,id,created_at, isEdit);
+                    PDFTescoPreview(svg_fin, name,zone,style_no,buyer_no,id,created_at, isEdit,generate_data.tesco_item_master[0].is_qrcode_required,qr_code_fin);
                 }
             },
             error: function(data) {
@@ -2567,7 +2887,7 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
 * @return Pdf
 */
 
-function PDFTescoPreview(data, name,zone,style_no,buyer_no,id,created_at, isEdit) {
+function PDFTescoPreview(data, name,zone,style_no,buyer_no,id,created_at, isEdit,qr_flag,qr_code_fin) {
 	if(name == "TCL1-sticker")
 	{
 		var db = "tesco_tcl1_orders";
@@ -2597,9 +2917,11 @@ $.ajax({
 		name:name,
 		zone:zone,
 		style:style_no,
+		qr_code_fin: qr_code_fin,
 		tesco_po_number:buyer_no,
 		id:id,
 		created_at:created_at,
+		qr_flag:qr_flag,
 		db:db
     },
     tryCount: 0,

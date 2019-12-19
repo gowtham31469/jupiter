@@ -31,22 +31,22 @@
             </tr>
             <tr>
                 <td width="150"><h3><strong>Billing Address</strong></h3></td>
-                <td width="172"></td>
+                <td width="140"></td>
                 <td width="140"><h3><strong>Shipping Address</strong></h3></td>
             </tr>
             <tr>
                 <td width="150">{{$bank_details->company_name}}</td>
-                <td width="172"></td>
-                <td width="140">{{$bank_details->company_name}}</td>
+                <td width="140"></td>
+                <td width="140s">{{$bank_details->company_name}}</td>
             </tr>
             <tr>
-                <td width="150">{{$bill_to->address}}</td>
-                <td width="172"></td>
-                <td width="140">{{$ship_to->address}}</td>
+                <td width="150">{{$bill_to->address}}-{{$bill_to->pincode}}</td>
+                <td width="140"></td>
+                <td width="140">{{$ship_to->address}}-{{$ship_to->pincode}}</td>
             </tr>
             <tr>
                 <td width="150">GSTIN : {{$bank_details->gstin_number}}</td>
-                <td width="172"></td>
+                <td width="140"></td>
                 <td width="140"></td>
             </tr>
             <tr>
@@ -140,7 +140,7 @@
                 <td width="140"></td>
                 <td width="140"></td>
                 <td width="50"><strong>Sub-Total</strong></td>
-                <td width="70" style="text-align:right;"><strong>{{number_format((float)$subtotal, 2, '.', '')}}</strong></td>
+                <td width="70" style="text-align:right;"><strong>INR {{number_format((float)$subtotal, 2, '.', '')}}</strong></td>
             </tr>
         </table>
         <hr>
@@ -150,27 +150,27 @@
                     <td width="140"></td>
                     <td width="140"></td>
                     <td width="40"><strong>CGST</strong></td>
-                    <td width="80" style="text-align:right;"><strong>{{number_format((float)$totalcgst, 2, '.', '')}}</strong></td>
+                    <td width="80" style="text-align:right;"><strong>INR {{number_format((float)$totalcgst, 2, '.', '')}}</strong></td>
                 </tr>
                 <tr>
                     <td width="140"></td>
                     <td width="140"></td>
                     <td width="40"><strong>SGST</strong></td>
-                    <td width="80" style="text-align:right;"><strong>{{number_format((float)$totalsgst, 2, '.', '')}}</strong></td>
+                    <td width="80" style="text-align:right;"><strong>INR {{number_format((float)$totalsgst, 2, '.', '')}}</strong></td>
                 </tr>
             @elseif($bank_details->place_of_supply==2)
                 <tr>
                     <td width="140"></td>
                     <td width="140"></td>
                     <td width="40"><strong>IGST</strong></td>
-                    <td width="80" style="text-align:right;"><strong>{{number_format((float)$totaligst, 2, '.', '')}}</strong></td>
+                    <td width="80" style="text-align:right;"><strong>INR {{number_format((float)$totaligst, 2, '.', '')}}</strong></td>
                 </tr>
             @else
                 <tr>
                     <td width="140"></td>
                     <td width="140"></td>
                     <td width="40"><strong>Taxes</strong></td>
-                    <td width="80" style="text-align:right;"><strong>{{number_format((float)$amount, 2, '.', '')}}</strong></td>
+                    <td width="80" style="text-align:right;"><strong>INR {{number_format((float)$amount, 2, '.', '')}}</strong></td>
                 </tr>
             @endif
         </table>
@@ -178,7 +178,7 @@
         <table>
             <tr>
                 <td width="140"></td><td width="140"></td><td width="45"><strong>Bill Amount</strong></td>
-                <td width="75" style="text-align:right;"><strong>{{number_format((float)$billamnt, 2, '.', '')}}</strong></td>
+                <td width="75" style="text-align:right;"><strong>INR {{number_format((float)$billamnt, 2, '.', '')}}</strong></td>
             </tr>
             <tr>
                 <td width="90"></td><td width="90"></td><td width="220" style="text-align:right;">{{$amtText}}</td>
@@ -202,13 +202,13 @@
                 <td><strong>BANK DETAILS: </strong></td>
             </tr>
             <tr>
-                <td>BANK</td><td>{{$company_details->bank}}</td>
+                <td>BANK</td><td width="150">{{$company_details->bank}}</td>
             </tr>
             <tr>
                 <td>A/C No</td><td>{{$company_details->account_no}}</td>
             </tr>
             <tr>
-                <td>A/C NAME</td><td>{{$company_details->account_holder}}</td>
+                <td>A/C NAME</td><td width="150">{{$company_details->account_holder}}</td>
             </tr>
             <tr>
                 <td>IFSC CODE</td><td>{{$company_details->ifsc_code}}</td>

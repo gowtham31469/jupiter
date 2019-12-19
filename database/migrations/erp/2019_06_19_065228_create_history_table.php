@@ -17,9 +17,11 @@ class CreateHistoryTable extends Migration
         $table->increments('id');
         $table->integer('buyer_id')->unsigned();
         $table->foreign('buyer_id')->references('id')->on('buyers');
+        $table->integer('erp_order_details_id')->unsigned();
+        $table->foreign('erp_order_details_id')->references('id')->on('erp_order_details')->onDelete('cascade');
         $table->string('template');
         $table->string('season');
-        $table->string('country');
+        $table->string('country')->nullable();
         $table->integer('customer_id')->unsigned();
         $table->foreign('customer_id')->references('id')->on('customers');
         $table->string('material');
@@ -28,7 +30,7 @@ class CreateHistoryTable extends Migration
         $table->string('reference');
         $table->string('po');
         $table->string('buyer_po');
-        $table->integer('ocn');
+        $table->string('ocn');
         $table->timestamps();
         });
     }

@@ -166,7 +166,7 @@ class OrderController extends Controller
              foreach ($templates as $template_id) 
              {
                  $template_details[] = DB::table('tesco_template')
-                             ->select('tesco_item_master.id','tesco_template.template_name','tesco_template.template_file','company.name as company')
+                             ->select('tesco_item_master.id','tesco_template.template_name','tesco_template.template_file','tesco_item_master.is_qrcode_required','company.name as company')
                              ->join('tesco_item_master','tesco_template.item_id','=','tesco_item_master.id')
                              ->join('company','company.id','=','tesco_item_master.company_id')
                              ->where('tesco_item_master.id','=',$template_id)
@@ -254,6 +254,7 @@ class OrderController extends Controller
             $already_exists   = [];
             $created_by       = $request['created_by'];
             $zero_quantity    = [];
+            $qr_code          = explode('|',$request['qr_code']);
 
             $tesco_main_customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
             
@@ -318,7 +319,8 @@ class OrderController extends Controller
                                 'itf_barcode'      => $itf_code[$i],
                                 'cases_per_carton' => $cases_per_carton[$i],
                                 'count'            => $count_TCL1[$i],
-                                'ratio_pack_type'  => $this->ratio_pack_type[$i]
+                                'ratio_pack_type'  => $this->ratio_pack_type[$i],
+                                'qr_code'          => $qr_code[$i]
                               ]);
                            $i++;
                          }
@@ -339,7 +341,8 @@ class OrderController extends Controller
                                 'itf_barcode'      => $itf_code[$i],
                                 'cases_per_carton' => $cases_per_carton[$i],
                                 'count'            => $count_TCL1[$i],
-                                'ratio_pack_type'  => $this->ratio_pack_type[$i]
+                                'ratio_pack_type'  => $this->ratio_pack_type[$i],
+                                'qr_code'          => $qr_code[$i]
                               ]);
                            $i++;
                          }
@@ -385,7 +388,8 @@ class OrderController extends Controller
                                   'itf_barcode'      => $itf_code[$i],
                                   'cases_per_carton' => $cases_per_carton[$i],
                                   'count'            => $count_TCL2[$i],
-                                  'ratio_pack_type'  => $this->ratio_pack_type[$i]
+                                  'ratio_pack_type'  => $this->ratio_pack_type[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -406,7 +410,8 @@ class OrderController extends Controller
                                   'itf_barcode'      => $itf_code[$i],
                                   'cases_per_carton' => $cases_per_carton[$i],
                                   'count'            => $count_TCL2[$i],
-                                  'ratio_pack_type'  => $this->ratio_pack_type[$i]
+                                  'ratio_pack_type'  => $this->ratio_pack_type[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -453,7 +458,8 @@ class OrderController extends Controller
                                   'itf_barcode'      => $itf_code[$i],
                                   'cases_per_carton' => $cases_per_carton[$i],
                                   'count'            => $count_TSL1[$i],
-                                  'ratio_pack_type'  => $this->ratio_pack_type[$i]
+                                  'ratio_pack_type'  => $this->ratio_pack_type[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -474,7 +480,8 @@ class OrderController extends Controller
                                   'itf_barcode'      => $itf_code[$i],
                                   'cases_per_carton' => $cases_per_carton[$i],
                                   'count'            => $count_TSL1[$i],
-                                  'ratio_pack_type'  => $this->ratio_pack_type[$i]
+                                  'ratio_pack_type'  => $this->ratio_pack_type[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -524,7 +531,8 @@ class OrderController extends Controller
                               'itf_barcode'      => $itf_code[$i],
                               'cases_per_carton' => $cases_per_carton[$i],
                               'count'            => $count_THL1[$i],
-                              'ratio_pack_type'  => $this->ratio_pack_type[$i]
+                              'ratio_pack_type'  => $this->ratio_pack_type[$i],
+                              'qr_code'          => $qr_code[$i]
                             ]);
                          $i++;
                        }
@@ -545,7 +553,8 @@ class OrderController extends Controller
                               'itf_barcode'      => $itf_code[$i],
                               'cases_per_carton' => $cases_per_carton[$i],
                               'count'            => $count_THL1[$i],
-                              'ratio_pack_type'  => $this->ratio_pack_type[$i]
+                              'ratio_pack_type'  => $this->ratio_pack_type[$i],
+                              'qr_code'          => $qr_code[$i]
                             ]);
                          $i++;
                        }
@@ -591,6 +600,7 @@ class OrderController extends Controller
             $already_exists   = [];
             $created_by       = $request['created_by'];
             $zero_quantity    = []; 
+            $qr_code          = explode('|',$request['qr_code']);
 
             $tesco_main_customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
             
@@ -648,13 +658,12 @@ class OrderController extends Controller
                            $i = 0;
                            foreach ($orms_tpn as $tpn) 
                            {
-                             TescoTCL4OrdersQuantity::create([
-                                  'tcl4_order_id'    => $tesco_order_id,
+                             TescoTCL4OrdersQuantity::updateOrCreate(['tcl4_order_id' => $tesco_order_id, 'size' => $size[$i]], [
                                   'orms_tpn'         => $tpn,
                                   'ean_barcode'      => $ean_code[$i],
-                                  'size'             => $size[$i],
                                   'case_size'        => $case_size[$i],
-                                  'count'            => $count_TCL4[$i]
+                                  'count'            => $count_TCL4[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -669,13 +678,12 @@ class OrderController extends Controller
                            $i = 0;
                            foreach ($orms_tpn as $tpn) 
                            {
-                             TescoTCL4OrdersQuantity::create([
-                                  'tcl4_order_id'    => $request['tcl4_last_id'],
+                             TescoTCL4OrdersQuantity::updateOrCreate(['tcl4_order_id' => $request['tcl4_last_id'], 'size'=> $size[$i]], [
                                   'orms_tpn'         => $tpn,
                                   'ean_barcode'      => $ean_code[$i],
-                                  'size'             => $size[$i],
                                   'case_size'        => $case_size[$i],
-                                  'count'            => $count_TCL4[$i]
+                                  'count'            => $count_TCL4[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -716,13 +724,12 @@ class OrderController extends Controller
                            $i = 0;
                            foreach ($orms_tpn as $tpn) 
                            {
-                             TescoTSL3OrdersQuantity::create([
-                                  'tsl3_order_id'    => $tesco_order_id,
+                             TescoTSL3OrdersQuantity::updateOrCreate(['tsl3_order_id' => $tesco_order_id, 'size' => $size[$i]], [
                                   'orms_tpn'         => $tpn,
                                   'ean_barcode'      => $ean_code[$i],
-                                  'size'             => $size[$i],
                                   'case_size'        => $case_size[$i],
-                                  'count'            => $count_TSL3[$i]
+                                  'count'            => $count_TSL3[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -737,13 +744,12 @@ class OrderController extends Controller
                            $i = 0;
                            foreach ($orms_tpn as $tpn) 
                            {
-                             TescoTSL3OrdersQuantity::create([
-                                  'tsl3_order_id'    => $request['tsl3_last_id'],
+                             TescoTSL3OrdersQuantity::updateOrCreate(['tsl3_order_id' => $request['tsl3_last_id'], 'size' => $size[$i]], [
                                   'orms_tpn'         => $tpn,
                                   'ean_barcode'      => $ean_code[$i],
-                                  'size'             => $size[$i],
                                   'case_size'        => $case_size[$i],
-                                  'count'            => $count_TSL3[$i]
+                                  'count'            => $count_TSL3[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -787,13 +793,12 @@ class OrderController extends Controller
                            $i = 0;
                            foreach ($orms_tpn as $tpn) 
                            {
-                             TescoTHL3OrdersQuantity::create([
-                                  'thl3_order_id'    => $tesco_order_id,
+                             TescoTHL3OrdersQuantity::updateOrCreate(['thl3_order_id' => $tesco_order_id, 'size' => $size[$i]], [
                                   'orms_tpn'         => $tpn,
                                   'ean_barcode'      => $ean_code[$i],
-                                  'size'             => $size[$i],
                                   'case_size'        => $case_size[$i],
-                                  'count'            => $count_THL3[$i]
+                                  'count'            => $count_THL3[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -808,13 +813,12 @@ class OrderController extends Controller
                            $i = 0;
                            foreach ($orms_tpn as $tpn) 
                            {
-                             TescoTHL3OrdersQuantity::create([
-                                  'thl3_order_id'    => $request['thl3_last_id'],
+                             TescoTHL3OrdersQuantity::updateOrCreate(['thl3_order_id' => $request['thl3_last_id'], 'size' => $size[$i]], [
                                   'orms_tpn'         => $tpn,
                                   'ean_barcode'      => $ean_code[$i],
-                                  'size'             => $size[$i],
                                   'case_size'        => $case_size[$i],
-                                  'count'            => $count_THL3[$i]
+                                  'count'            => $count_THL3[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -1252,11 +1256,9 @@ class OrderController extends Controller
                              $i = 0;
                              foreach ($tpnd as $value) 
                              {
-                               TescoTCL4OrdersQuantity::create([
-                                    'tcl4_order_id'    => $tesco_order_id,
+                               TescoTCL4OrdersQuantity::updateOrCreate(['tcl4_order_id' => $tesco_order_id, 'size' => $size[$i]], [
                                     'tpnd'             => $value,
                                     'ean_barcode'      => $ean_code[$i],
-                                    'size'             => $size[$i],
                                     'case_size'        => $case_size[$i],
                                     'count'            => $count_TCL4[$i]
                                   ]);
@@ -1273,11 +1275,9 @@ class OrderController extends Controller
                              $i = 0;
                              foreach ($tpnd as $value) 
                              {
-                               TescoTCL4OrdersQuantity::create([
-                                    'tcl4_order_id'    => $request['tcl4_last_id'],
+                               TescoTCL4OrdersQuantity::updateOrCreate(['tcl4_order_id' => $request['tcl4_last_id'], 'size' => $size[$i]], [
                                     'tpnd'             => $value,
                                     'ean_barcode'      => $ean_code[$i],
-                                    'size'             => $size[$i],
                                     'case_size'        => $case_size[$i],
                                     'count'            => $count_TCL4[$i]
                                   ]);
@@ -1320,11 +1320,9 @@ class OrderController extends Controller
                              $i = 0;
                              foreach ($tpnd as $value) 
                              {
-                               TescoTSL3OrdersQuantity::create([
-                                    'tsl3_order_id'    => $tesco_order_id,
+                               TescoTSL3OrdersQuantity::updateOrCreate(['tsl3_order_id' => $tesco_order_id, 'size' => $size[$i]], [
                                     'tpnd'             => $value,
                                     'ean_barcode'      => $ean_code[$i],
-                                    'size'             => $size[$i],
                                     'case_size'        => $case_size[$i],
                                     'count'            => $count_TSL3[$i]
                                   ]);
@@ -1341,11 +1339,9 @@ class OrderController extends Controller
                              $i = 0;
                              foreach ($tpnd as $value) 
                              {
-                               TescoTSL3OrdersQuantity::create([
-                                    'tsl3_order_id'    => $request['tsl3_last_id'],
+                               TescoTSL3OrdersQuantity::updateOrCreate(['tsl3_order_id' => $request['tsl3_last_id'], 'size' => $size[$i]], [
                                     'tpnd'             => $value,
                                     'ean_barcode'      => $ean_code[$i],
-                                    'size'             => $size[$i],
                                     'case_size'        => $case_size[$i],
                                     'count'            => $count_TSL3[$i]
                                   ]);
@@ -1391,11 +1387,9 @@ class OrderController extends Controller
                            $i = 0;
                            foreach ($tpnd as $value) 
                            {
-                             TescoTHL3OrdersQuantity::create([
-                                  'thl3_order_id'    => $tesco_order_id,
+                             TescoTHL3OrdersQuantity::updateOrCreate(['thl3_order_id' => $tesco_order_id, 'size' => $size[$i]], [
                                   'tpnd'             => $value,
                                   'ean_barcode'      => $ean_code[$i],
-                                  'size'             => $size[$i],
                                   'case_size'        => $case_size[$i],
                                   'count'            => $count_THL3[$i]
                                 ]);
@@ -1412,11 +1406,9 @@ class OrderController extends Controller
                            $i = 0;
                            foreach ($tpnd as $value) 
                            {
-                             TescoTHL3OrdersQuantity::create([
-                                  'thl3_order_id'    => $request['thl3_last_id'],
+                             TescoTHL3OrdersQuantity::updateOrCreate(['thl3_order_id' => $request['thl3_last_id'], 'size' => $size[$i]], [
                                   'tpnd'             => $value,
                                   'ean_barcode'      => $ean_code[$i],
-                                  'size'             => $size[$i],
                                   'case_size'        => $case_size[$i],
                                   'count'            => $count_THL3[$i]
                                 ]);
@@ -1481,6 +1473,7 @@ class OrderController extends Controller
                 $data_array['tableName'] = "tesco_".strtolower($template[$key])."_orders";
                 $data_array['buyer_id'] = $tesco_buyer_id->id;
                 $data_array['id'] = $template_id;
+                $data_array['created_by'] = Auth::guard('web_customer')->id();
                 $updated_erp_table = $erp_obj->updateTescoErpOrders($data_array);
               }
           }
@@ -1517,6 +1510,8 @@ class OrderController extends Controller
               $last_insertions  = [];
               $already_exists   = [];
               $created_by       = $request['created_by'];
+              $qr_code          = explode('|',$request['qr_code']);
+
               foreach ($templates as $template) 
               {
                 $template_id      = $template['id'];
@@ -1555,7 +1550,8 @@ class OrderController extends Controller
                                 'orms_tpn'         => $tpn,
                                 'itf_barcode'      => $itf_code[$i],
                                 'cases_per_carton' => $cases_per_carton[$i],
-                                'count'            => $count_TCL1[$i]
+                                'count'            => $count_TCL1[$i],
+                                'qr_code'          => $qr_code[$i]
                               ]);
                            $i++;
                          }
@@ -1572,7 +1568,8 @@ class OrderController extends Controller
                                 'orms_tpn'         => $tpn,
                                 'itf_barcode'      => $itf_code[$i],
                                 'cases_per_carton' => $cases_per_carton[$i],
-                                'count'            => $count_TCL1[$i]
+                                'count'            => $count_TCL1[$i],
+                                'qr_code'          => $qr_code[$i]
                               ]);
                            $i++;
                          }
@@ -1613,7 +1610,8 @@ class OrderController extends Controller
                                   'orms_tpn'         => $tpn,
                                   'itf_barcode'      => $itf_code[$i],
                                   'cases_per_carton' => $cases_per_carton[$i],
-                                  'count'            => $count_TCL2[$i]
+                                  'count'            => $count_TCL2[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -1630,7 +1628,8 @@ class OrderController extends Controller
                                   'orms_tpn'         => $tpn,
                                   'itf_barcode'      => $itf_code[$i],
                                   'cases_per_carton' => $cases_per_carton[$i],
-                                  'count'            => $count_TCL2[$i]
+                                  'count'            => $count_TCL2[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -1671,7 +1670,8 @@ class OrderController extends Controller
                                   'orms_tpn'         => $tpn,
                                   'itf_barcode'      => $itf_code[$i],
                                   'cases_per_carton' => $cases_per_carton[$i],
-                                  'count'            => $count_TSL1[$i]
+                                  'count'            => $count_TSL1[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -1688,7 +1688,8 @@ class OrderController extends Controller
                                   'orms_tpn'         => $tpn,
                                   'itf_barcode'      => $itf_code[$i],
                                   'cases_per_carton' => $cases_per_carton[$i],
-                                  'count'            => $count_TSL1[$i]
+                                  'count'            => $count_TSL1[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -1732,7 +1733,8 @@ class OrderController extends Controller
                                 'orms_tpn'         => $tpn,
                                 'itf_barcode'      => $itf_code[$i],
                                 'cases_per_carton' => $cases_per_carton[$i],
-                                'count'            => $count_THL1[$i]
+                                'count'            => $count_THL1[$i],
+                                'qr_code'          => $qr_code[$i]
                               ]);
                            $i++;
                          }
@@ -1749,7 +1751,8 @@ class OrderController extends Controller
                                 'orms_tpn'         => $tpn,
                                 'itf_barcode'      => $itf_code[$i],
                                 'cases_per_carton' => $cases_per_carton[$i],
-                                'count'            => $count_THL1[$i]
+                                'count'            => $count_THL1[$i],
+                                'qr_code'          => $qr_code[$i]
                               ]);
                            $i++;
                          }
@@ -1787,6 +1790,8 @@ class OrderController extends Controller
             $last_insertions  = [];
             $already_exists   = [];
             $created_by       = $request['created_by'];
+            $qr_code          = explode('|',$request['qr_code']);
+
             foreach ($templates as $template) 
             {
               $template_id      = $template['id'];
@@ -1824,7 +1829,8 @@ class OrderController extends Controller
                                   'ean_barcode'      => $ean_code[$i],
                                   'size'             => $size[$i],
                                   'case_size'        => $case_size[$i],
-                                  'count'            => $count_TCL4[$i]
+                                  'count'            => $count_TCL4[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -1844,7 +1850,8 @@ class OrderController extends Controller
                                   'ean_barcode'      => $ean_code[$i],
                                   'size'             => $size[$i],
                                   'case_size'        => $case_size[$i],
-                                  'count'            => $count_TCL4[$i]
+                                  'count'            => $count_TCL4[$i],
+                                  'qr_code'          => $qr_code[$i]
                                 ]);
                              $i++;
                            }
@@ -1885,7 +1892,8 @@ class OrderController extends Controller
                                 'ean_barcode'      => $ean_code[$i],
                                 'size'             => $size[$i],
                                 'case_size'        => $case_size[$i],
-                                'count'            => $count_TSL3[$i]
+                                'count'            => $count_TSL3[$i],
+                                'qr_code'          => $qr_code[$i]
                               ]);
                            $i++;
                          }
@@ -1905,7 +1913,8 @@ class OrderController extends Controller
                                 'ean_barcode'      => $ean_code[$i],
                                 'size'             => $size[$i],
                                 'case_size'        => $case_size[$i],
-                                'count'            => $count_TSL3[$i]
+                                'count'            => $count_TSL3[$i],
+                                'qr_code'          => $qr_code[$i]
                               ]);
                            $i++;
                          }
@@ -1949,7 +1958,8 @@ class OrderController extends Controller
                               'ean_barcode'      => $ean_code[$i],
                               'size'             => $size[$i],
                               'case_size'        => $case_size[$i],
-                              'count'            => $count_THL3[$i]
+                              'count'            => $count_THL3[$i],
+                              'qr_code'          => $qr_code[$i]
                             ]);
                          $i++;
                        }
@@ -1969,7 +1979,8 @@ class OrderController extends Controller
                               'ean_barcode'      => $ean_code[$i],
                               'size'             => $size[$i],
                               'case_size'        => $case_size[$i],
-                              'count'            => $count_THL3[$i]
+                              'count'            => $count_THL3[$i],
+                              'qr_code'          => $qr_code[$i]
                             ]);
                          $i++;
                        }
@@ -2918,7 +2929,7 @@ class OrderController extends Controller
         $result = '';
         $data = [];
         if (in_array("TCL 1", $artwork)) {
-              $tesco_tcl1_orders = DB::table('tesco_tcl1_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->where('order_status','!=', 'Order Cancelled')->select('*', DB::raw("'".$this->tcl1."'".' as "TemplateName"'),DB::raw("'".$this->tcl1_type."'".' as "type"'))->first();
+              $tesco_tcl1_orders = DB::table('tesco_tcl1_orders')->where('po_number',$request->po_number)->where($request->zone.'_style_ref',$request->style_number)->where('order_flag','newOrder')->where('order_status','!=', 'Order Cancelled')->select('*', DB::raw("'".$this->tcl1."'".' as "TemplateName"'),DB::raw("'".$this->tcl1_type."'".' as "type"'))->first();
             if($tesco_tcl1_orders) {
               $data['tesco_tcl1_orders'] = $tesco_tcl1_orders;
               $data['tesco_tcl1_orders']->order_quantity = DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$tesco_tcl1_orders->id)->select('*')->get();
@@ -2926,7 +2937,7 @@ class OrderController extends Controller
         }
         
         if (in_array("TCL 2", $artwork)) {
-          $tesco_tcl2_orders = DB::table('tesco_tcl2_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->where('order_status','!=', 'Order Cancelled')->select('*',DB::raw("'".$this->tcl2."'".' as "TemplateName"'),DB::raw("'".$this->tcl2_type."'".' as "type"'))->first();
+          $tesco_tcl2_orders = DB::table('tesco_tcl2_orders')->where('po_number',$request->po_number)->where($request->zone.'_style_ref',$request->style_number)->where('order_flag','newOrder')->where('order_status','!=', 'Order Cancelled')->select('*',DB::raw("'".$this->tcl2."'".' as "TemplateName"'),DB::raw("'".$this->tcl2_type."'".' as "type"'))->first();
           if($tesco_tcl2_orders) {
             $data['tesco_tcl2_orders'] = $tesco_tcl2_orders;
             $data['tesco_tcl2_orders']->order_quantity = DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$tesco_tcl2_orders->id)->select('*')->get();
@@ -2934,7 +2945,7 @@ class OrderController extends Controller
         }
         
         if (in_array("TCL 4", $artwork)) {
-          $tesco_tcl4_orders = DB::table('tesco_tcl4_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->where('order_status','!=', 'Order Cancelled')->select('*',DB::raw("'".$this->tcl4."'".' as "TemplateName"'),DB::raw("'".$this->tcl4_type."'".' as "type"'))->first();
+          $tesco_tcl4_orders = DB::table('tesco_tcl4_orders')->where('po_number',$request->po_number)->where($request->zone.'_style_ref',$request->style_number)->where('order_flag','newOrder')->where('order_status','!=', 'Order Cancelled')->select('*',DB::raw("'".$this->tcl4."'".' as "TemplateName"'),DB::raw("'".$this->tcl4_type."'".' as "type"'))->first();
           if($tesco_tcl4_orders) {
             $data['tesco_tcl4_orders'] = $tesco_tcl4_orders;
             $data['tesco_tcl4_orders']->order_quantity = DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$tesco_tcl4_orders->id)->select('*')->get();
@@ -2942,7 +2953,7 @@ class OrderController extends Controller
         }
         
         if (in_array("THL 1", $artwork)) {
-          $tesco_thl1_orders = DB::table('tesco_thl1_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->where('order_status','!=', 'Order Cancelled')->select('*',DB::raw("'".$this->thl1."'".' as "TemplateName"'),DB::raw("'".$this->thl1_type."'".' as "type"'))->first();
+          $tesco_thl1_orders = DB::table('tesco_thl1_orders')->where('po_number',$request->po_number)->where($request->zone.'_style_ref',$request->style_number)->where('order_flag','newOrder')->where('order_status','!=', 'Order Cancelled')->select('*',DB::raw("'".$this->thl1."'".' as "TemplateName"'),DB::raw("'".$this->thl1_type."'".' as "type"'))->first();
           if($tesco_thl1_orders) {
             $data['tesco_thl1_orders'] = $tesco_thl1_orders;
             $data['tesco_thl1_orders']->order_quantity = DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$tesco_thl1_orders->id)->select('*')->get();
@@ -2951,7 +2962,7 @@ class OrderController extends Controller
         
         
         if (in_array("THL 3", $artwork)) {
-          $tesco_thl3_orders = DB::table('tesco_thl3_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->where('order_status','!=', 'Order Cancelled')->select('*',DB::raw("'".$this->thl3."'".' as "TemplateName"'),DB::raw("'".$this->thl3_type."'".' as "type"'))->first();
+          $tesco_thl3_orders = DB::table('tesco_thl3_orders')->where('po_number',$request->po_number)->where($request->zone.'_style_ref',$request->style_number)->where('order_flag','newOrder')->where('order_status','!=', 'Order Cancelled')->select('*',DB::raw("'".$this->thl3."'".' as "TemplateName"'),DB::raw("'".$this->thl3_type."'".' as "type"'))->first();
           if($tesco_thl3_orders) {
             $data['tesco_thl3_orders'] = $tesco_thl3_orders;
             $data['tesco_thl3_orders']->order_quantity = DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$tesco_thl3_orders->id)->select('*')->get();
@@ -2959,7 +2970,7 @@ class OrderController extends Controller
         }
         
         if (in_array("TSL 1", $artwork)) {
-          $tesco_tsl1_orders = DB::table('tesco_tsl1_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->where('order_status','!=', 'Order Cancelled')->select('*',DB::raw("'".$this->tsl1."'".' as "TemplateName"'),DB::raw("'".$this->tsl1_type."'".' as "type"'))->first();
+          $tesco_tsl1_orders = DB::table('tesco_tsl1_orders')->where('po_number',$request->po_number)->where($request->zone.'_style_ref',$request->style_number)->where('order_flag','newOrder')->where('order_status','!=', 'Order Cancelled')->select('*',DB::raw("'".$this->tsl1."'".' as "TemplateName"'),DB::raw("'".$this->tsl1_type."'".' as "type"'))->first();
           if($tesco_tsl1_orders) {
             $data['tesco_tsl1_orders'] = $tesco_tsl1_orders;
             $data['tesco_tsl1_orders']->order_quantity = DB::table('tesco_tsl1_orders_quanty')->where('tsl1_order_id',$tesco_tsl1_orders->id)->select('*')->get();
@@ -2967,7 +2978,7 @@ class OrderController extends Controller
         }
         
         if (in_array("TSL 3", $artwork)) {
-          $tesco_tsl3_orders = DB::table('tesco_tsl3_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->where('order_status','!=', 'Order Cancelled')->select('*',DB::raw("'".$this->tsl3."'".' as "TemplateName"'),DB::raw("'".$this->tsl3_type."'".' as "type"'))->first();
+          $tesco_tsl3_orders = DB::table('tesco_tsl3_orders')->where('po_number',$request->po_number)->where($request->zone.'_style_ref',$request->style_number)->where('order_flag','newOrder')->where('order_status','!=', 'Order Cancelled')->select('*',DB::raw("'".$this->tsl3."'".' as "TemplateName"'),DB::raw("'".$this->tsl3_type."'".' as "type"'))->first();
           if($tesco_tsl3_orders) {
             $data['tesco_tsl3_orders'] = $tesco_tsl3_orders;
             $data['tesco_tsl3_orders']->order_quantity = DB::table('tesco_tsl3_orders_quanty')->where('tsl3_order_id',$tesco_tsl3_orders->id)->select('*')->get();

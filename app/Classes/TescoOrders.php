@@ -110,7 +110,8 @@ class TescoOrders
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
               }
             }
@@ -198,7 +199,8 @@ class TescoOrders
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
               }
             }
@@ -286,7 +288,8 @@ class TescoOrders
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
               }
               
@@ -375,7 +378,8 @@ class TescoOrders
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
               }
             }
@@ -463,7 +467,8 @@ class TescoOrders
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
               }
             }
@@ -551,7 +556,8 @@ class TescoOrders
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
               }
               
@@ -640,7 +646,8 @@ class TescoOrders
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date,
-                          'ocn_number'           => $request['ocn_no']
+                          'ocn_number'           => $request['ocn_no'],
+                          'full_description'     => $request['full_description']
                         ]);
               }
               
@@ -666,7 +673,7 @@ class TescoOrders
    * @param  [$request]
    * @param  [customer id]
    */
-  public function updateTescoOrders($table_name,$temp_data,$request,$customer_id)
+  public function updateTescoOrders($table_name,$temp_data,$request,$customer_id, $created_by)
   {
     try
     {
@@ -678,6 +685,7 @@ class TescoOrders
       $template_id     = $request['edit_id'];
       $template_name   = $request['template_name'];
       $zone            = $request['zone'];
+      $qr_code         = explode('|', $request['qr_code']);
      
       if ($table_name == "tesco_tcl1_orders" || $table_name == "tesco_tcl2_orders" || $table_name == "tesco_tsl1_orders") {
           $table_array = array('tesco_tcl1_orders','tesco_tcl2_orders','tesco_tsl1_orders');
@@ -703,11 +711,15 @@ class TescoOrders
           $table_data = DB::table($table)->where('po_number',$temp_data->po_number)
                         ->where('uk_style_ref',$temp_data->uk_style_ref)
                         ->where('ce_style_ref',$temp_data->ce_style_ref)
+                        ->where('order_flag',$temp_data->order_flag)
+                        ->where('order_status', '<>', 'Order Cancelled')
                         ->where('tesco_supplier_id',$temp_data->tesco_supplier_id)->first();
                    
             DB::table($table)->where('po_number',$temp_data->po_number)
                 ->where('uk_style_ref',$temp_data->uk_style_ref)
                 ->where('ce_style_ref',$temp_data->ce_style_ref)
+                ->where('order_flag',$temp_data->order_flag)
+                ->where('order_status', '<>', 'Order Cancelled')
                 ->update([
                     'zone'                 => $request['zone'],
                     'template_type'        => $request['type'],
@@ -724,6 +736,7 @@ class TescoOrders
                     'tesco_metadata_supplier_id' => $request['supplier'],
                     'rfid_compliant'       => $request['rfid'],
                     'tag_at_source'        => $request['tag_at_source'],
+                    'ocn_number'           => $request['tesco_ocn'],
                   ]);
        // get quantity_table ids.
        $quantity_data = DB::table($qunty_tbl)
@@ -748,7 +761,8 @@ class TescoOrders
                     'cases_per_carton'   => $case_size[$i],
                     'size'               => null,
                     'count'              => $quantity,
-                    'ratio_pack_type'    => $this->ratio_pack_type[$i]
+                    'ratio_pack_type'    => $this->ratio_pack_type[$i],
+                    'qr_code'            => $qr_code[$i]
                   ]);
             }
             else if(($template_name == "TCL4" && $zone=="CE") || ($template_name == "TSL3" && $zone=="CE"))
@@ -759,7 +773,8 @@ class TescoOrders
                       'case_size'       => $case_size[$i],
                       $qnty_id          => $table_data->id,
                       'size'            => $single_size[$i],
-                      'count'           => $quantity
+                      'count'           => $quantity,
+                      'qr_code'         => $qr_code[$i]
                     ]);
             }
             else if(($template_name == "TCL4" && $zone=="UK") || ($template_name == "TSL3" && $zone=="UK"))
@@ -800,10 +815,14 @@ class TescoOrders
             $erp_details_status =  $erp_order_details[0]->status_name;
             $erp_order_id =  $erp_order_details[0]->erp_order_id;
 
-            // delete from erp_order_details table
             foreach($erp_order_details as $erp_order_detail){
-                DB::table('erp_order_details')->where('id',$erp_order_detail->id)->delete();
-            }
+              // delete from history table and insert new rows.
+              $history_table_id =  DB::table('history')->where('erp_order_details_id',$erp_order_detail->id)->value('id');
+              DB::table('event_history')->where('history_id',$history_table_id)->delete();
+              DB::table('history')->where('id',$history_table_id)->delete();
+              // delete from erp_order_details table
+              DB::table('erp_order_details')->where('id',$erp_order_detail->id)->delete();
+          }
             
             /** @var array [Pass array of values to updateTescoErpOrderDetails function] */
             $data_array = [];   
@@ -813,6 +832,7 @@ class TescoOrders
             $data_array['id'] = $table_data->id;
             $data_array['erp_details_status'] = $erp_details_status;
             $data_array['erp_order_id'] = $erp_order_id;
+            $data_array['created_by'] = $created_by;
 
             // pass $table_name, $buyer_id,  $table_data->id, $erp_details_status and $erp_order_id array
             $edit_erp_obj->updateTescoErpOrderDetails($data_array);

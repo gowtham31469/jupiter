@@ -500,6 +500,12 @@ transform: scale(1);
 @endsection @section('jqueryIncludes')
 <script>
 	$(document).ready(function() {
+
+	/** To refresh modal while hidden **/
+	$('.modal').on('hidden.bs.modal', function (e) {
+        $('#comment_box').val("");
+	})
+
 	//$('.company-nav-div .profile-dropdown-admin').addClass('hidden')
 	
 	//$("#orderDetailsModal").niceScroll();
@@ -661,7 +667,7 @@ transform: scale(1);
 		if ($('#comment_box').val() != null && $('#comment_box').val() != "") {
 			var comment = true;
 			var commenttext = $('#comment_box').val();
-			i++;
+			//i++;
 		} else {
 			var comment = false;
 			var commenttext = $('#comment_box').val();
@@ -694,13 +700,21 @@ transform: scale(1);
 				beforeSend: function() {
 
 				},
-				success: function(data) {
-					$('#orderDetailsModal').modal("hide")
-					$('.snackbar_span').html('Po Verified successfully ...!');
-					showSnackbar();
-					location.reload()
-					$('#orderDetailsModal').modal("hide")
-				},
+				statusCode: {
+					200: function(data) {
+
+						$('#orderDetailsModal').modal("hide");
+						$('.snackbar_span').html('Po Verified successfully ...!');
+						showSnackbar();
+						location.reload();
+					
+					},
+					422: function(data) {
+						$('.snackbar_span').html(data.responseJSON.message);
+						showSnackbar();
+						$('#orderDetailsModal').modal("hide");
+					},
+	        	},
 				error: function(data) {
 
 				},
@@ -772,6 +786,10 @@ transform: scale(1);
 					else
 					{
 						var size = "-";
+					}
+					if(index.buyer_po_number==null)
+					{
+						index.buyer_po_number='-'
 					}
 					$('#order-details-table tbody').append(`
 						<tr id="` + index.id + `">

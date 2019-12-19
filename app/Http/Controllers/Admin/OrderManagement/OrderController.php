@@ -53,12 +53,14 @@ class OrderController extends Controller
 			$new_count['tcl1'] = DB::table('tesco_tcl1_orders')
 									->whereRaw('created_at > current_date - 1')
 									->where('new_ord_flag',0)
+									->where('order_status','!=','Order Cancelled')
 									->where('is_order_count_empty',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$new_count['tcl2'] = DB::table('tesco_tcl2_orders')
 									->whereRaw('created_at > current_date - 1')
 									->where('new_ord_flag',0)
+									->where('order_status','!=','Order Cancelled')
 									->where('is_order_count_empty',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
@@ -66,30 +68,35 @@ class OrderController extends Controller
 									->whereRaw('created_at > current_date - 1')
 									->where('new_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->where('order_status','!=','Order Cancelled')
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$new_count['thl1'] = DB::table('tesco_thl1_orders')
 									->whereRaw('created_at > current_date - 1')
 									->where('new_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->where('order_status','!=','Order Cancelled')
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$new_count['thl3'] = DB::table('tesco_thl3_orders')
 									->whereRaw('created_at > current_date - 1')
 									->where('new_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->where('order_status','!=','Order Cancelled')
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$new_count['tsl1'] = DB::table('tesco_tsl1_orders')
 									->whereRaw('created_at > current_date - 1')
 									->where('new_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->where('order_status','!=','Order Cancelled')
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$new_count['tsl3'] = DB::table('tesco_tsl3_orders')
 									->whereRaw('created_at > current_date - 1')
 									->where('new_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->where('order_status','!=','Order Cancelled')
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -472,8 +479,12 @@ class OrderController extends Controller
         PDF::setPrintFooter(false);
         PDF::SetFont('calibrib');
         PDF::AddPage();
-        PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
-        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
+        //PDF::RoundedRect(95, 255, 40, 30, 0.1, '1111', null, $style6);
+        //PDF::RoundedRect(140, 255, 40, 30, 0.1, '1111', 'null', $style6);
+        PDF::RoundedRect(10, 10, 150, 100, 0.000001, '1111', null, $style6);
+        PDF::RoundedRect(12.5, 12.5, 145, 95, 0.000001, '1111', null, $style6);
+        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
     } 
@@ -498,7 +509,12 @@ class OrderController extends Controller
         PDF::setPrintFooter(false);
         PDF::SetFont('calibrib');
 		PDF::AddPage('P', 'A4');
-		PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+		//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+		//PDF::RoundedRect(12.5, 12.5, 145, 95, 0, '0000');
+		
+		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
+        PDF::RoundedRect(10, 10, 150, 100, 0.000001, '1111', null, $style6);
+        PDF::RoundedRect(12.5, 12.5, 145, 95, 0.000001, '1111', null, $style6);
 		PDF::SetAutoPageBreak(TRUE);
 		$i=0;
 		$j=0;
@@ -510,23 +526,35 @@ class OrderController extends Controller
 			if($i == 2)
 			{
 				PDF::AddPage('P', 'A4');
-				PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+				//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
 				$yy=12.5;
-				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+				//PDF::RoundedRect(12.5, 12.5, 145, 95, 0, '0000');
+				
+				PDF::RoundedRect(10, 10, 150, 100, 0.000001, '1111', null, $style6);
+        		PDF::RoundedRect(12.5, 12.5, 145, 95, 0.000001, '1111', null, $style6);
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 				$i = 0;
 			}
 			else if($i == 0)
 			{
-				PDF::RoundedRect(10, 160, 150, 100, 0, '0000');
+				//PDF::RoundedRect(10, 160, 150, 100, 0, '0000');
 				$yy=12.5;
-				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+				//PDF::RoundedRect(12.5, 162.5, 145, 95, 0, '0000');
+				
+				PDF::RoundedRect(10, 160, 150, 100, 0.000001, '1111', null, $style6);
+				PDF::RoundedRect(12.5, 162.5, 145, 95, 0.000001, '1111', null, $style6);
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 				
 			}
 			else
 			{
-				PDF::RoundedRect(10, 160, 150, 100, 0, '0000');
+				//PDF::RoundedRect(10, 160, 150, 100, 0, '0000');
 				$yy += 150;
-				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+				//PDF::RoundedRect(12.5, 162.5, 145, 95, 0, '0000');
+				
+				PDF::RoundedRect(10, 160, 150, 100, 0.000001, '1111', null, $style6);
+				PDF::RoundedRect(12.5, 162.5, 145, 95, 0.000001, '1111', null, $style6);
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			}
 			$i++;
 			$j++;
@@ -544,24 +572,75 @@ class OrderController extends Controller
 	
 	public function printHangPdf(Request $request)
     {
-        $svg=urldecode($request->svg); 
-		$svg1=urldecode($request->svg1); 
+        $svgarrfront=explode(',_',$request->svg); 
+		//$svg1=urldecode($request->svg1); 
+		$svgarr=explode(',_',$request->svgRoot); 
         define ('PDF_FONT_NAME_MAIN', 'calibrib');
         define ('PDF_FONT_NAME_DATA', 'calibrib');
         PDF::setImageScale(1);
         PDF::setPrintHeader(false);
         PDF::setPrintFooter(false);
-        PDF::SetFont('calibrib');
+        PDF::SetFont('alternategothic2bt');
         PDF::AddPage();
-		PDF::RoundedRect(10, 10, 61, 131, 0, '0000');
+		//PDF::RoundedRect(10, 10, 61, 131, 0, '0000');
 		//PDF::SetFillColor(255, 255, 255);
         //PDF::SetTextColor(0, 0, 0);
-        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, '55', '125', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        //PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, '49', '117', $link='', $align='', $palign='', $border=0, $fitonpage=false);
 		
-		PDF::RoundedRect(80, 10, 61, 131, 0, '0000');
-		PDF::ImageSVG('@' . $svg1, $x=82.5, $y=12.5, '55', '125', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::SetFont('arial');
+		$count=0;
+		$xx=12.5;
+		$i=0;
+		$yy=12.5;
+		$arr_mer=array_merge($svgarrfront,$svgarr);
+		$fir=0;
+		$sec = count($arr_mer) / 2;
+		foreach($arr_mer as $value)
+		{
+			$svg=urldecode($value);
+			//PDF::RoundedRect(80, 10, 61, 131, 0, '0000');
+			//PDF::ImageSVG('@' . $svg,  $x=$xx, $y=12.5, '49', '117', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			
+			
+			if($count%2==0)  
+			{  
+				PDF::ImageSVG('@' . urldecode($arr_mer[$fir]),  $x=$xx, $y=$yy, '49', '117', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				$fir++;
+			}  
+			else  
+			{  
+				PDF::ImageSVG('@' . urldecode($arr_mer[$sec]),  $x=$xx, $y=$yy, '49', '117', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				$sec++;
+			}   
+			
+			$xx += 65;
+			$i++;
+			
+			if($i == 3)
+			{
+				//PDF::AddPage();
+				//$i=0;
+				$xx=12.5;
+				$yy=150;
+			}
+			
+			if($i == 6)
+			{
+				PDF::AddPage();
+				$i=0;
+				$xx=12.5;
+				$yy=12.5;
+			}
+			$count++;
+		}
+		
         PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
-        print_r(url('/storage/app/template/solid1.pdf'));
+		
+		exec("gs -dSAFER -dBATCH -dNOPAUSE -dNOCACHE -sDEVICE=pdfwrite -sColorConversionStrategy=CMYK -dProcessColorModel=/DeviceCMYK -sOutputFile=".public_path('/storage/app/template/solid1_cmyk.pdf')." ".public_path('/storage/app/template/solid1.pdf'));
+        
+//        print_r(url('/storage/app/template/'.$name.'_cmyk.pdf'));
+		
+        print_r(url('/storage/app/template/solid1_cmyk.pdf'));
     } 	
 	
 	/**
@@ -614,23 +693,25 @@ class OrderController extends Controller
         $svg=urldecode($request->svg); 
         $svg_back=urldecode($request->svg_back); 
         $svg_middle=urldecode($request->svg_middle); 
-        define ('PDF_FONT_NAME_MAIN', 'calibrib');
-        define ('PDF_FONT_NAME_DATA', 'calibrib');
+        define ('PDF_FONT_NAME_MAIN', 'calibri');
+        define ('PDF_FONT_NAME_DATA', 'calibri');
         PDF::setImageScale(1);
         PDF::setPrintHeader(false);
         PDF::setPrintFooter(false);
-        PDF::SetFont('dejavusans', '',  1.5, '', true);
+        PDF::SetFont('tahoma', '',  1.5, '', true);
         PDF::AddPage();
         //PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
 		//PDF::SetFillColor(255, 255, 255);
         //PDF::SetTextColor(0, 0, 0);
-		$tbl='<span>Fabriqué en - Made in - Fabricado en - Vervaardigd in - Hergestellt in - Сделанов  - صنع في - παράγεται στην - üretim yeri</span>';
 		
-		$tbl1='<p  style="font-size:5px;">'.$orchestra_countries{0}->french.' - '.$orchestra_countries{0}->english.' - '.$orchestra_countries{0}->spanish.' - '.$orchestra_countries{0}->portuguese.' - '.$orchestra_countries{0}->italian.' - '.$orchestra_countries{0}->dutch.' - '.$orchestra_countries{0}->german.' - <span>'.$orchestra_countries{0}->arabic.'</span> - '.$orchestra_countries{0}->greek.'</p>';
+	
+		$tbl='<p  style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri;line-height:1.25">Fabriqué en - Made in - <br> Fabricado en - <br>Fabricado em - <br>Fabbricato in - <br>Vervaardigd in  - <br>Hergestellt in -<br><span style="font-family:Tahoma">  ﺻﻨﻊ ب </span>-<br> παράγεται στην</p>';
+		
+		$tbl1='<p  style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$orchestra_countries{0}->french.' - '.$orchestra_countries{0}->english.' - '.$orchestra_countries{0}->spanish.' - '.$orchestra_countries{0}->portuguese.' - <br>'.$orchestra_countries{0}->italian.' - '.$orchestra_countries{0}->dutch.' - '.$orchestra_countries{0}->german.' - <br><span style="font-family:Tahoma">'.$orchestra_countries{0}->arabic.'</span> - '.$orchestra_countries{0}->greek.'</p>';
 		$tbl2="";
 		foreach($orchestra_care_instruction as $value)
 		{
-			$tbl2.='<p style="font-size:5px;">'.$value->french.' - '.$value->english.' - '.$value->spanish.' - '.$value->portuguese.' - '.$value->italian.' - '.$value->dutch.' - '.$value->german.' - <span>'.$value->arabic.'</span> - '.$value->greek.'</p><br><br>';
+			$tbl2.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$value->french.' - '.$value->english.' - '.$value->spanish.' - '.$value->portuguese.' - '.$value->italian.' - '.$value->dutch.' - '.$value->german.' - <span style="font-family:Tahoma">'.$value->arabic.'</span> - '.$value->greek.'</p><br><br>';
 		}
 		
 		//print_r($tbl2);
@@ -646,14 +727,14 @@ class OrderController extends Controller
 					$exp_value = explode('_',$value[0]);
 					$orchestra_parts = DB::table('orchestra_parts')->select('*')->where('id',$exp_value[0])->get();
 				
-					$tbl3.='<p style="font-size:5px">'.$orchestra_parts{0}->french.' - '.$orchestra_parts{0}->english.' - '.$orchestra_parts{0}->spanish.' - '.$orchestra_parts{0}->portuguese.' - '.$orchestra_parts{0}->italian.' - '.$orchestra_parts{0}->dutch.' - '.$orchestra_parts{0}->german.' - <span>'.$orchestra_parts{0}->arabic.'</span> - '.$orchestra_parts{0}->greek.'</p><br><br>';
+					$tbl3.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%)">'.$orchestra_parts{0}->french.' - '.$orchestra_parts{0}->english.' - '.$orchestra_parts{0}->spanish.' - '.$orchestra_parts{0}->portuguese.' - '.$orchestra_parts{0}->italian.' - '.$orchestra_parts{0}->dutch.' - '.$orchestra_parts{0}->german.' - <span>'.$orchestra_parts{0}->arabic.'</span> - '.$orchestra_parts{0}->greek.'</p><br><br>';
 			}
 			foreach($value as $key1 => $value1)
             {
 				$exp_val = explode('_',$value1);
 				$orchestra_compositions = DB::table('orchestra_compositions')->select('*')->where('english',$exp_val[1])->get();
 				
-				$tbl3.='<p style="font-size:5px">'.$exp_val[2].'% '.$orchestra_compositions{0}->french.' - '.$orchestra_compositions{0}->english.' - '.$orchestra_compositions{0}->spanish.' - '.$orchestra_compositions{0}->portuguese.' - '.$orchestra_compositions{0}->italian.' - '.$orchestra_compositions{0}->dutch.' - '.$orchestra_compositions{0}->german.' - <span>'.$orchestra_compositions{0}->arabic.'</span> - '.$orchestra_compositions{0}->greek.'</p><br><br>';
+				$tbl3.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$exp_val[2].'% '.$orchestra_compositions{0}->french.' - '.$orchestra_compositions{0}->english.' - '.$orchestra_compositions{0}->spanish.' - '.$orchestra_compositions{0}->portuguese.' - '.$orchestra_compositions{0}->italian.' - '.$orchestra_compositions{0}->dutch.' - '.$orchestra_compositions{0}->german.' - <span style="font-family:Tahoma">'.$orchestra_compositions{0}->arabic.'</span> - '.$orchestra_compositions{0}->greek.'</p><br><br>';
 			}
 		}
 		$xx=12.5;
@@ -661,10 +742,11 @@ class OrderController extends Controller
 		foreach($svgarr as $value)
 		{
 			$svg=urldecode($value);
-        	PDF::ImageSVG('@' . $svg, $x=$xx, $y=12.5, '25', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        	PDF::ImageSVG('@' . $svg, $x=$xx, $y=12.5, '25.5', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			PDF::SetFillColor(255, 255, 255);
 			PDF::SetTextColor(0, 0, 0);
-			//PDF::writeHTMLCell('25.5', '40', $xx, '151.5', $tbl1, '', 1, 1, true, 'C', true);
+			PDF::writeHTMLCell('25.5', '40', $xx, '135', $tbl, '', 0, 0, true, 'C', true);
+			PDF::writeHTMLCell('25.5', '40', $xx, '153.5', $tbl1, '', 0, 0, true, 'C', true);
 			$xx += 37.5;
 			$i++;
 			
@@ -675,11 +757,11 @@ class OrderController extends Controller
 				$xx=12.5;
 			}
 		}
+		PDF::ImageSVG('@' . $svg_back, $xx, $y=12.5, '25.5', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		PDF::writeHTMLCell('22', '40', $xx + 2.25, '25', $tbl2, '', 0, 0, true, 'C', true);
+		PDF::writeHTMLCell('25', '40', $xx + 1, '110', $tbl3, '', 0, 0, true, 'C', true);
 		PDF::AddPage();
-		PDF::ImageSVG('@' . $svg_back, $x=12.5, $y=12.5, '25', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
-		PDF::ImageSVG('@' . $svg_middle, $x=50, $y=12.5, '55', '82.5', $link='', $align='', $palign='', $border=0, $fitonpage=false);
-		PDF::writeHTMLCell('22', '40', '14', '25', $tbl2, '', 1, 1, true, 'C', true);
-		PDF::writeHTMLCell('25', '40', '13.5', '110', $tbl3, '', 1, 1, true, 'C', true);
+		PDF::ImageSVG('@' . $svg_middle, $x=50, $y=12.5, '55.5', '82.5', $link='', $align='', $palign='', $border=0, $fitonpage=false);
 		
 		//print_r($i);
 //		if($i == 0)
@@ -733,31 +815,45 @@ class OrderController extends Controller
         PDF::setPrintFooter(false);
         PDF::SetFont('calibrib');
         PDF::AddPage();
-        PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+		
+		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
+        //PDF::RoundedRect(95, 255, 40, 30, 0.1, '1111', null, $style6);
+        //PDF::RoundedRect(140, 255, 40, 30, 0.1, '1111', 'null', $style6);
+        PDF::RoundedRect(10, 10, 150, 100, 0.000001, '1111', null, $style6);
+        PDF::RoundedRect(12.5, 12.5, 145, 95, 0.000001, '1111', null, $style6);
+		
+		//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+		//PDF::RoundedRect(12.5, 12.5, 145, 95, 0, '0000');
         $td_size="";
         $td_col="";
         $total=0;
         $size=explode(',',$request->size);
         $qty=explode(',',$request->qty);
         $i=0;
+		$index_arr=array();
         foreach($size as $val)
         {
-            if($val != "")
-            {
-                $td_size.="<td>".$val."</td>";
-                $td_col.="<td>".$qty[$i]."</td>";
-            }
+			  if (!in_array($val, $index_arr)) 
+			  { 
+				   if($val != "")
+					{
+					    array_push($index_arr,$val);
+						$td_size.="<td><br><br>".$val."</td>";
+						$td_col.="<td>".$qty[$i]."</td>";
+					} 
+			  } 
+           
             $total+=$qty[$i];
             $i++;
         }
-          $tbl = '<table  border="0.5" style="text-align:center">
-              <tr>
-                          <td>Size:</td>
+          $tbl = '<table  border="1" style="text-align:center;">
+		  			<tr style="line-height:0.53">
+                          <td style="font-size:14px;text-align:center;line-height:0.45"><br><br>Size:</td>
                           '.$td_size.'
-                          <td>Total</td>
+                          <td><br><br>Total<br></td>
                           </tr>
                       <tr>
-                          <td>ERCU</td>
+                          <td style="font-size:7.5px;line-height:2">ERCU</td>
                           '.$td_col.'
                           <td>'.$total.'</td>
                           </tr>
@@ -765,7 +861,7 @@ class OrderController extends Controller
         PDF::SetFillColor(255, 255, 255);
         PDF::SetTextColor(0, 0, 0);
         
-        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
         PDF::writeHTMLCell(147, '', '11.5', '55', $tbl, '', 1, 1, true, '', true);
         
   
@@ -814,8 +910,14 @@ class OrderController extends Controller
         PDF::setPrintFooter(false);
         PDF::SetFont('calibrib');
 		PDF::AddPage('P', 'A4');
-		PDF::RoundedRect(10, 10, 100, 70, 0, '0000');
-		PDF::SetAutoPageBreak(TRUE);
+		//PDF::RoundedRect(10, 10, 100, 70, 0, '0000');
+		//PDF::RoundedRect(12.5, 12.5, 95, 65, 0, '0000');
+		 
+		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
+        PDF::RoundedRect(10, 10, 100, 70, 0.000001, '1111', null, $style6);
+        PDF::RoundedRect(12.5, 12.5, 95, 65, 0.000001, '1111', null, $style6);
+		 
+//		PDF::SetAutoPageBreak(TRUE);
 		$i=0;
 		$j=0;
 		$yy=12.5;
@@ -826,35 +928,72 @@ class OrderController extends Controller
 			if($i == 3)
 			{
 				PDF::AddPage('P', 'A4');
-				PDF::RoundedRect(10, 10, 100, 70, 0, '0000');
+				//PDF::RoundedRect(10, 10, 100, 70, 0, '0000');
+				//PDF::RoundedRect(12.5, 12.5, 95, 65, 0, '0000');
+				
+				PDF::RoundedRect(10, 10, 100, 70, 0.000001, '1111', null, $style6);
+        		PDF::RoundedRect(12.5, 12.5, 95, 65, 0.000001, '1111', null, $style6);
 				$yy=12.5;
-				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 				$i = 0;
 			}
 			else  if($i == 0)
 			{
-				PDF::RoundedRect(10, 100, 100, 70, 0, '0000');
+				//PDF::RoundedRect(10, 100, 100, 70, 0, '0000');
+				//PDF::RoundedRect(12.5, 102.5, 95, 65, 0, '0000');
+				
+				PDF::RoundedRect(10, 100, 100, 70, 0.000001, '1111', null, $style6);
+        		PDF::RoundedRect(12.5, 102.5, 95, 65, 0.000001, '1111', null, $style6);
 				$yy=12.5;
-				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 				
 			}
 			else if($i == 1)
 			{
-				PDF::RoundedRect(10, 100, 100, 70, 0, '0000');
+				//PDF::RoundedRect(10, 100, 100, 70, 0, '0000');
+				//PDF::RoundedRect(12.5, 102.5, 95, 65, 0, '0000');
+				PDF::RoundedRect(10, 100, 100, 70, 0.000001, '1111', null, $style6);
+        		PDF::RoundedRect(12.5, 102.5, 95, 65, 0.000001, '1111', null, $style6);
 				$yy += 90;
-				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			}
 			else
 			{
-				PDF::RoundedRect(10, 190, 100, 70, 0, '0000');
+				//PDF::RoundedRect(10, 190, 100, 70, 0, '0000');
+				//PDF::RoundedRect(12.5, 192.5, 95, 65, 0, '0000');
+				PDF::RoundedRect(10, 190, 100, 70, 0.000001, '1111', null, $style6);
+        		PDF::RoundedRect(12.5, 192.5, 95, 65, 0.000001, '1111', null, $style6);
 				$yy += 90;
-				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			}
 			$i++;
 			$j++;
 		 }
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
+    }
+	/**
+     * Function to get tesco tsl template UK , CE size chart based on size entered.
+     * @author <Praveen>
+     * @param [string] $[size] [<Size entered>], [string] $[zone] [<zone selected>]
+     * @return equivalent uk,ce size for size entered
+     */
+    public function getTescoTSLSizechart(Request $request)
+    {
+       try {
+             
+		   $size = $request['size'];
+		   $uvc_tco = $request['uvc_tco'];
+
+		   $size = DB::table('orchestra_size_chart')->select('cm as size')->where('age', 'ilike', $size)->where('is_enabled','=',1)->get();
+		   
+		   $orchestra_parcel_quantity_details = DB::table('orchestra_parcel_quantity_details')->select('*')->where('UVC_TCO', $uvc_tco)->get();
+           
+           return response()->json(['size_chart' => $size,'opqt' => $orchestra_parcel_quantity_details]);
+		   
+       } catch (\Exception $e) {
+           return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+       }
     }
    
 }

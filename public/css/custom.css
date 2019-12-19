@@ -608,6 +608,41 @@ span.navbar-brand.logo:hover {
     transition: 0.5s ease all;
 }
 
+.left-panelorc {
+    position: fixed;
+    right: 0px;
+    padding-right: 5px !important;
+    top: 0;
+    bottom: 0px;
+    height: 100vh !important;
+    z-index: 11;
+    transition: 0.5s ease all;
+    padding: 10px;
+    margin-right: -100%;
+}
+
+.left-panelorc.active {
+    margin-right: 33%;
+    transition: 0.5s ease all;
+}
+.left-panelos {
+    position: fixed;
+    right: 0px;
+    padding-right: 5px !important;
+    top: 0;
+    bottom: 0px;
+    height: 100vh !important;
+    z-index: 11;
+    transition: 0.5s ease all;
+    padding: 10px;
+    margin-right: -100%;
+}
+
+.left-panelos.active {
+    margin-right: 33% !important;
+    transition: 0.5s ease all;
+}
+
 .right-panel {
     position: fixed;
     right: 0px;
@@ -618,10 +653,28 @@ span.navbar-brand.logo:hover {
     z-index: 12;
     transition: 0.5s ease all;
     padding: 10px;
-    margin-right: -25%;
+    margin-right: -35%;
 }
 
 .right-panel.active {
+    margin-right: 0px;
+    transition: 0.5s ease all;
+}
+
+.right-panelos {
+    position: fixed;
+    right: 0px;
+    padding-left: 5px !important;
+    top: 0;
+    bottom: 0px;
+    height: 100vh !important;
+    z-index: 12;
+    transition: 0.5s ease all;
+    padding: 10px;
+    margin-right: -35%;
+}
+
+.right-panelos.active {
     margin-right: 0px;
     transition: 0.5s ease all;
 }
@@ -1041,6 +1094,9 @@ span.sticker-details {
 .label-Rejected {
     background: #e74c3c;
 }
+.label-OrderRejected {
+    background: #e74c3c;
+}
 
 .filter-window {
     z-index: 10;
@@ -1184,6 +1240,10 @@ p.dropdown-toggle i {
 }
 
 .pi_actions button {
+    margin-left: 5px;
+}
+
+.invoice_actions button {
     margin-left: 5px;
 }
 

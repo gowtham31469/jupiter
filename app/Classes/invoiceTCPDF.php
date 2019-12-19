@@ -105,7 +105,7 @@ class invoiceTCPDF extends \TCPDF
                                 
                             </td>
                             <td width="116.5">
-                                <p>Recievers Signature </p>
+                                <p>Receivers Signature </p>
                             </td>
                             <td width="100">
                                 <p>Prepared By</p>

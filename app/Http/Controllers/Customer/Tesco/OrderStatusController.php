@@ -23,6 +23,7 @@ use Auth;
 use Carbon\Carbon;
 use App\Classes\EditErpOrders;
 use App\Classes\ERPOrderStatusCheck;
+use Illuminate\Support\Facades\Redis;
 
 class OrderStatusController extends Controller
 {
@@ -210,7 +211,14 @@ class OrderStatusController extends Controller
                             ->get();
 	    }
             
+            /***********REDIS***************/
+            /** set order-status data into redis */ 
+            Redis::set('customer-order-status:tesco', json_encode($data));
 
+            /***********REDIS***************/
+            /** get order-status data from redis */
+            $data = Redis::get('customer-order-status:tesco');
+            $data = json_decode($data);
             $result = response()->json(['error'=> false,'message' =>'success','data'=>$data],200);            
         }
         catch (\Exception $e)
@@ -811,7 +819,7 @@ class OrderStatusController extends Controller
                 $data_array['buyer_id'] = $tesco_buyer_id->id;
                 $data_array['id'] = $value[1];
                 $data_array['created_by']= Auth::guard('web_customer')->id(); 
-                $updated_erp_table = $erp_obj->updateTescoErpOrders($data_array);
+                $erp_obj->updateTescoErpOrders($data_array);
             }
             $result = response()->json(['error'=> false,'message' =>'success'],200); 
            
@@ -835,27 +843,54 @@ class OrderStatusController extends Controller
 			$erp_obj   =   new ErpOrders();
             $id        =   explode(',',$request->id);
             $po        =   $request->po;
-            $erp_orders = DB::table('erp_orders')->where('po_no',$po)->select('*')->first();
+            $erp_orders = DB::table('erp_orders')->where('po_no',$po)->select('po_file')->first();
             
             foreach($id as $val)
             {
                 $value    =  explode('-',$val);
-            
+                $order_po_file = DB::table($value[0])->where('id',$value[1])->select('po_file')->first();
+
+                // po file status and po file path
+                if(sizeof($erp_orders) > 0)
+                {
+                    $status = "PO Uploaded";
+                    $po_file = $erp_orders->po_file;
+                }
+                else 
+                {
+                    // if po is already uploaded, set status as po uploaded
+                    if(sizeof($order_po_file) > 0)
+                    {
+                        $status = "PO Uploaded";
+                        $po_file = $order_po_file->po_file;
+                    }
+                    else
+                    {
+                        $status = "PO Pending";
+                        $po_file = $order_po_file;
+                    }
+                    
+                }
+
                 DB::table($value[0])->where('id',$value[1])
                    ->update([
                         'purchase_order_no' => $po,
-                        'po_file' => $erp_orders->po_file,
-                        'po_status' => "PO Pending",
+                        'po_file' => $po_file,
+                        'po_status' => $status,
                         'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                   ]);
-				 /** @var array [Pass array of values to updateTescoErpOrders function] */
-                $data_array = [];   
-                $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
-                $data_array['tableName'] = $value[0];
-                $data_array['buyer_id'] = $tesco_buyer_id->id;
-                $data_array['id'] = $value[1];
-                $data_array['created_by']= Auth::guard('web_customer')->id(); 
-                $updated_erp_table = $erp_obj->updateTescoErpOrders($data_array);
+                
+                  if($status === "PO Uploaded")
+                  {
+                        /** @var array [Pass array of values to updateTescoErpOrders function] */
+                        $data_array = [];   
+                        $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
+                        $data_array['tableName'] = $value[0];
+                        $data_array['buyer_id'] = $tesco_buyer_id->id;
+                        $data_array['id'] = $value[1];
+                        $data_array['created_by']= Auth::guard('web_customer')->id(); 
+                        $erp_obj->updateTescoErpOrders($data_array);
+                  }
             }
             $result = response()->json(['error'=> false,'message' =>'success'],200);
         }
@@ -932,7 +967,9 @@ class OrderStatusController extends Controller
             $quantity_details = DB::table($table_name.'_quanty')
                                 ->where($qnty_id,$order_details->id)->orderBy('id')->get();
             $template_file=DB::table('tesco_template')->where('item_id',$order_details->template_id)->select('*')->get();
-
+			
+			$tesco_item_master=DB::table('tesco_item_master')->where('id',$order_details->template_id)->select('*')->get();
+			
             $moq     =    DB::table('price_taxation')->where('template_id',$order_details->template_id)->where('customer_id',$order_details->tesco_supplier_id)->where('buyer_id',2)->value('moq');
 
             // fetch erp_order_details table status
@@ -944,7 +981,7 @@ class OrderStatusController extends Controller
 
             if ($order_details && $quantity_details)
             {
-                $result = response()->json(['error'=> false,'message' =>'success','order_details'=>$order_details,'quantity_details'=>$quantity_details,'template_file'=>$template_file,'moq' => $moq, 'erp_details' => $erp_order_details],200);
+                $result = response()->json(['error'=> false,'message' =>'success','order_details'=>$order_details,'quantity_details'=>$quantity_details,'template_file'=>$template_file,'tesco_item_master'=>$tesco_item_master,'moq' => $moq, 'erp_details' => $erp_order_details],200);
             }
             else
             {
@@ -973,8 +1010,8 @@ class OrderStatusController extends Controller
         $template_id     = $request['edit_id'];
         $template_name   = $request['template_name'];
         $zone            = $request['zone'];
-        $zone            = $request['zone'];
         $created_by      = Auth::guard('web_customer')->id();
+        $qr_code         = explode('|', $request['qr_code']);
 
         if($template_name == "TCL1")
         {
@@ -1088,7 +1125,8 @@ class OrderStatusController extends Controller
                                 'tesco_supplier_id'    => $customer_id,
                                 'rfid_compliant'       => $request['rfid'],
                                 'tag_at_source'        => $request['tag_at_source'],
-                                'is_order_count_empty' => $order_qnty
+                                'is_order_count_empty' => $order_qnty,
+                                'ocn_number'           => $request['tesco_ocn'],
                             ]);
 
             DB::table($qty_table_name)->where($foreign_key,$template_id)->delete();
@@ -1105,7 +1143,8 @@ class OrderStatusController extends Controller
                         'cases_per_carton'   => $case_size[$i],
                         'count'              => $count[$i],
                         'size'               => null,
-                        'ratio_pack_type'    => $this->ratio_pack_type[$i] 
+                        'ratio_pack_type'    => $this->ratio_pack_type[$i],
+                        'qr_code'           => $qr_code[$i]
                         ]);
                 }
                 else if(($template_name == "TCL4" && $zone=="CE") || ($template_name == "TSL3" && $zone=="CE") || ($template_name == "THL3" && $zone=="CE"))
@@ -1116,7 +1155,8 @@ class OrderStatusController extends Controller
                         $foreign_key         => $template_id,
                         'case_size'          => $case_size[$i],
                         'count'              => $count[$i],
-                        'size'               => $single_size[$i]
+                        'size'               => $single_size[$i],
+                        'qr_code'           => $qr_code[$i]
                         ]);
                 }
                 else if(($template_name == "TCL4" && $zone=="UK") || ($template_name == "TSL3" && $zone=="UK") || ($template_name == "THL3" && $zone=="UK"))

@@ -479,7 +479,7 @@ function renderParsedValues(parsedObj) {
 	if(typeof parsedObj.originalDescription !== 'undefined') {
 		$('#tesco_description').prev().text($('#tesco_description').prev().text()+'(Full Description: '+parsedObj.originalDescription+')');
 		
-//		$('#tesco_description').append('<input type="hidden" id="tesco_full_description" value="'+parsedObj.originalDescription+'">');
+		$('#tesco_full_description').val(parsedObj.originalDescription);
   	}
 
     if(type === 'single') {

@@ -10,6 +10,8 @@ use View;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use DB;
+use Illuminate\Support\Facades\Redis;
+
 
 /**
  * Audit Trail controller
@@ -65,60 +67,74 @@ class AuditTrailController extends Controller
     {
       try {
             $id = $request['id'];
-            $comparison_data = DB::table('audits')
+
+            /***********REDIS***************/
+            /** get auditing data from redis */
+            $comparison_data = Redis::get('price:audit:'.$id);
+            
+            if(!$comparison_data){
+              $comparison_data = DB::table('audits')
                                 ->select('audits.id','audits.module','audits.old_values','audits.new_values')
                                 ->where('audits.id',$id)
                                 ->get();
-            foreach ($comparison_data as $key => $value) 
-            {
-               // get company, buyer and template name from old values json object
-               $old_data = json_decode($value->old_values);
-               if($old_data)
-               {
-                    $company_name = DB::table('customers')
-                                     ->select('customers.company_name')
-                                     ->where('customers.id',$old_data->company_id)
-                                     ->first();
-                    $old_data->company = $company_name->company_name;
-                    $buyer_name = DB::table('buyers')
-                                     ->select('buyers.buyer_name')
-                                     ->where('buyers.id',$old_data->buyer_id)
-                                     ->first();
-                    $old_data->buyer = $buyer_name->buyer_name;
-                    $template = DB::table('tesco_item_master')
-                                     ->select('tesco_item_master.item_name')
-                                     ->where('tesco_item_master.id',$old_data->template_id)
-                                     ->where('tesco_item_master.company_id',1)
-                                     ->first();
-                    $old_data->template = $template->item_name;
-                    unset($old_data->company_id);
-                    unset($old_data->buyer_id);
-                    unset($old_data->template_id);
-                    $value->old_values = json_encode($old_data);
-               }
-               // get company, buyer and template name from new values json object
-               $new_data = json_decode($value->new_values);
-               $company_name = DB::table('customers')
-                                ->select('customers.company_name')
-                                ->where('customers.id',$new_data->company_id)
-                                ->first();
-               $new_data->company = $company_name->company_name;
-               $buyer_name = DB::table('buyers')
-                                ->select('buyers.buyer_name')
-                                ->where('buyers.id',$new_data->buyer_id)
-                                ->first();
-               $new_data->buyer = $buyer_name->buyer_name;
-               $template = DB::table('tesco_item_master')
-                                ->select('tesco_item_master.item_name')
-                                ->where('tesco_item_master.id',$new_data->template_id)
-                                ->where('tesco_item_master.company_id',1)
-                                ->first();
-               $new_data->template = $template->item_name;
-               unset($new_data->company_id);
-               unset($new_data->buyer_id);
-               unset($new_data->template_id);
-               $value->new_values = json_encode($new_data);
+              foreach ($comparison_data as $key => $value) 
+              {
+                // get company, buyer and template name from old values json object
+                $old_data = json_decode($value->old_values);
+                if($old_data)
+                {
+                      $company_name = DB::table('customers')
+                                      ->select('customers.company_name')
+                                      ->where('customers.id',$old_data->company_id)
+                                      ->first();
+                      $old_data->company = $company_name->company_name;
+                      $buyer_name = DB::table('buyers')
+                                      ->select('buyers.buyer_name')
+                                      ->where('buyers.id',$old_data->buyer_id)
+                                      ->first();
+                      $old_data->buyer = $buyer_name->buyer_name;
+                      $template = DB::table('tesco_item_master')
+                                      ->select('tesco_item_master.item_name')
+                                      ->where('tesco_item_master.id',$old_data->template_id)
+                                      ->where('tesco_item_master.company_id',1)
+                                      ->first();
+                      $old_data->template = $template->item_name;
+                      unset($old_data->company_id);
+                      unset($old_data->buyer_id);
+                      unset($old_data->template_id);
+                      $value->old_values = json_encode($old_data);
+                }
+                // get company, buyer and template name from new values json object
+                $new_data = json_decode($value->new_values);
+                $company_name = DB::table('customers')
+                                  ->select('customers.company_name')
+                                  ->where('customers.id',$new_data->company_id)
+                                  ->first();
+                $new_data->company = $company_name->company_name;
+                $buyer_name = DB::table('buyers')
+                                  ->select('buyers.buyer_name')
+                                  ->where('buyers.id',$new_data->buyer_id)
+                                  ->first();
+                $new_data->buyer = $buyer_name->buyer_name;
+                $template = DB::table('tesco_item_master')
+                                  ->select('tesco_item_master.item_name')
+                                  ->where('tesco_item_master.id',$new_data->template_id)
+                                  ->where('tesco_item_master.company_id',1)
+                                  ->first();
+                $new_data->template = $template->item_name;
+                unset($new_data->company_id);
+                unset($new_data->buyer_id);
+                unset($new_data->template_id);
+                $value->new_values = json_encode($new_data);
+              }
+               
+              /***********REDIS***************/
+              /** set auditing data into redis */ 
+              Redis::set('price:audit:'.$id, json_encode($comparison_data));
+            } else {
+              $comparison_data = json_decode($comparison_data);
             }
+            
             return response()->json(['error'=>'false','message' =>'success', 'comparison_data' => $comparison_data]);
           } catch (\Exception $e)
           {

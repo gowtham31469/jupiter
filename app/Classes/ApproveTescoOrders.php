@@ -32,7 +32,6 @@ class ApproveTescoOrders
 {
 
   private $current_date;
-  private $buyer_id;
   /**
    * Create a new controller instance.
    *
@@ -69,7 +68,7 @@ class ApproveTescoOrders
                           'order_approved_at' => $this->current_date
                         ]);
               $order_details  = $order_model::where('id',$template_id)
-                                  ->select('id','order_status','tesco_supplier_id','purchase_order_no','pi_id')
+                                  ->select('id','order_status','tesco_supplier_id','purchase_order_no','pi_id', 'order_created_at', 'order_approved_at')
                                   ->first();
 
               $order_qty_details  = $order_qty_model::where(strtolower($table).'_order_id', $order_details->id)
@@ -101,7 +100,9 @@ class ApproveTescoOrders
                     {
                       ErpOrderDetails::where('id',$erp_order_qty->id)
                             ->update([
-                                      'order_status_id'  => $order_status_id->id
+                                      'order_status_id'  => $order_status_id->id,
+                                      'order_date'       => $order_details->order_created_at,
+				                          		'aw_date'          => $order_details->order_approved_at
                                     ]);
                     }
                   }

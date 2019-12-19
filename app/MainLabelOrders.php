@@ -16,5 +16,5 @@ class MainLabelOrders extends Authenticatable
      */
 
     protected $table = 'orchestra_main_label_orders';
-    protected $fillable =['uvc','template_id','template_name','delivery_date','svg_path','status','pi_status','po_status','final_qty','customer_id'];
+    protected $fillable =['uvc','template_id','delivery_date','svg_path','status','pi_status','po_status','customer_id','orchestra_parcel_details_id','season_code','color_code','template_type'];
 }

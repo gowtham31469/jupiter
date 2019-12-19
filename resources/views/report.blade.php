@@ -1,8 +1,9 @@
-<!doctype html>
+@extends('layouts.Erp.app')
+{{-- <!doctype html> --}}
 
-<html lang="en">
+{{-- <html lang="en"> --}}
 
-<head>
+{{-- <head>
 	<meta charset="utf-8">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -11,17 +12,32 @@
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.5/css/bootstrap-select.min.css">
 
-	<!-- <link rel="stylesheet" href="./css/style.css"> -->
+	<!-- <link rel="stylesheet" href="./css/style.css"> --> --}}
+
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 	<style type="text/css">
 		.filter1{right: 5%;position: absolute;}
+		.dateGap{padding: 2.6%;    background: transparent;
+    border: none;
+    border-bottom: 1px solid teal;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border-radius: 0;}
 	</style>
-</head>
+{{-- </head> --}}
 
-<body>
-
+{{-- <body> --}}
+@section('navbar')
+<ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
+	<li><a href="{{ route('jobcard-manager') }}">Create Jobcard</a></li>
+	<li><a href="{{ route('jobcards-list') }}"  class="active">Jobcards List</a></li>
+</ul>
+@endsection
+@section('content')
 	<div class="container">
-
+		<hr>
+		
 		<hr>
 		<div class="row">
 			<div class="col-md-3">
@@ -73,11 +89,35 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.5/js/bootstrap-select.min.js"></script>
-
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script type="text/javascript">
+		$(function () {
+			$("#txtFrom").datepicker({
+				numberOfMonths: 3,
+				defaultDate: '-1m',
+				dateFormat: 'yy-mm-dd',
+				onSelect: function (selected) {
+					var dt = new Date(selected);
+					dt.setDate(dt.getDate() + 1);
+					$("#txtTo").datepicker("option", "minDate", dt);
+				}
+			});
+			$("#txtTo").datepicker({
+				numberOfMonths: 3,
+				defaultDate: '-1m',
+				dateFormat: 'yy-mm-dd',
+				onSelect: function (selected) {
+					var dt = new Date(selected);
+					dt.setDate(dt.getDate() - 1);
+					$("#txtFrom").datepicker("option", "maxDate", dt);
+				}
+			});
+		});
+	</script>
 	<script type="text/javascript">
 
 		$(document).ready(function($) {
-				
+
 			$(document).on('click', '#filter1', function(event) {
 				event.preventDefault();
 				/* Act on the event */
@@ -87,9 +127,9 @@
 				console.log($("#season").val())
 				console.log($("#template").val())
 
-					$.ajax({
+				$.ajax({
 					type : 'get',
-					url : '/filter_1',
+					url : '/level1Filter',
 					data:{
 						'buyer': $("#buyer").val(),
 						'country': $("#country").val(),
@@ -101,12 +141,13 @@
 					{
 
 					}
-					});
+				});
 			});
 
 		});
 
 	</script>
-</body>
+	@endsection
+{{-- </body>
 
-</html>
+</html> --}}

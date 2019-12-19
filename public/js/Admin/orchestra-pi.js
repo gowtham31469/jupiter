@@ -7,10 +7,11 @@
  * @return profoma invoice
  */
 
-const genarateOrchetraPI = (id,table_name,uvc,pi_status) => 
+const genarateOrchetraPI = (id, table_name, uvc, pi_status, buyer_po) => 
 {
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     var buyer_id = localStorage.getItem("buyer_id");
+    var buyer_po_no = buyer_po === '-'?null:buyer_po
     $.ajax({
         url: base_url + "/admin/orchestra/order-management/show-orchestra-pi",
         type: "Post",
@@ -19,8 +20,10 @@ const genarateOrchetraPI = (id,table_name,uvc,pi_status) =>
             _token: csrf_token,
             table_name: table_name,
             buyer_id : buyer_id,
+            pi_status:pi_status,
             id:id,
-            uvc:uvc
+            uvc:uvc,
+            buyer_po:buyer_po_no
         },
         tryCount: 0,
         retryLimit: 2,
@@ -43,7 +46,7 @@ const genarateOrchetraPI = (id,table_name,uvc,pi_status) =>
                     $('.advnc').text(data.data.bank_details.payment_terms)
                     $('.freight').text(data.data.bank_details.freight_terms)
                     $('.pi_number').text(data.data.company_details.pi_number)
-                    $('.pi-date').text(moment(data.data.company_details.pi_date).format('DD/MM/YYYY'));
+                    $('.pi-date').text(data.data.company_details.pi_date);
 
                     // check if revision number is 0 or not.
                     if (data.data.company_details.rev_number!=0)
@@ -56,11 +59,11 @@ const genarateOrchetraPI = (id,table_name,uvc,pi_status) =>
                     }
 
                     // company details data
-                    $('#company_details').html('<strong style="font-size:11px;">'+data.data.company_details.name+'</strong><br/>'+data.data.company_details.address+'<br/>PH : '+data.data.company_details.office_phone+', '+data.data.company_details.phone+'<br/>GSTIN : '+data.data.company_details.gstin)
-                    $('#bill_to').html('<h4>Billing Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.bill_to.address+'</br> GSTIN :'+data.data.bank_details.gstin_number+ '</p>');
+                    $('#company_details').html('<h4><strong>'+data.data.company_details.name+'</strong></h4>'+data.data.company_details.address+'<br/>PH : '+data.data.company_details.office_phone+', '+data.data.company_details.phone+'<br/>GSTIN : '+data.data.company_details.gstin)
+                    $('#bill_to').html('<h4>Billing Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.bill_to.address+'-'+data.data.bill_to.pincode+'</br> GSTIN :'+data.data.bank_details.gstin_number+ '</p>');
 
                     // ship to details data
-                    $('#ship_to').html('<h4>Shipping Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.ship_to.address+'</p>')
+                    $('#ship_to').html('<h4>Shipping Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.ship_to.address+'-'+data.data.ship_to.pincode+'</p>')
                     $('#bank_details').html(' <strong>BANK DETAILS: </strong><table class="table table-condensed" style="width:50%;"><tr><td>BANK</td><td>'+data.data.company_details.bank+'</td></tr><tr><td>A/C No</td><td>'+data.data.company_details.account_no+'</td></tr><tr><td>A/C NAME</td><td>'+data.data.company_details.account_holder+'</td></tr><tr><td>IFSC CODE</td><td>'+data.data.company_details.ifsc_code+'</td></tr></table>');
 
                     // order details table.
@@ -126,18 +129,18 @@ const genarateOrchetraPI = (id,table_name,uvc,pi_status) =>
 
                         // price details missing
                         if(noPrice < 1) {
-                            tr += '</tbody></table></div><hr><h4 class="text-right"> Total Quantity : '+totalqnty+' </h4><hr><h4 class="text-right"> Sub-Total : ₹ '+subtotal.toFixed(2)+' </h4><hr/><div class="text-right">'
+                            tr += '</tbody></table></div><hr><h4 class="text-right"> Total Quantity : '+totalqnty+' </h4><hr><h4 class="text-right"> Sub-Total : &#x20b9; '+subtotal.toFixed(2)+' </h4><hr/><div class="text-right">'
                             if (data.data.bank_details.place_of_supply==1)
                             {
-                               tr += '<h4> CGST : (<span>'+(totalcgst).toFixed(2)+'</span>)</h4><h4> SGST : (<span>'+(totalsgst).toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p  style="text-transform: capitalize" id="bilamnt">'+RsPaise(billamnt.toFixed(2))+'  </p></div><hr /></div>'
+                               tr += '<h4> CGST : &#x20b9; (<span>'+(totalcgst).toFixed(2)+'</span>)</h4><h4> SGST : &#x20b9; (<span>'+(totalsgst).toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : &#x20b9; '+billamnt.toFixed(2)+' </h4><p  style="text-transform: capitalize" id="bilamnt">'+RsPaise(billamnt.toFixed(2))+'  </p></div><hr /></div>'
                             }
                             else if (data.data.bank_details.place_of_supply==2)
                             {
-                                tr += '<h4> IGST : (<span>'+totaligst.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p style="text-transform: capitalize" id="bilamnt">'+RsPaise(billamnt.toFixed(2))+' </p></div><hr /></div>'
+                                tr += '<h4> IGST : &#x20b9; (<span>'+totaligst.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : &#x20b9; '+billamnt.toFixed(2)+' </h4><p style="text-transform: capitalize" id="bilamnt">'+RsPaise(billamnt.toFixed(2))+' </p></div><hr /></div>'
                             }
                             else
                             {
-                                tr += '<h4> Taxes : (<span>'+amount.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹'+billamnt.toFixed(2)+' </h4><p style="text-transform: capitalize" id="bilamnt">'+RsPaise(billamnt.toFixed(2))+'  </p></div><hr /></div>'
+                                tr += '<h4> Taxes : &#x20b9; (<span>'+amount.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : &#x20b9;'+billamnt.toFixed(2)+' </h4><p style="text-transform: capitalize" id="bilamnt">'+RsPaise(billamnt.toFixed(2))+'  </p></div><hr /></div>'
                             }
                             $('#item_details').html(tr);
                             
@@ -154,13 +157,13 @@ const genarateOrchetraPI = (id,table_name,uvc,pi_status) =>
                             $('#profoma-invoice').modal("show")
 
                         } else {
-                            $('.snackbar_span').html('Price Details are Missing !!');
+                            $('.snackbar_span').html('Price details should be within a range !!');
                             showSnackbar();
                         }
                     }
                     else
                     {
-                        $('.snackbar_span').html('Price Details are Missing !!');
+                        $('.snackbar_span').html('Price details should be within a range !!');
                         showSnackbar();
                     }
                 } 
@@ -329,14 +332,12 @@ function orchestradownloadPi(template_id,id,table_name){
         { 
             200: function(data)
             {
-                var resp = JSON.stringify(data);
-                          console.log( base_url+data.responseText)
-                          $('.snackbar_span').html("Successfully send Invoice to the Customer !");
-                            showSnackbar();
-                        window.open(
-                           base_url+$.trim(data.responseText),
-                          '_blank' // <- This is what makes it open in a new window.
-                        );            
+                $('.snackbar_span').html("Successfully send Invoice to the Customer !");
+                showSnackbar();
+                window.open(
+                base_url+$.trim(data.responseText),
+                '_blank' // <- This is what makes it open in a new window.
+                );            
             },
             400: function()
             {
@@ -346,7 +347,6 @@ function orchestradownloadPi(template_id,id,table_name){
             }
         },
         error: function (data){
-            console.log(data);
         },
         complete: function () {
             $(".loader").hide();

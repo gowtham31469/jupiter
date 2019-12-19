@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use DB;
 use App\TemplateNotes;
+use App\OrchestraTemplate;
 
 class TemplateController extends Controller
 {
@@ -32,6 +33,29 @@ class TemplateController extends Controller
     public function index()
     {
         return view('Admin/login');
+    }
+
+    public function getTemplateDetails(Request $request)
+    {
+        $details=OrchestraTemplate::where('item_id',$request->id)->first();
+        if($details)
+        {
+           
+             return response()->json(['Msg'=>'success','Res'=>$details->toArray()]);
+        }
+        else{
+        
+            return response()->json(['Msg'=>'NotFound '.$request->id]);
+        }
+    }
+
+    function updatePath(Request $request)
+    {
+  
+        OrchestraTemplate::where('item_id', $request->item)
+        ->update(['template_file' => $request->path,'template_name' => $request->c1, 
+            'template_description' => $request->c2]);
+        return response()->json("success");
     }
 
     public function dashboard()
@@ -80,9 +104,17 @@ class TemplateController extends Controller
     }  
 	
 	public function templateHierarchy(Request $request)
-    {
+{
 	    $buyer = $request->buyer;
-        $treeviewData= DB::table($buyer."_item_master")->select('id','item_name as text','parent_id')->get()->toArray();
+		if($buyer == "tesco")
+		{
+			$treeviewData= DB::table($buyer."_item_master")->select('id','parent_id', DB::raw("(CASE WHEN is_qrcode_required = 0 THEN item_name ELSE CONCAT(item_name,' with QR ') END) as text"))->orderBy('id', 'asc')->get()->toArray();
+		}
+		else
+		{
+			$treeviewData= DB::table($buyer."_item_master")->select('id','parent_id','item_name as text')->orderBy('id', 'asc')->get()->toArray();
+		}
+        
          
         if($treeviewData){
                 $childs = array();

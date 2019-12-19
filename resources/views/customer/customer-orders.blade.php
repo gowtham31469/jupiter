@@ -228,6 +228,15 @@ border: 0;
     white-space: nowrap;
 }
 
+.check-list
+{
+	position: relative;
+	display: block;
+	padding: 10px 15px;
+	margin-bottom: -1px;
+	background-color: #fff;
+	border: 1px solid #ddd;
+}
 .more-menu-item:hover {
     background-color: #489fe5;
 }
@@ -359,11 +368,10 @@ background: rgba(0,0,0,0.2);
 		border: 2px solid transparent;
 		border-bottom: 2px solid;
 	}
-	
 
 	.left-panel.active {
-    margin-right: 0%;
-}
+    	margin-right: 0%;
+	}
 
 </style>
 <input type="hidden" id="status_flag">
@@ -596,6 +604,59 @@ background: rgba(0,0,0,0.2);
 	</div>
 </div>
 
+    <div class="modal fade" id="po-file-upload-group" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="gridSystemModalLabel">Purchase Order</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="uvc_select_div">
+                    </div>
+                    <div id="exist_artwork_div_status" class="hidden">
+                        <h4>Artworks : </h4>
+                        <label style='color:red' id='check_error_status' class='hidden'>Please select atleast one artwork</label>
+                        <ul class="list-group checked-list-box">
+                        </ul>
+                        <button type="button" id="new_po1_status" class="btn btn-primary hidden">New PO</button>
+                        <button type="button" id="map_po_status" class="btn btn-primary hidden">Map PO</button>
+                        <hr/>
+                    </div>
+
+                    <div id="map_po_div_status" class="hidden">
+                        <h4>Map to Existing PO : </h4>
+                        <label style="color:red" id="select_error_status" class="hidden">Please Select PO</label>
+                        <div class="form-group" id="po_select_div">
+                            <label>Select PO</label>
+                        </div>
+                    </div>
+
+                    <div id="new_po_div_status" class="hidden">
+                        <h4>New PO : </h4>
+                        <label style='color:red' id='new_po_error_status' class='hidden'>Please Enter PO Number</label>
+						 <label style='color:red' id='new_po_error_length_status' class='hidden'>Max 9 characters</label>
+                        <div class="form-group">
+                            <label>PO Number</label>
+                            <input id="new_po_no_status" style="width: 40%;" type="text" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label style='color:red' id='new_po_file_error_status' class='hidden'>Please upload Po File</label>
+                            <br><label >PO File</label>
+                            <input type="file" accept="application/pdf" id="new_po_file_status">
+                            <p class="help-block"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+                    <button type="button" id="update_new_po_status" class="btn btn-primary hidden">Update</button>
+                    <button type="button" id="update_po_status" class="btn btn-primary btn-sm hidden">Update</button>
+                    <button type="button" id="new_pos_status" class="btn btn-primary btn-sm hidden">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
 <!-- Proforma Invoice Modal -->
 <div class="modal fade" id="profoma-invoice" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
         <div class="modal-dialog modal-lg" role="document">

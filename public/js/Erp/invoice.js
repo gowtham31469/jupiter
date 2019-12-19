@@ -161,17 +161,20 @@
             var dlvryBx= (chkbx != "checked") ? "disabled" : "";
             
             if (itemName==value.item_name) {
-
+                var _ocn = value.ocn_number==null?'-':value.ocn_number;
+                var _refName = value.reference_name==null?'-':value.reference_name;
                 tr += '<tr class="trClass" id="'+value.id+'">';
-                tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" '+chkbx+'/></td><td class="order_id">'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><div class="form-group has-feedback"><input type="number" value="" class="form-control delivery-qnty" style="text-align: center;" required data-id="'+value.id+'" min="1" '+dlvryBx+'  onkeyup="updateAmount.call(this,'+uniqueTax+')"></div></td><td class="rate">'+value.rate+'</td><td style="border-width: 1px !important;" class="amnt">'+(value.pending_qnty * value.rate).toFixed(2)+'</td>';
+                tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" '+chkbx+'/></td><td class="order_id">'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+_ocn+'</td><td>'+_refName+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><div class="form-group has-feedback"><input type="number" value="" class="form-control delivery-qnty" style="text-align: center;" required data-id="'+value.id+'" min="1" '+dlvryBx+'  onkeyup="updateAmount.call(this,'+uniqueTax+')"></div></td><td class="rate">'+value.rate+'</td><td style="border-width: 1px !important;" class="amnt">'+(value.pending_qnty * value.rate).toFixed(2)+'</td>';
                 tr += '</tr>';
                 
             }
             else{
                 var hsnCode = value.hsn_code==null?'-':value.hsn_code;
+                var _ocn = value.ocn_number==null?'-':value.ocn_number;
+                var _refName = value.reference_name==null?'-':value.reference_name;
                 tr += '<tr class="trClass" id="'+value.id+'">';
                 tr += '<tr><td></td><td colspan="13"><strong style="float: left;">ITEM: '+value.item_name+'  HSNCode: '+hsnCode+'</strong></td></tr><tr class="trClass" id="'+value.id+'">';
-                tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" '+chkbx+'/></td><td class="order_id">'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><div class="form-group has-feedback"><input type="number" min="1" step="1" value="" class="form-control delivery-qnty" style="text-align: center;" required data-id="'+value.id+'" min="1" '+dlvryBx+' onkeyup="updateAmount.call(this,'+uniqueTax+')"></div></td><td class="rate">'+value.rate+'</td><td class="amnt" style="border-width: 1px !important;">'+(value.pending_qnty * value.rate).toFixed(2)+'</td>';
+                tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" '+chkbx+'/></td><td class="order_id">'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+_ocn+'</td><td>'+_refName+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><div class="form-group has-feedback"><input type="number" min="1" step="1" value="" class="form-control delivery-qnty" style="text-align: center;" required data-id="'+value.id+'" min="1" '+dlvryBx+' onkeyup="updateAmount.call(this,'+uniqueTax+')"></div></td><td class="rate">'+value.rate+'</td><td class="amnt" style="border-width: 1px !important;">'+(value.pending_qnty * value.rate).toFixed(2)+'</td>';
                 tr += '</tr>';
                  itemName =value.item_name
             }
@@ -416,6 +419,8 @@
               result[index] += parseFloat($(val).text());
             });
         }); 
+
+        console.log("+++++"+result[12])
         return result[12];
     }
     /**
@@ -556,7 +561,7 @@
         $('#credit-val').text(data[0].credit_limit)
         $('#company_details').html('<h4>'+company_details.name+'</h4>'+company_details.address+'<p>PH : '+company_details.office_phone+', '+company_details.phone+'</br> GSTIN : '+company_details.gstin+'</p>')
 
-        $('#bill_to').html('<p>Buyer</p><h4>'+data[0].company_name+'</h4><p>'+bill_to.address+'</br> GSTIN :'+data[0].gstin_number+ '</p>')
+        $('#bill_to').html('<p>Buyer</p><h4>'+data[0].company_name+'</h4><p>'+bill_to.address+','+bill_to.pincode+'</br> GSTIN :'+data[0].gstin_number+ '</p>')
         $('#disp_thru').text(data[0].delvry_thru);
         $('.order-details tbody input[type=checkbox]').each(function () {
             if ($(this).prop("checked") == false) {
@@ -619,14 +624,19 @@
                 pending_qnty = value.pending_qnty - delQnty
 
                 if (itemName==value.item_name) {
+                    var _ocn = value.ocn_number==null?'-':value.ocn_number;
+                    var _refName = value.reference_name==null?'-':value.reference_name;
+
                     tr += '<tr class="trClass" id="'+value.id+'">';
-                    tr += '<td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+' </td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td style="border-width: 1px !important;" class="amnt">'+(delQnty * value.rate).toFixed(2)+'</td>';
+                    tr += '<td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+_ocn+'</td><td>'+_refName+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+' </td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td style="border-width: 1px !important;" class="amnt">'+(delQnty * value.rate).toFixed(2)+'</td>';
                     tr += '</tr>';
                 }
                 else{
                     var hsnCode = value.hsn_code==null?'-':value.hsn_code;
+                    var _ocn = value.ocn_number==null?'-':value.ocn_number;
+                    var _refName = value.reference_name==null?'-':value.reference_name;
                     tr += '<tr><td></td><td colspan="13"><strong style="float: left;">ITEM: '+value.item_name+'  HSNCode: '+hsnCode+'</strong></td></tr>';
-                    tr += '<tr class="trClass" id="'+value.id+'"><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_number+'</td><td>'+value.reference_name+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+' </td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td class="amnt" style="border-width: 1px !important;">'+(delQnty * value.rate).toFixed(2)+'</td>';
+                    tr += '<tr class="trClass" id="'+value.id+'"><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+_ocn+'</td><td>'+_refName+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+' </td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td class="amnt" style="border-width: 1px !important;">'+(delQnty * value.rate).toFixed(2)+'</td>';
                     tr += '</tr>';
                     itemName =value.item_name
                 }               
@@ -696,7 +706,9 @@
                 
             $('.invoice_actions').html('<button class="btn btn-success btn-xs" id="save-invoice">Save</button><button type="button" class="btn btn-primary btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
             $('.amnt-in-words').text(RsPaise($('.grand-total').text()))
-            $('#save-invoice').on('click',function(){
+            $('#save-invoice').on('click',function(e){
+               
+            $(this).attr('disabled',true)
 
             var eChargesArr1 = [];
 
@@ -710,8 +722,13 @@
             });
                 saveInvoice(arr,eChargesArr1)
             })
-            $('.delivery-details').html('<div class="preview-delivery-at">'+$('.delivery-card.active').html()+'</div>')
-            $('#erp-invoice').modal("show")
+            $('.delivery-details').html('<div class="preview-delivery-at">'+$('.delivery-card.active').html()+'</div>');
+            /** [ Backdrop for bootstrap modal ] */
+            $('#erp-invoice').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+            $('#erp-invoice').modal("show");
         }
     }
 
@@ -774,6 +791,8 @@
         var invoiceNo = $('#invoice-no').val();
         var invoiceDate = $('#invoice-date').val();
         var delivery_at = $('.preview-delivery-at').find('.d_address').attr('data-id');
+        var base = totalAmount();
+        
         $.ajax({
             url: "/erp/save-invoice",
             type: 'POST',
@@ -791,7 +810,8 @@
                 invoiceDate:invoiceDate,
                 eCharges:eCharges,
                 delivery_at:delivery_at,
-                finalData:finalData
+                finalData:finalData,
+                base_amt : base
                 
             },
             tryCount: 0,

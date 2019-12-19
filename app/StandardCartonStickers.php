@@ -16,5 +16,5 @@ class StandardCartonStickers extends Authenticatable
      */
 
     protected $table = 'orchestra_standard_carton_sticker_orders';
-    protected $fillable =['uvc','template_id','po','height','no_of_carton','total_polybag','final_order_qty_sets','order_qty','final_order_qty','delivery_date','svg_path','status','pi_status','po_status','customer_id'];
+    protected $fillable =['uvc','template_id','po','height','no_of_carton','total_polybag','final_order_qty_sets','order_qty','final_order_qty','delivery_date','svg_path','status','orchestra_parcel_details_id','season_code','pi_status','po_status','customer_id','color_code','group_id','template_type'];
 }
