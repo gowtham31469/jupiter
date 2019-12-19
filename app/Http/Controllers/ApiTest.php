@@ -46,218 +46,175 @@ use App\Classes\JobcardPDFHeaderFooter;
 use App\Classes\FPDF_Merge;
 use File;
 use Config;
+use Yajra\DataTables\Facades\DataTables;
+use App\TescoTCL1Orders;
+use App\TescoTCL1OrdersQuantity;
+use App\TescoTCL2Orders;
+use App\TescoTCL2OrdersQuantity;
+use App\TescoTCL4Orders;
+use App\TescoTCL4OrdersQuantity;
+use App\TescoTHL1Orders;
+use App\TescoTHL1OrdersQuantity;
+use App\TescoTHL3Orders;
+use App\TescoTHL3OrdersQuantity;
+use App\TescoTSL1Orders;
+use App\TescoTSL1OrdersQuantity;
+use App\TescoTSL3Orders;
+use App\TescoTSL3OrdersQuantity;
+
 
 class ApiTest extends Controller
 {
-   public function testApi(Request $request)
-   {
 
-$countries = array_unique(History::all()->sortBy('country')->pluck('country')->toArray());
-dd($countries);
+  public function getOrderStatusesOrch()
+  {
 
-$res = OrchestraSolidCartonSticker::with(['solidcartonstickerqty' => 
-            function($query)
-            {  
-              $query->groupBy('size')
-                  ->groupBy('orchestra_solid_carton_sticker_orders_qty.id');
-            }])
-            ->where('orchestra_solid_carton_sticker_orders.id',2)
-            ->get();
-          
-            $res->map(function ($res) {
-            $res->theme = OrchestraParcelDetails::where('id',$res->orchestra_parcel_details_id)->first()->Theme;
-            $res->reference_name = "Solid Carton Stickers";
-            $res->age_group = OrchestraAgeGroup::where('id',$res->group_id)->first()->color;
-            });
-          
+    $ddmmyy="DD-MM-YYYY";
+      $actions='-';
+            $data1 = DB::table('orchestra_hang_tag_orders')->join('orchestra_parcel_details','orchestra_parcel_details.UVC','=','orchestra_hang_tag_orders.uvc')->join('orchestra_item_master','orchestra_item_master.id','=','orchestra_hang_tag_orders.template_front_id')->leftjoin('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('orchestra_hang_tag_orders.status','!=','Order Cancelled')->select('orchestra_hang_tag_orders.color_code','orchestra_parcel_details.UVC',DB::raw("orchestra_hang_tag_orders.season_code as \"Season\""),DB::raw("'-' as \"BuyerPONo\""),DB::raw("'Hang Tag' as \"ArtworkType\""),DB::raw("'Hang Tag' as \"TemplateName\""),'orchestra_item_master.item_name as Reference No','customers.id as customer_id','orchestra_parcel_details.SupplierName as SupplierName',DB::raw("to_char(orchestra_hang_tag_orders.created_at,"."'".$ddmmyy."'".") as \"OrderDate\""),DB::raw("to_char(orchestra_hang_tag_orders.delivery_date,"."'".$ddmmyy."'".") as \"DeliveryDate\""),'orchestra_hang_tag_orders.status as artworkStatus','orchestra_hang_tag_orders.pi_status as pIstatus','orchestra_hang_tag_orders.po_status as PO Status','orchestra_hang_tag_orders.po_number as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'orchestra_hang_tag_orders' as \"tableName\""),'orchestra_hang_tag_orders.id  as tableID','orchestra_hang_tag_orders.po_file','customers.pi_required','customers.po_required','orchestra_hang_tag_orders.template_front_id as template_id','orchestra_hang_tag_orders.order_flag','customers.delivery_day_count','orchestra_hang_tag_orders.is_order_count_empty')->groupBy('orchestra_parcel_details.UVC','orchestra_parcel_details.SupplierName','orchestra_hang_tag_orders.created_at','orchestra_hang_tag_orders.delivery_date','orchestra_hang_tag_orders.status','orchestra_hang_tag_orders.pi_status','orchestra_hang_tag_orders.status','orchestra_hang_tag_orders.po_status','orchestra_hang_tag_orders.po_number','customers.pi_required','customers.id','orchestra_hang_tag_orders.id','orchestra_item_master.item_name')->orderBy('orchestra_hang_tag_orders.id','asc')->get();
+    
+            $data2 = DB::table('orchestra_special_tag_orders')->join('orchestra_parcel_details','orchestra_parcel_details.UVC','=','orchestra_special_tag_orders.uvc')->join('orchestra_item_master','orchestra_item_master.id','=','orchestra_special_tag_orders.template_id')->leftjoin('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('orchestra_special_tag_orders.status','!=','Order Cancelled')->select('orchestra_special_tag_orders.color_code','orchestra_parcel_details.UVC',DB::raw("orchestra_special_tag_orders.season_code as \"Season\""),DB::raw("'-' as \"BuyerPONo\""),DB::raw("'Special Tag' as \"ArtworkType\""),DB::raw("'Special Tag' as \"TemplateName\""),'orchestra_item_master.item_name as Reference No','customers.id as customer_id','orchestra_parcel_details.SupplierName as SupplierName',DB::raw("to_char(orchestra_special_tag_orders.created_at,"."'".$ddmmyy."'".") as \"OrderDate\""),DB::raw("to_char(orchestra_special_tag_orders.delivery_date,"."'".$ddmmyy."'".") as \"DeliveryDate\""),'orchestra_special_tag_orders.status as artworkStatus','orchestra_special_tag_orders.pi_status as pIstatus','orchestra_special_tag_orders.po_status as PO Status','orchestra_special_tag_orders.po_number as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'orchestra_special_tag_orders' as \"tableName\""),'orchestra_special_tag_orders.id  as tableID','orchestra_special_tag_orders.po_file','customers.pi_required','customers.po_required','orchestra_special_tag_orders.template_id','orchestra_special_tag_orders.order_flag','customers.delivery_day_count','orchestra_special_tag_orders.is_order_count_empty')->groupBy('orchestra_parcel_details.UVC','orchestra_parcel_details.SupplierName','orchestra_special_tag_orders.created_at','orchestra_special_tag_orders.delivery_date','orchestra_special_tag_orders.status','orchestra_special_tag_orders.pi_status','orchestra_special_tag_orders.status','orchestra_special_tag_orders.po_status','orchestra_special_tag_orders.po_number','customers.pi_required','customers.id','orchestra_special_tag_orders.id','orchestra_item_master.item_name')->orderBy('orchestra_special_tag_orders.id','asc')->get();
+     
+               
+            $data3 = DB::table('orchestra_main_label_orders')->join('orchestra_parcel_details','orchestra_parcel_details.UVC','=','orchestra_main_label_orders.uvc')->join('orchestra_item_master','orchestra_item_master.id','=','orchestra_main_label_orders.template_id')->leftjoin('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('orchestra_main_label_orders.status','!=','Order Cancelled')->select('orchestra_main_label_orders.color_code','orchestra_parcel_details.UVC',DB::raw("orchestra_main_label_orders.season_code as \"Season\""),DB::raw("'-' as \"BuyerPONo\""),DB::raw("'Main Label' as \"ArtworkType\""),DB::raw("'Main Label' as \"TemplateName\""),'orchestra_item_master.item_name as Reference No','customers.id as customer_id','orchestra_parcel_details.SupplierName as SupplierName',DB::raw("to_char(orchestra_main_label_orders.created_at,"."'".$ddmmyy."'".") as \"OrderDate\""),DB::raw("to_char(orchestra_main_label_orders.delivery_date,"."'".$ddmmyy."'".") as \"DeliveryDate\""),'orchestra_main_label_orders.status as artworkStatus','orchestra_main_label_orders.pi_status as pIstatus','orchestra_main_label_orders.po_status as PO Status','orchestra_main_label_orders.po_number as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'orchestra_main_label_orders' as \"tableName\""),'orchestra_main_label_orders.id  as tableID','orchestra_main_label_orders.po_file','customers.pi_required','customers.po_required','orchestra_main_label_orders.template_id','orchestra_main_label_orders.order_flag','customers.delivery_day_count','orchestra_main_label_orders.is_order_count_empty')->groupBy('orchestra_parcel_details.UVC','orchestra_parcel_details.SupplierName','orchestra_main_label_orders.created_at','orchestra_main_label_orders.delivery_date','orchestra_main_label_orders.status','orchestra_main_label_orders.pi_status','orchestra_main_label_orders.status','orchestra_main_label_orders.po_status','orchestra_main_label_orders.po_number','customers.pi_required','customers.id','orchestra_main_label_orders.id','orchestra_item_master.item_name')->orderBy('orchestra_main_label_orders.id','asc')->get();
+    
+      $data3 = DB::table('orchestra_size_label_orders')->join('orchestra_parcel_details','orchestra_parcel_details.UVC','=','orchestra_size_label_orders.uvc')->join('orchestra_item_master','orchestra_item_master.id','=','orchestra_size_label_orders.template_id')->leftjoin('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('orchestra_size_label_orders.status','!=','Order Cancelled')->select('orchestra_size_label_orders.color_code','orchestra_parcel_details.UVC',DB::raw("orchestra_size_label_orders.season_code as \"Season\""),DB::raw("'-' as \"BuyerPONo\""),DB::raw("'Size Label' as \"ArtworkType\""),DB::raw("'Size Label' as \"TemplateName\""),'orchestra_item_master.item_name as Reference No','customers.id as customer_id','orchestra_parcel_details.SupplierName as SupplierName',DB::raw("to_char(orchestra_size_label_orders.created_at,"."'".$ddmmyy."'".") as \"OrderDate\""),DB::raw("to_char(orchestra_size_label_orders.delivery_date,"."'".$ddmmyy."'".") as \"DeliveryDate\""),'orchestra_size_label_orders.status as artworkStatus','orchestra_size_label_orders.pi_status as pIstatus','orchestra_size_label_orders.po_status as PO Status','orchestra_size_label_orders.po_number as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'orchestra_size_label_orders' as \"tableName\""),'orchestra_size_label_orders.id  as tableID','orchestra_size_label_orders.po_file','customers.pi_required','customers.po_required','orchestra_size_label_orders.template_id','orchestra_size_label_orders.order_flag','customers.delivery_day_count','orchestra_size_label_orders.is_order_count_empty')->groupBy('orchestra_parcel_details.UVC','orchestra_parcel_details.SupplierName','orchestra_size_label_orders.created_at','orchestra_size_label_orders.delivery_date','orchestra_size_label_orders.status','orchestra_size_label_orders.pi_status','orchestra_size_label_orders.status','orchestra_size_label_orders.po_status','orchestra_size_label_orders.po_number','customers.pi_required','customers.id','orchestra_size_label_orders.id','orchestra_item_master.item_name')->orderBy('orchestra_size_label_orders.id','asc')->get();
+    
+      $data4 = DB::table('orchestra_heat_transfer_orders')->join('orchestra_parcel_details','orchestra_parcel_details.UVC','=','orchestra_heat_transfer_orders.uvc')->join('orchestra_item_master','orchestra_item_master.id','=','orchestra_heat_transfer_orders.template_id')->leftjoin('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('orchestra_heat_transfer_orders.status','!=','Order Cancelled')->select('orchestra_heat_transfer_orders.color_code','orchestra_parcel_details.UVC',DB::raw("orchestra_heat_transfer_orders.season_code as \"Season\""),DB::raw("'-' as \"BuyerPONo\""),DB::raw("'Heat Transfer' as \"ArtworkType\""),DB::raw("'Heat Transfer' as \"TemplateName\""),'orchestra_item_master.item_name as Reference No','customers.id as customer_id','orchestra_parcel_details.SupplierName as SupplierName',DB::raw("to_char(orchestra_heat_transfer_orders.created_at,"."'".$ddmmyy."'".") as \"OrderDate\""),DB::raw("to_char(orchestra_heat_transfer_orders.delivery_date,"."'".$ddmmyy."'".") as \"DeliveryDate\""),'orchestra_heat_transfer_orders.status as artworkStatus','orchestra_heat_transfer_orders.pi_status as pIstatus','orchestra_heat_transfer_orders.po_status as PO Status','orchestra_heat_transfer_orders.po_number as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'orchestra_heat_transfer_orders' as \"tableName\""),'orchestra_heat_transfer_orders.id  as tableID','orchestra_heat_transfer_orders.po_file','customers.pi_required','customers.po_required','orchestra_heat_transfer_orders.template_id','orchestra_heat_transfer_orders.order_flag','customers.delivery_day_count','orchestra_heat_transfer_orders.is_order_count_empty')->groupBy('orchestra_parcel_details.UVC','orchestra_parcel_details.SupplierName','orchestra_heat_transfer_orders.created_at','orchestra_heat_transfer_orders.delivery_date','orchestra_heat_transfer_orders.status','orchestra_heat_transfer_orders.pi_status','orchestra_heat_transfer_orders.status','orchestra_heat_transfer_orders.po_status','orchestra_heat_transfer_orders.po_number','customers.pi_required','customers.id','orchestra_heat_transfer_orders.id','orchestra_item_master.item_name')->orderBy('orchestra_heat_transfer_orders.id','asc')->get();
 
-          dd($res);
+            $data5 = DB::table('orchestra_wash_care_label_orders')->join('orchestra_parcel_details','orchestra_parcel_details.UVC','=','orchestra_wash_care_label_orders.uvc')->join('orchestra_item_master','orchestra_item_master.id','=','orchestra_wash_care_label_orders.template_id')->leftjoin('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('orchestra_wash_care_label_orders.status','!=','Order Cancelled')->select('orchestra_wash_care_label_orders.color_code','orchestra_parcel_details.UVC',DB::raw("orchestra_wash_care_label_orders.season_code as \"Season\""),DB::raw("orchestra_wash_care_label_orders.po as \"BuyerPONo\""),DB::raw("'WashCareLabel' as \"ArtworkType\""),'orchestra_wash_care_label_orders.template_name as TemplateName','orchestra_item_master.item_name as Reference No','customers.id as customer_id','orchestra_parcel_details.SupplierName as SupplierName',DB::raw("to_char(orchestra_wash_care_label_orders.created_at,"."'".$ddmmyy."'".") as \"OrderDate\""),DB::raw("to_char(orchestra_wash_care_label_orders.delivery_date,"."'".$ddmmyy."'".") as \"DeliveryDate\""),'orchestra_wash_care_label_orders.status as artworkStatus','orchestra_wash_care_label_orders.pi_status as pIstatus','orchestra_wash_care_label_orders.po_status as PO Status','orchestra_wash_care_label_orders.po_number as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'orchestra_wash_care_label_orders' as \"tableName\""),'orchestra_wash_care_label_orders.id  as tableID','orchestra_wash_care_label_orders.po_file','customers.pi_required','customers.po_required','orchestra_wash_care_label_orders.template_id','orchestra_wash_care_label_orders.order_flag','customers.delivery_day_count','orchestra_wash_care_label_orders.is_order_count_empty')->groupBy('orchestra_parcel_details.UVC','orchestra_parcel_details.SupplierName','orchestra_wash_care_label_orders.created_at','orchestra_wash_care_label_orders.delivery_date','orchestra_wash_care_label_orders.status','orchestra_wash_care_label_orders.pi_status','orchestra_wash_care_label_orders.status','orchestra_wash_care_label_orders.po_status','orchestra_wash_care_label_orders.po_number','customers.pi_required','customers.id','orchestra_wash_care_label_orders.id','orchestra_item_master.item_name')->orderBy('orchestra_wash_care_label_orders.id','asc')->get();
 
+            $data6 = DB::table('orchestra_solid_carton_sticker_orders')->join('orchestra_parcel_details','orchestra_parcel_details.UVC','=','orchestra_solid_carton_sticker_orders.uvc')->join('orchestra_item_master','orchestra_item_master.id','=','orchestra_solid_carton_sticker_orders.template_id')->leftjoin('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('orchestra_solid_carton_sticker_orders.status','!=','Order Cancelled')->select(DB::raw('distinct on (orchestra_solid_carton_sticker_orders.uvc,orchestra_solid_carton_sticker_orders.po) "UVC"'),DB::raw("orchestra_solid_carton_sticker_orders.season_code as \"Season\""),DB::raw("orchestra_solid_carton_sticker_orders.po as \"BuyerPONo\""),DB::raw("'Solid Carton Stickers' as \"ArtworkType\""),DB::raw("'Solid Carton Stickers' as \"TemplateName\""),'customers.id as customer_id','orchestra_parcel_details.SupplierName as SupplierName',DB::raw("to_char(orchestra_solid_carton_sticker_orders.created_at,"."'".$ddmmyy."'".") as \"OrderDate\""),DB::raw("to_char(orchestra_solid_carton_sticker_orders.delivery_date,"."'".$ddmmyy."'".") as \"DeliveryDate\""),'orchestra_solid_carton_sticker_orders.color_code','orchestra_solid_carton_sticker_orders.status as artworkStatus','orchestra_solid_carton_sticker_orders.pi_status as pIstatus','orchestra_solid_carton_sticker_orders.po_status as PO Status','orchestra_solid_carton_sticker_orders.po_number as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'orchestra_solid_carton_sticker_orders' as \"tableName\""),'orchestra_solid_carton_sticker_orders.id  as tableID','orchestra_solid_carton_sticker_orders.po_file','customers.pi_required','customers.po_required','orchestra_solid_carton_sticker_orders.template_id','orchestra_solid_carton_sticker_orders.order_flag','customers.delivery_day_count','orchestra_solid_carton_sticker_orders.is_order_count_empty')->where('orchestra_parcel_details.IsSTD',0)->groupBy('orchestra_solid_carton_sticker_orders.uvc','orchestra_parcel_details.UVC','orchestra_solid_carton_sticker_orders.po','orchestra_parcel_details.SupplierName','orchestra_solid_carton_sticker_orders.created_at','orchestra_solid_carton_sticker_orders.delivery_date','orchestra_solid_carton_sticker_orders.status','orchestra_solid_carton_sticker_orders.pi_status','orchestra_solid_carton_sticker_orders.status','orchestra_solid_carton_sticker_orders.po_status','orchestra_solid_carton_sticker_orders.po_number','customers.pi_required','customers.id','orchestra_solid_carton_sticker_orders.id')->get();
+              
+            $data7 = DB::table('orchestra_solid_poly_bag_sticker_orders')->join('orchestra_parcel_details','orchestra_parcel_details.UVC','=','orchestra_solid_poly_bag_sticker_orders.uvc')->join('orchestra_item_master','orchestra_item_master.id','=','orchestra_solid_poly_bag_sticker_orders.template_id')->leftjoin('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('orchestra_solid_poly_bag_sticker_orders.status','!=','Order Cancelled')->select(DB::raw('distinct on (orchestra_solid_poly_bag_sticker_orders.uvc,orchestra_solid_poly_bag_sticker_orders.po) "UVC"'),DB::raw("orchestra_solid_poly_bag_sticker_orders.season_code as \"Season\""),DB::raw("orchestra_solid_poly_bag_sticker_orders.po as \"BuyerPONo\""),DB::raw("'Solid Poly Bag Stickers' as \"ArtworkType\""),DB::raw("'Solid Poly Bag Stickers' as \"TemplateName\""),'customers.id as customer_id','orchestra_parcel_details.SupplierName as SupplierName',DB::raw("to_char(orchestra_solid_poly_bag_sticker_orders.created_at,"."'".$ddmmyy."'".") as \"OrderDate\""),DB::raw("to_char(orchestra_solid_poly_bag_sticker_orders.delivery_date,"."'".$ddmmyy."'".") as \"DeliveryDate\""),'orchestra_solid_poly_bag_sticker_orders.status as artworkStatus','orchestra_solid_poly_bag_sticker_orders.pi_status as pIstatus','orchestra_solid_poly_bag_sticker_orders.po_status as PO Status','orchestra_solid_poly_bag_sticker_orders.po_number as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'orchestra_solid_poly_bag_sticker_orders' as \"tableName\""),'orchestra_solid_poly_bag_sticker_orders.color_code','orchestra_solid_poly_bag_sticker_orders.id  as tableID','orchestra_solid_poly_bag_sticker_orders.po_file','customers.pi_required','customers.po_required','orchestra_solid_poly_bag_sticker_orders.template_id','orchestra_solid_poly_bag_sticker_orders.order_flag','customers.delivery_day_count','orchestra_solid_poly_bag_sticker_orders.is_order_count_empty')->where('orchestra_parcel_details.IsSTD',0)->groupBy('orchestra_solid_poly_bag_sticker_orders.uvc','orchestra_parcel_details.UVC','orchestra_solid_poly_bag_sticker_orders.po','orchestra_parcel_details.SupplierName','orchestra_solid_poly_bag_sticker_orders.created_at','orchestra_solid_poly_bag_sticker_orders.delivery_date','orchestra_solid_poly_bag_sticker_orders.status','orchestra_solid_poly_bag_sticker_orders.pi_status','orchestra_solid_poly_bag_sticker_orders.po_status','orchestra_solid_poly_bag_sticker_orders.po_number','orchestra_solid_poly_bag_sticker_orders.id','customers.pi_required','customers.id')->get();
+    
+            $data8 = DB::table('orchestra_standard_carton_sticker_orders')->join('orchestra_parcel_details','orchestra_parcel_details.UVC','=','orchestra_standard_carton_sticker_orders.uvc')->join('orchestra_item_master','orchestra_item_master.id','=','orchestra_standard_carton_sticker_orders.template_id')->leftjoin('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('orchestra_standard_carton_sticker_orders.status','!=','Order Cancelled')->select(DB::raw('distinct on (orchestra_standard_carton_sticker_orders.uvc,orchestra_standard_carton_sticker_orders.po) "UVC"'),DB::raw("orchestra_standard_carton_sticker_orders.season_code as \"Season\""),DB::raw("orchestra_standard_carton_sticker_orders.po as \"BuyerPONo\""),DB::raw("'Standard Carton Stickers' as \"ArtworkType\""),DB::raw("'Standard Carton Stickers' as \"TemplateName\""),'customers.id as customer_id','orchestra_parcel_details.SupplierName as SupplierName',DB::raw("to_char(orchestra_standard_carton_sticker_orders.created_at,"."'".$ddmmyy."'".") as \"OrderDate\""),DB::raw("to_char(orchestra_standard_carton_sticker_orders.delivery_date,"."'".$ddmmyy."'".") as \"DeliveryDate\""),'orchestra_standard_carton_sticker_orders.status as artworkStatus','orchestra_standard_carton_sticker_orders.pi_status as pIstatus','orchestra_standard_carton_sticker_orders.po_status as PO Status','orchestra_standard_carton_sticker_orders.po_number as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'orchestra_standard_carton_sticker_orders' as \"tableName\""),'orchestra_standard_carton_sticker_orders.color_code','orchestra_standard_carton_sticker_orders.id  as tableID','orchestra_standard_carton_sticker_orders.po_file','customers.pi_required','customers.po_required','orchestra_standard_carton_sticker_orders.template_id','orchestra_standard_carton_sticker_orders.order_flag','customers.delivery_day_count','orchestra_standard_carton_sticker_orders.is_order_count_empty')->where('orchestra_parcel_details.IsSTD',1)->groupBy('orchestra_standard_carton_sticker_orders.uvc','orchestra_parcel_details.UVC','orchestra_standard_carton_sticker_orders.po','orchestra_parcel_details.SupplierName','orchestra_standard_carton_sticker_orders.created_at','orchestra_standard_carton_sticker_orders.delivery_date','orchestra_standard_carton_sticker_orders.status','orchestra_standard_carton_sticker_orders.pi_status','orchestra_standard_carton_sticker_orders.po_status','orchestra_standard_carton_sticker_orders.po_number','orchestra_standard_carton_sticker_orders.id','customers.pi_required','customers.id')->get();
 
-
-DB::table('orchestra_parcel_details')
-            ->update(['order_status' => NULL,'sticker_order_status'=> NULL]);
-
-dd("done");
+            $data9 = DB::table('orchestra_standard_poly_bag_sticker_orders')->join('orchestra_parcel_details','orchestra_parcel_details.UVC','=','orchestra_standard_poly_bag_sticker_orders.uvc')->join('orchestra_item_master','orchestra_item_master.id','=','orchestra_standard_poly_bag_sticker_orders.template_id')->leftjoin('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('orchestra_standard_poly_bag_sticker_orders.status','!=','Order Cancelled')->select(DB::raw('distinct on (orchestra_standard_poly_bag_sticker_orders.uvc,orchestra_standard_poly_bag_sticker_orders.po) "UVC"'),DB::raw("orchestra_standard_poly_bag_sticker_orders.season_code as \"Season\""),DB::raw("orchestra_standard_poly_bag_sticker_orders.po as \"BuyerPONo\""),DB::raw("'Standard Poly Bag Stickers' as \"ArtworkType\""),DB::raw("'Standard Poly Bag Stickers' as \"TemplateName\""),'customers.id as customer_id','orchestra_parcel_details.SupplierName as SupplierName',DB::raw("to_char(orchestra_standard_poly_bag_sticker_orders.created_at,"."'".$ddmmyy."'".") as \"OrderDate\""),DB::raw("to_char(orchestra_standard_poly_bag_sticker_orders.delivery_date,"."'".$ddmmyy."'".") as \"DeliveryDate\""),'orchestra_standard_poly_bag_sticker_orders.status as artworkStatus','orchestra_standard_poly_bag_sticker_orders.pi_status as pIstatus','orchestra_standard_poly_bag_sticker_orders.po_status as PO Status','orchestra_standard_poly_bag_sticker_orders.po_number as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'orchestra_standard_poly_bag_sticker_orders' as \"tableName\""),'orchestra_standard_poly_bag_sticker_orders.color_code','orchestra_standard_poly_bag_sticker_orders.id  as tableID','orchestra_standard_poly_bag_sticker_orders.po_file','customers.pi_required','customers.po_required','orchestra_standard_poly_bag_sticker_orders.template_id','orchestra_standard_poly_bag_sticker_orders.order_flag','customers.delivery_day_count','orchestra_standard_poly_bag_sticker_orders.is_order_count_empty')->where('orchestra_parcel_details.IsSTD',1)->groupBy('orchestra_standard_poly_bag_sticker_orders.uvc','orchestra_parcel_details.UVC','orchestra_standard_poly_bag_sticker_orders.po','orchestra_parcel_details.SupplierName','orchestra_standard_poly_bag_sticker_orders.created_at','orchestra_standard_poly_bag_sticker_orders.delivery_date','orchestra_standard_poly_bag_sticker_orders.status','orchestra_standard_poly_bag_sticker_orders.pi_status','orchestra_standard_poly_bag_sticker_orders.po_status','orchestra_standard_poly_bag_sticker_orders.po_number','orchestra_standard_poly_bag_sticker_orders.id','customers.pi_required','customers.id')->get();
 
 
-$t = OrchestraWashCare::with(['washcarelabelQty' => function ($query) {
-        $query->leftJoin('orchestra_size_chart as osc', 'osc.age', 'orchestra_wash_care_label_orders_qty.size');
-    }])->where('orchestra_wash_care_label_orders.id',65)->get();
+            $data = $data1->merge($data2)->merge($data3)->merge($data4)->merge($data5)->merge($data6)->merge($data7)->merge($data8)->merge($data9);
 
-               return($t->toArray());
+            // return $data;
+          return Datatables::of($data)
+              
+              ->addColumn('artworkStatus', function ($data) {
+                  return $data->artworkStatus =="Order Approved" ? '<span class="label label-OrderApproved">'.$data->artworkStatus.'</span>':'<span class="label label-OrderPlaced">'.$data->artworkStatus.'</span>';
+              })
 
-$composition = DB::table('orchestra_wash_care_composition')
-                  ->where('owcl_id',65)
-                  ->select('parts_id','composition_id')
-                  ->get()->toArray();
-dd($composition[0]->parts_id);
-      // $p= OrchestraWashCare::with(['washcarelabelQty', function ($q) 
-      //          {
-      //           $q->where('orchestra_wash_care_label_orders_qty.owcl_id',65);
-      //          }])->get();
-      // return $p;
+              ->addColumn('deliveryDate', function ($data) {
+                  return '<span style="display:none;">2019-12-19 06:08:58</span><input value="31-12-2019" class="form-control input-sm datepicker_recurring_start" data-id="7" style="width: 107px;" placeholder="Delivery Date" onchange="updateDeliveryDate(this,&quot;276&quot;,&quot;tesco_tcl1_orders&quot;)" readonly="">';
+              })
 
+              ->addColumn('actions', function ($activities) {
+                  // return '';
 
-   $t = OrchestraWashCare::with(['washcarelabelQty' => function($type){
-                  $type->where('orchestra_wash_care_label_orders_qty.owcl_id',65);
-               }])->get();
+                  return'<a class="pi_generation" href="javascript:void(0)" onclick="genarateTescoPI(&quot;276&quot;,&quot;tesco_tcl1_orders&quot;,&quot;false&quot;,&quot;tst12QR&quot;,&quot;19&quot;,&quot;tst12QR&quot;,&quot;TCL1&quot;,&quot;newOrder&quot;)"><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="" data-original-title="Proforma Invoice"></i></a><a href="javascript:void(0)" onclick="tescoPOUpload(this,&quot;276&quot;,&quot;/storage/app/public/po-files/TESCO_PO_1576735749_po_460-92592_LINKUP_RATIO_A.pdf&quot;,&quot;tesco_tcl1_orders&quot;)" class="po-style"><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="" style="border-color:#FFFFFF" data-original-title="Purchase Order"></i></a>';
+                  })
 
-   return $t;
-   $res = OrchestraWashCare::with(array('washcarelabelQty' => function($query) {
-   $query->where('orchestra_wash_care_label_orders_qty.owcl_id',65);
-   }))
-   ->get();
+              ->editColumn('inputPo', function($data)
+              {
+                  return '<div class="form-group has-feedback"><div class="input-group"><input type="text" onkeypress="return AvoidSpace(event)" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" placeholder="Enter PO" maxlength="11" value="tst12QR"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick="tescoSetPO(this,&quot;276&quot;,&quot;tesco_tcl1_orders&quot;,&quot;/storage/app/public/po-files/TESCO_PO_1576735749_po_460-92592_LINKUP_RATIO_A.pdf&quot;)"><span class="fa fa-check"></span></button></span></div></div>';
+              })  
 
-   // return $res;
+          ->rawColumns(['inputPo','artworkStatus','actions','deliveryDate'])
+          ->make(true);
+  }
 
-
-      $r= DB::table('orchestra_hang_tag_orders_qty')
-               ->leftJoin('orchestra_parcel_quantity_details','orchestra_hang_tag_orders_qty.uvc_tco','orchestra_parcel_quantity_details.UVC_TCO')
-               // ->leftJoin('orchestra_parcel_details','orchestra_parcel_details.uvc_tco','orchestra_parcel_quantity_details.UVC_TCO')
-               ->where('orchestra_hang_tag_orders_qty.oht_id',27)
-               ->get();
-
-               return $r;
-       $a = DB::table('orchestra_parcel_quantity_details')
-               ->leftJoin('orchestra_parcel_details','orchestra_parcel_details.SKU_Code','orchestra_parcel_quantity_details.UVC_TCO')
-               ->leftJoin('orchestra_hang_tag_orders_qty','orchestra_hang_tag_orders_qty.uvc_tco','orchestra_parcel_quantity_details.UVC_TCO')
-               ->where('orchestra_hang_tag_orders_qty.oht_id',27)
-               ->select('Size_Range_Label')
-               ->get();
-      return($a);
+  public function getOrderStatusesTesco()
+  {
 
 
-
-// $q=  OrchestraHangTag::leftJoin('orchestra_parcel_quantity_details', function ($join) {
-// $join->on('orchestra_hang_tag_orders.uvc', '=', 'orchestra_parcel_quantity_details.UVC')
-// ->select('Price','Club_Price')
-// ->whereIn('Currency', ['DZD'])
-// ->where('Size', '2 ANS');
-// })->where('orchestra_hang_tag_orders.id', '=', 27)
-// ->select('Price','Club_Price')
-// ->get();
-
-
-
-$res = OrchestraHangTag::with(array('hangtagqty' => function($query) {
-$query->leftJoin('orchestra_size_chart as p', 'p.age', 'orchestra_hang_tag_orders_qty.size')
-->leftJoin('orchestra_parcel_details as kl', 'kl.SKU_Code', 'orchestra_hang_tag_orders_qty.uvc_tco')
-->select('orchestra_hang_tag_orders_qty.*','p.*','Size_Range_Label');
-}))
-->where('id', '=', 27)
-// ->select('Size_Range_Label')
-->get();
-
-// return($res);
-   $res->map(function ($res) {
-         foreach($res->hangtagqty as $key => $value) 
-         {
-         $CountryCodes =['DZD','CAD','CHF','SAR','MAD','MUR','USD'];
-         $PriceArr = array();
-         foreach($CountryCodes as $country)
-         { 
-        $q= OrchestraHangTag::leftJoin('orchestra_parcel_quantity_details', function ($join) 
-               use($value,$country)
-               {
-               $join->on('orchestra_hang_tag_orders.uvc', '=', 'orchestra_parcel_quantity_details.UVC')
-               ->select('Price','Club_Price')
-               ->where('Currency',$country)
-               ->where('Size', $value->size);
-               })
-        // ->leftJoin('orchestra_parcel_details', function ($join2) 
-        //        {
-        //        $join2->on('orchestra_parcel_details.SKU_Code', '=', 'orchestra_parcel_quantity_details.UVC_TCO')
-        //        ->select('Size_Range_Label');
-           
-        //        })
-        ->where('orchestra_hang_tag_orders.id', '=', 27)
-               ->select('Price','Club_Price')
-               ->get();
-
-         array_push($PriceArr, array("Price"=>$q->first()->Price, "ClubPrice" => $q->first()->Club_Price));
-
-         }
-         $value->prices =  $PriceArr;
-         $PriceArr = array();
-         }
-      });
-
-return($res->toArray());
-
-
-   // $value->Price=$q->first()->Price;
-   // $value->ClubPrice=$q->first()->Club_Price;
-
-
-
-
+      $tcl1 = "TCL 1";
+      $tesco_tcl1_orders = "tesco_tcl1_orders";
+      $actions="-";
+      $ddmmyy="DD-MM-YYYY";
+            $data1 = DB::table('tesco_tcl1_orders')
+                             ->join('customers','tesco_tcl1_orders.tesco_supplier_id','=','customers.id')
+                            ->whereNotIn('tesco_tcl1_orders.order_status',['Saved','Order Cancelled'])
+                            ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_tcl1_orders.uk_style_ref','tesco_tcl1_orders.ce_style_ref','tesco_tcl1_orders.po_number as BuyerPO','tesco_tcl1_orders.zone as Zone',DB::raw("'".$tcl1."'".' as "TemplateName"'),'tesco_tcl1_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_tcl1_orders.created_at as OrderDate',DB::raw('to_char(tesco_tcl1_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_tcl1_orders.order_status as artworkStatus','tesco_tcl1_orders.pi_status as pIstatus','tesco_tcl1_orders.po_status as PO Status','tesco_tcl1_orders.purchase_order_no as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'".$tesco_tcl1_orders."'".' as "tableName"'),'tesco_tcl1_orders.id as tableID','tesco_tcl1_orders.po_file','customers.pi_required','customers.po_required','tesco_tcl1_orders.template_id','tesco_tcl1_orders.order_flag','customers.delivery_day_count','is_order_count_empty')
+                            ->get();
+      $tcl2 = "TCL 2";
+      $tesco_tcl2_orders = "tesco_tcl2_orders";
+            $data2 = DB::table('tesco_tcl2_orders')
+                            ->join('customers','tesco_tcl2_orders.tesco_supplier_id','=','customers.id')
+                            // ->where('tesco_tcl2_orders.is_order_count_empty',0)
+                            ->whereNotIn('tesco_tcl2_orders.order_status',['Saved','Order Cancelled'])
+                            ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_tcl2_orders.uk_style_ref','tesco_tcl2_orders.ce_style_ref','tesco_tcl2_orders.po_number as BuyerPO','tesco_tcl2_orders.zone as Zone',DB::raw("'".$tcl2."'".' as "TemplateName"'),'tesco_tcl2_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_tcl2_orders.created_at as OrderDate',DB::raw('to_char(tesco_tcl2_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_tcl2_orders.order_status as artworkStatus','tesco_tcl2_orders.pi_status as pIstatus','tesco_tcl2_orders.po_status as PO Status','tesco_tcl2_orders.purchase_order_no as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'".$tesco_tcl2_orders."'".' as "tableName"'),'tesco_tcl2_orders.id as tableID','tesco_tcl2_orders.po_file','customers.pi_required','customers.po_required','tesco_tcl2_orders.template_id','tesco_tcl2_orders.order_flag','customers.delivery_day_count','is_order_count_empty')
+                            ->get();
+      $tcl4 = "TCL 4";
+      $tesco_tcl4_orders = "tesco_tcl4_orders";
+            $data3 = DB::table('tesco_tcl4_orders')
+                            ->join('customers','tesco_tcl4_orders.tesco_supplier_id','=','customers.id')
+                            // ->where('tesco_tcl4_orders.is_order_count_empty',0)
+                            // ->where('tesco_tcl4_orders.order_status', '!=', 'Saved')
+                            ->whereNotIn('tesco_tcl4_orders.order_status',['Saved','Order Cancelled'])
+                            ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_tcl4_orders.uk_style_ref','tesco_tcl4_orders.ce_style_ref','tesco_tcl4_orders.po_number as BuyerPO','tesco_tcl4_orders.zone as Zone',DB::raw("'".$tcl4."'".' as "TemplateName"'),'tesco_tcl4_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_tcl4_orders.created_at as OrderDate',DB::raw('to_char(tesco_tcl4_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_tcl4_orders.order_status as artworkStatus','tesco_tcl4_orders.pi_status as pIstatus','tesco_tcl4_orders.po_status as PO Status','tesco_tcl4_orders.purchase_order_no as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'".$tesco_tcl4_orders."'".' as "tableName"'),'tesco_tcl4_orders.id as tableID','tesco_tcl4_orders.po_file','customers.pi_required','customers.po_required','tesco_tcl4_orders.template_id','tesco_tcl4_orders.order_flag','customers.delivery_day_count','is_order_count_empty')
+                            ->get();
+      $thl1 = "THL 1";
+      $tesco_thl1_orders = "tesco_thl1_orders";
+            $data4 = DB::table('tesco_thl1_orders')
+                            ->join('customers','tesco_thl1_orders.tesco_supplier_id','=','customers.id')
+                            ->where('tesco_thl1_orders.is_order_count_empty',0)
+                            // ->where('tesco_thl1_orders.order_status', '!=', 'Saved')
+                            ->whereNotIn('tesco_thl1_orders.order_status',['Saved','Order Cancelled'])
+                            ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_thl1_orders.uk_style_ref','tesco_thl1_orders.ce_style_ref','tesco_thl1_orders.po_number as BuyerPO','tesco_thl1_orders.zone as Zone',DB::raw("'".$thl1."'".' as "TemplateName"'),'tesco_thl1_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_thl1_orders.created_at as OrderDate',DB::raw('to_char(tesco_thl1_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_thl1_orders.order_status as artworkStatus','tesco_thl1_orders.pi_status as pIstatus','tesco_thl1_orders.po_status as PO Status','tesco_thl1_orders.purchase_order_no as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'".$tesco_thl1_orders."'".' as "tableName"'),'tesco_thl1_orders.id as tableID','tesco_thl1_orders.po_file','customers.pi_required','customers.po_required','tesco_thl1_orders.template_id','tesco_thl1_orders.order_flag','customers.delivery_day_count','is_order_count_empty')
+                                ->get();
+      $thl3 = "THL 3";
+      $tesco_thl3_orders = "tesco_thl3_orders";
+            $data5 = DB::table('tesco_thl3_orders')
+                            ->join('customers','tesco_thl3_orders.tesco_supplier_id','=','customers.id')
+                            // ->where('tesco_thl3_orders.is_order_count_empty',0)
+                            // ->where('tesco_thl3_orders.order_status', '!=', 'Saved')
+                            ->whereNotIn('tesco_thl3_orders.order_status',['Saved','Order Cancelled'])
+                            ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_thl3_orders.uk_style_ref','tesco_thl3_orders.ce_style_ref','tesco_thl3_orders.po_number as BuyerPO','tesco_thl3_orders.zone as Zone',DB::raw("'".$thl3."'".' as "TemplateName"'),'tesco_thl3_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_thl3_orders.created_at as OrderDate',DB::raw('to_char(tesco_thl3_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_thl3_orders.order_status as artworkStatus','tesco_thl3_orders.pi_status as pIstatus','tesco_thl3_orders.po_status as PO Status','tesco_thl3_orders.purchase_order_no as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'".$tesco_thl3_orders."'".' as "tableName"'),'tesco_thl3_orders.id as tableID','tesco_thl3_orders.po_file','customers.pi_required','customers.po_required','tesco_thl3_orders.template_id','tesco_thl3_orders.order_flag','customers.delivery_day_count','is_order_count_empty')
+                            ->get();
+      $tsl1 = "TSL 1";
+      $tesco_tsl1_orders = "tesco_tsl1_orders";
+            $data6 = DB::table('tesco_tsl1_orders')
+                            ->join('customers','tesco_tsl1_orders.tesco_supplier_id','=','customers.id')
+                            // ->where('tesco_tsl1_orders.is_order_count_empty',0)
+                            // ->where('tesco_tsl1_orders.order_status', '!=', 'Saved')
+                            ->whereNotIn('tesco_tsl1_orders.order_status',['Saved','Order Cancelled'])
+                            ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_tsl1_orders.uk_style_ref','tesco_tsl1_orders.ce_style_ref','tesco_tsl1_orders.po_number as BuyerPO','tesco_tsl1_orders.zone as Zone',DB::raw("'".$tsl1."'".' as "TemplateName"'),'tesco_tsl1_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_tsl1_orders.created_at as OrderDate',DB::raw('to_char(tesco_tsl1_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_tsl1_orders.order_status as artworkStatus','tesco_tsl1_orders.pi_status as pIstatus','tesco_tsl1_orders.po_status as PO Status','tesco_tsl1_orders.purchase_order_no as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'".$tesco_tsl1_orders."'".' as "tableName"'),'tesco_tsl1_orders.id as tableID','tesco_tsl1_orders.po_file','customers.pi_required','customers.po_required','tesco_tsl1_orders.template_id','tesco_tsl1_orders.order_flag','customers.delivery_day_count','is_order_count_empty')
+                            ->get();
+      $tsl3 = "TSL 3";
+      $tesco_tsl3_orders = "tesco_tsl3_orders";
+            $data7 = DB::table('tesco_tsl3_orders')
+                            ->join('customers','tesco_tsl3_orders.tesco_supplier_id','=','customers.id')
+                            // ->where('tesco_tsl3_orders.is_order_count_empty',0)
+                            // ->where('tesco_tsl3_orders.order_status', '!=', 'Saved')
+                            ->whereNotIn('tesco_tsl3_orders.order_status',['Saved','Order Cancelled'])
+                            ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_tsl3_orders.uk_style_ref','tesco_tsl3_orders.ce_style_ref','tesco_tsl3_orders.po_number as BuyerPO','tesco_tsl3_orders.zone as Zone',DB::raw("'".$tsl3."'".' as "TemplateName"'),'tesco_tsl3_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_tsl3_orders.created_at as OrderDate',DB::raw('to_char(tesco_tsl3_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_tsl3_orders.order_status as artworkStatus','tesco_tsl3_orders.pi_status as pIstatus','tesco_tsl3_orders.po_status as PO Status','tesco_tsl3_orders.purchase_order_no as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'".$tesco_tsl3_orders."'".' as "tableName"'),'tesco_tsl3_orders.id as tableID','tesco_tsl3_orders.po_file','customers.pi_required','customers.po_required','tesco_tsl3_orders.template_id','tesco_tsl3_orders.order_flag','customers.delivery_day_count','is_order_count_empty')
+                            ->get();
 
 
+          $data = $data1->merge($data2)->merge($data3)->merge($data4)->merge($data5)->merge($data6)->merge($data7);
 
 
+          return Datatables::of($data)
+              
+              ->addColumn('artworkStatus', function ($data) {
+                  return $data->artworkStatus =="Order Approved" ? '<span class="label label-OrderApproved">'.$data->artworkStatus.'</span>':'<span class="label label-OrderPlaced">'.$data->artworkStatus.'</span>';
+              })
 
+              ->addColumn('deliveryDate', function ($data) {
+                  return '<span style="display:none;">2019-12-19 06:08:58</span><input value="31-12-2019" class="form-control input-sm datepicker_recurring_start" data-id="7" style="width: 107px;" placeholder="Delivery Date" onchange="updateDeliveryDate(this,&quot;276&quot;,&quot;tesco_tcl1_orders&quot;)" readonly="">';
+              })
 
+              ->addColumn('actions', function ($activities) {
+                  // return '';
 
+                  return'<a class="pi_generation" href="javascript:void(0)" onclick="genarateTescoPI(&quot;276&quot;,&quot;tesco_tcl1_orders&quot;,&quot;false&quot;,&quot;tst12QR&quot;,&quot;19&quot;,&quot;tst12QR&quot;,&quot;TCL1&quot;,&quot;newOrder&quot;)"><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="" data-original-title="Proforma Invoice"></i></a><a href="javascript:void(0)" onclick="tescoPOUpload(this,&quot;276&quot;,&quot;/storage/app/public/po-files/TESCO_PO_1576735749_po_460-92592_LINKUP_RATIO_A.pdf&quot;,&quot;tesco_tcl1_orders&quot;)" class="po-style"><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="" style="border-color:#FFFFFF" data-original-title="Purchase Order"></i></a>';
+                  })
 
+              ->editColumn('inputPo', function($data)
+              {
+                  return '<div class="form-group has-feedback"><div class="input-group"><input type="text" onkeypress="return AvoidSpace(event)" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" placeholder="Enter PO" maxlength="11" value="tst12QR"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick="tescoSetPO(this,&quot;276&quot;,&quot;tesco_tcl1_orders&quot;,&quot;/storage/app/public/po-files/TESCO_PO_1576735749_po_460-92592_LINKUP_RATIO_A.pdf&quot;)"><span class="fa fa-check"></span></button></span></div></div>';
+              })  
 
+          ->rawColumns(['inputPo','artworkStatus','actions','deliveryDate'])
+          ->make(true);
+  }
 
-// return($e[0]['hangtagqty']);
-foreach ($e[0]['hangtagqty'] as $key => $value) {
-   return $value;
-   // $e[0]['hangtagqty']['p']="ll";
-}
-return $e;
-   // $res  = OrchestraHangTag::find(27)
-   //                         ->hangtagqty
-   //                         ->leftJoin('orchestra_size_chart as os', 'os.age', '=', 'orchestra_hang_tag_orders_qty.size');
-   // dd($res->toArray());
-
-   //                $res['count'] = count($res);  
-   //                $res['reference_name'] = "Orchestra HangTag";   
-
-
-// $e=OrchestraHangTag::with('hangtagqty',function($q)
-// {
-// });
-
-// 
-
-//dd($e[0]['hangtagqty']);
-// $e[0]['hangtagqty']->map(function ($re) {
- 
-   // $row=DB::table('orchestra_parcel_quantity_details')
-   //                ->where('UVC','HGAKQJ')
-   //                ->where('Size','$re->size')
-   //                ->whereIn('Currency',['DZD'])
-   //                ->select('Price','Club_Price')
-   //                ->get();
-   //                dd($row);
-                  // $re->price =
-                  // $res->reference_name = "Solid Polybag Stickers";
-                  // $res->age_group = OrchestraAgeGroup::where('id',$res->group_id)->first()->color;
-                  // });
-
-
-// return($e);
-
-
-      // $f=DB::table('orchestra_parcel_quantity_details')
-      //             ->where('UVC','HGAKQJ')
-      //             ->whereIn('Currency',['DZD','CAD','CHF','SAR','MAD','MUR','USD'])
-      //             ->select('Price','Club_Price')
-      //             ->get();
-
-// dd ($f[0]->hangtagqty);
-// $res = OrchestraHangTag::with(['hangtagqty' => 
-//                   function($query)
-//                   {  
-//                      $query->groupBy('size')
-//                           ->groupBy('orchestra_hang_tag_orders_qty.id')
-//                           $join->on('users.id', '=', 'TotalCatches.user_id');;
-//                   }])->get();
-
-   	
-   
-}
 }
