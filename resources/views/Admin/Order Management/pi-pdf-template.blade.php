@@ -44,7 +44,7 @@
             <tr>
                 <td width="150">{{$bank_details->company_name}}</td>
                 <td width="140"></td>
-                <td width="140s">{{$bank_details->company_name}}</td>
+                <td width="140">{{$bank_details->company_name}}</td>
             </tr>
             <tr>
                 <td width="150">{{$bill_to->address}}-{{$bill_to->pincode}}</td>
