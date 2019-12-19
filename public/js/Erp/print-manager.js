@@ -169,7 +169,7 @@ function printHangDiv(front,back,disney,name,style_no,buyer_no,id,order_type,cre
 	var a1 = document.getElementById(back)
 	var svgDoc1 = a1.contentDocument;
 	var svgRoot1 = svgDoc1.documentElement;
-	
+	console.log(svgDoc1)
 	var index_arr=[];
 	var svgarr = [];
 	var svgarr_front = [];
