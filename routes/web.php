@@ -15,6 +15,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+Route::get('ostatusT', function () {
+    return view('orderStatus_T');
+});
+Route::get('ostatusO', function () {
+    return view('orderStatus_O');
+});
+Route::get('getOrderStatusesTesco', ['as'=>'getOrderStatusesTesco','uses'=>'ApiTest@getOrderStatusesTesco']);
+Route::get('getOrderStatusesOrch', ['as'=>'getOrderStatusesOrch','uses'=>'ApiTest@getOrderStatusesOrch']);
+
+
 Route::get('testApi', 'ApiTest@testApi')->name('testApi');
 
 
