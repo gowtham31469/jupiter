@@ -714,6 +714,8 @@ class TescoOrders
                         ->where('order_flag',$temp_data->order_flag)
                         ->where('order_status', '<>', 'Order Cancelled')
                         ->where('tesco_supplier_id',$temp_data->tesco_supplier_id)->first();
+		  
+		  dd($table_data);
                    
             DB::table($table)->where('po_number',$temp_data->po_number)
                 ->where('uk_style_ref',$temp_data->uk_style_ref)
