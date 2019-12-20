@@ -194,9 +194,9 @@ class ApiTest extends Controller
 
           return Datatables::of($data)
               
-              ->addColumn('artworkStatus', function ($data) {
-                  return $data->artworkStatus =="Order Approved" ? '<span class="label label-OrderApproved">'.$data->artworkStatus.'</span>':'<span class="label label-OrderPlaced">'.$data->artworkStatus.'</span>';
-              })
+                ->addColumn('artworkStatus', function ($data) {
+                    return $data->artworkStatus =="Order Approved" ? '<span class="label label-OrderApproved">'.$data->artworkStatus.'</span>':'<span class="label label-OrderPlaced">'.$data->artworkStatus.'</span>';
+                })
 
               ->addColumn('deliveryDate', function ($data) {
                   return '<span style="display:none;">2019-12-19 06:08:58</span><input value="31-12-2019" class="form-control input-sm datepicker_recurring_start" data-id="7" style="width: 107px;" placeholder="Delivery Date" onchange="updateDeliveryDate(this,&quot;276&quot;,&quot;tesco_tcl1_orders&quot;)" readonly="">';
