@@ -529,6 +529,26 @@ function tescoOrderStatus() {
 
                 var $tableSel = $('#datatable-tesco-orders');
                 $tableSel.DataTable({
+                    "processing": true,
+                    "serverSide": true,
+                    "ajax": "getOrderStatusesOrch",
+                    "columns": [
+                        {data: 'UVC', name: 'UVC'},
+                        {data: 'Season', name: 'Season'},
+                        {data: 'BuyerPONo', name: 'BuyerPONo'},
+                        {data: 'ArtworkType', name: 'ArtworkType'},
+                        {data: 'TemplateName', name: 'TemplateName'},
+                        {data: 'Reference No', name: 'Reference No'},
+                        {data: 'SupplierName', name: 'SupplierName'},
+                        {data: 'OrderDate', name: 'OrderDate'},
+                        {data: 'deliveryDate', name: 'deliveryDate'},
+                        {data: 'artworkStatus', name: 'artworkStatus'},
+                        {data: 'pIstatus', name: 'pIstatus'},
+                        {data: 'inputPo', name: 'inputPo'},
+                        {data: 'actions', name: 'actions'},
+                        
+               
+                    ],
                     "pageLength": 25,
                     "order": [
                         [7, "desc"]
