@@ -529,26 +529,6 @@ function tescoOrderStatus() {
 
                 var $tableSel = $('#datatable-tesco-orders');
                 $tableSel.DataTable({
-                    "processing": true,
-                    "serverSide": true,
-                    "ajax": "getOrderStatusesOrch",
-                    "columns": [
-                        {data: 'UVC', name: 'UVC'},
-                        {data: 'Season', name: 'Season'},
-                        {data: 'BuyerPONo', name: 'BuyerPONo'},
-                        {data: 'ArtworkType', name: 'ArtworkType'},
-                        {data: 'TemplateName', name: 'TemplateName'},
-                        {data: 'Reference No', name: 'Reference No'},
-                        {data: 'SupplierName', name: 'SupplierName'},
-                        {data: 'OrderDate', name: 'OrderDate'},
-                        {data: 'deliveryDate', name: 'deliveryDate'},
-                        {data: 'artworkStatus', name: 'artworkStatus'},
-                        {data: 'pIstatus', name: 'pIstatus'},
-                        {data: 'inputPo', name: 'inputPo'},
-                        {data: 'actions', name: 'actions'},
-                        
-               
-                    ],
                     "pageLength": 25,
                     "order": [
                         [7, "desc"]
@@ -725,19 +705,9 @@ var normalizeDate = function (dateString) {
  * @return {[type]}      [description]
  */
 function tescoStatusTable(data, path) {
-    var th = "";
+    var th = "<th style='text-align: center;'>Style No</th><th style='text-align: center;'>Buyer PO No</th><th style='text-align: center;'>Zone</th><th style='text-align: center;'>Reference No</th><th style='text-align: center;'>Template Type</th><th style='text-align: center;'>Company</th><th style='text-align: center;'>Order Date</th><th style='text-align: center;'>Delivery Date</th><th style='text-align: center;'>Artwork Status</th><th style='text-align: center;'>PI Status</th><th style='text-align: center;'>PO Status</th><th style='text-align: center;'>PO Number</th><th style='text-align: center;'>Actions</th>";
     var tr = "";
     var columnsIn = data[0];
-    for (var key in columnsIn) {
-        if (key != "tableName" && key != "tableID" && key != "po_file" && key != "pi_required" && key != "po_required" && key != "uk_style_ref" && key != "ce_style_ref" && key != "template_id" && key != "customer_id" && key != "order_flag" && key != "delivery_day_count" && key != "is_order_count_empty") {
-            if (key == "TemplateName") {
-                th += "<th style='text-align: center;'>Reference No</th>";
-            } else {
-                th += "<th style='text-align: center;'>" + key + "</th>";
-            }
-        }
-
-    }
     $.each(data, function (index, value) {
         var action_status = false;
         tr += '<tr class="trClass" id="' + value.tableName + '_' + value.tableID + '">';
