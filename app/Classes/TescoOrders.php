@@ -708,14 +708,12 @@ class TescoOrders
       {
           $qnty_id =  str_replace("_orders","_order_id",str_replace("tesco_","",$table));
           $erp_order_details = array();
-          $table_data = DB::table($table)->where('po_number1',$temp_data->po_number)
+          $table_data = DB::table($table)->where('po_number',$temp_data->po_number)
                         ->where('uk_style_ref',$temp_data->uk_style_ref)
                         ->where('ce_style_ref',$temp_data->ce_style_ref)
                         ->where('order_flag',$temp_data->order_flag)
                         ->where('order_status', '<>', 'Order Cancelled')
                         ->where('tesco_supplier_id',$temp_data->tesco_supplier_id)->first();
-		  
-		  dd($table_data);
                    
             DB::table($table)->where('po_number',$temp_data->po_number)
                 ->where('uk_style_ref',$temp_data->uk_style_ref)
