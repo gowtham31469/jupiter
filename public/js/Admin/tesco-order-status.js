@@ -899,6 +899,7 @@ function updateDeliveryDate(obj, tableID, tableName, count) {
  * @return {[type]}     [description]
  */
 function tescoSetPO(obj, id, tableName, po_file) {
+	$(obj).attr('disabled','disabled')
     $('.tesco-po').css('border-color', '');
     var po_number = $(obj).closest('tr').find('.tesco-po').val();
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -938,7 +939,7 @@ function tescoSetPO(obj, id, tableName, po_file) {
                         $(obj).closest('tr').find('.tesco-po').attr('disabled');
                         $(obj).closest('tr').find('.tesco-po').attr('placeholder', "Enter PO");
                     }
-
+					setTimeout(function(){ $(obj).removeAttr('disabled') }, 3000);
                 },
                 403: function (data) {
                     $('#snackbar').css('background-color', '#00b6ff');

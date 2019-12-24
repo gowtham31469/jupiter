@@ -565,16 +565,16 @@ function orderStatus() {
                         //For Custom Filters
                         this.api().columns().every(function (i) {
                             var column = this;
-                            if (i === 0 || i === 5 || i === 3) {
+                            if (i === 0 || i === 6 || i === 4) {
                                 var select;
                                 switch (i) {
                                     case 0:
                                         select = $('#styleNumber')
                                         break;
-                                    case 5:
+                                    case 6:
                                         select = $('#supplierName')
                                         break;
-                                    case 3:
+                                    case 4:
                                         select = $('#selectTemplate')
                                         break;
                                 }
@@ -3740,7 +3740,8 @@ function washcarelabelsOs(data, dataid) {
             $wash_cm = "";
 			$wash_in = "";
         }
-		var sizebox='<div class="form-group has-feedback"><label>Enter Size in Cm</label><input onkeypress="return checkNumbersOnly(event)" type="text" maxlength="3" class="form-control input-sm washonesizecm" value="'+$wash_cm+'" required="" placeholder="Enter Size in Cm"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label>Enter Size in inches</label><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control input-sm washonesizein" maxlength="3" value="'+$wash_in+'" placeholder="Enter Size in inches"><div class="help-block with-errors"></div></div>';
+		//var sizebox='<div class="form-group has-feedback"><label>Enter Size in Cm</label><input onkeypress="return checkNumbersOnly(event)" type="text" maxlength="3" class="form-control input-sm washonesizecm" value="'+$wash_cm+'" required="" placeholder="Enter Size in Cm"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label>Enter Size in inches</label><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control input-sm washonesizein" maxlength="3" value="'+$wash_in+'" placeholder="Enter Size in inches"><div class="help-block with-errors"></div></div>';
+		var sizebox='';
 	}
 	else
 	{
