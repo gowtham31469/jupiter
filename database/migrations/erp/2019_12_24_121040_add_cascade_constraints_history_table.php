@@ -14,14 +14,14 @@ class AddCascadeConstraintsHistoryTable extends Migration
     public function up()
     {
  	Schema::table('history', function (Blueprint $table) {
-		$table->dropForeign('history_erp_order_details_id_foreign');
+		#$table->dropForeign('history_erp_order_details_id_foreign');
 		$table->foreign('erp_order_details_id')
 		->references('id')->on('erp_order_details')
 		->onDelete('cascade');
         });
 
         Schema::table('event_history', function (Blueprint $table) {
-		$table->dropForeign('event_history_history_id_foreign');
+		#$table->dropForeign('event_history_history_id_foreign');
 		$table->foreign('history_id')
 		->references('id')->on('history')
 		->onDelete('cascade');
