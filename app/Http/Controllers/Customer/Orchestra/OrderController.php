@@ -3475,7 +3475,7 @@ class OrderController extends Controller
                 
             }
             
-            if ($po_details->po_file === null || $po_details->po_file === "null")
+            if ($po_details->po_file === null || $po_details->po_file === "")
             {
                 $po_status = "PO Pending";
             }
@@ -3548,7 +3548,7 @@ class OrderController extends Controller
                 
             }
             
-            if ($po_details->po_number === null || $po_details->po_number === "null")
+            if ($po_details->po_number === null || $po_details->po_number === "")
             {
                 $po_status = "PO Pending";
             }
