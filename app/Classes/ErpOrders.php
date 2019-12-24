@@ -111,7 +111,7 @@ class ErpOrders
 
 				$dataExists = DB::table('erp_order_details')->where('order_qnty_table_name',$qnty_table)->where('order_qnty_table_id',$vals->id)->where('erp_order_id',$erp_orders_id)->first();
 
-				if($dataExists->isEmpty()){
+				if(count($dataExists) == 0){
 					$erp_order_details_id = ErpOrderDetails::insertGetId([
 						'erp_order_id'     		=> $erp_orders->id,
 						'style_no'         		=> $style_no,
