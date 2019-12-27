@@ -796,7 +796,7 @@ class OrderStatusController extends Controller
             $destination_path='/storage/app/public/po-files/';
             $path='storage/app/public/po-files/';
             $Orname = $po_file->getClientOriginalName();
-            $filename= str_random(6).'_'.preg_replace('/\s+/', '-', $Orname);
+            $filename= str_random(6).'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $Orname));
             $po_file->move($path,$filename);
             $destination_path_insert=$destination_path.$filename;
             foreach($id as $val)
@@ -1306,7 +1306,7 @@ class OrderStatusController extends Controller
             $destination_path='/storage/app/public/po-files/';
             $path='storage/app/public/po-files/';
             $Orname = $po_file->getClientOriginalName();
-            $filename= str_random(6).'_'.preg_replace('/\s+/', '-', $Orname);
+            $filename= str_random(6).'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $Orname));
             $po_file->move($path,$filename);
             $destination_path_insert=$destination_path.$filename;
 
