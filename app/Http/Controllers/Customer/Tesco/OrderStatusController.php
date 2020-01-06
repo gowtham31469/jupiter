@@ -24,6 +24,8 @@ use Carbon\Carbon;
 use App\Classes\EditErpOrders;
 use App\Classes\ERPOrderStatusCheck;
 use Illuminate\Support\Facades\Redis;
+use App\ErpOrders as Erp;
+use App\ErpOrderDetails as ErpOrderDetails;
 
 class OrderStatusController extends Controller
 {
@@ -238,7 +240,7 @@ class OrderStatusController extends Controller
             $po_number   = $request->po_number;
             $template_id = $request->id;
             $table_name  = $request->tableName;
-            $po_details = DB::table($table_name)->where('id',$template_id)->select('po_file')->first();
+            $po_details = DB::table($table_name)->where('id',$template_id)->select('po_file','purchase_order_no')->first();
             
             $data_array = [];
             $data_array['id'] = $request->id;
@@ -277,7 +279,30 @@ class OrderStatusController extends Controller
                 $data_array_2['tableName'] = $table_name;
                 $data_array_2['buyer_id'] = $request->buyer_id;
                 $data_array_2['created_by'] = Auth::guard('web_customer')->id();
-                $erp_obj->updateTescoErpOrders($data_array_2);
+                $res = $erp_obj->updateTescoErpOrders($data_array_2);
+				
+				$buyer_id = json_encode($res->original['buyer_id']);
+				$customer_id = json_encode($res->original['customer_id']);
+				
+				$erp_previous_status = Erp::where('buyer_id',$buyer_id)->where('customer_id',$customer_id)->where('po_no',$po_details->purchase_order_no)->first();
+				
+				if($erp_previous_status)
+				{
+					$erp_moved_erp = ErpOrderDetails::where('erp_order_details.erp_order_id', $erp_previous_status->id)->where('status',1)->get();
+				
+				
+					if(count($erp_moved_erp) == 0)
+					{
+						if($erp_previous_status->previous_status != "" && $erp_previous_status->previous_status != null)
+						{
+							Erp::where('id',$erp_previous_status->id)->update([
+									'status' => $erp_previous_status->previous_status,
+									'previous_status' => null,
+							 ]);
+						}
+						
+					}
+				}
             }
 
             return response()->json(['error'=> false,'message' =>'Purchase Order Number added Successfully'],200);
