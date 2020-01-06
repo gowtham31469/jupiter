@@ -335,7 +335,7 @@ class PrintManagerController extends Controller
                     		->template_file;
 
                     		$jobcard_id_list->backPath = DB::table('orchestra_template')
-                    		->where('item_id',$row->template_back_id)
+                    		->where('item_id',$row->template_front_id)
                     		->where('flag',0)
                     		->first()
                     		->template_file;

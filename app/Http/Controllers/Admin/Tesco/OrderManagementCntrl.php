@@ -2177,6 +2177,7 @@ class OrderManagementCntrl extends Controller
 				$yy=60;
 				$qr_y=67.5;
 				$j=0;
+		 		$qr_count=0;
 				PDF::SetXY(10, 50);
 		
 				$qr_flag=$request->qr_flag;
@@ -2256,29 +2257,30 @@ class OrderManagementCntrl extends Controller
 				);
 				if($name == "TCL1-sticker")
 				{
-					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 88, 65, 17, 17, $style, 'N');
+					PDF::write2DBarcode($qr_code[$qr_count]->qr_code, 'QRCODE,Q', 88, 65, 17, 17, $style, 'N');
 				}
 				else if($name == "TCL2-sticker")
 				{
-					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 89.5, 69, 17, 17, $style, 'N');
+					PDF::write2DBarcode($qr_code[$qr_count]->qr_code, 'QRCODE,Q', 89.5, 69, 17, 17, $style, 'N');
 				}
 				else if($name == "TCL4-sticker")
 				{
-					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 89, $qr_y+1.5, 17, 17, $style, 'N');
+					PDF::write2DBarcode($qr_code[$qr_count]->qr_code, 'QRCODE,Q', 89, $qr_y+1.5, 17, 17, $style, 'N');
 				}
 				else if($name == "THL1-sticker")
 				{
-					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 89, 66, 17, 17, $style, 'N');
+					PDF::write2DBarcode($qr_code[$qr_count]->qr_code, 'QRCODE,Q', 89, 66, 17, 17, $style, 'N');
 				}
 				else if($name == "THL3-sticker")
 				{
-					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 90, $qr_y-2, 17, 17, $style, 'N');
+					PDF::write2DBarcode($qr_code[$qr_count]->qr_code, 'QRCODE,Q', 90, $qr_y-2, 17, 17, $style, 'N');
 				}
 				
 			}
 					
 					$i++;
 					$j++;
+					$qr_count++;
 					
 				}
 		

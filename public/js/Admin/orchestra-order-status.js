@@ -547,10 +547,10 @@ function orderStatus() {
                         null,
                         null,
                         null,
+						null,
                         {
                             "sType": "date-uk"
                         },
-                        null,
                         null,
                         null,
                         null,
@@ -618,7 +618,7 @@ function orderStatus() {
                     function (start, end, label) {
                         $.fn.dataTableExt.afnFiltering.length = 0;
                         $tableSel.dataTable().fnDraw();
-                        filterByDate(6, start, end); // We call our filter function
+                        filterByDate(7, start, end); // We call our filter function
                         $tableSel.dataTable().fnDraw(); // Manually redraw the table after filtering
                     });
 
@@ -724,7 +724,7 @@ function orchestraStatusTable(data, path) {
             }else if (key == "BuyerPONo") {
                 th += "<th style='text-align: center;'>BuyerPO No</th>";
             }else if (key == "ArtworkType") {
-                th += "<th style='text-align: center;'>Artwork Type</th>";
+                th += "<th style='display:none'>Artwork Type</th>";
             }else if (key == "SupplierName") {
                 th += "<th style='text-align: center;'>Supplier Name</th>";
             } else if (key == "OrderDate") {
@@ -840,6 +840,8 @@ function orchestraStatusTable(data, path) {
                     } else {
                         tr += '<td align="center"> - </td>';
                     }
+                } else if (key == "ArtworkType") {
+					tr += '<td style="display:none">' + value[key] + '</td>';
                 } else if (key == "DeliveryDate") {
 
                     if (value['is_order_count_empty'] == 0) {
@@ -858,7 +860,7 @@ function orchestraStatusTable(data, path) {
                     } else {
                         tr += '<td>' + value[key] + '</td>';
                     }
-                }
+                } 
             }
         }
         tr += '</tr>';
@@ -3657,14 +3659,15 @@ function washcarelabelsOs(data, dataid) {
             }
             
             var str=data.orchestra_wash_care_label_orders[dataid1].status;
-			if(str == "Order Approved")
-			{
-				$save_button_class = "hidden";
-			}
-			else
-			{
-				$save_button_class = "";
-			}
+//			if(str == "Order Approved")
+//			{
+//				$save_button_class = "hidden";
+//			}
+//			else
+//			{
+//				$save_button_class = "";
+//			}
+			$save_button_class = "";
             $status=str.replace(/ /g, "");
             $status_text=str;
             $wcl_name=data.orchestra_wash_care_label_orders[dataid1].template_name;
@@ -4315,7 +4318,7 @@ function setWashLabelOs(index, dataid, id) {
                 tot_qty_tablewash.push($(this).find('.tot_qty_tablewash').val())
                 uvc_tco.push($(this).find('.uvc_tco').text())
                 size.push($(this).find('.size').text())
-                barcode.push($(this).find('.size').text())
+                barcode.push($(this).find('.barcode').text())
             }
 
         })

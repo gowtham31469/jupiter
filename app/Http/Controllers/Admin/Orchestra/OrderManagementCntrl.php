@@ -3389,8 +3389,8 @@ class OrderManagementCntrl extends Controller
                     'status'    => "Buyer Approval Pending",
                     'orchestra_parcel_details_id'    => $parcel_id,
                     'season_code'    => $season_code,
-                    'pi_status'           => $pi_status,
-                    'po_status'           => $po_status,
+                    //'pi_status'           => $pi_status,
+                    //'po_status'           => $po_status,
             ]);
             $deleted = WashLabelOrdersQty::where('owcl_id', '=', $id)
                         ->delete();
@@ -3670,7 +3670,7 @@ class OrderManagementCntrl extends Controller
             $destination_path = '/storage/app/public/po-files/';
             $path       ='storage/app/public/po-files/';
             $Orname     = $po_file->getClientOriginalName();
-            $filename   = str_random(6).'_'.preg_replace('/\s+/', '-', $Orname);
+            $filename   = str_random(6).'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $Orname));
             $po_file->move($path,$filename);
             $destination_path_insert=$destination_path.$filename;
 
