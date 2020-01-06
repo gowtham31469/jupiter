@@ -547,10 +547,10 @@ function orderStatus() {
                         null,
                         null,
                         null,
-                        {
+                        null,
+						{
                             "sType": "date-uk"
                         },
-                        null,
                         null,
                         null,
                         null,
@@ -4317,7 +4317,7 @@ function setWashLabelOs(index, dataid, id) {
                 tot_qty_tablewash.push($(this).find('.tot_qty_tablewash').val())
                 uvc_tco.push($(this).find('.uvc_tco').text())
                 size.push($(this).find('.size').text())
-                barcode.push($(this).find('.size').text())
+                barcode.push($(this).find('.barcode').text())
             }
 
         })

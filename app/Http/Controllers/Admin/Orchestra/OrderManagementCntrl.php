@@ -3389,8 +3389,8 @@ class OrderManagementCntrl extends Controller
                     'status'    => "Buyer Approval Pending",
                     'orchestra_parcel_details_id'    => $parcel_id,
                     'season_code'    => $season_code,
-                    'pi_status'           => $pi_status,
-                    'po_status'           => $po_status,
+                    //'pi_status'           => $pi_status,
+                    //'po_status'           => $po_status,
             ]);
             $deleted = WashLabelOrdersQty::where('owcl_id', '=', $id)
                         ->delete();

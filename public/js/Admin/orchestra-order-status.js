@@ -547,10 +547,10 @@ function orderStatus() {
                         null,
                         null,
                         null,
+						null,
                         {
                             "sType": "date-uk"
                         },
-                        null,
                         null,
                         null,
                         null,
@@ -3659,14 +3659,15 @@ function washcarelabelsOs(data, dataid) {
             }
             
             var str=data.orchestra_wash_care_label_orders[dataid1].status;
-			if(str == "Order Approved")
-			{
-				$save_button_class = "hidden";
-			}
-			else
-			{
-				$save_button_class = "";
-			}
+//			if(str == "Order Approved")
+//			{
+//				$save_button_class = "hidden";
+//			}
+//			else
+//			{
+//				$save_button_class = "";
+//			}
+			$save_button_class = "";
             $status=str.replace(/ /g, "");
             $status_text=str;
             $wcl_name=data.orchestra_wash_care_label_orders[dataid1].template_name;
@@ -4317,7 +4318,7 @@ function setWashLabelOs(index, dataid, id) {
                 tot_qty_tablewash.push($(this).find('.tot_qty_tablewash').val())
                 uvc_tco.push($(this).find('.uvc_tco').text())
                 size.push($(this).find('.size').text())
-                barcode.push($(this).find('.size').text())
+                barcode.push($(this).find('.barcode').text())
             }
 
         })

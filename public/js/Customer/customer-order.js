@@ -2456,6 +2456,7 @@ function cancelWashDiv(dataid,factorycode){
 					$('.composition_percent'+dataid).removeAttr('disabled');
 					$('.composition_percent'+dataid).val('');
 					$('.add_to_list'+dataid).removeAttr('disabled');
+					$('.add_to_page'+dataid).removeAttr('disabled');
 					$('#composition_remove_qty'+dataid).html('');
 					$('.wash-card'+dataid).find('span').text('');
 					$('.wash-card'+dataid).find('.washlabelname'+dataid).text('Washcare Label');
@@ -2490,6 +2491,7 @@ function cancelWashDiv(dataid,factorycode){
 				$('.composition_percent'+dataid).removeAttr('disabled');
 				$('.composition_percent'+dataid).val('');
 				$('.add_to_list'+dataid).removeAttr('disabled');
+				$('.add_to_page'+dataid).removeAttr('disabled');
 				$('#composition_remove_qty'+dataid).html('');
 				$('.wash-card'+dataid).find('span').text('');
 				$('.wash-card'+dataid).find('.washlabelname'+dataid).text('Washcare Label');
@@ -9495,7 +9497,7 @@ function setWashLabel(index, dataid, id) {
                 tot_qty_tablewash.push($(this).find('.tot_qty_tablewash').val())
                 uvc_tco.push($(this).find('.uvc_tco').text())
                 size.push($(this).find('.size').text())
-                barcode.push($(this).find('.size').text())
+                barcode.push($(this).find('.barcode').text())
             }
 
         })

@@ -255,7 +255,7 @@ class JobManagerController extends Controller
 					// ->get();
 
 						$res = OrchestraWashCare::with(['washcarelabelQty' => function ($query) {
-						$query->leftJoin('orchestra_size_chart as osc', 'osc.age', 'orchestra_wash_care_label_orders_qty.size');
+						$query->leftJoin('orchestra_size_chart as osc', 'osc.age', 'orchestra_wash_care_label_orders_qty.size')->select(DB::raw('distinct on ("orchestra_wash_care_label_orders_qty".uvc_tco) "uvc_tco"'),'orchestra_wash_care_label_orders_qty.*','osc.*');
 						}])->where('orchestra_wash_care_label_orders.id',$parentTable_id)->get();
 					
 					$res->map(function ($res) use($parentTable_id) {
@@ -298,7 +298,7 @@ class JobManagerController extends Controller
 					$res = OrchestraHangTag::with(array('hangtagqty' => function($query) {
 								$query->leftJoin('orchestra_size_chart as osc', 'osc.age', 'orchestra_hang_tag_orders_qty.size')
 								->leftJoin('orchestra_parcel_details as opd', 'opd.SKU_Code', 'orchestra_hang_tag_orders_qty.uvc_tco')
-								->select('orchestra_hang_tag_orders_qty.*','osc.*','Size_Range_Label');
+								->select(DB::raw('distinct on ("orchestra_hang_tag_orders_qty".uvc_tco) "uvc_tco"'),'orchestra_hang_tag_orders_qty.*','osc.*','Size_Range_Label');
 								}))
 								->where('id', '=', $parentTable_id)
 								->get();
@@ -3007,7 +3007,7 @@ class JobManagerController extends Controller
 		{
 			// dd($value->parts_id);
 			// $express_value = explode('_',$value[0]);
-			// if($express_value[0] != "Select Option")
+			if($value->parts_id != 0)
 			{
 					// $exp_value = explode('_',$value[0]);
 					$orchestra_parts = DB::table('orchestra_parts')->select('*')->where('id',$value->parts_id)->get();

@@ -226,13 +226,30 @@ function printHangDiv(front,back,disney,name,style_no,buyer_no,id,order_type,cre
 								{	
 										if(i=='eur_price')
 										{	
-											svgDoc.getElementById("price1").innerHTML = v.split(",")[0];
-											svgDoc.getElementById("price2").innerHTML = v.split(",")[1];
+											if(v != null && v != "")
+											{
+												svgDoc.getElementById("price1").innerHTML = v.split(",")[0];
+												svgDoc.getElementById("price2").innerHTML = v.split(",")[1];
+											}
+											else
+											{
+												svgDoc.getElementById("price1").innerHTML = "";
+												svgDoc.getElementById("price2").innerHTML = "";
+											}
+											
 										}
 										else if(i=='eur_club_price')
 										{	
-											svgDoc.getElementById("club_price1").innerHTML = v.split(",")[0];
-											svgDoc.getElementById("club_price2").innerHTML = v.split(",")[1];
+											if(v != null && v != "")
+											{
+												svgDoc.getElementById("club_price1").innerHTML = v.split(",")[0];
+												svgDoc.getElementById("club_price2").innerHTML = v.split(",")[1];
+											}
+											else
+											{
+												svgDoc.getElementById("club_price1").innerHTML = "";
+												svgDoc.getElementById("club_price2").innerHTML = "";
+											}
 										}
 										else{
 											svgDoc1.getElementById(i).innerHTML=v
