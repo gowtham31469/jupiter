@@ -311,28 +311,28 @@ class PoManagerController extends Controller
             $id = $request->id; 
 			$buyer_id = $request->buyer_id;
 			$customer_id = $request->customer_id;
-			
 			   
-			   $arr_template =  DB::table('buyers')
-								 ->where('id',$buyer_id)
-								 ->first();
-			   
-            $orderlist   = ErpOrderDetails::join($arr_template->template_table,'erp_order_details.template_id',$arr_template->template_table.'.item_id')
+			$arr_template =  DB::table('buyers')
+								->where('id',$buyer_id)
+								->first();
+
+			$orders   = Erp::where('erp_orders.id',$id)
+							->join('customers','erp_orders.customer_id','customers.id')
+							->select('erp_orders.*','customers.company_name')
+							->get();   
+
+			$orderlist   = ErpOrderDetails::select('erp_order_details.*',$arr_template->template_table.'.template_name','erp_status.status_name')
+			                ->join($arr_template->template_table,'erp_order_details.template_id',$arr_template->template_table.'.item_id')
 							->join('erp_status','erp_order_details.status','erp_status.id')
 							->where('erp_order_details.erp_order_id',$id)
 							->where('erp_order_details.status','!=',4)
-                            ->select('erp_order_details.*',$arr_template->template_table.'.template_name','erp_status.status_name')
+							->where($arr_template->template_table.'.flag', '=', 0)
 							->orderBy('erp_order_details.buyer_po_number','asc')
 							->orderBy('erp_order_details.reference_name','asc')
                             ->get();
-			   
-				$orders   = Erp::where('erp_orders.id',$id)
-							->join('customers','erp_orders.customer_id','customers.id')
-                            ->select('erp_orders.*','customers.company_name')
-                            ->get();
 			
-		   foreach($orderlist as $value)
-		   {
+		    foreach($orderlist as $value)
+		    {
 			  $price =  DB::table('price_taxation')->select('price_taxation.*')->where('customer_id',$customer_id)->where('buyer_id',$buyer_id)->where('template_id',$value->template_id)->first();
 			   	
 			   if (empty($price)) {
@@ -349,12 +349,12 @@ class PoManagerController extends Controller
 				   }
 				   else
 				   {
-						$value->price = $price_range->price;
+					   $value->price = $price_range->price;
 				   }
 			   }
-		   }
+		    }
 			   
-           $result      = response()->json(['error'=> false,'message' =>'success','orderlist'=>$orderlist,'orders'=>$orders],200);
+            $result      = response()->json(['error'=> false,'message' =>'success','orderlist'=>$orderlist,'orders'=>$orders],200);
         }
         catch (\Exception $e)
         {
