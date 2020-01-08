@@ -304,53 +304,71 @@ class PrintManagerController extends Controller
 								$date = Carbon::parse($jobcard_id_list->created_at)->toDateString();
                     			$jobcard_id_list->created_date = Carbon::parse($date)->format('d-m-Y');
                     		}
+							
+							if($jobcard_id_list->order_qnty_table_name == "orchestra_hang_tag_orders_qty")
+							{
+								$fkey = DB::table('orchestra_hang_tag_orders_qty')
+								->where('id',$jobcard_id_list->order_qnty_table_id)
+								->first()
+								->oht_id;
+
+								$row = DB::table('orchestra_hang_tag_orders')
+								->where('id',$fkey)->first();
+								
+								$jobcard_id_list->frontPath = DB::table('orchestra_template')
+								->where('item_id',$row->template_front_id)
+								->where('flag',1)
+								->first()
+								->template_file;
+
+								$jobcard_id_list->backPath = DB::table('orchestra_template')
+								->where('item_id',$row->template_front_id)
+								->where('flag',0)
+								->first()
+								->template_file;
+
+								$jobcard_id_list->ownId = $row->id;
+								
+							}
+							
+							if($jobcard_id_list->order_qnty_table_name == "orchestra_wash_care_label_orders_qty")
+							{
+								$fkey = DB::table('orchestra_wash_care_label_orders_qty')
+								->where('id',$jobcard_id_list->order_qnty_table_id)
+								->first()
+								->owcl_id;
+
+								$row = DB::table('orchestra_wash_care_label_orders')
+								->where('id',$fkey)->first();
+								
+								$jobcard_id_list->frontPath = DB::table('orchestra_template')
+								->where('item_id',$row->template_id)
+								->where('flag',1)
+								->first()
+								->template_file;
+
+								$jobcard_id_list->backPath='/storage/app/template/Orchestra/WCL/sticker2.svg';
+								$jobcard_id_list->middlePath='/storage/app/template/Orchestra/WCL/sticker3.svg';
+							}
                 	    });
-
-					
-
- if($jobcard_id_list->first()->order_qnty_table_name ==  "orchestra_heat_transfer_orders_qty")
-                	    {
-                	    	return response()->json(['error'=> false,'message' =>'Print is currently not available for heat transfer orders', 'erp_orders_list' => []], 200);
-                	    }
-                	    if($jobcard_id_list->first()->order_qnty_table_name ==  "orchestra_hang_tag_orders_qty")
-                	    {
-
-                	    
-                	    	// $key = $jobcard_id_list->first()->order_qnty_table_id
-                	    	// ->first()->oht_id;
-                	    	$fkey = DB::table('orchestra_hang_tag_orders_qty')
-                	    	->where('id',$jobcard_id_list->first()->order_qnty_table_id)
-                	    	->first()
-                	    	->oht_id;
-
-                	    	$row = DB::table('orchestra_hang_tag_orders')
-                	    	->where('id',$fkey)->first();
-
-                	    	$jobcard_id_list->map(function ($jobcard_id_list,$key) use ($row){
-                    		
-                    		$jobcard_id_list->frontPath = DB::table('orchestra_template')
-                    		->where('item_id',$row->template_front_id)
-                    		->where('flag',1)
-                    		->first()
-                    		->template_file;
-
-                    		$jobcard_id_list->backPath = DB::table('orchestra_template')
-                    		->where('item_id',$row->template_front_id)
-                    		->where('flag',0)
-                    		->first()
-                    		->template_file;
-
-                    		$jobcard_id_list->ownId = $row->id;
-                	    });
-                	    }
-
-                	     if($jobcard_id_list->first()->order_qnty_table_name ==  "orchestra_wash_care_label_orders_qty")
-                	    {
-                	    	$jobcard_id_list->map(function ($jobcard_id_list,$key) {
-                    		$jobcard_id_list->backPath='/storage/app/template/Orchestra/WCL/sticker2.svg';
-                    		$jobcard_id_list->middlePath='/storage/app/template/Orchestra/WCL/sticker3.svg';
-                	    });
-                	    }
+						
+						$jobcard_id_list = $jobcard_id_list->filter(function ($jobcard_id_list, $key) {
+							
+							switch( $jobcard_id_list->order_qnty_table_name )
+							{
+								case "orchestra_heat_transfer_orders_qty":
+										return 0;
+								case "orchestra_special_tag_orders_qty":
+										return 0;
+								case "orchestra_main_label_orders_qty":
+										return 0;
+								case "orchestra_size_label_orders_qty":
+										return 0;
+								default:
+										return 1;
+							}
+							
+						});
 
 					}
 					else
