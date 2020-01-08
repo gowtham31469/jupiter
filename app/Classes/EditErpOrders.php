@@ -99,7 +99,7 @@ class EditErpOrders
 				$style_no = ($orders->zone == "CE") ? $orders->ce_style_ref : $orders->uk_style_ref ;
 				$custom_ref_name = DB::table('price_taxation')->where('customer_id',$orders->customer_id)->where('buyer_id',$buyer_id)->where('template_id',$orders->template_id)->value('custom_name');
 
-				$dataExists = DB::table('erp_order_details')->where('order_qnty_table_name',$qnty_table)->where('order_qnty_table_id',$vals->id)->where('erp_order_id',$erp_orders_id)->first();
+				$dataExists = DB::table('erp_order_details')->where('order_qnty_table_name',$qnty_table)->where('order_qnty_table_id',$vals->id)->where('erp_order_id',$erp_order_id)->first();
 				
 				if(empty($dataExists)){
 					$erp_order_details_id = ErpOrderDetails::insertGetId([
@@ -172,6 +172,12 @@ class EditErpOrders
 						'updated_at'  => $this->updated_at,
 					]);
 				}	
+
+				// remove erp_orders table row , if no FK relation exists in erp_order_details table
+				DB::table('erp_orders')->select('erp_orders.id')->whereNotIn('erp_orders.id', function($rightjoin) {                                             $rightjoin->select('erp_orders.id')
+							->from('erp_orders')
+							->rightjoin('erp_order_details', 'erp_orders.id', 'erp_order_details.erp_order_id')                                      ->groupBy('erp_orders.id');
+				})->delete();
 				
 			}
 		}
@@ -279,13 +285,9 @@ class EditErpOrders
 					$template_id = $orders->template_id;
 				}
 
-				$dataExists = DB::table('erp_order_details')->where('order_qnty_table_name',$qnty_table)->where('order_qnty_table_id',$vals->id)->first();
+				$dataExists = DB::table('erp_order_details')->where('order_qnty_table_name',$qnty_table)->where('order_qnty_table_id',$vals->id)->where('erp_order_id',$erp_order_id)->first();
 				
-				if(!empty($dataExists))
-				{
-					
-				}
-				else
+				if(empty($dataExists))
 				{
 					$erp_order_details_id = ErpOrderDetails::insertGetId([
 						'erp_order_id'     		=> $erp_order_id,

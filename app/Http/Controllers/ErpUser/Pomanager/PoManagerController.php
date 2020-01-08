@@ -412,7 +412,7 @@ class PoManagerController extends Controller
 						$query = ErpOrderDetails::where('id', $value->id)
 						->whereNotIn('status', $erp_status_ids);
 
-						if($po_rejected_date === null || $po_rejected_date === 'null') {
+						if($po_rejected_date === null || $po_rejected_date === '') {
 							$action_id  = DB::table('actions')->where('action', 'ilike', 'PO Manager Verified')->value('id');
 							$query = $query->update([
 										'rate' => $price_range{0}->price,
@@ -464,7 +464,7 @@ class PoManagerController extends Controller
 						$query = ErpOrderDetails::where('id', $value->id)
 						->whereNotIn('status', $erp_status_ids);
 
-						if($po_rejected_date === null || $po_rejected_date === 'null') {
+						if($po_rejected_date === null || $po_rejected_date === '') {
 							$action_id  = DB::table('actions')->where('action', 'ilike', 'PO Manager Verified')->value('id');
 							$query = $query->update([
 										'rate' => $price_range{0}->price,
