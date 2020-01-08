@@ -128,50 +128,51 @@ class EditErpOrders
 						'aw_date'               => $orders->order_approved_at,
 						'uuid'                  => $unique_id
 					]);
+
+					/** Get updated data and update in history table */
+					$template          = 'Available';
+					$action_id         = DB::table('actions')->where('action', 'ilike', 'PO Manager Verification Pending')->value('id');
+					
+					$template_level = DB::table('tesco_item_master as t1')
+										->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
+										->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
+										->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
+										->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
+										->where('t1.id', $orders->template_id)
+										->first();
+					
+					$material_name  = $template_level->material;
+					$material_sub   = $template_level->material_sub;
+					$material_ref   = $template_level->ref;
+
+					$history_id = DB::table('history')
+					->insertGetId([
+						'buyer_id'             => $buyer_id,
+						'erp_order_details_id' => $erp_order_details_id,
+						'template'             => $template,
+						'season'               => $orders->season_code,
+						'country'              => $orders->zone,
+						'customer_id'          => $orders->customer_id,
+						'material'             => $material_name,
+						'mat_sub'              => $material_sub,
+						'reference'            => $material_ref,
+						'style'                => $style_no,
+						'po'                   => $customer_po_no,
+						'buyer_po'             => $orders->po_number,
+						'ocn'                  => $orders->ocn_number,
+						'created_at'           => $this->updated_at,
+						'updated_at'           => $this->updated_at,
+					]);
+
+					DB::table('event_history')
+					->insert([
+						'history_id'  => $history_id,
+						'action_id'   => $action_id,
+						'created_at'  => $this->updated_at,
+						'updated_at'  => $this->updated_at,
+					]);
 				}	
 				
-				/** Get updated data and update in history table */
-				$template          = 'Available';
-				$action_id         = DB::table('actions')->where('action', 'ilike', 'PO Manager Verification Pending')->value('id');
-				
-				$template_level = DB::table('tesco_item_master as t1')
-									->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
-									->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
-									->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
-									->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
-									->where('t1.id', $orders->template_id)
-									->first();
-				
-				$material_name  = $template_level->material;
-				$material_sub   = $template_level->material_sub;
-				$material_ref   = $template_level->ref;
-
-				$history_id = DB::table('history')
-				->insertGetId([
-					'buyer_id'             => $buyer_id,
-					'erp_order_details_id' => $erp_order_details_id,
-					'template'             => $template,
-					'season'               => $orders->season_code,
-					'country'              => $orders->zone,
-					'customer_id'          => $orders->customer_id,
-					'material'             => $material_name,
-					'mat_sub'              => $material_sub,
-					'reference'            => $material_ref,
-					'style'                => $style_no,
-					'po'                   => $customer_po_no,
-					'buyer_po'             => $orders->po_number,
-					'ocn'                  => $orders->ocn_number,
-					'created_at'           => $this->updated_at,
-					'updated_at'           => $this->updated_at,
-				]);
-
-				DB::table('event_history')
-				->insert([
-					'history_id'  => $history_id,
-					'action_id'   => $action_id,
-					'created_at'  => $this->updated_at,
-					'updated_at'  => $this->updated_at,
-				]);
 			}
 		}
 	}
@@ -309,52 +310,52 @@ class EditErpOrders
 						'uuid'                  => $unique_id,
 						'template_type'         => $orders->template_type,
 					]);
+
+					// write data into history tables
+					$action_id      = DB::table('actions')->where('action', 'ilike', 'PO Manager Verification Pending')->value('id');
+
+					$template_data = DB::table('orchestra_item_master')
+										->where('orchestra_item_master.id', $template_id)
+										->select('orchestra_item_master.material_id', 'orchestra_item_master.item_name', 'orchestra_item_master.sub_material_id')->first();
+					$material_name  = DB::table('orchestra_item_master')->where('id', '=', $template_data->material_id)->value('item_name');
+					$material_sub  = DB::table('orchestra_item_master')->where('id', '=', $template_data->sub_material_id)->value('item_name');
+
+					$material_ref   = $template_data->item_name;
+					$buyer_po       = $orders->po;
+					$style          = $orders->uvc;
+					$ocn_number     = null;
+					$season         = $orders->season_code;
+					$country        = null;
+					$template       = 'Available';
+
+					/** Get updated data and update in history table */
+					$history_id = DB::table('history')
+					->insertGetId([
+						'buyer_id'             => $buyer_id,
+						'erp_order_details_id' => $erp_order_details_id,
+						'template'             => $template,
+						'season'               => $season,
+						'country'              => $country,
+						'customer_id'          => $orders->customer_id,
+						'material'             => $material_name,
+						'mat_sub'              => $material_sub,
+						'reference'            => $material_ref,
+						'style'                => $style,
+						'po'                   => $customer_po_no,
+						'buyer_po'             => $buyer_po,
+						'ocn'                  => $ocn_number,
+						'created_at'           => $this->created_at,
+						'updated_at'           => $this->created_at,
+					]);
+
+					DB::table('event_history')
+					->insert([
+						'history_id'  => $history_id,
+						'action_id'   => $action_id,
+						'created_at'  => $this->created_at,
+						'updated_at'  => $this->created_at,
+					]);
 				}	
-				
-				// write data into history tables
-				$action_id      = DB::table('actions')->where('action', 'ilike', 'PO Manager Verification Pending')->value('id');
-
-				$template_data = DB::table('orchestra_item_master')
-									->where('orchestra_item_master.id', $template_id)
-									->select('orchestra_item_master.material_id', 'orchestra_item_master.item_name', 'orchestra_item_master.sub_material_id')->first();
-				$material_name  = DB::table('orchestra_item_master')->where('id', '=', $template_data->material_id)->value('item_name');
-				$material_sub  = DB::table('orchestra_item_master')->where('id', '=', $template_data->sub_material_id)->value('item_name');
-
-				$material_ref   = $template_data->item_name;
-				$buyer_po       = $orders->po;
-				$style          = $orders->uvc;
-				$ocn_number     = null;
-				$season         = $orders->season_code;
-				$country        = null;
-				$template       = 'Available';
-
-				/** Get updated data and update in history table */
-				$history_id = DB::table('history')
-				->insertGetId([
-					'buyer_id'             => $buyer_id,
-					'erp_order_details_id' => $erp_order_details_id,
-					'template'             => $template,
-					'season'               => $season,
-					'country'              => $country,
-					'customer_id'          => $orders->customer_id,
-					'material'             => $material_name,
-					'mat_sub'              => $material_sub,
-					'reference'            => $material_ref,
-					'style'                => $style,
-					'po'                   => $customer_po_no,
-					'buyer_po'             => $buyer_po,
-					'ocn'                  => $ocn_number,
-					'created_at'           => $this->created_at,
-					'updated_at'           => $this->created_at,
-				]);
-
-				DB::table('event_history')
-				->insert([
-					'history_id'  => $history_id,
-					'action_id'   => $action_id,
-					'created_at'  => $this->created_at,
-					'updated_at'  => $this->created_at,
-				]);
 
 				// remove erp_orders table row , if no FK relation exists in erp_order_details table
 				DB::table('erp_orders')->select('erp_orders.id')->whereNotIn('erp_orders.id', function($rightjoin) {                                                  $rightjoin->select('erp_orders.id')
