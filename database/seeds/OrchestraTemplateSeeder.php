@@ -1134,22 +1134,12 @@ class OrchestraTemplateSeeder extends Seeder
             'hierarchy_id' => 62,
             ]);
 
-            \App\OrchestraTemplate::create([
-            'item_id' => 67,
-            'template_name' => "PBB1",
-            'template_description' => "PBB1",
-            'template_file' => "/storage/app/template/Orchestra/Tags/DISNESY/COD2//storage/app/template/Orchestra/Labels/HEAT_TRANSFER/DISNEY_H_TRANSFER/BABY/PBB2-H.TRANSFER DISNEY BABYDISNEY PIXAR.jpg",
-            'disney' => 1,
-            'tax' => 0,
-            'flag' => 0,
-            'hierarchy_id' => 62,
-            ]);
 
             \App\OrchestraTemplate::create([
             'item_id' => 68,
             'template_name' => "PBB2",
             'template_description' => "PBB2",
-            'template_file' => "/storage/app/template/Orchestra/Labels/HEAT_TRANSFER/DISNEY_H_TRANSFER/BABY/PBB3-H.TRANSFER DISNEY BABY DISNEY WINNIE.jpg",
+            'template_file' => "/storage/app/template/Orchestra/Labels/HEAT_TRANSFER/DISNEY_H_TRANSFER/BABY/PBB2-H.TRANSFER DISNEY BABYDISNEY PIXAR.jpg",
             'disney' => 1,
             'tax' => 0,
             'flag' => 0,

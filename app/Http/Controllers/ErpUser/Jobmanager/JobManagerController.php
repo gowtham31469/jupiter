@@ -308,6 +308,8 @@ class JobManagerController extends Controller
 					foreach($res->hangtagqty as $key => $value) 
 					{
 					$CountryCodes =array(0=>'DZD',1=>'CAD',2=>'CHF',3=>'MAD',4=>'MUR',5=>'USD',6=>'EUR');
+						
+					$countries = ['DZD','CAD','CHF','MAD','MUR','USD','EUR'];
 					$price = ['algeria_price','canada_price','swiss_price','morocco_price'
 							,'morris_price','us_price','eur_price'];
 					$clubPrice = ['algeria_club_price','canada_club_price','swiss_club_price','morroco_club_price'
@@ -326,7 +328,7 @@ class JobManagerController extends Controller
 					->select('Price','Club_Price')
 					->get();
 
-					array_push($PriceArr, array($price[$key]=>$q->first()->Price, $clubPrice[$key] => $q->first()->Club_Price));
+					array_push($PriceArr, array("Currency"=>$countries[$key],"Price"=>$q->first()->Price, "Club_Price" => $q->first()->Club_Price));
 					}
 
 					$value->prices =  $PriceArr;

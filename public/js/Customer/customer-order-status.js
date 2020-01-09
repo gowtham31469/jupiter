@@ -1143,11 +1143,13 @@ function tescoSetPO(obj, id, tableName, po_file) {
                     $('#snackbar').css('background-color', '#00b6ff');
                     $('.snackbar_span').html(data.responseJSON.message);
                     showSnackbar();
+					setTimeout(function(){ $(obj).removeAttr('disabled') }, 3000);
                 },
                 400: function () {
                     $('#snackbar').css('background-color', '#00b6ff');
                     $('.snackbar_span').html(data.responseJSON.message);
                     showSnackbar();
+					setTimeout(function(){ $(obj).removeAttr('disabled') }, 3000);
                 }
             },
             error: function (data) {

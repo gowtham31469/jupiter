@@ -198,92 +198,154 @@ function printHangDiv(front,back,disney,name,style_no,buyer_no,id,order_type,cre
 					console.log(data)
 						console.log("-------")
 					details = data.order_details[0].hangtagqty;
-					Refname =data.reference_name;
+					var node =data.reference_name;
 					$.each(details, function(index, val) {
+						
+							var size_txt = val.size;
+							var uvc_tco = val.uvc_tco;
+							var size = val.size.split(" ");
+						
+							if (size[1] == "ANS") {
+								if(size_txt.split(' ')[0] == 1)
+								{
+									var size1 = "YEAR";
+								}
+								else
+								{
+									var size1 = "YEARS";
+								}
 
-							svgDoc1.getElementById("uvc_tco").innerHTML = val.uvc_tco
-							svgDoc1.getElementById("size_french").innerHTML = val.size.split(" ")[1];
-							svgDoc1.getElementById("size").innerHTML = val.size.split(" ")[0];
-							svgDoc.getElementById("size_french").innerHTML = val.size.split(" ")[1];
-							svgDoc.getElementById("size").innerHTML = val.size.split(" ")[0];
-							svgDoc1.getElementById("cm").innerHTML = val.cm;
-							svgDoc1.getElementById("theme").innerHTML = data.order_details.theme;
-							svgDoc1.getElementById("size_list").innerHTML = val.Size_Range_Label.split(" ")[1]+"-"+val.Size_Range_Label.split(" ")[3];
-							if(val.size.split(" ")[1]=="MOIS")
+							} else {
+								if(size_txt.split(' ')[0] == 1)
+								{
+									var size1 = "MONTH";
+								}
+								else
+								{
+									var size1 = "MONTHS";
+								}
+							}
+						
+							var code = val.barcode;
+						
+						
+							if(size[0] == "TAILLE")
 							{
-								svgDoc1.getElementById("size_english").innerHTML = 'MONTHS';
-								svgDoc.getElementById("size_english").innerHTML = 'MONTHS';
+								svgDoc1.getElementById("size").innerHTML = "";
+								svgDoc1.getElementById("size_french").innerHTML = "";
+								svgDoc1.getElementById("size_english").innerHTML = "";
+								svgDoc1.getElementById("uvc_tco").innerHTML = uvc_tco;
+								svgDoc1.getElementById("size_list").innerHTML = "TAILLE UNIQUE";
+								svgDoc1.getElementById("cm").innerHTML = "ONE SIZE";
+								
+								svgDoc1.getElementById("tu_one_size").removeAttribute("visibility");
+								svgDoc.getElementById("size").innerHTML = "";
+								svgDoc.getElementById("size_french").innerHTML = "";
+								svgDoc.getElementById("size_english").innerHTML = "";
+								svgDoc.getElementById("tu_one_size").removeAttribute("visibility");
 							}
 							else
 							{
-								svgDoc1.getElementById("size_english").innerHTML = 'YEARS';
-								svgDoc.getElementById("size_english").innerHTML = 'YEARS';
-							}
+								if(val.cm != null && val.cm !=null)
+								{
+									svgDoc1.getElementById("cm").innerHTML =  val.cm+" CM";
+									
+								}
+								else
+								{
+									svgDoc1.getElementById("cm").innerHTML = "";
+								}
 
-							$.each(val.prices, function(ind, vl) {
-								temp=vl
-								$.each(temp,function(i,v)
-								{	
-										if(i=='eur_price')
-										{	
-											if(v != null && v != "")
-											{
-												svgDoc.getElementById("price1").innerHTML = v.split(",")[0];
-												svgDoc.getElementById("price2").innerHTML = v.split(",")[1];
-											}
-											else
-											{
-												svgDoc.getElementById("price1").innerHTML = "";
-												svgDoc.getElementById("price2").innerHTML = "";
-											}
+								svgDoc1.getElementById("size").innerHTML = size[0];
+								svgDoc1.getElementById("size_french").innerHTML = size[1];
+								svgDoc1.getElementById("size_english").innerHTML = size1;
+								svgDoc1.getElementById("uvc_tco").innerHTML = uvc_tco;
+								
+								svgDoc.getElementById("size").innerHTML = size[0];
+								svgDoc.getElementById("size_french").innerHTML = size[1];
+								svgDoc.getElementById("size_english").innerHTML = size1;
+							}
+						
+
+							$.each(val.prices, function(index,value){
+								switch(value.Currency)
+								{
+										case "EUR":
+										if(value.Price != "" && value.Price != null)
+										{
+											var svg_price =	value.Price.split(',');
+											var svg_club_price = value.Club_Price.split(',');
 											
+											svgDoc.getElementById("price1").innerHTML = svg_price[0];
+											svgDoc.getElementById("price2").innerHTML = ","+svg_price[1];
+											svgDoc.getElementById("club_price1").innerHTML = svg_club_price[0];
+											svgDoc.getElementById("club_price2").innerHTML = ","+ 	svg_club_price[1];	
 										}
-										else if(i=='eur_club_price')
-										{	
-											if(v != null && v != "")
-											{
-												svgDoc.getElementById("club_price1").innerHTML = v.split(",")[0];
-												svgDoc.getElementById("club_price2").innerHTML = v.split(",")[1];
-											}
-											else
-											{
-												svgDoc.getElementById("club_price1").innerHTML = "";
-												svgDoc.getElementById("club_price2").innerHTML = "";
-											}
+										else
+										{
+											svgDoc.getElementById("price1").innerHTML = "";
+											svgDoc.getElementById("price2").innerHTML = "";
+											svgDoc.getElementById("club_price1").innerHTML = "";
+											svgDoc.getElementById("club_price2").innerHTML = "";	
 										}
-										else{
-											svgDoc1.getElementById(i).innerHTML=v
-											svgDoc1.getElementById("saudi_club_price").innerHTML=''
-										}
-										
-								})
+										break;
+										case "CAD":
+										svgDoc1.getElementById("canada_price").innerHTML = value.Price;
+										svgDoc1.getElementById("canada_club_price").innerHTML = value.Club_Price;
+										break;
+										case "CHF":
+										svgDoc1.getElementById("swiss_price").innerHTML = value.Price;
+										svgDoc1.getElementById("swiss_club_price").innerHTML = value.Club_Price;
+										break;
+										case "DZD":
+										svgDoc1.getElementById("algeria_price").innerHTML = value.Price;
+										svgDoc1.getElementById("algeria_club_price").innerHTML = value.Club_Price;
+										break;
+										case "MAD":
+										svgDoc1.getElementById("morocco_price").innerHTML = value.Price;
+										svgDoc1.getElementById("morroco_club_price").innerHTML = value.Club_Price;
+										break;
+										case "MUR":
+										svgDoc1.getElementById("morris_price").innerHTML = value.Price;
+										svgDoc1.getElementById("morris_club_price").innerHTML = value.Club_Price;
+										break;
+										case "SAR":
+										svgDoc1.getElementById("saudi_club_price").innerHTML = value.Price;
+										break;
+										case "USD":
+										svgDoc1.getElementById("us_price").innerHTML = value.Price;
+										svgDoc1.getElementById("us_club_price").innerHTML = value.Club_Price;
+										break;
+										default:
+										console.log("default");
+										break;
+									}
+							});
+							
 
 							if(disney != "DI")
 							{
-								jsbarcode_hang(val.barcode, "barcode1", svgDoc1)
+								jsbarcode_hang(code, "barcode1", svgDoc1)
 								svgDoc1.getElementById("barcode1").setAttribute('transform', 'matrix(1.0971 0 0 1 10 50)');
 							}
 							else
 							{
 								
-                               jsbarcode_hang_disney(val.barcode, "barcode1", svgDoc1)
-								if(Refname == "COD2")
+                               jsbarcode_hang_disney(code, "barcode1", svgDoc1)
+								if(node == "COD2")
 								{
 						   			svgDoc1.getElementById("barcode1").setAttribute('transform', 'matrix(1.0971 0 0 1 -5 -15)');
 								}
-								else if(Refname == "DBB1")
+								else if(node == "DBB1")
 								{
 									svgDoc1.getElementById("barcode1").setAttribute('transform', 'matrix(1.0971 0 0 1 0 -20)');
+									//svgDoc1.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 92.096 47.0822)');
 								}
 								else
 								{
 									svgDoc1.getElementById("barcode1").setAttribute('transform', 'matrix(1.0971 0 0 1 0 -15)');
 								}
 							}
-							});
-							
-
-							
 						
 							var s = new XMLSerializer();
 							var d = svgRoot1;
@@ -374,69 +436,63 @@ function printWashDiv(data,data_back,data_middle,name,style_no,buyer_no,id,order
 					res = data.order_details[0] 	
 
 					$.each(details, function(index, val) {
-
-					svgDoc1.getElementById("parcel_code1").innerHTML = val.uvc_tco
-					svgDoc1.getElementById("parcel_code2").innerHTML = val.uvc_tco
-					svgDoc1.getElementById("size1").innerHTML = val.size
-					svgDoc1.getElementById("size2").innerHTML = val.size
-
-					svgDoc1.getElementById("cofreet_symbol1").setAttribute('xlink:href',res.cofreet_symbol1);
-					svgDoc1.getElementById("cofreet_symbol2").setAttribute('xlink:href',res.cofreet_symbol2);
-					svgDoc1.getElementById("cofreet_symbol3").setAttribute('xlink:href',res.cofreet_symbol3);
-					svgDoc1.getElementById("cofreet_symbol4").setAttribute('xlink:href',res.cofreet_symbol4);
-					svgDoc1.getElementById("cofreet_symbol5").setAttribute('xlink:href',res.cofreet_symbol5);
-
-					svgDoc1.getElementById("astm_symbol1").setAttribute('xlink:href',res.astm_symbol1);
-					svgDoc1.getElementById("astm_symbol2").setAttribute('xlink:href',res.astm_symbol2);
-					svgDoc1.getElementById("astm_symbol3").setAttribute('xlink:href',res.astm_symbol3);
-					svgDoc1.getElementById("astm_symbol4").setAttribute('xlink:href',res.astm_symbol4);
-					svgDoc1.getElementById("astm_symbol5").setAttribute('xlink:href',res.astm_symbol5);
-					
-							if(val.cm != null )
-							{
-								svgDoc1.getElementById("size_in_fr_en1").innerHTML = val.cm+" cm"
-								svgDoc1.getElementById("size_in_fr_en2").innerHTML = val.cm+" cm"
-							}
-							else
-							{
-								svgDoc1.getElementById("size_in_fr_en1").innerHTML = ''
-								svgDoc1.getElementById("size_in_fr_en2").innerHTML = ''
-							}
-							// svgDoc1.getElementById("size_french").innerHTML = val.size.split(" ")[1];
-							// svgDoc1.getElementById("size").innerHTML = val.size.split(" ")[0];
-							// svgDoc.getElementById("size_french").innerHTML = val.size.split(" ")[1];
-							// svgDoc.getElementById("size").innerHTML = val.size.split(" ")[0];
-							// svgDoc1.getElementById("cm").innerHTML = val.cm;
-							// svgDoc1.getElementById("theme").innerHTML = data.order_details.theme;
-							// svgDoc1.getElementById("size_list").innerHTML = val.Size_Range_Label.split(" ")[1]+"-"+val.Size_Range_Label.split(" ")[3];
-							// if(val.size.split(" ")[1]=="MOIS")
-							// {
-							// 	svgDoc1.getElementById("size_english").innerHTML = 'MONTHS';
-							// 	svgDoc.getElementById("size_english").innerHTML = 'MONTHS';
-							// }
-							// else
-							// {
-							// 	svgDoc1.getElementById("size_english").innerHTML = 'YEARS';
-							// 	svgDoc.getElementById("size_english").innerHTML = 'YEARS';
-							// }
-
-							
-							svgDoc1.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -38 135) rotate(270)');
-							jsbarcodewash(val.barcode, 'barcode', svgDoc1)
 						
-							var s = new XMLSerializer();
-							var d = svgRoot1;
-							var str = s.serializeToString(d);
-							var svg = encodeURI(str)
-							svgarr.push(svg)
-							
-							// var s_front = new XMLSerializer();
-							// var d_front = svgRoot;
-							// var str_front = s_front.serializeToString(d_front);
-							// var svg_front = encodeURI(str_front)
-							// svgarr_front.push(svg_front)
-							
-							ajax++;
+						var size_txt = val.size;
+						var uvc_tco = val.uvc_tco;
+						var size = val.size.split(" ")
+
+						if (size[1] == "ANS") {
+							var size1 = "years";
+						} else {
+							var size1 = "months";
+						}
+
+						var code = val.barcode;
+
+						if(val.cm != null && val.cm != "")
+						{
+							svgDoc1.getElementById("size_in_fr_en1").innerHTML = val.cm+" cm ";
+							svgDoc1.getElementById("size_in_fr_en2").innerHTML = val.cm+" cm ";
+						}
+						else
+						{
+							svgDoc1.getElementById("size_in_fr_en1").innerHTML = "";
+							svgDoc1.getElementById("size_in_fr_en2").innerHTML = "";
+						}
+
+						svgDoc1.getElementById("size1").innerHTML = size_txt.replace(" ", "").toLowerCase() + "/" + size1;
+						svgDoc1.getElementById("size2").innerHTML = size_txt.replace(" ", "").toLowerCase() + "/" + size1;
+						svgDoc1.getElementById("parcel_code1").innerHTML = uvc_tco;
+						svgDoc1.getElementById("parcel_code2").innerHTML = uvc_tco;
+						svgDoc1.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -38 135) rotate(270)');
+						jsbarcodewash(code, 'barcode', svgDoc1)
+
+						svgDoc1.getElementById("cofreet_symbol1").setAttribute('xlink:href',res.cofreet_symbol1);
+						svgDoc1.getElementById("cofreet_symbol2").setAttribute('xlink:href',res.cofreet_symbol2);
+						svgDoc1.getElementById("cofreet_symbol3").setAttribute('xlink:href',res.cofreet_symbol3);
+						svgDoc1.getElementById("cofreet_symbol4").setAttribute('xlink:href',res.cofreet_symbol4);
+						svgDoc1.getElementById("cofreet_symbol5").setAttribute('xlink:href',res.cofreet_symbol5);
+
+						svgDoc1.getElementById("astm_symbol1").setAttribute('xlink:href',res.astm_symbol1);
+						svgDoc1.getElementById("astm_symbol2").setAttribute('xlink:href',res.astm_symbol2);
+						svgDoc1.getElementById("astm_symbol3").setAttribute('xlink:href',res.astm_symbol3);
+						svgDoc1.getElementById("astm_symbol4").setAttribute('xlink:href',res.astm_symbol4);
+						svgDoc1.getElementById("astm_symbol5").setAttribute('xlink:href',res.astm_symbol5);
+
+
+						var s = new XMLSerializer();
+						var d = svgRoot1;
+						var str = s.serializeToString(d);
+						var svg = encodeURI(str)
+						svgarr.push(svg)
+
+						// var s_front = new XMLSerializer();
+						// var d_front = svgRoot;
+						// var str_front = s_front.serializeToString(d_front);
+						// var svg_front = encodeURI(str_front)
+						// svgarr_front.push(svg_front)
+
+						ajax++;
 					});
 
 					if(details.length == ajax)

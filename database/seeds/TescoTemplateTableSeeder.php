@@ -27,7 +27,7 @@ class TescoTemplateTableSeeder extends Seeder
                 'disney' => 0,
                 'tax' => 0,
                 'hierarchy_id' => 2,
-                'flag' => 1,
+                'flag' => 0,
             ),
             1 => 
             array (
@@ -39,7 +39,7 @@ class TescoTemplateTableSeeder extends Seeder
                 'disney' => 0,
                 'tax' => 0,
                 'hierarchy_id' => 2,
-                'flag' => 1,
+                'flag' => 0,
             ),
             2 => 
             array (
@@ -51,7 +51,7 @@ class TescoTemplateTableSeeder extends Seeder
                 'disney' => 0,
                 'tax' => 0,
                 'hierarchy_id' => 2,
-                'flag' => 1,
+                'flag' => 0,
             ),
             3 => 
             array (
@@ -63,7 +63,7 @@ class TescoTemplateTableSeeder extends Seeder
                 'disney' => 0,
                 'tax' => 0,
                 'hierarchy_id' => 2,
-                'flag' => 1,
+                'flag' => 0,
             ),
             4 => 
             array (
@@ -75,7 +75,7 @@ class TescoTemplateTableSeeder extends Seeder
                 'disney' => 0,
                 'tax' => 0,
                 'hierarchy_id' => 2,
-                'flag' => 1,
+                'flag' => 0,
             ),
             5 => 
             array (
@@ -87,7 +87,7 @@ class TescoTemplateTableSeeder extends Seeder
                 'disney' => 0,
                 'tax' => 0,
                 'hierarchy_id' => 2,
-                'flag' => 1,
+                'flag' => 0,
             ),
             6 => 
             array (
@@ -99,7 +99,7 @@ class TescoTemplateTableSeeder extends Seeder
                 'disney' => 0,
                 'tax' => 0,
                 'hierarchy_id' => 2,
-                'flag' => 1,
+                'flag' => 0,
             ),
             7 => 
             array (
@@ -111,7 +111,7 @@ class TescoTemplateTableSeeder extends Seeder
                 'disney' => 0,
                 'tax' => 0,
                 'hierarchy_id' => 2,
-                'flag' => 1,
+                'flag' => 0,
             ),
             8 => 
             array (
@@ -123,7 +123,7 @@ class TescoTemplateTableSeeder extends Seeder
                 'disney' => 0,
                 'tax' => 0,
                 'hierarchy_id' => 2,
-                'flag' => 1,
+                'flag' => 0,
             ),
             9 => 
             array (
@@ -135,7 +135,7 @@ class TescoTemplateTableSeeder extends Seeder
                 'disney' => 0,
                 'tax' => 0,
                 'hierarchy_id' => 2,
-                'flag' => 1,
+                'flag' => 0,
             ),
             10 => 
             array (
@@ -147,7 +147,7 @@ class TescoTemplateTableSeeder extends Seeder
                 'disney' => 0,
                 'tax' => 0,
                 'hierarchy_id' => 2,
-                'flag' => 1,
+                'flag' => 0,
             ),
             11 => 
             array (
@@ -159,7 +159,7 @@ class TescoTemplateTableSeeder extends Seeder
                 'disney' => 0,
                 'tax' => 0,
                 'hierarchy_id' => 2,
-                'flag' => 1,
+                'flag' => 0,
             ),
             12 => 
             array (
@@ -171,7 +171,7 @@ class TescoTemplateTableSeeder extends Seeder
                 'disney' => 0,
                 'tax' => 0,
                 'hierarchy_id' => 2,
-                'flag' => 1,
+                'flag' => 0,
             ),
             13 => 
             array (
@@ -183,7 +183,7 @@ class TescoTemplateTableSeeder extends Seeder
                 'disney' => 0,
                 'tax' => 0,
                 'hierarchy_id' => 2,
-                'flag' => 1,
+                'flag' => 0,
             ),
             15 => 
             array (
@@ -195,7 +195,7 @@ class TescoTemplateTableSeeder extends Seeder
                 'disney' => 0,
                 'tax' => 0,
                 'hierarchy_id' => 2,
-                'flag' => 1,
+                'flag' => 0,
             ),
             16 => 
             array (
@@ -207,7 +207,7 @@ class TescoTemplateTableSeeder extends Seeder
                 'disney' => 0,
                 'tax' => 0,
                 'hierarchy_id' => 2,
-                'flag' => 1,
+                'flag' => 0,
             ),
             17 => 
             array (
@@ -219,7 +219,7 @@ class TescoTemplateTableSeeder extends Seeder
                 'disney' => 0,
                 'tax' => 0,
                 'hierarchy_id' => 2,
-                'flag' => 1,
+                'flag' => 0,
             ),
             18 => 
             array (
@@ -231,7 +231,7 @@ class TescoTemplateTableSeeder extends Seeder
                 'disney' => 0,
                 'tax' => 0,
                 'hierarchy_id' => 2,
-                'flag' => 1,
+                'flag' => 0,
             ),
             19 => 
             array (
@@ -243,7 +243,7 @@ class TescoTemplateTableSeeder extends Seeder
                 'disney' => 0,
                 'tax' => 0,
                 'hierarchy_id' => 2,
-                'flag' => 1,
+                'flag' => 0,
             ),
             20 => 
             array (
@@ -255,7 +255,7 @@ class TescoTemplateTableSeeder extends Seeder
                 'disney' => 0,
                 'tax' => 0,
                 'hierarchy_id' => 2,
-                'flag' => 1,
+                'flag' => 0,
             ),
             21 => 
             array (
@@ -267,7 +267,7 @@ class TescoTemplateTableSeeder extends Seeder
                 'disney' => 0,
                 'tax' => 0,
                 'hierarchy_id' => 2,
-                'flag' => 1,
+                'flag' => 0,
             ),
         ));
         
