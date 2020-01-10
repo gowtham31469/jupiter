@@ -237,7 +237,7 @@ class JobManagerController extends Controller
 
 			asort($orders_erp);
 			
-			//dd($orders_erp);
+			dd($orders_erp);
 			
 			return view('erp.Jobmanager.jobmanager', ['orders' => $orders_erp, 'companies' => $companies, 'disp_modes' => $erp_dispatch_mode, 'finish_types' => $erp_finish_type, 'machines' => $erp_machines, 'teeth_nos' => $erp_teeth_no]);
 		}
