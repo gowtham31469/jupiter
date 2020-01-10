@@ -198,7 +198,10 @@ function printHangDiv(front,back,disney,name,style_no,buyer_no,id,order_type,cre
 					console.log(data)
 						console.log("-------")
 					details = data.order_details[0].hangtagqty;
-					var node =data.reference_name;
+					var node = name;
+//					alert(disney)
+//					alert(node)
+					//alert(data.reference_name)
 					$.each(details, function(index, val) {
 						
 							var size_txt = val.size;
@@ -658,7 +661,7 @@ function PopupHang(svgRoot, svgRoot1,svgDoc,svgDoc1,disney) {
 }
 
 
-function DownloadArtwork(modal,i,template_file,style_no,buyer_no,id,order_type,created_at,status,type,template_id) {
+function DownloadArtwork(modal,i,template_file,style_no,buyer_no,id,order_type,created_at,status,type,template_id,disney) {
 	
 	switch(status) {
 	  case "proof":
@@ -668,7 +671,7 @@ function DownloadArtwork(modal,i,template_file,style_no,buyer_no,id,order_type,c
 	  case "print_orchestra":
 	    if(type == "hang_tag")
 	    {
-	    	printHangDiv('orchestra_modal_front'+ i,'orchestra_modal_back'+ i,"DI",modal,style_no,buyer_no,id,order_type,created_at,status,"orchestra")
+	    	printHangDiv('orchestra_modal_front'+ i,'orchestra_modal_back'+ i,disney,modal,style_no,buyer_no,id,order_type,created_at,status,"orchestra")
 	  	}
 	  	else if(type == "wash_care")
 	  	{

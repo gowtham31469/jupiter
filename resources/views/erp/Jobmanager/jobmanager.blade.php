@@ -275,34 +275,132 @@
 							<tbody>
 								@foreach($orders as $key => $value)
 								@php $ref_name = str_replace(" ","",$value['reference_name']) @endphp
-								<tr id="{{$value['id']}}" data-refname="{{ $value['reference_name'] }}" data-buyer-po="{{ $value['buyer_po_number'] }}" data-order-type="{{ $value['order_type'] }}" data-created-at="{{ $value['created_at'] }}" data-style-no="{{ $value['style_no'] }}" data-template-file="{{ $value['template_file'] }}" data-iteration="{{ $loop->iteration }}" data-zone="{{ $value['zone'] }}" data-uuid="{{ $value['uuid'] }}">
-									<td>
-										<div class="form-check">
-										<a href="javascript:void(0)">
-											<label>
-												<input class="row-checkbox" type="checkbox" data-customer-name="{{$value['company_name']}}" style="margin-right: 10px;" onchange="return selectOrders(this)" data-buyer-name="{{$value['buyer_name']}}"> <span class="label-text" class="hidden-val">{{ $loop->iteration }}</label>
-										</a>
-										</div>
-									</td>
-									<td>{{$value['erp_id']}}</td>
-									<td>{{$value['company_name']}}</td>
-									<td data-buyer-id="{{$value['buyer_id']}}">{{$value['buyer_name']}}</td>
-									<td>{{$value['po_no']}}</td>
-									@if ($value['buyer_po_number'] != '')
-									    <td>{{$value['buyer_po_number']}}</td>
+								@if ($value['buyer_name'] == 'Orchestra')
+									@if ($value['order_qnty_table_name'] == 'orchestra_hang_tag_orders_qty')
+										<tr id="{{$value['id']}}" data-refname="{{ $value['reference_name'] }}" data-buyer-po="{{ $value['buyer_po_number'] }}" data-order-type="{{ $value['order_type'] }}" data-created-at="{{ $value['created_at'] }}" data-style-no="{{ $value['style_no'] }}" data-template-file="{{ $value['template_file'] }}" data-template-id="{{ $value['template_id'] }}" data-template-name="hang_tag" data-iteration="{{ $loop->iteration }}" data-zone="{{ $value['zone'] }}" data-uuid="{{ $value['uuid'] }}">
+											<td>
+												<div class="form-check">
+												<a href="javascript:void(0)">
+													<label>
+														<input class="row-checkbox" type="checkbox" data-customer-name="{{$value['company_name']}}" style="margin-right: 10px;" onchange="return selectOrders(this)" data-buyer-name="{{$value['buyer_name']}}"> <span class="label-text" class="hidden-val">{{ $loop->iteration }}</label>
+												</a>
+												</div>
+											</td>
+											<td>{{$value['erp_id']}}</td>
+											<td>{{$value['company_name']}}</td>
+											<td data-buyer-id="{{$value['buyer_id']}}">{{$value['buyer_name']}}</td>
+											<td>{{$value['po_no']}}</td>
+											@if ($value['buyer_po_number'] != '')
+												<td>{{$value['buyer_po_number']}}</td>
+											@else
+												<td>-</td>
+											@endif
+											<td>{{$value['style_no']}}</td>
+											<td>{{$value['reference_name']}}</td>
+											@if ($value['delivery_date'] != '')
+												<td>{{$value['delivery_date']}}</td>
+											@else
+												<td>-</td>
+											@endif
+
+											<td> <object style="opacity:0;width:0px;height:0px" id="orchestra_modal_front{{ $loop->iteration }}" class="center-block tesco_svg{{ $loop->iteration }}" data="{{$value['frontPath']}}" type="image/svg+xml"></object>
+										    <object style="opacity:0;width:0px;height:0px" id="orchestra_modal_back{{ $loop->iteration }}" class="center-block tesco_svg{{ $loop->iteration }}" data="{{$value['backPath']}}" type="image/svg+xml"></object><a class="artork_download" href="javascript:void(0)" onclick="openmodaltesco('{{$value['reference_name']}}','{{ $loop->iteration }}','{{$value['template_file']}}','{{$value['style_no']}}','{{$value['buyer_po_number']}}','{{$value['id']}}','{{$value['order_type']}}','{{$value['created_at']}}','print_orchestra','hang_tag','{{$value['template_id']}}','{{$value['Disney']}}')"><i class="fa fa-file-pdf-o fa-button preview-pdf" data-placement="left" title="Download Artwork" data-original-title="Download Artwork"></i></a></td>
+										</tr>
+									@elseif($value['order_qnty_table_name'] == 'orchestra_wash_care_label_orders_qty')
+										<tr id="{{$value['id']}}" data-refname="{{ $value['reference_name'] }}" data-buyer-po="{{ $value['buyer_po_number'] }}" data-order-type="{{ $value['order_type'] }}" data-created-at="{{ $value['created_at'] }}" data-style-no="{{ $value['style_no'] }}" data-template-file="{{ $value['template_file'] }}" data-template-id="{{ $value['template_id'] }}" data-template-name="wash_care" data-iteration="{{ $loop->iteration }}" data-zone="{{ $value['zone'] }}" data-uuid="{{ $value['uuid'] }}">
+											<td>
+												<div class="form-check">
+												<a href="javascript:void(0)">
+													<label>
+														<input class="row-checkbox" type="checkbox" data-customer-name="{{$value['company_name']}}" style="margin-right: 10px;" onchange="return selectOrders(this)" data-buyer-name="{{$value['buyer_name']}}"> <span class="label-text" class="hidden-val">{{ $loop->iteration }}</label>
+												</a>
+												</div>
+											</td>
+											<td>{{$value['erp_id']}}</td>
+											<td>{{$value['company_name']}}</td>
+											<td data-buyer-id="{{$value['buyer_id']}}">{{$value['buyer_name']}}</td>
+											<td>{{$value['po_no']}}</td>
+											@if ($value['buyer_po_number'] != '')
+												<td>{{$value['buyer_po_number']}}</td>
+											@else
+												<td>-</td>
+											@endif
+											<td>{{$value['style_no']}}</td>
+											<td>{{$value['reference_name']}}</td>
+											@if ($value['delivery_date'] != '')
+												<td>{{$value['delivery_date']}}</td>
+											@else
+												<td>-</td>
+											@endif
+
+											<td> <object style="opacity:0;width:0px;height:0px" id="washcare_front{{ $loop->iteration }}" class="center-block tesco_svg{{ $loop->iteration }}" data="{{$value['frontPath']}}" type="image/svg+xml"></object>
+										    <object style="opacity:0;width:0px;height:0px" id="washcare_back{{ $loop->iteration }}" class="center-block tesco_svg{{ $loop->iteration }}" data="{{$value['backPath']}}" type="image/svg+xml"></object>
+										    <object style="opacity:0;width:0px;height:0px" id="washcare_middle{{ $loop->iteration }}" class="center-block tesco_svg{{ $loop->iteration }}" data="{{$value['middlePath']}}" type="image/svg+xml"></object><a class="artork_download" href="javascript:void(0)" onclick="openmodaltesco('{{$value['reference_name']}}','{{ $loop->iteration }}','{{$value['template_file']}}','{{$value['style_no']}}','{{$value['buyer_po_number']}}','{{$value['id']}}','{{$value['order_type']}}','{{$value['created_at']}}','print_orchestra','wash_care','{{$value['template_id']}}','{{$value['Disney']}}')"><i class="fa fa-file-pdf-o fa-button preview-pdf" data-placement="left" title="Download Artwork" data-original-title="Download Artwork"></i></a></td>
+										</tr>
 									@else
-										<td>-</td>
+										<tr id="{{$value['id']}}" data-refname="{{ $value['reference_name'] }}" data-buyer-po="{{ $value['buyer_po_number'] }}" data-order-type="{{ $value['order_type'] }}" data-created-at="{{ $value['created_at'] }}" data-style-no="{{ $value['style_no'] }}" data-template-file="{{ $value['template_file'] }}" data-template-id="{{ $value['template_id'] }}" data-template-name="stickers" data-iteration="{{ $loop->iteration }}" data-zone="{{ $value['zone'] }}" data-uuid="{{ $value['uuid'] }}">
+											<td>
+												<div class="form-check">
+												<a href="javascript:void(0)">
+													<label>
+														<input class="row-checkbox" type="checkbox" data-customer-name="{{$value['company_name']}}" style="margin-right: 10px;" onchange="return selectOrders(this)" data-buyer-name="{{$value['buyer_name']}}"> <span class="label-text" class="hidden-val">{{ $loop->iteration }}</label>
+												</a>
+												</div>
+											</td>
+											<td>{{$value['erp_id']}}</td>
+											<td>{{$value['company_name']}}</td>
+											<td data-buyer-id="{{$value['buyer_id']}}">{{$value['buyer_name']}}</td>
+											<td>{{$value['po_no']}}</td>
+											@if ($value['buyer_po_number'] != '')
+												<td>{{$value['buyer_po_number']}}</td>
+											@else
+												<td>-</td>
+											@endif
+											<td>{{$value['style_no']}}</td>
+											<td>{{$value['reference_name']}}</td>
+											@if ($value['delivery_date'] != '')
+												<td>{{$value['delivery_date']}}</td>
+											@else
+												<td>-</td>
+											@endif
+											@if ($value['order_qnty_table_name'] == 'orchestra_heat_transfer_orders_qty' || $value['order_qnty_table_name'] == 'orchestra_special_tag_orders_qty' || $value['order_qnty_table_name'] == 'orchestra_main_label_orders_qty' || $value['order_qnty_table_name'] == 'orchestra_size_label_orders_qty')
+												<td> </td>
+											@else
+												<td> <object style="opacity:0;width:0px;height:0px" id="orchestra_svg_modal{{ $loop->iteration }}" class="center-block tesco_svg{{ $loop->iteration }}" data="{{$value['template_file']}}" type="image/svg+xml"></object><a class="artork_download" href="javascript:void(0)" onclick="openmodaltesco('{{$value['reference_name']}}','{{ $loop->iteration }}','{{$value['template_file']}}','{{$value['style_no']}}','{{$value['buyer_po_number']}}','{{$value['id']}}','{{$value['order_type']}}','{{$value['created_at']}}','print_orchestra','stickers','{{$value['template_id']}}','')"><i class="fa fa-file-pdf-o fa-button preview-pdf" data-placement="left" title="Download Artwork" data-original-title="Download Artwork"></i></a></td>
+											@endif
+											
+										</tr>
 									@endif
-									<td>{{$value['style_no']}}</td>
-									<td>{{$value['reference_name']}}</td>
-									@if ($value['delivery_date'] != '')
-										<td>{{$value['delivery_date']}}</td>
-									@else
-										<td>-</td>
-									@endif
-									
-									<td> <object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal{{$loop->iteration}}" class="center-block tesco_svg{{$loop->iteration}}" data="{{$value['template_file']}}" type="image/svg+xml"></object><a class="artork_download" href="javascript:void(0)" onclick="openmodaltesco('{{$ref_name}}','{{ $loop->iteration }}','{{$value['template_file']}}','{{$value['style_no']}}','{{$value['buyer_po_number']}}','{{$value['id']}}','{{$value['order_type']}}','{{$value['created_at']}}')"><i class="fa fa-file-pdf-o fa-button preview-pdf" data-placement="left" title="Download Artwork" data-original-title="Download Artwork"></i></a></td>
-								</tr>
+								@else
+									<tr id="{{$value['id']}}" data-refname="{{ $value['reference_name'] }}" data-buyer-po="{{ $value['buyer_po_number'] }}" data-order-type="{{ $value['order_type'] }}" data-created-at="{{ $value['created_at'] }}" data-style-no="{{ $value['style_no'] }}" data-template-file="{{ $value['template_file'] }}" data-iteration="{{ $loop->iteration }}" data-zone="{{ $value['zone'] }}" data-uuid="{{ $value['uuid'] }}">
+										<td>
+											<div class="form-check">
+											<a href="javascript:void(0)">
+												<label>
+													<input class="row-checkbox" type="checkbox" data-customer-name="{{$value['company_name']}}" style="margin-right: 10px;" onchange="return selectOrders(this)" data-buyer-name="{{$value['buyer_name']}}"> <span class="label-text" class="hidden-val">{{ $loop->iteration }}</label>
+											</a>
+											</div>
+										</td>
+										<td>{{$value['erp_id']}}</td>
+										<td>{{$value['company_name']}}</td>
+										<td data-buyer-id="{{$value['buyer_id']}}">{{$value['buyer_name']}}</td>
+										<td>{{$value['po_no']}}</td>
+										@if ($value['buyer_po_number'] != '')
+											<td>{{$value['buyer_po_number']}}</td>
+										@else
+											<td>-</td>
+										@endif
+										<td>{{$value['style_no']}}</td>
+										<td>{{$value['reference_name']}}</td>
+										@if ($value['delivery_date'] != '')
+											<td>{{$value['delivery_date']}}</td>
+										@else
+											<td>-</td>
+										@endif
+
+										<td> <object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal{{$loop->iteration}}" class="center-block tesco_svg{{$loop->iteration}}" data="{{$value['template_file']}}" type="image/svg+xml"></object><a class="artork_download" href="javascript:void(0)" onclick="openmodaltesco('{{$ref_name}}','{{ $loop->iteration }}','{{$value['template_file']}}','{{$value['style_no']}}','{{$value['buyer_po_number']}}','{{$value['id']}}','{{$value['order_type']}}','{{$value['created_at']}}','print','stickers','{{$value['template_id']}},''')"><i class="fa fa-file-pdf-o fa-button preview-pdf" data-placement="left" title="Download Artwork" data-original-title="Download Artwork"></i></a></td>
+									</tr>
+								@endif
 								@endforeach
 							</tbody>
 						</table>

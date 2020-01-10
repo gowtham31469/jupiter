@@ -315,6 +315,11 @@ class PrintManagerController extends Controller
 								$row = DB::table('orchestra_hang_tag_orders')
 								->where('id',$fkey)->first();
 								
+								$disney = DB::table('orchestra_parcel_details')
+								->where('id',$row->orchestra_parcel_details_id)->first();
+								
+								$jobcard_id_list->Disney = $disney->Licence_Code;
+								
 								$jobcard_id_list->frontPath = DB::table('orchestra_template')
 								->where('item_id',$row->template_front_id)
 								->where('flag',1)
@@ -340,6 +345,11 @@ class PrintManagerController extends Controller
 
 								$row = DB::table('orchestra_wash_care_label_orders')
 								->where('id',$fkey)->first();
+								
+								$disney = DB::table('orchestra_parcel_details')
+								->where('id',$row->orchestra_parcel_details_id)->first();
+								
+								$jobcard_id_list->Disney = $disney->Licence_Code;
 								
 								$jobcard_id_list->frontPath = DB::table('orchestra_template')
 								->where('item_id',$row->template_id)
