@@ -144,15 +144,15 @@ class JobManagerController extends Controller
 											->join('buyers', 'erp_orders.buyer_id', 'buyers.id')
 											->join('erp_status', 'erp_orders.status', 'erp_status.id')
 											->join($this->buyer_name.'_template', $this->buyer_name.'_template.item_id', 'erp_order_details.template_id')
-											// ->where('erp_order_details.template_id', '=', $valuess)
+											 ->where('erp_order_details.template_id', '=', $valuess)
 											// ->where('erp_orders.status', '=', $erp_status_id)
 											->where('erp_order_details.deleted_at', null)
 											->where('erp_order_details.status', '=', $erp_status_id)
 											->where('erp_order_details.order_status_id', '=', $order_status_id)
 											->where('buyers.id', $buyer_id)
 											->orderBy('erp_order_details.erp_order_id', 'asc')
-											->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id',$this->buyer_name.'_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at','erp_order_details.uuid', 'erp_order_details.zone')
-											->select('erp_orders.id', 'erp_orders.customer_id', 'erp_orders.buyer_id', 'erp_orders.po_no', 'erp_orders.po_file', 'erp_orders.status', 'erp_orders.erp_id','erp_order_details.reference_name', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name', 'buyers.id as buyer_id',$this->buyer_name.'_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at', 'erp_order_details.uuid', 'erp_order_details.zone')
+											->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name','erp_order_details.order_qnty_table_name','erp_order_details.order_qnty_table_id', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id',$this->buyer_name.'_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at','erp_order_details.uuid', 'erp_order_details.zone')
+											->select('erp_orders.id', 'erp_order_details.template_id','erp_orders.customer_id', 'erp_orders.buyer_id', 'erp_orders.po_no', 'erp_orders.po_file', 'erp_orders.status', 'erp_orders.erp_id','erp_order_details.reference_name','erp_order_details.order_qnty_table_name','erp_order_details.order_qnty_table_id', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name', 'buyers.id as buyer_id',$this->buyer_name.'_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at', 'erp_order_details.uuid', 'erp_order_details.zone')
 											->get()->toArray();
 					
 					if(count($erp_order_details) > 0)
@@ -163,6 +163,60 @@ class JobManagerController extends Controller
 							if($erp_order_det["delivery_date"] != null)
 							{
                                  $erp_order_det["delivery_date"] = Carbon::parse($erp_order_det["delivery_date"])->format('d-m-Y');
+							}
+							
+							if($erp_order_det["order_qnty_table_name"] == "orchestra_hang_tag_orders_qty")
+							{
+								$fkey = DB::table('orchestra_hang_tag_orders_qty')
+								->where('id',$erp_order_det["order_qnty_table_id"])
+								->first()
+								->oht_id;
+
+								$row = DB::table('orchestra_hang_tag_orders')
+								->where('id',$fkey)->first();
+								
+								$disney = DB::table('orchestra_parcel_details')
+								->where('id',$row->orchestra_parcel_details_id)->first();
+								
+								$erp_order_det["Disney"] = $disney->Licence_Code;
+								
+								$erp_order_det["frontPath"] = DB::table('orchestra_template')
+								->where('item_id',$row->template_front_id)
+								->where('flag',1)
+								->first()
+								->template_file;
+
+								$erp_order_det["backPath"] = DB::table('orchestra_template')
+								->where('item_id',$row->template_front_id)
+								->where('flag',0)
+								->first()
+								->template_file;
+								
+							}
+							
+							if($erp_order_det["order_qnty_table_name"] == "orchestra_wash_care_label_orders_qty")
+							{
+								$fkey = DB::table('orchestra_wash_care_label_orders_qty')
+								->where('id',$erp_order_det["order_qnty_table_id"])
+								->first()
+								->owcl_id;
+
+								$row = DB::table('orchestra_wash_care_label_orders')
+								->where('id',$fkey)->first();
+								
+								$disney = DB::table('orchestra_parcel_details')
+								->where('id',$row->orchestra_parcel_details_id)->first();
+								
+								$erp_order_det["Disney"] = $disney->Licence_Code;
+								
+								$erp_order_det["frontPath"] = DB::table('orchestra_template')
+								->where('item_id',$row->template_id)
+								->where('flag',1)
+								->first()
+								->template_file;
+
+								$erp_order_det["backPath"]='/storage/app/template/Orchestra/WCL/sticker2.svg';
+								$erp_order_det["middlePath"]='/storage/app/template/Orchestra/WCL/sticker3.svg';
 							}
 
 							$orders_erp[$erp_order_det['uuid']] = $erp_order_det;
@@ -182,6 +236,8 @@ class JobManagerController extends Controller
 			$erp_teeth_no = DB::table('erp_teeth_no')->where('is_enabled','=',true)->pluck('teeth_no','id')->all();
 
 			asort($orders_erp);
+			
+			//dd($orders_erp);
 			
 			return view('erp.Jobmanager.jobmanager', ['orders' => $orders_erp, 'companies' => $companies, 'disp_modes' => $erp_dispatch_mode, 'finish_types' => $erp_finish_type, 'machines' => $erp_machines, 'teeth_nos' => $erp_teeth_no]);
 		}

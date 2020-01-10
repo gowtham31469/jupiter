@@ -3,13 +3,40 @@
  * 
  * @return barcode
  */
-function openmodaltesco(modal, i,template_file,style_no,buyer_no,id,order_type,created_at) {
+function openmodaltesco(modal, i,template_file,style_no,buyer_no,id,order_type,created_at,status,type,template_id,disney) {
 	
-		genarateArtwork("tesco_svg_modal" + i, modal,style_no,buyer_no,id,order_type,created_at);
+	switch(status) {
+	  case "print_orchestra":
+	    if(type == "hang_tag")
+	    {
+	    	printHangDivJC('orchestra_modal_front'+ i,'orchestra_modal_back'+ i,disney,modal,style_no,buyer_no,id,order_type,created_at,status,"orchestra")
+	  	}
+	  	else if(type == "wash_care")
+	  	{
+   			printWashDivJC('washcare_front'+ i,'washcare_back'+ i,'washcare_middle'+i,modal,style_no,buyer_no,id,order_type,created_at,status,"orchestra")
+
+	  	}
+	  	else
+	  	{
+
+	   		genarateArtworkOrchestraJC("orchestra_svg_modal" + i, modal,style_no,buyer_no,id,order_type,created_at,status,"orchestra");
+	  
+	  	}
+		    break;
+
+	  case "print":
+	   		genarateArtwork("tesco_svg_modal" + i, modal,style_no,buyer_no,id,order_type,created_at,status,"tesco",template_id);
+	    break;
+
+	  default:
+	    // code block
+	}
+	
+		
 
 }
 
-function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at) {
+function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,status,buyer,template_id) {
 
 	var a = document.getElementById(data);
 	var svgDoc = a.contentDocument;
@@ -471,7 +498,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at) 
 									}
 									else
 									{
-										str = oswordWrap(desc_size, 23);
+										str = oswordWrapJC(desc_size, 23);
 										svgDoc.getElementById("description").innerHTML = str;
 										
 										if(name2 === "THL3")
@@ -527,7 +554,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at) 
 									}
 									else
 									{
-										str = oswordWrap(desc_size, 23);
+										str = oswordWrapJC(desc_size, 23);
 										svgDoc.getElementById("description").innerHTML = str;
 										
 										if(name2 === "THL3")
@@ -675,7 +702,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at) 
 						}
 						else
 						{
-							str = oswordWrap(description, 23);
+							str = oswordWrapJC(description, 23);
 							svgDoc.getElementById("description").innerHTML = str;
 							if (name2 === "TCL1")
 							{
@@ -1164,4 +1191,951 @@ function jsbarcodetescotsl(code, id, svgDoc) {
 	canvasTmp.remove();
 
 	svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+
+
+
+function printHangDivJC(front,back,disney,name,style_no,buyer_no,id,order_type,created_at,status,buyer) {
+	var a = document.getElementById(front)
+	var svgDoc = a.contentDocument;
+	var svgRoot = svgDoc.documentElement;
+
+	var a1 = document.getElementById(back)
+	var svgDoc1 = a1.contentDocument;
+	var svgRoot1 = svgDoc1.documentElement;
+	console.log(svgDoc1)
+	var index_arr=[];
+	var svgarr = [];
+	var svgarr_front = [];
+	var i=0;
+	var ajax=0;
+
+	$.ajax({
+				url: base_url + "/erp/job-manager/get-order-details",
+				type: "Post",
+				dataType: "json",
+				data: {
+					_token: csrf_token,
+					ref_name: name,
+					style_no: style_no,
+					buyer_no: buyer_no,
+					id: id,
+					created_at: created_at,
+					order_type:order_type,
+					buyer:buyer,
+				},
+				beforeSend: function() {
+
+				},
+				success: function(data) {
+					console.log("-------")
+					console.log(data)
+						console.log("-------")
+					details = data.order_details[0].hangtagqty;
+					var node = name;
+					$.each(details, function(index, val) {
+						
+							var size_txt = val.size;
+							var uvc_tco = val.uvc_tco;
+							var size = val.size.split(" ");
+						
+							if (size[1] == "ANS") {
+								if(size_txt.split(' ')[0] == 1)
+								{
+									var size1 = "YEAR";
+								}
+								else
+								{
+									var size1 = "YEARS";
+								}
+
+							} else {
+								if(size_txt.split(' ')[0] == 1)
+								{
+									var size1 = "MONTH";
+								}
+								else
+								{
+									var size1 = "MONTHS";
+								}
+							}
+						
+							var code = val.barcode;
+						
+						
+							if(size[0] == "TAILLE")
+							{
+								svgDoc1.getElementById("size").innerHTML = "";
+								svgDoc1.getElementById("size_french").innerHTML = "";
+								svgDoc1.getElementById("size_english").innerHTML = "";
+								svgDoc1.getElementById("uvc_tco").innerHTML = uvc_tco;
+								svgDoc1.getElementById("size_list").innerHTML = "TAILLE UNIQUE";
+								svgDoc1.getElementById("cm").innerHTML = "ONE SIZE";
+								
+								svgDoc1.getElementById("tu_one_size").removeAttribute("visibility");
+								svgDoc.getElementById("size").innerHTML = "";
+								svgDoc.getElementById("size_french").innerHTML = "";
+								svgDoc.getElementById("size_english").innerHTML = "";
+								svgDoc.getElementById("tu_one_size").removeAttribute("visibility");
+							}
+							else
+							{
+								if(val.cm != null && val.cm !=null)
+								{
+									svgDoc1.getElementById("cm").innerHTML =  val.cm+" CM";
+									
+								}
+								else
+								{
+									svgDoc1.getElementById("cm").innerHTML = "";
+								}
+
+								svgDoc1.getElementById("size").innerHTML = size[0];
+								svgDoc1.getElementById("size_french").innerHTML = size[1];
+								svgDoc1.getElementById("size_english").innerHTML = size1;
+								svgDoc1.getElementById("uvc_tco").innerHTML = uvc_tco;
+								
+								svgDoc.getElementById("size").innerHTML = size[0];
+								svgDoc.getElementById("size_french").innerHTML = size[1];
+								svgDoc.getElementById("size_english").innerHTML = size1;
+							}
+						
+
+							$.each(val.prices, function(index,value){
+								switch(value.Currency)
+								{
+										case "EUR":
+										if(value.Price != "" && value.Price != null)
+										{
+											var svg_price =	value.Price.split(',');
+											var svg_club_price = value.Club_Price.split(',');
+											
+											svgDoc.getElementById("price1").innerHTML = svg_price[0];
+											svgDoc.getElementById("price2").innerHTML = ","+svg_price[1];
+											svgDoc.getElementById("club_price1").innerHTML = svg_club_price[0];
+											svgDoc.getElementById("club_price2").innerHTML = ","+ 	svg_club_price[1];	
+										}
+										else
+										{
+											svgDoc.getElementById("price1").innerHTML = "";
+											svgDoc.getElementById("price2").innerHTML = "";
+											svgDoc.getElementById("club_price1").innerHTML = "";
+											svgDoc.getElementById("club_price2").innerHTML = "";	
+										}
+										break;
+										case "CAD":
+										svgDoc1.getElementById("canada_price").innerHTML = value.Price;
+										svgDoc1.getElementById("canada_club_price").innerHTML = value.Club_Price;
+										break;
+										case "CHF":
+										svgDoc1.getElementById("swiss_price").innerHTML = value.Price;
+										svgDoc1.getElementById("swiss_club_price").innerHTML = value.Club_Price;
+										break;
+										case "DZD":
+										svgDoc1.getElementById("algeria_price").innerHTML = value.Price;
+										svgDoc1.getElementById("algeria_club_price").innerHTML = value.Club_Price;
+										break;
+										case "MAD":
+										svgDoc1.getElementById("morocco_price").innerHTML = value.Price;
+										svgDoc1.getElementById("morroco_club_price").innerHTML = value.Club_Price;
+										break;
+										case "MUR":
+										svgDoc1.getElementById("morris_price").innerHTML = value.Price;
+										svgDoc1.getElementById("morris_club_price").innerHTML = value.Club_Price;
+										break;
+										case "SAR":
+										svgDoc1.getElementById("saudi_club_price").innerHTML = value.Price;
+										break;
+										case "USD":
+										svgDoc1.getElementById("us_price").innerHTML = value.Price;
+										svgDoc1.getElementById("us_club_price").innerHTML = value.Club_Price;
+										break;
+										default:
+										console.log("default");
+										break;
+									}
+							});
+							
+
+							if(disney != "DI")
+							{
+								jsbarcode_hangJC(code, "barcode1", svgDoc1)
+								svgDoc1.getElementById("barcode1").setAttribute('transform', 'matrix(1.0971 0 0 1 10 50)');
+							}
+							else
+							{
+								
+                               jsbarcode_hang_disneyJC(code, "barcode1", svgDoc1)
+								if(node == "COD2")
+								{
+						   			svgDoc1.getElementById("barcode1").setAttribute('transform', 'matrix(1.0971 0 0 1 -5 -15)');
+								}
+								else if(node == "DBB1")
+								{
+									svgDoc1.getElementById("barcode1").setAttribute('transform', 'matrix(1.0971 0 0 1 0 -20)');
+									//svgDoc1.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 92.096 47.0822)');
+								}
+								else
+								{
+									svgDoc1.getElementById("barcode1").setAttribute('transform', 'matrix(1.0971 0 0 1 0 -15)');
+								}
+							}
+						
+							var s = new XMLSerializer();
+							var d = svgRoot1;
+							var str = s.serializeToString(d);
+							var svg = encodeURI(str)
+							svgarr.push(svg)
+							
+							var s_front = new XMLSerializer();
+							var d_front = svgRoot;
+							var str_front = s_front.serializeToString(d_front);
+							var svg_front = encodeURI(str_front)
+							svgarr_front.push(svg_front)
+							
+							ajax++;
+					});
+
+					if(details.length == ajax)
+					{
+
+						var svg_fin = svgarr.join(',_');
+						var svg_fin_front = svgarr_front.join(',_');
+						//PopupWashJC(svg_fin,svgRoot1_back,svgRoot1_middle, dataid,svgDoc1);
+						
+						PopupHangJC(svg_fin_front, svg_fin,svgDoc,svgDoc1,disney);
+					}
+				},
+			});
+
+
+
+	
+
+	
+	
+}
+
+
+
+/**
+ * This Function is used Print Wash Care Labels.
+ *  
+ * @return Pdf
+ */
+
+function printWashDivJC(data,data_back,data_middle,name,style_no,buyer_no,id,order_type,created_at,status,buyer) {
+
+	var a1 = document.getElementById(data);
+	var svgDoc1 = a1.contentDocument;
+	var svgRoot1 = svgDoc1.documentElement;
+
+	var a1_back = document.getElementById(data_back);
+	var svgDoc1_back = a1_back.contentDocument;
+	var svgRoot1_back = svgDoc1_back.documentElement;
+	
+	var a1_middle = document.getElementById(data_middle);
+	var svgDoc1_middle = a1_middle.contentDocument;
+	var svgRoot1_middle = svgDoc1_middle.documentElement;
+
+	var index_arr=[];
+	var svgarr = [];
+	var svgarr_front = [];
+	var i=0;
+	var ajax=0;
+
+	$.ajax({
+				url: base_url + "/erp/job-manager/get-order-details",
+				type: "Post",
+				dataType: "json",
+				data: {
+					_token: csrf_token,
+					ref_name: name,
+					style_no: style_no,
+					buyer_no: buyer_no,
+					id: id,
+					created_at: created_at,
+					order_type:order_type,
+					buyer:buyer,
+				},
+				beforeSend: function() {
+
+				},
+				success: function(data) {
+					
+		
+					details = data.order_details[0].washcarelabel_qty;
+					Refname =data.reference_name;
+					parentId= data.order_details[0].parentId;
+					res = data.order_details[0] 	
+
+					$.each(details, function(index, val) {
+						
+						var size_txt = val.size;
+						var uvc_tco = val.uvc_tco;
+						var size = val.size.split(" ")
+
+						if (size[1] == "ANS") {
+							var size1 = "years";
+						} else {
+							var size1 = "months";
+						}
+
+						var code = val.barcode;
+
+						if(val.cm != null && val.cm != "")
+						{
+							svgDoc1.getElementById("size_in_fr_en1").innerHTML = val.cm+" cm ";
+							svgDoc1.getElementById("size_in_fr_en2").innerHTML = val.cm+" cm ";
+						}
+						else
+						{
+							svgDoc1.getElementById("size_in_fr_en1").innerHTML = "";
+							svgDoc1.getElementById("size_in_fr_en2").innerHTML = "";
+						}
+
+						svgDoc1.getElementById("size1").innerHTML = size_txt.replace(" ", "").toLowerCase() + "/" + size1;
+						svgDoc1.getElementById("size2").innerHTML = size_txt.replace(" ", "").toLowerCase() + "/" + size1;
+						svgDoc1.getElementById("parcel_code1").innerHTML = uvc_tco;
+						svgDoc1.getElementById("parcel_code2").innerHTML = uvc_tco;
+						svgDoc1.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -38 135) rotate(270)');
+						jsbarcodewashJC(code, 'barcode', svgDoc1)
+
+						svgDoc1.getElementById("cofreet_symbol1").setAttribute('xlink:href',res.cofreet_symbol1);
+						svgDoc1.getElementById("cofreet_symbol2").setAttribute('xlink:href',res.cofreet_symbol2);
+						svgDoc1.getElementById("cofreet_symbol3").setAttribute('xlink:href',res.cofreet_symbol3);
+						svgDoc1.getElementById("cofreet_symbol4").setAttribute('xlink:href',res.cofreet_symbol4);
+						svgDoc1.getElementById("cofreet_symbol5").setAttribute('xlink:href',res.cofreet_symbol5);
+
+						svgDoc1.getElementById("astm_symbol1").setAttribute('xlink:href',res.astm_symbol1);
+						svgDoc1.getElementById("astm_symbol2").setAttribute('xlink:href',res.astm_symbol2);
+						svgDoc1.getElementById("astm_symbol3").setAttribute('xlink:href',res.astm_symbol3);
+						svgDoc1.getElementById("astm_symbol4").setAttribute('xlink:href',res.astm_symbol4);
+						svgDoc1.getElementById("astm_symbol5").setAttribute('xlink:href',res.astm_symbol5);
+
+
+						var s = new XMLSerializer();
+						var d = svgRoot1;
+						var str = s.serializeToString(d);
+						var svg = encodeURI(str)
+						svgarr.push(svg)
+
+						// var s_front = new XMLSerializer();
+						// var d_front = svgRoot;
+						// var str_front = s_front.serializeToString(d_front);
+						// var svg_front = encodeURI(str_front)
+						// svgarr_front.push(svg_front)
+
+						ajax++;
+					});
+
+					if(details.length == ajax)
+					{
+
+						var svg_fin = svgarr.join(',_');
+						// var svg_fin_front = svgarr_front.join(',_');
+						
+						// PopupHangJC(svg_fin, svg_fin,svgDoc,svgDoc1,disney);
+						PopupWashJC(svg_fin,svgRoot1_back,svgRoot1_middle,svgDoc1,parentId);
+					}
+				},
+			});
+	
+	// if(i == ajax)
+	// {
+	// 	PopupWashJC(svgRoot1,svgRoot1_back,svgRoot1_middle,svgDoc1);
+	// }
+	
+}
+
+function genarateArtworkOrchestraJC(data, name,style_no,buyer_no,id,order_type,created_at,status,buyer)
+{
+	var a = document.getElementById(data);
+	var svgDoc = a.contentDocument;
+	// var name2=name;
+	var zone = localStorage.getItem("zone");
+	var svgarr = [];
+	var ajax_count = 0;
+	var name_count=0;
+	// var b = " ";
+	// var position = 5;
+// console.log(name)
+		// var ref_name = [name2.slice(0, position), b, name2.slice(position)].join('').trim();
+		$.ajax({
+				url: base_url + "/erp/job-manager/get-order-details",
+				type: "Post",
+				dataType: "json",
+				data: {
+					_token: csrf_token,
+					ref_name: name,
+					style_no: style_no,
+					buyer_no: buyer_no,
+					id: id,
+					created_at: created_at,
+					order_type:order_type,
+					buyer:buyer,
+				},
+				beforeSend: function() {
+
+				},
+				success: function(data) {
+				
+					var svgRoot = svgDoc.documentElement;
+					var zone= localStorage.getItem("zone");
+					localStorage.setItem("zone", zone);
+
+					details = data['order_details'][0];
+					// console.log(details)
+					switch(details.reference_name) 
+					{
+
+
+						// case "Orchestra WashCare":
+						
+						// 	printWashDivJC('washcare_svg_front1','washcare_svg_back1','washcare_svg_middle1',details['washcarelabel_qty']);
+
+						// break
+
+						case "Std Carton Stickers":
+							$(details['stdcartonstickerqty']).each(function(index,value){
+								svgDoc.getElementById("parcelcode").innerHTML = value.uvc_tco
+								// svgDoc.getElementById("size").innerHTML = value.size
+								svgDoc.getElementById("theme").innerHTML = details.theme
+								
+
+								// if(details.age_group!=null)
+								// {
+								// 	svgDoc.getElementById("color").innerHTML = details.age_group
+								// }
+
+								if(details.height != null )
+								{
+									var num = 600 * 395 * details.height
+									var val = num / (1000 * 1000 * 1000)
+									svgDoc.getElementById("height").innerHTML = details.height
+									svgDoc.getElementById("volume").innerHTML = val
+								}
+								else{
+									svgDoc.getElementById("volume").innerHTML = ''
+								}
+		
+								jsbarcodesolidcartonA(value.barcode, 'barcode1', svgDoc)
+								jsbarcodesolidcartonB(value.barcode, 'barcode2', svgDoc)
+								// var s = new XMLSerializer();
+								// var d = svgRoot;
+								// var str = s.serializeToString(d);
+								// svgarr.push(str)
+							})
+							// var svg_fin = svgarr.join(',_');
+							 
+							  PopupOrchestraJC(svgDoc,"STD-CARTON"); 
+							
+							
+
+						break;
+
+
+						case "Std Poly Stickers":
+							$(details['stdpolystickerqty']).each(function(index,value){
+								console.log(value)
+								svgDoc.getElementById("round").style.fill = details.age_group
+								svgDoc.getElementById("parcel_code").innerHTML = value.uvc_tco
+								svgDoc.getElementById("theme").innerHTML = details.theme
+								// svgDoc.getElementById("size").innerHTML = value.size
+								// svgDoc.getElementById("color").innerHTML = details.color_code
+								jsbarcodesolidpoly_orchestra(value.barcode, 'barcode', svgDoc)
+								var s = new XMLSerializer();
+								var d = svgRoot;
+								var str = s.serializeToString(d);
+								svgarr.push(str)
+							})
+							var svg_fin = svgarr.join(',_');
+							PopupTableOrchestraJC(svgDoc, "STD-POLY",details.sizeArr,details.qtyArr);
+						break;
+
+
+
+						case "Solid Polybag Stickers":
+							$(details['solidpolystickerqty']).each(function(index,value){
+								svgDoc.getElementById("round").style.fill = details.age_group
+								svgDoc.getElementById("parcel_code").innerHTML = value.uvc_tco
+								svgDoc.getElementById("size").innerHTML = value.size
+								svgDoc.getElementById("color").innerHTML = details.color_code
+								jsbarcodesolidpoly_orchestra(value.barcode, 'barcode', svgDoc)
+								var s = new XMLSerializer();
+								var d = svgRoot;
+								var str = s.serializeToString(d);
+								svgarr.push(str)
+							})
+							var svg_fin = svgarr.join(',_');
+							PopupOrchestrasmallJC(svg_fin, "SOLID-POLY",svgDoc);
+						break;
+
+
+						case "Solid Carton Stickers":
+							$(details['solidcartonstickerqty']).each(function(index,value){
+								svgDoc.getElementById("parcelcode").innerHTML = value.uvc_tco
+								svgDoc.getElementById("size").innerHTML = value.size
+								svgDoc.getElementById("theme").innerHTML = details.theme
+								
+
+								if(details.age_group!=null)
+								{
+									svgDoc.getElementById("color").innerHTML = details.age_group
+								}
+
+								if(details.height!=null)
+								{
+									var num = 600 * 395 * details.height
+									var val = num / (1000 * 1000 * 1000)
+									svgDoc.getElementById("height").innerHTML = details.height
+									svgDoc.getElementById("volume").innerHTML = val
+								}
+								else{
+									svgDoc.getElementById("volume").innerHTML = ''
+								}
+		
+								jsbarcodesolidcartonA(value.barcode, 'barcode1', svgDoc)
+								jsbarcodesolidcartonB(value.barcode, 'barcode2', svgDoc)
+								var s = new XMLSerializer();
+								var d = svgRoot;
+								var str = s.serializeToString(d);
+								svgarr.push(str)
+							})
+							var svg_fin = svgarr.join(',_');
+							PopupArrOrchestraJC(svg_fin, "SOLID-CARTON",svgDoc);
+						break;
+						default:
+						// code block
+					}
+				},
+			});
+}
+
+function PopupWashJC(data,data_back,data_middle,svgDoc1,pid) {
+
+	var s = new XMLSerializer();
+	// var d = data;
+	// var str = s.serializeToString(d);
+	// var svg = encodeURI(str)
+
+
+	var d_back = data_back;
+	var str_back = s.serializeToString(d_back);
+	var svg_back = encodeURI(str_back)
+
+	var d_middle = data_middle;
+	var str_middle = s.serializeToString(d_middle);
+	var svg_middle = encodeURI(str_middle)
+
+    var success = false;
+    var url = "";
+
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+
+    $.ajax({
+
+        url: base_url + "/erp/job-manager/orchestra/print-wash-pdf",
+        type: "post",
+        data: {
+            _token: csrf_token,
+            svg: data,
+            svg_back: svg_back,
+            svg_middle: svg_middle,
+            parentId : pid,
+        },
+        async: false,
+        success: function (data) {
+			svgDoc1.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -21 125.454) rotate(270)');
+            success = true;
+            url = data;
+        },
+        error: function (data) {
+
+        },
+    })
+    if (success) { //AND THIS CHANGED
+        window.open(url)
+    }
+}
+
+
+/**
+ * This Function is used to invoke JSBarcode for Wash Care Labels.
+ * 
+ * @return barcode
+ */
+
+function jsbarcodewashJC(code, id, svgDoc) {
+    JsBarcode("#ean-13", code, {
+        format: "ean13",
+        width: 5.99,
+        height: 290,
+		lineColor: "cmyk(0%, 0%, 0%, 100%)",
+        fontSize: 55
+    });
+    var svg = document.getElementById('svgdiv').querySelector('svg'),
+        canvas = document.createElement('canvas'),
+        body = document.getElementsByTagName('body')[0],
+        canvasTmp,
+        svg_xml,
+        ctx,
+        img;
+    // if our "svg" doesn't have 'xmlns' attribute we must add it
+    //    svg.setAttribute('width', '188.931023622px');
+    svg.setAttribute('font-size', '70px');
+    svg.setAttribute('font-family', 'ocr-b-10bt');
+    svg.setAttribute('width', '92.1px');
+    svg.setAttribute('height', '133px');
+    canvas.id = 'canvas';
+    canvas.width = svg.getBoundingClientRect().width;
+    canvas.height = svg.getBoundingClientRect().height;
+
+    body.appendChild(canvas);
+    canvasTmp = document.getElementById('canvas');
+
+    /* Time to play ;) */
+
+    // https://developer.mozilla.org/en/XMLSerializer
+    svg_xml = (new XMLSerializer()).serializeToString(svg);
+    ctx = canvasTmp.getContext('2d');
+
+    // JavaScript (HTML) image
+    img = new Image();
+
+    img.onload = function () {
+        ctx.drawImage(img, 0, 0);
+    };
+
+    // https://developer.mozilla.org/en/DOM/window.btoa
+    img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+    // img.src - contains base64 URI from svg
+
+    //remove temporary canvas
+    canvasTmp.remove();
+
+    svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+function PopupHangJC(svgRoot, svgRoot1,svgDoc,svgDoc1,disney) {
+//	var s = new XMLSerializer();
+//	var d = svgRoot;
+//	var str = s.serializeToString(d);
+//	var svg = encodeURI(str)
+
+//	var s1 = new XMLSerializer();
+//	var d1 = svgRoot1;
+//	var str1 = s1.serializeToString(d1);
+//	var svg1 = encodeURI(str1)
+
+	var success = false;
+	var url = "";
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/erp/job-manager/print-hang-pdf",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			svg: svgRoot,
+			svgRoot: svgRoot1
+		},
+		async: false,
+		success: function (data) {
+			
+			success = true;
+			url = data;
+		},
+		error: function (data) {
+
+		},
+	})
+	if (success) { //AND THIS CHANGED
+		window.open(url)
+	}
+}
+
+function PopupOrchestraJC(data,name) {
+	
+	var s = new XMLSerializer();
+	var d = data;
+	var str = s.serializeToString(d);
+	var svg = encodeURI(str)
+	var success = false;
+	var url = "";
+	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/erp/job-manager/orchestra/print-pdf",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			svg: svg,
+			name:name
+		},
+		async: false,
+		success: function (data) {
+			//window.location.href=data;
+			success = true;
+			url = data;
+		},
+		error: function (data) {
+
+		},
+	})
+	if (success) { //AND THIS CHANGED
+		window.open(url)
+	}
+}
+
+
+
+function PopupArrOrchestraJC(data,name,svgDoc) {
+	
+//	var s = new XMLSerializer();
+//	var d = data;
+//	var str = s.serializeToString(d);
+//	var svg = encodeURI(str)
+	var success = false;
+//	var url = "";
+	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/admin/order-management/print-pdf-arr",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			svg: data,
+			name: name
+		},
+		async: false,
+		success: function (data) {
+			//window.location.href=data;
+			success = true;
+			url = data;
+		},
+		error: function (data) {
+
+		},
+	})
+	if (success) { //AND THIS CHANGED
+		window.open(url)
+	}
+}
+
+
+
+function PopupTableOrchestraJC(data,name,size,qty) {
+	var s = new XMLSerializer();
+	var d = data;
+	var str = s.serializeToString(d);d
+	var svg = encodeURI(str)
+	var success = false;
+	var url = "";
+	// var size = [];
+	// var qty = [];
+	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
+
+	// $('#solidform tbody tr').each(function () {
+	// 	size.push($(this).find('.size').text());
+	// 	qty.push($(this).find('.qty').text());
+	// })
+	// size=['3 ANS','4 ANS','5 ANS','6 ANS','8 ANS'];
+	// qty=['3','4','5','6','8'];
+
+	var sizefin = size.join(',')
+	var qtyfin = qty.join(',')
+
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/erp/job-manager/orchestra/print-pdf-table",
+
+		type: "post",
+		data: {
+			_token: csrf_token,
+			svg: svg,
+			size: sizefin,
+			qty: qtyfin,
+			name:name
+		},
+		async: false,
+		success: function (data) {
+			success = true;
+			url = data;
+		},
+		error: function (data) {
+
+		},
+	})
+	if (success) { //AND THIS CHANGED
+		window.open(url)
+	}
+}
+
+
+
+function PopupOrchestrasmallJC(data,name,svgDoc) {
+//	var s = new XMLSerializer();
+//	var d = data;
+//	var str = s.serializeToString(d);
+//	var svg = encodeURI(str)
+	var success = false;
+//	var url = "";
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/erp/job-manager/orchestra/print-pdf-small",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			svg: data,
+			name: name
+		},
+		async: false,
+		success: function (data) {
+			success = true;
+			url = data;
+		},
+		error: function (data) {
+
+		},
+	})
+	if (success) { //AND THIS CHANGED
+		window.open(url)
+	}
+}
+
+
+function jsbarcode_hangJC(code, id, svgDoc) {
+	JsBarcode("#ean-13", code, {
+        format: "ean13",
+        width: 5.99,
+        height: 320,
+		lineColor: "cmyk(0%, 0%, 0%, 100%)",
+        fontSize: 55
+    });
+    var svg = document.getElementById('svgdiv').querySelector('svg'),
+        canvas = document.createElement('canvas'),
+        body = document.getElementsByTagName('body')[0],
+        canvasTmp,
+        svg_xml,
+        ctx,
+        img;
+    // if our "svg" doesn't have 'xmlns' attribute we must add it
+    //    svg.setAttribute('width', '188.931023622px');
+    svg.setAttribute('font-size', '70px');
+    svg.setAttribute('font-family', 'ocr-b-10bt');
+    svg.setAttribute('width', '80px');
+    svg.setAttribute('height', '100px');
+    canvas.id = 'canvas';
+    canvas.width = svg.getBoundingClientRect().width;
+    canvas.height = svg.getBoundingClientRect().height;
+
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
+
+	/* Time to play ;) */
+
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
+
+	// JavaScript (HTML) image
+	img = new Image();
+
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
+
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+	// img.src - contains base64 URI from svg
+
+	//remove temporary canvas
+	canvasTmp.remove();
+
+	svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+/**
+ * This Function is used to invoke Hang Tag JSBarcode.
+ * 
+ * @return barcode
+ */
+
+function jsbarcode_hang_disneyJC(code, id, svgDoc) {
+	JsBarcode("#ean-13", code, {
+        format: "ean13",
+        width: 5.99,
+        height: 286,
+		lineColor: "cmyk(0%, 0%, 0%, 100%)",
+        fontSize: 55
+    });
+    var svg = document.getElementById('svgdiv').querySelector('svg'),
+        canvas = document.createElement('canvas'),
+        body = document.getElementsByTagName('body')[0],
+        canvasTmp,
+        svg_xml,
+        ctx,
+        img;
+    // if our "svg" doesn't have 'xmlns' attribute we must add it
+    //    svg.setAttribute('width', '188.931023622px');
+    svg.setAttribute('font-size', '70px');
+    svg.setAttribute('font-family', 'ocr-b-10bt');
+    svg.setAttribute('width', '88px');
+    svg.setAttribute('height', '80px');
+    canvas.id = 'canvas';
+    canvas.width = svg.getBoundingClientRect().width;
+    canvas.height = svg.getBoundingClientRect().height;
+
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
+
+	/* Time to play ;) */
+
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
+
+	// JavaScript (HTML) image
+	img = new Image();
+
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
+
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+	// img.src - contains base64 URI from svg
+
+	//remove temporary canvas
+	canvasTmp.remove();
+
+	svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+function oswordWrapJC(str, maxWidth) {
+    var newLineStr = ""; done = false; res = '';
+    do {                    
+        found = false;
+        // Inserts new line at first whitespace of the line
+        for (i = maxWidth - 1; i >= 0; i--) {
+            if (testWhiteJC(str.charAt(i))) {
+                res = res + "<tspan style='fill:cmyk(0%, 0%, 0%, 100%); font-family:FranklinGothicBT-RomanCondensed, FrankGoth Cn BT; font-size:10.0001px;'  x='0' y='0'>" +[str.slice(0, i), newLineStr].join('') + "</tspan>";
+                str = str.slice(i + 1);
+                found = true;
+                break;
+            }
+        }
+        // Inserts new line at maxWidth position, the word is too long to wrap
+        if (!found) {
+            res +="<tspan style='fill:cmyk(0%, 0%, 0%, 100%); font-family:FranklinGothicBT-RomanCondensed, FrankGoth Cn BT; font-size:10.0001px;'>" + [str.slice(0, maxWidth), newLineStr].join('')+ "</tspan>";
+            str = str.slice(maxWidth);
+        }
+        if (str.length < maxWidth)
+            done = true;
+    } while (!done);
+    return res + "<tspan style='fill:cmyk(0%, 0%, 0%, 100%); font-family:FranklinGothicBT-RomanCondensed, FrankGoth Cn BT; font-size:10.0001px;' x='0' y='12'>"+str+"</tspan>";
+}
+function testWhiteJC(x) {
+    var white = new RegExp(/^\s$/);
+    return white.test(x.charAt(0));
 }
