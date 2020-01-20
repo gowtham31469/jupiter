@@ -576,21 +576,7 @@ transform: scale(1);
 
 	$('.company-nav-menu').html($('.company-nav-div').html());
 	var base_url = "<?php echo  url('/') ?>";
-	var table = $('#po-list-table').DataTable({
-		 "aoColumns": [
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        {
-                            "sType": "date-uk"
-                        },
-                        null,
-                    ],
-		"order": [[ 6, "desc" ]]
-    });
+	var table = $('#po-list-table').DataTable();
 
 	$("#po-list-table_filter input[type=search]").addClass('form-control');
 	$('.dataTables_length select').addClass('form-control');

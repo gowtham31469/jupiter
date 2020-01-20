@@ -156,6 +156,11 @@ class PoManagerController extends Controller
 					$hold_orders_count++;
 				}
 		}
+		
+		usort($orders_erp, function($a, $b) {
+			return $b['created_at'] <=> $a['created_at'];
+		});
+		//return($orders_erp);
 		return view('erp.Pomanager.poverify',['orders' => $orders_erp,'companies' => $companies,'new_orders' => $new_orders_count,'hold_orders' => $hold_orders_count]);
 	} 
 	
