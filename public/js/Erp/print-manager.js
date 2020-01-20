@@ -265,6 +265,15 @@ function printHangDiv(front,back,disney,name,style_no,buyer_no,id,order_type,cre
 								svgDoc1.getElementById("uvc_tco").innerHTML = uvc_tco;
 								
 								svgDoc.getElementById("size").innerHTML = size[0];
+								if(size[0].length == 1)
+								{
+									svgDoc.getElementById("size").setAttribute('transform', 'matrix(1.0074 0 0 1 21.0324 291.266)');
+									
+								}
+								else
+								{
+									svgDoc.getElementById("size").setAttribute('transform', 'matrix(1.0074 0 0 1 16.0324 291.266)');
+								}
 								svgDoc.getElementById("size_french").innerHTML = size[1];
 								svgDoc.getElementById("size_english").innerHTML = size1;
 							}

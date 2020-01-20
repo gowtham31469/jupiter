@@ -2630,6 +2630,16 @@ function printHangDiv(data,disney) {
 								svgDoc1.getElementById("uvc_tco").innerHTML = uvc_tco;
 								
 								svgDoc.getElementById("size").innerHTML = size[0];
+								//console.log(size[0].length)
+								if(size[0].length == 1)
+								{
+									svgDoc.getElementById("size").setAttribute('transform', 'matrix(1.0074 0 0 1 21.0324 291.266)');
+									
+								}
+								else
+								{
+									svgDoc.getElementById("size").setAttribute('transform', 'matrix(1.0074 0 0 1 16.0324 291.266)');
+								}
 								svgDoc.getElementById("size_french").innerHTML = size[1];
 								svgDoc.getElementById("size_english").innerHTML = size1;
 							}
@@ -5929,7 +5939,8 @@ function hangtagmodal(data) {
                            // svgDoc.getElementById("turkey_club_price").innerHTML = order_details[0].Prix_Club_Turquie != null ? order_details[0].Prix_Club_Turquie.toString().replace(".", ",") : "";
                             svgItem.innerHTML = order_details[0].UVC_TCO;
                             var size = order_details[0].Size.split(" ")
-                            svgDoc.getElementById("theme").innerHTML = order_details[0].Theme;
+							var string = order_details[0].Theme.toLowerCase();
+                            svgDoc.getElementById("theme").innerHTML = string.charAt(0).toUpperCase() + string.slice(1); 
 							
 							if(order_details[0].Size == "TAILLE UNIQUE")
 							{
@@ -6188,7 +6199,9 @@ function hangtagmodal(data) {
                            // svgDoc.getElementById("turkey_club_price").innerHTML = order_details[0].Prix_Club_Turquie != null ? order_details[0].Prix_Club_Turquie.toString().replace(".", ",") : "";
                             svgItem.innerHTML = order_details[0].UVC_TCO;
                             var size = order_details[0].Size.split(" ")
-                            svgDoc.getElementById("theme").innerHTML = order_details[0].Theme;
+							
+							var string = order_details[0].Theme.toLowerCase();
+                            svgDoc.getElementById("theme").innerHTML = string.charAt(0).toUpperCase() + string.slice(1); 
 							
 							if(order_details[0].Size == "TAILLE UNIQUE")
 							{
