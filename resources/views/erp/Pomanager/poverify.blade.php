@@ -577,9 +577,18 @@ transform: scale(1);
 	$('.company-nav-menu').html($('.company-nav-div').html());
 	var base_url = "<?php echo  url('/') ?>";
 	var table = $('#po-list-table').DataTable({
-		columnDefs: [
-		{ type: 'date-uk', targets: 0 }
-		],
+		 "aoColumns": [
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        {
+                            "sType": "date-uk"
+                        },
+                        null,
+                    ],
 		"order": [[ 6, "desc" ]]
     });
 
