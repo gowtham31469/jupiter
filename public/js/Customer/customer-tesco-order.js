@@ -3296,6 +3296,10 @@ function dynamicSVGTemplatescard(id,item)
                  if(orms_tpn != '')
                  {
                       svgDoc.getElementById("tpnd").innerHTML = orms_tpn;
+					  if($('#qr_flag').val() == 1)
+					  {
+						svgDoc.getElementById("tpnd_last_digit").innerHTML = orms_tpn.substr(orms_tpn.length - 3);
+					  }
                  }
                  else
                  {
