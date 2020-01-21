@@ -8803,7 +8803,15 @@ function jsbarcode_hang_disney(code, id, svgDoc) {
 	//remove temporary canvas
 	canvasTmp.remove();
 
-	svgDoc.getElementById(id).innerHTML = svg_xml;
+	var allGs = document.getElementsByTagName('g');
+	var firstG = allGs[0];
+	var firstChild = firstG.childNodes[0];
+	
+	firstChild.setAttribute("x","20")
+	
+	var xchil = document.getElementById('svgdiv')
+
+	svgDoc.getElementById(id).innerHTML = xchil.innerHTML;
 }
 /**
  * This Function is used to invoke Hang Tag JSBarcode.
@@ -8859,8 +8867,18 @@ function jsbarcode_hang(code, id, svgDoc) {
 
 	//remove temporary canvas
 	canvasTmp.remove();
+	
+	//console.log(svg_xml)
+	
+	var allGs = document.getElementsByTagName('g');
+	var firstG = allGs[0];
+	var firstChild = firstG.childNodes[0];
+	
+	firstChild.setAttribute("x","20")
+	
+	var xchil = document.getElementById('svgdiv')
 
-	svgDoc.getElementById(id).innerHTML = svg_xml;
+	svgDoc.getElementById(id).innerHTML = xchil.innerHTML;
 }
 
 /**
