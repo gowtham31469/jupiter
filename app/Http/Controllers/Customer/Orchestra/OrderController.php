@@ -3636,6 +3636,7 @@ class OrderController extends Controller
             
             $pi_obj      =   new ProformaInvoice();
             $data        =   $pi_obj->getOrchestraPIDetails($request);
+            unset($data['price_list']);
             $attachment =   $pi_obj->getOrchestraAttachment($data,$request);
             
             $erpOrders   =   [];
@@ -3675,16 +3676,8 @@ class OrderController extends Controller
 
                 foreach ($data['item_details'] as $key => $value)
                 {
-                    $unit_cost = 0;
-                    foreach ($data['price_list'] as $i => $val) {
-                        if ($value->item_id == $val->item_id) {
-                            if($value->quantity <= $val->volume_to) {
-                                $unit_cost = $val->price;
-                                $tax = $val->tax;
-                                break;
-                            }
-                        }
-                    }
+                    $unit_cost = $value->price;
+                    $tax = $value->tax;
                     $total_qnty+= $value->quantity;
                     $sub_total += $value->quantity *$unit_cost;
 

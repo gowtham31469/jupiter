@@ -76,17 +76,8 @@
             @endphp
             @foreach($item_details as $data)
                 @php
-                    foreach ($price_list as $val){
-                        if($data->item_id == $val->item_id){
-                            if($data->quantity <= $val->volume_to) {
-                                $unit_price = $val->price;
-                                $tax = $val->tax;
-                            }
-                        }
-                    }
-                    if($unit_price === 0){
-                        $noPrice++;
-                    }
+                    $unit_price = $data->price;
+                    $tax = $data->tax;
                     $taxamnt = ($data->quantity*$unit_price)*($tax/100);
                     $amnt =  ($data->quantity*$unit_price) + $taxamnt ;
                     $buyer_po = $data->po_no === ('' || null)?'-':$data->po_no;

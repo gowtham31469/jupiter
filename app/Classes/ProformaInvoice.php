@@ -388,7 +388,21 @@ class ProformaInvoice
                                     ->get()->toArray();
               $price_array = array_merge($price_array,$price_list);
             } 
-          $data['price_list'] = $price_array;
+            $data['price_list'] = $price_array;
+
+            // Set price and tax based on quantity range
+            foreach ($data['item_details'] as $key => $value)
+            {
+                foreach ($price_array as $i => $val) {
+                    if ($value->item_id == $val->item_id) {
+                        if($value->quantity <= $val->volume_to) {
+                            $value->price = $val->price;
+                            $value->tax = $val->tax;
+                            break;
+                        }
+                    }
+                }
+            }
           }
           if (empty($template_array) && sizeof($item_details)!=0) {
             $data['item_details'] = $item_details;
@@ -520,7 +534,7 @@ class ProformaInvoice
         $pi_name = 'SP-PI-'.$pi_max_id;
       }
       $dynView = View::make('Admin.Order Management.pi-pdf-template')
-                ->with(['company_details' => $data['company_details'], 'bank_details' => $data['bank_details'], 'ship_to'=>$data['ship_to'],'bill_to'=>$data['bill_to'],'item_details'=>$data['item_details'],'price_list'=> $data['price_list'], 'amtText'=>$request->amntText ]);
+                ->with(['company_details' => $data['company_details'], 'bank_details' => $data['bank_details'], 'ship_to'=>$data['ship_to'],'bill_to'=>$data['bill_to'],'item_details'=>$data['item_details'], 'amtText'=>$request->amntText ]);
       ob_start();
       $pdf = new PiTCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
       $pdf->setCompanyData($data['company_details']);
@@ -570,7 +584,7 @@ class ProformaInvoice
         $pi_name = 'SP-PI-'.$pi_max_id;
       }
       $dynView = View::make('Admin.Order Management.pi-pdf-template-orchestra')
-                ->with(['company_details' => $data['company_details'], 'bank_details' => $data['bank_details'], 'ship_to'=>$data['ship_to'],'bill_to'=>$data['bill_to'],'item_details'=>$data['item_details'],'price_list'=> $data['price_list'], 'amtText'=>$request->amntText ]);
+                ->with(['company_details' => $data['company_details'], 'bank_details' => $data['bank_details'], 'ship_to'=>$data['ship_to'],'bill_to'=>$data['bill_to'],'item_details'=>$data['item_details'], 'amtText'=>$request->amntText ]);
       ob_start();
       $pdf = new PiTCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
       $pdf->setCompanyData($data['company_details']);
