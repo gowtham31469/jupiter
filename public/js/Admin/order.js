@@ -3367,7 +3367,6 @@ function barcode_carton(id, data) {
 function label_order_details(uvc) {
     var search_string = $('.dataTables_filter input').val();
     localStorage.setItem("search_string", search_string);
-    $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
     // var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
     // var buyer_id=$('.buyer-select').val()
     var buyer = localStorage.getItem("buyer");
@@ -3385,7 +3384,10 @@ function label_order_details(uvc) {
             $(".loader").show();
         },
         success: function (data) {
-            localStorage.setItem("label_order_data", JSON.stringify(data));
+			if(data.customers.length > 0)
+			{
+				$('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+				 localStorage.setItem("label_order_data", JSON.stringify(data));
             orchestra_label_order_details(buyer, buyer_id, uvc, data)
             hangtagmodal(data);
             specialtags(data);
@@ -4156,6 +4158,13 @@ function label_order_details(uvc) {
 						washcare++;
 					});
             }
+			}
+			else
+			{
+				$('.snackbar_span').html('Company Details Missing.Please Contact Administrator...!');
+                showSnackbar();
+			}
+           
 
 
             //  washcarelabels(data,"");
