@@ -99,7 +99,7 @@ class BuyerManagementController extends Controller
                   $destination_path='/storage/app/public/buyer-logo/';
                   $path='storage/app/public/buyer-logo/';
                   $Orname = $image->getClientOriginalName();
-                  $filename= time().'_'.preg_replace('/\s+/', '-', $Orname);
+                  $filename= time().'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $Orname));
                   $image->move($path,$filename);
                   $destination_path_insert=$destination_path.$filename;
                 }
@@ -186,7 +186,7 @@ class BuyerManagementController extends Controller
                    $destination_path='/storage/app/public/buyer-logo/';
                    $path='storage/app/public/buyer-logo/';
                    $Orname = $image->getClientOriginalName();
-                   $filename= time().'_'.preg_replace('/\s+/', '-', $Orname);
+                   $filename= time().'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $Orname));
                    $image->move($path,$filename);
                    $destination_path_insert=$destination_path.$filename;
                 }

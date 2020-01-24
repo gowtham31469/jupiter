@@ -2812,11 +2812,87 @@ class JobManagerController extends Controller
 		);
 		 ///PDF::write1DBarcode('3531114195599', 'EAN13', '60', '72', '', 32, 0.45, $style, 'N');
 
-	   
-		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-		print_r(url('/storage/app/template/'.$name.'.pdf'));
+	    $random = number_format(Carbon::now('Asia/Kolkata')->timestamp * rand(),0,'','');
+		PDF::Output( public_path('/storage/app/template/'.$random.'-'.$name.'.pdf'), 'F');
+		//print_r(url('/storage/app/template/'.$name.'.pdf'));
+	 
+		$file_path =  "/storage/app/template/".$random.'-'.$name."."."pdf";	
+
+		return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$random.'-'.$name.'.pdf')],200);	
 		
 	}
+	
+	public function printPdfArr(Request $request)
+    {
+		 $name=$request->name;
+		 $svgarr = explode(',_',$request->svg);
+         //$svg=urldecode($request->svg);
+         define ('PDF_FONT_NAME_MAIN', 'calibrib');
+         define ('PDF_FONT_NAME_DATA', 'calibrib');
+//          print_r($svg);
+        PDF::setImageScale(1.66);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('calibrib');
+		PDF::AddPage('P', 'A4');
+		//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+		//PDF::RoundedRect(12.5, 12.5, 145, 95, 0, '0000');
+		
+		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
+        PDF::RoundedRect(10, 10, 150, 100, 0.000001, '1111', null, $style6);
+        PDF::RoundedRect(12.5, 12.5, 145, 95, 0.000001, '1111', null, $style6);
+		PDF::SetAutoPageBreak(TRUE);
+		$i=0;
+		$j=0;
+		$yy=12.5;
+		foreach($svgarr as $value)
+        {
+			$svg=urldecode($value);
+			
+			if($i == 2)
+			{
+				PDF::AddPage('P', 'A4');
+				//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+				$yy=12.5;
+				//PDF::RoundedRect(12.5, 12.5, 145, 95, 0, '0000');
+				
+				PDF::RoundedRect(10, 10, 150, 100, 0.000001, '1111', null, $style6);
+        		PDF::RoundedRect(12.5, 12.5, 145, 95, 0.000001, '1111', null, $style6);
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				$i = 0;
+			}
+			else if($i == 0)
+			{
+				//PDF::RoundedRect(10, 160, 150, 100, 0, '0000');
+				$yy=12.5;
+				//PDF::RoundedRect(12.5, 162.5, 145, 95, 0, '0000');
+				
+				PDF::RoundedRect(10, 160, 150, 100, 0.000001, '1111', null, $style6);
+				PDF::RoundedRect(12.5, 162.5, 145, 95, 0.000001, '1111', null, $style6);
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				
+			}
+			else
+			{
+				//PDF::RoundedRect(10, 160, 150, 100, 0, '0000');
+				$yy += 150;
+				//PDF::RoundedRect(12.5, 162.5, 145, 95, 0, '0000');
+				
+				PDF::RoundedRect(10, 160, 150, 100, 0.000001, '1111', null, $style6);
+				PDF::RoundedRect(12.5, 162.5, 145, 95, 0.000001, '1111', null, $style6);
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			}
+			$i++;
+			$j++;
+		 }
+		 $random = number_format(Carbon::now('Asia/Kolkata')->timestamp * rand(),0,'','');
+		 PDF::Output( public_path('/storage/app/template/'.$random.'-'.$name.'.pdf'), 'F');
+		//print_r(url('/storage/app/template/'.$name.'.pdf'));
+	 
+		$file_path =  "/storage/app/template/".$random.'-'.$name."."."pdf";	
+
+		return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$random.'-'.$name.'.pdf')],200);	
+    } 
 
 	public function printPdf(Request $request)
 	{
@@ -2836,8 +2912,13 @@ class JobManagerController extends Controller
 		PDF::RoundedRect(10, 10, 150, 100, 0.000001, '1111', null, $style6);
 		PDF::RoundedRect(12.5, 12.5, 145, 95, 0.000001, '1111', null, $style6);
 		PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-		print_r(url('/storage/app/template/'.$name.'.pdf'));
+		$random = number_format(Carbon::now('Asia/Kolkata')->timestamp * rand(),0,'','');
+		PDF::Output( public_path('/storage/app/template/'.$random.'-'.$name.'.pdf'), 'F');
+		//print_r(url('/storage/app/template/'.$name.'.pdf'));
+	 
+		$file_path =  "/storage/app/template/".$random.'-'.$name."."."pdf";	
+
+		return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$random.'-'.$name.'.pdf')],200);	
 	} 
 
 
@@ -2916,8 +2997,13 @@ class JobManagerController extends Controller
 			$i++;
 			$j++;
 		 }
-		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-		print_r(url('/storage/app/template/'.$name.'.pdf'));
+		$random = number_format(Carbon::now('Asia/Kolkata')->timestamp * rand(),0,'','');
+		PDF::Output( public_path('/storage/app/template/'.$random.'-'.$name.'.pdf'), 'F');
+		//print_r(url('/storage/app/template/'.$name.'.pdf'));
+	 
+		$file_path =  "/storage/app/template/".$random.'-'.$name."."."pdf";	
+
+		return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$random.'-'.$name.'.pdf')],200);	
 	}
 
 	/**
@@ -2996,10 +3082,112 @@ class JobManagerController extends Controller
 		
 //        print_r(url('/storage/app/template/'.$name.'_cmyk.pdf'));
 		
-		print_r(url('/storage/app/template/solid1.pdf'));
+		//print_r(url('/storage/app/template/solid1.pdf'));
+		$file_path =  "/storage/app/template/solid1.pdf";	
+
+		return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/solid1.pdf')],200);	
 	} 	
 
+	public function printHeatTransfer(Request $request)
+	{
+		$svgarrfront=explode(',_',$request->svg); 
+		$db = $request->db;
+		$id = $request->id;
+		$template_id = $request->template_id;
+		define ('PDF_FONT_NAME_MAIN', 'calibrib');
+		define ('PDF_FONT_NAME_DATA', 'calibrib');
+		PDF::setImageScale(1);
+		PDF::setPrintHeader(false);
+		PDF::setPrintFooter(false);
+		PDF::SetFont('alternategothic2bt');
+		PDF::AddPage();
+		
+		$template_file = DB::table('orchestra_template')->select('*')->where('item_id',$template_id)->get();
+		
+		PDF::Image(public_path($template_file{0}->template_file), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+		
+		PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
+		
+		$file_path =  "/storage/app/template/solid1.pdf";	
 
+		return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/solid1.pdf')],200);	
+	}
+	
+	public function printSpecialTag(Request $request)
+	{
+		$svgarrfront=explode(',_',$request->svg); 
+		$db = $request->db;
+		$id = $request->id;
+		$template_id = $request->template_id;
+		define ('PDF_FONT_NAME_MAIN', 'calibrib');
+		define ('PDF_FONT_NAME_DATA', 'calibrib');
+		PDF::setImageScale(1);
+		PDF::setPrintHeader(false);
+		PDF::setPrintFooter(false);
+		PDF::SetFont('alternategothic2bt');
+		PDF::AddPage();
+		
+		$template_file = DB::table('orchestra_template')->select('*')->where('item_id',$template_id)->get();
+		
+		PDF::Image(public_path($template_file{0}->template_file), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+		
+		PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
+		
+		$file_path =  "/storage/app/template/solid1.pdf";	
+
+		return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/solid1.pdf')],200);	
+	}
+	
+	public function printMainLabel(Request $request)
+	{
+		$svgarrfront=explode(',_',$request->svg); 
+		$db = $request->db;
+		$id = $request->id;
+		$template_id = $request->template_id;
+		define ('PDF_FONT_NAME_MAIN', 'calibrib');
+		define ('PDF_FONT_NAME_DATA', 'calibrib');
+		PDF::setImageScale(1);
+		PDF::setPrintHeader(false);
+		PDF::setPrintFooter(false);
+		PDF::SetFont('alternategothic2bt');
+		PDF::AddPage();
+		
+		$template_file = DB::table('orchestra_template')->select('*')->where('item_id',$template_id)->get();
+		
+		PDF::Image(public_path($template_file{0}->template_file), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+		
+		PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
+		
+		$file_path =  "/storage/app/template/solid1.pdf";	
+
+		return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/solid1.pdf')],200);	
+	}
+	
+	public function printSizeLabel(Request $request)
+	{
+		$svgarrfront=explode(',_',$request->svg); 
+		$db = $request->db;
+		$id = $request->id;
+		$template_id = $request->template_id;
+		define ('PDF_FONT_NAME_MAIN', 'calibrib');
+		define ('PDF_FONT_NAME_DATA', 'calibrib');
+		PDF::setImageScale(1);
+		PDF::setPrintHeader(false);
+		PDF::setPrintFooter(false);
+		PDF::SetFont('alternategothic2bt');
+		PDF::AddPage();
+		
+		$template_file = DB::table('orchestra_template')->select('*')->where('item_id',$template_id)->get();
+		
+		PDF::Image(public_path($template_file{0}->template_file), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+		
+		PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
+		
+		$file_path =  "/storage/app/template/solid1.pdf";	
+
+		return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/solid1.pdf')],200);	
+	}
+	
    public function printWashPdf(Request $request)
 	{			
 
@@ -3021,7 +3209,7 @@ class JobManagerController extends Controller
 		// $care_instruction_select = explode(',',$request->care_instruction_select_fin); 
 		
 		$orchestra_care_instruction = DB::table('orchestra_care_instruction')
-					->select('*')->where('id',$selectedWashCare->care_instruction_id)->get();
+					->select('*')->whereIn('id',explode(',',$selectedWashCare->care_instruction_id))->get();
 		
 
 		// dd($orchestra_care_instruction);
@@ -3138,7 +3326,11 @@ class JobManagerController extends Controller
 		
 	
 		PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
-		print_r(url('/storage/app/template/solid1.pdf'));
+		//print_r(url('/storage/app/template/solid1.pdf'));
+	   
+	    $file_path =  "/storage/app/template/solid1.pdf";	
+
+		return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/solid1.pdf')],200);	
 	}
 		/**
 		 * Function to update uuid value for existing data in erp_order_details table.

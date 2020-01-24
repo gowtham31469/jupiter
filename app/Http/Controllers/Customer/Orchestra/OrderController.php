@@ -651,12 +651,12 @@ class OrderController extends Controller
 					$data['merchandisers']="";
 				}
 				
-                $data['orchestra_care_symbols'] = DB::table('orchestra_care_symbols')->select('*')->get();
-                $data['orchestra_composition'] = DB::table('orchestra_compositions')->select('*')->get();
-                $data['orchestra_countries'] = DB::table('orchestra_countries')->select('*')->get();
-                $data['orchestra_care_instruction'] = DB::table('orchestra_care_instruction')->select('*')->get(); 
-                $data['orchestra_parts'] = DB::table('orchestra_parts')->select('*')->get();
-                $pro_family = DB::table('orchestra_product_family')->select('*')->where('code',$code)->get();
+                $data['orchestra_care_symbols'] = DB::table('orchestra_care_symbols')->where('is_enabled',1)->select('*')->get();
+                $data['orchestra_composition'] = DB::table('orchestra_compositions')->where('is_enabled',1)->select('*')->get();
+                $data['orchestra_countries'] = DB::table('orchestra_countries')->where('is_enabled',1)->select('*')->get();
+                $data['orchestra_care_instruction'] = DB::table('orchestra_care_instruction')->where('is_enabled',1)->select('*')->get(); 
+                $data['orchestra_parts'] = DB::table('orchestra_parts')->where('is_enabled',1)->select('*')->get();
+                $pro_family = DB::table('orchestra_product_family')->where('is_enabled',1)->select('*')->where('code',$code)->get();
 				if(count($pro_family) > 0)
 				{
 					$data['product_family'] = DB::table('orchestra_product_family')->select('*')->where('code',$code)->get();
@@ -686,7 +686,7 @@ class OrderController extends Controller
         
 		$data['color_wcl'] = DB::table('orchestra_parcel_details')->select('orchestra_parcel_details.Color_Code')->where('orchestra_parcel_details.UVC',$uvc)->groupBy('orchestra_parcel_details.Color_Code') ->orderBy('orchestra_parcel_details.Color_Code','asc')->get();
 		
-        $data['orchestra_age_group']= DB::table('orchestra_age_group')->select('*')->get();      
+        $data['orchestra_age_group']= DB::table('orchestra_age_group')->where('is_enabled',1)->select('*')->get();      
         
        $data['orchestra_solid_carton_sticker_orders']=DB::table('orchestra_solid_carton_sticker_orders')->select('*')->where('uvc',$uvc)->where('po',$po)->where('status','!=','Order Cancelled')->get();
 
