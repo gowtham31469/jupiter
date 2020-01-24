@@ -1909,7 +1909,7 @@ function PopupArrOrchestraJC(data,name,svgDoc) {
 	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
-		url: base_url + "/admin/order-management/print-pdf-arr",
+		url: base_url + "/erp/job-manager/orchestra/print-pdf-arr",
 		type: "post",
 		data: {
 			_token: csrf_token,

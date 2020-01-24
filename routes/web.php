@@ -766,14 +766,18 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::get('job-manager/script-update-uuid', 'ErpUser\Jobmanager\JobManagerController@scriptUpdateUUID');
 
 	/* Orchestra Print Manager*/
-
-	Route::post('job-manager/orchestra/print-pdf-small', 'ErpUser\Jobmanager\JobManagerController@printPdfSmall');
-
 	Route::post('job-manager/orchestra/print-pdf', 'ErpUser\Jobmanager\JobManagerController@printPdf');
+	Route::post('job-manager/orchestra/print-pdf-arr', 'ErpUser\Jobmanager\JobManagerController@printPdfArr');
+	Route::post('job-manager/orchestra/print-pdf-small', 'ErpUser\Jobmanager\JobManagerController@printPdfSmall');
 	Route::post('job-manager/orchestra/print-pdf-table', 'ErpUser\Jobmanager\JobManagerController@printPdfTable');
 
 
 	Route::post('job-manager/orchestra/print-wash-pdf', 'ErpUser\Jobmanager\JobManagerController@printWashPdf');
+	
+	Route::post('job-manager/orchestra/print-heat-transfer', 'ErpUser\Jobmanager\JobManagerController@printHeatTransfer');
+	Route::post('job-manager/orchestra/print-special-tag', 'ErpUser\Jobmanager\JobManagerController@printSpecialTag');
+	Route::post('job-manager/orchestra/print-main-label', 'ErpUser\Jobmanager\JobManagerController@printMainLabel');
+	Route::post('job-manager/orchestra/print-size-label', 'ErpUser\Jobmanager\JobManagerController@printSizeLabel');
 
 
 	Route::post('job-manager/print-hang-pdf', 'ErpUser\Jobmanager\JobManagerController@printHangPdf');
