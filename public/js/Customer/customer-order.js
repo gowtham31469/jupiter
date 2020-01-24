@@ -999,7 +999,7 @@ function sticker_order_details(uvc, po) {
 
     var search_string = $('.dataTables_filter input').val();
     localStorage.setItem("search_string", search_string);
-    $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+    
     var buyer = localStorage.getItem("buyer");
     var buyer_id = localStorage.getItem("buyer_id");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -1016,7 +1016,16 @@ function sticker_order_details(uvc, po) {
             $(".loader").show();
         },
         success: function (data) {
-            orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po)
+			if(data.customer_active == "active")
+			{
+				$('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+				orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po)
+			}
+			else
+			{
+				$('.snackbar_span').html('Company Details Missing.Please Contact Administrator...!');
+                showSnackbar();
+			}
         },
         error: function (data) {
 
