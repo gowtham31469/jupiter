@@ -1393,7 +1393,7 @@
       <div class="modal-content">
           <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title" id="editOrchestraColorCodeLabel">Edit Size Chart</h4>
+              <h4 class="modal-title" id="editOrchestraColorCodeLabel">Edit Color Code</h4>
           </div>
           {!! Form::open(['id' => 'edit_orchestra_color_code_form','data-toggle' => 'validator','role' => 'form']) !!}
               <div class="modal-body">
