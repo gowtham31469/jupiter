@@ -619,7 +619,7 @@ class OrchestraSettings extends Controller
     try {
           $id = $request['id'];
 
-           $is_exists = OrchestraProductFamily::where('code','ilike',$request['code'])->select('id')->get();
+           $is_exists = OrchestraProductFamily::where('code','ilike',$request['code'])->where('id','!=',$id)->select('id')->get();
 
          if(sizeof($is_exists) > 0)
           {
