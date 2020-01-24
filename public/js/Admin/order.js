@@ -1086,7 +1086,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
             $no_of_carton = "";
             $total_polybag = "";
             $final_order_qty_sets = "";
-            $order_qty = data.orchestra_parcel_details[0].Sum;
+            $order_qty = itemtotal;
             $final_order_qty = "";
         }
 		
