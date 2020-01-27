@@ -1015,6 +1015,7 @@ class OrderStatusCntrl extends Controller
                       ->where('id', '<>', $template_id)
                       ->where('order_status', '<>', 'Order Cancelled')
                       ->whereIn('order_flag', ['newOrder', 'repeatOrder'])
+					  ->orderBy('id')
                       ->first();
         }
         else
@@ -1024,6 +1025,7 @@ class OrderStatusCntrl extends Controller
                       ->where('id', '<>', $template_id)
                       ->where('order_status', '<>', 'Order Cancelled')
                       ->whereIn('order_flag', ['newOrder', 'repeatOrder'])
+					  ->orderBy('id')
                       ->first();
         }
         
