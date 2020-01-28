@@ -328,6 +328,7 @@ class PoManagerController extends Controller
 
 			$orderlist   = ErpOrderDetails::select('erp_order_details.*',$arr_template->template_table.'.template_name','erp_status.status_name')
 			                ->join($arr_template->template_table,'erp_order_details.template_id',$arr_template->template_table.'.item_id')
+							->where('erp_order_details.order_quantity', '!=' ,0)
 							->join('erp_status','erp_order_details.status','erp_status.id')
 							->where('erp_order_details.erp_order_id',$id)
 							->where('erp_order_details.status','!=',4)
@@ -394,6 +395,7 @@ class PoManagerController extends Controller
 			$erp_status_ids = DB::table('erp_status')->whereIn('status_name', ['Jobcard Created', 'Cancelled', 'Moved To JC Queue', 'Invoice Generated', 'Partial Invoice'])->pluck('id')->all();
 
 			$orderlist   = ErpOrderDetails::join('erp_orders', 'erp_order_details.erp_order_id', 'erp_orders.id')
+					->where('erp_order_details.order_quantity', '!=' ,0)
 					->where('erp_order_details.erp_order_id', $erp_order_id)
 					->whereNotIn('erp_order_details.status', $erp_status_ids)
 					->select('erp_order_details.*', 'erp_orders.customer_id', 'erp_orders.buyer_id')
