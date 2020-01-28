@@ -29,6 +29,22 @@ function viewWcl(id){
 				 var svgDoc1;
 			     mySVG.addEventListener("load", function () {
 					 svgDoc = mySVG.contentDocument;
+					 console.log(data.washing[0].cofreet_symbols);
+					 
+				svgDoc.getElementById("cofreet_symbol1").setAttribute('xlink:href', data.washing[0].cofreet_symbols);
+                svgDoc.getElementById("astm_symbol1").setAttribute('xlink:href', data.washing[0].astms_symbol);
+					 
+                svgDoc.getElementById("cofreet_symbol2").setAttribute('xlink:href', data.whitening[0].cofreet_symbols);
+                svgDoc.getElementById("astm_symbol2").setAttribute('xlink:href', data.whitening[0].astms_symbol);
+					 
+                svgDoc.getElementById("cofreet_symbol3").setAttribute('xlink:href', data.dryer[0].cofreet_symbols);
+                svgDoc.getElementById("astm_symbol3").setAttribute('xlink:href', data.dryer[0].astms_symbol);
+					 
+                svgDoc.getElementById("cofreet_symbol4").setAttribute('xlink:href', data.ironing[0].cofreet_symbols);
+                svgDoc.getElementById("astm_symbol4").setAttribute('xlink:href', data.ironing[0].astms_symbol);
+					 
+                svgDoc.getElementById("cofreet_symbol5").setAttribute('xlink:href', data.cleaning[0].cofreet_symbols);
+                svgDoc.getElementById("astm_symbol5").setAttribute('xlink:href', data.cleaning[0].astms_symbol);
 					 
 				
 				var text_for_mad_in = '<p>' + data.made_in[0].french + " - " + data.made_in[0].english  + " - " + data.made_in[0].spanish + " - " + data.made_in[0].portuguese + " - " + data.made_in[0].italian + " - " + data.made_in[0].dutch + " - " + data.made_in[0].german + " - " +
@@ -81,12 +97,10 @@ function viewWcl(id){
 				 
 				  mySVG1.addEventListener("load", function () {
 					 svgDoc1 = mySVG1.contentDocument;
-					 
+					  
+					 svgDoc1.getElementById("product_family").innerHTML = data.product_family.length > 0 ? data.product_family[0].arabic : "";
+					  
 				$.each(data.care_instruction, function (index, value) {
-					
-					
-					svgDoc1.getElementById("product_family").innerHTML = data.product_family.length > 0 ? data.product_family[0].arabic : "";
-					
 					var value = '<p class="text_pragraph">' + value.french + "-" +  value.english  + "-" +  value.spanish + "-" + value.portuguese + "-" + value.italian + "-" + value.dutch + "-" + value.german  + "-" +
 						value.arabic + "-" +
 						value.greek + '</p>';
@@ -198,6 +212,7 @@ function reject()
  * 
  * @return barcode
  */
+
 
 function jsbarcodewash(code, id, svgDoc) {
     JsBarcode("#ean-13", code, {

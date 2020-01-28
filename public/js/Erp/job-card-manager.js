@@ -1489,7 +1489,7 @@ function storeJobcard()
 								}
 								else
 								{
-									erp_details_div_html += '<div hidden class="edit-erp-details" data-erp-id="'+erp_data.erp_id+'" data-ref-name="'+erp_data.refname+'" data-order-type="'+erp_data.order_type+'" data-buyer-po="'+erp_data.buyer_po+'" data-created-at="'+erp_data.created_at+'"  data-style-no="'+erp_data.style_no+'" data-template-file="'+erp_data.temp_file+'" data-template-id="'+erp_data.temp_id+'" data-template-name="'+erp_data.temp_name+'" data-disney="'+erp_data.disney+'" data-uuid="'+erp_data.uuid+'"></div><object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal'+incr+'" class="center-block tesco_svg'+incr+'" data="'+erp_data.temp_file+'" type="image/svg+xml"></object>'
+									erp_details_div_html += '<div hidden class="edit-erp-details" data-erp-id="'+erp_data.erp_id+'" data-ref-name="'+erp_data.refname+'" data-order-type="'+erp_data.order_type+'" data-buyer-po="'+erp_data.buyer_po+'" data-created-at="'+erp_data.created_at+'"  data-style-no="'+erp_data.style_no+'" data-template-file="'+erp_data.temp_file+'" data-template-id="'+erp_data.temp_id+'" data-template-name="'+erp_data.temp_name+'" data-disney="'+erp_data.disney+'" data-uuid="'+erp_data.uuid+'"></div><object style="opacity:0;width:0px;height:0px" id="orchestra_svg_modal'+incr+'" class="center-block tesco_svg'+incr+'" data="'+erp_data.temp_file+'" type="image/svg+xml"></object>'
 								}
                                 
                                 incr++;
@@ -1869,9 +1869,9 @@ function updateJobcard(formData)
 		erp_order_details_obj.temp_id 	 = $(this).attr('data-template-id');
 		erp_order_details_obj.temp_name  = $(this).attr('data-template-name');
 		erp_order_details_obj.disney 	 = $(this).attr('data-disney');
-		erp_order_details_obj.frontPath  = $(this).attr('front-path');
-		erp_order_details_obj.backPath   = $(this).attr('back-path');
-		erp_order_details_obj.middlePath = $(this).attr('middle-path');
+		erp_order_details_obj.frontPath  = $(this).attr('data-front-path');
+		erp_order_details_obj.backPath   = $(this).attr('data-back-path');
+		erp_order_details_obj.middlePath = $(this).attr('data-middle-path');
         erp_order_details_obj.uuid       = $(this).attr('data-uuid');
 
         jsonArray.push(erp_order_details_obj);
@@ -2278,11 +2278,11 @@ function printHeatTransferJCPreview(style_no,buyer_no,id,order_type,created_at,s
 		type: "post",
 		data: {
 		   _token: csrf_token,
-			style:style_no,
+			style_no:style_no,
 			buyer_no:buyer_no,
 			id:id,
 			template_id:template_id,
-			refname:refname,
+			name:refname,
 			created_at:created_at,
 			db:"orchestra_heat_transfer_orders"
 		},
@@ -2320,11 +2320,11 @@ function  printSpecialTagJCPreview(style_no,buyer_no,id,order_type,created_at,st
 		type: "post",
 		data: {
 		   _token: csrf_token,
-			style:style_no,
+			style_no:style_no,
 			buyer_no:buyer_no,
 			id:id,
 			template_id:template_id,
-			refname:refname,
+			name:refname,
 			created_at:created_at,
 			db:"orchestra_special_tag_orders"
 		},
@@ -2362,11 +2362,11 @@ function printMainLabelJCPreview(style_no,buyer_no,id,order_type,created_at,stat
 		type: "post",
 		data: {
 		   _token: csrf_token,
-			style:style_no,
+			style_no:style_no,
 			buyer_no:buyer_no,
 			id:id,
 			template_id:template_id,
-			refname:refname,
+			name:refname,
 			created_at:created_at,
 			db:"orchestra_main_label_orders"
 		},
@@ -2404,11 +2404,11 @@ function printSizeLabelJCPreview(style_no,buyer_no,id,order_type,created_at,stat
 		type: "post",
 		data: {
 		   _token: csrf_token,
-			style:style_no,
+			style_no:style_no,
 			buyer_no:buyer_no,
 			id:id,
 			template_id:template_id,
-			refname:refname,
+			name:refname,
 			created_at:created_at,
 			db:"orchestra_size_label_orders"
 		},
@@ -3840,7 +3840,7 @@ function printHangDivJCPreview(front,back,disney,name,style_no,buyer_no,id,order
 						var svg_fin_front = svgarr_front.join(',_');
 						//PopupWashJCPreview(svg_fin,svgRoot1_back,svgRoot1_middle, dataid,svgDoc1);
 						
-						PopupHangJCPreview(svg_fin_front, svg_fin,svgDoc,svgDoc1,disney,isEdit);
+						PopupHangJCPreview(svg_fin_front, svg_fin,svgDoc,svgDoc1,disney,isEdit,name,id,style_no,buyer_no,created_at);
 					}
 				},
 			});
@@ -3973,7 +3973,7 @@ function printWashDivJCPreview(data,data_back,data_middle,name,style_no,buyer_no
 						// var svg_fin_front = svgarr_front.join(',_');
 						
 						// PopupHangJCPreview(svg_fin, svg_fin,svgDoc,svgDoc1,disney);
-						PopupWashJCPreview(svg_fin,svgRoot1_back,svgRoot1_middle,svgDoc1,parentId,isEdit);
+						PopupWashJCPreview(svg_fin,svgRoot1_back,svgRoot1_middle,svgDoc1,parentId,isEdit,name,id,style_no,buyer_no,created_at);
 					}
 				},
 			});
@@ -4065,7 +4065,7 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 							})
 							// var svg_fin = svgarr.join(',_');
 							 
-							  PopupOrchestraJCPreview(svgDoc,"STD-CARTON",isEdit); 
+							  PopupOrchestraJCPreview(svgDoc,"STD-CARTON",isEdit,id,style_no,buyer_no,created_at); 
 							
 							
 
@@ -4087,7 +4087,7 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupTableOrchestraJCPreview(svgDoc, "STD-POLY",details.sizeArr,details.qtyArr,isEdit);
+							PopupTableOrchestraJCPreview(svgDoc, "STD-POLY",details.sizeArr,details.qtyArr,isEdit,id,style_no,buyer_no,created_at);
 						break;
 
 
@@ -4105,7 +4105,7 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupOrchestrasmallJCPreview(svg_fin, "SOLID-POLY",svgDoc,isEdit);
+							PopupOrchestrasmallJCPreview(svg_fin, "SOLID-POLY",svgDoc,isEdit,id,style_no,buyer_no,created_at);
 						break;
 
 
@@ -4140,7 +4140,7 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupArrOrchestraJCPreview(svg_fin, "SOLID-CARTON",svgDoc,isEdit);
+							PopupArrOrchestraJCPreview(svg_fin, "SOLID-CARTON",svgDoc,isEdit,id,style_no,buyer_no,created_at);
 						break;
 						default:
 						// code block
@@ -4149,7 +4149,7 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 			});
 }
 
-function PopupWashJCPreview(data,data_back,data_middle,svgDoc1,pid,isEdit) {
+function PopupWashJCPreview(data,data_back,data_middle,svgDoc1,pid,isEdit,name,id,style_no,buyer_no,created_at) {
 
 	var s = new XMLSerializer();
 	// var d = data;
@@ -4178,8 +4178,13 @@ function PopupWashJCPreview(data,data_back,data_middle,svgDoc1,pid,isEdit) {
             _token: csrf_token,
             svg: data,
             svg_back: svg_back,
+			name:name,
             svg_middle: svg_middle,
             parentId : pid,
+            id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
         },
         async: false,
         success: function (data) {
@@ -4262,7 +4267,7 @@ function jsbarcodewashJCPreview(code, id, svgDoc) {
 
     svgDoc.getElementById(id).innerHTML = svg_xml;
 }
-function PopupHangJCPreview(svgRoot, svgRoot1,svgDoc,svgDoc1,disney,isEdit) {
+function PopupHangJCPreview(svgRoot, svgRoot1,svgDoc,svgDoc1,disney,isEdit,name,id,style_no,buyer_no,created_at) {
 //	var s = new XMLSerializer();
 //	var d = svgRoot;
 //	var str = s.serializeToString(d);
@@ -4282,7 +4287,12 @@ function PopupHangJCPreview(svgRoot, svgRoot1,svgDoc,svgDoc1,disney,isEdit) {
 		data: {
 			_token: csrf_token,
 			svg: svgRoot,
-			svgRoot: svgRoot1
+			name:name,
+			svgRoot: svgRoot1,
+            id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
 		},
 		async: false,
 		success: function (data) {
@@ -4308,7 +4318,7 @@ function PopupHangJCPreview(svgRoot, svgRoot1,svgDoc,svgDoc1,disney,isEdit) {
 	}
 }
 
-function PopupOrchestraJCPreview(data,name,isEdit) {
+function PopupOrchestraJCPreview(data,name,isEdit,id,style_no,buyer_no,created_at) {
 	
 	var s = new XMLSerializer();
 	var d = data;
@@ -4324,7 +4334,11 @@ function PopupOrchestraJCPreview(data,name,isEdit) {
 		data: {
 			_token: csrf_token,
 			svg: svg,
-			name:name
+			name:name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
 		},
 		async: false,
 		success: function (data) {
@@ -4352,7 +4366,7 @@ function PopupOrchestraJCPreview(data,name,isEdit) {
 
 
 
-function PopupArrOrchestraJCPreview(data,name,svgDoc,isEdit) {
+function PopupArrOrchestraJCPreview(data,name,svgDoc,isEdit,id,style_no,buyer_no,created_at) {
 	
 //	var s = new XMLSerializer();
 //	var d = data;
@@ -4368,7 +4382,11 @@ function PopupArrOrchestraJCPreview(data,name,svgDoc,isEdit) {
 		data: {
 			_token: csrf_token,
 			svg: data,
-			name: name
+			name: name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
 		},
 		async: false,
 		success: function (data) {
@@ -4395,7 +4413,7 @@ function PopupArrOrchestraJCPreview(data,name,svgDoc,isEdit) {
 
 
 
-function PopupTableOrchestraJCPreview(data,name,size,qty,isEdit) {
+function PopupTableOrchestraJCPreview(data,name,size,qty,isEdit,id,style_no,buyer_no,created_at) {
 	var s = new XMLSerializer();
 	var d = data;
 	var str = s.serializeToString(d);d
@@ -4426,7 +4444,11 @@ function PopupTableOrchestraJCPreview(data,name,size,qty,isEdit) {
 			svg: svg,
 			size: sizefin,
 			qty: qtyfin,
-			name:name
+			name:name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
 		},
 		async: false,
 		success: function (data) {
@@ -4453,7 +4475,7 @@ function PopupTableOrchestraJCPreview(data,name,size,qty,isEdit) {
 
 
 
-function PopupOrchestrasmallJCPreview(data,name,svgDoc,isEdit) {
+function PopupOrchestrasmallJCPreview(data,name,svgDoc,isEdit,id,style_no,buyer_no,created_at) {
 //	var s = new XMLSerializer();
 //	var d = data;
 //	var str = s.serializeToString(d);
@@ -4467,7 +4489,11 @@ function PopupOrchestrasmallJCPreview(data,name,svgDoc,isEdit) {
 		data: {
 			_token: csrf_token,
 			svg: data,
-			name: name
+			name: name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
 		},
 		async: false,
 		success: function (data) {

@@ -1412,7 +1412,7 @@ function printHangDivJC(front,back,disney,name,style_no,buyer_no,id,order_type,c
 						var svg_fin_front = svgarr_front.join(',_');
 						//PopupWashJC(svg_fin,svgRoot1_back,svgRoot1_middle, dataid,svgDoc1);
 						
-						PopupHangJC(svg_fin_front, svg_fin,svgDoc,svgDoc1,disney);
+						PopupHangJC(svg_fin_front, svg_fin,svgDoc,svgDoc1,disney,name,id,style_no,buyer_no,created_at);
 					}
 				},
 			});
@@ -1545,7 +1545,7 @@ function printWashDivJC(data,data_back,data_middle,name,style_no,buyer_no,id,ord
 						// var svg_fin_front = svgarr_front.join(',_');
 						
 						// PopupHangJC(svg_fin, svg_fin,svgDoc,svgDoc1,disney);
-						PopupWashJC(svg_fin,svgRoot1_back,svgRoot1_middle,svgDoc1,parentId);
+						PopupWashJC(svg_fin,svgRoot1_back,svgRoot1_middle,svgDoc1,parentId,name,id,style_no,buyer_no,created_at);
 					}
 				},
 			});
@@ -1637,7 +1637,7 @@ function genarateArtworkOrchestraJC(data, name,style_no,buyer_no,id,order_type,c
 							})
 							// var svg_fin = svgarr.join(',_');
 							 
-							  PopupOrchestraJC(svgDoc,"STD-CARTON"); 
+							  PopupOrchestraJC(svgDoc,"STD-CARTON",id,style_no,buyer_no,created_at); 
 							
 							
 
@@ -1659,7 +1659,7 @@ function genarateArtworkOrchestraJC(data, name,style_no,buyer_no,id,order_type,c
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupTableOrchestraJC(svgDoc, "STD-POLY",details.sizeArr,details.qtyArr);
+							PopupTableOrchestraJC(svgDoc, "STD-POLY",details.sizeArr,details.qtyArr,id,style_no,buyer_no,created_at);
 						break;
 
 
@@ -1677,7 +1677,7 @@ function genarateArtworkOrchestraJC(data, name,style_no,buyer_no,id,order_type,c
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupOrchestrasmallJC(svg_fin, "SOLID-POLY",svgDoc);
+							PopupOrchestrasmallJC(svg_fin, "SOLID-POLY",svgDoc,id,style_no,buyer_no,created_at);
 						break;
 
 
@@ -1712,7 +1712,7 @@ function genarateArtworkOrchestraJC(data, name,style_no,buyer_no,id,order_type,c
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupArrOrchestraJC(svg_fin, "SOLID-CARTON",svgDoc);
+							PopupArrOrchestraJC(svg_fin, "SOLID-CARTON",svgDoc,id,style_no,buyer_no,created_at);
 						break;
 						default:
 						// code block
@@ -1721,7 +1721,7 @@ function genarateArtworkOrchestraJC(data, name,style_no,buyer_no,id,order_type,c
 			});
 }
 
-function PopupWashJC(data,data_back,data_middle,svgDoc1,pid) {
+function PopupWashJC(data,data_back,data_middle,svgDoc1,pid,name,id,style_no,buyer_no,created_at) {
 
 	var s = new XMLSerializer();
 	// var d = data;
@@ -1752,12 +1752,17 @@ function PopupWashJC(data,data_back,data_middle,svgDoc1,pid) {
             svg_back: svg_back,
             svg_middle: svg_middle,
             parentId : pid,
+			name:name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
         },
         async: false,
         success: function (data) {
 			svgDoc1.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -21 125.454) rotate(270)');
             success = true;
-            url = data;
+            url = data.file_path;;
         },
         error: function (data) {
 
@@ -1826,7 +1831,7 @@ function jsbarcodewashJC(code, id, svgDoc) {
 
     svgDoc.getElementById(id).innerHTML = svg_xml;
 }
-function PopupHangJC(svgRoot, svgRoot1,svgDoc,svgDoc1,disney) {
+function PopupHangJC(svgRoot, svgRoot1,svgDoc,svgDoc1,disney,name,id,style_no,buyer_no,created_at) {
 //	var s = new XMLSerializer();
 //	var d = svgRoot;
 //	var str = s.serializeToString(d);
@@ -1846,13 +1851,18 @@ function PopupHangJC(svgRoot, svgRoot1,svgDoc,svgDoc1,disney) {
 		data: {
 			_token: csrf_token,
 			svg: svgRoot,
-			svgRoot: svgRoot1
+			name:name,
+			svgRoot: svgRoot1,
+            id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
 		},
 		async: false,
 		success: function (data) {
 			
 			success = true;
-			url = data;
+			url = data.file_path;
 		},
 		error: function (data) {
 
@@ -1863,7 +1873,7 @@ function PopupHangJC(svgRoot, svgRoot1,svgDoc,svgDoc1,disney) {
 	}
 }
 
-function PopupOrchestraJC(data,name) {
+function PopupOrchestraJC(data,name,id,style_no,buyer_no,created_at) {
 	
 	var s = new XMLSerializer();
 	var d = data;
@@ -1879,13 +1889,17 @@ function PopupOrchestraJC(data,name) {
 		data: {
 			_token: csrf_token,
 			svg: svg,
-			name:name
+			name:name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
 		},
 		async: false,
 		success: function (data) {
 			//window.location.href=data;
 			success = true;
-			url = data;
+			url = data.file_path;
 		},
 		error: function (data) {
 
@@ -1898,7 +1912,7 @@ function PopupOrchestraJC(data,name) {
 
 
 
-function PopupArrOrchestraJC(data,name,svgDoc) {
+function PopupArrOrchestraJC(data,name,svgDoc,id,style_no,buyer_no,created_at) {
 	
 //	var s = new XMLSerializer();
 //	var d = data;
@@ -1914,13 +1928,17 @@ function PopupArrOrchestraJC(data,name,svgDoc) {
 		data: {
 			_token: csrf_token,
 			svg: data,
-			name: name
+			name: name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
 		},
 		async: false,
 		success: function (data) {
 			//window.location.href=data;
 			success = true;
-			url = data;
+			url = data.file_path;
 		},
 		error: function (data) {
 
@@ -1933,7 +1951,7 @@ function PopupArrOrchestraJC(data,name,svgDoc) {
 
 
 
-function PopupTableOrchestraJC(data,name,size,qty) {
+function PopupTableOrchestraJC(data,name,size,qty,id,style_no,buyer_no,created_at) {
 	var s = new XMLSerializer();
 	var d = data;
 	var str = s.serializeToString(d);d
@@ -1964,12 +1982,16 @@ function PopupTableOrchestraJC(data,name,size,qty) {
 			svg: svg,
 			size: sizefin,
 			qty: qtyfin,
-			name:name
+			name:name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
 		},
 		async: false,
 		success: function (data) {
 			success = true;
-			url = data;
+			url = data.file_path;
 		},
 		error: function (data) {
 
@@ -1982,7 +2004,7 @@ function PopupTableOrchestraJC(data,name,size,qty) {
 
 
 
-function PopupOrchestrasmallJC(data,name,svgDoc) {
+function PopupOrchestrasmallJC(data,name,svgDoc,id,style_no,buyer_no,created_at) {
 //	var s = new XMLSerializer();
 //	var d = data;
 //	var str = s.serializeToString(d);
@@ -1996,12 +2018,16 @@ function PopupOrchestrasmallJC(data,name,svgDoc) {
 		data: {
 			_token: csrf_token,
 			svg: data,
-			name: name
+			name: name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
 		},
 		async: false,
 		success: function (data) {
 			success = true;
-			url = data;
+			url = data.file_path;
 		},
 		error: function (data) {
 

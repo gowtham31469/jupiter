@@ -13,7 +13,9 @@
 	<link rel="stylesheet" href="{{ asset('css/dropzone.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/custom.css') }}">
-    <link rel="stylesheet" href="{{ asset('DataTables/DataTables-1.10.16/css/dataTables.bootstrap.min.css') }}">
+<!--    <link rel="stylesheet" href="{{ asset('DataTables/DataTables-1.10.16/css/dataTables.bootstrap.min.css') }}">-->
+	<link rel="stylesheet" href="{{ asset('DataTables/datatables.css') }}">
+    <link rel="stylesheet" href="{{ asset('DataTables/Buttons-1.5.1/css/buttons.dataTables.min.css') }}">
 	
 	
 	<link rel="stylesheet" href="{{ asset('css/ion-icons.min.css') }}">
@@ -47,10 +49,11 @@
 	</div>
     <script type="text/javascript" src="{{ asset('DataTables/jQuery-3.2.1/jquery-3.2.1.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bootstrap-3.3.7-dist/js/bootstrap.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('DataTables/DataTables-1.10.16/js/jquery.dataTables.min.js') }}"></script>
+<!--    <script type="text/javascript" src="{{ asset('DataTables/DataTables-1.10.16/js/jquery.dataTables.min.js') }}"></script>-->
 	
-	
-	
+	 <script src="{{ asset('js/datatables/jquery.dataTables.min.js') }}"></script>
+	    <script src="{{ asset('js/datatables.js') }}"></script> 
+
 	 <script type="text/javascript" src="{{ asset('js/Chart.js') }}"></script>
 	
 	

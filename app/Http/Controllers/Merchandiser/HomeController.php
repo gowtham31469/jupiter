@@ -72,14 +72,27 @@ class HomeController extends Controller
 				//To get Wash care label composition
 				
 			    $wcl_orders = DB::table('orchestra_wash_care_label_orders')->select('*')->where('orchestra_wash_care_label_orders.id',$id)->get();
+			
 			    $uvc = $wcl_orders{0}->uvc; 
+			
 			    $made_in_id = $wcl_orders{0}->made_in_id;
+			$washing_id = $wcl_orders{0}->washing_id;
+			$whitening_id = $wcl_orders{0}->whitening_id;
+			$dryer_id = $wcl_orders{0}->dryer_id;
+			$ironing_id = $wcl_orders{0}->ironing_id;
+			$cleaning_id = $wcl_orders{0}->cleaning_id;
+			
 			    $care_instruction_id = explode(',',$wcl_orders{0}->care_instruction_id);
 			
 				 $care_instruction = DB::table('orchestra_care_instruction')->select('*')->whereIn('id',$care_instruction_id)->get(); 
 			
+			$washing = DB::table('orchestra_care_symbols')->select('*')->where('id',$washing_id)->get(); 
+			$whitening = DB::table('orchestra_care_symbols')->select('*')->where('id',$whitening_id)->get(); 
+			$dryer = DB::table('orchestra_care_symbols')->select('*')->where('id',$dryer_id)->get(); 
+			$ironing = DB::table('orchestra_care_symbols')->select('*')->where('id',$ironing_id)->get(); 
+			$cleaning = DB::table('orchestra_care_symbols')->select('*')->where('id',$cleaning_id)->get(); 
 			
-				$disney = DB::table('orchestra_template')->select('*')->where('id',$wcl_orders{0}->template_id)->get(); 
+				$disney = DB::table('orchestra_template')->select('*')->where('item_id',$wcl_orders{0}->template_id)->get(); 
 			
 			    $made_in= DB::table('orchestra_countries')->select('*')->where('id',$made_in_id)->get();
 			
@@ -114,14 +127,14 @@ class HomeController extends Controller
 				//To get Order Details like UVC,Size
 			
 				$order_details = DB::table('orchestra_parcel_details') ->leftJoin('orchestra_size_chart','orchestra_parcel_details.Size','=','orchestra_size_chart.age')->select('*',DB::raw("sum(\"Quantity\") as Sum"))->where('UVC',$uvc)->groupBy('Size','orchestra_parcel_details.id','orchestra_size_chart.id')->orderBy('orchestra_parcel_details.id')->get();
-			
-			    $code=substr($uvc, -4, 2);
+				
+			    $code=$order_details{0}->Family_Code;
 				
 				//To get Product Family
 			    $product_family = DB::table('orchestra_product_family')->select('*')->where('code',$code)->get();
 			
                 // $data['orchestra_wash_template_id']=2;
-                return response()->json(['error'=>'false','message' =>'success', 'wcl_orders_qty' => $wcl_orders_qty,'order_details'=>$order_details,'care_instruction'=>$care_instruction,'orchestra_wash_care_label_orders'=>$wcl_orders,'product_family'=>$product_family,'made_in'=>$made_in,'orchestra_wash_template_front'=>$orchestra_wash_template_front,'orchestra_wash_template_back'=>$orchestra_wash_template_back,'orchestra_wash_template_middle'=>$orchestra_wash_template_middle],200);
+                return response()->json(['error'=>'false','message' =>'success', 'wcl_orders_qty' => $wcl_orders_qty,'order_details'=>$order_details,'care_instruction'=>$care_instruction,'orchestra_wash_care_label_orders'=>$wcl_orders,'product_family'=>$product_family,'made_in'=>$made_in,'orchestra_wash_template_front'=>$orchestra_wash_template_front,'orchestra_wash_template_back'=>$orchestra_wash_template_back,'orchestra_wash_template_middle'=>$orchestra_wash_template_middle,'washing'=>$washing,'whitening'=>$whitening,'dryer'=>$dryer,'ironing'=>$ironing,'cleaning'=>$cleaning],200);
             } catch (\Exception $e)
             {
               return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
