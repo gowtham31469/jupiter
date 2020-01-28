@@ -1215,7 +1215,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
     {
         var onclick = "orderStatus()";
     }
-    $('.top-content').append('<form id="solid_carton_form"><h3><i class="ion-ios-browsers-outline"></i> Sticker Order Details for UVC ' + uvc + ' and PO ' + po + '</h3><hr/><h5><div style="margin-bottom: 10px;"><label style="color:red" class="age_group_error hidden">Please Select Age Group</label></div><span class="sticker-details">Supplier: <strong><span id="supplier">' + data.orchestra_parcel_details[0].SupplierName + '</span></strong> </span> <span class="sticker-details">Style: <strong><span id="style">' + data.orchestra_parcel_details[0].NomApple + '</span></strong></span><span class="sticker-details">Color: <strong><span id="color">' + data.orchestra_parcel_details[0].colour_Code + '</span></strong></span><span class="sticker-details" style="display: inline-flex; white-space: nowrap;">Age Group: <strong><span id="ageGroup">  <select class="form-control" style="margin-top: -9px; margin-left: 10px;" name="carlist" id="age" form="carform">' + option + '</select></span></strong> </span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>' + head_qty + '</h4><div class="table-responsive"><table class="table table-condensed table-bordered table-hover" id="solidform">' + thead + '<tbody id="solidformtbody">' + tr + '</tbody><tfoot><tr class="strong"><td colspan="3" class="text-right">Total</td><td>' + itemtotal + '</td>' + ttotal + '</tr></tfoot></table><div class="bottom-bar"><div class="modal-footer"> <button onclick="'+onclick+'" class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="submit" id="save_sticker_button" class="btn btn-xs btn-success '+save_hide_button+'"><i class="fa fa-floppy-o"></i>Save</button><button type="button" class="btn btn-success  pull-right btn-xs" data-toggle="modal" id="'+po_file_upload_button+'" style="'+update_disabel_button+'" >Update PO</button><button type="button" id="cancel_sticker_button" onclick=cancelStickerDiv() class="btn btn-xs btn-danger '+cancel_hide_button+'"><i class="fa fa-floppy-o"></i>Cancel</button></div></div></form></div></div><div class="col-md-4"><h4>' + head_qty1 + '</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" disabled value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" disabled value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume">' + $parcelVolume + '</span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6" style="width: 130px;"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left:-135px;">/</span> <div class="col-md-6" style="width: 130px;"><input ' + disabled + ' data-toggle="modal" data-target=".needed_modal" value="' + $no_of_carton + '" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>' + standard_div + ' </div></div>');
+    $('.top-content').append('<form id="solid_carton_form"><h3><i class="ion-ios-browsers-outline"></i> Sticker Order Details for UVC ' + uvc + ' and PO ' + po + '</h3><hr/><h5><div style="margin-bottom: 10px;"><label style="color:red" class="age_group_error hidden">Please Select Age Group</label></div><span class="sticker-details">Supplier: <strong><span id="supplier">' + data.orchestra_parcel_details[0].SupplierName + '</span></strong> </span> <span class="sticker-details">Style: <strong><span id="style">' + data.orchestra_parcel_details[0].NomApple + '</span></strong></span><span class="sticker-details">Color: <strong><span id="color">' + data.orchestra_parcel_details[0].colour_Code + '</span></strong></span><span class="sticker-details" style="display: inline-flex; white-space: nowrap;">Age Group: <strong><span id="ageGroup">  <select class="form-control" style="margin-top: -9px; margin-left: 10px;" name="carlist" id="age" form="carform">' + option + '</select></span></strong> </span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>' + head_qty + '</h4><div class="table-responsive"><table class="table table-condensed table-bordered table-hover" id="solidform">' + thead + '<tbody id="solidformtbody">' + tr + '</tbody><tfoot><tr class="strong"><td colspan="3" class="text-right">Total</td><td>' + itemtotal + '</td>' + ttotal + '</tr></tfoot></table><div class="bottom-bar"><div class="modal-footer"> <button onclick="'+onclick+'" class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="submit" id="save_sticker_button" class="btn btn-xs btn-success '+save_hide_button+'"><i class="fa fa-floppy-o"></i>Save</button><button type="button" class="btn btn-success  pull-right btn-xs" data-toggle="modal" id="'+po_file_upload_button+'" style="'+update_disabel_button+'" >Update PO</button><button type="button" id="cancel_sticker_button" onclick=cancelStickerDiv() class="btn hidden btn-xs btn-danger '+cancel_hide_button+'"><i class="fa fa-floppy-o"></i>Cancel</button></div></div></form></div></div><div class="col-md-4"><h4>' + head_qty1 + '</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" disabled value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" disabled value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume">' + $parcelVolume + '</span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6" style="width: 130px;"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left:-135px;">/</span> <div class="col-md-6" style="width: 130px;"><input ' + disabled + ' data-toggle="modal" data-target=".needed_modal" value="' + $no_of_carton + '" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>' + standard_div + ' </div></div>');
 
     $('#solid_carton_form');
 
@@ -9127,7 +9127,7 @@ function setHangTag(id,colour) {
 		success: function (data) {
 			$('#hangtagform').find('#exist_id').val(data.id)
 			$('#print_hang_button').removeClass('hidden')
-			$('#cancel_hang_button').removeClass('hidden')
+			//$('#cancel_hang_button').removeClass('hidden')
 			$('#save_hang_button').addClass('hidden')
 			$('#tree1 >ul > li').each( function() {
 			   disable( 'tree1',this.id );        
@@ -9198,7 +9198,7 @@ function setSpecialTag(id,colour) {
         success: function (data) {
 			$('#specialtagform').find('#exist_id').val(data.id)
 			$('#save_special_button').addClass('hidden')
-			$('#cancel_special_button').removeClass('hidden');
+			//$('#cancel_special_button').removeClass('hidden');
 			$('#tree2 >ul > li').each( function() {
 			   disable( 'tree2',this.id );        
 			})
@@ -9271,7 +9271,7 @@ function setHeatTransfer(id,colour) {
 		success: function (data) {
 			$('#heat_transferform').find('#exist_id').val(data.id)
 			$('#save_heat_transfer_button').addClass('hidden')
-			$('#cancel_heat_button').removeClass('hidden');
+			//$('#cancel_heat_button').removeClass('hidden');
 			$('#treeht >ul > li').each( function() {
 			   disable( 'treeht',this.id );        
 			})
@@ -9342,7 +9342,7 @@ function setMainLabel(id,colour) {
         success: function (data) {
 			$('#main_labelform').find('#exist_id').val(data.id)
 			$('#save_main_label_button').addClass('hidden')
-			$('#cancel_main_button').removeClass('hidden');
+			//$('#cancel_main_button').removeClass('hidden');
 			$('.snackbar_span').html('This is only for to place main label. Size label you want to place seperately');
 			showSnackbar();
 			$('#treeml >ul > li').each( function() {
@@ -9417,7 +9417,7 @@ function setSizeLabel(id,colour) {
 		success: function (data) {
 			$('#size_labelform').find('#exist_id').val(data.id)
 			$('#save_size_label_button').addClass('hidden')
-			$('#cancel_size_button').removeClass('hidden');
+			//$('#cancel_size_button').removeClass('hidden');
 			$('#treesl >ul > li').each( function() {
 			   disable( 'treesl',this.id );        
 			})
@@ -9777,7 +9777,7 @@ function setSolidStickers() {
 				$('#po-file-upload-button-standard').css('display','block')
 				$('#polybag_print_button').removeClass('hidden')
 				$('#carton_print_button').removeClass('hidden')
-				$('#cancel_sticker_button').removeClass('hidden')
+				//$('#cancel_sticker_button').removeClass('hidden')
 				$('#std_carton_id').val(data.carton_id);
 				$('#std_poly_id').val(data.poly_id);
 			},
@@ -9845,7 +9845,7 @@ function setSolidStickers() {
 				$('#po-file-upload-button-solid').css('display','block')
 				$('#polybag_print_button').removeClass('hidden')
 				$('#carton_print_button').removeClass('hidden')
-				$('#cancel_sticker_button').removeClass('hidden')
+				//$('#cancel_sticker_button').removeClass('hidden')
 				$('#carton_id').val(data.carton_id);
 				$('#poly_id').val(data.poly_id);
 			},
