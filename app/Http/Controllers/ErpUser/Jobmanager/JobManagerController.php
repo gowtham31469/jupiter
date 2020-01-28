@@ -4197,7 +4197,7 @@ class JobManagerController extends Controller
 		
 		$template_file = DB::table('orchestra_template')->select('*')->where('item_id',$template_id)->get();
 		
-		PDF::Image(public_path($template_file{0}->template_file), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+		PDF::Image(public_path($template_file{0}->template_file), 6, 54, 100, 100, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 		
 		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
 		
@@ -4405,7 +4405,7 @@ class JobManagerController extends Controller
 		
 		$template_file = DB::table('orchestra_template')->select('*')->where('item_id',$template_id)->get();
 		
-		PDF::Image(public_path($template_file{0}->template_file), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+		PDF::Image(public_path($template_file{0}->template_file), 6, 54, 100, 100, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 		
 		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
 		
@@ -4615,7 +4615,7 @@ class JobManagerController extends Controller
 		
 		$template_file = DB::table('orchestra_template')->select('*')->where('item_id',$template_id)->get();
 		
-		PDF::Image(public_path($template_file{0}->template_file), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+		PDF::Image(public_path($template_file{0}->template_file), 6, 54, 100, 100, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 		
 		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
 		
@@ -4824,7 +4824,7 @@ class JobManagerController extends Controller
 		
 		$template_file = DB::table('orchestra_template')->select('*')->where('item_id',$template_id)->get();
 		
-		PDF::Image(public_path($template_file{0}->template_file), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+		PDF::Image(public_path($template_file{0}->template_file), 6, 54, 100, 100, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 		
 		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
 		
