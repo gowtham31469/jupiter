@@ -102,10 +102,11 @@ class PoManagerController extends Controller
 		
 		 foreach($new_orders as $key => $values)
 		 {
+			 dd($values);
 			foreach($values as $valuess)
 			{
 				$buyer_id = explode("-",$key);
-				
+				dd()
 				$erp_order_details = Erp::join('erp_order_details','erp_order_details.erp_order_id','erp_orders.id')
 										 ->join('customers','erp_orders.customer_id','customers.id')
 										 ->join('erp_status','erp_orders.status','erp_status.id')
@@ -140,7 +141,6 @@ class PoManagerController extends Controller
 						}
 					}
 				}
-				dd($erp_order_details);
 			}
 			 
 		 }
