@@ -4211,7 +4211,15 @@ function washcarelabels(data, dataid,color_code,new_flag) {
         made_option += "<option data-id='" + value.id + "'  data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' value=" + value.id + ">" + value.english + "</option>";
     });
     $.each(data.orchestra_care_instruction, function (index, value) {
-        instruction_option += "<option data-id='" + value.id + "' data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german  + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' value=" + value.id + ">" + value.english + "</option>";
+		if(value.english.length > 31)
+		{
+			var txtEng = value.english.slice(0,30)+"...";
+		}
+		else
+		{
+			var txtEng = value.english;
+		}
+        instruction_option += "<option data-id='" + value.id + "' data-french='" + value.french + "' title='"+value.english+"' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german  + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' value=" + value.id + ">" + txtEng + "</option>";
     });
     $.each(data.orchestra_parts, function (index, value) {
         parts_option += "<option data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' value=" + value.id + ">" + value.english + "</option>";
@@ -4619,6 +4627,15 @@ function washcarelabels(data, dataid,color_code,new_flag) {
     })
 
     selectpicker()
+	
+	var title = [];
+	$('.care_instruction_select'+dataid+' option').each(function(){
+		title.push($(this).attr('title'));
+	});
+
+	$(".care_instruction_select"+dataid+" ul li").each(function(i){
+	  $(this).attr('title',title[i]).tooltip();
+	})
 
     var date = new Date();
     date.setDate(date.getDate() + 7);

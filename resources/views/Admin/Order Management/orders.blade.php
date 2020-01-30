@@ -369,6 +369,13 @@ background: rgba(0,0,0,0.2);
 	.left-panel.active {
     margin-right: 0%;
 }
+	.bootstrap-select .dropdown-menu {
+	width: 100%;
+}
+
+.bootstrap-select .dropdown-menu li small {
+	white-space: normal;
+}
 /* Hide HTML5 Up and Down arrows. */
 input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
 	-webkit-appearance: none;
