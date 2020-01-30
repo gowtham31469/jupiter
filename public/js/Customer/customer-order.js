@@ -4209,7 +4209,15 @@ function washcarelabels(data, dataid,color_code,new_flag) {
         made_option += "<option data-id='" + value.id + "'  data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' value=" + value.id + ">" + value.english + "</option>";
     });
     $.each(data.orchestra_care_instruction, function (index, value) {
-        instruction_option += "<option data-id='" + value.id + "' data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german  + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' value=" + value.id + ">" + value.english + "</option>";
+		if(value.english.length > 31)
+		{
+			var txtEng = value.english.slice(0,30)+"...";
+		}
+		else
+		{
+			var txtEng = value.english;
+		}
+        instruction_option += "<option data-id='" + value.id + "' data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german  + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' value=" + value.id + ">" + txtEng + "</option>";
     });
     $.each(data.orchestra_parts, function (index, value) {
         parts_option += "<option data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' value=" + value.id + ">" + value.english + "</option>";
@@ -4218,16 +4226,26 @@ function washcarelabels(data, dataid,color_code,new_flag) {
         composition_option += "<option data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german  + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' value=" + value.id + ">" + value.english + "</option>";
     });
     $.each(data.orchestra_care_symbols, function (index, value) {
+		//console.log(value.care_instruction.length)
+		if(value.care_instruction.length > 15)
+		{
+			var carEng = value.care_instruction.slice(0,15)+"...";
+		}
+		else
+		{
+			var carEng = value.care_instruction;
+		}
+		
         if (value.category_id == 1) {
-            washing_option += "<option data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + value.care_instruction + "' value=" + value.id + "  data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + ">" + value.care_instruction + "</option>";
+            washing_option += "<option title='"+value.care_instruction+"' data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + carEng + "' value=" + value.id + "  data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + ">" + carEng + "</option>";
         } else if (value.category_id == 2) {
-            whitening_option += "<option data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + value.care_instruction + "' data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + "  value=" + value.id + ">" + value.care_instruction + "</option>";
+            whitening_option += "<option title='"+value.care_instruction+"' data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + carEng + "' data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + "  value=" + value.id + ">" + carEng + "</option>";
         } else if (value.category_id == 3) {
-            dryer_option += "<option data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + value.care_instruction + "' value=" + value.id + "  data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + ">" + value.care_instruction + "</option>";
+            dryer_option += "<option title='"+value.care_instruction+"' data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + carEng + "' value=" + value.id + "  data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + ">" + carEng + "</option>";
         } else if (value.category_id == 4) {
-            ironing_option += "<option data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + value.care_instruction + "' value=" + value.id + "  data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + ">" + value.care_instruction + "</option>";
+            ironing_option += "<option title='"+value.care_instruction+"' data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + carEng + "' value=" + value.id + "  data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + ">" + carEng + "</option>";
         } else if (value.category_id == 5) {
-            cleaning_option += "<option data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + value.care_instruction + "' value=" + value.id + "  data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + ">" + value.care_instruction + "</option>";
+            cleaning_option += "<option title='"+value.care_instruction+"' data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + carEng + "' value=" + value.id + "  data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + ">" + carEng + "</option>";
         }
 
     });
@@ -4616,6 +4634,69 @@ function washcarelabels(data, dataid,color_code,new_flag) {
     })
 
     selectpicker()
+	
+	var title = [];
+	$('.care_instruction_select'+dataid+' option').each(function(){
+		title.push($(this).attr('title'));
+	});
+
+	$(".care_instruction_select"+dataid+" ul li").each(function(i){
+	  $(this).attr('title',title[i]).tooltip();
+	})
+	
+	var title = [];
+	$('.care_instruction_select'+dataid+' option').each(function(){
+		title.push($(this).attr('title'));
+	});
+
+	$(".care_instruction_select"+dataid+" ul li").each(function(i){
+	  $(this).attr('title',title[i]).tooltip();
+	})
+	
+	var washing_title = [];
+	$('.washing_select'+dataid+' option').each(function(){
+		washing_title.push($(this).attr('title'));
+	});
+
+	$(".washing_select"+dataid+" ul li").each(function(i){
+	  $(this).attr('title',washing_title[i]).tooltip();
+	})
+
+	var whitening_select = [];
+	$('.whitening_select'+dataid+' option').each(function(){
+		whitening_select.push($(this).attr('title'));
+	});
+
+	$(".whitening_select"+dataid+" ul li").each(function(i){
+	  $(this).attr('title',whitening_select[i]).tooltip();
+	})
+	
+	var dryer_select = [];
+	$('.dryer_select'+dataid+' option').each(function(){
+		dryer_select.push($(this).attr('title'));
+	});
+
+	$(".dryer_select"+dataid+" ul li").each(function(i){
+	  $(this).attr('title',dryer_select[i]).tooltip();
+	})
+	
+	var ironing_select = [];
+	$('.ironing_select'+dataid+' option').each(function(){
+		ironing_select.push($(this).attr('title'));
+	});
+
+	$(".ironing_select"+dataid+" ul li").each(function(i){
+	  $(this).attr('title',ironing_select[i]).tooltip();
+	})
+	
+	var cleaning_select = [];
+	$('.cleaning_select'+dataid+' option').each(function(){
+		cleaning_select.push($(this).attr('title'));
+	});
+
+	$(".cleaning_select"+dataid+" ul li").each(function(i){
+	  $(this).attr('title',cleaning_select[i]).tooltip();
+	})
 
     var date = new Date();
     date.setDate(date.getDate() + 7);
