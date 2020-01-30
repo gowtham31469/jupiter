@@ -140,6 +140,7 @@ class PoManagerController extends Controller
 						}
 					}
 				}
+				dd($erp_order_details);
 			}
 			 
 		 }
