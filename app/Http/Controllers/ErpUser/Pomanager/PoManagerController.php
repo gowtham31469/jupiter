@@ -82,7 +82,7 @@ class PoManagerController extends Controller
 									->select('erpusers_template_mapping.*','buyers.template_table','buyers.item_master_table','buyers.id as buyer_id')
 									->get();
 			}
-		
+		print_r($templates);
 		 $new_orders = array();
 		 $i=1;
 		 foreach($templates as $value)
@@ -99,10 +99,10 @@ class PoManagerController extends Controller
 		 }
 		
 		 $orders_erp = array();
-		
+		 dd($new_orders);
 		 foreach($new_orders as $key => $values)
 		 {
-			 dd($values);
+			
 			foreach($values as $valuess)
 			{
 				$buyer_id = explode("-",$key);
