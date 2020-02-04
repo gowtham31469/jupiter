@@ -515,8 +515,8 @@ class OrderController extends Controller
 			}
 			else  if($i == 0)
 			{
-				PDF::RoundedRect(10, 100, 100, 70, 0, '0000');
-				PDF::RoundedRect(12.5, 102.5, 95, 65, 0, '0000');
+				PDF::RoundedRect(10, 10, 100, 70, 0, '0000');
+				PDF::RoundedRect(12.5, 12.5, 95, 65, 0, '0000');
 				$yy=12.5;
 				//PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 				file_put_contents(public_path('/storage/app/template/demo'.$count.'.svg'), $svg);

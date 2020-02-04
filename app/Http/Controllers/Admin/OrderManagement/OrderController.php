@@ -942,8 +942,8 @@ class OrderController extends Controller
 				//PDF::RoundedRect(10, 100, 100, 70, 0, '0000');
 				//PDF::RoundedRect(12.5, 102.5, 95, 65, 0, '0000');
 				
-				PDF::RoundedRect(10, 100, 100, 70, 0.000001, '1111', null, $style6);
-        		PDF::RoundedRect(12.5, 102.5, 95, 65, 0.000001, '1111', null, $style6);
+				PDF::RoundedRect(10, 10, 100, 70, 0.000001, '1111', null, $style6);
+				PDF::RoundedRect(12.5, 12.5, 95, 65, 0.000001, '1111', null, $style6);
 				$yy=12.5;
 				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 				
