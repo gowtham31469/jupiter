@@ -682,7 +682,7 @@ class OrderController extends Controller
         
          $data['orchestra_parcel_quantity_details'] = DB::table('orchestra_parcel_quantity_details')->select(DB::raw('distinct on ("UVC_TCO") "UVC_TCO"'),'UVC','Size','BarcodeForPricesTags','Quantity','Color')->where('BuyerPONo',$po)->get();
         
-         $data['orchestra_parcel_details']= DB::table('orchestra_parcel_details as alias')->leftJoin('orchestra_color_code','orchestra_color_code.code','alias.Color_Code')->select(DB::raw('distinct on (alias."Size") "Size"'),DB::raw("(SELECT SUM(\"Quantity\") FROM orchestra_parcel_details WHERE \"Size\" = alias.\"Size\" and \"BuyerPONo\"='".$po."') as \"Sum\""),'alias.*','Standard_Code as ParcelCode','orchestra_color_code.english as colour_Code')->where('BuyerPONo',$po)->groupBy('alias.id','orchestra_color_code.id','BuyerPONo')->get();
+         $data['orchestra_parcel_details']= DB::table('orchestra_parcel_details as alias')->leftJoin('orchestra_color_code','orchestra_color_code.code','alias.Color_Code')->select(DB::raw('distinct on (alias."Size") "Size"'),DB::raw("(SELECT SUM(\"Quantity\") FROM orchestra_parcel_details WHERE \"Size\" = alias.\"Size\" and \"BuyerPONo\"='".$po."') as \"Sum\""),'alias.*','Standard_Code as ParcelCode','orchestra_color_code.french as colour_Code')->where('BuyerPONo',$po)->groupBy('alias.id','orchestra_color_code.id','BuyerPONo')->get();
         
 		$data['color_wcl'] = DB::table('orchestra_parcel_details')->select('orchestra_parcel_details.Color_Code')->where('orchestra_parcel_details.UVC',$uvc)->groupBy('orchestra_parcel_details.Color_Code') ->orderBy('orchestra_parcel_details.Color_Code','asc')->get();
 		
