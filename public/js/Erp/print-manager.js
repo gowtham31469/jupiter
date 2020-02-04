@@ -381,7 +381,7 @@ function printHangDiv(front,back,disney,name,style_no,buyer_no,id,order_type,cre
 						var svg_fin_front = svgarr_front.join(',_');
 						//PopupWash(svg_fin,svgRoot1_back,svgRoot1_middle, dataid,svgDoc1);
 						
-						PopupHang(svg_fin_front, svg_fin,svgDoc,svgDoc1,disney);
+						PopupHang(svg_fin_front, svg_fin,svgDoc,svgDoc1,disney,name,id,style_no,buyer_no,created_at);
 					}
 				},
 			});
@@ -514,7 +514,7 @@ function printWashDiv(data,data_back,data_middle,name,style_no,buyer_no,id,order
 						// var svg_fin_front = svgarr_front.join(',_');
 						
 						// PopupHang(svg_fin, svg_fin,svgDoc,svgDoc1,disney);
-						PopupWash(svg_fin,svgRoot1_back,svgRoot1_middle,svgDoc1,parentId);
+						PopupWash(svg_fin,svgRoot1_back,svgRoot1_middle,svgDoc1,parentId,name,id,style_no,buyer_no,created_at);
 					}
 				},
 			});
@@ -527,7 +527,7 @@ function printWashDiv(data,data_back,data_middle,name,style_no,buyer_no,id,order
 }
 
 
-function PopupWash(data,data_back,data_middle,svgDoc1,pid) {
+function PopupWash(data,data_back,data_middle,svgDoc1,pid,name,id,style_no,buyer_no,created_at) {
 
 	var s = new XMLSerializer();
 	// var d = data;
@@ -558,12 +558,17 @@ function PopupWash(data,data_back,data_middle,svgDoc1,pid) {
             svg_back: svg_back,
             svg_middle: svg_middle,
             parentId : pid,
+			name:name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
         },
         async: false,
         success: function (data) {
 			svgDoc1.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -21 125.454) rotate(270)');
             success = true;
-            url = data;
+            url = data.file_path;
         },
         error: function (data) {
 
@@ -632,7 +637,7 @@ function jsbarcodewash(code, id, svgDoc) {
 
     svgDoc.getElementById(id).innerHTML = svg_xml;
 }
-function PopupHang(svgRoot, svgRoot1,svgDoc,svgDoc1,disney) {
+function PopupHang(svgRoot, svgRoot1,svgDoc,svgDoc1,disney,name,id,style_no,buyer_no,created_at) {
 //	var s = new XMLSerializer();
 //	var d = svgRoot;
 //	var str = s.serializeToString(d);
@@ -652,13 +657,17 @@ function PopupHang(svgRoot, svgRoot1,svgDoc,svgDoc1,disney) {
 		data: {
 			_token: csrf_token,
 			svg: svgRoot,
-			svgRoot: svgRoot1
+			svgRoot: svgRoot1,
+            id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
 		},
 		async: false,
 		success: function (data) {
 			
 			success = true;
-			url = data;
+			url = data.file_path;
 		},
 		error: function (data) {
 
@@ -786,7 +795,7 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 							})
 							// var svg_fin = svgarr.join(',_');
 							 
-							  PopupOrchestra(svgDoc,"STD-CARTON"); 
+							  PopupOrchestra(svgDoc,"STD-CARTON",id,style_no,buyer_no,created_at); 
 							
 							
 
@@ -808,7 +817,7 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupTableOrchestra(svgDoc, "STD-POLY",details.sizeArr,details.qtyArr);
+							PopupTableOrchestra(svgDoc, "STD-POLY",details.sizeArr,details.qtyArr,id,style_no,buyer_no,created_at);
 						break;
 
 
@@ -826,7 +835,7 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupOrchestrasmall(svg_fin, "SOLID-POLY",svgDoc);
+							PopupOrchestrasmall(svg_fin, "SOLID-POLY",svgDoc,id,style_no,buyer_no,created_at);
 						break;
 
 
@@ -861,7 +870,7 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupArrOrchestra(svg_fin, "SOLID-CARTON",svgDoc);
+							PopupArrOrchestra(svg_fin, "SOLID-CARTON",svgDoc,id,style_no,buyer_no,created_at);
 						break;
 						default:
 						// code block
@@ -2477,7 +2486,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 
 
 
-function PopupOrchestra(data,name) {
+function PopupOrchestra(data,name,id,style_no,buyer_no,created_at) {
 	
 	var s = new XMLSerializer();
 	var d = data;
@@ -2493,13 +2502,17 @@ function PopupOrchestra(data,name) {
 		data: {
 			_token: csrf_token,
 			svg: svg,
-			name:name
+			name:name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
 		},
 		async: false,
 		success: function (data) {
 			//window.location.href=data;
 			success = true;
-			url = data;
+			url = data.file_path;
 		},
 		error: function (data) {
 
@@ -2512,7 +2525,7 @@ function PopupOrchestra(data,name) {
 
 
 
-function PopupArrOrchestra(data,name,svgDoc) {
+function PopupArrOrchestra(data,name,svgDoc,id,style_no,buyer_no,created_at) {
 	
 //	var s = new XMLSerializer();
 //	var d = data;
@@ -2528,13 +2541,17 @@ function PopupArrOrchestra(data,name,svgDoc) {
 		data: {
 			_token: csrf_token,
 			svg: data,
-			name: name
+			name: name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
 		},
 		async: false,
 		success: function (data) {
 			//window.location.href=data;
 			success = true;
-			url = data;
+			url = data.file_path;
 		},
 		error: function (data) {
 
@@ -2547,7 +2564,7 @@ function PopupArrOrchestra(data,name,svgDoc) {
 
 
 
-function PopupTableOrchestra(data,name,size,qty) {
+function PopupTableOrchestra(data,name,size,qty,id,style_no,buyer_no,created_at) {
 	var s = new XMLSerializer();
 	var d = data;
 	var str = s.serializeToString(d);d
@@ -2578,12 +2595,16 @@ function PopupTableOrchestra(data,name,size,qty) {
 			svg: svg,
 			size: sizefin,
 			qty: qtyfin,
-			name:name
+			name:name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
 		},
 		async: false,
 		success: function (data) {
 			success = true;
-			url = data;
+			url = data.file_path;
 		},
 		error: function (data) {
 
@@ -2596,7 +2617,7 @@ function PopupTableOrchestra(data,name,size,qty) {
 
 
 
-function PopupOrchestrasmall(data,name,svgDoc) {
+function PopupOrchestrasmall(data,name,svgDoc,id,style_no,buyer_no,created_at) {
 //	var s = new XMLSerializer();
 //	var d = data;
 //	var str = s.serializeToString(d);
@@ -2610,12 +2631,16 @@ function PopupOrchestrasmall(data,name,svgDoc) {
 		data: {
 			_token: csrf_token,
 			svg: data,
-			name: name
+			name: name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
 		},
 		async: false,
 		success: function (data) {
 			success = true;
-			url = data;
+			url = data.file_path;
 		},
 		error: function (data) {
 

@@ -3702,8 +3702,8 @@ class JobManagerController extends Controller
 				//PDF::RoundedRect(10, 100, 100, 70, 0, '0000');
 				//PDF::RoundedRect(12.5, 102.5, 95, 65, 0, '0000');
 				
-				PDF::RoundedRect(10, 137.5, 100, 70, 0.000001, '1111', null, $style6);
-				PDF::RoundedRect(12.5, 140, 95, 65, 0.000001, '1111', null, $style6);
+				PDF::RoundedRect(10, 47.5, 100, 70, 0.000001, '1111', null, $style6);
+				PDF::RoundedRect(12.5, 50, 95, 65, 0.000001, '1111', null, $style6);
 				$yy=50;
 				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 				
