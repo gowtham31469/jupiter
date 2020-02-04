@@ -4044,6 +4044,7 @@ class OrderManagementCntrl extends Controller
      */
 	public function mapLabelOrdersPo(Request $request)
     {
+		 $erp_obj   =   new ErpOrders();
 		 $id        =   explode(',',$request->id);
 		 $po        =   $request->po;
 		 $po_file        =   $request->po_file;
@@ -4052,13 +4053,22 @@ class OrderManagementCntrl extends Controller
 		{
 				$value    =  explode('-',$val);
 			
+				$tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Orchestra')->first();
+				$request_array = [];
+				$request_array['id'] = $value[1];
+				$request_array['tableName'] = $value[0]; 
+				$request_array['buyer_id'] = $tesco_buyer_id->id;  
+				$request_array['created_by'] = Auth::guard('web')->id();
+			
 				DB::table($value[0])->where('id',$value[1])
                 ->update([
                     'po_number' => $po,
-                    'po_status' => "PO Pending",
+                    'po_status' => "PO Uploaded",
                     'po_file' => $po_file,
                     'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                 ]);
+			
+				$erp_obj->updateOrchestraErpOrders($request_array);
 		}
 		return response()->json(['error'=> false,'message' =>'success'],200);
     }
@@ -4085,7 +4095,7 @@ class OrderManagementCntrl extends Controller
                 $destination_path = 'storage/app/public/po-files/';
                 $destination_path_db = '/storage/app/public/po-files/';
                 $Orname = $file->getClientOriginalName();
-                $filename = str_random(6).'_'.$Orname;
+                $filename = str_random(6).'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $Orname));
                 $file->move($destination_path,$filename);
                 $destination_path_insert = $destination_path_db.$filename;
                 
