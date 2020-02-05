@@ -777,10 +777,18 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 
 								if(details.height != null )
 								{
-									var num = 600 * 395 * details.height
+									var num = 600 * details.width * details.height
 									var val = num / (1000 * 1000 * 1000)
 									svgDoc.getElementById("height").innerHTML = details.height
 									svgDoc.getElementById("volume").innerHTML = val.toFixed(3)
+								}
+								else{
+									svgDoc.getElementById("volume").innerHTML = ''
+								}
+								
+								if(details.width != null )
+								{
+									svgDoc.getElementById("width").innerHTML = details.width
 								}
 								else{
 									svgDoc.getElementById("volume").innerHTML = ''
@@ -853,10 +861,18 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 
 								if(details.height!=null)
 								{
-									var num = 600 * 395 * details.height
+									var num = 600 * details.width * details.height
 									var val = num / (1000 * 1000 * 1000)
 									svgDoc.getElementById("height").innerHTML = details.height
 									svgDoc.getElementById("volume").innerHTML = val.toFixed(3)
+								}
+								else{
+									svgDoc.getElementById("volume").innerHTML = ''
+								}
+								
+								if(details.width != null )
+								{
+									svgDoc.getElementById("width").innerHTML = details.width
 								}
 								else{
 									svgDoc.getElementById("volume").innerHTML = ''
@@ -2536,7 +2552,7 @@ function PopupArrOrchestra(data,name,svgDoc,id,style_no,buyer_no,created_at) {
 	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
-		url: base_url + "/admin/order-management/print-pdf-arr",
+		url: base_url + "/erp/job-manager/orchestra/print-pdf-arr",
 		type: "post",
 		data: {
 			_token: csrf_token,
