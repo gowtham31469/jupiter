@@ -4050,7 +4050,7 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 									var num = 600 * 395 * details.height
 									var val = num / (1000 * 1000 * 1000)
 									svgDoc.getElementById("height").innerHTML = details.height
-									svgDoc.getElementById("volume").innerHTML = val
+									svgDoc.getElementById("volume").innerHTML = val.toFixed(3)
 								}
 								else{
 									svgDoc.getElementById("volume").innerHTML = ''
@@ -4126,7 +4126,7 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 									var num = 600 * 395 * details.height
 									var val = num / (1000 * 1000 * 1000)
 									svgDoc.getElementById("height").innerHTML = details.height
-									svgDoc.getElementById("volume").innerHTML = val
+									svgDoc.getElementById("volume").innerHTML = val.toFixed(3)
 								}
 								else{
 									svgDoc.getElementById("volume").innerHTML = ''

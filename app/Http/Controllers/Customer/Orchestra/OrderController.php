@@ -683,6 +683,10 @@ class OrderController extends Controller
          $data['orchestra_parcel_quantity_details'] = DB::table('orchestra_parcel_quantity_details')->select(DB::raw('distinct on ("UVC_TCO") "UVC_TCO"'),'UVC','Size','BarcodeForPricesTags','Quantity','Color')->where('BuyerPONo',$po)->get();
         
          $data['orchestra_parcel_details']= DB::table('orchestra_parcel_details as alias')->leftJoin('orchestra_color_code','orchestra_color_code.code','alias.Color_Code')->select(DB::raw('distinct on (alias."Size") "Size"'),DB::raw("(SELECT SUM(\"Quantity\") FROM orchestra_parcel_details WHERE \"Size\" = alias.\"Size\" and \"BuyerPONo\"='".$po."') as \"Sum\""),'alias.*','Standard_Code as ParcelCode','orchestra_color_code.french as colour_Code')->where('BuyerPONo',$po)->groupBy('alias.id','orchestra_color_code.id','BuyerPONo')->get();
+		
+		$sorted = $data['orchestra_parcel_details']->sortBy('id');
+		
+		$data['orchestra_parcel_details'] = $sorted->values()->all();
         
 		$data['color_wcl'] = DB::table('orchestra_parcel_details')->select('orchestra_parcel_details.Color_Code')->where('orchestra_parcel_details.UVC',$uvc)->groupBy('orchestra_parcel_details.Color_Code') ->orderBy('orchestra_parcel_details.Color_Code','asc')->get();
 		
@@ -2055,6 +2059,7 @@ class OrderController extends Controller
         $season_code =$request->season_code;
         $color_code =$request->color_code;
         $height =$request->height; 
+        $width =$request->width; 
         $age =$request->age;
         $po =$request->po;
         $carton_id =$request->carton_id; 
@@ -2179,7 +2184,8 @@ class OrderController extends Controller
                         'uvc'              => $uvc,
                         'template_id'      => $carton_template_id,
                         'po'               => $po,
-                        'height'           => $height, 
+                        'height'           => $height,
+					   	'width'           => $width,
                         'customer_id'    => $factory{0}->id,
                         'svg_path'         => "", 
                         'status'           => $status,
@@ -2220,6 +2226,7 @@ class OrderController extends Controller
                                 'template_id'      => $carton_template_id,
                                 'po'               => $po,
                                 'height'           => $height, 
+				   				'width'           => $width,
                         		'customer_id'    => $factory{0}->id,
                                 'svg_path'    => "", 
                                 'status'    => $status,
@@ -2275,6 +2282,7 @@ class OrderController extends Controller
         $season_code =$request->season_code;
         $color_code =$request->color_code;
         $height =$request->height; 
+        $width =$request->width; 
         $age =$request->age;
         $po =$request->po;
         $carton_id =$request->carton_id; 
@@ -2419,7 +2427,8 @@ class OrderController extends Controller
                         'uvc'              => $uvc,
                         'template_id'      => $carton_template_id,
                         'po'               => $po,
-                        'height'           => $height, 
+                        'height'           => $height,
+					   	'width'           => $width,
                         'customer_id'    => $factory{0}->id,
                         'no_of_carton'    => $no_of_carton, 
                         'total_polybag'    => $total_polybag, 
@@ -2465,7 +2474,8 @@ class OrderController extends Controller
                                 'uvc' => $uvc,
                                 'template_id'      => $carton_template_id,
                                 'po'               => $po,
-                                'height'           => $height, 
+                                'height'           => $height,
+				   				'width'           => $width,
 				   				'customer_id'    => $factory{0}->id,
                                 'no_of_carton'    => $no_of_carton, 
                                 'total_polybag'    => $total_polybag, 
@@ -2521,6 +2531,7 @@ class OrderController extends Controller
         $parcel_id =$request->parcel_id;
         $season_code =$request->season_code;
         $height =$request->height; 
+        $width =$request->width; 
         $age =$request->age;
         $carton_id =$request->carton_id;
 		
@@ -2562,7 +2573,8 @@ class OrderController extends Controller
 		SolidCartonStickerOrders::where('id',$carton_id)
                    ->update([
                         'uvc'              => $uvc,
-                        'height'           => $height, 
+                        'height'           => $height,
+					    'width'           => $width,
                         'customer_id'    => $factory{0}->id,
                         'svg_path'         => "", 
                         'status'           => $status,
@@ -2712,6 +2724,7 @@ class OrderController extends Controller
         $parcel_id =$request->parcel_id;
         $season_code =$request->season_code;
         $height =$request->height; 
+        $width =$request->width; 
         $age =$request->age;
         $carton_id =$request->carton_id;
         $no_of_carton =$request->no_of_carton;
@@ -2724,6 +2737,7 @@ class OrderController extends Controller
 		StandardCartonStickers::where('id',$carton_id)
                    ->update([
                         'height'           => $height,
+					    'width'           => $width,
                         'no_of_carton'    => $no_of_carton, 
                         'total_polybag'    => $total_polybag, 
                         'final_order_qty_sets'    => $final_order_qty_sets, 

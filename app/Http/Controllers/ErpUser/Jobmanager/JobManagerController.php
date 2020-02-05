@@ -467,7 +467,7 @@ class JobManagerController extends Controller
 						$sizeArr=OrchestraParcelDetails::where('UVC',$res[0]->uvc)
 												->where('Season_Code',$res[0]->season_code)
 												->select('Quantity','Size')
-												->orderBy('Size','asc')
+												->orderBy('id','asc')
 												->get()->groupBy('Size')
 												->toArray();
 								$qtyAr=[];				
