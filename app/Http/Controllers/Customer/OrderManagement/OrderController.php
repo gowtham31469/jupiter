@@ -280,13 +280,13 @@ class OrderController extends Controller
         //PDF::SetTextColor(0, 0, 0);
 		
 	
-		$tbl='<p  style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri;line-height:1.25">Fabriqué en - Made in - <br> Fabricado en - <br>Fabricado em - <br>Fabbricato in - <br>Vervaardigd in  - <br>Hergestellt in -<br><span style="font-family:Tahoma">  ﺻﻨﻊ ب </span>-<br> παράγεται στην</p>';
+		$tbl='<p  style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri;line-height:1.35">Fabriqué en - Made in - <br> Fabricado en - <br>Fabricado em - <br>Fabbricato in - <br>Vervaardigd in  - <br>Hergestellt in -<br><span style="font-family:Tahoma">  ﺻﻨﻊ ب </span>-<br> παράγεται στην</p>';
 		
 		$tbl1='<p  style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$orchestra_countries{0}->french.' - '.$orchestra_countries{0}->english.' - '.$orchestra_countries{0}->spanish.' - '.$orchestra_countries{0}->portuguese.' - <br>'.$orchestra_countries{0}->italian.' - '.$orchestra_countries{0}->dutch.' - '.$orchestra_countries{0}->german.' - <br><span style="font-family:Tahoma">'.$orchestra_countries{0}->arabic.'</span> - '.$orchestra_countries{0}->greek.'</p>';
 		$tbl2="";
 		foreach($orchestra_care_instruction as $value)
 		{
-			$tbl2.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$value->french.' - '.$value->english.' - '.$value->spanish.' - '.$value->portuguese.' - '.$value->italian.' - '.$value->dutch.' - '.$value->german.' - <span style="font-family:Tahoma">'.$value->arabic.'</span> - '.$value->greek.'</p><br><br>';
+			$tbl2.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri;text-align:left">'.$value->french.' - '.$value->english.' - '.$value->spanish.' - '.$value->portuguese.' - '.$value->italian.' - '.$value->dutch.' - '.$value->german.' - <span style="font-family:Tahoma">'.$value->arabic.'</span> - '.$value->greek.'</p><br><br>';
 		}
 		
 		//print_r($tbl2);
@@ -302,7 +302,7 @@ class OrderController extends Controller
 					$exp_value = explode('_',$value[0]);
 					$orchestra_parts = DB::table('orchestra_parts')->select('*')->where('id',$exp_value[0])->get();
 				
-					$tbl3.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);">'.$orchestra_parts{0}->french.' - '.$orchestra_parts{0}->english.' - '.$orchestra_parts{0}->spanish.' - '.$orchestra_parts{0}->portuguese.' - '.$orchestra_parts{0}->italian.' - '.$orchestra_parts{0}->dutch.' - '.$orchestra_parts{0}->german.' - <span>'.$orchestra_parts{0}->arabic.'</span> - '.$orchestra_parts{0}->greek.'</p><br><br>';
+					$tbl3.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%)">'.$orchestra_parts{0}->french.' - '.$orchestra_parts{0}->english.' - '.$orchestra_parts{0}->spanish.' - '.$orchestra_parts{0}->portuguese.' - '.$orchestra_parts{0}->italian.' - '.$orchestra_parts{0}->dutch.' - '.$orchestra_parts{0}->german.' - <span>'.$orchestra_parts{0}->arabic.'</span> - '.$orchestra_parts{0}->greek.'</p><br><br>';
 			}
 			foreach($value as $key1 => $value1)
             {
@@ -317,11 +317,13 @@ class OrderController extends Controller
 		foreach($svgarr as $value)
 		{
 			$svg=urldecode($value);
+			PDF::writeHTMLCell('25.5', '40', $xx, $y=5, '<p style="font-size:12px">Back</p>', '', 0, 0, true, 'C', true);
         	PDF::ImageSVG('@' . $svg, $x=$xx, $y=12.5, '25.5', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			PDF::SetFillColor(255, 255, 255);
 			PDF::SetTextColor(0, 0, 0);
 			PDF::writeHTMLCell('25.5', '40', $xx, '135', $tbl, '', 0, 0, true, 'C', true);
-			PDF::writeHTMLCell('25.5', '40', $xx, '153.5', $tbl1, '', 0, 0, true, 'C', true);
+			PDF::writeHTMLCell('26', '40', $xx, '154.3', $tbl1, '', 0, 0, true, 'C', true);
+			PDF::writeHTMLCell('25.5', '40', $xx, $y=180, '<p style="font-size:12px">Front</p>', '', 0, 0, true, 'C', true);
 			$xx += 37.5;
 			$i++;
 			
@@ -332,9 +334,11 @@ class OrderController extends Controller
 				$xx=12.5;
 			}
 		}
+		PDF::writeHTMLCell('25.5', '40', $xx, $y=5, '<p style="font-size:12px">Back</p>', '', 0, 0, true, 'C', true);
 		PDF::ImageSVG('@' . $svg_back, $xx, $y=12.5, '25.5', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
 		PDF::writeHTMLCell('22', '40', $xx + 2.25, '25', $tbl2, '', 0, 0, true, 'C', true);
 		PDF::writeHTMLCell('25', '40', $xx + 1, '110', $tbl3, '', 0, 0, true, 'C', true);
+		PDF::writeHTMLCell('25.5', '40', $xx, $y=180, '<p style="font-size:12px">Front</p>', '', 0, 0, true, 'C', true);
 		PDF::AddPage();
 		PDF::ImageSVG('@' . $svg_middle, $x=50, $y=12.5, '55.5', '82.5', $link='', $align='', $palign='', $border=0, $fitonpage=false);
 		

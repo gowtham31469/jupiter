@@ -2914,7 +2914,7 @@ function printWashDiv(data,data_back,data_middle,dataid) {
 							svgDoc1.getElementById("size2").innerHTML = size_txt.replace(" ", "").toLowerCase() + "/" + size1;
 							svgDoc1.getElementById("parcel_code1").innerHTML = uvc_tco;
 							svgDoc1.getElementById("parcel_code2").innerHTML = uvc_tco;
-							svgDoc1.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -38 135) rotate(270)');
+							svgDoc1.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -40 135) rotate(270)');
 							
 							
 							jsbarcodewash(code, 'barcode', svgDoc1)

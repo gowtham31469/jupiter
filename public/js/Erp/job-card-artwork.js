@@ -1507,7 +1507,7 @@ function printWashDivJC(data,data_back,data_middle,name,style_no,buyer_no,id,ord
 						svgDoc1.getElementById("size2").innerHTML = size_txt.replace(" ", "").toLowerCase() + "/" + size1;
 						svgDoc1.getElementById("parcel_code1").innerHTML = uvc_tco;
 						svgDoc1.getElementById("parcel_code2").innerHTML = uvc_tco;
-						svgDoc1.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -38 135) rotate(270)');
+						svgDoc1.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -40 135) rotate(270)');
 						jsbarcodewashJC(code, 'barcode', svgDoc1)
 
 						svgDoc1.getElementById("cofreet_symbol1").setAttribute('xlink:href',res.cofreet_symbol1);
