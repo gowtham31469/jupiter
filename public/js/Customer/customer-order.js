@@ -173,7 +173,7 @@ function orderStatus() {
 										var options = "<option>Select PO</option>";
 										$(newObj).each(function (index1, value1) {
 											if (value1.po_number != "" && value1.po_number != null) {
-												options += "<option>" + value1.po_number + "</option>";
+												options += "<option data-id='"+value1.po_file+"'>" + value1.po_number + "</option>";
 
 												coun++;
 											}
@@ -495,7 +495,8 @@ function orderStatus() {
 							data: {
 								_token: csrf_token,
 								id: aa,
-								po: $('#select_po_status').val()
+								po: $('#select_po_status').val(),
+								po_file:$('#select_po_status option:selected').attr('data-id')
 							},
 							beforeSend: function () {
 
@@ -1300,7 +1301,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 				var options = "<option>Select PO</option>";
 				$(newObj).each(function (index1, value1) {
 					if (value1.po_number != "" && value1.po_number != null) {
-						options += "<option>" + value1.po_number + "</option>";
+						options += "<option data-id='"+value1.po_file+"'>" + value1.po_number + "</option>";
 						$('#po-file-upload-div').find('#exist_artwork_div ul').append('<li data-id="'+value1.type+'-'+value1.id+'" data-company="'+value1.company_id+'" class="check-list">'+value1.TemplateName+" - "+value1.TemplateType+'</li>')
 						coun++;
 					}
@@ -1512,7 +1513,8 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 							data: {
 								_token: csrf_token,
 								id: aa,
-								po: $('#select_po').val()
+								po: $('#select_po').val(),
+								po_file:$('#select_po option:selected').attr('data-id')
 							},
 							beforeSend: function () {
 
@@ -1622,7 +1624,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 				var options = "<option>Select PO</option>";
 				$(newObj).each(function (index1, value1) {
 					if (value1.po_number != "" && value1.po_number != null) {
-						options += "<option>" + value1.po_number + "</option>";
+						options += "<option data-id='"+value1.po_file+"'>" + value1.po_number + "</option>";
 						$('#po-file-upload-div').find('#exist_artwork_div ul').append('<li data-id="'+value1.type+'-'+value1.id+'" data-company="'+value1.company_id+'" class="check-list">'+value1.TemplateName+" - "+value1.TemplateType+'</li>')
 						coun++;
 					}
@@ -1833,7 +1835,8 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 							data: {
 								_token: csrf_token,
 								id: aa,
-								po: $('#select_po').val()
+								po: $('#select_po').val(),
+								po_file:$('#select_po option:selected').attr('data-id')
 							},
 							beforeSend: function () {
 

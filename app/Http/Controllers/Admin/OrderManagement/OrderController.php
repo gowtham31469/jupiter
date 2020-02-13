@@ -838,7 +838,14 @@ class OrderController extends Controller
 				   if($val != "")
 					{
 					    array_push($index_arr,$val);
-						$td_size.="<td><br><br>".$val."</td>";
+						if(count($size) > 7)
+						{
+							$td_size.='<td style="font-size:11px;line-height:1.8"><br>'.$val.'</td>';
+						}
+					    else
+						{
+							$td_size.="<td><br><br>".$val."</td>";
+						}
 						$td_col.="<td>".$qty[$i]."</td>";
 					} 
 			  } 

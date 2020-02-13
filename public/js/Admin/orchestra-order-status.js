@@ -120,7 +120,7 @@ function orderStatus() {
 
                                             if (value1.po_number != "" && value1.po_number != null) {
                                                 if (old_po != value1.po_number) {
-                                                    options += "<option>" + value1.po_number + "</option>";
+                                                    options += "<option data-id='"+value1.po_file+"'>" + value1.po_number + "</option>";
                                                 }
 												
 												if(value1.color_code != "" && value1.color_code != null)
@@ -485,7 +485,8 @@ function orderStatus() {
                                                         data: {
                                                             _token: csrf_token,
                                                             id: aa,
-                                                            po: $('#select_po_status').val()
+                                                            po: $('#select_po_status').val(),
+															po_file:$('#select_po_status option:selected').attr('data-id')
                                                         },
                                                         beforeSend: function () {
 
