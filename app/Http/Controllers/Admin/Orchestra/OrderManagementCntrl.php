@@ -44,6 +44,9 @@ use Auth;
 use Illuminate\Support\Facades\Redis;
 use App\Classes\EditErpOrders;
 
+use App\ErpOrders as Erp;
+use App\ErpOrderDetails;
+
 class OrderManagementCntrl extends Controller
 {
     private $modules_permission;
@@ -57,6 +60,7 @@ class OrderManagementCntrl extends Controller
     {
         $this->middleware('auth');
         $this->edit_erp_obj    = new EditErpOrders();
+		$this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
     }
 
     /**
@@ -1172,12 +1176,74 @@ class OrderManagementCntrl extends Controller
     {
         $id =$request->id;
 		
-	    WashLabelOrders::where('id',$id)
+	     WashLabelOrders::where('id',$id)
                 ->update([
-                    'status' => "Order Cancelled"
+                    'status' => "Order Cancelled",
+					'order_cancelled_at' => $this->current_date
                 ]);
 		
-		$wcl = DB::table("orchestra_wash_care_label_orders")->where('id',$id)->select('*')->first();
+		  $wcl = DB::table("orchestra_wash_care_label_orders")->where('id',$id)->select('*')->first();
+		
+		  $order_qty_details  = DB::table("orchestra_wash_care_label_orders_qty")->where('owcl_id', $wcl->id)
+              ->select('id', DB::raw("'orchestra_wash_care_label_orders_qty' as \"table_name\""))->get();
+		
+		  $order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', $wcl->status)->first();
+
+		  $customer_data  = DB::table('customers')->select('pi_required', 'po_required')->where('id', $wcl->customer_id)->first();
+
+		  if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) 
+		  {
+			$purchase_order_no     = $wcl->pi_id;
+		  }
+		  else if($customer_data->po_required== 1)
+		  {
+			$purchase_order_no     = $wcl->po_number;
+		  }         
+		
+		$buyers  = DB::table('buyers')->select('*')->where('buyer_name', 'Orchestra')->first();
+		
+		$erp_orders = Erp::where('buyer_id',$buyers->id)->where('customer_id',$wcl->customer_id)->where('po_no', $purchase_order_no)->first();
+		
+		  if ($erp_orders) 
+		  {
+			$erp_id = $erp_orders->id;
+
+			// Get Erp status table id for 'Moved To JC Queue' status.
+			$erp_status_id = DB::table('erp_status')->where('status_name', 'ilike', 'Cancelled')->value('id');
+			// update order status in erp_order_details table
+			foreach ($order_qty_details as $key => $value) 
+			{
+			  $erp_order_qty = ErpOrderDetails::where('order_qnty_table_name',$value->table_name)->where('order_qnty_table_id',$value->id)->first();
+
+			  if ($erp_order_qty) 
+			  {
+				  
+				ErpOrderDetails::where('order_qnty_table_id', $value->id)
+				->where('order_qnty_table_name', $value->table_name)
+				->where('erp_order_id', $erp_id)
+				->update([
+						  'status'  => $erp_status_id,
+						  'order_status_id'  => $order_status_id->id
+						]);
+
+				/** Update order cancelled status erp orders table(iff, all the orders in the order details table have same status. ie, after cancelling all orders) */
+
+				$erp_order_table_status = DB::table('erp_order_details')
+				->where('erp_order_details.erp_order_id', $erp_id)
+				->pluck('status')->all();
+
+				if(count(array_unique($erp_order_table_status)) === 1)
+				{
+				  DB::table('erp_orders')
+					->where('erp_orders.id', $erp_id)
+					->update([
+					  'status'  => $erp_order_table_status[0]
+					]);
+				}
+			  }
+			}
+
+		  }
 		
 		$orchestra_hang = HangTagOrders::where('uvc',$wcl->uvc)->where('status','!=','Order Cancelled')->where('season_code',$wcl->season_code)->select('*')->get();
 		

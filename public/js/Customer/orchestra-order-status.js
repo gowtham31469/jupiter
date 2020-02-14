@@ -876,6 +876,7 @@ function orchestraStatusTable(data, path) {
  * @return {[type]}     [description]
  */
 const orchestraSetPO = (obj, id, tableName, po_file) => {
+	$(obj).attr('disabled','disabled')
     $('.orchestra-po').css('border-color', '');
     var po_number = $(obj).closest('tr').find('.orchestra-po').val();
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -910,17 +911,19 @@ const orchestraSetPO = (obj, id, tableName, po_file) => {
                         $(obj).closest('tr').find('.orchestra-po').attr('disabled');
                         $(obj).closest('tr').find('.orchestra-po').attr('placeholder', "Enter PO");
                     }
-
+					setTimeout(function(){ $(obj).removeAttr('disabled') }, 3000);
                 },
                 403: function (data) {
                     $('#snackbar').css('background-color', '#00b6ff');
                     $('.snackbar_span').html(data.responseJSON.message);
                     showSnackbar();
+					setTimeout(function(){ $(obj).removeAttr('disabled') }, 3000);
                 },
                 400: function () {
                     $('#snackbar').css('background-color', '#00b6ff');
                     $('.snackbar_span').html(data.responseJSON.message);
                     showSnackbar();
+					setTimeout(function(){ $(obj).removeAttr('disabled') }, 3000);
                 }
             },
             error: function (data) {},
@@ -929,6 +932,7 @@ const orchestraSetPO = (obj, id, tableName, po_file) => {
             }
         })
     } else {
+		setTimeout(function(){ $(obj).removeAttr('disabled') }, 3000);
         $(obj).closest('tr').find('.orchestra-po').focus();
         $(obj).closest('tr').find('.orchestra-po').css('border-color', '#F44336');
         $('.snackbar_span').html('Please enter a valid PO number');
