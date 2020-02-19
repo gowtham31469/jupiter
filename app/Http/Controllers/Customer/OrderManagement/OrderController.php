@@ -388,6 +388,17 @@ class OrderController extends Controller
          $svg=urldecode($request->svg);
          define ('PDF_FONT_NAME_MAIN', 'calibrib');
          define ('PDF_FONT_NAME_DATA', 'calibrib');
+		
+		$orchestra_color = DB::table('orchestra_color_code')->select('*')->where('code',$color)->get();
+		if(count($orchestra_color) > 0)
+		{
+			$color_code=$orchestra_color{0}->french;
+		}
+		else
+		{
+			$color_code="";
+		}
+		
 //          print_r($svg);
         PDF::setImageScale(1);
         PDF::setPrintHeader(false);
@@ -432,7 +443,7 @@ class OrderController extends Controller
                           <td><br><br>Total<br></td>
                           </tr>
                       <tr>
-                          <td style="font-size:7.5px;line-height:2">ERCU</td>
+                          <td style="font-size:7.5px;line-height:2">'.$color_code.'</td>
                           '.$td_col.'
                           <td>'.$total.'</td>
                           </tr>

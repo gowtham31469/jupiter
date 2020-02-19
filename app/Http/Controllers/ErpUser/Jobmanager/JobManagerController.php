@@ -2748,6 +2748,30 @@ class JobManagerController extends Controller
 						->select('customers.short_name')
 						->where('erp_orders.id',$id)
 						->get();
+	 
+	 
+	 	$sticker = DB::table("orchestra_standard_carton_sticker_orders")
+						->select('*')
+						->where('uvc',$request->style_no)
+						->where('po',$request->buyer_no)
+						->get();
+		 if(count($sticker) > 0)
+		 {
+			 $orchestra_color = DB::table('orchestra_color_code')->select('*')->where('code',$sticker{0}->color_code)->get();
+			if(count($orchestra_color) > 0)
+			{
+				$color_code=$orchestra_color{0}->french;
+			}
+			else
+			{
+				$color_code="";
+			}
+		 }
+		 else
+		 {
+			 $color_code="";
+		 }
+
 		 $customer_name = $customer{0}->short_name;
 		 $this->customer_name = $customer_name;
 		
@@ -2972,7 +2996,7 @@ class JobManagerController extends Controller
 						  <td><br><br>Total<br></td>
 						  </tr>
 					  <tr>
-						  <td style="font-size:7.5px;line-height:2">ERCU</td>
+						  <td style="font-size:7.5px;line-height:2">'.$color_code.'</td>
 						  '.$td_col.'
 						  <td>'.$total.'</td>
 						  </tr>

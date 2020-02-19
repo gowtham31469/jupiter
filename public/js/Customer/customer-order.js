@@ -1074,9 +1074,16 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
             }
 			
             $age = data.orchestra_standard_poly_bag_sticker_orders[0].group_id;
-			var num = 600 * $width * $height
-            var val = num / (1000 * 1000 * 1000)
-            $parcelVolume = val;
+			if($height)
+			{
+				var num = 600 * $width * $height
+				var val = num / (1000 * 1000 * 1000)
+				$parcelVolume = val;
+			}
+			else
+			{
+				$parcelVolume = "";
+			}
             if(data.orchestra_standard_poly_bag_sticker_orders[0].no_of_carton != "" && data.orchestra_standard_poly_bag_sticker_orders[0].no_of_carton != null)
 			{
 				$no_of_carton = data.orchestra_standard_poly_bag_sticker_orders[0].no_of_carton;
@@ -1196,9 +1203,16 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
             }
 			
             $age = data.orchestra_solid_poly_bag_sticker_orders[0].group_id;
-            var num = 600 * $width * $height
-            var val = num / (1000 * 1000 * 1000)
-            $parcelVolume = val;
+            if($height)
+			{
+				var num = 600 * $width * $height
+				var val = num / (1000 * 1000 * 1000)
+				$parcelVolume = val;
+			}
+			else
+			{
+				$parcelVolume = "";
+			}
 			update_disable=1;
 			$save_hide_button="hidden";
 			cancel_hide_button = "";
@@ -1942,9 +1956,16 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
     barcode_polybag('svg1', data)
     barcode_polybag('svg4', data)
     $("#modal_height").keyup(function () {
-        var num = $('#length').val() * $('#width').val() * this.value
-        var val = num / (1000 * 1000 * 1000)
-        $('#parcelVolume').text(val)
+        if(this.value)
+		{
+			var num = $('#length').val() * $('#width').val() * this.value
+			var val = num / (1000 * 1000 * 1000)
+			$('#parcelVolume').text(val)
+		}
+		else
+		{
+			var val = ""
+		}
         var svgDoc1;
         var mySVG1 = document.getElementById("svg2");
         svgDoc1 = mySVG1.contentDocument;
@@ -3257,7 +3278,8 @@ function PopupTable(data,name) {
 			svg: svg,
 			size: sizefin,
 			qty: qtyfin,
-			name:name
+			name:name,
+			color:$('#color_code').val()
 		},
 		async: false,
 		success: function (data) {
@@ -3347,7 +3369,7 @@ function barcode_polybag(id, data) {
 
 
 			})
-			$tbl = '<tr><td>Size:</td>' + $td_size + '<td>Total</td></tr><tr> <td>ERCU</td>' + $td_col + '<td>' + $total + '</td></tr>';
+			$tbl = '<tr><td>Size:</td>' + $td_size + '<td>Total</td></tr><tr> <td>'+data.orchestra_parcel_details[0].colour_Code+'</td>' + $td_col + '<td>' + $total + '</td></tr>';
 
 			var code = data.orchestra_parcel_details[0].ParcelBarCode.toString();
 			svgDoc.getElementById("theme").innerHTML = data.orchestra_parcel_details[0].Theme;
@@ -3382,7 +3404,14 @@ function barcode_carton(id, data) {
 		svgDoc.getElementById("length").innerHTML = $('#length').val();
 		svgDoc.getElementById("width").innerHTML = $('#width').val();
 		svgDoc.getElementById("height").innerHTML = $('#modal_height').val();
-		svgDoc.getElementById("volume").innerHTML = parseFloat($('#parcelVolume').text()).toFixed(3);
+		if($('#parcelVolume').text())
+		{
+			svgDoc.getElementById("volume").innerHTML = parseFloat($('#parcelVolume').text()).toFixed(3);
+		}
+		else
+		{
+			svgDoc.getElementById("volume").innerHTML = ""
+		}
 		svgDoc.getElementById("theme").innerHTML = data.orchestra_parcel_details[0].Theme;
 		
 		svgDoc.getElementById("color").innerHTML = data.orchestra_parcel_details[0].colour_Code;

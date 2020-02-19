@@ -1202,9 +1202,16 @@ function SolidCartonStickersOs(data)
 			$width = data.orchestra_solid_carton_sticker_orders[0].width;
 		}
 		
-		var num = 600 * $width * $height
-		var val = num / (1000 * 1000 * 1000)
-		$parcelVolume = val;
+		if($height)
+		{
+			var num = 600 * $width * $height
+			var val = num / (1000 * 1000 * 1000)
+			$parcelVolume = val;
+		}
+		else
+		{
+			$parcelVolume = "";
+		}
         $template_id = data.orchestra_solid_carton_sticker_orders[0].template_id;
         $exist_id = data.orchestra_solid_carton_sticker_orders[0].id;
         $solid_carton_count=data.orchestra_solid_carton_sticker_orders[0].final_qty;
@@ -1277,9 +1284,16 @@ function SolidCartonStickersOs(data)
 
 	
     $("#modal_height").keyup(function () {
-        var num = 600 * $('#width').val() * this.value
-        var val = num / (1000 * 1000 * 1000)
-        $('#parcelVolume').val(val)
+        if(this.value)
+		{
+			var num = 600 * $('#width').val() * this.value
+			var val = num / (1000 * 1000 * 1000)
+			$('#parcelVolume').val(val)
+		}
+		else
+		{
+			var val = ""
+		}
         var svgDoc1;
         var mySVG1 = document.getElementById("svg2");
         svgDoc1 = mySVG1.contentDocument;
@@ -1314,9 +1328,16 @@ function SolidPolyBagStickersOs(data)
 		} else {
 			$height = data.orchestra_solid_poly_bag_sticker_orders[0].height;
 		}
-		var num = 600 * 395 * $height
-		var val = num / (1000 * 1000 * 1000)
-		$parcelVolume = val;
+		if($height)
+		{
+			var num = 600 * 395 * $height
+			var val = num / (1000 * 1000 * 1000)
+			$parcelVolume = val;
+		}
+		else
+		{
+			$parcelVolume = "";
+		}
         $template_id = data.orchestra_solid_poly_bag_sticker_orders[0].template_id;
         $exist_id = data.orchestra_solid_poly_bag_sticker_orders[0].id;
         $solid_poly_bag_count=data.orchestra_solid_poly_bag_sticker_orders[0].final_qty;
@@ -1417,9 +1438,16 @@ function StandardCartonStickersOs(data)
 		} else {
 			$width = data.orchestra_standard_carton_sticker_orders[0].width;
 		}
-		var num = 600 * $width * $height
-		var val = num / (1000 * 1000 * 1000)
-		$parcelVolume = val;
+		if($height)
+		{
+			var num = 600 * $width * $height
+			var val = num / (1000 * 1000 * 1000)
+			$parcelVolume = val;
+		}
+		else
+		{
+			$parcelVolume = "";
+		}
         $template_id = data.orchestra_standard_carton_sticker_orders[0].template_id;
         $exist_id = data.orchestra_standard_carton_sticker_orders[0].id;
         $standard_carton_count=data.orchestra_standard_carton_sticker_orders_qty[0].quantity;
@@ -1488,9 +1516,16 @@ function StandardCartonStickersOs(data)
 
 	
     $("#modal_height").keyup(function () {
-        var num = 600 * $('#width').val() * this.value
-        var val = num / (1000 * 1000 * 1000)
-        $('#parcelVolume').val(val)
+        if(this.value)
+		{
+			var num = 600 * $('#width').val() * this.value
+			var val = num / (1000 * 1000 * 1000)
+			$('#parcelVolume').val(val)
+		}
+		else
+		{
+			var val = ""
+		}
         var svgDoc1;
         var mySVG1 = document.getElementById("svg2");
         svgDoc1 = mySVG1.contentDocument;
@@ -1537,9 +1572,16 @@ function StandardPolyBagStickersOs(data)
 		} else {
 			$height = data.orchestra_standard_poly_bag_sticker_orders[0].height;
 		}
-		var num = 600 * 395 * $height
-		var val = num / (1000 * 1000 * 1000)
-		$parcelVolume = val;
+		if($height)
+		{
+			var num = 600 * 395 * $height
+			var val = num / (1000 * 1000 * 1000)
+			$parcelVolume = val;
+		}
+		else
+		{
+			$parcelVolume = "";
+		}
         $template_id = data.orchestra_standard_poly_bag_sticker_orders[0].template_id;
         $exist_id = data.orchestra_standard_poly_bag_sticker_orders[0].id;
         $standard_poly_bag_count=data.orchestra_standard_poly_bag_sticker_orders_qty[0].quantity;
@@ -1721,7 +1763,7 @@ function barcode_std_polybagOs(id, data) {
 
 
 		})
-		$tbl = '<tr><td>Size:</td>' + $td_size + '<td>Total</td></tr><tr> <td>ERCU</td>' + $td_col + '<td>' + $total + '</td></tr>';
+		$tbl = '<tr><td>Size:</td>' + $td_size + '<td>Total</td></tr><tr> <td>'+data.orchestra_parcel_details[0].colour_Code+'</td>' + $td_col + '<td>' + $total + '</td></tr>';
 		svgDoc.getElementById("round").style.fill = $('#age option:selected').data('color');
 		var code = data.orchestra_parcel_details[0].ParcelBarCode.toString();
 		svgDoc.getElementById("theme").innerHTML = data.orchestra_parcel_details[0].Theme;
