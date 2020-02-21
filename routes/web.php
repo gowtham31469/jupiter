@@ -101,6 +101,13 @@ Route::post('admin/order-management/print-pdf', 'Admin\OrderManagement\OrderCont
 Route::post('admin/order-management/print-pdf-arr', 'Admin\OrderManagement\OrderController@printPdfArr');
 Route::post('admin/order-management/print-pdf-small', 'Admin\OrderManagement\OrderController@printPdfSmall');
 Route::post('admin/order-management/print-pdf-table', 'Admin\OrderManagement\OrderController@printPdfTable');
+
+
+Route::post('admin/order-management/proof-pdf', 'Admin\OrderManagement\OrderController@proofPdf');
+Route::post('admin/order-management/proof-pdf-arr', 'Admin\OrderManagement\OrderController@proofPdfArr');
+Route::post('admin/order-management/proof-pdf-small', 'Admin\OrderManagement\OrderController@proofPdfSmall');
+Route::post('admin/order-management/proof-pdf-table', 'Admin\OrderManagement\OrderController@proofPdfTable');
+
 Route::post('admin/order-management/print-hang-pdf', 'Admin\OrderManagement\OrderController@printHangPdf');
 Route::post('admin/order-management/print-special-pdf', 'Admin\OrderManagement\OrderController@printSpecialPdf');
 

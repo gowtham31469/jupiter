@@ -489,6 +489,91 @@ class OrderController extends Controller
         print_r(url('/storage/app/template/'.$name.'.pdf'));
     } 
 	
+	/**
+	 * Print Preview For 150 * 100 Size Stickers
+	 *
+	 * @return pdf
+	 */
+	
+    public function proofPdf(Request $request)
+    {
+		 $name=$request->name;
+         $svg=urldecode($request->svg);
+         define ('PDF_FONT_NAME_MAIN', 'calibrib');
+         define ('PDF_FONT_NAME_DATA', 'calibrib');
+//          print_r($svg);
+        PDF::setImageScale(1);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+		PDF::SetAutoPageBreak(TRUE);
+        PDF::SetFont('calibrib');
+		PDF::SetMargins(0, 0, 0, false);
+        PDF::AddPage('L',array(324,465));
+		PDF::setImageScale(1.66);
+		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
+        //PDF::RoundedRect(95, 255, 40, 30, 0.1, '1111', null, $style6);
+        //PDF::RoundedRect(140, 255, 40, 30, 0.1, '1111', 'null', $style6);
+		
+		//Top Left Corner
+		PDF::Line(7, 6, 7, 12, $style6);
+		PDF::Line(1, 12, 7, 12, $style6);
+		
+		//Bottom Left Corner
+		PDF::Line(7, 313, 7, 319, $style6);
+		PDF::Line(1, 313, 7, 313, $style6);
+		
+		//Top Right Corner
+		PDF::Line(458, 6, 458, 12, $style6);
+		PDF::Line(458, 12, 464, 12, $style6);
+		
+		//Bottom Right Corner
+		PDF::Line(458, 313, 464, 313, $style6);
+		PDF::Line(458, 313, 458, 319, $style6);
+		
+		PDF::RoundedRect(10, 15, 145, 95, 0.000001, '1111', null, $style6);
+        PDF::ImageSVG('@' . $svg, $x=10, $y=15, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+		PDF::Line(157.5, 6, 157.5, 12, $style6);
+		PDF::Line(157.5, 313, 157.5, 319, $style6);
+		
+		PDF::RoundedRect(160, 15, 145, 95, 0.000001, '1111', null, $style6);
+        PDF::ImageSVG('@' . $svg, $x=160, $y=15, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+		PDF::Line(307.5, 6, 307.5, 12, $style6);
+		PDF::Line(307.5, 313, 307.5, 319, $style6);
+		
+		PDF::RoundedRect(310, 15, 145, 95, 0.000001, '1111', null, $style6);
+        PDF::ImageSVG('@' . $svg, $x=310, $y= 15, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+		PDF::Line(1, 112.5, 7, 112.5, $style6);
+		PDF::Line(458, 112.5, 464, 112.5, $style6);
+		
+		PDF::RoundedRect(10, 115, 145, 95, 0.000001, '1111', null, $style6);
+        PDF::ImageSVG('@' . $svg, $x=10, $y=115, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+		PDF::RoundedRect(160, 115, 145, 95, 0.000001, '1111', null, $style6);
+        PDF::ImageSVG('@' . $svg, $x=160, $y=115, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+		PDF::RoundedRect(310, 115, 145, 95, 0.000001, '1111', null, $style6);
+        PDF::ImageSVG('@' . $svg, $x=310, $y=115, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+		PDF::Line(1, 212.5, 7, 212.5, $style6);
+		PDF::Line(458, 212.5, 464, 212.5, $style6);
+		
+		PDF::RoundedRect(10, 215, 145, 95, 0.000001, '1111', null, $style6);
+		PDF::ImageSVG('@' . $svg, $x=10, $y=215, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+		PDF::RoundedRect(160, 215, 145, 95, 0.000001, '1111', null, $style6);
+		PDF::ImageSVG('@' . $svg, $x=160, $y=215, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+		PDF::RoundedRect(310, 215, 145, 95, 0.000001, '1111', null, $style6);
+		PDF::ImageSVG('@' . $svg, $x=310, $y=215, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+		
+        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.$name.'.pdf'));
+    } 
+	
 	
 	/**
 	 * Print Preview For 150 * 100 Size Stickers
@@ -497,6 +582,83 @@ class OrderController extends Controller
 	 */
 	
     public function printPdfArr(Request $request)
+    {
+		 $name=$request->name;
+		 $svgarr = explode(',_',$request->svg);
+         //$svg=urldecode($request->svg);
+         define ('PDF_FONT_NAME_MAIN', 'calibrib');
+         define ('PDF_FONT_NAME_DATA', 'calibrib');
+//          print_r($svg);
+        PDF::setImageScale(1.66);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('calibrib');
+		PDF::AddPage('P', 'A4');
+		//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+		//PDF::RoundedRect(12.5, 12.5, 145, 95, 0, '0000');
+		
+		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
+        PDF::RoundedRect(10, 10, 150, 100, 0.000001, '1111', null, $style6);
+        PDF::RoundedRect(12.5, 12.5, 145, 95, 0.000001, '1111', null, $style6);
+		PDF::SetAutoPageBreak(TRUE);
+		$i=0;
+		$j=0;
+		$yy=12.5;
+		foreach($svgarr as $value)
+        {
+			$svg=urldecode($value);
+			
+			if($i == 2)
+			{
+				PDF::AddPage('P', 'A4');
+				//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+				$yy=12.5;
+				//PDF::RoundedRect(12.5, 12.5, 145, 95, 0, '0000');
+				
+				PDF::RoundedRect(10, 10, 150, 100, 0.000001, '1111', null, $style6);
+        		PDF::RoundedRect(12.5, 12.5, 145, 95, 0.000001, '1111', null, $style6);
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				$i = 0;
+			}
+			else if($i == 0)
+			{
+				//PDF::RoundedRect(10, 160, 150, 100, 0, '0000');
+				$yy=12.5;
+				//PDF::RoundedRect(12.5, 162.5, 145, 95, 0, '0000');
+				
+				PDF::RoundedRect(10, 160, 150, 100, 0.000001, '1111', null, $style6);
+				PDF::RoundedRect(12.5, 162.5, 145, 95, 0.000001, '1111', null, $style6);
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				
+			}
+			else
+			{
+				//PDF::RoundedRect(10, 160, 150, 100, 0, '0000');
+				$yy += 150;
+				//PDF::RoundedRect(12.5, 162.5, 145, 95, 0, '0000');
+				
+				PDF::RoundedRect(10, 160, 150, 100, 0.000001, '1111', null, $style6);
+				PDF::RoundedRect(12.5, 162.5, 145, 95, 0.000001, '1111', null, $style6);
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			}
+			$i++;
+			$j++;
+		 }
+		 
+		 PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+		 print_r(url('/storage/app/template/'.$name.'.pdf'));
+    } 
+	
+	
+	
+	
+	/**
+	 * Print Preview For 150 * 100 Size Stickers
+	 *
+	 * @return pdf
+	 */
+	
+    public function proofPdfArr(Request $request)
     {
 		 $name=$request->name;
 		 $svgarr = explode(',_',$request->svg);
@@ -914,12 +1076,247 @@ class OrderController extends Controller
     }
 	
 	/**
+	 * Print Preview For Standard Poly Bag Stickers
+	 * It Contains Dynamic Table
+	 * This Function is used to create dynamic table
+	 * @return pdf
+	 */
+	
+    public function proofPdfTable(Request $request)
+    {
+         $name=$request->name;
+		 $color=$request->color;
+         $svg=urldecode($request->svg);
+         define ('PDF_FONT_NAME_MAIN', 'calibrib');
+         define ('PDF_FONT_NAME_DATA', 'calibrib');
+//          print_r($svg);
+		
+		$orchestra_color = DB::table('orchestra_color_code')->select('*')->where('code',$color)->get();
+		if(count($orchestra_color) > 0)
+		{
+			$color_code=$orchestra_color{0}->french;
+		}
+		else
+		{
+			$color_code="";
+		}
+		
+		PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+		PDF::SetAutoPageBreak(TRUE);
+        PDF::SetFont('calibrib');
+		PDF::SetMargins(0, 0, 0, false);
+        PDF::AddPage('L',array(324,465));
+		PDF::setImageScale(1.66);
+		
+		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
+        $td_size="";
+        $td_col="";
+        $total=0;
+        $size=explode(',',$request->size);
+        $qty=explode(',',$request->qty);
+        $i=0;
+		$index_arr=array();
+        foreach($size as $val)
+        {
+			  if (!in_array($val, $index_arr)) 
+			  { 
+				   if($val != "")
+					{
+					    array_push($index_arr,$val);
+						if(count($size) > 7)
+						{
+							$td_size.='<td style="font-size:11px;line-height:1.8"><br>'.$val.'</td>';
+						}
+					    else
+						{
+							$td_size.="<td><br><br>".$val."</td>";
+						}
+						$td_col.="<td>".$qty[$i]."</td>";
+					} 
+			  } 
+           
+            $total+=$qty[$i];
+            $i++;
+        }
+          $tbl = '<table  border="1" style="text-align:center;">
+		  			<tr style="line-height:0.53">
+                          <td style="font-size:14px;text-align:center;line-height:0.45"><br><br>Size:</td>
+                          '.$td_size.'
+                          <td><br><br>Total<br></td>
+                          </tr>
+                      <tr>
+                          <td style="font-size:7.5px;line-height:2">'.$color_code.'</td>
+                          '.$td_col.'
+                          <td>'.$total.'</td>
+                          </tr>
+            </table>';
+        PDF::SetFillColor(255, 255, 255);
+        PDF::SetTextColor(0, 0, 0);
+        
+		
+		//Top Left Corner
+		PDF::Line(7, 6, 7, 12, $style6);
+		PDF::Line(1, 12, 7, 12, $style6);
+		
+		//Bottom Left Corner
+		PDF::Line(7, 313, 7, 319, $style6);
+		PDF::Line(1, 313, 7, 313, $style6);
+		
+		//Top Right Corner
+		PDF::Line(458, 6, 458, 12, $style6);
+		PDF::Line(458, 12, 464, 12, $style6);
+		
+		//Bottom Right Corner
+		PDF::Line(458, 313, 464, 313, $style6);
+		PDF::Line(458, 313, 458, 319, $style6);
+		
+		PDF::RoundedRect(10, 15, 145, 95, 0.000001, '1111', null, $style6);
+        
+        PDF::ImageSVG('@' . $svg, $x=10, $y=15, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::writeHTMLCell(147, '', '9', '57.5', $tbl, '', 1, 1, true, '', true);
+		
+		PDF::Line(157.5, 6, 157.5, 12, $style6);
+		PDF::Line(157.5, 313, 157.5, 319, $style6);
+		
+		PDF::RoundedRect(160, 15, 145, 95, 0.000001, '1111', null, $style6);
+        PDF::ImageSVG('@' . $svg, $x=160, $y=15, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		PDF::writeHTMLCell(147, '', '159', '57.5', $tbl, '', 1, 1, true, '', true);
+		
+		PDF::Line(307.5, 6, 307.5, 12, $style6);
+		PDF::Line(307.5, 313, 307.5, 319, $style6);
+		
+		PDF::RoundedRect(310, 15, 145, 95, 0.000001, '1111', null, $style6);
+        PDF::ImageSVG('@' . $svg, $x=310, $y= 15, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		PDF::writeHTMLCell(147, '', '309', '57.5', $tbl, '', 1, 1, true, '', true);
+		
+		PDF::Line(1, 112.5, 7, 112.5, $style6);
+		PDF::Line(458, 112.5, 464, 112.5, $style6);
+		
+		PDF::RoundedRect(10, 115, 145, 95, 0.000001, '1111', null, $style6);
+        PDF::ImageSVG('@' . $svg, $x=10, $y=115, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		PDF::writeHTMLCell(147, '', '9', '157.5', $tbl, '', 1, 1, true, '', true);
+		
+		PDF::RoundedRect(160, 115, 145, 95, 0.000001, '1111', null, $style6);
+        PDF::ImageSVG('@' . $svg, $x=160, $y=115, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		PDF::writeHTMLCell(147, '', '159', '157.5', $tbl, '', 1, 1, true, '', true);
+		
+		PDF::RoundedRect(310, 115, 145, 95, 0.000001, '1111', null, $style6);
+        PDF::ImageSVG('@' . $svg, $x=310, $y=115, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		PDF::writeHTMLCell(147, '', '309', '157.5', $tbl, '', 1, 1, true, '', true);
+		
+		PDF::Line(1, 212.5, 7, 212.5, $style6);
+		PDF::Line(458, 212.5, 464, 212.5, $style6);
+		
+		PDF::RoundedRect(10, 215, 145, 95, 0.000001, '1111', null, $style6);
+		PDF::ImageSVG('@' . $svg, $x=10, $y=215, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		PDF::writeHTMLCell(147, '', '9', '257.5', $tbl, '', 1, 1, true, '', true);
+		
+		PDF::RoundedRect(160, 215, 145, 95, 0.000001, '1111', null, $style6);
+		PDF::ImageSVG('@' . $svg, $x=160, $y=215, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		PDF::writeHTMLCell(147, '', '159', '257.5', $tbl, '', 1, 1, true, '', true);
+		
+		PDF::RoundedRect(310, 215, 145, 95, 0.000001, '1111', null, $style6);
+		PDF::ImageSVG('@' . $svg, $x=310, $y=215, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		PDF::writeHTMLCell(147, '', '309', '257.5', $tbl, '', 1, 1, true, '', true);
+		
+        
+  
+        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.$name.'.pdf'));
+        
+    }
+	
+	/**
 	 * Print Preview For 100 * 70 Size Stickers
 	 *
 	 * @return pdf
 	 */
 	
      public function printPdfSmall(Request $request)
+    {
+		 
+		  $name=$request->name;
+		 $svgarr = explode(',_',$request->svg);
+         //$svg=urldecode($request->svg);
+         define ('PDF_FONT_NAME_MAIN', 'calibrib');
+         define ('PDF_FONT_NAME_DATA', 'calibrib');
+//          print_r($svg);
+        PDF::setImageScale(1.66);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('calibrib');
+		PDF::AddPage('P', 'A4');
+		//PDF::RoundedRect(10, 10, 100, 70, 0, '0000');
+		//PDF::RoundedRect(12.5, 12.5, 95, 65, 0, '0000');
+		 
+		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
+        PDF::RoundedRect(10, 10, 100, 70, 0.000001, '1111', null, $style6);
+        PDF::RoundedRect(12.5, 12.5, 95, 65, 0.000001, '1111', null, $style6);
+		 
+//		PDF::SetAutoPageBreak(TRUE);
+		$i=0;
+		$j=0;
+		$yy=12.5;
+		foreach($svgarr as $value)
+        {
+			$svg=urldecode($value);
+			
+			if($i == 3)
+			{
+				PDF::AddPage('P', 'A4');
+				//PDF::RoundedRect(10, 10, 100, 70, 0, '0000');
+				//PDF::RoundedRect(12.5, 12.5, 95, 65, 0, '0000');
+				
+				PDF::RoundedRect(10, 10, 100, 70, 0.000001, '1111', null, $style6);
+        		PDF::RoundedRect(12.5, 12.5, 95, 65, 0.000001, '1111', null, $style6);
+				$yy=12.5;
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				$i = 0;
+			}
+			else  if($i == 0)
+			{
+				//PDF::RoundedRect(10, 100, 100, 70, 0, '0000');
+				//PDF::RoundedRect(12.5, 102.5, 95, 65, 0, '0000');
+				
+				PDF::RoundedRect(10, 10, 100, 70, 0.000001, '1111', null, $style6);
+				PDF::RoundedRect(12.5, 12.5, 95, 65, 0.000001, '1111', null, $style6);
+				$yy=12.5;
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				
+			}
+			else if($i == 1)
+			{
+				//PDF::RoundedRect(10, 100, 100, 70, 0, '0000');
+				//PDF::RoundedRect(12.5, 102.5, 95, 65, 0, '0000');
+				PDF::RoundedRect(10, 100, 100, 70, 0.000001, '1111', null, $style6);
+        		PDF::RoundedRect(12.5, 102.5, 95, 65, 0.000001, '1111', null, $style6);
+				$yy += 90;
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			}
+			else
+			{
+				//PDF::RoundedRect(10, 190, 100, 70, 0, '0000');
+				//PDF::RoundedRect(12.5, 192.5, 95, 65, 0, '0000');
+				PDF::RoundedRect(10, 190, 100, 70, 0.000001, '1111', null, $style6);
+        		PDF::RoundedRect(12.5, 192.5, 95, 65, 0.000001, '1111', null, $style6);
+				$yy += 90;
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			}
+			$i++;
+			$j++;
+		 }
+        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.$name.'.pdf'));
+    }
+	
+	/**
+	 * Print Preview For 100 * 70 Size Stickers
+	 *
+	 * @return pdf
+	 */
+	
+     public function proofPdfSmall(Request $request)
     {
 		 
 		  $name=$request->name;
