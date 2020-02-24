@@ -2343,6 +2343,7 @@ class OrderController extends Controller
         $size = explode(',',$request->size);
         $barcode = explode(',',$request->barcode);
         $uvc_tco = explode(',',$request->uvc_tco);
+		$size_break = explode(',',$request->size_break);
         $polybag_template_id = $request->polybag_template_id;
         $uvc =$request->uvc;
         $parcel_id =$request->parcel_id;
@@ -2429,6 +2430,7 @@ class OrderController extends Controller
                                         'size'      => $size[$j],
                                         'barcode'      => $barcode[$j],
                                         'uvc_tco'      => $uvc_tco[$j],
+                                        'size_break'      => $size_break[$j],
                                         'quantity'    => $final_order_qty,
                                         'quantity_sets'    => $final_order_qty
                      ]);
@@ -2473,6 +2475,7 @@ class OrderController extends Controller
                                         'size'      => $size[$j],
                                         'barcode'      => $barcode[$j],
                                         'uvc_tco'      => $uvc_tco[$j],
+										'size_break'      => $size_break[$j],
                                         'quantity'    => $final_order_qty,
                                         'quantity_sets'    => $final_order_qty
                     ]);

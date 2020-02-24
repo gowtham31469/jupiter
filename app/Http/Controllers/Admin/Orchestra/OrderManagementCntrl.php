@@ -2485,6 +2485,7 @@ class OrderManagementCntrl extends Controller
         //$delivery_date = $request->delivery_date;
         $carton_template_id = $request->carton_template_id; 
         $size = explode(',',$request->size);
+		$size_break = explode(',',$request->size_break);
         $barcode = explode(',',$request->barcode);
         $uvc_tco = explode(',',$request->uvc_tco);
         $polybag_template_id = $request->polybag_template_id;
@@ -2573,6 +2574,7 @@ class OrderManagementCntrl extends Controller
                                         'size'      => $size[$j],
                                         'barcode'      => $barcode[$j],
                                         'uvc_tco'      => $uvc_tco[$j],
+						 				'size_break	'      => $size_break[$j],
                                         'quantity'    => $final_order_qty,
                                         'quantity_sets'    => $final_order_qty
                      ]);
@@ -2617,6 +2619,7 @@ class OrderManagementCntrl extends Controller
                                         'size'      => $size[$j],
                                         'barcode'      => $barcode[$j],
                                         'uvc_tco'      => $uvc_tco[$j],
+										'size_break	'      => $size_break[$j],
                                         'quantity'    => $final_order_qty,
                                         'quantity_sets'    => $final_order_qty
                     ]);

@@ -2733,7 +2733,7 @@ class JobManagerController extends Controller
 
  public function printPdfTable(Request $request)
 	{
-		 $name=$request->name;
+		 $name=$request->style_no."-STD-POLY-".$request->buyer_no;
 	 	 $id=$request->id;
 		 $svg=urldecode($request->svg);
 		 define ('PDF_FONT_NAME_MAIN', 'calibrib');
@@ -2777,7 +2777,7 @@ class JobManagerController extends Controller
 		
 		 $this->created_date = $request->created_at;
 		
-		 $this->template_name = $request->name;
+		 $this->template_name = "STD-POLY";
 		 $this->template_zone = "";
 	     $this->template_desc = "";
 		 $this->tesco_po_number = $request->buyer_no;
@@ -3028,18 +3028,18 @@ class JobManagerController extends Controller
 		 ///PDF::write1DBarcode('3531114195599', 'EAN13', '60', '72', '', 32, 0.45, $style, 'N');
 
 	    $random = number_format(Carbon::now('Asia/Kolkata')->timestamp * rand(),0,'','');
-		PDF::Output( public_path('/storage/app/template/'.$random.'-'.$name.'.pdf'), 'F');
+		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
 		//print_r(url('/storage/app/template/'.$name.'.pdf'));
 	 
-		$file_path =  "/storage/app/template/".$random.'-'.$name."."."pdf";	
+		$file_path =  "/storage/app/template/".$name."."."pdf";	
 
-		return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$random.'-'.$name.'.pdf')],200);	
+		return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$name.'.pdf')],200);	
 		
 	}
 	
 	public function printPdfArr(Request $request)
     {
-		 $name=$request->name;
+		 $name=$request->style_no."-SOL-CARTON-".$request->buyer_no;
 		 $id=$request->id;
 		 $svgarr = explode(',_',$request->svg);
          //$svg=urldecode($request->svg);
@@ -3060,7 +3060,7 @@ class JobManagerController extends Controller
 		
 		 $this->created_date = $request->created_at;
 		
-		 $this->template_name = $request->name;
+		 $this->template_name = "SOL-CARTON";
 		 $this->template_zone = "";
 	     $this->template_desc = "";
 		 $this->tesco_po_number = $request->buyer_no;
@@ -3285,17 +3285,17 @@ class JobManagerController extends Controller
 			$j++;
 		 }
 		 $random = number_format(Carbon::now('Asia/Kolkata')->timestamp * rand(),0,'','');
-		 PDF::Output( public_path('/storage/app/template/'.$random.'-'.$name.'.pdf'), 'F');
+		 PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
 		//print_r(url('/storage/app/template/'.$name.'.pdf'));
 	 
-		$file_path =  "/storage/app/template/".$random.'-'.$name."."."pdf";	
+		$file_path =  "/storage/app/template/".$name."."."pdf";	
 
-		return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$random.'-'.$name.'.pdf')],200);	
+		return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$name.'.pdf')],200);	
     } 
 
 	public function printPdf(Request $request)
 	{
-		 $name=$request->name;
+		 $name=$request->style_no."-STD-CARTON-".$request->buyer_no;
 		 $id=$request->id;
 		 $svg=urldecode($request->svg);
 //		 define ('PDF_FONT_NAME_MAIN', 'calibrib');
@@ -3314,7 +3314,7 @@ class JobManagerController extends Controller
 		
 		 $this->created_date = $request->created_at;
 		
-		 $this->template_name = $request->name;
+		 $this->template_name = "STD-CARTON";
 		 $this->template_zone = "";
 	     $this->template_desc = "";
 		 $this->tesco_po_number = $request->buyer_no;
@@ -3495,12 +3495,12 @@ class JobManagerController extends Controller
 		PDF::RoundedRect(12.5, 50, 145, 95, 0.000001, '1111', null, $style6);
 		PDF::ImageSVG('@' . $svg, $x=12.5, $y=50, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 		$random = number_format(Carbon::now('Asia/Kolkata')->timestamp * rand(),0,'','');
-		PDF::Output( public_path('/storage/app/template/'.$random.'-'.$name.'.pdf'), 'F');
+		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
 		//print_r(url('/storage/app/template/'.$name.'.pdf'));
 	 
-		$file_path =  "/storage/app/template/".$random.'-'.$name."."."pdf";	
+		$file_path =  "/storage/app/template/".$name."."."pdf";	
 
-		return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$random.'-'.$name.'.pdf')],200);	
+		return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$name.'.pdf')],200);	
 	} 
 
 
@@ -3509,7 +3509,7 @@ class JobManagerController extends Controller
 	public function printPdfSmall(Request $request)
 	{
 		 
-		  $name=$request->name;
+		 $name=$request->style_no."-SOL-POLY-".$request->buyer_no;
 		$id=$request->id;
 		 $svgarr = explode(',_',$request->svg);
 		 //$svg=urldecode($request->svg);
@@ -3527,7 +3527,7 @@ class JobManagerController extends Controller
 		
 		 $this->created_date = $request->created_at;
 		
-		 $this->template_name = $request->name;
+		 $this->template_name = "SOL-POLY";
 		 $this->template_zone = "";
 	     $this->template_desc = "";
 		 $this->tesco_po_number = $request->buyer_no;
@@ -3761,12 +3761,12 @@ class JobManagerController extends Controller
 			$j++;
 		 }
 		$random = number_format(Carbon::now('Asia/Kolkata')->timestamp * rand(),0,'','');
-		PDF::Output( public_path('/storage/app/template/'.$random.'-'.$name.'.pdf'), 'F');
+		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
 		//print_r(url('/storage/app/template/'.$name.'.pdf'));
 	 
-		$file_path =  "/storage/app/template/".$random.'-'.$name."."."pdf";	
+		$file_path =  "/storage/app/template/".$name."."."pdf";	
 
-		return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$random.'-'.$name.'.pdf')],200);	
+		return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$name.'.pdf')],200);	
 	}
 
 	/**
