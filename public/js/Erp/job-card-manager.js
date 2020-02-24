@@ -4095,7 +4095,7 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupTableOrchestraJCPreview(svgDoc, "STD-POLY",details.sizeArr,details.qtyArr,isEdit,id,style_no,buyer_no,created_at);
+							PopupTableOrchestraJCPreview(svgDoc, "STD-POLY",details.sizeArr,details.qtyArr,details.sizBrkAr,isEdit,id,style_no,buyer_no,created_at);
 						break;
 
 
@@ -4429,7 +4429,7 @@ function PopupArrOrchestraJCPreview(data,name,svgDoc,isEdit,id,style_no,buyer_no
 
 
 
-function PopupTableOrchestraJCPreview(data,name,size,qty,isEdit,id,style_no,buyer_no,created_at) {
+function PopupTableOrchestraJCPreview(data,name,size,qty,sizebrk,isEdit,id,style_no,buyer_no,created_at) {
 	var s = new XMLSerializer();
 	var d = data;
 	var str = s.serializeToString(d);d
@@ -4449,7 +4449,7 @@ function PopupTableOrchestraJCPreview(data,name,size,qty,isEdit,id,style_no,buye
 
 	var sizefin = size.join(',')
 	var qtyfin = qty.join(',')
-
+	var sizebrkfin = sizebrk.join(',')
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
 		url: base_url + "/erp/job-manager/orchestra/print-pdf-table",
@@ -4460,6 +4460,7 @@ function PopupTableOrchestraJCPreview(data,name,size,qty,isEdit,id,style_no,buye
 			svg: svg,
 			size: sizefin,
 			qty: qtyfin,
+			sizebrk: sizebrkfin,
 			name:name,
 			id : id,
 			style_no:style_no,

@@ -2183,9 +2183,10 @@ function proofDiv(data, isstd,uvc) {
 	} else if (data == "svg3" && isstd == "1") {
 		var a = document.getElementById(data);
 		var svgDoc = a.contentDocument;
+		svgDoc.getElementById("standardcolor").style.fill = "#FFFFFF"
 		var svgRoot = svgDoc.documentElement;
 		var name=uvc+"-STD-CS";
-		ProofPopup(svgRoot,name);
+		ProofPopup(svgRoot,name,svgDoc);
 	} else {
 		var a = document.getElementById(data);
 		var svgDoc = a.contentDocument;
@@ -3457,7 +3458,7 @@ function Popupsmall(data,name,svgDoc,uvc,po) {
  * @return Pdf
  */
 
-function ProofPopup(data,name) {
+function ProofPopup(data,name,svgDoc) {
 	
 	var s = new XMLSerializer();
 	var d = data;
@@ -3480,6 +3481,7 @@ function ProofPopup(data,name) {
 			//window.location.href=data;
 			success = true;
 			url = data;
+			svgDoc.getElementById("standardcolor").style.fill = "#fbfb08"
 		},
 		error: function (data) {
 
@@ -3710,6 +3712,7 @@ function barcode_carton(id, data) {
 			jsbarcodestdcartonA(code, 'barcode1', svgDoc)
 			jsbarcodestdcartonB(code, 'barcode2', svgDoc)
 			svgDoc.getElementById("total_polybags_per_carton").innerHTML = $('#total_polybag').val();
+			svgDoc.getElementById("standardcolor").style.fill = "#fbfb08"
 			svgDoc.getElementById("no_of_cartons").innerHTML = $('#needed_modal').val();
 		} else {
 			var code = data.orchestra_parcel_details[0].BarcodeForPricesTags.toString();

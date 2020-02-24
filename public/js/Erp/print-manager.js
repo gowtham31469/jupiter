@@ -825,7 +825,7 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupTableOrchestra(svgDoc, "STD-POLY",details.sizeArr,details.qtyArr,id,style_no,buyer_no,created_at);
+							PopupTableOrchestra(svgDoc, "STD-POLY",details.sizeArr,details.qtyArr,details.sizBrkAr,id,style_no,buyer_no,created_at);
 						break;
 
 
@@ -2580,7 +2580,7 @@ function PopupArrOrchestra(data,name,svgDoc,id,style_no,buyer_no,created_at) {
 
 
 
-function PopupTableOrchestra(data,name,size,qty,id,style_no,buyer_no,created_at) {
+function PopupTableOrchestra(data,name,size,qty,sizebrk,id,style_no,buyer_no,created_at) {
 	var s = new XMLSerializer();
 	var d = data;
 	var str = s.serializeToString(d);d
@@ -2600,6 +2600,7 @@ function PopupTableOrchestra(data,name,size,qty,id,style_no,buyer_no,created_at)
 
 	var sizefin = size.join(',')
 	var qtyfin = qty.join(',')
+	var sizebrkfin = sizebrk.join(',')
 
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
@@ -2611,6 +2612,7 @@ function PopupTableOrchestra(data,name,size,qty,id,style_no,buyer_no,created_at)
 			svg: svg,
 			size: sizefin,
 			qty: qtyfin,
+			sizebrk: sizebrkfin,
 			name:name,
 			id : id,
 			style_no:style_no,

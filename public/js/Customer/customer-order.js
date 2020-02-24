@@ -3440,6 +3440,7 @@ function barcode_carton(id, data) {
 			jsbarcodestdcartonA(code, 'barcode1', svgDoc)
 			jsbarcodestdcartonB(code, 'barcode2', svgDoc)
 			svgDoc.getElementById("total_polybags_per_carton").innerHTML = $('#total_polybag').val();
+			svgDoc.getElementById("standardcolor").style.fill = "#fbfb08"
 			svgDoc.getElementById("no_of_cartons").innerHTML = $('#needed_modal').val();
 		} else {
 			var code = data.orchestra_parcel_details[0].BarcodeForPricesTags.toString();

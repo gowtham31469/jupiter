@@ -1667,7 +1667,7 @@ function genarateArtworkOrchestraJC(data, name,style_no,buyer_no,id,order_type,c
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupTableOrchestraJC(svgDoc, "STD-POLY",details.sizeArr,details.qtyArr,id,style_no,buyer_no,created_at);
+							PopupTableOrchestraJC(svgDoc, "STD-POLY",details.sizeArr,details.qtyArr,details.sizBrkAr,id,style_no,buyer_no,created_at);
 						break;
 
 
@@ -1967,7 +1967,7 @@ function PopupArrOrchestraJC(data,name,svgDoc,id,style_no,buyer_no,created_at) {
 
 
 
-function PopupTableOrchestraJC(data,name,size,qty,id,style_no,buyer_no,created_at) {
+function PopupTableOrchestraJC(data,name,size,qty,sizebrk,id,style_no,buyer_no,created_at) {
 	var s = new XMLSerializer();
 	var d = data;
 	var str = s.serializeToString(d);d
@@ -1987,7 +1987,7 @@ function PopupTableOrchestraJC(data,name,size,qty,id,style_no,buyer_no,created_a
 
 	var sizefin = size.join(',')
 	var qtyfin = qty.join(',')
-
+	var sizebrkfin = sizebrk.join(',')
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
 		url: base_url + "/erp/job-manager/orchestra/print-pdf-table",
@@ -1998,6 +1998,7 @@ function PopupTableOrchestraJC(data,name,size,qty,id,style_no,buyer_no,created_a
 			svg: svg,
 			size: sizefin,
 			qty: qtyfin,
+			sizebrk: sizebrkfin,
 			name:name,
 			id : id,
 			style_no:style_no,

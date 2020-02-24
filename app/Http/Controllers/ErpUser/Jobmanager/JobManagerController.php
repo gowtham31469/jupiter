@@ -466,12 +466,13 @@ class JobManagerController extends Controller
 				
 						$sizeArr=OrchestraParcelDetails::where('UVC',$res[0]->uvc)
 												->where('Season_Code',$res[0]->season_code)
-												->select('Quantity','Size')
+												->select('Quantity','Size','Size_Breakdown')
 												->orderBy('id','asc')
 												->get()->groupBy('Size')
 												->toArray();
 								$qtyAr=[];				
-								$sizAr=[];				
+								$sizAr=[];
+								$sizBrkAr=[];
 							foreach ($sizeArr as $key => $value)
 							 {
 									$qty=0;				
@@ -480,15 +481,21 @@ class JobManagerController extends Controller
 												}	
 												array_push($qtyAr, $qty);
 												array_push($sizAr, $key);
+								if(count($value) > 0 )
+								{
+									array_push($sizBrkAr, $value[0]['Size_Breakdown']);
+								}
+												
 							 }					
 
 
-						$res->map(function ($res) use($sizeArr,$qtyAr,$sizAr) {
+						$res->map(function ($res) use($sizeArr,$qtyAr,$sizAr,$sizBrkAr) {
 						$res->theme = OrchestraParcelDetails::where('id',$res->orchestra_parcel_details_id)->first()->Theme;
 						$res->reference_name = "Std Poly Stickers";
 						$res->age_group = OrchestraAgeGroup::where('id',$res->group_id)->first()->color;
 						$res->sizeArr = $sizAr;
 						$res->qtyArr = $qtyAr;
+						$res->sizBrkAr = $sizBrkAr;
 						});
 						
 				break;
@@ -2965,6 +2972,7 @@ class JobManagerController extends Controller
 		$total=0;
 		$size=explode(',',$request->size);
 		$qty=explode(',',$request->qty);
+	 	$sizebrk=explode(',',$request->sizebrk);
 		$i=0;
 		$index_arr=array();
 		foreach($size as $val)
@@ -2982,11 +2990,11 @@ class JobManagerController extends Controller
 						{
 							$td_size.="<td><br><br>".$val."</td>";
 						}
-						$td_col.="<td>".$qty[$i]."</td>";
+						$td_col.="<td>".$sizebrk[$i]."</td>";
 					} 
 			  } 
 		   
-			$total+=$qty[$i];
+			$total+=$sizebrk[$i];
 			$i++;
 		}
 		  $tbl = '<table  border="1" style="text-align:center;">

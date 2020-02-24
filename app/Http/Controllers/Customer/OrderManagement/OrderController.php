@@ -233,7 +233,7 @@ class OrderController extends Controller
 		exec('inkscape -z -e '.public_path('/storage/app/template/out.png').' -w 1000 -h 1000 '.public_path('/storage/app/template/demo.svg'));
 		
 		$html = '<img style="width:520px;height:341;border:1px solid #333" src="'.public_path('/storage/app/template/out.png').'">';
-		PDF::writeHTMLCell(147, 97, 12.5, 50, $html, '', 0, 0, false, 'L', false);
+		PDF::writeHTMLCell(147, 97, 11.5, 50, $html, '', 0, 0, false, 'L', false);
         //PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
@@ -463,7 +463,7 @@ class OrderController extends Controller
 				exec('inkscape -z -e '.public_path('/storage/app/template/out'.$count.'.png').' -w 1000 -h 1000 '.public_path('/storage/app/template/demo'.$count.'.svg'));
 
 				$html = '<img style="width:684px;height:449px;" src="'.public_path('/storage/app/template/out'.$count.'.png').'">';
-				PDF::writeHTMLCell(147, 97, 12.5, $yy, $html, '', 0, 0, false, 'L', false);
+				PDF::writeHTMLCell(147, 97, 11.5, $yy, $html, '', 0, 0, false, 'L', false);
 				//PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 				$i = 0;
 			}
@@ -481,7 +481,7 @@ class OrderController extends Controller
 				exec('inkscape -z -e '.public_path('/storage/app/template/out'.$count.'.png').' -w 1000 -h 1000 '.public_path('/storage/app/template/demo'.$count.'.svg'));
 
 				$html = '<img style="width:684px;height:449px;" src="'.public_path('/storage/app/template/out'.$count.'.png').'">';
-				PDF::writeHTMLCell(147, 97, 12.5, $yy, $html, '', 0, 0, false, 'L', false);
+				PDF::writeHTMLCell(147, 97, 11.5, $yy, $html, '', 0, 0, false, 'L', false);
 				//PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 				
 			}
@@ -498,7 +498,7 @@ class OrderController extends Controller
 				exec('inkscape -z -e '.public_path('/storage/app/template/out'.$count.'.png').' -w 1000 -h 1000 '.public_path('/storage/app/template/demo'.$count.'.svg'));
 
 				$html = '<img style="width:684px;height:449px;" src="'.public_path('/storage/app/template/out'.$count.'.png').'">';
-				PDF::writeHTMLCell(147, 97, 12.5, $yy, $html, '', 0, 0, false, 'L', false);
+				PDF::writeHTMLCell(147, 97, 11.5, $yy, $html, '', 0, 0, false, 'L', false);
 				
 				//PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			}
@@ -1005,7 +1005,7 @@ class OrderController extends Controller
 		exec('inkscape -z -e '.public_path('/storage/app/template/out.png').' -w 1000 -h 1000 '.public_path('/storage/app/template/demo.svg'));
 		
 		$html = '<img style="width:520px;height:341;border:1px solid #333" src="'.public_path('/storage/app/template/out.png').'">';
-		PDF::writeHTMLCell(147, 97, 12.5, 50, $html, '', 0, 0, false, 'L', false);
+		PDF::writeHTMLCell(147, 97, 11.5, 50, $html, '', 0, 0, false, 'L', false);
         
         //PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
         PDF::writeHTMLCell(147, '', '11.5', '92.5', $tbl, '', 1, 1, true, '', true);
