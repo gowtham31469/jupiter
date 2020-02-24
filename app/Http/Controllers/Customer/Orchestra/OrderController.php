@@ -124,7 +124,7 @@ class OrderController extends Controller
 		
 		 $customers = DB::table('customers')->select('*')->where('id',$company_id)->get();
 		
-		 $data['sticker_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id',DB::raw("'-' as \"Season\""),'BuyerPONo','SupplierName','NomApple as Style_Name','Quantity','IsSTD as Type',DB::raw("'Stickers' as \"OrderType\""),'sticker_order_status as Order Status',DB::raw("'-' as \"Disney\""))->whereNotIn('UVC_TCO', $UVC_TCO_array1)->where('orchestra_parcel_details.FactoryCode', $customers{0}->factory_code)->groupBy('id','UVC')->get();
+		 $data['sticker_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC","BuyerPONo") "UVC"'),'id',DB::raw("'-' as \"Season\""),'BuyerPONo','SupplierName','NomApple as Style_Name','Quantity','IsSTD as Type',DB::raw("'Stickers' as \"OrderType\""),'sticker_order_status as Order Status',DB::raw("'-' as \"Disney\""))->whereNotIn('UVC_TCO', $UVC_TCO_array1)->where('orchestra_parcel_details.FactoryCode', $customers{0}->factory_code)->groupBy('id','UVC')->get();
 
         $data['label_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id','Season_Code as Season',DB::raw("'-' as \"BuyerPONo\""),'SupplierName','Theme as Description','NomApple as Style_Name','Licence_Code as Disney',DB::raw("'-' as \"Type\""),'Quantity',DB::raw("'Labels' as \"OrderType\""),'order_status as Order Status')->whereNotIn('UVC_TCO', $UVC_TCO_array1)->where('orchestra_parcel_details.FactoryCode', $customers{0}->factory_code)->groupBy('id','UVC')->get();
         
