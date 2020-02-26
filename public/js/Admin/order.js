@@ -2154,6 +2154,7 @@ function proofDiv(data, isstd,uvc) {
 						var barcode = $(this).find('.barcode').text();
 						var SKU_Code = $(this).find('.SKU_Code').val();
 						svgDoc.getElementById("size").innerHTML = size;
+						svgDoc.getElementById("round").style.fill = "#FFFFFF"
 						svgDoc.getElementById("parcel_code").innerHTML = SKU_Code;
 						jsbarcodesolidpoly(barcode, 'barcode', svgDoc)
 						var s = new XMLSerializer();
@@ -2167,10 +2168,10 @@ function proofDiv(data, isstd,uvc) {
 			ajax_count++;
 			
 		});
-		
+		var age_colour = $('#age option:selected').data('color');
 		if (ajax_count == document.getElementById("solidformtbody").rows.length) {
 			var svg_fin = svgarr.join(',_');
-			ProofPopupsmall(svg_fin, name,svgDoc);
+			ProofPopupsmall(svg_fin, name,svgDoc,age_colour);
 		}
 		
 		
@@ -2178,8 +2179,10 @@ function proofDiv(data, isstd,uvc) {
 		var a = document.getElementById(data);
 		var svgDoc = a.contentDocument;
 		var svgRoot = svgDoc.documentElement;
+		svgDoc.getElementById("round").style.fill = "#FFFFFF"
 		var name=uvc+"-STD-PS";
-		ProofPopupTable(svgRoot,name);
+		var age_colour = $('#age option:selected').data('color');
+		ProofPopupTable(svgRoot,name,svgDoc,age_colour);
 	} else if (data == "svg3" && isstd == "1") {
 		var a = document.getElementById(data);
 		var svgDoc = a.contentDocument;
@@ -3537,7 +3540,7 @@ function ProofPopupArr(data,name,svgDoc) {
  * @return Pdf
  */
 
-function ProofPopupTable(data,name) {
+function ProofPopupTable(data,name,svgDoc,age_colour) {
 	var s = new XMLSerializer();
 	var d = data;
 	var str = s.serializeToString(d);
@@ -3574,6 +3577,7 @@ function ProofPopupTable(data,name) {
 		success: function (data) {
 			success = true;
 			url = data;
+			svgDoc.getElementById("round").style.fill = age_colour
 		},
 		error: function (data) {
 
@@ -3590,7 +3594,7 @@ function ProofPopupTable(data,name) {
  * @return Pdf
  */
 
-function ProofPopupsmall(data,name,svgDoc) {
+function ProofPopupsmall(data,name,svgDoc,age_colour) {
 //	var s = new XMLSerializer();
 //	var d = data;
 //	var str = s.serializeToString(d);
@@ -3610,6 +3614,7 @@ function ProofPopupsmall(data,name,svgDoc) {
 		success: function (data) {
 			success = true;
 			url = data;
+			svgDoc.getElementById("round").style.fill = age_colour
 		},
 		error: function (data) {
 

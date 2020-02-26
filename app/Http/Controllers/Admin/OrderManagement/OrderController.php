@@ -2051,75 +2051,131 @@ class OrderController extends Controller
      public function proofPdfSmall(Request $request)
     {
 		 
-		  $name=$request->name;
+		 $name=$request->name;
+		 $color=$request->color;
 		 $svgarr = explode(',_',$request->svg);
          //$svg=urldecode($request->svg);
          define ('PDF_FONT_NAME_MAIN', 'calibrib');
          define ('PDF_FONT_NAME_DATA', 'calibrib');
 //          print_r($svg);
-        PDF::setImageScale(1.66);
-        PDF::setPrintHeader(false);
+		
+		$orchestra_color = DB::table('orchestra_color_code')->select('*')->where('code',$color)->get();
+		if(count($orchestra_color) > 0)
+		{
+			$color_code=$orchestra_color{0}->french;
+		}
+		else
+		{
+			$color_code="";
+		}
+		
+		PDF::setPrintHeader(false);
         PDF::setPrintFooter(false);
+		PDF::SetAutoPageBreak(TRUE);
         PDF::SetFont('calibrib');
-		PDF::AddPage('P', 'A4');
 		//PDF::RoundedRect(10, 10, 100, 70, 0, '0000');
 		//PDF::RoundedRect(12.5, 12.5, 95, 65, 0, '0000');
 		 
 		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
-        PDF::RoundedRect(10, 10, 100, 70, 0.000001, '1111', null, $style6);
-        PDF::RoundedRect(12.5, 12.5, 95, 65, 0.000001, '1111', null, $style6);
 		 
 //		PDF::SetAutoPageBreak(TRUE);
-		$i=0;
-		$j=0;
-		$yy=12.5;
 		foreach($svgarr as $value)
         {
 			$svg=urldecode($value);
+			PDF::SetMargins(0, 0, 0, false);
+			PDF::AddPage('P',array(324,442));
+			PDF::setImageScale(1.66);
 			
-			if($i == 3)
-			{
-				PDF::AddPage('P', 'A4');
-				//PDF::RoundedRect(10, 10, 100, 70, 0, '0000');
-				//PDF::RoundedRect(12.5, 12.5, 95, 65, 0, '0000');
-				
-				PDF::RoundedRect(10, 10, 100, 70, 0.000001, '1111', null, $style6);
-        		PDF::RoundedRect(12.5, 12.5, 95, 65, 0.000001, '1111', null, $style6);
-				$yy=12.5;
-				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-				$i = 0;
-			}
-			else  if($i == 0)
-			{
-				//PDF::RoundedRect(10, 100, 100, 70, 0, '0000');
-				//PDF::RoundedRect(12.5, 102.5, 95, 65, 0, '0000');
-				
-				PDF::RoundedRect(10, 10, 100, 70, 0.000001, '1111', null, $style6);
-				PDF::RoundedRect(12.5, 12.5, 95, 65, 0.000001, '1111', null, $style6);
-				$yy=12.5;
-				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-				
-			}
-			else if($i == 1)
-			{
-				//PDF::RoundedRect(10, 100, 100, 70, 0, '0000');
-				//PDF::RoundedRect(12.5, 102.5, 95, 65, 0, '0000');
-				PDF::RoundedRect(10, 100, 100, 70, 0.000001, '1111', null, $style6);
-        		PDF::RoundedRect(12.5, 102.5, 95, 65, 0.000001, '1111', null, $style6);
-				$yy += 90;
-				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-			}
-			else
-			{
-				//PDF::RoundedRect(10, 190, 100, 70, 0, '0000');
-				//PDF::RoundedRect(12.5, 192.5, 95, 65, 0, '0000');
-				PDF::RoundedRect(10, 190, 100, 70, 0.000001, '1111', null, $style6);
-        		PDF::RoundedRect(12.5, 192.5, 95, 65, 0.000001, '1111', null, $style6);
-				$yy += 90;
-				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-			}
-			$i++;
-			$j++;
+			//Top Left Corner
+			PDF::Line(11.5, 3, 11.5, 10.5, $style6); //straight
+			PDF::Line(3, 10.5, 11.5, 10.5, $style6); //wide
+
+			//Bottom Left Corner
+			PDF::Line(11.5, 431.5, 11.5, 438.5, $style6);
+			PDF::Line(3, 431.5, 11.5, 431.5, $style6);
+
+			//Top Right Corner
+			PDF::Line(312.5, 3, 312.5, 10.5, $style6);
+			PDF::Line(312.5, 10.5, 321, 10.5, $style6);
+
+			//Bottom Right Corner
+			PDF::Line(312.5, 431.5, 321, 431.5, $style6);
+			PDF::Line(312.5, 431.5, 312.5, 438, $style6);
+			
+			
+			PDF::Line(11.5, 3, 11.5, 10.5, $style6);
+			PDF::Line(112, 3, 112, 10.5, $style6);
+			PDF::Line(212, 3, 212, 10.5, $style6);
+			
+			PDF::Line(3, 81, 11.5, 81, $style6);
+			PDF::Line(3, 151, 11.5, 151, $style6);
+			PDF::Line(3, 221, 11.5, 221, $style6);
+			PDF::Line(3, 291, 11.5, 291, $style6);
+			PDF::Line(3, 361, 11.5, 361, $style6);
+			
+			PDF::Line(312.5, 81, 321, 81, $style6);
+			PDF::Line(312.5, 151, 321, 151, $style6);
+			PDF::Line(312.5, 221, 321, 221, $style6);
+			PDF::Line(312.5, 291, 321, 291, $style6);
+			PDF::Line(312.5, 361, 321, 361, $style6);
+			
+			
+			PDF::Line(112, 431.5, 112, 438.5, $style6);
+			PDF::Line(212, 431.5, 212, 438.5, $style6);
+			
+			PDF::RoundedRect(14.5, 13.5, 95, 65, 0.000001, '1111', null, $style6);
+			PDF::ImageSVG('@' . $svg, $x=14.5, $y=13.5, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			
+			PDF::RoundedRect(114.5, 13.5, 95, 65, 0.000001, '1111', null, $style6);
+			PDF::ImageSVG('@' . $svg, $x=114.5, $y=13.5, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			
+			PDF::RoundedRect(214.5, 13.5, 95, 65, 0.000001, '1111', null, $style6);
+			PDF::ImageSVG('@' . $svg, $x=214.5, $y=13.5, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			
+			PDF::RoundedRect(14.5, 83.5, 95, 65, 0.000001, '1111', null, $style6);
+			PDF::ImageSVG('@' . $svg, $x=14.5, $y=83.5, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			
+			PDF::RoundedRect(114.5, 83.5, 95, 65, 0.000001, '1111', null, $style6);
+			PDF::ImageSVG('@' . $svg, $x=114.5, $y=83.5, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			
+			PDF::RoundedRect(214.5, 83.5, 95, 65, 0.000001, '1111', null, $style6);
+			PDF::ImageSVG('@' . $svg, $x=214.5, $y=83.5, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			
+			PDF::RoundedRect(14.5, 153.5, 95, 65, 0.000001, '1111', null, $style6);
+			PDF::ImageSVG('@' . $svg, $x=14.5, $y=153.5, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			
+			PDF::RoundedRect(114.5, 153.5, 95, 65, 0.000001, '1111', null, $style6);
+			PDF::ImageSVG('@' . $svg, $x=114.5, $y=153.5, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			
+			PDF::RoundedRect(214.5, 153.5, 95, 65, 0.000001, '1111', null, $style6);
+			PDF::ImageSVG('@' . $svg, $x=214.5, $y=153.5, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			
+			PDF::RoundedRect(14.5, 223.5, 95, 65, 0.000001, '1111', null, $style6);
+			PDF::ImageSVG('@' . $svg, $x=14.5, $y=223.5, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			
+			PDF::RoundedRect(114.5, 223.5, 95, 65, 0.000001, '1111', null, $style6);
+			PDF::ImageSVG('@' . $svg, $x=114.5, $y=223.5, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			
+			PDF::RoundedRect(214.5, 223.5, 95, 65, 0.000001, '1111', null, $style6);
+			PDF::ImageSVG('@' . $svg, $x=214.5, $y=223.5, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			
+			PDF::RoundedRect(14.5, 293.5, 95, 65, 0.000001, '1111', null, $style6);
+			PDF::ImageSVG('@' . $svg, $x=14.5, $y=293.5, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			
+			PDF::RoundedRect(114.5, 293.5, 95, 65, 0.000001, '1111', null, $style6);
+			PDF::ImageSVG('@' . $svg, $x=114.5, $y=293.5, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			
+			PDF::RoundedRect(214.5, 293.5, 95, 65, 0.000001, '1111', null, $style6);
+			PDF::ImageSVG('@' . $svg, $x=214.5, $y=293.5, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			
+			PDF::RoundedRect(14.5, 363.5, 95, 65, 0.000001, '1111', null, $style6);
+			PDF::ImageSVG('@' . $svg, $x=14.5, $y=363.5, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			
+			PDF::RoundedRect(114.5, 363.5, 95, 65, 0.000001, '1111', null, $style6);
+			PDF::ImageSVG('@' . $svg, $x=114.5, $y=363.5, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			
+			PDF::RoundedRect(214.5, 363.5, 95, 65, 0.000001, '1111', null, $style6);
+			PDF::ImageSVG('@' . $svg, $x=214.5, $y=363.5, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 		 }
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
