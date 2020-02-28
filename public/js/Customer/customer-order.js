@@ -2039,6 +2039,7 @@ function printDiv(data, isstd,uvc,po) {
 		var ajax_count = 0;
 		var svgarr = [];
 		var index_arr = [];
+		var tu_size = $('#solidform tbody tr').find('.size').text()
 		$('#solidform tbody tr').each(function (key, val) {
 			
 			if(index_arr.includes($(this).find('.size').text()) != true)
@@ -2052,6 +2053,12 @@ function printDiv(data, isstd,uvc,po) {
 						svgDoc.getElementById("size").innerHTML = size;
 						svgDoc.getElementById("parcel_code").innerHTML = SKU_Code;
 						jsbarcodesolidpoly(barcode, 'barcode', svgDoc)
+						if(size == "TAILLE UNIQUE")
+						{
+							svgDoc.getElementById("size").style.fontSize = "15px"
+							svgDoc.getElementById("size").setAttribute('transform','matrix(1 0 0 1 168.625 28.7874)');
+							svgDoc.getElementById("color").setAttribute('transform','matrix(1 0 0 1 169.625 45.3324)');
+						}
 						var s = new XMLSerializer();
 						var d = svgRoot;
 						var str = s.serializeToString(d);
@@ -2066,7 +2073,7 @@ function printDiv(data, isstd,uvc,po) {
 		
 		if (ajax_count == document.getElementById("solidformtbody").rows.length) {
 			var svg_fin = svgarr.join(',_');
-			Popupsmall(svg_fin, name,svgDoc,uvc,po);
+			Popupsmall(svg_fin, name,svgDoc,uvc,po,tu_size);
 		}
 		
 		
@@ -2089,6 +2096,7 @@ function printDiv(data, isstd,uvc,po) {
 		var ajax_count = 0;
 		var svgarr = [];
 		var index_arr = [];
+		var tu_size = $('#solidform tbody tr').find('.size').text()
 		$('#solidform tbody tr').each(function (key, val) {
 			if(index_arr.includes($(this).find('.size').text()) != true)
 			{
@@ -2102,7 +2110,10 @@ function printDiv(data, isstd,uvc,po) {
 						svgDoc.getElementById("parcelcode").innerHTML = SKU_Code;
 						jsbarcodesolidcartonA(barcode, 'barcode1', svgDoc)
 						jsbarcodesolidcartonB(barcode, 'barcode2', svgDoc)
-
+						if(size == "TAILLE UNIQUE")
+						{
+							svgDoc.getElementById("size").innerHTML = '<tspan xmlns="http://www.w3.org/2000/svg" dx="-12" dy="-5" text-anchor="start">TAILLE </tspan><tspan xmlns="http://www.w3.org/2000/svg" dx="-29" dy="9" text-anchor="middle">UNIQUE</tspan>';
+						}
 						var s = new XMLSerializer();
 						var d = svgRoot;
 						var str = s.serializeToString(d);
@@ -2115,7 +2126,7 @@ function printDiv(data, isstd,uvc,po) {
 		
 		if (ajax_count == document.getElementById("solidformtbody").rows.length) {
 			var svg_fin = svgarr.join(',_');
-			PopupArr(svg_fin, name,svgDoc,uvc,po);
+			PopupArr(svg_fin, name,svgDoc,uvc,po,tu_size);
 		}
 	}
 
@@ -3216,7 +3227,7 @@ function Popup(data,name,uvc,po) {
  * @return Pdf
  */
 
-function PopupArr(data,name,svgDoc,uvc,po) {
+function PopupArr(data,name,svgDoc,uvc,po,tu_size) {
 	var id = $('#carton_id').val()
 //	var s = new XMLSerializer();
 //	var d = data;
@@ -3242,6 +3253,10 @@ function PopupArr(data,name,svgDoc,uvc,po) {
 			//window.location.href=data;
 			success = true;
 			url = data;
+			if(tu_size == "TAILLE UNIQUE")
+		    {
+				svgDoc.getElementById("size").innerHTML = '<tspan xmlns="http://www.w3.org/2000/svg" dx="-11" dy="-5" text-anchor="start">TAILLE </tspan><tspan xmlns="http://www.w3.org/2000/svg" dx="-28" dy="9" text-anchor="middle">UNIQUE</tspan>';
+		    }
 		},
 		error: function (data) {
 
@@ -3315,7 +3330,7 @@ function PopupTable(data,name,uvc,po) {
  * @return Pdf
  */
 
-function Popupsmall(data,name,svgDoc,uvc,po) {
+function Popupsmall(data,name,svgDoc,uvc,po,tu_size) {
 //	var s = new XMLSerializer();
 //	var d = data;
 //	var str = s.serializeToString(d);
@@ -3339,6 +3354,11 @@ function Popupsmall(data,name,svgDoc,uvc,po) {
 		success: function (data) {
 			success = true;
 			url = data;
+			if(tu_size == "TAILLE UNIQUE")
+		    {
+				svgDoc.getElementById("size").setAttribute('transform','matrix(1 0 0 1 174.625 28.7874)');
+				svgDoc.getElementById("color").setAttribute('transform','matrix(1 0 0 1 175.625 45.3324)');
+			}
 		},
 		error: function (data) {
 
@@ -3396,7 +3416,17 @@ function barcode_polybag(id, data) {
 		} else {
 			svgDoc.getElementById("parcel_code").innerHTML = data.orchestra_parcel_details[0].UVC_TCO;
 			var code = data.orchestra_parcel_details[0].BarcodeForPricesTags.toString();
-			svgDoc.getElementById("size").innerHTML = data.orchestra_parcel_details[0].Size;
+			if(data.orchestra_parcel_details[0].Size == "TAILLE UNIQUE")
+		    {
+				svgDoc.getElementById("size").innerHTML = data.orchestra_parcel_details[0].Size;
+				svgDoc.getElementById("size").style.fontSize = "15px"
+				svgDoc.getElementById("size").setAttribute('transform','matrix(1 0 0 1 174.625 28.7874)');
+				svgDoc.getElementById("color").setAttribute('transform','matrix(1 0 0 1 175.625 45.3324)');
+		    }
+			else
+			{
+				svgDoc.getElementById("size").innerHTML = data.orchestra_parcel_details[0].Size;
+			}
 			svgDoc.getElementById("color").innerHTML = data.orchestra_parcel_details[0].colour_Code;
 			jsbarcodesolidpoly(code, 'barcode', svgDoc)
 
@@ -3444,7 +3474,14 @@ function barcode_carton(id, data) {
 			svgDoc.getElementById("no_of_cartons").innerHTML = $('#needed_modal').val();
 		} else {
 			var code = data.orchestra_parcel_details[0].BarcodeForPricesTags.toString();
-			svgDoc.getElementById("size").innerHTML = data.orchestra_parcel_details[0].Size;
+			if(data.orchestra_parcel_details[0].Size == "TAILLE UNIQUE")
+		    {
+				svgDoc.getElementById("size").innerHTML = '<tspan xmlns="http://www.w3.org/2000/svg" dx="-11" dy="-5" text-anchor="start">TAILLE </tspan><tspan xmlns="http://www.w3.org/2000/svg" dx="-28" dy="9" text-anchor="middle">UNIQUE</tspan>';
+		    }
+			else
+			{
+				svgDoc.getElementById("size").innerHTML = data.orchestra_parcel_details[0].Size;
+			}
 			svgDoc.getElementById("parcelcode").innerHTML = data.orchestra_parcel_details[0].UVC_TCO;
 			jsbarcodesolidcartonA(code, 'barcode1', svgDoc)
 			jsbarcodesolidcartonB(code, 'barcode2', svgDoc)

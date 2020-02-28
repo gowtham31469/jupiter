@@ -4063,7 +4063,7 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 								else{
 									svgDoc.getElementById("volume").innerHTML = ''
 								}
-		
+								svgDoc.getElementById("color").innerHTML = details.color_code
 								jsbarcodesolidcartonA(value.barcode, 'barcode1', svgDoc)
 								jsbarcodesolidcartonB(value.barcode, 'barcode2', svgDoc)
 								// var s = new XMLSerializer();
@@ -4105,6 +4105,12 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 								svgDoc.getElementById("round").style.fill = details.age_group
 								svgDoc.getElementById("parcel_code").innerHTML = value.uvc_tco
 								svgDoc.getElementById("size").innerHTML = value.size
+								if(value.size == "TAILLE UNIQUE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "15px"
+									svgDoc.getElementById("size").setAttribute('transform','matrix(1 0 0 1 168.625 28.7874)');
+									svgDoc.getElementById("color").setAttribute('transform','matrix(1 0 0 1 169.625 45.3324)');
+								}
 								svgDoc.getElementById("color").innerHTML = details.color_code
 								jsbarcodesolidpoly_orchestra(value.barcode, 'barcode', svgDoc)
 								var s = new XMLSerializer();
@@ -4147,7 +4153,11 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 								else{
 									svgDoc.getElementById("volume").innerHTML = ''
 								}
-		
+								if(value.size == "TAILLE UNIQUE")
+								{
+									svgDoc.getElementById("size").innerHTML = '<tspan xmlns="http://www.w3.org/2000/svg" dx="-12" dy="-5" text-anchor="start">TAILLE </tspan><tspan xmlns="http://www.w3.org/2000/svg" dx="-14" dy="9" text-anchor="middle">UNIQUE</tspan>';
+								}
+								svgDoc.getElementById("color").innerHTML = details.color_code
 								jsbarcodesolidcartonA(value.barcode, 'barcode1', svgDoc)
 								jsbarcodesolidcartonB(value.barcode, 'barcode2', svgDoc)
 								var s = new XMLSerializer();

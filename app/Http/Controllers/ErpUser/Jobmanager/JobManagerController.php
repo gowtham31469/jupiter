@@ -411,6 +411,16 @@ class JobManagerController extends Controller
 						$res->map(function ($res) {
 						$res->reference_name = "Solid Polybag Stickers";
 						$res->age_group = OrchestraAgeGroup::where('id',$res->group_id)->first()->color;
+							$color_code = DB::table('orchestra_color_code')->select('*')->where('code',$res->color_code)->first();
+							if($color_code)
+							{
+								$res->color_code =$color_code->french;
+							}
+							else
+							{
+								$res->color_code = "";
+							}
+							 
 						});
 				break;
 
@@ -430,6 +440,15 @@ class JobManagerController extends Controller
 						$res->theme = OrchestraParcelDetails::where('id',$res->orchestra_parcel_details_id)->first()->Theme;
 						$res->reference_name = "Solid Carton Stickers";
 						$res->age_group = OrchestraAgeGroup::where('id',$res->group_id)->first()->color;
+							$color_code = DB::table('orchestra_color_code')->select('*')->where('code',$res->color_code)->first();
+							if($color_code)
+							{
+								$res->color_code =$color_code->french;
+							}
+							else
+							{
+								$res->color_code = "";
+							}
 						});
 						
 				break;
@@ -449,6 +468,15 @@ class JobManagerController extends Controller
 						$res->theme = OrchestraParcelDetails::where('id',$res->orchestra_parcel_details_id)->first()->Theme;
 						$res->reference_name = "Std Carton Stickers";
 						$res->age_group = OrchestraAgeGroup::where('id',$res->group_id)->first()->color;
+							$color_code = DB::table('orchestra_color_code')->select('*')->where('code',$res->color_code)->first();
+							if($color_code)
+							{
+								$res->color_code =$color_code->french;
+							}
+							else
+							{
+								$res->color_code = "";
+							}
 						});
 				break;
 
@@ -496,6 +524,15 @@ class JobManagerController extends Controller
 						$res->sizeArr = $sizAr;
 						$res->qtyArr = $qtyAr;
 						$res->sizBrkAr = $sizBrkAr;
+							$color_code = DB::table('orchestra_color_code')->select('*')->where('code',$res->color_code)->first();
+							if($color_code)
+							{
+								$res->color_code =$color_code->french;
+							}
+							else
+							{
+								$res->color_code = "";
+							}
 						});
 						
 				break;
