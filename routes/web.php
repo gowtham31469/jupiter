@@ -736,7 +736,7 @@ Route::group(['prefix' => 'erp'], function () {
 	/* Routes for Print Manager Module */
 	Route::get('/print-manager', 'ErpUser\Printmanager\PrintManagerController@index'); 
 	
-	/* Routes for jobcard Manager Module */
+	/* Routes for job-manager/orchestra/proof-pdf-smallrd Manager Module */
 	Route::get('job-manager', 'ErpUser\Jobmanager\JobManagerController@index')->name('jobcard-manager'); 
 	Route::post('/job-manager/get-order-details', 'ErpUser\Jobmanager\JobManagerController@getOrderDetails'); 
 	Route::get('job-manager/get-jobcard-order-details', 'ErpUser\Jobmanager\JobManagerController@getOrderDetailsByIds'); 
@@ -744,7 +744,11 @@ Route::group(['prefix' => 'erp'], function () {
 	
 	Route::post('job-manager/tesco/print-div-tesco', 'ErpUser\Jobmanager\JobManagerController@printDivTesco');
 	Route::post('job-manager/tesco/print-div-tesco-small', 'ErpUser\Jobmanager\JobManagerController@printDivTescoSmall');
-	
+			
+	Route::post('job-manager/orchestra/proof-pdf', 'ErpUser\Jobmanager\JobManagerController@proofPdf');
+	Route::post('job-manager/orchestra/proof-pdf-arr', 'ErpUser\Jobmanager\JobManagerController@proofPdfArr');
+	Route::post('job-manager/orchestra/proof-pdf-small', 'ErpUser\Jobmanager\JobManagerController@proofPdfSmall');
+	Route::post('job-manager/orchestra/proof-pdf-table', 'ErpUser\Jobmanager\JobManagerController@proofPdfTable');
 	
 	Route::post('job-manager/tesco/generate-div-tesco', 'ErpUser\Jobmanager\JobManagerController@generateDivTesco');
 	Route::post('job-manager/tesco/generate-div-tesco-small', 'ErpUser\Jobmanager\JobManagerController@generateDivTescoSmall');

@@ -696,12 +696,16 @@ function DownloadArtwork(modal,i,template_file,style_no,buyer_no,id,order_type,c
    			printWashDiv('washcare_front'+ i,'washcare_back'+ i,'washcare_middle'+i,modal,style_no,buyer_no,id,order_type,created_at,status,"orchestra")
 
 	  	}
-	  	else
+	  	else if(type == "stickers")
 	  	{
 
 	   		genarateArtworkOrchestra("orchestra_svg_modal" + i, modal,style_no,buyer_no,id,order_type,created_at,status,"orchestra");
 	  
 	  	}
+		else if(type == "stickers_proof")
+		{
+			genarateArtworkOrchestraProof("orchestra_svg_modal" + i, modal,style_no,buyer_no,id,order_type,created_at,status,"orchestra");
+		}
 		    break;
 
 	  case "print":
@@ -897,6 +901,197 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 							})
 							var svg_fin = svgarr.join(',_');
 							PopupArrOrchestra(svg_fin, "SOLID-CARTON",svgDoc,id,style_no,buyer_no,created_at);
+						break;
+						default:
+						// code block
+					}
+				},
+			});
+}
+function genarateArtworkOrchestraProof(data, name,style_no,buyer_no,id,order_type,created_at,status,buyer)
+{
+	
+	var a = document.getElementById(data);
+	var svgDoc = a.contentDocument;
+	// var name2=name;
+	var zone = localStorage.getItem("zone");
+	var svgarr = [];
+	var ajax_count = 0;
+	var name_count=0;
+	// var b = " ";
+	// var position = 5;
+// console.log(name)
+		// var ref_name = [name2.slice(0, position), b, name2.slice(position)].join('').trim();
+		$.ajax({
+				url: base_url + "/erp/job-manager/get-order-details",
+				type: "Post",
+				dataType: "json",
+				data: {
+					_token: csrf_token,
+					ref_name: name,
+					style_no: style_no,
+					buyer_no: buyer_no,
+					id: id,
+					created_at: created_at,
+					order_type:order_type,
+					buyer:buyer,
+				},
+				beforeSend: function() {
+
+				},
+				success: function(data) {
+				
+					var svgRoot = svgDoc.documentElement;
+					var zone= localStorage.getItem("zone");
+					localStorage.setItem("zone", zone);
+
+					details = data['order_details'][0];
+					// console.log(details)
+					switch(details.reference_name) 
+					{
+
+
+						// case "Orchestra WashCare":
+						
+						// 	printWashDiv('washcare_svg_front1','washcare_svg_back1','washcare_svg_middle1',details['washcarelabel_qty']);
+
+						// break
+
+						case "Std Carton Stickers":
+							$(details['stdcartonstickerqty']).each(function(index,value){
+								svgDoc.getElementById("parcelcode").innerHTML = value.uvc_tco
+								// svgDoc.getElementById("size").innerHTML = value.size
+								svgDoc.getElementById("theme").innerHTML = details.theme
+								
+
+								// if(details.age_group!=null)
+								// {
+								// 	svgDoc.getElementById("color").innerHTML = details.age_group
+								// }
+
+								if(details.height != null )
+								{
+									var num = 600 * details.width * details.height
+									var val = num / (1000 * 1000 * 1000)
+									svgDoc.getElementById("height").innerHTML = details.height
+									svgDoc.getElementById("volume").innerHTML = val.toFixed(3)
+								}
+								else{
+									svgDoc.getElementById("volume").innerHTML = ''
+								}
+								
+								if(details.width != null )
+								{
+									svgDoc.getElementById("width").innerHTML = details.width
+								}
+								else{
+									svgDoc.getElementById("volume").innerHTML = ''
+								}
+								svgDoc.getElementById("standardcolor").style.fill = "#FFFFFF"
+								svgDoc.getElementById("color").innerHTML = details.color_code
+								jsbarcodesolidcartonA(value.barcode, 'barcode1', svgDoc)
+								jsbarcodesolidcartonB(value.barcode, 'barcode2', svgDoc)
+								// var s = new XMLSerializer();
+								// var d = svgRoot;
+								// var str = s.serializeToString(d);
+								// svgarr.push(str)
+							})
+							// var svg_fin = svgarr.join(',_');
+							 
+							  ProofPopupOrchestra(svgDoc,"STD-CARTON",id,style_no,buyer_no,created_at); 
+							
+							
+
+						break;
+
+
+						case "Std Poly Stickers":
+							$(details['stdpolystickerqty']).each(function(index,value){
+								console.log(value)
+								svgDoc.getElementById("round").style.fill = details.age_group
+								svgDoc.getElementById("parcel_code").innerHTML = value.uvc_tco
+								svgDoc.getElementById("theme").innerHTML = details.theme
+								// svgDoc.getElementById("size").innerHTML = value.size
+								// svgDoc.getElementById("color").innerHTML = details.color_code
+								jsbarcodesolidpoly_orchestra(value.barcode, 'barcode', svgDoc)
+								var s = new XMLSerializer();
+								var d = svgRoot;
+								var str = s.serializeToString(d);
+								svgarr.push(str)
+							})
+							var svg_fin = svgarr.join(',_');
+							ProofPopupTableOrchestra(svgDoc, "STD-POLY",details.sizeArr,details.qtyArr,details.sizBrkAr,id,style_no,buyer_no,created_at);
+						break;
+
+
+
+						case "Solid Polybag Stickers":
+							$(details['solidpolystickerqty']).each(function(index,value){
+								svgDoc.getElementById("round").style.fill = details.age_group
+								svgDoc.getElementById("parcel_code").innerHTML = value.uvc_tco
+								svgDoc.getElementById("size").innerHTML = value.size
+								if(value.size == "TAILLE UNIQUE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "15px"
+									svgDoc.getElementById("size").setAttribute('transform','matrix(1 0 0 1 168.625 28.7874)');
+									svgDoc.getElementById("color").setAttribute('transform','matrix(1 0 0 1 169.625 45.3324)');
+								}
+								svgDoc.getElementById("color").innerHTML = details.color_code
+								jsbarcodesolidpoly_orchestra(value.barcode, 'barcode', svgDoc)
+								var s = new XMLSerializer();
+								var d = svgRoot;
+								var str = s.serializeToString(d);
+								svgarr.push(str)
+							})
+							var svg_fin = svgarr.join(',_');
+							ProofPopupOrchestrasmall(svg_fin, "SOLID-POLY",svgDoc,id,style_no,buyer_no,created_at);
+						break;
+
+
+						case "Solid Carton Stickers":
+							$(details['solidcartonstickerqty']).each(function(index,value){
+								svgDoc.getElementById("parcelcode").innerHTML = value.uvc_tco
+								svgDoc.getElementById("size").innerHTML = value.size
+								svgDoc.getElementById("theme").innerHTML = details.theme
+								
+
+								if(details.age_group!=null)
+								{
+									svgDoc.getElementById("color").innerHTML = details.age_group
+								}
+
+								if(details.height!=null)
+								{
+									var num = 600 * details.width * details.height
+									var val = num / (1000 * 1000 * 1000)
+									svgDoc.getElementById("height").innerHTML = details.height
+									svgDoc.getElementById("volume").innerHTML = val.toFixed(3)
+								}
+								else{
+									svgDoc.getElementById("volume").innerHTML = ''
+								}
+								
+								if(details.width != null )
+								{
+									svgDoc.getElementById("width").innerHTML = details.width
+								}
+								else{
+									svgDoc.getElementById("volume").innerHTML = ''
+								}
+								if(value.size == "TAILLE UNIQUE")
+								{
+									svgDoc.getElementById("size").innerHTML = '<tspan xmlns="http://www.w3.org/2000/svg" dx="-12" dy="-5" text-anchor="start">TAILLE </tspan><tspan xmlns="http://www.w3.org/2000/svg" dx="-14" dy="9" text-anchor="middle">UNIQUE</tspan>';
+								}
+								svgDoc.getElementById("color").innerHTML = details.color_code
+								jsbarcodesolidcartonA(value.barcode, 'barcode1', svgDoc)
+								jsbarcodesolidcartonB(value.barcode, 'barcode2', svgDoc)
+								var s = new XMLSerializer();
+								var d = svgRoot;
+								var str = s.serializeToString(d);
+								svgarr.push(str)
+							})
+							var svg_fin = svgarr.join(',_');
+							ProofPopupArrOrchestra(svg_fin, "SOLID-CARTON",svgDoc,id,style_no,buyer_no,created_at);
 						break;
 						default:
 						// code block
@@ -2655,6 +2850,174 @@ function PopupOrchestrasmall(data,name,svgDoc,id,style_no,buyer_no,created_at) {
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
 		url: base_url + "/erp/job-manager/orchestra/print-pdf-small",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			svg: data,
+			name: name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
+		},
+		async: false,
+		success: function (data) {
+			success = true;
+			url = data.file_path;
+		},
+		error: function (data) {
+
+		},
+	})
+	if (success) { //AND THIS CHANGED
+		window.open(url)
+	}
+}
+
+
+function ProofPopupOrchestra(data,name,id,style_no,buyer_no,created_at) {
+	
+	var s = new XMLSerializer();
+	var d = data;
+	var str = s.serializeToString(d);
+	var svg = encodeURI(str)
+	var success = false;
+	var url = "";
+	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/erp/job-manager/orchestra/proof-pdf",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			svg: svg,
+			name:name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
+		},
+		async: false,
+		success: function (data) {
+			//window.location.href=data;
+			success = true;
+			url = data.file_path;
+		},
+		error: function (data) {
+
+		},
+	})
+	if (success) { //AND THIS CHANGED
+		window.open(url)
+	}
+}
+
+
+
+function ProofPopupArrOrchestra(data,name,svgDoc,id,style_no,buyer_no,created_at) {
+	
+//	var s = new XMLSerializer();
+//	var d = data;
+//	var str = s.serializeToString(d);
+//	var svg = encodeURI(str)
+	var success = false;
+//	var url = "";
+	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/erp/job-manager/orchestra/proof-pdf-arr",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			svg: data,
+			name: name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
+		},
+		async: false,
+		success: function (data) {
+			//window.location.href=data;
+			success = true;
+			url = data.file_path;
+		},
+		error: function (data) {
+
+		},
+	})
+	if (success) { //AND THIS CHANGED
+		window.open(url)
+	}
+}
+
+
+
+function ProofPopupTableOrchestra(data,name,size,qty,sizebrk,id,style_no,buyer_no,created_at) {
+	var s = new XMLSerializer();
+	var d = data;
+	var str = s.serializeToString(d);d
+	var svg = encodeURI(str)
+	var success = false;
+	var url = "";
+	// var size = [];
+	// var qty = [];
+	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
+
+	// $('#solidform tbody tr').each(function () {
+	// 	size.push($(this).find('.size').text());
+	// 	qty.push($(this).find('.qty').text());
+	// })
+	// size=['3 ANS','4 ANS','5 ANS','6 ANS','8 ANS'];
+	// qty=['3','4','5','6','8'];
+
+	var sizefin = size.join(',')
+	var qtyfin = qty.join(',')
+	var sizebrkfin = sizebrk.join(',')
+
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/erp/job-manager/orchestra/proof-pdf-table",
+
+		type: "post",
+		data: {
+			_token: csrf_token,
+			svg: svg,
+			size: sizefin,
+			qty: qtyfin,
+			size_break: sizebrkfin,
+			name:name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
+		},
+		async: false,
+		success: function (data) {
+			success = true;
+			url = data.file_path;
+		},
+		error: function (data) {
+
+		},
+	})
+	if (success) { //AND THIS CHANGED
+		window.open(url)
+	}
+}
+
+
+
+function ProofPopupOrchestrasmall(data,name,svgDoc,id,style_no,buyer_no,created_at) {
+//	var s = new XMLSerializer();
+//	var d = data;
+//	var str = s.serializeToString(d);
+//	var svg = encodeURI(str)
+	var success = false;
+//	var url = "";
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/erp/job-manager/orchestra/proof-pdf-small",
 		type: "post",
 		data: {
 			_token: csrf_token,
