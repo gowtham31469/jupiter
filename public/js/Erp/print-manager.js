@@ -769,7 +769,8 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 
 						case "Std Carton Stickers":
 							$(details['stdcartonstickerqty']).each(function(index,value){
-								svgDoc.getElementById("parcelcode").innerHTML = value.uvc_tco
+								svgDoc.getElementById("po").innerHTML = details.po;
+								svgDoc.getElementById("parcelcode").innerHTML = details.parcelCode
 								// svgDoc.getElementById("size").innerHTML = value.size
 								svgDoc.getElementById("theme").innerHTML = details.theme
 								
@@ -818,7 +819,7 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 							$(details['stdpolystickerqty']).each(function(index,value){
 								console.log(value)
 								svgDoc.getElementById("round").style.fill = details.age_group
-								svgDoc.getElementById("parcel_code").innerHTML = value.uvc_tco
+								svgDoc.getElementById("parcel_code").innerHTML = details.parcelCode
 								svgDoc.getElementById("theme").innerHTML = details.theme
 								// svgDoc.getElementById("size").innerHTML = value.size
 								// svgDoc.getElementById("color").innerHTML = details.color_code
@@ -859,6 +860,7 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 
 						case "Solid Carton Stickers":
 							$(details['solidcartonstickerqty']).each(function(index,value){
+								svgDoc.getElementById("po").innerHTML = details.po;
 								svgDoc.getElementById("parcelcode").innerHTML = value.uvc_tco
 								svgDoc.getElementById("size").innerHTML = value.size
 								svgDoc.getElementById("theme").innerHTML = details.theme
@@ -959,7 +961,8 @@ function genarateArtworkOrchestraProof(data, name,style_no,buyer_no,id,order_typ
 
 						case "Std Carton Stickers":
 							$(details['stdcartonstickerqty']).each(function(index,value){
-								svgDoc.getElementById("parcelcode").innerHTML = value.uvc_tco
+								svgDoc.getElementById("po").innerHTML = details.po;
+								svgDoc.getElementById("parcelcode").innerHTML = details.parcelCode
 								// svgDoc.getElementById("size").innerHTML = value.size
 								svgDoc.getElementById("theme").innerHTML = details.theme
 								
@@ -1009,7 +1012,7 @@ function genarateArtworkOrchestraProof(data, name,style_no,buyer_no,id,order_typ
 							$(details['stdpolystickerqty']).each(function(index,value){
 								console.log(value)
 								svgDoc.getElementById("round").style.fill = details.age_group
-								svgDoc.getElementById("parcel_code").innerHTML = value.uvc_tco
+								svgDoc.getElementById("parcel_code").innerHTML = details.parcelCode
 								svgDoc.getElementById("theme").innerHTML = details.theme
 								// svgDoc.getElementById("size").innerHTML = value.size
 								// svgDoc.getElementById("color").innerHTML = details.color_code
@@ -1050,6 +1053,7 @@ function genarateArtworkOrchestraProof(data, name,style_no,buyer_no,id,order_typ
 
 						case "Solid Carton Stickers":
 							$(details['solidcartonstickerqty']).each(function(index,value){
+								svgDoc.getElementById("po").innerHTML = details.po;
 								svgDoc.getElementById("parcelcode").innerHTML = value.uvc_tco
 								svgDoc.getElementById("size").innerHTML = value.size
 								svgDoc.getElementById("theme").innerHTML = details.theme

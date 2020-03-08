@@ -144,7 +144,7 @@ class JobManagerController extends Controller
 											->join('buyers', 'erp_orders.buyer_id', 'buyers.id')
 											->join('erp_status', 'erp_orders.status', 'erp_status.id')
 											->join($this->buyer_name.'_template', $this->buyer_name.'_template.item_id', 'erp_order_details.template_id')
-											->where('erp_order_details.template_id', '=', $valuess)
+											//->where('erp_order_details.template_id', '=', $valuess)
 											// ->where('erp_orders.status', '=', $erp_status_id)
 											->where('erp_order_details.deleted_at', null)
 											->where('erp_order_details.status', '=', $erp_status_id)
@@ -468,6 +468,8 @@ class JobManagerController extends Controller
 						$res->theme = OrchestraParcelDetails::where('id',$res->orchestra_parcel_details_id)->first()->Theme;
 						$res->reference_name = "Std Carton Stickers";
 						$res->age_group = OrchestraAgeGroup::where('id',$res->group_id)->first()->color;
+						$res->parcelCode = OrchestraParcelDetails::where('id',$res->orchestra_parcel_details_id)->first()->Standard_Code;
+							
 							$color_code = DB::table('orchestra_color_code')->select('*')->where('code',$res->color_code)->first();
 							if($color_code)
 							{
@@ -519,6 +521,7 @@ class JobManagerController extends Controller
 
 						$res->map(function ($res) use($sizeArr,$qtyAr,$sizAr,$sizBrkAr) {
 						$res->theme = OrchestraParcelDetails::where('id',$res->orchestra_parcel_details_id)->first()->Theme;
+						$res->parcelCode = OrchestraParcelDetails::where('id',$res->orchestra_parcel_details_id)->first()->Standard_Code;
 						$res->reference_name = "Std Poly Stickers";
 						$res->age_group = OrchestraAgeGroup::where('id',$res->group_id)->first()->color;
 						$res->sizeArr = $sizAr;
@@ -4226,27 +4229,25 @@ class JobManagerController extends Controller
 		//PDF::RoundedRect(12.5, 12.5, 95, 65, 0, '0000');
 		 
 		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
-		PDF::RoundedRect(10, 47.5, 100, 70, 0.000001, '1111', null, $style6);
-		PDF::RoundedRect(12.5, 50, 95, 65, 0.000001, '1111', null, $style6);
 		 
 //		PDF::SetAutoPageBreak(TRUE);
 		$i=0;
 		$j=0;
 		$yy=50;
 		foreach($svgarr as $value)
-		{
+        {
 			$svg=urldecode($value);
 			
-			if($i == 2)
+			if($i == 3)
 			{
 				PDF::AddPage('P', 'A4');
 				//PDF::RoundedRect(10, 10, 100, 70, 0, '0000');
 				//PDF::RoundedRect(12.5, 12.5, 95, 65, 0, '0000');
 				
-				PDF::RoundedRect(10, 47.5, 100, 70, 0.000001, '1111', null, $style6);
-				PDF::RoundedRect(12.5, 50, 95, 65, 0.000001, '1111', null, $style6);
+				PDF::RoundedRect(55, 47.5, 100, 70, 0.000001, '1111', null, $style6);
+				PDF::RoundedRect(57.5, 50, 95, 65, 0.000001, '1111', null, $style6);
 				$yy=50;
-				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				PDF::ImageSVG('@' . $svg, $x=57.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 				$i = 0;
 			}
 			else  if($i == 0)
@@ -4254,29 +4255,29 @@ class JobManagerController extends Controller
 				//PDF::RoundedRect(10, 100, 100, 70, 0, '0000');
 				//PDF::RoundedRect(12.5, 102.5, 95, 65, 0, '0000');
 				
-				PDF::RoundedRect(10, 47.5, 100, 70, 0.000001, '1111', null, $style6);
-				PDF::RoundedRect(12.5, 50, 95, 65, 0.000001, '1111', null, $style6);
+				PDF::RoundedRect(55, 47.5, 100, 70, 0.000001, '1111', null, $style6);
+				PDF::RoundedRect(57.5, 50, 95, 65, 0.000001, '1111', null, $style6);
 				$yy=50;
-				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				PDF::ImageSVG('@' . $svg, $x=57.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 				
 			}
 			else if($i == 1)
 			{
 				//PDF::RoundedRect(10, 100, 100, 70, 0, '0000');
 				//PDF::RoundedRect(12.5, 102.5, 95, 65, 0, '0000');
-				PDF::RoundedRect(10, 137.5, 100, 70, 0.000001, '1111', null, $style6);
-				PDF::RoundedRect(12.5, 140, 95, 65, 0.000001, '1111', null, $style6);
-				$yy += 90;
-				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				PDF::RoundedRect(55, 122.5, 100, 70, 0.000001, '1111', null, $style6);
+				PDF::RoundedRect(57.5, 125, 95, 65, 0.000001, '1111', null, $style6);
+				$yy += 75;
+				PDF::ImageSVG('@' . $svg, $x=57.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			}
 			else
 			{
 				//PDF::RoundedRect(10, 190, 100, 70, 0, '0000');
 				//PDF::RoundedRect(12.5, 192.5, 95, 65, 0, '0000');
-				PDF::RoundedRect(10, 227.5, 100, 70, 0.000001, '1111', null, $style6);
-				PDF::RoundedRect(12.5, 230, 95, 65, 0.000001, '1111', null, $style6);
-				$yy += 90;
-				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				PDF::RoundedRect(55, 197.5, 100, 70, 0.000001, '1111', null, $style6);
+				PDF::RoundedRect(57.5, 200, 95, 65, 0.000001, '1111', null, $style6);
+				$yy += 75;
+				PDF::ImageSVG('@' . $svg, $x=57.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			}
 			$i++;
 			$j++;
