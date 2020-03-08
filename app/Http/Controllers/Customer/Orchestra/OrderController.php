@@ -2422,20 +2422,16 @@ class OrderController extends Controller
 					$deleted = StandardPolyStickersQty::where('ospbs_id', '=', $poly_id)
                             ->delete();
             
-                $j=0;
-                foreach($size as $value)
-                {
-                     StandardPolyStickersQty::create([
-                                        'ospbs_id' => $poly_id,
-                                        'size'      => $size[$j],
-                                        'barcode'      => $barcode[$j],
-                                        'uvc_tco'      => $uvc_tco[$j],
-                                        'size_break'      => $size_break[$j],
-                                        'quantity'    => $final_order_qty,
-                                        'quantity_sets'    => $final_order_qty
-                     ]);
-					$j++;
-				}
+                 $j=0;
+				 StandardPolyStickersQty::create([
+									'ospbs_id' => $poly_id,
+									'size'      => "",
+									'barcode'      => $barcode[0],
+									'uvc_tco'      => "",
+									'size_break'      => "",
+									'quantity'    => $final_order_qty,
+									'quantity_sets'    => $final_order_qty
+				 ]);
 
 			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
                         ->update([
@@ -2468,19 +2464,15 @@ class OrderController extends Controller
 					 			'template_type'       => "ratio"
                      ]);
 				$j=0;
-                foreach($size as $value)
-                {
-					StandardPolyStickersQty::create([
-                                        'ospbs_id' => $inserted_poly->id,
-                                        'size'      => $size[$j],
-                                        'barcode'      => $barcode[$j],
-                                        'uvc_tco'      => $uvc_tco[$j],
-										'size_break'      => $size_break[$j],
-                                        'quantity'    => $final_order_qty,
-                                        'quantity_sets'    => $final_order_qty
-                    ]);
-					$j++;
-				}
+				StandardPolyStickersQty::create([
+									'ospbs_id' => $inserted_poly->id,
+									'size'      => "",
+									'barcode'      => $barcode[0],
+									'uvc_tco'      => "",
+									'size_break'      => "",
+									'quantity'    => $final_order_qty,
+									'quantity_sets'    => $final_order_qty
+				]);
 			
 			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
                         ->update([
@@ -2517,20 +2509,15 @@ class OrderController extends Controller
 			
 				$deleted = StandardCartonStickersQty::where('oscs_id', '=', $carton_id)
                             ->delete();
-				$j=0;
-                foreach($size as $value)
-                {
-               
-                     StandardCartonStickersQty::create([
-                                        'oscs_id' => $carton_id,
-                                        'size'      => $size[$j],
-                                        'barcode'      => $barcode[$j],
-                                        'uvc_tco'      => $uvc_tco[$j],
-                                        'quantity'    => $final_order_qty_sets,
-                                        'quantity_sets'    => $final_order_qty_sets
-                     ]);
-					$j++;
-				}
+				 $j=0;
+				 StandardCartonStickersQty::create([
+									'oscs_id' => $carton_id,
+									'size'      => "",
+									'barcode'      => $barcode[0],
+									'uvc_tco'      => "",
+									'quantity'    => $final_order_qty_sets,
+									'quantity_sets'    => $final_order_qty_sets
+				 ]);
 			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
                         ->update([
                           'sticker_order_status' => "Order Placed"
@@ -2564,20 +2551,14 @@ class OrderController extends Controller
                      ]);
 			
 				$j=0;
-                foreach($size as $value)
-                {
-			
-					StandardCartonStickersQty::create([
-                                        'oscs_id' => $inserted->id,
-                                        'size'      => $size[$j],
-                                        'barcode'      => $barcode[$j],
-                                        'uvc_tco'      => $uvc_tco[$j],
-                                        'quantity'    => $final_order_qty_sets,
-                                        'quantity_sets'    => $final_order_qty_sets
-                    ]);
-					$j++;
-					
-				}
+				StandardCartonStickersQty::create([
+									'oscs_id' => $inserted->id,
+									'size'      => "",
+									'barcode'      => $barcode[0],
+									'uvc_tco'      => "",
+									'quantity'    => $final_order_qty_sets,
+									'quantity_sets'    => $final_order_qty_sets
+				]);
 			
 			DB::table("orchestra_parcel_details")->where('UVC',$uvc)->where('BuyerPONo',$po)
                         ->update([
@@ -2818,18 +2799,14 @@ class OrderController extends Controller
                     ->delete();
     
         $j=0;
-		foreach($size as $value)
-		{
-			StandardCartonStickersQty::create([
-							'oscs_id' => $carton_id,
-							'size'      => $size[$j],
-							'barcode'      => $barcode[$j],
-							'uvc_tco'      => $uvc_tco[$j],
-							'quantity'    => $final_order_qty_sets,
-							'quantity_sets'    => $final_order_qty_sets
-			]);
-			$j++;
-		}
+		StandardCartonStickersQty::create([
+						'oscs_id' => $carton_id,
+						'size'      => "",
+						'barcode'      => $barcode[0],
+						'uvc_tco'      => "",
+						'quantity'    => $final_order_qty_sets,
+						'quantity_sets'    => $final_order_qty_sets
+		]);
 
         // fetch erp_order_details table details for each quantity_table ids.
         foreach($quantity_table_ids as $quantity_table_id)
@@ -2897,19 +2874,15 @@ class OrderController extends Controller
                 ->delete();
 
 
-        $j=0;
-		foreach($size as $value)
-		{
-			 StandardPolyStickersQty::create([
-								'ospbs_id' => $poly_id,
-								'size'      => $size[$j],
-								'barcode'      => $barcode[$j],
-								'uvc_tco'      => $uvc_tco[$j],
-								'quantity'    => $final_order_qty_sets,
-								'quantity_sets'    => $final_order_qty_sets
-			 ]);
-			$j++;
-		}
+         $j=0;
+		 StandardPolyStickersQty::create([
+							'ospbs_id' => $poly_id,
+							'size'      => "",
+							'barcode'      => $barcode[0],
+							'uvc_tco'      => "",
+							'quantity'    => $final_order_qty_sets,
+							'quantity_sets'    => $final_order_qty_sets
+		 ]);
 
         // fetch erp_order_details table details for each quantity_table ids.
         foreach($quantity_table_ids as $quantity_table_id)

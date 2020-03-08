@@ -13,8 +13,12 @@ class AddSizeNullableToStandardTable extends Migration
      */
     public function up()
     {
-        Schema::table('orchestra_standard_carton_sticker_orders_qty', function (Blueprint $table) {
-            //
+        Schema::table('orchestra_standard_poly_bag_sticker_orders_qty', function (Blueprint $table) {
+            $table->string('size')->nullable(true)->change();
+        });
+
+	Schema::table('orchestra_standard_carton_sticker_orders_qty', function (Blueprint $table) {
+           $table->string('size')->nullable(true)->change();
         });
     }
 
@@ -25,8 +29,12 @@ class AddSizeNullableToStandardTable extends Migration
      */
     public function down()
     {
-        Schema::table('orchestra_standard_carton_sticker_orders_qty', function (Blueprint $table) {
-            //
+         Schema::table('orchestra_standard_poly_bag_sticker_orders_qty', function (Blueprint $table) {
+            $table->string('size')->nullable(false)->change();
+        });
+
+	Schema::table('orchestra_standard_carton_sticker_orders_qty', function (Blueprint $table) {
+           $table->string('size')->nullable(false)->change();
         });
     }
 }
