@@ -1014,6 +1014,7 @@ function genarateArtworkOrchestraProof(data, name,style_no,buyer_no,id,order_typ
 								svgDoc.getElementById("round").style.fill = details.age_group
 								svgDoc.getElementById("parcel_code").innerHTML = details.parcelCode
 								svgDoc.getElementById("theme").innerHTML = details.theme
+								svgDoc.getElementById("round").style.fill = "#FFFFFF"
 								// svgDoc.getElementById("size").innerHTML = value.size
 								// svgDoc.getElementById("color").innerHTML = details.color_code
 								jsbarcodesolidpoly_orchestra(value.barcode, 'barcode', svgDoc)
@@ -1033,6 +1034,7 @@ function genarateArtworkOrchestraProof(data, name,style_no,buyer_no,id,order_typ
 								svgDoc.getElementById("round").style.fill = details.age_group
 								svgDoc.getElementById("parcel_code").innerHTML = value.uvc_tco
 								svgDoc.getElementById("size").innerHTML = value.size
+								svgDoc.getElementById("round").style.fill = "#FFFFFF"
 								if(value.size == "TAILLE UNIQUE")
 								{
 									svgDoc.getElementById("size").style.fontSize = "15px"
