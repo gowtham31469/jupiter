@@ -298,6 +298,15 @@ function generateJobcard(){
                             if(data.template_data.buyer.buyer_name.toLowerCase() === 'orchestra')
                             {
                                 $(".common-data-div").removeClass("hidden");
+
+                                if(data.template_data.tint_color.length === 1)
+                                {
+                                    $('#tint_color').val(data.template_data.tint_color)
+                                }
+                                else
+                                {
+                                    $('#tint_color').val('')
+                                }
                             } 
                             else 
                             {
@@ -307,7 +316,22 @@ function generateJobcard(){
 
                         if(data.template_data.style_array.length === 1)
                         {
-                            $('#style_no').val(data.template_data.style_array)
+                            if(data.template_data.buyer.buyer_name.toLowerCase() === 'orchestra')
+                            {
+                                if(data.template_data.tint_color.length === 1)
+                                {
+                                    $('#style_no').val(data.template_data.style_array+" - "+data.template_data.color_code)
+                                }
+                                else
+                                {
+                                    $('#style_no').val(data.template_data.style_array)
+                                }
+                            } 
+                            else 
+                            {
+                                $('#style_no').val(data.template_data.style_array)
+                            }
+                            
                         }
                         else
                         {

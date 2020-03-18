@@ -652,6 +652,8 @@ class JobManagerController extends Controller
 				$order_detail_ids   = array();
 				$erp_id_array       = array();
 				$customer_po_array  = array();
+				$color_code         = array();
+				$tint_color         = array();
 
 				/** Get erp order details table ids from erp orders table id */
 				foreach($erp_orders_ids as $row => $erp_orders_id)
@@ -735,6 +737,30 @@ class JobManagerController extends Controller
 						$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$unique_id]['template_id'] = $single_temp_data->template_id;
 						$single_templates[$single_temp_data->reference_name]['size'][$single_temp_data->size][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$unique_id]= $single_temp_data->order_quantity;
 					}
+
+					// Add color code and age group pantone color as tint color for orchestra
+					if($this->buyer_name === "Orchestra") {
+						// parse orchestra orders table and table id from quantity table name
+						$main_table     = str_replace("_qty","",$order_details->order_qnty_table_name);
+						$result_str     = str_replace("_"," ",str_replace("_orders","",$main_table));
+						$qnty_id        = '';
+						foreach (explode(' ', $result_str) as $word)
+						{
+						   $qnty_id .= strtolower($word[0]);
+						}
+						
+						$orchestra_color_details = DB::table($order_details->order_qnty_table_name)
+						->select($main_table.'.color_code', 'orchestra_age_group.pantone_color')
+						->join($main_table, $main_table.'.id', $order_details->order_qnty_table_name.'.'.$qnty_id.'_id')
+						->join('orchestra_age_group',  'orchestra_age_group.id', $main_table.'.group_id')
+						->where($order_details->order_qnty_table_name.'.id', '=', $order_details->order_qnty_table_id)
+						->first();
+						
+						!in_array($orchestra_color_details->color_code, $color_code)?array_push($color_code,$orchestra_color_details->color_code):$color_code;
+						!in_array($orchestra_color_details->pantone_color, $tint_color)?array_push($tint_color,$orchestra_color_details->pantone_color):$tint_color;
+
+					} 
+					
 				}
 
 				/** Same buyer or not validation */
@@ -875,6 +901,8 @@ class JobManagerController extends Controller
 				$template_data['single']           = $final_chunk;
 				$template_data['order_detail_ids'] = $order_detail_ids;
 				$template_data['customer_po_array']= $customer_po_array;
+				$template_data['color_code']       = $color_code;
+				$template_data['tint_color']       = $tint_color;
 			} else {
 				return response()->json(['error'=> true,'message' =>'Jobcard for Spectrra Printers currently not available !!'],406);
 			}
