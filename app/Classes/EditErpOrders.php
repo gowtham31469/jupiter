@@ -180,7 +180,6 @@ class EditErpOrders
 					if ($errorCode === 1062) { // Duplicate Entry error code
 						return true;
 					}
-					return false;
 					// continue;
 				}	
 
@@ -376,7 +375,6 @@ class EditErpOrders
 					if ($errorCode === 1062) { // Duplicate Entry error code
 						return true;
 					}
-					return false;
 					// continue;
 				}
 
