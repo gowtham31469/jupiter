@@ -4079,6 +4079,7 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 								}
 								else{
 									svgDoc.getElementById("volume").innerHTML = ''
+									svgDoc.getElementById("height").innerHTML =""
 								}
 								
 								if(details.width != null )
@@ -4170,6 +4171,7 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 								}
 								else{
 									svgDoc.getElementById("volume").innerHTML = ''
+									svgDoc.getElementById("height").innerHTML =""
 								}
 								
 								if(details.width != null )
