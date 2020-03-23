@@ -1075,6 +1075,7 @@ function genarateArtworkOrchestraProof(data, name,style_no,buyer_no,id,order_typ
 								}
 								else{
 									svgDoc.getElementById("volume").innerHTML = ''
+									svgDoc.getElementById("height").innerHTML = ''
 								}
 								
 								if(details.width != null )
