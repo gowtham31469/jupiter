@@ -3270,15 +3270,27 @@ class JobManagerController extends Controller
          define ('PDF_FONT_NAME_DATA', 'calibrib');
 //          print_r($svg);
 		
-		$orchestra_color = DB::table('orchestra_color_code')->select('*')->where('code',$color)->get();
-		if(count($orchestra_color) > 0)
-		{
-			$color_code=$orchestra_color{0}->french;
-		}
-		else
-		{
-			$color_code="";
-		}
+		$sticker = DB::table("orchestra_standard_poly_bag_sticker_orders")
+						->select('*')
+						->where('uvc',$request->style_no)
+						->where('po',$request->buyer_no)
+						->get();
+		 if(count($sticker) > 0)
+		 {
+			 $orchestra_color = DB::table('orchestra_color_code')->select('*')->where('code',$sticker{0}->color_code)->get();
+			if(count($orchestra_color) > 0)
+			{
+				$color_code=$orchestra_color{0}->french;
+			}
+			else
+			{
+				$color_code="";
+			}
+		 }
+		 else
+		 {
+			 $color_code="";
+		 }
 		
 		PDF::setPrintHeader(false);
         PDF::setPrintFooter(false);
