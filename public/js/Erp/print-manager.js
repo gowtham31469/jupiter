@@ -789,6 +789,7 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 								}
 								else{
 									svgDoc.getElementById("volume").innerHTML = ''
+									svgDoc.getElementById("height").innerHTML =""
 								}
 								
 								if(details.width != null )
@@ -880,6 +881,7 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 								}
 								else{
 									svgDoc.getElementById("volume").innerHTML = ''
+									svgDoc.getElementById("height").innerHTML =""
 								}
 								
 								if(details.width != null )
@@ -981,6 +983,7 @@ function genarateArtworkOrchestraProof(data, name,style_no,buyer_no,id,order_typ
 								}
 								else{
 									svgDoc.getElementById("volume").innerHTML = ''
+									svgDoc.getElementById("height").innerHTML =""
 								}
 								
 								if(details.width != null )
@@ -1074,8 +1077,8 @@ function genarateArtworkOrchestraProof(data, name,style_no,buyer_no,id,order_typ
 									svgDoc.getElementById("volume").innerHTML = val.toFixed(3)
 								}
 								else{
+									svgDoc.getElementById("height").innerHTML =""
 									svgDoc.getElementById("volume").innerHTML = ''
-									svgDoc.getElementById("height").innerHTML = ''
 								}
 								
 								if(details.width != null )
