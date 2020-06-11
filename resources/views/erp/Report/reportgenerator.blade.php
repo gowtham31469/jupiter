@@ -10,6 +10,8 @@
 <link rel="stylesheet" href="{{ asset('css/Erp/report/buttons.dataTables.min.css') }}">
 <link rel="stylesheet" href="{{ asset('css/Erp/report/bootstrap-multiselect.css') }}">
 <link rel="stylesheet" href="{{ asset('css/Erp/report/reports.css') }}">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
 @section('navbar')
 <style>
 	.navbar-nav > li > a {
@@ -64,7 +66,7 @@
 		<div class="modal fade" id="_prefModal" role="dialog" data-keyboard="false" data-backdrop="static">
 			<div class="modal-dialog">
 				<!-- Modal content-->
-				<div class="modal-content">
+				<div class="modal-content" style="width: 112%;">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
 						<h4 class="modal-title">Report Generation</h4>
@@ -100,64 +102,76 @@
 						</div>
 						<div class="row rowSep">
 							<div class="col-md-2 filters">
+								<label>Select Buyer</label>
 								{!! Form::select('sel_1[]', $buyers,null,['class' => 'multiselect filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Buyer','id'=>'buyer']) !!}
 							</div>
 							<div class="col-md-2 filters">
+								<label>Select Template</label>
 								{!! Form::select('sel_1[]',$templates,null,['class' => 'multiselect filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Template','id'=>'template']) !!}
 
 							</div>
 							<div class="col-md-2 filters">
+								<label>Select Season</label>
 								{!! Form::select('sel_1[]',$seasons,null,['class' => 'multiselect filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Season','id'=>'season']) !!}
 
 							</div>
 							<div class="col-md-2 filters">
+								<label>Select Country</label>
 								{!! Form::select('sel_1[]',$countries,null,['class' => 'multiselect filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Country','id'=>'country']) !!}
 
 							</div>
 							<div class="col-md-2">
-								<button class="btn btn-default" id="filter1"><span class="multiselect-selected-text">&nbsp;Next&nbsp;</span></button>
+								<button class="btn btn-default nxtBtn" id="filter1"><span class="multiselect-selected-text">&nbsp;Next&nbsp;</span></button>
 							</div>
 						</div>
 						<div class="row rowSep">
 							<div class="col-md-2 filters">
+								<label>Select Customer</label>
 								<select id="customer" class="multiselect filterLevel2" 	data-actions-box="true" data-size="10" nonSelectedText="Select Customer" multiple>
 								</select>
 							</div>
 							<div class="col-md-2 filters">
+								<label>Select Material</label>
 								<select id="material" class="multiselect filterLevel2" 	data-actions-box="true" data-size="10" title="Select 	 Material" multiple>
 								</select>
 							</div>
 							<div class="col-md-2 filters">
+								<label>Select Style</label>
 								<select id="style" class="multiselect filterLevel2" 		data-actions-box="true" data-size="10" title="Select 	 Style" multiple data-live-search="true">
 								</select>
 							</div>
 							<div class="col-md-2 filters">
+								<label>Select Mat-sub</label>
 								<select id="mat_sub" class="multiselect filterLevel2" 		data-actions-box="true" data-size="10" title="Select 	 Mat-sub" multiple data-live-search="true">
 								</select>
 							</div>
 							<div class="col-md-2">
-								<button class="btn btn-default" id="filter2" disabled=""><span class="multiselect-selected-text">&nbsp;Next&nbsp;</span></button>
+								<button class="btn btn-default nxtBtn" id="filter2" disabled=""><span class="multiselect-selected-text">&nbsp;Next&nbsp;</span></button>
 							</div>
 						</div>
 						<div class="row rowSep">
 							<div class="col-md-2 filters">
+								<label>Select Reference</label>
 								<select id="reference" class="multiselect filterLevel3" 	data-actions-box="true" data-size="10" title="Select 	Reference" multiple data-live-search="true">
 								</select>
 							</div>
 							<div class="col-md-2 filters">
+								<label>Select PO</label>
 								<select id="po" class="multiselect filterLevel3" 			data-actions-box="true" data-size="10" title="Select 	 PO" multiple data-live-search="true">
 								</select>
 							</div>
 							<div class="col-md-2 filters">
+								<label>Select Buyer PO</label>
 								<select id="buyer_po" class="multiselect filterLevel3" 	data-actions-box="true" data-size="10" title="Select 	 Buyer PO" multiple data-live-search="true">
 								</select>
 							</div>
 							<div class="col-md-2 filters">
+								<label>Select OCN</label>
 								<select id="ocn" class="multiselect filterLevel3" 			data-actions-box="true" data-size="10" title="Select 	 OCN" multiple data-live-search="true">
 								</select>
 							</div>
 							<div class="col-md-2 filters">
-								<button class="btn btn-default" id="filter3" disabled=""><span class="multiselect-selected-text">&nbsp;Done&nbsp;</span></button>
+								<button class="btn btn-default nxtBtn" id="filter3" disabled=""><span class="multiselect-selected-text">&nbsp;Done&nbsp;</span></button>
 							</div>
 						</div>
 					</div>
@@ -505,6 +519,9 @@ function create_table(def,extra)
 
 		reportTable = $('#reportTable').dataTable( {
 		processing: true,
+		"language": {
+		"processing": '<div class="spinner"></div>' 
+		},
 		serverSide: true,
 		"scrollX": true,
 		dom: 'lBfrtip',
