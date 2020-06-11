@@ -540,7 +540,7 @@ function create_table(def,extra)
 		"ajax": {
 			"url": "{{ url('setUpDatatable') }}",
 			"dataType": "json",
-			"type": "GET",
+			"type": "POST",
 			"data":{
 				_token: "{{csrf_token()}}",
 				role : $(".roleSelection option:selected").html(),
