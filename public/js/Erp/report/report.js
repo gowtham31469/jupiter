@@ -56,6 +56,7 @@ $(document).ready(function($) {
 		dateFormat: 'yy-mm-dd',
 		startDate: "01/01/1900",
 		endDate: "01/01/2100",
+		maxDate:"0",
 		autoclose: true,
 		todayHighlight: true,
 		onSelect: function (selected) {
