@@ -27,6 +27,7 @@ use Auth;
 use Illuminate\Support\Facades\Redis;
 use App\ErpOrders as Erp;
 use App\ErpOrderDetails as ErpOrderDetails;
+use App\Classes\CleanString;
 
 class OrderStatusCntrl extends Controller
 {
@@ -231,6 +232,7 @@ class OrderStatusCntrl extends Controller
         try 
         {
             $erp_obj    = new ErpOrders();
+            $formartStr_obj   = new CleanString();
             $table_name = $request->tableName;
             $row_id     = $request->id;
             $po_file    = $request->file('file');
@@ -239,7 +241,7 @@ class OrderStatusCntrl extends Controller
             $destination_path='/storage/app/public/po-files/';
             $path       ='storage/app/public/po-files/';
             $Orname     = $po_file->getClientOriginalName();
-            $filename   = str_random(6).'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $Orname));
+            $filename   = $formartStr_obj->cleanStr($Orname);
             $po_file->move($path,$filename);
             $destination_path_insert=$destination_path.$filename;
 
@@ -346,6 +348,7 @@ class OrderStatusCntrl extends Controller
             $sub_total  =   0 ;
             $pi_obj     =   new ProformaInvoice();
             $data       =   $pi_obj->getTescoPIDetails($request);
+            unset($data['price_list']);
             $attachment =  $pi_obj->getTescoAttachment($data,$request);
             
             $erpOrders  =   [];
@@ -386,16 +389,8 @@ class OrderStatusCntrl extends Controller
                 ]);
                 foreach ($data['item_details'] as $key => $value)
                 {
-                    $unit_cost = 0;
-                    foreach ($data['price_list'] as $i => $val) {
-                        if ($value->item_id == $val->item_id) {
-                            if($value->quantity <= $val->volume_to) {
-                                $unit_cost = $val->price;
-                                $tax = $val->tax;
-                                break;
-                            }
-                        }
-                    }
+                    $unit_cost = $value->price;
+                    $tax = $value->tax;
                     $total_qnty+= $value->quantity;
                     $sub_total += $value->quantity *$unit_cost;
                     ProfomaInvoiceItemDetails::create([
@@ -714,6 +709,7 @@ class OrderStatusCntrl extends Controller
         try
         {
             $erp_obj    = new ErpOrders();
+            $formartStr_obj   = new CleanString();
             $id        =  explode(',',$request->id);
             $po        =  $request->po;          
             $po_file = $request->file('po_file');
@@ -721,7 +717,7 @@ class OrderStatusCntrl extends Controller
             $destination_path='/storage/app/public/po-files/';
             $path='storage/app/public/po-files/';
             $Orname = $po_file->getClientOriginalName();
-            $filename= str_random(6).'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $Orname));
+            $filename   = $formartStr_obj->cleanStr($Orname);
             $po_file->move($path,$filename);
             $destination_path_insert=$destination_path.$filename;
             foreach($id as $val)
