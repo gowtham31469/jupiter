@@ -3151,7 +3151,8 @@ class JobManagerController extends Controller
 			foreach($order_details as $value)
 			{
 				// unique id for array creation
-				$unique_id = 'ERP'.$value->erp_order_id.str_random(25);
+				// combination of erpid-styleno-buyerpo
+				$unique_id = 'ERP-'.$value->erp_order_id.'-'.$value->style_no.'-'.$value->buyer_po_number;
 			
 				ErpOrderDetails::where(['erp_order_id' => $value->erp_order_id, 'style_no' => $value->style_no, 'order_qnty_table_name'=> $value->order_qnty_table_name, 'created_at'=> $value->created_at, 'buyer_po_number'=> $value->buyer_po_number, 'order_type'=> $value->order_type])
 					->update([

@@ -103,8 +103,7 @@ class ErpOrders
 	{
 		if ($order_details)
 		{
-			// unique id for array creation
-			$unique_id = 'ERP'.$erp_orders->id.str_random(25);
+			
 			foreach ($order_details as $key => $vals) {
 
 				$style_no       = ($orders->zone == "CE") ? $orders->ce_style_ref : $orders->uk_style_ref ;
@@ -112,10 +111,14 @@ class ErpOrders
 				$custom_ref_name = DB::table('price_taxation')->where('customer_id',$orders->customer_id)->where('buyer_id',$buyer_id)->where('template_id',$orders->template_id)->value('custom_name');
 
 				$dataExists = DB::table('erp_order_details')->where('order_qnty_table_name',$qnty_table)->where('order_qnty_table_id',$vals->id)->where('erp_order_id',$erp_orders_id)->count();
-
+                
 				try {
-
+                    
 					if($dataExists == 0){
+						// unique id for array creation
+						// combination of erpid-styleno-buyerpo
+						$unique_id = 'ERP-'.$erp_orders->id.'-'.$style_no.'-'.$orders->po_number;
+
 						DB::table('erp_order_details')->where('order_qnty_table_name',$qnty_table)->where('order_qnty_table_id',$vals->id)->delete();
 						$erp_order_details_id = ErpOrderDetails::insertGetId([
 							'erp_order_id'     		=> $erp_orders->id,
@@ -310,9 +313,7 @@ class ErpOrders
 	function insertOrchestraOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders_id, $table_name, $order_status_id, $customer_po_no)
 	{
 		if ($order_details)
-		{   
-			// unique id for array creation
-			$unique_id = 'ERP'.$erp_orders->id.str_random(25);
+		{
 
 			foreach ($order_details as $key => $vals) {
 
@@ -333,6 +334,10 @@ class ErpOrders
 				try{
 
 					if($dataExists == 0){
+						// unique id for array creation
+						// combination of erpid-styleno-buyerpo
+						$unique_id = 'ERP-'.$erp_orders->id.'-'.$orders->uvc.'-'.$orders->po;
+
 						DB::table('erp_order_details')->where('order_qnty_table_name',$qnty_table)->where('order_qnty_table_id',$vals->id)->delete();
 						$erp_order_details_id = ErpOrderDetails::insertGetId([
 							'erp_order_id'     		=> $erp_orders->id,
