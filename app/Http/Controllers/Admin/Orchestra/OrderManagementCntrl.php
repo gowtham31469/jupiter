@@ -43,6 +43,7 @@ use App\OrchestraParcelQuantityDetails;
 use Auth;
 use Illuminate\Support\Facades\Redis;
 use App\Classes\EditErpOrders;
+use App\Classes\CleanString;
 
 class OrderManagementCntrl extends Controller
 {
@@ -3662,6 +3663,7 @@ class OrderManagementCntrl extends Controller
         try 
         {
             $erp_obj    = new ErpOrders();
+            $formartStr_obj   = new CleanString();
             $table_name = $request->tableName;
             $row_id     = $request->id;
             $po_file    = $request->file('file');
@@ -3670,7 +3672,7 @@ class OrderManagementCntrl extends Controller
             $destination_path = '/storage/app/public/po-files/';
             $path       ='storage/app/public/po-files/';
             $Orname     = $po_file->getClientOriginalName();
-            $filename   = str_random(6).'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $Orname));
+            $filename   = $formartStr_obj->cleanStr($Orname);
             $po_file->move($path,$filename);
             $destination_path_insert=$destination_path.$filename;
 
