@@ -124,6 +124,11 @@
 								<button class="btn btn-default nxtBtn" id="filter1"><span class="multiselect-selected-text">&nbsp;Next&nbsp;</span></button>
 							</div>
 						</div>
+						<div class="loaderAnim hidden" id="loader1">
+							<div class="bounce1"></div>
+							<div class="bounce2"></div>
+							<div class="bounce3"></div>
+						</div>
 						<div class="row rowSep">
 							<div class="col-md-2 filters">
 								<label>Select Customer</label>
@@ -148,6 +153,11 @@
 							<div class="col-md-2">
 								<button class="btn btn-default nxtBtn" id="filter2" disabled=""><span class="multiselect-selected-text">&nbsp;Next&nbsp;</span></button>
 							</div>
+						</div>
+						<div class="loaderAnim hidden" id="loader2">
+							<div class="bounce1"></div>
+							<div class="bounce2"></div>
+							<div class="bounce3"></div>
 						</div>
 						<div class="row rowSep">
 							<div class="col-md-2 filters">
@@ -228,6 +238,7 @@
 		{
 			if($("#buyer").val().length > 0 && $("#season").val().length > 0 && $("#template").val().length > 0 && $("#country").val().length > 0)
 			{
+				$("#loader1").removeClass('hidden')
 				countries = [];
 				seasons = [];
 				templates = [];
@@ -333,6 +344,7 @@
 
 						}
 						$("#filter2").removeAttr('disabled')
+						$("#loader1").addClass('hidden')
 
 					}
 				});
@@ -354,6 +366,7 @@ function triggerLevel2()
 
 	if($("#customer").val().length > 0 && $("#material").val().length > 0 && $("#style").val().length > 0 && $("#mat_sub").val().length > 0 && $("#buyer").val().length > 0 && $("#season").val().length > 0 && $("#template").val().length > 0 && $("#country").val().length > 0)
 	{
+		$("#loader2").removeClass('hidden')
 		material = [];
 		style = [];
 		mat_sub = [];
@@ -450,6 +463,7 @@ function triggerLevel2()
 					showSnackbar();
 				}
 				$("#filter3").removeAttr('disabled')
+				$("#loader2").addClass('hidden')
 				$('.filterLevel3').multiselect('destroy');
 
 				$('.filterLevel3').multiselect({
