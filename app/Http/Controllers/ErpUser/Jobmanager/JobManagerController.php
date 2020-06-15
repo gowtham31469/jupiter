@@ -3146,15 +3146,15 @@ class JobManagerController extends Controller
 		 */
 		public function scriptUpdateUUID()
 		{
-			$order_details = DB::table('erp_order_details')->select('erp_order_id', 'style_no', 'order_qnty_table_name', 'created_at', 'buyer_po_number', 'order_type')->groupBy('erp_order_id', 'style_no', 'order_qnty_table_name', 'created_at', 'buyer_po_number', 'order_type')->get();
+			$order_details = DB::table('erp_order_details')->select('erp_order_id', 'style_no', 'order_qnty_table_name', 'created_at', 'buyer_po_number', 'order_type', 'order_type', 'reference_name')->groupBy('erp_order_id', 'style_no', 'order_qnty_table_name', 'created_at', 'buyer_po_number', 'order_type', 'order_type', 'reference_name')->get();
 			
 			foreach($order_details as $value)
 			{
 				// unique id for array creation
 				// combination of erpid-refname-styleno-buyerpo-ordertype
-				$unique_id = 'ERP-'.str_replace(' ', '-', $value->item_name).'-'.$value->erp_order_id.'-'.$value->style_no.'-'.$value->buyer_po_number.'-'.$value->order_flag;
+				$unique_id = 'ERP-'.str_replace(' ', '-', $value->reference_name).'-'.$value->erp_order_id.'-'.$value->style_no.'-'.$value->buyer_po_number.'-'.$value->order_type;
 			
-				ErpOrderDetails::where(['erp_order_id' => $value->erp_order_id, 'style_no' => $value->style_no, 'order_qnty_table_name'=> $value->order_qnty_table_name, 'created_at'=> $value->created_at, 'buyer_po_number'=> $value->buyer_po_number, 'order_type'=> $value->order_type])
+				ErpOrderDetails::where(['erp_order_id' => $value->erp_order_id, 'style_no' => $value->style_no, 'order_qnty_table_name'=> $value->order_qnty_table_name, 'created_at'=> $value->created_at, 'buyer_po_number'=> $value->buyer_po_number, 'order_type'=> $value->order_type])->whereDate('created_at', '>', '2020-06-11')
 					->update([
 								'uuid'  => $unique_id
 							]);
