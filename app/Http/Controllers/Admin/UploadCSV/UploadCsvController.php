@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin\UploadCSV;
 
 use Illuminate\Http\Request;
-use Excel;
 use App\Http\Controllers\Controller;
 use App\Classes\Modules;
 use Response;
@@ -86,16 +85,16 @@ class UploadCsvController extends Controller
             {
               foreach ($data as $key => $value)
               {
-                  $parcel_details_uvc = DB::table('orchestra_parcel_details')->where('UVC',trim($data[$key]['REFERENCE CODE']))->count();
+                  $parcel_details_uvc = OrchestraParcelDetails::where('UVC',trim($data[$key]['REFERENCE CODE']))->count();
                   if ($parcel_details_uvc > 0)
                   {
-                    $parcel_details_po = DB::table('orchestra_parcel_details')->where('UVC',trim($data[$key]['REFERENCE CODE']))->where('BuyerPONo',trim($data[$key]['PO']))->count();
+                    $parcel_details_po = OrchestraParcelDetails::where('UVC',trim($data[$key]['REFERENCE CODE']))->where('BuyerPONo',trim($data[$key]['PO']))->count();
                     if ($parcel_details_po > 0)
                     {  
-                      $parcel_details_sku_code = DB::table('orchestra_parcel_details')->where('UVC',trim($data[$key]['REFERENCE CODE']))->where('BuyerPONo',trim($data[$key]['PO']))->where('SKU_Code',trim($data[$key]['SKU CODE']))->count();
+                      $parcel_details_sku_code = OrchestraParcelDetails::where('UVC',trim($data[$key]['REFERENCE CODE']))->where('BuyerPONo',trim($data[$key]['PO']))->where('SKU_Code',trim($data[$key]['SKU CODE']))->count();
                       if($parcel_details_sku_code > 0)
                       {
-                        $parcel_details_last_date = DB::table('orchestra_parcel_details')->where('UVC',trim($data[$key]['REFERENCE CODE']))->where('BuyerPONo',trim($data[$key]['PO']))->where('SKU_Code',trim($data[$key]['SKU CODE']))->where('Po_Change_Date','<>',trim($data[$key]['PO CHANGE DATE']))->count();
+                        $parcel_details_last_date = OrchestraParcelDetails::where('UVC',trim($data[$key]['REFERENCE CODE']))->where('BuyerPONo',trim($data[$key]['PO']))->where('SKU_Code',trim($data[$key]['SKU CODE']))->where('Po_Change_Date','<>',trim($data[$key]['PO CHANGE DATE']))->count();
                         if($parcel_details_last_date > 0)
                         {
                           // collision. update temp parcel details table
@@ -104,7 +103,7 @@ class UploadCsvController extends Controller
                       }
                       else
                       {
-                        $parcel_details_last_date = DB::table('orchestra_parcel_details')->where('UVC',trim($data[$key]['REFERENCE CODE']))->where('BuyerPONo',trim($data[$key]['PO']))->where('Po_Change_Date','<>',trim($data[$key]['PO CHANGE DATE']))->count();
+                        $parcel_details_last_date = OrchestraParcelDetails::where('UVC',trim($data[$key]['REFERENCE CODE']))->where('BuyerPONo',trim($data[$key]['PO']))->where('Po_Change_Date','<>',trim($data[$key]['PO CHANGE DATE']))->count();
                         if($parcel_details_last_date > 0)
                         {
                           //collision. update temp parcel details table 
@@ -127,12 +126,12 @@ class UploadCsvController extends Controller
                   }
 
                   // check PO details missing for this sku code (ie, PO number = null).
-                  $po_missing = DB::table('orchestra_parcel_quantity_details')->where('UVC_TCO', trim($data[$key]['SKU CODE']))->where('BuyerPONo',null)->count();
+                  $po_missing = OrchestraParcelQuantityDetails::where('UVC_TCO', trim($data[$key]['SKU CODE']))->where('BuyerPONo',null)->count();
 
                   if($po_missing > 0)
                   {
                     // get po details from orchestra_parcel_details for this sku code.
-                    $parcel_details_data = DB::table('orchestra_parcel_details')->where('SKU_Code', trim($data[$key]['SKU CODE']))->select('*')->first();
+                    $parcel_details_data = OrchestraParcelDetails::where('SKU_Code', trim($data[$key]['SKU CODE']))->select('*')->first();
 
                     // get po data for current uvc_tco value and update in parcel_quantity_details table.
                     $upload_obj->updateOrchestraParcelQuantityPODetails($parcel_details_data);                 
@@ -147,12 +146,12 @@ class UploadCsvController extends Controller
                 $upload_obj->insertOrchestraParcelDetails($data,$key);
 
                 // check PO details missing for this sku code (ie, PO number = null).
-                $po_missing = DB::table('orchestra_parcel_quantity_details')->where('UVC_TCO', trim($data[$key]['SKU CODE']))->where('BuyerPONo',null)->count();
+                $po_missing = OrchestraParcelQuantityDetails::where('UVC_TCO', trim($data[$key]['SKU CODE']))->where('BuyerPONo',null)->count();
 
                 if($po_missing > 0)
                 {
                   // get po details from orchestra_parcel_details for this sku code.
-                  $parcel_details_data = DB::table('orchestra_parcel_details')->where('SKU_Code', trim($data[$key]['SKU CODE']))->select('*')->first();
+                  $parcel_details_data = OrchestraParcelDetails::where('SKU_Code', trim($data[$key]['SKU CODE']))->select('*')->first();
 
                   // get po data for current uvc_tco value and update in parcel_quantity_details table.
                   $upload_obj->updateOrchestraParcelQuantityPODetails($parcel_details_data);                 
@@ -201,20 +200,19 @@ class UploadCsvController extends Controller
           foreach ($data as $key=> $value)
           {
             // get po details from orchestra_parcel_details for this sku code.
-            $parcel_details_data = DB::table('orchestra_parcel_details')->where('SKU_Code', trim($data[$key]['SKU CODE']))->select('*')->first();
-
+            $parcel_details_data = OrchestraParcelDetails::where('SKU_Code', trim($data[$key]['SKU CODE']))->select('*')->first();
             // check sku code already exists or not 
-            $sku_exists = DB::table('orchestra_parcel_quantity_details')->where('UVC_TCO', trim($data[$key]['SKU CODE']))->count();
+            $sku_exists = OrchestraParcelQuantityDetails::where('UVC_TCO', trim($data[$key]['SKU CODE']))->count();
             if($sku_exists > 0)
             {
 
               // check PO details missing for this sku code (ie, PO number = null).
-              $po_missing = DB::table('orchestra_parcel_quantity_details')->where('UVC_TCO', trim($data[$key]['SKU CODE']))->where('BuyerPONo',null)->count();
+              $po_missing = OrchestraParcelQuantityDetails::where('UVC_TCO', trim($data[$key]['SKU CODE']))->where('BuyerPONo',null)->count();
 
               if($po_missing > 0)
               {
                 // get po data for current uvc_tco value and update in parcel_quantity_details table.
-                if(sizeof($parcel_details_data) > 0)
+                if($parcel_details_data)
                 {
                   $upload_obj->updateOrchestraParcelQuantityPODetails($parcel_details_data);  
                 }               
@@ -222,12 +220,12 @@ class UploadCsvController extends Controller
               }
 
               // check price details already exists for this sku code with different Country_Code.
-              $diff_order = DB::table('orchestra_parcel_quantity_details')->where('UVC_TCO', trim($data[$key]['SKU CODE']))->where('Country_Code',trim($data[$key]['COUNTRY CODE']))->count();
+              $diff_order = OrchestraParcelQuantityDetails::where('UVC_TCO', trim($data[$key]['SKU CODE']))->where('Country_Code',trim($data[$key]['COUNTRY CODE']))->count();
 
               if ($diff_order > 0)
               {
                 // check price details already exists with same UVC_TCO ,COUNTRY CODE & different Last_Change_Date
-                $quantity_date = DB::table('orchestra_parcel_quantity_details')->where('UVC_TCO', trim($data[$key]['SKU CODE']))->where('Country_Code',trim($data[$key]['COUNTRY CODE']))->where('Last_Change_Date','<>',trim($data[$key]['LAST_CHANGE_DATE']))->count();
+                $quantity_date = OrchestraParcelQuantityDetails::where('UVC_TCO', trim($data[$key]['SKU CODE']))->where('Country_Code',trim($data[$key]['COUNTRY CODE']))->where('Last_Change_Date','<>',trim($data[$key]['LAST_CHANGE_DATE']))->count();
 
                 if($quantity_date > 0)
                 {
@@ -239,7 +237,7 @@ class UploadCsvController extends Controller
               else
               {
                 // check price details already exists with same UVC_TCO & Last_Change_Date
-                $quantity_date = DB::table('orchestra_parcel_quantity_details')->where('UVC_TCO', trim($data[$key]['SKU CODE']))->where('Last_Change_Date',trim($data[$key]['LAST_CHANGE_DATE']))->count();
+                $quantity_date = OrchestraParcelQuantityDetails::where('UVC_TCO', trim($data[$key]['SKU CODE']))->where('Last_Change_Date',trim($data[$key]['LAST_CHANGE_DATE']))->count();
                 
                 // insert price details, iff order with same sku code, country code and last change date doesn't exists.
                 if($quantity_date > 0)
