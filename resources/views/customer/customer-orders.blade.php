@@ -770,6 +770,8 @@ background: rgba(0,0,0,0.2);
         localStorage.removeItem("wash_composition");
         localStorage.removeItem("deletemain");
         localStorage.removeItem("deletewash");
+        localStorage.removeItem("page_navigation");
+        localStorage.removeItem("search_string");
         $("#success-alert").hide();
         /** [ Make buyers card active ] */
         $('div.buyers-card').click(function(){

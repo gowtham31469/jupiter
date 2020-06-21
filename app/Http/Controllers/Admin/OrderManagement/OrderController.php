@@ -1565,36 +1565,64 @@ class OrderController extends Controller
 		$index_arr=array();
         foreach($size as $val)
         {
+			  $size_var = explode(' ',$size[0]);
 			  if (!in_array($val, $index_arr)) 
 			  { 
 				   if($val != "")
 					{
-					    array_push($index_arr,$val);
-						if(count($size) > 7)
+						array_push($index_arr,$val);
+						if($size_var[1] == "MOIS")
 						{
-							$td_size.='<td style="font-size:11px;line-height:1.8"><br>'.$val.'</td>';
+							if(count($size) > 6)
+							{
+								$td_size.='<td style="font-size:10px;line-height:1.8"><br>'.$val.'</td>';
+							}
+							else
+							{
+								$td_size.="<td><br><br>".$val."</td>";
+							}
 						}
-					    else
+						else
 						{
-							$td_size.="<td><br><br>".$val."</td>";
+							if(count($size) > 7)
+							{
+								$td_size.='<td style="font-size:11px;line-height:1.8"><br>'.$val.'</td>';
+							}
+							else
+							{
+								$td_size.="<td><br><br>".$val."</td>";
+							}
 						}
+						
 						$td_col.="<td>".$size_break[$i]."</td>";
 					} 
 			  } 
            
             $total+=$size_break[$i];
             $i++;
-        }
+		}
+		if(strlen($color_code) > 6)
+		{
+			$text_size = "6.5px";
+			$line_height = "4";
+			$line="2";
+		}
+		else
+		{
+			$text_size = "14px";
+			$line_height = "2";
+			$line="2.3";
+		}
           $tbl = '<table  border="1" style="text-align:center;">
 		  			<tr style="line-height:0.53">
                           <td style="font-size:14px;text-align:center;line-height:0.45"><br><br>Size:</td>
                           '.$td_size.'
                           <td><br><br>Total<br></td>
                           </tr>
-                      <tr>
-                          <td style="font-size:7.5px;line-height:2">'.$color_code.'</td>
+                      <tr style="line-height:'.$line.'">
+                          <td style="font-size:'.$text_size.';line-height:'.$line_height.'">'.$color_code.'</td>
                           '.$td_col.'
-                          <td>'.$total.'</td>
+                          <td style="line-height:'.$line.'">'.$total.'</td>
                           </tr>
             </table>';
         PDF::SetFillColor(255, 255, 255);
@@ -1673,26 +1701,54 @@ class OrderController extends Controller
 		$index_arr=array();
         foreach($size as $val)
         {
+			  $size_var = explode(' ',$size[0]);
 			  if (!in_array($val, $index_arr)) 
 			  { 
 				   if($val != "")
 					{
-					    array_push($index_arr,$val);
-						if(count($size) > 7)
+						array_push($index_arr,$val);
+						if($size_var[1] == "MOIS")
 						{
-							$td_size.='<td style="font-size:14px;line-height:2.3"><br>'.$val.'</td>';
+							if(count($size) > 6)
+							{
+								$td_size.='<td style="font-size:14px;line-height:2.3"><br>'.$val.'</td>';
+							}
+							else
+							{
+								$td_size.="<td><br><br>".$val."</td>";
+							}
 						}
-					    else
+						else
 						{
-							$td_size.="<td><br><br>".$val."</td>";
+							if(count($size) > 7)
+							{
+								$td_size.='<td style="font-size:14px;line-height:2.3"><br>'.$val.'</td>';
+							}
+							else
+							{
+								$td_size.="<td><br><br>".$val."</td>";
+							}
 						}
+						
 						$td_col.='<td style="line-height:1.5">'.$size_break[$i].'</td>';
 					} 
 			  } 
            
             $total+=$size_break[$i];
             $i++;
-        }
+		}
+		
+		if(strlen($color_code) > 6)
+		{
+			$text_size = "10px";
+			$line_height = "3";
+		}
+		else
+		{
+			$text_size = "14px";
+			$line_height = "2";
+		}
+
           $tbl = '<table  border="1" style="text-align:center;">
 		  			<tr style="line-height:0.53">
                           <td style="font-size:14px;text-align:center;line-height:0.75"><br><br>Size:</td>
@@ -1700,7 +1756,7 @@ class OrderController extends Controller
                           <td><br><br>Total<br></td>
                           </tr>
                       <tr>
-                          <td style="font-size:14px;text-align:center;line-height:2">'.$color_code.'</td>
+                          <td style="font-size:'.$text_size.';text-align:center;line-height:'.$line_height.'">'.$color_code.'</td>
                           '.$td_col.'
                           <td style="line-height:1.5">'.$total.'</td>
                           </tr>

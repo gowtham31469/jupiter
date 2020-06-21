@@ -3715,7 +3715,15 @@ function barcode_polybag(id, data) {
 
 
 			})
-			$tbl = '<tr><td>Size:</td>' + $td_size + '<td>Total</td></tr><tr> <td>'+data.orchestra_parcel_details[0].colour_Code+'</td>' + $td_col + '<td>' + $total + '</td></tr>';
+			if(data.orchestra_parcel_details[0].colour_Code.length  > 6)
+			{
+				var fon_siz = "style='font-size:6px'";
+			}
+			else
+			{
+				var fon_siz = "style='font-size: 8px;'";
+			}
+			$tbl = '<tr '+fon_siz+'><td>Size:</td>' + $td_size + '<td>Total</td></tr><tr '+fon_siz+'> <td>'+data.orchestra_parcel_details[0].colour_Code+'</td>' + $td_col + '<td>' + $total + '</td></tr>';
 
 			var code = data.orchestra_parcel_details[0].ParcelBarCode.toString();
 			svgDoc.getElementById("theme").innerHTML = data.orchestra_parcel_details[0].Theme;
