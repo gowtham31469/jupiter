@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Validator;
 use App\Classes\Modules;
 use App\Classes\ProformaInvoice;
 use Response;
-use Excel;
 use App\HangTagOrders;
 use App\ProfomaInvoice as PI;
 use App\ProfomaInvoiceItemDetails;
