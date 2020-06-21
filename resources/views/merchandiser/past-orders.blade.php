@@ -30,16 +30,16 @@
                     <td>{{ $order->SupplierName }}</td>
                     <td>{{ $order->merchandiser_name }}</td>
                     <td>{{ $order->Season }}</td>
-                    <td>{{ $order->OrderDate }}</td>
+                    <td>{{ date('d-m-Y', strtotime($order->OrderDate)) }}</td>
                     @if($order->ApprovedDate != "")
-                        <td>{{ $order->ApprovedDate }}</td>
+                        <td>{{ date('d-m-Y', strtotime($order->ApprovedDate)) }}</td>
                     @else
-                        <td>N/A</td>
+                        <td>-</td>
                     @endif
                     @if($order->RejectedDate)
-                        <td>{{ $order->RejectedDate }}</td>
+                        <td>{{ date('d-m-Y', strtotime($order->RejectedDate))}}</td>
                     @else
-                         <td>N/A</td>
+                         <td>-</td>
                     @endif
                     @if($order->Status == "Rejected")
                     <td><span class="label label-warning">{{  $order->Status }}</span></td>

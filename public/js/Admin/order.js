@@ -3047,19 +3047,30 @@ function printWashDiv(data,data_back,data_middle,dataid) {
 						retryLimit: 2,
 						success: function (data) {
 							//console.log(data)
-							if(data.size_chart.length > 0 )
+							if(size[0] == "TAILLE")
 							{
-								svgDoc1.getElementById("size_in_fr_en1").innerHTML = data.size_chart[0].size+" cm ";
-								svgDoc1.getElementById("size_in_fr_en2").innerHTML = data.size_chart[0].size+" cm ";
-							}
-							else
-							{
+								svgDoc1.getElementById("size1").innerHTML = size_txt;
+								svgDoc1.getElementById("size2").innerHTML = size_txt;
 								svgDoc1.getElementById("size_in_fr_en1").innerHTML = "";
 								svgDoc1.getElementById("size_in_fr_en2").innerHTML = "";
 							}
-
-							svgDoc1.getElementById("size1").innerHTML = size_txt.replace(" ", "").toLowerCase() + "/" + size1;
-							svgDoc1.getElementById("size2").innerHTML = size_txt.replace(" ", "").toLowerCase() + "/" + size1;
+							else
+							{
+								if(data.size_chart.length > 0 )
+								{
+									svgDoc1.getElementById("size_in_fr_en1").innerHTML = data.size_chart[0].size+" cm ";
+									svgDoc1.getElementById("size_in_fr_en2").innerHTML = data.size_chart[0].size+" cm ";
+								}
+								else
+								{
+									svgDoc1.getElementById("size_in_fr_en1").innerHTML = "";
+									svgDoc1.getElementById("size_in_fr_en2").innerHTML = "";
+								}
+	
+								svgDoc1.getElementById("size1").innerHTML = size_txt.replace(" ", "").toLowerCase() + "/" + size1;
+								svgDoc1.getElementById("size2").innerHTML = size_txt.replace(" ", "").toLowerCase() + "/" + size1;
+							}
+							
 							svgDoc1.getElementById("parcel_code1").innerHTML = uvc_tco;
 							svgDoc1.getElementById("parcel_code2").innerHTML = uvc_tco;
 							svgDoc1.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -40 135) rotate(270)');

@@ -694,7 +694,7 @@ class OrderStatusCntrl extends Controller
 		if(count($data['customers']) > 0)
 		{
 			$cust_id = $data['customers']{0}->id;
-			$data['merchandisers']=DB::table('merchandisers')->select('*')->get();
+			$data['merchandisers']=DB::table('merchandisers')->where('buyer_id',1)->select('*')->get();
 		}
 		else
 		{

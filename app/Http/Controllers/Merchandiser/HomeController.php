@@ -43,11 +43,13 @@ class HomeController extends Controller
     public function index()
     {
         try{
+			 $merchandiser_id = Auth::guard('web_merchandiser')->id();
              $orders = DB::table('orchestra_wash_care_label_orders')
                           ->join('orchestra_parcel_details','orchestra_parcel_details.UVC','=','orchestra_wash_care_label_orders.uvc')
                           ->join('merchandisers','merchandisers.id','=','orchestra_wash_care_label_orders.merchandisers_id')
                           ->select('orchestra_wash_care_label_orders.uvc as UVC',DB::raw("'WashCareLabel' as \"Artwork\""),'orchestra_parcel_details.SupplierName as SupplierName','orchestra_wash_care_label_orders.created_at as OrderDate','orchestra_wash_care_label_orders.delivery_date as DeliveryDate','orchestra_wash_care_label_orders.status as Status','orchestra_parcel_details.Season_Code as Season','merchandisers.merchandiser_name','orchestra_wash_care_label_orders.id')
                           ->where('orchestra_wash_care_label_orders.status','=','Buyer Approval Pending')
+                          ->where('orchestra_wash_care_label_orders.merchandisers_id','=',$merchandiser_id)
                           ->groupBy('orchestra_parcel_details.UVC','orchestra_wash_care_label_orders.id','orchestra_parcel_details.SupplierName','orchestra_parcel_details.Season_Code','merchandisers.merchandiser_name')
                           ->get();
               $buyers = DB::table('buyers')->where('is_active','=',1)->pluck('buyer_name','id')->all();
@@ -243,11 +245,12 @@ class HomeController extends Controller
 	    public function pastOrders()
 	    {
 	        try{
+				 $merchandiser_id = Auth::guard('web_merchandiser')->id();
 	             $orders = DB::table('orchestra_wash_care_label_orders')
 	                          ->join('orchestra_parcel_details','orchestra_parcel_details.UVC','=','orchestra_wash_care_label_orders.uvc')
 	                          ->join('merchandisers','merchandisers.id','=','orchestra_wash_care_label_orders.merchandisers_id')
 	                          ->select('orchestra_wash_care_label_orders.uvc as UVC',DB::raw("'WashCareLabel' as \"Artwork\""),'orchestra_parcel_details.SupplierName as SupplierName','orchestra_wash_care_label_orders.created_at as OrderDate','orchestra_wash_care_label_orders.delivery_date as DeliveryDate','orchestra_wash_care_label_orders.status as Status','orchestra_parcel_details.Season_Code as Season','merchandisers.merchandiser_name','orchestra_wash_care_label_orders.id','orchestra_wash_care_label_orders.approved_date as ApprovedDate','orchestra_wash_care_label_orders.rejected_date as RejectedDate')
-	                          ->where('orchestra_wash_care_label_orders.status','<>','Buyer Approval Pending')
+	                          ->where('orchestra_wash_care_label_orders.status','<>','Buyer Approval Pending')->where('orchestra_wash_care_label_orders.merchandisers_id','=',$merchandiser_id)
 	                          ->groupBy('orchestra_parcel_details.UVC','orchestra_parcel_details.SupplierName','orchestra_wash_care_label_orders.id','orchestra_parcel_details.Season_Code','merchandisers.merchandiser_name')
 	                          ->get();
                $buyers = DB::table('buyers')->where('is_active','=',1)->pluck('buyer_name','id')->all();

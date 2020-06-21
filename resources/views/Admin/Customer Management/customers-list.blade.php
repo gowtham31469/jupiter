@@ -691,7 +691,7 @@
     /** restrict special characters (except @, ., _ **/
     $('input').on('input', function() {
       var c = this.selectionStart,
-          r = /[^a-z0-9@._ ]/gi,
+          r = /[^-a-z0-9@._ ]/gi,
           v = $(this).val();
       if(r.test(v))
       {
