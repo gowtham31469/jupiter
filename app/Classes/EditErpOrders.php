@@ -92,8 +92,6 @@ class EditErpOrders
 	{
 		if ($order_details)
 		{
-			// unique id for array creation
-			$unique_id = 'ERP'.$erp_order_id.str_random(25);
 
 			foreach ($order_details as $key => $vals) {
 
@@ -105,11 +103,15 @@ class EditErpOrders
 
 					if($dataExists == 0)
 					{
+						// unique id for array creation
+						// combination of erpid-refname-styleno-buyerpo-ordertype
+						$unique_id = 'ERP-'.str_replace(' ', '-', $orders->item_name).'-'.$erp_order_id.'-'.$style_no.'-'.$orders->po_number.'-'.$orders->order_flag;
+
 						$erp_order_details_id = ErpOrderDetails::insertGetId([
 							'erp_order_id'     		=> $erp_order_id,
 							'style_no'         		=> $style_no,
-							   'order_quantity'   		=> $vals->count,
-							   'pending_orders'		=> $vals->count,
+							'order_quantity'   		=> $vals->count,
+							'pending_orders'		=> $vals->count,
 							'size'         	   		=> $vals->size,
 							'delivery_date'	   		=> $orders->delivery_date,
 							'order_qnty_table_name' => $qnty_table,
@@ -278,8 +280,6 @@ class EditErpOrders
 	{
 		if ($order_details)
 		{
-			// unique id for array creation
-			$unique_id = 'ERP'.$erp_order_id.str_random(25);
 
 			foreach ($order_details as $key => $vals) {
 
@@ -300,6 +300,10 @@ class EditErpOrders
 
 					if($dataExists == 0)
 					{
+						// unique id for array creation
+						// combination of erpid-refname-styleno-buyerpo-ordertype
+						$unique_id = 'ERP-'.str_replace(' ', '-', $orders->item_name).'-'.$erp_order_id.'-'.$orders->uvc.'-'.$orders->po.'-'.$orders->order_flag;
+
 						$erp_order_details_id = ErpOrderDetails::insertGetId([
 							'erp_order_id'     		=> $erp_order_id,
 							'style_no'         		=> $orders->uvc,

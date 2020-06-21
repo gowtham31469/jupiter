@@ -25,6 +25,7 @@ use App\Classes\ERPOrderStatusCheck;
 use Illuminate\Support\Facades\Redis;
 use App\ErpOrders as Erp;
 use App\ErpOrderDetails as ErpOrderDetails;
+use App\Classes\CleanString;
 
 class OrderStatusController extends Controller
 {
@@ -806,6 +807,7 @@ class OrderStatusController extends Controller
         try
         {
             $erp_obj    = new ErpOrders();
+            $formartStr_obj   = new CleanString();
             $id        =  explode(',',$request->id);
             $po        =  $request->po;          
             $po_file = $request->file('po_file');
@@ -813,7 +815,7 @@ class OrderStatusController extends Controller
             $destination_path='/storage/app/public/po-files/';
             $path='storage/app/public/po-files/';
             $Orname = $po_file->getClientOriginalName();
-            $filename= str_random(6).'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $Orname));
+            $filename   = $formartStr_obj->cleanStr($Orname);
             $po_file->move($path,$filename);
             $destination_path_insert=$destination_path.$filename;
             foreach($id as $val)
@@ -1315,6 +1317,7 @@ class OrderStatusController extends Controller
         try 
         {
             $erp_obj    = new ErpOrders();
+            $formartStr_obj   = new CleanString();
             $table_name = $request->tableName;
             $row_id     = $request->id;
             $po_file = $request->file('file');
@@ -1323,7 +1326,7 @@ class OrderStatusController extends Controller
             $destination_path='/storage/app/public/po-files/';
             $path='storage/app/public/po-files/';
             $Orname = $po_file->getClientOriginalName();
-            $filename= str_random(6).'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $Orname));
+            $filename   = $formartStr_obj->cleanStr($Orname);
             $po_file->move($path,$filename);
             $destination_path_insert=$destination_path.$filename;
 
