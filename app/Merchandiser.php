@@ -16,6 +16,8 @@ class Merchandiser extends Authenticatable
       */
       protected $table = 'merchandisers';
 
+      protected $primaryKey = 'id';
+
      /**
       * The attributes that are mass assignable.
       *

@@ -25,9 +25,10 @@ class BuyerManagementController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Modules $module)
     {
        $this->middleware('auth');
+       $this->module_var = $module;
     }
 
     /**
@@ -38,12 +39,11 @@ class BuyerManagementController extends Controller
      */
     public function index()
     {
-        $module_var = new Modules();
-        $is_allowed = $module_var->permittedModules();
+        $is_allowed = $this->module_var->permittedModules();
         if($is_allowed)
         {
-            $get_main_module = $module_var->getMainModules();
-            $get_sub_module = $module_var->getSubModules(3);
+            $get_main_module = $this->module_var->getMainModules();
+            $get_sub_module = $this->module_var->getSubModules(3);
             View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
                 return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
             });
@@ -131,15 +131,14 @@ class BuyerManagementController extends Controller
       }
       /**
        * Get buyer details by ID for editing.
-       * @param buyer id
+       * @param Request $request
        * @author <Praveen>
        * @return \Illuminate\Http\Response
        */
       public function getBuyerById(Request $request)
       {
         try {
-              $id = $request['id'];
-              $buyer = DB::table('buyers')->select('id','buyer_name','buyer_address','buyer_email','buyer_phone','is_active','logo')->where('buyers.id',$id)->get();
+              $buyer = DB::table('buyers')->select('id','buyer_name','buyer_address','buyer_email','buyer_phone','is_active','logo')->where('buyers.id',$request['id'])->get();
               return response()->json(['error'=>'false','message' =>'success', 'buyer' => $buyer]);
             } catch (\Exception $e)
             {
@@ -148,7 +147,7 @@ class BuyerManagementController extends Controller
       }
       /**
        * Update buyer by id.
-       * @param buyer id
+       * @param Request $request
        * @author <Praveen>
        * @return \Illuminate\Http\Response
        */
@@ -287,15 +286,14 @@ class BuyerManagementController extends Controller
       }
       /**
        * Get buyer details by ID for editing.
-       * @param Merchandiser id
+       * @param Request $request
        * @author <Praveen>
        * @return \Illuminate\Http\Response
        */
       public function getMerchandiserById(Request $request)
       {
         try {
-              $id = $request['id'];
-              $merchandiser = DB::table('merchandisers')->select('id','merchandiser_name','email','merchandiser_address','merchandiser_phone','is_active','buyer_id')->where('merchandisers.id',$id)->get();
+              $merchandiser = DB::table('merchandisers')->select('id','merchandiser_name','email','merchandiser_address','merchandiser_phone','is_active','buyer_id')->where('merchandisers.id', $request['id'])->get();
               return response()->json(['error'=>'false','message' =>'success', 'merchandiser' => $merchandiser]);
             } catch (\Exception $e)
             {
@@ -304,7 +302,7 @@ class BuyerManagementController extends Controller
       }
       /**
        * Update merchandiser by id.
-       * @param Merchandiser id
+       * @param Request $request
        * @author <Praveen>
        * @return \Illuminate\Http\Response
        */
@@ -351,12 +349,11 @@ class BuyerManagementController extends Controller
          */
         public function buyers()
         {
-            $module_var = new Modules();
-            $is_allowed = $module_var->permittedModules();
+            $is_allowed = $this->module_var->permittedModules();
             if($is_allowed)
             {
-                $get_main_module = $module_var->getMainModules();
-                $get_sub_module = $module_var->getSubModules(3);
+                $get_main_module = $this->module_var->getMainModules();
+                $get_sub_module = $this->module_var->getSubModules(3);
                 $buyers = DB::table('buyers')->select('id','buyer_name','buyer_address','buyer_email','buyer_phone','is_active')->orderBy('is_active','desc')->get();
                 View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
                     return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
@@ -375,12 +372,11 @@ class BuyerManagementController extends Controller
          */
         public function merchandisers()
         {
-            $module_var = new Modules();
-            $is_allowed = $module_var->permittedModules();
+            $is_allowed = $this->module_var->permittedModules();
             if($is_allowed)
             {
-                $get_main_module = $module_var->getMainModules();
-                $get_sub_module = $module_var->getSubModules(3);
+                $get_main_module = $this->module_var->getMainModules();
+                $get_sub_module = $this->module_var->getSubModules(3);
                 $merchandisers = DB::table('merchandisers')->select('merchandisers.id','merchandiser_name','merchandisers.email','merchandiser_address','merchandiser_phone','merchandisers.is_active','buyers.buyer_name')
                 ->orderBy('is_active','desc')
                 ->join('buyers','buyers.id','=','merchandisers.buyer_id')
@@ -399,19 +395,14 @@ class BuyerManagementController extends Controller
         }
         /**
          * Make buyer active
-         * @param buyer id
+         * @param Request $request
          * @author <Praveen>
          * @return boolean true or false
          */
         public function makeBuyerActive(Request $request)
         {
           try {
-                $id      = $request['id'];
-                
-                Buyer::where('id',$id)
-                 ->update([
-                   'is_active'  => 1
-                ]);
+                Buyer::find($request['id'])->update(['is_active' => 1]);
 
                 $result = response()->json(['error'=> false,'message' =>'Success'],200);
               } 
@@ -424,18 +415,13 @@ class BuyerManagementController extends Controller
         /**
          * Make Buyer in-active
          * @author <Praveen>
-         * @param buyer id
+         * @param Request $request
          * @return boolean true or false
          */
         public function makeBuyerInactive(Request $request)
         {
           try {
-                $id      = $request['id'];
-                
-                Buyer::where('id',$id)
-                 ->update([
-                   'is_active'  => 0
-                ]);
+                Buyer::find($request['id'])->update(['is_active' => 0]);
 
                 $result = response()->json(['error'=> false,'message' =>'Success'],200);
               } 
@@ -447,19 +433,14 @@ class BuyerManagementController extends Controller
         }
       /**
        * Make Merchandiser active
-       * @param Merchandiser id
+       * @param Request $request
        * @author <Praveen>
        * @return boolean true or false
        */
       public function makeMerchandiserActive(Request $request)
       {
         try {
-              $id      = $request['id'];
-              
-              Merchandiser::where('id',$id)
-               ->update([
-                 'is_active'  => 1
-              ]);
+              Merchandiser::find($request['id'])->update(['is_active' => 1]);
 
               $result = response()->json(['error'=> false,'message' =>'Success'],200);
             } 
@@ -472,18 +453,13 @@ class BuyerManagementController extends Controller
       /**
        * Make Merchandiser in-active
        * @author <Praveen>
-       * @param Merchandiser id
+       * @param Request $request
        * @return boolean true or false
        */
       public function makeMerchandiserInactive(Request $request)
       {
         try {
-              $id      = $request['id'];
-              
-              Merchandiser::where('id',$id)
-               ->update([
-                 'is_active'  => 0
-              ]);
+              Merchandiser::find($request['id'])->update(['is_active' => 0]);
 
               $result = response()->json(['error'=> false,'message' =>'Success'],200);
             } 
