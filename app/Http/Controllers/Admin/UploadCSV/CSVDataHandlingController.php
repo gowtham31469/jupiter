@@ -163,8 +163,8 @@ class CSVDataHandlingController extends Controller
       try
       {
         $data_array = $request->data_array;
-        $uvc = $data_array{0}['uvc'];
-        $temp_table = $data_array{0}['table'];
+        $uvc = $data_array[0]['uvc'];
+        $temp_table = $data_array[0]['table'];
 
         foreach ($data_array as $key => $value) 
         {
@@ -322,8 +322,8 @@ class CSVDataHandlingController extends Controller
       {
         $data_array = $request->data_array;
 
-        $uvc = $data_array{0}['uvc'];
-        $temp_table = $data_array{0}['table'];
+        $uvc = $data_array[0]['uvc'];
+        $temp_table = $data_array[0]['table'];
 
         foreach ($data_array as $key => $value) 
         {
