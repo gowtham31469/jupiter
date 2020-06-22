@@ -79,8 +79,8 @@ class UploadCsvController extends Controller
             /** If there is no collision, Insert into parcel details table otherwise update temp parcel details table*/
             if ($parcel_details_data_exists)
             {
-              foreach ($data as $value)
-              {
+               foreach ($data as $value)
+               {
                   $parcel_details_uvc = OrchestraParcelDetails::where('UVC', '=', trim($value['REFERENCE CODE']))->exists();
                   if ($parcel_details_uvc)
                   {
@@ -155,6 +155,7 @@ class UploadCsvController extends Controller
 
                   }
                 }
+                unset($value);
             }
             else
             {
@@ -179,6 +180,7 @@ class UploadCsvController extends Controller
                 }
 
               }
+              unset($value);
               
             }
             $result = response()->json(['error' =>false,'message' => 'PO CSV File Uploaded Successfully'], 200);
@@ -295,6 +297,7 @@ class UploadCsvController extends Controller
               //}
             }
           }
+          unset($value);
           // end of foreach
 
           $result = response()->json(['error' =>false,'message' => 'Price CSV File Uploaded Successfully'], 200);
