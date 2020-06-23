@@ -13,6 +13,8 @@ class RawMaterialMaster extends Model
       */
       protected $table = 'raw_material_master';
 
+      protected $primaryKey = 'id';
+
      /**
       * The attributes that are mass assignable.
       *

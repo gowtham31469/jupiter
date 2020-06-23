@@ -13,6 +13,8 @@ class TescoErrorReportEmails extends Model
       */
       protected $table = 'tesco_error_report_emails';
 
+      protected $primaryKey = 'id';
+
      /**
       * The attributes that are mass assignable.
       *
