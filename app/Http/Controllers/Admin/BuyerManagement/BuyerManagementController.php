@@ -104,8 +104,7 @@ class BuyerManagementController extends Controller
                   $destination_path_insert=$destination_path.$filename;
                 }
                 
-                $email_exists = Buyer::where('buyer_email',$email)->select('id')->get();
-                if(count($email_exists) > 0)
+                if(Buyer::where('buyer_email',$email)->exists())
                 {
                   $result = response()->json(['error'=> true,'message' =>'Email Already Exists'],409);
                 }
@@ -177,7 +176,7 @@ class BuyerManagementController extends Controller
                 {
                    //delete old file
                    $buyer = Buyer::select('id','logo')->where('id','=',$id)->get();
-                   $files = $buyer{0}->logo;
+                   $files = $buyer[0]->logo;
                    $files = substr($files,1);
                    File::delete($files);
 
@@ -206,7 +205,7 @@ class BuyerManagementController extends Controller
               }
               else
               {
-                  Buyer::where('id',$id)
+                  Buyer::find($id)
                    ->update([
                      'buyer_name'          => $input['name'],
                      'buyer_email'         => $input['email'],
@@ -258,8 +257,8 @@ class BuyerManagementController extends Controller
                 $address               = preg_replace('/\s*,\s*/', ', ', $request['address']);
                 $password              = Hash::make($request['p']);
                 $merchandiser_buyer    = $request['merchandiser_buyer'];
-                $email_exists = Merchandiser::where('email',$email)->select('id')->get();
-                if(count($email_exists) > 0)
+
+                if(Merchandiser::where('email',$email)->exists())
                 {
                   $result = response()->json(['error'=> true,'message' =>'Email Already Exists'],409);
                 }
@@ -325,7 +324,7 @@ class BuyerManagementController extends Controller
               }
               else
               {
-                  Merchandiser::where('id',$id)
+                  Merchandiser::find($id)
                    ->update([
                      'merchandiser_name'      => $input['name'],
                      'email'                  => $input['email'],
