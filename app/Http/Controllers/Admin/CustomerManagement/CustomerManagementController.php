@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin\CustomerManagement;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Classes\Modules;
-use Response;
 use View;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
@@ -16,10 +15,6 @@ use App\Customer;
 use App\CustomerContactPersons;
 use App\CustomerBillAddress;
 use App\CustomerBuyers;
-use App\PaymentTerms;
-use App\PlaceOfSupply;
-use App\FreightTerms;
-use App\NominatedForwarder;
 use App\CustomerMetadata;
 use App\PriceRange;
 use App\PriceTaxation;
@@ -38,9 +33,10 @@ class CustomerManagementController extends Controller
    * @author <Praveen>
    * @return void
    */
-   public function __construct()
+   public function __construct(Modules $module)
    {
       $this->middleware('auth');
+      $this->module_var = $module;
    }
    /**
     * Show the Customer-Management home page.
@@ -50,12 +46,11 @@ class CustomerManagementController extends Controller
    public function index()
    {
      try {
-           $module_var = new Modules();
-           $is_allowed = $module_var->permittedModules();
+           $is_allowed = $this->module_var->permittedModules();
            if($is_allowed)
            {
-               $get_main_module = $module_var->getMainModules();
-               $get_sub_module = $module_var->getSubModules(4);
+               $get_main_module = $this->module_var->getMainModules();
+               $get_sub_module = $this->module_var->getSubModules(4);
                View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
                    return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
                });
@@ -91,22 +86,11 @@ class CustomerManagementController extends Controller
              foreach ($customers as $value) 
              {
                 /** [Checking value null or not] */
-                if($value->courier_choice == "")
-                {
-                  $value->courier_choice   = "-";
-                }
-                if($value->tin_number == "")
-                {
-                  $value->tin_number   = "-";
-                }
-                if($value->pan_number == "")
-                {
-                  $value->pan_number   = "-";
-                }
-                if($value->gstin_number == "")
-                {
-                  $value->gstin_number   = "-";
-                }
+                $value->courier_choice = $value->courier_choice == ""?"-":$value->courier_choice;
+                $value->tin_number = $value->tin_number == ""?"-":$value->tin_number;
+                $value->pan_number = $value->pan_number == ""?"-":$value->pan_number;
+                $value->gstin_number = $value->gstin_number == ""?"-":$value->gstin_number;
+                
                 $customer_id = $value->id;
                 $default_contact = DB::table('customer_contact_persons')
                          ->select('customer_contact_persons.contact_person_name as contact_person','customer_contact_persons.contact_person_email as contact_email','customer_contact_persons.contact_person_phone as phone_no')
@@ -174,7 +158,8 @@ class CustomerManagementController extends Controller
                   $value->ship_pincode   = "-";
                 }
                 
-              }            
+              } 
+              unset($value);     
             return response()->json(['error'=>'false','message' =>'success', 'customers' => $customers,'tesco_customers_dropdown' => $tesco_customers_dropdown]);
           } catch (\Exception $e)
           {
@@ -222,8 +207,7 @@ class CustomerManagementController extends Controller
                 $customers            = $request['customers'];
                 $sap_code             = $request['sap_code'];
 
-                $email_exists = Customer::where('email',$login_email)->select('id')->get();
-                if(count($email_exists) > 0)
+                if(Customer::where('email',$login_email)->exists())
                 {
                   $result = response()->json(['error'=> true,'message' =>'Email Already Exists'],409);
                 }
@@ -280,6 +264,7 @@ class CustomerManagementController extends Controller
                         ]);
                         $i++;
                     }
+                    unset($contact);  
 
                     if(array_filter($address) != NULL)
                     {
@@ -299,6 +284,7 @@ class CustomerManagementController extends Controller
                           ]);
                           $j++;
                       }
+                      unset($value); 
                     }
                     
                     if(array_filter($buyers) != NULL)
@@ -310,6 +296,7 @@ class CustomerManagementController extends Controller
                               'buyer_id'        => $buyer
                           ]);
                       }
+                      unset($buyer);
                     }
                     
                     if(array_filter($customers) != NULL)
@@ -321,6 +308,7 @@ class CustomerManagementController extends Controller
                               'customer_metadata_id'  => $customer
                           ]);
                       }
+                      unset($customer);
                     }
                     
                     $result = response()->json(['error'=> false,'message' =>'success'],200);
@@ -355,8 +343,7 @@ class CustomerManagementController extends Controller
                 $customer_company     = $request['customer_company']; 
 			          $customer_title       = $request['customer_title'];
 
-                $email_exists =  DB::table('customer_profile')->where('email',$customer_email)->select('id')->get();
-                if(count($email_exists) > 0)
+                if(DB::table('customer_profile')->where('email',$customer_email)->exists())
                 {
                   $result = response()->json(['error'=> true,'message' =>'Email Already Exists'],409);
                 }
@@ -381,6 +368,7 @@ class CustomerManagementController extends Controller
                             'buyer_id'        => $buyer
                         ]);
                     }
+                    unset($buyer);
                     $result = response()->json(['error'=> false,'message' =>'success'],200);
                   }
 
@@ -399,9 +387,8 @@ class CustomerManagementController extends Controller
       public function makeCustomerActive(Request $request)
       {
         try {
-              $id      = $request['id'];
               
-              Customer::where('id',$id)
+              Customer::where('id', $request['id'])
                ->update([
                  'is_active'  => 1
               ]);
@@ -425,8 +412,8 @@ class CustomerManagementController extends Controller
               $id      = $request['id'];
               
               /** Check if this company linked with customer **/
-              $custumer_id = DB::table('customer_profile')->select('id')->where('company_id','=',$id)->where('status','=',1)->first();
-              if($custumer_id)
+              $custumer_link_exists = DB::table('customer_profile')->where('company_id','=',$id)->where('status','=',1)->exists();
+              if($custumer_link_exists)
               {
                 $result = response()->json(['error'=> false,'message' =>'Some customers linked to this company.'],208);
               }
@@ -457,9 +444,7 @@ class CustomerManagementController extends Controller
       public function makeCustomerProfileActive(Request $request)
       {
         try {
-              $id      = $request['id'];
-              
-              DB::table('customer_profile')->where('id',$id)
+              DB::table('customer_profile')->where('id', $request['id'])
                ->update([
                  'status'  => 1
               ]);
@@ -480,9 +465,7 @@ class CustomerManagementController extends Controller
       public function makeCustomerProfileInactive(Request $request)
       {
         try {
-              $id      = $request['id'];
-              
-              DB::table('customer_profile')->where('id',$id)
+              DB::table('customer_profile')->where('id', $request['id'])
                ->update([
                  'status'  => 0
               ]);
@@ -563,7 +546,7 @@ class CustomerManagementController extends Controller
         			   $company_buyers = DB::table('customer_buyers')
         								    ->join('buyers', 'buyers.id', 'customer_buyers.buyer_id')
         								    ->select('customer_buyers.*','buyers.buyer_name')
-        								    ->where('customer_buyers.customer_id','=',$customer{0}->company_id)
+        								    ->where('customer_buyers.customer_id','=',$customer[0]->company_id)
         								    ->get();
                 
                 return response()->json(['error'=>'false','message' =>'success','customers' => $customer,'buyers' => $buyers,'company_buyers' => $company_buyers]);
@@ -678,6 +661,7 @@ class CustomerManagementController extends Controller
                             ]);
                             $i++;
                         }
+                        unset($contact);
                       }
                         
                         /** Delete existing data before updating **/
@@ -701,6 +685,7 @@ class CustomerManagementController extends Controller
                               ]);
                               $j++;
                           }
+                          unset($value);
                         }
                         /** Delete existing data before updating **/
                         if(array_filter($buyers) != NULL)
@@ -714,6 +699,7 @@ class CustomerManagementController extends Controller
                                   'buyer_id'        => $buyer
                               ]);
                           }
+                          unset($buyer);
                         }
                         /** Delete existing data before updating **/
                         if(array_filter($customers) != NULL)
@@ -727,6 +713,7 @@ class CustomerManagementController extends Controller
                                   'customer_metadata_id' => $customer
                               ]);
                           }
+                          unset($customer);
                         }
                         $result = response()->json(['error'=> false,'message' =>'success'],200);
                       
@@ -784,7 +771,7 @@ class CustomerManagementController extends Controller
                                 'buyer_id'        => $buyer
                             ]);
                         }
-                       
+                        unset($buyer);
                         $result = response()->json(['error'=> false,'message' =>'success'],200);
                       
                     }
@@ -803,8 +790,7 @@ class CustomerManagementController extends Controller
     public function customers()
     {
           try {
-                 $module_var      = new Modules();
-                 $is_allowed      = $module_var->permittedModules();
+                 $is_allowed      = $this->module_var->permittedModules();
                  $buyers          = DB::table('buyers')->where('is_active','=',1)->pluck('buyer_name','id')->all();
                  $payment_terms   = DB::table('payment_terms')->pluck('payment_terms','id')->all();
                  $place_of_supply = DB::table('place_of_supply')->pluck('place_of_supply','id')->all();
@@ -824,22 +810,11 @@ class CustomerManagementController extends Controller
                    foreach ($customers as $value) 
                    {
                       /** [Checking value null or not] */
-                      if($value->courier_choice == "")
-                      {
-                        $value->courier_choice   = "-";
-                      }
-                      if($value->tin_number == "")
-                      {
-                        $value->tin_number   = "-";
-                      }
-                      if($value->pan_number == "")
-                      {
-                        $value->pan_number   = "-";
-                      }
-                      if($value->gstin_number == "")
-                      {
-                        $value->gstin_number   = "-";
-                      }
+                      $value->courier_choice = $value->courier_choice == ""?"-":$value->courier_choice;
+                      $value->tin_number = $value->tin_number == ""?"-":$value->tin_number;
+                      $value->pan_number = $value->pan_number == ""?"-":$value->pan_number;
+                      $value->gstin_number = $value->gstin_number == ""?"-":$value->gstin_number;
+                     
                       $customer_id = $value->id;
                       $default_contact = DB::table('customer_contact_persons')
                                ->select('customer_contact_persons.contact_person_name as contact_person','customer_contact_persons.contact_person_email as contact_email','customer_contact_persons.contact_person_phone as phone_no')
@@ -908,10 +883,11 @@ class CustomerManagementController extends Controller
                       }
                       
                     }  
+                    unset($value);
                  if($is_allowed)
                  {
-                     $get_main_module = $module_var->getMainModules();
-                     $get_sub_module = $module_var->getSubModules(4);
+                     $get_main_module = $this->module_var->getMainModules();
+                     $get_sub_module = $this->module_var->getSubModules(4);
                      View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
                          return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
                      });
@@ -960,8 +936,7 @@ class CustomerManagementController extends Controller
     public function customerProfile()
     {
           try {
-                 $module_var      = new Modules();
-                 $is_allowed      = $module_var->permittedModules();
+                 $is_allowed      = $this->module_var->permittedModules();
                  $buyers          = DB::table('buyers')->where('is_active','=',1)->pluck('buyer_name','id')->all();
 			  
 			           $roles = DB::table('roles')->pluck('role_name','id')->all();
@@ -979,8 +954,8 @@ class CustomerManagementController extends Controller
                                      ->get();  
                  if($is_allowed)
                  {
-                     $get_main_module = $module_var->getMainModules();
-                     $get_sub_module = $module_var->getSubModules(4);
+                     $get_main_module = $this->module_var->getMainModules();
+                     $get_sub_module = $this->module_var->getSubModules(4);
                      View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
                          return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
                      });
@@ -1001,11 +976,10 @@ class CustomerManagementController extends Controller
      * @return [type] [description]
      */
     public function custumerPriceList() {
-        $module_var = new Modules();
-        $is_allowed = $module_var->permittedModules();
+        $is_allowed = $this->module_var->permittedModules();
         if($is_allowed) {
-            $get_main_module = $module_var->getMainModules();
-            $get_sub_module = $module_var->getSubModules(4);
+            $get_main_module = $this->module_var->getMainModules();
+            $get_sub_module = $this->module_var->getSubModules(4);
             View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
                 return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
             });
