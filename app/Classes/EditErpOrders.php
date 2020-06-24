@@ -1,24 +1,25 @@
 <?php
 namespace App\Classes;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Response;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Validator;
-use App\Customer;
-use App\CustomerBillAddress;
 use DB;
-use Auth;
-use App\RolePermissionMdl;
 use Carbon\Carbon;
 use App\ErpOrders as Erp;
 use App\ErpOrderDetails;
-use App\History;
 
 class EditErpOrders
 {
-	private $updated_at;
-
+	private $current_date;
+	
+	/**
+	 * Create a new controller instance.
+	 *
+	 * @return void
+	 */
+	public function __construct()
+	{
+		// get the current time
+		$this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
+	}
+	
 	/**
 	 * updateTescoErpOrderDetails Function
 	 *
@@ -40,7 +41,6 @@ class EditErpOrders
 			// Get Erp status table id for  status name.
             $erp_status_id = DB::table('erp_status')->where('status_name', 'ilike', $erp_details_status)->value('id');
             
-			$this->updated_at = Carbon::now('Asia/Kolkata')->toDateTimeString();
             $orders     	= DB::table($table_name)->where($table_name.'.id',$row_id)
             					->join('tesco_item_master',$table_name.'.template_id','=','tesco_item_master.id')
                                 ->select('order_id','po_number','uk_style_ref','ce_style_ref','season_code','short_description','eqos_site_code','manufacture_date','tesco_department_id','tesco_brand_id','tesco_supplier_id as customer_id','rfid_compliant','tag_at_source','zone','template_type','pi_status','po_status','po_file','purchase_order_no','order_status','template_id','delivery_date','order_placed_by','pi_rev_no','edit_permission','cancel_ord_flag','order_created_at','order_approved_at','order_cancelled_at','po_uploaded_at','tesco_item_master.company_id','tesco_item_master.item_name','ocn_number','order_flag','pi_id','pi_file')->first();
@@ -126,8 +126,8 @@ class EditErpOrders
 							'buyer_po_number'  		=> $orders->po_number,
 							'zone'					=> $orders->zone,
 							'order_type'            => $orders->order_flag,
-							'created_at'            => $this->updated_at,
-							'updated_at'            => $this->updated_at,
+							'created_at'            => $this->current_date,
+							'updated_at'            => $this->current_date,
 							'order_status_id'       => $order_status_id->id,
 							'order_date'            => $orders->order_created_at,
 							'aw_date'               => $orders->order_approved_at,
@@ -165,16 +165,16 @@ class EditErpOrders
 							'po'                   => $customer_po_no,
 							'buyer_po'             => $orders->po_number,
 							'ocn'                  => $orders->ocn_number,
-							'created_at'           => $this->updated_at,
-							'updated_at'           => $this->updated_at,
+							'created_at'           => $this->current_date,
+							'updated_at'           => $this->current_date,
 						]);
 	
 						DB::table('event_history')
 						->insert([
 							'history_id'  => $history_id,
 							'action_id'   => $action_id,
-							'created_at'  => $this->updated_at,
-							'updated_at'  => $this->updated_at,
+							'created_at'  => $this->current_date,
+							'updated_at'  => $this->current_date,
 						]);
 					}
 				} catch (\Exception $e) {
@@ -216,7 +216,6 @@ class EditErpOrders
 
 			// Get Erp status table id for  status name.
             $erp_status_id = DB::table('erp_status')->where('status_name', 'ilike', $erp_details_status)->value('id');
-			$this->created_at = Carbon::now('Asia/Kolkata')->toDateTimeString();
 
 			// template front and back id storing in orchestra_hang_tag_orders table
 			if($main_table_name === 'orchestra_hang_tag_orders')
@@ -320,7 +319,7 @@ class EditErpOrders
 							'custom_ref_name' 		=> $custom_ref_name,
 							'buyer_po_number'  		=> $orders->po,
 							'order_type'            => $orders->order_flag,
-							'created_at'            => $this->created_at,
+							'created_at'            => $this->current_date,
 							'order_status_id'       => $order_status_id->id,
 							'order_date'            => $orders->order_created_at,
 							'aw_date'               => $orders->order_approved_at,
@@ -361,16 +360,16 @@ class EditErpOrders
 							'po'                   => $customer_po_no,
 							'buyer_po'             => $buyer_po,
 							'ocn'                  => $ocn_number,
-							'created_at'           => $this->created_at,
-							'updated_at'           => $this->created_at,
+							'created_at'           => $this->current_date,
+							'updated_at'           => $this->current_date,
 						]);
 
 						DB::table('event_history')
 						->insert([
 							'history_id'  => $history_id,
 							'action_id'   => $action_id,
-							'created_at'  => $this->created_at,
-							'updated_at'  => $this->created_at,
+							'created_at'  => $this->current_date,
+							'updated_at'  => $this->current_date,
 						]);
 					}	
 				} catch (\Exception $e) {

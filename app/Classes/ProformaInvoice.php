@@ -1,21 +1,25 @@
 <?php
 namespace App\Classes;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Response;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Validator;
-use App\Customer;
-use App\CustomerBillAddress;
 use DB;
-use Auth;
 use View;
-use App\RolePermissionMdl;
 use Carbon\Carbon;
 use App\Classes\PiTCPDF;
 
 class ProformaInvoice
 {
+  private $today;
+	
+	/**
+	 * Create a new controller instance.
+	 *
+	 * @return void
+	 */
+	public function __construct()
+	{
+		// get the current time
+		$this->today = Carbon::now('Asia/Kolkata');;
+  }
+  
 	/**
 	 * method to get the Proforma information for a particular order
 	 * @param  [type] $request [description]
@@ -27,7 +31,6 @@ class ProformaInvoice
         $table_name =   $request->table_name;
         $buyer_id   =   $request->buyer_id;
         $pi_id      =   DB::table('profoma_invoices')->max('id')+1;
-        $today      =   Carbon::now('Asia/Kolkata');
 
         if ($table_name === 'orchestra_hang_tag_orders') 
         {
@@ -54,7 +57,7 @@ class ProformaInvoice
           $data['company_details']->pi_number = "SP00".$pi_id;
         }
 
-        $data['company_details']->pi_date = $today->format('d/m/Y');;
+        $data['company_details']->pi_date = $this->today->format('d/m/Y');;
         $customer_details       = DB::table($table_name)
                                   ->join('customers',$table_name.'.customer_id','=','customers.id')
                                   ->join('orchestra_item_master','orchestra_item_master.id','=',$table_name.'.'.$temp_id_field)
@@ -94,7 +97,6 @@ class ProformaInvoice
         $item_details    = DB::table($table_name)
                           ->join($table_name.'_qty',$table_name.'_qty.'.$qnty_id.'_id','=',$table_name.'.id')
                           ->join('orchestra_item_master','orchestra_item_master.id','=',$table_name.'.'.$temp_id_field)
-                         // ->join('orchestra_template','orchestra_template.id','orchestra_template.item_id')
                           ->leftjoin('price_taxation','price_taxation.template_id','=','orchestra_item_master.id')
                           ->where('price_taxation.customer_id',$customer_details->id)
                           ->where('price_taxation.buyer_id',$buyer_id)
@@ -189,7 +191,6 @@ class ProformaInvoice
           if ($customer_details->nominated_forwarder!=null)
           {
            $customer_details->freight_terms =  DB::table('nominated_forwarders')->pluck('forwarder')->first();
-           // $customer_details['template_type'] = $pi_details->template_type;
           }
         }                        
         $data['bank_details']   = $customer_details;
@@ -233,8 +234,6 @@ class ProformaInvoice
         $buyer_id   =   $request->buyer_id;
         $pi_id      =   DB::table('profoma_invoices')->max('id')+1;
         
-        $today      =   Carbon::now('Asia/Kolkata');
-        
         $data['company_details'] =  DB::table('tesco_item_master')
                                           ->join($table_name,$table_name.'.template_id','=','tesco_item_master.id')
                                           ->join('company','company.id','=','tesco_item_master.company_id')
@@ -248,8 +247,8 @@ class ProformaInvoice
         else {
           $data['company_details']->pi_number = "SP00".$pi_id;
         }
-        // $data['company_details']->rev_number = 0;
-        $data['company_details']->pi_date = $today->format('d/m/Y');;
+        
+        $data['company_details']->pi_date = $this->today->format('d/m/Y');;
         
         $customer_details       = DB::table($table_name)
                                   ->join('customers',$table_name.'.tesco_supplier_id','=','customers.id')
@@ -379,7 +378,6 @@ class ProformaInvoice
              $price_list      = DB::table('price_taxation')
                                     ->join('price_range','price_range.price_taxation_id','price_taxation.id')
                                     ->join('tesco_template','tesco_template.item_id','price_taxation.template_id')
-                                    // ->join('tax_code','tesco_template.tax_code_id','tax_code.id')
                                     ->where('price_taxation.template_id','=',$item_id)
                                     ->where('price_taxation.customer_id',$customer_details->id)
                                     ->where('price_taxation.buyer_id',$buyer_id)
@@ -483,7 +481,6 @@ class ProformaInvoice
           if ($customer_details->nominated_forwarder!=null)
           {
            $customer_details->freight_terms =  DB::table('nominated_forwarders')->pluck('forwarder')->first();
-           // $customer_details['template_type'] = $pi_details->template_type;
           }
         }                        
         $data['bank_details']   = $customer_details;
@@ -609,9 +606,9 @@ class ProformaInvoice
       $pdf->SetXY(14, 35);
       $pdf->writeHTML($dynView->render());
 
-      $pdfdata =$pdf->output( public_path('storage/app/public/pi/'.$pi_name.'.pdf'), 'F');
+      $pdf->output( public_path('storage/app/public/pi/'.$pi_name.'.pdf'), 'F');
 
-      $attachment =  public_path('storage/app/public/pi/'.$pi_name.'.pdf');
+      public_path('storage/app/public/pi/'.$pi_name.'.pdf');
       return "/storage/app/public/pi/".$pi_name.".pdf";
     }
 }
