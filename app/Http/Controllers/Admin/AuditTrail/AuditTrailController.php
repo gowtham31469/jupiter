@@ -5,10 +5,7 @@ namespace App\Http\Controllers\Admin\AuditTrail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Classes\Modules;
-use Response;
 use View;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Validator;
 use DB;
 use Illuminate\Support\Facades\Redis;
 
@@ -24,9 +21,10 @@ class AuditTrailController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Modules $module)
     {
        $this->middleware('auth');
+       $this->module = $module;
     }
     /**
      * Show the Audits list page.
@@ -36,12 +34,11 @@ class AuditTrailController extends Controller
      */
     public function index()
     {
-        $module_var = new Modules();
-        $is_allowed = $module_var->permittedModules();
+        $is_allowed = $this->module->permittedModules();
         if($is_allowed)
         {
-            $get_main_module = $module_var->getMainModules();
-            $get_sub_module = $module_var->getSubModules(44);
+            $get_main_module = $this->module->getMainModules();
+            $get_sub_module = $this->module->getSubModules(44);
             $audit_data = DB::table('audits')
                           ->join('users','users.id','audits.user_id')
                           ->select('audits.id','audits.module','audits.ip_address','audits.user_agent','audits.event','audits.url','audits.created_at','users.name','users.email')
@@ -127,6 +124,7 @@ class AuditTrailController extends Controller
                 unset($new_data->template_id);
                 $value->new_values = json_encode($new_data);
               }
+              unset($value);
                
               /***********REDIS***************/
               /** set auditing data into redis */ 

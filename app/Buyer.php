@@ -13,6 +13,8 @@ class Buyer extends Model
       */
       protected $table = 'buyers';
 
+      protected $primaryKey = 'id';
+
      /**
       * The attributes that are mass assignable.
       *

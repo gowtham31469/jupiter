@@ -13,6 +13,8 @@ class TescoTaxCode extends Model
       */
       protected $table = 'tax_code';
 
+      protected $primaryKey = 'id';
+
      /**
       * The attributes that are mass assignable.
       *

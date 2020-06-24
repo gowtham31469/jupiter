@@ -13,6 +13,8 @@ class TescoBrand extends Model
       */
       protected $table = 'tesco_brand';
 
+      protected $primaryKey = 'id';
+
      /**
       * The attributes that are mass assignable.
       *
