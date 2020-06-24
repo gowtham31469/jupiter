@@ -5429,24 +5429,18 @@ function washcarelabels(data, dataid,color_code,new_flag) {
         //svgDoc.getElementById("product_family").innerHTML = data.product_family[0].arabic;
         svgDoc.getElementById("parcel_code2").innerHTML = data.order_details[0].UVC_TCO;
 		
-        //alert(data.order_details[0].Size)
+		//alert(data.order_details[0].Size)
 		
-		if(data.order_details[0].Size == "TAILLE UNIQUE")
+		
+		if(size[0] == "TAILLE")
 		{
 			//var inches=$('#washcarelabelform' + dataid+' .washonesizein').val()
 			//var cm=$('#washcarelabelform' + dataid+' .washonesizecm').val()
 			
 			svgDoc.getElementById("size_in_fr_en1").innerHTML = "";
         	svgDoc.getElementById("size_in_fr_en2").innerHTML = "";
-			svgDoc.getElementById("size1").innerHTML ="TAILLE UNIQUE";
-			svgDoc.getElementById("size2").innerHTML ="TAILLE UNIQUE";
-		}
-		else if(data.order_details[0].Size == "TAILLE L")
-		{
-			svgDoc.getElementById("size1").innerHTML = "TAILLE L";
-			svgDoc.getElementById("size2").innerHTML = "TAILLE L";
-			svgDoc.getElementById("size_in_fr_en1").innerHTML = "";
-			svgDoc.getElementById("size_in_fr_en2").innerHTML = "";
+			svgDoc.getElementById("size1").innerHTML = size;
+			svgDoc.getElementById("size2").innerHTML = size;
 		}
 		else
 		{
@@ -8434,22 +8428,15 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
 								svgDoc.getElementById("parcel_code2").innerHTML = datas.order_details[0].UVC_TCO;
 								
 								
-		if(datas.order_details[0].Size == "TAILLE UNIQUE")
+		if(size[0] == "TAILLE")
 		{
 			//var inches=$('#washcarelabelform' + dataid+' .washonesizein').val()
 			//var cm=$('#washcarelabelform' + dataid+' .washonesizecm').val()
 			
-			svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm";
-        svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm";
-			svgDoc.getElementById("size1").innerHTML ="TU";
-			svgDoc.getElementById("size2").innerHTML ="TU";
-		}
-		else if(datas.order_details[0].Size == "TAILLE L")
-		{
-			svgDoc.getElementById("size1").innerHTML = "TAILLE L";
-			svgDoc.getElementById("size2").innerHTML = "TAILLE L";
 			svgDoc.getElementById("size_in_fr_en1").innerHTML = "";
-			svgDoc.getElementById("size_in_fr_en2").innerHTML = "";
+        svgDoc.getElementById("size_in_fr_en2").innerHTML = "";
+			svgDoc.getElementById("size1").innerHTML = size;
+			svgDoc.getElementById("size2").innerHTML = size;
 		}
 		else
 		{
@@ -8657,22 +8644,15 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
 								svgDoc.getElementById("parcel_code1").innerHTML = datas.order_details[0].UVC_TCO;
 								svgDoc.getElementById("product_family").innerHTML = datas.product_family.length > 0 ? datas.product_family[0].arabic : "";
 								svgDoc.getElementById("parcel_code2").innerHTML = datas.order_details[0].UVC_TCO;
-								if(datas.order_details[0].Size == "TAILLE UNIQUE")
+								if(size[0] == "TAILLE")
 								{
 									//var inches=$('#washcarelabelform' + dataid+' .washonesizein').val()
 									//var cm=$('#washcarelabelform' + dataid+' .washonesizecm').val()
 
-									svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm";
-								svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm";
-									svgDoc.getElementById("size1").innerHTML ="TU";
-									svgDoc.getElementById("size2").innerHTML ="TU";
-								}
-								else if(datas.order_details[0].Size == "TAILLE L")
-								{
-									svgDoc.getElementById("size1").innerHTML = "TAILLE L";
-									svgDoc.getElementById("size2").innerHTML = "TAILLE L";
 									svgDoc.getElementById("size_in_fr_en1").innerHTML = "";
-									svgDoc.getElementById("size_in_fr_en2").innerHTML = "";
+								svgDoc.getElementById("size_in_fr_en2").innerHTML = "";
+									svgDoc.getElementById("size1").innerHTML = size;
+									svgDoc.getElementById("size2").innerHTML = size;
 								}
 								else
 								{
