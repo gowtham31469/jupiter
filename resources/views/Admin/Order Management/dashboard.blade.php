@@ -66,22 +66,6 @@
 </style>
 <div class="col-sm-12 col-md-12 main">
 	<div class="top-content">
-		<!--
-        <ol class="breadcrumb">
-            <li><a href="/admin/dashboard">Dashboard</a></li>
-            <li class="active">Order Management</li>
-        </ol>
-        <form class="navbar-form pull-right" style="margin-top:0px;">
-            <label style="color: #333; margin-right: 10px;"><i class="ion-crop"></i>Select Buyer</label>
-            <select class="js-example-responsive buyer-select">
-                  <option></option>
-                    @foreach($buyers as $buyer)
-                    <option value="{{$buyer->id}}">{{$buyer->buyer_name}}</option>
-                    @endforeach
-              </select>
-        </form>
-
-        <h3><i class="ion-ios-browsers-outline"></i>Order Management</h3>-->
 		<div class="main-sub-menu hidden">
 			<div class="action-group pull-right">
 				<!-- <a href="#" class=" btn btn-primary btn-sm"><i class="ion-upload"></i>Upload Data</a> -->
@@ -821,49 +805,6 @@
 				})
 		}
 		$('.logo').html('Orders')
-		$('.buyer-select').change(function() {
-			if ($(this).val() != "") {
-
-				var csrf_token = $('meta[name="csrf-token"]').attr('content');
-				$.ajax({
-					url: base_url + "/admin/order-management/order_sub_modules",
-					type: "Post",
-					dataType: "json",
-					data: {
-						_token: csrf_token,
-						buyer: $(this).find("option:selected").text().toLowerCase()
-					},
-					beforeSend: function() {
-
-					},
-					success: function(data) {
-						//                         $('.sub-nav-list').html('<li class="dashboard sub_modules"><a href="" ><i class="ion-grid"></i>Dashboard</a></li>')
-						//                         $.each(data, function (index, value) {
-						//                            $('.sub-nav-list').append('<li class="'+value.module_name.toLowerCase().replace(" ", "_")+' sub_modules"><a href="#" onclick="'+value.url_path+'"><i class="'+value.image+'"></i>'+value.module_name+'</a></li>')
-						//                        });
-						//                         $('.main-sub-menu').removeClass('hidden');
-
-						//                        if(data[0].module_name == "Label Orders")
-						//                            {
-						//                                label_orders();
-						//                            }
-						//                         if(data[0].module_name == "Sticker Orders")
-						//                             {
-						sticker_orders();
-						//}                        
-					},
-					error: function(data) {
-
-					},
-					complete: function() {
-						$(".loader").hide();
-						$(".loader").css('margin-top', '0%');
-					}
-				})
-			} else {
-				location.reload()
-			}
-		});
 		
 		function viewed(id,table_name)
 		{
