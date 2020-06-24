@@ -111,8 +111,10 @@ class PoManagerController extends Controller
 										 ->join('erp_status','erp_orders.status','erp_status.id')
 										 ->where('erp_order_details.template_id',$valuess)
 										 ->whereIn('erp_orders.buyer_id', $buyers)
-										 ->where('erp_orders.status',1)
-										 ->orWhere('erp_orders.status',2)
+										 ->where(function($q) {
+											$q->where('erp_orders.status',1)
+											->orWhere('erp_orders.status',2);
+										 })
 										 ->groupBy('erp_orders.id','customers.company_name','erp_status.status_name','erp_order_details.created_at')
 										 ->select('erp_orders.*','customers.company_name','erp_status.status_name','erp_order_details.created_at as po_created_date')
 										 ->get();

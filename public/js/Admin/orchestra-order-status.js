@@ -3704,7 +3704,15 @@ function washcarelabelsOs(data, dataid) {
         made_option += "<option data-id='" + value.id + "'  data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' value=" + value.id + ">" + value.english + "</option>";
     });
     $.each(data.orchestra_care_instruction, function (index, value) {
-        instruction_option += "<option data-id='" + value.id + "' data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german  + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' value=" + value.id + ">" + value.english + "</option>";
+        if(value.english.length > 31)
+		{
+			var txtEng = value.english.slice(0,30)+"...";
+		}
+		else
+		{
+			var txtEng = value.english;
+		}
+        instruction_option += "<option data-id='" + value.id + "' data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german  + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' value=" + value.id + ">" + txtEng + "</option>";
     });
     $.each(data.orchestra_parts, function (index, value) {
         parts_option += "<option data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' value=" + value.id + ">" + value.english + "</option>";
@@ -3713,16 +3721,24 @@ function washcarelabelsOs(data, dataid) {
         composition_option += "<option data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german  + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' value=" + value.id + ">" + value.english + "</option>";
     });
     $.each(data.orchestra_care_symbols, function (index, value) {
+        if(value.care_instruction.length > 15)
+		{
+			var carEng = value.care_instruction.slice(0,15)+"...";
+		}
+		else
+		{
+			var carEng = value.care_instruction;
+		}
         if (value.category_id == 1) {
-            washing_option += "<option data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + value.care_instruction + "' value=" + value.id + "  data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + ">" + value.care_instruction + "</option>";
+            washing_option += "<option data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + carEng + "' value=" + value.id + "  data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + ">" + carEng + "</option>";
         } else if (value.category_id == 2) {
-            whitening_option += "<option data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + value.care_instruction + "' data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + "  value=" + value.id + ">" + value.care_instruction + "</option>";
+            whitening_option += "<option data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + carEng + "' data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + "  value=" + value.id + ">" + carEng + "</option>";
         } else if (value.category_id == 3) {
-            dryer_option += "<option data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + value.care_instruction + "' value=" + value.id + "  data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + ">" + value.care_instruction + "</option>";
+            dryer_option += "<option data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + carEng + "' value=" + value.id + "  data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + ">" + carEng + "</option>";
         } else if (value.category_id == 4) {
-            ironing_option += "<option data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + value.care_instruction + "' value=" + value.id + "  data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + ">" + value.care_instruction + "</option>";
+            ironing_option += "<option data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + carEng + "' value=" + value.id + "  data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + ">" + carEng + "</option>";
         } else if (value.category_id == 5) {
-            cleaning_option += "<option data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + value.care_instruction + "' value=" + value.id + "  data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + ">" + value.care_instruction + "</option>";
+            cleaning_option += "<option data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + carEng + "' value=" + value.id + "  data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + ">" + carEng + "</option>";
         }
 
     });
@@ -4224,29 +4240,22 @@ function washcarelabelsOs(data, dataid) {
 		
         //alert(data.order_details[0].Size)
 		
-		if(data.order_details[0].Size == "TAILLE UNIQUE")
+		if(size[0] == "TAILLE")
 		{
 			//var inches=$('#washcarelabelform' + dataid+' .washonesizein').val()
 			var cm=$('#washcarelabelform' + dataid+' .washonesizecm').val()
 			
-			svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm";
-        svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm";
-			svgDoc.getElementById("size1").innerHTML ="TU";
-			svgDoc.getElementById("size2").innerHTML ="TU";
-		}
-		else if(data.order_details[0].Size == "TAILLE L")
-		{
-			svgDoc.getElementById("size1").innerHTML = "TAILLE L";
-			svgDoc.getElementById("size2").innerHTML = "TAILLE L";
 			svgDoc.getElementById("size_in_fr_en1").innerHTML = "";
-			svgDoc.getElementById("size_in_fr_en2").innerHTML = "";
+            svgDoc.getElementById("size_in_fr_en2").innerHTML = "";
+			svgDoc.getElementById("size1").innerHTML = size;
+			svgDoc.getElementById("size2").innerHTML = size;
 		}
 		else
 		{
 			svgDoc.getElementById("size_in_fr_en1").innerHTML = data.order_details[0].cm + "cm";
-        svgDoc.getElementById("size_in_fr_en2").innerHTML = data.order_details[0].cm + "cm";
-			  svgDoc.getElementById("size1").innerHTML = data.order_details[0].Size.replace(" ", "").toLowerCase() + "/" + size1;
-			  svgDoc.getElementById("size2").innerHTML = data.order_details[0].Size.replace(" ", "").toLowerCase() + "/" + size1;
+            svgDoc.getElementById("size_in_fr_en2").innerHTML = data.order_details[0].cm + "cm";
+			svgDoc.getElementById("size1").innerHTML = data.order_details[0].Size.replace(" ", "").toLowerCase() + "/" + size1;
+			svgDoc.getElementById("size2").innerHTML = data.order_details[0].Size.replace(" ", "").toLowerCase() + "/" + size1;
 		}
       
 

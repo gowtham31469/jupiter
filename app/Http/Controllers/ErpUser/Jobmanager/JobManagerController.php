@@ -5511,6 +5511,14 @@ class JobManagerController extends Controller
 		  $name=$this->template_name;
 		  $zone=$this->template_zone;
 			$tesco_po_number=$this->tesco_po_number;
+			if($tesco_po_number == null || $tesco_po_number == "null")
+			{
+				$tesco_po_number = "";
+			}
+			else
+			{
+				$tesco_po_number = $tesco_po_number;
+			}
 			$style=$this->style;
 			$tesco_description=$this->template_desc;
 			$date=date_create($this->created_date);
@@ -5604,6 +5612,14 @@ class JobManagerController extends Controller
 			// Custom Footer
 			PDF::setFooterCallback(function($pdf) {
 			$tesco_po_number=$this->tesco_po_number;
+			if($tesco_po_number == null || $tesco_po_number == "null")
+			{
+				$tesco_po_number = "";
+			}
+			else
+			{
+				$tesco_po_number = $tesco_po_number;
+			}
 			$customer_name=$this->customer_name;
 			// Position at 15 mm from bottom
 			$pdf->SetY(-50);
@@ -5718,39 +5734,42 @@ class JobManagerController extends Controller
 		
 		//print_r($tbl2);
 		$tbl3="";
+		$orchestra_wash_care_composition = DB::table('orchestra_wash_care_composition')
+					->select('*')->where('owcl_id',$request->parentId)->get();
+					//print_r($orchestra_wash_care_composition);
 		$composition = json_decode($request->composition);
 		//print_r($composition);
-		foreach($composition as $key => $value)
+		$page_id = "";
+		foreach($orchestra_wash_care_composition as $key => $value)
 		{
 			
-			$express_value = explode('_',$value[0]);
-			if($express_value[0] != "Select Option")
+			if($value->page_id != $page_id )
 			{
-					$exp_value = explode('_',$value[0]);
-					$orchestra_parts = DB::table('orchestra_parts')->select('*')->where('id',$exp_value[0])->get();
-				
-					$tbl3.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%)">'.$orchestra_parts{0}->french.' - '.$orchestra_parts{0}->english.' - '.$orchestra_parts{0}->spanish.' - '.$orchestra_parts{0}->portuguese.' - '.$orchestra_parts{0}->italian.' - '.$orchestra_parts{0}->dutch.' - '.$orchestra_parts{0}->german.' - <span>'.$orchestra_parts{0}->arabic.'</span> - '.$orchestra_parts{0}->greek.'</p><br><br>';
+					$orchestra_parts = DB::table('orchestra_parts')->select('*')->where('id',$value->parts_id)->get();
+					if(count($orchestra_parts) > 0)
+					{
+						$tbl3.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%)">'.$orchestra_parts{0}->french.' - '.$orchestra_parts{0}->english.' - '.$orchestra_parts{0}->spanish.' - '.$orchestra_parts{0}->portuguese.' - '.$orchestra_parts{0}->italian.' - '.$orchestra_parts{0}->dutch.' - '.$orchestra_parts{0}->german.' - <span>'.$orchestra_parts{0}->arabic.'</span> - '.$orchestra_parts{0}->greek.'</p><br><br>';
+					}
 			}
-			foreach($value as $key1 => $value1)
-            {
-				$exp_val = explode('_',$value1);
-				$orchestra_compositions = DB::table('orchestra_compositions')->select('*')->where('english',$exp_val[1])->get();
+			
+				$orchestra_compositions = DB::table('orchestra_compositions')->select('*')->where('id',$value->composition_id)->get();
 				
-				$tbl3.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$exp_val[2].'% '.$orchestra_compositions{0}->french.' - '.$orchestra_compositions{0}->english.' - '.$orchestra_compositions{0}->spanish.' - '.$orchestra_compositions{0}->portuguese.' - '.$orchestra_compositions{0}->italian.' - '.$orchestra_compositions{0}->dutch.' - '.$orchestra_compositions{0}->german.' - <span style="font-family:Tahoma">'.$orchestra_compositions{0}->arabic.'</span> - '.$orchestra_compositions{0}->greek.'</p><br><br>';
-			}
+				$tbl3.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$value->percentage.'% '.$orchestra_compositions{0}->french.' - '.$orchestra_compositions{0}->english.' - '.$orchestra_compositions{0}->spanish.' - '.$orchestra_compositions{0}->portuguese.' - '.$orchestra_compositions{0}->italian.' - '.$orchestra_compositions{0}->dutch.' - '.$orchestra_compositions{0}->german.' - <span style="font-family:Tahoma">'.$orchestra_compositions{0}->arabic.'</span> - '.$orchestra_compositions{0}->greek.'</p><br><br>';
+				$page_id = $value->page_id;
+
 		}
 		$xx=12.5;
 		$i=0;
 		foreach($svgarr as $value)
 		{
 			$svg=urldecode($value);
-			PDF::writeHTMLCell('25.5', '40', $xx, $y=5, '<p style="font-size:12px">Back</p>', '', 0, 0, true, 'C', true);
-        	PDF::ImageSVG('@' . $svg, $x=$xx, $y=12.5, '25.5', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			PDF::writeHTMLCell('25.5', '40', $xx, $y=42.5, '<p style="font-size:12px">Back</p>', '', 0, 0, true, 'C', true);
+        	PDF::ImageSVG('@' . $svg, $x=$xx, $y=50, '25.5', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			PDF::SetFillColor(255, 255, 255);
 			PDF::SetTextColor(0, 0, 0);
-			PDF::writeHTMLCell('25.5', '40', $xx, '135', $tbl, '', 0, 0, true, 'C', true);
-			PDF::writeHTMLCell('26', '40', $xx, '154.3', $tbl1, '', 0, 0, true, 'C', true);
-			PDF::writeHTMLCell('25.5', '40', $xx, $y=180, '<p style="font-size:12px">Front</p>', '', 0, 0, true, 'C', true);
+			PDF::writeHTMLCell('25.5', '40', $xx, '172.5', $tbl, '', 0, 0, true, 'C', true);
+			PDF::writeHTMLCell('26', '40', $xx, '191.8', $tbl1, '', 0, 0, true, 'C', true);
+			PDF::writeHTMLCell('25.5', '40', $xx, $y=217.5, '<p style="font-size:12px">Front</p>', '', 0, 0, true, 'C', true);
 			$xx += 37.5;
 			$i++;
 			
@@ -5761,13 +5780,13 @@ class JobManagerController extends Controller
 				$xx=12.5;
 			}
 		}
-		PDF::writeHTMLCell('25.5', '40', $xx, $y=5, '<p style="font-size:12px">Back</p>', '', 0, 0, true, 'C', true);
-		PDF::ImageSVG('@' . $svg_back, $xx, $y=12.5, '25.5', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
-		PDF::writeHTMLCell('22', '40', $xx + 2.25, '25', $tbl2, '', 0, 0, true, 'C', true);
-		PDF::writeHTMLCell('25', '40', $xx + 1, '110', $tbl3, '', 0, 0, true, 'C', true);
-		PDF::writeHTMLCell('25.5', '40', $xx, $y=180, '<p style="font-size:12px">Front</p>', '', 0, 0, true, 'C', true);
+		PDF::writeHTMLCell('25.5', '40', $xx, $y=42.5, '<p style="font-size:12px">Back</p>', '', 0, 0, true, 'C', true);
+		PDF::ImageSVG('@' . $svg_back, $xx, $y=50, '25.5', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		PDF::writeHTMLCell('22', '40', $xx + 2.25, '62.5', $tbl2, '', 0, 0, true, 'C', true);
+		PDF::writeHTMLCell('25', '40', $xx + 1, '147.5', $tbl3, '', 0, 0, true, 'C', true);
+		PDF::writeHTMLCell('25.5', '40', $xx, $y=217.5, '<p style="font-size:12px">Front</p>', '', 0, 0, true, 'C', true);
 		PDF::AddPage();
-		PDF::ImageSVG('@' . $svg_middle, $x=50, $y=12.5, '55.5', '82.5', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		PDF::ImageSVG('@' . $svg_middle, $x=50, $y=50, '55.5', '82.5', $link='', $align='', $palign='', $border=0, $fitonpage=false);
 		
 		//print_r($i);
 //		if($i == 0)
