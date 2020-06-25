@@ -5,13 +5,8 @@ namespace App\Http\Controllers\Admin\AdminRoleManagement;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Classes\Modules;
-use Response;
 use View;
 use App\User;
-use App\UserRole;
-use App\RolePermissionMdl;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Validator;
 use DB;
 use Hash;
 
@@ -84,8 +79,8 @@ class AdminRoleManagementController extends Controller
                 $phone                 = $request['phone'];
                 $address               = preg_replace('/\s*,\s*/', ', ', $request['address']);
                 $password              = Hash::make($request['p']);
-                $email_exists = User::where('email',$email)->select('id')->get();
-                if(count($email_exists) > 0)
+                
+                if(User::where('email',$email)->exists())
                 {
                   $result = response()->json(['error'=> true,'message' =>'Email Already Exists'],409);
                 }
@@ -129,9 +124,7 @@ class AdminRoleManagementController extends Controller
       public function makeAdminActive(Request $request)
       {
         try {
-              $id      = $request['id'];
-              
-              User::where('id',$id)
+              User::where('id', $request['id'])
                ->update([
                  'is_active'  => 1
               ]);
@@ -153,9 +146,7 @@ class AdminRoleManagementController extends Controller
       public function makeAdminInactive(Request $request)
       {
         try {
-              $id      = $request['id'];
-              
-              User::where('id',$id)
+              User::where('id', $request['id'])
                ->update([
                  'is_active'  => 0
               ]);

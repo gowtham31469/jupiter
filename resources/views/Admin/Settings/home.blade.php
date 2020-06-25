@@ -1354,6 +1354,7 @@
             </div>
             {!! Form::open(['id' => 'add_orchestra_color_form','data-toggle' => 'validator','role' => 'form']) !!}
                 <div class="modal-body">
+                <div id="orch_color_error"></div>
                   <div class="row">
                     <div class="col-md-6">
                     <div class="form-group has-feedback">
@@ -1397,6 +1398,7 @@
           </div>
           {!! Form::open(['id' => 'edit_orchestra_color_code_form','data-toggle' => 'validator','role' => 'form']) !!}
               <div class="modal-body">
+              <div id="edit_orch_color_error"></div>
                 {!! Form::hidden('edit_orchestra_color_code_id',$value = null, array('id'=>'edit_orchestra_color_code_id','class' => 'form-control input-sm')) !!}
                 <div class="row">
                   <div class="col-md-6">
@@ -2137,6 +2139,8 @@
         $('#edit_tesco_material_result').hide();
         $('#tesco_error_report_email_result').hide();
         $('#edit_tesco_error_report_email_result').hide();
+        $('#orch_color_error').hide();
+        $('#edit_orch_color_error').hide();
         $('.hidden-error').html('');
        })
 
