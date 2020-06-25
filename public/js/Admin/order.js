@@ -3202,7 +3202,9 @@ function PopupWash(data,data_back,data_middle,dataid,svgDoc1) {
 	
 	var d_middle = data_middle;
     var str_middle = s.serializeToString(d_middle);
-    var svg_middle = encodeURI(str_middle)
+	var svg_middle = encodeURI(str_middle)
+	
+	var id = $('#exist_id'+dataid).val()
 	
     var success = false;
     var url = "";
@@ -3221,7 +3223,8 @@ function PopupWash(data,data_back,data_middle,dataid,svgDoc1) {
         type: "post",
         data: {
             _token: csrf_token,
-            made_in_select:made_in_select,
+			made_in_select:made_in_select,
+			id:id,
             care_instruction_select_fin:care_instruction_select_fin,
             composition:wash_finals,
             svg: data,
