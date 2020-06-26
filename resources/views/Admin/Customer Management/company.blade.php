@@ -440,6 +440,7 @@
     $('.modal').on('hidden.bs.modal', function (e) {
       $('#add_customer_form').trigger('reset');
       $('#customer_result').hide();
+      $('#customer_edit_result').hide();
       $('#customer_add_role').val('0').selectpicker('refresh');
       $('#customer_add_company').val('0').selectpicker('refresh');
       $('#customer_add_buyer').val('0').selectpicker('refresh');
