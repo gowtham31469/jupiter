@@ -1,5 +1,6 @@
 <?php
 namespace App\Classes;
+use Exception;
 /**
  * FPDF_Merge
  * Tool to merge PDFs created by fpdf 1.6         
@@ -156,7 +157,7 @@ namespace App\Classes;
             $type = self::TYPE_TOKEN;
             
             if (!isset($xref[$index])){
-                $this->error('reference d\'object inconnue');
+                $this->error('unknown object reference');
             }
             
             fseek($f, $xref[$index]);
@@ -189,14 +190,14 @@ namespace App\Classes;
             }while( ($p === false) && ($prev !== $len) );
             
             if ($p === false){
-                $this->error('object ['.$index.'] non trouve');
+                $this->error('object ['.$index.'] not found');
             }
             
             $p--;
             $data = substr($data,0, $p);
             
             if (!preg_match('`^([0-9]+ 0 obj)`', $data, $m, PREG_OFFSET_CAPTURE)){
-                $this->error('object ['.$index.'] invalide');
+                $this->error('object ['.$index.'] invalid');
             }
             
             $p = $m[0][1] + strlen($m[1][0]) + 1;
@@ -255,7 +256,7 @@ namespace App\Classes;
         
         private function getResources($f, $xref, $page){
             if ($page[0] !== self::TYPE_DICTIONARY){
-                $this->error('getResources necessite un dictionaire');
+                $this->error('getResources requires a dictionary');
             }
             if (isset($page[1]['/Resources'])){
                 if ($page[1]['/Resources'][0] === self::TYPE_REFERENCE){
@@ -271,7 +272,7 @@ namespace App\Classes;
         
         private function getContent($f, $xref, $page){
             if ($page[0] !== self::TYPE_DICTIONARY){
-                $this->error('getContent necessite un dictionaire');
+                $this->error('getContent requires a dictionary');
             }
             $stream = '';
             if (isset($page[1]['/Contents'])){
@@ -319,14 +320,14 @@ namespace App\Classes;
                     	if (function_exists('gzuncompress')) {
                             $raw = !empty($raw) ? @gzuncompress($raw) : '';
                         } else {
-                            $this->error('gzuncompress necessaire pour decompresser ce stream');
+                            $this->error('gzuncompress needed to decompress this stream');
                         }
                         if ($raw === false) {
-                        	$this->error('erreur de decompression du stream');
+                        	$this->error('stream decompression error');
                         }
                     break;
                     default:
-                        $this->error($method . ' necessaire pour decompresser ce stream');
+                        $this->error($method . ' needed to decompress this stream');
                 }
             }
             return $raw;
@@ -519,7 +520,7 @@ namespace App\Classes;
         public function add( $filename ){
             $f = @fopen($filename, 'rb');
             if (!$f) {
-                $this->error('impossible d\'ouvrir le fichier');
+                $this->error('Impossible to open the file');
             }
             fseek($f, 0, SEEK_END);
             $fileLength = ftell($f);
@@ -530,7 +531,7 @@ namespace App\Classes;
             fseek($f, -128, SEEK_END);
             $data = fread($f, 128);
             if ($data === false) {
-                return $this->error('erreur de lecture dans le fichier');
+                return $this->error('read error in file');
             }
             $p = strripos($data, 'startxref');
             if ($p === false){
@@ -571,7 +572,7 @@ namespace App\Classes;
                         $index = intval($m[1]) - 1;
                         $cnt = intval($m[2]);
                     } else {
-                        $this->error('erreur dans xref');
+                        $this->error('error in xref');
                     }
                 } else {
                     $index++;
@@ -582,7 +583,7 @@ namespace App\Classes;
                         }
                         $xref[ $index ] = $m[1];
                     } else {
-                        $this->error('erreur dans xref : ' . $line);
+                        $this->error('error in xref : ' . $line);
                     }
                 }
             }
@@ -657,7 +658,7 @@ namespace App\Classes;
                 $mediaBox = isset($kid[1]['/MediaBox']) ? $kid[1]['/MediaBox'] : (isset($pages['/MediaBox']) ? $pages['/MediaBox'] : null);
             
                 if ($mediaBox[0] !== self::TYPE_ARRAY){
-                    $this->error('MediaBox non definie');
+                    $this->error('MediaBox not defined');
                 }
                 
                 
