@@ -3080,17 +3080,33 @@ class JobManagerController extends Controller
 			$total+=$sizebrk[$i];
 			$i++;
 		}
-		if(strlen($color_code) > 6)
+		if(count($size) > 6)
 		{
-			$text_size = "6.5px";
-			$line_height = "4";
-			$line="2";
+			if(strlen($color_code) > 6)
+			{
+				if($color_code == "BLEU FONCE" || $color_code == "BLEU CLAIR" || $color_code == "GRIS CLAIR" || $color_code == "GRIS FONCE" || $color_code == "ROSE CLAIR" || $color_code == "ROSE FONCE" || $color_code == "VERT FONCE" || $color_code == "VERT CLAIR" || $color_code == "BEIGE CLAIR")
+				{
+					$line_height = "2.5";
+				}
+				else
+				{
+					$line_height = "1.2";	
+				}
+				$text_size = "7.5px";
+				$line="1.5";
+			}
+			else
+			{
+				$text_size = "7.5px";
+				$line_height = "2.5";
+				$line="1.5";
+			}
 		}
 		else
 		{
-			$text_size = "14px";
-			$line_height = "2";
-			$line="2.3";
+			$text_size = "7.5px";
+			$line_height = "2.5";
+			$line="1.5";
 		}
           $tbl = '<table  border="1" style="text-align:center;">
 		  			<tr style="line-height:0.53">
