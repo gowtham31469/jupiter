@@ -1,7 +1,7 @@
 /* Generic Function to Store values using AJAX */ 
 function store(url, data) {
 	try {
-		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+		
 
 		$.ajax({
 			url: base_url + url,

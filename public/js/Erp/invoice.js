@@ -780,7 +780,7 @@
      * @param  {[extra charges]}
      */
     function saveInvoice(finalData,eCharges){
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         var myOffscreenEl = document.getElementById("invoice");
         var roundOff = $('#round-off').val();
         var taxTotal = $('.tax-total').text();

@@ -408,6 +408,6 @@
 				  $('#customer_buyer').prop('required',true);
 			  } 
         });
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     </script>
     @endsection

@@ -189,7 +189,6 @@ function updateCustomerPassword() {
         var current_password = $('#current_password').val();
         var new_password     = $('#new_password').val();
 
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             url: base_url + "/customer/update-customer-password",
             dataType: "json",
@@ -340,7 +339,6 @@ function editCustomer() {
         var email   = $('#customer_email').val();
         var title   = $('#customer_title').val();
 
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             url: base_url + "/customer/update-customer-profile-details",
             dataType: "json",

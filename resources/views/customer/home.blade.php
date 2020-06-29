@@ -195,7 +195,7 @@
          */
         function showApprovedOrders()
         {
-            var csrf_token = $('meta[name="csrf-token"]').attr('content');
+            
             $.ajax({
                 url: base_url + "/customer/tesco/order-management/approved-orders",
                 type: "Post",
@@ -229,7 +229,7 @@
          */
         function showPendingOrders() 
         {
-          var csrf_token = $('meta[name="csrf-token"]').attr('content');
+          
           $.ajax({
               url: base_url + "/customer/tesco/order-management/pending-orders",
               type: "Post",
@@ -264,7 +264,7 @@
          */
         function showCancelledOrders() 
         {
-            var csrf_token = $('meta[name="csrf-token"]').attr('content');
+            
             $.ajax({
                 url: base_url + "/customer/tesco/order-management/cancelled-orders",
                 type: "Post",

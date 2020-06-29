@@ -686,7 +686,7 @@
       /* Refresh auto populate country functionality */
       autopopulateCountry(0)
     });
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
 
     /** restrict special characters (except @, ., _ **/
     $('input').on('input', function() {

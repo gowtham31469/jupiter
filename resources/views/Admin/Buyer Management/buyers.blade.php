@@ -208,7 +208,7 @@
          $('#output').attr('style', '');
          $("#edit_image").val(null);
        });
-       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+       
        /** Add buyer bootstrap form validation **/
         $('#add_buyer_form').validator().on('submit', function (e) {
         if (e.isDefaultPrevented())

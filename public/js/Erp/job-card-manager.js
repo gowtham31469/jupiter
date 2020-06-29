@@ -2476,7 +2476,7 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
     var position = 3;
     var ref_name = [name2.slice(0, position), b, name2.slice(position)].join('').trim();
 
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
         $.ajax({
             url: base_url + "/erp/job-manager/get-order-details",
             type: "Post",
@@ -2713,7 +2713,7 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
     var b = " ";
     var position = 3;
     var ref_name = [name2.slice(0, position), b, name2.slice(position)].join('').trim();
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
         $.ajax({
             url: base_url + "/erp/job-manager/get-order-details",
             type: "Post",
@@ -4222,7 +4222,7 @@ function PopupWashJCPreview(data,data_back,data_middle,svgDoc1,pid,isEdit,name,i
     var success = false;
     var url = "";
 
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
 
     $.ajax({
 
@@ -4334,7 +4334,7 @@ function PopupHangJCPreview(svgRoot, svgRoot1,svgDoc,svgDoc1,disney,isEdit,name,
 
 	var success = false;
 	var url = "";
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/print-hang-pdf",
 		type: "post",
@@ -4381,7 +4381,7 @@ function PopupOrchestraJCPreview(data,name,isEdit,id,style_no,buyer_no,created_a
 	var success = false;
 	var url = "";
 	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/orchestra/print-pdf",
 		type: "post",
@@ -4429,7 +4429,7 @@ function PopupArrOrchestraJCPreview(data,name,svgDoc,isEdit,id,style_no,buyer_no
 	var success = false;
 //	var url = "";
 	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/orchestra/print-pdf-arr",
 		type: "post",
@@ -4488,7 +4488,7 @@ function PopupTableOrchestraJCPreview(data,name,size,qty,sizebrk,isEdit,id,style
 	var sizefin = size.join(',')
 	var qtyfin = qty.join(',')
 	var sizebrkfin = sizebrk.join(',')
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/orchestra/print-pdf-table",
 
@@ -4537,7 +4537,7 @@ function PopupOrchestrasmallJCPreview(data,name,svgDoc,isEdit,id,style_no,buyer_
 //	var svg = encodeURI(str)
 	var success = false;
 //	var url = "";
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/orchestra/print-pdf-small",
 		type: "post",

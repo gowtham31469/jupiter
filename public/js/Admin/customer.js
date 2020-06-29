@@ -27,7 +27,7 @@ function customersListView() {
         $('#customers_metadata').prop('required', false);
 
         var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         $.ajax({
             url: base_url + "/admin/customer-management/customers-list",
             type: "Post",
@@ -132,7 +132,7 @@ function addCustomer() {
         var gstin_number = $('#gstin_number').val();
         var pan_number = $('#pan_number').val();
         var login_email = $('#login_email').val();
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         var pi_required = $('#pi_required').is(':checked') ? 1 : 0;
         var payment_term = $("#payment_terms option:selected").val();
         var place_of_supply = $("#place_of_supply option:selected").val();
@@ -1078,7 +1078,7 @@ function editCustomer() {
         var gstin_number = $('#edit_gstin_number').val();
         var pan_number = $('#edit_pan_number').val();
         var login_email = $('#edit_login_email').val();
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         var pi_required = $('#edit_pi_required').is(':checked') ? 1 : 0;
         var payment_term = $("#edit_payment_terms option:selected").val();
         var place_of_supply = $("#edit_place_of_supply option:selected").val();

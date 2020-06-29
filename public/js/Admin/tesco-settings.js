@@ -14,7 +14,7 @@ function tescoBrands() {
     $('.tesco-sidebar').show();
     $('.orchestra-sidebar').hide();
     
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     $.ajax({
         url: base_url + "/admin/tesco/settings/brands",
         type: "POST",
@@ -88,7 +88,7 @@ function tescoBrands() {
  {
     try{
          var name       = $('#brand_name').val();
-         var csrf_token = $('meta[name="csrf-token"]').attr('content');
+         
 
          $.ajax({
              url: base_url + "/admin/tesco/add-tesco-brands",
@@ -191,7 +191,7 @@ function tescoBrands() {
   try{
        var id         = $('#edit_tesco_brands_id').val();
        var name       = $('#edit_brand_name').val();
-       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+       
        $.ajax({
            url:base_url + "/admin/tesco/update-tesco-brands",
            dataType:"json",
@@ -341,7 +341,7 @@ function tescoDepartment() {
       $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
       $('.tesco-sidebar').show();
       $('.orchestra-sidebar').hide();
-      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      
       $.ajax({
           url: base_url + "/admin/tesco/settings/departments",
           type: "POST",
@@ -419,7 +419,7 @@ function tescoDepartment() {
           var department       = $('#department_name').val();
           var pantone       = $('#pantone').val();
           var rbg = $('#rbg').val();
-          var csrf_token = $('meta[name="csrf-token"]').attr('content');
+          
  
           $.ajax({
               url: base_url + "/admin/tesco/add-tesco-departments",
@@ -527,7 +527,7 @@ function tescoDepartment() {
        var department       = $('#edit_department_name').val();
        var pantone = $('#edit_pantone_name').val();
        var rbg = $('#edit_rbg_name').val();
-       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+       
        $.ajax({
            url:base_url + "/admin/tesco/update-tesco-departments",
            dataType:"json",
@@ -675,7 +675,7 @@ function tescoSuppliers() {
       $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
       $('.tesco-sidebar').show();
       $('.orchestra-sidebar').hide();
-      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      
       $.ajax({
           url: base_url + "/admin/tesco/settings/suppliers",
           type: "POST",
@@ -750,7 +750,7 @@ function tescoSuppliers() {
      try{
           var supplier_name      = $('#supplier_name').val();
           var supplier_code       = $('#supplier_code').val();
-          var csrf_token = $('meta[name="csrf-token"]').attr('content');
+          
  
           $.ajax({
               url: base_url + "/admin/tesco/add-tesco-suppliers",
@@ -857,7 +857,7 @@ function tescoSuppliers() {
        var supplier_name       = $('#edit_supplier_name').val();
        var supplier_code = $('#edit_supplier_code').val();
 
-       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+       
        $.ajax({
            url:base_url + "/admin/tesco/update-tesco-suppliers",
            dataType:"json",
@@ -1007,7 +1007,7 @@ function tescoSizeChart() {
       $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
       $('.tesco-sidebar').show();
       $('.orchestra-sidebar').hide();
-      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      
       $.ajax({
           url: base_url + "/admin/tesco/settings/sizechart",
           type: "POST",
@@ -1083,7 +1083,7 @@ function tescoSizeChart() {
           var po_size      = $('#po_size').val();
           var uk       = $('#uk').val();
           var ce = $('#ce').val();
-          var csrf_token = $('meta[name="csrf-token"]').attr('content');
+          
  
           $.ajax({
               url: base_url + "/admin/tesco/add-tesco-size-charts",
@@ -1191,7 +1191,7 @@ function tescoSizeChart() {
        var uk = $('#edit_uk').val();
        var ce = $('#edit_ce').val();
 
-       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+       
        $.ajax({
            url:base_url + "/admin/tesco/update-tesco-sizecharts",
            dataType:"json",
@@ -1340,7 +1340,7 @@ function taxCode() {
       $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
       $('.tesco-sidebar').show();
       $('.orchestra-sidebar').hide();
-      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      
       $.ajax({
           url: base_url + "/admin/tesco/settings/tax-code",
           type: "POST",
@@ -1397,7 +1397,7 @@ function taxCode() {
           var tax_type   = $('#tax_type').val();
           var tax_code   = $('#tax_code').val();
           var tax        = $('#tax').val();
-          var csrf_token = $('meta[name="csrf-token"]').attr('content');
+          
  
           $.ajax({
               url: base_url + "/admin/tesco/add-tesco-tax-code",
@@ -1506,7 +1506,7 @@ function taxCode() {
        var tax_code  = $('#edit_tax_code').val();
        var tax       = $('#edit_tax').val();
 
-       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+       
        $.ajax({
            url:base_url + "/admin/tesco/update-tesco-tax-code",
            dataType:"json",
@@ -1554,7 +1554,7 @@ function tescoMaterialMasters() {
       $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
       $('.tesco-sidebar').show();
       $('.orchestra-sidebar').hide();
-      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      
       $.ajax({
           url: base_url + "/admin/tesco/settings/material",
           type: "POST",
@@ -1887,7 +1887,7 @@ function tescoErrorReportEmail() {
       $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
       $('.tesco-sidebar').show();
       $('.orchestra-sidebar').hide();
-      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      
       $.ajax({
           url: base_url + "/admin/tesco/settings/error-report-emails",
           type: "POST",

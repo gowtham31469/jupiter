@@ -47,7 +47,7 @@ function tescoOrders(callback) {
     localStorage.removeItem("data");
     localStorage.removeItem("template_group");
     localStorage.removeItem("moq_values");
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     try {
         /** [ ajax call to load tesco order page ] **/
         $.ajax({
@@ -1937,7 +1937,7 @@ function PopupTesco(data,name,zone) {
 	
 	var tesco_description = $('#tesco_description').val();
 	// window.open(base_url + "/customer/order-management/print-pdf?svg="+svg);
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/customer/tesco/print-div-tesco",
 		type: "post",
@@ -2022,7 +2022,7 @@ function PopupTescoSmall(data,name,zone) {
 	//var success = false;
 	var url = "";
 	// window.open(base_url + "/customer/order-management/print-pdf?svg="+svg);
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/customer/tesco/print-div-tesco-small",
 		type: "post",
@@ -7625,7 +7625,7 @@ function cancelTescoOrder() {
 			my_object.table_id = table_id.value;
 			array_list.push(my_object);
 		});
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
 
         $.ajax({
             url: base_url + "/customer/tesco/cancel-tesco-order",

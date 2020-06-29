@@ -4,7 +4,7 @@
 function price_template_list() {
     var buyer = localStorage.getItem("buyer");
     var buyer_id = localStorage.getItem("buyer_id");
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     $.ajax({
         url:base_url + "/admin/customer-management/get-buyers-customers",
         type:"GET",
@@ -82,7 +82,7 @@ function price_template_list() {
                 if (data.instance.is_leaf(data.node)) {
                     var template_id = data.node.id;
                     localStorage.setItem("template_id", data.node.id);
-                    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                    
                     if(buyer === 'tesco') {
                         var url = base_url + "/admin/" + buyer + "/customer-management/template-view";
                     } else if(buyer === 'orchestra') {

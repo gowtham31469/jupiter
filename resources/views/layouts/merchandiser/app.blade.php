@@ -290,7 +290,6 @@ function editMerchandiser() {
         var address = $('#merchandiser_profile_address').val();
         var buyer   = $('#merchandiser_buyer').val();
 
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             url: base_url + "/merchandiser/update-merchandiser-profile-details",
             dataType: "json",
@@ -367,7 +366,6 @@ function updateMerchandiserPassword() {
         var current_password = $('#current_password').val();
         var new_password     = $('#new_password').val();
 
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             url: base_url + "/merchandiser/update-merchandiser-password",
             dataType: "json",

@@ -434,7 +434,7 @@
 				  $('#customer_buyer').prop('required',true);
 			  } 
         });
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
 
     /** To refresh modal and form data**/
     $('.modal').on('hidden.bs.modal', function (e) {

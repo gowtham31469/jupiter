@@ -158,7 +158,7 @@ $(document).ready(function() {
    */
   function  viewedApproved(id,table_name) 
   {
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     $.ajax({
         url: base_url + "/customer/tesco/order-management/viewed-approved",
         type: "Post",
@@ -195,7 +195,7 @@ $(document).ready(function() {
   function viewedSelectedApproved()
   {
       var formdata = $("#frm-example").serialize();
-      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      
       var selected = [];
       $('#frm-example input[type=checkbox]').each(function () {
           if (this.checked) {
@@ -313,7 +313,7 @@ $(document).ready(function() {
    */
   function  viewedPending(id,table_name) 
   {
-      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      
       $.ajax({
           url: base_url + "/customer/tesco/order-management/viewed-pending",
           type: "Post",
@@ -350,7 +350,7 @@ $(document).ready(function() {
   function viewedSelectedPending()
   {
       var formdata = $("#frm-pending").serialize();
-      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      
       var selected = [];
       $('#frm-pending input[type=checkbox]').each(function () {
           if (this.checked) {
@@ -522,7 +522,7 @@ $(document).ready(function() {
   function viewedSelectedCancelled()
   {
       var formdata = $("#frm-cancelled").serialize();
-      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      
       var selected = [];
       $('#frm-cancelled input[type=checkbox]').each(function () {
           if (this.checked) {
@@ -567,7 +567,7 @@ $(document).ready(function() {
    */
   function  viewedCancelled(id,tablename) 
   {
-      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      
       var table_name = tablename;
       $.ajax({
           url: base_url + "/customer/tesco/order-management/viewed-cancelled",

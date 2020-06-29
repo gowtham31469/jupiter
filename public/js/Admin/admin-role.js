@@ -9,7 +9,7 @@
 var isSubmitting = false;
 function admin()
 {
- var csrf_token = $('meta[name="csrf-token"]').attr('content');
+ 
  try {
   $.ajax({
       url: base_url + "/admin/admin-role-management/admin-list",

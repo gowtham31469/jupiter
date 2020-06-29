@@ -147,7 +147,7 @@ function approve()
   	 try{
      var comment    = $('#comment').val();
      var id         = $('#wcl_id').val();
-     var csrf_token = $('meta[name="csrf-token"]').attr('content');
+     
     
      $.ajax({
          url: base_url + "/merchandiser/set-wcl-merchandiser-approve-comment",
@@ -181,7 +181,7 @@ function reject()
   	 try{
      var comment    = $('#comment').val();
      var id         = $('#wcl_id').val();
-     var csrf_token = $('meta[name="csrf-token"]').attr('content');
+     
     
      $.ajax({
          url: base_url + "/merchandiser/set-wcl-merchandiser-reject-comment",

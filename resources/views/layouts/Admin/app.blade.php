@@ -270,7 +270,6 @@ function editAdmin() {
         var email   = $('#admin_profile_email').val();
         var address = toTitleCase($('#admin_profile_address').val().replace(/,/g, ", "));
 
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             url: base_url + "/admin/update-admin-profile-details",
             dataType: "json",
@@ -346,7 +345,6 @@ function updateAdminPassword() {
         var current_password = $('#current_password').val();
         var new_password     = $('#new_password').val();
 
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             url: base_url + "/admin/update-admin-password",
             dataType: "json",
