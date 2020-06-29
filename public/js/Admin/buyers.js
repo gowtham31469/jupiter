@@ -407,7 +407,6 @@
           var phone                  = $('#merchandiser_phone').val();
           var address                = toTitleCase($('#merchandiser_address').val().replace(/,/g, ", "));
           var merchandiser_buyer     = $('#merchandiser_buyer').val();
-          var csrf_token             = $('meta[name="csrf-token"]').attr('content');
 
           $.ajax({
               url: base_url + "/admin/buyer-management/add-merchandiser",

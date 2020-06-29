@@ -1629,7 +1629,6 @@ function tescoMaterialMasters() {
           var emp_material        = $('#material_name_employee').val();
           var production_material = $('#material_name_production').val();
           var purchase_material   = $('#material_name_purchase').val();
-          var csrf_token          = $('meta[name="csrf-token"]').attr('content');
  
           $.ajax({
               url: base_url + "/admin/tesco/add-raw-material",
@@ -1737,7 +1736,6 @@ function tescoMaterialMasters() {
        var emp_material        = $('#edit_material_name_employee').val();
        var production_material = $('#edit_material_name_production').val();
        var purchase_material   = $('#edit_material_name_purchase').val();
-       var csrf_token          = $('meta[name="csrf-token"]').attr('content');
 
        $.ajax({
            url:base_url + "/admin/tesco/update-raw-material",
@@ -1963,7 +1961,6 @@ function tescoErrorReportEmail() {
           var error_case     = $('#error_case option:selected').text();
           var contact_person = $('#contact_person').val();
           var email          = $('#error_email').val();
-          var csrf_token     = $('meta[name="csrf-token"]').attr('content');
  
           $.ajax({
               url: base_url + "/admin/tesco/add-tesco-error-report-email",
@@ -2071,7 +2068,6 @@ function tescoErrorReportEmail() {
           var error_case     = $('#edit_error_case option:selected').text();
           var contact_person = $('#edit_contact_person').val();
           var email          = $('#edit_error_email').val();
-          var csrf_token     = $('meta[name="csrf-token"]').attr('content');
  
           $.ajax({
               url: base_url + "/admin/tesco/update-tesco-error-report-email",

@@ -220,7 +220,6 @@
 
           /** [ Joining array values using some delimiters ] */   
           buyer            = buyers.join(',');
-var csrf_token          =  $('meta[name="csrf-token"]').attr('content');
           $.ajax({
               url: base_url + "/customer/customer-management/update-customerProfile",
               method: 'PUT',
@@ -283,7 +282,6 @@ function addCustomer()
           var customer_company    =  $('#customer_add_company').val();
 	      var customer_title      =  $('#customer_add_title').val();
           var password            =  $('#password').val();
-          var csrf_token          =  $('meta[name="csrf-token"]').attr('content');
         
           var buyers          = [];
           /** [ Create array of multi selected buyers ] */

@@ -287,7 +287,6 @@ function savePricing() {
     var customer_id = localStorage.getItem("customer_id");
     var template_id = localStorage.getItem("template_id");
     var buyer_id    = localStorage.getItem("buyer_id");
-    var csrf_token  = $('meta[name="csrf-token"]').attr('content');
     var pricestring = $("#priceForm").serialize();
     $.ajax({
         url:base_url + "/admin/customer-management/save-price-tax",
@@ -326,7 +325,6 @@ function getSavedPriceTax() {
     var customer_id = localStorage.getItem("customer_id");
     var template_id = localStorage.getItem("template_id");
     var buyer_id    = localStorage.getItem("buyer_id");
-    var csrf_token  = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url:base_url + "/admin/customer-management/get-price-tax",
         type:"GET",

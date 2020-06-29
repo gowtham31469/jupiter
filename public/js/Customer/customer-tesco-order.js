@@ -7109,7 +7109,6 @@ function saveUKSingleTHL3()
 */
 function loadTemplatePreview() {
     var template_id = $('#artwork_list').find(':selected').data('tempid');
-    var csrf_token  = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: base_url + "/customer/tesco/template-view",
         type: "Post",
@@ -7507,7 +7506,6 @@ function approveTescoOrder()
 			my_object.table_id = table_id.value;
 			array_list.push(my_object);
 		});
-        var csrf_token        =  $('meta[name="csrf-token"]').attr('content');
 
         $.ajax({
                  url: base_url + "/customer/tesco/approve-tesco-order",

@@ -346,7 +346,6 @@
 			  {
 				  $('#customer_add_buyer').html('')
 				  $("#customer_add_role option[value='1']").show();
-				    var csrf_token           =  $('meta[name="csrf-token"]').attr('content');
 				    var customer_add_company =  $('#customer_add_company').val();
 					$.ajax({
 						url: base_url + "/admin/customer-management/customer-company-buyer",
@@ -398,7 +397,6 @@
 			  else 
 			  {
 				  $('#customer_buyer').html('')
-				    var csrf_token           =  $('meta[name="csrf-token"]').attr('content');
 				    var customer_add_company =  $('#customer_company').val();
 					$.ajax({
 						url: base_url + "/admin/customer-management/customer-company-buyer",

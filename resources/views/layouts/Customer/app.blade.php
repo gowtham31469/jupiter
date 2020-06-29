@@ -76,6 +76,7 @@
 <script src="{{ asset('js/toastr.js') }}"></script>
 <script>
     var base_url = "<?php echo  url('/') ?>";
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
 
      $(document).ready(function() {
     $('#send_feedback').trigger("reset");
@@ -88,7 +89,7 @@ $('#send_feedback').validator().on('submit', function(e) {
 
     } else {
         e.preventDefault();
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         var form_data = new FormData($(this)[0]);
 
         form_data.append('_token', csrf_token);

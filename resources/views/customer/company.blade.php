@@ -325,7 +325,6 @@
 			  else 
 			  {
 				  $('#customer_add_buyer').html('')
-				    var csrf_token           =  $('meta[name="csrf-token"]').attr('content');
 				    var customer_add_company =  $('#customer_add_company').val();
 					$.ajax({
 						url: base_url + "/customer/customer-management/customer-company-buyer",
@@ -372,7 +371,6 @@
 			  else 
 			  {
 				  $('#customer_buyer').html('')
-				    var csrf_token           =  $('meta[name="csrf-token"]').attr('content');
 				    var customer_add_company =  $('#customer_company').val();
 					$.ajax({
 						url: base_url + "/customer/customer-management/customer-company-buyer",
