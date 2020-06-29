@@ -1,4 +1,4 @@
-name="csrf-token"name="csrf-token"@extends('layouts.Erp.app') @section('navbar')
+@extends('layouts.Erp.app') @section('navbar')
 
 <ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
 	<li><a href="{{ route('poManager') }}">Po Verify</a></li>

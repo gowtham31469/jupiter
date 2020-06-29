@@ -4388,7 +4388,6 @@ function tescoOrderCommonData()
     description       =  $('#tesco_description').val();
     eqos              =  $('#tesco_eqos').val();
     manufacture_date  =  $('#tesco_manufacture_date').val();
-    csrf_token        =  $('meta[name="csrf-token"]').attr('content');
     department        =  $("#tesco_department option:selected").val();
     brand             =  $("#tesco_brand option:selected").val();
     supplier          =  $("#tesco_supplier option:selected").val();
