@@ -132,6 +132,20 @@ class ProformaInvoice
                 $price_array = array_merge($price_array,$price_list);
             } 
             $data['price_list'] = $price_array;
+
+            // Set price and tax based on quantity range
+            foreach ($data['item_details'] as $key => $value)
+            {
+                foreach ($price_array as $i => $val) {
+                    if ($value->item_id == $val->item_id) {
+                        if($value->quantity <= $val->volume_to) {
+                            $value->price = $val->price;
+                            $value->tax = $val->tax;
+                            break;
+                        }
+                    }
+                }
+            }
           }
         }
         else
