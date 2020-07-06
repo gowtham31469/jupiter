@@ -1237,8 +1237,16 @@ class OrderController extends Controller
 		
 		
 		$care_instruction_select = explode(',',$request->care_instruction_select_fin); 
-		
-		$orchestra_care_instruction = DB::table('orchestra_care_instruction')->select('*')->whereIn('id',$care_instruction_select)->get();
+		$casval = "";
+		$cascount = 1 ;
+		foreach($care_instruction_select as $cval)
+		{
+			$casval .= 'WHEN '.$cval.' THEN '.$cascount;
+			$cascount++;
+		}
+		$orchestra_care_instruction = DB::table('orchestra_care_instruction')->select('*')->whereIn('id',$care_instruction_select)->orderByRaw("CASE id
+		".$casval."
+		ELSE ".$cascount." END")->get();
 		
 		//print_r($orchestra_countries);
 		

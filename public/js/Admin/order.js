@@ -2654,6 +2654,8 @@ function cancelWashDiv(dataid,factorycode){
 					$('.made_in_select'+dataid).val('');
 					$('.care_instruction_select'+dataid).removeAttr('disabled');
 					$('.care_instruction_select'+dataid).val('');
+					$('.hiddencis'+dataid).val('');
+					$('.hiddencis'+dataid).find('option').remove()
 					$('.composition_select'+dataid).removeAttr('disabled');
 					$('.composition_select'+dataid).val('');
 					$('.composition_percent'+dataid).removeAttr('disabled');
@@ -2689,6 +2691,8 @@ function cancelWashDiv(dataid,factorycode){
 				$('.made_in_select'+dataid).val('');
 				$('.care_instruction_select'+dataid).removeAttr('disabled');
 				$('.care_instruction_select'+dataid).val('');
+				$('.hiddencis'+dataid).val('');
+				$('.hiddencis'+dataid).find('option').remove()
 				$('.composition_select'+dataid).removeAttr('disabled');
 				$('.composition_select'+dataid).val('');
 				$('.composition_percent'+dataid).removeAttr('disabled');
@@ -3210,7 +3214,7 @@ function PopupWash(data,data_back,data_middle,dataid,svgDoc1) {
     var url = "";
     var made_in_select = $('.made_in_select' + dataid + ' option:selected').attr('data-id');
     
-    var care_instruction = $('.care_instruction_select' + dataid + ' option:selected');
+    var care_instruction = $('.hiddencis' + dataid + ' option:selected');
         var care_instruction_select = [];
         $(care_instruction).each(function (index, brand) {
             care_instruction_select.push([$(this).val()]);
@@ -3990,8 +3994,17 @@ function label_order_details(uvc) {
 			
 			//$('#washcarelabelform' + washcare+' .washonesizein').val($('#washcarelabelform' + index+' .washonesizein').val())
 			//$('#washcarelabelform' + washcare+' .washonesizecm').val($('#washcarelabelform' + index+' .washonesizecm').val())
-            $('.care_instruction_select'+washcare).selectpicker('val',$('.care_instruction_select'+index).selectpicker('val'));
-            
+			$('.care_instruction_select'+washcare).selectpicker('val',$('.care_instruction_select'+index).selectpicker('val'));
+
+			$('.hiddencis'+ index + ' option:selected').each(function () {
+
+				$('select.hiddencis' + washcare).append("<option data-id='" + $(this).data('id') + "' data-french='" + $(this).data('french') + "' title='"+$(this).data('english')+"' data-english='" + $(this).data('english') + "' data-spanish='" + $(this).data('spanish') + "' data-portuguese='" + $(this).data('portuguese') + "' data-italian='" + $(this).data('italian') + "' data-dutch='" + $(this).data('dutch') + "' data-german='" + $(this).data('german')  + "' data-arabic='" + $(this).data('arabic') + "' data-greek='" + $(this).data('greek') + "' value=" + $(this).data('id') + " selected>" + $(this).data('english') + "</option>")
+				$('.hiddencis' + washcare).selectpicker('refresh');
+
+			});
+			
+			//$('.hiddencis'+washcare).selectpicker('val',$('.hiddencis'+index).selectpicker('val'));
+            //alert()
             $('#composition_remove_qty'+washcare).html($('#composition_remove_qty'+index).html())
             
             $('#composition_remove_qty'+index+' tr').each(function (ind,val) {
@@ -4050,7 +4063,7 @@ function label_order_details(uvc) {
             mySVG_back.addEventListener("load", function () {
 				svgDocBack=mySVG_back.contentDocument;
 				svgDocBack.getElementById("text_care_instruction").innerHTML = "";
-                $('.care_instruction_select' + washcare + ' option:selected').each(function () {
+                $('.hiddencis' + washcare + ' option:selected').each(function () {
                     var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german')  + "-" +
                         $(this).data('arabic') + "-" +
                         $(this).data('greek')  + '</p>';
@@ -4234,8 +4247,17 @@ function label_order_details(uvc) {
 			
 			//$('#washcarelabelform' + washcare+' .washonesizein').val($('#washcarelabelform' + old_id+' .washonesizein').val())
 			//$('#washcarelabelform' + washcare+' .washonesizecm').val($('#washcarelabelform' + old_id+' .washonesizecm').val())
-            $('.care_instruction_select'+washcare).selectpicker('val',$('.care_instruction_select'+old_id).selectpicker('val'));
-            
+			$('.care_instruction_select'+washcare).selectpicker('val',$('.care_instruction_select'+old_id).selectpicker('val'));
+
+			$('.hiddencis'+ old_id + ' option:selected').each(function () {
+
+				$('select.hiddencis' + washcare).append("<option data-id='" + $(this).data('id') + "' data-french='" + $(this).data('french') + "' title='"+$(this).data('english')+"' data-english='" + $(this).data('english') + "' data-spanish='" + $(this).data('spanish') + "' data-portuguese='" + $(this).data('portuguese') + "' data-italian='" + $(this).data('italian') + "' data-dutch='" + $(this).data('dutch') + "' data-german='" + $(this).data('german')  + "' data-arabic='" + $(this).data('arabic') + "' data-greek='" + $(this).data('greek') + "' value=" + $(this).data('id') + " selected>" + $(this).data('english') + "</option>")
+				$('.hiddencis' + washcare).selectpicker('refresh');
+
+			});
+
+			//$('.hiddencis'+washcare).selectpicker('val',$('.hiddencis'+old_id).selectpicker('val'));
+            //alert()
             $('#composition_remove_qty'+washcare).html($('#composition_remove_qty'+old_id).html())
             
             $('#composition_remove_qty'+old_id+' tr').each(function (ind,val) {
@@ -4294,7 +4316,7 @@ function label_order_details(uvc) {
             mySVG_back.addEventListener("load", function () {
 				svgDocBack=mySVG_back.contentDocument;
 				svgDocBack.getElementById("text_care_instruction").innerHTML = "";
-                $('.care_instruction_select' + washcare + ' option:selected').each(function () {
+                $('.hiddencis' + washcare + ' option:selected').each(function () {
                     var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german')  + "-" +
                         $(this).data('arabic') + "-" +
                         $(this).data('greek')  + '</p>';
@@ -4493,8 +4515,18 @@ function label_order_details(uvc) {
 			
 			//$('#washcarelabelform' + washcare+' .washonesizein').val($('#washcarelabelform' + old_id+' .washonesizein').val())
 			//$('#washcarelabelform' + washcare+' .washonesizecm').val($('#washcarelabelform' + old_id+' .washonesizecm').val())
-            $('.care_instruction_select'+washcare).selectpicker('val',$('.care_instruction_select'+old_id).selectpicker('val'));
-            
+			$('.care_instruction_select'+washcare).selectpicker('val',$('.care_instruction_select'+old_id).selectpicker('val'));
+
+			$('.hiddencis'+ old_id + ' option:selected').each(function () {
+
+				$('select.hiddencis' + washcare).append("<option data-id='" + $(this).data('id') + "' data-french='" + $(this).data('french') + "' title='"+$(this).data('english')+"' data-english='" + $(this).data('english') + "' data-spanish='" + $(this).data('spanish') + "' data-portuguese='" + $(this).data('portuguese') + "' data-italian='" + $(this).data('italian') + "' data-dutch='" + $(this).data('dutch') + "' data-german='" + $(this).data('german')  + "' data-arabic='" + $(this).data('arabic') + "' data-greek='" + $(this).data('greek') + "' value=" + $(this).data('id') + " selected>" + $(this).data('english') + "</option>")
+				$('.hiddencis' + washcare).selectpicker('refresh');
+
+			});
+			
+
+			//$('.hiddencis'+washcare).selectpicker('val',$('.hiddencis'+old_id).selectpicker('val'));
+            //alert()
             $('#composition_remove_qty'+washcare).html($('#composition_remove_qty'+old_id).html())
             
             $('#composition_remove_qty'+old_id+' tr').each(function (ind,val) {
@@ -4553,7 +4585,7 @@ function label_order_details(uvc) {
             mySVG_back.addEventListener("load", function () {
 				svgDocBack=mySVG_back.contentDocument;
 				svgDocBack.getElementById("text_care_instruction").innerHTML = "";
-                $('.care_instruction_select' + washcare + ' option:selected').each(function () {
+                $('.hiddencis' + washcare + ' option:selected').each(function () {
                     var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german')  + "-" +
                         $(this).data('arabic') + "-" +
                         $(this).data('greek')  + '</p>';
@@ -4920,7 +4952,7 @@ function washcarelabels(data, dataid,color_code,new_flag) {
 		var disney_flag="0";
 	}
 	
-    $('.top-content').append('<form id="washcarelabelform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><input type="hidden" value="' + color_code + '" id="color_id' + dataid + '"><input type="hidden" value="' + card_flag + '" id="card_flag' + dataid + '"><input type="hidden" value="' + $time_flag + '" id="time_flag' + dataid + '"><input type="hidden" value="' + $disable_option_select + '" id="composition_flag' + dataid + '">'+input_hidden+'<div class="left-panelorc col-md-8"> <div class="div-max"> <div class="col-md-3"> <h4>Options</h4> <hr><div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">WCL Name</label><input type="text" data-required-error="Required" '+$disable_option_select+' class="form-control input-sm" required="" placeholder="WCL Name" value="' + $wcl_name + '" id="wcl_name' + dataid + '"><div class="help-block with-errors"></div></div>  <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Washing</label><select '+$disable_option_select+' data-required-error="Required" data-live-search="true" class="form-control selectpicker input-sm washing_select' + dataid + '" required>' + washing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Whitening</label><select '+$disable_option_select+' data-required-error="Required" data-live-search="true" class="form-control selectpicker input-sm whitening_select' + dataid + '" required>' + whitening_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Dryer</label><select '+$disable_option_select+' data-required-error="Required" data-live-search="true" class="form-control selectpicker input-sm dryer_select' + dataid + '" required>' + dryer_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Ironing</label><select '+$disable_option_select+' data-required-error="Required" data-live-search="true" class="form-control selectpicker input-sm ironing_select' + dataid + '" required>' + ironing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Cleaning</label><select '+$disable_option_select+' data-required-error="Required" data-live-search="true" class="form-control selectpicker input-sm cleaning_select' + dataid + '" required>' + cleaning_option + '</select><div class="help-block with-errors"></div></div>'+sizebox+'  </div></div> <div class="col-md-5"> <h4>Art Work</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span> <hr> <div class="section-1 sections"> <div class="sample-artwork"><object style="height: calc( 100vh - 125px );"  id="washcare_svg_front' + dataid + '" data="' + data.orchestra_wash_template_front + '" type="image/svg+xml"></object> <object style="height: calc( 100vh - 125px );margin-left: 10px;"  id="washcare_svg_back' + dataid + '"  data="' + data.orchestra_wash_template_back + '" type="image/svg+xml"></object><object style="height: calc( 100vh - 125px );width: 145px;margin-left: 10px;"  id="washcare_svg_middle' + dataid + '" data="' + data.orchestra_wash_template_middle + '" type="image/svg+xml"></object></div><input type="hidden" value="' + disney_flag + '" id="wash_label_id"></div> </div> <div class="col-md-4 " style="padding-left:0px"> <h4>Options</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Made In</label><select '+$disable_option_select+' data-required-error="Required" data-live-search="true" class="form-control selectpicker input-sm made_in_select' + dataid + '" required>' + made_option + '</select><div class="help-block with-errors"></div></div> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Care Instructions</label><select '+$disable_option_select+' data-required-error="Required" data-live-search="true" class="form-control selectpicker input-sm care_instruction_select' + dataid + '" required multiple>' + instruction_option + '</select><div class="help-block with-errors"></div></div> <div class="section-1 sections"> <h5>Compositions</h5> <select '+$disable_option_select+' class="selectpicker composition_select' + dataid + '" data-live-search="true">  ' + composition_option + '  </select><p class="hidden" style="color:red;float:right" id="composition_error_required' + dataid + '">Please Select Composition</p> </div> <h5>Percentage</h5> <input  '+$disable_option_select+' type="number" min="1" max="100" class="form-control input-sm composition_percent' + dataid + '"><p class="hidden" style="color:red;text-align:right" id="percentage_error_required' + dataid + '">Please Enter Percentage</p>  <button '+$disable_option_select+' type="button" class="btn  btn-primary pull-right input-sm add_to_list' + dataid + '" onclick="add_to_list(' + dataid + ')">Add To List</button> <table class="table table-striped table-hover table-condensed"><thead><th>Composition</th><th>Quantity</th></thead><tbody id="composition_table_qty' + dataid + '"></tbody></table><p id="wash_composition_error' + dataid + '" class="hidden" style="color:red;text-align: right;margin-right: 10px;">Please Select composition</p><p id="wash_composition_page_error' + dataid + '" class="hidden" style="color:red;text-align: right;margin-right: 10px;">Please Add Composition to Page</p><div style="height: 30px;"><button class="btn  btn-primary pull-right input-sm add_to_composition' + dataid + '"  type="button" disabled onclick="add_to_composition(' + dataid + ')">Add To Composition</button></div><div><h4>Compositions :</h4><div><table class="table table-striped table-hover table-condensed"><thead><tr><th>Composition Name</th><th>Parts</th><th>Actions</th></tr></thead><tbody id="composition_remove_qty' + dataid + '"></tbody></table><div><p class="hidden composition_error_hidden" style="color:red;text-align: right;margin-right: 10px;">Please select parts</p></div><div><button '+$disable_option_select+' class="btn  btn-primary pull-right input-sm add_to_page' + dataid + '"  style="position:relative;" type="button" onclick="add_to_page(' + dataid + ')">Add To Page</button></div></div></div><div class="parts_none'+dataid+'" style="display:none"><select>' + parts_option + '</select></div> </div> </div> </div></div> <div class="right-panel col-md-4"> <div class="div-max scroll"> <h4 style="display: inline-block;">Quantity Info for <span class="washlabelnameqty' + dataid + '"> WashCare Label</span></h4> '+po_select+' <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal" id="wash_care_label_table_'+dataid+'" style="font-size:11px"> <thead> <tr> <th>UVC TCO#</th> <th>Size in ANS</th> <th>Barcode</th> <th>Qty</th> <th><input type="text" class="form-control input-sm extra_percentagewash" '+$disable_qty_select+' onkeypress="return checkNumbersOnly(event)" placeholder="Extra Qty %" style="float:left;height:20px;"></th> </tr></thead> <tbody style="font-size: 11px">' + tr + '  <tfoot><tr class="strong"> <td class="text-right" colspan="3">Total:</td><td>' + totaloq + '</td><td class="text-center tot_qty_tablewash_fin' + dataid + '">' + ttots + '</td></tr> </tfoot></tbody></table><hr>'+ $comment +' <button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_wash_button_'+dataid+'" style="margin-left:10px">Save</button> <button type="button" class="btn input-sm btn-danger '+$print_button_class+'" id="cancel_wash_button_'+dataid+'" style="float: right;margin-left: 10px;" onclick=cancelWashDiv("'+dataid+'","'+data.customers[0].factory_code+'")>Cancel</button><button class="btn btn-default pull-right input-sm" id="close" type="button">Close</button> <button type="button" class="btn btn-primary '+$print_button_class+'" id="print_wash_button_'+dataid+'" onclick=printWashDiv("washcare_svg_front'+dataid+'","washcare_svg_back'+dataid+'","washcare_svg_middle'+dataid+'","'+dataid+'")>Print</button></div> </div>  <div class="backdrop"></div></form>');
+    $('.top-content').append('<form id="washcarelabelform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><input type="hidden" value="' + color_code + '" id="color_id' + dataid + '"><input type="hidden" value="' + card_flag + '" id="card_flag' + dataid + '"><input type="hidden" value="' + $time_flag + '" id="time_flag' + dataid + '"><input type="hidden" value="' + $disable_option_select + '" id="composition_flag' + dataid + '">'+input_hidden+'<div class="left-panelorc col-md-8"> <div class="div-max"> <div class="col-md-3"> <h4>Options</h4> <hr><div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">WCL Name</label><input type="text" data-required-error="Required" '+$disable_option_select+' class="form-control input-sm" required="" placeholder="WCL Name" value="' + $wcl_name + '" id="wcl_name' + dataid + '"><div class="help-block with-errors"></div></div>  <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Washing</label><select '+$disable_option_select+' data-required-error="Required" data-live-search="true" class="form-control selectpicker input-sm washing_select' + dataid + '" required>' + washing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Whitening</label><select '+$disable_option_select+' data-required-error="Required" data-live-search="true" class="form-control selectpicker input-sm whitening_select' + dataid + '" required>' + whitening_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Dryer</label><select '+$disable_option_select+' data-required-error="Required" data-live-search="true" class="form-control selectpicker input-sm dryer_select' + dataid + '" required>' + dryer_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Ironing</label><select '+$disable_option_select+' data-required-error="Required" data-live-search="true" class="form-control selectpicker input-sm ironing_select' + dataid + '" required>' + ironing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Cleaning</label><select '+$disable_option_select+' data-required-error="Required" data-live-search="true" class="form-control selectpicker input-sm cleaning_select' + dataid + '" required>' + cleaning_option + '</select><div class="help-block with-errors"></div></div>'+sizebox+'  </div></div> <div class="col-md-5"> <h4>Art Work</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span> <hr> <div class="section-1 sections"> <div class="sample-artwork"><object style="height: calc( 100vh - 125px );"  id="washcare_svg_front' + dataid + '" data="' + data.orchestra_wash_template_front + '" type="image/svg+xml"></object> <object style="height: calc( 100vh - 125px );margin-left: 10px;"  id="washcare_svg_back' + dataid + '"  data="' + data.orchestra_wash_template_back + '" type="image/svg+xml"></object><object style="height: calc( 100vh - 125px );width: 145px;margin-left: 10px;"  id="washcare_svg_middle' + dataid + '" data="' + data.orchestra_wash_template_middle + '" type="image/svg+xml"></object></div><input type="hidden" value="' + disney_flag + '" id="wash_label_id"></div> </div> <div class="col-md-4 " style="padding-left:0px"> <h4>Options</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Made In</label><select '+$disable_option_select+' data-required-error="Required" data-live-search="true" class="form-control selectpicker input-sm made_in_select' + dataid + '" required>' + made_option + '</select><div class="help-block with-errors"></div></div> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Care Instructions</label><select '+$disable_option_select+' data-required-error="Required" data-live-search="true" class="form-control selectpicker input-sm care_instruction_select' + dataid + '" required multiple>' + instruction_option + '</select><select data-required-error="Required" data-live-search="true" class="form-control hiddencis_div selectpicker input-sm hiddencis' + dataid + '" multiple></select><div class="help-block with-errors"></div></div> <div class="section-1 sections"> <h5>Compositions</h5> <select '+$disable_option_select+' class="selectpicker composition_select' + dataid + '" data-live-search="true">  ' + composition_option + '  </select><p class="hidden" style="color:red;float:right" id="composition_error_required' + dataid + '">Please Select Composition</p> </div> <h5>Percentage</h5> <input  '+$disable_option_select+' type="number" min="1" max="100" class="form-control input-sm composition_percent' + dataid + '"><p class="hidden" style="color:red;text-align:right" id="percentage_error_required' + dataid + '">Please Enter Percentage</p>  <button '+$disable_option_select+' type="button" class="btn  btn-primary pull-right input-sm add_to_list' + dataid + '" onclick="add_to_list(' + dataid + ')">Add To List</button> <table class="table table-striped table-hover table-condensed"><thead><th>Composition</th><th>Quantity</th></thead><tbody id="composition_table_qty' + dataid + '"></tbody></table><p id="wash_composition_error' + dataid + '" class="hidden" style="color:red;text-align: right;margin-right: 10px;">Please Select composition</p><p id="wash_composition_page_error' + dataid + '" class="hidden" style="color:red;text-align: right;margin-right: 10px;">Please Add Composition to Page</p><div style="height: 30px;"><button class="btn  btn-primary pull-right input-sm add_to_composition' + dataid + '"  type="button" disabled onclick="add_to_composition(' + dataid + ')">Add To Composition</button></div><div><h4>Compositions :</h4><div><table class="table table-striped table-hover table-condensed"><thead><tr><th>Composition Name</th><th>Parts</th><th>Actions</th></tr></thead><tbody id="composition_remove_qty' + dataid + '"></tbody></table><div><p class="hidden composition_error_hidden" style="color:red;text-align: right;margin-right: 10px;">Please select parts</p></div><div><button '+$disable_option_select+' class="btn  btn-primary pull-right input-sm add_to_page' + dataid + '"  style="position:relative;" type="button" onclick="add_to_page(' + dataid + ')">Add To Page</button></div></div></div><div class="parts_none'+dataid+'" style="display:none"><select>' + parts_option + '</select></div> </div> </div> </div></div> <div class="right-panel col-md-4"> <div class="div-max scroll"> <h4 style="display: inline-block;">Quantity Info for <span class="washlabelnameqty' + dataid + '"> WashCare Label</span></h4> '+po_select+' <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal" id="wash_care_label_table_'+dataid+'" style="font-size:11px"> <thead> <tr> <th>UVC TCO#</th> <th>Size in ANS</th> <th>Barcode</th> <th>Qty</th> <th><input type="text" class="form-control input-sm extra_percentagewash" '+$disable_qty_select+' onkeypress="return checkNumbersOnly(event)" placeholder="Extra Qty %" style="float:left;height:20px;"></th> </tr></thead> <tbody style="font-size: 11px">' + tr + '  <tfoot><tr class="strong"> <td class="text-right" colspan="3">Total:</td><td>' + totaloq + '</td><td class="text-center tot_qty_tablewash_fin' + dataid + '">' + ttots + '</td></tr> </tfoot></tbody></table><hr>'+ $comment +' <button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_wash_button_'+dataid+'" style="margin-left:10px">Save</button> <button type="button" class="btn input-sm btn-danger '+$print_button_class+'" id="cancel_wash_button_'+dataid+'" style="float: right;margin-left: 10px;" onclick=cancelWashDiv("'+dataid+'","'+data.customers[0].factory_code+'")>Cancel</button><button class="btn btn-default pull-right input-sm" id="close" type="button">Close</button> <button type="button" class="btn btn-primary '+$print_button_class+'" id="print_wash_button_'+dataid+'" onclick=printWashDiv("washcare_svg_front'+dataid+'","washcare_svg_back'+dataid+'","washcare_svg_middle'+dataid+'","'+dataid+'")>Print</button></div> </div>  <div class="backdrop"></div></form>');
    //$('.left').removeClass('disabled')
 	
 	if(new_flag != "new")
@@ -5200,6 +5232,7 @@ function washcarelabels(data, dataid,color_code,new_flag) {
 	var mySVG_back = document.getElementById("washcare_svg_back" + dataid);
     var svgDoc_back;
     mySVG_back.addEventListener("load", function () {
+		//alert()
         svgDoc_back = mySVG_back.contentDocument;
 	
 	if (data.orchestra_wash_care_label_orders != "") {
@@ -5210,9 +5243,23 @@ function washcarelabels(data, dataid,color_code,new_flag) {
             }
 
             if (data.orchestra_wash_care_label_orders.length > dataid1) {
+				//alert()
                 $('.care_instruction_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].care_instruction);
+				svgDoc_back.getElementById("text_care_instruction").innerHTML = "";
+				//$('.hiddencis' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].care_instruction);
+
+				$(data.orchestra_wash_care_label_orders[dataid1].care_instruction).each(function (index,value) {
+					//alert($('.care_instruction_select' + dataid + ' option[value="'+value+'"]').data('french'))
+
+					$('select.hiddencis' + dataid).append("<option data-id='" + $('.care_instruction_select' + dataid + ' option[value="'+value+'"]').data('id') + "' data-french='" + $('.care_instruction_select' + dataid + ' option[value="'+value+'"]').data('french') + "' title='"+$('.care_instruction_select' + dataid + ' option[value="'+value+'"]').data('english')+"' data-english='" + $('.care_instruction_select' + dataid + ' option[value="'+value+'"]').data('english') + "' data-spanish='" + $('.care_instruction_select' + dataid + ' option[value="'+value+'"]').data('spanish') + "' data-portuguese='" + $('.care_instruction_select' + dataid + ' option[value="'+value+'"]').data('portuguese') + "' data-italian='" + $('.care_instruction_select' + dataid + ' option[value="'+value+'"]').data('italian') + "' data-dutch='" + $('.care_instruction_select' + dataid + ' option[value="'+value+'"]').data('dutch') + "' data-german='" + $('.care_instruction_select' + dataid + ' option[value="'+value+'"]').data('german')  + "' data-arabic='" + $('.care_instruction_select' + dataid + ' option[value="'+value+'"]').data('arabic') + "' data-greek='" + $('.care_instruction_select' + dataid + ' option[value="'+value+'"]').data('greek') + "' value=" + $('.care_instruction_select' + dataid + ' option[value="'+value+'"]').data('id') + " selected>" + $('.care_instruction_select' + dataid + ' option[value="'+value+'"]').data('english') + "</option>")
+					$('.hiddencis' + dataid).selectpicker('refresh');
+
+				});
+
+
+				
                 svgDoc_back.getElementById("text_care_instruction").innerHTML = "";
-                $('.care_instruction_select' + dataid + ' option:selected').each(function () {
+                $('.hiddencis' + dataid + ' option:selected').each(function () {
                     var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german') + "-" +
                         $(this).data('arabic') + "-" +
                         $(this).data('greek') + '</p>';
@@ -5286,16 +5333,39 @@ function washcarelabels(data, dataid,color_code,new_flag) {
 
         }
 		
-		 $('.care_instruction_select' + dataid + '.bootstrap-select').on('changed.bs.select', function () {
-            if ($('.care_instruction_select' + dataid + ' option:selected').val() != "") {
+		 $('.care_instruction_select' + dataid + '.bootstrap-select').on('changed.bs.select', function (e, clickedIndex, newValue, oldValue) {
+			//alert()
+			var hidden_id = $(this).find('option').eq(clickedIndex).val();
+
+
+			var arr = $('.hiddencis' + dataid).selectpicker('val')
+
+			//alert(hidden_id)
+
+			if(arr.includes(hidden_id) == true)
+			{
+				$('.hiddencis' + dataid + ' option[value="'+hidden_id+'"]').remove();
+				$('.hiddencis' + dataid).selectpicker('refresh');
+			}
+			else
+			{
+				$('select.hiddencis' + dataid).append("<option data-id='" + hidden_id + "' data-french='" + $(this).find('option').eq(clickedIndex).data('french') + "' title='"+$(this).find('option').eq(clickedIndex).data('english')+"' data-english='" + $(this).find('option').eq(clickedIndex).data('english') + "' data-spanish='" + $(this).find('option').eq(clickedIndex).data('spanish') + "' data-portuguese='" + $(this).find('option').eq(clickedIndex).data('portuguese') + "' data-italian='" + $(this).find('option').eq(clickedIndex).data('italian') + "' data-dutch='" + $(this).find('option').eq(clickedIndex).data('dutch') + "' data-german='" + $(this).find('option').eq(clickedIndex).data('german')  + "' data-arabic='" + $(this).find('option').eq(clickedIndex).data('arabic') + "' data-greek='" + $(this).find('option').eq(clickedIndex).data('greek') + "' value=" + hidden_id + " selected>" + $(this).find('option').eq(clickedIndex).data('english') + "</option>")
+				$('.hiddencis' + dataid).selectpicker('refresh');
+			}
+
+			//alert($(this).find('option').eq(clickedIndex).prop("checked") )
+			//alert($(this).find('option').eq(clickedIndex).data('french'))
+			 
+            if ($('.hiddencis' + dataid + ' option:selected').val() != "") {
                 svgDoc_back.getElementById("text_care_instruction").innerHTML = "";
-                $('.care_instruction_select' + dataid + ' option:selected').each(function () {
+                $('.hiddencis' + dataid + ' option:selected').each(function () {
                     var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german')  + "-" +
                         $(this).data('arabic') + "-" +
                         $(this).data('greek') + '</p>';
                     svgDoc_back.getElementById("text_care_instruction").innerHTML += value;
-                });
+				});
 
+				
 
             } else {
 
@@ -7617,7 +7687,16 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 			//$('#washcarelabelform' + washcare+' .washonesizein').val($('#washcarelabelform .washonesizein').val())
 			//$('#washcarelabelform' + washcare+' .washonesizecm').val($('#washcarelabelform .washonesizecm').val())
 			$('.care_instruction_select'+washcare).selectpicker('val',$('.care_instruction_select').selectpicker('val'));
-            
+
+			$('.hiddencis option:selected').each(function () {
+
+				$('select.hiddencis' + washcare).append("<option data-id='" + $(this).data('id') + "' data-french='" + $(this).data('french') + "' title='"+$(this).data('english')+"' data-english='" + $(this).data('english') + "' data-spanish='" + $(this).data('spanish') + "' data-portuguese='" + $(this).data('portuguese') + "' data-italian='" + $(this).data('italian') + "' data-dutch='" + $(this).data('dutch') + "' data-german='" + $(this).data('german')  + "' data-arabic='" + $(this).data('arabic') + "' data-greek='" + $(this).data('greek') + "' value=" + $(this).data('id') + " selected>" + $(this).data('english') + "</option>")
+				$('.hiddencis' + washcare).selectpicker('refresh');
+
+			});
+
+			//$('.hiddencis'+washcare).selectpicker('val',$('.hiddencis').selectpicker('val'));
+            //alert()
             $('#composition_remove_qty'+washcare).html($('#composition_remove_qty').html())
             
             $('#composition_remove_qty tr').each(function (ind,val) {
@@ -7669,7 +7748,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
                 svgDoc.getElementById("country").innerHTML = text_for_mad_in;
                 
                 svgDoc.getElementById("text_care_instruction").innerHTML = "";
-                $('.care_instruction_select' + washcare + ' option:selected').each(function () {
+                $('.hiddencis' + washcare + ' option:selected').each(function () {
                     var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german')  + "-" +
                         $(this).data('arabic') + "-" +
                         $(this).data('greek')  + '</p>';
@@ -8482,7 +8561,7 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
 								}
 
 									svgDoc.getElementById("text_care_instruction").innerHTML = "";
-									$('.care_instruction_select' + dataid + ' option:selected').each(function () {
+									$('.hiddencis' + dataid + ' option:selected').each(function () {
 										var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german') + "-" +
 											$(this).data('arabic') + "-" +
 											$(this).data('greek')  + '</p>';
@@ -8571,10 +8650,29 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
 
         });
 
-        $('.care_instruction_select' + dataid + '.bootstrap-select').on('changed.bs.select', function () {
-            if ($('.care_instruction_select' + dataid + ' option:selected').val() != "") {
+        $('.care_instruction_select' + dataid + '.bootstrap-select').on('changed.bs.select', function (e, clickedIndex, newValue, oldValue) {
+
+			var hidden_id = $(this).find('option').eq(clickedIndex).val();
+
+
+			var arr = $('.hiddencis' + dataid).selectpicker('val')
+
+			//alert(hidden_id)
+
+			if(arr.includes(hidden_id) == true)
+			{
+				$('.hiddencis' + dataid + ' option[value="'+hidden_id+'"]').remove();
+				$('.hiddencis' + dataid).selectpicker('refresh');
+			}
+			else
+			{
+				$('select.hiddencis' + dataid).append("<option data-id='" + hidden_id + "' data-french='" + $(this).find('option').eq(clickedIndex).data('french') + "' title='"+$(this).find('option').eq(clickedIndex).data('english')+"' data-english='" + $(this).find('option').eq(clickedIndex).data('english') + "' data-spanish='" + $(this).find('option').eq(clickedIndex).data('spanish') + "' data-portuguese='" + $(this).find('option').eq(clickedIndex).data('portuguese') + "' data-italian='" + $(this).find('option').eq(clickedIndex).data('italian') + "' data-dutch='" + $(this).find('option').eq(clickedIndex).data('dutch') + "' data-german='" + $(this).find('option').eq(clickedIndex).data('german')  + "' data-arabic='" + $(this).find('option').eq(clickedIndex).data('arabic') + "' data-greek='" + $(this).find('option').eq(clickedIndex).data('greek') + "' value=" + hidden_id + " selected>" + $(this).find('option').eq(clickedIndex).data('english') + "</option>")
+				$('.hiddencis' + dataid).selectpicker('refresh');
+			}
+			
+            if ($('.hiddencis' + dataid + ' option:selected').val() != "") {
                 svgDoc.getElementById("text_care_instruction").innerHTML = "";
-                $('.care_instruction_select' + dataid + ' option:selected').each(function () {
+                $('.hiddencis' + dataid + ' option:selected').each(function () {
                     var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german') + "-" +
                         $(this).data('arabic') + "-" +
                         $(this).data('greek')  + '</p>';
@@ -8698,7 +8796,7 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
 								}
 
 									svgDoc.getElementById("text_care_instruction").innerHTML = "";
-									$('.care_instruction_select' + dataid + ' option:selected').each(function () {
+									$('.hiddencis' + dataid + ' option:selected').each(function () {
 										var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german')  + "-" +
 											$(this).data('arabic') + "-" +
 											$(this).data('greek') + '</p>';
@@ -8787,10 +8885,28 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
 
         });
 
-        $('.care_instruction_select' + dataid + '.bootstrap-select').on('changed.bs.select', function () {
-            if ($('.care_instruction_select' + dataid + ' option:selected').val() != "") {
+        $('.care_instruction_select' + dataid + '.bootstrap-select').on('changed.bs.select', function (e, clickedIndex, newValue, oldValue) {
+
+			var hidden_id = $(this).find('option').eq(clickedIndex).val();
+
+
+			var arr = $('.hiddencis' + dataid).selectpicker('val')
+
+			//alert(hidden_id)
+
+			if(arr.includes(hidden_id) == true)
+			{
+				$('.hiddencis' + dataid + ' option[value="'+hidden_id+'"]').remove();
+				$('.hiddencis' + dataid).selectpicker('refresh');
+			}
+			else
+			{
+				$('select.hiddencis' + dataid).append("<option data-id='" + hidden_id + "' data-french='" + $(this).find('option').eq(clickedIndex).data('french') + "' title='"+$(this).find('option').eq(clickedIndex).data('english')+"' data-english='" + $(this).find('option').eq(clickedIndex).data('english') + "' data-spanish='" + $(this).find('option').eq(clickedIndex).data('spanish') + "' data-portuguese='" + $(this).find('option').eq(clickedIndex).data('portuguese') + "' data-italian='" + $(this).find('option').eq(clickedIndex).data('italian') + "' data-dutch='" + $(this).find('option').eq(clickedIndex).data('dutch') + "' data-german='" + $(this).find('option').eq(clickedIndex).data('german')  + "' data-arabic='" + $(this).find('option').eq(clickedIndex).data('arabic') + "' data-greek='" + $(this).find('option').eq(clickedIndex).data('greek') + "' value=" + hidden_id + " selected>" + $(this).find('option').eq(clickedIndex).data('english') + "</option>")
+				$('.hiddencis' + dataid).selectpicker('refresh');
+			}
+            if ($('.hiddencis' + dataid + ' option:selected').val() != "") {
                 svgDoc.getElementById("text_care_instruction").innerHTML = "";
-                $('.care_instruction_select' + dataid + ' option:selected').each(function () {
+                $('.hiddencis' + dataid + ' option:selected').each(function () {
                     var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german')  + "-" +
                         $(this).data('arabic') + "-" +
                         $(this).data('greek')  + '</p>';
@@ -10050,7 +10166,7 @@ function setWashLabel(index, dataid, id) {
         var made_in_select = $('.made_in_select' + dataid + ' option:selected').attr('data-id');
         // var care_instruction_select = $('.care_instruction_select'+dataid+' option:selected').val();
 
-        var care_instruction = $('.care_instruction_select' + dataid + ' option:selected');
+        var care_instruction = $('.hiddencis' + dataid + ' option:selected');
         var care_instruction_select = [];
         $(care_instruction).each(function (index, brand) {
             care_instruction_select.push([$(this).val()]);
@@ -10148,6 +10264,9 @@ function setWashLabel(index, dataid, id) {
         $('.composition_error_hidden').addClass('hidden')
         $('#washcare_label_card'+dataid).css('display','inline-block') 
 		$('#clone_washcare_label_card'+dataid).css('display','inline-block')
+		$('#clone_washcare_label_card'+dataid).css('float','right')
+		$('#washcare_label_card'+dataid).removeClass('hidden')
+		$('#clone_washcare_label_card'+dataid).removeClass('hidden')
 		$('.wash-card'+dataid+' span').text('Buyer Approval Pending')
 		$('.wash-card'+dataid+' span').addClass('label label-BuyerApprovalPending label-status')
 		$('.wash-card'+dataid+' span').removeClass('label-OrderRejected')
@@ -10464,8 +10583,17 @@ function clonewashcarelabels(index,color_code)
 	
 	
 	
-            $('.care_instruction_select'+washcare).selectpicker('val',$('.care_instruction_select'+index).selectpicker('val'));
-            
+			$('.care_instruction_select'+washcare).selectpicker('val',$('.care_instruction_select'+index).selectpicker('val'));
+
+			$('.hiddencis'+ index + ' option:selected').each(function () {
+
+				$('select.hiddencis' + washcare).append("<option data-id='" + $(this).data('id') + "' data-french='" + $(this).data('french') + "' title='"+$(this).data('english')+"' data-english='" + $(this).data('english') + "' data-spanish='" + $(this).data('spanish') + "' data-portuguese='" + $(this).data('portuguese') + "' data-italian='" + $(this).data('italian') + "' data-dutch='" + $(this).data('dutch') + "' data-german='" + $(this).data('german')  + "' data-arabic='" + $(this).data('arabic') + "' data-greek='" + $(this).data('greek') + "' value=" + $(this).data('id') + " selected>" + $(this).data('english') + "</option>")
+				$('.hiddencis' + washcare).selectpicker('refresh');
+
+			});
+			
+			//$('.hiddencis'+washcare).selectpicker('val',$('.hiddencis'+index).selectpicker('val'));
+            //alert()
             $('#composition_remove_qty'+washcare).html($('#composition_remove_qty'+index).html())
             
             $('#composition_remove_qty'+index+' tr').each(function (ind,val) {
@@ -10526,7 +10654,7 @@ function clonewashcarelabels(index,color_code)
 	  mySVG_back.addEventListener("load", function () {
 				svgDocBack=mySVG_back.contentDocument;
 				svgDocBack.getElementById("text_care_instruction").innerHTML = "";
-                $('.care_instruction_select' + washcare + ' option:selected').each(function () {
+                $('.hiddencis' + washcare + ' option:selected').each(function () {
                     var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german')  + "-" +
                         $(this).data('arabic') + "-" +
                         $(this).data('greek')  + '</p>';

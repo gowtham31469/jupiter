@@ -99,6 +99,9 @@
     background-size: 100%;
     background-repeat: no-repeat;
 }
+.hiddencis_div{
+    display: none !important;
+}
 .color input{ background-color:#f1f1f1;}
 .files:before {
     position: absolute;
