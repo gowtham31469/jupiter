@@ -279,7 +279,8 @@ function tescoRejectPI(id,table_name)
                $('.snackbar_span').html('PI Rejected!');
                $('#profoma-invoice').modal("hide")
                $('#'+table_name+'_'+id+' .pi_class').removeClass().addClass('pi_class label label-PIRejected').text('PI Rejected');
-               showSnackbar();             
+               showSnackbar();    
+               location.reload();         
             },
             400: function()
             {
