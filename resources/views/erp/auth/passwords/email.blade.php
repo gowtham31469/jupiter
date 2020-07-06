@@ -1,4 +1,4 @@
-@extends('layouts.erp.app-forgot-pswd')
+@extends('layouts.Erp.app-forgot-pswd')
 
 @section('content')
 <div class="container">

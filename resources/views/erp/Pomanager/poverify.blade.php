@@ -529,7 +529,7 @@ transform: scale(1);
 			$('.selected-buyer').text('Selected Company : ' + $('.buyers-card.active-buyer.active').data("name"))
 			$('#buyerSelectionModalCenter').modal('hide');
 
-			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			
 			$.ajax({
 				url: base_url + "/erp/po-manager/set_company_session",
 				type: "Post",
@@ -677,7 +677,7 @@ transform: scale(1);
 		} else {
 			$('.label-required-error').addClass('hidden')
 			$('.btn-submit').prop("disabled", true);
-			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			
 			var erp_order_id = $('#erp_order_id').val();
 			$.ajax({
 				url: base_url + "/erp/po-manager/submit-po-verify",
@@ -749,7 +749,7 @@ transform: scale(1);
 
 		$('#erp_order_id').val(id)
 		$('.po_file').attr('href', po_file)
-		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+		
 
 		$.ajax({
 			url: base_url + "/erp/po-manager/order-details",
@@ -844,7 +844,7 @@ transform: scale(1);
 	function change_po_updated_status() {
 		var id = $('#erp_order_id').val()
 		$('.new-po-upload').addClass('hidden')
-		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+		
 
 		$.ajax({
 			url: base_url + "/erp/po-manager/change_po_updated_status",

@@ -9,7 +9,7 @@ function tescoOrderStatus() {
     $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
     $('.top-content').html('');
     $('.template-error').html('');
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
 
     $.ajax({
         url: base_url + "/admin/tesco/tesco-orders",
@@ -472,7 +472,7 @@ function tescoOrderStatus() {
                                                         var aa = a.join(',');
                                                         var new_po_file = $('#new_po_file_status').prop('files')[0];
                                                         var new_po_no = $('#new_po_no_status').val();
-                                                        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                                                        
                                                         var form_data = new FormData();
                                                         form_data.append('id', aa);
                                                         form_data.append('po_file', new_po_file);
@@ -546,7 +546,7 @@ function tescoOrderStatus() {
                                                         var aa = a.join(',');
                                                         var new_po_file = $('#new_po_file_status').prop('files')[0];
                                                         var new_po_no = $('#new_po_no_status').val();
-                                                        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                                                        
                                                         var form_data = new FormData();
                                                         form_data.append('id', aa);
                                                         form_data.append('po_file', new_po_file);
@@ -613,7 +613,7 @@ function tescoOrderStatus() {
                                                         }
                                                     });
                                                     var aa = a.join(',');
-                                                    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                                                    
                                                     $.ajax({
                                                         url: base_url + "/admin/tesco/copy-po",
                                                         type: "Post",
@@ -930,7 +930,7 @@ $('body').on('focus', ".datepicker_recurring_start", function () {
 
 function updateDeliveryDate(obj, tableID, tableName, count) {
     $(obj).closest('tr').find('.datepicker_recurring_start').css('border-color', '');
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     var deliveryDate = $(obj).closest('tr').find('.datepicker_recurring_start').val();
     if (deliveryDate == "" || deliveryDate === '01-01-1970') {
         $(obj).closest('tr').find('.datepicker_recurring_start').css('border-color', 'rgb(244, 67, 54)');
@@ -983,7 +983,7 @@ function tescoSetPO(obj, id, tableName, po_file) {
 	$(obj).attr('disabled','disabled')
     $('.tesco-po').css('border-color', '');
     var po_number = $(obj).closest('tr').find('.tesco-po').val();
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     var buyer_id = localStorage.getItem("buyer_id");
     if (po_number != "") {
         $.ajax({
@@ -1056,7 +1056,7 @@ function tescoSetPO(obj, id, tableName, po_file) {
  * @return {[type]}     [description]
  */
 function tescoPOUpload(obj, id, po_file, tableName) {
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     $.ajax({
         url: base_url + "/admin/tesco/get-erp-status",
         type: 'get',
@@ -1145,7 +1145,7 @@ function updateArtwork(obj) {
 
     td_row = $(obj).parent().parent();
 
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     $.ajax({
         url: base_url + "/admin/tesco/edit-artwork",
         type: "Post",
@@ -1398,7 +1398,7 @@ function editArtwork() {
 }
 
 function enableArtworkEdit(tablename, rowid) {
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     $.ajax({
         url: base_url + "/admin/tesco/enable-artwork-edit",
         type: 'post',
@@ -1424,7 +1424,7 @@ function enableArtworkEdit(tablename, rowid) {
 }
 
 function disableArtworkEdit(tablename, rowid) {
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     $.ajax({
         url: base_url + "/admin/tesco/disable-artwork-edit",
         type: 'post',
@@ -1462,7 +1462,7 @@ function setEditOrderStatus() {
     var description = $('#tesco_description').val().replace(/&/g, '&#038;');
     var eqos = $('#tesco_eqos').val();
     var manufacture_date = $('#tesco_manufacture_date').val();
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     var department = $("#tesco_department option:selected").val();
     var brand = $("#tesco_brand option:selected").val();
     var supplier = $("#tesco_supplier option:selected").val();
@@ -2891,7 +2891,7 @@ function checkjsbarcodeean(code) {
 }
 
 function enableArtworkEdit(tablename, rowid) {
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     $.ajax({
         url: base_url + "/admin/tesco/enable-artwork-edit",
         type: 'post',
@@ -2915,7 +2915,7 @@ function enableArtworkEdit(tablename, rowid) {
 }
 
 function disableArtworkEdit(tablename, rowid) {
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     $.ajax({
         url: base_url + "/admin/tesco/disable-artwork-edit",
         type: 'post',

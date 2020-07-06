@@ -47,7 +47,7 @@ function tescoOrders(callback) {
     localStorage.removeItem("data");
     localStorage.removeItem("template_group");
     localStorage.removeItem("moq_values");
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     try {
         /** [ ajax call to load tesco order page ] **/
         $.ajax({
@@ -1937,7 +1937,7 @@ function PopupTesco(data,name,zone) {
 	
 	var tesco_description = $('#tesco_description').val();
 	// window.open(base_url + "/customer/order-management/print-pdf?svg="+svg);
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/customer/tesco/print-div-tesco",
 		type: "post",
@@ -2022,7 +2022,7 @@ function PopupTescoSmall(data,name,zone) {
 	//var success = false;
 	var url = "";
 	// window.open(base_url + "/customer/order-management/print-pdf?svg="+svg);
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/customer/tesco/print-div-tesco-small",
 		type: "post",
@@ -4388,7 +4388,6 @@ function tescoOrderCommonData()
     description       =  $('#tesco_description').val();
     eqos              =  $('#tesco_eqos').val();
     manufacture_date  =  $('#tesco_manufacture_date').val();
-    csrf_token        =  $('meta[name="csrf-token"]').attr('content');
     department        =  $("#tesco_department option:selected").val();
     brand             =  $("#tesco_brand option:selected").val();
     supplier          =  $("#tesco_supplier option:selected").val();
@@ -7109,7 +7108,6 @@ function saveUKSingleTHL3()
 */
 function loadTemplatePreview() {
     var template_id = $('#artwork_list').find(':selected').data('tempid');
-    var csrf_token  = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: base_url + "/customer/tesco/template-view",
         type: "Post",
@@ -7507,7 +7505,6 @@ function approveTescoOrder()
 			my_object.table_id = table_id.value;
 			array_list.push(my_object);
 		});
-        var csrf_token        =  $('meta[name="csrf-token"]').attr('content');
 
         $.ajax({
                  url: base_url + "/customer/tesco/approve-tesco-order",
@@ -7625,7 +7622,7 @@ function cancelTescoOrder() {
 			my_object.table_id = table_id.value;
 			array_list.push(my_object);
 		});
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
 
         $.ajax({
             url: base_url + "/customer/tesco/cancel-tesco-order",

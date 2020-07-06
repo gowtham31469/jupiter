@@ -699,7 +699,7 @@
 		function new_orders_modal() {
 			
 			
-				var csrf_token = $('meta[name="csrf-token"]').attr('content');
+				
 				$.ajax({
 					url: base_url + "/admin/order-management/new_orders",
 					type: "Post",
@@ -727,7 +727,7 @@
 		function aowp_modal() {
 			
 			
-			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			
 				$.ajax({
 					url: base_url + "/admin/order-management/aowp",
 					type: "Post",
@@ -754,7 +754,7 @@
 		function app_orders_modal() {
 			
 			
-			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			
 				$.ajax({
 					url: base_url + "/admin/order-management/approved_orders",
 					type: "Post",
@@ -781,7 +781,7 @@
 		function pen_orders_modal() {
 			
 			
-			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			
 				$.ajax({
 					url: base_url + "/admin/order-management/pending_orders",
 					type: "Post",
@@ -808,7 +808,7 @@
 		
 		function viewed(id,table_name)
 		{
-			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			
 				$.ajax({
 					url: base_url + "/admin/order-management/viewed_pen_production",
 					type: "Post",
@@ -961,7 +961,7 @@
 		function viewedneworders(id,table_name)
 		{
 			
-			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			
 				$.ajax({
 					url: base_url + "/admin/order-management/viewedneworders",
 					type: "Post",
@@ -991,7 +991,7 @@
 		
 		function viewedaowp(id,table_name)
 		{
-			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			
 				$.ajax({
 					url: base_url + "/admin/order-management/viewedaowp",
 					type: "Post",
@@ -1021,7 +1021,7 @@
 		
 		function viewedapporders(id,table_name)
 		{
-			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			
 				$.ajax({
 					url: base_url + "/admin/order-management/viewedapporders",
 					type: "Post",
@@ -1051,7 +1051,7 @@
 		
 		function viewedpenorders(id,table_name)
 		{
-			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			
 				$.ajax({
 					url: base_url + "/admin/order-management/viewedpenorders",
 					type: "Post",

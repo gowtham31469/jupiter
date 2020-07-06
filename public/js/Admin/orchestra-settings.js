@@ -61,7 +61,7 @@ function orchestraSettings() {
         $('.tesco-sidebar').hide();
         $('.orchestra-sidebar').show();
         /** Orchestra metadata sidebar */
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         $.ajax({
             url: base_url + "/admin/orchestra/settings/garments",
             type: "POST",
@@ -145,7 +145,7 @@ function showSnackbar() {
 function addOrchestraGarments() {
     try {
         var name = $('#garment_name').val();
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
 
         $.ajax({
             url: base_url + "/admin/orchestra/add-orchestra-garments",
@@ -249,7 +249,7 @@ function editOrchestraGarments() {
     try {
         var id = $('#edit_orchestra_garments_id').val();
         var name = $('#edit_garment_name').val();
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         $.ajax({
             url: base_url + "/admin/orchestra/update-orchestra-garments",
             dataType: "json",
@@ -394,7 +394,7 @@ function ageGroup() {
         $('.tesco-sidebar').hide();
         $('.orchestra-sidebar').show();
 
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         $.ajax({
             url: base_url + "/admin/orchestra/settings/age-group",
             type: "POST",
@@ -459,7 +459,7 @@ function addOrchestraAgegroup() {
     try {
         var name = $('#age_group_name').val();
         var color = $('#color_name').val();
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
 
         $.ajax({
             url: base_url + "/admin/orchestra/add-orchestra-agegroup",
@@ -565,7 +565,7 @@ function editOrchestraAgeGroup() {
         var id = $('#edit_orchestra_agegroup_id').val();
         var name = $('#edit_age_group_name').val();
         var color = $('#edit_color_name').val();
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         $.ajax({
             url: base_url + "/admin/orchestra/update-orchestra-agegroup",
             dataType: "json",
@@ -708,7 +708,7 @@ function countries() {
         $('.tesco-sidebar').hide();
         $('.orchestra-sidebar').show();
 
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         $.ajax({
             url: base_url + "/admin/orchestra/settings/countries",
             type: "POST",
@@ -788,7 +788,7 @@ function addOrchestraCountries() {
         var arabic = $('#arabic').val();
         var greek = $('#greek').val();
         var turkish = $('#turkish').val();
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
 
         $.ajax({
             url: base_url + "/admin/orchestra/add-orchestra-country",
@@ -914,7 +914,7 @@ function editOrchestraCountry() {
         var arabic = $('#edit_arabic').val();
         var greek = $('#edit_greek').val();
         var turkish = $('#edit_turkish').val();
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         $.ajax({
             url: base_url + "/admin/orchestra/update-orchestra-country",
             dataType: "json",
@@ -1056,7 +1056,7 @@ function productFamily() {
         $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
         $('.tesco-sidebar').hide();
         $('.orchestra-sidebar').show();
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         $.ajax({
             url: base_url + "/admin/orchestra/settings/productfamily",
             type: "POST",
@@ -1128,7 +1128,7 @@ function addOrchestraProductFamily() {
         var code = $('#code').val();
         var arabic = $('#arabic_pf').val();
 
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
 
         $.ajax({
             url: base_url + "/admin/orchestra/add-orchestra-productfamily",
@@ -1240,7 +1240,7 @@ function editOrchestraProductFamily() {
         var arabic = $('#edit_arabic_pf').val();
         var code = $('#edit_code').val();
 
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         $.ajax({
             url: base_url + "/admin/orchestra/update-orchestra-productfamily",
             dataType: "json",
@@ -1383,7 +1383,7 @@ function specialInstruction() {
         $('.tesco-sidebar').hide();
         $('.orchestra-sidebar').show();
 
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         $.ajax({
             url: base_url + "/admin/orchestra/settings/special-instructions",
             type: "POST",
@@ -1463,7 +1463,7 @@ function addOrchestraSpecialInstruction() {
         var arabic = $('#arabic_si').val();
         var greek = $('#greek_si').val();
         var turkish = $('#turkish_si').val();
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
 
         $.ajax({
             url: base_url + "/admin/orchestra/add-orchestra-special-instructions",
@@ -1589,7 +1589,7 @@ function editOrchestraSpecialInstruction() {
         var arabic = $('#edit_arabic_si').val();
         var greek = $('#edit_greek_si').val();
         var turkish = $('#edit_turkish_si').val();
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         $.ajax({
             url: base_url + "/admin/orchestra/update-orchestra-special-instruction",
             dataType: "json",
@@ -1731,7 +1731,7 @@ function compositions() {
         $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
         $('.tesco-sidebar').hide();
         $('.orchestra-sidebar').show();
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         $.ajax({
             url: base_url + "/admin/orchestra/settings/compositions",
             type: "POST",
@@ -1811,7 +1811,7 @@ function addOrchestraComposition() {
         var arabic = $('#arabic_co').val();
         var greek = $('#greek_co').val();
         var turkish = $('#turkish_co').val();
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
 
         $.ajax({
             url: base_url + "/admin/orchestra/add-orchestra-compositions",
@@ -1937,7 +1937,7 @@ function editOrchestraComposition() {
         var arabic = $('#edit_arabic_co').val();
         var greek = $('#edit_greek_co').val();
         var turkish = $('#edit_turkish_co').val();
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         $.ajax({
             url: base_url + "/admin/orchestra/update-orchestra-composition",
             dataType: "json",
@@ -2079,7 +2079,7 @@ function parts() {
         $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
         $('.tesco-sidebar').hide();
         $('.orchestra-sidebar').show();
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         $.ajax({
             url: base_url + "/admin/orchestra/settings/parts",
             type: "POST",
@@ -2159,7 +2159,7 @@ function addOrchestraPart() {
         var arabic = $('#arabic_pa').val();
         var greek = $('#greek_pa').val();
         var turkish = $('#turkish_pa').val();
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
 
         $.ajax({
             url: base_url + "/admin/orchestra/add-orchestra-parts",
@@ -2285,7 +2285,7 @@ function editOrchestraPart() {
         var arabic = $('#edit_arabic_pa').val();
         var greek = $('#edit_greek_pa').val();
         var turkish = $('#edit_turkish_pa').val();
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         $.ajax({
             url: base_url + "/admin/orchestra/update-orchestra-part",
             dataType: "json",
@@ -2427,7 +2427,7 @@ function sizeChart() {
         $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
         $('.tesco-sidebar').hide();
         $('.orchestra-sidebar').show();
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         $.ajax({
             url: base_url + "/admin/orchestra/settings/size-chart",
             type: "POST",
@@ -2496,7 +2496,7 @@ function addOrchestraSizeChart() {
         var age = $('#age').val();
         var cm = $('#cm').val();
         var inch = $('#inch').val();
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
 
         $.ajax({
             url: base_url + "/admin/orchestra/add-orchestra-size-chart",
@@ -2604,7 +2604,7 @@ function editOrchestraSizeChart() {
         var age = $('#edit_age').val();
         var cm = $('#edit_cm').val();
         var inch = $('#edit_inch').val();
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         $.ajax({
             url: base_url + "/admin/orchestra/update-orchestra-size-chart",
             dataType: "json",
@@ -2746,7 +2746,7 @@ function orchestraSymbols() {
         $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
         $('.tesco-sidebar').hide();
         $('.orchestra-sidebar').show();
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         $.ajax({
             url: base_url + "/admin/orchestra/settings/symbols",
             type: "POST",
@@ -2810,7 +2810,7 @@ function orchestraSymbols() {
  */
 function addOrchestraSymbols(cofreet_symbols, astms_symbol, category_id, care_instruction) {
     try {
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         var form_data = new FormData();
 
         form_data.append('cofreet_symbols', cofreet_symbols);
@@ -2868,7 +2868,7 @@ function addOrchestraSymbols(cofreet_symbols, astms_symbol, category_id, care_in
  */
 function editOrchestraSymbols(id, cofreet_symbols, astms_symbol, category_id, care_instruction) {
     try {
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         var form_data = new FormData();
         form_data.append('id', id);
         form_data.append('cofreet_symbols', cofreet_symbols);
@@ -3068,7 +3068,7 @@ function orchestraColorCode() {
         $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
         $('.tesco-sidebar').hide();
         $('.orchestra-sidebar').show();
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         $.ajax({
             url: base_url + "/admin/orchestra/settings/color",
             type: "POST",
@@ -3137,7 +3137,7 @@ function addColorCode() {
         var code = $('#code_cc').val();
         var english = $('#english_cc').val();
         var french = $('#french_cc').val();
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
 
         $.ajax({
             url: base_url + "/admin/settings/orchestra/add-color-code",
@@ -3318,7 +3318,7 @@ function editOrchestraColorCode() {
         var code = $('#edit_code_cc').val();
         var french = $('#edit_french_cc').val();
         var english = $('#edit_english_cc').val();
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         $.ajax({
             url: base_url + "/admin/orchestra/update-orchestra-color-code",
             dataType: "json",

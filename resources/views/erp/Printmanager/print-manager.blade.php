@@ -432,7 +432,7 @@ transform: scale(1);
 			$('.selected-buyer').text('Selected Company : ' + $('.buyers-card.active-buyer.active').data("name"))
 			$('#buyerSelectionModalCenter').modal('hide');
 
-			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			
 			$.ajax({
 				url: base_url + "/erp/po-manager/set_company_session",
 				type: "Post",

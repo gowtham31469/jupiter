@@ -161,7 +161,7 @@
              }, 2500);
            });
          });
-       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+       
        /** Add admin bootstrap form validation **/
         $('#add_admin_form').validator().on('submit', function (e) {
         if (e.isDefaultPrevented())

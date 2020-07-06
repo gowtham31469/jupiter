@@ -2182,7 +2182,7 @@
        /** To Enable  Garment  on click **/
        $(document).on('click', '#make_garment_enabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeGarmentEnabled function from orchestra-settings.js*/
            makeGarmentEnabled(id,csrf_token)
        });
@@ -2190,7 +2190,7 @@
        /** To disable Garment  on click **/
        $(document).on('click', '#make_garment_disabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeGarmentDisabled function from orchestra-settings.js*/
            makeGarmentDisabled(id,csrf_token)
        });
@@ -2232,7 +2232,7 @@
        /** To Enable  age group  on click **/
        $(document).on('click', '#make_age_group_enabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeAgeGroupEnabled function from orchestra-settings.js*/
            makeAgeGroupEnabled(id,csrf_token)
        });
@@ -2240,7 +2240,7 @@
        /** To disable age group  on click **/
        $(document).on('click', '#make_age_group_disabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeAgeGroupDisabled function from orchestra-settings.js*/
            makeAgeGroupDisabled(id,csrf_token)
        });
@@ -2282,7 +2282,7 @@
        /** To Enable  country  on click **/
        $(document).on('click', '#make_country_enabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeCountryEnabled function from orchestra-settings.js*/
            makeCountryEnabled(id,csrf_token)
        });
@@ -2290,7 +2290,7 @@
        /** To disable country  on click **/
        $(document).on('click', '#make_country_disabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeCountryDisabled function from orchestra-settings.js*/
            makeCountryDisabled(id,csrf_token)
        });
@@ -2332,7 +2332,7 @@
        /** To Enable  productfamily  on click **/
        $(document).on('click', '#make_productfamily_enabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeProductFamilyEnabled function from orchestra-settings.js*/
            makeProductFamilyEnabled(id,csrf_token)
        });
@@ -2340,7 +2340,7 @@
        /** To disable productfamily  on click **/
        $(document).on('click', '#make_productfamily_disabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeProductFamilyDisabled function from orchestra-settings.js*/
            makeProductFamilyDisabled(id,csrf_token)
        });
@@ -2382,7 +2382,7 @@
        /** To Enable  special instruction  on click **/
        $(document).on('click', '#make_special_instruction_enabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeSpecialInstructionEnabled function from orchestra-settings.js*/
            makeSpecialInstructionEnabled(id,csrf_token)
        });
@@ -2390,7 +2390,7 @@
        /** To disable special instruction  on click **/
        $(document).on('click', '#make_special_instruction_disabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeSpecialInstructionDisabled function from orchestra-settings.js*/
            makeSpecialInstructionDisabled(id,csrf_token)
        });
@@ -2432,7 +2432,7 @@
        /** To Enable  composition  on click **/
        $(document).on('click', '#make_composition_list_enabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeCompositionEnabled function from orchestra-settings.js*/
            makeCompositionEnabled(id,csrf_token)
        });
@@ -2440,7 +2440,7 @@
        /** To disable composition  on click **/
        $(document).on('click', '#make_composition_list_disabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeCompositionDisabled function from orchestra-settings.js*/
            makeCompositionDisabled(id,csrf_token)
        });
@@ -2483,7 +2483,7 @@
        /** To Enable  part  on click **/
        $(document).on('click', '#make_part_enabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makePartEnabled function from orchestra-settings.js*/
            makePartEnabled(id,csrf_token)
        });
@@ -2491,7 +2491,7 @@
        /** To disable part  on click **/
        $(document).on('click', '#make_part_disabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makePartDisabled function from orchestra-settings.js*/
            makePartDisabled(id,csrf_token)
        });
@@ -2533,7 +2533,7 @@
        /** To Enable  size chart  on click **/
        $(document).on('click', '#make_size_chart_enabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeOrchestraSizeChartEnabled function from orchestra-settings.js*/
            makeOrchestraSizeChartEnabled(id,csrf_token)
        });
@@ -2541,7 +2541,7 @@
        /** To disable size chart  on click **/
        $(document).on('click', '#make_size_chart_disabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeOrchestraSizeChartDisabled function from orchestra-settings.js*/
            makeOrchestraSizeChartDisabled(id,csrf_token)
        });
@@ -2593,7 +2593,7 @@
        /** To Enable  symbols  on click **/
        $(document).on('click', '#make_symbols_enabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeSymbolEnabled function from orchestra-settings.js*/
            makeSymbolEnabled(id,csrf_token)
        });
@@ -2601,7 +2601,7 @@
        /** To disable symbols  on click **/
        $(document).on('click', '#make_symbols_disabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeSymbolDisabled function from orchestra-settings.js*/
            makeSymbolDisabled(id,csrf_token)
        });
@@ -2645,7 +2645,7 @@
     /** To Enable  Brand  on click **/
     $(document).on('click', '#make_brand_enabled', function(e) {
         var id = $(this).closest('tr').attr('id');
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         /* call makeBrandEnabled function from tesco-settings.js*/
         makeBrandEnabled(id,csrf_token)
     });
@@ -2653,7 +2653,7 @@
     /** To disable Brand  on click **/
     $(document).on('click', '#make_brand_disabled', function(e) {
         var id = $(this).closest('tr').attr('id');
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         /* call makeBrandDisabled function from tesco-settings.js*/
         makeBrandDisabled(id,csrf_token)
     });
@@ -2695,7 +2695,7 @@
        /** To Enable  Department  on click **/
        $(document).on('click', '#make_department_enabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeDepartmentEnabled function from tesco-settings.js*/
            makeDepartmentEnabled(id,csrf_token)
        });
@@ -2703,7 +2703,7 @@
        /** To disable Department  on click **/
        $(document).on('click', '#make_department_disabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeDepartmentDisabled function from tesco-settings.js*/
            makeDepartmentDisabled(id,csrf_token)
        });
@@ -2746,7 +2746,7 @@
     /** To Enable  Supplier  on click **/
     $(document).on('click', '#make_supplier_enabled', function(e) {
         var id = $(this).closest('tr').attr('id');
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         /* call makeSupplierEnabled function from tesco-settings.js*/
         makeSupplierEnabled(id,csrf_token)
     });
@@ -2754,7 +2754,7 @@
     /** To disable Supplier  on click **/
     $(document).on('click', '#make_supplier_disabled', function(e) {
         var id = $(this).closest('tr').attr('id');
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         /* call makeSupplierDisabled function from tesco-settings.js*/
         makeSupplierDisabled(id,csrf_token)
     });
@@ -2796,7 +2796,7 @@
        /** To Enable  SizeChart  on click **/
        $(document).on('click', '#make_sizechart_enabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeSizeChartEnabled function from tesco-settings.js*/
            makeSizeChartEnabled(id,csrf_token)
        });
@@ -2804,7 +2804,7 @@
        /** To disable SizeChart  on click **/
        $(document).on('click', '#make_sizechart_disabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeSizeChartDisabled function from tesco-settings.js*/
            makeSizeChartDisabled(id,csrf_token)
        });
@@ -2883,7 +2883,7 @@
        /** To Enable  Material  on click **/
        $(document).on('click', '#make_material_enabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeMaterialEnabled function from tesco-settings.js*/
            makeMaterialEnabled(id,csrf_token)
        });
@@ -2891,7 +2891,7 @@
        /** To disable Material  on click **/
        $(document).on('click', '#make_material_disabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeMaterialDisabled function from tesco-settings.js*/
            makeMaterialDisabled(id,csrf_token)
        });
@@ -2931,7 +2931,7 @@
       /** To Enable  Tesco error report email  on click **/
        $(document).on('click', '#make_error_report_email_enabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeErrorReportEmailEnabled function from tesco-settings.js*/
            makeErrorReportEmailEnabled(id,csrf_token)
        });
@@ -2939,7 +2939,7 @@
        /** To disable Tesco error report email  on click **/
        $(document).on('click', '#make_error_report_email_disabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeErrorReportEmailDisabled function from tesco-settings.js*/
            makeErrorReportEmailDisabled(id,csrf_token)
        });
@@ -2975,7 +2975,7 @@
 
         $(document).on('click', '#make_color_enabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeColorEnabled function from orchestra-settings.js*/
            makeColorEnabled(id,csrf_token)
        });
@@ -2983,7 +2983,7 @@
        /** To disable part  on click **/
        $(document).on('click', '#make_color_disabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeColorDisabled function from orchestra-settings.js*/
            makeColorDisabled(id,csrf_token)
        });

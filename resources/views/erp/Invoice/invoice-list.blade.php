@@ -285,7 +285,7 @@ $(document).ready(function(){
     })
 
     function getInvoiceDetails() {
-      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      
       $.ajax({
         url: base_url + "/erp/get-invoice-details",
         type: "get",
@@ -370,7 +370,7 @@ $(document).ready(function(){
           $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
           $('#buyerSelectionModalCenter').modal('show');
           
-          var csrf_token = $('meta[name="csrf-token"]').attr('content');
+          
             $.ajax({
                 url: base_url + "/erp/po-manager/set_company_session",
                 type: "Post",
@@ -678,7 +678,7 @@ function showInvoice(obj){
      function editInvoice(){
         var eway_no = $('#eway_no').val();
         var inv_id = $('#inv_no').data('id');
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         var amntInwords = $('.amnt-in-words').text()
         if (eway_no=="") {
             $('.snackbar_span').html("Please link E-Way Bill No");
@@ -724,7 +724,7 @@ function showInvoice(obj){
     function downloadInvoice(){
       var eway_no = $('#eway_no').val();
         var inv_id = $('#inv_no').data('id');
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         var amntInwords = $('.amnt-in-words').text()
         if (eway_no=="") {
             $('.snackbar_span').html("Please link E-Way Bill No");

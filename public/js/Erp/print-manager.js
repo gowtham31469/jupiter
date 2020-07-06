@@ -546,7 +546,7 @@ function PopupWash(data,data_back,data_middle,svgDoc1,pid,name,id,style_no,buyer
     var success = false;
     var url = "";
 
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
 
     $.ajax({
 
@@ -650,7 +650,7 @@ function PopupHang(svgRoot, svgRoot1,svgDoc,svgDoc1,disney,name,id,style_no,buye
 
 	var success = false;
 	var url = "";
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/print-hang-pdf",
 		type: "post",
@@ -1169,7 +1169,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 				jsbarcodetescotslean(barcode_change, 'barcode', svgDoc)
 				
 				
-				var csrf_token = $('meta[name="csrf-token"]').attr('content');
+				
 	
 				$.ajax({
 						url: base_url + "/erp/job-manager/generatebarcodetsl3",
@@ -1206,7 +1206,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 				
 				//jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
 				
-				var csrf_token = $('meta[name="csrf-token"]').attr('content');
+				
 	
 				$.ajax({
 						url: base_url + "/erp/job-manager/generatebarcodetsl1",
@@ -1565,7 +1565,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 				}
 					//jsbarcodetescoean(barcode_change, 'barcode', svgDoc)
 				
-				var csrf_token = $('meta[name="csrf-token"]').attr('content');
+				
 	
 				$.ajax({
 						url: base_url + "/erp/job-manager/generatebarcodeeanbig",
@@ -1602,7 +1602,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 					var barcode_change = val.itf_barcode
 				}
 					//jsbarcodetesco(barcode_change, 'barcode', svgDoc)
-				var csrf_token = $('meta[name="csrf-token"]').attr('content');
+				
 	
 				$.ajax({
 						url: base_url + "/erp/job-manager/generatebarcodeitfbig",
@@ -1975,7 +1975,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 		var position = 3;
 		var ref_name = [name2.slice(0, position), b, name2.slice(position)].join('').trim();
 	
-		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+		
 			$.ajax({
 				url: base_url + "/erp/job-manager/get-order-details",
 				type: "Post",
@@ -2231,7 +2231,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 		var b = " ";
 		var position = 3;
 		var ref_name = [name2.slice(0, position), b, name2.slice(position)].join('').trim();
-		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+		
 			$.ajax({
 				url: base_url + "/erp/job-manager/get-order-details",
 				type: "Post",
@@ -2726,7 +2726,7 @@ function PopupOrchestra(data,name,id,style_no,buyer_no,created_at) {
 	var success = false;
 	var url = "";
 	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/orchestra/print-pdf",
 		type: "post",
@@ -2765,7 +2765,7 @@ function PopupArrOrchestra(data,name,svgDoc,id,style_no,buyer_no,created_at) {
 	var success = false;
 //	var url = "";
 	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/orchestra/print-pdf-arr",
 		type: "post",
@@ -2817,7 +2817,7 @@ function PopupTableOrchestra(data,name,size,qty,sizebrk,id,style_no,buyer_no,cre
 	var qtyfin = qty.join(',')
 	var sizebrkfin = sizebrk.join(',')
 
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/orchestra/print-pdf-table",
 
@@ -2857,7 +2857,7 @@ function PopupOrchestrasmall(data,name,svgDoc,id,style_no,buyer_no,created_at) {
 //	var svg = encodeURI(str)
 	var success = false;
 //	var url = "";
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/orchestra/print-pdf-small",
 		type: "post",
@@ -2894,7 +2894,7 @@ function ProofPopupOrchestra(data,name,id,style_no,buyer_no,created_at) {
 	var success = false;
 	var url = "";
 	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/orchestra/proof-pdf",
 		type: "post",
@@ -2933,7 +2933,7 @@ function ProofPopupArrOrchestra(data,name,svgDoc,id,style_no,buyer_no,created_at
 	var success = false;
 //	var url = "";
 	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/orchestra/proof-pdf-arr",
 		type: "post",
@@ -2985,7 +2985,7 @@ function ProofPopupTableOrchestra(data,name,size,qty,sizebrk,id,style_no,buyer_n
 	var qtyfin = qty.join(',')
 	var sizebrkfin = sizebrk.join(',')
 
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/orchestra/proof-pdf-table",
 
@@ -3025,7 +3025,7 @@ function ProofPopupOrchestrasmall(data,name,svgDoc,id,style_no,buyer_no,created_
 //	var svg = encodeURI(str)
 	var success = false;
 //	var url = "";
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/orchestra/proof-pdf-small",
 		type: "post",
@@ -3089,7 +3089,7 @@ function PopupTescoPrintManager(data, name,zone,style_no,buyer_no,id,created_at,
 	}
 	var url = "";
 	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/tesco/print-div-tesco",
 		type: "post",
@@ -3155,7 +3155,7 @@ function PopupTescoSmallPrintManager(data, name,zone,style_no,buyer_no,id,create
 	}
 	
 	var url = "";
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/tesco/print-div-tesco-small",
 		type: "post",
@@ -3207,7 +3207,7 @@ function PopupTescoSmallPrintManager(data, name,zone,style_no,buyer_no,id,create
 function PopupTescoGeneratePrintManager(data, name,svgDoc,template_id,qr_flag,qr_code_fin) {
 	
 	var url = "";
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/tesco/generate-div-tesco",
 		type: "post",
@@ -3257,7 +3257,7 @@ function PopupTescoGenerateSmallPrintManager(data, name,svgDoc) {
 	
 
 	var url = "";
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/tesco/generate-div-tesco-small",
 		type: "post",

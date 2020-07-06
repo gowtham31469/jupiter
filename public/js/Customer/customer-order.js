@@ -34,7 +34,7 @@ function isNumber(evt) {
 
 function orders() {
     $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     $.ajax({
         url: base_url + "/customer/orchestra/order-management/orders",
         type: "Post",
@@ -89,7 +89,7 @@ function orders() {
 function orderStatus() {
     $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
     var buyer = localStorage.getItem("buyer");
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     $.ajax({
         url: base_url + "/customer/" + buyer + "/order-management/order-status",
         type: "Post",
@@ -379,7 +379,7 @@ function orderStatus() {
 						var aa = a.join(',');
 						var new_po_file = $('#new_po_file_status').prop('files')[0];
 						var new_po_no = $('#new_po_no_status').val();
-						var csrf_token = $('meta[name="csrf-token"]').attr('content');
+						
 						var form_data = new FormData();
 						form_data.append('id', aa);
 						form_data.append('po_file', new_po_file);
@@ -434,7 +434,7 @@ function orderStatus() {
 							var aa = a.join(',');
 							var new_po_file = $('#new_po_file_status').prop('files')[0];
 							var new_po_no = $('#new_po_no_status').val();
-							var csrf_token = $('meta[name="csrf-token"]').attr('content');
+							
 							var form_data = new FormData();
 							form_data.append('id', aa);
 							form_data.append('po_file', new_po_file);
@@ -487,7 +487,7 @@ function orderStatus() {
 							}
 						});
 						var aa = a.join(',');
-						var csrf_token = $('meta[name="csrf-token"]').attr('content');
+						
 						$.ajax({
 							url: base_url + "/customer/" + buyer + "/order-management/map-label-orders-po",
 							type: "Post",
@@ -899,7 +899,7 @@ function setPO(obj,id,table_name)
 {
    $('.po').css('border-color', '');
    var po_number  = $(obj).closest('tr').find('.po').val();
-   var csrf_token = $('meta[name="csrf-token"]').attr('content');
+   
    if (po_number!="")
    {
     $.ajax({
@@ -1003,7 +1003,7 @@ function sticker_order_details(uvc, po) {
     
     var buyer = localStorage.getItem("buyer");
     var buyer_id = localStorage.getItem("buyer_id");
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     $.ajax({
         url: base_url + "/customer/" + buyer + "/order-management/sticker-order-details",
         type: "Post",
@@ -1466,7 +1466,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 						var aa = a.join(',');
 						var new_po_file = $('#new_po_file').prop('files')[0];
 						var new_po_no = $('#new_po_no').val();
-						var csrf_token = $('meta[name="csrf-token"]').attr('content');
+						
 						var form_data = new FormData();
 						form_data.append('id', aa);
 						form_data.append('po_file', new_po_file);
@@ -1519,7 +1519,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 							}
 						});
 						var aa = a.join(',');
-						var csrf_token = $('meta[name="csrf-token"]').attr('content');
+						
 						$.ajax({
 							url: base_url + "/customer/" + buyer + "/order-management/map-label-orders-po",
 							type: "Post",
@@ -1789,7 +1789,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 						var aa = a.join(',');
 						var new_po_file = $('#new_po_file').prop('files')[0];
 						var new_po_no = $('#new_po_no').val();
-						var csrf_token = $('meta[name="csrf-token"]').attr('content');
+						
 						var form_data = new FormData();
 						form_data.append('id', aa);
 						form_data.append('po_file', new_po_file);
@@ -1841,7 +1841,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 							}
 						});
 						var aa = a.join(',');
-						var csrf_token = $('meta[name="csrf-token"]').attr('content');
+						
 						$.ajax({
 							url: base_url + "/customer/" + buyer + "/order-management/map-label-orders-po",
 							type: "Post",
@@ -2146,7 +2146,7 @@ function cancelStickerDiv(){
 	var std_carton_id = $('#std_carton_id').val();
 	var std_poly_id = $('#std_poly_id').val();
 
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	var buyer = localStorage.getItem("buyer");
 	if ($('#carton_hidden').val() == "standard") {
 		$.ajax({
@@ -2217,7 +2217,7 @@ function cancelStickerDiv(){
 
 function cancelHangDiv(){
 	var id = $('#hangtagform').find('#exist_id').val();
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	var buyer = localStorage.getItem("buyer");
 	$.ajax({
 		url: base_url + "/customer/" + buyer + "/order-management/remove_hang_tag",
@@ -2272,7 +2272,7 @@ function cancelHangDiv(){
 
 function cancelSpecialDiv(){
 	var id = $('#specialtagform').find('#exist_id').val();
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	var buyer = localStorage.getItem("buyer");
 	$.ajax({
 		url: base_url + "/customer/" + buyer + "/order-management/remove_special_tag",
@@ -2324,7 +2324,7 @@ function cancelSpecialDiv(){
 
 function cancelHeatDiv(){
 	var id = $('#heat_transferform').find('#exist_id').val();
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	var buyer = localStorage.getItem("buyer");
 	$.ajax({
 		url: base_url + "/customer/" + buyer + "/order-management/remove_heat_transfer",
@@ -2378,7 +2378,7 @@ function cancelHeatDiv(){
 
 function cancelMainDiv(){
 	var id = $('#main_labelform').find('#exist_id').val();
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	var buyer = localStorage.getItem("buyer");
 	$.ajax({
 		url: base_url + "/customer/" + buyer + "/order-management/remove_main_label",
@@ -2430,7 +2430,7 @@ function cancelMainDiv(){
 
 function cancelSizeDiv(){
 	var id = $('#size_labelform').find('#exist_id').val();
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	var buyer = localStorage.getItem("buyer");
 	$.ajax({
 		url: base_url + "/customer/" + buyer + "/order-management/remove_size_label",
@@ -2497,7 +2497,7 @@ function cancelWashDiv(dataid,factorycode){
 	}
 	
 	
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	var buyer = localStorage.getItem("buyer");
 	$.ajax({
 		url: base_url + "/customer/" + buyer + "/order-management/remove_wcl",
@@ -3036,7 +3036,7 @@ function PopupSpecial(data) {
 	var success = false;
 	var url = "";
 	// window.open(base_url + "/customer/order-management/print-pdf?svg="+svg);
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/customer/order-management/print-special-pdf",
 		type: "post",
@@ -3098,7 +3098,7 @@ function PopupWash(data,data_back,data_middle,dataid,svgDoc1) {
         });
         var care_instruction_select_fin = care_instruction_select.join(',');
     var wash_finals = localStorage.getItem('wash_composition_final'+dataid);
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     $.ajax({
         url: base_url + "/customer/order-management/print-wash-pdf",
         type: "post",
@@ -3146,7 +3146,7 @@ function PopupHang(svgRoot, svgRoot1,svgDoc,svgDoc1,disney) {
 
 	var success = false;
 	var url = "";
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/customer/order-management/print-hang-pdf",
 		type: "post",
@@ -3205,7 +3205,7 @@ function Popup(data,name,uvc,po) {
 	var success = false;
 	var url = "";
 	// window.open(base_url + "/customer/order-management/print-pdf?svg="+svg);
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/customer/order-management/print-pdf",
 		type: "post",
@@ -3247,7 +3247,7 @@ function PopupArr(data,name,svgDoc,uvc,po,tu_size) {
 	var success = false;
 //	var url = "";
 	// window.open(base_url + "/customer/order-management/print-pdf?svg="+svg);
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/customer/order-management/print-pdf-arr",
 		type: "post",
@@ -3305,7 +3305,7 @@ function PopupTable(data,name,uvc,po) {
 	var sizefin = size.join(',')
 	var qtyfin = qty.join(',')
 	var size_breakfin = size_break.join(',')
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/customer/order-management/print-pdf-table",
 		type: "post",
@@ -3349,7 +3349,7 @@ function Popupsmall(data,name,svgDoc,uvc,po,tu_size) {
 	var id = $('#poly_id').val()
 	var success = false;
 //	var url = "";
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/customer/order-management/print-pdf-small",
 		type: "post",
@@ -3527,7 +3527,7 @@ function label_order_details(uvc) {
     // var buyer_id=$('.buyer-select').val()
     var buyer = localStorage.getItem("buyer");
     var buyer_id = localStorage.getItem("buyer_id");
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     $.ajax({
         url: base_url + "/customer/" + buyer + "/order-management/label-order-details",
         type: "Post",
@@ -4687,7 +4687,7 @@ function washcarelabels(data, dataid,color_code,new_flag) {
 		var season_code = $('#season_code').val();
 		var uvc_id = $('#uvc_id').val();
 		var card_flag = $('#time_flag' + dataid).val();
-		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+		
 		$.ajax({
 			url: base_url + "/customer/" + buyer + "/order-management/po_select_wcl",
 			type: "post",
@@ -5252,7 +5252,7 @@ function add_to_composition(dataid) {
     var wash_comp = JSON.stringify(wash_composition);
     localStorage.setItem('wash_composition', wash_comp);
 
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     var buyer = localStorage.getItem("buyer");
 
             $('#composition_remove_qty' + dataid).append('<tr id="' + add_page_composition + '"><td>Composition ' + add_page_composition + '</td><td><input type="hidden" value="'+comps+'" class="compositions_hidden">'+$('.parts_none'+ dataid).html()+'</td><td><a style="cursor:pointer" onclick="deleteComposition(this,' + dataid + ')"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>')
@@ -6014,7 +6014,7 @@ function hangtagmodal(data) {
         if ($template_front_id != "") {
             var buyer = localStorage.getItem("buyer");
             var template_id = $template_front_id;
-            var csrf_token = $('meta[name="csrf-token"]').attr('content');
+            
             $.ajax({
                 url: base_url + "/customer/" + buyer + "/template-management/template-view",
                 type: "Post",
@@ -6273,7 +6273,7 @@ function hangtagmodal(data) {
         if (data.instance.is_leaf(data.node)) {
             var buyer = localStorage.getItem("buyer");
             var template_id = data.node.id;
-            var csrf_token = $('meta[name="csrf-token"]').attr('content');
+            
             $.ajax({
                 url: base_url + "/customer/" + buyer + "/template-management/template-view",
                 type: "Post",
@@ -6966,7 +6966,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
                                                         var aa = a.join(',');
                                                         var new_po_file = $('#new_po_file_status').prop('files')[0];
                                                         var new_po_no = $('#new_po_no_status').val();
-                                                        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                                                        
                                                         var form_data = new FormData();
                                                         form_data.append('id', aa);
                                                         form_data.append('po_file', new_po_file);
@@ -7041,7 +7041,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
                                                         var aa = a.join(',');
                                                         var new_po_file = $('#new_po_file_status').prop('files')[0];
                                                         var new_po_no = $('#new_po_no_status').val();
-                                                        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                                                        
                                                         var form_data = new FormData();
                                                         form_data.append('id', aa);
                                                         form_data.append('po_file', new_po_file);
@@ -7109,7 +7109,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
                                                         }
                                                     });
                                                     var aa = a.join(',');
-                                                    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                                                    
 													//alert($('#select_po_status option:selected').attr('data-id'))
                                                     $.ajax({
                                                         url: base_url + "/customer/" + buyer + "/order-management/map-label-orders-po",
@@ -7471,7 +7471,7 @@ function treestructurespecial(data, tree, template_id,orchestra_special_tag_orde
 		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
 		if (template_id != "") {
 			var buyer = localStorage.getItem("buyer");
-			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			
 			$.ajax({
 				url: base_url + "/customer/" + buyer + "/template-management/template-view",
 				type: "Post",
@@ -7515,7 +7515,7 @@ function treestructurespecial(data, tree, template_id,orchestra_special_tag_orde
 		if (data.instance.is_leaf(data.node)) {
 			var buyer = localStorage.getItem("buyer");
 			var template_id = data.node.id;
-			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			
 			$.ajax({
 				url: base_url + "/customer/" + buyer + "/template-management/template-view",
 				type: "Post",
@@ -7593,7 +7593,7 @@ function treestructureheat_transfer(data, tree, template_id,orchestra_heat_trans
 		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
 		if (template_id != "") {
 			var buyer = localStorage.getItem("buyer");
-			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			
 			$.ajax({
 				url: base_url + "/customer/" + buyer + "/template-management/template-view",
 				type: "Post",
@@ -7639,7 +7639,7 @@ function treestructureheat_transfer(data, tree, template_id,orchestra_heat_trans
 		if (data.instance.is_leaf(data.node)) {
 			var buyer = localStorage.getItem("buyer");
 			var template_id = data.node.id;
-			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			
 			$.ajax({
 				url: base_url + "/customer/" + buyer + "/template-management/template-view",
 				type: "Post",
@@ -7717,7 +7717,7 @@ function treestructuremain_label(data, tree, template_id,orchestra_main_label_or
 		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
 		if (template_id != "") {
 			var buyer = localStorage.getItem("buyer");
-			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			
 			$.ajax({
 				url: base_url + "/customer/" + buyer + "/template-management/template-view",
 				type: "Post",
@@ -7763,7 +7763,7 @@ function treestructuremain_label(data, tree, template_id,orchestra_main_label_or
 		if (data.instance.is_leaf(data.node)) {
 			var buyer = localStorage.getItem("buyer");
 			var template_id = data.node.id;
-			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			
 			$.ajax({
 				url: base_url + "/customer/" + buyer + "/template-management/template-view",
 				type: "Post",
@@ -7841,7 +7841,7 @@ function treestructuresize_label(data, tree, template_id,orchestra_size_label_or
 		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
 		if (template_id != "") {
 			var buyer = localStorage.getItem("buyer");
-			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			
 			$.ajax({
 				url: base_url + "/customer/" + buyer + "/template-management/template-view",
 				type: "Post",
@@ -7887,7 +7887,7 @@ function treestructuresize_label(data, tree, template_id,orchestra_size_label_or
 		if (data.instance.is_leaf(data.node)) {
 			var buyer = localStorage.getItem("buyer");
 			var template_id = data.node.id;
-			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			
 			$.ajax({
 				url: base_url + "/customer/" + buyer + "/template-management/template-view",
 				type: "Post",
@@ -7966,7 +7966,7 @@ function treestructuremain(data, tree, template_id) {
 		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
 		if (template_id != "") {
 			var buyer = localStorage.getItem("buyer");
-			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			
 			$.ajax({
 				url: base_url + "/customer/" + buyer + "/template-management/template-view",
 				type: "Post",
@@ -8003,7 +8003,7 @@ function treestructuremain(data, tree, template_id) {
 		if (data.instance.is_leaf(data.node)) {
 			var buyer = localStorage.getItem("buyer");
 			var template_id = data.node.id;
-			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			
 			$.ajax({
 				url: base_url + "/customer/" + buyer + "/template-management/template-view",
 				type: "Post",
@@ -8080,7 +8080,7 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
 		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
 		if (template_id != "") {
 			var buyer = localStorage.getItem("buyer");
-			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			
 			$.ajax({
 				url: base_url + "/customer/" + buyer + "/template-management/template-view",
 				type: "Post",
@@ -8296,7 +8296,7 @@ function treestructurewash(data,dataid, tree, template_id,datas) {
 		if (data.instance.is_leaf(data.node)) {
 			var buyer = localStorage.getItem("buyer");
 			var template_id = data.node.id;
-			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			
 			$.ajax({
 				url: base_url + "/customer/" + buyer + "/template-management/template-view",
 				type: "Post",
@@ -9305,7 +9305,7 @@ function setHangTag(id,colour) {
 	var buyer = localStorage.getItem("buyer");
 //	alert()
 //	alert($('#parcel_id').val());
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/customer/" + buyer + "/order-management/set_hang_tag",
 		type: "Post",
@@ -9382,7 +9382,7 @@ function setSpecialTag(id,colour) {
     uvc_tco_fin = uvc_tco.join(',');
     size_fin = size.join(',');
     var buyer = localStorage.getItem("buyer");
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     $.ajax({
         url: base_url + "/customer/" + buyer + "/order-management/set_special_tag",
         type: "Post",
@@ -9453,7 +9453,7 @@ function setHeatTransfer(id,colour) {
 	size_id_fin = size_id.join(',');
 	main_id_fin = main_id.join(',');
 	var buyer = localStorage.getItem("buyer");
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/customer/" + buyer + "/order-management/set_heat_transfer",
 		type: "Post",
@@ -9526,7 +9526,7 @@ function setMainLabel(id,colour) {
     uvc_tco_fin = uvc_tco.join(',');
     size_fin = size.join(',');
     var buyer = localStorage.getItem("buyer");
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     $.ajax({
         url: base_url + "/customer/" + buyer + "/order-management/set_main_label",
         type: "Post",
@@ -9599,7 +9599,7 @@ function setSizeLabel(id,colour) {
 	size_id_fin = size_id.join(',');
 	main_id_fin = main_id.join(',');
 	var buyer = localStorage.getItem("buyer");
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/customer/" + buyer + "/order-management/set_size_label",
 		type: "Post",
@@ -9652,7 +9652,7 @@ function removeWashLabel(dataid) {
 	if(id != null && id !="")
 	{
 		var buyer = localStorage.getItem("buyer");
-		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+		
 		$.ajax({
 			url: base_url + "/customer/" + buyer + "/order-management/remove_wash_label",
 			type: "Post",
@@ -9757,7 +9757,7 @@ function setWashLabel(index, dataid, id) {
         size_fin = size.join(',');
         barcode_fin = barcode.join(',');
         var buyer = localStorage.getItem("buyer");
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         $.ajax({
             url: base_url + "/customer/" + buyer + "/order-management/set_wash_label",
             type: "Post",
@@ -9951,7 +9951,7 @@ function setSolidStickers() {
 		size_break_fin = size_break.join(',');
 		
 		var buyer = localStorage.getItem("buyer");
-		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+		
 		$.ajax({
 			url: base_url + "/customer/" + buyer + "/order-management/set_standard_stickers",
 			type: "Post",
@@ -10027,7 +10027,7 @@ function setSolidStickers() {
 		size_break_fin = size_break.join(',');
 
 		var buyer = localStorage.getItem("buyer");
-		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+		
 		$.ajax({
 			url: base_url + "/customer/" + buyer + "/order-management/set_solid_stickers",
 			type: "Post",

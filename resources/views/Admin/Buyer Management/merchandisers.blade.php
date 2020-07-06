@@ -204,7 +204,7 @@
          $('.status').tooltip('toggle')
          
        });
-       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+       
         
       /** To refresh modal while hidden**/
       $('.modal').on('hidden.bs.modal', function (e) {

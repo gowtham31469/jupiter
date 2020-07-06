@@ -3,7 +3,7 @@
  * @author <praveen>
  */
 
-var csrf_token = $('meta[name="csrf-token"]').attr('content');
+
  /**
   * Get order details for UVC
   * @param obj

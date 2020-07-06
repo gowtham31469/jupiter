@@ -49,7 +49,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
 		var position = 3;
 		var ref_name = [name2.slice(0, position), b, name2.slice(position)].join('').trim();
 	
-		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+		
 			$.ajax({
 				url: base_url + "/erp/job-manager/get-order-details",
 				type: "Post",
@@ -293,7 +293,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
 		var b = " ";
 		var position = 3;
 		var ref_name = [name2.slice(0, position), b, name2.slice(position)].join('').trim();
-		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+		
 			$.ajax({
 				url: base_url + "/erp/job-manager/get-order-details",
 				type: "Post",
@@ -809,7 +809,7 @@ function PopupTesco(data, name,zone,style_no,buyer_no,id,created_at,qr_flag,qr_c
 	}
 	var url = "";
 	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/tesco/print-div-tesco",
 		type: "post",
@@ -874,7 +874,7 @@ function PopupTescoSmall(data, name,zone,style_no,buyer_no,id,created_at) {
 	}
 	
 	var url = "";
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/tesco/print-div-tesco-small",
 		type: "post",
@@ -1770,7 +1770,7 @@ function PopupWashJC(data,data_back,data_middle,svgDoc1,pid,name,id,style_no,buy
     var success = false;
     var url = "";
 
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
 
     $.ajax({
 
@@ -1874,7 +1874,7 @@ function PopupHangJC(svgRoot, svgRoot1,svgDoc,svgDoc1,disney,name,id,style_no,bu
 
 	var success = false;
 	var url = "";
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/print-hang-pdf",
 		type: "post",
@@ -1912,7 +1912,7 @@ function PopupOrchestraJC(data,name,id,style_no,buyer_no,created_at) {
 	var success = false;
 	var url = "";
 	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/orchestra/print-pdf",
 		type: "post",
@@ -1951,7 +1951,7 @@ function PopupArrOrchestraJC(data,name,svgDoc,id,style_no,buyer_no,created_at) {
 	var success = false;
 //	var url = "";
 	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/orchestra/print-pdf-arr",
 		type: "post",
@@ -2002,7 +2002,7 @@ function PopupTableOrchestraJC(data,name,size,qty,sizebrk,id,style_no,buyer_no,c
 	var sizefin = size.join(',')
 	var qtyfin = qty.join(',')
 	var sizebrkfin = sizebrk.join(',')
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/orchestra/print-pdf-table",
 
@@ -2042,7 +2042,7 @@ function PopupOrchestrasmallJC(data,name,svgDoc,id,style_no,buyer_no,created_at)
 //	var svg = encodeURI(str)
 	var success = false;
 //	var url = "";
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/orchestra/print-pdf-small",
 		type: "post",

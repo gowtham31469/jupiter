@@ -101,7 +101,8 @@
     });
 	</script>
 	<script>
-	    var base_url = "<?php echo  url('/') ?>";
+        var base_url = "<?php echo  url('/') ?>";
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
 
 	     $(document).ready(function() {
     $('#send_feedback').trigger("reset");
@@ -115,7 +116,7 @@ $('#send_feedback').validator().on('submit', function(e) {
 
     } else {
         e.preventDefault();
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        
         var form_data = new FormData($(this)[0]);
 
         form_data.append('_token', csrf_token);
@@ -290,7 +291,6 @@ function editMerchandiser() {
         var address = $('#merchandiser_profile_address').val();
         var buyer   = $('#merchandiser_buyer').val();
 
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             url: base_url + "/merchandiser/update-merchandiser-profile-details",
             dataType: "json",
@@ -367,7 +367,6 @@ function updateMerchandiserPassword() {
         var current_password = $('#current_password').val();
         var new_password     = $('#new_password').val();
 
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             url: base_url + "/merchandiser/update-merchandiser-password",
             dataType: "json",
