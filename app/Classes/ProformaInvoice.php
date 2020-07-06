@@ -336,7 +336,7 @@ class ProformaInvoice
                                   ->where('ce_style_ref',$item_details[0]->style)
                                   ->where($key.'.pi_status',$item_details[0]->pi_status)
                                   ->where($key.'.order_flag',"newOrder")
-                                  ->select($key.'.id','size',$qunty_tbl.'.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name','po_number as po_no','zone','tesco_item_master.item_name as ref_no','tesco_template.item_id',$key.'.pi_rev_no','tesco_template.template_name','pi_rev_no')->get()->toArray();
+                                  ->select($key.'.id',$key.'.order_flag','size',$qunty_tbl.'.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name','po_number as po_no','zone','tesco_item_master.item_name as ref_no','tesco_template.item_id',$key.'.pi_rev_no','tesco_template.template_name','pi_rev_no')->get()->toArray();
 
                   }
                   else{
@@ -353,7 +353,7 @@ class ProformaInvoice
                                   ->where($key.'.pi_status',$item_details[0]->pi_status)
                                   ->where('uk_style_ref',$item_details[0]->style)
                                   ->where($key.'.order_flag',"newOrder")
-                                  ->select($key.'.id','size',$qunty_tbl.'.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name','po_number as po_no','zone','tesco_item_master.item_name as ref_no','tesco_template.item_id',$key.'.pi_rev_no','tesco_template.template_name','pi_rev_no')->get()->toArray();
+                                  ->select($key.'.id',$key.'.order_flag','size',$qunty_tbl.'.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name','po_number as po_no','zone','tesco_item_master.item_name as ref_no','tesco_template.item_id',$key.'.pi_rev_no','tesco_template.template_name','pi_rev_no')->get()->toArray();
                   }
                   if ($item_details2) {
                     $item_details = array_merge($item_details,$item_details2);
@@ -371,6 +371,93 @@ class ProformaInvoice
 
                 $data['item_details'] = $item_details;
               }
+          }
+          else if($item_details[0]->order_flag=="reOrder")
+          {
+            if ($item_details[0]->zone =="CE") {
+                $item_details    = DB::table($table_name)
+                ->join($table_name.'_quanty',$table_name.'_quanty.'.$qnty_id,'=',$table_name.'.id')
+                ->join('tesco_item_master','tesco_item_master.id',$table_name.'.template_id')
+                ->leftjoin('price_taxation','price_taxation.template_id','=',$table_name.'.template_id')
+                ->leftjoin('tesco_template','tesco_template.item_id','=','price_taxation.template_id')
+                ->where($table_name.'.is_order_count_empty',0)
+                ->where('price_taxation.customer_id',$customer_details->id)
+                ->where('price_taxation.buyer_id',$buyer_id)
+                ->where($table_name.'.po_number',$item_details[0]->po_no)
+                ->where($table_name.'.pi_status',$item_details[0]->pi_status)
+                ->where('ce_style_ref',$item_details[0]->style)
+                ->where($table_name.'.order_flag',"reOrder")
+                ->select($table_name.'.id',$table_name.'.order_flag','size',$table_name.'_quanty.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name','po_number as po_no','zone','tesco_item_master.item_name as ref_no','tesco_template.item_id',$table_name.'.pi_rev_no','tesco_template.template_name','pi_rev_no')->get()->toArray();
+            }
+            else{
+                $item_details    = DB::table($table_name)
+                ->join($table_name.'_quanty',$table_name.'_quanty.'.$qnty_id,'=',$table_name.'.id')
+                ->join('tesco_item_master','tesco_item_master.id',$table_name.'.template_id')
+                ->leftjoin('price_taxation','price_taxation.template_id','=',$table_name.'.template_id')
+                ->leftjoin('tesco_template','tesco_template.item_id','=','price_taxation.template_id')
+                ->where($table_name.'.is_order_count_empty',0)
+                ->where('price_taxation.customer_id',$customer_details->id)
+                ->where('price_taxation.buyer_id',$buyer_id)
+                ->where($table_name.'.po_number',$item_details[0]->po_no)
+                ->where($table_name.'.pi_status',$item_details[0]->pi_status)
+                ->where('uk_style_ref',$item_details[0]->style)
+                ->where($table_name.'.order_flag',"reOrder")
+                ->select($table_name.'.id',$table_name.'.order_flag','size',$table_name.'_quanty.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name','po_number as po_no','zone','tesco_item_master.item_name as ref_no','tesco_template.item_id',$table_name.'.pi_rev_no','tesco_template.template_name','pi_rev_no')->get()->toArray();
+              
+            }
+
+            foreach ($item_details as $key => $value) {
+                if ($value->zone == "CE") {
+                  $value->style = $value->ce_style_ref;
+                }
+                else{
+                  $value->style = $value->uk_style_ref;
+                }
+            }
+            $data['item_details'] = $item_details;
+           
+          }  
+          else if($item_details[0]->order_flag=="repeatOrder")
+          {
+            if ($item_details[0]->zone =="CE") {
+                $item_details    = DB::table($table_name)
+                ->join($table_name.'_quanty',$table_name.'_quanty.'.$qnty_id,'=',$table_name.'.id')
+                ->join('tesco_item_master','tesco_item_master.id',$table_name.'.template_id')
+                ->leftjoin('price_taxation','price_taxation.template_id','=',$table_name.'.template_id')
+                ->leftjoin('tesco_template','tesco_template.item_id','=','price_taxation.template_id')
+                ->where($table_name.'.is_order_count_empty',0)
+                ->where('price_taxation.customer_id',$customer_details->id)
+                ->where('price_taxation.buyer_id',$buyer_id)
+                ->where($table_name.'.po_number',$item_details[0]->po_no)
+                ->where($table_name.'.pi_status',$item_details[0]->pi_status)
+                ->where('ce_style_ref',$item_details[0]->style)
+                ->where($table_name.'.order_flag',"repeatOrder")
+                ->select($table_name.'.id',$table_name.'.order_flag','size',$table_name.'_quanty.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name','po_number as po_no','zone','tesco_item_master.item_name as ref_no','tesco_template.item_id',$table_name.'.pi_rev_no','tesco_template.template_name','pi_rev_no')->get()->toArray();
+            }
+            else {
+                $item_details    = DB::table($table_name)
+                ->join($table_name.'_quanty',$table_name.'_quanty.'.$qnty_id,'=',$table_name.'.id')
+                ->join('tesco_item_master','tesco_item_master.id',$table_name.'.template_id')
+                ->leftjoin('price_taxation','price_taxation.template_id','=',$table_name.'.template_id')
+                ->leftjoin('tesco_template','tesco_template.item_id','=','price_taxation.template_id')
+                ->where($table_name.'.is_order_count_empty',0)
+                ->where('price_taxation.customer_id',$customer_details->id)
+                ->where('price_taxation.buyer_id',$buyer_id)
+                ->where($table_name.'.po_number',$item_details[0]->po_no)
+                ->where($table_name.'.pi_status',$item_details[0]->pi_status)
+                ->where('uk_style_ref',$item_details[0]->style)
+                ->where($table_name.'.order_flag',"repeatOrder")
+                ->select($table_name.'.id',$table_name.'.order_flag','size',$table_name.'_quanty.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name','po_number as po_no','zone','tesco_item_master.item_name as ref_no','tesco_template.item_id',$table_name.'.pi_rev_no','tesco_template.template_name','pi_rev_no')->get()->toArray();
+            }
+            foreach ($item_details as $key => $value) {
+                if ($value->zone == "CE") {
+                  $value->style = $value->ce_style_ref;
+                }
+                else{
+                  $value->style = $value->uk_style_ref;
+                }
+            }
+            $data['item_details'] = $item_details;
           }  
 
           if ($item_id_array) {
@@ -432,7 +519,7 @@ class ProformaInvoice
         $buyer_id       = $request->buyer_id;
         $style_no       = $request->style_no;
         $buyer_po       = $request->buyer_po;
-        if ($order_flag == "reOrder") {
+        if ($order_flag == "reOrder" || $order_flag == "repeatOrder") {
            $rep_order_id   =  str_replace(' ', '', $template_name)."_".$table_id;
            $pi_details = DB::table('profoma_invoices')
             ->where('buyer_id',$buyer_id)

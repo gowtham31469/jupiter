@@ -3704,7 +3704,7 @@ class OrderController extends Controller
 
             if ($data)
             {
-                if ($data['item_details'][0]->order_flag=="reOrder") 
+                if ($data['item_details'][0]->order_flag=="reOrder" || $data['item_details'][0]->order_flag=="repeatOrder") 
                 {
                     $rep_order_id = str_replace(' ', '', $data['item_details'][0]->template_name)."_".$row_id;
                 }
