@@ -1511,10 +1511,14 @@ function storeJobcard()
 								{
 									erp_details_div_html += '<div hidden class="edit-erp-details" data-erp-id="'+erp_data.erp_id+'" data-ref-name="'+erp_data.refname+'" data-order-type="'+erp_data.order_type+'" data-buyer-po="'+erp_data.buyer_po+'" data-created-at="'+erp_data.created_at+'"  data-style-no="'+erp_data.style_no+'" data-template-file="'+erp_data.temp_file+'" data-template-id="'+erp_data.temp_id+'" data-template-name="'+erp_data.temp_name+'" data-front-path="'+erp_data.frontPath+'" data-back-path="'+erp_data.backPath+'" data-middle-path="'+erp_data.middlePath+'" data-disney="'+erp_data.disney+'" data-uuid="'+erp_data.uuid+'"></div><object style="opacity:0;width:0px;height:0px" id="washcare_front'+incr+'" class="center-block tesco_svg'+incr+'" data="'+erp_data.frontPath+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="washcare_back'+incr+'" class="center-block tesco_svg'+incr+'" data="'+erp_data.backPath+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="washcare_middle'+incr+'" class="center-block tesco_svg'+incr+'" data="'+erp_data.middlePath+'" type="image/svg+xml"></object>'
 								}
-								else
+								else if(erp_data.temp_name == "stickers")
 								{
 									erp_details_div_html += '<div hidden class="edit-erp-details" data-erp-id="'+erp_data.erp_id+'" data-ref-name="'+erp_data.refname+'" data-order-type="'+erp_data.order_type+'" data-buyer-po="'+erp_data.buyer_po+'" data-created-at="'+erp_data.created_at+'"  data-style-no="'+erp_data.style_no+'" data-template-file="'+erp_data.temp_file+'" data-template-id="'+erp_data.temp_id+'" data-template-name="'+erp_data.temp_name+'" data-disney="'+erp_data.disney+'" data-uuid="'+erp_data.uuid+'"></div><object style="opacity:0;width:0px;height:0px" id="orchestra_svg_modal'+incr+'" class="center-block tesco_svg'+incr+'" data="'+erp_data.temp_file+'" type="image/svg+xml"></object>'
-								}
+                                }
+                                else
+                                {
+                                    erp_details_div_html += '<div hidden class="edit-erp-details" data-erp-id="'+erp_data.erp_id+'" data-ref-name="'+erp_data.refname+'" data-order-type="'+erp_data.order_type+'" data-buyer-po="'+erp_data.buyer_po+'" data-created-at="'+erp_data.created_at+'"  data-style-no="'+erp_data.style_no+'" data-template-file="'+erp_data.temp_file+'" data-uuid="'+erp_data.uuid+'"></div><object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal'+incr+'" class="center-block tesco_svg'+incr+'" data="'+erp_data.temp_file+'" type="image/svg+xml"></object>'
+                                }
                                 
                                 incr++;
                             });
