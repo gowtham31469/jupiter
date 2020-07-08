@@ -822,6 +822,10 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::put('/settings/update-finishtype-by-id', 'ErpUser\ERPSettings\ERPSettingsController@updateFinishTypeById');
 	Route::put('/settings/make-finishtype-enabled', 'ErpUser\ERPSettings\ERPSettingsController@makeFinishTypeEnabled');
 	Route::put('/settings/make-finishtype-disabled', 'ErpUser\ERPSettings\ERPSettingsController@makeFinishTypeDisabled');
+
+	//Financial Year
+	Route::get('/settings/financial-year', 'ErpUser\ERPSettings\ERPSettingsController@getFinancialYear')->name('erp-financialyear');
+	Route::put('/settings/update-financial-year-date', 'ErpUser\ERPSettings\ERPSettingsController@updateFinancialYearDateById');
 });
 
 //Orchestra Order Management - customer

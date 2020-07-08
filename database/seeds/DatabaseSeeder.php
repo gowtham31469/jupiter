@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
 			OSTINItemMasterTableSeeder::class,
 			TescoTemplateTableSeeder::class,
 			TescoItemMasterTableSeeder::class,
+			FinancialYearResetDateSeeder::class
 		]);
     }
 }
