@@ -4,11 +4,19 @@ use DB;
 use Carbon\Carbon;
 use App\ErpOrders as Erp;
 use App\ErpOrderDetails;
+use App\FinancialYearResetDate;
 
 
 class ErpOrders
 {
 	private $current_date;
+	private $day;
+	private $year;
+	private $month_name;
+	private $month;
+	private $financial_year_date;
+	private $today;
+
 	
 	/**
 	 * Create a new controller instance.
@@ -19,6 +27,22 @@ class ErpOrders
 	{
 		// get the current time
 		$this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
+
+		// get today date as "08"
+		$this->day = Carbon::parse($this->current_date)->format('d');
+
+		// get year as "2020"
+		$this->year = Carbon::parse($this->current_date)->format('Y');
+
+		// get month as "July"
+		$this->month_name = Carbon::parse($this->current_date)->format('F');
+
+		// get month as "07"
+		$this->month = Carbon::parse($this->current_date)->format('m');
+
+		$this->financial_year_date = FinancialYearResetDate::value('financial_year_date');
+
+		$this->today = $this->month_name."-".$this->day;
 	}
 
 	/**
@@ -69,22 +93,36 @@ class ErpOrders
 			}
 			else
 			{
+				// Logic for resetting ERP ID format for new financial year			 
+				$max_erp_id = Erp::select('erp_id')->find(Erp::max('id'));
+				$split_erp_id = explode("-",$max_erp_id->erp_id);
+				$parsed_max_id  = ltrim(end($split_erp_id), '0');
+
+				// check if already order placed today.
+				$first_order_placed = Erp::whereDate('created_at', $this->current_date)->exists();
+				
+				if((strcmp($this->financial_year_date, $this->today) == 0) && !$first_order_placed){
+					(int)$parsed_max_id = 1;
+				} else {
+					(int)$parsed_max_id += 1;
+				}
+				
+				$erp_id = "ERPID-".$this->month."-".$this->year."-0".$parsed_max_id;
+
 				$erp_orders = Erp::create([
 								'buyer_id'         => $buyer_id,
 								'customer_id'      => $orders->customer_id,
 								'po_no'            => $po_no,
 								'po_file'          => $po_file,
 								'status'		   => 1,
-								'created_at'       => $this->current_date
+								'created_at'       => $this->current_date,
+								'erp_id'           => $erp_id
 							 ]);
-				$erp_id = "ERPID-0".$erp_orders->id;
-				$suc_erp_id=$erp_orders->id;
-				Erp::where('id',$erp_orders->id)->update(['erp_id'=>$erp_id]);
 				$status = 1;
 
 				$this->insertOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders->id, $order_status_id, $po_no);
 			}
-			$result = response()->json(['error'=> false,'message' =>'success','erp_id' =>$suc_erp_id,'buyer_id'=>(int)$buyer_id ,'customer_id'=>$orders->customer_id],200);
+			$result = response()->json(['error'=> false,'message' =>'success','erp_id' =>$erp_orders->id,'buyer_id'=>(int)$buyer_id ,'customer_id'=>$orders->customer_id],200);
 		}
         catch (\Exception $e)
         {
@@ -276,16 +314,31 @@ class ErpOrders
 			}
 			else
 			{
+				// Logic for restting ERP ID format for new financial year			 
+				$max_erp_id = Erp::select('erp_id')->find(Erp::max('id'));
+				$split_erp_id = explode("-",$max_erp_id->erp_id);
+				$parsed_max_id  = ltrim(end($split_erp_id), '0');
+				
+				// check if already first order placed today.
+				$first_order_placed = Erp::whereDate('created_at', $this->current_date)->exists();
+				
+				if((strcmp($this->financial_year_date, $this->today) == 0) && !$first_order_placed){
+					(int)$parsed_max_id = 1;
+				} else {
+					(int)$parsed_max_id += 1;
+				}
+
+				$erp_id = "ERPID-".$this->month."-".$this->year."-0".$parsed_max_id;
+
 				$erp_orders = Erp::create([
 								'buyer_id'         => $buyer_id,
 								'customer_id'      => $orders->customer_id,
 								'po_no'            => $po_no,
 								'po_file'          => $po_file,
 								'status'		   => 1,
-								'created_at'       => $this->current_date
+								'created_at'       => $this->current_date,
+								'erp_id'		   => $erp_id
 							 ]);
-				$erp_id = "ERPID-0".$erp_orders->id;
-				Erp::where('id',$erp_orders->id)->update(['erp_id'=>$erp_id]);
 				$status = 1;
 
 				$this->insertOrchestraOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders->id, $table_name, $order_status_id, $po_no);

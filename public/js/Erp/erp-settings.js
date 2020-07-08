@@ -1317,7 +1317,7 @@ function makeFinishTypeDisabled(id)
                 $(".loader").show();
             },
             success: function(data) {
-                var html_content = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Financial Year</h3></div>';
+                var html_content = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Financial Year</h3></div><br/>';
                 
                 $.each(data.erp_financial_year, function(index, item) {
                     html_content += ' <form class="form-inline" method="PUT" id="update_financial_month" data-toggle="validator" role="form" novalidate="true">\

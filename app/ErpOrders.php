@@ -15,13 +15,15 @@ class ErpOrders extends Model
       */
       protected $table = 'erp_orders';
 
+      protected $primaryKey = 'id';
+
      /**
       * The attributes that are mass assignable.
       *
       * @var array
       */
 
-      protected $fillable = ['id','customer_id','buyer_id','po_no','po_file','status','created_at','updated_at', 'deleted_at'];
+      protected $fillable = ['id','customer_id','buyer_id','po_no','po_file','status','created_at','updated_at', 'deleted_at', 'erp_id', 'partial_status', 'po_updated_status', 'previous_status'];
 	
 	/**
      * Get the customer.
