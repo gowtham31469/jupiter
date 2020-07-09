@@ -10,11 +10,13 @@ use App\FinancialYearResetDate;
 class ErpOrders
 {
 	private $current_date;
-	private $day;
 	private $year;
 	private $month;
 	private $financial_year_date;
 	private $today_date;
+	private $from;
+	private $to;
+
 
 	
 	/**
@@ -40,6 +42,14 @@ class ErpOrders
 
 		// get the current date in "dd-mm-yyyy" format
 		$this->today_date = Carbon::now('Asia/Kolkata')->format('d-m-Y');
+
+		$this->from  = Carbon::parse($this->financial_year_date_format)
+						->startOfDay()        // 2018-09-29 00:00:00.000000
+						->toDateTimeString(); // 2018-09-29 00:00:00
+
+		$this->to   = Carbon::parse($this->today_date)
+						->endOfDay()          // 2018-09-29 23:59:59.000000
+						->toDateTimeString(); // 2018-09-29 23:59:59
 
 	}
 
@@ -98,8 +108,9 @@ class ErpOrders
 				
 				if( strtotime($this->today_date) >= strtotime($this->financial_year_date_format) ){
 					// check if already order placed today.
-					$already_order_placed = Erp::whereBetween('created_at', [$this->financial_year_date_format, $this->today_date])->orWhereDate('created_at', '=',$this->today_date)->exists();
+					$already_order_placed = Erp::whereBetween('created_at', [$this->from, $this->to])->orWhereDate('created_at', '=',$this->today_date)->exists();
 
+					// set erp id as 1 for first order of the financial year
 					(int)$parsed_max_id = $already_order_placed === false?1:(int)$parsed_max_id+(int)1;
 				} else {
 					(int)$parsed_max_id += 1;
@@ -320,8 +331,9 @@ class ErpOrders
 				
 				if( strtotime($this->today_date) >= strtotime($this->financial_year_date_format) ){
 					// check if already order placed in current financial year.
-					$already_order_placed = Erp::whereBetween('created_at', [$this->financial_year_date_format, $this->today_date])->orWhereDate('created_at', '=',$this->today_date)->exists();
+					$already_order_placed = Erp::whereBetween('created_at', [$this->from, $this->to])->orWhereDate('created_at', '=',$this->today_date)->exists();
 
+					// set erp id as 1 for first order of the financial year
 					(int)$parsed_max_id = $already_order_placed === false?1:(int)$parsed_max_id+(int)1;
 				} else {
 					(int)$parsed_max_id += 1;

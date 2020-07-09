@@ -35,6 +35,7 @@ use File;
 use Config;
 use App\History;
 use App\Buyer;
+use App\FinancialYearResetDate;
 
 class JobManagerController extends Controller
 {
@@ -42,6 +43,10 @@ class JobManagerController extends Controller
 	private $buyer_name;
 	private $erp_jc_status_id;
 	private $order_ap_status_id;
+	private $year;
+	private $month;
+	private $financial_year_date;
+	private $today_date;
 	/**
 	 * Create a new controller instance.
 	 *
@@ -58,6 +63,17 @@ class JobManagerController extends Controller
 		 
 		// Get order status table id for 'Order Approved' status.
 		$this->order_ap_status_id = DB::table('orders_status')->where('status_name', 'ilike', 'Order Approved')->value('id');
+
+		// get year as "2020"
+		$this->year = Carbon::parse($this->current_date)->format('Y');
+
+		// get month as "07"
+		$this->month = Carbon::parse($this->current_date)->format('m');
+
+		$this->financial_year_date = FinancialYearResetDate::value('financial_year_date');
+
+		// format financial year date as "dd-mm-yyyy" 
+		$this->financial_year_date_format = $this->financial_year_date."-".$this->year;
 	}
 		
 	/**
@@ -675,8 +691,23 @@ class JobManagerController extends Controller
 				}
 				sort($order_detail_ids);
 				
-				$workorder_id = DB::table('jobcard_main_table')->max('id')+1;
+				// Logic for resetting Jobcard ID format for new financial year			 
+				$max_workorder_id = DB::table('jobcard_main_table')->select('work_order_id')->find(DB::table('jobcard_main_table')->max('id'));
+				$split_workorder_id = explode("-",$max_workorder_id->work_order_id);
+				$parsed_max_id  = end($split_workorder_id);
 				
+				if( strtotime($this->current_date) >= strtotime($this->financial_year_date_format) ){
+					// check if already jobcard created today.
+					$already_jobcard_created = DB::table('jobcard_main_table')->whereBetween('created_date', [$this->financial_year_date_format, $this->current_date])->orWhereDate('created_date', '=',$this->current_date)->exists();
+
+					// set erp id as 1 for first order of the financial year
+					(int)$parsed_max_id = $already_jobcard_created === false?1:(int)$parsed_max_id+(int)1;
+				} else {
+					(int)$parsed_max_id += 1;
+				}
+
+				// jobcard id format "JGA-JC-mm-yyyy-1"
+				$workorder_id = "JGA-JC-".$this->month."-".$this->year."-".$parsed_max_id;
 
 				foreach($order_detail_ids as $key => $order_detail_id)
 				{

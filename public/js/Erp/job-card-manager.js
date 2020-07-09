@@ -274,8 +274,7 @@ function generateJobcard(){
                             $('#jc_company_name').attr('data-company-id', data.template_data.company.company_id)
                         }
 
-                        var workorder_id = data.template_data.company.company === 'Jupiter Garments Accessories'?'JGA-JC-':'SP-JC-';
-                        $('#work_order').text( workorder_id+data.template_data.workorder_id);
+                        $('#work_order').text( data.template_data.workorder_id);
 
                         $('#today_date').text( data.template_data.today_date);
 
