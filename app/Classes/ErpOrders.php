@@ -12,10 +12,9 @@ class ErpOrders
 	private $current_date;
 	private $day;
 	private $year;
-	private $month_name;
 	private $month;
 	private $financial_year_date;
-	private $today;
+	private $today_date;
 
 	
 	/**
@@ -28,21 +27,20 @@ class ErpOrders
 		// get the current time
 		$this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
 
-		// get today date as "08"
-		$this->day = Carbon::parse($this->current_date)->format('d');
-
 		// get year as "2020"
 		$this->year = Carbon::parse($this->current_date)->format('Y');
-
-		// get month as "July"
-		$this->month_name = Carbon::parse($this->current_date)->format('F');
 
 		// get month as "07"
 		$this->month = Carbon::parse($this->current_date)->format('m');
 
 		$this->financial_year_date = FinancialYearResetDate::value('financial_year_date');
 
-		$this->today = $this->month_name."-".$this->day;
+		// format financial year date as "dd-mm-yyyy" 
+		$this->financial_year_date_format = $this->financial_year_date."-".$this->year;
+
+		// get the current date in "dd-mm-yyyy" format
+		$this->today_date = Carbon::now('Asia/Kolkata')->format('d-m-Y');
+
 	}
 
 	/**
@@ -97,16 +95,17 @@ class ErpOrders
 				$max_erp_id = Erp::select('erp_id')->find(Erp::max('id'));
 				$split_erp_id = explode("-",$max_erp_id->erp_id);
 				$parsed_max_id  = ltrim(end($split_erp_id), '0');
-
-				// check if already order placed today.
-				$first_order_placed = Erp::whereDate('created_at', $this->current_date)->exists();
 				
-				if((strcmp($this->financial_year_date, $this->today) == 0) && !$first_order_placed){
-					(int)$parsed_max_id = 1;
+				if( strtotime($this->today_date) >= strtotime($this->financial_year_date_format) ){
+					// check if already order placed today.
+					$already_order_placed = Erp::whereBetween('created_at', [$this->financial_year_date_format, $this->today_date])->orWhereDate('created_at', '=',$this->today_date)->exists();
+
+					(int)$parsed_max_id = $already_order_placed === false?1:(int)$parsed_max_id+(int)1;
 				} else {
 					(int)$parsed_max_id += 1;
 				}
 				
+				// erp id format : "ERPID-mm-yyyy-01"
 				$erp_id = "ERPID-".$this->month."-".$this->year."-0".$parsed_max_id;
 
 				$erp_orders = Erp::create([
@@ -319,15 +318,16 @@ class ErpOrders
 				$split_erp_id = explode("-",$max_erp_id->erp_id);
 				$parsed_max_id  = ltrim(end($split_erp_id), '0');
 				
-				// check if already first order placed today.
-				$first_order_placed = Erp::whereDate('created_at', $this->current_date)->exists();
-				
-				if((strcmp($this->financial_year_date, $this->today) == 0) && !$first_order_placed){
-					(int)$parsed_max_id = 1;
+				if( strtotime($this->today_date) >= strtotime($this->financial_year_date_format) ){
+					// check if already order placed in current financial year.
+					$already_order_placed = Erp::whereBetween('created_at', [$this->financial_year_date_format, $this->today_date])->orWhereDate('created_at', '=',$this->today_date)->exists();
+
+					(int)$parsed_max_id = $already_order_placed === false?1:(int)$parsed_max_id+(int)1;
 				} else {
 					(int)$parsed_max_id += 1;
 				}
 
+				// erp id format : "ERPID-mm-yyyy-01"
 				$erp_id = "ERPID-".$this->month."-".$this->year."-0".$parsed_max_id;
 
 				$erp_orders = Erp::create([

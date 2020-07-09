@@ -1339,11 +1339,12 @@ function makeFinishTypeDisabled(id)
                 });
                 html_content += '</div>';
                 $('.inner-content').html(html_content)
+
                 /** @type {Date} [financial year date Datepicker format & validation] */
-				$('#datePicker1').datepicker({
-					autoclose: true,
-					format: 'MM-dd',
-				})
+                $('#datePicker1').datepicker({
+                  autoclose: true,
+                  format: 'dd-mm',
+                })
 
             },
             error: function(errorXHR, errorStatus, errorThrown) {
