@@ -46,7 +46,6 @@ class JobManagerController extends Controller
 	private $year;
 	private $month;
 	private $financial_year_date;
-	private $today_date;
 	/**
 	 * Create a new controller instance.
 	 *
