@@ -103,8 +103,16 @@ class ErpOrders
 			{
 				// Logic for resetting ERP ID format for new financial year			 
 				$max_erp_id = Erp::select('erp_id')->find(Erp::max('id'));
-				$split_erp_id = explode("-",$max_erp_id->erp_id);
-				$parsed_max_id  = ltrim(end($split_erp_id), '0');
+				
+				if($max_erp_id){
+					$split_erp_id = explode("-",$max_erp_id->erp_id);
+					$parsed_max_id  = ltrim(end($split_erp_id), '0');
+
+					$erp_id_prefix = count($split_erp_id) === 2?"ERPID-0":"ERPID-".$this->month."-".$this->year."-0";
+				} else {
+					(int)$parsed_max_id = 0;
+					$erp_id_prefix = "ERPID-".$this->month."-".$this->year."-0";
+				}
 				
 				if( strtotime($this->today_date) >= strtotime($this->financial_year_date_format) ){
 					// check if already order placed today.
@@ -112,12 +120,14 @@ class ErpOrders
 
 					// set erp id as 1 for first order of the financial year
 					(int)$parsed_max_id = $already_order_placed === false?1:(int)$parsed_max_id+(int)1;
+
+					$erp_id_prefix = $already_order_placed === false?"ERPID-".$this->month."-".$this->year."-0":$erp_id_prefix;
 				} else {
 					(int)$parsed_max_id += 1;
 				}
 				
-				// erp id format : "ERPID-mm-yyyy-01"
-				$erp_id = "ERPID-".$this->month."-".$this->year."-0".$parsed_max_id;
+				// erp id format : "ERPID-mm-yyyy-01". and for old orders "ERPID-01" 
+				$erp_id = $erp_id_prefix.$parsed_max_id;
 
 				$erp_orders = Erp::create([
 								'buyer_id'         => $buyer_id,
@@ -324,23 +334,33 @@ class ErpOrders
 			}
 			else
 			{
-				// Logic for restting ERP ID format for new financial year			 
+				// Logic for resetting ERP ID format for new financial year			 
 				$max_erp_id = Erp::select('erp_id')->find(Erp::max('id'));
-				$split_erp_id = explode("-",$max_erp_id->erp_id);
-				$parsed_max_id  = ltrim(end($split_erp_id), '0');
+				
+				if($max_erp_id){
+					$split_erp_id = explode("-",$max_erp_id->erp_id);
+					(int)$parsed_max_id  = ltrim(end($split_erp_id), '0');
+
+					$erp_id_prefix = count($split_erp_id) === 2?"ERPID-0":"ERPID-".$this->month."-".$this->year."-0";
+				} else {
+					(int)$parsed_max_id = 0;
+					$erp_id_prefix = "ERPID-".$this->month."-".$this->year."-0";
+				}
 				
 				if( strtotime($this->today_date) >= strtotime($this->financial_year_date_format) ){
-					// check if already order placed in current financial year.
+					// check if already order placed today.
 					$already_order_placed = Erp::whereBetween('created_at', [$this->from, $this->to])->orWhereDate('created_at', '=',$this->today_date)->exists();
 
 					// set erp id as 1 for first order of the financial year
 					(int)$parsed_max_id = $already_order_placed === false?1:(int)$parsed_max_id+(int)1;
+
+					$erp_id_prefix = $already_order_placed === false?"ERPID-".$this->month."-".$this->year."-0":$erp_id_prefix;
 				} else {
 					(int)$parsed_max_id += 1;
 				}
-
-				// erp id format : "ERPID-mm-yyyy-01"
-				$erp_id = "ERPID-".$this->month."-".$this->year."-0".$parsed_max_id;
+				
+				// erp id format : "ERPID-mm-yyyy-01". and for old orders "ERPID-01" 
+				$erp_id = $erp_id_prefix.$parsed_max_id;
 
 				$erp_orders = Erp::create([
 								'buyer_id'         => $buyer_id,

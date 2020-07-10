@@ -693,8 +693,16 @@ class JobManagerController extends Controller
 				
 				// Logic for resetting Jobcard ID format for new financial year			 
 				$max_workorder_id = DB::table('jobcard_main_table')->select('work_order_id')->find(DB::table('jobcard_main_table')->max('id'));
-				$split_workorder_id = explode("-",$max_workorder_id->work_order_id);
-				$parsed_max_id  = end($split_workorder_id);
+
+				if($max_workorder_id){
+					$split_workorder_id = explode("-",$max_workorder_id->work_order_id);
+					(int)$parsed_max_id  = end($split_workorder_id);
+					
+					$jobcard_id_prefix = count($split_workorder_id) === 3?"JGA-JC-":"JGA-JC-".$this->month."-".$this->year."-";
+				} else {
+					(int)$parsed_max_id = 0;
+					$jobcard_id_prefix = "JGA-JC-".$this->month."-".$this->year."-";
+				}
 				
 				if( strtotime($this->current_date) >= strtotime($this->financial_year_date_format) ){
 					// check if already jobcard created today.
@@ -702,12 +710,14 @@ class JobManagerController extends Controller
 
 					// set erp id as 1 for first order of the financial year
 					(int)$parsed_max_id = $already_jobcard_created === false?1:(int)$parsed_max_id+(int)1;
+
+					$jobcard_id_prefix = $already_jobcard_created === false?"JGA-JC-".$this->month."-".$this->year."-":$jobcard_id_prefix;
 				} else {
 					(int)$parsed_max_id += 1;
 				}
-
-				// jobcard id format "JGA-JC-mm-yyyy-1"
-				$workorder_id = "JGA-JC-".$this->month."-".$this->year."-".$parsed_max_id;
+				
+				// jobcard id format "JGA-JC-mm-yyyy-1" and for old order "JGA-JC-1"
+				$workorder_id = $jobcard_id_prefix.$parsed_max_id;
 
 				foreach($order_detail_ids as $key => $order_detail_id)
 				{
