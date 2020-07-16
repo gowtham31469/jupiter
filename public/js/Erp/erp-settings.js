@@ -1296,3 +1296,121 @@ function makeFinishTypeDisabled(id)
    console.log("Error:"+e)
   }
  }
+
+ /**
+  * Method to show financial year date
+  * @author <praveen>
+  */
+ function financialYear() {
+    try {
+        $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+        $('.erp-sidebar-main').show();
+        $('.li-setting').removeClass('active');
+        $('.financialyearli').addClass('active');
+        $.ajax({
+            url: base_url + "/erp/settings/financial-year",
+            type: "GET",
+            dataType: "json",
+            tryCount: 0,
+            retryLimit: 2,
+            beforeSend: function() {
+                $(".loader").show();
+            },
+            success: function(data) {
+                var html_content = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Financial Year</h3></div><br/>';
+                
+                $.each(data.erp_financial_year, function(index, item) {
+                    html_content += ' <form class="form-inline" method="PUT" id="update_financial_month" data-toggle="validator" role="form" novalidate="true">\
+                    <input class="financial-year-hidden" id="financial_year_date_id" type="hidden" value="'+item.id+'">\
+                    <div class="col-md-3">\
+                        <div class="form-group has-feedback">\
+                            <label for="financial_year_date">Financial Year Date</label>\
+                            <div class="input-group financial_year_date date" data-provide="datepicker" id="datePicker1">\
+                                <input value="'+item.financial_year_date+'" id="financial_year_date" name="financial_year_date" type="text" class="form-control" required="" placeholder="Select Financial Year Date">\
+                                <div class="input-group-addon">\
+                                <span class="glyphicon glyphicon-th"> </span >\
+                            </div >\
+                        </div >\
+                        <div class="help-block with-errors"></div>\
+                        </div>\
+                    </div>\
+                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>\
+                    </form> ';
+                });
+                html_content += '</div>';
+                $('.inner-content').html(html_content)
+
+                /** @type {Date} [financial year date Datepicker format & validation] */
+                $('#datePicker1').datepicker({
+                  autoclose: true,
+                  format: 'dd-mm',
+                })
+
+            },
+            error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
+            },
+            complete: function() {
+                $(".loader").hide();
+                /** [ bootstrap validator for update financial year date form ] **/
+				$('#update_financial_month').validator().on('submit', function (e) {
+					if (e.isDefaultPrevented()) {
+
+					} else {
+						e.preventDefault();
+						updateFinancialYearDate();
+					}
+				})
+            }
+        })
+    } catch (e) {
+        console.log("Error:" + e)
+    }
+}
+
+/**
+ * Method to update financial year date
+ * @author <praveen>
+ */
+function updateFinancialYearDate(){
+    try{
+        var financial_year_date    = $('#financial_year_date').val();
+        var financial_year_date_id = $('#financial_year_date_id').val();
+        $.ajax({
+             url:base_url + "/erp/settings/update-financial-year-date",
+             dataType:"json",
+             beforeSend: function () {
+               $(".loader").show();
+             },
+             method:"put",
+             data:{_token:csrf_token,id:financial_year_date_id, date:financial_year_date},
+             tryCount : 0,
+             retryLimit : 2,
+             statusCode: {
+                  /** [Show response status based on HTTP status code] */
+                  200: function() {
+                       isSubmitting = false;
+                       $('.snackbar_span').html('Financial Year Date updated successfully. ');
+                       showSnackbar();
+                  },
+             },
+             error: function(errorXHR, errorStatus, errorThrown) {
+               this.tryCount++;
+               if (this.tryCount <= this.retryLimit) {
+                   $.ajax(this);
+                   return;
+               }
+             },
+             complete: function () {
+                financialYear();
+               $(".loader").hide();
+             }
+         })
+  } catch (e) {
+   console.log("Error:"+e)
+  }
+}

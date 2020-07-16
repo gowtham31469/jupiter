@@ -35,6 +35,7 @@ use File;
 use Config;
 use App\History;
 use App\Buyer;
+use App\FinancialYearResetDate;
 
 class JobManagerController extends Controller
 {
@@ -42,6 +43,9 @@ class JobManagerController extends Controller
 	private $buyer_name;
 	private $erp_jc_status_id;
 	private $order_ap_status_id;
+	private $year;
+	private $month;
+	private $financial_year_date;
 	/**
 	 * Create a new controller instance.
 	 *
@@ -58,6 +62,17 @@ class JobManagerController extends Controller
 		 
 		// Get order status table id for 'Order Approved' status.
 		$this->order_ap_status_id = DB::table('orders_status')->where('status_name', 'ilike', 'Order Approved')->value('id');
+
+		// get year as "2020"
+		$this->year = Carbon::parse($this->current_date)->format('Y');
+
+		// get month as "07"
+		$this->month = Carbon::parse($this->current_date)->format('m');
+
+		$this->financial_year_date = FinancialYearResetDate::value('financial_year_date');
+
+		// format financial year date as "dd-mm-yyyy" 
+		$this->financial_year_date_format = $this->financial_year_date."-".$this->year;
 	}
 		
 	/**
@@ -80,7 +95,7 @@ class JobManagerController extends Controller
 			{
 				$company_id   = DB::table('company')
 								->select('company.*')
-								->where('company.id', '=', $companies{0}->company)
+								->where('company.id', '=', $companies[0]->company)
 								->first();
 			}
 			else
@@ -561,7 +576,7 @@ class JobManagerController extends Controller
 									->select('*')
 									->get();
 			
-		$tesco_item_master=DB::table('tesco_item_master')->where('id',$order_details{0}->template_id)->select('*')->get();
+		$tesco_item_master=DB::table('tesco_item_master')->where('id',$order_details[0]->template_id)->select('*')->get();
 			
 		foreach($order_details as $value)
 		{
@@ -577,32 +592,32 @@ class JobManagerController extends Controller
 				->join('tesco_department',$order_table.'.tesco_department_id', 'tesco_department.id')
 				->join('tesco_brand',$order_table.'.tesco_brand_id', 'tesco_brand.id')
 				->join('tesco_suppliers',$order_table.'.tesco_metadata_supplier_id', 'tesco_suppliers.id')
-									->where($order_table.'.id',$order_details_omp{0}->$order_id)
+									->where($order_table.'.id',$order_details_omp[0]->$order_id)
 									->select($order_table.'.*','tesco_department.department','tesco_brand.brand','tesco_suppliers.supplier_name')
 									->get();
 			
-			$value->tpnd              = $order_details_omp{0}->tpnd;
-			$value->itf_barcode       = $order_details_omp{0}->itf_barcode;
-			$value->qr_code       	  = $order_details_omp{0}->qr_code;
-			$value->units_per_carton  = $order_details_omp{0}->units_per_carton;
-			$value->cases_per_carton  = $order_details_omp{0}->cases_per_carton;
-			$value->ean_barcode       = $order_details_omp{0}->ean_barcode;
-			$value->size              = $order_details_omp{0}->size;
-			$value->case_size         = $order_details_omp{0}->case_size;
-			$value->orms_tpn          = $order_details_omp{0}->orms_tpn;
-			$value->zone              = $order_omp{0}->zone;
-			$value->po_number         = $order_omp{0}->po_number;
-			$value->uk_style_ref      = $order_omp{0}->uk_style_ref;
-			$value->ce_style_ref      = $order_omp{0}->ce_style_ref;
-			$value->season_code       = $order_omp{0}->season_code;
-			$value->short_description = $order_omp{0}->short_description;
-			$value->eqos_site_code    = $order_omp{0}->eqos_site_code;
-			$value->manufacture_date  = $order_omp{0}->manufacture_date;
-			$value->department        = $order_omp{0}->department;
-			$value->brand             = $order_omp{0}->brand;
-			$value->supplier_name     = $order_omp{0}->supplier_name;
-			$value->rfid_compliant    = $order_omp{0}->rfid_compliant;
-			$value->tag_at_source     = $order_omp{0}->tag_at_source;
+			$value->tpnd              = $order_details_omp[0]->tpnd;
+			$value->itf_barcode       = $order_details_omp[0]->itf_barcode;
+			$value->qr_code       	  = $order_details_omp[0]->qr_code;
+			$value->units_per_carton  = $order_details_omp[0]->units_per_carton;
+			$value->cases_per_carton  = $order_details_omp[0]->cases_per_carton;
+			$value->ean_barcode       = $order_details_omp[0]->ean_barcode;
+			$value->size              = $order_details_omp[0]->size;
+			$value->case_size         = $order_details_omp[0]->case_size;
+			$value->orms_tpn          = $order_details_omp[0]->orms_tpn;
+			$value->zone              = $order_omp[0]->zone;
+			$value->po_number         = $order_omp[0]->po_number;
+			$value->uk_style_ref      = $order_omp[0]->uk_style_ref;
+			$value->ce_style_ref      = $order_omp[0]->ce_style_ref;
+			$value->season_code       = $order_omp[0]->season_code;
+			$value->short_description = $order_omp[0]->short_description;
+			$value->eqos_site_code    = $order_omp[0]->eqos_site_code;
+			$value->manufacture_date  = $order_omp[0]->manufacture_date;
+			$value->department        = $order_omp[0]->department;
+			$value->brand             = $order_omp[0]->brand;
+			$value->supplier_name     = $order_omp[0]->supplier_name;
+			$value->rfid_compliant    = $order_omp[0]->rfid_compliant;
+			$value->tag_at_source     = $order_omp[0]->tag_at_source;
 			
 		}
 		return response()->json(['error'=> true,'order_details' =>$order_details,'tesco_item_master' =>$tesco_item_master],200);
@@ -675,8 +690,33 @@ class JobManagerController extends Controller
 				}
 				sort($order_detail_ids);
 				
-				$workorder_id = DB::table('jobcard_main_table')->max('id')+1;
+				// Logic for resetting Jobcard ID format for new financial year			 
+				$max_workorder_id = DB::table('jobcard_main_table')->select('work_order_id')->find(DB::table('jobcard_main_table')->max('id'));
+
+				if($max_workorder_id){
+					$split_workorder_id = explode("-",$max_workorder_id->work_order_id);
+					(int)$parsed_max_id  = end($split_workorder_id);
+					
+					$jobcard_id_prefix = count($split_workorder_id) === 3?"JGA-JC-":"JGA-JC-".$this->month."-".$this->year."-";
+				} else {
+					(int)$parsed_max_id = 0;
+					$jobcard_id_prefix = "JGA-JC-".$this->month."-".$this->year."-";
+				}
 				
+				if( strtotime($this->current_date) >= strtotime($this->financial_year_date_format) ){
+					// check if already jobcard created today.
+					$already_jobcard_created = DB::table('jobcard_main_table')->whereBetween('created_date', [$this->financial_year_date_format, $this->current_date])->orWhereDate('created_date', '=',$this->current_date)->exists();
+
+					// set erp id as 1 for first order of the financial year
+					(int)$parsed_max_id = $already_jobcard_created === false?1:(int)$parsed_max_id+(int)1;
+
+					$jobcard_id_prefix = $already_jobcard_created === false?"JGA-JC-".$this->month."-".$this->year."-":$jobcard_id_prefix;
+				} else {
+					(int)$parsed_max_id += 1;
+				}
+				
+				// jobcard id format "JGA-JC-mm-yyyy-1" and for old order "JGA-JC-1"
+				$workorder_id = $jobcard_id_prefix.$parsed_max_id;
 
 				foreach($order_detail_ids as $key => $order_detail_id)
 				{
@@ -1381,7 +1421,7 @@ class JobManagerController extends Controller
 						->select('customers.short_name')
 						->where('erp_orders.id',$company_id)
 						->get();
-		 $customer_name = $customer{0}->short_name;
+		 $customer_name = $customer[0]->short_name;
 		 $this->customer_name = $customer_name;
 		
 		 $this->created_date = $request->created_at;
@@ -1690,7 +1730,7 @@ class JobManagerController extends Controller
 						->select('customers.short_name')
 						->where('erp_orders.id',$company_id)
 						->get();
-		 $customer_name = $customer{0}->short_name;
+		 $customer_name = $customer[0]->short_name;
 		 $this->customer_name = $customer_name;
 		
 		 $this->created_date = $request->created_at;
@@ -1994,7 +2034,7 @@ class JobManagerController extends Controller
 				{
 					$company_id   = DB::table('company')
 									->select('company.*')
-									->where('company.id', '=', $companies{0}->company)
+									->where('company.id', '=', $companies[0]->company)
 									->first();
 				}
 				else
@@ -2788,10 +2828,10 @@ class JobManagerController extends Controller
 					$order_table = str_replace("_quanty","",$value->order_qnty_table_name);
 					$order_id    = strtolower(str_replace(" ","",$value->reference_name).'_order_id');
 					$order_data  = 	DB::table($order_table)
-											->where($order_table.'.id',$order_details_data{0}->$order_id)
+											->where($order_table.'.id',$order_details_data[0]->$order_id)
 											->select($order_table.'.*')
 											->get();
-					$order_status = $order_data{0}->order_status;
+					$order_status = $order_data[0]->order_status;
 
 					$order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', $order_status)->first();
 					
@@ -2832,10 +2872,10 @@ class JobManagerController extends Controller
 						->get();
 		 if(count($sticker) > 0)
 		 {
-			 $orchestra_color = DB::table('orchestra_color_code')->select('*')->where('code',$sticker{0}->color_code)->get();
+			 $orchestra_color = DB::table('orchestra_color_code')->select('*')->where('code',$sticker[0]->color_code)->get();
 			if(count($orchestra_color) > 0)
 			{
-				$color_code=$orchestra_color{0}->french;
+				$color_code=$orchestra_color[0]->french;
 			}
 			else
 			{
@@ -2847,7 +2887,7 @@ class JobManagerController extends Controller
 			 $color_code="";
 		 }
 
-		 $customer_name = $customer{0}->short_name;
+		 $customer_name = $customer[0]->short_name;
 		 $this->customer_name = $customer_name;
 		
 		 $this->created_date = $request->created_at;
@@ -3176,7 +3216,7 @@ class JobManagerController extends Controller
 		$orchestra_color = DB::table('orchestra_color_code')->select('*')->where('code',$color)->get();
 		if(count($orchestra_color) > 0)
 		{
-			$color_code=$orchestra_color{0}->french;
+			$color_code=$orchestra_color[0]->french;
 		}
 		else
 		{
@@ -3320,10 +3360,10 @@ class JobManagerController extends Controller
 						->get();
 		 if(count($sticker) > 0)
 		 {
-			 $orchestra_color = DB::table('orchestra_color_code')->select('*')->where('code',$sticker{0}->color_code)->get();
+			 $orchestra_color = DB::table('orchestra_color_code')->select('*')->where('code',$sticker[0]->color_code)->get();
 			if(count($orchestra_color) > 0)
 			{
-				$color_code=$orchestra_color{0}->french;
+				$color_code=$orchestra_color[0]->french;
 			}
 			else
 			{
@@ -3688,7 +3728,7 @@ class JobManagerController extends Controller
 						->select('customers.short_name')
 						->where('erp_orders.id',$id)
 						->get();
-		 $customer_name = $customer{0}->short_name;
+		 $customer_name = $customer[0]->short_name;
 		 $this->customer_name = $customer_name;
 		
 		 $this->created_date = $request->created_at;
@@ -3942,7 +3982,7 @@ class JobManagerController extends Controller
 						->select('customers.short_name')
 						->where('erp_orders.id',$id)
 						->get();
-		 $customer_name = $customer{0}->short_name;
+		 $customer_name = $customer[0]->short_name;
 		 $this->customer_name = $customer_name;
 		
 		 $this->created_date = $request->created_at;
@@ -4155,7 +4195,7 @@ class JobManagerController extends Controller
 						->select('customers.short_name')
 						->where('erp_orders.id',$id)
 						->get();
-		 $customer_name = $customer{0}->short_name;
+		 $customer_name = $customer[0]->short_name;
 		 $this->customer_name = $customer_name;
 		
 		 $this->created_date = $request->created_at;
@@ -4420,7 +4460,7 @@ class JobManagerController extends Controller
 						->select('customers.short_name')
 						->where('erp_orders.id',$id)
 						->get();
-		 $customer_name = $customer{0}->short_name;
+		 $customer_name = $customer[0]->short_name;
 		 $this->customer_name = $customer_name;
 		
 		 $this->created_date = $request->created_at;
@@ -4679,12 +4719,12 @@ class JobManagerController extends Controller
 						->where('erp_orders.id',$id)
 						->get();
 		
-		 $customer_name = $customer{0}->short_name;
+		 $customer_name = $customer[0]->short_name;
 		 $this->customer_name = $customer_name;
 		
 		 $this->created_date = $request->created_at;
 		
-		 $this->template_name = $orchestra_item_master{0}->ref_no;
+		 $this->template_name = $orchestra_item_master[0]->ref_no;
 		 $this->template_zone = "";
 	     $this->template_desc = "Heat Transfer";
 		 $this->tesco_po_number = $request->buyer_no;
@@ -4859,7 +4899,7 @@ class JobManagerController extends Controller
 		
 		$template_file = DB::table('orchestra_template')->select('*')->where('item_id',$template_id)->get();
 		
-		PDF::Image(public_path($template_file{0}->template_file), 6, 54, 100, 100, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+		PDF::Image(public_path($template_file[0]->template_file), 6, 54, 100, 100, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 		
 		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
 		
@@ -4887,12 +4927,12 @@ class JobManagerController extends Controller
 						->select('customers.short_name')
 						->where('erp_orders.id',$id)
 						->get();
-		 $customer_name = $customer{0}->short_name;
+		 $customer_name = $customer[0]->short_name;
 		 $this->customer_name = $customer_name;
 		
 		 $this->created_date = $request->created_at;
 		
-		 $this->template_name = $orchestra_item_master{0}->ref_no;
+		 $this->template_name = $orchestra_item_master[0]->ref_no;
 		 $this->template_zone = "";
 	     $this->template_desc = "Special Tag";
 		 $this->tesco_po_number = $request->buyer_no;
@@ -5067,7 +5107,7 @@ class JobManagerController extends Controller
 		
 		$template_file = DB::table('orchestra_template')->select('*')->where('item_id',$template_id)->get();
 		
-		PDF::Image(public_path($template_file{0}->template_file), 6, 54, 100, 100, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+		PDF::Image(public_path($template_file[0]->template_file), 6, 54, 100, 100, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 		
 		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
 		
@@ -5096,12 +5136,12 @@ class JobManagerController extends Controller
 						->select('customers.short_name')
 						->where('erp_orders.id',$id)
 						->get();
-		 $customer_name = $customer{0}->short_name;
+		 $customer_name = $customer[0]->short_name;
 		 $this->customer_name = $customer_name;
 		
 		 $this->created_date = $request->created_at;
 		
-		 $this->template_name = $orchestra_item_master{0}->ref_no;
+		 $this->template_name = $orchestra_item_master[0]->ref_no;
 		 $this->template_zone = "";
 	     $this->template_desc = "Woven Main Label";
 		 $this->tesco_po_number = $request->buyer_no;
@@ -5277,7 +5317,7 @@ class JobManagerController extends Controller
 		
 		$template_file = DB::table('orchestra_template')->select('*')->where('item_id',$template_id)->get();
 		
-		PDF::Image(public_path($template_file{0}->template_file), 6, 54, 100, 100, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+		PDF::Image(public_path($template_file[0]->template_file), 6, 54, 100, 100, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 		
 		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
 		
@@ -5306,12 +5346,12 @@ class JobManagerController extends Controller
 						->select('customers.short_name')
 						->where('erp_orders.id',$id)
 						->get();
-		 $customer_name = $customer{0}->short_name;
+		 $customer_name = $customer[0]->short_name;
 		 $this->customer_name = $customer_name;
 		
 		 $this->created_date = $request->created_at;
 		
-		 $this->template_name = $orchestra_item_master{0}->ref_no;
+		 $this->template_name = $orchestra_item_master[0]->ref_no;
 		 $this->template_zone = "";
 	     $this->template_desc = "Woven Size Label";
 		 $this->tesco_po_number = $request->buyer_no;
@@ -5486,7 +5526,7 @@ class JobManagerController extends Controller
 		
 		$template_file = DB::table('orchestra_template')->select('*')->where('item_id',$template_id)->get();
 		
-		PDF::Image(public_path($template_file{0}->template_file), 6, 54, 100, 100, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+		PDF::Image(public_path($template_file[0]->template_file), 6, 54, 100, 100, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 		
 		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
 		
@@ -5508,7 +5548,7 @@ class JobManagerController extends Controller
 						->select('customers.short_name')
 						->where('erp_orders.id',$id)
 						->get();
-		 $customer_name = $customer{0}->short_name;
+		 $customer_name = $customer[0]->short_name;
 		 $this->customer_name = $customer_name;
 		
 		 $this->created_date = $request->created_at;
@@ -5741,7 +5781,7 @@ class JobManagerController extends Controller
 	
 		$tbl='<p  style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri;line-height:1.35">Fabriqué en - Made in - <br> Fabricado en - <br>Fabricado em - <br>Fabbricato in - <br>Vervaardigd in  - <br>Hergestellt in -<br><span style="font-family:Tahoma">  ﺻﻨﻊ ب </span>-<br> παράγεται στην</p>';
 		
-		$tbl1='<p  style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$orchestra_countries{0}->french.' - '.$orchestra_countries{0}->english.' - '.$orchestra_countries{0}->spanish.' - '.$orchestra_countries{0}->portuguese.' - <br>'.$orchestra_countries{0}->italian.' - '.$orchestra_countries{0}->dutch.' - '.$orchestra_countries{0}->german.' - <br><span style="font-family:Tahoma">'.$orchestra_countries{0}->arabic.'</span> - '.$orchestra_countries{0}->greek.'</p>';
+		$tbl1='<p  style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$orchestra_countries[0]->french.' - '.$orchestra_countries[0]->english.' - '.$orchestra_countries[0]->spanish.' - '.$orchestra_countries[0]->portuguese.' - <br>'.$orchestra_countries[0]->italian.' - '.$orchestra_countries[0]->dutch.' - '.$orchestra_countries[0]->german.' - <br><span style="font-family:Tahoma">'.$orchestra_countries[0]->arabic.'</span> - '.$orchestra_countries[0]->greek.'</p>';
 		$tbl2="";
 		foreach($orchestra_care_instruction as $value)
 		{
@@ -5764,13 +5804,13 @@ class JobManagerController extends Controller
 					$orchestra_parts = DB::table('orchestra_parts')->select('*')->where('id',$value->parts_id)->get();
 					if(count($orchestra_parts) > 0)
 					{
-						$tbl3.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%)">'.$orchestra_parts{0}->french.' - '.$orchestra_parts{0}->english.' - '.$orchestra_parts{0}->spanish.' - '.$orchestra_parts{0}->portuguese.' - '.$orchestra_parts{0}->italian.' - '.$orchestra_parts{0}->dutch.' - '.$orchestra_parts{0}->german.' - <span>'.$orchestra_parts{0}->arabic.'</span> - '.$orchestra_parts{0}->greek.'</p><br><br>';
+						$tbl3.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%)">'.$orchestra_parts[0]->french.' - '.$orchestra_parts[0]->english.' - '.$orchestra_parts[0]->spanish.' - '.$orchestra_parts[0]->portuguese.' - '.$orchestra_parts[0]->italian.' - '.$orchestra_parts[0]->dutch.' - '.$orchestra_parts[0]->german.' - <span>'.$orchestra_parts[0]->arabic.'</span> - '.$orchestra_parts[0]->greek.'</p><br><br>';
 					}
 			}
 			
 				$orchestra_compositions = DB::table('orchestra_compositions')->select('*')->where('id',$value->composition_id)->get();
 				
-				$tbl3.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$value->percentage.'% '.$orchestra_compositions{0}->french.' - '.$orchestra_compositions{0}->english.' - '.$orchestra_compositions{0}->spanish.' - '.$orchestra_compositions{0}->portuguese.' - '.$orchestra_compositions{0}->italian.' - '.$orchestra_compositions{0}->dutch.' - '.$orchestra_compositions{0}->german.' - <span style="font-family:Tahoma">'.$orchestra_compositions{0}->arabic.'</span> - '.$orchestra_compositions{0}->greek.'</p><br><br>';
+				$tbl3.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$value->percentage.'% '.$orchestra_compositions[0]->french.' - '.$orchestra_compositions[0]->english.' - '.$orchestra_compositions[0]->spanish.' - '.$orchestra_compositions[0]->portuguese.' - '.$orchestra_compositions[0]->italian.' - '.$orchestra_compositions[0]->dutch.' - '.$orchestra_compositions[0]->german.' - <span style="font-family:Tahoma">'.$orchestra_compositions[0]->arabic.'</span> - '.$orchestra_compositions[0]->greek.'</p><br><br>';
 				$page_id = $value->page_id;
 
 		}

@@ -13,6 +13,7 @@ use Auth;
 use App\Erpuser;
 use App\ErpuserBuyerMapping;
 use App\ErpuserCompanyMapping;
+use App\FinancialYearResetDate;
 
 class ERPSettingsController extends Controller
 {
@@ -493,8 +494,7 @@ class ERPSettingsController extends Controller
      * @author <gowtham>
      * @return boolean true or false
      */
-    public function makeFinishTypeEnabled
-        (Request $request)
+    public function makeFinishTypeEnabled(Request $request)
     {
     try {
             DB::table('erp_finish_type')->where('id',$request['id'])
@@ -636,4 +636,39 @@ class ERPSettingsController extends Controller
             }
             return $result;
         }
+
+    /**
+     * Show the financial year data.
+     * @author [praveen] <[praveen@wizroots.com]>
+     * @return \Illuminate\Http\Response
+     */
+    public function getFinancialYear()
+    {
+     try {
+            $erp_financial_year = FinancialYearResetDate::select('id', 'financial_year_date')->get();
+            return response()->json(['error'=>'false','message' =>'success', 'erp_financial_year' => $erp_financial_year]);
+         } catch (\Exception $e)
+         {
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+         }
+    }
+
+    /**
+     * Update the financial year date.
+     * @author [praveen] <[praveen@wizroots.com]>
+     * @return \Illuminate\Http\Response
+     */
+    public function updateFinancialYearDateById(Request $request)
+    {
+     try {
+            FinancialYearResetDate::find($request['id'])
+                  ->update([
+                      'financial_year_date'  => $request['date']
+                  ]);
+            return response()->json(['error'=> false,'message' =>'Success'],200);
+         } catch (\Exception $e)
+         {
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+         }
+    }
 }
