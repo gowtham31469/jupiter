@@ -116,8 +116,8 @@ class ErpOrders
                     
 					if($dataExists == 0){
 						// unique id for array creation
-						// combination of erpid-styleno-buyerpo
-						$unique_id = 'ERP-'.$erp_orders->id.'-'.$style_no.'-'.$orders->po_number;
+						// combination of erpid-refname-styleno-buyerpo-ordertype
+						$unique_id = 'ERP-'.str_replace(' ', '-', $orders->item_name).'-'.$erp_orders->id.'-'.$style_no.'-'.$orders->po_number.'-'.$orders->order_flag;
 
 						DB::table('erp_order_details')->where('order_qnty_table_name',$qnty_table)->where('order_qnty_table_id',$vals->id)->delete();
 						$erp_order_details_id = ErpOrderDetails::insertGetId([
@@ -335,8 +335,8 @@ class ErpOrders
 
 					if($dataExists == 0){
 						// unique id for array creation
-						// combination of erpid-styleno-buyerpo
-						$unique_id = 'ERP-'.$erp_orders->id.'-'.$orders->uvc.'-'.$orders->po;
+						// combination of erpid-refname-styleno-buyerpo-ordertype
+						$unique_id = 'ERP-'.str_replace(' ', '-', $orders->item_name).'-'.$erp_orders->id.'-'.$orders->uvc.'-'.$orders->po.'-'.$orders->order_flag;
 
 						DB::table('erp_order_details')->where('order_qnty_table_name',$qnty_table)->where('order_qnty_table_id',$vals->id)->delete();
 						$erp_order_details_id = ErpOrderDetails::insertGetId([

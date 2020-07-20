@@ -40,6 +40,8 @@ class JobManagerController extends Controller
 {
 	private $current_date;
 	private $buyer_name;
+	private $erp_jc_status_id;
+	private $order_ap_status_id;
 	/**
 	 * Create a new controller instance.
 	 *
@@ -51,6 +53,11 @@ class JobManagerController extends Controller
 		// get the current time
 		$this->current_date = Carbon::now('Asia/Kolkata')->format('d-m-Y');
 
+		// Get Erp status table id for 'Moved To JC Queue' status.
+		$this->erp_jc_status_id = DB::table('erp_status')->where('status_name', 'ilike', 'Moved To JC Queue')->value('id');
+		 
+		// Get order status table id for 'Order Approved' status.
+		$this->order_ap_status_id = DB::table('orders_status')->where('status_name', 'ilike', 'Order Approved')->value('id');
 	}
 		
 	/**
@@ -81,12 +88,6 @@ class JobManagerController extends Controller
 				return view('erp.home');
 			}
 
-			// Get Erp status table id for 'Moved To JC Queue' status.
-			$erp_status_id = DB::table('erp_status')->where('status_name', 'ilike', 'Moved To JC Queue')->value('id');
-		 
-			// Get order status table id for 'Order Approved' status.
-			$order_status_id = DB::table('orders_status')->where('status_name', 'ilike', 'Order Approved')->value('id');
-			
 			if(session()->get('company') == "" && session()->get('company') == null)
 			{
 				session()->put('company', $company_id->id);
@@ -144,11 +145,10 @@ class JobManagerController extends Controller
 											->join('buyers', 'erp_orders.buyer_id', 'buyers.id')
 											->join('erp_status', 'erp_orders.status', 'erp_status.id')
 											->join($this->buyer_name.'_template', $this->buyer_name.'_template.item_id', 'erp_order_details.template_id')
-											// ->where('erp_order_details.template_id', '=', $valuess)
-											// ->where('erp_orders.status', '=', $erp_status_id)
+											->where('erp_order_details.template_id', '=', $valuess)
 											->where('erp_order_details.deleted_at', null)
-											->where('erp_order_details.status', '=', $erp_status_id)
-											->where('erp_order_details.order_status_id', '=', $order_status_id)
+											->where('erp_order_details.status', '=', $this->erp_jc_status_id)
+											->where('erp_order_details.order_status_id', '=', $this->order_ap_status_id)
 											->where('buyers.id', $buyer_id)
 											->orderBy('erp_order_details.erp_order_id', 'asc')
 											->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name','erp_order_details.order_qnty_table_name','erp_order_details.order_qnty_table_id', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id',$this->buyer_name.'_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at','erp_order_details.uuid', 'erp_order_details.zone')
@@ -237,8 +237,6 @@ class JobManagerController extends Controller
 
 			asort($orders_erp);
 			
-			//dd($orders_erp);
-			
 			return view('erp.Jobmanager.jobmanager', ['orders' => $orders_erp, 'companies' => $companies, 'disp_modes' => $erp_dispatch_mode, 'finish_types' => $erp_finish_type, 'machines' => $erp_machines, 'teeth_nos' => $erp_teeth_no]);
 		}
 		catch (\Exception $e)
@@ -265,7 +263,6 @@ class JobManagerController extends Controller
 
 		if($request->buyer=="orchestra")
 		{
-			// dd($buyer_no);
 			$order_details  = 	DB::table('erp_order_details')
 							->where('erp_order_details.style_no',$style_no)
 							->where('erp_order_details.erp_order_id',$id)
@@ -614,6 +611,8 @@ class JobManagerController extends Controller
 					$order_detail_id_array = ErpOrderDetails::where('erp_order_details.erp_order_id', $erp_orders_id)
 											  ->where('erp_order_details.order_type', $order_type[$row])
 											  ->where('erp_order_details.uuid', $uuid[$row])
+											  ->where('erp_order_details.status', '=', $this->erp_jc_status_id)
+											  ->where('erp_order_details.order_status_id', '=', $this->order_ap_status_id)
 											  ->where('erp_order_details.reference_name', $selected_ref_arrays[$row]);
 					if($buyer_pos[$row] != "") {
 						$order_detail_id_array = $order_detail_id_array->where('erp_order_details.buyer_po_number', $buyer_pos[$row])
@@ -3146,15 +3145,15 @@ class JobManagerController extends Controller
 		 */
 		public function scriptUpdateUUID()
 		{
-			$order_details = DB::table('erp_order_details')->select('erp_order_id', 'style_no', 'order_qnty_table_name', 'created_at', 'buyer_po_number', 'order_type')->groupBy('erp_order_id', 'style_no', 'order_qnty_table_name', 'created_at', 'buyer_po_number', 'order_type')->get();
+			$order_details = DB::table('erp_order_details')->select('erp_order_id', 'style_no', 'order_qnty_table_name', 'created_at', 'buyer_po_number', 'order_type', 'order_type', 'reference_name')->groupBy('erp_order_id', 'style_no', 'order_qnty_table_name', 'created_at', 'buyer_po_number', 'order_type', 'order_type', 'reference_name')->get();
 			
 			foreach($order_details as $value)
 			{
 				// unique id for array creation
-				// combination of erpid-styleno-buyerpo
-				$unique_id = 'ERP-'.$value->erp_order_id.'-'.$value->style_no.'-'.$value->buyer_po_number;
+				// combination of erpid-refname-styleno-buyerpo-ordertype
+				$unique_id = 'ERP-'.str_replace(' ', '-', $value->reference_name).'-'.$value->erp_order_id.'-'.$value->style_no.'-'.$value->buyer_po_number.'-'.$value->order_type;
 			
-				ErpOrderDetails::where(['erp_order_id' => $value->erp_order_id, 'style_no' => $value->style_no, 'order_qnty_table_name'=> $value->order_qnty_table_name, 'created_at'=> $value->created_at, 'buyer_po_number'=> $value->buyer_po_number, 'order_type'=> $value->order_type])
+				ErpOrderDetails::where(['erp_order_id' => $value->erp_order_id, 'style_no' => $value->style_no, 'order_qnty_table_name'=> $value->order_qnty_table_name, 'created_at'=> $value->created_at, 'buyer_po_number'=> $value->buyer_po_number, 'order_type'=> $value->order_type])->whereDate('created_at', '>', '2020-06-11')
 					->update([
 								'uuid'  => $unique_id
 							]);

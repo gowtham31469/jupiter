@@ -104,8 +104,8 @@ class EditErpOrders
 					if($dataExists == 0)
 					{
 						// unique id for array creation
-						// combination of erpid-styleno-buyerpo
-						$unique_id = 'ERP-'.$erp_order_id.'-'.$style_no.'-'.$orders->po_number;
+						// combination of erpid-refname-styleno-buyerpo-ordertype
+						$unique_id = 'ERP-'.str_replace(' ', '-', $orders->item_name).'-'.$erp_order_id.'-'.$style_no.'-'.$orders->po_number.'-'.$orders->order_flag;
 
 						$erp_order_details_id = ErpOrderDetails::insertGetId([
 							'erp_order_id'     		=> $erp_order_id,
@@ -302,8 +302,8 @@ class EditErpOrders
 					if($dataExists == 0)
 					{
 						// unique id for array creation
-						// combination of erpid-styleno-buyerpo
-						$unique_id = 'ERP-'.$erp_order_id.'-'.$orders->uvc.'-'.$orders->po;
+						// combination of erpid-refname-styleno-buyerpo-ordertype
+						$unique_id = 'ERP-'.str_replace(' ', '-', $orders->item_name).'-'.$erp_order_id.'-'.$orders->uvc.'-'.$orders->po.'-'.$orders->order_flag;
 
 						$erp_order_details_id = ErpOrderDetails::insertGetId([
 							'erp_order_id'     		=> $erp_order_id,
