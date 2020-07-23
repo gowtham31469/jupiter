@@ -77,7 +77,7 @@ return [
     |
     |
     */
-    'UK_single_quantity' => ' -p 2 -a 121,9,400,440  -f JSON ',
+    'UK_single_quantity' => ' -p 2 -a 121,9,500,440  -f JSON ',
     /*
     |--------------------------------------------------------------------------
     | SET Tabula command for Get Information of SINGLE type
