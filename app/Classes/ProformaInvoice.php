@@ -331,6 +331,16 @@ class ProformaInvoice
                 $qnty_id_array = array('tesco_tcl4_orders_quanty','tesco_tsl3_orders_quanty');
                 $template_array = array_combine($table_array, $qnty_id_array);
               }
+              if ($table_name == "tesco_thl1_orders"){
+                $table_array = array('tesco_thl1_orders');
+                $qnty_id_array = array('tesco_thl1_orders_quanty');
+                $template_array = array_combine($table_array, $qnty_id_array);
+              }
+              if ($table_name == "tesco_thl3_orders"){
+                $table_array = array('tesco_thl3_orders');
+                $qnty_id_array = array('tesco_thl3_orders_quanty');
+                $template_array = array_combine($table_array, $qnty_id_array);
+              }
               if (!empty($template_array)) {
                   unset($template_array[$table_name]);
                   $data['tables']  = array_merge($data['tables'],$template_array);
