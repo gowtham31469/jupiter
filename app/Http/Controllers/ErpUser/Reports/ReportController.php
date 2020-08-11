@@ -627,13 +627,15 @@ public function setUpDatatable(Request $request)
                 $queryRes = History::whereIn('history.id',$eventHistory)
                 ->leftJoin("erp_order_details",'erp_order_details.id', '=', 
                             'history.erp_order_details_id')
+                ->leftJoin("erp_orders",'erp_orders.id', '=', 
+                                        'erp_order_details.erp_order_id')
                 ->leftJoin("customers",'customers.id', '=', 'history.customer_id')
                 ->leftJoin("buyers",'buyers.id', '=', 'history.buyer_id')
                 ->leftJoin("event_history",'history.id', '=', 'event_history.history_id')
                 ->leftJoin("actions",'actions.id', '=', 'event_history.action_id')
                 ->whereIn('actions.id',$statusId)
                 ->select([
-                    DB::raw('distinct on ("erp_order_id","reference","order_type") "erp_order_id" as "ErpId","reference" as "Reference","order_type" as "OrderType"'),
+                    DB::raw('distinct on ("erp_order_id","reference","order_type") "erp_order_id" as "ErpIds","erp_id" as "ErpId","reference" as "Reference","order_type" as "OrderType"'),
                     // DB::raw('distinct on ("erp_order_id") "erp_order_id"'),
                     DB::raw('to_char(erp_order_details.order_date,'."'".$ddmmyy."'".') as "Order_Dt"'),
                     DB::raw('to_char(po_reapproved_date,'."'".$ddmmyy."'".') as "Reapproved_Dt"'),
@@ -663,7 +665,7 @@ public function setUpDatatable(Request $request)
                     'actions.action as Status',
                     'event_history.reason as Reason'
                 ])
-                        ->orderBy('ErpId','asc')
+                        ->orderBy('ErpIds','asc')
                         ->orderBy('Reference','asc')
                         ->orderBy('OrderType','asc')
                         ->orderBy('Order_Dt','desc')
