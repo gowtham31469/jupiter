@@ -305,7 +305,7 @@ function tescoOrderStatus() {
                                         $(newObj).each(function (index1, value1) {
 
 
-                                            if (value1.purchase_order_no != "" && value1.purchase_order_no != null) {
+                                            if (value1.purchase_order_no != "" && value1.purchase_order_no != null && value1.po_file != "" && value1.po_file != null) {
                                                 if (old_po != value1.purchase_order_no) {
                                                     options += "<option>" + value1.purchase_order_no + "</option>";
                                                 }

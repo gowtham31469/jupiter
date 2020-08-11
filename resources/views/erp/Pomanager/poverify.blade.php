@@ -328,7 +328,7 @@ transform: scale(1);
 
 					<tr id="{{$vals->id}}">
 						<td class="">{{ $loop->iteration }}</td>
-						<td>{{$vals->id}}</td>
+						<td>{{$vals->erp_id}}</td>
 						<td>{{$vals->company_name}}</td>
 						<td>{{$vals->po_no}}</td>
 						<td>{{$vals->partial_status == 0 ? "NO":"YES"}}</td>
@@ -769,7 +769,7 @@ transform: scale(1);
 				$('#order-details-table tbody').html("");
 
 				var i = 1;
-
+				var erp_id = data.orders[0].erp_id;
 				$(data.orderlist).each(function(key, index) {
 					if (index.status == 2 || index.status == 4) {
 						var label = 'label label-danger';
@@ -794,7 +794,7 @@ transform: scale(1);
 					$('#order-details-table tbody').append(`
 						<tr id="` + index.id + `">
                           	<td class="">` + i + `</td>
-							  <td class="erp_td">` + index.erp_order_id + `</td>
+							  <td class="erp_td">` + erp_id + `</td>
 							  <td class="po_number_td">` + index.buyer_po_number + `</td>
 							  <td class="style_no_td">` + index.style_no + `</td>
 							  <td class="reference_td">` + index.template_name + `</td>
