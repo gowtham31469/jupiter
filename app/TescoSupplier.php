@@ -13,6 +13,8 @@ class TescoSupplier extends Model
       */
       protected $table = 'tesco_suppliers';
 
+      protected $primaryKey = 'id';
+
      /**
       * The attributes that are mass assignable.
       *

@@ -24,10 +24,16 @@ use App\Classes\invoiceTCPDF;
 use App\EventHistory;
 use App\History;
 use Carbon\Carbon;
+use App\FinancialYearResetDate;
 
 class InvoiceController extends Controller
 {
     private $current_date;
+    private $year;
+	private $month;
+	private $financial_year_date;
+	private $today_date;
+	private $from;
     /**
      * Create a new controller instance.
      *
@@ -37,7 +43,25 @@ class InvoiceController extends Controller
     {
 		$this->middleware('erpuser');
 		// get the current time
-		$this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
+        $this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
+        
+        // get year as "2020"
+		$this->year = Carbon::parse($this->current_date)->format('Y');
+
+		// get month as "07"
+		$this->month = Carbon::parse($this->current_date)->format('m');
+
+		$this->financial_year_date = FinancialYearResetDate::value('financial_year_date');
+
+		// format financial year date as "dd-mm-yyyy" 
+		$this->financial_year_date_format = $this->financial_year_date."-".$this->year;
+
+		// get the current date in "dd-mm-yyyy" format
+		$this->today_date = Carbon::now('Asia/Kolkata')->format('d-m-Y');
+
+		$this->from  = Carbon::parse($this->financial_year_date_format)
+						->startOfDay()        // 2018-09-29 00:00:00.000000
+						->toDateTimeString(); // 2018-09-29 00:00:00
 
 	}
 
@@ -69,9 +93,32 @@ class InvoiceController extends Controller
         $customers  = DB::table('customers')
                               ->where('is_active','=',1)
                               ->get();
-        $invID =   "INV-00".(Invoices::max('id')+1); 
 
-        return view('erp.Invoice.create-invoice',['customers' => $customers,'invID'=>$invID,'companies' => $companies]);
+        // Logic for resetting invoice ID format for new financial year			 
+        $max_invoice_id = Invoices::select('invoice_id')->find(Invoices::max('id'));
+        $invoice_id_prefix = "INV-".$this->month."-".$this->year."-00";
+
+        if($max_invoice_id){
+            $split_invoice_id = explode("-",$max_invoice_id->invoice_id);
+            (int)$parsed_max_id  = ltrim(end($split_invoice_id), '00');
+        } else {
+            (int)$parsed_max_id = 0;
+        }
+        
+        if( strtotime($this->today_date) >= strtotime($this->financial_year_date_format) ){
+            // check if already invoice created today.
+            $already_invoice_created = Invoices::whereBetween('created_at', [$this->from, $this->current_date])->orWhereDate('created_at', '=',$this->today_date)->exists();
+
+            // set erp id as 1 for first order of the financial year
+            (int)$parsed_max_id = $already_invoice_created === false?1:(int)$parsed_max_id+(int)1;
+        } else {
+            (int)$parsed_max_id += 1;
+        }
+        
+        // invoice id format "INV-mm-yyyy-001"
+        $invoice_id = $invoice_id_prefix.$parsed_max_id;
+
+        return view('erp.Invoice.create-invoice',['customers' => $customers,'invID'=> $invoice_id,'companies' => $companies]);
     }
 
     /**
@@ -266,10 +313,10 @@ class InvoiceController extends Controller
                                 'place_of_supply'=>  $place_of_supply,
                                 'delivery_at'    =>  $delivery_at,
                                 'bill_to'        =>  $billTo_id,
-                                'base_amnt'       =>  $request->base_amt
+                                'base_amnt'       =>  $request->base_amt,
+                                'invoice_id'      => $invoiceNo
                             ]);
 
-                $invoice_id =  "INV-00".$invoiceData->id;
                 if ($eChargesArr) {
                     foreach ($eChargesArr as $objts) {
                         foreach ($objts as $key => $vals) {
@@ -284,7 +331,6 @@ class InvoiceController extends Controller
                 $par_count = 0;
                 $ful_count = 0;
 
-                Invoices::where('id', $invoiceData->id)->update(['invoice_id'=> $invoice_id ]);
                 foreach ($orders as $key => $value) {
                     $pendingQnty = $value['pending_qnty'] - $value['delvry_qnty'];
                     $size = $value['size'] == ""?"null":$value['size'];
@@ -321,7 +367,7 @@ class InvoiceController extends Controller
                             'delivered_quantity'   => ( $value['order_quantity'] - $pendingQnty ),
                             'pending_orders'       => $pendingQnty,
                             'status'               => $status,
-                            'invoice_number'       => $invoice_id,
+                            'invoice_number'       => $invoiceNo,
                             'invoice_created_by'   => Auth::guard('erpuser')->id(),
                             'invoice_created_date' => $this->current_date
                             ]);                  

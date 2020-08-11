@@ -11,6 +11,7 @@
             <li id="2" onclick="machines()"><a class="li-setting machineli">Machine</a></li>
             <li id="3" onclick="teethNo()"><a class="li-setting teethnoli">Teeth Number</a></li>
             <li id="4" onclick="finishType()"><a class="li-setting finishtypeli">Finish Type</a></li>
+            <li id="5" onclick="financialYear()"><a class="li-setting financialyearli">Financial Year</a></li>
           </ul>
         </div>
         <div class="inner-content">

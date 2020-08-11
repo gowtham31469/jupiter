@@ -9,7 +9,7 @@
  var isSubmitting = false;
  function buyers()
  {
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     try {
      $.ajax({
          url: base_url + "/admin/buyer-management/buyers-list",
@@ -94,7 +94,7 @@
          var email      = $('#buyer_email').val();
          var phone      = $('#buyer_phone').val();
          var address    = toTitleCase($('#buyer_address').val().replace(/,/g, ", "));
-         var csrf_token = $('meta[name="csrf-token"]').attr('content');
+         
          var image      = $('#image')[0].files[0];
          var form_data = new FormData();
 
@@ -245,7 +245,7 @@
        var phone      = $('#edit_buyer_phone').val();
        var email      = $('#edit_buyer_email').val();
        var address    = toTitleCase($('#edit_buyer_address').val().replace(/,/g, ", "));
-       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+       
        var edit_image = $('#edit_image')[0].files[0];
        var form_data  = new FormData();
 
@@ -321,7 +321,7 @@
   function merchandiser()
   {
     try{
-          var csrf_token = $('meta[name="csrf-token"]').attr('content');
+          
           $.ajax({
                url: base_url + "/admin/buyer-management/merchandiser-list",
                type: "get",
@@ -407,7 +407,6 @@
           var phone                  = $('#merchandiser_phone').val();
           var address                = toTitleCase($('#merchandiser_address').val().replace(/,/g, ", "));
           var merchandiser_buyer     = $('#merchandiser_buyer').val();
-          var csrf_token             = $('meta[name="csrf-token"]').attr('content');
 
           $.ajax({
               url: base_url + "/admin/buyer-management/add-merchandiser",
@@ -542,7 +541,7 @@
          var address    = toTitleCase($('#edit_merchandiser_address').val().replace(/,/g, ", "));
          var buyer      = $('#edit_merchandiser_buyer').val();
 
-         var csrf_token = $('meta[name="csrf-token"]').attr('content');
+         
          $.ajax({
              url:base_url + "/admin/buyer-management/update-merchandiser-details",
              dataType:"json",

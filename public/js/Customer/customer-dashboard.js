@@ -158,7 +158,7 @@ $(document).ready(function() {
    */
   function  viewedApproved(id,table_name) 
   {
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     $.ajax({
         url: base_url + "/customer/tesco/order-management/viewed-approved",
         type: "Post",
@@ -195,7 +195,7 @@ $(document).ready(function() {
   function viewedSelectedApproved()
   {
       var formdata = $("#frm-example").serialize();
-      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      
       var selected = [];
       $('#frm-example input[type=checkbox]').each(function () {
           if (this.checked) {
@@ -260,7 +260,15 @@ $(document).ready(function() {
 		  {
 			  var po_no='-';
 		  }
-          html += '<tr><td><input type="checkbox" class="form-control" value="'+value.tablename+'_'+value.id+'" id="'+value.tablename+'_'+value.id+'" name="row_id" data-id="'+value.tablename+'"/></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>'+value.TemplateName+'</td><td style="width:63px">'+value.order_created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.order_approved_at.split(' ')[0].split('-').reverse().join('-')+'</td><td class="dt-body-center">'+po_no+'</td><td><label onclick=viewedApproved("'+value.id+'","'+value.tablename+'") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+		  if(value.order_approved_at != "" && value.order_approved_at != null)
+		  {
+			   var order_approved_at = value.order_approved_at.split(' ')[0].split('-').reverse().join('-')
+		  }
+		  else
+		  {
+			  var order_approved_at="";
+		  }
+          html += '<tr><td><input type="checkbox" class="form-control" value="'+value.tablename+'_'+value.id+'" id="'+value.tablename+'_'+value.id+'" name="row_id" data-id="'+value.tablename+'"/></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>'+value.TemplateName+'</td><td style="width:63px">'+value.order_created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+order_approved_at+'</td><td class="dt-body-center">'+po_no+'</td><td><label onclick=viewedApproved("'+value.id+'","'+value.tablename+'") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
       });
       $('#approvedModal .modal-body').html('<form id="frm-example"><table id ="approved-orders" class="table approved-orders "><thead><tr><th style="width: 0px;padding-right: 8px !important;"><input name="select_all" value="1" id="select-all" type="checkbox" class="form-control" /></th><th>Customer Name</th><th>Buyer</th><th>Style No</th><th>Product</th><th>Reference</th><th>Order Date</th><th>Approval Date</th><th>PO/PI Number</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table></form>');
       $('.approved-count').text(data.approved_count)
@@ -305,7 +313,7 @@ $(document).ready(function() {
    */
   function  viewedPending(id,table_name) 
   {
-      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      
       $.ajax({
           url: base_url + "/customer/tesco/order-management/viewed-pending",
           type: "Post",
@@ -342,7 +350,7 @@ $(document).ready(function() {
   function viewedSelectedPending()
   {
       var formdata = $("#frm-pending").serialize();
-      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      
       var selected = [];
       $('#frm-pending input[type=checkbox]').each(function () {
           if (this.checked) {
@@ -459,7 +467,17 @@ $(document).ready(function() {
         {
             var style_no = value.uk_style_ref;
         }   
-        html += '<tr><td><input type="checkbox" class="form-control" value="'+value.tablename+'_'+value.id+'" id="'+value.tablename+'_'+value.id+'" name="row_id" data-id="'+value.tablename+'"/></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>'+value.TemplateName+'</td><td>'+value.order_created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.order_cancelled_at.split(' ')[0].split('-').reverse().join('-')+'</td><td><label onclick= viewedCancelled("'+value.id+'","'+value.tablename+'") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+		
+		if(value.order_cancelled_at != "" && value.order_cancelled_at != null)
+	    {
+		   var order_cancelled_at = value.order_cancelled_at.split(' ')[0].split('-').reverse().join('-')
+	    }
+	    else
+	    {
+		  var order_cancelled_at="";
+	    }
+		
+        html += '<tr><td><input type="checkbox" class="form-control" value="'+value.tablename+'_'+value.id+'" id="'+value.tablename+'_'+value.id+'" name="row_id" data-id="'+value.tablename+'"/></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>'+value.TemplateName+'</td><td>'+value.order_created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+order_cancelled_at+'</td><td><label onclick= viewedCancelled("'+value.id+'","'+value.tablename+'") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
     });
     $('#cancelledOrdersModal .modal-body').html('<form id="frm-cancelled"><table class="table cancelled-orders" id="cancelled-orders"><thead><tr><th style="width: 0px;padding-right: 8px !important;"><input name="select_all" value="1" id="select-all" type="checkbox" class="form-control" /></th><th>Customer Name</th><th>Buyer</th><th>Style No</th><th>Product</th><th>Reference</th><th>Order Date</th><th>Cancelled Date</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table></form>');
     $('.cancelled-count').text(data.cancelled_count)
@@ -504,7 +522,7 @@ $(document).ready(function() {
   function viewedSelectedCancelled()
   {
       var formdata = $("#frm-cancelled").serialize();
-      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      
       var selected = [];
       $('#frm-cancelled input[type=checkbox]').each(function () {
           if (this.checked) {
@@ -549,7 +567,7 @@ $(document).ready(function() {
    */
   function  viewedCancelled(id,tablename) 
   {
-      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      
       var table_name = tablename;
       $.ajax({
           url: base_url + "/customer/tesco/order-management/viewed-cancelled",

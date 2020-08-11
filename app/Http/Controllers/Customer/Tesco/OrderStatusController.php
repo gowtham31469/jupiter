@@ -14,7 +14,6 @@ use App\ProfomaInvoiceItemDetails;
 use Response;
 use View;
 use DB;
-use Excel;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Config;
@@ -249,11 +248,11 @@ class OrderStatusController extends Controller
             $class_obj = new ERPOrderStatusCheck();
             $erp_order_details = $class_obj->ERPStatus($data_array);
 
-            if(sizeof($erp_order_details) > 0 && $erp_order_details[0] != null)
+            if($erp_order_details && $erp_order_details[0] != null)
             {
-                if($erp_order_details{0}->status_name != 'Hold For JC Queue' &&  $erp_order_details{0}->status_name != 'Moved To ERP' )
+                if($erp_order_details[0]->status_name != 'Hold For JC Queue' &&  $erp_order_details[0]->status_name != 'Moved To ERP' )
                 {
-                    return response()->json(['error'=> false,'message' =>'Order status is '.$erp_order_details{0}->status_name. '. PO number edit is not allowed.'],403);
+                    return response()->json(['error'=> false,'message' =>'Order status is '.$erp_order_details[0]->status_name. '. PO number edit is not allowed.'],403);
                 }
                 
             }
@@ -361,6 +360,7 @@ class OrderStatusController extends Controller
             $sub_total  =   0 ;
             $pi_obj     =   new ProformaInvoice();
             $data       =   $pi_obj->getTescoPIDetails($request);
+            unset($data['price_list']);
             $attachment =  $pi_obj->getTescoAttachment($data,$request);
 
             $erpOrders  =   [];
@@ -376,7 +376,7 @@ class OrderStatusController extends Controller
                 {
                     $style_no = $data['bank_details']->uk_style_ref;
                 }
-                if ($data['item_details'][0]->order_flag=="reOrder") {
+                if ($data['item_details'][0]->order_flag=="reOrder" || $data['item_details'][0]->order_flag=="repeatOrder") {
                     $rep_order_id = str_replace(' ', '', $data['item_details'][0]->template_name)."_".$row_id;
                 }
                 else{
@@ -401,16 +401,8 @@ class OrderStatusController extends Controller
                 ]);
                 foreach ($data['item_details'] as $key => $value)
                 {
-                    $unit_cost = 0;
-                    foreach ($data['price_list'] as $i => $val) {
-                        if ($value->item_id == $val->item_id) {
-                            if($value->quantity <= $val->volume_to) {
-                                $unit_cost = $val->price;
-                                $tax = $val->tax;
-                                break;
-                            }
-                        }
-                    }
+                    $unit_cost = $value->price;
+                    $tax = $value->tax;
                     $total_qnty+= $value->quantity;
                     $sub_total += $value->quantity *$unit_cost;
                     ProfomaInvoiceItemDetails::create([
@@ -1346,11 +1338,11 @@ class OrderStatusController extends Controller
             $class_obj = new ERPOrderStatusCheck();
             $erp_order_details = $class_obj->ERPStatus($data_array);
 
-            if(sizeof($erp_order_details) > 0 && $erp_order_details[0] != null)
+            if($erp_order_details && $erp_order_details[0] != null)
             {
-                if($erp_order_details{0}->status_name != 'Hold For JC Queue' &&  $erp_order_details{0}->status_name != 'Moved To ERP' )
+                if($erp_order_details[0]->status_name != 'Hold For JC Queue' &&  $erp_order_details[0]->status_name != 'Moved To ERP' )
                 {
-                    return response()->json(['error'=> false,'message' =>'Order status is '.$erp_order_details{0}->status_name. '. PO file upload is not allowed.'],403);
+                    return response()->json(['error'=> false,'message' =>'Order status is '.$erp_order_details[0]->status_name. '. PO file upload is not allowed.'],403);
                 }
                 
             }

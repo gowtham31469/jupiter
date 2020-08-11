@@ -1,18 +1,49 @@
 <?php
 namespace App\Classes;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Response;
-use Illuminate\Support\Facades\Input;
 use DB;
 use Carbon\Carbon;
 use App\ErpOrders as Erp;
 use App\ErpOrderDetails;
-use Auth;
+use App\FinancialYearResetDate;
+
 
 class ErpOrders
 {
-	private $created_at;
+	private $current_date;
+	private $year;
+	private $month;
+	private $financial_year_date;
+	private $today_date;
+	private $from;
+	
+	/**
+	 * Create a new controller instance.
+	 *
+	 * @return void
+	 */
+	public function __construct()
+	{
+		// get the current time
+		$this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
+
+		// get year as "2020"
+		$this->year = Carbon::parse($this->current_date)->format('Y');
+
+		// get month as "07"
+		$this->month = Carbon::parse($this->current_date)->format('m');
+
+		$this->financial_year_date = FinancialYearResetDate::value('financial_year_date');
+
+		// format financial year date as "dd-mm-yyyy" 
+		$this->financial_year_date_format = $this->financial_year_date."-".$this->year;
+
+		// get the current date in "dd-mm-yyyy" format
+		$this->today_date = Carbon::now('Asia/Kolkata')->format('d-m-Y');
+
+		$this->from  = Carbon::parse($this->financial_year_date_format)
+						->startOfDay()        // 2018-09-29 00:00:00.000000
+						->toDateTimeString(); // 2018-09-29 00:00:00
+	}
 
 	/**
 	 * Update tesco orders details in erp_orders table
@@ -30,7 +61,6 @@ class ErpOrders
             $qnty_table     = $table_name.'_quanty' ;
 			$qnty_id        =  str_replace("_orders","_order_id",str_replace("tesco_","",$table_name));
 			
-			$this->created_at = Carbon::now('Asia/Kolkata')->toDateTimeString();
             $orders     	= DB::table($table_name)->where($table_name.'.id',$row_id)
             					->join('tesco_item_master',$table_name.'.template_id','=','tesco_item_master.id')
                                 ->select('order_id','po_number','uk_style_ref','ce_style_ref','season_code','short_description','eqos_site_code','manufacture_date','tesco_department_id','tesco_brand_id','tesco_supplier_id as customer_id','rfid_compliant','tag_at_source','zone','template_type','pi_status','po_status','po_file','purchase_order_no','order_status','template_id','delivery_date','order_placed_by','pi_rev_no','edit_permission','cancel_ord_flag','order_created_at','order_approved_at','order_cancelled_at','po_uploaded_at','tesco_item_master.company_id','tesco_item_master.item_name','ocn_number','order_flag','pi_id','pi_file')->first();
@@ -63,22 +93,48 @@ class ErpOrders
 			}
 			else
 			{
+				// Logic for resetting ERP ID format for new financial year			 
+				$max_erp_id = Erp::select('erp_id')->find(Erp::max('id'));
+				
+				if($max_erp_id){
+					$split_erp_id = explode("-",$max_erp_id->erp_id);
+					$parsed_max_id  = ltrim(end($split_erp_id), '0');
+
+					$erp_id_prefix = count($split_erp_id) === 2?"ERPID-0":"ERPID-".$this->month."-".$this->year."-0";
+				} else {
+					(int)$parsed_max_id = 0;
+					$erp_id_prefix = "ERPID-".$this->month."-".$this->year."-0";
+				}
+				
+				if( strtotime($this->today_date) >= strtotime($this->financial_year_date_format) ){
+					// check if already order placed today.
+					$already_order_placed = Erp::whereBetween('created_at', [$this->from, $this->current_date])->orWhereDate('created_at', '=',$this->today_date)->exists();
+
+					// set erp id as 1 for first order of the financial year
+					(int)$parsed_max_id = $already_order_placed === false?1:(int)$parsed_max_id+(int)1;
+
+					$erp_id_prefix = $already_order_placed === false?"ERPID-".$this->month."-".$this->year."-0":$erp_id_prefix;
+				} else {
+					(int)$parsed_max_id += 1;
+				}
+				
+				// erp id format : "ERPID-mm-yyyy-01". and for old orders "ERPID-01" 
+				$erp_id = $erp_id_prefix.$parsed_max_id;
+
 				$erp_orders = Erp::create([
 								'buyer_id'         => $buyer_id,
 								'customer_id'      => $orders->customer_id,
 								'po_no'            => $po_no,
 								'po_file'          => $po_file,
 								'status'		   => 1,
-								'created_at'       => $this->created_at
+								'created_at'       => $this->current_date,
+								'erp_id'           => $erp_id
 							 ]);
-				$erp_id = "ERPID-0".$erp_orders->id;
-				$suc_erp_id=$erp_orders->id;
-				Erp::where('id',$erp_orders->id)->update(['erp_id'=>$erp_id]);
 				$status = 1;
 
 				$this->insertOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders->id, $order_status_id, $po_no);
 			}
-			$result = response()->json(['error'=> false,'message' =>'success','erp_id' =>$suc_erp_id,'buyer_id'=>(int)$buyer_id ,'customer_id'=>$orders->customer_id],200);
+			$result = response()->json(['error'=> false,'message' =>'success','erp_id' =>$erp_orders->id,'buyer_id'=>(int)$buyer_id ,'customer_id'=>$orders->customer_id],200);
 		}
         catch (\Exception $e)
         {
@@ -109,7 +165,6 @@ class ErpOrders
 				$style_no       = ($orders->zone == "CE") ? $orders->ce_style_ref : $orders->uk_style_ref ;
 
 				$custom_ref_name = DB::table('price_taxation')->where('customer_id',$orders->customer_id)->where('buyer_id',$buyer_id)->where('template_id',$orders->template_id)->value('custom_name');
-
 				$dataExists = DB::table('erp_order_details')->where('order_qnty_table_name',$qnty_table)->where('order_qnty_table_id',$vals->id)->where('erp_order_id',$erp_orders_id)->count();
                 
 				try {
@@ -139,7 +194,7 @@ class ErpOrders
 							'buyer_po_number'  		=> $orders->po_number,
 							'zone'					=> $orders->zone,
 							'order_type'            => $orders->order_flag,
-							'created_at'            => $this->created_at,
+							'created_at'            => $this->current_date,
 							'order_status_id'       => $order_status_id->id,
 							'order_date'            => $orders->order_created_at,
 							'aw_date'               => $orders->order_approved_at,
@@ -148,7 +203,6 @@ class ErpOrders
 						
 						/** Get updated data and update in history table */
 						$template          = 'Available';
-						$current_timestamp = Carbon::now('Asia/Kolkata')->toDateTimeString();
 						$action_id         = DB::table('actions')->where('action', 'ilike', 'PO Manager Verification Pending')->value('id');
 	
 						$template_level = DB::table('tesco_item_master as t1')
@@ -178,16 +232,16 @@ class ErpOrders
 							'po'                   => $customer_po_no,
 							'buyer_po'             => $orders->po_number,
 							'ocn'                  => $orders->ocn_number,
-							'created_at'           => $current_timestamp,
-							'updated_at'           => $current_timestamp,
+							'created_at'           => $this->current_date,
+							'updated_at'           => $this->current_date,
 						]);
 	
 						DB::table('event_history')
 						->insert([
 							'history_id'  => $history_id,
 							'action_id'   => $action_id,
-							'created_at'  => $current_timestamp,
-							'updated_at'  => $current_timestamp,
+							'created_at'  => $this->current_date,
+							'updated_at'  => $this->current_date,
 						]);
 					}
 				} catch (\Exception $e) {
@@ -198,11 +252,10 @@ class ErpOrders
 					// continue;
 				}
 
-				
 				// remove erp_orders table row , if no FK relation exists in erp_order_details table
 				DB::table('erp_orders')->select('erp_orders.id')->whereNotIn('erp_orders.id', function($rightjoin) {                                                  $rightjoin->select('erp_orders.id')
-					     ->from('erp_orders')
-						 ->rightjoin('erp_order_details', 'erp_orders.id', 'erp_order_details.erp_order_id')                                                 ->groupBy('erp_orders.id');
+					->from('erp_orders')
+					->rightjoin('erp_order_details', 'erp_orders.id', 'erp_order_details.erp_order_id')->groupBy('erp_orders.id');
 				})->delete();
 			}
 		}
@@ -230,8 +283,6 @@ class ErpOrders
             {
                 $qnty_id .= strtolower($word[0]);
             }
-			
-			$this->created_at = Carbon::now('Asia/Kolkata')->toDateTimeString();
 
 			// template front and back id storing in orchestra_hang_tag_orders table
 			if($table_name === 'orchestra_hang_tag_orders')
@@ -275,16 +326,43 @@ class ErpOrders
 			}
 			else
 			{
+				// Logic for resetting ERP ID format for new financial year			 
+				$max_erp_id = Erp::select('erp_id')->find(Erp::max('id'));
+				
+				if($max_erp_id){
+					$split_erp_id = explode("-",$max_erp_id->erp_id);
+					(int)$parsed_max_id  = ltrim(end($split_erp_id), '0');
+
+					$erp_id_prefix = count($split_erp_id) === 2?"ERPID-0":"ERPID-".$this->month."-".$this->year."-0";
+				} else {
+					(int)$parsed_max_id = 0;
+					$erp_id_prefix = "ERPID-".$this->month."-".$this->year."-0";
+				}
+				
+				if( strtotime($this->today_date) >= strtotime($this->financial_year_date_format) ){
+					// check if already order placed today.
+					$already_order_placed = Erp::whereBetween('created_at', [$this->from, $this->current_date])->orWhereDate('created_at', '=',$this->today_date)->exists();
+
+					// set erp id as 1 for first order of the financial year
+					(int)$parsed_max_id = $already_order_placed === false?1:(int)$parsed_max_id+(int)1;
+
+					$erp_id_prefix = $already_order_placed === false?"ERPID-".$this->month."-".$this->year."-0":$erp_id_prefix;
+				} else {
+					(int)$parsed_max_id += 1;
+				}
+				
+				// erp id format : "ERPID-mm-yyyy-01". and for old orders "ERPID-01" 
+				$erp_id = $erp_id_prefix.$parsed_max_id;
+
 				$erp_orders = Erp::create([
 								'buyer_id'         => $buyer_id,
 								'customer_id'      => $orders->customer_id,
 								'po_no'            => $po_no,
 								'po_file'          => $po_file,
 								'status'		   => 1,
-								'created_at'       => $this->created_at
+								'created_at'       => $this->current_date,
+								'erp_id'		   => $erp_id
 							 ]);
-				$erp_id = "ERPID-0".$erp_orders->id;
-				Erp::where('id',$erp_orders->id)->update(['erp_id'=>$erp_id]);
 				$status = 1;
 
 				$this->insertOrchestraOrderDetails($qnty_table, $order_details, $orders, $erp_orders, $buyer_id, $status, $erp_orders->id, $table_name, $order_status_id, $po_no);
@@ -355,7 +433,7 @@ class ErpOrders
 							'custom_ref_name' 		=> $custom_ref_name,
 							'buyer_po_number'  		=> $orders->po,
 							'order_type'            => $orders->order_flag,
-							'created_at'            => $this->created_at,
+							'created_at'            => $this->current_date,
 							'order_status_id'       => $order_status_id->id,
 							'order_date'            => $orders->order_created_at,
 							'aw_date'               => $orders->order_approved_at,
@@ -396,16 +474,16 @@ class ErpOrders
 							'po'                   => $customer_po_no,
 							'buyer_po'             => $buyer_po,
 							'ocn'                  => $ocn_number,
-							'created_at'           => $this->created_at,
-							'updated_at'           => $this->created_at,
+							'created_at'           => $this->current_date,
+							'updated_at'           => $this->current_date,
 						]);
 	
 						DB::table('event_history')
 						->insert([
 							'history_id'  => $history_id,
 							'action_id'   => $action_id,
-							'created_at'  => $this->created_at,
-							'updated_at'  => $this->created_at,
+							'created_at'  => $this->current_date,
+							'updated_at'  => $this->current_date,
 						]);
 					}
 				} catch (\Exception $e) {

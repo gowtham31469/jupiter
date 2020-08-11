@@ -93,6 +93,7 @@ class CSVDataHandlingController extends Controller
         foreach ($parcel_details as $key => $value) {
           array_push($UVC_TCO_array1, $value['UVC_TCO']);
         }
+        unset($value);
 
          $parcel_details_array = OrchestraParcelDetails::select(DB::raw('distinct on (orchestra_parcel_details."UVC_TCO") orchestra_parcel_details."UVC_TCO"'), 'UVC', 'UVC_TCO', 'BuyerPONo', 'Season_Code', 'SupplierName', DB::raw("'Price Details Missing ' as \"file_status\""))->whereNotIn('UVC_TCO', $UVC_TCO_array1)->get()->toArray();
 
@@ -103,6 +104,7 @@ class CSVDataHandlingController extends Controller
          foreach ($parcel_qty_details as $key => $value) {
            array_push($UVC_TCO_array2, $value['UVC_TCO']);
          }
+         unset($value);
 
          $parcel_qty_details_array = OrchestraParcelQuantityDetails::select(DB::raw('distinct on (orchestra_parcel_quantity_details."UVC_TCO") orchestra_parcel_quantity_details."UVC_TCO"'), 'UVC', 'UVC_TCO', 'BuyerPONo', 'Season_Code', 'Supplier_Name as SupplierName', DB::raw("'PO Details Missing' as \"file_status\""))->whereNotIn('UVC_TCO', $UVC_TCO_array2)->get()->toArray();
 
@@ -163,10 +165,10 @@ class CSVDataHandlingController extends Controller
       try
       {
         $data_array = $request->data_array;
-        $uvc = $data_array{0}['uvc'];
-        $temp_table = $data_array{0}['table'];
+        $uvc = $data_array[0]['uvc'];
+        $temp_table = $data_array[0]['table'];
 
-        foreach ($data_array as $key => $value) 
+        foreach ($data_array as $value) 
         {
            $temp_table = $value['table'];
            $po         = $value['po'];
@@ -178,128 +180,32 @@ class CSVDataHandlingController extends Controller
            DB::table($main_table)->where('BuyerPONo', $po)->where('UVC', $uvc)->where('UVC_TCO', $uvc_tco)->delete();
 
            // get data from temp table
-           $temp_table_data = DB::table($temp_table)->where('BuyerPONo', $po)->where('UVC', $uvc)->where('UVC_TCO', $uvc_tco)->get();
+           $temp_table_data = DB::table($temp_table)->where('BuyerPONo', $po)->where('UVC', $uvc)->where('UVC_TCO', $uvc_tco)->get()->toArray();
 
            if($main_table === 'orchestra_parcel_details')
            {
-              foreach ($temp_table_data as $key => $value) {
-                OrchestraParcelDetails::create([
-                  'FactoryCode'                        => $value->FactoryCode,
-                  'SupplierName'                       => $value->SupplierName,
-                  'SupplierAddress'			               => $value->SupplierAddress,
-                  'SupplierEmail'                      => $value->SupplierEmail,
-                  'SupplierCountry'                    => $value->SupplierCountry,
-                  'BuyerPONo'                          => $value->BuyerPONo,
-                  'UVC'                                => $value->UVC,
-                  'Theme'                              => $value->Theme,
-                  'IsSTD'                              => $value->IsSTD,
-                  'Quantity'                           => $value->Quantity,
-                  'NomApple'                           => $value->NomApple,
-                  'Season_Code'                        => $value->Season_Code,
-                  'SKU_Code'                           => $value->SKU_Code,
-                  'Po_Line_Number'                     => $value->Po_Line_Number,
-                  'Po_Line_Suffix'                     => $value->Po_Line_Suffix,
-                  'Po_Status_Code'                     => $value->Po_Status_Code,
-                  'Po_Status_Code_Description'         => $value->Po_Status_Code_Description,
-                  'Style_Code'                         => $value->Style_Code,
-                  'Activity_Code'                      => $value->Activity_Code,
-                  'Activity_Label'                     => $value->Activity_Label,
-                  'Universe_Code'                      => $value->Universe_Code,
-                  'Universe_Label'                     => $value->Universe_Label,
-                  'Department_Code'                    => $value->Department_Code,
-                  'Department_Label'                   => $value->Department_Label,
-                  'Family_Code'                        => $value->Family_Code,
-                  'Family_Label'                       => $value->Family_Label,
-                  'Sub_Family_Code'                    => $value->Sub_Family_Code,
-                  'Sub_Family_Label'                   => $value->Sub_Family_Label,
-                  'Theme_Code'                         => $value->Theme_Code,
-                  'Brand_Code'                         => $value->Brand_Code,
-                  'Brand_Label'                        => $value->Brand_Label,
-                  'Description_Fr'                     => $value->Description_Fr,
-                  'Buyer_Email'                        => $value->Buyer_Email,
-                  'Agent_Code'                         => $value->Agent_Code,
-                  'Agent_Name'                         => $value->Agent_Name,
-                  'Agent_Email'                        => $value->Agent_Email,
-                  'Agent_Address'                      => $value->Agent_Address,
-                  'Agent_Country'                      => $value->Agent_Country,
-                  'Supplier_Code'                      => $value->Supplier_Code,
-                  'Factory_Name'                       => $value->Factory_Name,
-                  'Factory_Email'                      => $value->Factory_Email,
-                  'Factory_Address'                    => $value->Factory_Address,
-                  'Made_In_Code'                       => $value->Made_In_Code,
-                  'Made_In_Label'                      => $value->Made_In_Label,
-                  'First_ETD_SHIPMENT_DATE'            => $value->First_ETD_SHIPMENT_DATE,
-                  'Shipment_Destination_Code'          => $value->Shipment_Destination_Code,
-                  'Shipment_Destination_Label'         => $value->Shipment_Destination_Label,
-                  'Incoterms_Code'                     => $value->Incoterms_Code,
-                  'Incoterms_City_Label'               => $value->Incoterms_City_Label,
-                  'Sku_Barcode'                        => $value->Sku_Barcode,
-                  'Set_'                               => $value->Set_,
-                  'Number_Of_Pieces'                   => $value->Number_Of_Pieces,
-                  'Color_Code'                         => $value->Color_Code,
-                  'Color_Label'                        => $value->Color_Label,
-                  'Standard_Code'                      => $value->Standard_Code,
-                  'Standard_Barcode'                   => $value->Standard_Barcode,
-                  'Size_Range_Code'                    => $value->Size_Range_Code,
-                  'Size_Range_Label'                   => $value->Size_Range_Label,
-                  'Size_Code'                          => $value->Size_Code,
-                  'Size_Label'                         => $value->Size_Label,
-                  'Size_Breakdown'                     => $value->Size_Breakdown,
-                  'Total_Standard_Solid_Parcel_Number' => $value->Total_Standard_Solid_Parcel_Number,
-                  'Product_Type'                       => $value->Product_Type,
-                  'Licence_Code'                       => $value->Licence_Code,
-                  'Licence_Label'                      => $value->Licence_Label,
-                  'Licence_Character_Code'             => $value->Licence_Character_Code,
-                  'Licence_Character_Label'            => $value->Licence_Character_Label,
-                  'Start_Print_Date'                   => $value->Start_Print_Date,
-                  'Composition_Label'                  => $value->Composition_Label,
-                  'Po_Change_Date'                     => $value->Po_Change_Date,
-                  'Purchase_Price'                     => $value->Purchase_Price,
-                  'Po_Amount'                          => $value->Po_Amount, 
-                  'Typologie'                          => $value->Typologie,
-                  'Payment_Condition_Code'             => $value->Payment_Condition_Code,
-                  'Payment_Terms'                      => $value->Payment_Terms,
-                  'Payment_Terms_Label'                => $value->Payment_Terms_Label,
-                  'BarcodeForPricesTags'               => $value->BarcodeForPricesTags,
-                  'UVC_TCO'                            => $value->UVC_TCO,
-                  'Size'                               => $value->Size,
-                  'ParcelBarCode'                      => $value->ParcelBarCode
-                  ]);
+              foreach ($temp_table_data as $orchestra_parcel_details_value) {
+
+                OrchestraParcelDetails::create((array)$orchestra_parcel_details_value);
+
               }
+              unset($orchestra_parcel_details_value);
            }
            else   
            {
-             foreach ($temp_table_data as $key => $value) 
-             {
-                OrchestraParcelQuantityDetails::create([
-                  'FactoryCode' 	       		    => $value->FactoryCode,
-                  'BuyerPONo'            		    => $value->BuyerPONo,
-                  'Theme'                		    => $value->Theme,
-                  'UVC_TCO'              		    => $value->UVC_TCO,
-                  'Quantity'             		    => $value->Quantity,
-                  'Color'                		    => $value->Color,
-                  'UVC'                  		    => $value->UVC,
-                  'Size'                 		    => $value->Size,
-                  'BarcodeForPricesTags' 		    => $value->BarcodeForPricesTags,
-                  'Country_Code'         		    => $value->Country_Code,
-                  'Season_Code'          		    => $value->Season_Code,
-                  'Currency'             		    => $value->Currency,
-                  'Price'                		    => $value->Price,
-                  'Club_Price'           		    => $value->Club_Price,
-                  'Nom_Appel'            		    => $value->Nom_Appel,
-                  'Last_Change_Date'     		    => $value->Last_Change_Date,
-                  'Supplier_Code'        		    => $value->Supplier_Code,
-                  'Supplier_Name'        		    => $value->Supplier_Name,
-                  'Po_Status_Code'              => $value->Po_Status_Code,
-                  'Po_Status_Code_Description'  => $value->Po_Status_Code_Description
-                  ]);
+             foreach ($temp_table_data as $temp_table_value) {
+
+                OrchestraParcelQuantityDetails::create((array)$temp_table_value);
+                
              }
+             unset($temp_table_value);
            }
 
            // delete data from temp table
            DB::table($temp_table)->where('BuyerPONo', $po)->where('UVC', $uvc)->where('UVC_TCO', $uvc_tco)->delete();
 
         }
+        unset($value);
         return response()->json(['error'=>'false','message' =>'Order Changes Has Been Confirmed.', 'uvc' => $uvc, 'table' => $temp_table]);
 
       }
@@ -322,8 +228,8 @@ class CSVDataHandlingController extends Controller
       {
         $data_array = $request->data_array;
 
-        $uvc = $data_array{0}['uvc'];
-        $temp_table = $data_array{0}['table'];
+        $uvc = $data_array[0]['uvc'];
+        $temp_table = $data_array[0]['table'];
 
         foreach ($data_array as $key => $value) 
         {
@@ -331,12 +237,12 @@ class CSVDataHandlingController extends Controller
            $po         = $value['po'];
            $uvc        = $value['uvc'];
            $uvc_tco    = $value['uvc_tco'];
-           $main_table = str_replace("temp_", "", $temp_table);
 
            // delete data from temp table
            DB::table($temp_table)->where('BuyerPONo', $po)->where('UVC', $uvc)->where('UVC_TCO', $uvc_tco)->delete();
 
         }
+        unset($value);
         return response()->json(['error'=>'false','message' =>'Order Changes Has Been Cancelled.', 'uvc' => $uvc, 'table' => $temp_table]);
 
       }

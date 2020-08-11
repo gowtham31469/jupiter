@@ -5,10 +5,7 @@ namespace App\Http\Controllers\Admin\Settings\Orchestra;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Classes\Modules;
-use Response;
 use View;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Validator;
 use DB;
 use App\OrchestraGarments;
 use App\OrchestraAgeGroup;
@@ -19,12 +16,10 @@ use App\OrchestraCompositions;
 use App\OrchestraParts;
 use App\OrchestraSizeCharts;
 use App\OrchestraCareSymbols;
-use App\OrchestraTaxCode;
 use App\OrchestraColorCode;
 
 /**
  * Orchestra Age Group controller
- * @author <Praveen>
  * @date(03/01/2018)
  */
 class OrchestraSettings extends Controller
@@ -42,7 +37,6 @@ class OrchestraSettings extends Controller
      * Show the orchestra age group table view.
      *
      * @return \Illuminate\Http\Response
-     * @author <Praveen>
      */
     public function index()
     {
@@ -70,7 +64,6 @@ class OrchestraSettings extends Controller
     }
     /**
      * Orchestra metadata garments list show using ajax.
-     * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
     public function orchestraGarments()
@@ -86,14 +79,12 @@ class OrchestraSettings extends Controller
     /**
      * Add orchestra garments.
      * @param \Illuminate\Http\Request
-     * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
     public function addOrchestraGarments(Request $request)
     {
         try {
-           $is_exists = OrchestraGarments::where('garment_name','ilike',$request['name'])->select('id')->get();
-             if(sizeof($is_exists) > 0)
+             if(OrchestraGarments::where('garment_name','ilike',$request['name'])->exists())
              {
                $result = response()->json(['error'=> true,'message' =>'Garment Name Already Exists'],208);
              }
@@ -118,14 +109,12 @@ class OrchestraSettings extends Controller
     /**
      * Get orchestra garment details by ID for editing.
      * @param orchestra garment id
-     * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
     public function getOrchestraGarmentsById(Request $request)
     {
     try {
-          $id = $request['id'];
-          $orchestra_garments = DB::table('orchestra_garments')->select('id','garment_name')->where('orchestra_garments.id',$id)->get();
+          $orchestra_garments = DB::table('orchestra_garments')->select('id','garment_name')->where('orchestra_garments.id', $request['id'])->get();
           return response()->json(['error'=>'false','message' =>'success', 'orchestra_garments' => $orchestra_garments]);
         } catch (\Exception $e)
         {
@@ -135,7 +124,6 @@ class OrchestraSettings extends Controller
     /**
     * Update garment by id.
     * @param garment id
-    * @author <Praveen>
     * @return \Illuminate\Http\Response
     */
     public function updateOrchestraGarmentsById(Request $request)
@@ -144,18 +132,17 @@ class OrchestraSettings extends Controller
           $id        = $request['id'];
           $name      = $request['name'];
 
-           $is_exists = OrchestraGarments::where('garment_name','ilike',$request['name'])->select('id')->get();
-             if(sizeof($is_exists) > 0)
+             if(OrchestraGarments::where('garment_name','ilike',$request['name'])->where('id','!=',$id)->exists())
              {
                $result = response()->json(['error'=> true,'message' =>'Garment Name Already Exists'],208);
              }
-             else{
+             else {
                   $updated = OrchestraGarments::where('id',$id)
-           ->update([
-             'garment_name' => $name
-          ]);
-
-            $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+                  ->update([
+                    'garment_name' => $name
+                  ]);
+ 
+                $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
              }
         
 
@@ -170,7 +157,6 @@ class OrchestraSettings extends Controller
     /**
        * Make Garment enabled
        * @param Garment id
-       * @author <Praveen>
        * @return boolean true or false
        */
       public function makeGarmentEnabled(Request $request)
@@ -193,7 +179,6 @@ class OrchestraSettings extends Controller
         }
       /**
        * Make Garment disabled
-       * @author <Praveen>
        * @return boolean true or false
        */
       public function makeGarmentDisabled(Request $request)
@@ -216,7 +201,6 @@ class OrchestraSettings extends Controller
       }
     /**
      * Orchestra metadata age group list show using ajax.
-     * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
     public function orchestraAgeGroup()
@@ -232,30 +216,16 @@ class OrchestraSettings extends Controller
     /**
      * Add orchestra age group.
      * @param \Illuminate\Http\Request
-     * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
     public function addOrchestraAgeGroup(Request $request)
     {
         try {
 
-           $is_exists= OrchestraAgeGroup::where('age_group_name','ilike',$request['name'])->where('color','ilike',$request['color'])->select('id')->get();
-           // $is_exists_color= OrchestraAgeGroup::where('color','ilike',$request['color'])->select('id')->get();
+             $is_exists= OrchestraAgeGroup::where('age_group_name','ilike',$request['name'])->where('color','ilike',$request['color'])->exists();
 
-             if(sizeof($is_exists) > 0 )
+             if($is_exists)
              {
-              // if(sizeof($is_exists_age) > 0 )
-              // {
-              //   $result = response()->json(['error'=> true,'message' =>'Age group name already exists'],208); 
-              // }
-              // if(sizeof($is_exists_color) > 0 )
-              // {
-              //   $result = response()->json(['error'=> true,'message' =>'Color already exists'],208); 
-              // }
-              // if(sizeof($is_exists_age) > 0 && sizeof($is_exists_color) > 0 )
-              // {
-              //   $result = response()->json(['error'=> true,'message' =>'Age group name and Color already exists'],208);
-              // }
               $result = response()->json(['error'=> true,'message' =>'Age group name & Color  already exists'],208); 
              }
           else
@@ -277,7 +247,6 @@ class OrchestraSettings extends Controller
     /**
      * Get orchestra age group details by ID for editing.
      * @param orchestra age-group id
-     * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
     public function getOrchestraAgeGroupById(Request $request)
@@ -294,7 +263,6 @@ class OrchestraSettings extends Controller
     /**
     * Update garment by id.
     * @param garment id
-    * @author <Praveen>
     * @return \Illuminate\Http\Response
     */
     public function updateOrchestraAgeGroupById(Request $request)
@@ -305,21 +273,20 @@ class OrchestraSettings extends Controller
           $color     = $request['color'];   
 
 
-           $is_exists= OrchestraAgeGroup::where('age_group_name','ilike',$request['name'])->where('color','ilike',$request['color'])->select('id')->get();
+           $is_exists= OrchestraAgeGroup::where('age_group_name','ilike',$request['name'])->where('color','ilike',$request['color'])->where('id','!=',$id)->exists();
 
-            if(sizeof($is_exists) > 0 )
+            if($is_exists)
              {
-
               $result = response()->json(['error'=> true,'message' =>'Age group name & Color  already exists'],208); 
              }
            else{
                $updated = OrchestraAgeGroup::where('id',$id)
-           ->update([
-             'age_group_name' => $name,
-             'color'          => $color
-          ]);
+              ->update([
+                'age_group_name' => $name,
+                'color'          => $color
+              ]);
 
-            $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+                $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
            }       
         
           // $result = response()->json(['error'=> false,'message' =>'Success'],200);
@@ -333,7 +300,6 @@ class OrchestraSettings extends Controller
     /**
        * Make AgeGroup enabled
        * @param AgeGroup id
-       * @author <Praveen>
        * @return boolean true or false
        */
       public function makeAgeGroupEnabled(Request $request)
@@ -356,7 +322,6 @@ class OrchestraSettings extends Controller
         }
       /**
        * Make AgeGroup disabled
-       * @author <Praveen>
        * @return boolean true or false
        */
       public function makeAgeGroupDisabled(Request $request)
@@ -379,7 +344,6 @@ class OrchestraSettings extends Controller
       }
     /**
      * Orchestra metadata countries list show using ajax.
-     * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
     public function orchestraCountries()
@@ -395,15 +359,13 @@ class OrchestraSettings extends Controller
     /**
      * Add orchestra country.
      * @param \Illuminate\Http\Request
-     * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
     public function addOrchestraCountry(Request $request)
     {
         try {
 
-        $is_exists = OrchestraCountries::where('english','ilike',$request['english'])->select('id')->get();
-         if(sizeof($is_exists) > 0)
+         if(OrchestraCountries::where('english','ilike',$request['english'])->exists())
           {
               $result = response()->json(['error'=> true,'message' =>'Country Name[English] Already Exists'],208);
           }
@@ -436,7 +398,6 @@ class OrchestraSettings extends Controller
     /**
      * Get orchestra country details by ID for editing.
      * @param orchestra country id
-     * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
     public function getOrchestraCountryById(Request $request)
@@ -453,7 +414,6 @@ class OrchestraSettings extends Controller
     /**
     * Update orchestra country by id.
     * @param orchestra country id
-    * @author <Praveen>
     * @return \Illuminate\Http\Response
     */
     public function updateOrchestraCountryById(Request $request)
@@ -461,9 +421,7 @@ class OrchestraSettings extends Controller
     try {
           $id = $request['id'];
 
-          $is_exists = OrchestraCountries::where('english','ilike',$request['english'])->select('id')->get();
-
-         if(sizeof($is_exists) > 0)
+         if(OrchestraCountries::where('english','ilike',$request['english'])->where('id','!=',$id)->exists())
           {
               $result = response()->json(['error'=> true,'message' =>'Country Name[English] Already Exists'],208);
           }
@@ -497,7 +455,6 @@ class OrchestraSettings extends Controller
     /**
        * Make Country enabled
        * @param Country id
-       * @author <Praveen>
        * @return boolean true or false
        */
       public function makeCountryEnabled(Request $request)
@@ -520,7 +477,6 @@ class OrchestraSettings extends Controller
         }
       /**
        * Make Country disabled
-       * @author <Praveen>
        * @return boolean true or false
        */
       public function makeCountryDisabled(Request $request)
@@ -543,7 +499,6 @@ class OrchestraSettings extends Controller
       }
     /**
      * Orchestra metadata Product Family list show using ajax.
-     * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
     public function orchestraProductFamily()
@@ -559,18 +514,12 @@ class OrchestraSettings extends Controller
     /**
      * Add orchestra product family.
      * @param \Illuminate\Http\Request
-     * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
     public function addOrchestraProductFamily(Request $request)
     {
         try {
-
-
-
-          $is_exists = OrchestraProductFamily::where('code','ilike',$request['code'])->select('id')->get();
-
-         if(sizeof($is_exists) > 0)
+         if(OrchestraProductFamily::where('code','ilike',$request['code'])->exists())
           {
               $result = response()->json(['error'=> true,'message' =>'Product Family Code Already Exists'],208);
           }
@@ -594,7 +543,6 @@ class OrchestraSettings extends Controller
     /**
      * Get orchestra age group details by ID for editing.
      * @param orchestra age-group id
-     * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
     public function getOrchestraProductFamilyById(Request $request)
@@ -611,7 +559,6 @@ class OrchestraSettings extends Controller
     /**
     * Update orchestra productfamily by id.
     * @param orchestra productfamily id
-    * @author <Praveen>
     * @return \Illuminate\Http\Response
     */
     public function updateOrchestraProductFamilyById(Request $request)
@@ -619,9 +566,7 @@ class OrchestraSettings extends Controller
     try {
           $id = $request['id'];
 
-           $is_exists = OrchestraProductFamily::where('code','ilike',$request['code'])->select('id')->get();
-
-         if(sizeof($is_exists) > 0)
+         if(OrchestraProductFamily::where('code','ilike',$request['code'])->where('id','!=',$id)->exists())
           {
               $result = response()->json(['error'=> true,'message' =>'Product Family Code Already Exists'],208);
           }
@@ -648,7 +593,6 @@ class OrchestraSettings extends Controller
     /**
        * Make ProductFamily enabled
        * @param ProductFamily id
-       * @author <Praveen>
        * @return boolean true or false
        */
       public function makeProductFamilyEnabled(Request $request)
@@ -671,7 +615,6 @@ class OrchestraSettings extends Controller
         }
       /**
        * Make ProductFamily disabled
-       * @author <Praveen>
        * @return boolean true or false
        */
       public function makeProductFamilyDisabled(Request $request)
@@ -694,7 +637,6 @@ class OrchestraSettings extends Controller
       }
     /**
      * Orchestra metadata special instructions list show using ajax.
-     * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
     public function orchestraSpecialInstructions()
@@ -710,16 +652,13 @@ class OrchestraSettings extends Controller
     /**
      * Add orchestra special instructions.
      * @param \Illuminate\Http\Request
-     * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
     public function addOrchestraSpecialInstructions(Request $request)
     {
         try {
 
-          $is_exists = OrchestraSpecialInstructions::where('english','ilike',$request['english'])->select('id')->get();
-
-         if(sizeof($is_exists) > 0)
+         if(OrchestraSpecialInstructions::where('english','ilike',$request['english'])->exists())
           {
               $result = response()->json(['error'=> true,'message' =>'Special Instruction[English] Already Exists'],208);
           }
@@ -750,7 +689,6 @@ class OrchestraSettings extends Controller
     /**
      * Get orchestra special instructions details by ID for editing.
      * @param orchestra special instructions id
-     * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
     public function getOrchestraSpecialInstructionById(Request $request)
@@ -767,16 +705,14 @@ class OrchestraSettings extends Controller
     /**
     * Update orchestra special instruction by id.
     * @param orchestra special instruction id
-    * @author <Praveen>
     * @return \Illuminate\Http\Response
     */
     public function updateOrchestraSpecialInstructionById(Request $request)
     {
     try {
           $id        = $request['id'];
-         $is_exists = OrchestraSpecialInstructions::where('english','ilike',$request['english'])->select('id')->get();
 
-         if(sizeof($is_exists) > 0)
+         if(OrchestraSpecialInstructions::where('english','ilike',$request['english'])->where('id','!=',$id)->exists())
           {
               $result = response()->json(['error'=> true,'message' =>'Special Instruction[English] Already Exists'],208);
           }
@@ -808,7 +744,6 @@ class OrchestraSettings extends Controller
     /**
        * Make SpecialInstruction enabled
        * @param SpecialInstruction id
-       * @author <Praveen>
        * @return boolean true or false
        */
       public function makeSpecialInstructionEnabled(Request $request)
@@ -831,7 +766,6 @@ class OrchestraSettings extends Controller
         }
       /**
        * Make SpecialInstruction disabled
-       * @author <Praveen>
        * @return boolean true or false
        */
       public function makeSpecialInstructionDisabled(Request $request)
@@ -854,7 +788,6 @@ class OrchestraSettings extends Controller
       }
     /**
      * Orchestra Compositions list show using ajax.
-     * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
     public function orchestraCompositions()
@@ -870,15 +803,12 @@ class OrchestraSettings extends Controller
     /**
      * Add orchestra Compositions.
      * @param \Illuminate\Http\Request
-     * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
     public function addOrchestraCompositions(Request $request)
     {
         try {
-          $is_exists = OrchestraCompositions::where('english','ilike',$request['english'])->select('id')->get();
-
-         if(sizeof($is_exists) > 0)
+         if(OrchestraCompositions::where('english','ilike',$request['english'])->exists())
           {
               $result = response()->json(['error'=> true,'message' =>'Composition[English] Already Exists'],208);
           }
@@ -909,7 +839,6 @@ class OrchestraSettings extends Controller
     /**
      * Get orchestra Compositions details by ID for editing.
      * @param orchestra Compositions id
-     * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
     public function getOrchestraCompositionById(Request $request)
@@ -926,16 +855,14 @@ class OrchestraSettings extends Controller
     /**
     * Update orchestra Composition by id.
     * @param orchestra Composition id
-    * @author <Praveen>
     * @return \Illuminate\Http\Response
     */
     public function updateOrchestraCompositionById(Request $request)
     {
     try {
           $id = $request['id'];
-          $is_exists = OrchestraCompositions::where('english','ilike',$request['english'])->select('id')->get();
 
-         if(sizeof($is_exists) > 0)
+         if(OrchestraCompositions::where('english','ilike',$request['english'])->where('id','!=',$id)->exists())
           {
               $result = response()->json(['error'=> true,'message' =>'Composition[English] Already Exists'],208);
           }
@@ -969,7 +896,6 @@ class OrchestraSettings extends Controller
     /**
        * Make Composition enabled
        * @param Composition id
-       * @author <Praveen>
        * @return boolean true or false
        */
       public function makeCompositionEnabled(Request $request)
@@ -992,7 +918,6 @@ class OrchestraSettings extends Controller
         }
       /**
        * Make Composition disabled
-       * @author <Praveen>
        * @return boolean true or false
        */
       public function makeCompositionDisabled(Request $request)
@@ -1015,7 +940,6 @@ class OrchestraSettings extends Controller
       }
     /**
      * Orchestra Parts list show using ajax.
-     * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
     public function orchestraParts()
@@ -1031,19 +955,15 @@ class OrchestraSettings extends Controller
     /**
      * Add orchestra Parts.
      * @param \Illuminate\Http\Request
-     * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
     public function addOrchestraParts(Request $request)
     {
         try {
            
-          $id = $request['id'];
-          $is_exists = OrchestraParts::where('english','ilike',$request['english'])->select('id')->get();
-
-         if(sizeof($is_exists) > 0)
+         if(OrchestraParts::where('english','ilike',$request['english'])->exists())
           {
-              $result = response()->json(['error'=> true,'message' =>'Composition[English] Already Exists'],208);
+              $result = response()->json(['error'=> true,'message' =>'Part[English] Already Exists'],208);
           }
           else{
             $inserted = OrchestraParts::create([
@@ -1072,7 +992,6 @@ class OrchestraSettings extends Controller
     /**
      * Get orchestra Parts details by ID for editing.
      * @param orchestra Parts id
-     * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
     public function getOrchestraPartById(Request $request)
@@ -1089,7 +1008,6 @@ class OrchestraSettings extends Controller
     /**
     * Update orchestra Part by id.
     * @param orchestra Part id
-    * @author <Praveen>
     * @return \Illuminate\Http\Response
     */
     public function updateOrchestraPartById(Request $request)
@@ -1097,11 +1015,9 @@ class OrchestraSettings extends Controller
     try {
           $id = $request['id'];
 
-          $is_exists = OrchestraParts::where('english','ilike',$request['english'])->select('id')->get();
-
-         if(sizeof($is_exists) > 0)
+         if(OrchestraParts::where('english','ilike',$request['english'])->where('id','!=',$id)->exists())
           {
-              $result = response()->json(['error'=> true,'message' =>'Composition[English] Already Exists'],208);
+              $result = response()->json(['error'=> true,'message' =>'Part[English] Already Exists'],208);
           }
           else{        
           $updated = OrchestraParts::where('id',$id)
@@ -1134,7 +1050,6 @@ class OrchestraSettings extends Controller
     /**
        * Make Part enabled
        * @param Part id
-       * @author <Praveen>
        * @return boolean true or false
        */
       public function makePartEnabled(Request $request)
@@ -1157,7 +1072,6 @@ class OrchestraSettings extends Controller
         }
       /**
        * Make Part disabled
-       * @author <Praveen>
        * @return boolean true or false
        */
       public function makePartDisabled(Request $request)
@@ -1180,7 +1094,6 @@ class OrchestraSettings extends Controller
       }
     /**
      * Orchestra Size Charts list show using ajax.
-     * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
     public function orchestraSizeCharts()
@@ -1196,17 +1109,14 @@ class OrchestraSettings extends Controller
     /**
      * Add orchestra Size Charts.
      * @param \Illuminate\Http\Request
-     * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
     public function addOrchestraSizeCharts(Request $request)
     {
         try {
-        $is_exists = OrchestraSizeCharts::where('age','ilike',$request['age'])->select('id')->get();
-
-         if(sizeof($is_exists) > 0)
+         if(OrchestraSizeCharts::where('age','ilike',$request['age'])->exists())
           {
-              $result = response()->json(['error'=> true,'message' =>'Composition[English] Already Exists'],208);
+              $result = response()->json(['error'=> true,'message' =>'Size Chart Already Exists'],208);
           }
           else{ 
             $inserted = OrchestraSizeCharts::create([
@@ -1226,7 +1136,6 @@ class OrchestraSettings extends Controller
     /**
      * Get orchestra Size Chart details by ID for editing.
      * @param orchestra Size Chart id
-     * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
     public function getOrchestraSizeChartById(Request $request)
@@ -1243,7 +1152,6 @@ class OrchestraSettings extends Controller
     /**
     * Update orchestra size chart by id.
     * @param orchestra size chart id
-    * @author <Praveen>
     * @return \Illuminate\Http\Response
     */
     public function updateOrchestraSizeChartById(Request $request)
@@ -1251,11 +1159,9 @@ class OrchestraSettings extends Controller
     try {
           $id = $request['id'];
           
-            $is_exists = OrchestraSizeCharts::where('age','ilike',$request['age'])->select('id')->get();
-
-         if(sizeof($is_exists) > 0)
+         if(OrchestraSizeCharts::where('age','ilike',$request['age'])->where('id','!=',$id)->exists())
           {
-              $result = response()->json(['error'=> true,'message' =>'Composition[English] Already Exists'],208);
+              $result = response()->json(['error'=> true,'message' =>'Size Chart Already Exists'],208);
           }
           else{ 
           $updated = OrchestraSizeCharts::where('id',$id)
@@ -1278,7 +1184,6 @@ class OrchestraSettings extends Controller
     /**
        * Make SizeChart enabled
        * @param SizeChart id
-       * @author <Praveen>
        * @return boolean true or false
        */
       public function makeSizeChartEnabled(Request $request)
@@ -1301,7 +1206,6 @@ class OrchestraSettings extends Controller
         }
       /**
        * Make SizeChart disabled
-       * @author <Praveen>
        * @return boolean true or false
        */
       public function makeSizeChartDisabled(Request $request)
@@ -1324,7 +1228,6 @@ class OrchestraSettings extends Controller
       }
      /**
      * Orchestra metadata Symbols list show using ajax.
-     * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
     public function orchestraSymbols()
@@ -1362,8 +1265,8 @@ class OrchestraSettings extends Controller
 
           if($cofreet_extension === 'png' && $astms_extension === 'png')
           {
-            $cofreet_symbols_filename= str_random(6).'_'.$cofreet_symbols_orname;
-            $astms_symbol_filename= str_random(6).'_'.$astms_symbol_orname;
+            $cofreet_symbols_filename= str_random(6).'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $cofreet_symbols_orname));
+            $astms_symbol_filename= str_random(6).'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $astms_symbol_orname));
 
               switch($request->category_id){
                 case 1:
@@ -1495,14 +1398,8 @@ class OrchestraSettings extends Controller
               'care_instruction'=>  $request->care_instruction
           ]);
 
-            // if($inserted != '')
-            // {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            // }
-            // else
-            // {
-            //   $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            // }
+          $result = response()->json(['error'=> false,'message' =>'success'],200);
+
 
         } catch (\Exception $e)
         {
@@ -1513,7 +1410,6 @@ class OrchestraSettings extends Controller
     /**
        * Make Symbol enabled
        * @param Symbol id
-       * @author <Praveen>
        * @return boolean true or false
        */
       public function makeSymbolEnabled(Request $request)
@@ -1536,7 +1432,6 @@ class OrchestraSettings extends Controller
         }
       /**
        * Make Symbol disabled
-       * @author <Praveen>
        * @return boolean true or false
        */
       public function makeSymbolDisabled(Request $request)
@@ -1576,12 +1471,18 @@ class OrchestraSettings extends Controller
     public function addOrchestraColorCode(Request $request)
           {
               try {
-                  $inserted = OrchestraColorCode::create([
-                              'code'       => $request['code'],
-                              'french'     => $request['french'],
-                              'english'    => $request['english'],
-                            ]);
-                  $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+                  if(OrchestraColorCode::where('code','ilike',$request['code'])->where('english','ilike',$request['english'])->exists())
+                  {
+                      $result = response()->json(['error'=> true,'message' =>'Color Code Already Exists'],208);
+                  }
+                  else{ 
+                    $inserted = OrchestraColorCode::create([
+                                'code'       => $request['code'],
+                                'french'     => $request['french'],
+                                'english'    => $request['english'],
+                              ]);
+                    $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+                  }
       
               } catch (\Exception $e)
               {
@@ -1645,15 +1546,20 @@ class OrchestraSettings extends Controller
     {
     try {
           $id        = $request['id'];
-                   
-          OrchestraColorCode::where('id',$id)
-           ->update([
-            'code'    => $request['code'],
-            'english'    => $request['english'],
-            'french'     => $request['french'],
-          ]);
+          if(OrchestraColorCode::where('code','ilike',$request['code'])->where('english','ilike',$request['english'])->where('id', '<>', $id)->exists())
+          {
+              $result = response()->json(['error'=> true,'message' =>'Color Code Already Exists'],208);
+          }
+          else{ 
+              OrchestraColorCode::where('id',$id)
+              ->update([
+                'code'    => $request['code'],
+                'english'    => $request['english'],
+                'french'     => $request['french'],
+              ]);
 
-          $result = response()->json(['error'=> false,'message' =>'Success'],200);
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+          }      
         
         } catch (\Exception $e)
         {

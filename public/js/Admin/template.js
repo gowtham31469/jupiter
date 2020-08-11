@@ -21,7 +21,7 @@
 
 function template_list() {
 	var buyer = localStorage.getItem("buyer");
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/admin/template-management/template-hierarchy",
 		type: "Post",
@@ -76,7 +76,7 @@ function template_list() {
 				$('#tree1').on('activate_node.jstree', function (e, data) {
 					if (data.instance.is_leaf(data.node)) {
 						var template_id = data.node.id;
-						var csrf_token = $('meta[name="csrf-token"]').attr('content');
+						
 						$.ajax({
 							url: base_url + "/admin/" + buyer + "/template-management/template-view",
 							type: "Post",
@@ -202,7 +202,7 @@ function template_list() {
 					
 					if (data.instance.is_leaf(data.node)) {
 						var template_id = data.node.id;
-						var csrf_token = $('meta[name="csrf-token"]').attr('content');
+						
 						$.ajax({
 							url: base_url + "/admin/" + buyer + "/template-management/template-list-view",
 							type: "Post",
@@ -359,7 +359,7 @@ function template_list() {
 				$('#tree1').on('activate_node.jstree', function (e, data) {
 					if (data.instance.is_leaf(data.node)) {
 						var template_id = data.node.id;
-						var csrf_token = $('meta[name="csrf-token"]').attr('content');
+						
 						$.ajax({
 							url: base_url + "/admin/template-management/template-view",
 							type: "Post",
@@ -616,7 +616,7 @@ function saveTescoTax(temp_id) {
 	var width = $('#dimension_width_' + temp_id).val();
 	var buyer = localStorage.getItem("buyer");
 	var gltext = $('#gl_text_' + temp_id).val();
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/admin/template-management/save-taxation",
 		type: "POST",
@@ -667,7 +667,7 @@ function addTemplate(template_id) {
 	var width = $('#dimension_width_new').val();
 	var buyer = localStorage.getItem("buyer");
 	var gltext = $('#gl_text_new').val();
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/admin/template-management/add-template",
 		type: "POST",
@@ -718,7 +718,7 @@ function addTemplate(template_id) {
 //	var width = $('#dimension_width_' + temp_id).val();
 //	var buyer = localStorage.getItem("buyer");
 //	var gltext = $('#gl_text_' + temp_id).val();
-//	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+//	
 //	$.ajax({
 //		url: base_url + "/admin/" + buyer + "/template-management/save-taxation",
 //		type: "POST",
@@ -760,7 +760,7 @@ function addTemplate(template_id) {
 	{
 		$('#template_id').val(id);
 		var buyer = localStorage.getItem("buyer");
-		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+		
 		$.ajax({
 		url: base_url + "/admin/" + buyer + "/template-details",
 		type: "GET",

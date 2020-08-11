@@ -385,7 +385,7 @@
        /** To Enable  Material  on click **/
        $(document).on('click', '#make_material_enabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeMaterialEnabled function from tesco-settings.js*/
            makeMaterialEnabled(id,csrf_token)
        });
@@ -393,7 +393,7 @@
        /** To disable Material  on click **/
        $(document).on('click', '#make_material_disabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeMaterialDisabled function from tesco-settings.js*/
            makeMaterialDisabled(id,csrf_token)
        });
@@ -435,7 +435,7 @@
       /** To Enable  Tesco error report email  on click **/
        $(document).on('click', '#make_error_report_email_enabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeErrorReportEmailEnabled function from tesco-settings.js*/
            makeErrorReportEmailEnabled(id,csrf_token)
        });
@@ -443,7 +443,7 @@
        /** To disable Tesco error report email  on click **/
        $(document).on('click', '#make_error_report_email_disabled', function(e) {
            var id = $(this).closest('tr').attr('id');
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           
            /* call makeErrorReportEmailDisabled function from tesco-settings.js*/
            makeErrorReportEmailDisabled(id,csrf_token)
        });

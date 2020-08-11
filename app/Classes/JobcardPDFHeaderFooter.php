@@ -1,13 +1,5 @@
 <?php
 namespace App\Classes;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Response;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Validator;
-use DB;
-use Auth;
-use PDF;
 
 class JobcardPDFHeaderFooter extends \TCPDF
 {
@@ -79,9 +71,6 @@ class JobcardPDFHeaderFooter extends \TCPDF
         $this->SetTopMargin(30);
         // Position at 5 mm from top
         $this->SetY(10);
-        // header logo image
-        // $this->Image('logo path', x-coordinate, y-coordinate, width, height);
-        //$this->Image('././././'.$this->company->company_logo, 160, 10, 35, 15);
         // Set font
         $this->SetFont('helvetica', '', 8);
         $header = '<table width="100%" cellspacing="0" cellpadding="5" border="0">

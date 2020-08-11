@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Validator;
 use App\Classes\Modules;
 use App\Classes\ProformaInvoice;
 use Response;
-use Excel;
 use App\HangTagOrders;
 use App\ProfomaInvoice as PI;
 use App\ProfomaInvoiceItemDetails;
@@ -77,7 +76,7 @@ class OrderStatusCntrl extends Controller
                                         ->orderBy('orchestra_parcel_details.id')
                                         ->get();
 				
-				$data['orchestra_age_group']= DB::table('orchestra_age_group')->select('*')->get();   
+				$data['orchestra_age_group']= DB::table('orchestra_age_group')->where('is_enabled',1)->select('*')->get();   
 				
 				$data['orchestra_parcel_quantity_details'] = DB::table('orchestra_parcel_quantity_details')->select(DB::raw('distinct on ("UVC_TCO") "UVC_TCO"'),'UVC','Size','BarcodeForPricesTags','Quantity','Color')->where('BuyerPONo',$po)->where('orchestra_parcel_quantity_details.UVC',$uvc)->get();
 
@@ -694,19 +693,19 @@ class OrderStatusCntrl extends Controller
 		if(count($data['customers']) > 0)
 		{
 			$cust_id = $data['customers']{0}->id;
-			$data['merchandisers']=DB::table('merchandisers')->select('*')->get();
+			$data['merchandisers']=DB::table('merchandisers')->where('buyer_id',1)->select('*')->get();
 		}
 		else
 		{
 			$data['merchandisers']="";
 		}
 
-		$data['orchestra_care_symbols'] = DB::table('orchestra_care_symbols')->select('*')->get();
-		$data['orchestra_composition'] = DB::table('orchestra_compositions')->select('*')->get();
-		$data['orchestra_countries'] = DB::table('orchestra_countries')->select('*')->get();
-		$data['orchestra_care_instruction'] = DB::table('orchestra_care_instruction')->select('*')->get(); 
-		$data['orchestra_parts'] = DB::table('orchestra_parts')->select('*')->get();
-		$pro_family = DB::table('orchestra_product_family')->select('*')->where('code',$code)->get();
+		$data['orchestra_care_symbols'] = DB::table('orchestra_care_symbols')->where('is_enabled',1)->select('*')->get();
+		$data['orchestra_composition'] = DB::table('orchestra_compositions')->where('is_enabled',1)->select('*')->get();
+		$data['orchestra_countries'] = DB::table('orchestra_countries')->where('is_enabled',1)->select('*')->get();
+		$data['orchestra_care_instruction'] = DB::table('orchestra_care_instruction')->where('is_enabled',1)->select('*')->get(); 
+		$data['orchestra_parts'] = DB::table('orchestra_parts')->where('is_enabled',1)->select('*')->get();
+		$pro_family = DB::table('orchestra_product_family')->where('is_enabled',1)->select('*')->where('code',$code)->get();
 		if(count($pro_family) > 0)
 		{
 			$data['product_family'] = DB::table('orchestra_product_family')->select('*')->where('code',$code)->get();

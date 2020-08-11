@@ -4,30 +4,17 @@ namespace App\Http\Controllers\Admin\Settings\Tesco;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Classes\Modules;
-use Response;
-use View;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Validator;
 use DB;
 use App\TescoBrand;
 use App\TescoDepartment;
 use App\TescoSupplier;
 use App\TescoSizeChart;
 use App\TescoTCL1Orders;
-use App\TescoTCL1OrdersQuantity;
-use App\TescoTCL2Orders;
-use App\TescoTCL2OrdersQuantity;
 use App\TescoTCL4Orders;
 use App\TescoTCL4OrdersQuantity;
 use App\TescoTHL1Orders;
-use App\TescoTHL1OrdersQuantity;
 use App\TescoTHL3Orders;
 use App\TescoTHL3OrdersQuantity;
-use App\TescoTSL1Orders;
-use App\TescoTSL1OrdersQuantity;
-use App\TescoTSL3Orders;
-use App\TescoTSL3OrdersQuantity;
 use App\TescoTaxCode;
 use App\RawMaterialMaster;
 use App\TescoErrorReportEmails;
@@ -52,7 +39,7 @@ class TescoSettings extends Controller
     public function tescoBrands()
     {
       try {
-            $tesco_brand = DB::table('tesco_brand')->select('id','brand','is_enabled')->orderBy('is_enabled','desc')->get();
+            $tesco_brand = TescoBrand::select('id','brand','is_enabled')->orderBy('is_enabled','desc')->get();
 
             return response()->json(['error'=>'false','message' =>'success', 'tesco_brands' => $tesco_brand]);
           } catch (\Exception $e)
@@ -70,10 +57,7 @@ class TescoSettings extends Controller
     public function addTescoBrands(Request $request)
     {
         try {
-
-             /** @var array [Database Unique field validation] */
-             $is_exists = TescoBrand::where('brand','ilike',$request['name'])->select('id')->get();
-             if(sizeof($is_exists) > 0)
+             if(TescoBrand::where('brand','ilike',$request['name'])->exists())
              {
                $result = response()->json(['error'=> true,'message' =>'Brand Already Exists'],208);
              }
@@ -84,8 +68,6 @@ class TescoSettings extends Controller
                       ]);
                 $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
              }
-            
-
         } catch (\Exception $e)
         {
             $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
@@ -102,8 +84,7 @@ class TescoSettings extends Controller
     public function getTescoBrandsById(Request $request)
     {
     try {
-          $id = $request['id'];
-          $tesco_brand = DB::table('tesco_brand')->select('id','brand','is_enabled')->where('tesco_brand.id',$id)->get();
+          $tesco_brand = TescoBrand::select('id','brand','is_enabled')->where('tesco_brand.id', $request['id'])->get();
           return response()->json(['error'=>'false','message' =>'success', 'tesco_brands' => $tesco_brand]);
         } catch (\Exception $e)
         {
@@ -119,20 +100,15 @@ class TescoSettings extends Controller
     public function updateTescoBrandsById(Request $request)
     {
     try {
-          $id        = $request['id'];
-          $name      = $request['name'];
-          
-          /** @var array [Database Unique field validation] */
-          $is_exists = TescoBrand::where('brand','ilike',$request['name'])->where('id','<>',$id)->select('id')->get();
-          if(sizeof($is_exists) > 0)
+          if(TescoBrand::where([['brand','ilike',$request['name']], ['id','<>', $request['id']]])->exists())
           {
               $result = response()->json(['error'=> true,'message' =>'Brand Already Exists'],208);
           }
           else
           {
-            TescoBrand::where('id',$id)
+            TescoBrand::find($request['id'])
              ->update([
-               'brand' => $name
+               'brand' => $request['name']
             ]);
 
             $result = response()->json(['error'=> false,'message' =>'Success'],200);
@@ -153,9 +129,7 @@ class TescoSettings extends Controller
       public function makeBrandEnabled(Request $request)
       {
         try {
-              $id      = $request['id'];
-              
-              TescoBrand::where('id',$id)
+              TescoBrand::find($request['id'])
                ->update([
                  'is_enabled'  => 1
               ]);
@@ -180,18 +154,18 @@ class TescoSettings extends Controller
               // Check if this brand is in use or not  while placing the order. 
               // Checking for 1 template order table from each combination.
               // (ie, TCL1 from TCL1, TCL2 and TSL1 combination)
-              $tcl1_table_brands = TescoTCL1Orders::where('tesco_brand_id','=',$id)->pluck('id')->all();
-              $tcl4_table_brands = TescoTCL4Orders::where('tesco_brand_id','=',$id)->pluck('id')->all();
-              $thl1_table_brands = TescoTHL1Orders::where('tesco_brand_id','=',$id)->pluck('id')->all();
-              $thl3_table_brands = TescoTHL3Orders::where('tesco_brand_id','=',$id)->pluck('id')->all();
+              $tcl1_table_brands = TescoTCL1Orders::where('tesco_brand_id','=',$id)->exists();
+              $tcl4_table_brands = TescoTCL4Orders::where('tesco_brand_id','=',$id)->exists();
+              $thl1_table_brands = TescoTHL1Orders::where('tesco_brand_id','=',$id)->exists();
+              $thl3_table_brands = TescoTHL3Orders::where('tesco_brand_id','=',$id)->exists();
 
-             if((sizeof($tcl1_table_brands) > 0) || (sizeof($tcl4_table_brands) > 0) || (sizeof($thl1_table_brands) > 0) || (sizeof($thl3_table_brands) > 0))
+             if($tcl1_table_brands || $tcl4_table_brands || $thl1_table_brands || $thl3_table_brands)
               {
                 $result = response()->json(['error'=> false,'message' =>'Brand is in use.'],208);
               }
               else
               {
-                TescoBrand::where('id',$id)
+                TescoBrand::find($id)
                  ->update([
                    'is_enabled'  => 0
                 ]);
@@ -214,7 +188,7 @@ class TescoSettings extends Controller
     public function tescoDepartments()
     {
       try {
-            $tesco_department = DB::table('tesco_department')->select('id','department','pantone','rbg','is_enabled')->orderBy('is_enabled','desc')->get();
+            $tesco_department = TescoDepartment::select('id','department','pantone','rbg','is_enabled')->orderBy('is_enabled','desc')->get();
             return response()->json(['error'=>'false','message' =>'success', 'tesco_department' => $tesco_department]);
           } catch (\Exception $e)
           {
@@ -231,9 +205,7 @@ class TescoSettings extends Controller
     public function addTescoDepartment(Request $request)
     {
         try {
-             /** @var array [Database Unique field validation] */
-              $is_exists = TescoDepartment::where('department','ilike',$request['department'])->select('id')->get();
-              if(sizeof($is_exists) > 0)
+              if(TescoDepartment::where('department','ilike',$request['department'])->exists())
              {
                $result = response()->json(['error'=> true,'message' =>'Department Already Exists'],208);
              }
@@ -263,8 +235,7 @@ class TescoSettings extends Controller
     public function getTescoDepartmentsById(Request $request)
     {
     try {
-          $id = $request['id'];
-          $tesco_department = DB::table('tesco_department')->select('id','department','pantone','rbg')->where('tesco_department.id',$id)->get();
+          $tesco_department = TescoDepartment::select('id','department','pantone','rbg')->where('tesco_department.id', $request['id'])->get();
           return response()->json(['error'=>'false','message' =>'success', 'tesco_departments' => $tesco_department]);
         } catch (\Exception $e)
         {
@@ -285,15 +256,13 @@ class TescoSettings extends Controller
           $pantone = $request['pantone'];
           $rbg = $request['rbg'];
           
-          /** @var array [Database Unique field validation] */
-          $is_exists = TescoDepartment::where('department','ilike',$request['department'])->where('id','<>',$id)->select('id')->get();
-          if(sizeof($is_exists) > 0)
+          if(TescoDepartment::where([['department','ilike', $department], ['id','<>',$id]])->exists())
           {
               $result = response()->json(['error'=> true,'message' =>'Department Already Exists'],208);
           }
           else
           {
-            TescoDepartment::where('id',$id)
+            TescoDepartment::find($id)
              ->update([
                'department' => $department,
                'pantone' => $pantone,
@@ -318,9 +287,7 @@ class TescoSettings extends Controller
       public function makeDepartmentEnabled(Request $request)
       {
         try {
-              $id      = $request['id'];
-              
-              TescoDepartment::where('id',$id)
+              TescoDepartment::find($request['id'])
                ->update([
                  'is_enabled'  => 1
               ]);
@@ -345,18 +312,18 @@ class TescoSettings extends Controller
               // Check if this department is in use or not while placing the order. 
               // Checking for 1 template order table from each combination.
               // (ie, TCL1 from TCL1, TCL2 and TSL1 combination)
-              $tcl1_table_departments = TescoTCL1Orders::where('tesco_department_id','=',$id)->pluck('id')->all();
-              $tcl4_table_departments = TescoTCL4Orders::where('tesco_department_id','=',$id)->pluck('id')->all();
-              $thl1_table_departments = TescoTHL1Orders::where('tesco_department_id','=',$id)->pluck('id')->all();
-              $thl3_table_departments = TescoTHL3Orders::where('tesco_department_id','=',$id)->pluck('id')->all();
+              $tcl1_table_departments = TescoTCL1Orders::where('tesco_department_id','=',$id)->exists();
+              $tcl4_table_departments = TescoTCL4Orders::where('tesco_department_id','=',$id)->exists();
+              $thl1_table_departments = TescoTHL1Orders::where('tesco_department_id','=',$id)->exists();
+              $thl3_table_departments = TescoTHL3Orders::where('tesco_department_id','=',$id)->exists();
 
-              if((sizeof($tcl1_table_departments) > 0) || (sizeof($tcl4_table_departments) > 0) || (sizeof($thl1_table_departments) > 0) || (sizeof($thl3_table_departments) > 0))
+              if($tcl1_table_departments || $tcl4_table_departments || $thl1_table_departments || $thl3_table_departments)
               {
                 $result = response()->json(['error'=> false,'message' =>'Department is in use.'],208);
               }
               else
               {
-                TescoDepartment::where('id',$id)
+                TescoDepartment::find($id)
                  ->update([
                    'is_enabled'  => 0
                 ]);
@@ -377,7 +344,7 @@ class TescoSettings extends Controller
     public function tescoSuppliers()
     {
       try {
-            $tesco_suppliers = DB::table('tesco_suppliers')->select('id','supplier_name','supplier_code','is_enabled')->orderBy('is_enabled','desc')->get();
+            $tesco_suppliers = TescoSupplier::select('id','supplier_name','supplier_code','is_enabled')->orderBy('is_enabled','desc')->get();
             return response()->json(['error'=>'false','message' =>'success', 'tesco_suppliers' => $tesco_suppliers]);
           } catch (\Exception $e)
           {
@@ -394,9 +361,7 @@ class TescoSettings extends Controller
     public function addTescoSuppliers(Request $request)
     {
         try {
-              /** @var array [Database Unique field validation] */
-              $is_exists = TescoSupplier::where('supplier_code', '=', $request['supplier_code'])->where('supplier_name','ilike',$request['supplier_name'])->select('id')->get();
-              if(sizeof($is_exists) > 0)
+              if(TescoSupplier::where([['supplier_code', '=', $request['supplier_code']], ['supplier_name','ilike',$request['supplier_name']]])->exists())
               {
                 $result = response()->json(['error'=> true,'message' =>'Supplier Already Exists'],208);
               }
@@ -426,8 +391,7 @@ class TescoSettings extends Controller
     public function getTescoSuppliersById(Request $request)
     {
     try {
-          $id = $request['id'];
-          $tesco_suppliers = DB::table('tesco_suppliers')->select('id','supplier_name','supplier_code')->where('tesco_suppliers.id',$id)->get();
+          $tesco_suppliers = TescoSupplier::select('id','supplier_name','supplier_code')->where('tesco_suppliers.id', $request['id'])->get();
           return response()->json(['error'=>'false','message' =>'success', 'tesco_suppliers' => $tesco_suppliers]);
         } catch (\Exception $e)
         {
@@ -447,19 +411,19 @@ class TescoSettings extends Controller
           $supplier_name = $request['supplier_name'];
           $supplier_code = $request['supplier_code'];
 
-          /** @var array [Database Unique field validation] */
-          $is_exists = TescoSupplier::select('id')
-                       ->where('supplier_name', 'ilike', $request['supplier_name'])
-                       ->where('supplier_code', '=', $request['supplier_code'])
-                       ->where('id','<>',$id)
-                       ->get();
-          if(sizeof($is_exists) > 0)
+          $is_exists = TescoSupplier::where([
+            ['supplier_name', 'ilike', $request['supplier_name']],
+            ['supplier_code', '=', $request['supplier_code']],
+            ['id','<>',$id],
+          ])->exists();
+
+          if($is_exists)
           {
               $result = response()->json(['error'=> true,'message' =>'Supplier Already Exists.'],208);
           }
           else
           {
-              TescoSupplier::where('id',$id)
+              TescoSupplier::find($id)
                ->update([
                  'supplier_name' => $supplier_name,
                  'supplier_code' => $supplier_code
@@ -483,9 +447,7 @@ class TescoSettings extends Controller
     public function makeSupplierEnabled(Request $request)
     {
       try {
-            $id      = $request['id'];
-            
-            TescoSupplier::where('id',$id)
+            TescoSupplier::find($request['id'])
              ->update([
                'is_enabled'  => 1
             ]);
@@ -508,18 +470,20 @@ class TescoSettings extends Controller
         try {
               $id      = $request['id'];
               /** Check if this supplier linked with tesco company  **/
-              $company_id = DB::table('customer_metadata')->select('customer_metadata.id')
+              $company_id = DB::table('customer_metadata')
                             ->join('customers','customers.id','customer_metadata.customer_id')
-                            ->where('customer_metadata.customer_metadata_id','=',$id)
-                            ->where('customers.is_active','=',1)
-                            ->first();
+                            ->where([
+                              ['customer_metadata.customer_metadata_id','=',$id],
+                              ['customers.is_active','=',1],
+                            ])
+                            ->exists();
               if($company_id)
               {
                 $result = response()->json(['error'=> false,'message' =>'Linked to company'],208);
               }
               else
               {
-                TescoSupplier::where('id',$id)
+                TescoSupplier::find($id)
                  ->update([
                    'is_enabled'  => 0
                 ]);
@@ -543,7 +507,7 @@ class TescoSettings extends Controller
       public function tescoSizeChart()
       {
         try {
-              $tesco_size_chart = DB::table('tesco_size_chart')->select('id','po_size','uk','ce','is_enabled')->orderBy('is_enabled','desc')->get();
+              $tesco_size_chart = TescoSizeChart::select('id','po_size','uk','ce','is_enabled')->orderBy('is_enabled','desc')->get();
               return response()->json(['error'=>'false','message' =>'success', 'tesco_sizecharts' => $tesco_size_chart]);
             } catch (\Exception $e)
             {
@@ -560,9 +524,7 @@ class TescoSettings extends Controller
     public function addTescoSizeCharts(Request $request)
     {
         try {
-             $is_exists = TescoSizeChart::where('po_size', 'ilike', $request['po_size'])->select('id')->get();
-
-             if(sizeof($is_exists) > 0)
+             if(TescoSizeChart::where('po_size', 'ilike', $request['po_size'])->exists())
              {
                $result = response()->json(['error'=> true,'message' =>'Size Chart Already Exists'],208);
              }
@@ -592,8 +554,7 @@ class TescoSettings extends Controller
     public function getTescoSizeChartsById(Request $request)
     {
     try {
-          $id = $request['id'];
-          $tesco_size_chart = DB::table('tesco_size_chart')->select('id','po_size','uk','ce')->where('tesco_size_chart.id',$id)->get();
+          $tesco_size_chart = TescoSizeChart::select('id','po_size','uk','ce')->where('tesco_size_chart.id', $request['id'])->get();
           return response()->json(['error'=>'false','message' =>'success', 'tesco_sizecharts' => $tesco_size_chart]);
         } catch (\Exception $e)
         {
@@ -614,19 +575,13 @@ class TescoSettings extends Controller
           $uk        = $request['uk'];
           $ce        = $request['ce'];
 
-          /** @var array [Database Unique field validation] */
-          $is_exists = TescoSizeChart::select('id')
-                       ->where('po_size', 'ilike', $po_size)
-                       ->where('id','<>',$id)
-                       ->get();
-
-          if(sizeof($is_exists) > 0)
+          if(TescoSizeChart::where([['po_size', 'ilike', $po_size], ['id','<>',$id]])->exists())
           {
               $result = response()->json(['error'=> true,'message' =>'Size Chart Already Exists'],208);
           }
           else
           {
-             TescoSizeChart::where('id',$id)
+             TescoSizeChart::find($id)
               ->update([
                 'po_size' => $po_size,
                 'uk' => $uk,
@@ -651,9 +606,7 @@ class TescoSettings extends Controller
       public function makeSizeChartEnabled(Request $request)
       {
         try {
-              $id      = $request['id'];
-              
-              TescoSizeChart::where('id',$id)
+              TescoSizeChart::find($request['id'])
                ->update([
                  'is_enabled'  => 1
               ]);
@@ -676,21 +629,21 @@ class TescoSettings extends Controller
         try {
               $id      = $request['id'];
               // get sizechart for this id.
-              $size = DB::table('tesco_size_chart')->select('po_size')->where('id','=',$id)->first();
+              $size = TescoSizeChart::select('po_size')->where('id','=',$id)->first();
               // Check if this department is in use or not while placing the order. 
               // Checking for 1 template order table from each combination.
               // (ie, TCL4 from TCL4 and TSL3 combination)
               // size only for tesco single templates
-              $tcl4_sizes = TescoTCL4OrdersQuantity::where('size','ilike',$size->po_size)->pluck('id')->all();
-              $thl3_sizes = TescoTHL3OrdersQuantity::where('size','ilike',$size->po_size)->pluck('id')->all();
+              $tcl4_sizes = TescoTCL4OrdersQuantity::where('size','ilike',$size->po_size)->exists();
+              $thl3_sizes = TescoTHL3OrdersQuantity::where('size','ilike',$size->po_size)->exists();
 
-              if((sizeof($tcl4_sizes) > 0) || (sizeof($thl3_sizes) > 0))
+              if($tcl4_sizes || $thl3_sizes)
               {
                 $result = response()->json(['error'=> false,'message' =>'Size Chart is in use.'],208);
               }
               else
               {
-                TescoSizeChart::where('id',$id)
+                TescoSizeChart::find($id)
                  ->update([
                    'is_enabled'  => 0
                 ]);
@@ -713,7 +666,7 @@ class TescoSettings extends Controller
          public function taxCode()
          {
            try {
-                 $taxcode = DB::table('tax_code')->select('id','tax_code','tax_type','is_enabled', 'tax')->orderBy('is_enabled','desc')->get();
+                 $taxcode = TescoTaxCode::select('id','tax_code','tax_type','is_enabled', 'tax')->orderBy('is_enabled','desc')->get();
                  return response()->json(['error'=>'false','message' =>'success', 'taxcodes' => $taxcode]);
                } catch (\Exception $e)
                {
@@ -730,9 +683,9 @@ class TescoSettings extends Controller
        public function addTaxCodes(Request $request)
        {
            try {
-                $is_exists = TescoTaxCode::where('tax_type', 'ilike', $request['tax_type'])->where('tax_code', 'ilike', $request['tax_code'])->where('tax', '=', $request['tax'])->select('id')->get();
+                $is_exists = TescoTaxCode::where([['tax_type', 'ilike', $request['tax_type']], ['tax_code', 'ilike', $request['tax_code']], ['tax', '=', $request['tax']]])->exists();
 
-                if(sizeof($is_exists) > 0)
+                if($is_exists)
                 {
                   $result = response()->json(['error'=> true,'message' =>'Tax Code Already Exists'],208);
                 }
@@ -762,8 +715,7 @@ class TescoSettings extends Controller
        public function getTaxCodesById(Request $request)
        {
        try {
-             $id = $request['id'];
-             $tax_code = DB::table('tax_code')->select('id','tax_code','tax_type','is_enabled', 'tax')->where('tax_code.id',$id)->get();
+             $tax_code = TescoTaxCode::select('id','tax_code','tax_type','is_enabled', 'tax')->where('tax_code.id', $request['id'])->get();
              return response()->json(['error'=>'false','message' =>'success', 'tax_codes' => $tax_code]);
            } catch (\Exception $e)
            {
@@ -784,21 +736,20 @@ class TescoSettings extends Controller
              $tax_type  = $request['tax_type'];
              $tax       = $request['tax'];
 
-             /** @var array [Database Unique field validation] */
-             $is_exists = TescoTaxCode::select('id')
-                          ->where('tax_type', 'ilike', $tax_type)
-                          ->where('tax_code', 'ilike', $tax_code)
-                          ->where('tax', '=', $tax)
-                          ->where('id','<>',$id)
-                          ->get();
+             $is_exists = TescoTaxCode::where([
+               ['tax_type', 'ilike', $tax_type],
+               ['tax_code', 'ilike', $tax_code],
+               ['tax', '=', $tax],
+               ['id','<>',$id]
+             ])->exists();
 
-             if(sizeof($is_exists) > 0)
+             if($is_exists)
              {
                  $result = response()->json(['error'=> true,'message' =>'Tax Code Already Exists'],208);
              }
              else
              {
-                TescoTaxCode::where('id',$id)
+                TescoTaxCode::find($id)
                  ->update([
                    'tax_code' => $tax_code,
                    'tax_type' => $tax_type,
@@ -823,7 +774,7 @@ class TescoSettings extends Controller
         public function rawMaterials()
         {
           try {
-                $raw_materials = DB::table('raw_material_master')->select('id','material_name_employee','material_name_production','is_enabled', 'material_name_purchase')->orderBy('is_enabled','desc')->get();
+                $raw_materials = RawMaterialMaster::select('id','material_name_employee','material_name_production','is_enabled', 'material_name_purchase')->orderBy('is_enabled','desc')->get();
                 return response()->json(['error'=>'false','message' =>'success', 'raw_materials' => $raw_materials]);
               } catch (\Exception $e)
               {
@@ -840,9 +791,13 @@ class TescoSettings extends Controller
         public function addRawMaterial(Request $request)
         {
             try {
-                 $is_exists = RawMaterialMaster::where('material_name_employee', 'ilike', $request['emp_material'])->where('material_name_production', 'ilike', $request['production_material'])->where('material_name_purchase', 'ilike', $request['purchase_material'])->select('id')->get();
+                 $is_exists = RawMaterialMaster::where([
+                   ['material_name_employee', 'ilike', $request['emp_material']],
+                   ['material_name_production', 'ilike', $request['production_material']],
+                   ['material_name_purchase', 'ilike', $request['purchase_material']]
+                 ])->exists();
 
-                 if(sizeof($is_exists) > 0)
+                 if($is_exists)
                  {
                    $result = response()->json(['error'=> true,'message' =>'Material Already Exists'],208);
                  }
@@ -872,8 +827,7 @@ class TescoSettings extends Controller
         public function getRawMaterialById(Request $request)
         {
         try {
-              $id = $request['id'];
-              $raw_material = DB::table('raw_material_master')->select('id','material_name_employee','material_name_production','is_enabled', 'material_name_purchase')->where('raw_material_master.id',$id)->get();
+              $raw_material = RawMaterialMaster::select('id','material_name_employee','material_name_production','is_enabled', 'material_name_purchase')->where('raw_material_master.id', $request['id'])->get();
               return response()->json(['error'=>'false','message' =>'success', 'raw_material' => $raw_material]);
             } catch (\Exception $e)
             {
@@ -894,21 +848,20 @@ class TescoSettings extends Controller
               $production_material = $request['production_material'];
               $purchase_material   = $request['purchase_material'];
 
-              /** @var array [Database Unique field validation] */
-              $is_exists = RawMaterialMaster::select('id')
-                           ->where('material_name_employee', 'ilike', $emp_material)
-                           ->where('material_name_production', 'ilike', $production_material)
-                           ->where('material_name_purchase', 'ilike', $purchase_material)
-                           ->where('id','<>',$id)
-                           ->get();
+              $is_exists = RawMaterialMaster::where([
+                             ['material_name_employee', 'ilike', $emp_material],
+                             ['material_name_production', 'ilike', $production_material],
+                             ['material_name_purchase', 'ilike', $purchase_material],
+                             ['id','<>',$id]
+                           ])->exists();
 
-              if(sizeof($is_exists) > 0)
+              if($is_exists)
               {
                   $result = response()->json(['error'=> true,'message' =>'Material Already Exists'],208);
               }
               else
               {
-                 RawMaterialMaster::where('id',$id)
+                 RawMaterialMaster::find($id)
                   ->update([
                     'material_name_employee'    => $emp_material,
                     'material_name_production'  => $production_material,
@@ -933,9 +886,7 @@ class TescoSettings extends Controller
       public function makeMaterialEnabled(Request $request)
       {
         try {
-              $id      = $request['id'];
-              
-              RawMaterialMaster::where('id',$id)
+              RawMaterialMaster::find($request['id'])
                ->update([
                  'is_enabled'  => true
               ]);
@@ -956,21 +907,18 @@ class TescoSettings extends Controller
       public function makeMaterialDisabled(Request $request)
       {
         try {
-              $id      = $request['id'];
-              /** @var array [Database Unique field validation] */
-              $is_exists = DB::table('tesco_template')->where('material_id','=',$id)->select('id')->get();
-              if(sizeof($is_exists) > 0)
-             {
-               $result = response()->json(['error'=> true,'message' =>'Material is in use.'],208);
-             }
-             else
-             {
-                $inserted = RawMaterialMaster::where('id',$id)
-                              ->update([
-                                'is_enabled'  => false
-                            ]);
-                $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
-             }
+              if(DB::table('tesco_template')->where('material_id','=', $request['id'])->exists())
+              {
+                $result = response()->json(['error'=> true,'message' =>'Material is in use.'],208);
+              }
+              else
+              {
+                  $inserted = RawMaterialMaster::find($request['id'])
+                                ->update([
+                                  'is_enabled'  => false
+                              ]);
+                  $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+              }
             } 
             catch (\Exception $e)
             {
@@ -1003,9 +951,9 @@ class TescoSettings extends Controller
        public function addTescoErrorReportEmail(Request $request)
        {
            try {
-                $is_exists = TescoErrorReportEmails::where('error_case', 'ilike', $request['error_case'])->where('email_address', 'ilike', $request['email'])->where('company_id', '=', $request['company'])->select('id')->get();
+                $is_exists = TescoErrorReportEmails::where([['error_case', 'ilike', $request['error_case']], ['email_address', 'ilike', $request['email']], ['company_id', '=', $request['company']]])->exists();
 
-                if(sizeof($is_exists) > 0)
+                if($is_exists)
                 {
                   $result = response()->json(['error'=> true,'message' =>'Email Details Already Exists'],208);
                 }
@@ -1036,8 +984,7 @@ class TescoSettings extends Controller
         public function getTescoErrorReportEmailById(Request $request)
         {
         try {
-              $id = $request['id'];
-              $error_report_data = TescoErrorReportEmails::select('*')->where('id',$id)->get();
+              $error_report_data = TescoErrorReportEmails::select('*')->where('id', $request['id'])->get();
               return response()->json(['error'=>'false','message' =>'success', 'error_report_data' => $error_report_data]);
             } catch (\Exception $e)
             {
@@ -1053,20 +1000,20 @@ class TescoSettings extends Controller
         public function updateTescoErrorReportEmailById(Request $request)
         {
             try {
-                 /** @var array [Database Unique field validation] */
-                 $is_exists = TescoErrorReportEmails::select('id')
-                             ->where('error_case', 'ilike', $request['error_case'])
-                             ->where('email_address', 'ilike', $request['email'])
-                             ->where('company_id', '=', $request['company'])
-                             ->where('id','<>',$request['id'])
-                             ->get();
-                 if(sizeof($is_exists) > 0)
+                 $is_exists = TescoErrorReportEmails::where([
+                   ['error_case', 'ilike', $request['error_case']],
+                   ['email_address', 'ilike', $request['email']],
+                   ['company_id', '=', $request['company']],
+                   ['id','<>',$request['id']]
+                 ])->exists();
+
+                 if($is_exists)
                  {
                    $result = response()->json(['error'=> true,'message' =>'Email Details Already Exists'],208);
                  }
                  else
                  {
-                    TescoErrorReportEmails::where('id',$request['id'])
+                    TescoErrorReportEmails::find($request['id'])
                      ->update([
                         'company_id'     => $request['company'],
                         'error_case'     => $request['error_case'],
@@ -1091,9 +1038,8 @@ class TescoSettings extends Controller
       public function makeErrorReportEmailEnabled(Request $request)
       {
         try {
-              $id      = $request['id'];
               
-              TescoErrorReportEmails::where('id',$id)
+              TescoErrorReportEmails::find($request['id'])
                ->update([
                  'is_enabled'  => true
               ]);
@@ -1114,8 +1060,7 @@ class TescoSettings extends Controller
       public function makeErrorReportEmailDisabled(Request $request)
       {
         try {
-              $id      = $request['id'];
-              TescoErrorReportEmails::where('id',$id)
+              TescoErrorReportEmails::find($request['id'])
                ->update([
                  'is_enabled'  => false
               ]);

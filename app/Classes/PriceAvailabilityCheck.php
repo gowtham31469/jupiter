@@ -1,12 +1,6 @@
 <?php
 namespace App\Classes;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Response;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Validator;
 use DB;
-use Auth;
 /**
  * Class to check price availability for the tesco template orders
  * @author [Praveen] <[praveen@wizroots.com]>

@@ -459,6 +459,8 @@
     @endif @section('jqueryIncludes')
 	<script  type="text/javascript" src="{{ asset('js/moment.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/daterangepicker.js') }}"></script>
+
+    <script src="{{ asset('js/Customer/customer-order.js') }}"></script>
     <script src="{{ asset('js/html2pdf.bundle.min.js') }}"></script>
     <script src="{{ asset('js/Customer/customer-order-status.js') }}"></script>
     <script src="{{ asset('js/Customer/orchestra-order-status.js') }}"></script>

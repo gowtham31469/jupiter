@@ -49,7 +49,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
 		var position = 3;
 		var ref_name = [name2.slice(0, position), b, name2.slice(position)].join('').trim();
 	
-		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+		
 			$.ajax({
 				url: base_url + "/erp/job-manager/get-order-details",
 				type: "Post",
@@ -293,7 +293,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
 		var b = " ";
 		var position = 3;
 		var ref_name = [name2.slice(0, position), b, name2.slice(position)].join('').trim();
-		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+		
 			$.ajax({
 				url: base_url + "/erp/job-manager/get-order-details",
 				type: "Post",
@@ -809,7 +809,7 @@ function PopupTesco(data, name,zone,style_no,buyer_no,id,created_at,qr_flag,qr_c
 	}
 	var url = "";
 	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/tesco/print-div-tesco",
 		type: "post",
@@ -874,7 +874,7 @@ function PopupTescoSmall(data, name,zone,style_no,buyer_no,id,created_at) {
 	}
 	
 	var url = "";
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/tesco/print-div-tesco-small",
 		type: "post",
@@ -1296,6 +1296,15 @@ function printHangDivJC(front,back,disney,name,style_no,buyer_no,id,order_type,c
 								svgDoc1.getElementById("uvc_tco").innerHTML = uvc_tco;
 								
 								svgDoc.getElementById("size").innerHTML = size[0];
+								if(size[0].length == 1)
+								{
+									svgDoc.getElementById("size").setAttribute('transform', 'matrix(1.0074 0 0 1 21.0324 291.266)');
+									
+								}
+								else
+								{
+									svgDoc.getElementById("size").setAttribute('transform', 'matrix(1.0074 0 0 1 16.0324 291.266)');
+								}
 								svgDoc.getElementById("size_french").innerHTML = size[1];
 								svgDoc.getElementById("size_english").innerHTML = size1;
 							}
@@ -1403,7 +1412,7 @@ function printHangDivJC(front,back,disney,name,style_no,buyer_no,id,order_type,c
 						var svg_fin_front = svgarr_front.join(',_');
 						//PopupWashJC(svg_fin,svgRoot1_back,svgRoot1_middle, dataid,svgDoc1);
 						
-						PopupHangJC(svg_fin_front, svg_fin,svgDoc,svgDoc1,disney);
+						PopupHangJC(svg_fin_front, svg_fin,svgDoc,svgDoc1,disney,name,id,style_no,buyer_no,created_at);
 					}
 				},
 			});
@@ -1498,7 +1507,7 @@ function printWashDivJC(data,data_back,data_middle,name,style_no,buyer_no,id,ord
 						svgDoc1.getElementById("size2").innerHTML = size_txt.replace(" ", "").toLowerCase() + "/" + size1;
 						svgDoc1.getElementById("parcel_code1").innerHTML = uvc_tco;
 						svgDoc1.getElementById("parcel_code2").innerHTML = uvc_tco;
-						svgDoc1.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -38 135) rotate(270)');
+						svgDoc1.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -40 135) rotate(270)');
 						jsbarcodewashJC(code, 'barcode', svgDoc1)
 
 						svgDoc1.getElementById("cofreet_symbol1").setAttribute('xlink:href',res.cofreet_symbol1);
@@ -1536,7 +1545,7 @@ function printWashDivJC(data,data_back,data_middle,name,style_no,buyer_no,id,ord
 						// var svg_fin_front = svgarr_front.join(',_');
 						
 						// PopupHangJC(svg_fin, svg_fin,svgDoc,svgDoc1,disney);
-						PopupWashJC(svg_fin,svgRoot1_back,svgRoot1_middle,svgDoc1,parentId);
+						PopupWashJC(svg_fin,svgRoot1_back,svgRoot1_middle,svgDoc1,parentId,name,id,style_no,buyer_no,created_at);
 					}
 				},
 			});
@@ -1598,7 +1607,8 @@ function genarateArtworkOrchestraJC(data, name,style_no,buyer_no,id,order_type,c
 
 						case "Std Carton Stickers":
 							$(details['stdcartonstickerqty']).each(function(index,value){
-								svgDoc.getElementById("parcelcode").innerHTML = value.uvc_tco
+								svgDoc.getElementById("po").innerHTML = details.po;
+								svgDoc.getElementById("parcelcode").innerHTML = details.parcelCode
 								// svgDoc.getElementById("size").innerHTML = value.size
 								svgDoc.getElementById("theme").innerHTML = details.theme
 								
@@ -1610,15 +1620,24 @@ function genarateArtworkOrchestraJC(data, name,style_no,buyer_no,id,order_type,c
 
 								if(details.height != null )
 								{
-									var num = 600 * 395 * details.height
+									var num = 600 * details.width * details.height
 									var val = num / (1000 * 1000 * 1000)
 									svgDoc.getElementById("height").innerHTML = details.height
-									svgDoc.getElementById("volume").innerHTML = val
+									svgDoc.getElementById("volume").innerHTML = val.toFixed(3)
+								}
+								else{
+									svgDoc.getElementById("volume").innerHTML = ''
+									svgDoc.getElementById("height").innerHTML =""
+								}
+								
+								if(details.width != null )
+								{
+									svgDoc.getElementById("width").innerHTML = details.width
 								}
 								else{
 									svgDoc.getElementById("volume").innerHTML = ''
 								}
-		
+								svgDoc.getElementById("color").innerHTML = details.color_code
 								jsbarcodesolidcartonA(value.barcode, 'barcode1', svgDoc)
 								jsbarcodesolidcartonB(value.barcode, 'barcode2', svgDoc)
 								// var s = new XMLSerializer();
@@ -1628,7 +1647,7 @@ function genarateArtworkOrchestraJC(data, name,style_no,buyer_no,id,order_type,c
 							})
 							// var svg_fin = svgarr.join(',_');
 							 
-							  PopupOrchestraJC(svgDoc,"STD-CARTON"); 
+							  PopupOrchestraJC(svgDoc,"STD-CARTON",id,style_no,buyer_no,created_at); 
 							
 							
 
@@ -1639,7 +1658,7 @@ function genarateArtworkOrchestraJC(data, name,style_no,buyer_no,id,order_type,c
 							$(details['stdpolystickerqty']).each(function(index,value){
 								console.log(value)
 								svgDoc.getElementById("round").style.fill = details.age_group
-								svgDoc.getElementById("parcel_code").innerHTML = value.uvc_tco
+								svgDoc.getElementById("parcel_code").innerHTML = details.parcelCode
 								svgDoc.getElementById("theme").innerHTML = details.theme
 								// svgDoc.getElementById("size").innerHTML = value.size
 								// svgDoc.getElementById("color").innerHTML = details.color_code
@@ -1650,7 +1669,7 @@ function genarateArtworkOrchestraJC(data, name,style_no,buyer_no,id,order_type,c
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupTableOrchestraJC(svgDoc, "STD-POLY",details.sizeArr,details.qtyArr);
+							PopupTableOrchestraJC(svgDoc, "STD-POLY",details.sizeArr,details.qtyArr,details.sizBrkAr,id,style_no,buyer_no,created_at);
 						break;
 
 
@@ -1660,6 +1679,12 @@ function genarateArtworkOrchestraJC(data, name,style_no,buyer_no,id,order_type,c
 								svgDoc.getElementById("round").style.fill = details.age_group
 								svgDoc.getElementById("parcel_code").innerHTML = value.uvc_tco
 								svgDoc.getElementById("size").innerHTML = value.size
+								if(value.size == "TAILLE UNIQUE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "15px"
+									svgDoc.getElementById("size").setAttribute('transform','matrix(1 0 0 1 168.625 28.7874)');
+									svgDoc.getElementById("color").setAttribute('transform','matrix(1 0 0 1 169.625 45.3324)');
+								}
 								svgDoc.getElementById("color").innerHTML = details.color_code
 								jsbarcodesolidpoly_orchestra(value.barcode, 'barcode', svgDoc)
 								var s = new XMLSerializer();
@@ -1668,12 +1693,13 @@ function genarateArtworkOrchestraJC(data, name,style_no,buyer_no,id,order_type,c
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupOrchestrasmallJC(svg_fin, "SOLID-POLY",svgDoc);
+							PopupOrchestrasmallJC(svg_fin, "SOLID-POLY",svgDoc,id,style_no,buyer_no,created_at);
 						break;
 
 
 						case "Solid Carton Stickers":
 							$(details['solidcartonstickerqty']).each(function(index,value){
+								svgDoc.getElementById("po").innerHTML = details.po;
 								svgDoc.getElementById("parcelcode").innerHTML = value.uvc_tco
 								svgDoc.getElementById("size").innerHTML = value.size
 								svgDoc.getElementById("theme").innerHTML = details.theme
@@ -1686,15 +1712,28 @@ function genarateArtworkOrchestraJC(data, name,style_no,buyer_no,id,order_type,c
 
 								if(details.height!=null)
 								{
-									var num = 600 * 395 * details.height
+									var num = 600 * details.width * details.height
 									var val = num / (1000 * 1000 * 1000)
 									svgDoc.getElementById("height").innerHTML = details.height
-									svgDoc.getElementById("volume").innerHTML = val
+									svgDoc.getElementById("volume").innerHTML = val.toFixed(3)
+								}
+								else{
+									svgDoc.getElementById("volume").innerHTML = ''
+									svgDoc.getElementById("height").innerHTML =""
+								}
+								
+								if(details.width != null )
+								{
+									svgDoc.getElementById("width").innerHTML = details.width
 								}
 								else{
 									svgDoc.getElementById("volume").innerHTML = ''
 								}
-		
+								if(value.size == "TAILLE UNIQUE")
+								{
+									svgDoc.getElementById("size").innerHTML = '<tspan xmlns="http://www.w3.org/2000/svg" dx="-12" dy="-5" text-anchor="start">TAILLE </tspan><tspan xmlns="http://www.w3.org/2000/svg" dx="-14" dy="9" text-anchor="middle">UNIQUE</tspan>';
+								}
+								svgDoc.getElementById("color").innerHTML = details.color_code
 								jsbarcodesolidcartonA(value.barcode, 'barcode1', svgDoc)
 								jsbarcodesolidcartonB(value.barcode, 'barcode2', svgDoc)
 								var s = new XMLSerializer();
@@ -1703,7 +1742,7 @@ function genarateArtworkOrchestraJC(data, name,style_no,buyer_no,id,order_type,c
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupArrOrchestraJC(svg_fin, "SOLID-CARTON",svgDoc);
+							PopupArrOrchestraJC(svg_fin, "SOLID-CARTON",svgDoc,id,style_no,buyer_no,created_at);
 						break;
 						default:
 						// code block
@@ -1712,7 +1751,7 @@ function genarateArtworkOrchestraJC(data, name,style_no,buyer_no,id,order_type,c
 			});
 }
 
-function PopupWashJC(data,data_back,data_middle,svgDoc1,pid) {
+function PopupWashJC(data,data_back,data_middle,svgDoc1,pid,name,id,style_no,buyer_no,created_at) {
 
 	var s = new XMLSerializer();
 	// var d = data;
@@ -1731,7 +1770,7 @@ function PopupWashJC(data,data_back,data_middle,svgDoc1,pid) {
     var success = false;
     var url = "";
 
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
 
     $.ajax({
 
@@ -1743,12 +1782,17 @@ function PopupWashJC(data,data_back,data_middle,svgDoc1,pid) {
             svg_back: svg_back,
             svg_middle: svg_middle,
             parentId : pid,
+			name:name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
         },
         async: false,
         success: function (data) {
 			svgDoc1.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -21 125.454) rotate(270)');
             success = true;
-            url = data;
+            url = data.file_path;;
         },
         error: function (data) {
 
@@ -1817,7 +1861,7 @@ function jsbarcodewashJC(code, id, svgDoc) {
 
     svgDoc.getElementById(id).innerHTML = svg_xml;
 }
-function PopupHangJC(svgRoot, svgRoot1,svgDoc,svgDoc1,disney) {
+function PopupHangJC(svgRoot, svgRoot1,svgDoc,svgDoc1,disney,name,id,style_no,buyer_no,created_at) {
 //	var s = new XMLSerializer();
 //	var d = svgRoot;
 //	var str = s.serializeToString(d);
@@ -1830,20 +1874,25 @@ function PopupHangJC(svgRoot, svgRoot1,svgDoc,svgDoc1,disney) {
 
 	var success = false;
 	var url = "";
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/print-hang-pdf",
 		type: "post",
 		data: {
 			_token: csrf_token,
 			svg: svgRoot,
-			svgRoot: svgRoot1
+			name:name,
+			svgRoot: svgRoot1,
+            id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
 		},
 		async: false,
 		success: function (data) {
 			
 			success = true;
-			url = data;
+			url = data.file_path;
 		},
 		error: function (data) {
 
@@ -1854,7 +1903,7 @@ function PopupHangJC(svgRoot, svgRoot1,svgDoc,svgDoc1,disney) {
 	}
 }
 
-function PopupOrchestraJC(data,name) {
+function PopupOrchestraJC(data,name,id,style_no,buyer_no,created_at) {
 	
 	var s = new XMLSerializer();
 	var d = data;
@@ -1863,20 +1912,24 @@ function PopupOrchestraJC(data,name) {
 	var success = false;
 	var url = "";
 	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/orchestra/print-pdf",
 		type: "post",
 		data: {
 			_token: csrf_token,
 			svg: svg,
-			name:name
+			name:name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
 		},
 		async: false,
 		success: function (data) {
 			//window.location.href=data;
 			success = true;
-			url = data;
+			url = data.file_path;
 		},
 		error: function (data) {
 
@@ -1889,7 +1942,7 @@ function PopupOrchestraJC(data,name) {
 
 
 
-function PopupArrOrchestraJC(data,name,svgDoc) {
+function PopupArrOrchestraJC(data,name,svgDoc,id,style_no,buyer_no,created_at) {
 	
 //	var s = new XMLSerializer();
 //	var d = data;
@@ -1898,20 +1951,24 @@ function PopupArrOrchestraJC(data,name,svgDoc) {
 	var success = false;
 //	var url = "";
 	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
-		url: base_url + "/admin/order-management/print-pdf-arr",
+		url: base_url + "/erp/job-manager/orchestra/print-pdf-arr",
 		type: "post",
 		data: {
 			_token: csrf_token,
 			svg: data,
-			name: name
+			name: name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
 		},
 		async: false,
 		success: function (data) {
 			//window.location.href=data;
 			success = true;
-			url = data;
+			url = data.file_path;
 		},
 		error: function (data) {
 
@@ -1924,7 +1981,7 @@ function PopupArrOrchestraJC(data,name,svgDoc) {
 
 
 
-function PopupTableOrchestraJC(data,name,size,qty) {
+function PopupTableOrchestraJC(data,name,size,qty,sizebrk,id,style_no,buyer_no,created_at) {
 	var s = new XMLSerializer();
 	var d = data;
 	var str = s.serializeToString(d);d
@@ -1944,8 +2001,8 @@ function PopupTableOrchestraJC(data,name,size,qty) {
 
 	var sizefin = size.join(',')
 	var qtyfin = qty.join(',')
-
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	var sizebrkfin = sizebrk.join(',')
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/orchestra/print-pdf-table",
 
@@ -1955,12 +2012,17 @@ function PopupTableOrchestraJC(data,name,size,qty) {
 			svg: svg,
 			size: sizefin,
 			qty: qtyfin,
-			name:name
+			sizebrk: sizebrkfin,
+			name:name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
 		},
 		async: false,
 		success: function (data) {
 			success = true;
-			url = data;
+			url = data.file_path;
 		},
 		error: function (data) {
 
@@ -1973,26 +2035,30 @@ function PopupTableOrchestraJC(data,name,size,qty) {
 
 
 
-function PopupOrchestrasmallJC(data,name,svgDoc) {
+function PopupOrchestrasmallJC(data,name,svgDoc,id,style_no,buyer_no,created_at) {
 //	var s = new XMLSerializer();
 //	var d = data;
 //	var str = s.serializeToString(d);
 //	var svg = encodeURI(str)
 	var success = false;
 //	var url = "";
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/orchestra/print-pdf-small",
 		type: "post",
 		data: {
 			_token: csrf_token,
 			svg: data,
-			name: name
+			name: name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
 		},
 		async: false,
 		success: function (data) {
 			success = true;
-			url = data;
+			url = data.file_path;
 		},
 		error: function (data) {
 
@@ -2053,7 +2119,15 @@ function jsbarcode_hangJC(code, id, svgDoc) {
 	//remove temporary canvas
 	canvasTmp.remove();
 
-	svgDoc.getElementById(id).innerHTML = svg_xml;
+	var allGs = document.getElementsByTagName('g');
+	var firstG = allGs[0];
+	var firstChild = firstG.childNodes[0];
+	
+	firstChild.setAttribute("x","20")
+	
+	var xchil = document.getElementById('svgdiv')
+
+	svgDoc.getElementById(id).innerHTML = xchil.innerHTML;
 }
 /**
  * This Function is used to invoke Hang Tag JSBarcode.
@@ -2110,7 +2184,15 @@ function jsbarcode_hang_disneyJC(code, id, svgDoc) {
 	//remove temporary canvas
 	canvasTmp.remove();
 
-	svgDoc.getElementById(id).innerHTML = svg_xml;
+	var allGs = document.getElementsByTagName('g');
+	var firstG = allGs[0];
+	var firstChild = firstG.childNodes[0];
+	
+	firstChild.setAttribute("x","20")
+	
+	var xchil = document.getElementById('svgdiv')
+
+	svgDoc.getElementById(id).innerHTML = xchil.innerHTML;
 }
 function oswordWrapJC(str, maxWidth) {
     var newLineStr = ""; done = false; res = '';

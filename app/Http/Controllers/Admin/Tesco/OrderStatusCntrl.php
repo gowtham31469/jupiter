@@ -14,7 +14,6 @@ use App\ProfomaInvoiceItemDetails;
 use Response;
 use View;
 use DB;
-use Excel;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Config;
@@ -156,11 +155,11 @@ class OrderStatusCntrl extends Controller
             $class_obj = new ERPOrderStatusCheck();
             $erp_order_details = $class_obj->ERPStatus($data_array);
             
-            if(sizeof($erp_order_details) > 0 && $erp_order_details[0] != null)
+            if($erp_order_details && $erp_order_details[0] != null)
             {
-                if($erp_order_details{0}->status_name != 'Hold For JC Queue' &&  $erp_order_details{0}->status_name != 'Moved To ERP' )
+                if($erp_order_details[0]->status_name != 'Hold For JC Queue' &&  $erp_order_details[0]->status_name != 'Moved To ERP' )
                 {
-                    return response()->json(['error'=> false,'message' =>'Order status is '.$erp_order_details{0}->status_name. '. PO number edit is not allowed.'],403);
+                    return response()->json(['error'=> false,'message' =>'Order status is '.$erp_order_details[0]->status_name. '. PO number edit is not allowed.'],403);
                 }
                 
             }
@@ -254,11 +253,11 @@ class OrderStatusCntrl extends Controller
             $class_obj = new ERPOrderStatusCheck();
             $erp_order_details = $class_obj->ERPStatus($data_array);
 
-            if(sizeof($erp_order_details) > 0 && $erp_order_details[0] != null)
+            if($erp_order_details && $erp_order_details[0] != null)
             {
-                if($erp_order_details{0}->status_name != 'Hold For JC Queue' &&  $erp_order_details{0}->status_name != 'Moved To ERP' )
+                if($erp_order_details[0]->status_name != 'Hold For JC Queue' &&  $erp_order_details[0]->status_name != 'Moved To ERP' )
                 {
-                    return response()->json(['error'=> false,'message' =>'Order status is '.$erp_order_details{0}->status_name. '. PO file upload is not allowed.'],403);
+                    return response()->json(['error'=> false,'message' =>'Order status is '.$erp_order_details[0]->status_name. '. PO file upload is not allowed.'],403);
                 }
                 
             }
@@ -364,7 +363,7 @@ class OrderStatusCntrl extends Controller
                 {
                     $style_no = $data['bank_details']->uk_style_ref;
                 }
-                if ($data['item_details'][0]->order_flag=="reOrder") {
+                if ($data['item_details'][0]->order_flag=="reOrder" || $data['item_details'][0]->order_flag=="repeatOrder") {
                     $rep_order_id = str_replace(' ', '', $data['item_details'][0]->template_name)."_".$row_id;
                 }
                 else{

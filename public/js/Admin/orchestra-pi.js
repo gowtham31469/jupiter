@@ -9,7 +9,7 @@
 
 const genarateOrchetraPI = (id, table_name, uvc, pi_status, buyer_po) => 
 {
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     var buyer_id = localStorage.getItem("buyer_id");
     var buyer_po_no = buyer_po === '-'?null:buyer_po
     $.ajax({
@@ -195,7 +195,7 @@ const genarateOrchetraPI = (id, table_name, uvc, pi_status, buyer_po) =>
  */
 function orchestraApprovePI(template_id,row_id,table_name,amount)
 {
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     var buyer_id = localStorage.getItem("buyer_id");
     var amntText = $('#bilamnt').text();
 
@@ -255,7 +255,7 @@ function orchestraApprovePI(template_id,row_id,table_name,amount)
  */
 function orchestraRejectPI(id,table_name)
 {
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     $.ajax({
         url: base_url + "/admin/orchestra/reject-orchestra-pi",
         type: "Post",
@@ -309,7 +309,7 @@ function orchestraRejectPI(id,table_name)
  */
 function orchestradownloadPi(template_id,id,table_name){
 
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     var buyer_id = localStorage.getItem("buyer_id");
     var amntText = $('#bilamnt').text();
     $.ajax({

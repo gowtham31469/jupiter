@@ -1,7 +1,7 @@
 const genarateTescoPI = (id,tableName,pi_status,style_no,template_id,buyer_po,template_name,order_flag) =>
 {
     $('#uvc_number').text(style_no)
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     var buyer_id = localStorage.getItem("buyer_id");
     var tr = "";
     $.ajax({
@@ -197,7 +197,7 @@ const genarateTescoPI = (id,tableName,pi_status,style_no,template_id,buyer_po,te
  */
 function tescoApprovePI(template_id,id,table_name,billamnt)
 {
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     var buyer_id = localStorage.getItem("buyer_id");
     $.ajax({
         url: base_url + "/customer/tesco/approve-tesco-pi",
@@ -255,7 +255,7 @@ function tescoApprovePI(template_id,id,table_name,billamnt)
  */
 function tescoRejectPI(id,table_name)
 {
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     var buyer_id = localStorage.getItem("buyer_id");
     $.ajax({
         url: base_url + "/customer/tesco/reject-tesco-pi",
@@ -279,7 +279,8 @@ function tescoRejectPI(id,table_name)
                $('.snackbar_span').html('PI Rejected!');
                $('#profoma-invoice').modal("hide")
                $('#'+table_name+'_'+id+' .pi_class').removeClass().addClass('pi_class label label-PIRejected').text('PI Rejected');
-               showSnackbar();             
+               showSnackbar();    
+               location.reload();         
             },
             400: function()
             {
@@ -416,7 +417,7 @@ function RsPaise(n) {
 
 function downloadPi(template_id,id,table_name){
 
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
     var buyer_id = localStorage.getItem("buyer_id");
     var amntText = $('#bilamnt').text();
     $.ajax({

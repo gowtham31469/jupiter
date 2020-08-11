@@ -6,7 +6,7 @@
 function reOrderTesco() {
 	//$('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
 	var buyer = localStorage.getItem("buyer");
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/customer/tesco/reorder",
 		type: "Post",
@@ -116,7 +116,7 @@ function reordertescoartworks() {
 	$('.how_it_works_reorder').css('margin-top', '0px')
 	var uvc = $('#uvc_number').val();
 	var buyer = localStorage.getItem("buyer");
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	if (uvc != "Select Style Number") {
 		$('.how_it_works_reorder').html("");
 		$('.list_div_reorder').html('<ul class="list-group"></ul>');
@@ -182,7 +182,7 @@ function repeatordertescoartworks() {
 	$('.how_it_works_reorder').css('margin-top', '0px')
 	var uvc = $('#style_number').val();
 	var buyer = localStorage.getItem("buyer");
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	if (uvc != "Select Style Number") {
 		$('.how_it_works_reorder').html("");
 		$('.list_div_reorder').html('<ul class="list-group"></ul>');
@@ -248,7 +248,7 @@ function repeatordertescoartworks() {
 
 function extraQuantityTesco(type, id, name, zone, po_number, liid) {
 	var buyer = localStorage.getItem("buyer");
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/customer/tesco/extra-quantity",
 		type: "Post",
@@ -1017,7 +1017,7 @@ function setTescoReorder(type, id, liid) {
 	if (item == "Repeat Order") {
 		var uvc = $('#style_number').val();
 		var buyer = localStorage.getItem("buyer");
-		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+		
 		var po_number = $('.purchase_order_number').val();
 		var uk_style = $('#uk_style').val()
 		var ce_style = $('#ce_style').val()
@@ -1092,7 +1092,7 @@ function setTescoReorder(type, id, liid) {
 
 	} else {
 		var buyer = localStorage.getItem("buyer");
-		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+		
 		$.ajax({
 			url: base_url + "/customer/tesco/set-tesco-reorder",
 			type: "Post",

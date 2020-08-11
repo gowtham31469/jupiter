@@ -3,7 +3,6 @@
 */
 function loadTemplatePreview() {
     var template_id = $('#artwork_list').find(':selected').data('tempid');
-    var csrf_token  = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: base_url + "/admin/tesco/template-management/template-view",
         type: "Post",

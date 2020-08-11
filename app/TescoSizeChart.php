@@ -13,6 +13,8 @@ class TescoSizeChart extends Model
       */
       protected $table = 'tesco_size_chart';
 
+      protected $primaryKey = 'id';
+
      /**
       * The attributes that are mass assignable.
       *

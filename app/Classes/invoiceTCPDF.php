@@ -1,13 +1,5 @@
 <?php
 namespace App\Classes;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Response;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Validator;
-use DB;
-use Auth;
-use PDF;
 
 class invoiceTCPDF extends \TCPDF
 {
@@ -66,7 +58,6 @@ class invoiceTCPDF extends \TCPDF
         $this->Line(8,8,8, $this->getPageHeight()-8);
         // Title
         
-        // $this->writeHTML("<hr>", false, false, true, false, '');
     }
 
       /**
@@ -79,7 +70,6 @@ class invoiceTCPDF extends \TCPDF
         $this->SetX(8);
         // Set font
         $this->SetFont('helvetica', '', 8);
-        // $this->writeHTML("<hr>", false, false, true, false, '');
         
         $footer = ' <table>
                     <tr class="blank_row">

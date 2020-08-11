@@ -432,7 +432,7 @@ transform: scale(1);
 			$('.selected-buyer').text('Selected Company : ' + $('.buyers-card.active-buyer.active').data("name"))
 			$('#buyerSelectionModalCenter').modal('hide');
 
-			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			
 			$.ajax({
 				url: base_url + "/erp/po-manager/set_company_session",
 				type: "Post",
@@ -730,7 +730,7 @@ function getErpOrderList()
 										<td>`+partial_status +`</td>
 										<td><span class="label `+status+`">`+item.status_name+`</span></td>
 										<td>`+item.created_date+`</td>
-										<td><object style="opacity:0;width:0px;height:0px" id="orchestra_svg_modal`+i+`" class="center-block tesco_svg`+i+`" data="`+item.template_file+`" type="image/svg+xml"></object><a class="print_download" href="javascript:void(0)" onclick="DownloadArtwork('`+item.reference_name+`','`+i+`','`+item.template_file+`','`+item.style_no+`','`+item.buyer_po_number+`','`+item.erp_order_id+`','`+item.order_type+`','`+item.created_at+`','print_orchestra','stickers','`+item.template_id+`','')" ><i class="fa fa-edit"  title="Download Print" data-original-title="Download Print"></i></a>
+										<td><object style="opacity:0;width:0px;height:0px" id="orchestra_svg_modal`+i+`" class="center-block tesco_svg`+i+`" data="`+item.template_file+`" type="image/svg+xml"></object><a class="print_download" href="javascript:void(0)" onclick="DownloadArtwork('`+item.reference_name+`','`+i+`','`+item.template_file+`','`+item.style_no+`','`+item.buyer_po_number+`','`+item.erp_order_id+`','`+item.order_type+`','`+item.created_at+`','print_orchestra','stickers','`+item.template_id+`','')" ><i class="fa fa-edit"  title="Download Print" data-original-title="Download Print"></i></a><a style="margin-left: 10px;" class="proof_download" href="javascript:void(0)" onclick="DownloadArtwork('`+item.reference_name+`','`+i+`','`+item.template_file+`','`+item.style_no+`','`+item.buyer_po_number+`','`+item.erp_order_id+`','`+item.order_type+`','`+item.created_at+`','print_orchestra','stickers_proof','`+item.template_id+`','')" ><i class="fa fa-edit"  title="Download Proof" data-original-title="Download Proof"></i></a>
 										</td>
 										</tr>`;
 								}

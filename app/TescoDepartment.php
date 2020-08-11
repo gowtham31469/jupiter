@@ -13,6 +13,8 @@ class TescoDepartment extends Model
       */
       protected $table = 'tesco_department';
 
+      protected $primaryKey = 'id';
+
      /**
       * The attributes that are mass assignable.
       *

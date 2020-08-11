@@ -265,6 +265,15 @@ function printHangDiv(front,back,disney,name,style_no,buyer_no,id,order_type,cre
 								svgDoc1.getElementById("uvc_tco").innerHTML = uvc_tco;
 								
 								svgDoc.getElementById("size").innerHTML = size[0];
+								if(size[0].length == 1)
+								{
+									svgDoc.getElementById("size").setAttribute('transform', 'matrix(1.0074 0 0 1 21.0324 291.266)');
+									
+								}
+								else
+								{
+									svgDoc.getElementById("size").setAttribute('transform', 'matrix(1.0074 0 0 1 16.0324 291.266)');
+								}
 								svgDoc.getElementById("size_french").innerHTML = size[1];
 								svgDoc.getElementById("size_english").innerHTML = size1;
 							}
@@ -372,7 +381,7 @@ function printHangDiv(front,back,disney,name,style_no,buyer_no,id,order_type,cre
 						var svg_fin_front = svgarr_front.join(',_');
 						//PopupWash(svg_fin,svgRoot1_back,svgRoot1_middle, dataid,svgDoc1);
 						
-						PopupHang(svg_fin_front, svg_fin,svgDoc,svgDoc1,disney);
+						PopupHang(svg_fin_front, svg_fin,svgDoc,svgDoc1,disney,name,id,style_no,buyer_no,created_at);
 					}
 				},
 			});
@@ -467,7 +476,7 @@ function printWashDiv(data,data_back,data_middle,name,style_no,buyer_no,id,order
 						svgDoc1.getElementById("size2").innerHTML = size_txt.replace(" ", "").toLowerCase() + "/" + size1;
 						svgDoc1.getElementById("parcel_code1").innerHTML = uvc_tco;
 						svgDoc1.getElementById("parcel_code2").innerHTML = uvc_tco;
-						svgDoc1.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -38 135) rotate(270)');
+						svgDoc1.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -40 135) rotate(270)');
 						jsbarcodewash(code, 'barcode', svgDoc1)
 
 						svgDoc1.getElementById("cofreet_symbol1").setAttribute('xlink:href',res.cofreet_symbol1);
@@ -505,7 +514,7 @@ function printWashDiv(data,data_back,data_middle,name,style_no,buyer_no,id,order
 						// var svg_fin_front = svgarr_front.join(',_');
 						
 						// PopupHang(svg_fin, svg_fin,svgDoc,svgDoc1,disney);
-						PopupWash(svg_fin,svgRoot1_back,svgRoot1_middle,svgDoc1,parentId);
+						PopupWash(svg_fin,svgRoot1_back,svgRoot1_middle,svgDoc1,parentId,name,id,style_no,buyer_no,created_at);
 					}
 				},
 			});
@@ -518,7 +527,7 @@ function printWashDiv(data,data_back,data_middle,name,style_no,buyer_no,id,order
 }
 
 
-function PopupWash(data,data_back,data_middle,svgDoc1,pid) {
+function PopupWash(data,data_back,data_middle,svgDoc1,pid,name,id,style_no,buyer_no,created_at) {
 
 	var s = new XMLSerializer();
 	// var d = data;
@@ -537,7 +546,7 @@ function PopupWash(data,data_back,data_middle,svgDoc1,pid) {
     var success = false;
     var url = "";
 
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
 
     $.ajax({
 
@@ -549,12 +558,17 @@ function PopupWash(data,data_back,data_middle,svgDoc1,pid) {
             svg_back: svg_back,
             svg_middle: svg_middle,
             parentId : pid,
+			name:name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
         },
         async: false,
         success: function (data) {
 			svgDoc1.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -21 125.454) rotate(270)');
             success = true;
-            url = data;
+            url = data.file_path;
         },
         error: function (data) {
 
@@ -623,7 +637,7 @@ function jsbarcodewash(code, id, svgDoc) {
 
     svgDoc.getElementById(id).innerHTML = svg_xml;
 }
-function PopupHang(svgRoot, svgRoot1,svgDoc,svgDoc1,disney) {
+function PopupHang(svgRoot, svgRoot1,svgDoc,svgDoc1,disney,name,id,style_no,buyer_no,created_at) {
 //	var s = new XMLSerializer();
 //	var d = svgRoot;
 //	var str = s.serializeToString(d);
@@ -636,20 +650,24 @@ function PopupHang(svgRoot, svgRoot1,svgDoc,svgDoc1,disney) {
 
 	var success = false;
 	var url = "";
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/print-hang-pdf",
 		type: "post",
 		data: {
 			_token: csrf_token,
 			svg: svgRoot,
-			svgRoot: svgRoot1
+			svgRoot: svgRoot1,
+            id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
 		},
 		async: false,
 		success: function (data) {
 			
 			success = true;
-			url = data;
+			url = data.file_path;
 		},
 		error: function (data) {
 
@@ -678,12 +696,16 @@ function DownloadArtwork(modal,i,template_file,style_no,buyer_no,id,order_type,c
    			printWashDiv('washcare_front'+ i,'washcare_back'+ i,'washcare_middle'+i,modal,style_no,buyer_no,id,order_type,created_at,status,"orchestra")
 
 	  	}
-	  	else
+	  	else if(type == "stickers")
 	  	{
 
 	   		genarateArtworkOrchestra("orchestra_svg_modal" + i, modal,style_no,buyer_no,id,order_type,created_at,status,"orchestra");
 	  
 	  	}
+		else if(type == "stickers_proof")
+		{
+			genarateArtworkOrchestraProof("orchestra_svg_modal" + i, modal,style_no,buyer_no,id,order_type,created_at,status,"orchestra");
+		}
 		    break;
 
 	  case "print":
@@ -747,7 +769,8 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 
 						case "Std Carton Stickers":
 							$(details['stdcartonstickerqty']).each(function(index,value){
-								svgDoc.getElementById("parcelcode").innerHTML = value.uvc_tco
+								svgDoc.getElementById("po").innerHTML = details.po;
+								svgDoc.getElementById("parcelcode").innerHTML = details.parcelCode
 								// svgDoc.getElementById("size").innerHTML = value.size
 								svgDoc.getElementById("theme").innerHTML = details.theme
 								
@@ -759,15 +782,24 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 
 								if(details.height != null )
 								{
-									var num = 600 * 395 * details.height
+									var num = 600 * details.width * details.height
 									var val = num / (1000 * 1000 * 1000)
 									svgDoc.getElementById("height").innerHTML = details.height
-									svgDoc.getElementById("volume").innerHTML = val
+									svgDoc.getElementById("volume").innerHTML = val.toFixed(3)
+								}
+								else{
+									svgDoc.getElementById("volume").innerHTML = ''
+									svgDoc.getElementById("height").innerHTML =""
+								}
+								
+								if(details.width != null )
+								{
+									svgDoc.getElementById("width").innerHTML = details.width
 								}
 								else{
 									svgDoc.getElementById("volume").innerHTML = ''
 								}
-		
+								svgDoc.getElementById("color").innerHTML = details.color_code
 								jsbarcodesolidcartonA(value.barcode, 'barcode1', svgDoc)
 								jsbarcodesolidcartonB(value.barcode, 'barcode2', svgDoc)
 								// var s = new XMLSerializer();
@@ -777,7 +809,7 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 							})
 							// var svg_fin = svgarr.join(',_');
 							 
-							  PopupOrchestra(svgDoc,"STD-CARTON"); 
+							  PopupOrchestra(svgDoc,"STD-CARTON",id,style_no,buyer_no,created_at); 
 							
 							
 
@@ -788,7 +820,7 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 							$(details['stdpolystickerqty']).each(function(index,value){
 								console.log(value)
 								svgDoc.getElementById("round").style.fill = details.age_group
-								svgDoc.getElementById("parcel_code").innerHTML = value.uvc_tco
+								svgDoc.getElementById("parcel_code").innerHTML = details.parcelCode
 								svgDoc.getElementById("theme").innerHTML = details.theme
 								// svgDoc.getElementById("size").innerHTML = value.size
 								// svgDoc.getElementById("color").innerHTML = details.color_code
@@ -799,7 +831,7 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupTableOrchestra(svgDoc, "STD-POLY",details.sizeArr,details.qtyArr);
+							PopupTableOrchestra(svgDoc, "STD-POLY",details.sizeArr,details.qtyArr,details.sizBrkAr,id,style_no,buyer_no,created_at);
 						break;
 
 
@@ -809,6 +841,12 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 								svgDoc.getElementById("round").style.fill = details.age_group
 								svgDoc.getElementById("parcel_code").innerHTML = value.uvc_tco
 								svgDoc.getElementById("size").innerHTML = value.size
+								if(value.size == "TAILLE UNIQUE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "15px"
+									svgDoc.getElementById("size").setAttribute('transform','matrix(1 0 0 1 168.625 28.7874)');
+									svgDoc.getElementById("color").setAttribute('transform','matrix(1 0 0 1 169.625 45.3324)');
+								}
 								svgDoc.getElementById("color").innerHTML = details.color_code
 								jsbarcodesolidpoly_orchestra(value.barcode, 'barcode', svgDoc)
 								var s = new XMLSerializer();
@@ -817,12 +855,13 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupOrchestrasmall(svg_fin, "SOLID-POLY",svgDoc);
+							PopupOrchestrasmall(svg_fin, "SOLID-POLY",svgDoc,id,style_no,buyer_no,created_at);
 						break;
 
 
 						case "Solid Carton Stickers":
 							$(details['solidcartonstickerqty']).each(function(index,value){
+								svgDoc.getElementById("po").innerHTML = details.po;
 								svgDoc.getElementById("parcelcode").innerHTML = value.uvc_tco
 								svgDoc.getElementById("size").innerHTML = value.size
 								svgDoc.getElementById("theme").innerHTML = details.theme
@@ -835,15 +874,28 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 
 								if(details.height!=null)
 								{
-									var num = 600 * 395 * details.height
+									var num = 600 * details.width * details.height
 									var val = num / (1000 * 1000 * 1000)
 									svgDoc.getElementById("height").innerHTML = details.height
-									svgDoc.getElementById("volume").innerHTML = val
+									svgDoc.getElementById("volume").innerHTML = val.toFixed(3)
+								}
+								else{
+									svgDoc.getElementById("volume").innerHTML = ''
+									svgDoc.getElementById("height").innerHTML =""
+								}
+								
+								if(details.width != null )
+								{
+									svgDoc.getElementById("width").innerHTML = details.width
 								}
 								else{
 									svgDoc.getElementById("volume").innerHTML = ''
 								}
-		
+								if(value.size == "TAILLE UNIQUE")
+								{
+									svgDoc.getElementById("size").innerHTML = '<tspan xmlns="http://www.w3.org/2000/svg" dx="-12" dy="-5" text-anchor="start">TAILLE </tspan><tspan xmlns="http://www.w3.org/2000/svg" dx="-14" dy="9" text-anchor="middle">UNIQUE</tspan>';
+								}
+								svgDoc.getElementById("color").innerHTML = details.color_code
 								jsbarcodesolidcartonA(value.barcode, 'barcode1', svgDoc)
 								jsbarcodesolidcartonB(value.barcode, 'barcode2', svgDoc)
 								var s = new XMLSerializer();
@@ -852,7 +904,204 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupArrOrchestra(svg_fin, "SOLID-CARTON",svgDoc);
+							PopupArrOrchestra(svg_fin, "SOLID-CARTON",svgDoc,id,style_no,buyer_no,created_at);
+						break;
+						default:
+						// code block
+					}
+				},
+			});
+}
+function genarateArtworkOrchestraProof(data, name,style_no,buyer_no,id,order_type,created_at,status,buyer)
+{
+	
+	var a = document.getElementById(data);
+	var svgDoc = a.contentDocument;
+	// var name2=name;
+	var zone = localStorage.getItem("zone");
+	var svgarr = [];
+	var ajax_count = 0;
+	var name_count=0;
+	// var b = " ";
+	// var position = 5;
+// console.log(name)
+		// var ref_name = [name2.slice(0, position), b, name2.slice(position)].join('').trim();
+		$.ajax({
+				url: base_url + "/erp/job-manager/get-order-details",
+				type: "Post",
+				dataType: "json",
+				data: {
+					_token: csrf_token,
+					ref_name: name,
+					style_no: style_no,
+					buyer_no: buyer_no,
+					id: id,
+					created_at: created_at,
+					order_type:order_type,
+					buyer:buyer,
+				},
+				beforeSend: function() {
+
+				},
+				success: function(data) {
+				
+					var svgRoot = svgDoc.documentElement;
+					var zone= localStorage.getItem("zone");
+					localStorage.setItem("zone", zone);
+
+					details = data['order_details'][0];
+					// console.log(details)
+					switch(details.reference_name) 
+					{
+
+
+						// case "Orchestra WashCare":
+						
+						// 	printWashDiv('washcare_svg_front1','washcare_svg_back1','washcare_svg_middle1',details['washcarelabel_qty']);
+
+						// break
+
+						case "Std Carton Stickers":
+							$(details['stdcartonstickerqty']).each(function(index,value){
+								svgDoc.getElementById("po").innerHTML = details.po;
+								svgDoc.getElementById("parcelcode").innerHTML = details.parcelCode
+								// svgDoc.getElementById("size").innerHTML = value.size
+								svgDoc.getElementById("theme").innerHTML = details.theme
+								
+
+								// if(details.age_group!=null)
+								// {
+								// 	svgDoc.getElementById("color").innerHTML = details.age_group
+								// }
+
+								if(details.height != null )
+								{
+									var num = 600 * details.width * details.height
+									var val = num / (1000 * 1000 * 1000)
+									svgDoc.getElementById("height").innerHTML = details.height
+									svgDoc.getElementById("volume").innerHTML = val.toFixed(3)
+								}
+								else{
+									svgDoc.getElementById("volume").innerHTML = ''
+									svgDoc.getElementById("height").innerHTML =""
+								}
+								
+								if(details.width != null )
+								{
+									svgDoc.getElementById("width").innerHTML = details.width
+								}
+								else{
+									svgDoc.getElementById("volume").innerHTML = ''
+								}
+								svgDoc.getElementById("standardcolor").style.fill = "#FFFFFF"
+								svgDoc.getElementById("color").innerHTML = details.color_code
+								jsbarcodesolidcartonA(value.barcode, 'barcode1', svgDoc)
+								jsbarcodesolidcartonB(value.barcode, 'barcode2', svgDoc)
+								// var s = new XMLSerializer();
+								// var d = svgRoot;
+								// var str = s.serializeToString(d);
+								// svgarr.push(str)
+							})
+							// var svg_fin = svgarr.join(',_');
+							 
+							  ProofPopupOrchestra(svgDoc,"STD-CARTON",id,style_no,buyer_no,created_at); 
+							
+							
+
+						break;
+
+
+						case "Std Poly Stickers":
+							$(details['stdpolystickerqty']).each(function(index,value){
+								console.log(value)
+								svgDoc.getElementById("round").style.fill = details.age_group
+								svgDoc.getElementById("parcel_code").innerHTML = details.parcelCode
+								svgDoc.getElementById("theme").innerHTML = details.theme
+								svgDoc.getElementById("round").style.fill = "#FFFFFF"
+								// svgDoc.getElementById("size").innerHTML = value.size
+								// svgDoc.getElementById("color").innerHTML = details.color_code
+								jsbarcodesolidpoly_orchestra(value.barcode, 'barcode', svgDoc)
+								var s = new XMLSerializer();
+								var d = svgRoot;
+								var str = s.serializeToString(d);
+								svgarr.push(str)
+							})
+							var svg_fin = svgarr.join(',_');
+							ProofPopupTableOrchestra(svgDoc, "STD-POLY",details.sizeArr,details.qtyArr,details.sizBrkAr,id,style_no,buyer_no,created_at);
+						break;
+
+
+
+						case "Solid Polybag Stickers":
+							$(details['solidpolystickerqty']).each(function(index,value){
+								svgDoc.getElementById("round").style.fill = details.age_group
+								svgDoc.getElementById("parcel_code").innerHTML = value.uvc_tco
+								svgDoc.getElementById("size").innerHTML = value.size
+								svgDoc.getElementById("round").style.fill = "#FFFFFF"
+								if(value.size == "TAILLE UNIQUE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "15px"
+									svgDoc.getElementById("size").setAttribute('transform','matrix(1 0 0 1 168.625 28.7874)');
+									svgDoc.getElementById("color").setAttribute('transform','matrix(1 0 0 1 169.625 45.3324)');
+								}
+								svgDoc.getElementById("color").innerHTML = details.color_code
+								jsbarcodesolidpoly_orchestra(value.barcode, 'barcode', svgDoc)
+								var s = new XMLSerializer();
+								var d = svgRoot;
+								var str = s.serializeToString(d);
+								svgarr.push(str)
+							})
+							var svg_fin = svgarr.join(',_');
+							ProofPopupOrchestrasmall(svg_fin, "SOLID-POLY",svgDoc,id,style_no,buyer_no,created_at);
+						break;
+
+
+						case "Solid Carton Stickers":
+							$(details['solidcartonstickerqty']).each(function(index,value){
+								svgDoc.getElementById("po").innerHTML = details.po;
+								svgDoc.getElementById("parcelcode").innerHTML = value.uvc_tco
+								svgDoc.getElementById("size").innerHTML = value.size
+								svgDoc.getElementById("theme").innerHTML = details.theme
+								
+
+								if(details.age_group!=null)
+								{
+									svgDoc.getElementById("color").innerHTML = details.age_group
+								}
+
+								if(details.height!=null)
+								{
+									var num = 600 * details.width * details.height
+									var val = num / (1000 * 1000 * 1000)
+									svgDoc.getElementById("height").innerHTML = details.height
+									svgDoc.getElementById("volume").innerHTML = val.toFixed(3)
+								}
+								else{
+									svgDoc.getElementById("height").innerHTML =""
+									svgDoc.getElementById("volume").innerHTML = ''
+								}
+								
+								if(details.width != null )
+								{
+									svgDoc.getElementById("width").innerHTML = details.width
+								}
+								else{
+									svgDoc.getElementById("volume").innerHTML = ''
+								}
+								if(value.size == "TAILLE UNIQUE")
+								{
+									svgDoc.getElementById("size").innerHTML = '<tspan xmlns="http://www.w3.org/2000/svg" dx="-12" dy="-5" text-anchor="start">TAILLE </tspan><tspan xmlns="http://www.w3.org/2000/svg" dx="-14" dy="9" text-anchor="middle">UNIQUE</tspan>';
+								}
+								svgDoc.getElementById("color").innerHTML = details.color_code
+								jsbarcodesolidcartonA(value.barcode, 'barcode1', svgDoc)
+								jsbarcodesolidcartonB(value.barcode, 'barcode2', svgDoc)
+								var s = new XMLSerializer();
+								var d = svgRoot;
+								var str = s.serializeToString(d);
+								svgarr.push(str)
+							})
+							var svg_fin = svgarr.join(',_');
+							ProofPopupArrOrchestra(svg_fin, "SOLID-CARTON",svgDoc,id,style_no,buyer_no,created_at);
 						break;
 						default:
 						// code block
@@ -920,7 +1169,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 				jsbarcodetescotslean(barcode_change, 'barcode', svgDoc)
 				
 				
-				var csrf_token = $('meta[name="csrf-token"]').attr('content');
+				
 	
 				$.ajax({
 						url: base_url + "/erp/job-manager/generatebarcodetsl3",
@@ -957,7 +1206,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 				
 				//jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
 				
-				var csrf_token = $('meta[name="csrf-token"]').attr('content');
+				
 	
 				$.ajax({
 						url: base_url + "/erp/job-manager/generatebarcodetsl1",
@@ -1316,7 +1565,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 				}
 					//jsbarcodetescoean(barcode_change, 'barcode', svgDoc)
 				
-				var csrf_token = $('meta[name="csrf-token"]').attr('content');
+				
 	
 				$.ajax({
 						url: base_url + "/erp/job-manager/generatebarcodeeanbig",
@@ -1353,7 +1602,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 					var barcode_change = val.itf_barcode
 				}
 					//jsbarcodetesco(barcode_change, 'barcode', svgDoc)
-				var csrf_token = $('meta[name="csrf-token"]').attr('content');
+				
 	
 				$.ajax({
 						url: base_url + "/erp/job-manager/generatebarcodeitfbig",
@@ -1726,7 +1975,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 		var position = 3;
 		var ref_name = [name2.slice(0, position), b, name2.slice(position)].join('').trim();
 	
-		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+		
 			$.ajax({
 				url: base_url + "/erp/job-manager/get-order-details",
 				type: "Post",
@@ -1982,7 +2231,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 		var b = " ";
 		var position = 3;
 		var ref_name = [name2.slice(0, position), b, name2.slice(position)].join('').trim();
-		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+		
 			$.ajax({
 				url: base_url + "/erp/job-manager/get-order-details",
 				type: "Post",
@@ -2468,7 +2717,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 
 
 
-function PopupOrchestra(data,name) {
+function PopupOrchestra(data,name,id,style_no,buyer_no,created_at) {
 	
 	var s = new XMLSerializer();
 	var d = data;
@@ -2477,20 +2726,24 @@ function PopupOrchestra(data,name) {
 	var success = false;
 	var url = "";
 	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/orchestra/print-pdf",
 		type: "post",
 		data: {
 			_token: csrf_token,
 			svg: svg,
-			name:name
+			name:name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
 		},
 		async: false,
 		success: function (data) {
 			//window.location.href=data;
 			success = true;
-			url = data;
+			url = data.file_path;
 		},
 		error: function (data) {
 
@@ -2503,7 +2756,7 @@ function PopupOrchestra(data,name) {
 
 
 
-function PopupArrOrchestra(data,name,svgDoc) {
+function PopupArrOrchestra(data,name,svgDoc,id,style_no,buyer_no,created_at) {
 	
 //	var s = new XMLSerializer();
 //	var d = data;
@@ -2512,20 +2765,24 @@ function PopupArrOrchestra(data,name,svgDoc) {
 	var success = false;
 //	var url = "";
 	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
-		url: base_url + "/admin/order-management/print-pdf-arr",
+		url: base_url + "/erp/job-manager/orchestra/print-pdf-arr",
 		type: "post",
 		data: {
 			_token: csrf_token,
 			svg: data,
-			name: name
+			name: name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
 		},
 		async: false,
 		success: function (data) {
 			//window.location.href=data;
 			success = true;
-			url = data;
+			url = data.file_path;
 		},
 		error: function (data) {
 
@@ -2538,7 +2795,7 @@ function PopupArrOrchestra(data,name,svgDoc) {
 
 
 
-function PopupTableOrchestra(data,name,size,qty) {
+function PopupTableOrchestra(data,name,size,qty,sizebrk,id,style_no,buyer_no,created_at) {
 	var s = new XMLSerializer();
 	var d = data;
 	var str = s.serializeToString(d);d
@@ -2558,8 +2815,9 @@ function PopupTableOrchestra(data,name,size,qty) {
 
 	var sizefin = size.join(',')
 	var qtyfin = qty.join(',')
+	var sizebrkfin = sizebrk.join(',')
 
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/orchestra/print-pdf-table",
 
@@ -2569,12 +2827,17 @@ function PopupTableOrchestra(data,name,size,qty) {
 			svg: svg,
 			size: sizefin,
 			qty: qtyfin,
-			name:name
+			sizebrk: sizebrkfin,
+			name:name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
 		},
 		async: false,
 		success: function (data) {
 			success = true;
-			url = data;
+			url = data.file_path;
 		},
 		error: function (data) {
 
@@ -2587,26 +2850,198 @@ function PopupTableOrchestra(data,name,size,qty) {
 
 
 
-function PopupOrchestrasmall(data,name,svgDoc) {
+function PopupOrchestrasmall(data,name,svgDoc,id,style_no,buyer_no,created_at) {
 //	var s = new XMLSerializer();
 //	var d = data;
 //	var str = s.serializeToString(d);
 //	var svg = encodeURI(str)
 	var success = false;
 //	var url = "";
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/orchestra/print-pdf-small",
 		type: "post",
 		data: {
 			_token: csrf_token,
 			svg: data,
-			name: name
+			name: name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
 		},
 		async: false,
 		success: function (data) {
 			success = true;
-			url = data;
+			url = data.file_path;
+		},
+		error: function (data) {
+
+		},
+	})
+	if (success) { //AND THIS CHANGED
+		window.open(url)
+	}
+}
+
+
+function ProofPopupOrchestra(data,name,id,style_no,buyer_no,created_at) {
+	
+	var s = new XMLSerializer();
+	var d = data;
+	var str = s.serializeToString(d);
+	var svg = encodeURI(str)
+	var success = false;
+	var url = "";
+	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
+	
+	$.ajax({
+		url: base_url + "/erp/job-manager/orchestra/proof-pdf",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			svg: svg,
+			name:name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
+		},
+		async: false,
+		success: function (data) {
+			//window.location.href=data;
+			success = true;
+			url = data.file_path;
+		},
+		error: function (data) {
+
+		},
+	})
+	if (success) { //AND THIS CHANGED
+		window.open(url)
+	}
+}
+
+
+
+function ProofPopupArrOrchestra(data,name,svgDoc,id,style_no,buyer_no,created_at) {
+	
+//	var s = new XMLSerializer();
+//	var d = data;
+//	var str = s.serializeToString(d);
+//	var svg = encodeURI(str)
+	var success = false;
+//	var url = "";
+	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
+	
+	$.ajax({
+		url: base_url + "/erp/job-manager/orchestra/proof-pdf-arr",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			svg: data,
+			name: name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
+		},
+		async: false,
+		success: function (data) {
+			//window.location.href=data;
+			success = true;
+			url = data.file_path;
+		},
+		error: function (data) {
+
+		},
+	})
+	if (success) { //AND THIS CHANGED
+		window.open(url)
+	}
+}
+
+
+
+function ProofPopupTableOrchestra(data,name,size,qty,sizebrk,id,style_no,buyer_no,created_at) {
+	var s = new XMLSerializer();
+	var d = data;
+	var str = s.serializeToString(d);d
+	var svg = encodeURI(str)
+	var success = false;
+	var url = "";
+	// var size = [];
+	// var qty = [];
+	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
+
+	// $('#solidform tbody tr').each(function () {
+	// 	size.push($(this).find('.size').text());
+	// 	qty.push($(this).find('.qty').text());
+	// })
+	// size=['3 ANS','4 ANS','5 ANS','6 ANS','8 ANS'];
+	// qty=['3','4','5','6','8'];
+
+	var sizefin = size.join(',')
+	var qtyfin = qty.join(',')
+	var sizebrkfin = sizebrk.join(',')
+
+	
+	$.ajax({
+		url: base_url + "/erp/job-manager/orchestra/proof-pdf-table",
+
+		type: "post",
+		data: {
+			_token: csrf_token,
+			svg: svg,
+			size: sizefin,
+			qty: qtyfin,
+			size_break: sizebrkfin,
+			name:name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
+		},
+		async: false,
+		success: function (data) {
+			success = true;
+			url = data.file_path;
+		},
+		error: function (data) {
+
+		},
+	})
+	if (success) { //AND THIS CHANGED
+		window.open(url)
+	}
+}
+
+
+
+function ProofPopupOrchestrasmall(data,name,svgDoc,id,style_no,buyer_no,created_at) {
+//	var s = new XMLSerializer();
+//	var d = data;
+//	var str = s.serializeToString(d);
+//	var svg = encodeURI(str)
+	var success = false;
+//	var url = "";
+	
+	$.ajax({
+		url: base_url + "/erp/job-manager/orchestra/proof-pdf-small",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			svg: data,
+			name: name,
+			id : id,
+			style_no:style_no,
+			buyer_no:buyer_no,
+			created_at:created_at
+		},
+		async: false,
+		success: function (data) {
+			success = true;
+			url = data.file_path;
 		},
 		error: function (data) {
 
@@ -2654,7 +3089,7 @@ function PopupTescoPrintManager(data, name,zone,style_no,buyer_no,id,created_at,
 	}
 	var url = "";
 	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/tesco/print-div-tesco",
 		type: "post",
@@ -2720,7 +3155,7 @@ function PopupTescoSmallPrintManager(data, name,zone,style_no,buyer_no,id,create
 	}
 	
 	var url = "";
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/tesco/print-div-tesco-small",
 		type: "post",
@@ -2772,7 +3207,7 @@ function PopupTescoSmallPrintManager(data, name,zone,style_no,buyer_no,id,create
 function PopupTescoGeneratePrintManager(data, name,svgDoc,template_id,qr_flag,qr_code_fin) {
 	
 	var url = "";
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/tesco/generate-div-tesco",
 		type: "post",
@@ -2822,7 +3257,7 @@ function PopupTescoGenerateSmallPrintManager(data, name,svgDoc) {
 	
 
 	var url = "";
-	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
 	$.ajax({
 		url: base_url + "/erp/job-manager/tesco/generate-div-tesco-small",
 		type: "post",
@@ -2984,7 +3419,15 @@ function jsbarcode_hang(code, id, svgDoc) {
 	//remove temporary canvas
 	canvasTmp.remove();
 
-	svgDoc.getElementById(id).innerHTML = svg_xml;
+	var allGs = document.getElementsByTagName('g');
+	var firstG = allGs[0];
+	var firstChild = firstG.childNodes[0];
+	
+	firstChild.setAttribute("x","20")
+	
+	var xchil = document.getElementById('svgdiv')
+
+	svgDoc.getElementById(id).innerHTML = xchil.innerHTML;
 }
 
 /**
@@ -3188,7 +3631,15 @@ function jsbarcode_hang_disney(code, id, svgDoc) {
 	//remove temporary canvas
 	canvasTmp.remove();
 
-	svgDoc.getElementById(id).innerHTML = svg_xml;
+	var allGs = document.getElementsByTagName('g');
+	var firstG = allGs[0];
+	var firstChild = firstG.childNodes[0];
+	
+	firstChild.setAttribute("x","20")
+	
+	var xchil = document.getElementById('svgdiv')
+
+	svgDoc.getElementById(id).innerHTML = xchil.innerHTML;
 }
 
 

@@ -1,10 +1,5 @@
 <?php
 namespace App\Classes;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Response;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Validator;
 use DB;
 use Auth;
 use App\RolePermissionMdl;
@@ -25,7 +20,6 @@ class Modules{
                     ->join('module','module.id','=','role_permission.module_id')
                     ->where('module.parent_id',$parent_id)
                     ->where('permission',1)->select('module.*')->get();
-//        return $sub_modules;
 	}
 /**
      * Function to get main modules
@@ -53,7 +47,6 @@ class Modules{
 	{
 		return DB::table('module')->where('module.parent_id',$parent_id)
                             ->select('module.*')->get();
-//        return $sub_modules;
 	}
     /**
      * Function to get default main modules
@@ -65,7 +58,6 @@ class Modules{
     {
         return DB::table('module')->where('module.parent_id',0)
                     ->select('module.*')->get();
-//        return $modules;
     }
     /**
      * Function to get role permissions for modules
@@ -106,7 +98,7 @@ class Modules{
             $first_level1= DB::table("module")->where("id", $first_level->parent_id)->first();
             $loop = $this->getTopParent($first_level1->url_path);
         }
-        //return module name
+        
         if($loop != '')
         {
             return $loop;
@@ -122,7 +114,6 @@ class Modules{
         return RolePermissionMdl::where('role_permission.user_role_id',$id)
                     ->join('module','module.id','=','role_permission.module_id')
                     ->where('permission',1)->select('role_permission.module_id')->get();
-//        return $modules;
     }
 
 }

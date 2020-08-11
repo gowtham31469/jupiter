@@ -101,6 +101,13 @@ Route::post('admin/order-management/print-pdf', 'Admin\OrderManagement\OrderCont
 Route::post('admin/order-management/print-pdf-arr', 'Admin\OrderManagement\OrderController@printPdfArr');
 Route::post('admin/order-management/print-pdf-small', 'Admin\OrderManagement\OrderController@printPdfSmall');
 Route::post('admin/order-management/print-pdf-table', 'Admin\OrderManagement\OrderController@printPdfTable');
+
+
+Route::post('admin/order-management/proof-pdf', 'Admin\OrderManagement\OrderController@proofPdf');
+Route::post('admin/order-management/proof-pdf-arr', 'Admin\OrderManagement\OrderController@proofPdfArr');
+Route::post('admin/order-management/proof-pdf-small', 'Admin\OrderManagement\OrderController@proofPdfSmall');
+Route::post('admin/order-management/proof-pdf-table', 'Admin\OrderManagement\OrderController@proofPdfTable');
+
 Route::post('admin/order-management/print-hang-pdf', 'Admin\OrderManagement\OrderController@printHangPdf');
 Route::post('admin/order-management/print-special-pdf', 'Admin\OrderManagement\OrderController@printSpecialPdf');
 
@@ -391,8 +398,6 @@ Route::Post('admin/orchestra/order-management/update-label-orders-po', 'Admin\Or
 Route::get('admin/orchestra/template-management/get-company-list', 'Admin\Orchestra\TemplateManagementCntrl@getCompanyList');
 Route::get('admin/orchestra/get-erp-status', 'Admin\Orchestra\OrderManagementCntrl@checkERPStatus');
 
-Route::post('/admin/order-management/order_sub_modules', 'Admin\AdminController@orderSubModules');
-Route::post('/admin/template-management/sub_modules', 'Admin\AdminController@templateSubModules');
 /** Tesco order-management**/
 Route::get('admin/tesco/order-management', 'Admin\Tesco\OrderManagementCntrl@index');
 Route::post('admin/tesco/template-management/template-view', 'Admin\Tesco\TemplateManagementCntrl@templateView');
@@ -729,7 +734,7 @@ Route::group(['prefix' => 'erp'], function () {
 	/* Routes for Print Manager Module */
 	Route::get('/print-manager', 'ErpUser\Printmanager\PrintManagerController@index'); 
 	
-	/* Routes for jobcard Manager Module */
+	/* Routes for job-manager/orchestra/proof-pdf-smallrd Manager Module */
 	Route::get('job-manager', 'ErpUser\Jobmanager\JobManagerController@index')->name('jobcard-manager'); 
 	Route::post('/job-manager/get-order-details', 'ErpUser\Jobmanager\JobManagerController@getOrderDetails'); 
 	Route::get('job-manager/get-jobcard-order-details', 'ErpUser\Jobmanager\JobManagerController@getOrderDetailsByIds'); 
@@ -737,7 +742,11 @@ Route::group(['prefix' => 'erp'], function () {
 	
 	Route::post('job-manager/tesco/print-div-tesco', 'ErpUser\Jobmanager\JobManagerController@printDivTesco');
 	Route::post('job-manager/tesco/print-div-tesco-small', 'ErpUser\Jobmanager\JobManagerController@printDivTescoSmall');
-	
+			
+	Route::post('job-manager/orchestra/proof-pdf', 'ErpUser\Jobmanager\JobManagerController@proofPdf');
+	Route::post('job-manager/orchestra/proof-pdf-arr', 'ErpUser\Jobmanager\JobManagerController@proofPdfArr');
+	Route::post('job-manager/orchestra/proof-pdf-small', 'ErpUser\Jobmanager\JobManagerController@proofPdfSmall');
+	Route::post('job-manager/orchestra/proof-pdf-table', 'ErpUser\Jobmanager\JobManagerController@proofPdfTable');
 	
 	Route::post('job-manager/tesco/generate-div-tesco', 'ErpUser\Jobmanager\JobManagerController@generateDivTesco');
 	Route::post('job-manager/tesco/generate-div-tesco-small', 'ErpUser\Jobmanager\JobManagerController@generateDivTescoSmall');
@@ -766,14 +775,18 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::get('job-manager/script-update-uuid', 'ErpUser\Jobmanager\JobManagerController@scriptUpdateUUID');
 
 	/* Orchestra Print Manager*/
-
-	Route::post('job-manager/orchestra/print-pdf-small', 'ErpUser\Jobmanager\JobManagerController@printPdfSmall');
-
 	Route::post('job-manager/orchestra/print-pdf', 'ErpUser\Jobmanager\JobManagerController@printPdf');
+	Route::post('job-manager/orchestra/print-pdf-arr', 'ErpUser\Jobmanager\JobManagerController@printPdfArr');
+	Route::post('job-manager/orchestra/print-pdf-small', 'ErpUser\Jobmanager\JobManagerController@printPdfSmall');
 	Route::post('job-manager/orchestra/print-pdf-table', 'ErpUser\Jobmanager\JobManagerController@printPdfTable');
 
 
 	Route::post('job-manager/orchestra/print-wash-pdf', 'ErpUser\Jobmanager\JobManagerController@printWashPdf');
+	
+	Route::post('job-manager/orchestra/print-heat-transfer', 'ErpUser\Jobmanager\JobManagerController@printHeatTransfer');
+	Route::post('job-manager/orchestra/print-special-tag', 'ErpUser\Jobmanager\JobManagerController@printSpecialTag');
+	Route::post('job-manager/orchestra/print-main-label', 'ErpUser\Jobmanager\JobManagerController@printMainLabel');
+	Route::post('job-manager/orchestra/print-size-label', 'ErpUser\Jobmanager\JobManagerController@printSizeLabel');
 
 
 	Route::post('job-manager/print-hang-pdf', 'ErpUser\Jobmanager\JobManagerController@printHangPdf');
@@ -809,6 +822,10 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::put('/settings/update-finishtype-by-id', 'ErpUser\ERPSettings\ERPSettingsController@updateFinishTypeById');
 	Route::put('/settings/make-finishtype-enabled', 'ErpUser\ERPSettings\ERPSettingsController@makeFinishTypeEnabled');
 	Route::put('/settings/make-finishtype-disabled', 'ErpUser\ERPSettings\ERPSettingsController@makeFinishTypeDisabled');
+
+	//Financial Year
+	Route::get('/settings/financial-year', 'ErpUser\ERPSettings\ERPSettingsController@getFinancialYear')->name('erp-financialyear');
+	Route::put('/settings/update-financial-year-date', 'ErpUser\ERPSettings\ERPSettingsController@updateFinancialYearDateById');
 });
 
 //Orchestra Order Management - customer

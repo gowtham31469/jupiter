@@ -1,12 +1,6 @@
 <?php
 namespace App\Classes;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Response;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Validator;
 use DB;
-use Auth;
 use App\TescoTCL1Orders;
 use App\TescoTCL2Orders;
 use App\TescoTCL4Orders;
@@ -741,6 +735,7 @@ class TescoOrders
        // get quantity_table ids.
        $quantity_data = DB::table($qunty_tbl)
                        ->where($qnty_id,$table_data->id)
+		   			   ->orderBy('id')
                        ->select('count','id')->get(); 
         
        $old_data = DB::table($qunty_tbl)

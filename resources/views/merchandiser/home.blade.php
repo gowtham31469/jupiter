@@ -30,8 +30,16 @@
                     <td>{{ $order->SupplierName }}</td>
                     <td>{{ $order->merchandiser_name }}</td>
                     <td>{{ $order->Season }}</td>
-                    <td>{{ $order->OrderDate }}</td>
-                    <td>{{ $order->DeliveryDate }}</td>
+					@if($order->OrderDate != "")
+                        <td>{{ date('d-m-Y', strtotime($order->OrderDate)) }}</td>
+                    @else
+                        <td>-</td>
+                    @endif
+					@if($order->DeliveryDate != "")
+                        <td>{{ date('d-m-Y', strtotime($order->DeliveryDate)) }}</td>
+                    @else
+                        <td>-</td>
+                    @endif
                     <td><span class="label label-Pending">{{  $order->Status }}</span></td>
                     <td><a class="view-wcl" href="#"><span><i class="fa fa-eye fa-button" title="view"></i> View</span></a></td>
                 </tr>
