@@ -53,11 +53,11 @@ class InvoiceController extends Controller
 
 		$this->financial_year_date = FinancialYearResetDate::value('financial_year_date');
 
-		// format financial year date as "dd-mm-yyyy" 
-		$this->financial_year_date_format = $this->financial_year_date."-".$this->year;
+		// format financial year date as "yyyy-dd-mm" 
+		$this->financial_year_date_format = $this->year.'-'.$this->financial_year_date;
 
 		// get the current date in "dd-mm-yyyy" format
-		$this->today_date = Carbon::now('Asia/Kolkata')->format('d-m-Y');
+		$this->today_date = Carbon::now('Asia/Kolkata')->format('Y-m-d');
 
 		$this->from  = Carbon::parse($this->financial_year_date_format)
 						->startOfDay()        // 2018-09-29 00:00:00.000000
