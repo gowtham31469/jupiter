@@ -1343,7 +1343,7 @@ function makeFinishTypeDisabled(id)
                 /** @type {Date} [financial year date Datepicker format & validation] */
                 $('#datePicker1').datepicker({
                   autoclose: true,
-                  format: 'dd-mm',
+                  format: 'mm-dd',
                 })
 
             },
