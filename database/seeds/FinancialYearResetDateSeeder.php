@@ -13,7 +13,7 @@ class FinancialYearResetDateSeeder extends Seeder
     public function run()
     {
         DB::table('financial_year_reset_date')->insert([
-            'financial_year_date' => '01-04',
+            'financial_year_date' => '04-01',
             'created_at' => date("Y-m-d H:i:s")
         ]);
     }

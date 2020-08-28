@@ -55,7 +55,7 @@ class JobManagerController extends Controller
 	{
 		$this->middleware('erpuser');
 		// get the current time
-		$this->current_date = Carbon::now('Asia/Kolkata')->format('d-m-Y');
+		$this->current_date = Carbon::now('Asia/Kolkata')->format('Y-m-d');
 
 		// Get Erp status table id for 'Moved To JC Queue' status.
 		$this->erp_jc_status_id = DB::table('erp_status')->where('status_name', 'ilike', 'Moved To JC Queue')->value('id');
@@ -71,8 +71,8 @@ class JobManagerController extends Controller
 
 		$this->financial_year_date = FinancialYearResetDate::value('financial_year_date');
 
-		// format financial year date as "dd-mm-yyyy" 
-		$this->financial_year_date_format = $this->financial_year_date."-".$this->year;
+		// format financial year date as "yyyy-dd-mm" 
+		$this->financial_year_date_format = $this->year.'-'.$this->financial_year_date;
 	}
 		
 	/**
@@ -924,7 +924,7 @@ class JobManagerController extends Controller
 				/** Push all array values into template_data array */
 				$template_data['order_date']       = Carbon::parse(min($order_dt_array))->format('d-m-Y');
 				$template_data['cus_del_date']     = $delivery_dt_array;
-				$template_data['today_date']       = $this->current_date;
+				$template_data['today_date']       = Carbon::parse($this->current_date)->format('d-m-Y');
 				$template_data['workorder_id']     = $workorder_id;
 				$template_data['company']          = $company;
 				$template_data['customer']         = $customer;
