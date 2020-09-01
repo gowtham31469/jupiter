@@ -2455,12 +2455,16 @@ function GenerateDivTesco(data, name) {
 		var svgarr = [];
 		var ajax_count = 0;
 		var name_count=0;
+		var qr_tpndarr = [];
+		var qr_tpnd = "";
 		$('#table_row tr').each(function (key, val) {
 			var svgRoot = svgDoc.documentElement;
 			if ((name == "TCL1-sticker" && zone == "CE") || (name == "TCL2-sticker" && zone == "CE") || (name == "TSL1-sticker" && zone == "CE") || (name == "THL1-sticker" && zone == "CE")) {
 				svgDoc.getElementById("pieces_in_ratio").innerHTML = $(this).find('.ce_ratio_cpc').val();
 
 				svgDoc.getElementById("tpnd").innerHTML = $(this).find('.ce_ratio_orms_tpn').val();
+
+				qr_tpnd =  $(this).find('.ce_ratio_orms_tpn').val();
 				if($('#qr_flag').val() == 1)
 				{
 					svgDoc.getElementById("tpnd_last_digit").innerHTML = $(this).find('.ce_ratio_orms_tpn').val().substr($(this).find('.ce_ratio_orms_tpn').val().length - 3);
@@ -2469,6 +2473,7 @@ function GenerateDivTesco(data, name) {
 				svgDoc.getElementById("unit_per_case").innerHTML = $(this).find('.ce_single_case_size').val();
 
 				svgDoc.getElementById("tpnd").innerHTML = $(this).find('.ce_single_orms_tpn').val();
+				qr_tpnd = $(this).find('.ce_single_orms_tpn').val();
 				if($('#qr_flag').val() == 1)
 				{
 					svgDoc.getElementById("tpnd_last_digit").innerHTML = $(this).find('.ce_single_orms_tpn').val().substr($(this).find('.ce_single_orms_tpn').val().length - 3);
@@ -2477,10 +2482,12 @@ function GenerateDivTesco(data, name) {
 				svgDoc.getElementById("unit_per_case").innerHTML = $(this).find('.uk_single_case_size').val();
 
 				svgDoc.getElementById("tpnd").innerHTML = $(this).find('.uk_single_tpnd').val();
+				qr_tpnd = $(this).find('.uk_single_tpnd').val();
 			} else if ((name == "TCL1-sticker" && zone == "UK") || (name == "TCL2-sticker" && zone == "UK") || (name == "TSL1-sticker" && zone == "UK") || (name == "THL1-sticker" && zone == "UK")) {
 				svgDoc.getElementById("pieces_in_ratio").innerHTML = $(this).find('.uk_ratio_upc').val();
 
 				svgDoc.getElementById("tpnd").innerHTML = $(this).find('.uk_ratio_tpnd').val();
+				qr_tpnd = $(this).find('.uk_ratio_tpnd').val();
 			}
 			if ((name == "THL3-sticker")) {
 
@@ -2506,7 +2513,8 @@ function GenerateDivTesco(data, name) {
 							ajax_count++;
 							if (ajax_count == document.getElementById("table_row").rows.length) {
 								var svg_fin = svgarr.join(',_');
-								PopupTescoGenerate(svg_fin, name,svgDoc);
+								var qr_tpnd_fin = qr_tpndarr.join(',_');
+								PopupTescoGenerate(svg_fin, name,svgDoc,qr_tpnd_fin);
 							}
 						},
 						complete: function () {
@@ -2543,7 +2551,8 @@ function GenerateDivTesco(data, name) {
 							ajax_count++;
 							if (ajax_count == document.getElementById("table_row").rows.length) {
 								var svg_fin = svgarr.join(',_');
-								PopupTescoGenerate(svg_fin, name,svgDoc);
+								var qr_tpnd_fin = qr_tpndarr.join(',_');
+								PopupTescoGenerate(svg_fin, name,svgDoc,qr_tpnd_fin);
 							}
 						},
 						complete: function () {
@@ -2697,6 +2706,7 @@ function GenerateDivTesco(data, name) {
 							var d = svgRoot;
 							var str = s.serializeToString(d);
 							svgarr.push(str)
+							qr_tpndarr.push(qr_tpnd)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
 							this.tryCount++;
@@ -2773,6 +2783,7 @@ function GenerateDivTesco(data, name) {
 					var str = s.serializeToString(d);
 
 					svgarr.push(str)
+					qr_tpndarr.push(qr_tpnd)
 
 				}
 			} else {
@@ -2781,6 +2792,7 @@ function GenerateDivTesco(data, name) {
 				var str = s.serializeToString(d);
 
 				svgarr.push(str)
+				qr_tpndarr.push(qr_tpnd)
 			}
 
 
@@ -2797,7 +2809,8 @@ function GenerateDivTesco(data, name) {
 			{
 				if (ajax_count == document.getElementById("table_row").rows.length) {
 					var svg_fin = svgarr.join(',_');
-					PopupTescoGenerate(svg_fin, name,svgDoc);
+					var qr_tpnd_fin = qr_tpndarr.join(',_');
+					PopupTescoGenerate(svg_fin, name,svgDoc,qr_tpnd_fin);
 				}
 
 			}
@@ -3105,7 +3118,7 @@ function PopupTescoSmallSet(data, name) {
  * @return Pdf
  */
 
-function PopupTescoGenerate(data, name,svgDoc) {
+function PopupTescoGenerate(data, name,svgDoc,qr_tpnd_fin) {
 	var tcl1_id = $('#TCL1_id').val();
 	var tcl2_id = $('#TCL2_id').val();
 	var tcl4_id = $('#TCL4_id').val();
@@ -3126,7 +3139,8 @@ function PopupTescoGenerate(data, name,svgDoc) {
 			thl1_id: thl1_id,
 			thl3_id: thl3_id,
 			qr_flag: qr_flag,
-			name: name
+			name: name,
+			qr_tpnd_fin:qr_tpnd_fin
 		},
 		tryCount: 0,
 		retryLimit: 2,
