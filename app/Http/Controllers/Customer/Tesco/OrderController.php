@@ -1443,6 +1443,7 @@ class OrderController extends Controller
     {
       try {
          $erp_obj      = new ErpOrders();
+         $updated_erp_table_array = [];
          $template_ids = explode(',',$request['template_id']);
          $template     = explode(',',$request['templates']);
         
@@ -1474,10 +1475,16 @@ class OrderController extends Controller
                 $data_array['buyer_id'] = $tesco_buyer_id->id;
                 $data_array['id'] = $template_id;
                 $data_array['created_by'] = Auth::guard('web_customer')->id();
-                $updated_erp_table = $erp_obj->updateTescoErpOrders($data_array);
+                
+                $jsonResponse = $erp_obj->updateTescoErpOrders($data_array);
+                $content = $jsonResponse->getContent();
+                $updated_erp_table_array = json_decode($content, true);
               }
           }
-          if ($updated_erp_table != '')
+
+          $class_status = array_key_exists('message', $updated_erp_table_array)?$updated_erp_table_array['message']:'error';
+
+          if ($class_status === 'success') 
           {
             $result = response()->json(['error'=> false,'message' =>'success', 'po_number' => $request['po_number']],200);
           }
