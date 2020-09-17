@@ -293,6 +293,7 @@ class JobManagerController extends Controller
 							})
 
 							->where('erp_order_details.status','!=',4)
+							->where('erp_order_details.order_status_id','!=',3)
 							->where('erp_order_details.deleted_at', null)
 							->orderBy('erp_order_details.id', 'desc')
 							->select('*')
@@ -571,6 +572,7 @@ class JobManagerController extends Controller
 									->where('erp_order_details.buyer_po_number',$buyer_no)
 									->where('erp_order_details.order_type',$order_type)
 									->where('erp_order_details.status','!=',4)
+									->where('erp_order_details.order_status_id','!=',3)
 									->where('erp_order_details.deleted_at', null)
 									->orderBy('erp_order_details.id', 'desc')
 									->select('*')

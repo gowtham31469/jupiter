@@ -3693,7 +3693,7 @@ class OrderManagementCntrl extends Controller
                         'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                         ]);
             if ($po_status == "PO Uploaded") {
-                /** @var array [Pass array of values to updateTescoErpOrders function] */
+                /** @var array [Pass array of values to updateOrchestraErpOrders function] */
                 $request_array = [];
                 $request_array['id'] = $template_id;
                 $request_array['tableName'] = $table_name; 
@@ -3768,7 +3768,7 @@ class OrderManagementCntrl extends Controller
 
                         ]);
             if ($po_status == "PO Uploaded") {
-                /** @var array [Pass array of values to updateTescoErpOrders function] */
+                /** @var array [Pass array of values to updateOrchestraErpOrders function] */
                 $request_array = [];
                 $request_array['id'] = $row_id;
                 $request_array['tableName'] = $table_name; 
@@ -3914,7 +3914,7 @@ class OrderManagementCntrl extends Controller
                             'pi_file' => $attatchment, 
                             'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                         ]);
-            /** @var array [Pass array of values to updateTescoErpOrders function] */
+            /** @var array [Pass array of values to updateOrchestraErpOrders function] */
             $erpOrders['tableName'] = $table_name;
             $erpOrders['id']        = $row_id;
             $erpOrders['buyer_id']  = $buyer_id;  

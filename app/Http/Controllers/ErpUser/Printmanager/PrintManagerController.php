@@ -277,6 +277,7 @@ class PrintManagerController extends Controller
 				
 					$jobcard_id_list  = ErpOrderDetails::join('erp_status','erp_status.id','erp_order_details.status')->join($buyer.'_template', $buyer.'_template.item_id', 'erp_order_details.template_id')->where('erp_order_details.erp_order_id', '=', $erp_id)
 											->where('erp_order_details.status','!=',4)
+											->where('erp_order_details.order_status_id','!=',3)
 											->select(DB::raw('distinct on (erp_order_details.erp_order_id,buyer_po_number,style_no,reference_name,order_type) erp_order_details.erp_order_id'),'erp_order_details.*','erp_status.status_name',$buyer.'_template.template_file')->groupBy('erp_order_details.id','erp_order_details.buyer_po_number','erp_order_details.style_no','erp_order_details.reference_name','erp_order_details.order_type','erp_status.status_name',$buyer.'_template.template_file')
 											->get();
 // dd($jobcard_id_list);

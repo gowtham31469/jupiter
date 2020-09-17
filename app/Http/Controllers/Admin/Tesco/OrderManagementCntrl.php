@@ -2185,33 +2185,33 @@ class OrderManagementCntrl extends Controller
 				{
 					$tcl1_id=$request->tcl1_id;
 
-					$qr_code = DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$tcl1_id)->select('*')->get();
+					$qr_code = DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$tcl1_id)->select('*')->orderBy('id', 'asc')->get();
 
 				}
 				else if($name == "TCL2-sticker")
 				{
 					$tcl2_id=$request->tcl2_id;
 
-					$qr_code = DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$tcl2_id)->select('*')->get();
+					$qr_code = DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$tcl2_id)->select('*')->orderBy('id', 'asc')->get();
 				}
 
 				else if($name == "TCL4-sticker")
 				{
 					$tcl4_id=$request->tcl4_id;
 
-					$qr_code = DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$tcl4_id)->select('*')->get();
+					$qr_code = DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$tcl4_id)->select('*')->orderBy('id', 'asc')->get();
 				}
 				else if($name == "THL1-sticker")
 				{
 					$thl1_id=$request->thl1_id;
 
-					$qr_code = DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$thl1_id)->select('*')->get();
+					$qr_code = DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$thl1_id)->select('*')->orderBy('id', 'asc')->get();
 				}
 				else if($name == "THL3-sticker")
 				{
 					$thl3_id=$request->thl3_id;
 
-					$qr_code = DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$thl3_id)->select('*')->get();
+					$qr_code = DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$thl3_id)->select('*')->orderBy('id', 'asc')->get();
 				}
 		
 				foreach($svgarr as $value)
@@ -2307,6 +2307,7 @@ class OrderManagementCntrl extends Controller
     public function generateDivTesco(Request $request)
     {
             $svgarr = explode(',_',$request->svg);
+            $qr_tpndarr = explode(',_',$request->qr_tpnd_fin);
         $name=$request->name;
         $svg=urldecode($request->svg);
         define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
@@ -2323,33 +2324,33 @@ class OrderManagementCntrl extends Controller
 		{
 			$tcl1_id=$request->tcl1_id;
 			
-			$qr_code = DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$tcl1_id)->select('*')->get();
+			$qr_code = DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$tcl1_id)->select('*')->orderBy('id', 'asc')->get();
 			
 		}
 		else if($name == "TCL2-sticker")
 		{
 			$tcl2_id=$request->tcl2_id;
 			
-			$qr_code = DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$tcl2_id)->select('*')->get();
+			$qr_code = DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$tcl2_id)->select('*')->orderBy('id', 'asc')->get();
 		}
 		
 		else if($name == "TCL4-sticker")
 		{
 			$tcl4_id=$request->tcl4_id;
 			
-			$qr_code = DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$tcl4_id)->select('*')->get();
+			$qr_code = DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$tcl4_id)->select('*')->orderBy('id', 'asc')->get();
 		}
 		else if($name == "THL1-sticker")
 		{
 			$thl1_id=$request->thl1_id;
 			
-			$qr_code = DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$thl1_id)->select('*')->get();
+			$qr_code = DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$thl1_id)->select('*')->orderBy('id', 'asc')->get();
 		}
 		else if($name == "THL3-sticker")
 		{
 			$thl3_id=$request->thl3_id;
 			
-			$qr_code = DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$thl3_id)->select('*')->get();
+			$qr_code = DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$thl3_id)->select('*')->orderBy('id', 'asc')->get();
 		}
 		
         foreach($svgarr as $value)
@@ -2401,27 +2402,30 @@ class OrderManagementCntrl extends Controller
 					'border' => false,
 					'padding' => 0,
 					'bgcolor' => false
-				);
-				if($name == "TCL1-sticker")
-				{
-					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 73.5, 5, 17, 17, $style, 'N');
-				}
-				else if($name == "TCL2-sticker")
-				{
-					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 74.5, 8.5, 17, 17, $style, 'N');
-				}
-				else if($name == "TCL4-sticker")
-				{
-					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 74, 8.5, 17, 17, $style, 'N');
-				}
-				else if($name == "THL1-sticker")
-				{
-					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 74, 5, 17, 17, $style, 'N');
-				}
-				else if($name == "THL3-sticker")
-				{
-					PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 75, 5, 17, 17, $style, 'N');
-				}
+        );
+        if($qr_tpndarr[$i] == $qr_code[$i]->orms_tpn)
+        {
+            if($name == "TCL1-sticker")
+            {
+              PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 73.5, 5, 17, 17, $style, 'N');
+            }
+            else if($name == "TCL2-sticker")
+            {
+              PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 74.5, 8.5, 17, 17, $style, 'N');
+            }
+            else if($name == "TCL4-sticker")
+            {
+              PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 74, 8.5, 17, 17, $style, 'N');
+            }
+            else if($name == "THL1-sticker")
+            {
+              PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 74, 5, 17, 17, $style, 'N');
+            }
+            else if($name == "THL3-sticker")
+            {
+              PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 75, 5, 17, 17, $style, 'N');
+            }
+        }
 				
 			}
 			
@@ -3697,6 +3701,7 @@ class OrderManagementCntrl extends Controller
     {
       try {
          $erp_obj        = new ErpOrders();
+         $updated_erp_table_array = [];
          $template_ids  = explode(',',$request['template_id']);
          $template      = explode(',',$request['templates']);
         
@@ -3727,10 +3732,16 @@ class OrderManagementCntrl extends Controller
                 $data_array['tableName'] = "tesco_".strtolower($template[$key])."_orders";
                 $data_array['buyer_id'] = $tesco_buyer_id->id;
                 $data_array['id'] = $template_id;
-                $updated_erp_table = $erp_obj->updateTescoErpOrders($data_array);
+                
+                $jsonResponse = $erp_obj->updateTescoErpOrders($data_array);
+                $content = $jsonResponse->getContent();
+                $updated_erp_table_array = json_decode($content, true);
               }
           }
-          if ($updated_erp_table != '') 
+          
+          $class_status = array_key_exists('message', $updated_erp_table_array)?$updated_erp_table_array['message']:'error';
+
+          if ($class_status === 'success') 
           {
             $result = response()->json(['error'=> false,'message' =>'success', 'po_number' => $request['po_number']],200);
           }

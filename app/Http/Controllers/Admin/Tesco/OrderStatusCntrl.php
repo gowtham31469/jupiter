@@ -31,6 +31,9 @@ use App\Classes\CleanString;
 class OrderStatusCntrl extends Controller
 {
     private $ratio_pack_type;
+    private $updated_erp_table_array;
+    private $class_status;
+    private $erp_obj;
 	/**
      * Create a new controller instance.
      *
@@ -40,6 +43,10 @@ class OrderStatusCntrl extends Controller
     {
        $this->middleware('auth');
        $this->ratio_pack_type = ['RatA', 'RatB', 'RatC', 'RatD', 'RatE', 'RatF', 'RatG', 'RatH', 'RatI', 'RatJ', 'RatK', 'RatL', 'RatM', 'RatN', 'RatO', 'RatP', 'RatQ', 'RatR', 'RatS', 'RatT', 'RatU', 'RatV', 'RatW', 'RatX', 'RatY', 'RatZ'];
+
+       $this->updated_erp_table_array = [];
+       $this->class_status = 'success';
+       $this->erp_obj    = new ErpOrders();
     }
     /**
      * method to show the tesco order status page
@@ -140,7 +147,6 @@ class OrderStatusCntrl extends Controller
 	{
 		try
 		{
-            $erp_obj        = new ErpOrders();
             $po_number      = $request->po_number;
 			$template_id    = $request->id;
             $table_name     = $request->tableName; 
@@ -173,47 +179,61 @@ class OrderStatusCntrl extends Controller
                 $po_status = "PO Uploaded";
             }
 
-            $data 		=   DB::table($table_name)->where('id',$template_id)
-                            ->update([
-                                'purchase_order_no' => $po_number,
-                                'po_status' => $po_status,
-                                'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
-                                ]);
-            if ($po_status == "PO Uploaded") {
+            DB::table($table_name)->where('id',$template_id)
+            ->update([
+                'purchase_order_no' => $po_number,
+                'po_status' => $po_status,
+                'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
+                ]);
+
+            if ($po_status === "PO Uploaded") {
                 /** @var array [Pass array of values to updateTescoErpOrders function] */
                 $data_array_2 = [];
                 $data_array_2['id'] = $template_id;
                 $data_array_2['tableName'] = $table_name;
                 $data_array_2['buyer_id'] = $request->buyer_id;
                 $data_array_2['created_by'] = Auth::guard('web')->id();
-                $res = $erp_obj->updateTescoErpOrders($data_array_2);
-				
-				$buyer_id = json_encode($res->original['buyer_id']);
-				$customer_id = json_encode($res->original['customer_id']);
-				
-				$erp_previous_status = Erp::where('buyer_id',$buyer_id)->where('customer_id',$customer_id)->where('po_no',$po_details->purchase_order_no)->first();
-				
-				if($erp_previous_status)
-				{
-					$erp_moved_erp = ErpOrderDetails::where('erp_order_details.erp_order_id', $erp_previous_status->id)->where('status',1)->get();
-				
-				
-					if(count($erp_moved_erp) == 0)
-					{
-						if($erp_previous_status->previous_status != "" && $erp_previous_status->previous_status != null)
-						{
-							Erp::where('id',$erp_previous_status->id)->update([
-									'status' => $erp_previous_status->previous_status,
-									'previous_status' => null,
-							 ]);
-						}
-						
-					}
-				}
-				
+
+                $jsonResponse = $this->erp_obj->updateTescoErpOrders($data_array_2);
+                $content = $jsonResponse->getContent();
+                $this->updated_erp_table_array = json_decode($content, true);
+                
+                $this->class_status = array_key_exists('message', $this->updated_erp_table_array)?$this->updated_erp_table_array['message']:'error';
+
+                if ($this->class_status === 'success' ) {
+                    $buyer_id = $this->updated_erp_table_array['buyer_id'];
+                    $customer_id = $this->updated_erp_table_array['customer_id'];
+                    
+                    $erp_previous_status = Erp::where('buyer_id',$buyer_id)->where('customer_id',$customer_id)->where('po_no',$po_details->purchase_order_no)->first();
+                    
+                    if($erp_previous_status)
+                    {
+                        $erp_moved_erp = ErpOrderDetails::where('erp_order_details.erp_order_id', $erp_previous_status->id)->where('status',1)->get();
+                    
+                        if(count($erp_moved_erp) == 0)
+                        {
+                            if($erp_previous_status->previous_status != "" && $erp_previous_status->previous_status != null)
+                            {
+                                Erp::where('id',$erp_previous_status->id)->update([
+                                        'status' => $erp_previous_status->previous_status,
+                                        'previous_status' => null,
+                                ]);
+                            }
+                            
+                        }
+                    }
+                }
             }
 
-            return response()->json(['error'=> false,'message' =>'Purchase Order Number added Successfully'],200);
+            if ($this->class_status === 'success' ) 
+            {
+                return response()->json(['error'=> false,'message' =>'Purchase Order Number added successfully'],200);
+            }
+            else {
+                return response()->json(['error'=> true,'message' =>'Purchase Order Number updation failed'],400);
+            }
+
+            
 		}
         catch (\Exception $e)
         {
@@ -230,7 +250,6 @@ class OrderStatusCntrl extends Controller
     {
         try 
         {
-            $erp_obj    = new ErpOrders();
             $formartStr_obj   = new CleanString();
             $table_name = $request->tableName;
             $row_id     = $request->id;
@@ -271,13 +290,14 @@ class OrderStatusCntrl extends Controller
                 $po_status = "PO Uploaded";
             }
             
-            $data   = DB::table($table_name)->where('id',$row_id)
-                        ->update([
-                          'po_file' => $destination_path_insert,
-                          'po_status' => $po_status,
-                          'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
+            DB::table($table_name)->where('id',$row_id)
+            ->update([
+                'po_file' => $destination_path_insert,
+                'po_status' => $po_status,
+                'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
 
-                        ]);
+            ]);
+            
             if ($po_status == "PO Uploaded") {
                 /** @var array [Pass array of values to updateTescoErpOrders function] */
                 $data_array_2 = [];   
@@ -285,9 +305,41 @@ class OrderStatusCntrl extends Controller
                 $data_array_2['buyer_id'] = $request->buyer_id;
                 $data_array_2['id'] = $row_id;
                 $data_array_2['created_by'] = Auth::guard('web')->id();
-                $erp_obj->updateTescoErpOrders($data_array_2);
+
+                $jsonResponse = $this->erp_obj->updateTescoErpOrders($data_array_2);
+
+                $content = $jsonResponse->getContent();
+
+                $this->updated_erp_table_array = json_decode($content, true);
+
+                $this->class_status = array_key_exists('message', $this->updated_erp_table_array)?$this->updated_erp_table_array['message']:'error';
+
+                if ($this->class_status === 'success' ) {
+                    $buyer_id = $this->updated_erp_table_array['buyer_id'];
+                    $customer_id = $this->updated_erp_table_array['customer_id'];
+                    
+                    $erp_previous_status = Erp::where('buyer_id',$buyer_id)->where('customer_id',$customer_id)->where('po_no',$po_details->purchase_order_no)->first();
+                    
+                    if($erp_previous_status)
+                    {
+                        $erp_moved_erp = ErpOrderDetails::where('erp_order_details.erp_order_id', $erp_previous_status->id)->where('status',1)->get();
+                    
+                        if(count($erp_moved_erp) == 0)
+                        {
+                            if($erp_previous_status->previous_status != "" && $erp_previous_status->previous_status != null)
+                            {
+                                Erp::where('id',$erp_previous_status->id)->update([
+                                        'status' => $erp_previous_status->previous_status,
+                                        'previous_status' => null,
+                                ]);
+                            }
+                            
+                        }
+                    }
+                }
             }
-            if ($data)
+
+            if ($this->class_status === 'success' ) 
             {
                return response()->json(['error'=> false,'message' =>'success','po_file'=>$destination_path_insert],200);
             }
@@ -351,7 +403,6 @@ class OrderStatusCntrl extends Controller
             $attachment =  $pi_obj->getTescoAttachment($data,$request);
             
             $erpOrders  =   [];
-            $erp_obj    =   new ErpOrders();
 
             if ($data)
             {
@@ -464,7 +515,7 @@ class OrderStatusCntrl extends Controller
                     $erpOrders['created_by']= Auth::guard('web')->id();
                     $customer_data  = DB::table('customers')->where('id',$data['bank_details']->id)->first();
                     if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
-                        $erp_obj->updateTescoErpOrders($erpOrders);
+                        $this->erp_obj->updateTescoErpOrders($erpOrders);
                     } 
                 }
             }
@@ -485,7 +536,7 @@ class OrderStatusCntrl extends Controller
                 $customer_data  = DB::table('customers')->where('id',$data['bank_details']->id)->first();
 
                 if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
-                    $erp_obj->updateTescoErpOrders($erpOrders);
+                    $this->erp_obj->updateTescoErpOrders($erpOrders);
                 }                                
             }
             if ($approved_data)
@@ -623,7 +674,7 @@ class OrderStatusCntrl extends Controller
                             ->join('tesco_item_master','tesco_tcl1_orders.template_id','=','tesco_item_master.id')
                             ->join('customers','tesco_tcl1_orders.tesco_supplier_id','=','customers.id')
                             ->where('customers.po_required',1) 
-				 			->where('tesco_tcl1_orders.order_status', '!=', 'Saved')
+                            ->whereNotIn('tesco_tcl1_orders.order_status',['Saved','Order Cancelled'])
                             ->where('tesco_tcl1_orders.is_order_count_empty',0)
                             ->select('tesco_tcl1_orders.*',DB::raw("'".$tcl1."'".' as "TemplateName"'),DB::raw("'".$tesco_tcl1_orders."'".' as "tableName"'),'tesco_item_master.company_id')
                             ->where("zone",$zone)
@@ -634,7 +685,7 @@ class OrderStatusCntrl extends Controller
                             ->join('tesco_item_master','tesco_tcl2_orders.template_id','=','tesco_item_master.id')
                             ->join('customers','tesco_tcl2_orders.tesco_supplier_id','=','customers.id')
                             ->where('customers.po_required',1)
-							->where('tesco_tcl2_orders.order_status', '!=', 'Saved')
+							->whereNotIn('tesco_tcl2_orders.order_status',['Saved','Order Cancelled'])
                             ->select('tesco_tcl2_orders.*',DB::raw("'".$tcl2."'".' as "TemplateName"'),DB::raw("'".$tesco_tcl2_orders."'".' as "tableName"'),'tesco_item_master.company_id')
                             ->where("zone",$zone)
                             ->where($col,$style_num)
@@ -644,7 +695,7 @@ class OrderStatusCntrl extends Controller
                             ->join('customers','tesco_tcl4_orders.tesco_supplier_id','=','customers.id')
                             ->where('customers.po_required',1)
                             ->where('tesco_tcl4_orders.is_order_count_empty',0)
-				            ->where('tesco_tcl4_orders.order_status', '!=', 'Saved')
+				            ->whereNotIn('tesco_tcl4_orders.order_status',['Saved','Order Cancelled'])
                             ->select('tesco_tcl4_orders.*',DB::raw("'".$tcl4."'".' as "TemplateName"'),DB::raw("'".$tesco_tcl4_orders."'".' as "tableName"'),'tesco_item_master.company_id')
                             ->where("zone",$zone)
                             ->where($col,$style_num)
@@ -654,7 +705,7 @@ class OrderStatusCntrl extends Controller
                             ->join('customers','tesco_thl1_orders.tesco_supplier_id','=','customers.id')
                             ->where('customers.po_required',1)
                             ->where('tesco_thl1_orders.is_order_count_empty',0)
-				            ->where('tesco_thl1_orders.order_status', '!=', 'Saved')
+				            ->whereNotIn('tesco_thl1_orders.order_status',['Saved','Order Cancelled'])
                             ->select('tesco_thl1_orders.*',DB::raw("'".$thl1."'".' as "TemplateName"'),DB::raw("'".$tesco_thl1_orders."'".' as "tableName"'),'tesco_item_master.company_id')
                             ->where("zone",$zone)
                             ->where($col,$style_num)
@@ -664,7 +715,7 @@ class OrderStatusCntrl extends Controller
                             ->join('customers','tesco_thl3_orders.tesco_supplier_id','=','customers.id')
                             ->where('customers.po_required',1)
                             ->where('tesco_thl3_orders.is_order_count_empty',0)
-				            ->where('tesco_thl3_orders.order_status', '!=', 'Saved')
+				            ->whereNotIn('tesco_thl3_orders.order_status',['Saved','Order Cancelled'])
                             ->select('tesco_thl3_orders.*',DB::raw("'".$thl3."'".' as "TemplateName"'),DB::raw("'".$tesco_thl3_orders."'".' as "tableName"'),'tesco_item_master.company_id')
                             ->where("zone",$zone)
                             ->where($col,$style_num)
@@ -674,7 +725,7 @@ class OrderStatusCntrl extends Controller
                             ->join('customers','tesco_tsl1_orders.tesco_supplier_id','=','customers.id')
                             ->where('customers.po_required',1)
                             ->where('tesco_tsl1_orders.is_order_count_empty',0)
-				            ->where('tesco_tsl1_orders.order_status', '!=', 'Saved')
+				            ->whereNotIn('tesco_tsl1_orders.order_status',['Saved','Order Cancelled'])
                             ->select('tesco_tsl1_orders.*',DB::raw("'".$tsl1."'".' as "TemplateName"'),DB::raw("'".$tesco_tsl1_orders."'".' as "tableName"'),'tesco_item_master.company_id')
                             ->where("zone",$zone)
                             ->where($col,$style_num)
@@ -684,7 +735,7 @@ class OrderStatusCntrl extends Controller
                             ->join('customers','tesco_tsl3_orders.tesco_supplier_id','=','customers.id')
                             ->where('customers.po_required',1)
                             ->where('tesco_tsl3_orders.is_order_count_empty',0)
-				            ->where('tesco_tsl3_orders.order_status', '!=', 'Saved')
+				            ->whereNotIn('tesco_tsl3_orders.order_status',['Saved','Order Cancelled'])
                             ->select('tesco_tsl3_orders.*',DB::raw("'".$tsl3."'".' as "TemplateName"'),DB::raw("'".$tesco_tsl3_orders."'".' as "tableName"'),'tesco_item_master.company_id')
                             ->where("zone",$zone)
                             ->where($col,$style_num)
@@ -707,7 +758,6 @@ class OrderStatusCntrl extends Controller
     {
         try
         {
-            $erp_obj    = new ErpOrders();
             $formartStr_obj   = new CleanString();
             $id        =  explode(',',$request->id);
             $po        =  $request->po;          
@@ -738,7 +788,7 @@ class OrderStatusCntrl extends Controller
                 $data_array['buyer_id'] = $tesco_buyer_id->id;
                 $data_array['id'] = $value[1];
                 $data_array['created_by']= Auth::guard('web')->id();
-                $erp_obj->updateTescoErpOrders($data_array);
+                $this->erp_obj->updateTescoErpOrders($data_array);
             }
             $result = response()->json(['error'=> false,'message' =>'success'],200); 
            
@@ -759,7 +809,6 @@ class OrderStatusCntrl extends Controller
     {
         try
         {
-            $erp_obj   =   new ErpOrders();
             $id        =   explode(',',$request->id);
             $po        =   $request->po;
             $erp_orders = DB::table('erp_orders')->where('po_no',$po)->select('po_file')->first();
@@ -808,7 +857,7 @@ class OrderStatusCntrl extends Controller
                     $data_array['buyer_id'] = $tesco_buyer_id->id;
                     $data_array['id'] = $value[1];
                     $data_array['created_by']= Auth::guard('web')->id();
-                    $erp_obj->updateTescoErpOrders($data_array);
+                    $this->erp_obj->updateTescoErpOrders($data_array);
                 }
 				
             }

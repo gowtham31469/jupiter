@@ -262,33 +262,33 @@ class PrintController extends Controller
 				{
 					$tcl1_id=$request->tcl1_id;
 
-					$qr_code = DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$tcl1_id)->select('*')->get();
+					$qr_code = DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$tcl1_id)->select('*')->orderBy('id', 'asc')->get();
 
 				}
 				else if($name == "TCL2-sticker")
 				{
 					$tcl2_id=$request->tcl2_id;
 
-					$qr_code = DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$tcl2_id)->select('*')->get();
+					$qr_code = DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$tcl2_id)->select('*')->orderBy('id', 'asc')->get();
 				}
 
 				else if($name == "TCL4-sticker")
 				{
 					$tcl4_id=$request->tcl4_id;
 
-					$qr_code = DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$tcl4_id)->select('*')->get();
+					$qr_code = DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$tcl4_id)->select('*')->orderBy('id', 'asc')->get();
 				}
 				else if($name == "THL1-sticker")
 				{
 					$thl1_id=$request->thl1_id;
 
-					$qr_code = DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$thl1_id)->select('*')->get();
+					$qr_code = DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$thl1_id)->select('*')->orderBy('id', 'asc')->get();
 				}
 				else if($name == "THL3-sticker")
 				{
 					$thl3_id=$request->thl3_id;
 
-					$qr_code = DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$thl3_id)->select('*')->get();
+					$qr_code = DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$thl3_id)->select('*')->orderBy('id', 'asc')->get();
 				}
 		
 				foreach($svgarr as $value)
