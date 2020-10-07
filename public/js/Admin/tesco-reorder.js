@@ -1102,7 +1102,7 @@ function setTescoReorder(type,id,liid)
 		 	val_count	+= parseInt($(item).val());
         });
         count = count.join(',');
-		$('#'+liid).append('<span class="label sticker" style="position: absolute;margin-left: -100px;margin-top: 5px;">'+val_count+'</span><img src="/images/tick.png" alt="Tag" style="position: absolute;margin-left: 20px;margin-top: -2px;">');
+		
 	if(item == "Repeat Order")
 	{
 		var uvc=$('#style_number').val();
@@ -1140,6 +1140,8 @@ function setTescoReorder(type,id,liid)
 
 						},
 						success: function (data) {
+
+							$('#'+liid).append('<span class="label sticker" style="position: absolute;margin-left: -100px;margin-top: 5px;">'+val_count+'</span><img src="/images/tick.png" alt="Tag" style="position: absolute;margin-left: 20px;margin-top: -2px;">');
 						
 							var i=1;
 							$(".list-group li").each(function(key,index){
@@ -1169,6 +1171,7 @@ function setTescoReorder(type,id,liid)
 				}
 				else
 				{
+					$('.submitbutton').removeAttr('disabled')
 					$('#po_already_error').removeClass('hidden')
 				}
 			 },
