@@ -3918,8 +3918,8 @@ class OrderManagementCntrl extends Controller
                     }
                     else
                     {
-                      /** [ Invoking saveTCL1Order function using class instance ] */
-                       $tesco_order     = $tesco_order_obj->saveTCL1Order($request,$template_id,$created_by);
+                      /** [ Invoking saveTescoOrder function using class instance ] */
+                       $tesco_order     = $tesco_order_obj->saveTescoOrder($request,$template_id,$created_by);
 
                        /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                        if($request['is_insert'] == 'true')
@@ -3978,8 +3978,8 @@ class OrderManagementCntrl extends Controller
                     }
                     else
                     {
-                      /** [ Invoking saveTCL2Order function using class instance ] */
-                       $tesco_order     = $tesco_order_obj->saveTCL2Order($request,$template_id,$created_by);
+                      /** [ Invoking saveTescoOrder function using class instance ] */
+                       $tesco_order     = $tesco_order_obj->saveTescoOrder($request,$template_id,$created_by);
                        
                        /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                        if($request['is_insert'] == 'true')
@@ -4038,8 +4038,8 @@ class OrderManagementCntrl extends Controller
                     }
                     else
                     {
-                      /** [ Invoking saveTSL1Order function using class instance ] */
-                       $tesco_order     = $tesco_order_obj->saveTSL1Order($request,$template_id,$created_by);
+                      /** [ Invoking saveTescoOrder function using class instance ] */
+                       $tesco_order     = $tesco_order_obj->saveTescoOrder($request,$template_id,$created_by);
                        
                        /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                        if($request['is_insert'] == 'true')
@@ -4101,8 +4101,8 @@ class OrderManagementCntrl extends Controller
                     }
                     else
                     {
-                      /** [ Invoking saveTHL1Order function using class instance ] */
-                       $tesco_order     = $tesco_order_obj->saveTHL1Order($request,$template_id,$created_by);
+                      /** [ Invoking saveTescoOrder function using class instance ] */
+                       $tesco_order     = $tesco_order_obj->saveTescoOrder($request,$template_id,$created_by);
                        
                        /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                        if($request['is_insert'] == 'true')
@@ -4217,8 +4217,8 @@ class OrderManagementCntrl extends Controller
                       }
                       else
                       {
-                        /** [ Invoking saveTCL4Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->saveTCL4Order($request,$template_id,$created_by);
+                        /** [ Invoking saveTescoOrder function using class instance ] */
+                         $tesco_order     = $tesco_order_obj->saveTescoOrder($request,$template_id,$created_by);
 
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -4280,8 +4280,8 @@ class OrderManagementCntrl extends Controller
                     }
                     else
                     {
-                      /** [ Invoking saveTSL3Order function using class instance ] */
-                       $tesco_order     = $tesco_order_obj->saveTSL3Order($request,$template_id,$created_by);
+                      /** [ Invoking saveTescoOrder function using class instance ] */
+                       $tesco_order     = $tesco_order_obj->saveTescoOrder($request,$template_id,$created_by);
                        
                        /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                        if($request['is_insert'] == 'true')
@@ -4346,8 +4346,8 @@ class OrderManagementCntrl extends Controller
                   }
                   else
                   {
-                    /** [ Invoking saveTHL3Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->saveTHL3Order($request,$template_id,$created_by);
+                    /** [ Invoking saveTescoOrder function using class instance ] */
+                     $tesco_order     = $tesco_order_obj->saveTescoOrder($request,$template_id,$created_by);
                      
                      /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                      if($request['is_insert'] == 'true')
@@ -4467,8 +4467,8 @@ class OrderManagementCntrl extends Controller
                   }
                   else
                   {
-                     /** [ Invoking saveTCL1Order function using class instance ] */
-                       $tesco_order     = $tesco_order_obj->saveTCL1Order($request,$template_id,$created_by);
+                     /** [ Invoking saveTescoOrder function using class instance ] */
+                       $tesco_order     = $tesco_order_obj->saveTescoOrder($request,$template_id,$created_by);
                        
                        /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                        if($request['is_insert'] == 'true')
@@ -4526,8 +4526,8 @@ class OrderManagementCntrl extends Controller
                   }
                   else
                   {
-                      /** [ Invoking saveTCL2Order function using class instance ] */
-                       $tesco_order     = $tesco_order_obj->saveTCL2Order($request,$template_id,$created_by);
+                      /** [ Invoking saveTescoOrder function using class instance ] */
+                       $tesco_order     = $tesco_order_obj->saveTescoOrder($request,$template_id,$created_by);
                        
                        /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                        if($request['is_insert'] == 'true')
@@ -4585,8 +4585,8 @@ class OrderManagementCntrl extends Controller
                   }
                   else
                   {
-                    /** [ Invoking saveTSL1Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->saveTSL1Order($request,$template_id,$created_by);
+                    /** [ Invoking saveTescoOrder function using class instance ] */
+                     $tesco_order     = $tesco_order_obj->saveTescoOrder($request,$template_id,$created_by);
                      
                      /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                      if($request['is_insert'] == 'true')
@@ -4647,8 +4647,8 @@ class OrderManagementCntrl extends Controller
                   }
                   else
                   {
-                    /** [ Invoking saveTHL1Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->saveTHL1Order($request,$template_id,$created_by);
+                    /** [ Invoking saveTescoOrder function using class instance ] */
+                     $tesco_order     = $tesco_order_obj->saveTescoOrder($request,$template_id,$created_by);
                      
                        /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                        if($request['is_insert'] == 'true')
@@ -4763,8 +4763,8 @@ class OrderManagementCntrl extends Controller
                   }
                   else
                   {
-                    /** [ Invoking saveTCL4Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->saveTCL4Order($request,$template_id,$created_by);
+                    /** [ Invoking saveTescoOrder function using class instance ] */
+                     $tesco_order     = $tesco_order_obj->saveTescoOrder($request,$template_id,$created_by);
                      
                      /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                      if($request['is_insert'] == 'true')
@@ -4824,8 +4824,8 @@ class OrderManagementCntrl extends Controller
                   }
                   else
                   {
-                    /** [ Invoking saveTSL3Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->saveTSL3Order($request,$template_id,$created_by);
+                    /** [ Invoking saveTescoOrder function using class instance ] */
+                     $tesco_order     = $tesco_order_obj->saveTescoOrder($request,$template_id,$created_by);
                      
                      /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                      if($request['is_insert'] == 'true')
@@ -4888,8 +4888,8 @@ class OrderManagementCntrl extends Controller
                   }
                   else
                   {
-                    /** [ Invoking saveTHL3Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->saveTHL3Order($request,$template_id,$created_by);
+                    /** [ Invoking saveTescoOrder function using class instance ] */
+                     $tesco_order     = $tesco_order_obj->saveTescoOrder($request,$template_id,$created_by);
                      
                      /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                      if($request['is_insert'] == 'true')
