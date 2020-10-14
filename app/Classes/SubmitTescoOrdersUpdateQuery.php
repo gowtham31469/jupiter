@@ -32,7 +32,7 @@ class SubmitTescoOrdersUpdateQuery
 	 * @param  [type] $request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id
 	 * @return number of rows updated.
 	 */
-	public function updateTCL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by,$po_status)
+	public function updateTCL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by,$po_status, $order_status, $edit_permission)
 	{
 		try {
               $result = TescoTCL1Orders::where('id',$existing_id)
@@ -53,7 +53,7 @@ class SubmitTescoOrdersUpdateQuery
                           'tesco_metadata_supplier_id' => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
-                          'order_status'         => "Order Placed",
+                          'order_status'         => $order_status,
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
                           'po_status'            => $po_status,
@@ -61,7 +61,8 @@ class SubmitTescoOrdersUpdateQuery
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date,
                           'ocn_number'           => $request['ocn_no'],
-                          'full_description'     => $request['full_description']
+                          'full_description'     => $request['full_description'],
+                          'edit_permission'      => $edit_permission
                         ]);
         } catch (\Exception $e)
         {
@@ -74,7 +75,7 @@ class SubmitTescoOrdersUpdateQuery
    * @param  [type] $request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id
    * @return number of rows updated.
    */
-  public function updateTCL2Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by,$po_status)
+  public function updateTCL2Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by,$po_status, $order_status, $edit_permission)
   {
     try {
             $result = TescoTCL2Orders::where('id',$existing_id)
@@ -95,7 +96,7 @@ class SubmitTescoOrdersUpdateQuery
                           'tesco_metadata_supplier_id' => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
-                          'order_status'         => "Order Placed",
+                          'order_status'         => $order_status,
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
                           'po_status'            => $po_status,
@@ -103,7 +104,8 @@ class SubmitTescoOrdersUpdateQuery
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date,
                           'ocn_number'           => $request['ocn_no'],
-                          'full_description'     => $request['full_description']
+                          'full_description'     => $request['full_description'],
+                          'edit_permission'      => $edit_permission
                         ]);
             
         } catch (\Exception $e)
@@ -117,7 +119,7 @@ class SubmitTescoOrdersUpdateQuery
    * @param  [type] $request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id
    * @return number of rows updated.
    */
-  public function updateTSL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by,$po_status)
+  public function updateTSL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by,$po_status,$order_status, $edit_permission)
   {
     try {
             $result = TescoTSL1Orders::where('id',$existing_id)
@@ -138,7 +140,7 @@ class SubmitTescoOrdersUpdateQuery
                           'tesco_metadata_supplier_id' => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
-                          'order_status'         => "Order Placed",
+                          'order_status'         => $order_status,
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
                           'po_status'            => $po_status,
@@ -146,7 +148,8 @@ class SubmitTescoOrdersUpdateQuery
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date,
                           'ocn_number'           => $request['ocn_no'],
-                          'full_description'     => $request['full_description']
+                          'full_description'     => $request['full_description'],
+                          'edit_permission'      => $edit_permission
                         ]);
             
         } catch (\Exception $e)
@@ -160,7 +163,7 @@ class SubmitTescoOrdersUpdateQuery
    * @param  [type] $request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id
    * @return number of rows updated.
    */
-  public function updateTHL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by,$po_status)
+  public function updateTHL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by,$po_status, $order_status, $edit_permission)
   {
     try {
               $result = TescoTHL1Orders::where('id',$existing_id)
@@ -181,7 +184,7 @@ class SubmitTescoOrdersUpdateQuery
                           'tesco_metadata_supplier_id' => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
-                          'order_status'         => "Order Placed",
+                          'order_status'         => $order_status,
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
                           'po_status'            => $po_status,
@@ -189,7 +192,8 @@ class SubmitTescoOrdersUpdateQuery
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date,
                           'ocn_number'           => $request['ocn_no'],
-                          'full_description'     => $request['full_description']
+                          'full_description'     => $request['full_description'],
+                          'edit_permission'      => $edit_permission
                         ]);
             
         } catch (\Exception $e)
@@ -203,7 +207,7 @@ class SubmitTescoOrdersUpdateQuery
    * @param  [type] $request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id
    * @return number of rows updated.
    */
-  public function updateTCL4Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by,$po_status)
+  public function updateTCL4Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by,$po_status, $order_status, $edit_permission)
   {
     try {
               $result = TescoTCL4Orders::where('id',$existing_id)
@@ -224,7 +228,7 @@ class SubmitTescoOrdersUpdateQuery
                           'tesco_metadata_supplier_id' => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
-                          'order_status'         => "Order Placed",
+                          'order_status'         => $order_status,
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
                           'po_status'            => $po_status,
@@ -232,7 +236,8 @@ class SubmitTescoOrdersUpdateQuery
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date,
                           'ocn_number'           => $request['ocn_no'],
-                          'full_description'     => $request['full_description']
+                          'full_description'     => $request['full_description'],
+                          'edit_permission'      => $edit_permission
                         ]);
             
         } catch (\Exception $e)
@@ -246,7 +251,7 @@ class SubmitTescoOrdersUpdateQuery
    * @param  [type] $request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id
    * @return number of rows updated.
    */
-  public function updateTSL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by,$po_status)
+  public function updateTSL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by,$po_status, $order_status, $edit_permission)
   {
     try {
               $result = TescoTSL3Orders::where('id',$existing_id)
@@ -267,7 +272,7 @@ class SubmitTescoOrdersUpdateQuery
                           'tesco_metadata_supplier_id' => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
-                          'order_status'         => "Order Placed",
+                          'order_status'         => $order_status,
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
                           'po_status'            => $po_status,
@@ -275,7 +280,8 @@ class SubmitTescoOrdersUpdateQuery
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date,
                           'ocn_number'           => $request['ocn_no'],
-                          'full_description'     => $request['full_description']
+                          'full_description'     => $request['full_description'],
+                          'edit_permission'      => $edit_permission
                         ]);
             
         } catch (\Exception $e)
@@ -289,7 +295,7 @@ class SubmitTescoOrdersUpdateQuery
    * @param  [type] $request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id
    * @return number of rows updated.
    */
-  public function updateTHL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by,$po_status)
+  public function updateTHL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by,$po_status, $order_status, $edit_permission)
   {
     try {
               $result = TescoTHL3Orders::where('id',$existing_id)
@@ -310,7 +316,7 @@ class SubmitTescoOrdersUpdateQuery
                           'tesco_metadata_supplier_id' => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
-                          'order_status'         => "Order Placed",
+                          'order_status'         => $order_status,
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
                           'po_status'            => $po_status,
@@ -318,7 +324,8 @@ class SubmitTescoOrdersUpdateQuery
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date,
                           'ocn_number'           => $request['ocn_no'],
-                          'full_description'     => $request['full_description']
+                          'full_description'     => $request['full_description'],
+                          'edit_permission'      => $edit_permission
                         ]);
             
             

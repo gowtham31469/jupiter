@@ -301,8 +301,10 @@ class OrderController extends Controller
                     }
                     else
                     {
+                      $order_status  = $is_order_count_empty === 1?'Order Pending':'Order Placed';
+                      $edit_permission  = $is_order_count_empty === 1?1:0;
                       /** [ Invoking createTCL1Order function using class instance ] */
-                       $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required);
+                       $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required, $order_status, $edit_permission);
 
                        /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                        if($request['is_insert'] == 'true')
@@ -370,8 +372,10 @@ class OrderController extends Controller
                     }
                     else
                     {
+                         $order_status  = $is_order_count_empty === 1?'Order Pending':'Order Placed';
+                         $edit_permission  = $is_order_count_empty === 1?1:0;
                          /** [ Invoking createTCL2Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required);
+                         $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required, $order_status, $edit_permission);
 
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -440,8 +444,10 @@ class OrderController extends Controller
                     }
                     else
                     {
+                        $order_status  = $is_order_count_empty === 1?'Order Pending':'Order Placed';
+                        $edit_permission  = $is_order_count_empty === 1?1:0;
                         /** [ Invoking createTSL1Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required);
+                         $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required, $order_status, $edit_permission);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -513,8 +519,10 @@ class OrderController extends Controller
                   }
                   else
                   {
+                    $order_status  = $is_order_count_empty === 1?'Order Pending':'Order Placed';
+                    $edit_permission  = $is_order_count_empty === 1?1:0;
                      /** [ Invoking createTHL1Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required);
+                     $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required, $order_status, $edit_permission);
 
                      /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                      if($request['is_insert'] == 'true')
@@ -646,8 +654,10 @@ class OrderController extends Controller
                     }
                     else
                     {
+                        $order_status  = $is_order_count_empty === 1?'Order Pending':'Order Placed';
+                        $edit_permission  = $is_order_count_empty === 1?1:0;
                          /** [ Invoking createTCL4Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required);
+                         $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required, $order_status, $edit_permission);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -712,8 +722,10 @@ class OrderController extends Controller
                     }
                     else
                     {
+                         $order_status  = $is_order_count_empty === 1?'Order Pending':'Order Placed';
+                         $edit_permission  = $is_order_count_empty === 1?1:0;
                          /** [ Invoking createTSL3Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required);
+                         $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required, $order_status, $edit_permission);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -781,8 +793,10 @@ class OrderController extends Controller
                     }
                     else
                     {
+                         $order_status  = $is_order_count_empty === 1?'Order Pending':'Order Placed';
+                         $edit_permission  = $is_order_count_empty === 1?1:0;
                          /** [ Invoking createTHL3Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required);
+                         $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required, $order_status, $edit_permission);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -908,8 +922,10 @@ class OrderController extends Controller
                     }
                     else
                     {
+                         $order_status  = $is_order_count_empty === 1?'Order Pending':'Order Placed';
+                         $edit_permission  = $is_order_count_empty === 1?1:0;
                          /** [ Invoking createTCL1Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required);
+                         $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required, $order_status, $edit_permission);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -976,8 +992,10 @@ class OrderController extends Controller
                     }
                     else
                     {
+                         $order_status  = $is_order_count_empty === 1?'Order Pending':'Order Placed';
+                         $edit_permission  = $is_order_count_empty === 1?1:0;
                          /** [ Invoking createTCL2Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required);
+                         $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required, $order_status, $edit_permission);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -1044,8 +1062,10 @@ class OrderController extends Controller
                   }
                   else
                   {
+                    $order_status  = $is_order_count_empty === 1?'Order Pending':'Order Placed';
+                    $edit_permission  = $is_order_count_empty === 1?1:0;
                      /** [ Invoking createTSL1Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required);
+                     $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required, $order_status, $edit_permission);
                      
                      /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                      if($request['is_insert'] == 'true')
@@ -1115,8 +1135,10 @@ class OrderController extends Controller
                   }
                   else
                   {
+                       $order_status  = $is_order_count_empty === 1?'Order Pending':'Order Placed';
+                       $edit_permission  = $is_order_count_empty === 1?1:0;
                        /** [ Invoking createTHL1Order function using class instance ] */
-                       $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required);
+                       $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required, $order_status, $edit_permission);
                        
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -1244,8 +1266,10 @@ class OrderController extends Controller
                       }
                       else
                       {
+                        $order_status  = $is_order_count_empty === 1?'Order Pending':'Order Placed';
+                        $edit_permission  = $is_order_count_empty === 1?1:0;
                          /** [ Invoking createTCL4Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required);
+                         $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required, $order_status, $edit_permission);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -1308,8 +1332,10 @@ class OrderController extends Controller
                       }
                       else
                       {
+                        $order_status  = $is_order_count_empty === 1?'Order Pending':'Order Placed';
+                        $edit_permission  = $is_order_count_empty === 1?1:0;
                          /** [ Invoking createTSL3Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required);
+                         $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required, $order_status, $edit_permission);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -1375,8 +1401,10 @@ class OrderController extends Controller
                   }
                   else
                   {
+                       $order_status  = $is_order_count_empty === 1?'Order Pending':'Order Placed';
+                       $edit_permission  = $is_order_count_empty === 1?1:0;
                        /** [ Invoking createTHL3Order function using class instance ] */
-                       $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required);
+                       $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required, $order_status, $edit_permission);
                        
                        /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                        if($request['is_insert'] == 'true')
