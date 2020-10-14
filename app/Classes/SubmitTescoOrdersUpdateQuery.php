@@ -32,7 +32,7 @@ class SubmitTescoOrdersUpdateQuery
 	 * @param  [type] $request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id, $customer_id,$created_by,$po_status, $order_status, $edit_permission, $order_model
 	 * @return number of rows updated.
 	 */
-	public function updateSavedTescoOrder($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by,$po_status, $order_status, $edit_permission, $order_model)
+	public function submitSavedTescoOrder($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by,$po_status, $order_status, $edit_permission, $order_model)
 	{
 		try {
               $result = $order_model::where('id',$existing_id)

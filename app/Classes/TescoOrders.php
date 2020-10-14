@@ -69,8 +69,8 @@ class TescoOrders
               if($is_exists)
               {
                 $existing_id = $is_exists->id;
-                /** [ Invoking updateSavedTescoOrder function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateSavedTescoOrder($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by,$po_status, $order_status, $edit_permission, $order_model);
+                /** [ Invoking submitSavedTescoOrder function using class instance ] */
+                $tesco_order  = $tesco_order_obj->submitSavedTescoOrder($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by,$po_status, $order_status, $edit_permission, $order_model);
 
                 return $is_exists;
                 
@@ -109,8 +109,8 @@ class TescoOrders
             }
             else
             {
-              /** [ Invoking updateSavedTescoOrder function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateSavedTescoOrder($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request[strtolower(str_replace(" ","",$template_data->item_name)).'_last_id'],$customer_id,$created_by,$po_status, $order_status, $edit_permission, $order_model);
+              /** [ Invoking submitSavedTescoOrder function using class instance ] */
+                $tesco_order  = $tesco_order_obj->submitSavedTescoOrder($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request[strtolower(str_replace(" ","",$template_data->item_name)).'_last_id'],$customer_id,$created_by,$po_status, $order_status, $edit_permission, $order_model);
 
                 return $tesco_order;
             }
