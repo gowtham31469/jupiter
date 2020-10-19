@@ -595,6 +595,12 @@ Route::get('admin/common-settings', 'Admin\Settings\SettingsController@index');
 
 /** Tesco order-status**/
 Route::post('admin/tesco/tesco-orders', 'Admin\Tesco\OrderStatusCntrl@index');
+Route::post('admin/tesco/tesco-orders-filter', 'Admin\Tesco\OrderStatusCntrl@tescoFilter');
+Route::post('admin/tesco/tesco-orders-submit-filter', 'Admin\Tesco\OrderStatusCntrl@tescoOrdersSubmitFilter');
+
+
+Route::post('admin/tesco/tesco-submit-os', 'Admin\Tesco\OrderStatusCntrl@tescoSubmitOs');
+
 Route::post('admin/tesco/order-management/set-po-number', 'Admin\Tesco\OrderStatusCntrl@setPONumber');
 Route::post('admin/tesco/set-po-file', 'Admin\Tesco\OrderStatusCntrl@setCustomerPOFile');
 
