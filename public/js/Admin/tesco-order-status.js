@@ -11,7 +11,7 @@ function tescoOrderStatus() {
     $('.template-error').html('');
     
     $.ajax({
-        url: base_url + "/admin/tesco/tesco-orders",
+        url: base_url + "/admin/tesco/tesco-orders-filter",
         type: "Post",
         dataType: "json",
         data: {
@@ -24,613 +24,165 @@ function tescoOrderStatus() {
         statusCode: {
             /** [Show response status based on HTTP status code] */
             200: function (data) {
-                var path = base_url + "/admin/tesco/order-management/order-status";
-                var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
-
-                var newObj1 = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
-
-                $('.main-content').html("<button style='margin-bottom:10px' id='po-file-upload-button' class='btn btn-sm btn-primary pull-right' type='button'>Update PO</button>");
-                newObj.sort(function (obj1, obj2) {
-                    var date1 = obj1.OrderDate;
-                    var date2 = obj2.OrderDate;
-                    if (date1 > date2) return -1;
-                    if (date1 < date2) return 1;
-                    return 0;
-                });
-                $('.main-content').append(tescoStatusTable(newObj, path));
-                $('.top-content').html("")
-                $('#datatable-tesco-orders th:contains("StyleNo")').text('Style No');
                 var uniqueNames = [];
                 var zones = [];
 
-                newObj1.sort(function (obj1, obj2) {
-                    var date1 = obj1.OrderDate;
-                    var date2 = obj2.OrderDate;
-                    if (date1 > date2) return -1;
-                    if (date1 < date2) return 1;
-                    return 0;
-                });
+                $('.top-content').html(`
+                <div class="row">
+                <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="stylenoos" title="Select CE Style Number" multiple data-selected-text-format="count" data-live-search="true" data-size="10"></select></div></div>
+                <div class="col-md-2"></div>
+                <div class="col-md-4"><input type="text" placeholder="Start Date" class="form-control startdateos" multiple style="width:100%" name="startdateos" /></div>
+                <div class="col-md-2"></div>
+                <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="ukstylenoos" title="Select UK Style Number" multiple data-selected-text-format="count" data-live-search="true" data-size="10"></select></div></div>
+                </div>
+                <div class="row" style="margin-top: 15px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="seasonos" title="Select Season" multiple data-selected-text-format="count" data-live-search="true" data-size="10"></select></div></div>
+                <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="orderstatusos" title="Select Order Status" multiple data-selected-text-format="count" data-live-search="true" data-size="10"><option value="Saved">Saved</option><option value="Submited">Submited</option><option value="Pending">Pending</option></select></div></div>
+                <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="artworkstatusos" title="Select Artwork Status" multiple data-selected-text-format="count" data-live-search="true" data-size="10"><option value="Approval Pending">Approval Pending</option><option value="Order Approved">Order Approved</option></select></div></div>
+                <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="postatusos" title="Select PO Status" multiple data-selected-text-format="count" data-live-search="true" data-size="10"><option value="PO Pending">PO Pending</option><option value="PO Uploaded">PO Uploaded</option></select></div></div>
+                <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="pistatusos" title="Select PI Status" multiple data-selected-text-format="count" data-live-search="true" data-size="10"><option value="PI Approval Pending">PI Approval Pending</option><option value="PI Approved">PI Approved</option></select></div></div>
+                <div class="col-md-1"></div>
+                </div>
+                <div class="row" style="margin-top: 15px;">
+                <div class="col-md-12">
+                <button class="btn btn-primary input-sm pull-right" onclick="submitOs(this)" id="submitos">Submit</button>
+                </div>
+                </div>
+                <div id="OrderStatusTable"></div>
+                `);
 
-                for (i = 0; i < newObj1.length; i++) {
-                    if (newObj1[i].Zone == "CE") {
-                        if (uniqueNames.indexOf(newObj1[i].ce_style_ref) === -1) {
-                            uniqueNames.push(newObj1[i].ce_style_ref);
-                            zones.push("CE");
+                $(data.data).each(function(index,value){
+                    $("#seasonos").append("<option value='"+ value.season_code + "'>" + value.season_code + "</option>");
+                })
+
+                $(data.style_no).each(function(index,value){
+                    if (value.zone == "CE") {
+                        if (uniqueNames.indexOf(value.ce_style_ref) === -1) {
+                            $("#stylenoos").append("<option value='"+ value.ce_style_ref + "'>" + value.ce_style_ref + "</option>");
                         }
                     } else {
-                        if (uniqueNames.indexOf(newObj1[i].uk_style_ref) === -1) {
-                            uniqueNames.push(newObj1[i].uk_style_ref);
-                            zones.push("UK");
+                        if (uniqueNames.indexOf(value.uk_style_ref) === -1) {
+                            $("#ukstylenoos").append("<option value='"+ value.uk_style_ref + "'>" + value.uk_style_ref + "</option>");
                         }
                     }
-                }
-                var options = "<option>Select Style Number</option>";
-                for (i = 0; i < uniqueNames.length; i++) {
-                    options += "<option data-zone=" + zones[i] + ">" + uniqueNames[i] + "</option>";
-                }
+                })
 
-                $('#po-file-upload-button').click(function () {
-                    $('#po-file-upload-group').modal("show")
-                    $('#uvc_select_div').html('<label>Select Style Number</label><select id="style_num" class="form-control selectpicker" data-live-search="true">' + options + '</select>')
-                    $('#style_num').selectpicker('refresh');
-                    $('#new_po_div_status').addClass('hidden');
-                    $('#new_po1_status').addClass('hidden');
-                    $('#map_po_status').addClass('hidden');
-                    $('#update_new_po_status').addClass('hidden');
-                    $('#update_po_status').addClass('hidden');
-                    $('#new_pos_status').addClass('hidden');
-                    $('#map_po_div_status').addClass('hidden');
-                    $('#new_po_no_status').val("")
-                    $('#new_po_file_status').val("")
-                    $('#exist_artwork_div_status').addClass('hidden')
-                    $('#new_po_error_status').addClass('hidden')
-                    $('#new_po_file_error_status').addClass('hidden')
-                    $('#new_po_error_length_status').addClass('hidden');
-                    $('#style_num').change(function () {
-                        if ($(this).val() != "Select Style Number") {
-                            $('#new_po_div_status').addClass('hidden');
-                            $('#new_po1_status').addClass('hidden');
-                            $('#map_po_status').addClass('hidden');
-                            $('#update_new_po_status').addClass('hidden');
-                            $('#update_po_status').addClass('hidden');
-                            $('#new_pos_status').addClass('hidden');
-                            $('#map_po_div_status').addClass('hidden');
-                            $('#exist_artwork_div_status').removeClass('hidden')
+                var d = new Date();
+                var maxDate = d.toLocaleDateString('en-US');
+                d.setMonth(d.getMonth() - 6);
+                var minDate = d.toLocaleDateString('en-US');
 
-                            var selected = $(this).find('option:selected');
-                            var styleNum = selected.val();
-                            var zone = selected.data('zone');
-                            $.ajax({
-                                url: base_url + "/admin/tesco/get-artworks",
-                                type: "get",
-                                dataType: "json",
-                                data: {
-                                    styleNum: styleNum,
-                                    zone: zone
-                                },
-                                beforeSend: function () {
+                // alert(minDate)
+                // alert(maxDate)
 
-                                },
-                                statusCode: {
-                                    /** [Show response status based on HTTP status code] */
-                                    200: function (data) {
-
-                                        $('#check_error_status').addClass('hidden')
-                                        $('#new_po_error_status').addClass('hidden')
-                                        $('#new_po_file_error_status').addClass('hidden')
-                                        $('#new_po_error_length_status').addClass('hidden');
-                                        $('#po-file-upload-group').find('#exist_artwork_div_status ul').html("");
-                                        var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
-                                        var coun = 0;
-                                        var options = "<option>Select PO</option>";
-                                        var unique_po = []
-                                        var old_po = ""
-                                        var new_po_div_status = 0;
-                                        $(newObj).each(function (index1, value1) {
-
-                                            if (value1.purchase_order_no != "" && value1.purchase_order_no != null && value1.po_file != "" && value1.po_file != null) {
-                                                if (old_po != value1.purchase_order_no) {
-                                                    options += "<option>" + value1.purchase_order_no + "</option>";
-                                                }
-                                                old_po = value1.purchase_order_no
-                                                coun++;
-                                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="check-list">' + value1.TemplateName + '</li>')
-                                                new_po_div_status++;
-
-                                            } else {
-                                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="list-group-item">' + value1.TemplateName + '</li>')
-                                            }
-
-                                        });
-
-                                        $('.list-group.checked-list-box .list-group-item').each(function () {
-
-                                            // Settings
-                                            var $widget = $(this),
-                                                $checkbox = $('<input type="checkbox" class="hidden" />'),
-                                                color = ($widget.data('color') ? $widget.data('color') : "primary"),
-                                                style = ($widget.data('style') == "button" ? "btn-" : "list-group-item-"),
-                                                settings = {
-                                                    on: {
-                                                        icon: 'glyphicon glyphicon-check'
-                                                    },
-                                                    off: {
-                                                        icon: 'glyphicon glyphicon-unchecked'
-                                                    }
-                                                };
-                                            $widget.css('cursor', 'pointer')
-                                            $widget.append($checkbox);
-
-                                            // Event Handlers
-                                            $widget.on('click', function () {
-                                                $checkbox.prop('checked', !$checkbox.is(':checked'));
-                                                $checkbox.triggerHandler('change');
-                                                updateDisplay();
-                                            });
-                                            $checkbox.on('change', function () {
-                                                updateDisplay();
-                                            });
-
-
-                                            // Actions
-                                            function updateDisplay() {
-                                                var isChecked = $checkbox.is(':checked');
-
-                                                // Set the button's state
-                                                $widget.data('state', (isChecked) ? "on" : "off");
-
-                                                // Set the button's icon
-                                                $widget.find('.state-icon')
-                                                    .removeClass()
-                                                    .addClass('state-icon ' + settings[$widget.data('state')].icon);
-
-                                                // Update the button's color
-                                                if (isChecked) {
-                                                    $widget.addClass(style + color + ' active');
-                                                } else {
-                                                    $widget.removeClass(style + color + ' active');
-                                                }
-                                            }
-
-                                            // Initialization
-                                            function init() {
-
-                                                if ($widget.data('checked') == true) {
-                                                    $checkbox.prop('checked', !$checkbox.is(':checked'));
-                                                }
-
-                                                updateDisplay();
-
-                                                // Inject the icon if applicable
-                                                if ($widget.find('.state-icon').length == 0) {
-                                                    $widget.prepend('<span class="state-icon ' + settings[$widget.data('state')].icon + '"></span>');
-                                                }
-                                            }
-                                            init();
-                                        });
-
-                                        $('#get-checked-data').on('click', function (event) {
-                                            event.preventDefault();
-                                            var checkedItems = {},
-                                                counter = 0;
-                                            $("#check-list-box li.active").each(function (idx, li) {
-                                                checkedItems[counter] = $(li).text();
-                                                counter++;
-                                            });
-                                            $('#display-json').html(JSON.stringify(checkedItems, null, '\t'));
-                                        });
-
-
-                                        //company wise
-                                        $('.list-group-item').click(function () {
-                                            $count_li = 0;
-                                            $('.list-group li').each(function (key, val) {
-                                                if ($(this).hasClass('active')) {
-                                                    $count_li++;
-                                                }
-                                            });
-                                            if ($count_li > 0) {
-                                                var company_id = $(this).data('company');
-                                                $('.list-group li').each(function (key, val) {
-                                                    if ($(this).data('company') != company_id) {
-                                                        $(this).addClass('hidden');
-                                                    }
-                                                })
-                                            } else {
-                                                $('.list-group li').each(function (key, val) {
-                                                    $(this).removeClass('hidden');
-                                                })
-                                            }
-
-                                        })
-
-
-                                        $('#po_select_div').html('<label>Select PO</label><select id="select_po_status" class="form-control">' + options + '</select>')
-                                        if (coun == 0) {
-                                            $('#map_po_status').addClass('hidden');
-                                            $('#new_po1_status').addClass('hidden');
-                                            $('#new_po_div_status').removeClass('hidden');
-                                            $('#new_pos_status').removeClass('hidden');
-                                        } else {
-                                            $('#map_po_status').removeClass('hidden');
-                                            $('#new_po1_status').removeClass('hidden');
-                                            $('#new_pos_status').addClass('hidden');
-                                        }
-                                        $('#new_po1_status').click(function () {
-                                            var sList = 0;
-                                            $('#exist_artwork_div_status input[type=checkbox]').each(function () {
-                                                if (this.checked) {
-                                                    sList++;
-                                                }
-                                            });
-
-                                            if (sList > 0) {
-
-                                                $('#update_new_po_status').removeClass('hidden')
-                                                $('#update_po_status').addClass('hidden')
-                                                $('#new_pos_status').addClass('hidden')
-                                                $('#new_po_div_status').removeClass('hidden')
-                                                $('#map_po_div_status').addClass('hidden')
-                                                $('#exist_artwork_div_status').removeClass('hidden')
-
-                                            } else {
-                                                $('#check_error_status').removeClass('hidden')
-                                            }
-
-                                        });
-                                        $('#map_po_status').click(function () {
-
-                                            var sList = 0;
-                                            $('#exist_artwork_div_status input[type=checkbox]').each(function () {
-                                                if (this.checked) {
-                                                    sList++;
-                                                }
-                                            });
-
-                                            if (sList > 0) {
-                                                $('#update_po_status').removeClass('hidden')
-                                                $('#update_new_po_status').addClass('hidden')
-                                                $('#new_pos_status').addClass('hidden')
-                                                $('#map_po_div_status').removeClass('hidden')
-                                                $('#new_po_div_status').addClass('hidden')
-                                                $('#exist_artwork_div_status').removeClass('hidden')
-                                                $('#check_error_status').addClass('hidden')
-
-                                            } else {
-                                                $('#check_error_status').removeClass('hidden')
-                                            }
-
-                                        });
-                                        $('#update_new_po_status').click(function () {
-
-                                            var sList = 0;
-                                            $('#exist_artwork_div_status input[type=checkbox]').each(function () {
-                                                if (this.checked) {
-                                                    sList++;
-                                                }
-                                            });
-
-                                            if (sList > 0) {
-                                                $('#check_error_status').addClass('hidden')
-                                                if ($('#new_po_no_status').val() != "" && $('#new_po_file_status').val() != "") {
-
-                                                    if ($('#new_po_no_status').val().length > 9) {
-                                                        $('#new_po_error_length_status').removeClass('hidden');
-                                                        $('#new_po_error_status').addClass('hidden');
-                                                        $('#new_po_file_error_status').addClass('hidden');
-                                                    } else {
-                                                        var a = [];
-                                                        $('#exist_artwork_div_status input[type=checkbox]').each(function () {
-                                                            if (this.checked) {
-                                                                a.push($(this).parent().attr('data-id'));
-                                                            }
-                                                        });
-                                                        var aa = a.join(',');
-                                                        var new_po_file = $('#new_po_file_status').prop('files')[0];
-                                                        var new_po_no = $('#new_po_no_status').val();
-                                                        
-                                                        var form_data = new FormData();
-                                                        form_data.append('id', aa);
-                                                        form_data.append('po_file', new_po_file);
-                                                        form_data.append('po', new_po_no);
-                                                        form_data.append('_token', csrf_token);
-                                                        $.ajax({
-                                                            url: base_url + "/admin/tesco/update-po",
-                                                            dataType: 'text',
-                                                            cache: false,
-                                                            contentType: false,
-                                                            processData: false,
-                                                            data: form_data,
-                                                            type: 'post',
-                                                            success: function (data) {
-                                                                tescoOrderStatus()
-                                                                $('#po-file-upload-group').modal('hide')
-                                                                $('.snackbar_span').html('PO Updated Successfully');
-                                                                showSnackbar();
-                                                            },
-                                                            error: function () {
-                                                                console.log('somethig is wrong, please try later');
-                                                            }
-
-                                                        });
-                                                    }
-
-                                                } else {
-                                                    if ($('#new_po_no_status').val() == "" && $('#new_po_file_status').val() == "") {
-                                                        $('#new_po_error_status').removeClass('hidden')
-                                                        $('#new_po_file_error_status').removeClass('hidden')
-                                                        $('#new_po_error_length_status').addClass('hidden');
-                                                    } else if ($('#new_po_file_status').val() == "") {
-                                                        $('#new_po_file_error_status').removeClass('hidden')
-                                                        $('#new_po_error_status').addClass('hidden')
-                                                        $('#new_po_error_length_status').addClass('hidden');
-                                                    } else if ($('#new_po_no_status').val() == "") {
-                                                        $('#new_po_error_status').removeClass('hidden')
-                                                        $('#new_po_file_error_status').addClass('hidden')
-                                                        $('#new_po_error_length_status').addClass('hidden');
-                                                    }
-
-                                                }
-                                            } else {
-                                                $('#check_error_status').removeClass('hidden')
-                                            }
-                                        });
-
-                                        $('#new_pos_status').click(function () {
-                                            var sList = 0;
-                                            $('#exist_artwork_div_status input[type=checkbox]').each(function () {
-                                                if (this.checked) {
-                                                    sList++;
-                                                }
-                                            });
-
-                                            if (sList > 0) {
-                                                $('#check_error_status').addClass('hidden')
-                                                if ($('#new_po_no_status').val() != "" && $('#new_po_file_status').val() != "") {
-                                                    if ($('#new_po_no_status').val().length > 9) {
-                                                        $('#new_po_error_length_status').removeClass('hidden');
-
-                                                        $('#new_po_error_status').addClass('hidden');
-                                                        $('#new_po_file_error_status').addClass('hidden');
-                                                    } else {
-                                                        var a = [];
-                                                        $('#exist_artwork_div_status input[type=checkbox]').each(function () {
-                                                            if (this.checked) {
-                                                                a.push($(this).parent().attr('data-id'));
-                                                            }
-                                                        });
-                                                        var aa = a.join(',');
-                                                        var new_po_file = $('#new_po_file_status').prop('files')[0];
-                                                        var new_po_no = $('#new_po_no_status').val();
-                                                        
-                                                        var form_data = new FormData();
-                                                        form_data.append('id', aa);
-                                                        form_data.append('po_file', new_po_file);
-                                                        form_data.append('po', new_po_no);
-                                                        form_data.append('_token', csrf_token);
-                                                        $.ajax({
-                                                            url: base_url + "/admin/tesco/update-po",
-                                                            dataType: 'text',
-                                                            cache: false,
-                                                            contentType: false,
-                                                            processData: false,
-                                                            data: form_data,
-                                                            type: 'post',
-                                                            success: function (data) {
-                                                                tescoOrderStatus()
-                                                                $('#po-file-upload-group').modal('hide')
-                                                                $('.snackbar_span').html('PO Updated Successfully');
-                                                                showSnackbar();
-                                                            },
-                                                            error: function () {
-                                                                console.log('somethig is wrong, please try later');
-                                                            }
-
-                                                        });
-                                                    }
-
-                                                } else {
-                                                    if ($('#new_po_no_status').val() == "" && $('#new_po_file_status').val() == "") {
-                                                        $('#new_po_error_status').removeClass('hidden')
-                                                        $('#new_po_file_error_status').removeClass('hidden')
-                                                        $('#new_po_error_length_status').addClass('hidden');
-                                                    } else if ($('#new_po_file_status').val() == "") {
-                                                        $('#new_po_file_error_status').removeClass('hidden')
-                                                        $('#new_po_error_status').addClass('hidden')
-                                                        $('#new_po_error_length_status').addClass('hidden');
-                                                    } else if ($('#new_po_no_status').val() == "") {
-                                                        $('#new_po_error_status').removeClass('hidden')
-                                                        $('#new_po_file_error_status').addClass('hidden')
-                                                        $('#new_po_error_length_status').addClass('hidden');
-                                                    }
-                                                }
-
-                                            } else {
-                                                $('#check_error_status').removeClass('hidden')
-                                            }
-                                        });
-                                        $('#update_po_status').click(function () {
-
-                                            var sList = 0;
-                                            $('#exist_artwork_div_status input[type=checkbox]').each(function () {
-                                                if (this.checked) {
-                                                    sList++;
-                                                }
-                                            });
-
-                                            if (sList > 0) {
-                                                $('#check_error_status').addClass('hidden')
-
-                                                if ($('#select_po_status').val() != "Select PO") {
-                                                    var a = [];
-                                                    $('#exist_artwork_div_status input[type=checkbox]').each(function () {
-                                                        if (this.checked) {
-                                                            a.push($(this).parent().attr('data-id'));
-                                                        }
-                                                    });
-                                                    var aa = a.join(',');
-                                                    
-                                                    $.ajax({
-                                                        url: base_url + "/admin/tesco/copy-po",
-                                                        type: "Post",
-                                                        dataType: "json",
-                                                        data: {
-                                                            _token: csrf_token,
-                                                            id: aa,
-                                                            po: $('#select_po_status').val()
-                                                        },
-                                                        beforeSend: function () {
-
-                                                        },
-                                                        success: function (data) {
-                                                            tescoOrderStatus()
-                                                            $('#po-file-upload-group').modal('hide')
-                                                            $('.snackbar_span').html('PO Updated Successfully');
-                                                            showSnackbar();
-                                                        },
-                                                        error: function (data) {
-
-                                                        },
-                                                        complete: function () {
-                                                            $(".loader").hide();
-                                                        }
-                                                    })
-                                                } else {
-                                                    $('#select_error_status').removeClass('hidden')
-                                                }
-                                            } else {
-                                                $('#check_error_status').removeClass('hidden')
-                                            }
-
-                                        });
-
-                                        if (newObj.length == new_po_div_status) {
-                                            $('#new_po_div_status').addClass('hidden')
-                                            $('#new_po1_status').addClass('hidden')
-                                            $('#map_po_status').addClass('hidden')
-                                        }
-
-                                    },
-                                    400: function () {
-                                        $('.snackbar_span').html('Something went wrong');
-                                        showSnackbar();
-                                    }
-                                },
-                                error: function (data) {
-                                },
-                                complete: function () {
-                                    $(".loader").hide();
-                                }
-                            })
-                        }
-                    });
-
-                });
-
-                var $tableSel = $('#datatable-tesco-orders');
-                $tableSel.DataTable({
-                    "pageLength": 25,
-                    "order": [
-                        [7, "desc"]
-                    ],
-                    "aoColumns": [
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        {
-                            "sType": "date-uk"
+                $('input[name="startdateos"]').daterangepicker({
+                    "minDate": minDate,
+                    "maxDate": maxDate
+                },
+                function (start, end, label) {
+                    var start_date = start.format('YYYY-MM-DD');
+                    var end_date = end.format('YYYY-MM-DD');
+                    $.ajax({
+                        url: base_url + "/admin/tesco/tesco-orders-submit-filter",
+                        type: "Post",
+                        dataType: "json",
+                        data: {
+                            _token: csrf_token,
+                            start_date:start_date,
+                            end_date:end_date
                         },
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                    ],
-                    initComplete: function () {
-                        $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first').append(' <button class="filterbtn" type="button" onClick="showFilter()"><i class="fa fa-filter" aria-hidden="true"></i></button>');
-                        $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first .dataTables_filter').css('display', 'inline-block');
-                        $('.main-content > .dataTables_wrapper > .row > .col-sm-12:first').append('<div class="filter-window"><h5><strong>Order Status Filter</strong></h5> <div class="row"> <div class="col-md-3"><input type="text" class="form-control" style="width:100%" name="daterange" /></div><div class="col-md-3"><select class="selectpicker" id="supplierName"> <option disabled selected>Select Customer</option></select></div><div class="col-md-3"><select class="selectpicker" id="styleNumber"> <option disabled selected>Select Style Number</option></select></div><div class="col-md-3"><select class="selectpicker" id="selectTemplate"> <option disabled selected>Select Template Name</option> </select></div></div><div class="filter-actions"><button class="btn btn-primary input-sm pull-right" id="reset">Clear Filter</button><button id="closeFilter" class="btn btn-default input-sm pull-right" onclick="showFilter()">Close</button><div class="clearfix"></div></div></div>');
-                        //For Custom Filters
-                        this.api().columns().every(function (i) {
-                            var column = this;
-                            if (i === 0 || i === 5 || i === 3) {
-                                var select;
-                                switch (i) {
-                                    case 0:
-                                        select = $('#styleNumber')
-                                        break;
-                                    case 5:
-                                        select = $('#supplierName')
-                                        break;
-                                    case 3:
-                                        select = $('#selectTemplate')
-                                        break;
-                                }
-                                select.on('change', function () {
-                                    var val = $.fn.dataTable.util.escapeRegex(
-                                        $(this).val()
-                                    );
+                        beforeSend: function () {
+                            $(".loader").show();
+                            $(".loader").css('margin-top', '12%');
+                        },
+                        statusCode: {
+                            /** [Show response status based on HTTP status code] */
+                            200: function (data) {
+                                
+                                $("#seasonos").html("");
+                                $("#ukstylenoos").html("");
+                                $("#stylenoos").html("");
 
-                                    column
-                                        .search(val ? '^' + val + '$' : '', true, false)
-                                        .draw();
-                                });
-
-                                select.append('<option value=""> </option>');
-                                column.data().unique().sort().each(function (d, j) {
-                                    cleanText = d.replace(/<\/?[^>]+(>|$)/g, "");
-                                    select.append('<option value="' + cleanText + '">' + cleanText + '</option>')
-                                });
+                                $(data.data).each(function(index,value){
+                                    $("#seasonos").append("<option value='"+ value.season_code + "'>" + value.season_code + "</option>");
+                                })
+                
+                                $(data.style_no).each(function(index,value){
+                                    if (value.zone == "CE") {
+                                        if (uniqueNames.indexOf(value.ce_style_ref) === -1) {
+                                            $("#stylenoos").append("<option value='"+ value.ce_style_ref + "'>" + value.ce_style_ref + "</option>");
+                                        }
+                                    } else {
+                                        if (uniqueNames.indexOf(value.uk_style_ref) === -1) {
+                                            $("#ukstylenoos").append("<option value='"+ value.uk_style_ref + "'>" + value.uk_style_ref + "</option>");
+                                        }
+                                    }
+                                })
+                                $(".selectpicker").val('');
+                                $('.selectpicker').selectpicker('refresh');
+                            },
+                            400: function () {
+                                $('.snackbar_span').html('Something went wrong');
+                                showSnackbar();
                             }
-                        });
-                    }
+                        },
+                        error: function (data) {
+                        },
+                        complete: function () {
+                            $(".loader").hide();
+                            $(".loader").css('margin-top', '0%');
+                        }
+                    })
                 });
 
-                $("#reset").on("click", function () {
-                    $('#styleNumber').val('').change();
-                    $('#supplierName').val('').change();
-                    $('#selectTemplate').val('').change();
-                    $.fn.dataTableExt.afnFiltering.length = 0;
-                    $tableSel.dataTable().fnDraw();
-                    $('input[name="daterange"]').val('Filter by Order Date');
-                    $('input[name="daterange"]').datepicker("refresh");
-                    $('.selectpicker').selectpicker('val', 1);
-                    $('.selectpicker').selectpicker('refresh');
+            },
+            400: function () {
+                $('.snackbar_span').html('Something went wrong');
+                showSnackbar();
+            }
+        },
+        error: function (data) {
+        },
+        complete: function () {
+            $(".loader").hide();
+            $(".loader").css('margin-top', '0%');
+        }
+    })
+}
 
-                });
+function submitOs(obj)
+{
+    var seasonos = $('#seasonos').val();
+    var ukstylenoos = $('#ukstylenoos').val();
+    var orderstatusos = $('#orderstatusos').val();
+    var artworkstatusos = $('#artworkstatusos').val();
+    var postatusos = $('#postatusos').val();
+    var pistatusos = $('#pistatusos').val();
+    var stylenoos = $('#stylenoos').val();
+    $.ajax({
+        url: base_url + "/admin/tesco/tesco-submit-os",
+        type: "Post",
+        dataType: "json",
+        data: {
+            _token: csrf_token,
+            seasonos:seasonos,
+            ukstylenoos:ukstylenoos,
+            orderstatusos:orderstatusos,
+            artworkstatusos:artworkstatusos,
+            postatusos:postatusos,
+            pistatusos:pistatusos,
+            stylenoos:stylenoos,
+        },
+        beforeSend: function () {
+            $(".loader").show();
+            $(".loader").css('margin-top', '12%');
+        },
+        statusCode: {
+            /** [Show response status based on HTTP status code] */
+            200: function (data) {
+                
 
-                $('.selectpicker').selectpicker();
-                $('input[name="daterange"]').daterangepicker({
-
-                    },
-                    function (start, end, label) {
-                        $.fn.dataTableExt.afnFiltering.length = 0;
-                        $tableSel.dataTable().fnDraw();
-                        filterByDate(6, start, end); // We call our filter function
-                        $tableSel.dataTable().fnDraw(); // Manually redraw the table after filtering
-                    });
-
-                $('input[name="daterange"]').val('Filter by Order Date');
-
-
-                // Clear the filter. Unlike normal filters in Datatables,
-                // custom filters need to be removed from the afnFiltering array.
-                $('.cancelBtn').on('click', function (e) {
-                    e.preventDefault();
-                    $.fn.dataTableExt.afnFiltering.length = 0;
-                    $tableSel.dataTable().fnDraw();
-                });
-                $('.pi-view').tooltip('show')
-                $('.pi-view').tooltip('toggle')
-                $('.po-view').tooltip('show')
-                $('.po-view').tooltip('toggle')
-                $("#datatable-tesco-orders_filter input").addClass('form-control input-sm');
-                $("#datatable-tesco-orders_filter input").attr('placeholder', 'Data Search');
-                $('#datatable-tesco-orders_length select').addClass('form-control input-sm');
             },
             400: function () {
                 $('.snackbar_span').html('Something went wrong');
