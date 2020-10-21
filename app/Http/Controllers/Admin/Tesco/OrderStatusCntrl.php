@@ -138,6 +138,215 @@ class OrderStatusCntrl extends Controller
         }
         return $result;
     }
+    public function tescoFilter(Request $request)
+    {
+        try
+		{
+            $tcl1 = "TCL 1";
+			$tesco_tcl1_orders = "tesco_tcl1_orders";
+			$actions="-";
+            $ddmmyy="DD-MM-YYYY";
+            $date_start = date("Y-m-d", strtotime(" -6 month"));
+            $date_end = date("Y-m-d");
+
+            $tcl1 = DB::table("tesco_tcl1_orders")
+            ->whereBetween('tesco_tcl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                ->select("season_code");
+
+            $tcl2 = DB::table("tesco_tcl2_orders")
+            ->whereBetween('tesco_tcl2_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                ->select("season_code");
+            
+            $tcl4 = DB::table("tesco_tcl4_orders")
+            ->whereBetween('tesco_tcl4_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("season_code");
+
+            $tsl1 = DB::table("tesco_tsl1_orders")
+            ->whereBetween('tesco_tsl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("season_code");
+
+            $tsl3 = DB::table("tesco_tsl3_orders")
+            ->whereBetween('tesco_tsl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("season_code");
+
+            $thl1 = DB::table("tesco_thl1_orders")
+            ->whereBetween('tesco_thl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("season_code");
+                
+            $data = DB::table("tesco_thl3_orders")
+            ->whereBetween('tesco_thl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                ->select("season_code")
+                ->groupBy('season_code')
+                ->union($tcl1)
+                ->union($tcl2)
+                ->union($tcl4)
+                ->union($tsl1)
+                ->union($tsl3)
+                ->union($thl1)
+                ->get();
+
+            $tcl1_style = DB::table("tesco_tcl1_orders")
+            ->whereBetween('tesco_tcl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("uk_style_ref","ce_style_ref","zone");
+
+            $tcl2_style = DB::table("tesco_tcl2_orders")
+            ->whereBetween('tesco_tcl2_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("uk_style_ref","ce_style_ref","zone");
+                    
+            $tcl4_style = DB::table("tesco_tcl4_orders")
+            ->whereBetween('tesco_tcl4_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("uk_style_ref","ce_style_ref","zone");
+            
+            $tsl1_style = DB::table("tesco_tsl1_orders")
+            ->whereBetween('tesco_tsl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("uk_style_ref","ce_style_ref","zone");
+            
+            $tsl3_style = DB::table("tesco_tsl3_orders")
+            ->whereBetween('tesco_tsl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("uk_style_ref","ce_style_ref","zone");
+
+            $thl1_style = DB::table("tesco_thl1_orders")
+            ->whereBetween('tesco_thl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("uk_style_ref","ce_style_ref","zone");
+
+            $style_no = DB::table("tesco_thl3_orders")
+                        ->whereBetween('tesco_thl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                        ->select("uk_style_ref","ce_style_ref","zone")
+                        ->union($tcl1_style)
+                        ->union($tcl2_style)
+                        ->union($tcl4_style)
+                        ->union($tsl1_style)
+                        ->union($tsl3_style)
+                        ->union($thl1_style)
+                        ->get();
+
+            //$data = json_decode($data);
+            $result = response()->json(['error'=> false,'message' =>'success','data'=>$data,'style_no'=>$style_no],200);
+            return $result;
+        }
+        catch (\Exception $e)
+        {
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+    }
+    public function tescoOrdersSubmitFilter(Request $request)
+    {
+        try
+		{
+            $date_start = $request->start_date;
+            $date_end = $request->end_date;
+
+            $tcl1 = DB::table("tesco_tcl1_orders")
+            ->whereBetween('tesco_tcl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                ->select("season_code");
+
+            $tcl2 = DB::table("tesco_tcl2_orders")
+            ->whereBetween('tesco_tcl2_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                ->select("season_code");
+            
+            $tcl4 = DB::table("tesco_tcl4_orders")
+            ->whereBetween('tesco_tcl4_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("season_code");
+
+            $tsl1 = DB::table("tesco_tsl1_orders")
+            ->whereBetween('tesco_tsl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("season_code");
+
+            $tsl3 = DB::table("tesco_tsl3_orders")
+            ->whereBetween('tesco_tsl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("season_code");
+
+            $thl1 = DB::table("tesco_thl1_orders")
+            ->whereBetween('tesco_thl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("season_code");
+                
+            $data = DB::table("tesco_thl3_orders")
+            ->whereBetween('tesco_thl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                ->select("season_code")
+                ->groupBy('season_code')
+                ->union($tcl1)
+                ->union($tcl2)
+                ->union($tcl4)
+                ->union($tsl1)
+                ->union($tsl3)
+                ->union($thl1)
+                ->get();
+
+            $tcl1_style = DB::table("tesco_tcl1_orders")
+            ->whereBetween('tesco_tcl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("uk_style_ref","ce_style_ref","zone");
+
+            $tcl2_style = DB::table("tesco_tcl2_orders")
+            ->whereBetween('tesco_tcl2_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("uk_style_ref","ce_style_ref","zone");
+                    
+            $tcl4_style = DB::table("tesco_tcl4_orders")
+            ->whereBetween('tesco_tcl4_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("uk_style_ref","ce_style_ref","zone");
+            
+            $tsl1_style = DB::table("tesco_tsl1_orders")
+            ->whereBetween('tesco_tsl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("uk_style_ref","ce_style_ref","zone");
+            
+            $tsl3_style = DB::table("tesco_tsl3_orders")
+            ->whereBetween('tesco_tsl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("uk_style_ref","ce_style_ref","zone");
+
+            $thl1_style = DB::table("tesco_thl1_orders")
+            ->whereBetween('tesco_thl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("uk_style_ref","ce_style_ref","zone");
+
+            $style_no = DB::table("tesco_thl3_orders")
+                        ->whereBetween('tesco_thl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                        ->select("uk_style_ref","ce_style_ref","zone")
+                        ->union($tcl1_style)
+                        ->union($tcl2_style)
+                        ->union($tcl4_style)
+                        ->union($tsl1_style)
+                        ->union($tsl3_style)
+                        ->union($thl1_style)
+                        ->get();
+
+            //$data = json_decode($data);
+            $result = response()->json(['error'=> false,'message' =>'success','data'=>$data,'style_no'=>$style_no],200);
+            return $result;
+        }
+        catch (\Exception $e)
+        {
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+    }
+    
+
+    public function tescoSubmitOs(Request $request)
+    {
+        try
+		{
+            $seasonos      = $request->seasonos;
+			$orderstatusos    = $request->orderstatusos;
+            $artworkstatusos     = $request->artworkstatusos; 
+            $postatusos      = $request->postatusos;
+			$pistatusos    = $request->pistatusos;
+            $stylenoos     = $request->stylenoos; 
+            $ukstylenoos     = $request->ukstylenoos; 
+            $orders = DB::table("tesco_tcl1_orders")
+                        ->whereIn('season_code', $seasonos)
+                        ->whereIn('ce_style_ref', $stylenoos)
+                        ->whereIn('uk_style_ref', $ukstylenoos)
+                        ->whereIn('po_status', $postatusos)
+                        ->whereIn('pi_status', $pistatusos)
+                        ->select("*")
+                        ->get();
+
+            //$data = json_decode($data);
+            $result = response()->json(['error'=> false,'message' =>'success','data'=>$orders],200);
+            return $result;
+        }
+        catch (\Exception $e)
+        {
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+    }
     
     /**
      * method to set the PO number for an order
