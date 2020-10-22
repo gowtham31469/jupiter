@@ -17,6 +17,7 @@ class ErpOrders
 	private $from;
 	private $financial_year_start;
 	private $financial_year_end;
+	private $financial_year;
 	
 	/**
 	 * Create a new controller instance.
@@ -46,7 +47,8 @@ class ErpOrders
 						->startOfDay()        // 2018-09-29 00:00:00.000000
 						->toDateTimeString(); // 2018-09-29 00:00:00
 
-		// store financial year start and end date
+		// store financial year start and end date and
+		// financial year identification
 		if($this->today_date < $this->financial_year_date_format){
 			$this->financial_year_start = Carbon::parse($this->financial_year_date_format)->subYear()->toDateString();
 			$this->financial_year_end = Carbon::parse($this->financial_year_date_format)->subDay()->toDateString();
