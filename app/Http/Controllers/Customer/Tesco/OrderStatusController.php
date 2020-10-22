@@ -383,6 +383,10 @@ class OrderStatusController extends Controller
             unset($data['price_list']);
             $attachment =  $pi_obj->getTescoAttachment($data,$request);
 
+            // call PI generation function
+            $pi_id = $pi_obj->piNumberGenerator();
+            $pi_number = $data['company_details']->id === 1?"JGA-PI-".$pi_id:"SP-PI-".$pi_id;
+
             $erpOrders  =   [];
 
             if ($data)
@@ -415,7 +419,8 @@ class OrderStatusController extends Controller
                     'template_type'  => $data['bank_details']->template_type,
                     'revision_no'  => $data['item_details'][0]->pi_rev_no,
                     'rep_order_id'     => $rep_order_id,
-                    'pi_file'         => $attachment
+                    'pi_file'         => $attachment,
+                    'pi_number'       => $pi_number
                     
                 ]);
                 foreach ($data['item_details'] as $key => $value)
