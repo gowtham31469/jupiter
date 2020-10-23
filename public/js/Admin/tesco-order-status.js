@@ -46,6 +46,8 @@ function tescoOrderStatus() {
                 </div>
                 <div class="row" style="margin-top: 15px;">
                 <div class="col-md-12">
+                <input type="hidden" id="start_date">
+                <input type="hidden" id="end_date">
                 <button class="btn btn-primary input-sm pull-right" onclick="submitOs(this)" id="submitos">Submit</button>
                 </div>
                 </div>
@@ -83,6 +85,8 @@ function tescoOrderStatus() {
                 function (start, end, label) {
                     var start_date = start.format('YYYY-MM-DD');
                     var end_date = end.format('YYYY-MM-DD');
+                    $('#start_date').val(start_date);
+                    $('#end_date').val(end_date);
                     $.ajax({
                         url: base_url + "/admin/tesco/tesco-orders-submit-filter",
                         type: "Post",
@@ -160,6 +164,8 @@ function submitOs(obj)
     var postatusos = $('#postatusos').val();
     var pistatusos = $('#pistatusos').val();
     var stylenoos = $('#stylenoos').val();
+    var start_date = $('#start_date').val();
+    var end_date = $('#end_date').val();
     $.ajax({
         url: base_url + "/admin/tesco/tesco-submit-os",
         type: "Post",
@@ -173,6 +179,8 @@ function submitOs(obj)
             postatusos:postatusos,
             pistatusos:pistatusos,
             stylenoos:stylenoos,
+            start_date:start_date,
+            end_date:end_date
         },
         beforeSend: function () {
             $(".loader").show();
