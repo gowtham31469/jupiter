@@ -51,7 +51,7 @@ function tescoOrderStatus() {
                 <button class="btn btn-primary input-sm pull-right" onclick="submitOs(this)" id="submitos">Submit</button>
                 </div>
                 </div>
-                <div id="OrderStatusTable"></div>
+                <div style="padding-top:15px;" id="OrderStatusTable"></div>
                 `);
 
                 $(data.data).each(function(index,value){
@@ -189,8 +189,36 @@ function submitOs(obj)
         statusCode: {
             /** [Show response status based on HTTP status code] */
             200: function (data) {
-                
-
+                $('#OrderStatusTable').html(tescoStatusTable(data.data, "path"))
+                var $tableSel = $('#datatable-tesco-orders');
+                $tableSel.DataTable({
+                    "pageLength": 25,
+                    "order": [
+                        [7, "desc"]
+                    ],
+                    "aoColumns": [
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        {
+                            "sType": "date-uk"
+                        },
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                    ],
+                    initComplete: function () {
+                        $("#datatable-tesco-orders_filter input").addClass('form-control input-sm');
+                        $("#datatable-tesco-orders_filter input").attr('placeholder', 'Data Search');
+                        $('#datatable-tesco-orders_length select').addClass('form-control input-sm');
+                    }
+                });
             },
             400: function () {
                 $('.snackbar_span').html('Something went wrong');
