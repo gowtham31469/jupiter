@@ -20,7 +20,7 @@ class ErpOrderDetails extends Model
       *
       * @var array
       */
-      protected $fillable = ['id', 'erp_order_id', 'style_no', 'order_quantity', 'delivered_quantity', 'size', 'delivery_date', 'order_qnty_table_name', 'order_qnty_table_id', 'status', 'created_at','updated_at', 'deleted_at', 'company_id', 'template_id', 'reference_name', 'rate', 'ocn_number', 'pending_orders', 'template_type','custom_ref_name','buyer_po_number','zone','order_type', 'order_status_id', 'jc_created_date', 'po_verified_date', 'invoice_created_date', 'order_hold_date', 'po_manager_approved_by', 'jc_created_by', 'invoice_created_by', 'order_hold_by', 'order_cancelled_by', 'jc_number', 'invoice_number', 'reason', 'po_reapproved_date', 'po_rejected_date', 'po_rejected_by', 'aw_date', 'order_date', 'uuid'];
+      protected $fillable = ['id', 'erp_order_id', 'style_no', 'order_quantity', 'delivered_quantity', 'size', 'delivery_date', 'order_qnty_table_name', 'order_qnty_table_id', 'status', 'created_at','updated_at', 'deleted_at', 'company_id', 'template_id', 'reference_name', 'rate', 'ocn_number', 'pending_orders', 'template_type','custom_ref_name','buyer_po_number','zone','order_type', 'order_status_id', 'jc_created_date', 'po_verified_date', 'invoice_created_date', 'order_hold_date', 'po_manager_approved_by', 'jc_created_by', 'invoice_created_by', 'order_hold_by', 'order_cancelled_by', 'jc_number', 'invoice_number', 'reason', 'po_reapproved_date', 'po_rejected_date', 'po_rejected_by', 'aw_date', 'order_date', 'uuid', 'fiscal_year_start', 'fiscal_year_endd'];
 	/**
      * Get the Orders.
      */
