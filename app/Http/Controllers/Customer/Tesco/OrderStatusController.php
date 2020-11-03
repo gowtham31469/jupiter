@@ -1116,6 +1116,8 @@ class OrderStatusController extends Controller
         }
 
         $order_qnty = (array_sum($count)>0)?0:1 ;
+        $order_status  = $order_qnty === 1?'Order Pending':'Order Placed';
+        $edit_permission  = $order_qnty === 1?1:0;
 
         // check for same po number and style combination already exists or not.
         if($zone == "CE")
@@ -1167,6 +1169,8 @@ class OrderStatusController extends Controller
                                 'tag_at_source'        => $request['tag_at_source'],
                                 'is_order_count_empty' => $order_qnty,
                                 'ocn_number'           => $request['tesco_ocn'],
+                                'order_status'         => $order_status,
+                                'edit_permission'      => $edit_permission
                             ]);
 
             DB::table($qty_table_name)->where($foreign_key,$template_id)->delete();
