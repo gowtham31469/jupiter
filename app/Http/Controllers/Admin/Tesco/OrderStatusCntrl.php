@@ -322,20 +322,199 @@ class OrderStatusCntrl extends Controller
     {
         try
 		{
-            $seasonos      = $request->seasonos;
-			$orderstatusos    = $request->orderstatusos;
-            $artworkstatusos     = $request->artworkstatusos; 
-            $postatusos      = $request->postatusos;
-			$pistatusos    = $request->pistatusos;
-            $stylenoos     = $request->stylenoos; 
-            $ukstylenoos     = $request->ukstylenoos; 
-            $orders = DB::table("tesco_tcl1_orders")
-                        ->whereIn('season_code', $seasonos)
-                        ->whereIn('ce_style_ref', $stylenoos)
-                        ->whereIn('uk_style_ref', $ukstylenoos)
-                        ->whereIn('po_status', $postatusos)
-                        ->whereIn('pi_status', $pistatusos)
-                        ->select("*")
+            if($request->seasonos !== null)
+            {
+                $seasonos = $request->seasonos;
+            }
+            else
+            {
+                $seasonos = array();
+            }
+
+            if($request->orderstatusos !== null)
+            {
+                $orderstatusos = $request->orderstatusos;
+            }
+            else
+            {
+                $orderstatusos = [];
+            }
+
+            if($request->artworkstatusos !== null)
+            {
+                $artworkstatusos = $request->artworkstatusos;
+            }
+            else
+            {
+                $artworkstatusos = [];
+            }
+
+
+            if($request->postatusos !== null)
+            {
+                $postatusos = $request->postatusos;
+            }
+            else
+            {
+                $postatusos = [];
+            }
+
+            if($request->pistatusos !== null)
+            {
+                $pistatusos = $request->pistatusos;
+            }
+            else
+            {
+                $pistatusos = [];
+            }
+
+            if($request->stylenoos !== null)
+            {
+                $stylenoos = $request->stylenoos;
+            }
+            else
+            {
+                $stylenoos = [];
+            }
+
+            if($request->ukstylenoos !== null)
+            {
+                $ukstylenoos = $request->ukstylenoos;
+            }
+            else
+            {
+                $ukstylenoos = [];
+            }
+
+            if (in_array("Approval Pending", $artworkstatusos))
+            {
+                array_splice($artworkstatusos, array_search("Approval Pending", $artworkstatusos ), 1);
+                array_push($artworkstatusos,"Order Placed","Saved","Order Pending");
+            }
+            if($request->start_date !== null)
+            {
+                $date_start = $request->start_date;
+            }
+            else
+            {
+                $date_start = date("Y-m-d", strtotime(" -6 month"));
+            }
+            
+            if($request->end_date !== null)
+            {
+                $date_end = $request->end_date;
+            }
+            else
+            {
+                $date_end = date("Y-m-d");
+            }
+           
+            
+            $tcl1 = "TCL 1";
+			$tesco_tcl1_orders = "tesco_tcl1_orders";
+			$actions="-";
+			$ddmmyy="DD-MM-YYYY";
+            $tesco_tcl1_orders = DB::table("tesco_tcl1_orders")
+                            ->join('customers','tesco_tcl1_orders.tesco_supplier_id','=','customers.id')
+                            ->whereBetween('tesco_tcl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                            ->orWhereIn('season_code', $seasonos)
+                            ->orWhereIn('order_status', $orderstatusos)
+                            ->orWhereIn('order_status', $artworkstatusos)
+                            ->orWhereIn('ce_style_ref', $stylenoos)
+                            ->orWhereIn('uk_style_ref', $ukstylenoos)
+                            ->orWhereIn('po_status', $postatusos)
+                            ->orWhereIn('pi_status', $pistatusos)
+                            ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_tcl1_orders.uk_style_ref','tesco_tcl1_orders.ce_style_ref','tesco_tcl1_orders.po_number as BuyerPO','tesco_tcl1_orders.zone as Zone',DB::raw("'".$tcl1."'".' as "TemplateName"'),'tesco_tcl1_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_tcl1_orders.created_at as OrderDate',DB::raw('to_char(tesco_tcl1_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_tcl1_orders.order_status as Artwork Status','tesco_tcl1_orders.pi_status as PI Status','tesco_tcl1_orders.po_status as PO Status','tesco_tcl1_orders.purchase_order_no as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'".$tesco_tcl1_orders."'".' as "tableName"'),'tesco_tcl1_orders.id as tableID','tesco_tcl1_orders.po_file','customers.pi_required','customers.po_required','tesco_tcl1_orders.template_id','tesco_tcl1_orders.order_flag','customers.delivery_day_count','is_order_count_empty');
+
+            $tcl2 = "TCL 2";
+            $tesco_tcl2_orders = "tesco_tcl2_orders";
+            $tesco_tcl2_orders = DB::table("tesco_tcl2_orders")
+            ->join('customers','tesco_tcl2_orders.tesco_supplier_id','=','customers.id')
+                            ->whereBetween('tesco_tcl2_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                            ->orWhereIn('season_code', $seasonos)
+                            ->orWhereIn('order_status', $orderstatusos)
+                            ->orWhereIn('order_status', $artworkstatusos)
+                            ->orWhereIn('ce_style_ref', $stylenoos)
+                            ->orWhereIn('uk_style_ref', $ukstylenoos)
+                            ->orWhereIn('po_status', $postatusos)
+                            ->orWhereIn('pi_status', $pistatusos)
+                            ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_tcl2_orders.uk_style_ref','tesco_tcl2_orders.ce_style_ref','tesco_tcl2_orders.po_number as BuyerPO','tesco_tcl2_orders.zone as Zone',DB::raw("'".$tcl2."'".' as "TemplateName"'),'tesco_tcl2_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_tcl2_orders.created_at as OrderDate',DB::raw('to_char(tesco_tcl2_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_tcl2_orders.order_status as Artwork Status','tesco_tcl2_orders.pi_status as PI Status','tesco_tcl2_orders.po_status as PO Status','tesco_tcl2_orders.purchase_order_no as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'".$tesco_tcl2_orders."'".' as "tableName"'),'tesco_tcl2_orders.id as tableID','tesco_tcl2_orders.po_file','customers.pi_required','customers.po_required','tesco_tcl2_orders.template_id','tesco_tcl2_orders.order_flag','customers.delivery_day_count','is_order_count_empty');
+
+            $tcl4 = "TCL 4";
+            $tesco_tcl4_orders = "tesco_tcl4_orders";
+            $tesco_tcl4_orders = DB::table("tesco_tcl4_orders")
+            ->join('customers','tesco_tcl4_orders.tesco_supplier_id','=','customers.id')
+                            ->whereBetween('tesco_tcl4_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                            ->orWhereIn('season_code', $seasonos)
+                            ->orWhereIn('order_status', $orderstatusos)
+                            ->orWhereIn('order_status', $artworkstatusos)
+                            ->orWhereIn('ce_style_ref', $stylenoos)
+                            ->orWhereIn('uk_style_ref', $ukstylenoos)
+                            ->orWhereIn('po_status', $postatusos)
+                            ->orWhereIn('pi_status', $pistatusos)
+                            ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_tcl4_orders.uk_style_ref','tesco_tcl4_orders.ce_style_ref','tesco_tcl4_orders.po_number as BuyerPO','tesco_tcl4_orders.zone as Zone',DB::raw("'".$tcl4."'".' as "TemplateName"'),'tesco_tcl4_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_tcl4_orders.created_at as OrderDate',DB::raw('to_char(tesco_tcl4_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_tcl4_orders.order_status as Artwork Status','tesco_tcl4_orders.pi_status as PI Status','tesco_tcl4_orders.po_status as PO Status','tesco_tcl4_orders.purchase_order_no as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'".$tesco_tcl4_orders."'".' as "tableName"'),'tesco_tcl4_orders.id as tableID','tesco_tcl4_orders.po_file','customers.pi_required','customers.po_required','tesco_tcl4_orders.template_id','tesco_tcl4_orders.order_flag','customers.delivery_day_count','is_order_count_empty');
+
+            $tsl1 = "TSL 1";
+            $tesco_tsl1_orders = "tesco_tsl1_orders";
+            $tesco_tsl1_orders = DB::table("tesco_tsl1_orders")
+            ->join('customers','tesco_tsl1_orders.tesco_supplier_id','=','customers.id')
+                            ->whereBetween('tesco_tsl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                            ->orWhereIn('season_code', $seasonos)
+                            ->orWhereIn('order_status', $orderstatusos)
+                            ->orWhereIn('order_status', $artworkstatusos)
+                            ->orWhereIn('ce_style_ref', $stylenoos)
+                            ->orWhereIn('uk_style_ref', $ukstylenoos)
+                            ->orWhereIn('po_status', $postatusos)
+                            ->orWhereIn('pi_status', $pistatusos)
+                            ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_tsl1_orders.uk_style_ref','tesco_tsl1_orders.ce_style_ref','tesco_tsl1_orders.po_number as BuyerPO','tesco_tsl1_orders.zone as Zone',DB::raw("'".$tsl1."'".' as "TemplateName"'),'tesco_tsl1_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_tsl1_orders.created_at as OrderDate',DB::raw('to_char(tesco_tsl1_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_tsl1_orders.order_status as Artwork Status','tesco_tsl1_orders.pi_status as PI Status','tesco_tsl1_orders.po_status as PO Status','tesco_tsl1_orders.purchase_order_no as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'".$tesco_tsl1_orders."'".' as "tableName"'),'tesco_tsl1_orders.id as tableID','tesco_tsl1_orders.po_file','customers.pi_required','customers.po_required','tesco_tsl1_orders.template_id','tesco_tsl1_orders.order_flag','customers.delivery_day_count','is_order_count_empty');
+
+			$tsl3 = "TSL 3";
+			$tesco_tsl3_orders = "tesco_tsl3_orders";
+            $tesco_tsl3_orders = DB::table("tesco_tsl3_orders")
+            ->join('customers','tesco_tsl3_orders.tesco_supplier_id','=','customers.id')
+                            ->whereBetween('tesco_tsl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                            ->orWhereIn('season_code', $seasonos)
+                            ->orWhereIn('order_status', $orderstatusos)
+                            ->orWhereIn('order_status', $artworkstatusos)
+                            ->orWhereIn('ce_style_ref', $stylenoos)
+                            ->orWhereIn('uk_style_ref', $ukstylenoos)
+                            ->orWhereIn('po_status', $postatusos)
+                            ->orWhereIn('pi_status', $pistatusos)
+                            ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_tsl3_orders.uk_style_ref','tesco_tsl3_orders.ce_style_ref','tesco_tsl3_orders.po_number as BuyerPO','tesco_tsl3_orders.zone as Zone',DB::raw("'".$tsl3."'".' as "TemplateName"'),'tesco_tsl3_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_tsl3_orders.created_at as OrderDate',DB::raw('to_char(tesco_tsl3_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_tsl3_orders.order_status as Artwork Status','tesco_tsl3_orders.pi_status as PI Status','tesco_tsl3_orders.po_status as PO Status','tesco_tsl3_orders.purchase_order_no as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'".$tesco_tsl3_orders."'".' as "tableName"'),'tesco_tsl3_orders.id as tableID','tesco_tsl3_orders.po_file','customers.pi_required','customers.po_required','tesco_tsl3_orders.template_id','tesco_tsl3_orders.order_flag','customers.delivery_day_count','is_order_count_empty');
+
+            $thl1 = "THL 1";
+            $tesco_thl1_orders = "tesco_thl1_orders";
+            $tesco_thl1_orders = DB::table("tesco_thl1_orders")
+            ->join('customers','tesco_thl1_orders.tesco_supplier_id','=','customers.id')
+                            ->whereBetween('tesco_thl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                            ->orWhereIn('season_code', $seasonos)
+                            ->orWhereIn('order_status', $orderstatusos)
+                            ->orWhereIn('order_status', $artworkstatusos)
+                            ->orWhereIn('ce_style_ref', $stylenoos)
+                            ->orWhereIn('uk_style_ref', $ukstylenoos)
+                            ->orWhereIn('po_status', $postatusos)
+                            ->orWhereIn('pi_status', $pistatusos)
+                            ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_thl1_orders.uk_style_ref','tesco_thl1_orders.ce_style_ref','tesco_thl1_orders.po_number as BuyerPO','tesco_thl1_orders.zone as Zone',DB::raw("'".$thl1."'".' as "TemplateName"'),'tesco_thl1_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_thl1_orders.created_at as OrderDate',DB::raw('to_char(tesco_thl1_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_thl1_orders.order_status as Artwork Status','tesco_thl1_orders.pi_status as PI Status','tesco_thl1_orders.po_status as PO Status','tesco_thl1_orders.purchase_order_no as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'".$tesco_thl1_orders."'".' as "tableName"'),'tesco_thl1_orders.id as tableID','tesco_thl1_orders.po_file','customers.pi_required','customers.po_required','tesco_thl1_orders.template_id','tesco_thl1_orders.order_flag','customers.delivery_day_count','is_order_count_empty');
+
+			$thl3 = "THL 3";
+			$tesco_thl3_orders = "tesco_thl3_orders";
+            $orders = DB::table("tesco_thl3_orders")
+            ->join('customers','tesco_thl3_orders.tesco_supplier_id','=','customers.id')
+                        ->whereBetween('tesco_thl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                        ->orWhereIn('season_code', $seasonos)
+                        ->orWhereIn('order_status', $orderstatusos)
+                        ->orWhereIn('order_status', $artworkstatusos)
+                        ->orWhereIn('ce_style_ref', $stylenoos)
+                        ->orWhereIn('uk_style_ref', $ukstylenoos)
+                        ->orWhereIn('po_status', $postatusos)
+                        ->orWhereIn('pi_status', $pistatusos)
+                        ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_thl3_orders.uk_style_ref','tesco_thl3_orders.ce_style_ref','tesco_thl3_orders.po_number as BuyerPO','tesco_thl3_orders.zone as Zone',DB::raw("'".$thl3."'".' as "TemplateName"'),'tesco_thl3_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_thl3_orders.created_at as OrderDate',DB::raw('to_char(tesco_thl3_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_thl3_orders.order_status as Artwork Status','tesco_thl3_orders.pi_status as PI Status','tesco_thl3_orders.po_status as PO Status','tesco_thl3_orders.purchase_order_no as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'".$tesco_thl3_orders."'".' as "tableName"'),'tesco_thl3_orders.id as tableID','tesco_thl3_orders.po_file','customers.pi_required','customers.po_required','tesco_thl3_orders.template_id','tesco_thl3_orders.order_flag','customers.delivery_day_count','is_order_count_empty')
+                        ->union($tesco_tcl1_orders)
+                        ->union($tesco_tcl2_orders)
+                        ->union($tesco_tcl4_orders)
+                        ->union($tesco_tsl1_orders)
+                        ->union($tesco_tsl3_orders)
+                        ->union($tesco_thl1_orders)
                         ->get();
 
             //$data = json_decode($data);
@@ -610,6 +789,10 @@ class OrderStatusCntrl extends Controller
             $data       =   $pi_obj->getTescoPIDetails($request);
             unset($data['price_list']);
             $attachment =  $pi_obj->getTescoAttachment($data,$request);
+
+            // call PI generation function
+            $pi_id = $pi_obj->piNumberGenerator();
+            $pi_number = $data['company_details']->id === 1?"JGA-PI-".$pi_id:"SP-PI-".$pi_id;
             
             $erpOrders  =   [];
 
@@ -643,7 +826,8 @@ class OrderStatusCntrl extends Controller
                     'template_type'    => $data['bank_details']->template_type,
                     'revision_no'      => $data['item_details'][0]->pi_rev_no,
                     'rep_order_id'     => $rep_order_id,
-                     'pi_file'         => $attachment
+                    'pi_file'          => $attachment,
+                    'pi_number'        => $pi_number
                     
                 ]);
                 foreach ($data['item_details'] as $key => $value)
