@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Redis;
 use App\ErpOrders as Erp;
 use App\ErpOrderDetails as ErpOrderDetails;
 use App\Classes\CleanString;
+use App\OrderManagementHistory;
 
 class OrderStatusCntrl extends Controller
 {
@@ -574,6 +575,13 @@ class OrderStatusCntrl extends Controller
                 'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                 ]);
 
+            // update po upload status in order history table
+            $po_upload_status = $po_status === "PO Pending"?"PO Upload Pending":$po_status;
+            OrderManagementHistory::where([['order_table_name', $table_name], ['order_table_id', $template_id]])->update([
+              'po_status' => $po_upload_status,
+              'customer_po' => $po_number,
+            ]);
+
             if ($po_status === "PO Uploaded") {
                 /** @var array [Pass array of values to updateTescoErpOrders function] */
                 $data_array_2 = [];
@@ -685,6 +693,12 @@ class OrderStatusCntrl extends Controller
                 'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
 
             ]);
+
+            // update po upload status in order history table
+            $po_upload_status = $po_status === "PO Pending"?"PO Upload Pending":$po_status;
+            OrderManagementHistory::where([['order_table_name', $table_name], ['order_table_id', $row_id]])->update([
+                'po_status' => $po_upload_status,
+              ]);
             
             if ($po_status == "PO Uploaded") {
                 /** @var array [Pass array of values to updateTescoErpOrders function] */
@@ -910,6 +924,11 @@ class OrderStatusCntrl extends Controller
                     if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
                         $this->erp_obj->updateTescoErpOrders($erpOrders);
                     } 
+
+                    // update PI approve status as "PI Approved" in order history table
+                    OrderManagementHistory::where([['order_table_name', $table], ['order_table_id', $tableID]])->update([
+                        'pi_status'   => "PI Approved"
+                    ]);
                 }
             }
             else{
@@ -930,7 +949,12 @@ class OrderStatusCntrl extends Controller
 
                 if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
                     $this->erp_obj->updateTescoErpOrders($erpOrders);
-                }                                
+                }
+                
+                 // update PI approve status as "PI Approved" in order history table
+                 OrderManagementHistory::where([['order_table_name', $table_name], ['order_table_id', $row_id]])->update([
+                    'pi_status'   => "PI Approved"
+                ]);
             }
             if ($approved_data)
             {
@@ -1173,6 +1197,12 @@ class OrderStatusCntrl extends Controller
                         'po_status' => "PO Uploaded",
                         'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                   ]);
+                
+                // update po upload status in order history table
+                OrderManagementHistory::where([['order_table_name', $value[0]], ['order_table_id', $value[1]]])->update([
+                    'po_status' => "PO Uploaded",
+                    'customer_po' => $po,
+                ]);
 
                 /** @var array [Pass array of values to updateTescoErpOrders function] */
                 $data_array = [];   
@@ -1240,6 +1270,13 @@ class OrderStatusCntrl extends Controller
                         'po_status' => $status,
                         'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                   ]);
+                
+                // update po upload status in order history table
+                $po_upload_status = $status === "PO Pending"?"PO Upload Pending":$status;
+                OrderManagementHistory::where([['order_table_name', $value[0]], ['order_table_id', $value[1]]])->update([
+                    'po_status' => $po_upload_status,
+                    'customer_po' => $po,
+                ]);
 
                 if($status === "PO Uploaded")
                 {
@@ -1450,6 +1487,8 @@ class OrderStatusCntrl extends Controller
         $customer_id = DB::table('customer_metadata')->where('customer_metadata_id',$request['supplier'])->select('*')->first();
 		
         $order_qnty = (array_sum($count)>0)?0:1 ;
+        $order_status  = $order_qnty === 1?'Order Pending':'Order Placed';
+        $edit_permission  = $order_qnty === 1?1:0;
         
         // check for same po number and style combination already exists or not.
         if($zone == "CE")
@@ -1500,7 +1539,19 @@ class OrderStatusCntrl extends Controller
                                        'tag_at_source'        => $request['tag_at_source'],
                                        'is_order_count_empty' => $order_qnty,
                                        'ocn_number'           => $request['tesco_ocn'],
+                                       'order_status'         => $order_status,
+                                       'edit_permission'      => $edit_permission
                                      ]);	
+            
+            // update order data in order management history table 
+            OrderManagementHistory::where([['order_table_name', $table_name], ['order_table_id', $template_id]])->update([
+                'season'                    => $request['season_code'],
+                'customer_id'               => $customer_id->customer_id,
+                'style'                     => $request[strtolower($request['zone']).'_style'],
+                'buyer_po'                  => $request['po_number'],
+                'ocn_number'                => $request['tesco_ocn'],
+                'order_status'              => $order_status
+            ]);
             
              DB::table($qty_table_name)->where($foreign_key,$template_id)->delete();
               

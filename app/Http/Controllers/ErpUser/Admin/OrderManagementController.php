@@ -9,6 +9,7 @@ use Session;
 use DB;
 use Auth;
 use Carbon\Carbon;
+use App\OrderManagementHistory;
 
 class OrderManagementController extends Controller
 {
@@ -701,6 +702,11 @@ class OrderManagementController extends Controller
 					$main_table_id = DB::table($order_qty_table)->where('id',$order_qnty_table_id)->value($order_qty_field);
 
 					DB::table($main_table)->where('id',$main_table_id)->update([$order_status_field => "Order Cancelled"]);
+					
+					 // update order status as "Order Cancelled" in order management history table
+					OrderManagementHistory::where([['order_table_name', $main_table], ['order_table_id', $main_table_id]])->update([
+						'order_status' => "Order Cancelled",
+					]);
 				}
 
 				\App\ErpOrderDetails::where('erp_order_id', $request->id)->where('erp_order_details.status', '<>', $erp_status_id)->update([
