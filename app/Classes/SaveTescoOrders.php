@@ -8,6 +8,7 @@ use App\TescoTHL1Orders;
 use App\TescoTHL3Orders;
 use App\TescoTSL1Orders;
 use App\TescoTSL3Orders;
+use App\OrderManagementHistory;
 /**
  * Class to save the tesco template orders
  * @author [Praveen] <[praveen@wizroots.com]>
@@ -39,11 +40,10 @@ class SaveTescoOrders
            }
 
             /** Insert order details first time. If data already exits, update old values**/
-           return $order_model::updateOrCreate([strtolower($request['zone']).'_style_ref' => $request[strtolower($request['zone']).'_style'], 'po_number' => $request['po_number'], 'order_status' => 'Saved'],[
+           $saved_order  = $order_model::updateOrCreate([strtolower($request['zone']).'_style_ref' => $request[strtolower($request['zone']).'_style'], 'po_number' => $request['po_number'], 'order_status' => 'Saved'],[
             'order_id'             => "",
             'zone'                 => $request['zone'],
             'template_type'        => $request['type'],
-            'po_number'            => $request['po_number'],
             'uk_style_ref'         => $request['uk_style'],
             'ce_style_ref'         => $request['ce_style'],
             'season_code'          => $request['season_code'],
@@ -56,7 +56,6 @@ class SaveTescoOrders
             'tesco_metadata_supplier_id' => $request['supplier'],
             'rfid_compliant'       => $request['rfid'],
             'tag_at_source'        => $request['tag_at_source'],
-            'order_status'         => "Saved",
             'template_id'          => $template_id,
             'pi_status'            => "",
             'po_status'            => "",
@@ -64,6 +63,36 @@ class SaveTescoOrders
             'ocn_number'           => $request['ocn_no'],
             'full_description'     => $request['full_description']
           ]);
+
+          /** Insert order data into history table */
+          $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
+          $template_level = DB::table('tesco_item_master as t1')
+											->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
+											->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
+											->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
+											->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
+											->where('t1.id', $template_id)
+											->first();
+	
+          $material_name  = $template_level->material;
+          $material_sub   = $template_level->material_sub;
+          $material_ref   = $template_level->ref;
+          $order_table_name = "tesco_".strtolower(str_replace(" ","",$template_data->item_name))."_orders";
+                 
+          OrderManagementHistory::updateOrCreate(['order_table_name'  => $order_table_name, 'order_table_id'    => $saved_order->id],[
+            'buyer_id'                  => $tesco_buyer_id->id,
+            'season'                    => $request['season_code'],
+            'customer_id'               => $customer_id,
+            'material'                  => $material_name,
+            'sub_material'              => $material_sub,
+            'style'                     => $request[strtolower($request['zone']).'_style'],
+            'reference'                 => $material_ref,
+            'buyer_po'                  => $request['po_number'],
+            'ocn_number'                => $request['ocn_no'],
+            'order_status'              => 'Order Saved'
+          ]);
+
+          return $saved_order;
 
         } catch (\Exception $e)
         {

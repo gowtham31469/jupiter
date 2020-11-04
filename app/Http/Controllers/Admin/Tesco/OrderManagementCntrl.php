@@ -36,6 +36,7 @@ use Auth;
 use Carbon\Carbon;
 use App\Classes\ErpOrders;
 use Intervention\Image\ImageManagerStatic as Image;
+use App\OrderManagementHistory;
 
 class OrderManagementCntrl extends Controller
 {
@@ -2998,7 +2999,38 @@ class OrderManagementCntrl extends Controller
 					$newTask->save();
 					$i++;
 				}
-			}	
+      }	
+      
+      /** Insert order data into history table */
+      $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
+      $template_level = DB::table('tesco_item_master as t1')
+                  ->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
+                  ->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
+                  ->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
+                  ->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
+                  ->where('t1.id', $newTasks->template_id)
+                  ->first();
+
+      $material_name  = $template_level->material;
+      $material_sub   = $template_level->material_sub;
+      $material_ref   = $template_level->ref;
+      $po_upload_status = $po_status === "PO Pending"?"PO Upload Pending":null;
+      $style_ref = strtolower($newTasks->zone).'_style_ref';
+             
+      OrderManagementHistory::updateOrCreate(['order_table_name'  => $type, 'order_table_id'    => $newTasks->id],[
+        'buyer_id'                  => $tesco_buyer_id->id,
+        'season'                    => $newTasks->season_code,
+        'customer_id'               => $newTasks->tesco_supplier_id,
+        'material'                  => $material_name,
+        'sub_material'              => $material_sub,
+        'style'                     => $newTasks->$style_ref,
+        'reference'                 => $material_ref,
+        'buyer_po'                  => $newTasks->po_number,
+        'ocn_number'                => $newTasks->ocn_number,
+        'order_status'              => 'Order Placed',
+        'pi_status'                 => $pi_status,
+        'po_status'                 => $po_upload_status
+      ]);
 		    echo true;
     }
   /**
@@ -3375,7 +3407,39 @@ class OrderManagementCntrl extends Controller
 					$i++;
 				}
 				$data=DB::table($type)->where('id',$newTasks->id)->select('*',DB::raw("'".$this->tsl3."'".' as "TemplateName"'),DB::raw("'".$type."'".' as "type"'))->get();
-			}	
+      }	
+      
+      /** Insert order data into history table */
+      $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
+      $template_level = DB::table('tesco_item_master as t1')
+                  ->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
+                  ->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
+                  ->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
+                  ->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
+                  ->where('t1.id', $newTasks->template_id)
+                  ->first();
+
+      $material_name  = $template_level->material;
+      $material_sub   = $template_level->material_sub;
+      $material_ref   = $template_level->ref;
+      $po_upload_status = $po_status === "PO Pending"?"PO Upload Pending":null;
+      $style_ref = strtolower($newTasks->zone).'_style_ref';
+             
+      OrderManagementHistory::updateOrCreate(['order_table_name'  => $type, 'order_table_id'    => $newTasks->id],[
+        'buyer_id'                  => $tesco_buyer_id->id,
+        'season'                    => $newTasks->season_code,
+        'customer_id'               => $newTasks->tesco_supplier_id,
+        'material'                  => $material_name,
+        'sub_material'              => $material_sub,
+        'style'                     => $newTasks->$style_ref,
+        'reference'                 => $material_ref,
+        'buyer_po'                  => $po,
+        'ocn_number'                => $ocn_number,
+        'order_status'              => 'Order Placed',
+        'pi_status'                 => $pi_status,
+        'po_status'                 => $po_upload_status
+      ]);
+
 		    echo $data;
     }
     /**
@@ -3404,6 +3468,7 @@ class OrderManagementCntrl extends Controller
               {
                 //Dynamic function name and database model name for each templates
                 $model_name = 'App\\'."Tesco".$template[$key]."Orders";
+                $order_table_name = "tesco_".strtolower($template[$key])."_orders";
                 $response = $model_name::where('id',$template_id)
                               ->update([
                               'po_status'         => "PO Uploaded",
@@ -3415,13 +3480,19 @@ class OrderManagementCntrl extends Controller
                 /** @var array [Pass array of values to updateTescoErpOrders function] */
                 $data_array = [];   
                 $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
-                $data_array['tableName'] = "tesco_".strtolower($template[$key])."_orders";
+                $data_array['tableName'] = $order_table_name;
                 $data_array['buyer_id'] = $tesco_buyer_id->id;
                 $data_array['id'] = $template_id;
                 
                 $jsonResponse = $erp_obj->updateTescoErpOrders($data_array);
                 $content = $jsonResponse->getContent();
                 $updated_erp_table_array = json_decode($content, true);
+
+                // update po upload status as "PO Uploaded" in order history table
+                OrderManagementHistory::where([['order_table_name', $order_table_name], ['order_table_id', $template_id]])->update([
+                  'po_status'   => "PO Uploaded",
+                  'customer_po' => $request['po_number'],
+                ]);
               }
           }
           

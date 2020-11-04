@@ -34,6 +34,7 @@ use App\Classes\CancelTescoOrders;
 use PDF;
 use Carbon\Carbon;
 use App\Classes\ErpOrders;
+use App\OrderManagementHistory;
 
 class OrderController extends Controller
 {
@@ -1159,6 +1160,7 @@ class OrderController extends Controller
               {
                 //Dynamic function name and database model name for each templates
                 $model_name = 'App\\'."Tesco".$template[$key]."Orders";
+                $order_table_name = "tesco_".strtolower($template[$key])."_orders";
                 $response = $model_name::where('id',$template_id)
                               ->update([
                               'po_status'         => "PO Uploaded",
@@ -1170,7 +1172,7 @@ class OrderController extends Controller
                 /** @var array [Pass array of values to updateTescoErpOrders function] */
                 $data_array = [];   
                 $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
-                $data_array['tableName'] = "tesco_".strtolower($template[$key])."_orders";
+                $data_array['tableName'] = $order_table_name;
                 $data_array['buyer_id'] = $tesco_buyer_id->id;
                 $data_array['id'] = $template_id;
                 $data_array['created_by'] = Auth::guard('web_customer')->id();
@@ -1178,6 +1180,12 @@ class OrderController extends Controller
                 $jsonResponse = $erp_obj->updateTescoErpOrders($data_array);
                 $content = $jsonResponse->getContent();
                 $updated_erp_table_array = json_decode($content, true);
+
+                // update po upload status as "PO Uploaded" in order history table
+                OrderManagementHistory::where([['order_table_name', $order_table_name], ['order_table_id', $template_id]])->update([
+                  'po_status'   => "PO Uploaded",
+                  'customer_po' => $request['po_number'],
+                ]);
               }
           }
 

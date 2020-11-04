@@ -11,6 +11,7 @@ use App\TescoTSL3Orders;
 use App\Classes\SubmitTescoOrdersUpdateQuery;
 use Carbon\Carbon;
 use App\Classes\EditErpOrders;
+use App\OrderManagementHistory;
 /**
  * Class to store the tesco template orders
  * @author [Praveen] <[praveen@wizroots.com]>
@@ -59,11 +60,10 @@ class TescoOrders
 
           /** Insert order details first time. If data already exits, update old values**/
           
-          return $order_model::updateOrCreate([strtolower($request['zone']).'_style_ref' => $request[strtolower($request['zone']).'_style'], 'order_status' => 'Saved', 'po_number' => $request['po_number']], [
+          $order_submitted = $order_model::updateOrCreate([strtolower($request['zone']).'_style_ref' => $request[strtolower($request['zone']).'_style'], 'order_status' => 'Saved', 'po_number' => $request['po_number']], [
                     'order_id'             => $order_id,
                     'zone'                 => $request['zone'],
                     'template_type'        => $request['type'],
-                    'po_number'            => $request['po_number'],
                     'uk_style_ref'         => $request['uk_style'],
                     'ce_style_ref'         => $request['ce_style'],
                     'season_code'          => $request['season_code'],
@@ -87,6 +87,39 @@ class TescoOrders
                     'full_description'     => $request['full_description'],
                     'edit_permission'      => $edit_permission
                   ]);
+
+          /** Insert order data into history table */
+          $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
+          $template_level = DB::table('tesco_item_master as t1')
+											->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
+											->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
+											->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
+											->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
+											->where('t1.id', $template_id)
+											->first();
+	
+          $material_name  = $template_level->material;
+          $material_sub   = $template_level->material_sub;
+          $material_ref   = $template_level->ref;
+          $order_table_name = "tesco_".strtolower(str_replace(" ","",$template_data->item_name))."_orders";
+          $po_upload_status = $po_status === null?null:"PO Upload Pending";
+                 
+          OrderManagementHistory::updateOrCreate(['order_table_name'  => $order_table_name, 'order_table_id'    => $order_submitted->id],[
+            'buyer_id'                  => $tesco_buyer_id->id,
+            'season'                    => $request['season_code'],
+            'customer_id'               => $customer_id,
+            'material'                  => $material_name,
+            'sub_material'              => $material_sub,
+            'style'                     => $request[strtolower($request['zone']).'_style'],
+            'reference'                 => $material_ref,
+            'buyer_po'                  => $request['po_number'],
+            'ocn_number'                => $request['ocn_no'],
+            'order_status'              => $order_status,
+            'pi_status'                 => $pi_status,
+            'po_status'                 => $po_upload_status
+          ]);
+
+          return $order_submitted;
             
         } catch (\Exception $e)
         {
@@ -266,6 +299,15 @@ class TescoOrders
             // pass $table_name, $buyer_id,  $table_data->id, $erp_details_status and $erp_order_id array
             $edit_erp_obj->updateTescoErpOrderDetails($data_array);
         }
+
+        // update order data in order management history table 
+        OrderManagementHistory::where([['order_table_name', $table], ['order_table_id', $table_data->id]])->update([
+          'season'                    => $request['season_code'],
+          'customer_id'               => $customer_id,
+          'style'                     => $request[strtolower($request['zone']).'_style'],
+          'buyer_po'                  => $request['po_number'],
+          'ocn_number'                => $request['tesco_ocn'],
+        ]);
       }
     } 
     catch (Exception $e)
