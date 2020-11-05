@@ -283,6 +283,35 @@
             </div>
         </div>
     </div>
+
+
+    <div class="modal fade" id="approve-upload-group" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="gridSystemModalLabel">Approve Artwork</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="uvc_approve_select_div">
+                    </div>
+                    <div id="exist_artwork_approve_div_status" class="hidden">
+                        <h4>Artworks : </h4>
+                        <label style='color:red' id='check_approve_error_status' class='hidden'>Please select atleast one artwork</label>
+                        <ul class="list-group checked-list-box">
+                        </ul>
+                        <hr/>
+                        <button type="button" id="approve_button" class="btn btn-primary">Approve Artwork</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+                    <button type="button" id="approve_submit" class="btn btn-primary hidden">Approve</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="left-panel col-md-12" style="display: none;">
         <div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
         <div class="div-max">          

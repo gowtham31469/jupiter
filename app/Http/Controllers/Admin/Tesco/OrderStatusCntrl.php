@@ -1022,6 +1022,143 @@ class OrderStatusCntrl extends Controller
         }
         return $result;
     }
+    
+    /**
+     * method to get the tesco artworks for a particular style number
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function getApproveArtwork(Request $request)
+    {
+        try 
+        {
+            $style_num = $request->styleNum;
+            $zone      = $request->zone;
+            if ($zone=="CE") {
+               $col = "ce_style_ref";
+            }
+            else{
+                 $col = "uk_style_ref";
+            }
+			
+			
+			
+			$tcl1 = "TCL 1";
+			$tesco_tcl1_orders = "tesco_tcl1_orders";
+			$tcl2 = "TCL 2";
+			$tesco_tcl2_orders = "tesco_tcl2_orders";
+			$tcl4 = "TCL 4";
+			$tesco_tcl4_orders = "tesco_tcl4_orders";			
+			$thl1 = "THL 1";
+			$tesco_thl1_orders = "tesco_thl1_orders";					
+			$thl3 = "THL 3";
+			$tesco_thl3_orders = "tesco_thl3_orders";							
+			$tsl1 = "TSL 1";
+			$tesco_tsl1_orders = "tesco_tsl1_orders";							
+			$tsl3 = "TSL 3";
+			$tesco_tsl3_orders = "tesco_tsl3_orders";			
+			
+            $data['tcl1'] = DB::table('tesco_tcl1_orders')
+                            ->join('tesco_item_master','tesco_tcl1_orders.template_id','=','tesco_item_master.id')
+                            ->join('customers','tesco_tcl1_orders.tesco_supplier_id','=','customers.id')
+                            ->where('customers.po_required',1) 
+                            ->whereNotIn('tesco_tcl1_orders.order_status',['Saved','Order Cancelled'])
+                            ->where('tesco_tcl1_orders.is_order_count_empty',0)
+                            ->select('tesco_tcl1_orders.*',DB::raw("'".$tcl1."'".' as "TemplateName"'),DB::raw("'".$tesco_tcl1_orders."'".' as "tableName"'),'tesco_item_master.company_id')
+                            ->where("zone",$zone)
+                            ->where($col,$style_num)
+                            ->get();
+            $data['tcl2'] = DB::table('tesco_tcl2_orders')
+                            ->where('tesco_tcl2_orders.is_order_count_empty',0)
+                            ->join('tesco_item_master','tesco_tcl2_orders.template_id','=','tesco_item_master.id')
+                            ->join('customers','tesco_tcl2_orders.tesco_supplier_id','=','customers.id')
+                            ->where('customers.po_required',1)
+							->whereNotIn('tesco_tcl2_orders.order_status',['Saved','Order Cancelled'])
+                            ->select('tesco_tcl2_orders.*',DB::raw("'".$tcl2."'".' as "TemplateName"'),DB::raw("'".$tesco_tcl2_orders."'".' as "tableName"'),'tesco_item_master.company_id')
+                            ->where("zone",$zone)
+                            ->where($col,$style_num)
+                            ->get();
+            $data['tcl4'] = DB::table('tesco_tcl4_orders')
+                            ->join('tesco_item_master','tesco_tcl4_orders.template_id','=','tesco_item_master.id')
+                            ->join('customers','tesco_tcl4_orders.tesco_supplier_id','=','customers.id')
+                            ->where('customers.po_required',1)
+                            ->where('tesco_tcl4_orders.is_order_count_empty',0)
+				            ->whereNotIn('tesco_tcl4_orders.order_status',['Saved','Order Cancelled'])
+                            ->select('tesco_tcl4_orders.*',DB::raw("'".$tcl4."'".' as "TemplateName"'),DB::raw("'".$tesco_tcl4_orders."'".' as "tableName"'),'tesco_item_master.company_id')
+                            ->where("zone",$zone)
+                            ->where($col,$style_num)
+                            ->get();
+            $data['thl1'] = DB::table('tesco_thl1_orders')
+                            ->join('tesco_item_master','tesco_thl1_orders.template_id','=','tesco_item_master.id')
+                            ->join('customers','tesco_thl1_orders.tesco_supplier_id','=','customers.id')
+                            ->where('customers.po_required',1)
+                            ->where('tesco_thl1_orders.is_order_count_empty',0)
+				            ->whereNotIn('tesco_thl1_orders.order_status',['Saved','Order Cancelled'])
+                            ->select('tesco_thl1_orders.*',DB::raw("'".$thl1."'".' as "TemplateName"'),DB::raw("'".$tesco_thl1_orders."'".' as "tableName"'),'tesco_item_master.company_id')
+                            ->where("zone",$zone)
+                            ->where($col,$style_num)
+                            ->get();
+            $data['thl3'] = DB::table('tesco_thl3_orders')
+                            ->join('tesco_item_master','tesco_thl3_orders.template_id','=','tesco_item_master.id')
+                            ->join('customers','tesco_thl3_orders.tesco_supplier_id','=','customers.id')
+                            ->where('customers.po_required',1)
+                            ->where('tesco_thl3_orders.is_order_count_empty',0)
+				            ->whereNotIn('tesco_thl3_orders.order_status',['Saved','Order Cancelled'])
+                            ->select('tesco_thl3_orders.*',DB::raw("'".$thl3."'".' as "TemplateName"'),DB::raw("'".$tesco_thl3_orders."'".' as "tableName"'),'tesco_item_master.company_id')
+                            ->where("zone",$zone)
+                            ->where($col,$style_num)
+                            ->get();
+            $data['tsl1'] = DB::table('tesco_tsl1_orders')
+                            ->join('tesco_item_master','tesco_tsl1_orders.template_id','=','tesco_item_master.id')
+                            ->join('customers','tesco_tsl1_orders.tesco_supplier_id','=','customers.id')
+                            ->where('customers.po_required',1)
+                            ->where('tesco_tsl1_orders.is_order_count_empty',0)
+				            ->whereNotIn('tesco_tsl1_orders.order_status',['Saved','Order Cancelled'])
+                            ->select('tesco_tsl1_orders.*',DB::raw("'".$tsl1."'".' as "TemplateName"'),DB::raw("'".$tesco_tsl1_orders."'".' as "tableName"'),'tesco_item_master.company_id')
+                            ->where("zone",$zone)
+                            ->where($col,$style_num)
+                            ->get();
+            $data['tsl3'] = DB::table('tesco_tsl3_orders')
+                            ->join('tesco_item_master','tesco_tsl3_orders.template_id','=','tesco_item_master.id')
+                            ->join('customers','tesco_tsl3_orders.tesco_supplier_id','=','customers.id')
+                            ->where('customers.po_required',1)
+                            ->where('tesco_tsl3_orders.is_order_count_empty',0)
+				            ->whereNotIn('tesco_tsl3_orders.order_status',['Saved','Order Cancelled'])
+                            ->select('tesco_tsl3_orders.*',DB::raw("'".$tsl3."'".' as "TemplateName"'),DB::raw("'".$tesco_tsl3_orders."'".' as "tableName"'),'tesco_item_master.company_id')
+                            ->where("zone",$zone)
+                            ->where($col,$style_num)
+                            ->get();
+            $result = response()->json(['error'=> false,'message' =>'success','data'=>$data],200); 
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+    public function approveArtworkBulk(Request $request)
+    {
+        try 
+        {
+            $id  =  explode(',',$request->id);
+            foreach($id as $val)
+            {
+                $value    =  explode('-',$val);
+                
+                DB::table($value[0])->where('id',$value[1])
+                   ->update([
+                        'order_status' => "Order Approved"
+                  ]);
+            }
+            $result = response()->json(['error'=> false,'message' =>'success'],200); 
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
 
     /**
      * method to get the tesco artworks for a particular style number
