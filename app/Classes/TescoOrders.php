@@ -12,6 +12,7 @@ use App\Classes\SubmitTescoOrdersUpdateQuery;
 use Carbon\Carbon;
 use App\Classes\EditErpOrders;
 use App\OrderManagementHistory;
+use App\Classes\TescoMaterialQuery;
 /**
  * Class to store the tesco template orders
  * @author [Praveen] <[praveen@wizroots.com]>
@@ -41,6 +42,8 @@ class TescoOrders
 	public function createTescoOrder($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required, $order_status, $edit_permission)
 	{
 		try {
+          $tesco_material_obj = new TescoMaterialQuery();
+
           /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
           $pi_status = $pi_required == 1?"PI Approval Pending":null;
 
@@ -90,13 +93,7 @@ class TescoOrders
 
           /** Insert order data into history table */
           $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
-          $template_level = DB::table('tesco_item_master as t1')
-											->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
-											->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
-											->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
-											->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
-											->where('t1.id', $template_id)
-											->first();
+          $template_level = $tesco_material_obj->tescoMaterialDetails($template_id);
 	
           $material_name  = $template_level->material;
           $material_sub   = $template_level->material_sub;

@@ -10,11 +10,13 @@ use DB;
 use Auth;
 use Carbon\Carbon;
 use App\OrderManagementHistory;
+use App\Classes\TescoMaterialQuery;
 
 class OrderManagementController extends Controller
 {
 	private $order_status_id;
 	private $current_date;
+	private $tesco_material_obj;
     /**
      * Create a new controller instance.
      *
@@ -27,6 +29,7 @@ class OrderManagementController extends Controller
 		$this->order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', 'Order Cancelled')->first();
 		// get the current time
 		$this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
+		$this->tesco_material_obj = new TescoMaterialQuery();
 	}
 
 
@@ -116,13 +119,7 @@ class OrderManagementController extends Controller
 					$country        = $order_details->zone;
 					$style_zone     = strtolower($country).'_style_ref';
 					$template_id    = $order_details->template_id;
-					$template_level = DB::table('tesco_item_master as t1')
-										->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
-										->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
-										->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
-										->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
-										->where('t1.id', $template_id)
-										->first();
+					$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id);
 					
 					$material_name  = $template_level->material;
 					$material_sub   = $template_level->material_sub;
@@ -245,13 +242,7 @@ class OrderManagementController extends Controller
 					$country        = $order_details->zone;
 					$style_zone     = strtolower($country).'_style_ref';
 					$template_id    = $order_details->template_id;
-					$template_level = DB::table('tesco_item_master as t1')
-										->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
-										->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
-										->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
-										->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
-										->where('t1.id', $template_id)
-										->first();
+					$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id);
 					
 					$material_name  = $template_level->material;
 					$material_sub   = $template_level->material_sub;
@@ -459,13 +450,7 @@ class OrderManagementController extends Controller
 						$country        = $order_details->zone;
 						$style_zone     = strtolower($country).'_style_ref';
 						$template_id    = $order_details->template_id;
-						$template_level = DB::table('tesco_item_master as t1')
-											->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
-											->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
-											->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
-											->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
-											->where('t1.id', $template_id)
-											->first();
+						$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id);
 						
 						$material_name  = $template_level->material;
 						$material_sub   = $template_level->material_sub;
@@ -604,13 +589,7 @@ class OrderManagementController extends Controller
 						$country        = $order_details->zone;
 						$style_zone     = strtolower($country).'_style_ref';
 						$template_id    = $order_details->template_id;
-						$template_level = DB::table('tesco_item_master as t1')
-											->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
-											->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
-											->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
-											->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
-											->where('t1.id', $template_id)
-											->first();
+						$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id);
 						
 						$material_name  = $template_level->material;
 						$material_sub   = $template_level->material_sub;

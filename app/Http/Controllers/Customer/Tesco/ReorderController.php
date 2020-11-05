@@ -35,9 +35,11 @@ use App\Classes\SaveTescoOrders;
 use PDF;
 use Carbon\Carbon;
 use App\OrderManagementHistory;
+use App\Classes\TescoMaterialQuery;
 
 class ReorderController extends Controller
 {
+    private $tesco_material_obj;
     /**
      * Create a new controller instance.
      *
@@ -60,7 +62,9 @@ class ReorderController extends Controller
         $this->thl1_type = "tesco_thl1_orders";
         $this->thl3_type = "tesco_thl3_orders";
         $this->tsl1_type = "tesco_tsl1_orders";
-        $this->tsl3_type = "tesco_tsl3_orders";
+		$this->tsl3_type = "tesco_tsl3_orders";
+		
+		$this->tesco_material_obj = new TescoMaterialQuery();
     }
 	
  	/**
@@ -698,13 +702,7 @@ class ReorderController extends Controller
 			
 			/** Insert order data into history table */
 			$tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
-			$template_level = DB::table('tesco_item_master as t1')
-						->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
-						->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
-						->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
-						->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
-						->where('t1.id', $newTasks->template_id)
-						->first();
+			$template_level = $this->tesco_material_obj->tescoMaterialDetails($newTasks->template_id);
 	  
 			$material_name  = $template_level->material;
 			$material_sub   = $template_level->material_sub;
@@ -1114,13 +1112,7 @@ class ReorderController extends Controller
 			
 			/** Insert order data into history table */
 			$tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
-			$template_level = DB::table('tesco_item_master as t1')
-						->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
-						->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
-						->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
-						->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
-						->where('t1.id', $newTasks->template_id)
-						->first();
+			$template_level = $this->tesco_material_obj->tescoMaterialDetails($newTasks->template_id);
 	  
 			$material_name  = $template_level->material;
 			$material_sub   = $template_level->material_sub;
