@@ -9,6 +9,7 @@ use App\TescoTHL3Orders;
 use App\TescoTSL1Orders;
 use App\TescoTSL3Orders;
 use App\OrderManagementHistory;
+use App\Classes\TescoMaterialQuery;
 /**
  * Class to save the tesco template orders
  * @author [Praveen] <[praveen@wizroots.com]>
@@ -23,6 +24,8 @@ class SaveTescoOrders
   public function saveTescoOrder($request,$template_id,$created_by)
   {
     try {
+           $tesco_material_obj = new TescoMaterialQuery();
+
            /** [ Get company id for template ] */
            $template_data = DB::table('tesco_item_master')->select('item_name')->where('id','=',$template_id)->first();
 
@@ -66,13 +69,7 @@ class SaveTescoOrders
 
           /** Insert order data into history table */
           $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
-          $template_level = DB::table('tesco_item_master as t1')
-											->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
-											->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
-											->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
-											->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
-											->where('t1.id', $template_id)
-											->first();
+          $template_level = $tesco_material_obj->tescoMaterialDetails($template_id);
 	
           $material_name  = $template_level->material;
           $material_sub   = $template_level->material_sub;

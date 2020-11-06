@@ -4,10 +4,12 @@ use DB;
 use Carbon\Carbon;
 use App\ErpOrders as Erp;
 use App\ErpOrderDetails;
+use App\Classes\TescoMaterialQuery;
 
 class EditErpOrders
 {
 	private $current_date;
+	private $tesco_material_obj;
 	
 	/**
 	 * Create a new controller instance.
@@ -18,6 +20,8 @@ class EditErpOrders
 	{
 		// get the current time
 		$this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
+
+		$this->tesco_material_obj = new TescoMaterialQuery();
 	}
 	
 	/**
@@ -138,13 +142,7 @@ class EditErpOrders
 						$template          = 'Available';
 						$action_id         = DB::table('actions')->where('action', 'ilike', 'PO Manager Verification Pending')->value('id');
 						
-						$template_level = DB::table('tesco_item_master as t1')
-											->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
-											->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
-											->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
-											->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
-											->where('t1.id', $orders->template_id)
-											->first();
+						$template_level = $this->tesco_material_obj->tescoMaterialDetails($orders->template_id);
 						
 						$material_name  = $template_level->material;
 						$material_sub   = $template_level->material_sub;
