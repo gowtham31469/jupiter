@@ -1044,7 +1044,7 @@ span.sticker-details {
 .label-OrderCancelled {
     background: rgb(244, 67, 54);
 }
-.label-Pending {
+.label-OrderPending {
     background: #2c3e50;
 }
 .label-POPending {
@@ -1565,4 +1565,9 @@ span.batch-additional {
     box-sizing: border-box;
     margin: 0 20px 40px;
     height: calc(100% - 10px);
+}
+
+.table-btn-xs{
+    font-size: 75%;
+    font-weight: bold;
 }
