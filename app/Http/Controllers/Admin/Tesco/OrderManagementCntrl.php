@@ -29,7 +29,6 @@ use App\TescoTSL3Orders;
 use App\TescoTSL3OrdersQuantity;
 use App\Classes\TescoOrders;
 use App\Classes\SaveTescoOrders;
-use App\Classes\ApproveTescoOrders;
 use App\Classes\CancelTescoOrders;
 use PDF;
 use Auth;

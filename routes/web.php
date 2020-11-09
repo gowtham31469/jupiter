@@ -625,6 +625,7 @@ Route::post('admin/tesco/disable-artwork-edit', 'Admin\Tesco\OrderStatusCntrl@di
 
 Route::post('admin/tesco/edit-check-exist-po-repeat', 'Admin\Tesco\OrderStatusCntrl@editCheckExistPoRepeat');
 Route::get('admin/tesco/get-erp-status', 'Admin\Tesco\OrderStatusCntrl@checkERPStatus');
+Route::put('admin/tesco/approve-tesco-artwork', 'Admin\Tesco\OrderStatusCntrl@approveTescoArtwork');
 
 Route::get('customer/reorder', 'Customer\HomeController@reorder');
 
