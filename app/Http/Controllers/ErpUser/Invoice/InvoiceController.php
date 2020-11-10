@@ -33,7 +33,8 @@ class InvoiceController extends Controller
 	private $month;
 	private $financial_year_date;
 	private $today_date;
-	private $from;
+    private $from;
+	private $financial_year;
     /**
      * Create a new controller instance.
      *
@@ -61,7 +62,14 @@ class InvoiceController extends Controller
 
 		$this->from  = Carbon::parse($this->financial_year_date_format)
 						->startOfDay()        // 2018-09-29 00:00:00.000000
-						->toDateTimeString(); // 2018-09-29 00:00:00
+                        ->toDateTimeString(); // 2018-09-29 00:00:00
+        
+        // financial year identification
+		if($this->today_date < $this->financial_year_date_format){
+			$this->financial_year = Carbon::parse($this->financial_year_date_format)->subYear()->format('y');
+		} else {
+			$this->financial_year = Carbon::parse($this->financial_year_date_format)->format('y');
+		}
 
 	}
 
@@ -96,26 +104,27 @@ class InvoiceController extends Controller
 
         // Logic for resetting invoice ID format for new financial year			 
         $max_invoice_id = Invoices::select('invoice_id')->find(Invoices::max('id'));
-        $invoice_id_prefix = "INV-".$this->month."-".$this->year."-00";
+        $invoice_id_prefix = "INV-".$this->financial_year;
 
         if($max_invoice_id){
-            $split_invoice_id = explode("-",$max_invoice_id->invoice_id);
-            (int)$parsed_max_id  = ltrim(end($split_invoice_id), '00');
-        } else {
-            (int)$parsed_max_id = 0;
-        }
-        
-        if( strtotime($this->today_date) >= strtotime($this->financial_year_date_format) ){
-            // check if already invoice created today.
-            $already_invoice_created = Invoices::whereBetween('created_at', [$this->from, $this->current_date])->orWhereDate('created_at', '=',$this->today_date)->exists();
+            (int)$parsed_max_id  = substr($max_invoice_id->invoice_id, 6);
 
-            // set erp id as 1 for first order of the financial year
-            (int)$parsed_max_id = $already_invoice_created === false?1:(int)$parsed_max_id+(int)1;
+            // To handle, if financial year start date is sunday or holiday
+            if( strtotime($this->today_date) >= strtotime($this->financial_year_date_format) ){
+                // check if already invoice created today.
+                $already_invoice_created = Invoices::whereBetween('created_at', [$this->from, $this->current_date])->orWhereDate('created_at', '=',$this->today_date)->exists();
+    
+                // set invoice id as 00001 for first order of the financial year
+                (int)$parsed_max_id = $already_invoice_created === false?str_pad(1, 5, 0, STR_PAD_LEFT):str_pad($parsed_max_id+1, 5, 0, STR_PAD_LEFT);
+            } else {
+                (int)$parsed_max_id = str_pad($parsed_max_id+1, 5, 0, STR_PAD_LEFT);
+            }
+
         } else {
-            (int)$parsed_max_id += 1;
+            (int)$parsed_max_id = str_pad(1, 5, 0, STR_PAD_LEFT);
         }
         
-        // invoice id format "INV-mm-yyyy-001"
+        // invoice id format "INV-yyXXXXX"
         $invoice_id = $invoice_id_prefix.$parsed_max_id;
 
         return view('erp.Invoice.create-invoice',['customers' => $customers,'invID'=> $invoice_id,'companies' => $companies]);

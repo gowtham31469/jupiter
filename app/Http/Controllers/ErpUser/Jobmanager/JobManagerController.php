@@ -36,6 +36,7 @@ use Config;
 use App\History;
 use App\Buyer;
 use App\FinancialYearResetDate;
+use App\Classes\TescoMaterialQuery;
 
 class JobManagerController extends Controller
 {
@@ -46,6 +47,8 @@ class JobManagerController extends Controller
 	private $year;
 	private $month;
 	private $financial_year_date;
+	private $tesco_material_obj;
+
 	/**
 	 * Create a new controller instance.
 	 *
@@ -73,6 +76,7 @@ class JobManagerController extends Controller
 
 		// format financial year date as "yyyy-dd-mm" 
 		$this->financial_year_date_format = $this->year.'-'.$this->financial_year_date;
+		$this->tesco_material_obj = new TescoMaterialQuery();
 	}
 		
 	/**
@@ -1164,13 +1168,7 @@ class JobManagerController extends Controller
 									$country        = $order_details->zone;
 									$style_zone     = strtolower($country).'_style_ref';
 									$template_id    = $order_details->template_id;
-									$template_level = DB::table('tesco_item_master as t1')
-														->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
-														->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
-														->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
-														->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
-														->where('t1.id', $template_id)
-														->first();
+									$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id);
 									
 									$material_name  = $template_level->material;
 									$material_sub   = $template_level->material_sub;

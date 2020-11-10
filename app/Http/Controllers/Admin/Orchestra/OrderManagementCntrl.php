@@ -3843,6 +3843,10 @@ class OrderManagementCntrl extends Controller
             $data        =   $pi_obj->getOrchestraPIDetails($request);
             unset($data['price_list']);
             $attatchment =   $pi_obj->getOrchestraAttachment($data,$request);
+
+            // call PI generation function
+            $pi_id = $pi_obj->piNumberGenerator();
+            $pi_number = $data['company_details']->id === 1?"JGA-PI-".$pi_id:"SP-PI-".$pi_id;
             
             $erpOrders   =   [];
             $total_qnty  =   0 ; 
@@ -3875,7 +3879,8 @@ class OrderManagementCntrl extends Controller
                     'place_of_supply'  => $data['bank_details']->place_of_supply,
                     'revision_no'      => $data['item_details'][0]->pi_rev_no,
                     'rep_order_id'     => $rep_order_id,
-                    'pi_file'          => $attatchment
+                    'pi_file'          => $attachment,
+                    'pi_number'        => $pi_number
                     
                 ]);
 

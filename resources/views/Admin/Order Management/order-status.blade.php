@@ -617,6 +617,45 @@
             </div>
         </div>
     </div>
+
+<!-- Tesco Artwork Approve Modal -->
+<div class="modal fade" id="approveTescoArtworkModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Approve Artwork</h4>
+            </div>
+                <div class="modal-body">
+                        <input type="hidden" value="" id="ts_table_id">
+                        <input type="hidden" value="" id="ts_table_name">
+                        <p>Are you sure, you want to  approve this artwork ?</p>
+                </div>
+                <div class="modal-footer">
+                    {!! Form::button('No', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                    {!! Form::button('Yes', ['class' => 'btn btn-primary btn-sm', 'id' => 'approve_tesco_artwork_btn','onclick' => 'approveTescoArtwork()'] ) !!}
+                </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tesco Saved order alertbox -->
+<div class="modal fade" id="savedOrderAlertBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Saved Drafts</h4>
+            </div>
+                <div class="modal-body">
+                        <p>Please visit the Create Order page and complete your order.</p>
+                </div>
+                <div class="modal-footer">
+                    {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                </div>
+        </div>
+    </div>
+</div>
 @endsection @else
 <script type="text/javascript">
     window.location = "{{ url('/admin') }}";

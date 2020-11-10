@@ -230,12 +230,10 @@ function mapStoredValues(oDetails) {
         $('.delete-row, .add-row-btn, .submit-btn, .save-btn').remove();
         if(order_status === 'Order Placed')
         {
-            $('.approve-btn').show();
             $('.cancel-btn').show();
         }
         else 
         {
-            $('.approve-btn').hide();
             $('.cancel-btn').hide();
         }
     }

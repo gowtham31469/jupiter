@@ -1004,7 +1004,7 @@ var normalizeDate = function (dateString) {
  * @return {[type]}      [description]
  */
 function tescoStatusTable(data, path) {
-    var th = "<th style='text-align: center;'>Style No</th><th style='text-align: center;'>Season Code</th><th style='text-align: center;'>Buyer PO No</th><th style='text-align: center;'>Zone</th><th style='text-align: center;'>Reference No</th><th style='text-align: center;'>Template Type</th><th style='text-align: center;'>Company</th><th style='text-align: center;'>Order Date</th><th style='text-align: center;'>Delivery Date</th><th style='text-align: center;'>Artwork Status</th><th style='text-align: center;'>PI Status</th><th style='text-align: center;'>PO Status</th><th style='text-align: center;'>PO Number</th><th style='text-align: center;'>Actions</th>";
+    var th = "<th style='text-align: center;'>Style No</th><th style='text-align: center;'>Season Code</th><th style='text-align: center;'>Buyer PO No</th><th style='text-align: center;'>Zone</th><th style='text-align: center;'>Reference No</th><th style='text-align: center;'>Template Type</th><th style='text-align: center;'>Company</th><th style='text-align: center;'>Order Date</th><th style='text-align: center;'>Delivery Date</th><th style='text-align: center;'>Order Status</th><th style='text-align: center;'>Artwork Status</th><th style='text-align: center;'>PI Status</th><th style='text-align: center;'>PO Status</th><th style='text-align: center;'>PO Number</th>";
     var tr = "";
     var columnsIn = data[0];
     $.each(data, function (index, value) {
@@ -1028,46 +1028,66 @@ function tescoStatusTable(data, path) {
 
                 } else if (key == "PI Status") {
                     var str = value[key];
-                    if (str != null && str != "" && value['is_order_count_empty'] == 0) {
-                        if (str == "PI Approved") {
+                    if (value['pi_required'] == 1 && value['is_order_count_empty'] == 0) {
+                        if (str === 'PI Approved') {
                             action_status = true;
+                            status = str.replace(/ /g, "");
+                            status_text = '<span class="pi_class label label-' + status + '">' + value[key] + '</span>';
+                            tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateTescoPI("' + value.tableID + '","' + value.tableName + '","' + action_status + '","' + style_no + '","' + value.template_id + '","' + value.BuyerPO + '","' + value.TemplateName.replace(/ /g, "") + '","' + order_flag + '")>'+status_text+'</a></td>';
+                        } else {
+                            if (value['order_status'] === 'Order Placed' || value['order_status'] === 'Order Approved') {
+                                status_text = '<span class="pi_class label label-PIApprovalPending"> PI Approval Pending </span>';
+                                tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateTescoPI("' + value.tableID + '","' + value.tableName + '","' + action_status + '","' + style_no + '","' + value.template_id + '","' + value.BuyerPO + '","' + value.TemplateName.replace(/ /g, "") + '","' + order_flag + '")>'+status_text+'</a></td>';
+                            } else {
+                                tr += '<td align="center"><span class="pi_class label label-default"> PI Pending </span></td>';
+                            }
                         }
-                        $status = str.replace(/ /g, "");
-                        $status_text = '<span class="pi_class label label-' + $status + '">' + value[key] + '</span>';
                     } else {
-                        $status_text = " - ";
+                        tr += '<td align="center"> - </td>';
                     }
 
-
-                    tr += '<td align="center">' + $status_text + '</td>';
-
-                } else if (key == "Artwork Status") {
-                    if (value['is_order_count_empty'] == 0) {
+                } else if (key == "order_status") {
+                    if (value['order_status'] != 'Saved') {
                         var str = value[key];
                         $status = str.replace(/ /g, "");
 
                         tr += '<td align="center"><span class="label label-' + $status + '">' + value[key] + '</span></td>';
                     } else {
-                        tr += '<td align="center"><span class="label label-CreateOrder">Create Order</span></td>';
+                        tr += '<td align="center"><span class="label label-draft" title="Please visit the Create Order page and complete your order." data-placement="top">Order Saved</span></td>';
+                    }
+
+                } else if (key == "artwork_status") {
+                    if (value['artwork_status'] == "Order Approved") {
+                        var str = value[key];
+                        $status = str.replace(/ /g, "");
+
+                        tr += '<td align="center"><span class="label label-OrderApproved">Artwork Approved</span></td>';
+                    } else if (value['artwork_status'] == "Order Placed"){
+                        tr += '<td align="center"><button type="button" class="btn btn-xs table-btn-xs btn-primary artwork-approval-pending"  data-table-id="' + value.tableID +'" data-table-name="' + value.tableName +'" >Approval Pending</button></td>';
+                    } else {
+                        tr += '<td align="center"> - </td>';
                     }
 
                 } else if (key == "PO Status") {
                     var str = value[key];
-                    var status_text = " - "
+                    var status_text = " - ";
+                    var po_file = value['po_file'];
                     if (value['po_required'] == 1 && value['is_order_count_empty'] == 0) {
-                        if (str != null && str != "") {
+                        if (value['PO Status'] === 'PO Uploaded') {
                             status = str.replace(/ /g, "");
-                            status_text = '<span class="po_class label label-' + status + '">' + value[key] + '</span>';
+                            status_text = '<span class="po_class label label-' + status + '">' + value['PO Status'] + '</span>';
+                            tr += '<td align="center" class="po_status"><a href="javascript:void(0)" class="po-style" onclick=tescoPOUpload(this,"' + value.tableID + '","' + po_file + '","' + value.tableName + '") > '+status_text+' </a></td>';
                         } else {
-                            str = "PO Pending"
-                            status = str.replace(/ /g, "");
-                            status_text = '<span class="po_class label label-' + status + '">' + str + '</span>';
+                            if (value['order_status'] === 'Order Placed' || value['order_status'] === 'Order Approved') {
+                                status_text = '<span class="po_class label label-POPending"> PO Pending </span>';
+                                tr += '<td align="center" class="po_status"><a href="javascript:void(0)" class="po-style" onclick=tescoPOUpload(this,"' + value.tableID + '","' + po_file + '","' + value.tableName + '") > '+status_text+' </a></td>';
+                            } else {
+                                tr += '<td align="center class="po_status"><span class="po_class label label-default"> PO Pending </span></td>';
+                            }
                         }
                     } else {
-                        status_text = " - ";
+                        tr += '<td align="center class="po_status"> - </td>';
                     }
-
-                    tr += '<td align="center class="po_status">' + status_text + '</td>';
 
                 } else if (key == "StyleNo") {
                     var order_flag = value.order_flag;
@@ -1085,29 +1105,12 @@ function tescoStatusTable(data, path) {
                     } else {
                         style_no = value.uk_style_ref;
                     }
-                    tr += '<td align="center" data-id="' + value.tableID + '" data-table="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>' + span_style + '' + style_no + '</a></td>';
-                } else if (key == "Actions") {
-                    var po_file = value['po_file'];
-                    if (po_file != null) {
-                        style_po = "style='border-color:#FFFFFF'"
+                    if (value['order_status'] != 'Saved'){
+                        tr += '<td align="center" data-id="' + value.tableID + '" data-table="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>' + span_style + '' + style_no + '</a></td>';
                     } else {
-                        style_po = "style='border-color:#FF0000'"
+                        tr += '<td align="center" data-id="' + value.tableID + '" data-table="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '"><a class="" href="javascript:void(0)" data-toggle= "modal" data-target="#savedOrderAlertBox">' + span_style + '' + style_no + '</a></td>';
                     }
-                    var pi_required = value['pi_required'];
-                    var po_required = value['po_required'];
-                    if (value["Artwork Status"] != "Order Cancelled" && value['is_order_count_empty'] == 0) {
-                        if (pi_required == 1 && po_required == 1) {
-                            tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateTescoPI("' + value.tableID + '","' + value.tableName + '","' + action_status + '","' + style_no + '","' + value.template_id + '","' + value.BuyerPO + '","' + value.TemplateName.replace(/ /g, "") + '","' + order_flag + '")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="javascript:void(0)" onclick=tescoPOUpload(this,"' + value.tableID + '","' + po_file + '","' + value.tableName + '") class="po-style" ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" ' + style_po + '></i></a></td>';
-                        } else if (po_required == 1 && pi_required == 0) {
-
-                            tr += '<td align="center"><a href="javascript:void(0)" class="po-style" onclick=tescoPOUpload(this,"' + value.tableID + '","' + po_file + '","' + value.tableName + '") ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" ' + style_po + '></i></a></td>';
-                        } else if (pi_required == 1 && po_required == 0) {
-
-                            tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateTescoPI("' + value.tableID + '","' + value.tableName + '","' + action_status + '","' + style_no + '","' + value.template_id + '","' + value.BuyerPO + '","' + value.TemplateName.replace(/ /g, "") + '","' + order_flag + '")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a></td>';
-                        }
-                    } else {
-                        tr += '<td align="center"> - </td>';
-                    }
+                    
                 } else if (key == "DeliveryDate") {
 
                     if (value['is_order_count_empty'] == 0 && value["Artwork Status"] != "Order Cancelled") {
@@ -3189,4 +3192,57 @@ function oswordWrap(str, maxWidth) {
 function testWhite(x) {
     var white = new RegExp(/^\s$/);
     return white.test(x.charAt(0));
+}
+
+/**
+ * Approve tesco artworks from order status page with confirmation modal
+ * @author <praveen>
+ */
+$(document).on('click','.artwork-approval-pending',function() {
+    $('#ts_table_id').val($(this).data('table-id'));
+    $('#ts_table_name').val($(this).data('table-name'));
+    // show Modal
+    $('#approveTescoArtworkModal').modal('show');
+});
+
+function approveTescoArtwork() {
+	try {
+        var table_id = $('#ts_table_id').val();
+        var table_name = $('#ts_table_name').val();
+		$.ajax({
+			url: base_url + "/admin/tesco/approve-tesco-artwork",
+			type: 'PUT',
+			data: {
+				_token: csrf_token,
+                table_id: table_id,
+                table_name:table_name
+			},
+			tryCount: 0,
+			retryLimit: 2,
+			dataType: "json",
+			beforeSend: function () {
+				$(".loader").show();
+			},
+			success: function (data) {
+                $('#approveTescoArtworkModal').modal('hide');
+				$('.snackbar_span').html('Artwork Approved Successfully');
+                showSnackbar();
+                submitOs(this);
+
+			},
+			error: function (errorXHR, errorStatus, errorThrown) {
+				this.tryCount++;
+				if (this.tryCount <= this.retryLimit) {
+					$.ajax(this);
+					return;
+				}
+			},
+			complete: function () {
+				$(".loader").hide();
+			}
+		})
+	} catch (e) {
+		/** [error statements] */
+		console.error("Error:" + e)
+	}
 }
