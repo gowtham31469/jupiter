@@ -301,12 +301,11 @@
                         <ul class="list-group checked-list-box">
                         </ul>
                         <hr/>
-                        <button type="button" id="approve_button" class="btn btn-primary">Approve Artwork</button>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
-                    <button type="button" id="approve_submit" class="btn btn-primary hidden">Approve</button>
+                    <button type="button" id="approve_button" class="btn btn-primary hidden">Approve Artwork</button>
                 </div>
             </div>
         </div>

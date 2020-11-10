@@ -38,7 +38,7 @@ function tescoOrderStatus() {
                 <div class="row" style="margin-top: 15px;">
                 <div class="col-md-1"></div>
                 <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="seasonos" title="Select Season" multiple data-selected-text-format="count" data-live-search="true" data-size="10"></select></div></div>
-                <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="orderstatusos" title="Select Order Status" multiple data-selected-text-format="count" data-live-search="true" data-size="10"><option value="Saved">Saved</option><option value="Submited">Submited</option><option value="Pending">Pending</option></select></div></div>
+                <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="orderstatusos" title="Select Order Status" multiple data-selected-text-format="count" data-live-search="true" data-size="10"><option value="Saved">Saved</option><option value="Submited">Submited</option><option value="Pending">Pending</option><option value="Order Cancelled">Cancelled</option></select></div></div>
                 <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="artworkstatusos" title="Select Artwork Status" multiple data-selected-text-format="count" data-live-search="true" data-size="10"><option value="Approval Pending">Approval Pending</option><option value="Order Approved">Order Approved</option></select></div></div>
                 <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="postatusos" title="Select PO Status" multiple data-selected-text-format="count" data-live-search="true" data-size="10"><option value="PO Pending">PO Pending</option><option value="PO Uploaded">PO Uploaded</option></select></div></div>
                 <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="pistatusos" title="Select PI Status" multiple data-selected-text-format="count" data-live-search="true" data-size="10"><option value="PI Approval Pending">PI Approval Pending</option><option value="PI Approved">PI Approved</option></select></div></div>
@@ -153,6 +153,7 @@ function tescoOrderStatus() {
                     $('#style_approve_num').change(function () {
                         if ($(this).val() != "Select Style Number") 
                         {
+                            $('#approve_button').removeClass('hidden')
                             var selected = $(this).find('option:selected');
                             var styleNum = selected.val();
                             var zone = selected.data('zone');
@@ -379,6 +380,12 @@ function tescoOrderStatus() {
                                     $(".loader").hide();
                                 }
                             })
+                        }
+                        else
+                        {
+                            $('#approve_button').addClass('hidden')
+                            $('#check_approve_error_status').addClass('hidden')
+                            $('#exist_artwork_approve_div_status').addClass('hidden')
                         }
 
                     })
@@ -897,9 +904,10 @@ function submitOs(obj)
                 $tableSel.DataTable({
                     "pageLength": 25,
                     "order": [
-                        [7, "desc"]
+                        [8, "desc"]
                     ],
                     "aoColumns": [
+                        null,
                         null,
                         null,
                         null,
@@ -996,7 +1004,7 @@ var normalizeDate = function (dateString) {
  * @return {[type]}      [description]
  */
 function tescoStatusTable(data, path) {
-    var th = "<th style='text-align: center;'>Style No</th><th style='text-align: center;'>Buyer PO No</th><th style='text-align: center;'>Zone</th><th style='text-align: center;'>Reference No</th><th style='text-align: center;'>Template Type</th><th style='text-align: center;'>Company</th><th style='text-align: center;'>Order Date</th><th style='text-align: center;'>Delivery Date</th><th style='text-align: center;'>Artwork Status</th><th style='text-align: center;'>PI Status</th><th style='text-align: center;'>PO Status</th><th style='text-align: center;'>PO Number</th><th style='text-align: center;'>Actions</th>";
+    var th = "<th style='text-align: center;'>Style No</th><th style='text-align: center;'>Season Code</th><th style='text-align: center;'>Buyer PO No</th><th style='text-align: center;'>Zone</th><th style='text-align: center;'>Reference No</th><th style='text-align: center;'>Template Type</th><th style='text-align: center;'>Company</th><th style='text-align: center;'>Order Date</th><th style='text-align: center;'>Delivery Date</th><th style='text-align: center;'>Artwork Status</th><th style='text-align: center;'>PI Status</th><th style='text-align: center;'>PO Status</th><th style='text-align: center;'>PO Number</th><th style='text-align: center;'>Actions</th>";
     var tr = "";
     var columnsIn = data[0];
     $.each(data, function (index, value) {
@@ -1005,7 +1013,7 @@ function tescoStatusTable(data, path) {
         for (var key in columnsIn) {
             if (key != "id") {
 
-                if (key == "PO Number" && value['po_required'] == 1 && value['is_order_count_empty'] == 0) {
+                if (key == "PO Number" && value['po_required'] == 1 && value['is_order_count_empty'] == 0 && value["Artwork Status"] != "Order Cancelled") {
                     var po_file = value['po_file'];
                     let customer_po_number = value[key] === null?'':value[key];
                     tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" onkeypress="return AvoidSpace(event)" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" placeholder="Enter PO" maxlength="11" value="'+customer_po_number+'"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"' + value.tableID + '","' + value.tableName + '","' + po_file + '")><span class="fa fa-check"></span></button></span></div></div></td>';
@@ -1102,7 +1110,7 @@ function tescoStatusTable(data, path) {
                     }
                 } else if (key == "DeliveryDate") {
 
-                    if (value['is_order_count_empty'] == 0) {
+                    if (value['is_order_count_empty'] == 0 && value["Artwork Status"] != "Order Cancelled") {
                         if (value[key] == null) {
                             tr += '<td><span style=display:none;>' + value.OrderDate + '</span><input class="form-control input-sm datepicker_recurring_start" data-id="' + value.delivery_day_count + '" style="width: 107px; border-color: rgb(244, 67, 54);" placeholder="Delivery Date" onchange=updateDeliveryDate(this,"' + value.tableID + '","' + value.tableName + '")  readonly></td>';
                         } else {
