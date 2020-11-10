@@ -5,6 +5,7 @@ use Carbon\Carbon;
 use App\ErpOrders as Erp;
 use App\ErpOrderDetails;
 use App\FinancialYearResetDate;
+use App\Classes\TescoMaterialQuery;
 
 
 class ErpOrders
@@ -18,6 +19,7 @@ class ErpOrders
 	private $financial_year_start;
 	private $financial_year_end;
 	private $financial_year;
+	private $tesco_material_obj;
 	
 	/**
 	 * Create a new controller instance.
@@ -58,6 +60,8 @@ class ErpOrders
 			$this->financial_year_end = Carbon::parse($this->financial_year_date_format)->addYear()->subDay()->toDateString();
 			$this->financial_year = Carbon::parse($this->financial_year_date_format)->format('y');
 		}
+
+		$this->tesco_material_obj = new TescoMaterialQuery();
 	}
 
 	/**
@@ -242,13 +246,7 @@ class ErpOrders
 						$template          = 'Available';
 						$action_id         = DB::table('actions')->where('action', 'ilike', 'PO Manager Verification Pending')->value('id');
 	
-						$template_level = DB::table('tesco_item_master as t1')
-											->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
-											->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
-											->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
-											->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
-											->where('t1.id', $orders->template_id)
-											->first();
+						$template_level = $this->tesco_material_obj->tescoMaterialDetails($orders->template_id);
 	
 						$material_name  = $template_level->material;
 						$material_sub   = $template_level->material_sub;

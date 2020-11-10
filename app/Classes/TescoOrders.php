@@ -11,6 +11,8 @@ use App\TescoTSL3Orders;
 use App\Classes\SubmitTescoOrdersUpdateQuery;
 use Carbon\Carbon;
 use App\Classes\EditErpOrders;
+use App\OrderManagementHistory;
+use App\Classes\TescoMaterialQuery;
 /**
  * Class to store the tesco template orders
  * @author [Praveen] <[praveen@wizroots.com]>
@@ -40,80 +42,81 @@ class TescoOrders
 	public function createTescoOrder($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required, $order_status, $edit_permission)
 	{
 		try {
-            /** [ Creating new object for SubmitTescoOrdersUpdateQuery() class ] */
-            $tesco_order_obj = new SubmitTescoOrdersUpdateQuery(); 
+          $tesco_material_obj = new TescoMaterialQuery();
 
-            /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
-            $pi_status = $pi_required == 1?"PI Approval Pending":null;
+          /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
+          $pi_status = $pi_required == 1?"PI Approval Pending":null;
 
-            /** [ po_required for this customer or not. If required then po_staus will be "PO Pending"  ] */
-            $po_status = $po_required == 1?"PO Pending":null;
+          /** [ po_required for this customer or not. If required then po_staus will be "PO Pending"  ] */
+          $po_status = $po_required == 1?"PO Pending":null;
 
-            /** [ Get company id for template ] */
-            $template_data = DB::table('tesco_item_master')->select('company_id', 'item_name')->where('id','=',$template_id)->first();
+          /** [ Get company id for template ] */
+          $template_data = DB::table('tesco_item_master')->select('company_id', 'item_name')->where('id','=',$template_id)->first();
 
-            //Dynamic function name and database model name for each templates
-            $order_model = 'App\\'."Tesco".str_replace(" ","",$template_data->item_name)."Orders";
+          //Dynamic function name and database model name for each templates
+          $order_model = 'App\\'."Tesco".str_replace(" ","",$template_data->item_name)."Orders";
 
-            /** [ Get orders table maximum id value for creating order id] */
-            $max_id = $order_model::max('id');
+          /** [ Get orders table maximum id value for creating order id] */
+          $max_id = $order_model::max('id');
 
-            $order_id = $template_data->company_id == 1?"JGA_".str_replace(" ","",$template_data->item_name)."00".($max_id+1):"SP_".str_replace(" ","",$template_data->item_name)."00".($max_id+1);
+          $order_id = $template_data->company_id == 1?"JGA_".str_replace(" ","",$template_data->item_name)."00".($max_id+1):"SP_".str_replace(" ","",$template_data->item_name)."00".($max_id+1);
 
-            /** Insert order details first time. If data already exits, update old values**/
-            if($request['is_insert'] == 'true')
-            {
-              /** [ Check if order already placed for this CE style OR UK style ] */
-              $is_exists = $order_model::select('id')->where(strtolower($request['zone']).'_style_ref','=',$request[strtolower($request['zone']).'_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
-            
-              if($is_exists)
-              {
-                $existing_id = $is_exists->id;
-                /** [ Invoking submitSavedTescoOrder function using class instance ] */
-                $tesco_order  = $tesco_order_obj->submitSavedTescoOrder($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by,$po_status, $order_status, $edit_permission, $order_model);
+          /** Insert order details first time. If data already exits, update old values**/
+          
+          $order_submitted = $order_model::updateOrCreate([strtolower($request['zone']).'_style_ref' => $request[strtolower($request['zone']).'_style'], 'order_status' => 'Saved', 'po_number' => $request['po_number']], [
+                    'order_id'             => $order_id,
+                    'zone'                 => $request['zone'],
+                    'template_type'        => $request['type'],
+                    'uk_style_ref'         => $request['uk_style'],
+                    'ce_style_ref'         => $request['ce_style'],
+                    'season_code'          => $request['season_code'],
+                    'short_description'    => $request['description'],
+                    'eqos_site_code'       => $request['eqos'],
+                    'manufacture_date'     => $request['manufacture_date'],
+                    'tesco_department_id'  => $request['department'],
+                    'tesco_brand_id'       => $request['brand'],
+                    'tesco_supplier_id'    => $customer_id,
+                    'tesco_metadata_supplier_id' => $request['supplier'],
+                    'rfid_compliant'       => $request['rfid'],
+                    'tag_at_source'        => $request['tag_at_source'],
+                    'order_status'         => $order_status,
+                    'template_id'          => $template_id,
+                    'pi_status'            => $pi_status,
+                    'po_status'            => $po_status,
+                    'is_order_count_empty' => $is_order_count_empty,
+                    'order_placed_by'      => $created_by,
+                    'order_created_at'     => $this->current_date,
+                    'ocn_number'           => $request['ocn_no'],
+                    'full_description'     => $request['full_description'],
+                    'edit_permission'      => $edit_permission
+                  ]);
 
-                return $is_exists;
-                
-              }
-              else
-              {
-                return $order_model::create([
-                          'order_id'             => $order_id,
-                          'zone'                 => $request['zone'],
-                          'template_type'        => $request['type'],
-                          'po_number'            => $request['po_number'],
-                          'uk_style_ref'         => $request['uk_style'],
-                          'ce_style_ref'         => $request['ce_style'],
-                          'season_code'          => $request['season_code'],
-                          'short_description'    => $request['description'],
-                          'eqos_site_code'       => $request['eqos'],
-                          'manufacture_date'     => $request['manufacture_date'],
-                          'tesco_department_id'  => $request['department'],
-                          'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $customer_id,
-                          'tesco_metadata_supplier_id' => $request['supplier'],
-                          'rfid_compliant'       => $request['rfid'],
-                          'tag_at_source'        => $request['tag_at_source'],
-                          'order_status'         => $order_status,
-                          'template_id'          => $template_id,
-                          'pi_status'            => $pi_status,
-                          'po_status'            => $po_status,
-                          'is_order_count_empty' => $is_order_count_empty,
-                          'order_placed_by'      => $created_by,
-                          'order_created_at'     => $this->current_date,
-                          'ocn_number'           => $request['ocn_no'],
-                          'full_description'     => $request['full_description'],
-                          'edit_permission'      => $edit_permission
-                        ]);
-              }
-            }
-            else
-            {
-              /** [ Invoking submitSavedTescoOrder function using class instance ] */
-                $tesco_order  = $tesco_order_obj->submitSavedTescoOrder($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request[strtolower(str_replace(" ","",$template_data->item_name)).'_last_id'],$customer_id,$created_by,$po_status, $order_status, $edit_permission, $order_model);
+          /** Insert order data into history table */
+          $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
+          $template_level = $tesco_material_obj->tescoMaterialDetails($template_id);
+	
+          $material_name  = $template_level->material;
+          $material_sub   = $template_level->material_sub;
+          $material_ref   = $template_level->ref;
+          $order_table_name = "tesco_".strtolower(str_replace(" ","",$template_data->item_name))."_orders";
+          $po_upload_status = $po_status === null?null:"PO Upload Pending";
+                 
+          OrderManagementHistory::updateOrCreate(['order_table_name'  => $order_table_name, 'order_table_id'    => $order_submitted->id],[
+            'buyer_id'                  => $tesco_buyer_id->id,
+            'season'                    => $request['season_code'],
+            'customer_id'               => $customer_id,
+            'material'                  => $material_name,
+            'sub_material'              => $material_sub,
+            'style'                     => $request[strtolower($request['zone']).'_style'],
+            'reference'                 => $material_ref,
+            'buyer_po'                  => $request['po_number'],
+            'ocn_number'                => $request['ocn_no'],
+            'order_status'              => $order_status,
+            'pi_status'                 => $pi_status,
+            'po_status'                 => $po_upload_status
+          ]);
 
-                return $tesco_order;
-            }
+          return $order_submitted;
             
         } catch (\Exception $e)
         {
@@ -293,6 +296,15 @@ class TescoOrders
             // pass $table_name, $buyer_id,  $table_data->id, $erp_details_status and $erp_order_id array
             $edit_erp_obj->updateTescoErpOrderDetails($data_array);
         }
+
+        // update order data in order management history table 
+        OrderManagementHistory::where([['order_table_name', $table], ['order_table_id', $table_data->id]])->update([
+          'season'                    => $request['season_code'],
+          'customer_id'               => $customer_id,
+          'style'                     => $request[strtolower($request['zone']).'_style'],
+          'buyer_po'                  => $request['po_number'],
+          'ocn_number'                => $request['tesco_ocn'],
+        ]);
       }
     } 
     catch (Exception $e)

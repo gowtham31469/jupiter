@@ -34,9 +34,12 @@ use App\Classes\TescoOrders;
 use App\Classes\SaveTescoOrders;
 use PDF;
 use Carbon\Carbon;
+use App\OrderManagementHistory;
+use App\Classes\TescoMaterialQuery;
 
 class ReorderController extends Controller
 {
+    private $tesco_material_obj;
     /**
      * Create a new controller instance.
      *
@@ -59,7 +62,9 @@ class ReorderController extends Controller
         $this->thl1_type = "tesco_thl1_orders";
         $this->thl3_type = "tesco_thl3_orders";
         $this->tsl1_type = "tesco_tsl1_orders";
-        $this->tsl3_type = "tesco_tsl3_orders";
+		$this->tsl3_type = "tesco_tsl3_orders";
+		
+		$this->tesco_material_obj = new TescoMaterialQuery();
     }
 	
  	/**
@@ -693,7 +698,33 @@ class ReorderController extends Controller
 					$newTask->save();
 					$i++;
 				}
-			}	
+			}
+			
+			/** Insert order data into history table */
+			$tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
+			$template_level = $this->tesco_material_obj->tescoMaterialDetails($newTasks->template_id);
+	  
+			$material_name  = $template_level->material;
+			$material_sub   = $template_level->material_sub;
+			$material_ref   = $template_level->ref;
+			$po_upload_status = $po_status === "PO Pending"?"PO Upload Pending":null;
+			$style_ref = strtolower($newTasks->zone).'_style_ref';
+				   
+			OrderManagementHistory::updateOrCreate(['order_table_name'  => $type, 'order_table_id'    => $newTasks->id],[
+			  'buyer_id'                  => $tesco_buyer_id->id,
+			  'season'                    => $newTasks->season_code,
+			  'customer_id'               => $newTasks->tesco_supplier_id,
+			  'material'                  => $material_name,
+			  'sub_material'              => $material_sub,
+			  'style'                     => $newTasks->$style_ref,
+			  'reference'                 => $material_ref,
+			  'buyer_po'                  => $newTasks->po_number,
+			  'ocn_number'                => $newTasks->ocn_number,
+			  'order_status'              => 'Order Placed',
+			  'pi_status'                 => $pi_status,
+			  'po_status'                 => $po_upload_status
+			]);
+
 		    echo true;
     }
   /**
@@ -1078,7 +1109,32 @@ class ReorderController extends Controller
 				}
 				$data=DB::table($type)->where('id',$newTasks->id)->select('*',DB::raw("'".$this->tsl3."'".' as "TemplateName"'),DB::raw("'".$type."'".' as "type"'))->get();
 			}	
-		    
+			
+			/** Insert order data into history table */
+			$tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
+			$template_level = $this->tesco_material_obj->tescoMaterialDetails($newTasks->template_id);
+	  
+			$material_name  = $template_level->material;
+			$material_sub   = $template_level->material_sub;
+			$material_ref   = $template_level->ref;
+			$po_upload_status = $po_status === "PO Pending"?"PO Upload Pending":null;
+			$style_ref = strtolower($newTasks->zone).'_style_ref';
+				   
+			OrderManagementHistory::updateOrCreate(['order_table_name'  => $type, 'order_table_id'    => $newTasks->id],[
+			  'buyer_id'                  => $tesco_buyer_id->id,
+			  'season'                    => $newTasks->season_code,
+			  'customer_id'               => $newTasks->tesco_supplier_id,
+			  'material'                  => $material_name,
+			  'sub_material'              => $material_sub,
+			  'style'                     => $newTasks->$style_ref,
+			  'reference'                 => $material_ref,
+			  'buyer_po'                  => $po,
+			  'ocn_number'                => $ocn_number,
+			  'order_status'              => 'Order Placed',
+			  'pi_status'                 => $pi_status,
+			  'po_status'                 => $po_upload_status
+			]);
+			
 			echo $data;
     }
 	 /**
