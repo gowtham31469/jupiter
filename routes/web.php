@@ -904,8 +904,14 @@ Route::get('getTableFields','ErpUser\Reports\ReportController@getTableFields');
 Route::post('setUpDatatable', 'ErpUser\Reports\ReportController@setUpDatatable' )->name('setUpDatatable');
 
 // Routes for admin report generation
+Route::get('testQuery','Admin\Report\ReportController@testQuery');
 Route::get('admin/generate-report','Admin\Report\ReportController@index')->name('generate-report');
 Route::post('admin_level1Filter','Admin\Report\ReportController@level1Filter');
+Route::post('admin_level2Filter','Admin\Report\ReportController@level2Filter');
+Route::get('admin_getTableFields','Admin\Report\ReportController@admin_getTableFields');
+Route::post('admin_setUpDatatable', 'Admin\Report\ReportController@admin_setUpDatatable' )
+													  ->name('admin_setUpDatatable');
+
 
 Route::get('print-manager/get-customers-list', 'ErpUser\Printmanager\PrintManagerController@getCustomersListByBuyerId'); 
 Route::get('print-manager/get-style-list', 'ErpUser\Printmanager\PrintManagerController@getStyleListByBuyerCustomerId'); 

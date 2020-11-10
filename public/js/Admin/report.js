@@ -121,17 +121,27 @@ $(document).ready(function($) {
 			$('.selectpicker').removeClass('open');
 			if($(".roleSelection option:selected").val().length > 0)
 			{
-				selectedRoles=$(".roleSelection option:selected").val()
-				if($("#"+selectedRoles).val().length > 0)
+				console.log($("#options_for_orders").val().length)
+				if($("#options_for_orders").val().length || $("#options_for_delivery").val().length )
 				{
-					if($("#reference").val().length > 0 && $("#po").val().length > 0 && $("#buyer_po").val().length > 0 && $("#ocn").val().length > 0 && $("#customer").val().length > 0 && $("#material").val().length > 0 && $("#style").val().length > 0 && $("#mat_sub").val().length > 0 && $("#buyer").val().length > 0 && $("#season").val().length > 0 && $("#template").val().length > 0 && $("#country").val().length > 0)
+		
+					if($("#reference").val().length > 0 && $("#po").val().length > 0 && $("#buyer_po").val().length > 0 && $("#ocn").val().length > 0 && $("#customer").val().length > 0 && $("#material").val().length > 0 && $("#style").val().length > 0 && $("#mat_sub").val().length > 0 && $("#buyer").val().length > 0 && $("#season").val().length > 0)
 					{
+						$status =[]
+						if($(".roleSelection option:selected").html() == "Orders")
+						{
+							$status = $("#options_for_orders").val()
+						}
+						else
+						{
+							$status = $("#options_for_delivery").val()
+						}
 						$.ajax({
 							type : 'get',
-							url : '/getTableFields',
+							url : '/admin_getTableFields',
 							data:{
 								'role' : $(".roleSelection option:selected").html(),
-								'status' : $("#"+selectedRoles).val(),
+								'status' : $status
 							},
 							success:function(data)
 							{	
@@ -201,7 +211,7 @@ $(document).ready(function($) {
 	$(document).on('click', '#update_table', function(event) {
 		event.preventDefault();
 
-		if($("#reference").val().length > 0 && $("#po").val().length > 0 && $("#buyer_po").val().length > 0 && $("#ocn").val().length > 0 && $("#customer").val().length > 0 && $("#material").val().length > 0 && $("#style").val().length > 0 && $("#mat_sub").val().length > 0 && $("#buyer").val().length > 0 && $("#season").val().length > 0 && $("#template").val().length > 0 && $("#country").val().length > 0)
+		if($("#reference").val().length > 0 && $("#po").val().length > 0 && $("#buyer_po").val().length > 0 && $("#ocn").val().length > 0 && $("#customer").val().length > 0 && $("#material").val().length > 0 && $("#style").val().length > 0 && $("#mat_sub").val().length > 0 && $("#buyer").val().length > 0 && $("#season").val().length > 0)
 		{
 			var listItems1 = $(".checklist1 li");
 			var listItems2 = $(".checklist2 li");

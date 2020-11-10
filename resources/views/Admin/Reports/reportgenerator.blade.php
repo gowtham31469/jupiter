@@ -81,7 +81,7 @@
 									<option value="{{ $action_as_id[$key] }}"> {{ $action }}</option>
 									@endforeach --}}
 
-									{!! Form::select('roleSelection', $allActions,null,['class' => 'selectpicker roleSelection','required','data-size'=>"10","title"=>'Select Role']) !!}
+									{!! Form::select('roleSelection', $allActions,null,['class' => 'selectpicker roleSelection','required','data-size'=>"10","title"=>'Select Role','id'=>'roleSelection']) !!}
 								</select>
 							</div>
 							<div class="col-md-3" style="padding-left: 0;width: 24%;">
@@ -286,39 +286,27 @@
 									.text(value)); 
 							});
 
-							var temp1=[]
-							$.each(data.result, function(key, value) { 
+			
+							$.each(data.Materials, function(key, value) { 
 
-								if($.inArray( value['material'], temp1 )==-1)	
-								{	
 									$('#material').append($("<option></option>")
-										.text(value['material']));
-								}
-								temp1.push(value['material'])
+										.text(value));
 							});
 
 							var temp2=[]
-							$.each(data.result, function(key, value) 
+							$.each(data.Style, function(key, value) 
 							{ 
-								if($.inArray( value['style'], temp2 )==-1)	
-								{	
 									$('#style').append($("<option></option>")
-										.text(value['style'])); 
-								}
-								temp2.push(value['style'])
+										.text(value)); 
 							});
 							
 
-							var temp3=[]
-							$.each(data.result, function(key, value) 
+							$.each(data.SubMaterials, function(key, value) 
 							{ 
-								if($.inArray( value['mat_sub'], temp3 )==-1)	
-								{
-									$('#mat_sub').append($("<option value='"+value['mat_sub']+"'></option>")
-										.text(value['mat_sub'])); 
-								}
-								temp3.push(value['mat_sub'])
+									$('#mat_sub').append($("<option value='"+value+"'></option>")
+										.text(value)); 
 							});
+
 							$('.filterLevel2').multiselect('destroy');
 
 							$('.filterLevel2').multiselect({
@@ -353,7 +341,7 @@
 function triggerLevel2()
 {
 
-	if($("#customer").val().length > 0 && $("#material").val().length > 0 && $("#style").val().length > 0 && $("#mat_sub").val().length > 0 && $("#buyer").val().length > 0 && $("#season").val().length > 0 && $("#template").val().length > 0 && $("#country").val().length > 0)
+	if($("#customer").val().length > 0 && $("#material").val().length > 0 && $("#style").val().length > 0 && $("#mat_sub").val().length > 0 && $("#buyer").val().length > 0 && $("#season").val().length > 0)
 	{
 		$("#loader2").removeClass('hidden')
 		material = [];
@@ -374,7 +362,7 @@ function triggerLevel2()
 
 		$.ajax({
 			type : 'post',
-			url: "{{ url('/level2Filter') }}",
+			url: "{{ url('/admin_level2Filter') }}",
 			data:{
 				'buyer': $("#buyer").val(),
 				'materials': material,
@@ -398,53 +386,38 @@ function triggerLevel2()
 
 				console.log(data)
 
-				if(data.length > 0)
+				if(data)
 				{
-					var temp4=[]	
-					$.each(data, function(key, value) 
+					$.each(data.Reference, function(key, value) 
 					{ 
-						if($.inArray( value['reference'], temp4 )==-1)	
-						{
+
 							$('#reference').append($("<option></option>")
-								.text(value['reference'])); 
-						}
-						temp4.push(value['reference'])
+								.text(value)); 
 					});
 
-					var temp5=[]
-					$.each(data, function(key, value)
+					$.each(data.CustomerPo, function(key, value)
 					{ 
-						if($.inArray( value['po'], temp5 )==-1)	
-						{
+
 							$('#po').append($("<option></option>")
-								.text(value['po'])); 
-						}
-						temp5.push(value['po'])
+								.text(value)); 
 					});
 
-					var temp6=[]
-					$.each(data, function(key, value)
+					$.each(data.BuyerPo, function(key, value)
 					{ 
-						if($.inArray( value['buyer_po'], temp6 )==-1)	
-						{
+
 							$('#buyer_po').append($("<option></option>")
-								.text(value['buyer_po'])); 
-						}
-						temp6.push(value['buyer_po'])
+								.text(value)); 
+
 					});
 
-					var temp7=[]
-					$.each(data, function(key, value)
+					$.each(data.Ocn, function(key, value)
 					{ 
-						if($.inArray( value['ocn'], temp7 )==-1)	
-						{
-							if(value['ocn'] != null && value['ocn'] != ',')
+
+							if(value != null && value != ',')
 							{
 								$('#ocn').append($("<option></option>")
-								.text(value['ocn'])); 
+								.text(value)); 
 							}
-						}
-						temp7.push(value['ocn'])
 					});
 				}
 				else{
@@ -492,6 +465,16 @@ function create_table(def,extra)
 	po = [];
 	buyer_po = [];
 	ocn = [];
+	$status =[]
+
+	if($(".roleSelection option:selected").html() == "Orders")
+	{
+		$status = $("#options_for_orders").val()
+	}
+	else
+	{
+		$status = $("#options_for_delivery").val()
+	}
 
 	$.each($("#reference option:selected"), function(){            
 		reference.push($(this).html());
@@ -558,13 +541,13 @@ function create_table(def,extra)
 			header: true,
 		},
 		"ajax": {
-			"url": "{{ url('setUpDatatable') }}",
+			"url": "{{ url('admin_setUpDatatable') }}",
 			"dataType": "json",
 			"type": "POST",
 			"data":{
 				_token: "{{csrf_token()}}",
 				role : $(".roleSelection option:selected").html(),
-				status : $("#"+selectedRoles).val(),
+				status : $status,
 				references : reference,
 				pos : po,
 				buyer_pos : buyer_po,
@@ -574,9 +557,7 @@ function create_table(def,extra)
 				styles : style,
 				mat_subs : mat_sub,
 				customers : $("#customer").val(),
-				country : countries,
 				season : seasons,
-				template : templates,
 				date_start : date1,
 				date_end : date2
 			}

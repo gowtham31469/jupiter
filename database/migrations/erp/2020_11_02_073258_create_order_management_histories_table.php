@@ -30,8 +30,8 @@ class CreateOrderManagementHistoriesTable extends Migration
             $table->string('customer_po')->nullable()->index();
             $table->string('buyer_po')->nullable()->index();
             $table->string('ocn_number')->nullable()->index();
-            $table->string('order_details_table_name')->nullable();
-            $table->bigInteger('order_details_table_id')->nullable();
+            $table->string('order_table_name')->nullable();
+            $table->bigInteger('order_table_id')->nullable();
             $table->string('order_status')->default('Order Saved')->index();
             $table->string('artwork_status')->default('Artwork Approval Pending')->index();
             $table->string('po_status')->default('PO Upload Pending')->index();
