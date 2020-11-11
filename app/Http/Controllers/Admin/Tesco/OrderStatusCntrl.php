@@ -577,7 +577,7 @@ class OrderStatusCntrl extends Controller
                 ]);
 
             // update po upload status in order history table
-            $po_upload_status = $po_status === "PO Pending"?"PO Upload Pending":$po_status;
+            $po_upload_status = $po_status === "PO Pending"?0:1;
             OrderManagementHistory::where([['order_table_name', $table_name], ['order_table_id', $template_id]])->update([
               'po_status' => $po_upload_status,
               'customer_po' => $po_number,
@@ -696,7 +696,7 @@ class OrderStatusCntrl extends Controller
             ]);
 
             // update po upload status in order history table
-            $po_upload_status = $po_status === "PO Pending"?"PO Upload Pending":$po_status;
+            $po_upload_status = $po_status === "PO Pending"?0:1;
             OrderManagementHistory::where([['order_table_name', $table_name], ['order_table_id', $row_id]])->update([
                 'po_status' => $po_upload_status,
               ]);
@@ -928,7 +928,7 @@ class OrderStatusCntrl extends Controller
 
                     // update PI approve status as "PI Approved" in order history table
                     OrderManagementHistory::where([['order_table_name', $table], ['order_table_id', $tableID]])->update([
-                        'pi_status'   => "PI Approved"
+                        'pi_status'   => 1
                     ]);
                 }
             }
@@ -954,7 +954,7 @@ class OrderStatusCntrl extends Controller
                 
                  // update PI approve status as "PI Approved" in order history table
                  OrderManagementHistory::where([['order_table_name', $table_name], ['order_table_id', $row_id]])->update([
-                    'pi_status'   => "PI Approved"
+                    'pi_status'   => 1
                 ]);
             }
             if ($approved_data)
@@ -1201,7 +1201,7 @@ class OrderStatusCntrl extends Controller
                 
                 // update po upload status in order history table
                 OrderManagementHistory::where([['order_table_name', $value[0]], ['order_table_id', $value[1]]])->update([
-                    'po_status' => "PO Uploaded",
+                    'po_status' => 1,
                     'customer_po' => $po,
                 ]);
 
@@ -1273,7 +1273,7 @@ class OrderStatusCntrl extends Controller
                   ]);
                 
                 // update po upload status in order history table
-                $po_upload_status = $status === "PO Pending"?"PO Upload Pending":$status;
+                $po_upload_status = $status === "PO Pending"?0:1;
                 OrderManagementHistory::where([['order_table_name', $value[0]], ['order_table_id', $value[1]]])->update([
                     'po_status' => $po_upload_status,
                     'customer_po' => $po,
@@ -1543,7 +1543,7 @@ class OrderStatusCntrl extends Controller
                                        'order_status'         => $order_status,
                                        'edit_permission'      => $edit_permission
                                      ]);	
-            
+            $order_status_id  = $order_status === 'Order Pending'?6:2;
             // update order data in order management history table 
             OrderManagementHistory::where([['order_table_name', $table_name], ['order_table_id', $template_id]])->update([
                 'season'                    => $request['season_code'],
@@ -1551,7 +1551,7 @@ class OrderStatusCntrl extends Controller
                 'style'                     => $request[strtolower($request['zone']).'_style'],
                 'buyer_po'                  => $request['po_number'],
                 'ocn_number'                => $request['tesco_ocn'],
-                'order_status'              => $order_status
+                'order_status'              => $order_status_id
             ]);
             
              DB::table($qty_table_name)->where($foreign_key,$template_id)->delete();

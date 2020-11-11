@@ -75,7 +75,8 @@ class SaveTescoOrders
           $material_sub   = $template_level->material_sub;
           $material_ref   = $template_level->ref;
           $order_table_name = "tesco_".strtolower(str_replace(" ","",$template_data->item_name))."_orders";
-                 
+          
+          // order_status = 1 , ID of saved status in order_status table.
           OrderManagementHistory::updateOrCreate(['order_table_name'  => $order_table_name, 'order_table_id'    => $saved_order->id],[
             'buyer_id'                  => $tesco_buyer_id->id,
             'season'                    => $request['season_code'],
@@ -86,7 +87,7 @@ class SaveTescoOrders
             'reference'                 => $material_ref,
             'buyer_po'                  => $request['po_number'],
             'ocn_number'                => $request['ocn_no'],
-            'order_status'              => 'Order Saved'
+            'order_status'              => 1
           ]);
 
           return $saved_order;
