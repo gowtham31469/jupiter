@@ -88,9 +88,9 @@
 								<select class="selectpicker tempSelection" id="tempSelect" title="Select Status" disabled>
 								</select>
 
-								{!! Form::select('options_for_orders[]', $options_for_orders,null,['class' => 'selectpicker all_status options_for_orders hidden','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Status [ Orders ]','id'=>'options_for_orders']) !!}
+								{!! Form::select('options_for_orders[]', $options_for_orders,null,['class' => 'selectpicker all_status options_for_orders hidden','required','data-size'=>"10",'multiple',"title"=>'Select Status [ Orders ]','id'=>'options_for_orders']) !!}
 
-								{!! Form::select('options_for_delivery[]', $options_for_delivery,null,['class' => 'selectpicker all_status options_for_delivery hidden','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Status [ Delivery ]','id'=>'options_for_delivery']) !!}
+								{!! Form::select('options_for_delivery[]', $options_for_delivery,null,['class' => 'selectpicker all_status options_for_delivery hidden','required','data-size'=>"10",'multiple',"title"=>'Select Status [ Delivery ]','id'=>'options_for_delivery']) !!}
 
 								{{-- {!! Form::select('role_Status[]', $order,null,['class' => 'selectpicker all_status _order hidden','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Status [ Order ]','id'=>'_order']) !!}
 
@@ -100,7 +100,9 @@
 						<div class="row rowSep">
 							<div class="col-md-2 filters">
 								<label>Select Buyer</label>
-								{!! Form::select('sel_1[]', $buyers,null,['class' => 'multiselect filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Buyer','id'=>'buyer']) !!}
+								{!! Form::select('buyer', $buyers,null,['class' => 'selectpicker buyer_selection filterLevel1','required','data-size'=>"10","title"=>'None Selected','id'=>'buyer']) !!}
+
+							{{-- 	{!! Form::select('sel_1[]', $buyers,null,['class' => 'multiselect filterLevel1','required','data-size'=>"10",'data-actions-box'=>"true","title"=>'Select Buyer','id'=>'buyer']) !!} --}}
 							</div>
 							<div class="col-md-2 filters">
 								<label>Select Template</label>
@@ -564,6 +566,7 @@ function create_table(def,extra)
 		},
 		"columns" :allColoumns
 	});
+		$('table tr:first th:first').text('S.No');
 		$("#reportTitle").html("Consolidated Report [ "+$(".roleSelection option:selected").html()+" ]")
 		$("#moreOtions").removeClass('hidden')
 		$('.dt-buttons').append('<button class="dt-button buttons-html5" tabindex="0" aria-controls="reportTable" type="button" id="moreOtions"><span>More Options</span></button><button class="dt-button buttons-html5" tabindex="0" aria-controls="reportTable" type="button" id="setFilters"><span class="fa fa-cogs"></span></button>')

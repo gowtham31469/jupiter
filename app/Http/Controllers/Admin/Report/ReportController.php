@@ -46,7 +46,7 @@ class ReportController extends Controller
 							  '3'=>'PO Upload Pending',
 							  '4'=>'PI Approval Pending',
 							  '5'=>'Cancelled',
-							  '6'=>'On Hold by Supplier',
+							  // '6'=>'On Hold by Supplier',
 							  '7'=>'Incomplete(saved,not submitted)'];
 
 		$options_for_delivery = ['8'=>'Dispacted',
@@ -71,7 +71,7 @@ class ReportController extends Controller
     public function level1Filter(Request $request)
 	{
 		
-		$result = OrderManagementHistory::whereIn('buyer_id',$request->buyer)
+		$result = OrderManagementHistory::where('buyer_id',$request->buyer)
 		->whereIn('season',$request->season)
 
 		->whereBetween('created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
@@ -94,7 +94,7 @@ class ReportController extends Controller
 	public function level2Filter(Request $request)
 	{
 
-		$result = OrderManagementHistory::whereIn('buyer_id',$request->buyer)
+		$result = OrderManagementHistory::where('buyer_id',$request->buyer)
 		->whereIn('season',$request->season)
 		->whereIn('material',$request->materials)
 		->whereIn('sub_material',$request->mat_subs)
@@ -120,25 +120,25 @@ class ReportController extends Controller
 		$default_fields = [];
 		$extra_fields = [];
 
-		$if_Placed = ["Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","ByrPo","Quantity","Aw_Status","PI_PO_status"];
+		$if_Placed = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","ByrPo","Quantity","Aw_Status","PI_Status","PO_Status"];
 
-		$if_Cancelled = ["Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","Quantity","Reason"];
+		$if_Cancelled = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","Quantity"];
 
-		$if_Aw_Pending = ["Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","ByrPo","Quantity","Aw_Status","PI_PO_status","Reapproved_Dt"];
+		$if_Aw_Pending = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","ByrPo","Quantity","Aw_Status","PI_Status","PO_Status"];
 
-		$if_PO_Upload_Pending = ["Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","ByrPo","Quantity","Aw_Status"];
+		$if_PO_Upload_Pending = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","ByrPo","Quantity","Aw_Status"];
 
-		$if_PI_Upload_Pending = ["Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","ByrPo","Quantity","Aw_Status"];
+		$if_PI_Upload_Pending = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","ByrPo","Quantity","Aw_Status"];
 
-		$if_On_Hold = ["Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","Quantity","Aw_Status","Reason"];
+		$if_On_Hold = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","Quantity","Aw_Status"];
 
-		$if_Incomplete = ["Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","Quantity"];
+		$if_Incomplete = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","Quantity"];
 
-		$if_Dispatched = ["Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","Quantity","DispMode","Awb"];
+		$if_Dispatched = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","Quantity","DispMode","Awb"];
 
-		$if_Pending = ["Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","Quantity"];
+		$if_Pending = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","Quantity"];
 
-		$all_fields = ["Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","ByrPo","Quantity","Aw_Status","Inv_No","Inv_Dt","Aw_Status","PI_PO_status","Reason","Reapproved_Dt","DispMode","Awb"];
+		$all_fields = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","ByrPo","Quantity","Aw_Status","Inv_No","Inv_Dt","Aw_Status","PI_Status","PO_Status","Reason","Reapproved_Dt","DispMode","Awb"];
 
 		foreach ($request->status as $key => $value) {
 			# code...
@@ -220,10 +220,8 @@ class ReportController extends Controller
 
 	public function admin_setUpDatatable(Request $request)
 	{   
-		// return $request->all();
-
-
-		$table_names = OrderManagementHistory::whereIn('buyer_id',$request->buyer)
+		// dd($request->all());
+		$table_names = OrderManagementHistory::where('buyer_id',$request->buyer)
 		->whereIn('season',$request->season)
 		->whereIn('material',$request->materials)
 		->whereIn('sub_material',$request->mat_subs)
@@ -234,54 +232,179 @@ class ReportController extends Controller
 		->whereIn('buyer_po',$request->buyer_pos)
 		->whereIn('ocn_number',$request->ocns)
 		->whereBetween('created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
+
+		->where(function($q) use ($request) {
+
+			foreach ($request->status as $key => $value) 
+			{
+				switch ($value) 
+				{
+					case 1:
+						$q->where('order_status',2);
+					break;
+					
+					case 2:
+						$q->where('artwork_status',1);
+					break;
+
+					case 3:
+						$q->where('po_status',1);
+					break;
+
+					case 4:
+						$q->where('pi_status',1);
+					break;
+
+					case 5:
+						$q->where('order_status',3);
+					break;
+
+					case 6:
+						$q->where('order_status','Hold');
+					break;
+
+					case 7:
+						$q->where('order_status',1);
+					break;
+
+					default:
+						# code...
+						break;
+				}
+			}
+			
+		})
 		->select('order_table_name','order_table_id')
 		->get();
 
-		// $queryRes =
+		$queryRes = collect();
+		
 		$ddmmyy="DD/MM/YYYY";
-		$queryRes = collect(); 
-		// return $table_names;
-		foreach ($table_names as $key => $value) 
-		{
 
-			$primary = $value['order_table_name'];
-			$secondary = $value['order_table_name']."_qty";
-			$primary_id = $value['order_table_name'].'.id';
-			$secondary_id = $value['order_table_name'].'_qty'.'.oht_id';
-			$primary_order_date = $value['order_table_name'].'.order_created_at';
-			// return $primary_order_date;
+		switch ($request->buyer) {
+			case 1:
+				foreach ($table_names as $key => $value) 
+				{
+					$primary = $value['order_table_name'];
+					$secondary = $value['order_table_name']."_qty";
+					$primary_id = $value['order_table_name'].'.id';
+					$secondary_id = $value['order_table_name'].'_qty'.'.oht_id';
+					$primary_order_date = $value['order_table_name'].'.order_created_at';
 
-			$res = DB::table($primary)
-					->leftJoin($secondary,$secondary_id,$primary_id)
-					->select([
-						// ''.$primary_order_date.' as Order_Dt'])->get();
-	         
-	                    DB::raw('to_char('.$primary_order_date.','."'".$ddmmyy."'".') as "Order_Dt"'),
-	    //                 'company_name as Customer',
-	                    // 'material as Material',
-	                    'uvc as Style',
-	    //                 'history.po as P.O',
-	    //                 'ocn as OCN',
-	    //                 'jc_number as JC.No',
-	    //                 'invoice_number as Inv.No',
-	    //                 'season as Season',
-	    //                 'country as Country',
-	    //                 'buyer_po as ByrPo',
-	    //                 'order_quantity as Quantity',
-	    //                 'actions.action as Status',
-	    //                 'event_history.reason as Reason'
-                	])
-                	->get();
-               	
-            // dd($queryRes[0]->created_at);
-			$queryRes = $queryRes->merge($res);
+					$res = collect();
 
+					$res = DB::table($primary)
+						->leftJoin($secondary,$secondary_id,$primary_id)
+						->select([
+							DB::raw('to_char('.$primary_order_date.','."'".$ddmmyy."'".') as "Order_Dt"'),
+							'uvc as Style',
+							'quantity as Quantity',
+							'pi_status as PI_Status',
+							'po_status as PO_Status',
+							'status as Aw_Status',
+							'po as ByrPo',
+							'po_number as P.O',
+						])->get();
+					
+
+					$template_id = DB::table($primary)->where('id',$value['order_table_id'])->first()->template_id;
+
+					$template_data = DB::table('orchestra_item_master')
+											->where('orchestra_item_master.id', $template_id)
+											->select('orchestra_item_master.material_id', 'orchestra_item_master.item_name', 'orchestra_item_master.sub_material_id')
+											->first();
+
+					$material_name  = DB::table('orchestra_item_master')
+												->where('id', '=', $template_data->material_id)
+												->value('item_name');
+
+					$material_sub  = DB::table('orchestra_item_master')
+											->where('id', '=', $template_data->sub_material_id)
+											->value('item_name');
+
+					$material_ref   = $template_data->item_name;
+
+
+					$res->map(function ($res,$key) use($material_name,$material_sub,$material_ref) {
+		                    $res->Material = $material_name;
+		                    $res->Sub_Material = $material_sub;
+		                    $res->Reference = $material_ref;
+		                    $res->Inv_No = "-";
+		                    $res->Inv_Dt = "-";
+		                    $res->Reapproved_Dt = "-";
+		                    $res->DispMode = "-";		
+		                    $res->Awb = "-";		
+		                    $res->Reason = "-";		
+		                    $res->OCN = "-";		
+                   		 });
+
+					$queryRes = $queryRes->merge($res);
+				}
+				break;
 			
+
+			case 2:
+				foreach ($table_names as $key => $value) 
+				{
+
+					$primary = $value['order_table_name'];
+					$base = explode("_", $primary)[1];
+					$secondary = $value['order_table_name']."_quanty";
+					$primary_id = $value['order_table_name'].'.id';
+					$secondary_id = $value['order_table_name'].'_quanty.'.$base.'_order_id';
+					$primary_order_date = $value['order_table_name'].'.order_created_at';
+
+					$res = collect();
+
+					$res = DB::table($primary)
+						->leftJoin($secondary,$secondary_id,$primary_id)
+						->select([
+							DB::raw('to_char('.$primary_order_date.','."'".$ddmmyy."'".') as "Order_Dt"'),
+							'zone','uk_style_ref','ce_style_ref',
+							'count as Quantity',
+							'pi_status as PI_Status',
+							'po_status as PO_Status',
+							'order_status as Aw_Status',
+							'po_number as ByrPo',
+							'ocn_number as OCN',
+							'purchase_order_no as P.O',
+						])
+						->get();
+					
+					$template_id = DB::table($primary)->where('id',$value['order_table_id'])->first()->template_id;
+
+					$template_level = DB::table('tesco_item_master as t1')
+                            ->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
+                            ->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
+                            ->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
+                            ->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
+                            ->where('t1.id', $template_id)
+                            ->first();
+
+					$res->map(function ($res,$key) use($template_level) {
+		                    $res->Material = $template_level->material_sub;
+		                    $res->Sub_Material = $template_level->material;
+		                    $res->Reference = $template_level->ref;
+		                    $res->Inv_No = "-";
+		                    $res->Inv_Dt = "-";
+		                    $res->Reapproved_Dt = "-";
+		                    $res->DispMode = "-";		
+		                    $res->Awb = "-";		
+		                    $res->Reason = "-";		
+		                    $res->zone=="UK" ? $res->Style = $res->uk_style_ref : $res->Style = $res->ce_style_ref;	
+                   		 });
+
+					$queryRes = $queryRes->merge($res);
+				}
+				break;
+
+
+			default:
+				# code...
+				break;
 		}
 
-		// dd($res);
-
-		return Datatables::of($queryRes)->make();
+		return Datatables::of($queryRes)->addIndexColumn()->make();
 	}
 
 
