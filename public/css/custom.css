@@ -1038,6 +1038,9 @@ span.sticker-details {
 .label-OrderPlaced {
     background: #2ecc71;
 }
+.label-Saved {
+    background: #3498db;
+}
 .label-OrderApproved {
     background: #09a308;
 }

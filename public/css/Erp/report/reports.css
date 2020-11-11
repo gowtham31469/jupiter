@@ -1,3 +1,14 @@
+
+  .buyer_selection .btn-default {
+    position: absolute;
+    top: -10px;
+    height: 30px;
+    font-size: smaller;
+    font-weight: 400;
+    width: 120%;
+    color: #636b6f!important;
+    font-family: inherit!important;
+}
 .loaderAnim {
   margin-left: 36%;
 }

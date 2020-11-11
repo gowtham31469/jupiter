@@ -608,6 +608,8 @@ Route::post('admin/tesco/reject-tesco-pi', 'Admin\Tesco\OrderStatusCntrl@rejectT
 Route::post('admin/tesco/edit-artwork', 'Admin\Tesco\OrderStatusCntrl@editArtwork');
 Route::post('admin/orchestra/edit-artwork', 'Admin\Orchestra\OrderStatusCntrl@editArtwork');
 Route::get('admin/tesco/get-artworks', 'Admin\Tesco\OrderStatusCntrl@getArtwork');
+Route::post('admin/tesco/approve-artworks-bulk', 'Admin\Tesco\OrderStatusCntrl@approveArtworkBulk');
+Route::get('admin/tesco/get-approve-artworks', 'Admin\Tesco\OrderStatusCntrl@getApproveArtwork');
 Route::post('admin/tesco/update-po', 'Admin\Tesco\OrderStatusCntrl@updateArtworkPO');
 Route::post('admin/tesco/copy-po', 'Admin\Tesco\OrderStatusCntrl@copyArtworkPO');
 Route::post('admin/tesco/get-po-file', 'Admin\Tesco\OrderStatusCntrl@getPOFile');
@@ -903,6 +905,16 @@ Route::post('level1Filter','ErpUser\Reports\ReportController@level1Filter');
 Route::post('/level2Filter','ErpUser\Reports\ReportController@level2Filter');
 Route::get('getTableFields','ErpUser\Reports\ReportController@getTableFields');
 Route::post('setUpDatatable', 'ErpUser\Reports\ReportController@setUpDatatable' )->name('setUpDatatable');
+
+// Routes for admin report generation
+Route::get('testQuery','Admin\Report\ReportController@testQuery');
+Route::get('admin/generate-report','Admin\Report\ReportController@index')->name('generate-report');
+Route::post('admin_level1Filter','Admin\Report\ReportController@level1Filter');
+Route::post('admin_level2Filter','Admin\Report\ReportController@level2Filter');
+Route::get('admin_getTableFields','Admin\Report\ReportController@admin_getTableFields');
+Route::post('admin_setUpDatatable', 'Admin\Report\ReportController@admin_setUpDatatable' )
+													  ->name('admin_setUpDatatable');
+
 
 Route::get('print-manager/get-customers-list', 'ErpUser\Printmanager\PrintManagerController@getCustomersListByBuyerId'); 
 Route::get('print-manager/get-style-list', 'ErpUser\Printmanager\PrintManagerController@getStyleListByBuyerCustomerId'); 
