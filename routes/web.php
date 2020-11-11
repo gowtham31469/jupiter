@@ -608,6 +608,8 @@ Route::post('admin/tesco/reject-tesco-pi', 'Admin\Tesco\OrderStatusCntrl@rejectT
 Route::post('admin/tesco/edit-artwork', 'Admin\Tesco\OrderStatusCntrl@editArtwork');
 Route::post('admin/orchestra/edit-artwork', 'Admin\Orchestra\OrderStatusCntrl@editArtwork');
 Route::get('admin/tesco/get-artworks', 'Admin\Tesco\OrderStatusCntrl@getArtwork');
+Route::post('admin/tesco/approve-artworks-bulk', 'Admin\Tesco\OrderStatusCntrl@approveArtworkBulk');
+Route::get('admin/tesco/get-approve-artworks', 'Admin\Tesco\OrderStatusCntrl@getApproveArtwork');
 Route::post('admin/tesco/update-po', 'Admin\Tesco\OrderStatusCntrl@updateArtworkPO');
 Route::post('admin/tesco/copy-po', 'Admin\Tesco\OrderStatusCntrl@copyArtworkPO');
 Route::post('admin/tesco/get-po-file', 'Admin\Tesco\OrderStatusCntrl@getPOFile');
