@@ -59,7 +59,7 @@ class ApproveTescoOrders
 
             // update Artwork approve status as "Artwork Approved" in order history table
             OrderManagementHistory::where([['order_table_name', $table], ['order_table_id', $table_row_id]])->update([
-                'artwork_status'   => "Artwork Approved"
+                'artwork_status'   => 1
             ]);
             
             $order_details  = DB::table($table)->where('id',$table_row_id)
