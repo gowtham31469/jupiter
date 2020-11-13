@@ -66,6 +66,8 @@ function tescoOrderStatus() {
                             $("#ukstylenoos").append("<option value='"+ value.uk_style_ref + "'>" + value.uk_style_ref + "</option>");
                     }
                 })
+                
+                $('.selectpicker').selectpicker();
 
                 var d = new Date();
                 var maxDate = d.toLocaleDateString('en-US');
@@ -1013,7 +1015,7 @@ function tescoStatusTable(data, path) {
         for (var key in columnsIn) {
             if (key != "id") {
 
-                if (key == "PO Number" && value['po_required'] == 1 && value['is_order_count_empty'] == 0 && value["Artwork Status"] != "Order Cancelled") {
+                if (key == "PO Number" && value['po_required'] == 1 && value['is_order_count_empty'] == 0 && value["order_status"] != "Order Cancelled" && value["order_status"] != "Saved") {
                     var po_file = value['po_file'];
                     let customer_po_number = value[key] === null?'':value[key];
                     tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" onkeypress="return AvoidSpace(event)" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" placeholder="Enter PO" maxlength="11" value="'+customer_po_number+'"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"' + value.tableID + '","' + value.tableName + '","' + po_file + '")><span class="fa fa-check"></span></button></span></div></div></td>';
@@ -1113,7 +1115,7 @@ function tescoStatusTable(data, path) {
                     
                 } else if (key == "DeliveryDate") {
 
-                    if (value['is_order_count_empty'] == 0 && value["Artwork Status"] != "Order Cancelled") {
+                    if (value['is_order_count_empty'] == 0 && value["order_status"] != "Order Cancelled" && value["order_status"] != "Saved") {
                         if (value[key] == null) {
                             tr += '<td><span style=display:none;>' + value.OrderDate + '</span><input class="form-control input-sm datepicker_recurring_start" data-id="' + value.delivery_day_count + '" style="width: 107px; border-color: rgb(244, 67, 54);" placeholder="Delivery Date" onchange=updateDeliveryDate(this,"' + value.tableID + '","' + value.tableName + '")  readonly></td>';
                         } else {
@@ -1389,6 +1391,11 @@ function updateArtwork(obj) {
                     $('.snackbar_span').html('Please Check in Create Order Page!!!');
                     showSnackbar();
                 }
+                else if(data.order_details.order_status == "Order Cancelled")
+                {
+                    $('.snackbar_span').html('Order Cancelled!!!');
+                    showSnackbar();
+                }
                 else
                 {
 
@@ -1566,6 +1573,10 @@ function updateArtwork(obj) {
                         svgDoc1 = mySVG1.contentDocument;
                         dynamicSVGTemplatescard(svgDoc1, TemplateName, data.order_details.zone, data.order_details.template_type)
                     }, false);
+                    if(data.order_details.is_order_count_empty == 1)
+                    {
+                        editArtwork()
+                    }
 
                 }
 
