@@ -707,7 +707,8 @@ class ReorderController extends Controller
 			$material_name  = $template_level->material;
 			$material_sub   = $template_level->material_sub;
 			$material_ref   = $template_level->ref;
-			$po_upload_status = $po_status === "PO Pending"?"PO Upload Pending":null;
+			$po_upload_status = $po_status === "PO Pending"?0:null;
+			$pi_approve_status = $pi_status === "PI Approval Pending"?0:null;
 			$style_ref = strtolower($newTasks->zone).'_style_ref';
 				   
 			OrderManagementHistory::updateOrCreate(['order_table_name'  => $type, 'order_table_id'    => $newTasks->id],[
@@ -720,8 +721,8 @@ class ReorderController extends Controller
 			  'reference'                 => $material_ref,
 			  'buyer_po'                  => $newTasks->po_number,
 			  'ocn_number'                => $newTasks->ocn_number,
-			  'order_status'              => 'Order Placed',
-			  'pi_status'                 => $pi_status,
+			  'order_status'              => 2,
+			  'pi_status'                 => $pi_approve_status,
 			  'po_status'                 => $po_upload_status
 			]);
 
@@ -1117,7 +1118,8 @@ class ReorderController extends Controller
 			$material_name  = $template_level->material;
 			$material_sub   = $template_level->material_sub;
 			$material_ref   = $template_level->ref;
-			$po_upload_status = $po_status === "PO Pending"?"PO Upload Pending":null;
+			$po_upload_status = $po_status === "PO Pending"?0:null;
+			$pi_approve_status = $pi_status === "PI Approval Pending"?0:null;
 			$style_ref = strtolower($newTasks->zone).'_style_ref';
 				   
 			OrderManagementHistory::updateOrCreate(['order_table_name'  => $type, 'order_table_id'    => $newTasks->id],[
@@ -1130,8 +1132,8 @@ class ReorderController extends Controller
 			  'reference'                 => $material_ref,
 			  'buyer_po'                  => $po,
 			  'ocn_number'                => $ocn_number,
-			  'order_status'              => 'Order Placed',
-			  'pi_status'                 => $pi_status,
+			  'order_status'              => 2,
+			  'pi_status'                 => $pi_approve_status,
 			  'po_status'                 => $po_upload_status
 			]);
 			

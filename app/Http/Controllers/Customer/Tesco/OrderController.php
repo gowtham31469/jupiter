@@ -1183,7 +1183,7 @@ class OrderController extends Controller
 
                 // update po upload status as "PO Uploaded" in order history table
                 OrderManagementHistory::where([['order_table_name', $order_table_name], ['order_table_id', $template_id]])->update([
-                  'po_status'   => "PO Uploaded",
+                  'po_status'   => 1,
                   'customer_po' => $request['po_number'],
                 ]);
               }

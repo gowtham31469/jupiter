@@ -3012,7 +3012,8 @@ class OrderManagementCntrl extends Controller
       $material_name  = $template_level->material;
       $material_sub   = $template_level->material_sub;
       $material_ref   = $template_level->ref;
-      $po_upload_status = $po_status === "PO Pending"?"PO Upload Pending":null;
+      $po_upload_status = $po_status === "PO Pending"?0:null;
+      $pi_approve_status = $pi_status === "PI Approval Pending"?0:null;
       $style_ref = strtolower($newTasks->zone).'_style_ref';
              
       OrderManagementHistory::updateOrCreate(['order_table_name'  => $type, 'order_table_id'    => $newTasks->id],[
@@ -3025,8 +3026,8 @@ class OrderManagementCntrl extends Controller
         'reference'                 => $material_ref,
         'buyer_po'                  => $newTasks->po_number,
         'ocn_number'                => $newTasks->ocn_number,
-        'order_status'              => 'Order Placed',
-        'pi_status'                 => $pi_status,
+        'order_status'              => 2,
+        'pi_status'                 => $pi_approve_status,
         'po_status'                 => $po_upload_status
       ]);
 		    echo true;
@@ -3414,7 +3415,8 @@ class OrderManagementCntrl extends Controller
       $material_name  = $template_level->material;
       $material_sub   = $template_level->material_sub;
       $material_ref   = $template_level->ref;
-      $po_upload_status = $po_status === "PO Pending"?"PO Upload Pending":null;
+      $po_upload_status = $po_status === "PO Pending"?0:null;
+      $pi_approve_status = $pi_status === "PI Approval Pending"?0:null;
       $style_ref = strtolower($newTasks->zone).'_style_ref';
              
       OrderManagementHistory::updateOrCreate(['order_table_name'  => $type, 'order_table_id'    => $newTasks->id],[
@@ -3427,8 +3429,8 @@ class OrderManagementCntrl extends Controller
         'reference'                 => $material_ref,
         'buyer_po'                  => $po,
         'ocn_number'                => $ocn_number,
-        'order_status'              => 'Order Placed',
-        'pi_status'                 => $pi_status,
+        'order_status'              => 2,
+        'pi_status'                 => $pi_approve_status,
         'po_status'                 => $po_upload_status
       ]);
 
@@ -3482,7 +3484,7 @@ class OrderManagementCntrl extends Controller
 
                 // update po upload status as "PO Uploaded" in order history table
                 OrderManagementHistory::where([['order_table_name', $order_table_name], ['order_table_id', $template_id]])->update([
-                  'po_status'   => "PO Uploaded",
+                  'po_status'   => 1,
                   'customer_po' => $request['po_number'],
                 ]);
               }

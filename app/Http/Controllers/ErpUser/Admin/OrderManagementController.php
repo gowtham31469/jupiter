@@ -684,7 +684,7 @@ class OrderManagementController extends Controller
 					
 					 // update order status as "Order Cancelled" in order management history table
 					OrderManagementHistory::where([['order_table_name', $main_table], ['order_table_id', $main_table_id]])->update([
-						'order_status' => "Order Cancelled",
+						'order_status' => 3,
 					]);
 				}
 
