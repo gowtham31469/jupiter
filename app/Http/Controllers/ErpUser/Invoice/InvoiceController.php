@@ -103,22 +103,14 @@ class InvoiceController extends Controller
                               ->get();
 
         // Logic for resetting invoice ID format for new financial year			 
-        $max_invoice_id = Invoices::select('invoice_id')->find(Invoices::max('id'));
-        $invoice_id_prefix = "INV-".$this->financial_year;
+        $max_invoice_id = Invoices::select('invoice_id')->find(Invoices::whereBetween('created_at', [$this->from, $this->current_date])->orWhereDate('created_at', '=',$this->today_date)->max('id'));
+        $invoice_id_prefix = $this->financial_year;
 
         if($max_invoice_id){
-            (int)$parsed_max_id  = substr($max_invoice_id->invoice_id, 6);
-
-            // To handle, if financial year start date is sunday or holiday
-            if( strtotime($this->today_date) >= strtotime($this->financial_year_date_format) ){
-                // check if already invoice created today.
-                $already_invoice_created = Invoices::whereBetween('created_at', [$this->from, $this->current_date])->orWhereDate('created_at', '=',$this->today_date)->exists();
-    
-                // set invoice id as 00001 for first order of the financial year
-                (int)$parsed_max_id = $already_invoice_created === false?str_pad(1, 5, 0, STR_PAD_LEFT):str_pad($parsed_max_id+1, 5, 0, STR_PAD_LEFT);
-            } else {
-                (int)$parsed_max_id = str_pad($parsed_max_id+1, 5, 0, STR_PAD_LEFT);
-            }
+            $explode_invoice_number = explode("-",$max_invoice_id->invoice_id);
+            $trim_invoice  = ltrim(end($explode_invoice_number), '0');
+            (int)$parsed_max_id = substr($trim_invoice, 2);
+            (int)$parsed_max_id = str_pad($parsed_max_id+1, 5, 0, STR_PAD_LEFT);
 
         } else {
             (int)$parsed_max_id = str_pad(1, 5, 0, STR_PAD_LEFT);
