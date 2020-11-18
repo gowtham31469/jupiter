@@ -1065,8 +1065,7 @@ class OrderStatusCntrl extends Controller
             $attachment =  $pi_obj->getTescoAttachment($data,$request);
 
             // call PI generation function
-            $pi_id = $pi_obj->piNumberGenerator();
-            $pi_number = $data['company_details']->id === 1?"JGA-PI-".$pi_id:"SP-PI-".$pi_id;
+            $pi_number = $pi_obj->piNumberGenerator();
             
             $erpOrders  =   [];
 

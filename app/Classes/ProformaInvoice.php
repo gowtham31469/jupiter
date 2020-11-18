@@ -91,15 +91,8 @@ class ProformaInvoice
                                       ->select('company.*',$table_name.'.pi_rev_no as rev_number')
                                       ->first();
                                          
-        if ($data['company_details']->id == 1) 
-        {
-          $data['company_details']->pi_number = "JGA-PI-".$pi_id;
-        }
-        else 
-        {
-          $data['company_details']->pi_number = "SP-PI-".$pi_id;
-        }
-
+        $data['company_details']->pi_number = $pi_id;
+        
         $data['company_details']->pi_date = $this->today->format('d/m/Y');;
         $customer_details       = DB::table($table_name)
                                   ->join('customers',$table_name.'.customer_id','=','customers.id')
@@ -294,12 +287,8 @@ class ProformaInvoice
                                           ->select('company.*',$table_name.'.pi_rev_no as rev_number')
                                           ->first();
                                          
-        if ($data['company_details']->id == 1) {
-          $data['company_details']->pi_number = "JGA-PI-".$pi_id;
-        }
-        else {
-          $data['company_details']->pi_number = "SP-PI-".$pi_id;
-        }
+       
+        $data['company_details']->pi_number = $pi_id;
         
         $data['company_details']->pi_date = $this->today->format('d/m/Y');;
         
@@ -747,31 +736,19 @@ class ProformaInvoice
     */
     public function piNumberGenerator(){
       // Logic for resetting ERP ID format for new financial year	
-      $max_pi_number = ProfomaInvoice::select('pi_number')->find(ProfomaInvoice::max('id'));
+      $max_pi_number = ProfomaInvoice::select('pi_number')->find(ProfomaInvoice::whereBetween('created_at', [$this->from, $this->current_date])->orWhereDate('created_at', '=',$this->today_date)->max('id'));
 
       // if old PI exists, then generate PIID based on old data
       // else start new PIID from initial value(001)
       if($max_pi_number){
 
         // parse PI number and get last 3 continuous number.
-        // PI format for JGA "JGA-PI-yymmXXX"
-        // PI format for Spectrra "SP-PI-yymmXXX"
+        // PI format for JGA "yymmXXX"
         $explode_pi_number = explode("-",$max_pi_number->pi_number);
         $trim_pi  = ltrim(end($explode_pi_number), '0');
         (int)$parsed_pi_id = substr($trim_pi, 4);
+        (int)$parsed_pi_id = str_pad($parsed_pi_id+1, 3, 0, STR_PAD_LEFT);
 
-        // To handle, if financial year start date is sunday or holiday
-        if( strtotime($this->today_date) >= strtotime($this->financial_year_date_format) ){
-          // check if already pi has been generated in new financial year or not.
-          $already_pi_created = ProfomaInvoice::whereBetween('created_at', [$this->from, $this->current_date])->orWhereDate('created_at', '=',$this->today_date)->exists();
-          
-          // set pi id as 1 for first PI of the financial year else increment previous PI ID by 1
-          (int)$parsed_pi_id = $already_pi_created === true?str_pad($parsed_pi_id+1, 3, 0, STR_PAD_LEFT):(int)$parsed_pi_id = str_pad(1, 3, 0, STR_PAD_LEFT);;
-            
-        } else {
-          (int)$parsed_pi_id = str_pad($parsed_pi_id+1, 3, 0, STR_PAD_LEFT);
-        }
-        
       } else {
         (int)$parsed_pi_id = str_pad(1, 3, 0, STR_PAD_LEFT);
       }
