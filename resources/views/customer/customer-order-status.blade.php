@@ -473,6 +473,24 @@
         </div>
     </div>
 </div>
+
+<!-- Tesco Saved order alertbox -->
+<div class="modal fade" id="savedOrderAlertBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Saved Drafts</h4>
+            </div>
+                <div class="modal-body">
+                        <p>Please visit the Create Order page and complete your order.</p>
+                </div>
+                <div class="modal-footer">
+                    {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                </div>
+        </div>
+    </div>
+</div>
     @endsection @else
     <script type="text/javascript">
         window.location = "{{ url('/customer') }}";
