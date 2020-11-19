@@ -250,7 +250,7 @@ Route::group(['middleware' => 'customer_auth'], function()
 	Route::post('customer/tesco/tesco-orders', 'Customer\Tesco\OrderStatusController@index');
 	Route::post('customer/tesco/order-status', 'Customer\Tesco\OrderStatusController@index');
 	Route::post('customer/tesco/order-management/set-po-number', 'Customer\Tesco\OrderStatusController@setPONumber');
-
+	Route::put('customer/tesco/approve-tesco-artwork', 'Customer\Tesco\OrderStatusController@approveTescoArtwork');
 
 	Route::post('customer/tesco/tesco-orders-filter', 'Customer\Tesco\OrderStatusController@tescoFilter');
 	Route::post('customer/tesco/tesco-orders-submit-filter', 'Customer\Tesco\OrderStatusController@tescoOrdersSubmitFilter');

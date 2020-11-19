@@ -27,6 +27,7 @@ use App\ErpOrders as Erp;
 use App\ErpOrderDetails as ErpOrderDetails;
 use App\Classes\CleanString;
 use App\OrderManagementHistory;
+use App\Classes\ApproveTescoOrders;
 use PDF;
 
 class OrderStatusController extends Controller
@@ -3573,6 +3574,41 @@ class OrderStatusController extends Controller
             $result = response()->json(['error'=> false,'message' =>'success','erp_details' => $erp_order_details],200);
         }
         catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+    /**
+     * Approve tesco artwork
+     * @param \Illuminate\Http\Request
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function approveTescoArtwork(Request $request)
+    {
+      try {
+              /** [ Creating new object for ApproveTescoOrders() class ] */
+              $approve_order_obj = new ApproveTescoOrders();
+              $buyer_id = DB::table("buyers")->where('buyer_name','ilike','Tesco')->pluck('id')->first();
+
+              if(sizeof($request) > 0)
+              {
+                /** [ Invoking approveTescoOrderMethod function using class instance ] */
+                $approved_order = $approve_order_obj->approveTescoOrderMethod($request, $buyer_id);
+              }
+            
+              if($approved_order == "approved")
+              {
+                $result = response()->json(['error'=> false,'message' =>'success'],200);
+              }
+              else
+              {
+                $result = response()->json(['error'=> true,'message' =>'Error'],400);
+              }
+
+        } catch (\Exception $e)
         {
             $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
