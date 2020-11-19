@@ -33,6 +33,11 @@
 
 <input type="hidden" id="status_flag">
 <div class="col-sm-12 col-md-12 main">
+
+        <div class="main-content">
+                <div class="select-buyer">
+                </div>
+            </div>
     <div class="top-content">
         <div class="buyer-nav-div hidden">
            <a class="dropdown-toggle profile-dropdown-admin selected-buyer" style="text-transform:capitalize;cursor: pointer;">Select Buyer</a>
@@ -41,10 +46,6 @@
         <div class="clearfix"></div>
     </div>
 
-    <div class="main-content">
-        <div class="select-buyer">
-        </div>
-    </div>
     <div class="modal fade po-details" id="po-file-upload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
