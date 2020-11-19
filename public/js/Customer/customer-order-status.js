@@ -187,7 +187,7 @@ function tescoOrderStatus() {
     $('.template-error').html('');
     
     $.ajax({
-        url: base_url + "/customer/tesco/tesco-orders",
+        url: base_url + "/customer/tesco/tesco-orders-filter",
         type: "Post",
         dataType: "json",
         data: {
@@ -200,52 +200,378 @@ function tescoOrderStatus() {
         statusCode: {
             /** [Show response status based on HTTP status code] */
             200: function (data) {
-                var path = base_url + "/customer/tesco/order-management/order-status";
-                var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
-                var newObj1 = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
-
-                $('.main-content').html("<button style='margin-bottom:10px' id='po-file-upload-button' class='btn btn-sm btn-primary pull-right' type='button'>Update PO</button>");
-                newObj.sort(function (obj1, obj2) {
-                    var date1 = obj1.OrderDate;
-                    var date2 = obj2.OrderDate;
-                    if (date1 > date2) return -1;
-                    if (date1 < date2) return 1;
-                    return 0;
-                });
-                $('.main-content').append(tescoStatusTable(newObj, path));
-                $('.top-content').html("");
-                $('#datatable-tesco-orders th:contains("StyleNo")').text('Style No');
-
-
-                newObj1.sort(function (obj1, obj2) {
-                    var date1 = obj1.OrderDate;
-                    var date2 = obj2.OrderDate;
-                    if (date1 > date2) return -1;
-                    if (date1 < date2) return 1;
-                    return 0;
-                });
                 var uniqueNames = [];
                 var zones = [];
-                for (i = 0; i < newObj1.length; i++) {
-                    if (newObj1[i].Zone == "CE") {
-                        if (uniqueNames.indexOf(newObj1[i].ce_style_ref) === -1) {
-                            uniqueNames.push(newObj1[i].ce_style_ref);
-                            zones.push("CE");
-                        }
+
+                $('.top-content').html(`
+                <div class="row">
+                <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="stylenoos" title="Select CE Style Number" multiple data-selected-text-format="count" data-live-search="true" data-size="10"></select></div></div>
+                <div class="col-md-2"></div>
+                <div class="col-md-4"><input type="text" placeholder="Start Date" class="form-control startdateos" multiple style="width:100%" name="startdateos" /></div>
+                <div class="col-md-2"></div>
+                <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="ukstylenoos" title="Select UK Style Number" multiple data-selected-text-format="count" data-live-search="true" data-size="10"></select></div></div>
+                </div>
+                <div class="row" style="margin-top: 15px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="seasonos" title="Select Season" multiple data-selected-text-format="count" data-live-search="true" data-size="10"></select></div></div>
+                <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="orderstatusos" title="Select Order Status" multiple data-selected-text-format="count" data-live-search="true" data-size="10"><option value="Saved">Saved</option><option value="Submited">Submited</option><option value="Pending">Pending</option><option value="Order Cancelled">Cancelled</option></select></div></div>
+                <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="artworkstatusos" title="Select Artwork Status" multiple data-selected-text-format="count" data-live-search="true" data-size="10"><option value="Approval Pending">Approval Pending</option><option value="Order Approved">Order Approved</option></select></div></div>
+                <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="postatusos" title="Select PO Status" multiple data-selected-text-format="count" data-live-search="true" data-size="10"><option value="PO Pending">PO Pending</option><option value="PO Uploaded">PO Uploaded</option></select></div></div>
+                <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="pistatusos" title="Select PI Status" multiple data-selected-text-format="count" data-live-search="true" data-size="10"><option value="PI Approval Pending">PI Approval Pending</option><option value="PI Approved">PI Approved</option></select></div></div>
+                <div class="col-md-1"></div>
+                </div>
+                <div class="row" style="margin-top: 15px;">
+                <div class="col-md-12">
+                <input type="hidden" id="start_date">
+                <input type="hidden" id="end_date">
+                <button class="btn btn-primary input-sm pull-right" onclick="submitOs(this)" id="submitos">Submit</button><button style='margin-bottom: 15px;margin-right: 15px;' id='po-file-upload-button' class='btn btn-sm btn-primary pull-right' type='button'>Update PO</button>
+                <button style='margin-bottom: 15px;margin-right: 15px;' id='artwork-approve-upload-button' class='btn btn-sm btn-primary pull-right' type='button'>Approve Artwork</button>
+                </div>
+                </div>
+                <div style="padding-top:15px;" id="OrderStatusTable"></div>
+                `);
+
+                $(data.data).each(function(index,value){
+                    $("#seasonos").append("<option value='"+ value.season_code + "'>" + value.season_code + "</option>");
+                })
+
+                $(data.style_no).each(function(index,value){
+                    if (value.zone == "CE") {
+                            $("#stylenoos").append("<option value='"+ value.ce_style_ref + "'>" + value.ce_style_ref + "</option>");
                     } else {
-                        if (uniqueNames.indexOf(newObj1[i].uk_style_ref) === -1) {
-                            uniqueNames.push(newObj1[i].uk_style_ref);
-                            zones.push("UK");
-                        }
+                            $("#ukstylenoos").append("<option value='"+ value.uk_style_ref + "'>" + value.uk_style_ref + "</option>");
                     }
-                }
+                })
+                
+                $('.selectpicker').selectpicker();
+
+                var d = new Date();
+                var maxDate = d.toLocaleDateString('en-US');
+                d.setMonth(d.getMonth() - 6);
+                var minDate = d.toLocaleDateString('en-US');
+
+                // alert(minDate)
+                // alert(maxDate)
+
+                $('input[name="startdateos"]').daterangepicker({
+                    "minDate": minDate,
+                    "maxDate": maxDate
+                },
+                function (start, end, label) {
+                    var start_date = start.format('YYYY-MM-DD');
+                    var end_date = end.format('YYYY-MM-DD');
+                    $('#start_date').val(start_date);
+                    $('#end_date').val(end_date);
+                    $.ajax({
+                        url: base_url + "/customer/tesco/tesco-orders-submit-filter",
+                        type: "Post",
+                        dataType: "json",
+                        data: {
+                            _token: csrf_token,
+                            start_date:start_date,
+                            end_date:end_date
+                        },
+                        beforeSend: function () {
+                            $(".loader").show();
+                            $(".loader").css('margin-top', '12%');
+                        },
+                        statusCode: {
+                            /** [Show response status based on HTTP status code] */
+                            200: function (data) {
+                                
+                                $("#seasonos").html("");
+                                $("#ukstylenoos").html("");
+                                $("#stylenoos").html("");
+
+                                $(data.data).each(function(index,value){
+                                    $("#seasonos").append("<option value='"+ value.season_code + "'>" + value.season_code + "</option>");
+                                })
+                
+                                $(data.style_no).each(function(index,value){
+                                    if (value.zone == "CE") {
+                                        if (uniqueNames.indexOf(value.ce_style_ref) === -1) {
+                                            $("#stylenoos").append("<option value='"+ value.ce_style_ref + "'>" + value.ce_style_ref + "</option>");
+                                        }
+                                    } else {
+                                        if (uniqueNames.indexOf(value.uk_style_ref) === -1) {
+                                            $("#ukstylenoos").append("<option value='"+ value.uk_style_ref + "'>" + value.uk_style_ref + "</option>");
+                                        }
+                                    }
+                                })
+                                $(".selectpicker").val('');
+                                $('.selectpicker').selectpicker('refresh');
+                            },
+                            400: function () {
+                                $('.snackbar_span').html('Something went wrong');
+                                showSnackbar();
+                            }
+                        },
+                        error: function (data) {
+                        },
+                        complete: function () {
+                            $(".loader").hide();
+                            $(".loader").css('margin-top', '0%');
+                        }
+                    })
+                });
+
                 var options = "<option>Select Style Number</option>";
-                for (i = 0; i < uniqueNames.length; i++) {
-                    options += "<option data-zone=" + zones[i] + ">" + uniqueNames[i] + "</option>";
-                }
+                $(data.style_no).each(function(index,value){
+                    if (value.zone == "CE") {
+                        options += "<option data-zone=" + value.zone + ">" + value.ce_style_ref + "</option>";
+                    } else {
+                        options += "<option data-zone=" + value.zone + ">" + value.uk_style_ref + "</option>";
+                    }
+                })
+
+                $('#artwork-approve-upload-button').click(function () {
+                    $('#approve-upload-group').modal("show")
+                    $('#uvc_approve_select_div').html('<label>Select Style Number</label><select id="style_approve_num" class="form-control selectpicker" data-live-search="true">' + options + '</select>')
+                    $('#style_approve_num').selectpicker('refresh');
+                    $('#style_approve_num').change(function () {
+                        if ($(this).val() != "Select Style Number") 
+                        {
+                            $('#approve_button').removeClass('hidden')
+                            var selected = $(this).find('option:selected');
+                            var styleNum = selected.val();
+                            var zone = selected.data('zone');
+                            $.ajax({
+                                url: base_url + "/customer/tesco/get-approve-artworks",
+                                type: "get",
+                                dataType: "json",
+                                data: {
+                                    styleNum: styleNum,
+                                    zone: zone
+                                },
+                                beforeSend: function () {
+
+                                },
+                                statusCode: {
+                                    /** [Show response status based on HTTP status code] */
+                                    200: function (data) {
+                                        $('#exist_artwork_approve_div_status').removeClass('hidden')
+                                        $('#approve-upload-group').find('#exist_artwork_approve_div_status ul').html("");
+                                        var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
+                                        var coun = 0;
+                                        var options = "<option>Select PO</option>";
+                                        var unique_po = []
+                                        var old_po = ""
+                                        var new_po_div_status = 0;
+                                        $(newObj).each(function (index1, value1) {
+
+                                            if (value1.order_status != "Order Approved") {
+                                                $('#approve-upload-group').find('#exist_artwork_approve_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="list-group-item">' + value1.TemplateName + '</li>')
+                                                
+
+                                            } else {
+                                                if (old_po != value1.purchase_order_no) {
+                                                    options += "<option>" + value1.purchase_order_no + "</option>";
+                                                }
+                                                old_po = value1.purchase_order_no
+                                                coun++;
+                                                $('#approve-upload-group').find('#exist_artwork_approve_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="check-list">' + value1.TemplateName + '</li>')
+                                                new_po_div_status++;
+                                            }
+
+                                        });
+
+                                        $('.list-group.checked-list-box .list-group-item').each(function () {
+
+                                            // Settings
+                                            var $widget = $(this),
+                                                $checkbox = $('<input type="checkbox" class="hidden" />'),
+                                                color = ($widget.data('color') ? $widget.data('color') : "primary"),
+                                                style = ($widget.data('style') == "button" ? "btn-" : "list-group-item-"),
+                                                settings = {
+                                                    on: {
+                                                        icon: 'glyphicon glyphicon-check'
+                                                    },
+                                                    off: {
+                                                        icon: 'glyphicon glyphicon-unchecked'
+                                                    }
+                                                };
+                                            $widget.css('cursor', 'pointer')
+                                            $widget.append($checkbox);
+
+                                            // Event Handlers
+                                            $widget.on('click', function () {
+                                                $checkbox.prop('checked', !$checkbox.is(':checked'));
+                                                $checkbox.triggerHandler('change');
+                                                updateDisplay();
+                                            });
+                                            $checkbox.on('change', function () {
+                                                updateDisplay();
+                                            });
+
+
+                                            // Actions
+                                            function updateDisplay() {
+                                                var isChecked = $checkbox.is(':checked');
+
+                                                // Set the button's state
+                                                $widget.data('state', (isChecked) ? "on" : "off");
+
+                                                // Set the button's icon
+                                                $widget.find('.state-icon')
+                                                    .removeClass()
+                                                    .addClass('state-icon ' + settings[$widget.data('state')].icon);
+
+                                                // Update the button's color
+                                                if (isChecked) {
+                                                    $widget.addClass(style + color + ' active');
+                                                } else {
+                                                    $widget.removeClass(style + color + ' active');
+                                                }
+                                            }
+
+                                            // Initialization
+                                            function init() {
+
+                                                if ($widget.data('checked') == true) {
+                                                    $checkbox.prop('checked', !$checkbox.is(':checked'));
+                                                }
+
+                                                updateDisplay();
+
+                                                // Inject the icon if applicable
+                                                if ($widget.find('.state-icon').length == 0) {
+                                                    $widget.prepend('<span class="state-icon ' + settings[$widget.data('state')].icon + '"></span>');
+                                                }
+                                            }
+                                            init();
+                                        });
+
+                                        $('#get-checked-data').on('click', function (event) {
+                                            event.preventDefault();
+                                            var checkedItems = {},
+                                                counter = 0;
+                                            $("#check-list-box li.active").each(function (idx, li) {
+                                                checkedItems[counter] = $(li).text();
+                                                counter++;
+                                            });
+                                            $('#display-json').html(JSON.stringify(checkedItems, null, '\t'));
+                                        });
+
+
+                                        //company wise
+                                        $('.list-group-item').click(function () {
+                                            $count_li = 0;
+                                            $('.list-group li').each(function (key, val) {
+                                                if ($(this).hasClass('active')) {
+                                                    $count_li++;
+                                                }
+                                            });
+                                            if ($count_li > 0) {
+                                                var company_id = $(this).data('company');
+                                                $('.list-group li').each(function (key, val) {
+                                                    if ($(this).data('company') != company_id) {
+                                                        $(this).addClass('hidden');
+                                                    }
+                                                })
+                                            } else {
+                                                $('.list-group li').each(function (key, val) {
+                                                    $(this).removeClass('hidden');
+                                                })
+                                            }
+
+                                        })
+
+                                        $('#approve_submit').click(function () {
+                                            var sList = 0;
+                                            $('#exist_artwork_approve_div_status input[type=checkbox]').each(function () {
+                                                if (this.checked) {
+                                                    sList++;
+                                                }
+                                            });
+
+                                            if (sList > 0) {
+
+                                                // $('#update_new_po_status').removeClass('hidden')
+                                                // $('#update_po_status').addClass('hidden')
+                                                // $('#new_pos_status').addClass('hidden')
+                                                // $('#new_po_div_status').removeClass('hidden')
+                                                // $('#map_po_div_status').addClass('hidden')
+                                                // $('#exist_artwork_div_status').removeClass('hidden')
+
+                                            } else {
+                                                //$('#check_error_status').removeClass('hidden')
+                                            }
+
+                                        });
+
+                                        $('#approve_button').on('click', function (event) {
+                                            $count_li = 0;
+                                            $('.list-group li').each(function (key, val) {
+                                                if ($(this).hasClass('active')) {
+                                                    $count_li++;
+                                                }
+                                            });
+                                            if ($count_li > 0) {
+                                                $('#check_approve_error_status').addClass('hidden')
+                                                var a = [];
+                                                $('#exist_artwork_approve_div_status input[type=checkbox]').each(function () {
+                                                    if (this.checked) {
+                                                        a.push($(this).parent().attr('data-id'));
+                                                    }
+                                                });
+                                                var aa = a.join(',');
+                                                $.ajax({
+                                                    url: base_url + "/customer/tesco/approve-artworks-bulk",
+                                                    type: "Post",
+                                                    dataType: "json",
+                                                    data: {
+                                                        _token: csrf_token,
+                                                        id: aa
+                                                    },
+                                                    beforeSend: function () {
+
+                                                    },
+                                                    success: function (data) {
+                                                        //alert("asda");
+                                                        $('#approve-upload-group').modal("hide")
+                                                        $('.snackbar_span').html('Order Approved Successfully');
+                                                        showSnackbar();
+                                                        location.reload()
+                                                    },
+                                                    error: function (data) {
+
+                                                    },
+                                                    complete: function () {
+                                                        $(".loader").hide();
+                                                    }
+                                                })
+                                            }
+                                            else{
+                                                $('#check_approve_error_status').removeClass('hidden')
+                                            }
+                                        });
+
+                                    },
+                                    400: function () {
+                                        $('.snackbar_span').html('Something went wrong');
+                                        showSnackbar();
+                                    }
+                                },
+                                error: function (data) {
+                                },
+                                complete: function () {
+                                    $(".loader").hide();
+                                }
+                            })
+                        }
+                        else
+                        {
+                            $('#approve_button').addClass('hidden')
+                            $('#check_approve_error_status').addClass('hidden')
+                            $('#exist_artwork_approve_div_status').addClass('hidden')
+                        }
+
+                    })
+
+                })
 
                 $('#po-file-upload-button').click(function () {
-                    $('#po-file-upload-group').modal("show");
+                    $('#po-file-upload-group').modal("show")
                     $('#uvc_select_div').html('<label>Select Style Number</label><select id="style_num" class="form-control selectpicker" data-live-search="true">' + options + '</select>')
                     $('#style_num').selectpicker('refresh');
                     $('#new_po_div_status').addClass('hidden');
@@ -259,9 +585,8 @@ function tescoOrderStatus() {
                     $('#new_po_file_status').val("")
                     $('#exist_artwork_div_status').addClass('hidden')
                     $('#new_po_error_status').addClass('hidden')
-                    $('#new_po_error_length_status').addClass('hidden');
                     $('#new_po_file_error_status').addClass('hidden')
-
+                    $('#new_po_error_length_status').addClass('hidden');
                     $('#style_num').change(function () {
                         if ($(this).val() != "Select Style Number") {
                             $('#new_po_div_status').addClass('hidden');
@@ -293,8 +618,8 @@ function tescoOrderStatus() {
 
                                         $('#check_error_status').addClass('hidden')
                                         $('#new_po_error_status').addClass('hidden')
-                                        $('#new_po_error_length_status').addClass('hidden');
                                         $('#new_po_file_error_status').addClass('hidden')
+                                        $('#new_po_error_length_status').addClass('hidden');
                                         $('#po-file-upload-group').find('#exist_artwork_div_status ul').html("");
                                         var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
                                         var coun = 0;
@@ -304,7 +629,6 @@ function tescoOrderStatus() {
                                         var new_po_div_status = 0;
                                         $(newObj).each(function (index1, value1) {
 
-
                                             if (value1.purchase_order_no != "" && value1.purchase_order_no != null && value1.po_file != "" && value1.po_file != null) {
                                                 if (old_po != value1.purchase_order_no) {
                                                     options += "<option>" + value1.purchase_order_no + "</option>";
@@ -313,11 +637,13 @@ function tescoOrderStatus() {
                                                 coun++;
                                                 $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="check-list">' + value1.TemplateName + '</li>')
                                                 new_po_div_status++;
+
                                             } else {
                                                 $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="list-group-item">' + value1.TemplateName + '</li>')
                                             }
 
                                         });
+
                                         $('.list-group.checked-list-box .list-group-item').each(function () {
 
                                             // Settings
@@ -333,7 +659,6 @@ function tescoOrderStatus() {
                                                         icon: 'glyphicon glyphicon-unchecked'
                                                     }
                                                 };
-
                                             $widget.css('cursor', 'pointer')
                                             $widget.append($checkbox);
 
@@ -421,7 +746,7 @@ function tescoOrderStatus() {
                                         })
 
 
-                                        $('#selectpo_status').html('<label>Select PO</label><select id="select_po_status" class="form-control">' + options + '</select>')
+                                        $('#po_select_div').html('<label>Select PO</label><select id="select_po_status" class="form-control">' + options + '</select>')
                                         if (coun == 0) {
                                             $('#map_po_status').addClass('hidden');
                                             $('#new_po1_status').addClass('hidden');
@@ -490,10 +815,8 @@ function tescoOrderStatus() {
                                                 $('#check_error_status').addClass('hidden')
                                                 if ($('#new_po_no_status').val() != "" && $('#new_po_file_status').val() != "") {
 
-
                                                     if ($('#new_po_no_status').val().length > 9) {
                                                         $('#new_po_error_length_status').removeClass('hidden');
-
                                                         $('#new_po_error_status').addClass('hidden');
                                                         $('#new_po_file_error_status').addClass('hidden');
                                                     } else {
@@ -536,16 +859,16 @@ function tescoOrderStatus() {
                                                 } else {
                                                     if ($('#new_po_no_status').val() == "" && $('#new_po_file_status').val() == "") {
                                                         $('#new_po_error_status').removeClass('hidden')
-                                                        $('#new_po_error_length_status').addClass('hidden');
                                                         $('#new_po_file_error_status').removeClass('hidden')
+                                                        $('#new_po_error_length_status').addClass('hidden');
                                                     } else if ($('#new_po_file_status').val() == "") {
                                                         $('#new_po_file_error_status').removeClass('hidden')
-                                                        $('#new_po_error_length_status').addClass('hidden');
                                                         $('#new_po_error_status').addClass('hidden')
+                                                        $('#new_po_error_length_status').addClass('hidden');
                                                     } else if ($('#new_po_no_status').val() == "") {
                                                         $('#new_po_error_status').removeClass('hidden')
-                                                        $('#new_po_error_length_status').addClass('hidden');
                                                         $('#new_po_file_error_status').addClass('hidden')
+                                                        $('#new_po_error_length_status').addClass('hidden');
                                                     }
 
                                                 }
@@ -606,7 +929,6 @@ function tescoOrderStatus() {
 
                                                         });
                                                     }
-
 
                                                 } else {
                                                     if ($('#new_po_no_status').val() == "" && $('#new_po_file_status').val() == "") {
@@ -682,6 +1004,7 @@ function tescoOrderStatus() {
                                             }
 
                                         });
+
                                         if (newObj.length == new_po_div_status) {
                                             $('#new_po_div_status').addClass('hidden')
                                             $('#new_po1_status').addClass('hidden')
@@ -695,7 +1018,6 @@ function tescoOrderStatus() {
                                     }
                                 },
                                 error: function (data) {
-                                    console.log(data);
                                 },
                                 complete: function () {
                                     $(".loader").hide();
@@ -706,13 +1028,65 @@ function tescoOrderStatus() {
 
                 });
 
+            },
+            400: function () {
+                $('.snackbar_span').html('Something went wrong');
+                showSnackbar();
+            }
+        },
+        error: function (data) {
+        },
+        complete: function () {
+            $(".loader").hide();
+            $(".loader").css('margin-top', '0%');
+        }
+    })
+}
+
+
+function submitOs(obj)
+{
+    var seasonos = $('#seasonos').val();
+    var ukstylenoos = $('#ukstylenoos').val();
+    var orderstatusos = $('#orderstatusos').val();
+    var artworkstatusos = $('#artworkstatusos').val();
+    var postatusos = $('#postatusos').val();
+    var pistatusos = $('#pistatusos').val();
+    var stylenoos = $('#stylenoos').val();
+    var start_date = $('#start_date').val();
+    var end_date = $('#end_date').val();
+    $.ajax({
+        url: base_url + "/customer/tesco/tesco-submit-os",
+        type: "Post",
+        dataType: "json",
+        data: {
+            _token: csrf_token,
+            seasonos:seasonos,
+            ukstylenoos:ukstylenoos,
+            orderstatusos:orderstatusos,
+            artworkstatusos:artworkstatusos,
+            postatusos:postatusos,
+            pistatusos:pistatusos,
+            stylenoos:stylenoos,
+            start_date:start_date,
+            end_date:end_date
+        },
+        beforeSend: function () {
+            $(".loader").show();
+            $(".loader").css('margin-top', '12%');
+        },
+        statusCode: {
+            /** [Show response status based on HTTP status code] */
+            200: function (data) {
+                $('#OrderStatusTable').html(tescoStatusTable(data.data, "path"))
                 var $tableSel = $('#datatable-tesco-orders');
                 $tableSel.DataTable({
                     "pageLength": 25,
                     "order": [
-                        [5, "desc"]
+                        [7, "desc"]
                     ],
                     "aoColumns": [
+                        null,
                         null,
                         null,
                         null,
@@ -727,87 +1101,14 @@ function tescoOrderStatus() {
                         null,
                         null,
                         null,
+                        null,
                     ],
                     initComplete: function () {
-                        $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first').append(' <button class="filterbtn" type="button" onClick="showFilter()"><i class="fa fa-filter" aria-hidden="true"></i></button>');
-                        $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first .dataTables_filter').css('display', 'inline-block');
-                        $('.main-content > .dataTables_wrapper > .row > .col-sm-12:first').append('<div class="filter-window"><h5><strong>Order Status Filter</strong></h5> <div class="row"> <div class="col-md-3"><input type="text" class="form-control" style="width:100%" name="daterange" /></div><div class="col-md-3"><select class="selectpicker" id="buyerPo"> <option disabled selected>Select PO Number</option></select></div><div class="col-md-3"><select class="selectpicker" id="styleNumber"> <option disabled selected>Select Style Number</option></select></div><div class="col-md-3"><select class="selectpicker" id="selectTemplate"> <option disabled selected>Select Template Name</option> </select></div></div><div class="filter-actions"><button class="btn btn-primary input-sm pull-right" id="reset">Clear Filter</button><button id="closeFilter" class="btn btn-default input-sm pull-right" onclick="showFilter()">Close</button><div class="clearfix"></div></div></div>');
-                        //For Custom Filters
-                        this.api().columns().every(function (i) {
-                            var column = this;
-                            if (i === 0 || i === 1 || i === 3) {
-                                var select;
-                                switch (i) {
-                                    case 0:
-                                        select = $('#styleNumber')
-                                        break;
-                                    case 1:
-                                        select = $('#buyerPo')
-                                        break;
-                                    case 3:
-                                        select = $('#selectTemplate')
-                                        break;
-                                }
-                                select.on('change', function () {
-                                    var val = $.fn.dataTable.util.escapeRegex(
-                                        $(this).val()
-                                    );
-
-                                    column
-                                        .search(val ? '^' + val + '$' : '', true, false)
-                                        .draw();
-                                });
-
-                                select.append('<option value=""> </option>');
-                                column.data().unique().sort().each(function (d, j) {
-                                    cleanText = d.replace(/<\/?[^>]+(>|$)/g, "");
-                                    select.append('<option value="' + cleanText + '">' + cleanText + '</option>')
-                                });
-                            }
-                        });
+                        $("#datatable-tesco-orders_filter input").addClass('form-control input-sm');
+                        $("#datatable-tesco-orders_filter input").attr('placeholder', 'Data Search');
+                        $('#datatable-tesco-orders_length select').addClass('form-control input-sm');
                     }
                 });
-                $("#reset").on("click", function () {
-                    $('#styleNumber').val('').change();
-                    $('#buyerPo').val('').change();
-                    $('#selectTemplate').val('').change();
-                    $.fn.dataTableExt.afnFiltering.length = 0;
-                    $tableSel.dataTable().fnDraw();
-                    $('input[name="daterange"]').val('Filter by Order Date');
-                    $('input[name="daterange"]').datepicker("refresh");
-                    $('.selectpicker').selectpicker('val', 1);
-                    $('.selectpicker').selectpicker('refresh');
-
-                });
-
-                $('.selectpicker').selectpicker();
-                $('input[name="daterange"]').daterangepicker({
-
-                    },
-                    function (start, end, label) {
-                        $.fn.dataTableExt.afnFiltering.length = 0;
-                        $tableSel.dataTable().fnDraw();
-                        filterByDate(5, start, end); // We call our filter function
-                        $tableSel.dataTable().fnDraw(); // Manually redraw the table after filtering
-                    });
-
-                $('input[name="daterange"]').val('Filter by Order Date');
-
-
-                // Clear the filter. Unlike normal filters in Datatables,
-                // custom filters need to be removed from the afnFiltering array.
-                $('.cancelBtn').on('click', function (e) {
-                    e.preventDefault();
-                    $.fn.dataTableExt.afnFiltering.length = 0;
-                    $tableSel.dataTable().fnDraw();
-                });
-                $('.pi-view').tooltip('show')
-                $('.pi-view').tooltip('toggle')
-                $('.po-view').tooltip('show')
-                $('.po-view').tooltip('toggle')
-                $("#datatable-tesco-orders_filter input").addClass('form-control input-sm');
-                $("#datatable-tesco-orders_filter input").attr('placeholder', 'Data Search');
-                $('#datatable-tesco-orders_length select').addClass('form-control input-sm');
             },
             400: function () {
                 $('.snackbar_span').html('Something went wrong');
@@ -815,7 +1116,6 @@ function tescoOrderStatus() {
             }
         },
         error: function (data) {
-            console.log(data);
         },
         complete: function () {
             $(".loader").hide();
@@ -927,7 +1227,18 @@ function tescoStatusTable(data, path) {
 
                     tr += '<td align="center">' + $status_text + '</td>';
 
-                } else if (key == "Artwork Status") {
+                } else if (key == "Artwork") {
+
+                        var zone = value.Zone
+                        var style_no = "";
+                        if (zone == "CE") {
+                            style_no = value.ce_style_ref;
+                        } else {
+                            style_no = value.uk_style_ref;
+                        }
+                        tr += '<td align="center"><object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal' + value.tableID + '" class="center-block tesco_svg" data="' + value.template_file+'" type="image/svg+xml"></object><a data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value.order_status + '" class="" href="javascript:void(0)" onclick=downloadArtwork("tesco_svg_modal' + value.tableID + '","'+value.TemplateName.replace(/ /g, "")+'","'+style_no+'","'+value.BuyerPO+'","' + value.tableID + '","' + value.order_flag + '",this)><span style="cursor:pointer" class="fa fa-download"></span></a></td>';
+
+                }else if (key == "Artwork Status") {
 
                     if (value['is_order_count_empty'] == 0) {
                         var str = value[key];
@@ -1032,6 +1343,147 @@ function tescoStatusTable(data, path) {
         tr += '</tr>';
     })
     return '<table id="datatable-tesco-orders" class="table table-hover table-striped table-bordered" style="width: 100%"><thead><tr>' + th + '</tr></thead><tbody>' + tr + '</tbody></table></div></div></div></div></div></div>';
+}
+
+
+function PopupTescoPrintManager(data, name,zone,style_no,buyer_no,id,created_at,template_id,qr_flag,qr_code_fin) {
+
+	//	var s = new XMLSerializer();
+	//	var d = data;
+	//	var str = s.serializeToString(d);
+	//	var svg = encodeURI(str)
+	//var success = false;
+	
+	if(name == "TCL1-sticker")
+	{
+		var db = "tesco_tcl1_orders";
+	}
+	else if(name == "TCL2-sticker")
+	{
+		var db = "tesco_tcl2_orders";
+	}
+	else if(name == "TCL4-sticker")
+	{
+		var db = "tesco_tcl4_orders";
+	}
+	else if(name == "THL1-sticker")
+	{
+		var db = "tesco_thl1_orders";
+	}
+	else if(name == "THL3-sticker")
+	{
+		var db = "tesco_thl3_orders";
+	}
+	var url = "";
+	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
+	
+	$.ajax({
+		url: base_url + "/customer/" + buyer + "/print-div-tescoos",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			svg: data,
+			name:name,
+			zone:zone,
+			style:style_no,
+			qr_code_fin: qr_code_fin,
+			tesco_po_number:buyer_no,
+			id:id,
+			template_id:template_id,
+			created_at:created_at,
+			qr_flag:qr_flag,
+			db:db
+		},
+		tryCount: 0,
+		retryLimit: 2,
+		async: false,
+		success: function (data) {
+			//window.location.href=data;
+			//			success = true;
+			//			url = data;
+
+			var element = document.createElement('a');
+			element.setAttribute('href', data.url);
+			element.setAttribute('download', name);
+
+			element.style.display = 'none';
+			document.body.appendChild(element);
+
+			element.click();
+
+			document.body.removeChild(element);
+
+
+		},
+		error: function (errorXHR, errorStatus, errorThrown) {
+			this.tryCount++;
+			if (this.tryCount <= this.retryLimit) {
+				$.ajax(this);
+				return;
+			}
+		},
+	})
+}
+/**
+ * This Function is Sub Function of #printDivTesco.
+ *  For print preview of small stickers
+ * @return Pdf
+ */
+
+function PopupTescoSmallPrintManager(data, name,zone,style_no,buyer_no,id,created_at) {
+	
+		
+	if(name == "TSL1-sticker")
+	{
+		var db = "tesco_tsl1_orders";
+	}
+	else if(name == "TSL3-sticker")
+	{
+		var db = "tesco_tsl3_orders";
+	}
+	
+	var url = "";
+	
+	$.ajax({
+		url: base_url + "/customer/" + buyer + "/print-div-tesco-smallos",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			svg: data,
+			name:name,
+			zone:zone,
+			style:style_no,
+			tesco_po_number:buyer_no,
+			id:id,
+			created_at:created_at,
+			db:db
+		},
+		tryCount: 0,
+		retryLimit: 2,
+		async: false,
+		success: function (data) {
+
+			var element = document.createElement('a');
+			element.setAttribute('href', data.url);
+			element.setAttribute('download', name);
+
+			element.style.display = 'none';
+			document.body.appendChild(element);
+
+			element.click();
+
+			document.body.removeChild(element);
+
+
+		},
+		error: function (errorXHR, errorStatus, errorThrown) {
+			this.tryCount++;
+			if (this.tryCount <= this.retryLimit) {
+				$.ajax(this);
+				return;
+			}
+		},
+	})
 }
 
 
@@ -1650,6 +2102,755 @@ function setEditOrderStatus() {
 
 }
 
+function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj) {
+
+    var created_at = $(obj).parent().attr('data-orderdate');
+    var status = $(obj).parent().attr('data-order_status');
+    var template_id = $(obj).parent().attr('data-template_id');
+    var buyer = "tesco";
+
+	var a = document.getElementById(data);
+	var svgDoc = a.contentDocument;
+	var name2=name;
+	var name = name + "-sticker";
+	if (name == "TSL1-sticker" || name == "TSL3-sticker") {
+		var svgarr = [];
+		var ajax_count = 0;
+		var b = " ";
+		var position = 3;
+		var ref_name = [name2.slice(0, position), b, name2.slice(position)].join('').trim();
+	
+		
+			$.ajax({
+				url: base_url + "/customer/" + buyer + "/get-order-details",
+                type: "Post",
+                dataType: "json",
+                data: {
+                    _token: csrf_token,
+                    name: name,
+                    id: id
+                },
+				beforeSend: function() {
+
+				},
+				success: function(data) {
+					
+		$(data.order_details).each(function (key, val) {
+			var svgRoot = svgDoc.documentElement;
+			var zone=val.zone;
+			localStorage.setItem("zone", zone);
+
+			if ((name == "TSL1-sticker" && zone == "CE")) {
+				svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + val.orms_tpn;
+			} else if ((name == "TSL3-sticker" && zone == "CE")) {
+				svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + val.orms_tpn;
+			} else if ((name == "TSL3-sticker" && zone == "UK")) {
+				svgDoc.getElementById("tpnd").innerHTML = "TPND: " + val.tpnd;
+			} else if ((name == "TSL1-sticker" && zone == "UK")) {
+				svgDoc.getElementById("tpnd").innerHTML = "TPND: " + val.tpnd;
+			}
+
+
+
+			if ((name == "TSL3-sticker")) {
+				if (zone == "CE") {
+					var barcode_change = val.ean_barcode
+				} else {
+					var barcode_change = val.ean_barcode
+				}
+				alert(barcode_change);
+				jsbarcodetescotslean(barcode_change, 'barcode', svgDoc)
+				
+				svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
+				
+				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+			} else {
+				if (zone == "CE") {
+					var barcode_change = val.itf_barcode
+				} else {
+					var barcode_change = val.itf_barcode
+				}
+				
+				jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
+				
+				svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
+				
+				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+
+			}
+
+			if (zone == "CE") {
+				var size = val.size;
+			} else {
+				var size = val.size;
+			}
+
+			var description = val.short_description.replace(/&/g,'&#038;');
+			if ((name == "TSL3-sticker")) {
+				if (size != '') {
+					$.ajax({
+						url: base_url + "/erp/job-manager/tesco/get-tsl-size",
+						type: 'GET',
+						async: false,
+						data: {
+							size: size,
+							zone: zone
+						},
+						tryCount: 0,
+						retryLimit: 2,
+						success: function (data) {
+								/** [ Dynamically change svg short description ] */
+							if (description != '' && data.size_chart.length != 0) {
+								var str = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+
+								
+								if (str.length > 24) {
+									if (/\S/.test(str.charAt(24))) {
+										//No Space
+										if (str.indexOf(" ") == "-1") {
+											svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+										} else {
+											svgDoc.getElementById("description").innerHTML = str.substr(0, str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = str.substr(str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+										}
+
+									} else {
+										//Space
+										svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+									}
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+								} else {
+									svgDoc.getElementById("description").innerHTML = str.toUpperCase();
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+									svgDoc.getElementById("description1").innerHTML = "";
+								}
+							} else if (data.size_chart.length != 0) {
+								svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+								svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
+								svgDoc.getElementById("description1").innerHTML = '';
+							} else if (description != '') {
+								if (description.length > 24) {
+									if (/\S/.test(description.charAt(24))) {
+										//No Space
+										if (description.indexOf(" ") == "-1") {
+											svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+										} else {
+											svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+										}
+
+									} else {
+										//Space
+										svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+									}
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+								} else {
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+									svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+									svgDoc.getElementById("description1").innerHTML = "";
+								}
+							} else {
+								svgDoc.getElementById("description").innerHTML = '';
+								svgDoc.getElementById("description1").innerHTML = '';
+							}
+							var s = new XMLSerializer();
+				var d = svgRoot;
+				var str = s.serializeToString(d);
+
+				svgarr.push(str)
+						},
+						error: function (errorXHR, errorStatus, errorThrown) {
+							this.tryCount++;
+							if (this.tryCount <= this.retryLimit) {
+								$.ajax(this);
+								return;
+							}
+						},
+						complete: function () {
+
+						}
+					})
+				} else {
+					/** [ Dynamically change svg short description ] */
+					if (description != '') {
+						
+							if (description.length > 24) {
+								if (/\S/.test(description.charAt(24))) {
+									//No Space
+									if (description.indexOf(" ") == "-1") {
+										svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+									} else {
+										svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+									}
+
+								} else {
+									//Space
+									svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+									svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+								}
+								svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+							} else {
+								svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+								svgDoc.getElementById("description1").innerHTML = "";
+								svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+							}
+					} else {
+						svgDoc.getElementById("description").innerHTML = '';
+					}
+					var s = new XMLSerializer();
+				var d = svgRoot;
+				var str = s.serializeToString(d);
+
+				svgarr.push(str)
+
+				}
+			} else {
+				var description =val.short_description.replace(/&/g,'&#038;');
+				if (description.length > 24) {
+					if (/\S/.test(description.charAt(24))) {
+						//No Space
+						if (description.indexOf(" ") == "-1") {
+							svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+							svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+						} else {
+							svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+							svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+						}
+
+					} else {
+						//Space
+						svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+						svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+					}
+					svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+				} else {
+					svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+					svgDoc.getElementById("description1").innerHTML = "";
+					svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+				}
+				
+				var s = new XMLSerializer();
+				var d = svgRoot;
+				var str = s.serializeToString(d);
+
+				svgarr.push(str)
+			}
+			ajax_count++;
+		})
+					if (ajax_count == data.order_details.length) {
+						var svg_fin = svgarr.join(',_');
+						var zone = localStorage.getItem("zone");
+						
+					 
+						  PopupTescoSmallPrintManager(svg_fin, name,zone,style_no,buyer_no,id,created_at);
+					  
+						
+					}
+				},
+				error: function(data) {
+
+				},
+				complete: function() {
+
+				}
+			})
+
+		
+		
+
+
+	} else {
+		var svgarr = [];
+		var qr_code_arr = [];
+		var ajax_count = 0;
+		var b = " ";
+		var position = 3;
+		var ref_name = [name2.slice(0, position), b, name2.slice(position)].join('').trim();
+		
+			$.ajax({
+				url: base_url + "/customer/" + buyer + "/get-order-details",
+                type: "Post",
+                dataType: "json",
+                data: {
+                    _token: csrf_token,
+                    name: name,
+                    id: id
+                },
+				beforeSend: function() {
+
+				},
+				success: function(data) {
+					var generate_data = data;
+					$(data.order_details).each(function (key, val) {
+						var zone=val.zone;
+						localStorage.setItem("zone", zone);
+			var svgRoot = svgDoc.documentElement;
+						
+		if (val.supplier_name != '') {
+		    svgDoc.getElementById("supplier").innerHTML = val.supplier_name.toUpperCase().replace('&', '&amp;');
+		 } else {
+		 	svgDoc.getElementById("supplier").innerHTML = "";
+		 }
+						
+		if (val.po_number != '') {
+			svgDoc.getElementById("po_number").innerHTML = val.po_number.toUpperCase();
+		} else {
+			svgDoc.getElementById("po_number").innerHTML = '';
+		}
+
+		/** [ Dynamically change svg CE style reference number ] */
+		if (val.ce_style_ref != '') {
+			svgDoc.getElementById("ce_style").innerHTML = val.ce_style_ref.toUpperCase();
+		} else {
+			svgDoc.getElementById("ce_style").innerHTML = '';
+		}
+		/** [ Dynamically change svg UK style reference number ] */
+		if (val.uk_style_ref != '') {
+			svgDoc.getElementById("uk_style").innerHTML = val.uk_style_ref.toUpperCase();
+		} else {
+			svgDoc.getElementById("uk_style").innerHTML = '';
+		}
+		/** [ Dynamically change svg EQOS code ] */
+		if (val.eqos_site_code != '') {
+			svgDoc.getElementById("eqos").innerHTML = val.eqos_site_code.toUpperCase();
+		} else {
+			svgDoc.getElementById("eqos").innerHTML = '';
+		}
+		
+					
+						/** [ Dynamically change  svg department ] */
+		if (val.department != '') {
+			/** [Give font-size for department] */
+			if (val.department.length < 17) {
+				svgDoc.getElementById("department").setAttribute("style", "font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;");
+			} else {
+				svgDoc.getElementById("department").setAttribute("style", "font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:9px;");
+			}
+			/** [ Dynamically change svg department] */
+			svgDoc.getElementById("department").innerHTML = val.department.toUpperCase().replace('&', '&amp;');
+		} else {
+			svgDoc.getElementById("department").innerHTML = '';
+		}
+		/** [ Dynamically change svg brand ] */
+		if (val.brand != '') {
+			/** [Give font-size for brand] */
+			if (val.brand.length < 17) {
+				svgDoc.getElementById("brand").setAttribute("style", "font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;");
+			} else {
+				svgDoc.getElementById("brand").setAttribute("style", "font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:9px;");
+			}
+			svgDoc.getElementById("brand").innerHTML = val.brand.toUpperCase().replace('&', '&amp;');
+		} else {
+			svgDoc.getElementById("brand").innerHTML = '';
+		}
+						
+										
+		var tag_at_source = val.tag_at_source == 0 ? "no" : "yes";
+		var rfid = val.rfid_compliant == 0 ? "no" : "yes";
+						
+		/** [ Dynamically svg RFID ] */
+		if (rfid != '') {
+			svgDoc.getElementById("rfid").innerHTML = rfid.toUpperCase();
+		} else {
+			svgDoc.getElementById("rfid").innerHTML = '';
+		}
+		/** [ Dynamically change svg tag at source ] */
+		if (tag_at_source != '') {
+			svgDoc.getElementById("tag_at_source").innerHTML = tag_at_source.toUpperCase();
+		} else {
+			svgDoc.getElementById("tag_at_source").innerHTML = '';
+		}
+		/** [ Dynamically change svg tag at source ] */
+		if (val.season_code != '') {
+			svgDoc.getElementById("season_code").innerHTML = val.season_code.toUpperCase();
+		} else {
+			svgDoc.getElementById("season_code").innerHTML = '';
+		}
+		/** [ Dynamically change svg manufacture date ] */
+		if (val.manufacture_date != '') {
+			svgDoc.getElementById("manufactured_date").innerHTML = val.manufacture_date.toUpperCase();
+		} else {
+			svgDoc.getElementById("manufactured_date").innerHTML = '';
+		}
+						
+			if ((name == "TCL1-sticker" && zone == "CE") || (name == "TCL2-sticker" && zone == "CE") || (name == "TSL1-sticker" && zone == "CE") || (name == "THL1-sticker" && zone == "CE")) {
+				svgDoc.getElementById("pieces_in_ratio").innerHTML = val.cases_per_carton;
+
+				svgDoc.getElementById("tpnd").innerHTML = val.orms_tpn;
+				if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
+				{
+					svgDoc.getElementById("tpnd_last_digit").innerHTML = val.orms_tpn.substr(val.orms_tpn.length - 3);
+				}
+			} else if ((name == "TCL4-sticker" && zone == "CE") || (name == "THL3-sticker" && zone == "CE")) {
+				svgDoc.getElementById("unit_per_case").innerHTML = val.case_size;
+
+				svgDoc.getElementById("tpnd").innerHTML =val.orms_tpn;
+				if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
+				{
+					svgDoc.getElementById("tpnd_last_digit").innerHTML = val.orms_tpn.substr(val.orms_tpn.length - 3);
+				}
+			} else if ((name == "TCL4-sticker" && zone == "UK") || (name == "THL3-sticker" && zone == "UK")) {
+				svgDoc.getElementById("unit_per_case").innerHTML = val.case_size;
+
+				svgDoc.getElementById("tpnd").innerHTML = val.tpnd;
+			} else if ((name == "TCL1-sticker" && zone == "UK") || (name == "TCL2-sticker" && zone == "UK") || (name == "TSL1-sticker" && zone == "UK") || (name == "THL1-sticker" && zone == "UK")) {
+				svgDoc.getElementById("pieces_in_ratio").innerHTML = val.units_per_carton;
+
+				svgDoc.getElementById("tpnd").innerHTML = val.tpnd;
+			}
+			if ((name == "THL3-sticker")) {
+
+				if (zone == "CE") {
+					var barcode_change = val.ean_barcode
+				} else {
+					var barcode_change = val.ean_barcode
+				}
+					jsbarcodetescoean(barcode_change, 'barcode', svgDoc)
+				
+				svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
+				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+			} else if ((name == "TCL1-sticker") || (name == "THL1-sticker")) {
+
+				if (zone == "CE") {
+					var barcode_change = val.itf_barcode
+				} else {
+					var barcode_change = val.itf_barcode
+				}
+					jsbarcodetesco(barcode_change, 'barcode', svgDoc)
+				
+				svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
+				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+
+			}
+
+			if (zone == "CE") {
+				var size = val.size;
+			} else {
+				var size = val.size;
+			}
+
+			var description = val.short_description.replace(/&/g,'&#038;');
+			if ((name == "TCL4-sticker") || (name == "TSL3-sticker") || (name == "THL3-sticker")) {
+				if (size != '') {
+					$.ajax({
+						url: base_url + "/erp/job-manager/tesco/get-tsl-size",
+						type: 'GET',
+						async: false,
+						data: {
+							size: size,
+							zone: zone
+						},
+						tryCount: 0,
+						retryLimit: 2,
+						success: function (data) {
+							/** [ Dynamically change svg short description ] */
+							if (description != '' && data.size_chart.length != 0) {
+								var desc_size = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+								if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
+								{
+									if(desc_size.length <= 23)
+									{
+										svgDoc.getElementById("description").innerHTML = desc_size;
+										if(name2 === "THL3")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+										}
+									}
+									else
+									{
+										str = oswordWrap(desc_size, 23);
+										svgDoc.getElementById("description").innerHTML = str;
+										
+										if(name2 === "THL3")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 135)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 148)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 135)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 148)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+										}
+									}
+								}
+								else
+								{
+									svgDoc.getElementById("description").innerHTML = desc_size;
+								}
+							} else if (data.size_chart.length != 0) {
+								svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
+							} else if (description != '') {
+								var desc_size = description.toUpperCase();
+								
+								if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
+								{
+									if(desc_size.length <= 23)
+									{
+										svgDoc.getElementById("description").innerHTML = desc_size;
+										if(name2 === "THL3")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+										}
+									}
+									else
+									{
+										str = oswordWrap(desc_size, 23);
+										svgDoc.getElementById("description").innerHTML = str;
+										
+										if(name2 === "THL3")
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 135)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 148)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 135)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 148)");
+											
+										}
+										else
+										{
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+										}
+									}
+								}
+								else
+								{
+									svgDoc.getElementById("description").innerHTML = desc_size;
+								}
+								
+							} else {
+								svgDoc.getElementById("description").innerHTML = '';
+							}
+							var s = new XMLSerializer();
+							var d = svgRoot;
+							var str = s.serializeToString(d);
+							svgarr.push(str)
+							qr_code_arr.push(val.qr_code)
+						},
+						error: function (errorXHR, errorStatus, errorThrown) {
+							this.tryCount++;
+							if (this.tryCount <= this.retryLimit) {
+								$.ajax(this);
+								return;
+							}
+						},
+						complete: function () {
+
+						}
+					})
+				} else {
+					/** [ Dynamically change svg short description ] */
+					if (description != '') {
+							if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
+							{
+								var desc_size = description.toUpperCase();
+								if(desc_size.length <= 23)
+								{
+									svgDoc.getElementById("description").innerHTML = desc_size;
+									if(name2 === "THL3")
+									{
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+
+									}
+									else
+									{
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+									}
+								}
+								else
+								{
+									str = wordWrap(desc_size, 23);
+									svgDoc.getElementById("description").innerHTML = str;
+
+									if(name2 === "THL3")
+									{
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 135)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 148)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 135)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 148)");
+
+									}
+									else
+									{
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+									}
+								}
+							}
+							else
+							{
+								/** [ Dynamically change svg short description ] */
+								svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+							}					
+						} else {
+							svgDoc.getElementById("description").innerHTML = '';
+						}
+					var s = new XMLSerializer();
+					var d = svgRoot;
+					var str = s.serializeToString(d);
+
+					svgarr.push(str)
+					qr_code_arr.push(val.qr_code)
+
+				}
+			} else {
+				if (description != '') {
+					if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
+					{
+						if(description.length <= 20)
+						{
+							svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+							if (name2 === "TCL1")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 125)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 137)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 88.1544, 125)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 88.1544, 137)");
+							}
+							else if (name2 === "TCL2")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+								svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+								svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
+							}
+							else if(name2 === "THL1")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 125)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 137)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 125)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 137)");
+							}
+							
+						}
+						else
+						{
+							str = oswordWrap(description, 23);
+							svgDoc.getElementById("description").innerHTML = str;
+							if (name2 === "TCL1")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 133)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 146)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 88.1544, 133)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 88.1544, 146)");
+							}
+							else if (name2 === "TCL2")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
+								svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 163)");
+								svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
+							}
+							else if(name2 === "THL1")
+							{
+								svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 135)");
+								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 148)");
+								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 135)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 148)");
+							}
+						}
+					}
+					else
+					{
+						/** [ Dynamically change svg short description ] */
+						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+					}					
+				} else {
+					svgDoc.getElementById("description").innerHTML = '';
+				}
+				var s = new XMLSerializer();
+				var d = svgRoot;
+				var str = s.serializeToString(d);
+
+				svgarr.push(str)
+				qr_code_arr.push(val.qr_code)
+			}
+
+
+	
+			ajax_count++;
+		})
+			if (ajax_count == data.order_details.length) {
+				var svg_fin = svgarr.join(',_');
+				var qr_code_fin = qr_code_arr.join(',_');
+				var zone = localStorage.getItem("zone");
+				
+				  PopupTescoPrintManager(svg_fin, name,zone,style_no,buyer_no,id,created_at,template_id,generate_data.tesco_item_master[0].is_qrcode_required,qr_code_fin);
+			   
+			}
+				},
+				error: function(data) {
+
+				},
+				complete: function() {
+
+				}
+			});
+		
+		
+
+	}
+
+
+}
 /**
  * Dynamically Add rows
  * @param {*} obj 
@@ -3441,4 +4642,279 @@ function testWhite(x) {
     return white.test(x.charAt(0));
 }
 
+/**
+ * This Function is used to invoke JSBarcode.
+ * 
+ * @return barcode
+ */
+function jsbarcodetesco(code, id, svgDoc) {
+
+	JsBarcode("#ean-13", code, {
+		format: "ITF14",
+		width: 3.28148,
+		height: 202,
+		fontSize: 30,
+		flat: true,
+		displayValue: false
+	});
+	var svg = document.getElementById('svgdiv').querySelector('svg'),
+		canvas = document.createElement('canvas'),
+		body = document.getElementsByTagName('body')[0],
+		canvasTmp,
+		svg_xml,
+		ctx,
+		img;
+	// if our "svg" doesn't have 'xmlns' attribute we must add it
+	//    svg.setAttribute('width', '188.931023622px');
+	svg.setAttribute('font-size', '30px');
+	svg.setAttribute('font-family', 'frankgothcnbt');
+
+	svg.setAttribute('width', '408.900px');
+	svg.setAttribute('height', '328.02px');
+	
+
+	
+	//svg.removeAttribute('version');
+	//svg.removeAttribute('viewBox');
+//	svg.removeAttribute('x');
+//	svg.removeAttribute('y');
+	//svg.setAttribute('viewBox','0 ,0 ,463 ,222');
+	
+	canvas.id = 'canvas';
+	canvas.width = svg.getBoundingClientRect().width;
+	canvas.height = svg.getBoundingClientRect().height;
+
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
+
+	/* Time to play ;) */
+
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
+
+	// JavaScript (HTML) image
+	img = new Image();
+
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
+
+	// img.src - contains base64 URI from svg
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+
+
+	//remove temporary canvas
+	canvasTmp.remove();
+	svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+
+/**
+ * This Function is used to invoke Ean 13 JSBarcode.
+ * 
+ * @return barcode
+ */
+function jsbarcodetescoean(code, id, svgDoc) {
+	//		format: "ean13",
+	//		width: 3.45,
+	//		height: 125,
+	//		fontSize: 35,
+	//		flat: true,
+	//		displayValue: false
+	JsBarcode("#ean-13", code, {
+		format: "ean13",
+		width: 3.9260,
+		height: 170,
+		fontSize: 30,
+		flat: true,
+		displayValue: false
+	});
+	var svg = document.getElementById('svgdiv').querySelector('svg'),
+		canvas = document.createElement('canvas'),
+		body = document.getElementsByTagName('body')[0],
+		canvasTmp,
+		svg_xml,
+		ctx,
+		img;
+	// if our "svg" doesn't have 'xmlns' attribute we must add it
+	//    svg.setAttribute('width', '188.931023622px');
+	svg.setAttribute('font-size', '50px');
+	svg.setAttribute('font-family', 'frankgothcnbt');
+
+	svg.setAttribute('width', '412.25px');
+	svg.setAttribute('height', '378.02px');
+	
+//	svg.removeAttribute('version');
+//	svg.removeAttribute('viewBox');
+//	svg.removeAttribute('x');
+//	svg.removeAttribute('y');
+	//svg.setAttribute('viewBox','0, 0, 393 ,190');
+
+	canvas.id = 'canvas';
+	canvas.width = svg.getBoundingClientRect().width;
+	canvas.height = svg.getBoundingClientRect().height;
+
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
+
+	/* Time to play ;) */
+
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
+
+	// JavaScript (HTML) image
+	img = new Image();
+
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
+
+	// img.src - contains base64 URI from svg
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+
+	//remove temporary canvas
+	canvasTmp.remove();
+
+	svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+/**
+ * This Function is used to invoke Ean 13 JSBarcode.
+ * 
+ * @return barcode
+ */
+function jsbarcodetescotslean(code, id, svgDoc) {
+	//		format: "ean13",
+	//		width: 3.45,
+	//		height: 125,
+	//		fontSize: 35,
+	//		flat: true,
+	//		displayValue: false
+	JsBarcode("#ean-13", code, {
+		format: "ean13",
+		width: 3.9260,
+		height: 167,
+		fontSize: 30,
+		flat: true,
+		displayValue: false
+	});
+	var svg = document.getElementById('svgdiv').querySelector('svg'),
+		canvas = document.createElement('canvas'),
+		body = document.getElementsByTagName('body')[0],
+		canvasTmp,
+		svg_xml,
+		ctx,
+		img;
+	// if our "svg" doesn't have 'xmlns' attribute we must add it
+	//    svg.setAttribute('width', '188.931023622px');
+	svg.setAttribute('font-size', '50px');
+	svg.setAttribute('font-family', 'frankgothcnbt');
+
+	svg.setAttribute('width', '419.075px');
+	svg.setAttribute('height', '275.02px');
+
+	
+	
+//	svg.removeAttribute('version');
+//	svg.removeAttribute('viewBox');
+//	svg.removeAttribute('x');
+//	svg.removeAttribute('y');
+	//svg.setAttribute('viewBox','0 ,0 ,393 ,187');
+	
+	canvas.id = 'canvas';
+	canvas.width = svg.getBoundingClientRect().width;
+	canvas.height = svg.getBoundingClientRect().height;
+
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
+
+	/* Time to play ;) */
+
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
+
+	// JavaScript (HTML) image
+	img = new Image();
+
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
+
+	// img.src - contains base64 URI from svg
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+
+	//remove temporary canvas
+	canvasTmp.remove();
+
+	svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+
+/**
+ * This Function is used to invoke JSBarcode.
+ * 
+ * @return barcode 
+ */
+
+
+function jsbarcodetescotsl(code, id, svgDoc) {
+	JsBarcode("#ean-13", code, {
+		format: "ITF14",
+		width: 3.28148,
+		height: 199,
+		fontSize: 30,
+		flat: true,
+		displayValue: false
+	});
+	var svg = document.getElementById('svgdiv').querySelector('svg'),
+		canvas = document.createElement('canvas'),
+		body = document.getElementsByTagName('body')[0],
+		canvasTmp,
+		svg_xml,
+		ctx,
+		img;
+	// if our "svg" doesn't have 'xmlns' attribute we must add it
+	//    svg.setAttribute('width', '188.931023622px');
+	svg.setAttribute('font-size', '30px');
+	svg.setAttribute('font-family', 'frankgothcnbt');
+
+	svg.setAttribute('width', '415.100px');
+	svg.setAttribute('height', '328.02px');
+	
+//	svg.removeAttribute('version');
+//	svg.removeAttribute('viewBox');
+//	svg.removeAttribute('x');
+//	svg.removeAttribute('y');
+	//svg.setAttribute('viewBox','0 0 231 109');
+	
+	canvas.id = 'canvas';
+	canvas.width = svg.getBoundingClientRect().width;
+	canvas.height = svg.getBoundingClientRect().height;
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
+	/* Time to play ;) */
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
+	// JavaScript (HTML) image
+	img = new Image();
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
+
+	// img.src - contains base64 URI from svg
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+	//remove temporary canvas
+	canvasTmp.remove();
+
+	svgDoc.getElementById(id).innerHTML = svg_xml;
+}
 
