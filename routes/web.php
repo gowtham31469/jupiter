@@ -256,6 +256,10 @@ Route::group(['middleware' => 'customer_auth'], function()
 	Route::post('customer/tesco/tesco-orders-submit-filter', 'Customer\Tesco\OrderStatusController@tescoOrdersSubmitFilter');
 	Route::post('customer/tesco/tesco-submit-os', 'Customer\Tesco\OrderStatusController@tescoSubmitOs');
 
+
+	Route::post('customer/tesco/print-div-tescoos', 'Customer\Tesco\OrderStatusController@printDivTesco');
+	Route::post('customer/tesco/print-div-tesco-smallos', 'Customer\Tesco\OrderStatusController@printDivTescoSmall');
+
 	Route::post('customer/tesco/order-management/show-tesco-pi', 'Customer\Tesco\OrderStatusController@getTescoPI');
 	Route::post('customer/tesco/approve-tesco-pi', 'Customer\Tesco\OrderStatusController@approveTescoPI');
 	Route::post('customer/tesco/reject-tesco-pi', 'Customer\Tesco\OrderStatusController@rejectTescoPI');
