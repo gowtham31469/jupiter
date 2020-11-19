@@ -67,7 +67,7 @@ class ApproveTescoOrders
                                 ->first();
 
             $order_qty_details  = DB::table($table.'_quanty')->where( $reference[1].'_order_id', $order_details->id)
-            ->select('id', DB::raw($table."_quanty as \"table_name\""))->get();
+            ->select('id', DB::raw("'".strtolower($table)."_quanty' as \"table_name\""))->get();
 
             $order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', $order_details->order_status)->first();
 
@@ -82,7 +82,7 @@ class ApproveTescoOrders
               $purchase_order_no     = $order_details->purchase_order_no;
             }         
             
-            $erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$order_details->tesco_supplier_id)->where('po_no', $purchase_order_no)->first();
+            $erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$order_details->tesco_supplier_id)->where('po_no', $purchase_order_no)->exists();
 
             if ($erp_orders) 
             {

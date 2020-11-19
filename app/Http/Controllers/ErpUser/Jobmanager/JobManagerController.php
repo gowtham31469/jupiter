@@ -76,6 +76,19 @@ class JobManagerController extends Controller
 
 		// format financial year date as "yyyy-dd-mm" 
 		$this->financial_year_date_format = $this->year.'-'.$this->financial_year_date;
+
+		// store financial year start and end date and
+		// financial year identification
+		if($this->current_date < $this->financial_year_date_format){
+			$this->financial_year_start = Carbon::parse($this->financial_year_date_format)->subYear()->toDateString();
+			$this->financial_year_end = Carbon::parse($this->financial_year_date_format)->subDay()->toDateString();
+			$this->financial_year = Carbon::parse($this->financial_year_date_format)->subYear()->format('y');
+		} else {
+			$this->financial_year_start = $this->financial_year_date_format;
+			$this->financial_year_end = Carbon::parse($this->financial_year_date_format)->addYear()->subDay()->toDateString();
+			$this->financial_year = Carbon::parse($this->financial_year_date_format)->format('y');
+		}
+
 		$this->tesco_material_obj = new TescoMaterialQuery();
 	}
 		
@@ -681,6 +694,8 @@ class JobManagerController extends Controller
 				$color_code         = array();
 				$tint_color         = array();
 
+				$item_array = ['Printed Labels' => 'PL', 'Woven Labels' => 'WL', 'Heat Tranfers' => 'HT', 'Carton & Polybag Stickers' => 'CS', 'Printed Boards' => 'PB', 'Swing Tags' => 'ST', 'Size Stickers' => 'ST', 'Garment Friendly' => 'GF', 'Price Stickers' => 'PS', 'Header Cards' => 'HC', 'Insert Cards' => 'IC', 'Cascades' => 'CD'];
+
 				/** Get erp order details table ids from erp orders table id */
 				foreach($erp_orders_ids as $row => $erp_orders_id)
 				{
@@ -702,35 +717,6 @@ class JobManagerController extends Controller
 					$order_detail_ids = array_unique(array_merge($order_detail_ids,$order_detail_id_array));
 				}
 				sort($order_detail_ids);
-				
-				// Logic for resetting Jobcard ID format for new financial year			 
-				$max_workorder_id = DB::table('jobcard_main_table')->select('work_order_id')->find(DB::table('jobcard_main_table')->max('id'));
-
-				if($max_workorder_id){
-					$split_workorder_id = explode("-",$max_workorder_id->work_order_id);
-					(int)$parsed_max_id  = end($split_workorder_id);
-					
-					$jobcard_id_prefix = count($split_workorder_id) === 3?"JGA-JC-":"JGA-JC-".$this->month."-".$this->year."-";
-				} else {
-					(int)$parsed_max_id = 0;
-					$jobcard_id_prefix = "JGA-JC-".$this->month."-".$this->year."-";
-				}
-				
-				if( strtotime($this->current_date) >= strtotime($this->financial_year_date_format) ){
-					// check if already jobcard created today.
-					$already_jobcard_created = DB::table('jobcard_main_table')->whereBetween('created_date', [$this->financial_year_date_format, $this->current_date])->orWhereDate('created_date', '=',$this->current_date)->exists();
-
-					// set erp id as 1 for first order of the financial year
-					(int)$parsed_max_id = $already_jobcard_created === false?1:(int)$parsed_max_id+(int)1;
-
-					$jobcard_id_prefix = $already_jobcard_created === false?"JGA-JC-".$this->month."-".$this->year."-":$jobcard_id_prefix;
-				} else {
-					(int)$parsed_max_id += 1;
-				}
-				
-				// jobcard id format "JGA-JC-mm-yyyy-1" and for old order "JGA-JC-1"
-				$workorder_id = $jobcard_id_prefix.$parsed_max_id;
-
 				foreach($order_detail_ids as $key => $order_detail_id)
 				{
 					$order_details = Erp::select('erp_orders.*', 'erp_order_details.*')
@@ -933,6 +919,61 @@ class JobManagerController extends Controller
 						}
 					}
 				}
+
+				// Jobcard ID format snippets
+				$item_name = sizeof($article_array) === 1?$item_array[$article_array[0]]:'xx';  // Item name(2) prefix for jobcard
+				$order_id = 'xxxxx';  // xxxxx for multiple erpid selection.
+				
+				//  order id prefix logic
+				if(sizeof(array_unique($erp_orders_ids)) === 1){
+					$erp_id_str = Erp::where('erp_orders.id', '=', $erp_orders_ids[0])->value('erp_id');
+					$split_erp_id = explode("-",$erp_id_str);
+
+					// last 5 digits of erpid logic for old and new erpid's.
+					// order id of old erpid 'ERPID-01234' is '01234'.
+					// order id of new erpid 'yymmxxxxx' is 'xxxxx'.
+					if($split_erp_id[0] === 'ERPID'){
+						$order_id = $split_erp_id[1];
+					} else {
+						$order_id = substr(Erp::where('erp_orders.id', '=', $erp_orders_ids[0])->value('erp_id'),-5);  // last 5 characters/digits of erpid for jobcard id.
+					}
+				}
+				
+				// the default jobcard id prefix format
+				(int)$parsed_max_id = str_pad(1, 4, 0, STR_PAD_LEFT); // to generate 4 digit continous numbers
+				$jobcard_id_prefix = $item_name.$this->financial_year.$order_id;
+
+				// Logic for resetting Jobcard ID format for new financial year			 
+				$max_workorder_id = DB::table('jobcard_main_table')
+									->select('work_order_id')
+									->find(DB::table('jobcard_main_table')
+									->where(function($q) use ($item_name) {
+										$q->where('work_order_id', 'like', $item_name . '%')
+										  ->orWhere('work_order_id', 'like', 'JGA-JC-%');
+									})
+									->whereBetween('created_date', [$this->financial_year_date_format, $this->current_date])
+									->max('id'));
+
+				if($max_workorder_id){
+					$latest_workorder_id = $max_workorder_id->work_order_id;
+
+					$prefix_str = substr($latest_workorder_id, 0, 7);
+					
+					// maintain jobcard id prefix as "JGA-JC-" for old orders
+					if($prefix_str === "JGA-JC-"){
+						$jobcard_id_prefix = "JGA-JC-";
+						$split_workorder_id = explode("-",$latest_workorder_id);
+						(int)$parsed_max_id  = $split_workorder_id[2];
+						(int)$parsed_max_id += 1;
+					} else {
+						$jobcard_id_prefix = $item_name.$this->financial_year.$order_id;
+						(int)$parsed_max_id  = substr($latest_workorder_id, 9);
+						(int)$parsed_max_id  = str_pad($parsed_max_id+1, 4, 0, STR_PAD_LEFT);
+					}
+				}
+				
+				// jobcard id format "Itemname(2)FinancialYearERPID(last 5)0001" where  and for old order "JGA-JC-1"
+				$workorder_id = $jobcard_id_prefix.$parsed_max_id;
 
 				/** Push all array values into template_data array */
 				$template_data['order_date']       = Carbon::parse(min($order_dt_array))->format('d-m-Y');

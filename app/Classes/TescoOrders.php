@@ -101,6 +101,7 @@ class TescoOrders
           $order_table_name = "tesco_".strtolower(str_replace(" ","",$template_data->item_name))."_orders";
           $po_upload_status = $po_status === null?null:0;
           $pi_approve_status = $pi_required == 1?0:null;
+          $order_status_id  = $order_status === 'Order Pending'?6:2;
                  
           OrderManagementHistory::updateOrCreate(['order_table_name'  => $order_table_name, 'order_table_id'    => $order_submitted->id],[
             'buyer_id'                  => $tesco_buyer_id->id,
@@ -112,7 +113,7 @@ class TescoOrders
             'reference'                 => $material_ref,
             'buyer_po'                  => $request['po_number'],
             'ocn_number'                => $request['ocn_no'],
-            'order_status'              => $order_status,
+            'order_status'              => $order_status_id,
             'pi_status'                 => $pi_approve_status,
             'po_status'                 => $po_upload_status
           ]);
