@@ -1429,17 +1429,31 @@ class OrderStatusCntrl extends Controller
     {
         try 
         {
+            /** [ Creating new object for ApproveTescoOrders() class ] */
+            $approve_order_obj = new ApproveTescoOrders();
+            $buyer_id = DB::table("buyers")->where('buyer_name','ilike','Tesco')->pluck('id')->first();
             $id  =  explode(',',$request->id);
+            $data_array = [];
+            
             foreach($id as $val)
             {
                 $value    =  explode('-',$val);
+                $data_array['table_name'] = $value[0];
+                $data_array['table_id'] = $value[1];
                 
-                DB::table($value[0])->where('id',$value[1])
-                   ->update([
-                        'order_status' => "Order Approved"
-                  ]);
+                /** [ Invoking approveTescoOrderMethod function using class instance ] */
+               $approved_order = $approve_order_obj->approveTescoOrderMethod($data_array, $buyer_id);
             }
-            $result = response()->json(['error'=> false,'message' =>'success'],200); 
+           
+            if($approved_order == "approved")
+            {
+                $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+                $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+
         }
         catch (\Exception $e)
         {
