@@ -1692,7 +1692,7 @@ function AvoidSpace(event) {
 function updateArtwork(obj) {
     $('#po_already_error').addClass('hidden')
     var id = $(obj).parent().attr('data-id');
-    var table_name = $(obj).parent().attr('data-table1');
+    var table_name = $(obj).parent().attr('data-table');
     var TemplateName = $(obj).parent().attr('data-template');
     $('#tesco_ocn').prop('disabled', true);
 
