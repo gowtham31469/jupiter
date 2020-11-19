@@ -47,8 +47,8 @@ class ApproveTescoOrders
   public function approveTescoOrderMethod($request, $buyer_id)
   {
     try {
-            $table = $request->table_name; 
-            $table_row_id = $request->table_id; 
+            $table = $request['table_name']; 
+            $table_row_id = $request['table_id']; 
             $reference = explode("_",$table);
 
             DB::table($table)->where('id',$table_row_id)
