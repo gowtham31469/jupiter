@@ -1081,6 +1081,12 @@ function submitOs(obj)
                 $('#OrderStatusTable').html(tescoStatusTable(data.data, "path"))
                 var $tableSel = $('#datatable-tesco-orders');
                 $tableSel.DataTable({
+                    "columnDefs": [{
+                        "targets": '_all',
+                        "createdCell": function (td, cellData, rowData, row, col) {
+                            $(td).css('padding', '5px')
+                        }
+                    }],
                     "pageLength": 25,
                     "order": [
                         [7, "desc"]
