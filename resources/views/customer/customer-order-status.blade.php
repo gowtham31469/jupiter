@@ -31,6 +31,12 @@
     .html2canvas-container { width: 3000px !important; height: 3000px !important; }
 </style>
 
+{{-- Hidden div for svg rendering --}}
+<div id="modaldiv">
+        <div id="svgdiv" style="position:absolute;visibility:hidden">\
+         <svg id="ean-13"></svg>\
+       </div>
+    </div>
 <input type="hidden" id="status_flag">
 <div class="col-sm-12 col-md-12 main">
 
@@ -447,12 +453,6 @@
             </div>
         </div>
     </div>
-{{-- Hidden div for svg rendering --}}
-<div id="modaldiv">
-	<div id="svgdiv" style="position:absolute;visibility:hidden">\
-	 <svg id="ean-13"></svg>\
-   </div>
-</div>
 <!-- Tesco Artwork Approve Modal -->
 <div class="modal fade" id="approveTescoArtworkModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">

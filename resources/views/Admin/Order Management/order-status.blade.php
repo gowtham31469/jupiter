@@ -45,6 +45,12 @@
 		-moz-appearance: textfield;
 	}
 </style>
+{{-- Hidden div for svg rendering --}}
+<div id="modaldiv">
+	<div id="svgdiv" style="position:absolute;visibility:hidden">\
+	 <svg id="ean-13"></svg>\
+   </div>
+</div>
 <div class="col-sm-12 col-md-12 main">
   
 
