@@ -396,6 +396,13 @@ input[type="number"] {
         </div>
         {{ Form::hidden('invisible', $buyer_count, array('id' => 'invisible__count_id')) }}
         <div class="clearfix"></div>
+
+        <div class="year-nav-div hidden">
+           <select class="selectpicker selected-year" id="financialYear" name="financialYear">
+                Select Year
+            </select>
+        </div>
+        <div class="clearfix"></div>
     </div>
 	<div class="main-content">
 		<div class="select-buyer">
@@ -807,7 +814,48 @@ input[type="number"] {
 	<script>
 	$(document).ready (function(){
         $("#success-alert").hide();
-     });	
+        
+        /** Fiscal Year Select box begin */
+        
+        // add year selection menu into navbar
+            $('.year-nav-menu').html($('.year-nav-div').html());
+
+        // Populate 30 years in selectbox options
+            var yearsLength = 30;
+            var currentYear = new Date().getFullYear();
+            for(var i = 0; i < 30; i++){
+                var next = currentYear+1;
+                var year_text = currentYear + '-' + next.toString().slice(-2);
+                var year_value = currentYear + '-' + next;
+                $('#financialYear').append(new Option(year_text, year_value));
+                currentYear--;
+            }
+
+        // Make current year as selected if fiscal year not selected
+            if (localStorage.getItem("fiscal-year") === null) {
+                localStorage.setItem("fiscal-year", $('#financialYear option:first').val());
+                $("#financialYear").val(localStorage.getItem("fiscal-year"));
+            } else {
+                $("#financialYear").val(localStorage.getItem("fiscal-year"));
+            } 
+        
+            $('#financialYear').selectpicker('refresh');
+            
+        // [ Trigger event on selectbox change, to change fiscal year value in local storage]
+            $('#financialYear').on('change', function(e){
+                localStorage.setItem("fiscal-year", this.value);
+                
+                if (localStorage.getItem("buyer") === 'orchestra') 
+                {
+                    orders();
+                } else if (buyer === 'tesco')  {
+                    tescoOrders(reOrderTesco);
+                }
+            });
+        
+        /** Fiscal year select box end */
+     });
+     	
 		$(function () {
     $('.list-group.checked-list-box .list-group-item').each(function () {
         
@@ -898,6 +946,7 @@ input[type="number"] {
 
 
 		$(document).ready(function() {
+            
 			/** Clear local storage data **/
 			localStorage.removeItem("artwork_back");
 			localStorage.removeItem("back_flag");
@@ -1036,9 +1085,6 @@ input[type="number"] {
              })
             
         });
-		
-		
-        
 	</script>
 
 	@endsection
