@@ -607,6 +607,23 @@ Route::post('admin/tesco/tesco-orders-filter', 'Admin\Tesco\OrderStatusCntrl@tes
 Route::post('admin/tesco/tesco-orders-submit-filter', 'Admin\Tesco\OrderStatusCntrl@tescoOrdersSubmitFilter');
 
 
+Route::post('admin/tesco/get-order-details', 'Admin\Tesco\OrderStatusCntrl@getOrderDetails');
+
+
+
+Route::post('admin/tesco/print-div-tescoos', 'Admin\Tesco\OrderStatusCntrl@printDivTesco');
+Route::post('admin/tesco/print-div-tesco-smallos', 'Admin\Tesco\OrderStatusCntrl@printDivTescoSmall');
+
+
+Route::post('admin/tesco/generate-div-tescoos', 'Admin\Tesco\OrderStatusCntrl@generateDivTesco');
+Route::post('admin/tesco/generate-div-tesco-smallos', 'Admin\Tesco\OrderStatusCntrl@generateDivTescoSmall');
+
+Route::post('admin/tesco/generatebarcodetsl1', 'Admin\Tesco\OrderStatusCntrl@generateBarcodeTsl1');
+Route::post('admin/tesco/generatebarcodetsl3', 'Admin\Tesco\OrderStatusCntrl@generateBarcodeTsl3');
+
+Route::post('admin/tesco/generatebarcodeeanbig', 'Admin\Tesco\OrderStatusCntrl@generateBarcodeEanBig');
+Route::post('admin/tesco/generatebarcodeitfbig', 'Admin\Tesco\OrderStatusCntrl@generateBarcodeItfBig');
+
 Route::post('admin/tesco/tesco-submit-os', 'Admin\Tesco\OrderStatusCntrl@tescoSubmitOs');
 
 Route::post('admin/tesco/order-management/set-po-number', 'Admin\Tesco\OrderStatusCntrl@setPONumber');

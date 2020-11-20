@@ -29,6 +29,7 @@ use App\ErpOrderDetails as ErpOrderDetails;
 use App\Classes\CleanString;
 use App\OrderManagementHistory;
 use App\Classes\ApproveTescoOrders;
+use PDF;
 
 class OrderStatusCntrl extends Controller
 {
@@ -418,6 +419,7 @@ class OrderStatusCntrl extends Controller
 			$ddmmyy="DD-MM-YYYY";
             $tesco_tcl1_orders = DB::table("tesco_tcl1_orders")
                             ->join('customers','tesco_tcl1_orders.tesco_supplier_id','=','customers.id')
+                            ->join('tesco_template','tesco_tcl1_orders.template_id','=','tesco_template.item_id')
                             ->whereBetween('tesco_tcl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                             ->where(function($query) use ($seasonos){
                                 if(count($seasonos))
@@ -463,12 +465,13 @@ class OrderStatusCntrl extends Controller
                                     $query->orWhereIn('pi_status', $pistatusos);
                                 }
                             })
-                            ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_tcl1_orders.season_code','tesco_tcl1_orders.uk_style_ref','tesco_tcl1_orders.ce_style_ref','tesco_tcl1_orders.po_number as BuyerPO','tesco_tcl1_orders.zone as Zone',DB::raw("'".$tcl1."'".' as "TemplateName"'),'tesco_tcl1_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_tcl1_orders.created_at as OrderDate',DB::raw('to_char(tesco_tcl1_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_tcl1_orders.order_status as order_status', 'tesco_tcl1_orders.order_status as artwork_status','tesco_tcl1_orders.pi_status as PI Status','tesco_tcl1_orders.po_status as PO Status','tesco_tcl1_orders.purchase_order_no as PO Number',DB::raw("'".$tesco_tcl1_orders."'".' as "tableName"'),'tesco_tcl1_orders.id as tableID','tesco_tcl1_orders.po_file','customers.pi_required','customers.po_required','tesco_tcl1_orders.template_id','tesco_tcl1_orders.order_flag','customers.delivery_day_count','is_order_count_empty');
+                            ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_tcl1_orders.season_code','tesco_tcl1_orders.uk_style_ref','tesco_tcl1_orders.ce_style_ref','tesco_tcl1_orders.po_number as BuyerPO','tesco_tcl1_orders.zone as Zone',DB::raw("'".$tcl1."'".' as "TemplateName"'),'tesco_tcl1_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_tcl1_orders.created_at as OrderDate',DB::raw('to_char(tesco_tcl1_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_tcl1_orders.order_status as order_status','tesco_template.template_file',DB::raw("'".$actions."'".' as "Artwork"'), 'tesco_tcl1_orders.order_status as artwork_status','tesco_tcl1_orders.pi_status as PI Status','tesco_tcl1_orders.po_status as PO Status','tesco_tcl1_orders.purchase_order_no as PO Number',DB::raw("'".$tesco_tcl1_orders."'".' as "tableName"'),'tesco_tcl1_orders.id as tableID','tesco_tcl1_orders.po_file','customers.pi_required','customers.po_required','tesco_tcl1_orders.template_id','tesco_tcl1_orders.order_flag','customers.delivery_day_count','is_order_count_empty',DB::raw("'".$actions."'".' as "Print Proof"'));
 
             $tcl2 = "TCL 2";
             $tesco_tcl2_orders = "tesco_tcl2_orders";
             $tesco_tcl2_orders = DB::table("tesco_tcl2_orders")
             ->join('customers','tesco_tcl2_orders.tesco_supplier_id','=','customers.id')
+            ->join('tesco_template','tesco_tcl2_orders.template_id','=','tesco_template.item_id')
                             ->whereBetween('tesco_tcl2_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                             ->where(function($query) use ($seasonos){
                                 if(count($seasonos))
@@ -514,12 +517,13 @@ class OrderStatusCntrl extends Controller
                                     $query->orWhereIn('pi_status', $pistatusos);
                                 }
                             })
-                            ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_tcl2_orders.season_code','tesco_tcl2_orders.uk_style_ref','tesco_tcl2_orders.ce_style_ref','tesco_tcl2_orders.po_number as BuyerPO','tesco_tcl2_orders.zone as Zone',DB::raw("'".$tcl2."'".' as "TemplateName"'),'tesco_tcl2_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_tcl2_orders.created_at as OrderDate',DB::raw('to_char(tesco_tcl2_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_tcl2_orders.order_status as order_status', 'tesco_tcl2_orders.order_status as artwork_status','tesco_tcl2_orders.pi_status as PI Status','tesco_tcl2_orders.po_status as PO Status','tesco_tcl2_orders.purchase_order_no as PO Number',DB::raw("'".$tesco_tcl2_orders."'".' as "tableName"'),'tesco_tcl2_orders.id as tableID','tesco_tcl2_orders.po_file','customers.pi_required','customers.po_required','tesco_tcl2_orders.template_id','tesco_tcl2_orders.order_flag','customers.delivery_day_count','is_order_count_empty');
+                            ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_tcl2_orders.season_code','tesco_tcl2_orders.uk_style_ref','tesco_tcl2_orders.ce_style_ref','tesco_tcl2_orders.po_number as BuyerPO','tesco_tcl2_orders.zone as Zone',DB::raw("'".$tcl2."'".' as "TemplateName"'),'tesco_tcl2_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_tcl2_orders.created_at as OrderDate',DB::raw('to_char(tesco_tcl2_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_tcl2_orders.order_status as order_status','tesco_template.template_file',DB::raw("'".$actions."'".' as "Artwork"'), 'tesco_tcl2_orders.order_status as artwork_status','tesco_tcl2_orders.pi_status as PI Status','tesco_tcl2_orders.po_status as PO Status','tesco_tcl2_orders.purchase_order_no as PO Number',DB::raw("'".$tesco_tcl2_orders."'".' as "tableName"'),'tesco_tcl2_orders.id as tableID','tesco_tcl2_orders.po_file','customers.pi_required','customers.po_required','tesco_tcl2_orders.template_id','tesco_tcl2_orders.order_flag','customers.delivery_day_count','is_order_count_empty',DB::raw("'".$actions."'".' as "Print Proof"'));
 
             $tcl4 = "TCL 4";
             $tesco_tcl4_orders = "tesco_tcl4_orders";
             $tesco_tcl4_orders = DB::table("tesco_tcl4_orders")
             ->join('customers','tesco_tcl4_orders.tesco_supplier_id','=','customers.id')
+            ->join('tesco_template','tesco_tcl4_orders.template_id','=','tesco_template.item_id')
                             ->whereBetween('tesco_tcl4_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                             ->where(function($query) use ($seasonos){
                                 if(count($seasonos))
@@ -565,12 +569,13 @@ class OrderStatusCntrl extends Controller
                                     $query->orWhereIn('pi_status', $pistatusos);
                                 }
                             })
-                            ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_tcl4_orders.season_code','tesco_tcl4_orders.uk_style_ref','tesco_tcl4_orders.ce_style_ref','tesco_tcl4_orders.po_number as BuyerPO','tesco_tcl4_orders.zone as Zone',DB::raw("'".$tcl4."'".' as "TemplateName"'),'tesco_tcl4_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_tcl4_orders.created_at as OrderDate',DB::raw('to_char(tesco_tcl4_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_tcl4_orders.order_status as order_status', 'tesco_tcl4_orders.order_status as artwork_status','tesco_tcl4_orders.pi_status as PI Status','tesco_tcl4_orders.po_status as PO Status','tesco_tcl4_orders.purchase_order_no as PO Number',DB::raw("'".$tesco_tcl4_orders."'".' as "tableName"'),'tesco_tcl4_orders.id as tableID','tesco_tcl4_orders.po_file','customers.pi_required','customers.po_required','tesco_tcl4_orders.template_id','tesco_tcl4_orders.order_flag','customers.delivery_day_count','is_order_count_empty');
+                            ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_tcl4_orders.season_code','tesco_tcl4_orders.uk_style_ref','tesco_tcl4_orders.ce_style_ref','tesco_tcl4_orders.po_number as BuyerPO','tesco_tcl4_orders.zone as Zone',DB::raw("'".$tcl4."'".' as "TemplateName"'),'tesco_tcl4_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_tcl4_orders.created_at as OrderDate',DB::raw('to_char(tesco_tcl4_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_tcl4_orders.order_status as order_status','tesco_template.template_file',DB::raw("'".$actions."'".' as "Artwork"'), 'tesco_tcl4_orders.order_status as artwork_status','tesco_tcl4_orders.pi_status as PI Status','tesco_tcl4_orders.po_status as PO Status','tesco_tcl4_orders.purchase_order_no as PO Number',DB::raw("'".$tesco_tcl4_orders."'".' as "tableName"'),'tesco_tcl4_orders.id as tableID','tesco_tcl4_orders.po_file','customers.pi_required','customers.po_required','tesco_tcl4_orders.template_id','tesco_tcl4_orders.order_flag','customers.delivery_day_count','is_order_count_empty',DB::raw("'".$actions."'".' as "Print Proof"'));
 
             $tsl1 = "TSL 1";
             $tesco_tsl1_orders = "tesco_tsl1_orders";
             $tesco_tsl1_orders = DB::table("tesco_tsl1_orders")
             ->join('customers','tesco_tsl1_orders.tesco_supplier_id','=','customers.id')
+            ->join('tesco_template','tesco_tsl1_orders.template_id','=','tesco_template.item_id')
                             ->whereBetween('tesco_tsl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                             ->where(function($query) use ($seasonos){
                                 if(count($seasonos))
@@ -616,12 +621,13 @@ class OrderStatusCntrl extends Controller
                                     $query->orWhereIn('pi_status', $pistatusos);
                                 }
                             })
-                            ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_tsl1_orders.season_code','tesco_tsl1_orders.uk_style_ref','tesco_tsl1_orders.ce_style_ref','tesco_tsl1_orders.po_number as BuyerPO','tesco_tsl1_orders.zone as Zone',DB::raw("'".$tsl1."'".' as "TemplateName"'),'tesco_tsl1_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_tsl1_orders.created_at as OrderDate',DB::raw('to_char(tesco_tsl1_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_tsl1_orders.order_status as order_status', 'tesco_tsl1_orders.order_status as artwork_status','tesco_tsl1_orders.pi_status as PI Status','tesco_tsl1_orders.po_status as PO Status','tesco_tsl1_orders.purchase_order_no as PO Number',DB::raw("'".$tesco_tsl1_orders."'".' as "tableName"'),'tesco_tsl1_orders.id as tableID','tesco_tsl1_orders.po_file','customers.pi_required','customers.po_required','tesco_tsl1_orders.template_id','tesco_tsl1_orders.order_flag','customers.delivery_day_count','is_order_count_empty');
+                            ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_tsl1_orders.season_code','tesco_tsl1_orders.uk_style_ref','tesco_tsl1_orders.ce_style_ref','tesco_tsl1_orders.po_number as BuyerPO','tesco_tsl1_orders.zone as Zone',DB::raw("'".$tsl1."'".' as "TemplateName"'),'tesco_tsl1_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_tsl1_orders.created_at as OrderDate',DB::raw('to_char(tesco_tsl1_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_tsl1_orders.order_status as order_status','tesco_template.template_file',DB::raw("'".$actions."'".' as "Artwork"'), 'tesco_tsl1_orders.order_status as artwork_status','tesco_tsl1_orders.pi_status as PI Status','tesco_tsl1_orders.po_status as PO Status','tesco_tsl1_orders.purchase_order_no as PO Number',DB::raw("'".$tesco_tsl1_orders."'".' as "tableName"'),'tesco_tsl1_orders.id as tableID','tesco_tsl1_orders.po_file','customers.pi_required','customers.po_required','tesco_tsl1_orders.template_id','tesco_tsl1_orders.order_flag','customers.delivery_day_count','is_order_count_empty',DB::raw("'".$actions."'".' as "Print Proof"'));
 
 			$tsl3 = "TSL 3";
 			$tesco_tsl3_orders = "tesco_tsl3_orders";
             $tesco_tsl3_orders = DB::table("tesco_tsl3_orders")
             ->join('customers','tesco_tsl3_orders.tesco_supplier_id','=','customers.id')
+            ->join('tesco_template','tesco_tsl3_orders.template_id','=','tesco_template.item_id')
                             ->whereBetween('tesco_tsl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                             ->where(function($query) use ($seasonos){
                                 if(count($seasonos))
@@ -667,12 +673,13 @@ class OrderStatusCntrl extends Controller
                                     $query->orWhereIn('pi_status', $pistatusos);
                                 }
                             })
-                            ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_tsl3_orders.season_code','tesco_tsl3_orders.uk_style_ref','tesco_tsl3_orders.ce_style_ref','tesco_tsl3_orders.po_number as BuyerPO','tesco_tsl3_orders.zone as Zone',DB::raw("'".$tsl3."'".' as "TemplateName"'),'tesco_tsl3_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_tsl3_orders.created_at as OrderDate',DB::raw('to_char(tesco_tsl3_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_tsl3_orders.order_status as order_status', 'tesco_tsl3_orders.order_status as artwork_status','tesco_tsl3_orders.pi_status as PI Status','tesco_tsl3_orders.po_status as PO Status','tesco_tsl3_orders.purchase_order_no as PO Number',DB::raw("'".$tesco_tsl3_orders."'".' as "tableName"'),'tesco_tsl3_orders.id as tableID','tesco_tsl3_orders.po_file','customers.pi_required','customers.po_required','tesco_tsl3_orders.template_id','tesco_tsl3_orders.order_flag','customers.delivery_day_count','is_order_count_empty');
+                            ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_tsl3_orders.season_code','tesco_tsl3_orders.uk_style_ref','tesco_tsl3_orders.ce_style_ref','tesco_tsl3_orders.po_number as BuyerPO','tesco_tsl3_orders.zone as Zone',DB::raw("'".$tsl3."'".' as "TemplateName"'),'tesco_tsl3_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_tsl3_orders.created_at as OrderDate',DB::raw('to_char(tesco_tsl3_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_tsl3_orders.order_status as order_status','tesco_template.template_file',DB::raw("'".$actions."'".' as "Artwork"'), 'tesco_tsl3_orders.order_status as artwork_status','tesco_tsl3_orders.pi_status as PI Status','tesco_tsl3_orders.po_status as PO Status','tesco_tsl3_orders.purchase_order_no as PO Number',DB::raw("'".$tesco_tsl3_orders."'".' as "tableName"'),'tesco_tsl3_orders.id as tableID','tesco_tsl3_orders.po_file','customers.pi_required','customers.po_required','tesco_tsl3_orders.template_id','tesco_tsl3_orders.order_flag','customers.delivery_day_count','is_order_count_empty',DB::raw("'".$actions."'".' as "Print Proof"'));
 
             $thl1 = "THL 1";
             $tesco_thl1_orders = "tesco_thl1_orders";
             $tesco_thl1_orders = DB::table("tesco_thl1_orders")
             ->join('customers','tesco_thl1_orders.tesco_supplier_id','=','customers.id')
+            ->join('tesco_template','tesco_thl1_orders.template_id','=','tesco_template.item_id')
                             ->whereBetween('tesco_thl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                             ->where(function($query) use ($seasonos){
                                 if(count($seasonos))
@@ -718,12 +725,13 @@ class OrderStatusCntrl extends Controller
                                     $query->orWhereIn('pi_status', $pistatusos);
                                 }
                             })
-                            ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_thl1_orders.season_code','tesco_thl1_orders.uk_style_ref','tesco_thl1_orders.ce_style_ref','tesco_thl1_orders.po_number as BuyerPO','tesco_thl1_orders.zone as Zone',DB::raw("'".$thl1."'".' as "TemplateName"'),'tesco_thl1_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_thl1_orders.created_at as OrderDate',DB::raw('to_char(tesco_thl1_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_thl1_orders.order_status as order_status', 'tesco_thl1_orders.order_status as artwork_status','tesco_thl1_orders.pi_status as PI Status','tesco_thl1_orders.po_status as PO Status','tesco_thl1_orders.purchase_order_no as PO Number',DB::raw("'".$tesco_thl1_orders."'".' as "tableName"'),'tesco_thl1_orders.id as tableID','tesco_thl1_orders.po_file','customers.pi_required','customers.po_required','tesco_thl1_orders.template_id','tesco_thl1_orders.order_flag','customers.delivery_day_count','is_order_count_empty');
+                            ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_thl1_orders.season_code','tesco_thl1_orders.uk_style_ref','tesco_thl1_orders.ce_style_ref','tesco_thl1_orders.po_number as BuyerPO','tesco_thl1_orders.zone as Zone',DB::raw("'".$thl1."'".' as "TemplateName"'),'tesco_thl1_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_thl1_orders.created_at as OrderDate',DB::raw('to_char(tesco_thl1_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_thl1_orders.order_status as order_status','tesco_template.template_file',DB::raw("'".$actions."'".' as "Artwork"'), 'tesco_thl1_orders.order_status as artwork_status','tesco_thl1_orders.pi_status as PI Status','tesco_thl1_orders.po_status as PO Status','tesco_thl1_orders.purchase_order_no as PO Number',DB::raw("'".$tesco_thl1_orders."'".' as "tableName"'),'tesco_thl1_orders.id as tableID','tesco_thl1_orders.po_file','customers.pi_required','customers.po_required','tesco_thl1_orders.template_id','tesco_thl1_orders.order_flag','customers.delivery_day_count','is_order_count_empty',DB::raw("'".$actions."'".' as "Print Proof"'));
 
 			$thl3 = "THL 3";
 			$tesco_thl3_orders = "tesco_thl3_orders";
             $orders = DB::table("tesco_thl3_orders")
             ->join('customers','tesco_thl3_orders.tesco_supplier_id','=','customers.id')
+            ->join('tesco_template','tesco_thl3_orders.template_id','=','tesco_template.item_id')
                         ->whereBetween('tesco_thl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                         ->where(function($query) use ($seasonos){
                             if(count($seasonos))
@@ -769,7 +777,7 @@ class OrderStatusCntrl extends Controller
                                 $query->orWhereIn('pi_status', $pistatusos);
                             }
                         })
-                        ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_thl3_orders.season_code','tesco_thl3_orders.uk_style_ref','tesco_thl3_orders.ce_style_ref','tesco_thl3_orders.po_number as BuyerPO','tesco_thl3_orders.zone as Zone',DB::raw("'".$thl3."'".' as "TemplateName"'),'tesco_thl3_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_thl3_orders.created_at as OrderDate',DB::raw('to_char(tesco_thl3_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_thl3_orders.order_status as order_status', 'tesco_thl3_orders.order_status as artwork_status','tesco_thl3_orders.pi_status as PI Status','tesco_thl3_orders.po_status as PO Status','tesco_thl3_orders.purchase_order_no as PO Number',DB::raw("'".$tesco_thl3_orders."'".' as "tableName"'),'tesco_thl3_orders.id as tableID','tesco_thl3_orders.po_file','customers.pi_required','customers.po_required','tesco_thl3_orders.template_id','tesco_thl3_orders.order_flag','customers.delivery_day_count','is_order_count_empty')
+                        ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_thl3_orders.season_code','tesco_thl3_orders.uk_style_ref','tesco_thl3_orders.ce_style_ref','tesco_thl3_orders.po_number as BuyerPO','tesco_thl3_orders.zone as Zone',DB::raw("'".$thl3."'".' as "TemplateName"'),'tesco_thl3_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_thl3_orders.created_at as OrderDate',DB::raw('to_char(tesco_thl3_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_thl3_orders.order_status as order_status','tesco_template.template_file',DB::raw("'".$actions."'".' as "Artwork"'), 'tesco_thl3_orders.order_status as artwork_status','tesco_thl3_orders.pi_status as PI Status','tesco_thl3_orders.po_status as PO Status','tesco_thl3_orders.purchase_order_no as PO Number',DB::raw("'".$tesco_thl3_orders."'".' as "tableName"'),'tesco_thl3_orders.id as tableID','tesco_thl3_orders.po_file','customers.pi_required','customers.po_required','tesco_thl3_orders.template_id','tesco_thl3_orders.order_flag','customers.delivery_day_count','is_order_count_empty',DB::raw("'".$actions."'".' as "Print Proof"'))
                         ->union($tesco_tcl1_orders)
                         ->union($tesco_tcl2_orders)
                         ->union($tesco_tcl4_orders)
@@ -786,6 +794,1031 @@ class OrderStatusCntrl extends Controller
         {
             return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
+    }
+
+
+	
+	/**
+   * Print Preview For Stickers
+   *
+   * @return pdf
+   */
+  
+  public function printDivTesco(Request $request)
+  {
+      $id = $request['id'];
+      $name = $request['name'];
+      
+      if($name == "TCL1-sticker"){
+          $table = "tesco_tcl1_orders";
+          $qty_table = "tesco_tcl1_orders_quanty";
+          $table_id = "tcl1_order_id";
+      }
+      else if($name == "TCL2-sticker"){
+          
+          $table = "tesco_tcl2_orders";
+          $qty_table = "tesco_tcl2_orders_quanty";
+          $table_id = "tcl2_order_id";
+      }
+      else if($name == "TCL4-sticker"){
+          
+          $table = "tesco_tcl4_orders";
+          $qty_table = "tesco_tcl4_orders_quanty";
+          $table_id = "tcl4_order_id";
+      }
+      else if($name == "THL1-sticker"){
+          
+          $table = "tesco_thl1_orders";
+          $qty_table = "tesco_thl1_orders_quanty";
+          $table_id = "thl1_order_id";
+      }
+      else if($name == "THL3-sticker"){
+          
+          $table = "tesco_thl3_orders";
+          $qty_table = "tesco_thl3_orders_quanty";
+          $table_id = "thl3_order_id";
+      }
+      else if($name == "TSL1-sticker"){
+          
+          $table = "tesco_tsl1_orders";
+          $qty_table = "tesco_tsl1_orders_quanty";
+          $table_id = "tsl1_order_id";
+      }
+      else if($name == "TSL3-sticker"){
+          
+          $table = "tesco_tsl3_orders";
+          $qty_table = "tesco_tsl3_orders_quanty";
+          $table_id = "tsl3_order_id";
+      }
+      
+      
+      $order_details  = 	DB::table($table)
+                          ->join('customers',$table.'.tesco_supplier_id','=','customers.id')
+                          ->where($table.'.id',$id)
+                          ->select('*')
+                          ->get();
+                                  
+       $customer_name = $order_details[0]->short_name;
+       $this->customer_name = $customer_name;
+      
+       $this->created_date = $request->created_at;
+      
+       $this->template_name = $request->name;
+       $this->template_zone = $request->zone;
+        if($request->name == "TCL1-sticker")
+        {
+            $this->template_desc = "RATIO STICKER";
+        }
+        else if($request->name == "TCL2-sticker")
+        {
+             $this->template_desc = "RATIO BD STICKER"; 
+        }
+        else if($request->name == "TCL4-sticker")
+        {
+             $this->template_desc =  "SINGLES BD STICKER";
+        }
+        else if($request->name == "THL1-sticker")
+        {
+              $this->template_desc = "RATIO STICKER";
+        }
+        else if($request->name == "THL3-sticker")
+        {
+             $this->template_desc = "SINGLES RATIO BD STICKER";
+        }
+        $this->tesco_po_number = $request->tesco_po_number;
+        $this->style = $request->style;
+        
+          // Custom Header
+        PDF::setHeaderCallback(function($pdf) {
+          $pdf->SetY(0);
+        $name=str_replace("-sticker", "", $this->template_name);
+        $zone=$this->template_zone;
+          $tesco_po_number=$this->tesco_po_number;
+          $style=$this->style;
+          $tesco_description=$this->template_desc;
+          $date=date_create($this->created_date);
+          $created_date =  date_format($date,"d.m.Y");
+          $image_file= K_PATH_IMAGES.'logo_example.jpg';
+          $svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188.244mm" height="50.1333mm" viewBox="0 0 1024 264" version="1.2" baseProfile="tiny">
+                  <title>Qt Svg Document</title>
+                  <desc>Generated with Qt</desc>
+                  <defs>
+                  </defs>
+                  <g fill="none" stroke="black" stroke-width="1" fill-rule="evenodd" stroke-linecap="square" stroke-linejoin="bevel">
+                  <g fill="#ffffff" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1024,0 L1024,264 L0,264 L0,0"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1024,0 L1024,264 L0,264 L0,0"/>
+                  </g>
+                  <g fill="#000000" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal" style="&#10;    /* border-radius: 27px; */&#10;">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,65 L666,65 L666,66 L499,66 L499,65"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,65 L500,65 L500,144 L499,144 L499,65"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,65 L821,65 L821,66 L665,66 L665,65"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,65 L969,65 L969,66 L820,66 L820,65"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M968,65 L969,65 L969,105 L968,105 L968,65"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M968,104 L969,104 L969,144 L968,144 L968,104"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,182 L821,182 L821,183 L499,183 L499,182"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,143 L500,143 L500,183 L499,183 L499,143"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,182 L969,182 L969,183 L820,183 L820,182"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M968,143 L969,143 L969,183 L968,183 L968,143"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,143 L666,143 L666,144 L499,144 L499,143"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,65 L666,65 L666,144 L665,144 L665,65"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,104 L821,104 L821,105 L665,105 L665,104"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,65 L666,65 L666,105 L665,105 L665,65"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,65 L821,65 L821,105 L820,105 L820,65"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L969,104 L969,105 L820,105 L820,104"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,65 L821,65 L821,105 L820,105 L820,65"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,104 L821,104 L821,105 L665,105 L665,104"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,104 L666,104 L666,143 L665,143 L665,104"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L821,104 L821,143 L820,143 L820,104"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L969,104 L969,105 L820,105 L820,104"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L969,143 L969,144 L820,144 L820,143"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L821,104 L821,144 L820,144 L820,104"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,143 L821,143 L821,144 L499,144 L499,143"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L821,143 L821,183 L820,183 L820,143"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L969,143 L969,144 L820,144 L820,143"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L821,143 L821,183 L820,183 L820,143"/>
+                  </g>
+                  <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,212 L1016,212 L1016,213 L8,213 L8,212"/>
+                  </g>
+                  <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,213 L1016,213 L1016,214 L8,214 L8,213"/>
+                  </g>
+                  <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,212 L8,214 L9,213 L9,212 L8,212"/>
+                  </g>
+                  <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1015,213 L1015,214 L1016,214 L1016,212 L1015,213"/>
+                  </g>
+                  <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,216 L1016,216 L1016,217 L8,217 L8,216"/>
+                  </g>
+                  <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,217 L1016,217 L1016,218 L8,218 L8,217"/>
+                  </g>
+                  <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,216 L8,218 L9,217 L9,216 L8,216"/>
+                  </g>
+                  <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1015,217 L1015,218 L1016,218 L1016,216 L1015,217"/>
+                  </g>
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="56cm" height="37cm" version="1.1">
+                          <image xlink:href="'.public_path('/images/jupiter.jpg').'" x="174" y="66" height="65px" width="116px" style=""/>
+                  </svg>
+                  <g xmlns="http://www.w3.org/2000/svg" fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="35" font-style="normal" font-weight="700">
+                  <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="50" y="176" font-family="Times New Roman" font-size="30" font-weight="700" font-style="normal">Jupiter Garments Accessories</text>
+
+                  </g>
+                  <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">
+                  <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="507" y="127" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">PO NO : '.$tesco_po_number.'</text>
+                  <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">STYLE : '.$style.'</text>
+                  <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REF : '.$name.' - '.$zone.'</text>
+                  <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DATE : '.$created_date.'</text>
+                  <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Size: 127x80mm</text>
+                  <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="505" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DESCRIPTION : '.$tesco_description.'</text>
+                  <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REV.NO :</text>
+                  </g>
+                  </g>
+                  </svg>';
+                  $pdf->ImageSVG('@' . $svg, '', '', '', '', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+          });
+                          
+                  // Custom Footer
+          PDF::setFooterCallback(function($pdf) {
+                  $tesco_po_number=$this->tesco_po_number;
+                  $customer_name=$this->customer_name;
+                  // Position at 15 mm from bottom
+                  $pdf->SetY(-50);
+                  $pdf->SetX(9.5);
+                  // Set font
+                  //$pdf->SetFont('frankgothcnbt');
+                  // Page number
+                  $svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188mm" height="65.2667mm" viewBox="0 0 1360 168" version="1.2" baseProfile="tiny">
+                  <title>Qt Svg Document</title>
+                  <desc>Generated with Qt</desc>
+                  <defs>
+                  </defs>
+                  <g fill="none" stroke="black" stroke-width="1" fill-rule="evenodd" stroke-linecap="square" stroke-linejoin="bevel">
+                  <g fill="#ffffff" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1360,0 L1360,168 L0,168 L0,0"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1360,0 L1360,168 L0,168 L0,0"/>
+                  </g>
+                  <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,52 L1352,52 L1352,53 L8,53 L8,52"/>
+                  </g>
+                  <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,53 L1352,53 L1352,54 L8,54 L8,53"/>
+                  </g>
+                  <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,52 L8,54 L9,53 L9,52 L8,52"/>
+                  </g>
+                  <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1351,53 L1351,54 L1352,54 L1352,52 L1351,53"/>
+                  </g>
+                  <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,56 L1352,56 L1352,57 L8,57 L8,56"/>
+                  </g>
+                  <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,57 L1352,57 L1352,58 L8,58 L8,57"/>
+                  </g>
+                  <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,56 L8,58 L9,57 L9,56 L8,56"/>
+                  </g>
+                  <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1351,57 L1351,58 L1352,58 L1352,56 L1351,57"/>
+                  </g>
+                  <g fill="#000000" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M385,79 L386,79 L386,157 L385,157 L385,79"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M764,79 L765,79 L765,157 L764,157 L764,79"/>
+                  </g>
+                  <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">
+                  <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">CUSTOMER : '.$customer_name.'</text>
+                  <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="152" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">PO No : '.$tesco_po_number.'</text>
+                  <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="405" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">APPROVED BY : </text>
+                  </g>
+                  <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="700" font-style="normal">
+                  <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="405" y="152" font-family="Times New Roman" font-size="23" font-weight="700" font-style="normal">PREPARED BY:</text>
+                  </g>
+                  <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">
+                  <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="784" y="103" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">COMMENTS IF ANY :</text>
+                  </g>
+                  </g>
+                  </svg>';
+                  
+                   $pdf->ImageSVG('@' . $svg, '', '', '', '', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+      
+          });
+      
+      
+              $svgarr = explode(',_',$request->svg);
+              $name=$request->name;
+              $svg=urldecode($request->svg);
+              PDF::setImageScale(1);
+              PDF::SetFont('frankgothcnbt');
+              PDF::AddPage();
+              $i=0;
+              $yy=60;
+              $qr_y=67.5;
+              $j=0;
+              $qr_count=0;
+              PDF::SetXY(10, 50);
+      
+      
+              $qr_flag=$request->qr_flag;
+              $id=$request->id;
+              $qr_code=explode(',_',$request->qr_code_fin);
+      
+              foreach($svgarr as $value)
+              {
+                  $svg=urldecode($value);
+                  PDF::SetFillColor(255,255,255);
+                  if($i == 2)
+                  {
+                      $yy=60;
+                      $qr_y=67.5;
+                      PDF::AddPage();
+                      PDF::RoundedRect(15, 60, 127, 80, 0, '0000');
+                      $i = 0;
+                  }
+                  else if($i == 0)
+                  {
+                      PDF::RoundedRect(15, 60, 127, 80, 0, '0000');
+                      $yy=60;
+                      $qr_y=67.5;
+                  }
+                  else
+                  {
+                      PDF::RoundedRect(15, 160, 127, 80, 0, '0000');
+                      $yy += 100;
+                      $qr_y+=100;
+                  }
+                  
+          
+                  
+                  $svg=urldecode($value);
+                  file_put_contents(public_path('/storage/app/template/big_sticker'.$j.'.svg'), $svg);
+                  
+                  $html = '<img style="width:480px;height:302.36220472px;" src="'.public_path('/storage/app/template/big_sticker'.$j.'.svg').'">';
+                  PDF::writeHTMLCell(127, 80, 15, $yy+1, $html, '', 0, 0, false, 'L', false);
+              
+                  if($qr_flag == 1)
+          {
+              // new style
+              $style = array(
+                  'border' => false,
+                  'padding' => 0,
+                  'bgcolor' => false
+              );
+              if($name == "TCL1-sticker")
+              {
+                  PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 88, 65, 17, 17, $style, 'N');
+              }
+              else if($name == "TCL2-sticker")
+              {
+                  PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 89.5, 69, 17, 17, $style, 'N');
+              }
+              else if($name == "TCL4-sticker")
+              {
+                  PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 89, $qr_y+1.5, 17, 17, $style, 'N');
+              }
+              else if($name == "THL1-sticker")
+              {
+                  PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 89, 66, 17, 17, $style, 'N');
+              }
+              else if($name == "THL3-sticker")
+              {
+                  PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 90, $qr_y-2, 17, 17, $style, 'N');
+              }
+              
+          }
+                  
+                  $i++;
+                  $j++;
+                  $qr_count++;
+                  
+              }
+      
+              $k=0;
+              if(count($svgarr) == $j)
+              {
+                  foreach($svgarr as $value)
+                  {
+                      unlink(public_path('/storage/app/template/big_sticker'.$k.'.svg'));
+                      $k++;
+                  }
+              }
+              $random = number_format(Carbon::now('Asia/Kolkata')->timestamp * rand(),0,'','');
+              PDF::Output( public_path('/storage/app/template/'.$random.'-'.$name.'.pdf'), 'F');
+              $file_path =  "/storage/app/template/".$random.'-'.$name."."."pdf";	
+              
+              return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$random.'-'.$name.'.pdf')],200);	
+  } 
+   /**
+ * Print Preview For Stickers
+ *
+ * @return pdf
+ */
+
+  public function printDivTescoSmall(Request $request)
+  {
+      $id = $request['id'];
+      $name = $request['name'];
+      
+      if($name == "TCL1-sticker"){
+          $table = "tesco_tcl1_orders";
+          $qty_table = "tesco_tcl1_orders_quanty";
+          $table_id = "tcl1_order_id";
+      }
+      else if($name == "TCL2-sticker"){
+          
+          $table = "tesco_tcl2_orders";
+          $qty_table = "tesco_tcl2_orders_quanty";
+          $table_id = "tcl2_order_id";
+      }
+      else if($name == "TCL4-sticker"){
+          
+          $table = "tesco_tcl4_orders";
+          $qty_table = "tesco_tcl4_orders_quanty";
+          $table_id = "tcl4_order_id";
+      }
+      else if($name == "THL1-sticker"){
+          
+          $table = "tesco_thl1_orders";
+          $qty_table = "tesco_thl1_orders_quanty";
+          $table_id = "thl1_order_id";
+      }
+      else if($name == "THL3-sticker"){
+          
+          $table = "tesco_thl3_orders";
+          $qty_table = "tesco_thl3_orders_quanty";
+          $table_id = "thl3_order_id";
+      }
+      else if($name == "TSL1-sticker"){
+          
+          $table = "tesco_tsl1_orders";
+          $qty_table = "tesco_tsl1_orders_quanty";
+          $table_id = "tsl1_order_id";
+      }
+      else if($name == "TSL3-sticker"){
+          
+          $table = "tesco_tsl3_orders";
+          $qty_table = "tesco_tsl3_orders_quanty";
+          $table_id = "tsl3_order_id";
+      }
+      
+      
+      $order_details  = 	DB::table($table)
+                          ->join('customers',$table.'.tesco_supplier_id','=','customers.id')
+                          ->where($table.'.id',$id)
+                          ->select('*')
+                          ->get();
+                                  
+       $customer_name = $order_details[0]->short_name;
+       $this->customer_name = $customer_name;
+      
+       $this->created_date = $request->created_at;
+      
+       $this->template_name = $request->name;
+       $this->template_zone = $request->zone;
+      
+        if($request->name == "TSL1-sticker")
+        {
+            $this->template_desc = "RATIO POLYBAG STICKER";
+        }
+        else if($request->name == "TSL3-sticker")
+        {
+             $this->template_desc = "SINGLE POLYBAG STICKER "; 
+        }
+        $this->tesco_po_number = $request->tesco_po_number;
+        $this->style = $request->style;
+        $this->tesco_description = $request->tesco_description;
+        
+          // Custom Header
+        PDF::setHeaderCallback(function($pdf) {
+        $name=str_replace("-sticker", "", $this->template_name);
+        $zone=$this->template_zone;
+          $tesco_po_number=$this->tesco_po_number;
+          $style=$this->style;
+          $tesco_description=$this->template_desc;
+          $date=date_create($this->created_date);
+          $created_date =  date_format($date,"d.m.Y");
+          $image_file= K_PATH_IMAGES.'logo_example.jpg';
+          $svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188.244mm" height="50.1333mm" viewBox="0 0 1024 264" version="1.2" baseProfile="tiny">
+                  <title>Qt Svg Document</title>
+                  <desc>Generated with Qt</desc>
+                  <defs>
+                  </defs>
+                  <g fill="none" stroke="black" stroke-width="1" fill-rule="evenodd" stroke-linecap="square" stroke-linejoin="bevel">
+                  <g fill="#ffffff" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1024,0 L1024,264 L0,264 L0,0"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1024,0 L1024,264 L0,264 L0,0"/>
+                  </g>
+                  <g fill="#000000" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal" style="&#10;    /* border-radius: 27px; */&#10;">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,65 L666,65 L666,66 L499,66 L499,65"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,65 L500,65 L500,144 L499,144 L499,65"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,65 L821,65 L821,66 L665,66 L665,65"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,65 L969,65 L969,66 L820,66 L820,65"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M968,65 L969,65 L969,105 L968,105 L968,65"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M968,104 L969,104 L969,144 L968,144 L968,104"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,182 L821,182 L821,183 L499,183 L499,182"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,143 L500,143 L500,183 L499,183 L499,143"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,182 L969,182 L969,183 L820,183 L820,182"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M968,143 L969,143 L969,183 L968,183 L968,143"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,143 L666,143 L666,144 L499,144 L499,143"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,65 L666,65 L666,144 L665,144 L665,65"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,104 L821,104 L821,105 L665,105 L665,104"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,65 L666,65 L666,105 L665,105 L665,65"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,65 L821,65 L821,105 L820,105 L820,65"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L969,104 L969,105 L820,105 L820,104"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,65 L821,65 L821,105 L820,105 L820,65"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,104 L821,104 L821,105 L665,105 L665,104"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,104 L666,104 L666,143 L665,143 L665,104"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L821,104 L821,143 L820,143 L820,104"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L969,104 L969,105 L820,105 L820,104"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L969,143 L969,144 L820,144 L820,143"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L821,104 L821,144 L820,144 L820,104"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,143 L821,143 L821,144 L499,144 L499,143"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L821,143 L821,183 L820,183 L820,143"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L969,143 L969,144 L820,144 L820,143"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L821,143 L821,183 L820,183 L820,143"/>
+                  </g>
+                  <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,212 L1016,212 L1016,213 L8,213 L8,212"/>
+                  </g>
+                  <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,213 L1016,213 L1016,214 L8,214 L8,213"/>
+                  </g>
+                  <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,212 L8,214 L9,213 L9,212 L8,212"/>
+                  </g>
+                  <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1015,213 L1015,214 L1016,214 L1016,212 L1015,213"/>
+                  </g>
+                  <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,216 L1016,216 L1016,217 L8,217 L8,216"/>
+                  </g>
+                  <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,217 L1016,217 L1016,218 L8,218 L8,217"/>
+                  </g>
+                  <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,216 L8,218 L9,217 L9,216 L8,216"/>
+                  </g>
+                  <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1015,217 L1015,218 L1016,218 L1016,216 L1015,217"/>
+                  </g>
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="56cm" height="37cm" version="1.1">
+                          <image xlink:href="'.public_path('/images/jupiter.jpg').'" x="174" y="66" height="65px" width="116px" style=""/>
+                  </svg>
+                  <g xmlns="http://www.w3.org/2000/svg" fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="35" font-style="normal" font-weight="700">
+                  <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="50" y="176" font-family="Times New Roman" font-size="30" font-weight="700" font-style="normal">Jupiter Garments Accessories</text>
+
+                  </g>
+                  <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">
+                  <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="507" y="127" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">PO NO : '.$tesco_po_number.'</text>
+                  <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">STYLE : '.$style.'</text>
+                  <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REF : '.$name.' - '.$zone.'</text>
+                  <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DATE : '.$created_date.'</text>
+                  <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">SIZE: 40x30mm</text>
+                  <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="505" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DESCRIPTION : '.$tesco_description.'</text>
+                  <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REV.NO:</text>
+                  </g>
+                  </g>
+                  </svg>';
+                  $pdf->ImageSVG('@' . $svg, '', '', '', '', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+          });
+                          
+          // Custom Footer
+          PDF::setFooterCallback(function($pdf) {
+          $tesco_po_number=$this->tesco_po_number;
+          $customer_name=$this->customer_name;
+          // Position at 15 mm from bottom
+          $pdf->SetY(-50);
+          $pdf->SetX(9.5);
+          // Set font
+          //$pdf->SetFont('frankgothcnbt');
+          // Page number
+          $svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188mm" height="65.2667mm" viewBox="0 0 1360 168" version="1.2" baseProfile="tiny">
+                  <title>Qt Svg Document</title>
+                  <desc>Generated with Qt</desc>
+                  <defs>
+                  </defs>
+                  <g fill="none" stroke="black" stroke-width="1" fill-rule="evenodd" stroke-linecap="square" stroke-linejoin="bevel">
+                  <g fill="#ffffff" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1360,0 L1360,168 L0,168 L0,0"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1360,0 L1360,168 L0,168 L0,0"/>
+                  </g>
+                  <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,52 L1352,52 L1352,53 L8,53 L8,52"/>
+                  </g>
+                  <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,53 L1352,53 L1352,54 L8,54 L8,53"/>
+                  </g>
+                  <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,52 L8,54 L9,53 L9,52 L8,52"/>
+                  </g>
+                  <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1351,53 L1351,54 L1352,54 L1352,52 L1351,53"/>
+                  </g>
+                  <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,56 L1352,56 L1352,57 L8,57 L8,56"/>
+                  </g>
+                  <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,57 L1352,57 L1352,58 L8,58 L8,57"/>
+                  </g>
+                  <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,56 L8,58 L9,57 L9,56 L8,56"/>
+                  </g>
+                  <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1351,57 L1351,58 L1352,58 L1352,56 L1351,57"/>
+                  </g>
+                  <g fill="#000000" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M385,79 L386,79 L386,157 L385,157 L385,79"/>
+                  <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M764,79 L765,79 L765,157 L764,157 L764,79"/>
+                  </g>
+                  <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">
+                  <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">CUSTOMER : '.$customer_name.'</text>
+                  <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="152" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">PO NO : '.$tesco_po_number.'</text>
+                  <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="405" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">APPROVED BY : </text>
+                  </g>
+                  <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="700" font-style="normal">
+                  <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="405" y="152" font-family="Times New Roman" font-size="23" font-weight="700" font-style="normal">PREPARED BY:</text>
+                  </g>
+                  <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">
+                  <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="784" y="103" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">COMMENTS IF ANY :</text>
+                  </g>
+                  </g>
+                  </svg>';
+                  
+                   $pdf->ImageSVG('@' . $svg, '', '', '', '', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+      
+      });
+      $svgarr = explode(',_',$request->svg);
+      $name=$request->name;
+  //$svg=urldecode($request->svg);
+  PDF::setImageScale(1);
+  PDF::SetFont('frankgothcnbt');	
+      PDF::AddPage();
+      $i=0;
+      $yy=0;
+      $j=1;
+      PDF::SetXY(10, 50);
+      foreach($svgarr as $value)
+      {
+          //$svg=urldecode($value);
+          PDF::SetFillColor(255,255,255);
+          if($i == 3 || $i == 6 || $i == 9 || $i == 15 || $i == 18)
+          {
+              $xx=15;
+              $yy+=50;
+          }
+          else if($i == 0)
+          {
+              $yy=50;
+              $xx=15;
+          }
+          else if($i == 12)
+          {
+              PDF::AddPage();
+              $xx=15;
+              $yy=50;
+          }
+          else 
+          {
+              $xx+=70;
+          }
+          $j++;
+          
+          
+          file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $value);
+          $html = '<img style="width:151.18110236px;height:113.38582677px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
+          PDF::writeHTMLCell(42, 32, $xx, $yy, $html, '', 0, 0, false, 'L', false);
+          $i++;
+
+      }
+      $random = number_format(Carbon::now('Asia/Kolkata')->timestamp * rand(),0,'','');
+      PDF::Output( public_path('/storage/app/template/'.$random.'-'.$name.'.pdf'), 'F');
+      $file_path =  "/storage/app/template/".$random.'-'.$name."."."pdf";	
+      
+      return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$random.'-'.$name.'.pdf')],200);	
+              
+      }
+
+
+	 public function generateDivTesco(Request $request)
+     {
+             $svgarr = explode(',_',$request->svg);
+         $name=$request->name;
+         $svg=urldecode($request->svg);
+         define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
+         define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
+         PDF::setPrintHeader(false);
+         PDF::setPrintFooter(false);
+         PDF::SetFont('frankgothcnbt');
+         PDF::SetFont('franklingothicdemicond');
+         PDF::SetAutoPageBreak(TRUE);
+         $i=0;
+          
+         $qr_flag=$request->qr_flag;
+         $qr_code=explode(',_',$request->qr_code_fin);
+          
+         foreach($svgarr as $value)
+         {
+              PDF::SetMargins(0, 0, 0, false);
+              PDF::AddPage('L', array(80,127));
+              $svg=urldecode($value);
+              PDF::setImageScale(1.66);
+              PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=127, $h=80, $link='', $align='', $palign='', $border=0, $fitonpage=true);
+             if($name != "TCL2-sticker" && $name != "TCL4-sticker")
+             {
+                  if($name != "THL3-sticker")
+                  {
+                      if($qr_flag == 1)
+                      {
+                          if($name == "THL1-sticker")
+                           {
+                              PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+                          }
+                          else
+                          {
+                              PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+                          }
+                          
+                      }
+                      else
+                      {
+                          PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+                      }
+                  }
+                 else
+                 {
+                     if($qr_flag == 1)
+                     {
+                         PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'),-4, 53.5, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+                     }
+                     else
+                     {
+                         PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -2, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+                     }
+                 }
+             }
+             
+             if($qr_flag == 1)
+             {
+                 // new style
+                 $style = array(
+                     'border' => false,
+                     'padding' => 0,
+                     'bgcolor' => false
+                 );
+                 if($name == "TCL1-sticker")
+                 {
+                     PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 73.5, 5, 17, 17, $style, 'N');
+                 }
+                 else if($name == "TCL2-sticker")
+                 {
+                     PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 74.5, 8.5, 17, 17, $style, 'N');
+                 }
+                 else if($name == "TCL4-sticker")
+                 {
+                     PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 74, 8.5, 17, 17, $style, 'N');
+                 }
+                 else if($name == "THL1-sticker")
+                 {
+                     PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 74, 5, 17, 17, $style, 'N');
+                 }
+                 else if($name == "THL3-sticker")
+                 {
+                     PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 75, 5, 17, 17, $style, 'N');
+                 }
+                 
+             }
+             
+              $i++;
+         }
+          
+         if($name != "TCL4-sticker" && $name != "TCL2-sticker")
+         {
+             $j=0;
+             if(count($svgarr) == $i)
+             {
+                 foreach($svgarr as $value)
+                 {
+                     unlink(public_path('/storage/app/template/barcode_'.$j.'.png'));
+                     $j++;
+                 }
+             }
+         }
+         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+         print_r(url('/storage/app/template/'.$name.'.pdf'));
+         
+         
+         
+ //		$svgarr = explode(',_',$request->svg);
+ //		$name=$request->name;
+ //        $svg=urldecode($request->svg);
+ //        define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
+ //        define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
+ //        PDF::setPrintHeader(false);
+ //        PDF::setPrintFooter(false);
+ //        PDF::SetFont('frankgothcnbt');
+ //		PDF::SetAutoPageBreak(TRUE);
+ //		$j=0;
+ //		foreach($svgarr as $value)
+ //		{
+ //			PDF::SetMargins(0, 0, 0, false);
+ //			PDF::setImageScale(1);
+ //			PDF::AddPage('L', array(80,127));
+ //			$svg=urldecode($value);
+ //			file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
+ //			$html = '<img style="width:480px;height:302.36220472px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
+ //			PDF::writeHTMLCell(129, 82.5, -1,0, $html, '', 0, 0, false, 'L', false);
+ //			$j++;
+ //		}
+ //		PDF::deletePage(1);
+ //        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+ //        print_r(url('/storage/app/template/'.$name.'.pdf'));
+     } 
+     
+     
+          /**
+    * Print Preview For Stickers
+    *
+    * @return pdf
+    */
+   
+     public function generateDivTescoSmall(Request $request)
+     {
+         $svgarr = explode(',_',$request->svg);
+         $name=$request->name;
+         $svg=urldecode($request->svg);
+         define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
+         define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
+         PDF::setImageScale(1.66);
+         PDF::setPrintHeader(false);
+         PDF::setPrintFooter(false);
+         PDF::SetFont('frankgothcnbt');
+         PDF::SetFont('myriad');
+         PDF::SetAutoPageBreak(TRUE);
+         $i=0;
+         foreach($svgarr as $value)
+         {
+              PDF::AddPage('L', array(30,80));
+              PDF::SetMargins(0, 0, 0, false);
+             
+              $svg=urldecode($value);
+             
+             
+             
+              PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=40, $h=30, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+              PDF::ImageSVG('@' . $svg, $x=40, $y=0, $w=40, $h=30, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+             
+              if($name == "TSL3-sticker")
+              {
+                  PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 0.9, 2, 36.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+             
+                 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 40.9, 2, 36.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+              }
+              else
+              {
+ //				 $img = Image::make(public_path('/storage/app/template/barcode_'.$i.'.png'));
+ //
+ //				// now you are able to resize the instance
+ //				$img->resize(150, 50);
+ //
+ //				// finally we save the image as a new file
+ //				$img->save(public_path('/storage/app/template/barcode_RESIZE.png'));
+                  
+                  PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -1.1, 2,41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+             
+                 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 38.7, 2, 41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+              }
+             
+             
+             
+             
+ //			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -1.7, 2, 42, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+ //			
+ //			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 39.7, 2, 42, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+ //			
+             $i++;
+         }
+         $j=0;
+         if(count($svgarr) == $i)
+         {
+             foreach($svgarr as $value)
+             {
+                 unlink(public_path('/storage/app/template/barcode_'.$j.'.png'));
+                 $j++;
+             }
+         }
+         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+         print_r(url('/storage/app/template/'.$name.'.pdf'));
+     }
+
+
+	 /**
+	 * This Function is used to generate barcode using java.
+	 *
+	 * @return path of barcode
+	 */
+	public function generateBarcodeTsl1(Request $request)
+	{
+		$name=$request['name'];
+		$type=$request['type'];
+		$barcode=$request['barcode'];
+		
+		$tabula       = Config::get('tabula.bar_jar');
+		
+		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 33 13');
+		$info    = json_encode($info, true);
+		return $info;
+	}
+	/**
+	 * This Function is used to generate barcode using java.
+	 *
+	 * @return path of barcode
+	 */
+	public function generateBarcodeTsl3(Request $request)
+	{
+		$name=$request['name'];
+		$type=$request['type'];
+		$barcode=$request['barcode'];
+		
+		$tabula       = Config::get('tabula.bar_jar');
+		
+		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 33 13');
+		$info    = json_encode($info, true);
+		return $info;
+	}
+	/**
+	 * This Function is used to generate barcode using java.
+	 *
+	 * @return path of barcode
+	 */
+	public function generateBarcodeEanBig(Request $request)
+	{
+		$name=$request['name'];
+		$type=$request['type'];
+		$barcode=$request['barcode'];
+		
+		$tabula       = Config::get('tabula.bar_jar_big');
+		
+		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 50 16');
+		$info    = json_encode($info, true);
+		return $info;
+	}
+	/**
+	 * This Function is used to generate barcode using java.
+	 *
+	 * @return path of barcode
+	 */
+	public function generateBarcodeItfBig(Request $request)
+	{
+		$name=$request['name'];
+		$type=$request['type'];
+		$barcode=$request['barcode'];
+		
+		$tabula       = Config::get('tabula.bar_jar_big');
+		
+		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 50 16');
+		$info    = json_encode($info, true);
+		return $info;
+	}
+
+    
+		/**
+     * Get order deatils.
+     * @param order details id
+     * @author Gowtham <gowtham@wizroots.com>
+     * @return \Illuminate\Http\Response
+     */
+	public function getOrderDetails(Request $request)
+	{
+		$id = $request['id'];
+		$name = $request['name'];
+		
+		if($name == "TCL1-sticker"){
+			$table = "tesco_tcl1_orders";
+			$qty_table = "tesco_tcl1_orders_quanty";
+			$table_id = "tcl1_order_id";
+		}
+		else if($name == "TCL2-sticker"){
+			
+			$table = "tesco_tcl2_orders";
+			$qty_table = "tesco_tcl2_orders_quanty";
+			$table_id = "tcl2_order_id";
+		}
+		else if($name == "TCL4-sticker"){
+			
+			$table = "tesco_tcl4_orders";
+			$qty_table = "tesco_tcl4_orders_quanty";
+			$table_id = "tcl4_order_id";
+		}
+		else if($name == "THL1-sticker"){
+			
+			$table = "tesco_thl1_orders";
+			$qty_table = "tesco_thl1_orders_quanty";
+			$table_id = "thl1_order_id";
+		}
+		else if($name == "THL3-sticker"){
+			
+			$table = "tesco_thl3_orders";
+			$qty_table = "tesco_thl3_orders_quanty";
+			$table_id = "thl3_order_id";
+		}
+		else if($name == "TSL1-sticker"){
+			
+			$table = "tesco_tsl1_orders";
+			$qty_table = "tesco_tsl1_orders_quanty";
+			$table_id = "tsl1_order_id";
+		}
+		else if($name == "TSL3-sticker"){
+			
+			$table = "tesco_tsl3_orders";
+			$qty_table = "tesco_tsl3_orders_quanty";
+			$table_id = "tsl3_order_id";
+		}
+		
+		
+		$order_details  = 	DB::table($qty_table)
+									->where($table_id,$id)
+									->select('*')
+									->get();
+		
+		foreach($order_details as $value)
+		{
+            $odetails  = 	DB::table($table)
+									->where('id',$id)
+									->select('*')
+									->get();
+			$tesco_item_master=DB::table('tesco_item_master')->where('id',$odetails[0]->template_id)->select('*')->get();
+			
+			$order_omp  = 	DB::table($table)
+				->join('tesco_department',$table.'.tesco_department_id', 'tesco_department.id')
+				->join('tesco_brand',$table.'.tesco_brand_id', 'tesco_brand.id')
+				->join('tesco_suppliers',$table.'.tesco_metadata_supplier_id', 'tesco_suppliers.id')
+									->where($table.'.id',$value->$table_id)
+									->select($table.'.*','tesco_department.department','tesco_brand.brand','tesco_suppliers.supplier_name')
+									->get();
+			
+			
+			$value->zone=$order_omp{0}->zone;
+			$value->po_number=$order_omp{0}->po_number;
+			$value->uk_style_ref=$order_omp{0}->uk_style_ref;
+			$value->ce_style_ref=$order_omp{0}->ce_style_ref;
+			$value->season_code=$order_omp{0}->season_code;
+			$value->short_description=$order_omp{0}->short_description;
+			$value->eqos_site_code=$order_omp{0}->eqos_site_code;
+			$value->manufacture_date=$order_omp{0}->manufacture_date;
+			$value->department=$order_omp{0}->department;
+			$value->brand=$order_omp{0}->brand;
+			$value->supplier_name=$order_omp{0}->supplier_name;
+			$value->rfid_compliant=$order_omp{0}->rfid_compliant;
+			$value->tag_at_source=$order_omp{0}->tag_at_source;
+			
+		}
+		
+		return response()->json(['error'=> true,'order_details' =>$order_details,'tesco_item_master' => $tesco_item_master],200);
     }
     
     /**
