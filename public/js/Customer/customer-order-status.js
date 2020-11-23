@@ -1856,7 +1856,7 @@ function updateArtwork(obj) {
 
                     $('.osorderdetails').text(" Order Details - " + TemplateName)
                     $('.osartwork').text(" Artwork - " + TemplateName)
-                    if (data.order_details.edit_permission == 1) {
+                    if (data.order_details.edit_permission == 1 || data.order_details.is_order_count_empty == 1) {
                         $('.osfooter').html('<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm hidden" id="submit" type="submit" disabled="true">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit" style="width: 55px;margin-left: 10px;" onclick ="editArtwork()" type="button">Edit</button><span id="error_msg_alert" style="color:red;"></span><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
                     } else {
                         $('.osfooter').html('<span id="error_msg_alert" style="color:red;"></span><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
@@ -1886,6 +1886,10 @@ function updateArtwork(obj) {
                         svgDoc1 = mySVG1.contentDocument;
                         dynamicSVGTemplatescard(svgDoc1, TemplateName, data.order_details.zone, data.order_details.template_type)
                     }, false);
+                    if(data.order_details.is_order_count_empty == 1)
+                    {
+                        editArtwork()
+                    }
 
                 }
 
