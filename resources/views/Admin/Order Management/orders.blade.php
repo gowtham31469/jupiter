@@ -814,46 +814,6 @@ input[type="number"] {
 	<script>
 	$(document).ready (function(){
         $("#success-alert").hide();
-        
-        /** Fiscal Year Select box begin */
-        
-        // add year selection menu into navbar
-            $('.year-nav-menu').html($('.year-nav-div').html());
-
-        // Populate 30 years in selectbox options
-            var yearsLength = 30;
-            var currentYear = new Date().getFullYear();
-            for(var i = 0; i < 30; i++){
-                var next = currentYear+1;
-                var year_text = currentYear + '-' + next.toString().slice(-2);
-                var year_value = currentYear + '-' + next;
-                $('#financialYear').append(new Option(year_text, year_value));
-                currentYear--;
-            }
-
-        // Make current year as selected if fiscal year not selected
-            if (localStorage.getItem("fiscal-year") === null) {
-                localStorage.setItem("fiscal-year", $('#financialYear option:first').val());
-                $("#financialYear").val(localStorage.getItem("fiscal-year"));
-            } else {
-                $("#financialYear").val(localStorage.getItem("fiscal-year"));
-            } 
-        
-            $('#financialYear').selectpicker('refresh');
-            
-        // [ Trigger event on selectbox change, to change fiscal year value in local storage]
-            $('#financialYear').on('change', function(e){
-                localStorage.setItem("fiscal-year", this.value);
-                
-                if (localStorage.getItem("buyer") === 'orchestra') 
-                {
-                    orders();
-                } else if (buyer === 'tesco')  {
-                    tescoOrders(reOrderTesco);
-                }
-            });
-        
-        /** Fiscal year select box end */
      });
      	
 		$(function () {
