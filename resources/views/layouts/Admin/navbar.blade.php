@@ -21,7 +21,7 @@
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-                
+                <li class="dropdown year-nav-menu"></li>
                 <li class="dropdown buyer-nav-menu"></li>
                 <li><a class="notification" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" href="#"><i class="fa fa-bell fa-1x" aria-hidden="true"></i></a>
                   <ul class="dropdown-menu notify-drop">

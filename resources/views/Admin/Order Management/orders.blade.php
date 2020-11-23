@@ -396,6 +396,13 @@ input[type="number"] {
         </div>
         {{ Form::hidden('invisible', $buyer_count, array('id' => 'invisible__count_id')) }}
         <div class="clearfix"></div>
+
+        <div class="year-nav-div hidden">
+           <select class="selectpicker selected-year" id="financialYear" name="financialYear">
+                Select Year
+            </select>
+        </div>
+        <div class="clearfix"></div>
     </div>
 	<div class="main-content">
 		<div class="select-buyer">
@@ -807,7 +814,8 @@ input[type="number"] {
 	<script>
 	$(document).ready (function(){
         $("#success-alert").hide();
-     });	
+     });
+     	
 		$(function () {
     $('.list-group.checked-list-box .list-group-item').each(function () {
         
@@ -898,6 +906,7 @@ input[type="number"] {
 
 
 		$(document).ready(function() {
+            
 			/** Clear local storage data **/
 			localStorage.removeItem("artwork_back");
 			localStorage.removeItem("back_flag");
@@ -1036,9 +1045,6 @@ input[type="number"] {
              })
             
         });
-		
-		
-        
 	</script>
 
 	@endsection
