@@ -397,11 +397,8 @@ input[type="number"] {
         {{ Form::hidden('invisible', $buyer_count, array('id' => 'invisible__count_id')) }}
         <div class="clearfix"></div>
 
-        <div class="year-nav-div hidden">
-           <select class="selectpicker selected-year" id="financialYear" name="financialYear">
-                Select Year
-            </select>
-        </div>
+        <!-- Financial year selection div -->
+        <div class="year-nav-div hidden"></div>
         <div class="clearfix"></div>
     </div>
 	<div class="main-content">
@@ -810,6 +807,8 @@ input[type="number"] {
     <script src="{{ asset('js/Admin/orchestra-pi.js') }}"></script>
     <script src="{{ asset('js/Admin/parser.js') }}"></script>
     <script src="{{ asset('js/Admin/tesco-view-orders.js') }}"></script>
+    <!-- Financial year selection script -->
+    <script src="{{ asset('js/common/financial-year-switch.js') }}"></script>
 <script src="{{ asset('js/moment.min.js') }}"></script>
 	<script>
 	$(document).ready (function(){

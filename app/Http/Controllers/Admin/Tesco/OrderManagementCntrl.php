@@ -59,9 +59,7 @@ class OrderManagementCntrl extends Controller
     private $current_date;
     private $ratio_pack_type;
     private $tesco_material_obj;
-    private $year;
     private $financial_year_date;
-    private $financial_year_date_format;
 
 
     /**

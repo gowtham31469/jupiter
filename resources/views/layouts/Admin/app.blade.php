@@ -80,7 +80,6 @@
     <script src="{{ asset('js/jquery.easy-autocomplete.min.js') }}"></script>
     <script src="{{ asset('js/toastr.js') }}"></script>
     <script src="{{ asset('js/qrjs2.min.js') }}"></script>
-    <script src="{{ asset('js/common/financial-year-switch.js') }}"></script>
     
 <script>
     var base_url = "<?php echo  url('/') ?>";
