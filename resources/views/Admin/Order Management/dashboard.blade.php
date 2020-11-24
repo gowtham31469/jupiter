@@ -363,6 +363,7 @@
 
 	</script>
 	@endif @section('jqueryIncludes')
+	<script src="{{ asset('js/common/financial-year-switch.js') }}"></script>
 	<script>
 		var table = 	$('.pending_table').DataTable({
                             dom: 'Bfrtip',
@@ -699,13 +700,14 @@
 		function new_orders_modal() {
 			
 			
-				
+			$fiscal_year = getCookie("fiscal-year");
 				$.ajax({
 					url: base_url + "/admin/order-management/new_orders",
 					type: "Post",
 					dataType: "json",
 					data: {
-						_token: csrf_token
+						_token: csrf_token,
+						fiscal_year:$fiscal_year
 					},
 					beforeSend: function() {
 
@@ -726,14 +728,15 @@
 
 		function aowp_modal() {
 			
-			
+			$fiscal_year = getCookie("fiscal-year");
 			
 				$.ajax({
 					url: base_url + "/admin/order-management/aowp",
 					type: "Post",
 					dataType: "json",
 					data: {
-						_token: csrf_token
+						_token: csrf_token,
+						fiscal_year:$fiscal_year
 					},
 					beforeSend: function() {
 
@@ -754,13 +757,14 @@
 		function app_orders_modal() {
 			
 			
-			
+			$fiscal_year = getCookie("fiscal-year");
 				$.ajax({
 					url: base_url + "/admin/order-management/approved_orders",
 					type: "Post",
 					dataType: "json",
 					data: {
-						_token: csrf_token
+						_token: csrf_token,
+						fiscal_year:$fiscal_year
 					},
 					beforeSend: function() {
 
@@ -781,13 +785,14 @@
 		function pen_orders_modal() {
 			
 			
-			
+			$fiscal_year = getCookie("fiscal-year");
 				$.ajax({
 					url: base_url + "/admin/order-management/pending_orders",
 					type: "Post",
 					dataType: "json",
 					data: {
-						_token: csrf_token
+						_token: csrf_token,
+						fiscal_year:$fiscal_year
 					},
 					beforeSend: function() {
 
@@ -805,6 +810,22 @@
 				})
 		}
 		$('.logo').html('Orders')
+
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+    }
+    }
+    return "";
+}
 		
 		function viewed(id,table_name)
 		{
