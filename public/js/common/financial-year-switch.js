@@ -18,20 +18,35 @@ $(document).ready (function(){
         }
 
     // Make current year as selected if fiscal year not selected
-        if (localStorage.getItem("fiscal-year") === null) {
-            localStorage.setItem("fiscal-year", $('#financialYear option:first').val());
-            $("#financialYear").val(localStorage.getItem("fiscal-year"));
+        $fiscal_year = getCookie("fiscal-year");
+        if ($fiscal_year === "") {
+            document.cookie = "fiscal-year="+$('#financialYear option:first').val()+"; path=/;";
+            $("#financialYear").val(getCookie("fiscal-year"));
         } else {
-            $("#financialYear").val(localStorage.getItem("fiscal-year"));
+            $("#financialYear").val(getCookie("fiscal-year"));
         } 
         $('#financialYear').selectpicker('refresh');
         
     // [ Trigger event on selectbox change, to change fiscal year value in local storage]
         $('#financialYear').on('change', function(e){
-            
-            localStorage.setItem("fiscal-year", this.value);
+            document.cookie = "fiscal-year="+this.value+"; path=/;";
             location.reload(); 
         });
     
     /** Fiscal year select box end */
+
+        function getCookie(cname) {
+            var name = cname + "=";
+            var ca = document.cookie.split(';');
+            for(var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+            }
+            return "";
+        }
  });

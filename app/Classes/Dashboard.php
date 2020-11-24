@@ -1,12 +1,27 @@
 <?php
 namespace App\Classes;
 use DB;
+use App\FinancialYearResetDate;
+use Carbon\Carbon;
+
 /*
  * Create an EAN13 Barcode image.
  */
 
 class Dashboard
 {
+   private $financial_year_date;
+
+   /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+
+    public function __construct()
+    {
+        $this->financial_year_date = FinancialYearResetDate::value('financial_year_date');
+	}
    public function pendingProduction()
    {
 	   		$pendingproduction['tcl1'] = DB::table('tesco_tcl1_orders')
@@ -89,8 +104,12 @@ class Dashboard
       		return $pendingproduction;
    }
 	
-	public function newOrders()
+	public function newOrders($fiscal_year)
 	{
+		$year = explode('-', $fiscal_year);
+		$from_date = $year[0].'-'.$this->financial_year_date;
+		$to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+
 			$new_orders['tcl1'] = DB::table('tesco_tcl1_orders')
 				->join('customers','customers.id','=','tesco_tcl1_orders.tesco_supplier_id')
 				->join('tesco_tcl1_orders_quanty','tesco_tcl1_orders_quanty.tcl1_order_id','=','tesco_tcl1_orders.id')
@@ -98,6 +117,7 @@ class Dashboard
 									->where('new_ord_flag',0)
 									->where('order_status','!=','Order Cancelled')
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl1_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tcl1_orders.*','customers.company_name',DB::raw('sum(count) as sum'))
 									->groupBy('tesco_tcl1_orders.id','customers.company_name')
 									->get();
@@ -108,6 +128,7 @@ class Dashboard
 									->where('new_ord_flag',0)
 									->where('order_status','!=','Order Cancelled')
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl2_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tcl2_orders.*','customers.company_name',DB::raw('sum(count) as sum'))
 									->groupBy('tesco_tcl2_orders.id','customers.company_name')
 									->get();
@@ -118,6 +139,7 @@ class Dashboard
 									->where('new_ord_flag',0)
 									->where('order_status','!=','Order Cancelled')
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl4_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tcl4_orders.*','customers.company_name',DB::raw('sum(count) as sum'))
 									->groupBy('tesco_tcl4_orders.id','customers.company_name')
 									->get();
@@ -128,6 +150,7 @@ class Dashboard
 									->where('tesco_thl1_orders.new_ord_flag',0)
 									->where('order_status','!=','Order Cancelled')
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_thl1_orders.created_at', [$from_date, $to_date])
 									->select('tesco_thl1_orders.*','customers.company_name',DB::raw('sum(count) as sum'))
 									->groupBy('tesco_thl1_orders.id','customers.company_name')
 									->get();
@@ -138,6 +161,7 @@ class Dashboard
 									->where('new_ord_flag',0)
 									->where('order_status','!=','Order Cancelled')
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_thl3_orders.created_at', [$from_date, $to_date])
 									->select('tesco_thl3_orders.*','customers.company_name',DB::raw('sum(count) as sum'))
 									->groupBy('tesco_thl3_orders.id','customers.company_name')
 									->get();
@@ -148,6 +172,7 @@ class Dashboard
 									->where('new_ord_flag',0)
 									->where('order_status','!=','Order Cancelled')
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl1_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tsl1_orders.*','customers.company_name',DB::raw('sum(count) as sum'))
 									->groupBy('tesco_tsl1_orders.id','customers.company_name')
 									->get();
@@ -158,19 +183,25 @@ class Dashboard
 									->where('new_ord_flag',0)
 									->where('order_status','!=','Order Cancelled')
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl3_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tsl3_orders.*','customers.company_name',DB::raw('sum(count) as sum'))
 									->groupBy('tesco_tsl3_orders.id','customers.company_name')
 									->get();
 			return $new_orders;
 	}
 	
-	public function approvedOrders()
+	public function approvedOrders($fiscal_year)
 	{
+		$year = explode('-', $fiscal_year);
+		$from_date = $year[0].'-'.$this->financial_year_date;
+		$to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+		
 			$approved_orders['tcl1'] = DB::table('tesco_tcl1_orders')
 				->join('customers','customers.id','=','tesco_tcl1_orders.tesco_supplier_id')
 									->where('order_status','Order Approved')
 									->where('app_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl1_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tcl1_orders.*','customers.company_name')
 									->get();
 			$approved_orders['tcl2'] = DB::table('tesco_tcl2_orders')
@@ -178,6 +209,7 @@ class Dashboard
 									->where('order_status','Order Approved')
 									->where('app_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl2_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tcl2_orders.*','customers.company_name')
 									->get();
 			$approved_orders['tcl4'] = DB::table('tesco_tcl4_orders')
@@ -185,6 +217,7 @@ class Dashboard
 									->where('order_status','Order Approved')
 									->where('app_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl4_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tcl4_orders.*','customers.company_name')
 									->get();
 			$approved_orders['thl1'] = DB::table('tesco_thl1_orders')
@@ -192,6 +225,7 @@ class Dashboard
 									->where('order_status','Order Approved')
 									->where('app_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_thl1_orders.created_at', [$from_date, $to_date])
 									->select('tesco_thl1_orders.*','customers.company_name')
 									->get();
 			$approved_orders['thl3'] = DB::table('tesco_thl3_orders')
@@ -199,6 +233,7 @@ class Dashboard
 									->where('order_status','Order Approved')
 									->where('app_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_thl3_orders.created_at', [$from_date, $to_date])
 									->select('tesco_thl3_orders.*','customers.company_name')
 									->get();
 			$approved_orders['tsl1'] = DB::table('tesco_tsl1_orders')
@@ -206,6 +241,7 @@ class Dashboard
 									->where('order_status','Order Approved')
 									->where('app_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl1_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tsl1_orders.*','customers.company_name')
 									->get();
 			$approved_orders['tsl3'] = DB::table('tesco_tsl3_orders')
@@ -213,19 +249,24 @@ class Dashboard
 									->where('order_status','Order Approved')
 									->where('app_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl3_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tsl3_orders.*','customers.company_name')
 									->get();
         	return $approved_orders;
 	}
 	
-	public function pendingOrders()
+	public function pendingOrders($fiscal_year)
 	{
+		$year = explode('-', $fiscal_year);
+		$from_date = $year[0].'-'.$this->financial_year_date;
+		$to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
 			
 			$pending_orders['tcl1'] = DB::table('tesco_tcl1_orders')
 				->join('customers','customers.id','=','tesco_tcl1_orders.tesco_supplier_id')
 									->where('order_status','Order Placed')
 									->where('pen_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl1_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tcl1_orders.*','customers.company_name')
 									->get();
 			$pending_orders['tcl2'] = DB::table('tesco_tcl2_orders')
@@ -233,6 +274,7 @@ class Dashboard
 									->where('order_status','Order Placed')
 									->where('pen_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl2_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tcl2_orders.*','customers.company_name')
 									->get();
 			$pending_orders['tcl4'] = DB::table('tesco_tcl4_orders')
@@ -240,6 +282,7 @@ class Dashboard
 									->where('order_status','Order Placed')
 									->where('pen_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl4_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tcl4_orders.*','customers.company_name')
 									->get();
 			$pending_orders['thl1'] = DB::table('tesco_thl1_orders')
@@ -247,6 +290,7 @@ class Dashboard
 									->where('order_status','Order Placed')
 									->where('pen_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_thl1_orders.created_at', [$from_date, $to_date])
 									->select('tesco_thl1_orders.*','customers.company_name')
 									->get();
 			$pending_orders['thl3'] = DB::table('tesco_thl3_orders')
@@ -254,6 +298,7 @@ class Dashboard
 									->where('order_status','Order Placed')
 									->where('pen_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_thl3_orders.created_at', [$from_date, $to_date])
 									->select('tesco_thl3_orders.*','customers.company_name')
 									->get();
 			$pending_orders['tsl1'] = DB::table('tesco_tsl1_orders')
@@ -261,6 +306,7 @@ class Dashboard
 									->where('order_status','Order Placed')
 									->where('pen_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl1_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tsl1_orders.*','customers.company_name')
 									->get();
 			$pending_orders['tsl3'] = DB::table('tesco_tsl3_orders')
@@ -268,13 +314,18 @@ class Dashboard
 									->where('order_status','Order Placed')
 									->where('pen_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl3_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tsl3_orders.*','customers.company_name')
 									->get();
 			return $pending_orders;
 	}
 	
-	public function aowp()
+	public function aowp($fiscal_year)
 	{
+			$year = explode('-', $fiscal_year);
+			$from_date = $year[0].'-'.$this->financial_year_date;
+			$to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+
 			$app_pipo['tcl1_1'] = DB::table('tesco_tcl1_orders')
 				->join('customers','customers.id','=','tesco_tcl1_orders.tesco_supplier_id')
 									->where('order_status','Order Approved')
@@ -282,6 +333,7 @@ class Dashboard
 									->whereIn('pi_status',['PI Approval Pending',""])
 									->where('app_pipo_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl1_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tcl1_orders.*','customers.company_name')
 									->get();
 			
@@ -292,6 +344,7 @@ class Dashboard
 									->where('pi_status','PI Approval Pending')
 									->where('app_pipo_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl1_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tcl1_orders.*','customers.company_name')
 									->get();
 			
@@ -302,6 +355,7 @@ class Dashboard
 									->whereIn('pi_status',['PI Approval Pending',""])
 									->where('app_pipo_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl2_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tcl2_orders.*','customers.company_name')
 									->get();
 			
@@ -312,6 +366,7 @@ class Dashboard
 									->where('pi_status','PI Approval Pending')
 									->where('app_pipo_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl2_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tcl2_orders.*','customers.company_name')
 									->get();
 			
@@ -322,6 +377,7 @@ class Dashboard
 									->whereIn('pi_status',['PI Approval Pending',""])
 									->where('app_pipo_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl4_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tcl4_orders.*','customers.company_name')
 									->get();
 			
@@ -332,6 +388,7 @@ class Dashboard
 									->where('pi_status','PI Approval Pending')
 									->where('app_pipo_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl4_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tcl4_orders.*','customers.company_name')
 									->get();
 			
@@ -342,6 +399,7 @@ class Dashboard
 									->whereIn('pi_status',['PI Approval Pending',""])
 									->where('app_pipo_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_thl1_orders.created_at', [$from_date, $to_date])
 									->select('tesco_thl1_orders.*','customers.company_name')
 									->get();
 			
@@ -352,6 +410,7 @@ class Dashboard
 									->where('pi_status','PI Approval Pending')
 									->where('app_pipo_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_thl1_orders.created_at', [$from_date, $to_date])
 									->select('tesco_thl1_orders.*','customers.company_name')
 									->get();
 			
@@ -362,6 +421,7 @@ class Dashboard
 									->whereIn('pi_status',['PI Approval Pending',""])
 									->where('app_pipo_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_thl3_orders.created_at', [$from_date, $to_date])
 									->select('tesco_thl3_orders.*','customers.company_name')
 									->get();
 			
@@ -372,6 +432,7 @@ class Dashboard
 									->where('pi_status','PI Approval Pending')
 									->where('app_pipo_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_thl3_orders.created_at', [$from_date, $to_date])
 									->select('tesco_thl3_orders.*','customers.company_name')
 									->get();
 			$app_pipo['tsl1_1'] = DB::table('tesco_tsl1_orders')
@@ -381,6 +442,7 @@ class Dashboard
 									->whereIn('pi_status',['PI Approval Pending',""])
 									->where('app_pipo_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl1_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tsl1_orders.*','customers.company_name')
 									->get();
 			
@@ -391,6 +453,7 @@ class Dashboard
 									->where('pi_status','PI Approval Pending')
 									->where('app_pipo_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl1_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tsl1_orders.*','customers.company_name')
 									->get();
 			
@@ -401,6 +464,7 @@ class Dashboard
 									->whereIn('pi_status',['PI Approval Pending',""])
 									->where('app_pipo_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl3_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tsl3_orders.*','customers.company_name')
 									->get();
 			
@@ -411,6 +475,7 @@ class Dashboard
 									->where('pi_status','PI Approval Pending')
 									->where('app_pipo_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl3_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tsl3_orders.*','customers.company_name')
 									->get();
         	return $app_pipo;

@@ -12,9 +12,16 @@ use Illuminate\Support\Facades\Validator;
 use DB;
 use PDF;
 use App\Classes\Dashboard;
+use Carbon\Carbon;
+use App\FinancialYearResetDate;
 
 class OrderController extends Controller
 {
+	private $current_date;
+	private $year;
+	private $financial_year_date;
+	private $financial_year_start;
+	private $financial_year_end;
     /**
      * Create a new controller instance.
      *
@@ -22,7 +29,24 @@ class OrderController extends Controller
      */
     public function __construct()
     {
-       $this->middleware('auth');
+	   $this->middleware('auth');
+	   // get the current time
+		$this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
+
+		// get year as "2020"
+		$this->year = Carbon::parse($this->current_date)->format('Y');
+
+		$this->financial_year_date = FinancialYearResetDate::value('financial_year_date');
+
+		// format financial year date as "yyyy-dd-mm" 
+		$this->financial_year_date_format = $this->year.'-'.$this->financial_year_date;
+
+		// store financial year start and end date and
+		// financial year identification
+		
+		$this->financial_year_start = $this->financial_year_date_format;
+		$this->financial_year_end = Carbon::parse($this->financial_year_date_format)->addYear()->subDay()->toDateString();
+
     }
 
     /**
@@ -48,7 +72,20 @@ class OrderController extends Controller
             });
             
             $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->get();
-            $buyer_count = count($buyers);
+			$buyer_count = count($buyers);
+			
+			if(!isset($_COOKIE["fiscal-year"])) {
+
+				$from_date = $this->financial_year_start;
+				$to_date = $this->financial_year_end; 
+
+			  } else {
+				$year = explode('-', $_COOKIE["fiscal-year"]);
+				$from_date = $year[0].'-'.$this->financial_year_date;
+				$to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+			  }
+
+
 			
 			$new_count['tcl1'] = DB::table('tesco_tcl1_orders')
 									->whereRaw('created_at > current_date - 1')
