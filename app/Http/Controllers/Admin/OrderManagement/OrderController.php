@@ -92,6 +92,7 @@ class OrderController extends Controller
 									->where('new_ord_flag',0)
 									->where('order_status','!=','Order Cancelled')
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl1_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$new_count['tcl2'] = DB::table('tesco_tcl2_orders')
@@ -99,12 +100,14 @@ class OrderController extends Controller
 									->where('new_ord_flag',0)
 									->where('order_status','!=','Order Cancelled')
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl2_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$new_count['tcl4'] = DB::table('tesco_tcl4_orders')
 									->whereRaw('created_at > current_date - 1')
 									->where('new_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl4_orders.created_at', [$from_date, $to_date])
 									->where('order_status','!=','Order Cancelled')
 									->select(DB::raw('count(*) as sum'))
 									->get();
@@ -112,6 +115,7 @@ class OrderController extends Controller
 									->whereRaw('created_at > current_date - 1')
 									->where('new_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_thl1_orders.created_at', [$from_date, $to_date])
 									->where('order_status','!=','Order Cancelled')
 									->select(DB::raw('count(*) as sum'))
 									->get();
@@ -119,6 +123,7 @@ class OrderController extends Controller
 									->whereRaw('created_at > current_date - 1')
 									->where('new_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_thl3_orders.created_at', [$from_date, $to_date])
 									->where('order_status','!=','Order Cancelled')
 									->select(DB::raw('count(*) as sum'))
 									->get();
@@ -126,6 +131,7 @@ class OrderController extends Controller
 									->whereRaw('created_at > current_date - 1')
 									->where('new_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl1_orders.created_at', [$from_date, $to_date])
 									->where('order_status','!=','Order Cancelled')
 									->select(DB::raw('count(*) as sum'))
 									->get();
@@ -133,6 +139,7 @@ class OrderController extends Controller
 									->whereRaw('created_at > current_date - 1')
 									->where('new_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl3_orders.created_at', [$from_date, $to_date])
 									->where('order_status','!=','Order Cancelled')
 									->select(DB::raw('count(*) as sum'))
 									->get();
@@ -144,42 +151,49 @@ class OrderController extends Controller
 									->where('order_status','Order Approved')
 									->where('app_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl1_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$approved_orders['tcl2'] = DB::table('tesco_tcl2_orders')
 									->where('order_status','Order Approved')
 									->where('app_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl2_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$approved_orders['tcl4'] = DB::table('tesco_tcl4_orders')
 									->where('order_status','Order Approved')
 									->where('app_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl4_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$approved_orders['thl1'] = DB::table('tesco_thl1_orders')
 									->where('order_status','Order Approved')
 									->where('app_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_thl1_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$approved_orders['thl3'] = DB::table('tesco_thl3_orders')
 									->where('order_status','Order Approved')
 									->where('app_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_thl3_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$approved_orders['tsl1'] = DB::table('tesco_tsl1_orders')
 									->where('order_status','Order Approved')
 									->where('app_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl1_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$approved_orders['tsl3'] = DB::table('tesco_tsl3_orders')
 									->where('order_status','Order Approved')
 									->where('app_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl3_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -189,42 +203,49 @@ class OrderController extends Controller
 									->where('order_status','Order Placed')
 									->where('pen_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl1_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$pending_orders['tcl2'] = DB::table('tesco_tcl2_orders')
 									->where('order_status','Order Placed')
 									->where('pen_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl2_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$pending_orders['tcl4'] = DB::table('tesco_tcl4_orders')
 									->where('order_status','Order Placed')
 									->where('pen_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl4_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$pending_orders['thl1'] = DB::table('tesco_thl1_orders')
 									->where('order_status','Order Placed')
 									->where('pen_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_thl1_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$pending_orders['thl3'] = DB::table('tesco_thl3_orders')
 									->where('order_status','Order Placed')
 									->where('pen_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_thl3_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$pending_orders['tsl1'] = DB::table('tesco_tsl1_orders')
 									->where('order_status','Order Placed')
 									->where('pen_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl1_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$pending_orders['tsl3'] = DB::table('tesco_tsl3_orders')
 									->where('order_status','Order Placed')
 									->where('pen_ord_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl3_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -237,6 +258,7 @@ class OrderController extends Controller
 									->whereIn('pi_status',['PI Approval Pending',""])
 									->where('app_pipo_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl1_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -246,6 +268,7 @@ class OrderController extends Controller
 									->where('pi_status','PI Approval Pending')
 									->where('app_pipo_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl1_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -255,6 +278,7 @@ class OrderController extends Controller
 									->whereIn('pi_status',['PI Approval Pending',""])
 									->where('app_pipo_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl2_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -264,6 +288,7 @@ class OrderController extends Controller
 									->where('pi_status','PI Approval Pending')
 									->where('app_pipo_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl2_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -273,6 +298,7 @@ class OrderController extends Controller
 									->whereIn('pi_status',['PI Approval Pending',""])
 									->where('app_pipo_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl4_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -282,6 +308,7 @@ class OrderController extends Controller
 									->where('pi_status','PI Approval Pending')
 									->where('app_pipo_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl4_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -291,6 +318,7 @@ class OrderController extends Controller
 									->whereIn('pi_status',['PI Approval Pending',""])
 									->where('app_pipo_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_thl1_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -300,6 +328,7 @@ class OrderController extends Controller
 									->where('pi_status','PI Approval Pending')
 									->where('app_pipo_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_thl1_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -309,6 +338,7 @@ class OrderController extends Controller
 									->whereIn('pi_status',['PI Approval Pending',""])
 									->where('app_pipo_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_thl3_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -318,6 +348,7 @@ class OrderController extends Controller
 									->where('pi_status','PI Approval Pending')
 									->where('app_pipo_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_thl3_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$app_pipo1['tsl1'] = DB::table('tesco_tsl1_orders')
@@ -326,6 +357,7 @@ class OrderController extends Controller
 									->whereIn('pi_status',['PI Approval Pending',""])
 									->where('app_pipo_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl1_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -335,6 +367,7 @@ class OrderController extends Controller
 									->where('pi_status','PI Approval Pending')
 									->where('app_pipo_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl1_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -344,6 +377,7 @@ class OrderController extends Controller
 									->whereIn('pi_status',['PI Approval Pending',""])
 									->where('app_pipo_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl3_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -353,6 +387,7 @@ class OrderController extends Controller
 									->where('pi_status','PI Approval Pending')
 									->where('app_pipo_flag',0)
 									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl3_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -361,7 +396,7 @@ class OrderController extends Controller
 			
 			$pending_class    = new Dashboard();
 
-            $pendingproduction      = $pending_class->pendingProduction();
+            $pendingproduction      = $pending_class->pendingProduction($from_date, $to_date);
                 
 			
 			

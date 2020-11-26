@@ -22,7 +22,7 @@ class Dashboard
     {
         $this->financial_year_date = FinancialYearResetDate::value('financial_year_date');
 	}
-   public function pendingProduction()
+   public function pendingProduction($from_date, $to_date)
    {
 	   		$pendingproduction['tcl1'] = DB::table('tesco_tcl1_orders')
 				->join('customers','customers.id','=','tesco_tcl1_orders.tesco_supplier_id')
@@ -33,6 +33,7 @@ class Dashboard
 											})
 											->where('pen_pro_flag',0)
 											->where('is_order_count_empty',0)
+											->whereBetween('tesco_tcl1_orders.created_at', [$from_date, $to_date])
 											->select('tesco_tcl1_orders.*','customers.company_name')
 											->get();
 			$pendingproduction['tcl2'] = DB::table('tesco_tcl2_orders')
@@ -44,6 +45,7 @@ class Dashboard
 											})
 											->where('pen_pro_flag',0)
 											->where('is_order_count_empty',0)
+											->whereBetween('tesco_tcl2_orders.created_at', [$from_date, $to_date])
 											->select('tesco_tcl2_orders.*','customers.company_name')
 											->get();
 			$pendingproduction['tcl4'] = DB::table('tesco_tcl4_orders')
@@ -55,6 +57,7 @@ class Dashboard
 											})
 											->where('pen_pro_flag',0)
 											->where('is_order_count_empty',0)
+											->whereBetween('tesco_tcl4_orders.created_at', [$from_date, $to_date])
 											->select('tesco_tcl4_orders.*','customers.company_name')
 											->get();
 			$pendingproduction['tsl1'] = DB::table('tesco_tsl1_orders')
@@ -66,6 +69,7 @@ class Dashboard
 											})
 											->where('pen_pro_flag',0)
 											->where('is_order_count_empty',0)
+											->whereBetween('tesco_tsl1_orders.created_at', [$from_date, $to_date])
 											->select('tesco_tsl1_orders.*','customers.company_name')
 											->get();
 			$pendingproduction['tsl3'] = DB::table('tesco_tsl3_orders')
@@ -77,6 +81,7 @@ class Dashboard
 											})
 											->where('pen_pro_flag',0)
 											->where('is_order_count_empty',0)
+											->whereBetween('tesco_tsl3_orders.created_at', [$from_date, $to_date])
 											->select('tesco_tsl3_orders.*','customers.company_name')
 											->get();
 			$pendingproduction['thl1'] = DB::table('tesco_thl1_orders')
@@ -88,6 +93,7 @@ class Dashboard
 											})
 											->where('pen_pro_flag',0)
 											->where('is_order_count_empty',0)
+											->whereBetween('tesco_thl1_orders.created_at', [$from_date, $to_date])
 											->select('tesco_thl1_orders.*','customers.company_name')
 											->get();
 			$pendingproduction['thl3'] = DB::table('tesco_thl3_orders')
@@ -99,6 +105,7 @@ class Dashboard
 											})
 											->where('pen_pro_flag',0)
 											->where('is_order_count_empty',0)
+											->whereBetween('tesco_thl3_orders.created_at', [$from_date, $to_date])
 											->select('tesco_thl3_orders.*','customers.company_name')
 											->get();
       		return $pendingproduction;

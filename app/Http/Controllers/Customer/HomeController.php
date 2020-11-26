@@ -11,6 +11,8 @@ use Response;
 use View;
 use DB;
 use Auth;
+use Carbon\Carbon;
+use App\FinancialYearResetDate;
 
 class HomeController extends Controller
 {
@@ -21,6 +23,11 @@ class HomeController extends Controller
     private $thl3;
     private $tsl1;
     private $tsl3;
+    private $current_date;
+    private $year;
+    private $financial_year_date;
+    private $financial_year_start;
+    private $financial_year_end;
     /**
      * Create a new controller instance.
      *
@@ -36,6 +43,22 @@ class HomeController extends Controller
         $this->thl3 = "THL 3";
         $this->tsl1 = "TSL 1";
         $this->tsl3 = "TSL 3";
+        // get the current time
+       $this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
+   
+       // get year as "2020"
+       $this->year = Carbon::parse($this->current_date)->format('Y');
+   
+       $this->financial_year_date = FinancialYearResetDate::value('financial_year_date');
+   
+       // format financial year date as "yyyy-dd-mm" 
+       $this->financial_year_date_format = $this->year.'-'.$this->financial_year_date;
+   
+       // store financial year start and end date and
+       // financial year identification
+       
+       $this->financial_year_start = $this->financial_year_date_format;
+       $this->financial_year_end = Carbon::parse($this->financial_year_date_format)->addYear()->subDay()->toDateString();
     }
 
     /**
@@ -46,6 +69,17 @@ class HomeController extends Controller
     public function index()
     {
         try{
+
+            if(!isset($_COOKIE["fiscal-year"])) {
+
+                $from_date = $this->financial_year_start;
+                $to_date = $this->financial_year_end; 
+      
+            } else {
+                $year = explode('-', $_COOKIE["fiscal-year"]);
+                $from_date = $year[0].'-'.$this->financial_year_date;
+                $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+            }
             $customObj   = new CustomerDashboard();
             $customer_id = Auth::guard('web_customer')->id();
             $customer_role_id = DB::table('customer_profile')->select('*')
@@ -63,15 +97,15 @@ class HomeController extends Controller
 
             if($customer_role_id->role_id == 1)
             {
-                $approved_orders = $customObj->getAllApprovedOrders();
-                $app_pending_orders = $customObj->getAllPendingOrders();
-                $cancelled_orders = $customObj->getAllCancelledOrders();
+                $approved_orders = $customObj->getAllApprovedOrders($from_date, $to_date);
+                $app_pending_orders = $customObj->getAllPendingOrders($from_date, $to_date);
+                $cancelled_orders = $customObj->getAllCancelledOrders($from_date, $to_date);
                
             }
             else{
-                $approved_orders = $customObj->getApprovedOrders();              
-                $app_pending_orders = $customObj->getPendingOrders();
-                $cancelled_orders = $customObj->getCancelledOrders();
+                $approved_orders = $customObj->getApprovedOrders($from_date, $to_date);
+                $app_pending_orders = $customObj->getPendingOrders($from_date, $to_date);
+                $cancelled_orders = $customObj->getCancelledOrders($from_date, $to_date);
                 
 
             }
@@ -96,6 +130,16 @@ class HomeController extends Controller
     public function getApprovedOrdersList()
     {
       try {
+          if(!isset($_COOKIE["fiscal-year"])) {
+
+              $from_date = $this->financial_year_start;
+              $to_date = $this->financial_year_end; 
+
+          } else {
+              $year = explode('-', $_COOKIE["fiscal-year"]);
+              $from_date = $year[0].'-'.$this->financial_year_date;
+              $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+          }
           $customObj   = new CustomerDashboard();
           $customer_id = Auth::guard('web_customer')->id();
           $customer_role_id = DB::table('customer_profile')->select('*')
@@ -103,11 +147,11 @@ class HomeController extends Controller
           if($customer_role_id->role_id == 1)
           { 
             //invoke the CustomerDashboard class method to get all the  approved order list
-              $approved_orders = $customObj->getAllApprovedOrders();
+              $approved_orders = $customObj->getAllApprovedOrders($from_date, $to_date);
           }
           else{
              //invoke the CustomerDashboard class method to get the approved order list for the logged in user
-              $approved_orders = $customObj->getApprovedOrders();
+              $approved_orders = $customObj->getApprovedOrders($from_date, $to_date);
           }
 
           $result = response()->json(['error'=> false,'message' =>'success','data'=>$approved_orders],200);
@@ -126,6 +170,16 @@ class HomeController extends Controller
     public function getPendingOrdersList()
     {
       try {
+          if(!isset($_COOKIE["fiscal-year"])) {
+
+              $from_date = $this->financial_year_start;
+              $to_date = $this->financial_year_end; 
+
+          } else {
+              $year = explode('-', $_COOKIE["fiscal-year"]);
+              $from_date = $year[0].'-'.$this->financial_year_date;
+              $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+          }
           $customObj   = new CustomerDashboard();
 
           $customer_id = Auth::guard('web_customer')->id();
@@ -134,11 +188,11 @@ class HomeController extends Controller
           if($customer_role_id->role_id == 1)
             {
               //invoke the CustomerDashboard class method to get all the  approval pending order list
-                $pending_orders = $customObj->getAllPendingOrders();
+                $pending_orders = $customObj->getAllPendingOrders($from_date, $to_date);
             }
             else{
               //invoke the CustomerDashboard class method to get the approval pending order list for the logged in user
-                $pending_orders = $customObj->getPendingOrders();
+                $pending_orders = $customObj->getPendingOrders($from_date, $to_date);
             }
 
           $result = response()->json(['error'=> false,'message' =>'success','data'=>$pending_orders],200);
@@ -157,6 +211,16 @@ class HomeController extends Controller
     public function getCancelledOrdersList()
     {
       try {
+          if(!isset($_COOKIE["fiscal-year"])) {
+
+              $from_date = $this->financial_year_start;
+              $to_date = $this->financial_year_end; 
+
+          } else {
+              $year = explode('-', $_COOKIE["fiscal-year"]);
+              $from_date = $year[0].'-'.$this->financial_year_date;
+              $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+          }
           $customObj   = new CustomerDashboard();
           $customer_id = Auth::guard('web_customer')->id();
           $customer_role_id = DB::table('customer_profile')->select('*')
@@ -164,11 +228,11 @@ class HomeController extends Controller
           if($customer_role_id->role_id == 1)
           {
              //invoke the CustomerDashboard class method to get all the cancelled order list
-              $cancelled_orders = $customObj->getAllCancelledOrders();
+              $cancelled_orders = $customObj->getAllCancelledOrders($from_date, $to_date);
           }
           else{
             //invoke the CustomerDashboard class method to get the cancelled order list for the logged in user
-              $cancelled_orders = $customObj->getCancelledOrders();
+              $cancelled_orders = $customObj->getCancelledOrders($from_date, $to_date);
           }
 
           $result = response()->json(['error'=> false,'message' =>'success','data'=>$cancelled_orders],200);
