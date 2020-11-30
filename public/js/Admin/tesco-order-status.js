@@ -31,17 +31,17 @@ function tescoOrderStatus() {
                 <div class="row">
                 <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="stylenoos" title="Select CE Style Number" multiple data-selected-text-format="count" data-live-search="true" data-size="10"></select></div></div>
                 <div class="col-md-2"></div>
-                <div class="col-md-4"><input type="text" placeholder="Start Date" class="form-control startdateos" multiple style="width:100%" name="startdateos" /></div>
+                <div class="col-md-4"><input type="text" placeholder="Start Date - End Date" class="form-control startdateos" autocomplete="off" multiple style="width:100%" name="startdateos" /></div>
                 <div class="col-md-2"></div>
                 <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="ukstylenoos" title="Select UK Style Number" multiple data-selected-text-format="count" data-live-search="true" data-size="10"></select></div></div>
                 </div>
                 <div class="row" style="margin-top: 15px;">
                 <div class="col-md-1"></div>
                 <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="seasonos" title="Select Season" multiple data-selected-text-format="count" data-live-search="true" data-size="10"></select></div></div>
-                <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="orderstatusos" title="Select Order Status" multiple data-selected-text-format="count" data-live-search="true" data-size="10"><option value="Saved">Saved</option><option value="Submited">Submited</option><option value="Pending">Pending</option><option value="Order Cancelled">Cancelled</option></select></div></div>
+                <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="orderstatusos" title="Select Order Status" multiple data-selected-text-format="count" data-live-search="true" data-size="10"><option value="Saved">Saved</option><option value="Order Placed">Submited</option><option value="Order Pending">Pending</option><option value="Order Cancelled">Cancelled</option></select></div></div>
                 <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="artworkstatusos" title="Select Artwork Status" multiple data-selected-text-format="count" data-live-search="true" data-size="10"><option value="Approval Pending">Approval Pending</option><option value="Order Approved">Order Approved</option></select></div></div>
                 <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="postatusos" title="Select PO Status" multiple data-selected-text-format="count" data-live-search="true" data-size="10"><option value="PO Pending">PO Pending</option><option value="PO Uploaded">PO Uploaded</option></select></div></div>
-                <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="pistatusos" title="Select PI Status" multiple data-selected-text-format="count" data-live-search="true" data-size="10"><option value="PI Approval Pending">PI Approval Pending</option><option value="PI Approved">PI Approved</option></select></div></div>
+                <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="pistatusos" title="Select PI Status" multiple data-selected-text-format="count" data-live-search="true" data-size="10"><option value="PI Approval Pending">PI Approval Pending</option><option value="PI Approved">PI Approved</option><option value="PI Rejected">PI Rejected</option></select></div></div>
                 <div class="col-md-1"></div>
                 </div>
                 <div class="row" style="margin-top: 15px;">
@@ -79,7 +79,8 @@ function tescoOrderStatus() {
 
                 $('input[name="startdateos"]').daterangepicker({
                     "minDate": minDate,
-                    "maxDate": maxDate
+                    "maxDate": maxDate,
+                    autoUpdateInput: false,
                 },
                 function (start, end, label) {
                     var start_date = start.format('YYYY-MM-DD');
@@ -137,6 +138,15 @@ function tescoOrderStatus() {
                             $(".loader").css('margin-top', '0%');
                         }
                     })
+                });
+
+
+                $('input[name="startdateos"]').on('apply.daterangepicker', function(ev, picker){
+                    $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+                });
+
+                $('input[name="startdateos"]').on('cancel.daterangepicker', function(ev, picker) {
+                    $(this).val('');
                 });
 
                 var options = "<option>Select Style Number</option>";
@@ -1053,6 +1063,11 @@ function tescoStatusTable(data, path) {
                     if (value['pi_required'] == 1 && value['is_order_count_empty'] == 0) {
                         if (str === 'PI Approved') {
                             action_status = true;
+                            status = str.replace(/ /g, "");
+                            status_text = '<span class="pi_class label label-' + status + '">' + value[key] + '</span>';
+                            tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateTescoPI("' + value.tableID + '","' + value.tableName + '","' + action_status + '","' + style_no + '","' + value.template_id + '","' + value.BuyerPO + '","' + value.TemplateName.replace(/ /g, "") + '","' + order_flag + '")>'+status_text+'</a></td>';
+                        }
+                        else if (str === 'PI Rejected') {
                             status = str.replace(/ /g, "");
                             status_text = '<span class="pi_class label label-' + status + '">' + value[key] + '</span>';
                             tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateTescoPI("' + value.tableID + '","' + value.tableName + '","' + action_status + '","' + style_no + '","' + value.template_id + '","' + value.BuyerPO + '","' + value.TemplateName.replace(/ /g, "") + '","' + order_flag + '")>'+status_text+'</a></td>';
@@ -2190,7 +2205,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj) {
 				} else {
 					var barcode_change = val.ean_barcode
 				}
-				alert(barcode_change);
+				//alert(barcode_change);
 				jsbarcodetescotslean(barcode_change, 'barcode', svgDoc)
 				
 				svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
@@ -2581,6 +2596,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj) {
 						tryCount: 0,
 						retryLimit: 2,
 						success: function (data) {
+                            //alert(data.size_chart)
 							/** [ Dynamically change svg short description ] */
 							if (description != '' && data.size_chart.length != 0) {
 								var desc_size = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
