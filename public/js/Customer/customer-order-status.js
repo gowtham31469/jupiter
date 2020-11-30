@@ -207,7 +207,7 @@ function tescoOrderStatus() {
                 <div class="row">
                 <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="stylenoos" title="Select CE Style Number" multiple data-selected-text-format="count" data-live-search="true" data-size="10"></select></div></div>
                 <div class="col-md-2"></div>
-                <div class="col-md-4"><input type="text" placeholder="Start Date" class="form-control startdateos" multiple style="width:100%" name="startdateos" /></div>
+                <div class="col-md-4"><input type="text" placeholder="Start Date - End Date" class="form-control startdateos" autocomplete="off" multiple style="width:100%" name="startdateos" /></div>
                 <div class="col-md-2"></div>
                 <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="ukstylenoos" title="Select UK Style Number" multiple data-selected-text-format="count" data-live-search="true" data-size="10"></select></div></div>
                 </div>
@@ -255,7 +255,8 @@ function tescoOrderStatus() {
 
                 $('input[name="startdateos"]').daterangepicker({
                     "minDate": minDate,
-                    "maxDate": maxDate
+                    "maxDate": maxDate,
+                    autoUpdateInput: false
                 },
                 function (start, end, label) {
                     var start_date = start.format('YYYY-MM-DD');
@@ -313,6 +314,14 @@ function tescoOrderStatus() {
                             $(".loader").css('margin-top', '0%');
                         }
                     })
+                });
+
+                $('input[name="startdateos"]').on('apply.daterangepicker', function(ev, picker){
+                    $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+                });
+
+                $('input[name="startdateos"]').on('cancel.daterangepicker', function(ev, picker) {
+                    $(this).val('');
                 });
 
                 var options = "<option>Select Style Number</option>";
@@ -1907,6 +1916,15 @@ function updateArtwork(obj) {
                         $('#submit').remove();
                         $('#error_msg_alert').html('ERP Order Status : <strong>' + data.erp_details[0].status_name + '</strong>. You are not allowed to edit this order.')
                     }
+                }
+
+                if(data.order_details.pi_status == "PI Approved")
+                {
+                    $('#enable_edit').remove();
+                    $('#disable_edit').remove();
+                    $('#edit').remove();
+                    $('#submit').remove();
+                    $('#error_msg_alert').html('<strong>PI is approved so you are not allowed to edit this order.</strong>')
                 }
 
             },

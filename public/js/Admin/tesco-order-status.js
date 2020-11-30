@@ -80,7 +80,7 @@ function tescoOrderStatus() {
                 $('input[name="startdateos"]').daterangepicker({
                     "minDate": minDate,
                     "maxDate": maxDate,
-                    autoUpdateInput: false,
+                    autoUpdateInput: false
                 },
                 function (start, end, label) {
                     var start_date = start.format('YYYY-MM-DD');
@@ -3480,6 +3480,14 @@ function updateArtwork(obj) {
 
                         $('#error_msg_alert').html('ERP Order Status : <strong>' + data.erp_details[0].status_name + '</strong>. You are not allowed to edit this order.')
                     }
+                }
+                if(data.order_details.pi_status == "PI Approved")
+                {
+                    $('#enable_edit').remove();
+                    $('#disable_edit').remove();
+                    $('#edit').remove();
+                    $('#submit').remove();
+                    $('#error_msg_alert').html('<strong>PI is approved so you are not allowed to edit this order.</strong>')
                 }
 
                 $('.left-panel').addClass('active');
