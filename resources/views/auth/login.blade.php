@@ -28,9 +28,9 @@
                             <button class="btn btn-sm btn-primary btn-block " type="submit">Sign in</button>
                         </form>
                         <!-- /form -->
-                        <a href="{{route('password.request')}}" class="forgot-password">
+                        {{-- <a href="{{route('password.request')}}" class="forgot-password">
                 Forgot the password?
-            </a>
+            </a> --}}
                     </div>
                     <!-- /card-container -->
                 </div>
