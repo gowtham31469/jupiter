@@ -1347,7 +1347,7 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj) {
 			if ((name == "TSL3-sticker")) {
 				if (size != '') {
 					$.ajax({
-						url: base_url + "/erp/job-manager/tesco/get-tsl-size",
+						url: base_url + "/admin/tesco/get-tsl-size",
 						type: 'GET',
 						async: false,
 						data: {
@@ -1737,7 +1737,7 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj) {
 			if ((name == "TCL4-sticker") || (name == "TSL3-sticker") || (name == "THL3-sticker")) {
 				if (size != '') {
 					$.ajax({
-						url: base_url + "/erp/job-manager/tesco/get-tsl-size",
+						url: base_url + "/admin/tesco/get-tsl-size",
 						type: 'GET',
 						async: false,
 						data: {
@@ -2236,7 +2236,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj) {
 			if ((name == "TSL3-sticker")) {
 				if (size != '') {
 					$.ajax({
-						url: base_url + "/erp/job-manager/tesco/get-tsl-size",
+						url: base_url + "/admin/tesco/get-tsl-size",
 						type: 'GET',
 						async: false,
 						data: {
@@ -2586,7 +2586,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj) {
 			if ((name == "TCL4-sticker") || (name == "TSL3-sticker") || (name == "THL3-sticker")) {
 				if (size != '') {
 					$.ajax({
-						url: base_url + "/erp/job-manager/tesco/get-tsl-size",
+						url: base_url + "/admin/tesco/get-tsl-size",
 						type: 'GET',
 						async: false,
 						data: {
