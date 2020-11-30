@@ -80,7 +80,7 @@ function tescoOrderStatus() {
                 $('input[name="startdateos"]').daterangepicker({
                     "minDate": minDate,
                     "maxDate": maxDate,
-                    autoUpdateInput: false,
+                    autoUpdateInput: false
                 },
                 function (start, end, label) {
                     var start_date = start.format('YYYY-MM-DD');
@@ -1347,7 +1347,7 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj) {
 			if ((name == "TSL3-sticker")) {
 				if (size != '') {
 					$.ajax({
-						url: base_url + "/erp/job-manager/tesco/get-tsl-size",
+						url: base_url + "/admin/tesco/get-tsl-size",
 						type: 'GET',
 						async: false,
 						data: {
@@ -1737,7 +1737,7 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj) {
 			if ((name == "TCL4-sticker") || (name == "TSL3-sticker") || (name == "THL3-sticker")) {
 				if (size != '') {
 					$.ajax({
-						url: base_url + "/erp/job-manager/tesco/get-tsl-size",
+						url: base_url + "/admin/tesco/get-tsl-size",
 						type: 'GET',
 						async: false,
 						data: {
@@ -2236,7 +2236,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj) {
 			if ((name == "TSL3-sticker")) {
 				if (size != '') {
 					$.ajax({
-						url: base_url + "/erp/job-manager/tesco/get-tsl-size",
+						url: base_url + "/admin/tesco/get-tsl-size",
 						type: 'GET',
 						async: false,
 						data: {
@@ -2586,7 +2586,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj) {
 			if ((name == "TCL4-sticker") || (name == "TSL3-sticker") || (name == "THL3-sticker")) {
 				if (size != '') {
 					$.ajax({
-						url: base_url + "/erp/job-manager/tesco/get-tsl-size",
+						url: base_url + "/admin/tesco/get-tsl-size",
 						type: 'GET',
 						async: false,
 						data: {
@@ -3480,6 +3480,14 @@ function updateArtwork(obj) {
 
                         $('#error_msg_alert').html('ERP Order Status : <strong>' + data.erp_details[0].status_name + '</strong>. You are not allowed to edit this order.')
                     }
+                }
+                if(data.order_details.pi_status == "PI Approved")
+                {
+                    $('#enable_edit').remove();
+                    $('#disable_edit').remove();
+                    $('#edit').remove();
+                    $('#submit').remove();
+                    $('#error_msg_alert').html('<strong>PI is approved so you are not allowed to edit this order.</strong>')
                 }
 
                 $('.left-panel').addClass('active');
