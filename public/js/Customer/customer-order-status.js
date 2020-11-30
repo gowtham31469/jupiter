@@ -217,7 +217,7 @@ function tescoOrderStatus() {
                 <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="orderstatusos" title="Select Order Status" multiple data-selected-text-format="count" data-live-search="true" data-size="10"><option value="Saved">Saved</option><option value="Order Placed">Submited</option><option value="Order Pending">Pending</option><option value="Order Cancelled">Cancelled</option></select></div></div>
                 <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="artworkstatusos" title="Select Artwork Status" multiple data-selected-text-format="count" data-live-search="true" data-size="10"><option value="Approval Pending">Approval Pending</option><option value="Order Approved">Order Approved</option></select></div></div>
                 <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="postatusos" title="Select PO Status" multiple data-selected-text-format="count" data-live-search="true" data-size="10"><option value="PO Pending">PO Pending</option><option value="PO Uploaded">PO Uploaded</option></select></div></div>
-                <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="pistatusos" title="Select PI Status" multiple data-selected-text-format="count" data-live-search="true" data-size="10"><option value="PI Approval Pending">PI Approval Pending</option><option value="PI Approved">PI Approved</option></select></div></div>
+                <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="pistatusos" title="Select PI Status" multiple data-selected-text-format="count" data-live-search="true" data-size="10"><option value="PI Approval Pending">PI Approval Pending</option><option value="PI Approved">PI Approved</option><option value="PI Rejected">PI Rejected</option></select></div></div>
                 <div class="col-md-1"></div>
                 </div>
                 <div class="row" style="margin-top: 15px;">
@@ -1230,7 +1230,13 @@ function tescoStatusTable(data, path) {
                             status = str.replace(/ /g, "");
                             status_text = '<span class="pi_class label label-' + status + '">' + value[key] + '</span>';
                             tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateTescoPI("' + value.tableID + '","' + value.tableName + '","' + action_status + '","' + style_no + '","' + value.template_id + '","' + value.BuyerPO + '","' + value.TemplateName.replace(/ /g, "") + '","' + order_flag + '")>'+status_text+'</a></td>';
-                        } else {
+                        } 
+                        else if (str === 'PI Rejected') {
+                            status = str.replace(/ /g, "");
+                            status_text = '<span class="pi_class label label-' + status + '">' + value[key] + '</span>';
+                            tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateTescoPI("' + value.tableID + '","' + value.tableName + '","' + action_status + '","' + style_no + '","' + value.template_id + '","' + value.BuyerPO + '","' + value.TemplateName.replace(/ /g, "") + '","' + order_flag + '")>'+status_text+'</a></td>';
+                        } 
+                        else {
                             if (value['order_status'] === 'Order Placed' || value['order_status'] === 'Order Approved') {
                                 status_text = '<span class="pi_class label label-PIApprovalPending"> PI Approval Pending </span>';
                                 tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateTescoPI("' + value.tableID + '","' + value.tableName + '","' + action_status + '","' + style_no + '","' + value.template_id + '","' + value.BuyerPO + '","' + value.TemplateName.replace(/ /g, "") + '","' + order_flag + '")>'+status_text+'</a></td>';
