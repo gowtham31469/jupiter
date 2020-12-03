@@ -1,4 +1,4 @@
-@extends('layouts.Erp.app')
+@extends('layouts.Admin.app')
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/Erp/report/jquery-ui.css') }}">
 <link rel="stylesheet" href="{{ asset('css/Erp/report/datatables.min.css') }}">
@@ -6,18 +6,6 @@
 <link rel="stylesheet" href="{{ asset('css/Erp/report/bootstrap-multiselect.css') }}">
 <link rel="stylesheet" href="{{ asset('css/Erp/report/reports.css') }}">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
-@section('navbar')
-<style>
-	.navbar-nav > li > a {
-		line-height: 12px !important;
-	}
-	 table.dataTable tbody td {text-align: left;}
-</style>
-<ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
-	<li><a href="#" onClick="window.location.reload();return false;" class="active">Get Reports</a></li>
-</ul>
-@endsection
 
 <div class="container-fluid setMarginTop4">
 
@@ -213,6 +201,7 @@
 	</div>
 </div>
 
+@endsection 
 @section('jqueryIncludes')
 
 <script type="text/javascript" src="{{ asset('js/Erp/report/jquery-ui.js') }}"></script>
@@ -639,5 +628,4 @@ function create_table(def,extra)
 	}
 
 </script>
-@endsection 
 @endsection 

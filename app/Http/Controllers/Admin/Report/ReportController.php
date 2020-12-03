@@ -22,56 +22,72 @@ use App\OrderManagementHistory;
 use Carbon\Carbon;
 use DB;
 use Auth;
+use App\Classes\Modules;
+use View;
 
 class ReportController extends Controller
 {
 	
 
-    public function __construct()
+    public function __construct(Modules $module)
     {
        $this->middleware('auth');
+       $this->module = $module;
     }
-
     public function index()
     {
-		$tax=array_unique(TescoTaxCode::all()->pluck('tax')->toArray());
-		array_multisort($tax);
-		array_walk($tax, function(&$value, $key) { $value .= '% tax'; } );
+		$is_allowed = $this->module->permittedModules();
+        if($is_allowed)
+        {
+            $get_main_module = $this->module->getMainModules();
+            $get_sub_module = $this->module->getSubModules(50);
+            $tax=array_unique(TescoTaxCode::all()->pluck('tax')->toArray());
+			array_multisort($tax);
+			array_walk($tax, function(&$value, $key) { $value .= '% tax'; } );
 
-		$allActions = ['1'=>'Orders','2'=>'Delivery'];
-		$action_as_id = array();
+			$allActions = ['1'=>'Orders','2'=>'Delivery'];
+			$action_as_id = array();
 
-		$options_for_orders = ['1'=>'Orders Placed(submitted orders)',
-							  '2'=>'AW Approvl Pending',
-							  '3'=>'PO Upload Pending',
-							  '4'=>'PI Approval Pending',
-							  '5'=>'Cancelled',
-							  // '6'=>'On Hold by Supplier',
-							  '7'=>'Incomplete(saved,not submitted)'];
+			$options_for_orders = ['1'=>'Orders Placed(submitted orders)',
+								'2'=>'AW Approvl Pending',
+								'3'=>'PO Upload Pending',
+								'4'=>'PI Approval Pending',
+								'5'=>'Cancelled',
+								// '6'=>'On Hold by Supplier',
+								'7'=>'Incomplete(saved,not submitted)'];
 
-		$options_for_delivery = ['8'=>'Dispacted',
-							     '9'=>'Pending'];
+			$options_for_delivery = ['8'=>'Dispacted',
+									'9'=>'Pending'];
 
-		$order_hisory = OrderManagementHistory::all();
+			$order_hisory = OrderManagementHistory::all();
 
-		$seasons = $order_hisory->unique('season')->pluck('season');
+			$seasons = $order_hisory->unique('season')->pluck('season');
 
-		$buyer_id = $order_hisory->unique('buyer_id')->pluck('buyer_id');
+			$buyer_id = $order_hisory->unique('buyer_id')->pluck('buyer_id');
 
-		$buyers = Buyer::whereIn('id',$buyer_id)->orderBy('buyer_name')
-												->pluck('buyer_name','id')
-												->toArray();
-		$templates = [];
-		$countries = [];
-		$customers = [];
+			$buyers = Buyer::whereIn('id',$buyer_id)->orderBy('buyer_name')
+													->pluck('buyer_name','id')
+													->toArray();
+			$templates = [];
+			$countries = [];
+			$customers = [];
 
-		$level1_route = route('filter_level1');
-		$level2_route = route('filter_level2');
-		$get_table_fields_route = route('admin_getTableFields');
-    	$set_Datatable_route = route('admin_setUpDatatable');
+			$level1_route = route('filter_level1');
+			$level2_route = route('filter_level2');
+			$get_table_fields_route = route('admin_getTableFields');
+			$set_Datatable_route = route('admin_setUpDatatable');
 
-    	$admin_flag = 1;
-		return view('Admin.Reports.reportgenerator',compact('buyers','allActions','countries','seasons','templates','options_for_orders','options_for_delivery','level1_route','level2_route','customers','get_table_fields_route','set_Datatable_route','admin_flag'));
+			$admin_flag = 1;
+			
+			View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
+				return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
+			});
+			return view('Admin.Reports.reportgenerator',compact('buyers','allActions','countries','seasons','templates','options_for_orders','options_for_delivery','level1_route','level2_route','customers','get_table_fields_route','set_Datatable_route','admin_flag'));
+        }
+        else
+        {
+             return redirect('/admin/dashboard');
+        }
     }
 
 
