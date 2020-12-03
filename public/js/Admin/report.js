@@ -116,63 +116,7 @@ $(document).ready(function($) {
 
 	});
 
-	function triggerLevel3()
-		{
-			$('.selectpicker').removeClass('open');
-			if($(".roleSelection option:selected").val().length > 0)
-			{
-				console.log($("#options_for_orders").val().length)
-				if($("#options_for_orders").val().length || $("#options_for_delivery").val().length )
-				{
-		
-					if($("#reference").val().length > 0 && $("#po").val().length > 0 && $("#buyer_po").val().length > 0 && $("#ocn").val().length > 0 && $("#customer").val().length > 0 && $("#material").val().length > 0 && $("#style").val().length > 0 && $("#mat_sub").val().length > 0 && $("#buyer").val().length > 0 && $("#season").val().length > 0)
-					{
-						$status =[]
-						if($(".roleSelection option:selected").html() == "Orders")
-						{
-							$status = $("#options_for_orders").val()
-						}
-						else
-						{
-							$status = $("#options_for_delivery").val()
-						}
-						$.ajax({
-							type : 'get',
-							url : '/admin_getTableFields',
-							data:{
-								'role' : $(".roleSelection option:selected").html(),
-								'status' : $status
-							},
-							success:function(data)
-							{	
-								if(data.Default.length > 0)
-								{
-									$("#_prefModal").modal('hide')
-									create_table(data.Default,data.Extra)
-								}
-								else{
-									$('.snackbar_span').html("No values found for this combination !!.");
-									showSnackbar();
-								}
-							}
-						});
-					}
-					else
-					{
-						$('.snackbar_span').html("Please select atleast one value from each of the select boxes.");
-						showSnackbar();
-					}
-				}
-				else{
-					$('.snackbar_span').html("Please select the status.");
-					showSnackbar();
-				}
-			}
-			else{
-				$('.snackbar_span').html("Please select one of the roles.");
-				showSnackbar();
-			}
-		}
+	
 
 	$(document).on('change', '.filterLevel1', function(event) {
 			$(".filterLevel2").multiselect('clearSelection');

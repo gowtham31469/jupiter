@@ -936,12 +936,18 @@ Route::post('setUpDatatable', 'ErpUser\Reports\ReportController@setUpDatatable' 
 // Routes for admin report generation
 Route::get('testQuery','Admin\Report\ReportController@testQuery');
 Route::get('admin/generate-report','Admin\Report\ReportController@index')->name('generate-report');
-Route::post('admin_level1Filter','Admin\Report\ReportController@level1Filter');
-Route::post('admin_level2Filter','Admin\Report\ReportController@level2Filter');
-Route::get('admin_getTableFields','Admin\Report\ReportController@admin_getTableFields');
+Route::post('filter_level1','Admin\Report\ReportController@level1Filter')->name('filter_level1');
+Route::post('admin_level2Filter','Admin\Report\ReportController@level2Filter')->name('filter_level2');
+Route::post('admin_getTableFields','Admin\Report\ReportController@admin_getTableFields')->name('admin_getTableFields');
 Route::post('admin_setUpDatatable', 'Admin\Report\ReportController@admin_setUpDatatable' )
 													  ->name('admin_setUpDatatable');
 
+// Routes for customer report generation
+Route::get('customer/generate-report','Customer\Report\ReportController@index');
+Route::post('customer_filter_level1','Customer\Report\ReportController@level1Filter')->name('customer_filter_level1');
+Route::post('customer_filter_level2','Customer\Report\ReportController@level2Filter')->name('customer_filter_level2');
+Route::post('customer_getTableFields','Customer\Report\ReportController@customer_getTableFields')->name('customer_getTableFields');
+Route::post('customer_setUpDatatable','Customer\Report\ReportController@customer_setUpDatatable')->name('customer_setUpDatatable');
 
 Route::get('print-manager/get-customers-list', 'ErpUser\Printmanager\PrintManagerController@getCustomersListByBuyerId'); 
 Route::get('print-manager/get-style-list', 'ErpUser\Printmanager\PrintManagerController@getStyleListByBuyerCustomerId'); 
