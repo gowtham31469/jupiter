@@ -19,6 +19,7 @@
                         <li><a  href="{{ url('/customer/dashboard') }}">Dashboard</a></li>
                         <li><a  href="{{ url('/customer/create-order') }}">Create Order</a></li>
                         <li><a  href="{{ url('/customer/order-status') }}">Order Status</a></li>
+                        <li><a  href="{{ url('/customer/generate-report') }}">Report</a></li>
 <!--                        <li><a  href="{{ url('/customer/reorder') }}">ReOrder</a></li>-->
                     </ul>
 
