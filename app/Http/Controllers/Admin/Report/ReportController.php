@@ -63,8 +63,15 @@ class ReportController extends Controller
 												->toArray();
 		$templates = [];
 		$countries = [];
+		$customers = [];
 
-		return view('Admin.Reports.reportgenerator',compact('buyers','allActions','countries','seasons','templates','options_for_orders','options_for_delivery'));
+		$level1_route = route('filter_level1');
+		$level2_route = route('filter_level2');
+		$get_table_fields_route = route('admin_getTableFields');
+    	$set_Datatable_route = route('admin_setUpDatatable');
+
+    	$admin_flag = 1;
+		return view('Admin.Reports.reportgenerator',compact('buyers','allActions','countries','seasons','templates','options_for_orders','options_for_delivery','level1_route','level2_route','customers','get_table_fields_route','set_Datatable_route','admin_flag'));
     }
 
 
@@ -237,6 +244,7 @@ class ReportController extends Controller
 
 			foreach ($request->status as $key => $value) 
 			{
+
 				switch ($value) 
 				{
 					case 1:
@@ -244,15 +252,15 @@ class ReportController extends Controller
 					break;
 					
 					case 2:
-						$q->where('artwork_status',1);
+						$q->where('artwork_status',false);
 					break;
 
 					case 3:
-						$q->where('po_status',1);
+						$q->where('po_status',false);
 					break;
 
 					case 4:
-						$q->where('pi_status',1);
+						$q->where('pi_status',false);
 					break;
 
 					case 5:

@@ -32,10 +32,11 @@ class CreateOrderManagementHistoriesTable extends Migration
             $table->string('ocn_number')->nullable()->index();
             $table->string('order_table_name')->nullable();
             $table->bigInteger('order_table_id')->nullable();
-            $table->string('order_status')->default('Order Saved')->index();
-            $table->string('artwork_status')->default('Artwork Approval Pending')->index();
-            $table->string('po_status')->default('PO Upload Pending')->index();
-            $table->string('pi_status')->default('PI Approval Pending')->index();
+            $table->integer('order_status')->nullable(true)->default(1);
+            $table->foreign('order_status')->references('id')->on('orders_status')->onDelete('cascade')->index();
+            $table->boolean('artwork_status')->nullable(true)->default(0)->index();
+            $table->boolean('po_status')->nullable(true)->default(0)->index();
+            $table->boolean('pi_status')->nullable(true)->default(0)->index();
             $table->timestamps();
         });
     }
