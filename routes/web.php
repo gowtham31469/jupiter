@@ -250,6 +250,16 @@ Route::group(['middleware' => 'customer_auth'], function()
 	Route::post('customer/tesco/tesco-orders', 'Customer\Tesco\OrderStatusController@index');
 	Route::post('customer/tesco/order-status', 'Customer\Tesco\OrderStatusController@index');
 	Route::post('customer/tesco/order-management/set-po-number', 'Customer\Tesco\OrderStatusController@setPONumber');
+	Route::put('customer/tesco/approve-tesco-artwork', 'Customer\Tesco\OrderStatusController@approveTescoArtwork');
+
+	Route::post('customer/tesco/tesco-orders-filter', 'Customer\Tesco\OrderStatusController@tescoFilter');
+	Route::post('customer/tesco/tesco-orders-submit-filter', 'Customer\Tesco\OrderStatusController@tescoOrdersSubmitFilter');
+	Route::post('customer/tesco/tesco-submit-os', 'Customer\Tesco\OrderStatusController@tescoSubmitOs');
+
+
+	Route::post('customer/tesco/print-div-tescoos', 'Customer\Tesco\OrderStatusController@printDivTesco');
+	Route::post('customer/tesco/print-div-tesco-smallos', 'Customer\Tesco\OrderStatusController@printDivTescoSmall');
+
 	Route::post('customer/tesco/order-management/show-tesco-pi', 'Customer\Tesco\OrderStatusController@getTescoPI');
 	Route::post('customer/tesco/approve-tesco-pi', 'Customer\Tesco\OrderStatusController@approveTescoPI');
 	Route::post('customer/tesco/reject-tesco-pi', 'Customer\Tesco\OrderStatusController@rejectTescoPI');
@@ -596,6 +606,23 @@ Route::post('admin/tesco/tesco-orders', 'Admin\Tesco\OrderStatusCntrl@index');
 Route::post('admin/tesco/tesco-orders-filter', 'Admin\Tesco\OrderStatusCntrl@tescoFilter');
 Route::post('admin/tesco/tesco-orders-submit-filter', 'Admin\Tesco\OrderStatusCntrl@tescoOrdersSubmitFilter');
 
+
+Route::post('admin/tesco/get-order-details', 'Admin\Tesco\OrderStatusCntrl@getOrderDetails');
+
+
+
+Route::post('admin/tesco/print-div-tescoos', 'Admin\Tesco\OrderStatusCntrl@printDivTesco');
+Route::post('admin/tesco/print-div-tesco-smallos', 'Admin\Tesco\OrderStatusCntrl@printDivTescoSmall');
+
+
+Route::post('admin/tesco/generate-div-tescoos', 'Admin\Tesco\OrderStatusCntrl@generateDivTesco');
+Route::post('admin/tesco/generate-div-tesco-smallos', 'Admin\Tesco\OrderStatusCntrl@generateDivTescoSmall');
+
+Route::post('admin/tesco/generatebarcodetsl1', 'Admin\Tesco\OrderStatusCntrl@generateBarcodeTsl1');
+Route::post('admin/tesco/generatebarcodetsl3', 'Admin\Tesco\OrderStatusCntrl@generateBarcodeTsl3');
+
+Route::post('admin/tesco/generatebarcodeeanbig', 'Admin\Tesco\OrderStatusCntrl@generateBarcodeEanBig');
+Route::post('admin/tesco/generatebarcodeitfbig', 'Admin\Tesco\OrderStatusCntrl@generateBarcodeItfBig');
 
 Route::post('admin/tesco/tesco-submit-os', 'Admin\Tesco\OrderStatusCntrl@tescoSubmitOs');
 

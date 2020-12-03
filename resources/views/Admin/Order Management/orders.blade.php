@@ -396,6 +396,10 @@ input[type="number"] {
         </div>
         {{ Form::hidden('invisible', $buyer_count, array('id' => 'invisible__count_id')) }}
         <div class="clearfix"></div>
+
+        <!-- Financial year selection div -->
+        <div class="year-nav-div hidden"></div>
+        <div class="clearfix"></div>
     </div>
 	<div class="main-content">
 		<div class="select-buyer">
@@ -803,11 +807,14 @@ input[type="number"] {
     <script src="{{ asset('js/Admin/orchestra-pi.js') }}"></script>
     <script src="{{ asset('js/Admin/parser.js') }}"></script>
     <script src="{{ asset('js/Admin/tesco-view-orders.js') }}"></script>
+    <!-- Financial year selection script -->
+    <script src="{{ asset('js/common/financial-year-switch.js') }}"></script>
 <script src="{{ asset('js/moment.min.js') }}"></script>
 	<script>
 	$(document).ready (function(){
         $("#success-alert").hide();
-     });	
+     });
+     	
 		$(function () {
     $('.list-group.checked-list-box .list-group-item').each(function () {
         
@@ -898,6 +905,7 @@ input[type="number"] {
 
 
 		$(document).ready(function() {
+            
 			/** Clear local storage data **/
 			localStorage.removeItem("artwork_back");
 			localStorage.removeItem("back_flag");
@@ -1036,9 +1044,6 @@ input[type="number"] {
              })
             
         });
-		
-		
-        
 	</script>
 
 	@endsection

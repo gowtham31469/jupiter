@@ -385,6 +385,9 @@ background: rgba(0,0,0,0.2);
         </div>
         {{ Form::hidden('invisible', $buyer_count, array('id' => 'invisible__count_id')) }}
         <div class="clearfix"></div>
+        <!-- Financial year selection div -->
+        <div class="year-nav-div hidden"></div>
+        <div class="clearfix"></div>
     </div>
     <div class="main-content">
         <div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
@@ -750,6 +753,8 @@ background: rgba(0,0,0,0.2);
 <script src="{{ asset('js/Admin/parser.js') }}"></script>
 <script src="{{ asset('js/moment.min.js') }}"></script>
 <script src="{{ asset('js/Customer/customer-pi.js') }}"></script>
+<!-- Financial year selection script -->
+<script src="{{ asset('js/common/financial-year-switch.js') }}"></script>
 <script>
   var logged_in_customer = {{ Auth::guard("web_customer")->user()->id }};
 </script>

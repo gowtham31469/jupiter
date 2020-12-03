@@ -37,17 +37,15 @@ use App\History;
 use App\Buyer;
 use App\FinancialYearResetDate;
 use App\Classes\TescoMaterialQuery;
+use App\Classes\JobcardIDGenerator;
 
 class JobManagerController extends Controller
 {
 	private $current_date;
-	private $buyer_name;
 	private $erp_jc_status_id;
 	private $order_ap_status_id;
-	private $year;
-	private $month;
-	private $financial_year_date;
 	private $tesco_material_obj;
+	private $jobcard_id_gen_obj;
 
 	/**
 	 * Create a new controller instance.
@@ -66,17 +64,8 @@ class JobManagerController extends Controller
 		// Get order status table id for 'Order Approved' status.
 		$this->order_ap_status_id = DB::table('orders_status')->where('status_name', 'ilike', 'Order Approved')->value('id');
 
-		// get year as "2020"
-		$this->year = Carbon::parse($this->current_date)->format('Y');
-
-		// get month as "07"
-		$this->month = Carbon::parse($this->current_date)->format('m');
-
-		$this->financial_year_date = FinancialYearResetDate::value('financial_year_date');
-
-		// format financial year date as "yyyy-dd-mm" 
-		$this->financial_year_date_format = $this->year.'-'.$this->financial_year_date;
 		$this->tesco_material_obj = new TescoMaterialQuery();
+		$this->jobcard_id_gen_obj = new JobcardIDGenerator();
 	}
 		
 	/**
@@ -681,6 +670,8 @@ class JobManagerController extends Controller
 				$color_code         = array();
 				$tint_color         = array();
 
+				$item_array = ['Printed Labels' => 'PL', 'Woven Labels' => 'WL', 'Heat Tranfers' => 'HT', 'Carton & Polybag Stickers' => 'CS', 'Printed Boards' => 'PB', 'Swing Tags' => 'ST', 'Size Stickers' => 'ST', 'Garment Friendly' => 'GF', 'Price Stickers' => 'PS', 'Header Cards' => 'HC', 'Insert Cards' => 'IC', 'Cascades' => 'CD'];
+
 				/** Get erp order details table ids from erp orders table id */
 				foreach($erp_orders_ids as $row => $erp_orders_id)
 				{
@@ -702,35 +693,6 @@ class JobManagerController extends Controller
 					$order_detail_ids = array_unique(array_merge($order_detail_ids,$order_detail_id_array));
 				}
 				sort($order_detail_ids);
-				
-				// Logic for resetting Jobcard ID format for new financial year			 
-				$max_workorder_id = DB::table('jobcard_main_table')->select('work_order_id')->find(DB::table('jobcard_main_table')->max('id'));
-
-				if($max_workorder_id){
-					$split_workorder_id = explode("-",$max_workorder_id->work_order_id);
-					(int)$parsed_max_id  = end($split_workorder_id);
-					
-					$jobcard_id_prefix = count($split_workorder_id) === 3?"JGA-JC-":"JGA-JC-".$this->month."-".$this->year."-";
-				} else {
-					(int)$parsed_max_id = 0;
-					$jobcard_id_prefix = "JGA-JC-".$this->month."-".$this->year."-";
-				}
-				
-				if( strtotime($this->current_date) >= strtotime($this->financial_year_date_format) ){
-					// check if already jobcard created today.
-					$already_jobcard_created = DB::table('jobcard_main_table')->whereBetween('created_date', [$this->financial_year_date_format, $this->current_date])->orWhereDate('created_date', '=',$this->current_date)->exists();
-
-					// set erp id as 1 for first order of the financial year
-					(int)$parsed_max_id = $already_jobcard_created === false?1:(int)$parsed_max_id+(int)1;
-
-					$jobcard_id_prefix = $already_jobcard_created === false?"JGA-JC-".$this->month."-".$this->year."-":$jobcard_id_prefix;
-				} else {
-					(int)$parsed_max_id += 1;
-				}
-				
-				// jobcard id format "JGA-JC-mm-yyyy-1" and for old order "JGA-JC-1"
-				$workorder_id = $jobcard_id_prefix.$parsed_max_id;
-
 				foreach($order_detail_ids as $key => $order_detail_id)
 				{
 					$order_details = Erp::select('erp_orders.*', 'erp_order_details.*')
@@ -934,6 +896,9 @@ class JobManagerController extends Controller
 					}
 				}
 
+				// jobcard id format "Itemname(2)FinancialYearERPID(last 5)0001" where  and for old order "JGA-JC-1"
+				$workorder_id = $this->jobcard_id_gen_obj->generateJobcardID($article_array, $erp_orders_ids);
+
 				/** Push all array values into template_data array */
 				$template_data['order_date']       = Carbon::parse(min($order_dt_array))->format('d-m-Y');
 				$template_data['cus_del_date']     = $delivery_dt_array;
@@ -977,7 +942,7 @@ class JobManagerController extends Controller
 	{
 		try {
 				$company_id      = $request['company_id'];
-				$workorder_id    = $request['workorder_id'];
+				$jobcard_id      = $request['workorder_id'];
 				$created_date    = $request['created_date'] == ''?NULL:Carbon::parse($request['created_date'],'Asia/Kolkata')->toDateString();
 				$article         = $request['article'];
 				$material        = $request['material'];
@@ -1026,10 +991,15 @@ class JobManagerController extends Controller
 
 				$current_timestamp = Carbon::now('Asia/Kolkata')->toDateTimeString();
 
-				if(isset($company_id) && isset($workorder_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($machine) && isset($cus_del_date)  && isset($finish_type)  && isset($compiled_by) && isset($final_json_obj) && isset($material))
+				if(isset($company_id) && isset($jobcard_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($machine) && isset($cus_del_date)  && isset($finish_type)  && isset($compiled_by) && isset($final_json_obj) && isset($material))
 				{
 					$buyer    = DB::table('buyers')->select('buyer_name')->where('id', '=', $buyer_id)->first();
 					$customer = DB::table('customers')->select('short_name as customer_name', 'pi_required', 'po_required')->where('id', '=', $customer_id)->first();
+
+					$article_array = explode(', ', $article);
+					
+					// jobcard id format "Itemname(2)FinancialYearERPID(last 5)0001" where  and for old order "JGA-JC-1"
+					$workorder_id = $this->jobcard_id_gen_obj->generateJobcardID($article_array, $erp_orders_ids);
 
 					// Get Erp status table id for 'Jobcard Created' status.
 					$erp_status_id = DB::table('erp_status')->where('status_name', 'ilike', 'Jobcard Created')->value('id');

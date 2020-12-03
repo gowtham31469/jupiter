@@ -31,8 +31,19 @@
     .html2canvas-container { width: 3000px !important; height: 3000px !important; }
 </style>
 
+{{-- Hidden div for svg rendering --}}
+<div id="modaldiv">
+        <div id="svgdiv" style="position:absolute;visibility:hidden">\
+         <svg id="ean-13"></svg>\
+       </div>
+    </div>
 <input type="hidden" id="status_flag">
 <div class="col-sm-12 col-md-12 main">
+
+        <div class="main-content">
+                <div class="select-buyer">
+                </div>
+            </div>
     <div class="top-content">
         <div class="buyer-nav-div hidden">
            <a class="dropdown-toggle profile-dropdown-admin selected-buyer" style="text-transform:capitalize;cursor: pointer;">Select Buyer</a>
@@ -41,10 +52,6 @@
         <div class="clearfix"></div>
     </div>
 
-    <div class="main-content">
-        <div class="select-buyer">
-        </div>
-    </div>
     <div class="modal fade po-details" id="po-file-upload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -446,12 +453,6 @@
             </div>
         </div>
     </div>
-{{-- Hidden div for svg rendering --}}
-<div id="modaldiv">
-	<div id="svgdiv" style="position:absolute;visibility:hidden">\
-	 <svg id="ean-13"></svg>\
-   </div>
-</div>
 <!-- Tesco Artwork Approve Modal -->
 <div class="modal fade" id="approveTescoArtworkModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -468,6 +469,24 @@
                 <div class="modal-footer">
                     {!! Form::button('No', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
                     {!! Form::button('Yes', ['class' => 'btn btn-primary btn-sm', 'id' => 'approve_tesco_artwork_btn','onclick' => 'approveTescoArtwork()'] ) !!}
+                </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tesco Saved order alertbox -->
+<div class="modal fade" id="savedOrderAlertBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Saved Drafts</h4>
+            </div>
+                <div class="modal-body">
+                        <p>Please visit the Create Order page and complete your order.</p>
+                </div>
+                <div class="modal-footer">
+                    {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
                 </div>
         </div>
     </div>

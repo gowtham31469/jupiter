@@ -25,16 +25,12 @@ use App\EventHistory;
 use App\History;
 use Carbon\Carbon;
 use App\FinancialYearResetDate;
+use App\Classes\InvoiceIDGenerator;
 
 class InvoiceController extends Controller
 {
     private $current_date;
-    private $year;
-	private $month;
-	private $financial_year_date;
-	private $today_date;
-    private $from;
-	private $financial_year;
+    private $invoice_id_gen_obj;
     /**
      * Create a new controller instance.
      *
@@ -46,30 +42,7 @@ class InvoiceController extends Controller
 		// get the current time
         $this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
         
-        // get year as "2020"
-		$this->year = Carbon::parse($this->current_date)->format('Y');
-
-		// get month as "07"
-		$this->month = Carbon::parse($this->current_date)->format('m');
-
-		$this->financial_year_date = FinancialYearResetDate::value('financial_year_date');
-
-		// format financial year date as "yyyy-dd-mm" 
-		$this->financial_year_date_format = $this->year.'-'.$this->financial_year_date;
-
-		// get the current date in "dd-mm-yyyy" format
-		$this->today_date = Carbon::now('Asia/Kolkata')->format('Y-m-d');
-
-		$this->from  = Carbon::parse($this->financial_year_date_format)
-						->startOfDay()        // 2018-09-29 00:00:00.000000
-                        ->toDateTimeString(); // 2018-09-29 00:00:00
-        
-        // financial year identification
-		if($this->today_date < $this->financial_year_date_format){
-			$this->financial_year = Carbon::parse($this->financial_year_date_format)->subYear()->format('y');
-		} else {
-			$this->financial_year = Carbon::parse($this->financial_year_date_format)->format('y');
-		}
+        $this->invoice_id_gen_obj = new InvoiceIDGenerator();
 
 	}
 
@@ -102,30 +75,8 @@ class InvoiceController extends Controller
                               ->where('is_active','=',1)
                               ->get();
 
-        // Logic for resetting invoice ID format for new financial year			 
-        $max_invoice_id = Invoices::select('invoice_id')->find(Invoices::max('id'));
-        $invoice_id_prefix = "INV-".$this->financial_year;
-
-        if($max_invoice_id){
-            (int)$parsed_max_id  = substr($max_invoice_id->invoice_id, 6);
-
-            // To handle, if financial year start date is sunday or holiday
-            if( strtotime($this->today_date) >= strtotime($this->financial_year_date_format) ){
-                // check if already invoice created today.
-                $already_invoice_created = Invoices::whereBetween('created_at', [$this->from, $this->current_date])->orWhereDate('created_at', '=',$this->today_date)->exists();
-    
-                // set invoice id as 00001 for first order of the financial year
-                (int)$parsed_max_id = $already_invoice_created === false?str_pad(1, 5, 0, STR_PAD_LEFT):str_pad($parsed_max_id+1, 5, 0, STR_PAD_LEFT);
-            } else {
-                (int)$parsed_max_id = str_pad($parsed_max_id+1, 5, 0, STR_PAD_LEFT);
-            }
-
-        } else {
-            (int)$parsed_max_id = str_pad(1, 5, 0, STR_PAD_LEFT);
-        }
-        
-        // invoice id format "INV-yyXXXXX"
-        $invoice_id = $invoice_id_prefix.$parsed_max_id;
+        // invoice id format "yyXXXXX"
+        $invoice_id = $this->invoice_id_gen_obj->generateInvoiceID();
 
         return view('erp.Invoice.create-invoice',['customers' => $customers,'invID'=> $invoice_id,'companies' => $companies]);
     }
@@ -250,10 +201,15 @@ class InvoiceController extends Controller
             $roundOff      = $request->roundOff;
             $amntInwords   = $request->amntInwords;
             $grandTotal    = $request->grandTotal;
-            $invoiceNo     = $request->invoiceNo;
+            // $invoiceNo     = $request->invoiceNo;
             $invoiceDate   = $request->invoiceDate;
             $delivery_at   = $request->delivery_at;
             $eChargesArr   = $request['eCharges'];
+
+            // invoice id format "yyXXXXX"
+            $invoiceNo = $this->invoice_id_gen_obj->generateInvoiceID();
+
+
             ini_set('max_execution_time', 1000);
             $bill_to = DB::table('customer_bill_address')
                           ->where('customer_bill_address.customer_id',$orders[0]['customer_id'])

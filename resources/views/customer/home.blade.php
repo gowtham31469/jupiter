@@ -187,6 +187,7 @@
         window.location = "{{ url('/customer') }}";
     </script>
     @endif @section('jqueryIncludes')
+	<script src="{{ asset('js/common/financial-year-switch.js') }}"></script>
     <script src="{{ asset('js/Customer/customer-dashboard.js') }}"></script>
     <script> 
         /**
@@ -195,13 +196,14 @@
          */
         function showApprovedOrders()
         {
-            
+            $fiscal_year = getCookie("fiscal-year");
             $.ajax({
                 url: base_url + "/customer/tesco/order-management/approved-orders",
                 type: "Post",
                 dataType: "json",
                 data: {
-                    _token: csrf_token
+                    _token: csrf_token,
+                    fiscal_year:$fiscal_year
                 },
                 beforeSend: function() {
 
@@ -229,13 +231,14 @@
          */
         function showPendingOrders() 
         {
-          
+          $fiscal_year = getCookie("fiscal-year");
           $.ajax({
               url: base_url + "/customer/tesco/order-management/pending-orders",
               type: "Post",
               dataType: "json",
               data: {
-                  _token: csrf_token
+                  _token: csrf_token,
+                  fiscal_year:$fiscal_year
               },
               beforeSend: function() {
 
@@ -264,13 +267,14 @@
          */
         function showCancelledOrders() 
         {
-            
+            $fiscal_year = getCookie("fiscal-year");
             $.ajax({
                 url: base_url + "/customer/tesco/order-management/cancelled-orders",
                 type: "Post",
                 dataType: "json",
                 data: {
-                    _token: csrf_token
+                    _token: csrf_token,
+                    fiscal_year:$fiscal_year
                 },
                 beforeSend: function() {
 
@@ -291,6 +295,21 @@
                     $(".loader").css('margin-top', '0%');
                 }
             })
+        }
+
+        function getCookie(cname) {
+            var name = cname + "=";
+            var ca = document.cookie.split(';');
+            for(var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+            }
+            return "";
         }
 
     </script>

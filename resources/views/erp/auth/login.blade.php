@@ -92,9 +92,9 @@
                                     Login
                                 </button>
 
-                                <a class="btn btn-link" href="{{ url('/erp/password/reset') }}">
+                                {{-- <a class="btn btn-link" href="{{ url('/erp/password/reset') }}">
                                     Forgot Your Password?
-                                </a>
+                                </a> --}}
                             </div>
                         </div>
                     </form>

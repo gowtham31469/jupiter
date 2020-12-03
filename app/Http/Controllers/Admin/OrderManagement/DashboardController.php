@@ -29,8 +29,9 @@ class DashboardController extends Controller
 	{
 		try
 		{
+			$fiscal_year   = $request->fiscal_year;
 			$new_class    = new Dashboard();
-            $new_orders      = $new_class->newOrders();			
+            $new_orders      = $new_class->newOrders($fiscal_year);			
             $result = response()->json(['error'=> false,'message' =>'success','new_orders'=>$new_orders],200);
        
 		}
@@ -45,10 +46,11 @@ class DashboardController extends Controller
 	{
 		try
 		{
+			$fiscal_year   = $request->fiscal_year;
 			
 			$approved_class    = new Dashboard();
 
-            $approved_orders   = $approved_class->approvedOrders();
+            $approved_orders   = $approved_class->approvedOrders($fiscal_year);
 			
             $result = response()->json(['error'=> false,'message' =>'success','approved_orders'=>$approved_orders],200);
        
@@ -64,10 +66,11 @@ class DashboardController extends Controller
 	{
 		try
 		{
-			
+			$fiscal_year   = $request->fiscal_year;
+
 			$pending_class    = new Dashboard();
 
-            $pending_orders   = $pending_class->pendingOrders();
+            $pending_orders   = $pending_class->pendingOrders($fiscal_year);
 			
             $result = response()->json(['error'=> false,'message' =>'success','pending_orders'=>$pending_orders],200);
        
@@ -84,9 +87,11 @@ class DashboardController extends Controller
 		try
 		{
 			
+			$fiscal_year   = $request->fiscal_year;
+
 			$aowp_class    = new Dashboard();
 
-            $app_pipo  	   = $aowp_class->aowp();
+            $app_pipo  	   = $aowp_class->aowp($fiscal_year);
 			
             $result = response()->json(['error'=> false,'message' =>'success','app_pipo'=>$app_pipo],200);
        
