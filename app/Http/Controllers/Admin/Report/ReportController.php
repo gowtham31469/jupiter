@@ -101,16 +101,16 @@ class ReportController extends Controller
 		->select('material','customer_id','style','sub_material')
 		->get();
 
-		$customer_id = $result->unique('customer_id')->pluck('customer_id');
+		$customer_id = $result->unique('customer_id')->pluck('customer_id')->toArray();
 
-		$materials = $result->unique('material')->pluck('material');
-		$sub_materials = $result->unique('sub_material')->pluck('sub_material');
-		$style = $result->unique('style')->pluck('style');
+		$materials = $result->unique('material')->pluck('material')->toArray();
+		$sub_materials = $result->unique('sub_material')->pluck('sub_material')->toArray();
+		$style = $result->unique('style')->pluck('style')->toArray();
 
 		$customers=Customer::whereIn('id',$customer_id)->orderBy('company_name')
 		->pluck('company_name','id')->toArray();    
 
-		return response()->json(['customers'=>$customers,'result'=>$result,'Materials'=>$materials,'SubMaterials'=>$sub_materials,'Style'=>$style]);
+		return response()->json(['customers'=>array_filter($customers),'result'=>$result,'Materials'=>array_filter($materials),'SubMaterials'=>array_filter($sub_materials),'Style'=>array_filter($style)]);
 	}
 
 
@@ -128,12 +128,12 @@ class ReportController extends Controller
 		->select('reference','buyer_po','ocn_number','customer_po')
 		->get();
 
-		$reference = $result->unique('reference')->pluck('reference');
-		$buyer_po = $result->unique('buyer_po')->pluck('buyer_po');
-		$customer_po = $result->unique('customer_po')->pluck('customer_po');
-		$ocn = $result->unique('ocn_number')->pluck('ocn_number');
+		$reference = $result->unique('reference')->pluck('reference')->toArray();
+		$buyer_po = $result->unique('buyer_po')->pluck('buyer_po')->toArray();
+		$customer_po = $result->unique('customer_po')->pluck('customer_po')->toArray();
+		$ocn = $result->unique('ocn_number')->pluck('ocn_number')->toArray();
 
-		return response()->json(['Reference'=>$reference,'BuyerPo'=>$buyer_po,'CustomerPo'=>$customer_po,'Ocn'=>$ocn]);
+		return response()->json(['Reference'=>array_filter($reference),'BuyerPo'=>array_filter($buyer_po),'CustomerPo'=>array_filter($customer_po),'Ocn'=>array_filter($ocn)]);
 	}
 
 

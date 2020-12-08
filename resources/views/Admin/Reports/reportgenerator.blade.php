@@ -451,7 +451,7 @@ function triggerLevel3()
 			$('.selectpicker').removeClass('open');
 			if($(".roleSelection option:selected").val().length > 0)
 			{
-				console.log($("#options_for_orders").val().length)
+				console.log($("#po").val().length)
 				if($("#options_for_orders").val().length || $("#options_for_delivery").val().length )
 				{
 		
