@@ -1,4 +1,4 @@
-@extends('layouts.Erp.app')
+@extends('layouts.Admin.app')
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/Erp/report/jquery-ui.css') }}">
 <link rel="stylesheet" href="{{ asset('css/Erp/report/datatables.min.css') }}">
@@ -6,18 +6,6 @@
 <link rel="stylesheet" href="{{ asset('css/Erp/report/bootstrap-multiselect.css') }}">
 <link rel="stylesheet" href="{{ asset('css/Erp/report/reports.css') }}">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
-@section('navbar')
-<style>
-	.navbar-nav > li > a {
-		line-height: 12px !important;
-	}
-	 table.dataTable tbody td {text-align: left;}
-</style>
-<ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
-	<li><a href="#" onClick="window.location.reload();return false;" class="active">Get Reports</a></li>
-</ul>
-@endsection
 
 <div class="container-fluid setMarginTop4">
 
@@ -131,8 +119,14 @@
 						<div class="row rowSep">
 							<div class="col-md-2 filters">
 								<label>Select Customer</label>
-								<select id="customer" class="multiselect filterLevel2" 	data-actions-box="true" data-size="10" nonSelectedText="Select Customer" multiple>
+								
+								@if($admin_flag)
+									<select id="customer" class="multiselect filterLevel2" 	data-actions-box="true" data-size="10" nonSelectedText="Select Customer" multiple>
 								</select>
+								@else
+									{!! Form::select('customer',$customers,null,['class' => 'multiselect filterLevel2','required',"nonSelectedText"=>'Select Customer','id'=>'customer']) !!}
+								@endif
+								
 							</div>
 							<div class="col-md-2 filters">
 								<label>Select Material</label>
@@ -207,6 +201,7 @@
 	</div>
 </div>
 
+@endsection 
 @section('jqueryIncludes')
 
 <script type="text/javascript" src="{{ asset('js/Erp/report/jquery-ui.js') }}"></script>
@@ -256,7 +251,7 @@
 				}
 				$.ajax({
 					type : 'post',
-					url: "{{ url('/admin_level1Filter') }}",
+					url: "{{ $level1_route }}",
 					data:{
 						'buyer': $("#buyer").val(),
 						'country': countries,
@@ -364,7 +359,7 @@ function triggerLevel2()
 
 		$.ajax({
 			type : 'post',
-			url: "{{ url('/admin_level2Filter') }}",
+			url: "{{ $level2_route }}",
 			data:{
 				'buyer': $("#buyer").val(),
 				'materials': material,
@@ -450,6 +445,65 @@ function triggerLevel2()
 	}
 }
 
+
+function triggerLevel3()
+		{
+			$('.selectpicker').removeClass('open');
+			if($(".roleSelection option:selected").val().length > 0)
+			{
+				console.log($("#po").val().length)
+				if($("#options_for_orders").val().length || $("#options_for_delivery").val().length )
+				{
+		
+					if($("#reference").val().length > 0 && $("#po").val().length > 0 && $("#buyer_po").val().length > 0 && $("#ocn").val().length > 0 && $("#customer").val().length > 0 && $("#material").val().length > 0 && $("#style").val().length > 0 && $("#mat_sub").val().length > 0 && $("#buyer").val().length > 0 && $("#season").val().length > 0)
+					{
+						$status =[]
+						if($(".roleSelection option:selected").html() == "Orders")
+						{
+							$status = $("#options_for_orders").val()
+						}
+						else
+						{
+							$status = $("#options_for_delivery").val()
+						}
+						$.ajax({
+							type : 'post',
+							url: "{{ $get_table_fields_route }}",
+							data:{
+								'role' : $(".roleSelection option:selected").html(),
+								'status' : $status,
+								'_token': "{{ csrf_token() }}",	
+							},
+							success:function(data)
+							{	
+								if(data.Default.length > 0)
+								{
+									$("#_prefModal").modal('hide')
+									create_table(data.Default,data.Extra)
+								}
+								else{
+									$('.snackbar_span').html("No values found for this combination !!.");
+									showSnackbar();
+								}
+							}
+						});
+					}
+					else
+					{
+						$('.snackbar_span').html("Please select atleast one value from each of the select boxes.");
+						showSnackbar();
+					}
+				}
+				else{
+					$('.snackbar_span').html("Please select the status.");
+					showSnackbar();
+				}
+			}
+			else{
+				$('.snackbar_span').html("Please select one of the roles.");
+				showSnackbar();
+			}
+		}
 
 function create_table(def,extra)
 { 
@@ -543,7 +597,7 @@ function create_table(def,extra)
 			header: true,
 		},
 		"ajax": {
-			"url": "{{ url('admin_setUpDatatable') }}",
+			"url": "{{ $set_Datatable_route }}",
 			"dataType": "json",
 			"type": "POST",
 			"data":{
@@ -574,5 +628,4 @@ function create_table(def,extra)
 	}
 
 </script>
-@endsection 
 @endsection 
