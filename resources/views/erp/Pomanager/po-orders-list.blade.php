@@ -133,6 +133,7 @@
 					var i = 1;
 					if (data.message != "empty") {
 						$('.div-table').removeClass('hidden')
+						var erp_id = data.orders[0].erp_id;
 						$(data.orderlist).each(function(key, index) {
 							if (index.status == 2 || index.status == 4) {
 								var label = 'label label-danger';
@@ -150,7 +151,7 @@
 							$('#order-details-table tbody').append(`
 						<tr id="` + index.id + `">
                           	<td class="">` + i + `</td>
-							  <td class="erp_td">` + index.erp_order_id + `</td>
+							  <td class="erp_td">` + erp_id + `</td>
 							  <td class="po_number_td">` + index.buyer_po_number + `</td>
 							  <td class="style_no_td">` + index.style_no + `</td>
 							  <td class="reference_td">` + index.template_name + `</td>
