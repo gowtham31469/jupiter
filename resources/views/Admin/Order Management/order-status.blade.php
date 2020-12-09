@@ -846,7 +846,13 @@
                 $('#snackbar').css('background-color','#00b6ff');
                 $('.snackbar_span').html('Purchase Order File Uploaded Successfully');
                 showSnackbar();
-                window.location = "{{ url('/admin/order-management/order-status') }}";
+                //window.location = "{{ url('/admin/order-management/order-status') }}";
+                if(response.po_status == "PO Uploaded")
+                {
+                    $('#'+tab_nm+'_'+row_id).find('.po_status a span').text("PO Uploaded")
+                    $('#'+tab_nm+'_'+row_id).find('.po_status a span').removeClass("label-POPending")
+                    $('#'+tab_nm+'_'+row_id).find('.po_status a span').addClass("label-POUploaded")
+                }
             });
             this.on("error", function(file, response) {
                 this.removeFile(file);

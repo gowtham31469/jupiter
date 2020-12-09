@@ -3132,7 +3132,13 @@ function tescoSetPO(obj, id, tableName, po_file) {
                         $(obj).closest('tr').find('.tesco-po').attr('disabled');
                         $(obj).closest('tr').find('.tesco-po').attr('placeholder', "Enter PO");
                     }
-					setTimeout(function(){ $(obj).removeAttr('disabled') }, 3000);
+                    setTimeout(function(){ $(obj).removeAttr('disabled') }, 3000);
+                    if(data.po_status == "PO Uploaded")
+                    {
+                        $(obj).closest('tr').find('.po_status a span').text("PO Uploaded")
+                        $(obj).closest('tr').find('.po_status a span').removeClass("label-POPending")
+                        $(obj).closest('tr').find('.po_status a span').addClass("label-POUploaded")
+                    }
                 },
                 403: function (data) {
                     $('#snackbar').css('background-color', '#00b6ff');
