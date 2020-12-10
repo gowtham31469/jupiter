@@ -1916,7 +1916,7 @@ class OrderStatusCntrl extends Controller
 
             if ($this->class_status === 'success' ) 
             {
-                return response()->json(['error'=> false,'message' =>'Purchase Order Number added successfully'],200);
+                return response()->json(['error'=> false,'message' =>'Purchase Order Number added successfully','po_status' => $po_status],200);
             }
             else {
                 return response()->json(['error'=> true,'message' =>'Purchase Order Number updation failed'],400);
@@ -2036,7 +2036,7 @@ class OrderStatusCntrl extends Controller
 
             if ($this->class_status === 'success' ) 
             {
-               return response()->json(['error'=> false,'message' =>'success','po_file'=>$destination_path_insert],200);
+               return response()->json(['error'=> false,'message' =>'success','po_file'=>$destination_path_insert,'po_status' => $po_status],200);
             }
             else
             {
