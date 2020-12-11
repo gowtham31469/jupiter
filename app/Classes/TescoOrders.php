@@ -56,6 +56,10 @@ class TescoOrders
           //Dynamic function name and database model name for each templates
           $order_model = 'App\\'."Tesco".str_replace(" ","",$template_data->item_name)."Orders";
 
+          // total order quantity calculation
+          $total_qty_array = explode(',',$request['count_'.str_replace(" ","",$template_data->item_name)]);
+          $total_qty = array_sum($total_qty_array);
+
           /** [ Get orders table maximum id value for creating order id] */
           $max_id = $order_model::max('id');
 
@@ -88,7 +92,8 @@ class TescoOrders
                     'order_created_at'     => $this->current_date,
                     'ocn_number'           => $request['ocn_no'],
                     'full_description'     => $request['full_description'],
-                    'edit_permission'      => $edit_permission
+                    'edit_permission'      => $edit_permission,
+                    'total_qty'            => $total_qty
                   ]);
 
           /** Insert order data into history table */

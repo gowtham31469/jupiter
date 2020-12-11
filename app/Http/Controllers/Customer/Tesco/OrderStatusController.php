@@ -3153,7 +3153,8 @@ class OrderStatusController extends Controller
                                 'is_order_count_empty' => $order_qnty,
                                 'ocn_number'           => $request['tesco_ocn'],
                                 'order_status'         => $order_status,
-                                'edit_permission'      => $edit_permission
+                                'edit_permission'      => $edit_permission,
+                                'total_qty'            => array_sum($count)
                             ]);
             $order_status_id  = $order_status === 'Order Pending'?6:2;
             // update order data in order management history table 
