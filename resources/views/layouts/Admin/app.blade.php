@@ -36,7 +36,7 @@
         @if (Auth::guard("web")->user()) @include('layouts.Admin.navbar')
         @elseif(!Auth::guest())
             <script type="text/javascript">
-       customer         window.location = "{{ url('/admin/login') }}";
+                 window.location = "{{ url('/admin/login') }}";
             </script>
         @endif
         @yield('content')

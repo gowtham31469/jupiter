@@ -49,7 +49,7 @@
 			@include('layouts.Erp.profile-modal')
         @elseif(!Auth::guest())
             <script type="text/javascript">
-                customer  window.location = "{{ url('/erp/login') }}";
+                window.location = "{{ url('/erp/login') }}";
             </script>
         @endif
         @yield('content')
