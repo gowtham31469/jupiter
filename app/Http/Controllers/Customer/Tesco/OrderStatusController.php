@@ -2282,7 +2282,7 @@ class OrderStatusController extends Controller
 
             if ($this->class_status === 'success' ) 
             {
-                return response()->json(['error'=> false,'message' =>'Purchase Order Number added successfully'],200);
+                return response()->json(['error'=> false,'message' =>'Purchase Order Number added successfully','po_status' => $po_status],200);
             }
             else {
                 return response()->json(['error'=> true,'message' =>'Purchase Order Number updation failed'],400);
@@ -3153,7 +3153,8 @@ class OrderStatusController extends Controller
                                 'is_order_count_empty' => $order_qnty,
                                 'ocn_number'           => $request['tesco_ocn'],
                                 'order_status'         => $order_status,
-                                'edit_permission'      => $edit_permission
+                                'edit_permission'      => $edit_permission,
+                                'total_qty'            => array_sum($count)
                             ]);
             $order_status_id  = $order_status === 'Order Pending'?6:2;
             // update order data in order management history table 
@@ -3430,7 +3431,7 @@ class OrderStatusController extends Controller
             
             if ($this->class_status === 'success' ) 
             {
-               return response()->json(['error'=> false,'message' =>'success','po_file'=>$destination_path_insert],200);
+               return response()->json(['error'=> false,'message' =>'success','po_file'=>$destination_path_insert,'po_status' => $po_status],200);
             }
             else
             {

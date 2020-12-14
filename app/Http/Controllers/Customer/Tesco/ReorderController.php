@@ -393,6 +393,7 @@ class ReorderController extends Controller
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "reOrder";
 				$newTasks->edit_permission = 0;
+				$newTasks->total_qty = array_sum($counts);
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$id)->select('*')->get();
@@ -441,6 +442,7 @@ class ReorderController extends Controller
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "reOrder";
 				$newTasks->edit_permission = 0;
+				$newTasks->total_qty = array_sum($counts);
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$id)->select('*')->get();
@@ -489,6 +491,7 @@ class ReorderController extends Controller
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "reOrder";
 				$newTasks->edit_permission = 0;
+				$newTasks->total_qty = array_sum($counts);
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$id)->select('*')->get();
@@ -538,6 +541,7 @@ class ReorderController extends Controller
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "reOrder";
 				$newTasks->edit_permission = 0;
+				$newTasks->total_qty = array_sum($counts);
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$id)->select('*')->get();
@@ -587,6 +591,7 @@ class ReorderController extends Controller
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "reOrder";
 				$newTasks->edit_permission = 0;
+				$newTasks->total_qty = array_sum($counts);
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$id)->select('*')->get();
@@ -636,6 +641,7 @@ class ReorderController extends Controller
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "reOrder";
 				$newTasks->edit_permission = 0;
+				$newTasks->total_qty = array_sum($counts);
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tsl1_orders_quanty')->where('tsl1_order_id',$id)->select('*')->get();
@@ -684,6 +690,7 @@ class ReorderController extends Controller
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "reOrder";
 				$newTasks->edit_permission = 0;
+				$newTasks->total_qty = array_sum($counts);
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tsl3_orders_quanty')->where('tsl3_order_id',$id)->select('*')->get();
@@ -776,6 +783,7 @@ class ReorderController extends Controller
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
 				$newTasks->edit_permission = 0;
+				$newTasks->total_qty = array_sum($counts);
 				$newTasks->save();
 				
 				
@@ -829,6 +837,7 @@ class ReorderController extends Controller
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
 				$newTasks->edit_permission = 0;
+				$newTasks->total_qty = array_sum($counts);
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$id)->select('*')->get();
@@ -882,6 +891,7 @@ class ReorderController extends Controller
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
 				$newTasks->edit_permission = 0;
+				$newTasks->total_qty = array_sum($counts);
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$id)->select('*')->get();
@@ -935,6 +945,7 @@ class ReorderController extends Controller
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
 				$newTasks->edit_permission = 0;
+				$newTasks->total_qty = array_sum($counts);
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$id)->select('*')->get();
@@ -988,6 +999,7 @@ class ReorderController extends Controller
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
 				$newTasks->edit_permission = 0;
+				$newTasks->total_qty = array_sum($counts);
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$id)->select('*')->get();
@@ -1041,6 +1053,7 @@ class ReorderController extends Controller
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
 				$newTasks->edit_permission = 0;
+				$newTasks->total_qty = array_sum($counts);
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tsl1_orders_quanty')->where('tsl1_order_id',$id)->select('*')->get();
@@ -1094,6 +1107,7 @@ class ReorderController extends Controller
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
 				$newTasks->edit_permission = 0;
+				$newTasks->total_qty = array_sum($counts);
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tsl3_orders_quanty')->where('tsl3_order_id',$id)->select('*')->get();
