@@ -934,7 +934,7 @@ Route::get('getTableFields','ErpUser\Reports\ReportController@getTableFields');
 Route::post('setUpDatatable', 'ErpUser\Reports\ReportController@setUpDatatable' )->name('setUpDatatable');
 
 // Routes for admin report generation
-Route::get('testQuery','Admin\Report\ReportController@testQuery');
+Route::get('testQuery','Admin\Report\ReportController@testQuery')->name('testQuery');
 Route::get('admin/generate-report','Admin\Report\ReportController@index')->name('generate-report');
 Route::post('filter_level1','Admin\Report\ReportController@level1Filter')->name('filter_level1');
 Route::post('admin_level2Filter','Admin\Report\ReportController@level2Filter')->name('filter_level2');

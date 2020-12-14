@@ -1,4 +1,4 @@
-@extends('layouts.Admin.app')
+@extends('layouts.Erp.app')
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/Erp/report/jquery-ui.css') }}">
 <link rel="stylesheet" href="{{ asset('css/Erp/report/datatables.min.css') }}">
