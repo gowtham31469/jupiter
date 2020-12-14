@@ -526,10 +526,38 @@ function create_table(def,extra)
 	if($(".roleSelection option:selected").html() == "Orders")
 	{
 		$status = $("#options_for_orders").val()
+		selections = '';
+		$("#options_for_orders option:selected").each(function (i,v) {
+		var $this = $(this);
+		if ($this.length) {
+			if(i==0)
+			{
+				selections+=$this.text();
+			}
+			else
+			{
+				selections+=", "+$this.text();
+			}
+		}
+		});
 	}
 	else
 	{
 		$status = $("#options_for_delivery").val()
+		selections = '';
+		$("#options_for_orders option:selected").each(function (i,v) {
+		var $this = $(this);
+		if ($this.length) {
+			if(i==0)
+			{
+				selections+=$this.text();
+			}
+			else
+			{
+				selections+=", "+$this.text();
+			}
+		}
+		});
 	}
 
 	$.each($("#reference option:selected"), function(){            
@@ -621,7 +649,7 @@ function create_table(def,extra)
 		"columns" :allColoumns
 	});
 		$('table tr:first th:first').text('S.No');
-		$("#reportTitle").html("Consolidated Report [ "+$(".roleSelection option:selected").html()+" ]")
+		$("#reportTitle").html($(".roleSelection option:selected").html()+" Report of "+$("#buyer option:selected").text())
 		$("#moreOtions").removeClass('hidden')
 		$('.dt-buttons').append('<button class="dt-button buttons-html5" tabindex="0" aria-controls="reportTable" type="button" id="moreOtions"><span>More Options</span></button><button class="dt-button buttons-html5" tabindex="0" aria-controls="reportTable" type="button" id="setFilters"><span class="fa fa-cogs"></span></button>')
 

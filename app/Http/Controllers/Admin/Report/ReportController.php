@@ -318,11 +318,12 @@ class ReportController extends Controller
 					$res = collect();
 
 					$res = DB::table($primary)
-						->leftJoin($secondary,$secondary_id,$primary_id)
+						->where('id',$value['order_table_id'])
+						// ->leftJoin($secondary,$secondary_id,$primary_id)
 						->select([
 							DB::raw('to_char('.$primary_order_date.','."'".$ddmmyy."'".') as "Order_Dt"'),
 							'uvc as Style',
-							'quantity as Quantity',
+							'total_qty as Quantity',
 							'pi_status as PI_Status',
 							'po_status as PO_Status',
 							'status as Aw_Status',
@@ -370,7 +371,6 @@ class ReportController extends Controller
 			case 2:
 				foreach ($table_names as $key => $value) 
 				{
-
 					$primary = $value['order_table_name'];
 					$base = explode("_", $primary)[1];
 					$secondary = $value['order_table_name']."_quanty";
@@ -381,11 +381,12 @@ class ReportController extends Controller
 					$res = collect();
 
 					$res = DB::table($primary)
-						->leftJoin($secondary,$secondary_id,$primary_id)
+						->where('id',$value['order_table_id'])
+						// ->leftJoin($secondary,$secondary_id,$primary_id)
 						->select([
 							DB::raw('to_char('.$primary_order_date.','."'".$ddmmyy."'".') as "Order_Dt"'),
 							'zone','uk_style_ref','ce_style_ref',
-							'count as Quantity',
+							'total_qty as Quantity',
 							'pi_status as PI_Status',
 							'po_status as PO_Status',
 							'order_status as Aw_Status',
