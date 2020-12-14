@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -33,7 +33,8 @@
     
     <div class="container-fluid">
         <div class="row">
-        @if (Auth::guard("web")->user()) @include('layouts.Admin.navbar')
+        @if (Auth::guard("web")->user())
+        @include('layouts.Admin.navbar')
         @elseif(!Auth::guest())
             <script type="text/javascript">
        customer         window.location = "{{ url('/admin/login') }}";

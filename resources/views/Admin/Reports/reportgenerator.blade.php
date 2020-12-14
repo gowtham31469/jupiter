@@ -1,4 +1,5 @@
-@extends('layouts.Erp.app')
+@extends('layouts.Admin.app')
+{{-- @extends('layouts.Erp.app') --}}
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/Erp/report/jquery-ui.css') }}">
 <link rel="stylesheet" href="{{ asset('css/Erp/report/datatables.min.css') }}">
@@ -6,7 +7,11 @@
 <link rel="stylesheet" href="{{ asset('css/Erp/report/bootstrap-multiselect.css') }}">
 <link rel="stylesheet" href="{{ asset('css/Erp/report/reports.css') }}">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
+<style type="text/css">
+	.container-fluid {
+     min-height: unset !important; 
+}
+</style>
 <div class="container-fluid setMarginTop4">
 
 	<div id="snackbar">
