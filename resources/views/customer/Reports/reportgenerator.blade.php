@@ -6,7 +6,11 @@
 <link rel="stylesheet" href="{{ asset('css/Erp/report/bootstrap-multiselect.css') }}">
 <link rel="stylesheet" href="{{ asset('css/Erp/report/reports.css') }}">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
+<style type="text/css">
+	.container-fluid {
+     min-height: unset !important; 
+}
+</style>
 <div class="container-fluid setMarginTop4">
 
 	<div id="snackbar">
@@ -626,7 +630,7 @@ function create_table(def,extra)
 		"columns" :allColoumns
 	});
 		$('table tr:first th:first').text('S.No');
-		$("#reportTitle").html("Consolidated Report [ "+$(".roleSelection option:selected").html()+" ]")
+		$("#reportTitle").html($(".roleSelection option:selected").html()+" Report of "+$("#buyer option:selected").text())
 		$("#moreOtions").removeClass('hidden')
 		$('.dt-buttons').append('<button class="dt-button buttons-html5" tabindex="0" aria-controls="reportTable" type="button" id="moreOtions"><span>More Options</span></button><button class="dt-button buttons-html5" tabindex="0" aria-controls="reportTable" type="button" id="setFilters"><span class="fa fa-cogs"></span></button>')
 
