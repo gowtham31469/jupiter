@@ -239,11 +239,13 @@ class ReportController extends Controller
 		->whereIn('style',$request->styles)
 		->where('customer_id',$request->customers)
 		->whereIn('reference',$request->references)
-		->whereIn('customer_po',$request->pos)
+		// ->whereIn('customer_po',$request->pos)
 		->whereIn('buyer_po',$request->buyer_pos)
 		->whereIn('ocn_number',$request->ocns)
 		->whereBetween('created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
-
+		->where(function($q1) use ($request) {
+			$request->pos!=null ? $q1->whereIn('customer_po',$request->pos) : '';
+		})
 		->where(function($q) use ($request) {
 
 			foreach ($request->status as $key => $value) 
@@ -252,31 +254,31 @@ class ReportController extends Controller
 				switch ($value) 
 				{
 					case 1:
-						$q->where('order_status',2);
+						$q->orWhere('order_status',2);
 					break;
 					
 					case 2:
-						$q->where('artwork_status',false);
+						$q->orWhere('artwork_status',false);
 					break;
 
 					case 3:
-						$q->where('po_status',false);
+						$q->orWhere('po_status',false);
 					break;
 
 					case 4:
-						$q->where('pi_status',false);
+						$q->orWhere('pi_status',false);
 					break;
 
 					case 5:
-						$q->where('order_status',3);
+						$q->orWhere('order_status',3);
 					break;
 
 					case 6:
-						$q->where('order_status','Hold');
+						$q->orWhere('order_status','Hold');
 					break;
 
 					case 7:
-						$q->where('order_status',1);
+						$q->orWhere('order_status',1);
 					break;
 
 					default:
