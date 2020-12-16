@@ -239,11 +239,13 @@ class ReportController extends Controller
 		->whereIn('style',$request->styles)
 		->where('customer_id',$request->customers)
 		->whereIn('reference',$request->references)
-		->whereIn('customer_po',$request->pos)
+		// ->whereIn('customer_po',$request->pos)
 		->whereIn('buyer_po',$request->buyer_pos)
 		->whereIn('ocn_number',$request->ocns)
 		->whereBetween('created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
-
+		->where(function($q1) use ($request) {
+			$request->pos!=null ? $q1->whereIn('customer_po',$request->pos) : '';
+		})
 		->where(function($q) use ($request) {
 
 			foreach ($request->status as $key => $value) 
@@ -252,31 +254,31 @@ class ReportController extends Controller
 				switch ($value) 
 				{
 					case 1:
-						$q->where('order_status',2);
+						$q->orWhere('order_status',2);
 					break;
 					
 					case 2:
-						$q->where('artwork_status',false);
+						$q->orWhere('artwork_status',false);
 					break;
 
 					case 3:
-						$q->where('po_status',false);
+						$q->orWhere('po_status',false);
 					break;
 
 					case 4:
-						$q->where('pi_status',false);
+						$q->orWhere('pi_status',false);
 					break;
 
 					case 5:
-						$q->where('order_status',3);
+						$q->orWhere('order_status',3);
 					break;
 
 					case 6:
-						$q->where('order_status','Hold');
+						$q->orWhere('order_status','Hold');
 					break;
 
 					case 7:
-						$q->where('order_status',1);
+						$q->orWhere('order_status',1);
 					break;
 
 					default:
@@ -292,7 +294,7 @@ class ReportController extends Controller
 		$queryRes = collect();
 		
 		$ddmmyy="DD/MM/YYYY";
-
+		
 		switch ($request->buyer) {
 			case 1:
 				foreach ($table_names as $key => $value) 
@@ -306,11 +308,12 @@ class ReportController extends Controller
 					$res = collect();
 
 					$res = DB::table($primary)
-						->leftJoin($secondary,$secondary_id,$primary_id)
+						->where('id',$value['order_table_id'])
+						// ->leftJoin($secondary,$secondary_id,$primary_id)
 						->select([
 							DB::raw('to_char('.$primary_order_date.','."'".$ddmmyy."'".') as "Order_Dt"'),
 							'uvc as Style',
-							'quantity as Quantity',
+							'total_qty as Quantity',
 							'pi_status as PI_Status',
 							'po_status as PO_Status',
 							'status as Aw_Status',
@@ -369,11 +372,12 @@ class ReportController extends Controller
 					$res = collect();
 
 					$res = DB::table($primary)
-						->leftJoin($secondary,$secondary_id,$primary_id)
+						->where('id',$value['order_table_id'])
+						// ->leftJoin($secondary,$secondary_id,$primary_id)
 						->select([
 							DB::raw('to_char('.$primary_order_date.','."'".$ddmmyy."'".') as "Order_Dt"'),
 							'zone','uk_style_ref','ce_style_ref',
-							'count as Quantity',
+							'total_qty as Quantity',
 							'pi_status as PI_Status',
 							'po_status as PO_Status',
 							'order_status as Aw_Status',

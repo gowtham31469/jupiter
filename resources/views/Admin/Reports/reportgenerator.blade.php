@@ -456,11 +456,11 @@ function triggerLevel3()
 			$('.selectpicker').removeClass('open');
 			if($(".roleSelection option:selected").val().length > 0)
 			{
-				console.log($("#po").val().length)
+				// console.log($("#po").val().length && $("#po").val().length > 0)
 				if($("#options_for_orders").val().length || $("#options_for_delivery").val().length )
 				{
 		
-					if($("#reference").val().length > 0 && $("#po").val().length > 0 && $("#buyer_po").val().length > 0 && $("#ocn").val().length > 0 && $("#customer").val().length > 0 && $("#material").val().length > 0 && $("#style").val().length > 0 && $("#mat_sub").val().length > 0 && $("#buyer").val().length > 0 && $("#season").val().length > 0)
+					if($("#reference").val().length > 0  && $("#buyer_po").val().length > 0 && $("#ocn").val().length > 0 && $("#customer").val().length > 0 && $("#material").val().length > 0 && $("#style").val().length > 0 && $("#mat_sub").val().length > 0 && $("#buyer").val().length > 0 && $("#season").val().length > 0)
 					{
 						$status =[]
 						if($(".roleSelection option:selected").html() == "Orders")
