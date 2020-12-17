@@ -36,10 +36,16 @@ use PDF;
 use Carbon\Carbon;
 use App\OrderManagementHistory;
 use App\Classes\TescoMaterialQuery;
+use App\FinancialYearResetDate;
 
 class ReorderController extends Controller
 {
     private $tesco_material_obj;
+    private $current_date;
+    private $year;
+    private $financial_year_date;
+    private $financial_year_start;
+    private $financial_year_end;
     /**
      * Create a new controller instance.
      *
@@ -65,6 +71,24 @@ class ReorderController extends Controller
 		$this->tsl3_type = "tesco_tsl3_orders";
 		
 		$this->tesco_material_obj = new TescoMaterialQuery();
+
+
+		// get the current time
+		$this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
+
+		// get year as "2020"
+		$this->year = Carbon::parse($this->current_date)->format('Y');
+
+		$this->financial_year_date = FinancialYearResetDate::value('financial_year_date');
+          
+		// format financial year date as "yyyy-dd-mm" 
+		$this->financial_year_date_format = $this->year.'-'.$this->financial_year_date;
+
+		// store financial year start and end date and
+		// financial year identification
+		 $this->financial_year_start = $this->financial_year_date_format;
+		 $this->financial_year_end = Carbon::parse($this->financial_year_date_format)->addYear()->subDay()->toDateString();
+
     }
 	
  	/**
@@ -74,6 +98,18 @@ class ReorderController extends Controller
      */
   	public function reOrder(Request $request)
     {
+
+			if(!isset($_COOKIE["fiscal-year"])) {
+
+				$from_date = $this->financial_year_start;
+				$to_date = $this->financial_year_end; 
+
+		} else {
+				$year = explode('-', $_COOKIE["fiscal-year"]);
+				$from_date = $year[0].'-'.$this->financial_year_date;
+				$to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+		}
+
 		$customer_id = Auth::guard('web_customer')->id();
 		
 		
@@ -82,37 +118,37 @@ class ReorderController extends Controller
 	  {
 		$customer_id = Auth::guard('web_customer')->user()->id;
 
-        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
 
-		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
 
-		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
 
-		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
 
-		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
 
-		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
 
-		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
 		echo json_encode($data);
 	  }
 	  else
 	  {
 		  $customer_id = Auth::guard('web_customer')->user()->id;
-        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select('*')->get();
+        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->where('order_placed_by','=',$customer_id)->select('*')->get();
 
-		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select('*')->get();
+		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->where('order_placed_by','=',$customer_id)->select('*')->get();
 
-		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select('*')->get();
+		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->where('order_placed_by','=',$customer_id)->select('*')->get();
 
-		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select('*')->get();
+		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->where('order_placed_by','=',$customer_id)->select('*')->get();
 
-		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select('*')->get();
+		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->where('order_placed_by','=',$customer_id)->select('*')->get();
 
-		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select('*')->get();
+		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->where('order_placed_by','=',$customer_id)->select('*')->get();
 
-		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select('*')->get();
+		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->where('order_placed_by','=',$customer_id)->select('*')->get();
 		echo json_encode($data);
 	  }
 		
