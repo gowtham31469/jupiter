@@ -57,9 +57,12 @@ class OrderManagementCntrl extends Controller
     private $tsl1_type;
     private $tsl3_type;
     private $current_date;
+    private $year;
     private $ratio_pack_type;
     private $tesco_material_obj;
     private $financial_year_date;
+    private $financial_year_start;
+    private $financial_year_end;
 
 
     /**
@@ -89,11 +92,22 @@ class OrderManagementCntrl extends Controller
         // get the current time
         $this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
 
+        // get year as "2020"
+        $this->year = Carbon::parse($this->current_date)->format('Y');
+
         $this->ratio_pack_type = ['RatA', 'RatB', 'RatC', 'RatD', 'RatE', 'RatF', 'RatG', 'RatH', 'RatI', 'RatJ', 'RatK', 'RatL', 'RatM', 'RatN', 'RatO', 'RatP', 'RatQ', 'RatR', 'RatS', 'RatT', 'RatU', 'RatV', 'RatW', 'RatX', 'RatY', 'RatZ'];
 
         $this->tesco_material_obj = new TescoMaterialQuery();
 
         $this->financial_year_date = FinancialYearResetDate::value('financial_year_date');
+          
+       // format financial year date as "yyyy-dd-mm" 
+       $this->financial_year_date_format = $this->year.'-'.$this->financial_year_date;
+   
+       // store financial year start and end date and
+       // financial year identification
+        $this->financial_year_start = $this->financial_year_date_format;
+        $this->financial_year_end = Carbon::parse($this->financial_year_date_format)->addYear()->subDay()->toDateString();
         
     }
 
@@ -2519,19 +2533,31 @@ class OrderManagementCntrl extends Controller
      */
     public function reOrder(Request $request)
     {
-        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled", "Order Pending"])->select('*')->get();
 
-    		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled", "Order Pending"])->select('*')->get();
+        if(!isset($_COOKIE["fiscal-year"])) {
 
-    		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled", "Order Pending"])->select('*')->get();
+            $from_date = $this->financial_year_start;
+            $to_date = $this->financial_year_end; 
 
-    		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled", "Order Pending"])->select('*')->get();
-
-    		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled", "Order Pending"])->select('*')->get();
-
-    		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled", "Order Pending"])->select('*')->get();
+        } else {
+            $year = explode('-', $_COOKIE["fiscal-year"]);
+            $from_date = $year[0].'-'.$this->financial_year_date;
+            $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+        }
         
-    		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled", "Order Pending"])->select('*')->get();
+        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled", "Order Pending"])->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
+
+    		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled", "Order Pending"])->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
+
+    		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled", "Order Pending"])->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
+
+    		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled", "Order Pending"])->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
+
+    		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled", "Order Pending"])->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
+
+    		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled", "Order Pending"])->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
+        
+    		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled", "Order Pending"])->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
     		echo json_encode($data);
     }
   /**
