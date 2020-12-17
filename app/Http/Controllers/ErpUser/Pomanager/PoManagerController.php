@@ -187,9 +187,9 @@ class PoManagerController extends Controller
 	public function getOrderDetails(Request $request)
 	{
 		  try {
-            $id = $request->erp_id; 
+            $erp_id = $request->erp_id; 
 			  
-			$data   = 	Erp::where('erp_orders.id',$id)
+			$data   = 	Erp::where('erp_orders.erp_id',$erp_id)
 								->select('erp_orders.*')
 								->get();
 			  
@@ -197,6 +197,7 @@ class PoManagerController extends Controller
 			{
 					$buyer_id = $data{0}->buyer_id;
 					$customer_id = $data{0}->customer_id;
+					$id = $data{0}->id;
 
 
 				   $arr_template =  DB::table('buyers')
