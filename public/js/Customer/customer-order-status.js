@@ -1198,22 +1198,22 @@ var normalizeDate = function (dateString) {
  * @return {[type]}      [description]
  */
 function tescoStatusTable(data, path) {
-    var th = "";
+    var th = "<th style='text-align: center;'>Style No</th><th style='text-align: center;'>Season Code</th><th style='text-align: center;'>Buyer Po</th><th style='text-align: center;'>Zone</th><th style='text-align: center;'>Reference No</th><th style='text-align: center;'>Template Type</th><th style='text-align: center;'>Order Date</th><th style='text-align: center;'>Delivery Date</th><th style='text-align: center;'>Order Status</th><th style='text-align: center;'>Artwork</th><th style='text-align: center;'>Artwork Status</th><th style='text-align: center;'>PI Status</th><th style='text-align: center;'>PO Status</th><th style='text-align: center;'>PO Number</th>";
     var tr = "";
     var columnsIn = data[0];
-    for (var key in columnsIn) {
-        if (key != "tableName" && key != "tableID" && key != "po_file" && key != "pi_required" && key != "po_required" && key != "uk_style_ref" && key != "ce_style_ref" && key != "template_id" && key != "customer_id" && key != "order_flag" && key != "delivery_day_count" && key != "is_order_count_empty" && key != "template_file") {
-            if (key == "TemplateName") {
-                th += "<th style='text-align: center;'>Reference No</th>";
-            } else if (key == "order_status") {
-                th += "<th style='text-align: center;'>Order Status</th>";
-            } else if (key == "artwork_status") {
-                th += "<th style='text-align: center;'>Artwork Status</th>";
-            } else {
-                th += "<th style='text-align: center;'>" + key + "</th>";
-            }
-        }
-    }
+    // for (var key in columnsIn) {
+    //     if (key != "tableName" && key != "tableID" && key != "po_file" && key != "pi_required" && key != "po_required" && key != "uk_style_ref" && key != "ce_style_ref" && key != "template_id" && key != "customer_id" && key != "order_flag" && key != "delivery_day_count" && key != "is_order_count_empty" && key != "template_file") {
+    //         if (key == "TemplateName") {
+    //             th += "<th style='text-align: center;'>Reference No</th>";
+    //         } else if (key == "order_status") {
+    //             th += "<th style='text-align: center;'>Order Status</th>";
+    //         } else if (key == "artwork_status") {
+    //             th += "<th style='text-align: center;'>Artwork Status</th>";
+    //         } else {
+    //             th += "<th style='text-align: center;'>" + key + "</th>";
+    //         }
+    //     }
+    // }
     $.each(data, function (index, value) {
         var action_status = false;
         tr += '<tr class="trClass" id="' + value.tableName + '_' + value.tableID + '">';
@@ -1225,7 +1225,7 @@ function tescoStatusTable(data, path) {
                     let customer_po_number = value[key] === null ? '' : value[key];
                     tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" onkeypress="return AvoidSpace(event)" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" placeholder="Enter PO" maxlength="11" value="' + customer_po_number + '"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"' + value.tableID + '","' + value.tableName + '","' + po_file + '")><span class="fa fa-check"></span></button></span></div></div></td>';
                 } else if (key == "OrderDate") {
-                    if (value['is_order_count_empty'] == 0) {
+                    if (value['is_order_count_empty'] == 0 && value['order_status'] != "Saved"){
                         var orderDate = moment(value[key]).format('DD-MM-YYYY');
                         tr += '<td align="center">' + orderDate + '</td>';
                     } else {
@@ -1258,7 +1258,7 @@ function tescoStatusTable(data, path) {
                     }
 
                 } else if (key == "Artwork") {
-
+                    if (value['order_status'] != 'Saved') {
                         var zone = value.Zone
                         var style_no = "";
                         if (zone == "CE") {
@@ -1267,6 +1267,11 @@ function tescoStatusTable(data, path) {
                             style_no = value.uk_style_ref;
                         }
                         tr += '<td align="center"><object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal' + value.tableID + '" class="center-block tesco_svg" data="' + value.template_file+'" type="image/svg+xml"></object><a data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value.order_status + '" class="" href="javascript:void(0)" onclick=downloadArtwork("tesco_svg_modal' + value.tableID + '","'+value.TemplateName.replace(/ /g, "")+'","'+style_no+'","'+value.BuyerPO+'","' + value.tableID + '","' + value.order_flag + '",this)><span style="cursor:pointer" class="fa fa-download"></span></a></td>';
+                    }
+                    else{
+                        tr += '<td align="center">-</td>';
+                    }
+                       
 
                 }else if (key == "order_status") {
                     if (value['order_status'] != 'Saved') {

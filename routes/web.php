@@ -268,6 +268,9 @@ Route::group(['middleware' => 'customer_auth'], function()
 	Route::post('customer/orchestra/edit-artwork', 'Customer\Orchestra\OrderStatusCntrl@editArtwork');
 	
 	Route::get('customer/tesco/get-artworks', 'Customer\Tesco\OrderStatusController@getArtwork');
+	Route::post('customer/tesco/approve-artworks-bulk', 'Customer\Tesco\OrderStatusController@approveArtworkBulk');
+
+	Route::get('customer/tesco/get-approve-artworks', 'Customer\Tesco\OrderStatusController@getApproveArtwork');
 	Route::post('customer/tesco/update-po', 'Customer\Tesco\OrderStatusController@updateArtworkPO');
 	Route::post('customer/tesco/copy-po', 'Customer\Tesco\OrderStatusController@copyArtworkPO');
 	Route::post('customer/tesco/get-po-file', 'Customer\Tesco\OrderStatusController@getPOFile');
