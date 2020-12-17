@@ -155,7 +155,7 @@ $(document).ready(function($) {
 	$(document).on('click', '#update_table', function(event) {
 		event.preventDefault();
 
-		if($("#reference").val().length > 0 && $("#po").val().length > 0 && $("#buyer_po").val().length > 0 && $("#ocn").val().length > 0 && $("#customer").val().length > 0 && $("#material").val().length > 0 && $("#style").val().length > 0 && $("#mat_sub").val().length > 0 && $("#buyer").val().length > 0 && $("#season").val().length > 0)
+		if($("#reference").val().length > 0 && $("#buyer_po").val().length > 0 && $("#ocn").val().length > 0 && $("#customer").val().length > 0 && $("#material").val().length > 0 && $("#style").val().length > 0 && $("#mat_sub").val().length > 0 && $("#buyer").val().length > 0 && $("#season").val().length > 0)
 		{
 			var listItems1 = $(".checklist1 li");
 			var listItems2 = $(".checklist2 li");

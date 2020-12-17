@@ -143,25 +143,25 @@ class ReportController extends Controller
 		$default_fields = [];
 		$extra_fields = [];
 
-		$if_Placed = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","ByrPo","Quantity","Aw_Status","PI_Status","PO_Status"];
+		$if_Placed = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","ByrPo","Customer","Quantity","Aw_Status","PI_Status","PO_Status","PO_Uploaded_Dt","Aw_Approved_Dt"];
 
-		$if_Cancelled = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","Quantity"];
+		$if_Cancelled = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","Customer","Quantity"];
 
-		$if_Aw_Pending = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","ByrPo","Quantity","Aw_Status","PI_Status","PO_Status"];
+		$if_Aw_Pending = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","ByrPo","Customer","Quantity","Aw_Status","PI_Status","PO_Status","PO_Uploaded_Dt"];
 
-		$if_PO_Upload_Pending = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","ByrPo","Quantity","Aw_Status"];
+		$if_PO_Upload_Pending = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","ByrPo","Customer","Quantity","Aw_Status","PO_Uploaded_Dt","Aw_Approved_Dt"];
 
-		$if_PI_Upload_Pending = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","ByrPo","Quantity","Aw_Status"];
+		$if_PI_Upload_Pending = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","ByrPo","Customer","Quantity","Aw_Status","PO_Uploaded_Dt"];
 
-		$if_On_Hold = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","Quantity","Aw_Status"];
+		$if_On_Hold = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","Customer","OCN","Reference","Quantity","Aw_Status","PO_Uploaded_Dt"];
 
-		$if_Incomplete = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","Quantity"];
+		$if_Incomplete = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","Customer","OCN","Reference","Quantity","PO_Uploaded_Dt","Aw_Approved_Dt"];
 
-		$if_Dispatched = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","Quantity","DispMode","Awb"];
+		$if_Dispatched = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","Customer","OCN","Reference","Quantity","DispMode","Awb","PO_Uploaded_Dt","Aw_Approved_Dt"];
 
-		$if_Pending = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","Quantity"];
+		$if_Pending = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","Customer","OCN","Reference","Quantity","PO_Uploaded_Dt","Aw_Approved_Dt"];
 
-		$all_fields = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","ByrPo","Quantity","Aw_Status","Inv_No","Inv_Dt","Aw_Status","PI_Status","PO_Status","Reason","Reapproved_Dt","DispMode","Awb"];
+		$all_fields = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","ByrPo","Quantity","Aw_Status","Inv_No","Inv_Dt","Aw_Status","PI_Status","PO_Status","Reason","Reapproved_Dt","DispMode","Awb","Customer","PO_Uploaded_Dt","Aw_Approved_Dt"];
 
 		foreach ($request->status as $key => $value) {
 			# code...
@@ -301,7 +301,7 @@ class ReportController extends Controller
 			}
 			
 		})
-		->select('order_table_name','order_table_id')
+		->select('order_table_name','order_table_id','customer_id')
 		->get();
 
 		$queryRes = collect();
@@ -332,6 +332,8 @@ class ReportController extends Controller
 							'status as Aw_Status',
 							'po as ByrPo',
 							'po_number as P.O',
+							DB::raw('to_char(order_approved_at,'."'".$ddmmyy."'".') as "Aw_Approved_Dt"'),
+							DB::raw('to_char(po_uploaded_at,'."'".$ddmmyy."'".') as "PO_Uploaded_Dt"')
 						])->get();
 					
 
@@ -352,8 +354,9 @@ class ReportController extends Controller
 
 					$material_ref   = $template_data->item_name;
 
+					$customer_name = $customers=Customer::where('id',$value['customer_id'])->first()->company_name;   
 
-					$res->map(function ($res,$key) use($material_name,$material_sub,$material_ref) {
+					$res->map(function ($res,$key) use($material_name,$material_sub,$material_ref,$customer_name) {
 		                    $res->Material = $material_name;
 		                    $res->Sub_Material = $material_sub;
 		                    $res->Reference = $material_ref;
@@ -364,6 +367,8 @@ class ReportController extends Controller
 		                    $res->Awb = "-";		
 		                    $res->Reason = "-";		
 		                    $res->OCN = "-";		
+		                    $res->OCN = "-";		
+		                    $res->Customer = $customer_name;		
                    		 });
 
 					$queryRes = $queryRes->merge($res);
@@ -396,6 +401,8 @@ class ReportController extends Controller
 							'po_number as ByrPo',
 							'ocn_number as OCN',
 							'purchase_order_no as P.O',
+							DB::raw('to_char(order_approved_at,'."'".$ddmmyy."'".') as "Aw_Approved_Dt"'),
+							DB::raw('to_char(po_uploaded_at,'."'".$ddmmyy."'".') as "PO_Uploaded_Dt"')
 						])
 						->get();
 					
@@ -409,7 +416,9 @@ class ReportController extends Controller
                             ->where('t1.id', $template_id)
                             ->first();
 
-					$res->map(function ($res,$key) use($template_level) {
+                    $customer_name = $customers=Customer::where('id',$value['customer_id'])->first()->company_name;
+
+					$res->map(function ($res,$key) use($template_level,$customer_name) {
 		                    $res->Material = $template_level->material_sub;
 		                    $res->Sub_Material = $template_level->material;
 		                    $res->Reference = $template_level->ref;
@@ -420,6 +429,7 @@ class ReportController extends Controller
 		                    $res->Awb = "-";		
 		                    $res->Reason = "-";		
 		                    $res->zone=="UK" ? $res->Style = $res->uk_style_ref : $res->Style = $res->ce_style_ref;	
+		                    $res->Customer = $customer_name;	
                    		 });
 
 					$queryRes = $queryRes->merge($res);
