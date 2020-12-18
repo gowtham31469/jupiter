@@ -59,7 +59,9 @@ class ReportController extends Controller
 		$options_for_delivery = ['8'=>'Dispacted',
 							     '9'=>'Pending'];
 
-		$order_hisory = OrderManagementHistory::all();
+		$customer_id = Auth::guard('web_customer')->id();
+		$profile_id = CustomerProfile::where('id',$customer_id)->first()->company_id;
+		$order_hisory = OrderManagementHistory::where('customer_id',$profile_id)->get();
 
 		$seasons = $order_hisory->unique('season')->pluck('season');
 
@@ -71,8 +73,8 @@ class ReportController extends Controller
 		$templates = [];
 		$countries = [];
 		$admin_flag = 0;
-		$customer_id = Auth::guard('web_customer')->id();
-		$profile_id = CustomerProfile::where('id',$customer_id)->first()->company_id;
+		
+		
 		$customers=Customer::where('id',$profile_id)->orderBy('company_name')
 		->pluck('company_name','id')->toArray();  
 
@@ -82,10 +84,12 @@ class ReportController extends Controller
 
     public function level1Filter(Request $request)
 	{
+		$customer_id = Auth::guard('web_customer')->id();
+		$profile_id = CustomerProfile::where('id',$customer_id)->first()->company_id;
 		
 		$result = OrderManagementHistory::where('buyer_id',$request->buyer)
 		->whereIn('season',$request->season)
-
+		->where('customer_id',$profile_id)
 		->whereBetween('created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
 		->select('material','customer_id','style','sub_material')
 		->get();
@@ -295,6 +299,9 @@ class ReportController extends Controller
 		
 		$ddmmyy="DD/MM/YYYY";
 		
+		$customer_id = Auth::guard('web_customer')->id();
+		$customer = CustomerProfile::where('id',$customer_id)->first();
+
 		switch ($request->buyer) {
 			case 1:
 				foreach ($table_names as $key => $value) 
@@ -374,6 +381,11 @@ class ReportController extends Controller
 					$res = DB::table($primary)
 						->where('id',$value['order_table_id'])
 						// ->leftJoin($secondary,$secondary_id,$primary_id)
+						->where(function($q) use ($request,$customer,$customer_id) {
+							$customer->role_id==1 ? $q->where('tesco_supplier_id',$customer->company_id) : 
+							$q->where('tesco_supplier_id',$customer->company_id)
+							  ->where('order_placed_by',$customer_id);
+						})
 						->select([
 							DB::raw('to_char('.$primary_order_date.','."'".$ddmmyy."'".') as "Order_Dt"'),
 							'zone','uk_style_ref','ce_style_ref',
