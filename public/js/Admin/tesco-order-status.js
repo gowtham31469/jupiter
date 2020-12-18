@@ -922,10 +922,11 @@ function submitOs(obj)
                     }],
                     "pageLength": 25,
                     "order": [
-                        [9, "desc"]
+                        [10, "desc"]
                     ],
                     scrollX:        true,
                     "aoColumns": [
+                        null,
                         null,
                         null,
                         null,
@@ -1026,7 +1027,7 @@ var normalizeDate = function (dateString) {
  * @return {[type]}      [description]
  */
 function tescoStatusTable(data, path) {
-    var th = "<th style='text-align: center;'>Style No</th><th style='text-align: center;'>OCN No</th><th style='text-align: center;'>Season Code</th><th style='text-align: center;'>Buyer Po</th><th style='text-align: center;'>Zone</th><th style='text-align: center;'>Reference No</th><th style='text-align: center;'>Template Type</th><th style='text-align: center;'>Company</th><th style='text-align: center;'>Order Date</th><th style='text-align: center;'>Delivery Date</th><th style='text-align: center;'>Order Status</th><th style='text-align: center;'>Artwork</th><th style='text-align: center;'>Artwork Status</th><th style='text-align: center;'>PI Status</th><th style='text-align: center;'>PO Status</th><th style='text-align: center;'>PO Number</th><th style='text-align: center;'>Print Proof</th>";
+    var th = "<th style='text-align: center;'>Style No</th><th style='text-align: center;display:none'>PO Number</th><th style='text-align: center;'>OCN No</th><th style='text-align: center;'>Season Code</th><th style='text-align: center;'>Buyer Po</th><th style='text-align: center;'>Zone</th><th style='text-align: center;'>Reference No</th><th style='text-align: center;'>Template Type</th><th style='text-align: center;'>Company</th><th style='text-align: center;'>Order Date</th><th style='text-align: center;'>Delivery Date</th><th style='text-align: center;'>Order Status</th><th style='text-align: center;'>Artwork</th><th style='text-align: center;'>Artwork Status</th><th style='text-align: center;'>PI Status</th><th style='text-align: center;'>PO Status</th><th style='text-align: center;'>PO Number</th><th style='text-align: center;'>Print Proof</th>";
     var tr = "";
     var columnsIn = data[0];
     // for (var key in columnsIn) {
@@ -1179,9 +1180,9 @@ function tescoStatusTable(data, path) {
                     }
 
                     if (value['order_status'] != 'Saved'){
-                        tr += '<td align="center" data-id="' + value.tableID + '" data-table="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>' + span_style + '' + style_no + '</a></td>';
+                        tr += '<td align="center" data-id="' + value.tableID + '" data-table="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>' + span_style + '' + style_no + '</a></td><td style="text-align: center;display:none">'+value['PO Number']+'</td>';
                     } else {
-                        tr += '<td align="center" data-id="' + value.tableID + '" data-table="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '"><a class="" href="javascript:void(0)" data-toggle= "modal" data-target="#savedOrderAlertBox">' + span_style + '' + style_no + '</a></td>';
+                        tr += '<td align="center" data-id="' + value.tableID + '" data-table="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '"><a class="" href="javascript:void(0)" data-toggle= "modal" data-target="#savedOrderAlertBox">' + span_style + '' + style_no + '</a></td><td style="text-align: center;display:none">'+value['PO Number']+'</td>';
                     }
 
                 } else if (key == "DeliveryDate") {
