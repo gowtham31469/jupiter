@@ -246,7 +246,7 @@
                         <label style="color:red" id="select_error_status" class="hidden">Please Select PO</label>
                         <div class="form-group" id="selectpo_status">
                             <label>Select PO</label>
-                            <select class="form-control">
+                            <select id="select_po_status" class="form-control">
                                   <option>1</option>
                                   <option>2</option>
                                   <option>3</option>
