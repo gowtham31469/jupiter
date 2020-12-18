@@ -381,7 +381,7 @@ class ReportController extends Controller
 					$res = DB::table($primary)
 						->where('id',$value['order_table_id'])
 						// ->leftJoin($secondary,$secondary_id,$primary_id)
-						->where(function($q) use ($request,$customer) {
+						->where(function($q) use ($request,$customer,$customer_id) {
 							$customer->role_id==1 ? $q->where('tesco_supplier_id',$customer->company_id) : 
 							$q->where('tesco_supplier_id',$customer->company_id)
 							  ->where('order_placed_by',$customer_id)->id();
