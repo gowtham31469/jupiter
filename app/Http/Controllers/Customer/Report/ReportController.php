@@ -384,7 +384,7 @@ class ReportController extends Controller
 						->where(function($q) use ($request,$customer,$customer_id) {
 							$customer->role_id==1 ? $q->where('tesco_supplier_id',$customer->company_id) : 
 							$q->where('tesco_supplier_id',$customer->company_id)
-							  ->where('order_placed_by',$customer_id)->id();
+							  ->where('order_placed_by',$customer_id);
 						})
 						->select([
 							DB::raw('to_char('.$primary_order_date.','."'".$ddmmyy."'".') as "Order_Dt"'),
