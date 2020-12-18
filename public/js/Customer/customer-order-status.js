@@ -755,7 +755,7 @@ function tescoOrderStatus() {
                                         })
 
 
-                                        $('#po_select_div').html('<label>Select PO</label><select id="select_po_status" class="form-control">' + options + '</select>')
+                                        $('#selectpo_status').html('<label>Select PO</label><select id="select_po_status" class="form-control">' + options + '</select>')
                                         if (coun == 0) {
                                             $('#map_po_status').addClass('hidden');
                                             $('#new_po1_status').addClass('hidden');
@@ -1098,9 +1098,10 @@ function submitOs(obj)
                     }],
                     "pageLength": 25,
                     "order": [
-                        [7, "desc"]
+                        [8, "desc"]
                     ],
                     "aoColumns": [
+                        null,
                         null,
                         null,
                         null,
@@ -1198,7 +1199,7 @@ var normalizeDate = function (dateString) {
  * @return {[type]}      [description]
  */
 function tescoStatusTable(data, path) {
-    var th = "<th style='text-align: center;'>Style No</th><th style='text-align: center;'>Season Code</th><th style='text-align: center;'>Buyer Po</th><th style='text-align: center;'>Zone</th><th style='text-align: center;'>Reference No</th><th style='text-align: center;'>Template Type</th><th style='text-align: center;'>Order Date</th><th style='text-align: center;'>Delivery Date</th><th style='text-align: center;'>Order Status</th><th style='text-align: center;'>Artwork</th><th style='text-align: center;'>Artwork Status</th><th style='text-align: center;'>PI Status</th><th style='text-align: center;'>PO Status</th><th style='text-align: center;'>PO Number</th>";
+    var th = "<th style='text-align: center;'>Style No</th><th style='text-align: center;'>OCN No</th><th style='text-align: center;'>Season Code</th><th style='text-align: center;'>Buyer Po</th><th style='text-align: center;'>Zone</th><th style='text-align: center;'>Reference No</th><th style='text-align: center;'>Template Type</th><th style='text-align: center;'>Order Date</th><th style='text-align: center;'>Delivery Date</th><th style='text-align: center;'>Order Status</th><th style='text-align: center;'>Artwork</th><th style='text-align: center;'>Artwork Status</th><th style='text-align: center;'>PI Status</th><th style='text-align: center;'>PO Status</th><th style='text-align: center;'>PO Number</th>";
     var tr = "";
     var columnsIn = data[0];
     // for (var key in columnsIn) {
