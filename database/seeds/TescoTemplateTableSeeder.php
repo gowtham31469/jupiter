@@ -269,6 +269,78 @@ class TescoTemplateTableSeeder extends Seeder
                 'hierarchy_id' => 2,
                 'flag' => 0,
             ),
+            22 => 
+            array (
+                'id' => 22,
+                'item_id' => 26,
+                'template_name' => 'TCL 1',
+                'template_description' => 'TCL 1',
+                'template_file' => '/storage/app/template/tesco/TCL1_CE_PO.svg',
+                'disney' => 0,
+                'tax' => 0,
+                'hierarchy_id' => 2,
+                'flag' => 0,
+            ),
+            23 => 
+            array (
+                'id' => 23,
+                'item_id' => 27,
+                'template_name' => 'TCL 2',
+                'template_description' => 'TCL 2',
+                'template_file' => '/storage/app/template/tesco/TCL2_CE_PO.svg',
+                'disney' => 0,
+                'tax' => 0,
+                'hierarchy_id' => 2,
+                'flag' => 0,
+            ),
+            24 => 
+            array (
+                'id' => 24,
+                'item_id' => 28,
+                'template_name' => 'TCL 4',
+                'template_description' => 'TCL 4',
+                'template_file' => '/storage/app/template/tesco/TCL4_CE_PO.svg',
+                'disney' => 0,
+                'tax' => 0,
+                'hierarchy_id' => 2,
+                'flag' => 0,
+            ),
+            25 => 
+            array (
+                'id' => 25,
+                'item_id' => 29,
+                'template_name' => 'TCL 1',
+                'template_description' => 'TCL 1',
+                'template_file' => '/storage/app/template/tesco/TCL1_UK_PO.svg',
+                'disney' => 0,
+                'tax' => 0,
+                'hierarchy_id' => 2,
+                'flag' => 0,
+            ),
+            26 => 
+            array (
+                'id' => 26,
+                'item_id' => 30,
+                'template_name' => 'TCL 2',
+                'template_description' => 'TCL 2',
+                'template_file' => '/storage/app/template/tesco/TCL2_UK_PO.svg',
+                'disney' => 0,
+                'tax' => 0,
+                'hierarchy_id' => 2,
+                'flag' => 0,
+            ),
+            27 => 
+            array (
+                'id' => 27,
+                'item_id' => 31,
+                'template_name' => 'TCL 4',
+                'template_description' => 'TCL 4',
+                'template_file' => '/storage/app/template/tesco/TCL4_UK_PO.svg',
+                'disney' => 0,
+                'tax' => 0,
+                'hierarchy_id' => 2,
+                'flag' => 0,
+            ),
         ));
         
         
