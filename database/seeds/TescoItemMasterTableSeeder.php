@@ -267,6 +267,66 @@ class TescoItemMasterTableSeeder extends Seeder
                 'tag_name' => '',
                 'is_qrcode_required' => 1
             ),
+            26 => 
+            array (
+                'id' => 26,
+                'company_id' => 1,
+                'parent_id' => 3,
+                'item_name' => 'TCL 1',
+                'ref_no' => 'TCL 1',
+                'tag_name' => '',
+                'is_qrcode_required' => 1
+            ),
+            27 => 
+            array (
+                'id' => 27,
+                'company_id' => 1,
+                'parent_id' => 3,
+                'item_name' => 'TCL 2',
+                'ref_no' => 'TCL 2',
+                'tag_name' => '',
+                'is_qrcode_required' => 1
+            ),
+            28 => 
+            array (
+                'id' => 28,
+                'company_id' => 1,
+                'parent_id' => 3,
+                'item_name' => 'TCL 4',
+                'ref_no' => 'TCL 4',
+                'tag_name' => '',
+                'is_qrcode_required' => 1
+            ),
+            29 => 
+            array (
+                'id' => 29,
+                'company_id' => 1,
+                'parent_id' => 4,
+                'item_name' => 'TCL 1',
+                'ref_no' => 'TCL 1',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            30 => 
+            array (
+                'id' => 30,
+                'company_id' => 1,
+                'parent_id' => 4,
+                'item_name' => 'TCL 2',
+                'ref_no' => 'TCL 2',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            31 => 
+            array (
+                'id' => 31,
+                'company_id' => 1,
+                'parent_id' => 4,
+                'item_name' => 'TCL 4',
+                'ref_no' => 'TCL 4',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
         ));
         
         
