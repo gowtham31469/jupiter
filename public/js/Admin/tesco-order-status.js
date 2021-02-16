@@ -194,7 +194,7 @@ function tescoOrderStatus() {
                                         $(newObj).each(function (index1, value1) {
 
                                             if (value1.order_status != "Order Approved") {
-                                                $('#approve-upload-group').find('#exist_artwork_approve_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="list-group-item">' + value1.TemplateName + '</li>')
+                                                $('#approve-upload-group').find('#exist_artwork_approve_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="list-group-item">' + value1.TemplateName +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>'+ value1.po_number+ '</li>')
                                                 
 
                                             } else {
@@ -203,7 +203,7 @@ function tescoOrderStatus() {
                                                 }
                                                 old_po = value1.purchase_order_no
                                                 coun++;
-                                                $('#approve-upload-group').find('#exist_artwork_approve_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="check-list">' + value1.TemplateName + '</li>')
+                                                $('#approve-upload-group').find('#exist_artwork_approve_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="check-list">' + value1.TemplateName +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>'+ value1.po_number+ '</li>')
                                                 new_po_div_status++;
                                             }
 
