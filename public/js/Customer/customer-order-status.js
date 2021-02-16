@@ -644,11 +644,11 @@ function tescoOrderStatus() {
                                                 }
                                                 old_po = value1.purchase_order_no
                                                 coun++;
-                                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="check-list">' + value1.TemplateName + '</li>')
+                                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="check-list">' + value1.TemplateName +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>'+ value1.po_number +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>'+ value1.purchase_order_no+  '</li>')
                                                 new_po_div_status++;
 
                                             } else {
-                                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="list-group-item">' + value1.TemplateName + '</li>')
+                                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="list-group-item">' + value1.TemplateName +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>'+ value1.po_number +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>-'+  '</li>')
                                             }
 
                                         });

@@ -232,7 +232,7 @@
                     <div id="uvc_select_div">
                     </div>
                     <div id="exist_artwork_div_status" class="hidden">
-                        <h4>Artworks : </h4>
+                        <h4>Artworks :  <span style="display: inline-block;margin-left: 100px;" class="tab"></span> Buyer PO No :<span style="display: inline-block;margin-left: 100px;" class="tab"></span> Cust PO No :</h4>
                         <label style='color:red' id='check_error_status' class='hidden'>Please select atleast one artwork</label>
                         <ul class="list-group checked-list-box">
                         </ul>
