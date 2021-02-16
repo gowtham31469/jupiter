@@ -29,27 +29,27 @@ function tescoOrderStatus() {
 
                 $('.top-content').html(`
                 <div class="row">
-                <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="stylenoos" title="Select CE Style Number" multiple data-selected-text-format="count" data-actions-box="true" data-live-search="true" data-size="10"></select></div></div>
-                <div class="col-md-2"></div>
-                <div class="col-md-4"><input type="text" placeholder="Start Date - End Date" class="form-control startdateos" autocomplete="off" multiple style="width:100%" name="startdateos" /></div>
-                <div class="col-md-2"></div>
-                <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="ukstylenoos" title="Select UK Style Number" multiple data-selected-text-format="count" data-actions-box="true" data-live-search="true" data-size="10"></select></div></div>
+                <div class="col-md-5"><input type="text" placeholder="Start Date - End Date" class="form-control startdateos" autocomplete="off" multiple style="width:100%" name="startdateos" /></div>
+                <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="ukstylenoos" title="Select Style Number" multiple data-selected-text-format="count" data-actions-box="true" data-live-search="true" data-size="10"></select></div></div>
+                <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="seasonos" title="Select Season" data-actions-box="true" multiple data-selected-text-format="count" data-live-search="true" data-size="10"></select></div></div>
+                <div class="col-md-1"></div>
+                <div class="col-md-2">
+                <button style='margin-bottom: 15px;margin-right: 15px;' id='artwork-approve-upload-button' class='btn btn-sm btn-primary pull-right' type='button'>Approve Artwork</button>
+                </div>
                 </div>
                 <div class="row" style="margin-top: 15px;">
-                <div class="col-md-1"></div>
-                <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="seasonos" title="Select Season" data-actions-box="true" multiple data-selected-text-format="count" data-live-search="true" data-size="10"></select></div></div>
                 <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="orderstatusos" title="Select Order Status" data-actions-box="true" multiple data-selected-text-format="count" data-live-search="true" data-size="10"><option value="Saved">Saved</option><option value="Order Placed">Submited</option><option value="Order Pending">Pending</option><option value="Order Cancelled">Cancelled</option></select></div></div>
                 <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="artworkstatusos" title="Select Artwork Status" data-actions-box="true" multiple data-selected-text-format="count" data-live-search="true" data-size="10"><option value="Approval Pending">Approval Pending</option><option value="Order Approved">Order Approved</option></select></div></div>
                 <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="postatusos" title="Select PO Status" data-actions-box="true" multiple data-selected-text-format="count" data-live-search="true" data-size="10"><option value="PO Pending">PO Pending</option><option value="PO Uploaded">PO Uploaded</option></select></div></div>
                 <div class="col-md-2"><div class="input-group"><select class="selectpicker" id="pistatusos" title="Select PI Status" data-actions-box="true" multiple data-selected-text-format="count" data-live-search="true" data-size="10"><option value="PI Approval Pending">PI Approval Pending</option><option value="PI Approved">PI Approved</option><option value="PI Rejected">PI Rejected</option></select></div></div>
-                <div class="col-md-1"></div>
+                <div class="col-md-1">
+                <button class="btn btn-primary input-sm pull-right" onclick="submitOs(this)" id="submitos">Submit</button></div>
+                <div class="col-md-3"><button style='margin-bottom: 15px;margin-right: 15px;' id='po-file-upload-button' class='btn btn-sm btn-primary pull-right' type='button'>Update PO</button></div>
                 </div>
                 <div class="row" style="margin-top: 15px;">
                 <div class="col-md-12">
                 <input type="hidden" id="start_date">
                 <input type="hidden" id="end_date">
-                <button class="btn btn-primary input-sm pull-right" onclick="submitOs(this)" id="submitos">Submit</button><button style='margin-bottom: 15px;margin-right: 15px;' id='po-file-upload-button' class='btn btn-sm btn-primary pull-right' type='button'>Update PO</button>
-                <button style='margin-bottom: 15px;margin-right: 15px;' id='artwork-approve-upload-button' class='btn btn-sm btn-primary pull-right' type='button'>Approve Artwork</button>
                 </div>
                 </div>
                 <div style="padding-top:15px;" id="OrderStatusTable"></div>
@@ -61,9 +61,9 @@ function tescoOrderStatus() {
 
                 $(data.style_no).each(function(index,value){
                     if (value.zone == "CE") {
-                            $("#stylenoos").append("<option value='"+ value.ce_style_ref + "'>" + value.ce_style_ref + "</option>");
+                            $("#ukstylenoos").append("<option data-id='CE' value='"+ value.ce_style_ref + "'>" + value.ce_style_ref + "</option>");
                     } else {
-                            $("#ukstylenoos").append("<option value='"+ value.uk_style_ref + "'>" + value.uk_style_ref + "</option>");
+                            $("#ukstylenoos").append("<option data-id='UK' value='"+ value.uk_style_ref + "'>" + value.uk_style_ref + "</option>");
                     }
                 })
                 
@@ -115,11 +115,11 @@ function tescoOrderStatus() {
                                 $(data.style_no).each(function(index,value){
                                     if (value.zone == "CE") {
                                         if (uniqueNames.indexOf(value.ce_style_ref) === -1) {
-                                            $("#stylenoos").append("<option value='"+ value.ce_style_ref + "'>" + value.ce_style_ref + "</option>");
+                                            $("#ukstylenoos").append("<option data-id='CE' value='"+ value.ce_style_ref + "'>" + value.ce_style_ref + "</option>");
                                         }
                                     } else {
                                         if (uniqueNames.indexOf(value.uk_style_ref) === -1) {
-                                            $("#ukstylenoos").append("<option value='"+ value.uk_style_ref + "'>" + value.uk_style_ref + "</option>");
+                                            $("#ukstylenoos").append("<option data-id='UK' value='"+ value.uk_style_ref + "'>" + value.uk_style_ref + "</option>");
                                         }
                                     }
                                 })
@@ -879,13 +879,24 @@ function tescoOrderStatus() {
 
 function submitOs(obj)
 {
+
+    var ukstylenoos = [];
+    var stylenoos = [];
+    $('#ukstylenoos :selected').each(function() {
+        if($(this).data("id") == "CE")
+        {
+            stylenoos.push($(this).val());
+        }
+        else
+        {
+            ukstylenoos.push($(this).val());
+        }
+    })
     var seasonos = $('#seasonos').val();
-    var ukstylenoos = $('#ukstylenoos').val();
     var orderstatusos = $('#orderstatusos').val();
     var artworkstatusos = $('#artworkstatusos').val();
     var postatusos = $('#postatusos').val();
     var pistatusos = $('#pistatusos').val();
-    var stylenoos = $('#stylenoos').val();
     var start_date = $('#start_date').val();
     var end_date = $('#end_date').val();
     $.ajax({
@@ -1126,7 +1137,7 @@ function tescoStatusTable(data, path) {
 
                         tr += '<td align="center"><span class="label label-' + $status + '">' + value[key] + '</span></td>';
                     } else {
-                        tr += '<td align="center"><span class="label label-draft" title="Please visit the Create Order page and complete your order." data-placement="top">Order Saved</span></td>';
+                        tr += '<td align="center"><span class="label label-draft" title="Please SUBMIT your order at the Create Order Page." data-placement="top">Order Saved</span></td>';
                     }
 
                 } else if (key == "artwork_status") {
