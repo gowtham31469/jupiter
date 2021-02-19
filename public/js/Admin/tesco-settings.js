@@ -2206,5 +2206,265 @@ function tescoErrorReportEmail() {
     }
    }
 
+/**
+ * Function to tesco Symbols
+ */
+
+function tescoSymbols() {
+  try{
+    $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+    $('.orchestra-sidebar').hide();
+    $('.tesco-sidebar').show();
+    $.ajax({
+      url: base_url + "/admin/tesco/settings/symbols",
+      type: "POST",
+      dataType: "json",
+      data: {
+          _token: csrf_token
+      },
+      tryCount: 0,
+      retryLimit: 2,
+      beforeSend: function() {
+          $(".loader").show();
+      },
+      success: function(data) {
+        var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoSymbolsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Symbol</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Symbols</h3></div><table id="tesco-symbols-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>ISO Symbols</th><th>Astm Symbol</th><th>Care Instruction</th><th>Degree</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+        $.each(data.tesco_care_symbols, function(i, item) {
+          var index = i + 1;
+          tesco_metadata += '<tr data-category="' + item.category_id + '" id="' + item.id + '"><td>' + index + '</td><td class="td_iso_symbols"><img width="30px" src="' + item.iso_symbols + '"></td><td class="td_astms_symbol"><img width="30px" src="' + item.astms_symbol + '"></td><td class="td_care_instruction">' + item.care_instruction + '</td>';
+          tesco_metadata += '<td class="td_care_degree">' + item.degree + '</td>';
+          if (item.is_enabled) {
+            tesco_metadata += '<td><span class="label label-success">Enabled</span></td>';
+          } else {
+            tesco_metadata += '<td><span class="label label-danger">Disabled</span></td>';
+          }
+          if (item.is_enabled) {
+            tesco_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="disable_tesco_symbol" data-placement="left"></i></a>';
+          } else {
+            tesco_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="enable_tesco_symbol" data-placement="left"></i></a>';
+          }
+          tesco_metadata += '</td></tr>';
+        });
+        tesco_metadata += '</tbody></table></div>';
+        $('.content').html(tesco_metadata)
+        $('.edit-tesco-symbols').tooltip('show')
+        $('.edit-tesco-symbols').tooltip('toggle')
+        $('.status').tooltip('show')
+        $('.status').tooltip('toggle')
+        $('#tesco-symbols-list-table').DataTable();
+        $("#tesco-symbols-list-table_filter input").addClass('form-control input-sm');
+        $("#tesco-symbols-list-table_filter input").attr('placeholder', 'Data Search');
+        $('#tesco-symbols-list-table_length select').addClass('form-control input-sm');
+      },
+      error: function(errorXHR, errorStatus, errorThrown) {
+          this.tryCount++;
+          if (this.tryCount <= this.retryLimit) {
+              $.ajax(this);
+              return;
+          }
+      },
+      complete: function() {
+          $(".loader").hide();
+      }
+    })
+  } catch (e) {
+    console.log("Error:" + e)
+  }
+}
+
+
+/**
+ * Function to Tesco Settings Symbols
+ */
+function addTescoSymbols(iso_symbols, astms_symbol, category_id, care_instruction, care_degree) {
+  try {
+      
+      var form_data = new FormData();
+
+      form_data.append('iso_symbols', iso_symbols);
+      form_data.append('astms_symbol', astms_symbol);
+      form_data.append('category_id', category_id);
+      form_data.append('care_instruction', care_instruction);
+      form_data.append('care_degree', care_degree);
+      form_data.append('_token', csrf_token);
+
+
+      $.ajax({
+          url: base_url + "/admin/tesco/settings/addTescoSymbols",
+          type: "POST",
+          data: form_data,
+          cache: false,
+          contentType: false,
+          processData: false,
+          tryCount: 0,
+          retryLimit: 2,
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          statusCode: {
+              /** [ Show response status based on HTTP status code ] */
+              200: function() {
+                  $('.snackbar_span').html('Symbols Added Successfully');
+                  showSnackbar();
+                  $('#addTescoSymbolsModal').modal('hide');
+                  tescoSymbols();
+              },
+              422: function() {
+                  $('.hidden-error').html('<div class="alert alert-warning">\
+                      Invalid File Format\
+                    </div>')
+              }
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              $(".loader").hide();
+          }
+      });
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+/**
+ * Makes a Symbol Enabled.
+ * @param id,csrf_token
+ * @author <praveen>
+ */
+function makeSymbolEnabled(id, csrf_token) {
+  try {
+      if (isSubmitting) {
+          return;
+      }
+      isSubmitting = true;
+      $.ajax({
+          url: base_url + "/admin/tesco/make-symbol-enabled",
+          dataType: "json",
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          method: "put",
+          data: { _token: csrf_token, id: id },
+          tryCount: 0,
+          retryLimit: 2,
+          statusCode: {
+              /** [Show response status based on HTTP status code] */
+              200: function() {
+                  isSubmitting = false;
+                  $('.snackbar_span').html('Symbol is enabled ');
+                  showSnackbar();
+              }
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              orchestraSymbols();
+              $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
    
+/**
+ * Makes a tesco Symbol Enabled.
+ * @param id,csrf_token
+ */
+function enableTescoSymbol(id, csrf_token) {
+  try {
+      if (isSubmitting) {
+          return;
+      }
+      isSubmitting = true;
+      $.ajax({
+          url: base_url + "/admin/tesco/enable-tesco-symbol",
+          dataType: "json",
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          method: "put",
+          data: { _token: csrf_token, id: id },
+          tryCount: 0,
+          retryLimit: 2,
+          statusCode: {
+              /** [Show response status based on HTTP status code] */
+              200: function() {
+                  isSubmitting = false;
+                  $('.snackbar_span').html('Symbol is enabled ');
+                  showSnackbar();
+              }
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              tescoSymbols();
+              $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+
+/**
+ * Makes a Symbol Diabled
+ * @param id,csrf_token
+ */
+function disableTescoSymbol(id, csrf_token) {
+  try {
+      if (isSubmitting) {
+          return;
+      }
+      isSubmitting = true;
+      $.ajax({
+          url: base_url + "/admin/tesco/disable-tesco-symbol",
+          dataType: "json",
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          method: "put",
+          data: { _token: csrf_token, id: id },
+          tryCount: 0,
+          retryLimit: 2,
+          statusCode: {
+              /** [Show response status based on HTTP status code] */
+              200: function() {
+                  isSubmitting = false;
+                  $('.snackbar_span').html('Symbol is disabled ');
+                  showSnackbar();
+              }
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              tescoSymbols();
+              $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
    

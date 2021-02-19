@@ -957,6 +957,11 @@ Route::get('print-manager/get-style-list', 'ErpUser\Printmanager\PrintManagerCon
 Route::get('print-manager/get-erporder-list', 'ErpUser\Printmanager\PrintManagerController@getErpOrderListByBuyerCustomerId'); 
 
 
+#Tesco Wash care Symbols
+Route::post('admin/tesco/settings/symbols', 'Admin\Settings\Tesco\TescoSettings@tescoSymbols');
+Route::post('admin/tesco/settings/addTescoSymbols', 'Admin\Settings\Tesco\TescoSettings@addTescoSymbols');
+Route::put('admin/tesco/enable-tesco-symbol', 'Admin\Settings\Tesco\TescoSettings@enableTescoSymbol');
+Route::put('admin/tesco/disable-tesco-symbol', 'Admin\Settings\Tesco\TescoSettings@disableTescoSymbol');
 
 
 

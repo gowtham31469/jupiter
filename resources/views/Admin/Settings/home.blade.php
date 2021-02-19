@@ -33,6 +33,7 @@
             <li id="2" onclick="tescoDepartment()"><a>Departments</a></li>
             <li id="3" onclick="tescoSuppliers()"><a>Customers</a></li>
             <li id="4"  onclick="tescoSizeChart()"><a>Size Chart</a></li>
+            <li id="5"  onclick="tescoSymbols()"><a>Symbols</a></li>
           </ul>
         </div>
         <div class="content">
@@ -1966,6 +1967,57 @@
              </div>
          </div>
      </div>
+    {{-- Tesco add care symbols --}}
+    <div class="modal fade" id="addTescoSymbolsModal" tabindex="-1" role="dialog" aria-labelledby="tescoSymbolsLabel">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+               <h4 class="modal-title" id="tescoSymbolsLabel">Add Symbols</h4>
+            </div>
+            {!! Form::open(['id' => 'add_tesco_symbols_form','data-toggle' => 'validator','role' => 'form']) !!}
+            <div class="modal-body">
+               <div class="hidden-error"></div>
+               <div class="form-group has-feedback">
+                {!! Form::label('care_degree', 'Degree', ['class' => 'form_label']) !!}
+                {{ Form::text('care_degree', null,  ['class' => 'form-control', 'required']) }}
+                <div class="help-block with-errors"></div>
+               </div>
+               <div class="form-group has-feedback">
+                  {!! Form::label('symbol_category', 'Category', ['class' => 'form_label']) !!}
+                  {{ Form::select('symbol_category', $category, '', ['class' => 'form-control input-sm','required']) }}
+                  <div class="help-block with-errors"></div>
+               </div>
+               <div class="form-group has-feedback">
+                  {!! Form::label('iso_symbol', 'ISO Symbol (*.png only)', ['class' => 'form_label']) !!}
+                  <div class="row">
+                     <div class="col-md-2"> <img width="30px" id="add_iso_symbol" src="/not-available.png" alt="symbol"></div>
+                     <div class="col-md-10"> {{ Form::file('iso_symbol', ['required', 'accept' => 'image/png']) }}</div>
+                  </div>
+                  <div class="help-block with-errors"></div>
+               </div>
+               <div class="form-group has-feedback">
+                  {!! Form::label('astms_symbol', 'Astms Symbol (*.png only)', ['class' => 'form_label']) !!}
+                  <div class="row">
+                     <div class="col-md-2"><img width="30px" id="add_astms_symbol" src="/not-available.png" alt="symbol"></div>
+                     <div class="col-md-10">{{ Form::file('astms_symbol', ['required', 'accept' => 'image/png']) }}</div>
+                  </div>
+                  <div class="help-block with-errors"></div>
+               </div>
+               <div class="form-group has-feedback">
+                  {!! Form::label('care_instruction', 'Care Instruction', ['class' => 'form_label']) !!}
+                  {{ Form::textarea('care_instruction', null,  ['class' => 'form-control', 'maxlength' => '255', 'minlength' => '1', 'style' => 'resize: none;', 'rows' => '5','required']) }}
+                  <div class="help-block with-errors"></div>
+               </div>
+            </div>
+            <div class="modal-footer">
+               {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+               {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+            </div>
+            {!! Form::close() !!}
+         </div>
+      </div>
+   </div>
     @endsection @else
     <script type="text/javascript">
         window.location = "{{ url('/admin') }}";
@@ -2142,6 +2194,7 @@
         $('#orch_color_error').hide();
         $('#edit_orch_color_error').hide();
         $('.hidden-error').html('');
+        $('#add_tesco_symbols_form').trigger("reset");
        })
 
       /** Add orchestra garment form validation **/
@@ -2563,6 +2616,48 @@
               addOrchestraSymbols(cofreet_file, astms_file, symbol_category, care_instruction);
            }
          })
+
+
+          /** Add tesco symbols form validation **/
+          $('#add_tesco_symbols_form').validator().on('submit', function (e) {
+           if (e.isDefaultPrevented())
+           {
+
+           }
+           else
+           {
+              e.preventDefault();
+              
+              var iso_file = $(this).find("input[name='iso_symbol']")[0].files[0];
+              var astms_file = $(this).find("input[name='astms_symbol']")[0].files[0];
+              var symbol_category = $(this).find('#symbol_category option:selected').val();
+              var care_instruction = $(this).find('#care_instruction').val();
+              var care_degree = $(this).find('#care_degree').val();
+              
+              /* call addTescoSymbols function from tesco-settings.js*/
+              addTescoSymbols(iso_file, astms_file, symbol_category, care_instruction, care_degree);
+           }
+          })
+
+            /** To Enable  symbols  on click **/
+          $(document).on('click', '#enable_tesco_symbol', function(e) {
+              var id = $(this).closest('tr').attr('id');
+              
+              /* call makeTescoSymbolEnabled function from tesco-settings.js*/
+              enableTescoSymbol(id,csrf_token)
+          });
+
+          /** To Enable  symbols  on click **/
+          $(document).on('click', '#disable_tesco_symbol', function(e) {
+              var id = $(this).closest('tr').attr('id');
+              
+              /* call makeTescoSymbolEnabled function from tesco-settings.js*/
+              disableTescoSymbol(id,csrf_token)
+          });
+
+
+
+
        });
 
        /** Edit orchestra symbols form validation **/
