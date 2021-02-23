@@ -32,7 +32,7 @@ function reOrderTesco() {
 				return 0;
 			});
 			for (i = 0; i < newObj1.length; i++) {
-				if (newObj1[i].is_order_count_empty == 0) {
+				//if (newObj1[i].is_order_count_empty == 0) {
 					if (newObj1[i].zone == "CE") {
 						if (uniqueNames.indexOf(newObj1[i].ce_style_ref) === -1) {
 							uniqueNames.push(newObj1[i].ce_style_ref);
@@ -42,7 +42,7 @@ function reOrderTesco() {
 							uniqueNames.push(newObj1[i].uk_style_ref);
 						}
 					}
-				}
+				//}
 			}
 			var options = "<option>Select Style Number</option>";
 			for (i = 0; i < uniqueNames.length; i++) {
@@ -62,7 +62,7 @@ function reOrderTesco() {
 				return 0;
 			});
 			for (i = 0; i < newObjrepeatOrder1.length; i++) {
-				if (newObjrepeatOrder1[i].is_order_count_empty == 0) {
+				//if (newObjrepeatOrder1[i].is_order_count_empty == 0) {
 					if (newObjrepeatOrder1[i].zone == "CE") {
 						if (uniqueNamesRepeatOrder.indexOf(newObjrepeatOrder1[i].ce_style_ref) === -1) {
 							uniqueNamesRepeatOrder.push(newObjrepeatOrder1[i].ce_style_ref);
@@ -72,7 +72,7 @@ function reOrderTesco() {
 							uniqueNamesRepeatOrder.push(newObjrepeatOrder1[i].uk_style_ref);
 						}
 					}
-				}
+				//}
 
 			}
 			var optionsRepeatOrder = "<option>Select Style Number</option>";
@@ -136,7 +136,7 @@ function reordertescoartworks() {
 				var i = 1;
 				$(newObj).each(function (key, index) {
 
-					if (index.is_order_count_empty == 0) {
+					//if (index.is_order_count_empty == 0) {
 						if (index.zone == "CE") {
 							var span = '<span class="label labels">' + index.zone + '</span><span id="list-li-reorder' + i + '"></span>';
 							if (index.ce_style_ref == uvc) {
@@ -152,7 +152,7 @@ function reordertescoartworks() {
 						}
 						i++;
 
-					}
+					//}
 
 				})
 
@@ -203,7 +203,7 @@ function repeatordertescoartworks() {
 
 				var i = 1;
 				$(newObj).each(function (key, index) {
-					if (index.is_order_count_empty == 0) {
+					//if (index.is_order_count_empty == 0) {
 						if (index.zone == "CE") {
 							var span = '<span class="label labels">' + index.zone + '</span><span id="list-li-repeatorder' + i + '">';
 							if (index.ce_style_ref == uvc) {
@@ -218,7 +218,7 @@ function repeatordertescoartworks() {
 							}
 						}
 						i++;
-					}
+					//}
 
 				})
 
