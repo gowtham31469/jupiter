@@ -246,9 +246,9 @@ function tescoOrderStatus() {
                 $('.selectpicker').selectpicker();
 
                 var d = new Date();
-                var maxDate = d.toLocaleDateString('en-US');
+                var maxDate = d.toLocaleDateString();
                 d.setMonth(d.getMonth() - 6);
-                var minDate = d.toLocaleDateString('en-US');
+                var minDate = d.toLocaleDateString();
 
                 // alert(minDate)
                 // alert(maxDate)
@@ -256,7 +256,8 @@ function tescoOrderStatus() {
                 $('input[name="startdateos"]').daterangepicker({
                     "minDate": minDate,
                     "maxDate": maxDate,
-                    autoUpdateInput: false
+                    autoUpdateInput: false,
+                    locale: { format: 'DD/MM/YYYY' }
                 },
                 function (start, end, label) {
                     var start_date = start.format('YYYY-MM-DD');
@@ -317,10 +318,12 @@ function tescoOrderStatus() {
                 });
 
                 $('input[name="startdateos"]').on('apply.daterangepicker', function(ev, picker){
-                    $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+                    $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
                 });
 
                 $('input[name="startdateos"]').on('cancel.daterangepicker', function(ev, picker) {
+                    $('#start_date').val('');
+                    $('#end_date').val('');
                     $(this).val('');
                 });
 
@@ -1926,7 +1929,12 @@ function updateArtwork(obj) {
                     }, false);
                     if(data.order_details.is_order_count_empty == 1)
                     {
-                        editArtwork()
+                       // editArtwork()
+                       $('#edit').remove();
+                       $('#submit').removeClass('hidden');
+                       $("#submit").prop("disabled", false);
+                       $("#add_row").prop("disabled", false);
+                       $(".qty-table-modal :input").prop("disabled", false);
                     }
 
                 }
