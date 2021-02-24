@@ -365,10 +365,12 @@ function tescoOrderStatus() {
                                                     },
                                                     success: function (data) {
                                                         //alert("asda");
+                                                        $('#ukstylenoos').selectpicker('val', styleNum);
+                                                        submitOs(this)
                                                         $('#approve-upload-group').modal("hide")
                                                         $('.snackbar_span').html('Order Approved Successfully');
                                                         showSnackbar();
-                                                        location.reload()
+                                                        //location.reload()
                                                     },
                                                     error: function (data) {
 
@@ -681,7 +683,9 @@ function tescoOrderStatus() {
                                                             data: form_data,
                                                             type: 'post',
                                                             success: function (data) {
-                                                                tescoOrderStatus()
+                                                                $('#ukstylenoos').selectpicker('val', styleNum);
+                                                                submitOs(this)
+                                                                //tescoOrderStatus()
                                                                 $('#po-file-upload-group').modal('hide')
                                                                 $('.snackbar_span').html('PO Updated Successfully');
                                                                 showSnackbar();
@@ -755,7 +759,9 @@ function tescoOrderStatus() {
                                                             data: form_data,
                                                             type: 'post',
                                                             success: function (data) {
-                                                                tescoOrderStatus()
+                                                                $('#ukstylenoos').selectpicker('val', styleNum);
+                                                                submitOs(this)
+                                                                //tescoOrderStatus()
                                                                 $('#po-file-upload-group').modal('hide')
                                                                 $('.snackbar_span').html('PO Updated Successfully');
                                                                 showSnackbar();
@@ -821,7 +827,9 @@ function tescoOrderStatus() {
 
                                                         },
                                                         success: function (data) {
-                                                            tescoOrderStatus()
+                                                            $('#ukstylenoos').selectpicker('val', styleNum);
+                                                            submitOs(this)
+                                                            //tescoOrderStatus()
                                                             $('#po-file-upload-group').modal('hide')
                                                             $('.snackbar_span').html('PO Updated Successfully');
                                                             showSnackbar();
