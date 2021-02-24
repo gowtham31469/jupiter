@@ -964,4 +964,10 @@ Route::put('admin/tesco/enable-tesco-symbol', 'Admin\Settings\Tesco\TescoSetting
 Route::put('admin/tesco/disable-tesco-symbol', 'Admin\Settings\Tesco\TescoSettings@disableTescoSymbol');
 
 
-
+#Tesco Countries
+Route::post('admin/tesco/settings/countries', 'Admin\Settings\Tesco\TescoSettings@tescoCountries');
+Route::post('admin/tesco/add-tesco-country', 'Admin\Settings\Tesco\TescoSettings@addTescoCountry');
+Route::get('admin/tesco/get-tesco-country-details', 'Admin\Settings\Tesco\TescoSettings@getTescoCountryById');
+Route::put('admin/tesco/update-tesco-country', 'Admin\Settings\Tesco\TescoSettings@updateTescoCountryById');
+Route::put('admin/tesco/enable-tesco-country', 'Admin\Settings\Tesco\TescoSettings@enableTescoCountry');
+Route::put('admin/tesco/disable-tesco-country', 'Admin\Settings\Tesco\TescoSettings@disableTescoCountry');

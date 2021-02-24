@@ -19,6 +19,7 @@ use App\TescoTaxCode;
 use App\RawMaterialMaster;
 use App\TescoErrorReportEmails;
 use App\TescoCareSymbols;
+use App\TescoCountries;
 
 class TescoSettings extends Controller
 {
@@ -1208,6 +1209,124 @@ class TescoSettings extends Controller
       catch (\Exception $e)
       {
               $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+      return $result;
+    }
+
+        /**
+     * Orchestra metadata countries list show using ajax.
+     * @return \Illuminate\Http\Response
+     */
+    public function tescoCountries(){
+      try {
+        $tesco_countries = DB::table('tesco_countries')->select('id', 'english','polish', 'czech', 'slovak', 'hungarian','is_enabled')->orderBy('is_enabled','desc')->get();
+        return response()->json(['error'=>'false','message' =>'success', 'tesco_countries' => $tesco_countries]);
+      } catch (\Exception $e){
+        return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+    }
+
+     /**
+     * Add orchestra country.
+     * @param \Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+     */
+    public function addTescoCountry(Request $request){
+        try {
+         if(TescoCountries::where('english','ilike',$request['english'])->exists())
+          {
+              $result = response()->json(['error'=> true,'message' =>'Country Name[English] Already Exists'],208);
+          }else{
+             $inserted = TescoCountries::create([
+                        'english'   => $request['english'],
+                        'polish'    => $request['polish'],
+                        'czech'     => $request['czech'],
+                        'slovak'    => $request['slovak'],
+                        'hungarian' => $request['hungarian']
+                      ]);
+
+            $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+          }
+        } catch (\Exception $e){
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+     /**
+     * Get tesco country details by ID for editing.
+     * @param tesco country id
+     * @return \Illuminate\Http\Response
+     */
+    public function getTescoCountryById(Request $request){
+      try {
+          $id = $request['id'];
+          $tesco_countries = DB::table('tesco_countries')->select('*')->where('tesco_countries.id',$id)->get();
+          return response()->json(['error'=>'false','message' =>'success', 'tesco_countries' => $tesco_countries]);
+      } catch (\Exception $e){
+          return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+    }
+
+    /**
+    * Update tesco country by id.
+    * @param tesco country id
+    * @return \Illuminate\Http\Response
+    */
+    public function updateTescoCountryById(Request $request){
+      try {
+          $id = $request['id'];
+          
+          if(TescoCountries::where('english','ilike',$request['english'])->where('id','!=',$id)->exists()){
+              $result = response()->json(['error'=> true,'message' =>'Country Name[English] Already Exists'],208);
+          }else{
+              $updated = TescoCountries::where('id',$id)->update([
+                  'english'   => $request['english'],
+                  'polish'    => $request['polish'],
+                  'czech'     => $request['czech'],
+                  'slovak'    => $request['slovak'],
+                  'hungarian' => $request['hungarian']
+                ]);
+              $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+          }
+        } catch (\Exception $e){
+               $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+    /**
+       * enable Tesco Country
+       * @param Country id
+       * @return boolean true or false
+    */
+    public function enableTescoCountry(Request $request){
+        try {
+          $id = $request['id'];
+          TescoCountries::where('id',$id)->update([
+                 'is_enabled'  => 1
+          ]);
+          $result = response()->json(['error'=> false,'message' =>'Success'],200);
+        }
+        catch (\Exception $e){
+          $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+    /**
+     * disable Tesco Country
+     * @return boolean true or false
+     */
+    public function disableTescoCountry(Request $request){
+      try {
+        $id = $request['id'];  
+        TescoCountries::where('id',$id)->update([
+                 'is_enabled'  => 0
+        ]);
+        $result = response()->json(['error'=> false,'message' =>'Success'],200);
+      } 
+      catch (\Exception $e){
+        $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
       }
       return $result;
     }
