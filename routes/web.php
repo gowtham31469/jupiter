@@ -972,10 +972,10 @@ Route::put('admin/tesco/update-tesco-country', 'Admin\Settings\Tesco\TescoSettin
 Route::put('admin/tesco/enable-tesco-country', 'Admin\Settings\Tesco\TescoSettings@enableTescoCountry');
 Route::put('admin/tesco/disable-tesco-country', 'Admin\Settings\Tesco\TescoSettings@disableTescoCountry');
 
-#Tesco Compositions
-Route::post('admin/tesco/settings/compositions', 'Admin\Settings\Tesco\TescoSettings@tescoCompositions');
-Route::post('admin/tesco/add-tesco-compositions', 'Admin\Settings\Tesco\TescoSettings@addTescoCompositions');
-Route::get('admin/tesco/get-tesco-composition-details', 'Admin\Settings\Tesco\TescoSettings@getTescoCompositionById');
-Route::put('admin/tesco/update-tesco-composition', 'Admin\Settings\Tesco\TescoSettings@updateTescoCompositionById');
-Route::put('admin/tesco/enable-tesco-composition', 'Admin\Settings\Tesco\TescoSettings@enableTescoComposition');
-Route::put('admin/tesco/disable-tesco-composition', 'Admin\Settings\Tesco\TescoSettings@disableTescoComposition');
+#Tesco Components
+Route::post('admin/tesco/settings/components', 'Admin\Settings\Tesco\TescoSettings@tescoComponents');
+Route::post('admin/tesco/add-tesco-components', 'Admin\Settings\Tesco\TescoSettings@addTescoComponents');
+Route::get('admin/tesco/get-tesco-components-details', 'Admin\Settings\Tesco\TescoSettings@getTescoComponentsById');
+Route::put('admin/tesco/update-tesco-components', 'Admin\Settings\Tesco\TescoSettings@updateTescoComponentsById');
+Route::put('admin/tesco/enable-tesco-components', 'Admin\Settings\Tesco\TescoSettings@enableTescoComponents');
+Route::put('admin/tesco/disable-tesco-components', 'Admin\Settings\Tesco\TescoSettings@disableTescoComponents');

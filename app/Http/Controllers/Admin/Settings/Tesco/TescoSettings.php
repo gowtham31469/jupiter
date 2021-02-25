@@ -20,7 +20,7 @@ use App\RawMaterialMaster;
 use App\TescoErrorReportEmails;
 use App\TescoCareSymbols;
 use App\TescoCountries;
-use App\TescoCompositions;
+use App\TescoComponents;
 
 class TescoSettings extends Controller
 {
@@ -1334,13 +1334,13 @@ class TescoSettings extends Controller
 
 
     /**
-     * Tesco Compositions list show using ajax.
+     * Tesco Components list show using ajax.
      * @return \Illuminate\Http\Response
      */
-    public function tescoCompositions(){
+    public function tescoComponents(){
       try {
-          $tesco_compositions = DB::table('tesco_compositions')->select('id', 'english','polish', 'czech', 'slovak', 'hungarian','is_enabled')->orderBy('is_enabled','desc')->get();
-          return response()->json(['error'=>'false','message' =>'success', 'tesco_compositions' => $tesco_compositions]);
+          $tesco_components = DB::table('tesco_components')->select('id', 'english','polish', 'czech', 'slovak', 'hungarian','is_enabled')->orderBy('is_enabled','desc')->get();
+          return response()->json(['error'=>'false','message' =>'success', 'tesco_components' => $tesco_components]);
       }
       catch (\Exception $e){
           return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
@@ -1348,16 +1348,16 @@ class TescoSettings extends Controller
     }
 
     /**
-     * Add tesco Compositions.
+     * Add tesco Components.
      * @param \Illuminate\Http\Request
      * @return \Illuminate\Http\Response
      */
-    public function addTescoCompositions(Request $request){
+    public function addTescoComponents(Request $request){
         try {
-            if(TescoCompositions::where('english','ilike',$request['english'])->exists()){
-                $result = response()->json(['error'=> true,'message' =>'Composition[English] Already Exists'],208);
+            if(TescoComponents::where('english','ilike',$request['english'])->exists()){
+                $result = response()->json(['error'=> true,'message' =>'Components[English] Already Exists'],208);
             }else{
-                $inserted = TescoCompositions::create([
+                $inserted = TescoComponents::create([
                         'english'   => $request['english'],
                         'polish'    => $request['polish'],
                         'czech'     => $request['czech'],
@@ -1375,15 +1375,15 @@ class TescoSettings extends Controller
     }
 
     /**
-     * Get tesco Compositions details by ID for editing.
-     * @param tesco Compositions id
+     * Get tesco Components details by ID for editing.
+     * @param tesco Components id
      * @return \Illuminate\Http\Response
      */
-    public function getTescoCompositionById(Request $request){
+    public function getTescoComponentsById(Request $request){
       try {
             $id = $request['id'];
-            $tesco_compositions = DB::table('tesco_compositions')->select('*')->where('tesco_compositions.id',$id)->get();
-            return response()->json(['error'=>'false','message' =>'success', 'tesco_compositions' => $tesco_compositions]);
+            $tesco_components = DB::table('tesco_components')->select('*')->where('tesco_components.id',$id)->get();
+            return response()->json(['error'=>'false','message' =>'success', 'tesco_components' => $tesco_components]);
       }
       catch (\Exception $e){
             return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
@@ -1391,17 +1391,17 @@ class TescoSettings extends Controller
     }
 
     /**
-    * Update tesco Composition by id.
-    * @param tesco Composition id
+    * Update tesco Components by id.
+    * @param tesco Components id
     * @return \Illuminate\Http\Response
     */
-    public function updateTescoCompositionById(Request $request){
+    public function updateTescoComponentsById(Request $request){
       try {
           $id = $request['id'];
-          if(TescoCompositions::where('english','ilike',$request['english'])->where('id','!=',$id)->exists()){
-                $result = response()->json(['error'=> true,'message' =>'Composition[English] Already Exists'],208);
+          if(TescoComponents::where('english','ilike',$request['english'])->where('id','!=',$id)->exists()){
+                $result = response()->json(['error'=> true,'message' =>'Components[English] Already Exists'],208);
           } else {
-              $updated = TescoCompositions::where('id',$id)->update([
+              $updated = TescoComponents::where('id',$id)->update([
                                         'english'   => $request['english'],
                                         'polish'    => $request['polish'],
                                         'czech'     => $request['czech'],
@@ -1417,14 +1417,14 @@ class TescoSettings extends Controller
     }
 
     /**
-       * Make Composition enabled
-       * @param Composition id
+       * Make Components enabled
+       * @param Components id
        * @return boolean true or false
        */
-      public function enableTescoComposition(Request $request){
+      public function enableTescoComponents(Request $request){
           try {
                 $id = $request['id'];
-                TescoCompositions::where('id',$id)->update([
+                TescoComponents::where('id',$id)->update([
                         'is_enabled'  => 1
                 ]);
                 $result = response()->json(['error'=> false,'message' =>'Success'],200);
@@ -1435,13 +1435,13 @@ class TescoSettings extends Controller
       }
 
       /**
-       * Make Composition disabled
+       * Make Components disabled
        * @return boolean true or false
        */
-      public function disableTescoComposition(Request $request){
+      public function disableTescoComponents(Request $request){
           try {
               $id = $request['id'];
-              TescoCompositions::where('id',$id)->update([
+              TescoComponents::where('id',$id)->update([
                 'is_enabled'  => 0
               ]);
               $result = response()->json(['error'=> false,'message' =>'Success'],200);

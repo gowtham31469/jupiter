@@ -35,7 +35,7 @@
             <li id="4"  onclick="tescoSizeChart()"><a>Size Chart</a></li>
             <li id="5"  onclick="tescoSymbols()"><a>Symbols</a></li>
             <li id="6" onclick="tescoCountries()"><a>Countries</a></li>
-            <li id="7" onclick="tescoCompositions()"><a>Compositions</a></li>
+            <li id="7" onclick="tescoComponents()"><a>Components</a></li>
           </ul>
         </div>
         <div class="content">
@@ -45,7 +45,7 @@
     {{-- includes tesco form modals --}}
     @include('Admin.Settings.includes.tesco-caresymbols')
     @include('Admin.Settings.includes.tesco-countires')
-    @include('Admin.Settings.includes.tesco-compositions')
+    @include('Admin.Settings.includes.tesco-components')
     
     {{-- Add Orchestra Garments Modal --}}
     <div class="modal fade" id="addOrchestraGarmentsModal" tabindex="-1" role="dialog" aria-labelledby="orchestraGarmentsLabel">
@@ -2152,10 +2152,13 @@
         $('#edit_orch_color_error').hide();
         $('.hidden-error').html('');
         $('#add_tesco_symbols_form').trigger("reset");
+        $('#edit_tesco_symbols_form').trigger("reset");
         $('#add-tesco-countries-form').trigger("reset");
+        $('#edit-tesco-countries-form').trigger("reset");
         $("#country_error").addClass('hidden')
         $("#country_update_error").addClass('hidden')
-        $('#add-tesco-compositions-form').trigger("reset");
+        $('#add-tesco-components-form').trigger("reset");
+        $('#edit_tesco_components_form').trigger("reset");
        })
 
       /** Add orchestra garment form validation **/
@@ -2709,48 +2712,48 @@
            makeCompositionDisabled(id,csrf_token)
        });
 
-       /** Add tesco composition form validation **/
-       $('#add-tesco-compositions-form').validator().on('submit', function (e) {
+       /** Add tesco components form validation **/
+       $('#add-tesco-components-form').validator().on('submit', function (e) {
           if (e.isDefaultPrevented()){
           }else{
              e.preventDefault();
              /* call addTescoComposition function from tesco-settings.js*/
-             addTescoComposition();
+             addTescoComponents();
           }
         })
 
-        /** get edit tesco composition details **/
-       $(document).on('click','.edit-tesco-compostions',function(e){
+        /** get edit tesco components details **/
+       $(document).on('click','.edit-tesco-components',function(e){
            var id = $(this).closest('tr').attr('id');
            e.preventDefault();
-           /* call gettescoCompositionById function from tesco-settings.js*/
-           getTescoCompositionById(id);
+           /* call getTescoComponentsById function from tesco-settings.js*/
+           getTescoComponentsById(id);
        });
 
-        /** submit edit tesco composition form **/
-        $('#edit_tesco_composition_form').validator().on('submit', function (e) {
+        /** submit edit tesco components form **/
+        $('#edit_tesco_components_form').validator().on('submit', function (e) {
          if (e.isDefaultPrevented()){
          }else{
             e.preventDefault();
-            /* call edittescoComposition function from tesco-settings.js*/
-            editTescoComposition();
+            /* call edittescocomponents function from tesco-settings.js*/
+            editTescoComponents();
          }
        })
 
-       /** To Enable tesco composition  on click **/
-       $(document).on('click', '#enableTescoCompostions', function(e) {
+       /** To Enable tesco components  on click **/
+       $(document).on('click', '#enableTescoComponents', function(e) {
            var id = $(this).closest('tr').attr('id');
            
-           /* call enableTescoCompostions function from tesco-settings.js*/
-           enableTescoCompostions(id,csrf_token)
+           /* call enableTescoComponents function from tesco-settings.js*/
+           enableTescoComponents(id,csrf_token)
        });
 
-       /** To disable tesco composition  on click **/
-       $(document).on('click', '#disableTescoCompostions', function(e) {
+       /** To disable tesco components  on click **/
+       $(document).on('click', '#disableTescoComponents', function(e) {
            var id = $(this).closest('tr').attr('id');
            
-           /* call disableTescoComposition function from tesco-settings.js*/
-           disableTescoComposition(id,csrf_token)
+           /* call disableTescocomponents function from tesco-settings.js*/
+           disableTescoComponents(id,csrf_token)
        });
 
     });

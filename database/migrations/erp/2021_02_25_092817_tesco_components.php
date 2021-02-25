@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class TescoCompositions extends Migration
+class TescoComponents extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class TescoCompositions extends Migration
      */
     public function up()
     {
-        Schema::create('tesco_compositions', function (Blueprint $table) {
+        Schema::create('tesco_components', function (Blueprint $table) {
             $table->increments('id');
             $table->string('english');
             $table->string('polish');
@@ -32,6 +32,6 @@ class TescoCompositions extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tesco_compositions');
+        Schema::dropIfExists('tesco_components');
     }
 }

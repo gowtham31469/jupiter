@@ -2812,16 +2812,16 @@ function disableTescoCountry(id, csrf_token) {
 }
 
 /**
- * Function to Tesco compositions home page
+ * Function to Tesco Components home page
  */
-function tescoCompositions() {
+function tescoComponents() {
   try {
       $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
       $('.orchestra-sidebar').hide();
       $('.tesco-sidebar').show();
       
       $.ajax({
-          url: base_url + "/admin/tesco/settings/compositions",
+          url: base_url + "/admin/tesco/settings/components",
           type: "POST",
           dataType: "json",
           data: {
@@ -2834,11 +2834,11 @@ function tescoCompositions() {
           },
           success: function(data) {
             var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>'+
-            '<div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescocompositionsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Composition </a></div></div>'+
-            '<div class="template-block"><div class="top-content"><h3 class="content-heading"> Compositions </h3></div>'+
-            '<table id="tesco-compostions-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead>'+
+            '<div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescocomponentsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Components </a></div></div>'+
+            '<div class="template-block"><div class="top-content"><h3 class="content-heading"> Components </h3></div>'+
+            '<table id="tesco-components-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead>'+
             '<tr><th>Sl. No</th><th>English</th><th>Polish</th><th>Czech</th><th>Slovak</th><th>Hungarian</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
-            $.each(data.tesco_compositions, function(i, item) {
+            $.each(data.tesco_components, function(i, item) {
               var index = i + 1;
               tesco_metadata += '<tr id="' + item.id + '">'+
               '<td>' + index + '</td>'+
@@ -2853,22 +2853,22 @@ function tescoCompositions() {
                 tesco_metadata += '<td><span class="label label-danger">Disabled</span></td>';
               }
               if (item.is_enabled) {
-                tesco_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="disableTescoCompostions" data-placement="left"></i></a>';
+                tesco_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="disableTescoComponents" data-placement="left"></i></a>';
               } else {
-                tesco_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="enableTescoCompostions" data-placement="left"></i></a>';
+                tesco_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="enableTescoComponents" data-placement="left"></i></a>';
               }
-              tesco_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-tesco-compostions filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
+              tesco_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-tesco-components filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
             })
             tesco_metadata += '</tbody></table></div>';
             $('.content').html(tesco_metadata)
-            $('#tesco-compostions-list-table').DataTable();
-            $('.edit-tesco-compostions').tooltip('show')
-            $('.edit-tesco-compostions').tooltip('toggle')
+            $('#tesco-components-list-table').DataTable();
+            $('.edit-tesco-components').tooltip('show')
+            $('.edit-tesco-components').tooltip('toggle')
             $('.status').tooltip('show')
             $('.status').tooltip('toggle')
-            $("#tesco-compostions-list-table_filter input").addClass('form-control input-sm');
-            $("#tesco-compostions-list-table_filter input").attr('placeholder', 'Data Search');
-            $('#tesco-compostions-list-table_length select').addClass('form-control input-sm');
+            $("#tesco-components-list-table_filter input").addClass('form-control input-sm');
+            $("#tesco-components-list-table_filter input").attr('placeholder', 'Data Search');
+            $('#tesco-components-list-table_length select').addClass('form-control input-sm');
           },
           error: function(errorXHR, errorStatus, errorThrown) {
               this.tryCount++;
@@ -2888,9 +2888,9 @@ function tescoCompositions() {
 
 
 /**
- * Adds tesco composition.
+ * Adds tesco components.
  */
-function addTescoComposition() {
+function addTescoComponents() {
   try {
     var english = $('#comp_english').val();
     var polish = $('#comp_polish').val();
@@ -2900,7 +2900,7 @@ function addTescoComposition() {
       
 
     $.ajax({
-          url: base_url + "/admin/tesco/add-tesco-compositions",
+          url: base_url + "/admin/tesco/add-tesco-components",
           method: 'POST',
           data: {
             _token: csrf_token,
@@ -2919,16 +2919,16 @@ function addTescoComposition() {
 
               /** [ Show response status based on HTTP status code ] */
               200: function() {
-                  $('.snackbar_span').html("Composition Added Successfully");
+                  $('.snackbar_span').html("Components Added Successfully");
                   showSnackbar();
-                  $('#addTescocompositionsModal').modal('hide');
-                  tescoCompositions()
+                  $('#addTescocomponentsModal').modal('hide');
+                  tescoComponents()
               },
               208: function() {
-                  $('#composition_error').removeClass('hidden');
-                  $('#composition_error').removeAttr('style');
-                  $('#composition_error').html('Composition[English] already excists.')
-                  $("#composition_error").addClass("alert alert-warning");
+                  $('#components_error').removeClass('hidden');
+                  $('#components_error').removeAttr('style');
+                  $('#components_error').html('Component[English] already excists.')
+                  $("#components_error").addClass("alert alert-warning");
               },
               400: function() {
                   $('.snackbar_span').html("Something went wrong!!");
@@ -2952,17 +2952,17 @@ function addTescoComposition() {
 }
 
 /**
- * Function for get tesco Composition details for editing
+ * Function for get tesco Components details for editing
  * @param id
  */
-function getTescoCompositionById(id) {
+function getTescoComponentsById(id) {
   try {
       if (isSubmitting) {
           return;
       }
       isSubmitting = true;
       $.ajax({
-          url: base_url + "/admin/tesco/get-tesco-composition-details",
+          url: base_url + "/admin/tesco/get-tesco-components-details",
           dataType: "json",
           method: "get",
           data: { id: id },
@@ -2973,18 +2973,18 @@ function getTescoCompositionById(id) {
           },
           success: function(data) {
               isSubmitting = false;
-              $('#edit_tesco_compositions_id').val(id);
-              $('#comp_edit_english').val(data.tesco_compositions[0].english);
-              $('#comp_edit_polish').val(data.tesco_compositions[0].polish);
-              $('#comp_edit_czech').val(data.tesco_compositions[0].czech);
-              $('#comp_edit_slovak').val(data.tesco_compositions[0].slovak);
-              $('#comp_edit_hungarian').val(data.tesco_compositions[0].hungarian);
-              $('#editTescoCompositionModal').modal({
+              $('#edit_tesco_components_id').val(id);
+              $('#comp_edit_english').val(data.tesco_components[0].english);
+              $('#comp_edit_polish').val(data.tesco_components[0].polish);
+              $('#comp_edit_czech').val(data.tesco_components[0].czech);
+              $('#comp_edit_slovak').val(data.tesco_components[0].slovak);
+              $('#comp_edit_hungarian').val(data.tesco_components[0].hungarian);
+              $('#editTescoComponentsModal').modal({
                   backdrop: 'static',
                   keyboard: false
               })
-              $('#edit_tesco_composition_form').validator('validate');
-              $('#editTescoCompositionModal').modal('show');
+              $('#edit_tesco_components_form').validator('validate');
+              $('#editTescoComponentsModal').modal('show');
           },
           error: function(errorXHR, errorStatus, errorThrown) {
               this.tryCount++;
@@ -3004,11 +3004,11 @@ function getTescoCompositionById(id) {
 
 
 /**
- * Function for edit Tesco Composition instruction
+ * Function for edit Tesco Components instruction
  */
-function editTescoComposition() {
+function editTescoComponents() {
   try {
-      var id = $('#edit_tesco_compositions_id').val();
+      var id = $('#edit_tesco_components_id').val();
       var english = $('#comp_edit_english').val();
       var polish = $('#comp_edit_polish').val();
       var czech = $('#comp_edit_czech').val();
@@ -3016,11 +3016,11 @@ function editTescoComposition() {
       var hungarian = $('#comp_edit_hungarian').val();
       
       $.ajax({
-          url: base_url + "/admin/tesco/update-tesco-composition",
+          url: base_url + "/admin/tesco/update-tesco-components",
           dataType: "json",
           beforeSend: function() {
               $(".loader").show();
-              $('#composition_update_error').addClass('hidden');
+              $('#components_update_error').addClass('hidden');
           },
           method: "put",
           data: { 
@@ -3038,16 +3038,16 @@ function editTescoComposition() {
 
               /** [ Show response status based on HTTP status code ] */
               200: function() {
-                  $('.snackbar_span').html("Composition Updated Successfully");
+                  $('.snackbar_span').html("Components Updated Successfully");
                   showSnackbar();
-                  $('#editTescoCompositionModal').modal('hide');
-                  tescoCompositions()
+                  $('#editTescoComponentsModal').modal('hide');
+                  tescoComponents()
               },
               208: function() {
-                  $('#composition_update_error').removeClass('hidden');
-                  $('#composition_update_error').removeAttr('style');
-                  $('#composition_update_error').html('Composition[English] already excists.')
-                  $("#composition_update_error").addClass("alert alert-warning");
+                  $('#components_update_error').removeClass('hidden');
+                  $('#components_update_error').removeAttr('style');
+                  $('#components_update_error').html('Component[English] already excists.')
+                  $("#components_update_error").addClass("alert alert-warning");
               },
           },
           error: function(errorXHR, errorStatus, errorThrown) {
@@ -3068,17 +3068,17 @@ function editTescoComposition() {
 
 
 /**
- * Makes a Composition Enabled.
+ * Makes a Components Enabled.
  * @param id,csrf_token
  */
-function enableTescoCompostions(id, csrf_token) {
+function enableTescoComponents(id, csrf_token) {
   try {
       if (isSubmitting) {
           return;
       }
       isSubmitting = true;
       $.ajax({
-          url: base_url + "/admin/tesco/enable-tesco-composition",
+          url: base_url + "/admin/tesco/enable-tesco-components",
           dataType: "json",
           beforeSend: function() {
               $(".loader").show();
@@ -3091,7 +3091,7 @@ function enableTescoCompostions(id, csrf_token) {
               /** [Show response status based on HTTP status code] */
               200: function() {
                   isSubmitting = false;
-                  $('.snackbar_span').html('Composition is enabled ');
+                  $('.snackbar_span').html('Components is enabled ');
                   showSnackbar();
               }
           },
@@ -3103,7 +3103,7 @@ function enableTescoCompostions(id, csrf_token) {
               }
           },
           complete: function() {
-            tescoCompositions();
+            tescoComponents();
             $(".loader").hide();
           }
       })
@@ -3114,17 +3114,17 @@ function enableTescoCompostions(id, csrf_token) {
 
 
 /**
- * Makes a Composition Diabled
+ * Makes a Components Diabled
  * @param id,csrf_token
  */
-function disableTescoComposition(id, csrf_token) {
+function disableTescoComponents(id, csrf_token) {
     try {
         if (isSubmitting) {
             return;
         }
         isSubmitting = true;
         $.ajax({
-            url: base_url + "/admin/tesco/disable-tesco-composition",
+            url: base_url + "/admin/tesco/disable-tesco-components",
             dataType: "json",
             beforeSend: function() {
                 $(".loader").show();
@@ -3137,7 +3137,7 @@ function disableTescoComposition(id, csrf_token) {
                 /** [Show response status based on HTTP status code] */
                 200: function() {
                     isSubmitting = false;
-                    $('.snackbar_span').html('Composition is disabled ');
+                    $('.snackbar_span').html('Components is disabled ');
                     showSnackbar();
                 }
             },
@@ -3149,7 +3149,7 @@ function disableTescoComposition(id, csrf_token) {
                 }
             },
             complete: function() {
-                tescoCompositions();
+                tescoComponents();
                 $(".loader").hide();
             }
         })
