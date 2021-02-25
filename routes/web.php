@@ -987,3 +987,11 @@ Route::get('admin/tesco/get-tesco-fabric-details', 'Admin\Settings\Tesco\TescoSe
 Route::put('admin/tesco/update-tesco-fabric-details', 'Admin\Settings\Tesco\TescoSettings@updateTescoFabricById');
 Route::put('admin/tesco/enable-tesco-fabric', 'Admin\Settings\Tesco\TescoSettings@enableTescoFabric');
 Route::put('admin/tesco/disable-tesco-fabric', 'Admin\Settings\Tesco\TescoSettings@disableTescoFabric');
+
+#Tesco Kids Warning Statement
+Route::post('admin/tesco/settings/get-warn-stmts-lists', 'Admin\Settings\Tesco\TescoSettings@tescoKidsWarnLists');
+Route::post('admin/tesco/add-tesco-warn-stmt', 'Admin\Settings\Tesco\TescoSettings@addTescoWarnStmt');
+Route::get('admin/tesco/get-tesco-warn-stmt-details', 'Admin\Settings\Tesco\TescoSettings@getTescoWarningStmtById');
+Route::put('admin/tesco/update-tesco-warn-stmt-details', 'Admin\Settings\Tesco\TescoSettings@updateTescoWarningStmtById');
+Route::put('admin/tesco/enable-tesco-warn-stmt', 'Admin\Settings\Tesco\TescoSettings@enableTescoWarningStmt');
+Route::put('admin/tesco/disable-tesco-warn-stmt', 'Admin\Settings\Tesco\TescoSettings@disableTescoWarningStmt');

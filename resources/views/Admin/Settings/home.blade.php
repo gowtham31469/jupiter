@@ -37,6 +37,7 @@
             <li id="6" onclick="tescoCountries()"><a>Countries</a></li>
             <li id="7" onclick="tescoComponents()"><a>Component</a></li>
             <li id="8" onclick="tescoFabricList()"><a>Fabrics</a></li>
+            <li id="8" onclick="tescoKidsWarningStmt()"><a>Warning Statements</a></li>
           </ul>
         </div>
         <div class="content">
@@ -48,6 +49,7 @@
     @include('Admin.Settings.includes.tesco-countires')
     @include('Admin.Settings.includes.tesco-components')
     @include('Admin.Settings.includes.tesco-fabriclist')
+    @include('Admin.Settings.includes.tesco-warnstatement')
     
     {{-- Add Orchestra Garments Modal --}}
     <div class="modal fade" id="addOrchestraGarmentsModal" tabindex="-1" role="dialog" aria-labelledby="orchestraGarmentsLabel">
@@ -2163,6 +2165,14 @@
         $('#edit_tesco_components_form').trigger("reset");
         $('#add-tesco-fabric-form').trigger("reset");
         $('#edit-tesco-fabric-form').trigger("reset");
+        $('#add-tesco-kids-statement-form').trigger("reset");
+        $('#edit-tesco-kids-statement-form').trigger("reset");
+        $("#components_error").addClass('hidden')
+        $("#components_update_error").addClass('hidden')
+        $("#fabric_error").addClass('hidden')
+        $("#fabric_update_error").addClass('hidden')
+        $("#kids_stmt_error").addClass('hidden')
+        $("#kids_stmt_update_error").addClass('hidden')
        })
 
       /** Add orchestra garment form validation **/
@@ -2804,6 +2814,53 @@
            /* call disableTescocomponents function from tesco-settings.js*/
            disableTescoFabric(id,csrf_token)
        });
+
+       /** Add tesco kids stmt form validation **/
+       $('#add-tesco-kids-statement-form').validator().on('submit', function (e) {
+          if (e.isDefaultPrevented()){
+          }else{
+             e.preventDefault();
+             /* call add tesco fabric function from tesco-settings.js*/
+             addTescoKidsStatement();
+          }
+        })
+
+        /** get edit tesco kids stmt details **/
+       $(document).on('click','.edit-tesco-kids-stmt',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           /* call getTescokidsstmtById function from tesco-settings.js*/
+           getTescoKidsStmtById(id);
+       });
+
+      /** submit edit tesco kids stmt  form **/
+      $('#edit-tesco-kids-statement-form').validator().on('submit', function (e) {
+          if (e.isDefaultPrevented()){
+          }else{
+              e.preventDefault();
+              /* call updateTescoKidsStmt function from tesco-settings.js*/
+              updateTescoKidsStmt();
+          }
+       })
+
+      /** To Enable tesco kids stmt  on click **/
+      $(document).on('click', '#enableTescoKidsStatement', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           
+           /* call enableTescoKidsWarningStmt function from tesco-settings.js*/
+           enableTescoKidsStatement(id,csrf_token)
+       });
+
+
+       /** To disable tesco kids stmt on click **/
+       $(document).on('click', '#disableTescoKidsStatement', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           
+           /* call disableTescoKidsWarningStmt function from tesco-settings.js*/
+           disableTescoKidsStatement(id,csrf_token)
+       });
+
+
 
     });
 
