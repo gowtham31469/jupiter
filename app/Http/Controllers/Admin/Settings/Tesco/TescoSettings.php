@@ -20,6 +20,7 @@ use App\RawMaterialMaster;
 use App\TescoErrorReportEmails;
 use App\TescoCareSymbols;
 use App\TescoCountries;
+use App\TescoCompositions;
 
 class TescoSettings extends Controller
 {
@@ -1330,6 +1331,126 @@ class TescoSettings extends Controller
       }
       return $result;
     }
+
+
+    /**
+     * Tesco Compositions list show using ajax.
+     * @return \Illuminate\Http\Response
+     */
+    public function tescoCompositions(){
+      try {
+          $tesco_compositions = DB::table('tesco_compositions')->select('id', 'english','polish', 'czech', 'slovak', 'hungarian','is_enabled')->orderBy('is_enabled','desc')->get();
+          return response()->json(['error'=>'false','message' =>'success', 'tesco_compositions' => $tesco_compositions]);
+      }
+      catch (\Exception $e){
+          return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+    }
+
+    /**
+     * Add tesco Compositions.
+     * @param \Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+     */
+    public function addTescoCompositions(Request $request){
+        try {
+            if(TescoCompositions::where('english','ilike',$request['english'])->exists()){
+                $result = response()->json(['error'=> true,'message' =>'Composition[English] Already Exists'],208);
+            }else{
+                $inserted = TescoCompositions::create([
+                        'english'   => $request['english'],
+                        'polish'    => $request['polish'],
+                        'czech'     => $request['czech'],
+                        'slovak'    => $request['slovak'],
+                        'hungarian' => $request['hungarian']
+                ]);
+                $result = $inserted != '' ? response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+
+        } catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+    /**
+     * Get tesco Compositions details by ID for editing.
+     * @param tesco Compositions id
+     * @return \Illuminate\Http\Response
+     */
+    public function getTescoCompositionById(Request $request){
+      try {
+            $id = $request['id'];
+            $tesco_compositions = DB::table('tesco_compositions')->select('*')->where('tesco_compositions.id',$id)->get();
+            return response()->json(['error'=>'false','message' =>'success', 'tesco_compositions' => $tesco_compositions]);
+      }
+      catch (\Exception $e){
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+    }
+
+    /**
+    * Update tesco Composition by id.
+    * @param tesco Composition id
+    * @return \Illuminate\Http\Response
+    */
+    public function updateTescoCompositionById(Request $request){
+      try {
+          $id = $request['id'];
+          if(TescoCompositions::where('english','ilike',$request['english'])->where('id','!=',$id)->exists()){
+                $result = response()->json(['error'=> true,'message' =>'Composition[English] Already Exists'],208);
+          } else {
+              $updated = TescoCompositions::where('id',$id)->update([
+                                        'english'   => $request['english'],
+                                        'polish'    => $request['polish'],
+                                        'czech'     => $request['czech'],
+                                        'slovak'    => $request['slovak'],
+                                        'hungarian' => $request['hungarian']
+                        ]);
+            $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+          }        
+      } catch (\Exception $e) {
+                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+      return $result;
+    }
+
+    /**
+       * Make Composition enabled
+       * @param Composition id
+       * @return boolean true or false
+       */
+      public function enableTescoComposition(Request $request){
+          try {
+                $id = $request['id'];
+                TescoCompositions::where('id',$id)->update([
+                        'is_enabled'  => 1
+                ]);
+                $result = response()->json(['error'=> false,'message' =>'Success'],200);
+          } catch (\Exception $e) {
+                    $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+          return $result;
+      }
+
+      /**
+       * Make Composition disabled
+       * @return boolean true or false
+       */
+      public function disableTescoComposition(Request $request){
+          try {
+              $id = $request['id'];
+              TescoCompositions::where('id',$id)->update([
+                'is_enabled'  => 0
+              ]);
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+          } catch (\Exception $e) {
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+              return $result;
+      }
     
 }
+
 
