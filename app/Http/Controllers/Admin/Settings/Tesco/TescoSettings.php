@@ -21,6 +21,7 @@ use App\TescoErrorReportEmails;
 use App\TescoCareSymbols;
 use App\TescoCountries;
 use App\TescoComponents;
+use App\TescoFabricLists;
 
 class TescoSettings extends Controller
 {
@@ -1450,7 +1451,127 @@ class TescoSettings extends Controller
           }
               return $result;
       }
+
+
+    /**
+     * tescoFabricList list show using ajax.
+     * @return \Illuminate\Http\Response
+     */
+    public function tescoFabricList(){
+      try {
+          $tesco_fabriclists = DB::table('tesco_fabriclists')->select('id', 'english','polish', 'czech', 'slovak', 'hungarian','is_enabled')->orderBy('is_enabled','desc')->get();
+          return response()->json(['error'=>'false','message' =>'success', 'tesco_fabriclists' => $tesco_fabriclists]);
+      }
+      catch (\Exception $e){
+          return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+    }
+
+    /**
+     * Add tesco Fabric.
+     * @param \Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+     */
+    public function addTescoFabric(Request $request){
+      try {
+          if(TescoFabricLists::where('english','ilike',$request['english'])->exists()){
+              $result = response()->json(['error'=> true,'message' =>'Fabric[English] Already Exists'],208);
+          }else{
+              $inserted = TescoFabricLists::create([
+                      'english'   => $request['english'],
+                      'polish'    => $request['polish'],
+                      'czech'     => $request['czech'],
+                      'slovak'    => $request['slovak'],
+                      'hungarian' => $request['hungarian']
+              ]);
+              $result = $inserted != '' ? response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+          }
+
+      } catch (\Exception $e)
+      {
+          $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+      return $result;
+    }
+
+  /**
+     * Get tesco fabric details by ID for editing.
+     * @param tesco fabric id
+     * @return \Illuminate\Http\Response
+     */
+    public function getTescoFabricById(Request $request){
+      try {
+            $id = $request['id'];
+            $tesco_fabriclists = DB::table('tesco_fabriclists')->select('*')->where('tesco_fabriclists.id',$id)->get();
+            return response()->json(['error'=>'false','message' =>'success', 'tesco_fabriclists' => $tesco_fabriclists]);
+      }
+      catch (\Exception $e){
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+    }
+
+    /**
+    * Update tesco fabric by id.
+    * @param tesco fabric id
+    * @return \Illuminate\Http\Response
+    */
+    public function updateTescoFabricById(Request $request){
+      try {
+          $id = $request['id'];
+          if(TescoFabricLists::where('english','ilike',$request['english'])->where('id','!=',$id)->exists()){
+                $result = response()->json(['error'=> true,'message' =>'Fabric[English] Already Exists'],208);
+          } else {
+              $updated = TescoFabricLists::where('id',$id)->update([
+                                        'english'   => $request['english'],
+                                        'polish'    => $request['polish'],
+                                        'czech'     => $request['czech'],
+                                        'slovak'    => $request['slovak'],
+                                        'hungarian' => $request['hungarian']
+                        ]);
+            $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+          }        
+      } catch (\Exception $e) {
+                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+      return $result;
+    }
     
+    /**
+       * Make Fabric enabled
+       * @param Fabric id
+       * @return boolean true or false
+       */
+    public function enableTescoFabric(Request $request){
+        try {
+              $id = $request['id'];
+              TescoFabricLists::where('id',$id)->update([
+                      'is_enabled'  => 1
+              ]);
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+        } catch (\Exception $e) {
+                  $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+    /**
+     * Make Fabric disabled
+     * @return boolean true or false
+     */
+    public function disableTescoFabric(Request $request){
+        try {
+            $id = $request['id'];
+            TescoFabricLists::where('id',$id)->update([
+              'is_enabled'  => 0
+            ]);
+            $result = response()->json(['error'=> false,'message' =>'Success'],200);
+        } catch (\Exception $e) {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+            return $result;
+    }
+
+
 }
 
 

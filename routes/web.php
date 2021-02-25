@@ -979,3 +979,11 @@ Route::get('admin/tesco/get-tesco-components-details', 'Admin\Settings\Tesco\Tes
 Route::put('admin/tesco/update-tesco-components', 'Admin\Settings\Tesco\TescoSettings@updateTescoComponentsById');
 Route::put('admin/tesco/enable-tesco-components', 'Admin\Settings\Tesco\TescoSettings@enableTescoComponents');
 Route::put('admin/tesco/disable-tesco-components', 'Admin\Settings\Tesco\TescoSettings@disableTescoComponents');
+
+#Tesco Fabric list
+Route::post('admin/tesco/settings/fabric-lists', 'Admin\Settings\Tesco\TescoSettings@tescoFabricList');
+Route::post('admin/tesco/add-tesco-fabric', 'Admin\Settings\Tesco\TescoSettings@addTescoFabric');
+Route::get('admin/tesco/get-tesco-fabric-details', 'Admin\Settings\Tesco\TescoSettings@getTescoFabricById');
+Route::put('admin/tesco/update-tesco-fabric-details', 'Admin\Settings\Tesco\TescoSettings@updateTescoFabricById');
+Route::put('admin/tesco/enable-tesco-fabric', 'Admin\Settings\Tesco\TescoSettings@enableTescoFabric');
+Route::put('admin/tesco/disable-tesco-fabric', 'Admin\Settings\Tesco\TescoSettings@disableTescoFabric');

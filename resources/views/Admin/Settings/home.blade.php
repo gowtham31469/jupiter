@@ -35,7 +35,8 @@
             <li id="4"  onclick="tescoSizeChart()"><a>Size Chart</a></li>
             <li id="5"  onclick="tescoSymbols()"><a>Symbols</a></li>
             <li id="6" onclick="tescoCountries()"><a>Countries</a></li>
-            <li id="7" onclick="tescoComponents()"><a>Components</a></li>
+            <li id="7" onclick="tescoComponents()"><a>Component</a></li>
+            <li id="8" onclick="tescoFabricList()"><a>Fabrics</a></li>
           </ul>
         </div>
         <div class="content">
@@ -46,6 +47,7 @@
     @include('Admin.Settings.includes.tesco-caresymbols')
     @include('Admin.Settings.includes.tesco-countires')
     @include('Admin.Settings.includes.tesco-components')
+    @include('Admin.Settings.includes.tesco-fabriclist')
     
     {{-- Add Orchestra Garments Modal --}}
     <div class="modal fade" id="addOrchestraGarmentsModal" tabindex="-1" role="dialog" aria-labelledby="orchestraGarmentsLabel">
@@ -2159,6 +2161,8 @@
         $("#country_update_error").addClass('hidden')
         $('#add-tesco-components-form').trigger("reset");
         $('#edit_tesco_components_form').trigger("reset");
+        $('#add-tesco-fabric-form').trigger("reset");
+        $('#edit-tesco-fabric-form').trigger("reset");
        })
 
       /** Add orchestra garment form validation **/
@@ -2754,6 +2758,51 @@
            
            /* call disableTescocomponents function from tesco-settings.js*/
            disableTescoComponents(id,csrf_token)
+       });
+
+
+        /** Add tesco fabric form validation **/
+        $('#add-tesco-fabric-form').validator().on('submit', function (e) {
+          if (e.isDefaultPrevented()){
+          }else{
+             e.preventDefault();
+             /* call add tesco fabric function from tesco-settings.js*/
+             addTescoFabric();
+          }
+        })
+
+      /** get edit tesco fabric details **/
+       $(document).on('click','.edit-tesco-fabric',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           /* call getTescoFabricById function from tesco-settings.js*/
+           getTescoFabricById(id);
+       });
+
+       /** submit edit tesco fabric form **/
+       $('#edit-tesco-fabric-form').validator().on('submit', function (e) {
+          if (e.isDefaultPrevented()){
+          }else{
+              e.preventDefault();
+              /* call updateTescoFabric function from tesco-settings.js*/
+              updateTescoFabric();
+          }
+       })
+
+       /** To Enable tesco Fabric  on click **/
+       $(document).on('click', '#enableTescoFabric', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           
+           /* call enableTescoFabric function from tesco-settings.js*/
+           enableTescoFabric(id,csrf_token)
+       });
+
+       /** To disable tesco components  on click **/
+       $(document).on('click', '#disableTescoFabric', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           
+           /* call disableTescocomponents function from tesco-settings.js*/
+           disableTescoFabric(id,csrf_token)
        });
 
     });
