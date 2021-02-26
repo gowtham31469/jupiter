@@ -18,6 +18,11 @@ use App\TescoTHL3OrdersQuantity;
 use App\TescoTaxCode;
 use App\RawMaterialMaster;
 use App\TescoErrorReportEmails;
+use App\TescoCareSymbols;
+use App\TescoCountries;
+use App\TescoComponents;
+use App\TescoFabricLists;
+use App\TescoKidsWarningStatements;
 
 class TescoSettings extends Controller
 {
@@ -1073,6 +1078,620 @@ class TescoSettings extends Controller
             }
             return $result;
       }
+
+
+    /**
+     * Tesco metadata Symbols list show using ajax.
+     * @return \Illuminate\Http\Response
+    */
+    public function tescoSymbols()
+    {
+      try {
+            $tesco_care_symbols = DB::table('tesco_care_symbols')->select('*')->orderBy('is_enabled','desc')->get();
+       
+            return response()->json(['error'=>'false','message' =>'success', 'tesco_care_symbols' => $tesco_care_symbols]);
+          } catch (\Exception $e)
+          {
+                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+    }
+
+    /**
+     * Tesco metadata add Care Symbols with ajax.
+     * @return \Illuminate\Http\Response
+    */
+    public function addTescoSymbols(Request $request){
+      try {
+        $destination_path='images/WashCareSymbols/tesco/';
+        $destination_path_db='/images/WashCareSymbols/tesco/';
+        $iso_symbols= $request->file('iso_symbols');
+        $astms_symbol= $request->file('astms_symbol');
+        $care_degree = $request->input('care_degree');
+
+        $iso_symbols_orname = $iso_symbols->getClientOriginalName();
+        $astms_symbol_orname = $astms_symbol->getClientOriginalName();
+
+        $iso_extension = $iso_symbols->getClientOriginalExtension();
+        $astms_extension = $astms_symbol->getClientOriginalExtension();
+
+        if($iso_extension === 'png' && $astms_extension === 'png')
+        {
+          $iso_symbols_filename= str_random(6).'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $iso_symbols_orname));
+          $astms_symbol_filename= str_random(6).'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $astms_symbol_orname));
+
+            switch($request->category_id){
+              case 1:
+                $upload_path = 'Washing/';
+                break;
+              case 2:
+                $upload_path = 'Whitening/';
+                break;
+              case 3:
+                $upload_path = 'Dryer/';
+                break;
+              case 4:
+                $upload_path = 'Ironing/';
+                break;
+              case 5:
+                $upload_path = 'Cleaning/';
+                break;
+              default:
+                $upload_path = 'Washing/';
+                break;
+            }
+
+            $iso_symbols->move($destination_path.$upload_path,$iso_symbols_filename);
+            $astms_symbol->move($destination_path.$upload_path,$astms_symbol_filename);
+  
+            $iso_path_insert=$destination_path_db.$upload_path.$iso_symbols_filename;
+            $astms_path_insert=$destination_path_db.$upload_path.$astms_symbol_filename;
+
+            $inserted = DB::table('tesco_care_symbols')->insert([
+                'category_id'     =>  $request->category_id,
+                'iso_symbols'     =>  $iso_path_insert,
+                'astms_symbol'    =>  $astms_path_insert,
+                'care_instruction'=>  $request->care_instruction,
+                'degree'          =>  $care_degree
+            ]);
+        }
+        else   
+        {
+          $inserted = '';
+        }
+
+        $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Unprocessable Format'],422);
+
+      } catch (\Exception $e)
+      {
+          $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+      return $result;
+    }
+
+
+  /**
+   * Make tesco Symbol enabled
+   * @param Symbol id
+   * @return boolean true or false
+   */
+  public function enableTescoSymbol(Request $request)
+  {
+    try {
+          $id = $request->get('id');
+          
+          TescoCareSymbols::where('id',$id)
+            ->update([
+              'is_enabled'  => 1
+          ]);
+
+          $result = response()->json(['error'=> false,'message' =>'Success'],200);
+        } 
+        catch (\Exception $e)
+        {
+                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+    /**
+     * Make Symbol disabled
+     * @return boolean true or false
+     */
+    public function disableTescoSymbol(Request $request)
+    {
+      try {
+        $id = $request['id'];
+
+        TescoCareSymbols::where('id',$id)
+          ->update([
+            'is_enabled'  => 0
+        ]);
+
+        $result = response()->json(['error'=> false,'message' =>'Success'],200);
+      } 
+      catch (\Exception $e)
+      {
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+      return $result;
+    }
+
+        /**
+     * Orchestra metadata countries list show using ajax.
+     * @return \Illuminate\Http\Response
+     */
+    public function tescoCountries(){
+      try {
+        $tesco_countries = DB::table('tesco_countries')->select('id', 'english','polish', 'czech', 'slovak', 'hungarian','is_enabled')->orderBy('is_enabled','desc')->get();
+        return response()->json(['error'=>'false','message' =>'success', 'tesco_countries' => $tesco_countries]);
+      } catch (\Exception $e){
+        return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+    }
+
+     /**
+     * Add orchestra country.
+     * @param \Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+     */
+    public function addTescoCountry(Request $request){
+        try {
+         if(TescoCountries::where('english','ilike',$request['english'])->exists())
+          {
+              $result = response()->json(['error'=> true,'message' =>'Country Name[English] Already Exists'],208);
+          }else{
+             $inserted = TescoCountries::create([
+                        'english'   => $request['english'],
+                        'polish'    => $request['polish'],
+                        'czech'     => $request['czech'],
+                        'slovak'    => $request['slovak'],
+                        'hungarian' => $request['hungarian']
+                      ]);
+
+            $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+          }
+        } catch (\Exception $e){
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+     /**
+     * Get tesco country details by ID for editing.
+     * @param tesco country id
+     * @return \Illuminate\Http\Response
+     */
+    public function getTescoCountryById(Request $request){
+      try {
+          $id = $request['id'];
+          $tesco_countries = DB::table('tesco_countries')->select('*')->where('tesco_countries.id',$id)->get();
+          return response()->json(['error'=>'false','message' =>'success', 'tesco_countries' => $tesco_countries]);
+      } catch (\Exception $e){
+          return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+    }
+
+    /**
+    * Update tesco country by id.
+    * @param tesco country id
+    * @return \Illuminate\Http\Response
+    */
+    public function updateTescoCountryById(Request $request){
+      try {
+          $id = $request['id'];
+          
+          if(TescoCountries::where('english','ilike',$request['english'])->where('id','!=',$id)->exists()){
+              $result = response()->json(['error'=> true,'message' =>'Country Name[English] Already Exists'],208);
+          }else{
+              $updated = TescoCountries::where('id',$id)->update([
+                  'english'   => $request['english'],
+                  'polish'    => $request['polish'],
+                  'czech'     => $request['czech'],
+                  'slovak'    => $request['slovak'],
+                  'hungarian' => $request['hungarian']
+                ]);
+              $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+          }
+        } catch (\Exception $e){
+               $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+    /**
+       * enable Tesco Country
+       * @param Country id
+       * @return boolean true or false
+    */
+    public function enableTescoCountry(Request $request){
+        try {
+          $id = $request['id'];
+          TescoCountries::where('id',$id)->update([
+                 'is_enabled'  => 1
+          ]);
+          $result = response()->json(['error'=> false,'message' =>'Success'],200);
+        }
+        catch (\Exception $e){
+          $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+    /**
+     * disable Tesco Country
+     * @return boolean true or false
+     */
+    public function disableTescoCountry(Request $request){
+      try {
+        $id = $request['id'];  
+        TescoCountries::where('id',$id)->update([
+                 'is_enabled'  => 0
+        ]);
+        $result = response()->json(['error'=> false,'message' =>'Success'],200);
+      } 
+      catch (\Exception $e){
+        $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+      return $result;
+    }
+
+
+    /**
+     * Tesco Components list show using ajax.
+     * @return \Illuminate\Http\Response
+     */
+    public function tescoComponents(){
+      try {
+          $tesco_components = DB::table('tesco_components')->select('id', 'english','polish', 'czech', 'slovak', 'hungarian','is_enabled')->orderBy('is_enabled','desc')->get();
+          return response()->json(['error'=>'false','message' =>'success', 'tesco_components' => $tesco_components]);
+      }
+      catch (\Exception $e){
+          return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+    }
+
+    /**
+     * Add tesco Components.
+     * @param \Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+     */
+    public function addTescoComponents(Request $request){
+        try {
+            if(TescoComponents::where('english','ilike',$request['english'])->exists()){
+                $result = response()->json(['error'=> true,'message' =>'Components[English] Already Exists'],208);
+            }else{
+                $inserted = TescoComponents::create([
+                        'english'   => $request['english'],
+                        'polish'    => $request['polish'],
+                        'czech'     => $request['czech'],
+                        'slovak'    => $request['slovak'],
+                        'hungarian' => $request['hungarian']
+                ]);
+                $result = $inserted != '' ? response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+
+        } catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+    /**
+     * Get tesco Components details by ID for editing.
+     * @param tesco Components id
+     * @return \Illuminate\Http\Response
+     */
+    public function getTescoComponentsById(Request $request){
+      try {
+            $id = $request['id'];
+            $tesco_components = DB::table('tesco_components')->select('*')->where('tesco_components.id',$id)->get();
+            return response()->json(['error'=>'false','message' =>'success', 'tesco_components' => $tesco_components]);
+      }
+      catch (\Exception $e){
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+    }
+
+    /**
+    * Update tesco Components by id.
+    * @param tesco Components id
+    * @return \Illuminate\Http\Response
+    */
+    public function updateTescoComponentsById(Request $request){
+      try {
+          $id = $request['id'];
+          if(TescoComponents::where('english','ilike',$request['english'])->where('id','!=',$id)->exists()){
+                $result = response()->json(['error'=> true,'message' =>'Components[English] Already Exists'],208);
+          } else {
+              $updated = TescoComponents::where('id',$id)->update([
+                                        'english'   => $request['english'],
+                                        'polish'    => $request['polish'],
+                                        'czech'     => $request['czech'],
+                                        'slovak'    => $request['slovak'],
+                                        'hungarian' => $request['hungarian']
+                        ]);
+            $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+          }        
+      } catch (\Exception $e) {
+                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+      return $result;
+    }
+
+    /**
+       * Make Components enabled
+       * @param Components id
+       * @return boolean true or false
+       */
+      public function enableTescoComponents(Request $request){
+          try {
+                $id = $request['id'];
+                TescoComponents::where('id',$id)->update([
+                        'is_enabled'  => 1
+                ]);
+                $result = response()->json(['error'=> false,'message' =>'Success'],200);
+          } catch (\Exception $e) {
+                    $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+          return $result;
+      }
+
+      /**
+       * Make Components disabled
+       * @return boolean true or false
+       */
+      public function disableTescoComponents(Request $request){
+          try {
+              $id = $request['id'];
+              TescoComponents::where('id',$id)->update([
+                'is_enabled'  => 0
+              ]);
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+          } catch (\Exception $e) {
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+              return $result;
+      }
+
+
+    /**
+     * tescoFabricList list show using ajax.
+     * @return \Illuminate\Http\Response
+     */
+    public function tescoFabricList(){
+      try {
+          $tesco_fabriclists = DB::table('tesco_fabriclists')->select('id', 'english','polish', 'czech', 'slovak', 'hungarian','is_enabled')->orderBy('is_enabled','desc')->get();
+          return response()->json(['error'=>'false','message' =>'success', 'tesco_fabriclists' => $tesco_fabriclists]);
+      }
+      catch (\Exception $e){
+          return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+    }
+
+    /**
+     * Add tesco Fabric.
+     * @param \Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+     */
+    public function addTescoFabric(Request $request){
+      try {
+          if(TescoFabricLists::where('english','ilike',$request['english'])->exists()){
+              $result = response()->json(['error'=> true,'message' =>'Fabric[English] Already Exists'],208);
+          }else{
+              $inserted = TescoFabricLists::create([
+                      'english'   => $request['english'],
+                      'polish'    => $request['polish'],
+                      'czech'     => $request['czech'],
+                      'slovak'    => $request['slovak'],
+                      'hungarian' => $request['hungarian']
+              ]);
+              $result = $inserted != '' ? response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+          }
+
+      } catch (\Exception $e)
+      {
+          $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+      return $result;
+    }
+
+  /**
+     * Get tesco fabric details by ID for editing.
+     * @param tesco fabric id
+     * @return \Illuminate\Http\Response
+     */
+    public function getTescoFabricById(Request $request){
+      try {
+            $id = $request['id'];
+            $tesco_fabriclists = DB::table('tesco_fabriclists')->select('*')->where('tesco_fabriclists.id',$id)->get();
+            return response()->json(['error'=>'false','message' =>'success', 'tesco_fabriclists' => $tesco_fabriclists]);
+      }
+      catch (\Exception $e){
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+    }
+
+    /**
+    * Update tesco fabric by id.
+    * @param tesco fabric id
+    * @return \Illuminate\Http\Response
+    */
+    public function updateTescoFabricById(Request $request){
+      try {
+          $id = $request['id'];
+          if(TescoFabricLists::where('english','ilike',$request['english'])->where('id','!=',$id)->exists()){
+                $result = response()->json(['error'=> true,'message' =>'Fabric[English] Already Exists'],208);
+          } else {
+              $updated = TescoFabricLists::where('id',$id)->update([
+                                        'english'   => $request['english'],
+                                        'polish'    => $request['polish'],
+                                        'czech'     => $request['czech'],
+                                        'slovak'    => $request['slovak'],
+                                        'hungarian' => $request['hungarian']
+                        ]);
+            $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+          }        
+      } catch (\Exception $e) {
+                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+      return $result;
+    }
     
+    /**
+       * Make Fabric enabled
+       * @param Fabric id
+       * @return boolean true or false
+       */
+    public function enableTescoFabric(Request $request){
+        try {
+              $id = $request['id'];
+              TescoFabricLists::where('id',$id)->update([
+                      'is_enabled'  => 1
+              ]);
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+        } catch (\Exception $e) {
+                  $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+    /**
+     * Make Fabric disabled
+     * @return boolean true or false
+     */
+    public function disableTescoFabric(Request $request){
+        try {
+            $id = $request['id'];
+            TescoFabricLists::where('id',$id)->update([
+              'is_enabled'  => 0
+            ]);
+            $result = response()->json(['error'=> false,'message' =>'Success'],200);
+        } catch (\Exception $e) {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+            return $result;
+    }
+
+
+    /**
+     * tescoKidsWarnLists list show using ajax.
+     * @return \Illuminate\Http\Response
+     */
+    public function tescoKidsWarnLists(){
+      try {
+          $tesco_warninglists = DB::table('tesco_kids_warning_statements')->select('id', 'english','polish', 'czech', 'slovak', 'hungarian','is_enabled')->orderBy('is_enabled','desc')->get();
+          return response()->json(['error'=>'false','message' =>'success', 'tesco_warninglists' => $tesco_warninglists]);
+      }
+      catch (\Exception $e){
+          return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+    }
+
+    /**
+     * Add Tesco Warning Stmt.
+     * @param \Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+     */
+    public function addTescoWarnStmt(Request $request){
+      try {
+          if(TescoKidsWarningStatements::where('english','ilike',$request['english'])->exists()){
+              $result = response()->json(['error'=> true,'message' =>'Statement [English] Already Exists'],208);
+          }else{
+              $inserted = TescoKidsWarningStatements::create([
+                      'english'   => $request['english'],
+                      'polish'    => $request['polish'],
+                      'czech'     => $request['czech'],
+                      'slovak'    => $request['slovak'],
+                      'hungarian' => $request['hungarian']
+              ]);
+              $result = $inserted != '' ? response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+          }
+
+      } catch (\Exception $e)
+      {
+          $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+      return $result;
+    }
+
+  /**
+     * Get tesco Warning Stmt details by ID for editing.
+     * @param tesco Warning Stmt id
+     * @return \Illuminate\Http\Response
+     */
+    public function getTescoWarningStmtById(Request $request){
+      try {
+            $id = $request['id'];
+            $tesco_warninglists = DB::table('tesco_kids_warning_statements')->select('*')->where('tesco_kids_warning_statements.id',$id)->get();
+            return response()->json(['error'=>'false','message' =>'success', 'tesco_warninglists' => $tesco_warninglists]);
+      }
+      catch (\Exception $e){
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+    }
+
+    /**
+    * Update tesco Warning Stmt by id.
+    * @param tesco Warning Stmt id
+    * @return \Illuminate\Http\Response
+    */
+    public function updateTescoWarningStmtById(Request $request){
+      try {
+          $id = $request['id'];
+          if(TescoKidsWarningStatements::where('english','ilike',$request['english'])->where('id','!=',$id)->exists()){
+                $result = response()->json(['error'=> true,'message' =>'Statement [English] Already Exists'],208);
+          } else {
+              $updated = TescoKidsWarningStatements::where('id',$id)->update([
+                                        'english'   => $request['english'],
+                                        'polish'    => $request['polish'],
+                                        'czech'     => $request['czech'],
+                                        'slovak'    => $request['slovak'],
+                                        'hungarian' => $request['hungarian']
+                        ]);
+            $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+          }        
+      } catch (\Exception $e) {
+                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+      return $result;
+    }
+    
+    /**
+       * Make Warning Stmt enabled
+       * @param Fabric id
+       * @return boolean true or false
+       */
+    public function enableTescoWarningStmt(Request $request){
+        try {
+              $id = $request['id'];
+              TescoKidsWarningStatements::where('id',$id)->update([
+                      'is_enabled'  => 1
+              ]);
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+        } catch (\Exception $e) {
+                  $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+    /**
+     * Make Warning Stmt disabled
+     * @return boolean true or false
+     */
+    public function disableTescoWarningStmt(Request $request){
+        try {
+            $id = $request['id'];
+            TescoKidsWarningStatements::where('id',$id)->update([
+              'is_enabled'  => 0
+            ]);
+            $result = response()->json(['error'=> false,'message' =>'Success'],200);
+        } catch (\Exception $e) {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+            return $result;
+    }
+
+
 }
+
 
