@@ -304,7 +304,7 @@
                         </div>
                         <div class="form-group has-feedback">
                             <label for="tesco_season_code">Season Code</label>
-                            <input type="text" class="form-control" name="tesco_season_code" id="tesco_season_code" required="" placeholder="Enter Season Code" onkeyup="dynamicSVGTemplates()" data-minlength="4" maxlength="4" data-required-error="Mandatory Field." data-minlength-error="Enter 4 digits." maxlength="4">
+                            <input type="text" class="form-control" name="tesco_season_code" id="tesco_season_code" required="" placeholder="Enter Season Code" onkeyup="dynamicSVGTemplates()" data-required-error="Mandatory Field." >
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">

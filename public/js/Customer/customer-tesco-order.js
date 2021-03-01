@@ -641,7 +641,7 @@ function createOrders(parsedObj = false, oType = false) {
                                     <div class="col-md-3">\
                                         <div class="form-group has-feedback">\
                                             <label for="tesco_season_code">Season Code</label>\
-                                            <input type="text" class="form-control" data-minlength="4" data-required-error="Mandatory Field." data-minlength-error="Enter 4 digits." name="tesco_season_code" id="tesco_season_code" required="" placeholder="Enter Season Code" onkeyup="dynamicSVGTemplates()" maxlength="4">\
+                                            <input type="text" class="form-control" data-required-error="Mandatory Field."  name="tesco_season_code" id="tesco_season_code" required="" placeholder="Enter Season Code" onkeyup="dynamicSVGTemplates()">\
                                             <div class="help-block with-errors"></div>\
                                         </div>\
                                     </div>\
