@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="{{ asset('css/Erp/report/buttons.dataTables.min.css') }}">
 <link rel="stylesheet" href="{{ asset('css/Erp/report/bootstrap-multiselect.css') }}">
 <link rel="stylesheet" href="{{ asset('css/Erp/report/reports.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('css/daterangepicker.css') }}" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <style type="text/css">
 	.container-fluid {
@@ -59,15 +60,16 @@
 						<h4 class="modal-title">Report Generation</h4>
 					</div>
 					<div class="modal-body model1">
-						<div class="row rowSep">
-							<div class="col-md-2" style="margin-right: 2%;">
+						<div class="row rowSep" style="width: 90%;">
+							{{-- <div class="col-md-2" style="margin-right: 2%;">
 								<input class="dateGap" type="text" id="txtFrom" placeholder="Start Date" autocomplete="off"/>
 							</div>
 							<div class="col-md-2" style="margin-right: 3.1%;">
 								<input class="dateGap" type="text" id="txtTo" placeholder="End Date" autocomplete="off"/>
-							</div>
-
-							<div class="col-md-3 movLft">
+							</div> --}}
+							<div class="col-md-4 "><input type="text" placeholder="Start Date - End Date" class="form-control startdateos" autocomplete="off" multiple style="width:100%" name="startdateos" /></div>
+                {{-- <div class="col-md-2"></div> --}}
+							<div class="col-md-4">
 								{{-- <select class="selectpicker roleSelection" name="roleSelection" title="Select Role">
 									@foreach($allActions as $key=> $action)
 									<option value="{{ $action_as_id[$key] }}"> {{ $action }}</option>
@@ -76,13 +78,13 @@
 									{!! Form::select('roleSelection', $allActions,null,['class' => 'selectpicker roleSelection','required','data-size'=>"10","title"=>'Select Role','id'=>'roleSelection']) !!}
 								</select>
 							</div>
-							<div class="col-md-3" style="padding-left: 0;width: 24%;">
+							<div class="col-md-4" style="">
 								<select class="selectpicker tempSelection" id="tempSelect" title="Select Status" disabled>
 								</select>
 
-								{!! Form::select('options_for_orders[]', $options_for_orders,null,['class' => 'selectpicker all_status options_for_orders hidden','required','data-size'=>"10",'multiple',"title"=>'Select Status [ Orders ]','id'=>'options_for_orders']) !!}
+								{!! Form::select('options_for_orders[]', $options_for_orders,null,['class' => 'selectpicker all_status options_for_orders hidden','required','data-size'=>"10",'multiple',"title"=>'Select Status [ Orders ]','id'=>'options_for_orders',"data-actions-box"=>'true']) !!}
 
-								{!! Form::select('options_for_delivery[]', $options_for_delivery,null,['class' => 'selectpicker all_status options_for_delivery hidden','required','data-size'=>"10",'multiple',"title"=>'Select Status [ Delivery ]','id'=>'options_for_delivery']) !!}
+								{!! Form::select('options_for_delivery[]', $options_for_delivery,null,['class' => 'selectpicker all_status options_for_delivery hidden','required','data-size'=>"10",'multiple',"title"=>'Select Status [ Delivery ]','id'=>'options_for_delivery',"data-actions-box"=>'true']) !!}
 
 								{{-- {!! Form::select('role_Status[]', $order,null,['class' => 'selectpicker all_status _order hidden','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Status [ Order ]','id'=>'_order']) !!}
 
@@ -132,16 +134,19 @@
 								@endif
 								
 							</div>
-							<div class="col-md-2 filters">
-								<label>Select Material</label>
-								<select id="material" class="multiselect filterLevel2" 	data-actions-box="true" data-size="10" title="Select 	 Material" multiple>
-								</select>
-							</div>
+							
 							<div class="col-md-2 filters">
 								<label>Select Style</label>
 								<select id="style" class="multiselect filterLevel2" 		data-actions-box="true" data-size="10" title="Select 	 Style" multiple data-live-search="true">
 								</select>
 							</div>
+
+							<div class="col-md-2 filters">
+								<label>Select Material</label>
+								<select id="material" class="multiselect filterLevel2" 	data-actions-box="true" data-size="10" title="Select 	 Material" multiple>
+								</select>
+							</div>
+
 							<div class="col-md-2 filters">
 								<label>Select Mat-sub</label>
 								<select id="mat_sub" class="multiselect filterLevel2" 		data-actions-box="true" data-size="10" title="Select 	 Mat-sub" multiple data-live-search="true">
@@ -221,10 +226,101 @@
 <script type="text/javascript" src="{{ asset('js/Erp/report/vfs_fonts.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/Erp/report/buttons.html5.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/Erp/report/bootstrap-multiselect.min.js') }}"></script>
-
-
+<script src="{{ asset('js/moment.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/daterangepicker.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/Admin/report.js') }}"></script>
 <script type="text/javascript">
+
+
+	var d = new Date();
+                var maxDate = d.toLocaleDateString('en-US');
+                d.setMonth(d.getMonth() - 6);
+                var minDate = d.toLocaleDateString('en-US');
+
+                // alert(minDate)
+                // alert(maxDate)
+
+                // $('input[name="startdateos"]').daterangepicker({
+                //     "minDate": minDate,
+                //     "maxDate": maxDate,
+                //     autoUpdateInput: false
+                // });
+
+                $(function() {
+  $('input[name="startdateos"]').daterangepicker({
+    opens: 'left',
+    "minDate": minDate,
+                //     "maxDate": maxDate,
+  }, function(start, end, label) {
+    console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+  });
+});
+                // ,
+                // function (start, end, label) {
+                //     var start_date = start.format('YYYY-MM-DD');
+                //     var end_date = end.format('YYYY-MM-DD');
+                //     $('#start_date').val(start_date);
+                //     $('#end_date').val(end_date);
+                //     $.ajax({
+                //         url: base_url + "/customer/tesco/tesco-orders-submit-filter",
+                //         type: "Post",
+                //         dataType: "json",
+                //         data: {
+                //             _token: csrf_token,
+                //             start_date:start_date,
+                //             end_date:end_date
+                //         },
+                //         beforeSend: function () {
+                //             $(".loader").show();
+                //             $(".loader").css('margin-top', '12%');
+                //         },
+                //         statusCode: {
+                //             /** [Show response status based on HTTP status code] */
+                //             200: function (data) {
+                                
+                //                 $("#seasonos").html("");
+                //                 $("#ukstylenoos").html("");
+                //                 $("#stylenoos").html("");
+
+                //                 $(data.data).each(function(index,value){
+                //                     $("#seasonos").append("<option value='"+ value.season_code + "'>" + value.season_code + "</option>");
+                //                 })
+                
+                //                 $(data.style_no).each(function(index,value){
+                //                     if (value.zone == "CE") {
+                //                         if (uniqueNames.indexOf(value.ce_style_ref) === -1) {
+                //                             $("#stylenoos").append("<option value='"+ value.ce_style_ref + "'>" + value.ce_style_ref + "</option>");
+                //                         }
+                //                     } else {
+                //                         if (uniqueNames.indexOf(value.uk_style_ref) === -1) {
+                //                             $("#ukstylenoos").append("<option value='"+ value.uk_style_ref + "'>" + value.uk_style_ref + "</option>");
+                //                         }
+                //                     }
+                //                 })
+                //                 $(".selectpicker").val('');
+                //                 $('.selectpicker').selectpicker('refresh');
+                //             },
+                //             400: function () {
+                //                 $('.snackbar_span').html('Something went wrong');
+                //                 showSnackbar();
+                //             }
+                //         },
+                //         error: function (data) {
+                //         },
+                //         complete: function () {
+                //             $(".loader").hide();
+                //             $(".loader").css('margin-top', '0%');
+                //         }
+                //     })
+                // });
+
+                $('input[name="startdateos"]').on('apply.daterangepicker', function(ev, picker){
+                    $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+                });
+
+                $('input[name="startdateos"]').on('cancel.daterangepicker', function(ev, picker) {
+                    $(this).val('');
+                });
 
 	function triggerLevel1()
 	{	
@@ -268,6 +364,8 @@
 						'template': templates,
 						'date_start' : $("#txtFrom").val(),
 						'date_end' : $("#txtTo").val(),
+						'date_end' : $(".startdateos").val(),
+						'date_start' : $(".startdateos").val(),
 						'invoiceStatus' : _invSelectd,
 						'_token': "{{ csrf_token() }}",
 					},

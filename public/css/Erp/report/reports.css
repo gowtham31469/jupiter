@@ -334,5 +334,7 @@ font-weight: 400;
 	margin-left: -52%;
     margin-top: 1%;
 }
+.startdateos{margin-top: -3.7%;height: 30px!important;}
+/*.startdateos .form-control{height: 31px!important;}*/
 /*.btn .caret, .btn-group>.btn:first-child {height: unset!important;}*/
 /*.multiselect .btn-default{height: 25px !important;}*/
