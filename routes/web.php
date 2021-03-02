@@ -957,6 +957,41 @@ Route::get('print-manager/get-style-list', 'ErpUser\Printmanager\PrintManagerCon
 Route::get('print-manager/get-erporder-list', 'ErpUser\Printmanager\PrintManagerController@getErpOrderListByBuyerCustomerId'); 
 
 
+#Tesco Wash care Symbols
+Route::post('admin/tesco/settings/symbols', 'Admin\Settings\Tesco\TescoSettings@tescoSymbols');
+Route::post('admin/tesco/settings/addTescoSymbols', 'Admin\Settings\Tesco\TescoSettings@addTescoSymbols');
+Route::put('admin/tesco/enable-tesco-symbol', 'Admin\Settings\Tesco\TescoSettings@enableTescoSymbol');
+Route::put('admin/tesco/disable-tesco-symbol', 'Admin\Settings\Tesco\TescoSettings@disableTescoSymbol');
 
 
+#Tesco Countries
+Route::post('admin/tesco/settings/countries', 'Admin\Settings\Tesco\TescoSettings@tescoCountries');
+Route::post('admin/tesco/add-tesco-country', 'Admin\Settings\Tesco\TescoSettings@addTescoCountry');
+Route::get('admin/tesco/get-tesco-country-details', 'Admin\Settings\Tesco\TescoSettings@getTescoCountryById');
+Route::put('admin/tesco/update-tesco-country', 'Admin\Settings\Tesco\TescoSettings@updateTescoCountryById');
+Route::put('admin/tesco/enable-tesco-country', 'Admin\Settings\Tesco\TescoSettings@enableTescoCountry');
+Route::put('admin/tesco/disable-tesco-country', 'Admin\Settings\Tesco\TescoSettings@disableTescoCountry');
 
+#Tesco Components
+Route::post('admin/tesco/settings/components', 'Admin\Settings\Tesco\TescoSettings@tescoComponents');
+Route::post('admin/tesco/add-tesco-components', 'Admin\Settings\Tesco\TescoSettings@addTescoComponents');
+Route::get('admin/tesco/get-tesco-components-details', 'Admin\Settings\Tesco\TescoSettings@getTescoComponentsById');
+Route::put('admin/tesco/update-tesco-components', 'Admin\Settings\Tesco\TescoSettings@updateTescoComponentsById');
+Route::put('admin/tesco/enable-tesco-components', 'Admin\Settings\Tesco\TescoSettings@enableTescoComponents');
+Route::put('admin/tesco/disable-tesco-components', 'Admin\Settings\Tesco\TescoSettings@disableTescoComponents');
+
+#Tesco Fabric list
+Route::post('admin/tesco/settings/fabric-lists', 'Admin\Settings\Tesco\TescoSettings@tescoFabricList');
+Route::post('admin/tesco/add-tesco-fabric', 'Admin\Settings\Tesco\TescoSettings@addTescoFabric');
+Route::get('admin/tesco/get-tesco-fabric-details', 'Admin\Settings\Tesco\TescoSettings@getTescoFabricById');
+Route::put('admin/tesco/update-tesco-fabric-details', 'Admin\Settings\Tesco\TescoSettings@updateTescoFabricById');
+Route::put('admin/tesco/enable-tesco-fabric', 'Admin\Settings\Tesco\TescoSettings@enableTescoFabric');
+Route::put('admin/tesco/disable-tesco-fabric', 'Admin\Settings\Tesco\TescoSettings@disableTescoFabric');
+
+#Tesco Kids Warning Statement
+Route::post('admin/tesco/settings/get-warn-stmts-lists', 'Admin\Settings\Tesco\TescoSettings@tescoKidsWarnLists');
+Route::post('admin/tesco/add-tesco-warn-stmt', 'Admin\Settings\Tesco\TescoSettings@addTescoWarnStmt');
+Route::get('admin/tesco/get-tesco-warn-stmt-details', 'Admin\Settings\Tesco\TescoSettings@getTescoWarningStmtById');
+Route::put('admin/tesco/update-tesco-warn-stmt-details', 'Admin\Settings\Tesco\TescoSettings@updateTescoWarningStmtById');
+Route::put('admin/tesco/enable-tesco-warn-stmt', 'Admin\Settings\Tesco\TescoSettings@enableTescoWarningStmt');
+Route::put('admin/tesco/disable-tesco-warn-stmt', 'Admin\Settings\Tesco\TescoSettings@disableTescoWarningStmt');

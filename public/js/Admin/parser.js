@@ -467,14 +467,14 @@ function readSupplierCode(supplier) {
 function renderParsedValues(parsedObj) {
     var zone        = localStorage.getItem("zone").toLowerCase();
     var type        = localStorage.getItem("template type");
-    $('#tesco_po_number').val(parsedObj.purchaseOrder);
+    $('#tesco_po_number').val(parsedObj.purchaseOrder).attr('disabled', true);
     if(zone === 'ce') {
-        $('#tesco_ce_style').val(parsedObj.styleNumber);
+        $('#tesco_ce_style').val(parsedObj.styleNumber).attr('disabled', true);
      } else {
-        $('#tesco_uk_style').val(parsedObj.styleNumber);
+        $('#tesco_uk_style').val(parsedObj.styleNumber).attr('disabled', true);
      }
-   // $('#tesco_eqos').val(parsedObj.supplierCode);
-    $('#tesco_season_code').val(parsedObj.seasonCode);
+   // $('#tesco_eqos').val(parsedObj.supplierCode).attr('disabled', true);
+    $('#tesco_season_code').val(parsedObj.seasonCode).attr('disabled', true);
     $('#tesco_description').val(parsedObj.shortDescription);
 	if(typeof parsedObj.originalDescription !== 'undefined') {
 		$('#tesco_description').prev().text($('#tesco_description').prev().text()+'(Full Description: '+parsedObj.originalDescription+')');
@@ -486,14 +486,14 @@ function renderParsedValues(parsedObj) {
         $.each(parsedObj.orderQuantity, function(i, j) {
             var index = i + 1;
             if(zone === 'ce') {
-                $('#ce_single_orms_tpn_'+index).val(j.TPND);
+                $('#ce_single_orms_tpn_'+index).val(j.TPND).attr('disabled', true);
             } else {
-                $('#uk_single_tpnd_'+index).val(j.TPND);
+                $('#uk_single_tpnd_'+index).val(j.TPND).attr('disabled', true);
             }
             
-            $('#'+zone+'_single_ean_'+index).val(j.EAN_Barcode);
-            $('#'+zone+'_single_case_size_'+index).val(j.Case_Size);
-            $('#'+zone+'_single_size_'+index).val(j.Size);  
+            $('#'+zone+'_single_ean_'+index).val(j.EAN_Barcode).attr('disabled', true);
+            $('#'+zone+'_single_case_size_'+index).val(j.Case_Size).attr('disabled', true);
+            $('#'+zone+'_single_size_'+index).val(j.Size).attr('disabled', true);
             if(parsedObj.orderQuantity.length !== (i+1)) {
                 $('.add-row-btn').trigger('click');
             }
@@ -501,19 +501,22 @@ function renderParsedValues(parsedObj) {
     } else if(type === 'ratio') {
         $.each(parsedObj.orderQuantity, function(i, j) {
             var index = i + 1;
-            $('#'+zone+'_ratio_itf_'+index).val(j.itf);
+            $('#'+zone+'_ratio_itf_'+index).val(j.itf).attr('disabled', true);
             if(zone === 'ce') {
-                $('#'+zone+'_ratio_orms_tpn_'+index).val(j.tpnd);
-                $('#'+zone+'_ratio_cpc_'+index).val(j.cpc);
+                $('#'+zone+'_ratio_orms_tpn_'+index).val(j.tpnd).attr('disabled', true);
+                $('#'+zone+'_ratio_cpc_'+index).val(j.cpc).attr('disabled', true);
             } else {
-                $('#'+zone+'_ratio_tpnd_'+index).val(j.tpnd);
-                $('#'+zone+'_ratio_upc_'+index).val(j.upc);
+                $('#'+zone+'_ratio_tpnd_'+index).val(j.tpnd).attr('disabled', true);
+                $('#'+zone+'_ratio_upc_'+index).val(j.upc).attr('disabled', true);
             }
             if(parsedObj.orderQuantity.length !== (i+1)) {
                 $('.add-row-btn').trigger('click');
             }
         }); 
     }
+
+    // hide delete button 
+    $('.delete-row').addClass( 'hidden' );
 }
 
 var _validFileExtensions = [".pdf"];    

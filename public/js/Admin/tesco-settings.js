@@ -2206,5 +2206,1643 @@ function tescoErrorReportEmail() {
     }
    }
 
+/**
+ * Function to tesco Symbols
+ */
+
+function tescoSymbols() {
+  try{
+    $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+    $('.orchestra-sidebar').hide();
+    $('.tesco-sidebar').show();
+    $.ajax({
+      url: base_url + "/admin/tesco/settings/symbols",
+      type: "POST",
+      dataType: "json",
+      data: {
+          _token: csrf_token
+      },
+      tryCount: 0,
+      retryLimit: 2,
+      beforeSend: function() {
+          $(".loader").show();
+      },
+      success: function(data) {
+        var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoSymbolsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Symbol</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Symbols</h3></div><table id="tesco-symbols-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>ISO Symbols</th><th>Astm Symbol</th><th>Care Instruction</th><th>Degree</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+        $.each(data.tesco_care_symbols, function(i, item) {
+          var index = i + 1;
+          tesco_metadata += '<tr data-category="' + item.category_id + '" id="' + item.id + '"><td>' + index + '</td><td class="td_iso_symbols"><img width="30px" src="' + item.iso_symbols + '"></td><td class="td_astms_symbol"><img width="30px" src="' + item.astms_symbol + '"></td><td class="td_care_instruction">' + item.care_instruction + '</td>';
+          tesco_metadata += '<td class="td_care_degree">' + item.degree + '</td>';
+          if (item.is_enabled) {
+            tesco_metadata += '<td><span class="label label-success">Enabled</span></td>';
+          } else {
+            tesco_metadata += '<td><span class="label label-danger">Disabled</span></td>';
+          }
+          if (item.is_enabled) {
+            tesco_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="disable_tesco_symbol" data-placement="left"></i></a>';
+          } else {
+            tesco_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="enable_tesco_symbol" data-placement="left"></i></a>';
+          }
+          tesco_metadata += '</td></tr>';
+        });
+        tesco_metadata += '</tbody></table></div>';
+        $('.content').html(tesco_metadata)
+        $('.edit-tesco-symbols').tooltip('show')
+        $('.edit-tesco-symbols').tooltip('toggle')
+        $('.status').tooltip('show')
+        $('.status').tooltip('toggle')
+        $('#tesco-symbols-list-table').DataTable();
+        $("#tesco-symbols-list-table_filter input").addClass('form-control input-sm');
+        $("#tesco-symbols-list-table_filter input").attr('placeholder', 'Data Search');
+        $('#tesco-symbols-list-table_length select').addClass('form-control input-sm');
+      },
+      error: function(errorXHR, errorStatus, errorThrown) {
+          this.tryCount++;
+          if (this.tryCount <= this.retryLimit) {
+              $.ajax(this);
+              return;
+          }
+      },
+      complete: function() {
+          $(".loader").hide();
+      }
+    })
+  } catch (e) {
+    console.log("Error:" + e)
+  }
+}
+
+
+/**
+ * Function to Tesco Settings Symbols
+ */
+function addTescoSymbols(iso_symbols, astms_symbol, category_id, care_instruction, care_degree) {
+  try {
+      
+      var form_data = new FormData();
+
+      form_data.append('iso_symbols', iso_symbols);
+      form_data.append('astms_symbol', astms_symbol);
+      form_data.append('category_id', category_id);
+      form_data.append('care_instruction', care_instruction);
+      form_data.append('care_degree', care_degree);
+      form_data.append('_token', csrf_token);
+
+
+      $.ajax({
+          url: base_url + "/admin/tesco/settings/addTescoSymbols",
+          type: "POST",
+          data: form_data,
+          cache: false,
+          contentType: false,
+          processData: false,
+          tryCount: 0,
+          retryLimit: 2,
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          statusCode: {
+              /** [ Show response status based on HTTP status code ] */
+              200: function() {
+                  $('.snackbar_span').html('Symbols Added Successfully');
+                  showSnackbar();
+                  $('#addTescoSymbolsModal').modal('hide');
+                  tescoSymbols();
+              },
+              422: function() {
+                  $('.hidden-error').html('<div class="alert alert-warning">\
+                      Invalid File Format\
+                    </div>')
+              }
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              $(".loader").hide();
+          }
+      });
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+/**
+ * Makes a Symbol Enabled.
+ * @param id,csrf_token
+ * @author <praveen>
+ */
+function makeSymbolEnabled(id, csrf_token) {
+  try {
+      if (isSubmitting) {
+          return;
+      }
+      isSubmitting = true;
+      $.ajax({
+          url: base_url + "/admin/tesco/make-symbol-enabled",
+          dataType: "json",
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          method: "put",
+          data: { _token: csrf_token, id: id },
+          tryCount: 0,
+          retryLimit: 2,
+          statusCode: {
+              /** [Show response status based on HTTP status code] */
+              200: function() {
+                  isSubmitting = false;
+                  $('.snackbar_span').html('Symbol is enabled ');
+                  showSnackbar();
+              }
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              orchestraSymbols();
+              $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
    
-   
+/**
+ * Makes a tesco Symbol Enabled.
+ * @param id,csrf_token
+ */
+function enableTescoSymbol(id, csrf_token) {
+  try {
+      if (isSubmitting) {
+          return;
+      }
+      isSubmitting = true;
+      $.ajax({
+          url: base_url + "/admin/tesco/enable-tesco-symbol",
+          dataType: "json",
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          method: "put",
+          data: { _token: csrf_token, id: id },
+          tryCount: 0,
+          retryLimit: 2,
+          statusCode: {
+              /** [Show response status based on HTTP status code] */
+              200: function() {
+                  isSubmitting = false;
+                  $('.snackbar_span').html('Symbol is enabled ');
+                  showSnackbar();
+              }
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              tescoSymbols();
+              $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+
+/**
+ * Makes a Symbol Diabled
+ * @param id,csrf_token
+ */
+function disableTescoSymbol(id, csrf_token) {
+  try {
+      if (isSubmitting) {
+          return;
+      }
+      isSubmitting = true;
+      $.ajax({
+          url: base_url + "/admin/tesco/disable-tesco-symbol",
+          dataType: "json",
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          method: "put",
+          data: { _token: csrf_token, id: id },
+          tryCount: 0,
+          retryLimit: 2,
+          statusCode: {
+              /** [Show response status based on HTTP status code] */
+              200: function() {
+                  isSubmitting = false;
+                  $('.snackbar_span').html('Symbol is disabled ');
+                  showSnackbar();
+              }
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              tescoSymbols();
+              $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+/**
+ * Function to Tesco countries home page
+ */
+function tescoCountries() {
+  try {
+    $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+    $('.orchestra-sidebar').hide();
+    $('.tesco-sidebar').show();
+
+    $.ajax({
+      url: base_url + "/admin/tesco/settings/countries",
+      type: "POST",
+      dataType: "json",
+      data: {
+          _token: csrf_token
+      },
+      tryCount: 0,
+      retryLimit: 2,
+      beforeSend: function() {
+          $(".loader").show();
+      },
+      success: function(data) {
+        var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>'+
+        '<div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoCountryModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Countries </a></div></div>'+
+        '<div class="template-block"><div class="top-content"><h3 class="content-heading"> Countries </h3></div>'+
+        '<table id="tesco-countries-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead>'+
+        '<tr><th>Sl. No</th><th>English</th><th>Polish</th><th>Czech</th><th>Slovak</th><th>Hungarian</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+        $.each(data.tesco_countries, function(i, item) {
+          var index = i + 1;
+          tesco_metadata += '<tr id="' + item.id + '">'+
+          '<td>' + index + '</td>'+
+          '<td>' + item.english + '</td>'+
+          '<td>' + item.polish + '</td>'+
+          '<td>' + item.czech + '</td>'+
+          '<td>' + item.slovak + '</td>'+
+          '<td>' + item.hungarian + '</td>';
+          if (item.is_enabled) {
+            tesco_metadata += '<td><span class="label label-success">Enabled</span></td>';
+          } else {
+            tesco_metadata += '<td><span class="label label-danger">Disabled</span></td>';
+          }
+          if (item.is_enabled) {
+            tesco_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="disableTescoCountry" data-placement="left"></i></a>';
+          } else {
+            tesco_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="enableTescoCountry" data-placement="left"></i></a>';
+          }
+          tesco_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-tesco-country filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
+        })
+        tesco_metadata += '</tbody></table></div>';
+        $('.content').html(tesco_metadata)
+        $('#tesco-countries-list-table').DataTable();
+        $('.edit-tesco-country').tooltip('show')
+        $('.edit-tesco-country').tooltip('toggle')
+        $('.status').tooltip('show')
+        $('.status').tooltip('toggle')
+        $("#tesco-countries-list-table_filter input").addClass('form-control input-sm');
+        $("#tesco-countries-list-table_filter input").attr('placeholder', 'Data Search');
+        $('#tesco-countries-list-table_length select').addClass('form-control input-sm');
+      
+      },
+      error: function(errorXHR, errorStatus, errorThrown) {
+        this.tryCount++;
+        if (this.tryCount <= this.retryLimit) {
+            $.ajax(this);
+            return;
+        }
+      },
+      complete: function() {
+        $(".loader").hide();
+      }
+    })
+  }catch(e) {
+    console.log("Error:" + e)
+  }
+}
+
+/**
+ * Function to add Tesco countries
+ */
+function addTescoCountries() {
+  var english = $('#english').val();
+  var polish = $('#polish').val();
+  var czech = $('#czech').val();
+  var slovak = $('#slovak').val();
+  var hungarian = $('#hungarian').val();
+
+  try {
+    $.ajax({
+      url: base_url + "/admin/tesco/add-tesco-country",
+      method: 'POST',
+      data: {
+        _token: csrf_token,
+        english: english,
+        polish: polish,
+        czech: czech,
+        slovak: slovak,
+        hungarian: hungarian,
+
+      },
+      tryCount: 0,
+      retryLimit: 2,
+      beforeSend: function () {
+        $(".loader").show();
+      },
+      statusCode: {
+
+        /** [ Show response status based on HTTP status code ] */
+        200: function () {
+          $('.snackbar_span').html("Country Name Added Successfully");
+          showSnackbar();
+          $('#addTescoCountryModal').modal('hide');
+          tescoCountries()
+        },
+        208: function () {
+          $('#country_error').removeClass('hidden');
+          $('#country_error').removeAttr('style');
+          $('#country_error').html('Country Name[English] exists.')
+          $("#country_error").addClass("alert alert-warning");
+        },
+        400: function () {
+          $('.snackbar_span').html("Something went wrong!!");
+          showSnackbar();
+        }
+      },
+      error: function (errorXHR, errorStatus, errorThrown) {
+        this.tryCount++;
+        if (this.tryCount <= this.retryLimit) {
+          $.ajax(this);
+          return;
+        }
+      },
+      complete: function () {
+        $(".loader").hide();
+      }
+    })
+  } catch (e) {
+    console.log("Error:" + e)
+  }
+}
+
+/**
+ * Function for get tesco country details for editing
+ * @param id
+ */
+function getTescoCountryById(id) {
+  try {
+    if (isSubmitting) { return; }
+
+    isSubmitting = true;
+    $.ajax({
+        url: base_url + "/admin/tesco/get-tesco-country-details",
+        dataType: "json",
+        method: "get",
+        data: { id: id },
+        tryCount: 0,
+        retryLimit: 2,
+        beforeSend: function() {
+            $(".loader").show();
+        },
+        success: function(data) {
+            isSubmitting = false;
+            $('#edit_tesco_country_id').val(id);
+            $('#edit_english').val(data.tesco_countries[0].english);
+            $('#edit_polish').val(data.tesco_countries[0].polish);
+            $('#edit_czech').val(data.tesco_countries[0].czech);
+            $('#edit_slovak').val(data.tesco_countries[0].slovak);
+            $('#edit_hungarian').val(data.tesco_countries[0].hungarian);
+
+            $('#editTescoCountryModal').modal({
+                backdrop: 'static',
+                keyboard: false
+            })
+            $('#edit_tesco_country_form').validator('validate');
+            $('#editTescoCountryModal').modal('show');
+        },
+        error: function(errorXHR, errorStatus, errorThrown) {
+            this.tryCount++;
+            if (this.tryCount <= this.retryLimit) {
+                $.ajax(this);
+                return;
+            }
+        },
+        complete: function() {
+            $(".loader").hide();
+        }
+    })
+  } catch (e) {
+    console.log("Error:" + e)
+  }
+}
+
+/**
+ * Function for edit tesco country name
+ */
+function editTescoCountry() {
+  try {
+      var id = $('#edit_tesco_country_id').val();
+      var english = $('#edit_english').val();
+      var polish = $('#edit_polish').val();
+      var czech = $('#edit_czech').val();
+      var slovak = $('#edit_slovak').val();
+      var hungarian = $('#edit_hungarian').val();
+      
+      $.ajax({
+          url: base_url + "/admin/tesco/update-tesco-country",
+          dataType: "json",
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          method: "put",
+          data: { 
+            _token: csrf_token,
+            id: id,
+            english: english,
+            polish: polish,
+            czech: czech,
+            slovak: slovak,
+            hungarian: hungarian
+          },
+          tryCount: 0,
+          retryLimit: 2,
+          statusCode: {
+
+              /** [ Show response status based on HTTP status code ] */
+              200: function() {
+                  $('.snackbar_span').html("Country Name Updated Successfully");
+                  showSnackbar();
+                  $('#editTescoCountryModal').modal('hide');
+                  tescoCountries()
+              },
+              208: function() {
+                  $('#country_update_error').removeClass('hidden');
+                  $('#country_update_error').removeAttr('style');
+                  $('#country_update_error').html('Country Name[English] exists.')
+                  $("#country_update_error").addClass("alert alert-warning");
+              },
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+/**
+ * Makes a Country Enabled.
+ * @param id,csrf_token
+ */
+function enableTescoCountry(id, csrf_token) {
+  try {
+      if (isSubmitting) {
+          return;
+      }
+      isSubmitting = true;
+      $.ajax({
+          url: base_url + "/admin/tesco/enable-tesco-country",
+          dataType: "json",
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          method: "put",
+          data: { _token: csrf_token, id: id },
+          tryCount: 0,
+          retryLimit: 2,
+          statusCode: {
+              /** [Show response status based on HTTP status code] */
+              200: function() {
+                  isSubmitting = false;
+                  $('.snackbar_span').html('Country is enabled ');
+                  showSnackbar();
+              }
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              tescoCountries();
+              $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+/**
+* Makes a Country Diabled
+* @param id,csrf_token
+*/
+function disableTescoCountry(id, csrf_token) {
+  try {
+      if (isSubmitting) {
+          return;
+      }
+      isSubmitting = true;
+      $.ajax({
+          url: base_url + "/admin/tesco/disable-tesco-country",
+          dataType: "json",
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          method: "put",
+          data: { _token: csrf_token, id: id },
+          tryCount: 0,
+          retryLimit: 2,
+          statusCode: {
+              /** [Show response status based on HTTP status code] */
+              200: function() {
+                  isSubmitting = false;
+                  $('.snackbar_span').html('Country is disabled ');
+                  showSnackbar();
+              }
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              tescoCountries();
+              $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+/**
+ * Function to Tesco Components home page
+ */
+function tescoComponents() {
+  try {
+      $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+      $('.orchestra-sidebar').hide();
+      $('.tesco-sidebar').show();
+      
+      $.ajax({
+          url: base_url + "/admin/tesco/settings/components",
+          type: "POST",
+          dataType: "json",
+          data: {
+              _token: csrf_token
+          },
+          tryCount: 0,
+          retryLimit: 2,
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          success: function(data) {
+            var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>'+
+            '<div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescocomponentsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Components </a></div></div>'+
+            '<div class="template-block"><div class="top-content"><h3 class="content-heading"> Components </h3></div>'+
+            '<table id="tesco-components-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead>'+
+            '<tr><th>Sl. No</th><th>English</th><th>Polish</th><th>Czech</th><th>Slovak</th><th>Hungarian</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+            $.each(data.tesco_components, function(i, item) {
+              var index = i + 1;
+              tesco_metadata += '<tr id="' + item.id + '">'+
+              '<td>' + index + '</td>'+
+              '<td>' + item.english + '</td>'+
+              '<td>' + item.polish + '</td>'+
+              '<td>' + item.czech + '</td>'+
+              '<td>' + item.slovak + '</td>'+
+              '<td>' + item.hungarian + '</td>';
+              if (item.is_enabled) {
+                tesco_metadata += '<td><span class="label label-success">Enabled</span></td>';
+              } else {
+                tesco_metadata += '<td><span class="label label-danger">Disabled</span></td>';
+              }
+              if (item.is_enabled) {
+                tesco_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="disableTescoComponents" data-placement="left"></i></a>';
+              } else {
+                tesco_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="enableTescoComponents" data-placement="left"></i></a>';
+              }
+              tesco_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-tesco-components filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
+            })
+            tesco_metadata += '</tbody></table></div>';
+            $('.content').html(tesco_metadata)
+            $('#tesco-components-list-table').DataTable();
+            $('.edit-tesco-components').tooltip('show')
+            $('.edit-tesco-components').tooltip('toggle')
+            $('.status').tooltip('show')
+            $('.status').tooltip('toggle')
+            $("#tesco-components-list-table_filter input").addClass('form-control input-sm');
+            $("#tesco-components-list-table_filter input").attr('placeholder', 'Data Search');
+            $('#tesco-components-list-table_length select').addClass('form-control input-sm');
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+
+/**
+ * Adds tesco components.
+ */
+function addTescoComponents() {
+  try {
+    var english = $('#comp_english').val();
+    var polish = $('#comp_polish').val();
+    var czech = $('#comp_czech').val();
+    var slovak = $('#comp_slovak').val();
+    var hungarian = $('#comp_hungarian').val();
+      
+
+    $.ajax({
+          url: base_url + "/admin/tesco/add-tesco-components",
+          method: 'POST',
+          data: {
+            _token: csrf_token,
+            english: english,
+            polish: polish,
+            czech: czech,
+            slovak: slovak,
+            hungarian: hungarian,
+          },
+          tryCount: 0,
+          retryLimit: 2,
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          statusCode: {
+
+              /** [ Show response status based on HTTP status code ] */
+              200: function() {
+                  $('.snackbar_span').html("Components Added Successfully");
+                  showSnackbar();
+                  $('#addTescocomponentsModal').modal('hide');
+                  tescoComponents()
+              },
+              208: function() {
+                  $('#components_error').removeClass('hidden');
+                  $('#components_error').removeAttr('style');
+                  $('#components_error').html('Component[English] already excists.')
+                  $("#components_error").addClass("alert alert-warning");
+              },
+              400: function() {
+                  $('.snackbar_span').html("Something went wrong!!");
+                  showSnackbar();
+              }
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              $(".loader").hide();
+          }
+    })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+/**
+ * Function for get tesco Components details for editing
+ * @param id
+ */
+function getTescoComponentsById(id) {
+  try {
+      if (isSubmitting) {
+          return;
+      }
+      isSubmitting = true;
+      $.ajax({
+          url: base_url + "/admin/tesco/get-tesco-components-details",
+          dataType: "json",
+          method: "get",
+          data: { id: id },
+          tryCount: 0,
+          retryLimit: 2,
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          success: function(data) {
+              isSubmitting = false;
+              $('#edit_tesco_components_id').val(id);
+              $('#comp_edit_english').val(data.tesco_components[0].english);
+              $('#comp_edit_polish').val(data.tesco_components[0].polish);
+              $('#comp_edit_czech').val(data.tesco_components[0].czech);
+              $('#comp_edit_slovak').val(data.tesco_components[0].slovak);
+              $('#comp_edit_hungarian').val(data.tesco_components[0].hungarian);
+              $('#editTescoComponentsModal').modal({
+                  backdrop: 'static',
+                  keyboard: false
+              })
+              $('#edit_tesco_components_form').validator('validate');
+              $('#editTescoComponentsModal').modal('show');
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+
+/**
+ * Function for edit Tesco Components instruction
+ */
+function editTescoComponents() {
+  try {
+      var id = $('#edit_tesco_components_id').val();
+      var english = $('#comp_edit_english').val();
+      var polish = $('#comp_edit_polish').val();
+      var czech = $('#comp_edit_czech').val();
+      var slovak = $('#comp_edit_slovak').val();
+      var hungarian = $('#comp_edit_hungarian').val();
+      
+      $.ajax({
+          url: base_url + "/admin/tesco/update-tesco-components",
+          dataType: "json",
+          beforeSend: function() {
+              $(".loader").show();
+              $('#components_update_error').addClass('hidden');
+          },
+          method: "put",
+          data: { 
+            _token: csrf_token,
+            id : id,
+            english: english,
+            polish: polish,
+            czech: czech,
+            slovak: slovak,
+            hungarian: hungarian,
+          },
+          tryCount: 0,
+          retryLimit: 2,
+          statusCode: {
+
+              /** [ Show response status based on HTTP status code ] */
+              200: function() {
+                  $('.snackbar_span').html("Components Updated Successfully");
+                  showSnackbar();
+                  $('#editTescoComponentsModal').modal('hide');
+                  tescoComponents()
+              },
+              208: function() {
+                  $('#components_update_error').removeClass('hidden');
+                  $('#components_update_error').removeAttr('style');
+                  $('#components_update_error').html('Component[English] already excists.')
+                  $("#components_update_error").addClass("alert alert-warning");
+              },
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+
+/**
+ * Makes a Components Enabled.
+ * @param id,csrf_token
+ */
+function enableTescoComponents(id, csrf_token) {
+  try {
+      if (isSubmitting) {
+          return;
+      }
+      isSubmitting = true;
+      $.ajax({
+          url: base_url + "/admin/tesco/enable-tesco-components",
+          dataType: "json",
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          method: "put",
+          data: { _token: csrf_token, id: id },
+          tryCount: 0,
+          retryLimit: 2,
+          statusCode: {
+              /** [Show response status based on HTTP status code] */
+              200: function() {
+                  isSubmitting = false;
+                  $('.snackbar_span').html('Components is enabled ');
+                  showSnackbar();
+              }
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+            tescoComponents();
+            $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+
+/**
+ * Makes a Components Diabled
+ * @param id,csrf_token
+ */
+function disableTescoComponents(id, csrf_token) {
+    try {
+        if (isSubmitting) {
+            return;
+        }
+        isSubmitting = true;
+        $.ajax({
+            url: base_url + "/admin/tesco/disable-tesco-components",
+            dataType: "json",
+            beforeSend: function() {
+                $(".loader").show();
+            },
+            method: "put",
+            data: { _token: csrf_token, id: id },
+            tryCount: 0,
+            retryLimit: 2,
+            statusCode: {
+                /** [Show response status based on HTTP status code] */
+                200: function() {
+                    isSubmitting = false;
+                    $('.snackbar_span').html('Components is disabled ');
+                    showSnackbar();
+                }
+            },
+            error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
+            },
+            complete: function() {
+                tescoComponents();
+                $(".loader").hide();
+            }
+        })
+    } catch (e) {
+        console.log("Error:" + e)
+    }
+}
+
+
+/**
+ * Function to Tesco Fabric List home page
+ */
+function tescoFabricList() {
+  try {
+      $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+      $('.orchestra-sidebar').hide();
+      $('.tesco-sidebar').show();
+      
+      $.ajax({
+          url: base_url + "/admin/tesco/settings/fabric-lists",
+          type: "POST",
+          dataType: "json",
+          data: {
+              _token: csrf_token
+          },
+          tryCount: 0,
+          retryLimit: 2,
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          success: function(data) {
+            var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>'+
+            '<div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoFabricsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Fabric </a></div></div>'+
+            '<div class="template-block"><div class="top-content"><h3 class="content-heading"> Fabrics </h3></div>'+
+            '<table id="tesco-fabric-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead>'+
+            '<tr><th>Sl. No</th><th>English</th><th>Polish</th><th>Czech</th><th>Slovak</th><th>Hungarian</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+            $.each(data.tesco_fabriclists, function(i, item) {
+              var index = i + 1;
+              tesco_metadata += '<tr id="' + item.id + '">'+
+              '<td>' + index + '</td>'+
+              '<td>' + item.english + '</td>'+
+              '<td>' + item.polish + '</td>'+
+              '<td>' + item.czech + '</td>'+
+              '<td>' + item.slovak + '</td>'+
+              '<td>' + item.hungarian + '</td>';
+              if (item.is_enabled) {
+                tesco_metadata += '<td><span class="label label-success">Enabled</span></td>';
+              } else {
+                tesco_metadata += '<td><span class="label label-danger">Disabled</span></td>';
+              }
+              if (item.is_enabled) {
+                tesco_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="disableTescoFabric" data-placement="left"></i></a>';
+              } else {
+                tesco_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="enableTescoFabric" data-placement="left"></i></a>';
+              }
+              tesco_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-tesco-fabric filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
+            })
+            tesco_metadata += '</tbody></table></div>';
+            $('.content').html(tesco_metadata)
+            $('#tesco-fabric-list-table').DataTable();
+            $('.edit-tesco-fabric').tooltip('show')
+            $('.edit-tesco-fabric').tooltip('toggle')
+            $('.status').tooltip('show')
+            $('.status').tooltip('toggle')
+            $("#tesco-fabric-list-table_filter input").addClass('form-control input-sm');
+            $("#tesco-fabric-list-table_filter input").attr('placeholder', 'Data Search');
+            $('#tesco-fabric-list-table_length select').addClass('form-control input-sm');
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+/**
+ * Adds tesco fabric.
+ */
+function addTescoFabric() {
+  try {
+    var english = $('#fabric_english').val();
+    var polish = $('#fabric_polish').val();
+    var czech = $('#fabric_czech').val();
+    var slovak = $('#fabric_slovak').val();
+    var hungarian = $('#fabric_hungarian').val();
+      
+
+    $.ajax({
+          url: base_url + "/admin/tesco/add-tesco-fabric",
+          method: 'POST',
+          data: {
+            _token: csrf_token,
+            english: english,
+            polish: polish,
+            czech: czech,
+            slovak: slovak,
+            hungarian: hungarian,
+          },
+          tryCount: 0,
+          retryLimit: 2,
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          statusCode: {
+
+              /** [ Show response status based on HTTP status code ] */
+              200: function() {
+                  $('.snackbar_span').html("Fabric Added Successfully");
+                  showSnackbar();
+                  $('#addTescoFabricsModal').modal('hide');
+                  tescoFabricList()
+              },
+              208: function() {
+                  $('#fabric_error').removeClass('hidden');
+                  $('#fabric_error').removeAttr('style');
+                  $('#fabric_error').html('Fabric[English] already excists.')
+                  $("#fabric_error").addClass("alert alert-warning");
+              },
+              400: function() {
+                  $('.snackbar_span').html("Something went wrong!!");
+                  showSnackbar();
+              }
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              $(".loader").hide();
+          }
+    })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+/**
+ * Function for get tesco Components details for editing
+ * @param id
+ */
+function getTescoFabricById(id) {
+  try {
+      if (isSubmitting) {
+          return;
+      }
+      isSubmitting = true;
+      $.ajax({
+          url: base_url + "/admin/tesco/get-tesco-fabric-details",
+          dataType: "json",
+          method: "get",
+          data: { id: id },
+          tryCount: 0,
+          retryLimit: 2,
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          success: function(data) {
+              isSubmitting = false;
+              $('#edit_tesco_fabric_id').val(id);
+              $('#edit_fabric_english').val(data.tesco_fabriclists[0].english);
+              $('#edit_fabric_polish').val(data.tesco_fabriclists[0].polish);
+              $('#edit_fabric_czech').val(data.tesco_fabriclists[0].czech);
+              $('#edit_fabric_slovak').val(data.tesco_fabriclists[0].slovak);
+              $('#edit_fabric_hungarian').val(data.tesco_fabriclists[0].hungarian);
+              $('#editTescoFabricModal').modal({
+                  backdrop: 'static',
+                  keyboard: false
+              })
+              $('#edit-tesco-fabric-form').validator('validate');
+              $('#editTescoFabricModal').modal('show');
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+/**
+ * Function for update Tesco fabric
+ */
+function updateTescoFabric() {
+  try {
+      var id = $('#edit_tesco_fabric_id').val();
+      var english = $('#edit_fabric_english').val();
+      var polish = $('#edit_fabric_polish').val();
+      var czech = $('#edit_fabric_czech').val();
+      var slovak = $('#edit_fabric_slovak').val();
+      var hungarian = $('#edit_fabric_hungarian').val();
+      
+      $.ajax({
+          url: base_url + "/admin/tesco/update-tesco-fabric-details",
+          dataType: "json",
+          beforeSend: function() {
+              $(".loader").show();
+              $('#fabric_update_error').addClass('hidden');
+          },
+          method: "put",
+          data: { 
+            _token: csrf_token,
+            id : id,
+            english: english,
+            polish: polish,
+            czech: czech,
+            slovak: slovak,
+            hungarian: hungarian,
+          },
+          tryCount: 0,
+          retryLimit: 2,
+          statusCode: {
+
+              /** [ Show response status based on HTTP status code ] */
+              200: function() {
+                  $('.snackbar_span').html("Fabric Updated Successfully");
+                  showSnackbar();
+                  $('#editTescoFabricModal').modal('hide');
+                  tescoFabricList()
+              },
+              208: function() {
+                  $('#fabric_update_error').removeClass('hidden');
+                  $('#fabric_update_error').removeAttr('style');
+                  $('#fabric_update_error').html('Fabric[English] already excists.')
+                  $("#fabric_update_error").addClass("alert alert-warning");
+              },
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+/**
+ * Makes a Fabric Enabled.
+ * @param id,csrf_token
+ */
+function enableTescoFabric(id, csrf_token) {
+  try {
+      if (isSubmitting) {
+          return;
+      }
+      isSubmitting = true;
+      $.ajax({
+          url: base_url + "/admin/tesco/enable-tesco-fabric",
+          dataType: "json",
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          method: "put",
+          data: { _token: csrf_token, id: id },
+          tryCount: 0,
+          retryLimit: 2,
+          statusCode: {
+              /** [Show response status based on HTTP status code] */
+              200: function() {
+                  isSubmitting = false;
+                  $('.snackbar_span').html('Fabric is enabled ');
+                  showSnackbar();
+              }
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+            tescoFabricList();
+            $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+/**
+ * Makes a fabric Diabled
+ * @param id,csrf_token
+ */
+function disableTescoFabric(id, csrf_token) {
+  try {
+      if (isSubmitting) {
+          return;
+      }
+      isSubmitting = true;
+      $.ajax({
+          url: base_url + "/admin/tesco/disable-tesco-fabric",
+          dataType: "json",
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          method: "put",
+          data: { _token: csrf_token, id: id },
+          tryCount: 0,
+          retryLimit: 2,
+          statusCode: {
+              /** [Show response status based on HTTP status code] */
+              200: function() {
+                  isSubmitting = false;
+                  $('.snackbar_span').html('Components is disabled ');
+                  showSnackbar();
+              }
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              tescoFabricList();
+              $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+
+/**
+ * Function to tescoKidsWarningStmt List home page
+ */
+function tescoKidsWarningStmt() {
+  try {
+      $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+      $('.orchestra-sidebar').hide();
+      $('.tesco-sidebar').show();
+      
+      $.ajax({
+          url: base_url + "/admin/tesco/settings/get-warn-stmts-lists",
+          type: "POST",
+          dataType: "json",
+          data: {
+              _token: csrf_token
+          },
+          tryCount: 0,
+          retryLimit: 2,
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          success: function(data) {
+            var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>'+
+            '<div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoKidsStatementModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Statements </a></div></div>'+
+            '<div class="template-block"><div class="top-content"><h3 class="content-heading"> Kids Warning Statements </h3></div>'+
+            '<table id="tesco-kids-stmt-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead>'+
+            '<tr><th>Sl. No</th><th>English</th><th>Polish</th><th>Czech</th><th>Slovak</th><th>Hungarian</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+            $.each(data.tesco_warninglists, function(i, item) {
+              var index = i + 1;
+              tesco_metadata += '<tr id="' + item.id + '">'+
+              '<td>' + index + '</td>'+
+              '<td>' + item.english + '</td>'+
+              '<td>' + item.polish + '</td>'+
+              '<td>' + item.czech + '</td>'+
+              '<td>' + item.slovak + '</td>'+
+              '<td>' + item.hungarian + '</td>';
+              if (item.is_enabled) {
+                tesco_metadata += '<td><span class="label label-success">Enabled</span></td>';
+              } else {
+                tesco_metadata += '<td><span class="label label-danger">Disabled</span></td>';
+              }
+              if (item.is_enabled) {
+                tesco_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="disableTescoKidsStatement" data-placement="left"></i></a>';
+              } else {
+                tesco_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="enableTescoKidsStatement" data-placement="left"></i></a>';
+              }
+              tesco_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-tesco-kids-stmt filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
+            })
+            tesco_metadata += '</tbody></table></div>';
+            $('.content').html(tesco_metadata)
+            $('#tesco-kids-stmt-list-table').DataTable();
+            $('.edit-tesco-kids-stmt').tooltip('show')
+            $('.edit-tesco-kids-stmt').tooltip('toggle')
+            $('.status').tooltip('show')
+            $('.status').tooltip('toggle')
+            $("#tesco-kids-stmt-list-table_filter input").addClass('form-control input-sm');
+            $("#tesco-kids-stmt-list-table_filter input").attr('placeholder', 'Data Search');
+            $('#tesco-kids-stmt-list-table_length select').addClass('form-control input-sm');
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+/**
+ * Adds tesco Kids Statement.
+ */
+function addTescoKidsStatement() {
+  try {
+    var english = $('#kids_stmt_english').val();
+    var polish = $('#kids_stmt_polish').val();
+    var czech = $('#kids_stmt_czech').val();
+    var slovak = $('#kids_stmt_slovak').val();
+    var hungarian = $('#kids_stmt_hungarian').val();
+      
+
+    $.ajax({
+          url: base_url + "/admin/tesco/add-tesco-warn-stmt",
+          method: 'POST',
+          data: {
+            _token: csrf_token,
+            english: english,
+            polish: polish,
+            czech: czech,
+            slovak: slovak,
+            hungarian: hungarian,
+          },
+          tryCount: 0,
+          retryLimit: 2,
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          statusCode: {
+
+              /** [ Show response status based on HTTP status code ] */
+              200: function() {
+                  $('.snackbar_span').html("Statement Added Successfully");
+                  showSnackbar();
+                  $('#addTescoKidsStatementModal').modal('hide');
+                  tescoKidsWarningStmt()
+              },
+              208: function() {
+                  $('#kids_stmt_error').removeClass('hidden');
+                  $('#kids_stmt_error').removeAttr('style');
+                  $('#kids_stmt_error').html('Statement[English] already excists.')
+                  $("#kids_stmt_error").addClass("alert alert-warning");
+              },
+              400: function() {
+                  $('.snackbar_span').html("Something went wrong!!");
+                  showSnackbar();
+              }
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              $(".loader").hide();
+          }
+    })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+
+/**
+ * Function for get tesco KidsStmt ById details for editing
+ * @param id
+ */
+function getTescoKidsStmtById(id) {
+  try {
+      if (isSubmitting) {
+          return;
+      }
+      isSubmitting = true;
+      $.ajax({
+          url: base_url + "/admin/tesco/get-tesco-warn-stmt-details",
+          dataType: "json",
+          method: "get",
+          data: { id: id },
+          tryCount: 0,
+          retryLimit: 2,
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          success: function(data) {
+              isSubmitting = false;
+              $('#edit_tesco_kids_stmt_id').val(id);
+              $('#edit_kids_stmt_english').val(data.tesco_warninglists[0].english);
+              $('#edit_kids_stmt_polish').val(data.tesco_warninglists[0].polish);
+              $('#edit_kids_stmt_czech').val(data.tesco_warninglists[0].czech);
+              $('#edit_kids_stmt_slovak').val(data.tesco_warninglists[0].slovak);
+              $('#edit_kids_stmt_hungarian').val(data.tesco_warninglists[0].hungarian);
+              $('#editTescoKidsStatementModal').modal({
+                  backdrop: 'static',
+                  keyboard: false
+              })
+              $('#edit-tesco-kids-statement-form').validator('validate');
+              $('#editTescoKidsStatementModal').modal('show');
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+/**
+ * Function for update Tesco fabric
+ */
+function updateTescoKidsStmt() {
+  try {
+      var id = $('#edit_tesco_kids_stmt_id').val();
+      var english = $('#edit_kids_stmt_english').val();
+      var polish = $('#edit_kids_stmt_polish').val();
+      var czech = $('#edit_kids_stmt_czech').val();
+      var slovak = $('#edit_kids_stmt_slovak').val();
+      var hungarian = $('#edit_kids_stmt_hungarian').val();
+      
+      $.ajax({
+          url: base_url + "/admin/tesco/update-tesco-warn-stmt-details",
+          dataType: "json",
+          beforeSend: function() {
+              $(".loader").show();
+              $('#kids_stmt_update_error').addClass('hidden');
+          },
+          method: "put",
+          data: { 
+            _token: csrf_token,
+            id : id,
+            english: english,
+            polish: polish,
+            czech: czech,
+            slovak: slovak,
+            hungarian: hungarian,
+          },
+          tryCount: 0,
+          retryLimit: 2,
+          statusCode: {
+
+              /** [ Show response status based on HTTP status code ] */
+              200: function() {
+                  $('.snackbar_span').html("Statement Updated Successfully");
+                  showSnackbar();
+                  $('#editTescoKidsStatementModal').modal('hide');
+                  tescoKidsWarningStmt()
+              },
+              208: function() {
+                  $('#kids_stmt_update_error').removeClass('hidden');
+                  $('#kids_stmt_update_error').removeAttr('style');
+                  $('#kids_stmt_update_error').html('Statement [English] already excists.')
+                  $("#kids_stmt_update_error").addClass("alert alert-warning");
+              },
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+/**
+ * Makes a Kids Warning Stmt Enabled.
+ * @param id,csrf_token
+ */
+function enableTescoKidsStatement(id, csrf_token) {
+  try {
+      if (isSubmitting) {
+          return;
+      }
+      isSubmitting = true;
+      $.ajax({
+          url: base_url + "/admin/tesco/enable-tesco-warn-stmt",
+          dataType: "json",
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          method: "put",
+          data: { _token: csrf_token, id: id },
+          tryCount: 0,
+          retryLimit: 2,
+          statusCode: {
+              /** [Show response status based on HTTP status code] */
+              200: function() {
+                  isSubmitting = false;
+                  $('.snackbar_span').html('Statement is enabled ');
+                  showSnackbar();
+              }
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+            tescoKidsWarningStmt();
+            $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+/**
+ * Makes a Kids Warning Stmt Enabled.
+ * @param id,csrf_token
+ */
+function disableTescoKidsStatement(id, csrf_token) {
+  try {
+      if (isSubmitting) {
+          return;
+      }
+      isSubmitting = true;
+      $.ajax({
+          url: base_url + "/admin/tesco/disable-tesco-warn-stmt",
+          dataType: "json",
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          method: "put",
+          data: { _token: csrf_token, id: id },
+          tryCount: 0,
+          retryLimit: 2,
+          statusCode: {
+              /** [Show response status based on HTTP status code] */
+              200: function() {
+                  isSubmitting = false;
+                  $('.snackbar_span').html('Statement is disabled ');
+                  showSnackbar();
+              }
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              tescoKidsWarningStmt();
+              $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
