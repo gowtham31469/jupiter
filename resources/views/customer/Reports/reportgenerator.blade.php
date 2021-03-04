@@ -209,6 +209,8 @@
 		</div>
 	</div>
 </div>
+<input type="text" id="txtFrom">
+<input type="text" id="txtTo">
 @endsection
     @else
     <script type="text/javascript">
@@ -232,10 +234,10 @@
 <script type="text/javascript">
 
 
-	var d = new Date();
-                var maxDate = d.toLocaleDateString('en-US');
-                d.setMonth(d.getMonth() - 6);
-                var minDate = d.toLocaleDateString('en-US');
+	// var d = new Date();
+ //                var maxDate = d.toLocaleDateString('en-US');
+ //                d.setMonth(d.getMonth() - 6);
+ //                var minDate = d.toLocaleDateString('en-US');
 
                 // alert(minDate)
                 // alert(maxDate)
@@ -249,9 +251,13 @@
                 $(function() {
   $('input[name="startdateos"]').daterangepicker({
     opens: 'left',
-    "minDate": minDate,
+    autoUpdateInput: false,
+    // "minDate": minDate,
+        // "startDate": minDate
+
                 //     "maxDate": maxDate,
   }, function(start, end, label) {
+  
     console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
   });
 });
@@ -315,7 +321,9 @@
                 // });
 
                 $('input[name="startdateos"]').on('apply.daterangepicker', function(ev, picker){
-                    $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+                    $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+                    	$("#txtFrom").val(picker.startDate.format('YYYY-MM-DD'))
+  						$("#txtTo").val(picker.endDate.format('YYYY-MM-DD'))
                 });
 
                 $('input[name="startdateos"]').on('cancel.daterangepicker', function(ev, picker) {
@@ -325,8 +333,7 @@
 	function triggerLevel1()
 	{	
 
-		if($("#txtFrom").val().length > 0 && $("#txtTo").val().length > 0)
-		{
+		// /
 			if($("#buyer").val().length > 0 && $("#season").val().length > 0 )
 			{
 				$("#loader1").removeClass('hidden')
@@ -364,8 +371,6 @@
 						'template': templates,
 						'date_start' : $("#txtFrom").val(),
 						'date_end' : $("#txtTo").val(),
-						'date_end' : $(".startdateos").val(),
-						'date_start' : $(".startdateos").val(),
 						'invoiceStatus' : _invSelectd,
 						'_token': "{{ csrf_token() }}",
 					},
@@ -435,11 +440,11 @@
 				$('.snackbar_span').html("Please select atleast one value from each of the select boxes.");
 				showSnackbar();
 			}
-		}
-		else{
-			$('.snackbar_span').html("Please set the date interval.");
-			showSnackbar();
-		}
+		// }
+		// else{
+		// 	$('.snackbar_span').html("Please set the date interval.");
+		// 	showSnackbar();
+		// }
 	}
 
 function triggerLevel2()

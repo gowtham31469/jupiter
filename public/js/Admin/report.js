@@ -139,6 +139,7 @@ $(document).ready(function($) {
 	});
 
 	$(document).on('click', '#filter3,#gen_report', function(event) {
+		console.log($("#txtFrom").val()+"------")
 		date1 = $("#txtFrom").val()
 		date2 = $("#txtTo").val()
 		triggerLevel3()

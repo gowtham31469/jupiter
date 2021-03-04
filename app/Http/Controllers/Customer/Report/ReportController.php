@@ -84,13 +84,30 @@ class ReportController extends Controller
 
     public function level1Filter(Request $request)
 	{
+		// dd($request->all());
+
+		if($request->date_start == null || $request->date_end == null)
+		{
+			$endDate = Carbon::now();
+        	$startDate = Carbon::now()->subMonth(6);
+		}
+
+		else
+		{
+			$endDate = $request->date_end;
+        	$startDate = $request->date_start;
+		}
+
+		// dd($startDate);
+
 		$customer_id = Auth::guard('web_customer')->id();
 		$profile_id = CustomerProfile::where('id',$customer_id)->first()->company_id;
 		
 		$result = OrderManagementHistory::where('buyer_id',$request->buyer)
 		->whereIn('season',$request->season)
 		->where('customer_id',$profile_id)
-		->whereBetween('created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
+		// ->whereBetween('created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
+		->whereBetween('created_at', [$startDate, $endDate])
 		->select('material','customer_id','style','sub_material')
 		->get();
 
@@ -109,6 +126,18 @@ class ReportController extends Controller
 	public function level2Filter(Request $request)
 	{
 
+		if($request->date_start == null || $request->date_end == null)
+		{
+			$endDate = Carbon::now();
+        	$startDate = Carbon::now()->subMonth(6);
+		}
+
+		else
+		{
+			$endDate = $request->date_end;
+        	$startDate = $request->date_start;
+		}
+
 		$result = OrderManagementHistory::where('buyer_id',$request->buyer)
 		->whereIn('season',$request->season)
 		->whereIn('material',$request->materials)
@@ -116,7 +145,8 @@ class ReportController extends Controller
 		->whereIn('style',$request->styles)
 		->where('customer_id',$request->customers)
 
-		->whereBetween('created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
+		// ->whereBetween('created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
+		->whereBetween('created_at', [$startDate, $endDate])
 		->select('reference','buyer_po','ocn_number','customer_po')
 		->get();
 
@@ -235,7 +265,19 @@ class ReportController extends Controller
 
 	public function customer_setUpDatatable(Request $request)
 	{   
-		// dd($request->all());
+		
+		if($request->date_start == null || $request->date_end == null)
+		{
+			$endDate = Carbon::now();
+        	$startDate = Carbon::now()->subMonth(6);
+		}
+
+		else
+		{
+			$endDate = $request->date_end;
+        	$startDate = $request->date_start;
+		}
+
 		$table_names = OrderManagementHistory::where('buyer_id',$request->buyer)
 		->whereIn('season',$request->season)
 		->whereIn('material',$request->materials)
@@ -246,7 +288,8 @@ class ReportController extends Controller
 		// ->whereIn('customer_po',$request->pos)
 		->whereIn('buyer_po',$request->buyer_pos)
 		->whereIn('ocn_number',$request->ocns)
-		->whereBetween('created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
+		// ->whereBetween('created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
+		->whereBetween('created_at', [$startDate, $endDate])
 		->where(function($q1) use ($request) {
 			$request->pos!=null ? $q1->whereIn('customer_po',$request->pos) : '';
 		})
