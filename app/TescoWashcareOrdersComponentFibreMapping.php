@@ -11,4 +11,8 @@ class TescoWashcareOrdersComponentFibreMapping extends Model
         'fibre_composition_id',
         'fibre_composition_percentage'
     ]; 
+
+    protected $casts = [
+        'fibre_composition_text' => 'json',
+    ];
 }

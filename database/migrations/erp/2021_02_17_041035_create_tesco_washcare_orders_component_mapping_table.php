@@ -17,6 +17,7 @@ class CreateTescoWashcareOrdersComponentMappingTable extends Migration
             $table->increments('id');
             $table->unsignedBigInteger('washcare_order_id')->index();
             $table->unsignedInteger('garment_component_id')->index();
+            $table->json('garment_component_text')->nullable();
             $table->timestamps();
 
             $table->foreign('washcare_order_id')->references('id')->on('tesco_washcare_orders')->onDelete('cascade');

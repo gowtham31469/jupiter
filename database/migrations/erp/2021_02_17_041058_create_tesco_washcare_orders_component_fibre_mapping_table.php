@@ -17,6 +17,7 @@ class CreateTescoWashcareOrdersComponentFibreMappingTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('washcare_component_id')->index();
             $table->unsignedInteger('fibre_composition_id')->index();
+            $table->json('fibre_composition_text')->nullable();
             $table->integer('fibre_composition_percentage');
             $table->timestamps();
 

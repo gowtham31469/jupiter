@@ -64,6 +64,11 @@ class TescoWashcareOrders extends Model
         'pi_approved_at',
     ]; 
 
+    protected $casts = [
+        'country_of_origin_text' => 'json',
+        'kids_warning_text' => 'json',
+    ];
+
     /**
      * Get the customer for the order.
      */

@@ -10,4 +10,8 @@ class TescoWashcareOrdersComponentMapping extends Model
         'washcare_order_id',
         'garment_component_id'
     ]; 
+
+    protected $casts = [
+        'garment_component_text' => 'json',
+    ];
 }

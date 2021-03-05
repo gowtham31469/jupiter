@@ -30,11 +30,13 @@ class CreateTescoWashcareOrdersTable extends Migration
             $table->string('ocn_number')->nullable(true);
             $table->string('fabric_batch_code')->nullable(true);
             $table->string('leather_suede_code')->nullable(true);
+            $table->integer('tog')->nullable(true);
             $table->unsignedInteger('kaff_id')->nullable(true)->index();
             $table->unsignedInteger('country_of_origin_id')->nullable(true)->index();
+            $table->json('country_of_origin_text')->nullable();
             $table->unsignedInteger('kids_warning_id')->nullable(true)->index();
+            $table->json('kids_warning_text')->nullable();
             $table->unsignedInteger('primary_size_id')->nullable(true)->index();
-            $table->unsignedInteger('tog_id')->nullable(true)->index();
             $table->unsignedInteger('wash_symbol_id')->nullable(true)->index();
             $table->unsignedInteger('bleach_symbol_id')->nullable(true)->index();
             $table->unsignedInteger('dry_symbol_id')->nullable(true)->index();

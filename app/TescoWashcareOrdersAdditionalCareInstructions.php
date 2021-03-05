@@ -10,4 +10,8 @@ class TescoWashcareOrdersAdditionalCareInstructions extends Model
         'washcare_order_id',
         'additional_care_id'
     ]; 
+
+    protected $casts = [
+        'additional_care_text' => 'json',
+    ];
 }

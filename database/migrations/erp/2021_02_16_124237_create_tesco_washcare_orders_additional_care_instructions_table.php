@@ -17,6 +17,7 @@ class CreateTescoWashcareOrdersAdditionalCareInstructionsTable extends Migration
             $table->increments('id');
             $table->unsignedBigInteger('washcare_order_id')->index();
             $table->unsignedInteger('additional_care_id')->nullable(true)->index();
+            $table->json('additional_care_text')->nullable();
             $table->timestamps();
 
             $table->foreign('washcare_order_id')->references('id')->on('tesco_washcare_orders')->onDelete('cascade');
