@@ -33,12 +33,24 @@
             <li id="2" onclick="tescoDepartment()"><a>Departments</a></li>
             <li id="3" onclick="tescoSuppliers()"><a>Customers</a></li>
             <li id="4"  onclick="tescoSizeChart()"><a>Size Chart</a></li>
+            <li id="5"  onclick="tescoSymbols()"><a>Symbols</a></li>
+            <li id="6" onclick="tescoCountries()"><a>Countries</a></li>
+            <li id="7" onclick="tescoComponents()"><a>Component</a></li>
+            <li id="8" onclick="tescoFabricList()"><a>Fabrics</a></li>
+            <li id="8" onclick="tescoKidsWarningStmt()"><a>Warning Statements</a></li>
           </ul>
         </div>
         <div class="content">
         </div>
     </div>
 
+    {{-- includes tesco form modals --}}
+    @include('Admin.Settings.includes.tesco-caresymbols')
+    @include('Admin.Settings.includes.tesco-countires')
+    @include('Admin.Settings.includes.tesco-components')
+    @include('Admin.Settings.includes.tesco-fabriclist')
+    @include('Admin.Settings.includes.tesco-warnstatement')
+    
     {{-- Add Orchestra Garments Modal --}}
     <div class="modal fade" id="addOrchestraGarmentsModal" tabindex="-1" role="dialog" aria-labelledby="orchestraGarmentsLabel">
         <div class="modal-dialog" role="document">
@@ -1966,6 +1978,7 @@
              </div>
          </div>
      </div>
+    
     @endsection @else
     <script type="text/javascript">
         window.location = "{{ url('/admin') }}";
@@ -2142,6 +2155,24 @@
         $('#orch_color_error').hide();
         $('#edit_orch_color_error').hide();
         $('.hidden-error').html('');
+        $('#add_tesco_symbols_form').trigger("reset");
+        $('#edit_tesco_symbols_form').trigger("reset");
+        $('#add-tesco-countries-form').trigger("reset");
+        $('#edit-tesco-countries-form').trigger("reset");
+        $("#country_error").addClass('hidden')
+        $("#country_update_error").addClass('hidden')
+        $('#add-tesco-components-form').trigger("reset");
+        $('#edit_tesco_components_form').trigger("reset");
+        $('#add-tesco-fabric-form').trigger("reset");
+        $('#edit-tesco-fabric-form').trigger("reset");
+        $('#add-tesco-kids-statement-form').trigger("reset");
+        $('#edit-tesco-kids-statement-form').trigger("reset");
+        $("#components_error").addClass('hidden')
+        $("#components_update_error").addClass('hidden')
+        $("#fabric_error").addClass('hidden')
+        $("#fabric_update_error").addClass('hidden')
+        $("#kids_stmt_error").addClass('hidden')
+        $("#kids_stmt_update_error").addClass('hidden')
        })
 
       /** Add orchestra garment form validation **/
@@ -2563,7 +2594,275 @@
               addOrchestraSymbols(cofreet_file, astms_file, symbol_category, care_instruction);
            }
          })
+
+
+          /** Add tesco symbols form validation **/
+          $('#add_tesco_symbols_form').validator().on('submit', function (e) {
+           if (e.isDefaultPrevented())
+           {
+
+           }
+           else
+           {
+              e.preventDefault();
+              
+              var iso_file = $(this).find("input[name='iso_symbol']")[0].files[0];
+              var astms_file = $(this).find("input[name='astms_symbol']")[0].files[0];
+              var symbol_category = $(this).find('#symbol_category option:selected').val();
+              var care_instruction = $(this).find('#care_instruction').val();
+              var care_degree = $(this).find('#care_degree').val();
+              
+              /* call addTescoSymbols function from tesco-settings.js*/
+              addTescoSymbols(iso_file, astms_file, symbol_category, care_instruction, care_degree);
+           }
+          })
+
+            /** To Enable  symbols  on click **/
+          $(document).on('click', '#enable_tesco_symbol', function(e) {
+              var id = $(this).closest('tr').attr('id');
+              
+              /* call makeTescoSymbolEnabled function from tesco-settings.js*/
+              enableTescoSymbol(id,csrf_token)
+          });
+
+          /** To Enable  symbols  on click **/
+          $(document).on('click', '#disable_tesco_symbol', function(e) {
+              var id = $(this).closest('tr').attr('id');
+              
+              /* call makeTescoSymbolEnabled function from tesco-settings.js*/
+              disableTescoSymbol(id,csrf_token)
+          });
+
+          /** Add tesco country form validation **/
+        $('#add-tesco-countries-form').validator().on('submit', function (e) {
+          if (e.isDefaultPrevented()){
+          }else{
+             e.preventDefault();
+             addTescoCountries();
+          }
+        })
+        
+        $(document).on('click','.edit-tesco-country',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           /* call getTescoCountryById function from Tesco-settings.js*/
+           getTescoCountryById(id);
+        });
+        
+        /** submit edit tesco country form **/
+       $('#edit_tesco_country_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented()){
+         }else{
+            e.preventDefault();
+            /* call editTescoCountry function from tesco-settings.js*/
+            editTescoCountry();
+         }
+       })
+
+        /** To Enable  country  on click **/
+      $(document).on('click', '#enableTescoCountry', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           
+           /* call enableTescoCountry function from tesco-settings.js*/
+           enableTescoCountry(id,csrf_token)
        });
+
+       /** To disable country  on click **/
+       $(document).on('click', '#disableTescoCountry', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           
+           /* call disableTescoCountry function from tesco-settings.js*/
+           disableTescoCountry(id,csrf_token)
+       });
+
+       /** Add orchestra composition form validation **/
+        $('#add_orchestra_composition_form').validator().on('submit', function (e) {
+          if (e.isDefaultPrevented())
+          {
+
+          }
+          else
+          {
+             e.preventDefault();
+             /* call addOrchestraComposition function from orchestra-settings.js*/
+             addOrchestraComposition();
+          }
+        })
+
+        /** get edit orchestra composition details **/
+       $(document).on('click','.edit-orchestra-composition',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           /* call getOrchestraCompositionById function from orchestra-settings.js*/
+           getOrchestraCompositionById(id);
+       });
+
+        /** submit edit orchestra composition form **/
+       $('#edit_orchestra_composition_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            /* call editOrchestraComposition function from orchestra-settings.js*/
+            editOrchestraComposition();
+         }
+       })
+       /** To Enable  composition  on click **/
+       $(document).on('click', '#make_composition_list_enabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           
+           /* call makeCompositionEnabled function from orchestra-settings.js*/
+           makeCompositionEnabled(id,csrf_token)
+       });
+
+       /** To disable composition  on click **/
+       $(document).on('click', '#make_composition_list_disabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           
+           /* call makeCompositionDisabled function from orchestra-settings.js*/
+           makeCompositionDisabled(id,csrf_token)
+       });
+
+       /** Add tesco components form validation **/
+       $('#add-tesco-components-form').validator().on('submit', function (e) {
+          if (e.isDefaultPrevented()){
+          }else{
+             e.preventDefault();
+             /* call addTescoComposition function from tesco-settings.js*/
+             addTescoComponents();
+          }
+        })
+
+        /** get edit tesco components details **/
+       $(document).on('click','.edit-tesco-components',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           /* call getTescoComponentsById function from tesco-settings.js*/
+           getTescoComponentsById(id);
+       });
+
+        /** submit edit tesco components form **/
+        $('#edit_tesco_components_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented()){
+         }else{
+            e.preventDefault();
+            /* call edittescocomponents function from tesco-settings.js*/
+            editTescoComponents();
+         }
+       })
+
+       /** To Enable tesco components  on click **/
+       $(document).on('click', '#enableTescoComponents', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           
+           /* call enableTescoComponents function from tesco-settings.js*/
+           enableTescoComponents(id,csrf_token)
+       });
+
+       /** To disable tesco components  on click **/
+       $(document).on('click', '#disableTescoComponents', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           
+           /* call disableTescocomponents function from tesco-settings.js*/
+           disableTescoComponents(id,csrf_token)
+       });
+
+
+        /** Add tesco fabric form validation **/
+        $('#add-tesco-fabric-form').validator().on('submit', function (e) {
+          if (e.isDefaultPrevented()){
+          }else{
+             e.preventDefault();
+             /* call add tesco fabric function from tesco-settings.js*/
+             addTescoFabric();
+          }
+        })
+
+      /** get edit tesco fabric details **/
+       $(document).on('click','.edit-tesco-fabric',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           /* call getTescoFabricById function from tesco-settings.js*/
+           getTescoFabricById(id);
+       });
+
+       /** submit edit tesco fabric form **/
+       $('#edit-tesco-fabric-form').validator().on('submit', function (e) {
+          if (e.isDefaultPrevented()){
+          }else{
+              e.preventDefault();
+              /* call updateTescoFabric function from tesco-settings.js*/
+              updateTescoFabric();
+          }
+       })
+
+       /** To Enable tesco Fabric  on click **/
+       $(document).on('click', '#enableTescoFabric', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           
+           /* call enableTescoFabric function from tesco-settings.js*/
+           enableTescoFabric(id,csrf_token)
+       });
+
+       /** To disable tesco components  on click **/
+       $(document).on('click', '#disableTescoFabric', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           
+           /* call disableTescocomponents function from tesco-settings.js*/
+           disableTescoFabric(id,csrf_token)
+       });
+
+       /** Add tesco kids stmt form validation **/
+       $('#add-tesco-kids-statement-form').validator().on('submit', function (e) {
+          if (e.isDefaultPrevented()){
+          }else{
+             e.preventDefault();
+             /* call add tesco fabric function from tesco-settings.js*/
+             addTescoKidsStatement();
+          }
+        })
+
+        /** get edit tesco kids stmt details **/
+       $(document).on('click','.edit-tesco-kids-stmt',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           /* call getTescokidsstmtById function from tesco-settings.js*/
+           getTescoKidsStmtById(id);
+       });
+
+      /** submit edit tesco kids stmt  form **/
+      $('#edit-tesco-kids-statement-form').validator().on('submit', function (e) {
+          if (e.isDefaultPrevented()){
+          }else{
+              e.preventDefault();
+              /* call updateTescoKidsStmt function from tesco-settings.js*/
+              updateTescoKidsStmt();
+          }
+       })
+
+      /** To Enable tesco kids stmt  on click **/
+      $(document).on('click', '#enableTescoKidsStatement', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           
+           /* call enableTescoKidsWarningStmt function from tesco-settings.js*/
+           enableTescoKidsStatement(id,csrf_token)
+       });
+
+
+       /** To disable tesco kids stmt on click **/
+       $(document).on('click', '#disableTescoKidsStatement', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           
+           /* call disableTescoKidsWarningStmt function from tesco-settings.js*/
+           disableTescoKidsStatement(id,csrf_token)
+       });
+
+
+
+    });
 
        /** Edit orchestra symbols form validation **/
        $('#edit_orchestra_symbols_form').validator().on('submit', function (e) {
