@@ -23,6 +23,7 @@ use App\TescoCountries;
 use App\TescoComponents;
 use App\TescoFabricLists;
 use App\TescoKidsWarningStatements;
+use App\TescoTranslation;
 
 class TescoSettings extends Controller
 {
@@ -1691,6 +1692,125 @@ class TescoSettings extends Controller
             return $result;
     }
 
+
+    /**
+     * tescoTranslationLists list show using ajax.
+     * @return \Illuminate\Http\Response
+     */
+    public function tescoTranslationLists(){
+      try {
+          $tesco_translationlists = DB::table('tesco_translation')->select('id', 'english','polish', 'czech', 'slovak', 'hungarian','is_enabled')->orderBy('is_enabled','desc')->get();
+          return response()->json(['error'=>'false','message' =>'success', 'tesco_translationlist' => $tesco_translationlists]);
+      }
+      catch (\Exception $e){
+          return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+    }
+
+    /**
+     * Add Tesco Translation
+     * @param \Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+     */
+    public function addTescoTranslation(Request $request){
+      try {
+          if(TescoTranslation::where('english','ilike',$request['english'])->exists()){
+              $result = response()->json(['error'=> true,'message' =>'Statement [English] Already Exists'],208);
+          }else{
+              $inserted = TescoTranslation::create([
+                      'english'   => $request['english'],
+                      'polish'    => $request['polish'],
+                      'czech'     => $request['czech'],
+                      'slovak'    => $request['slovak'],
+                      'hungarian' => $request['hungarian']
+              ]);
+              $result = $inserted != '' ? response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+          }
+
+      } catch (\Exception $e)
+      {
+          $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+      return $result;
+    }
+
+      /**
+     * Get tesco translation details by ID for editing.
+     * @param tesco translation id
+     * @return \Illuminate\Http\Response
+     */
+    public function getTescoTranslationById(Request $request){
+      try {
+            $id = $request['id'];
+            $tesco_translationlists = DB::table('tesco_translation')->select('*')->where('tesco_translation.id',$id)->get();
+            return response()->json(['error'=>'false','message' =>'success', 'tesco_translationlists' => $tesco_translationlists]);
+      }
+      catch (\Exception $e){
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+    }
+
+    /**
+    * Update tesco translation
+    * @param tesco translation id
+    * @return \Illuminate\Http\Response
+    */
+    public function updateTescoTranslationById(Request $request){
+      try {
+          $id = $request['id'];
+          if(TescoTranslation::where('english','ilike',$request['english'])->where('id','!=',$id)->exists()){
+                $result = response()->json(['error'=> true,'message' =>'Statement [English] Already Exists'],208);
+          } else {
+              $updated = TescoTranslation::where('id',$id)->update([
+                                        'english'   => $request['english'],
+                                        'polish'    => $request['polish'],
+                                        'czech'     => $request['czech'],
+                                        'slovak'    => $request['slovak'],
+                                        'hungarian' => $request['hungarian']
+                        ]);
+            $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+          }        
+      } catch (\Exception $e) {
+                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+      return $result;
+    }
+
+
+    /**
+       * Make Translation enabled
+       * @param Translation id
+       * @return boolean true or false
+       */
+      public function enableTescoTranslation(Request $request){
+        try {
+              $id = $request['id'];
+              TescoTranslation::where('id',$id)->update([
+                      'is_enabled'  => 1
+              ]);
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+        } catch (\Exception $e) {
+                  $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+    /**
+     * Make Translation disabled
+     * @return boolean true or false
+     */
+    public function disableTescoTranslation(Request $request){
+        try {
+            $id = $request['id'];
+            TescoTranslation::where('id',$id)->update([
+              'is_enabled'  => 0
+            ]);
+            $result = response()->json(['error'=> false,'message' =>'Success'],200);
+        } catch (\Exception $e) {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+            return $result;
+    }
 
 }
 

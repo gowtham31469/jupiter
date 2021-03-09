@@ -995,3 +995,11 @@ Route::get('admin/tesco/get-tesco-warn-stmt-details', 'Admin\Settings\Tesco\Tesc
 Route::put('admin/tesco/update-tesco-warn-stmt-details', 'Admin\Settings\Tesco\TescoSettings@updateTescoWarningStmtById');
 Route::put('admin/tesco/enable-tesco-warn-stmt', 'Admin\Settings\Tesco\TescoSettings@enableTescoWarningStmt');
 Route::put('admin/tesco/disable-tesco-warn-stmt', 'Admin\Settings\Tesco\TescoSettings@disableTescoWarningStmt');
+
+#Tesco Translation
+Route::post('admin/tesco/settings/get-tesco-translation-lists', 'Admin\Settings\Tesco\TescoSettings@tescoTranslationLists');
+Route::post('admin/tesco/add-tesco-translation', 'Admin\Settings\Tesco\TescoSettings@addTescoTranslation');
+Route::get('admin/tesco/get-tesco-translation-details', 'Admin\Settings\Tesco\TescoSettings@getTescoTranslationById');
+Route::put('admin/tesco/update-tesco-translation-details', 'Admin\Settings\Tesco\TescoSettings@updateTescoTranslationById');
+Route::put('admin/tesco/enable-tesco-translation', 'Admin\Settings\Tesco\TescoSettings@enableTescoTranslation');
+Route::put('admin/tesco/disable-tesco-translation', 'Admin\Settings\Tesco\TescoSettings@disableTescoTranslation');
