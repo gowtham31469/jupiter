@@ -51,7 +51,7 @@ class TescoOrders
           $po_status = $po_required == 1?"PO Pending":null;
 
           /** [ Get company id for template ] */
-          $template_data = DB::table('tesco_item_master')->select('company_id', 'item_name')->where('id','=',$template_id)->first();
+          $template_data = DB::table('tesco_item_master')->select('tesco_item_master.item_name', 'tesco_template.name_in_reports', 'tesco_item_master.company_id')->join('tesco_template', 'tesco_item_master.id', 'tesco_template.item_id')->where('tesco_item_master.id','=',$template_id)->first();
 
           //Dynamic function name and database model name for each templates
           $order_model = 'App\\'."Tesco".str_replace(" ","",$template_data->item_name)."Orders";
@@ -120,7 +120,8 @@ class TescoOrders
             'ocn_number'                => $request['ocn_no'],
             'order_status'              => $order_status_id,
             'pi_status'                 => $pi_approve_status,
-            'po_status'                 => $po_upload_status
+            'po_status'                 => $po_upload_status,
+            'name_in_reports'           => $template_data->name_in_reports
           ]);
 
           return $order_submitted;

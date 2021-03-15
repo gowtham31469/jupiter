@@ -3071,7 +3071,8 @@ class OrderManagementCntrl extends Controller
         'ocn_number'                => $newTasks->ocn_number,
         'order_status'              => 2,
         'pi_status'                 => $pi_approve_status,
-        'po_status'                 => $po_upload_status
+        'po_status'                 => $po_upload_status,
+        'name_in_reports'           => $template_level->name_in_reports
       ]);
 		    echo true;
     }
@@ -3481,7 +3482,8 @@ class OrderManagementCntrl extends Controller
         'ocn_number'                => $ocn_number,
         'order_status'              => 2,
         'pi_status'                 => $pi_approve_status,
-        'po_status'                 => $po_upload_status
+        'po_status'                 => $po_upload_status,
+        'name_in_reports'           => $template_level->name_in_reports
       ]);
 
 		    echo $data;
