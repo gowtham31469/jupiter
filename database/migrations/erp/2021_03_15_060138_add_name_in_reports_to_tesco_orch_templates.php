@@ -14,11 +14,11 @@ class AddNameInReportsToTescoOrchTemplates extends Migration
     public function up()
     {
         Schema::table('tesco_template', function (Blueprint $table) {
-            $table->string('name_in_reports')->nullable();
+            $table->integer('name_in_reports')->nullable();
         });
 
         Schema::table('orchestra_template', function (Blueprint $table) {
-            $table->string('name_in_reports')->nullable();
+            $table->integer('name_in_reports')->nullable();
         });
     }
 

@@ -27,7 +27,7 @@ class SaveTescoOrders
            $tesco_material_obj = new TescoMaterialQuery();
 
            /** [ Get company id for template ] */
-           $template_data = DB::table('tesco_item_master')->select('tesco_item_master.item_name', 'tesco_template.name_in_reports')->join('tesco_template', 'tesco_item_master.id', 'tesco_template.item_id')->where('tesco_item_master.id','=',$template_id)->first();
+           $template_data = DB::table('tesco_item_master')->select('tesco_item_master.item_name', 'reports_template_level_name.name as name_in_reports', 'tesco_item_master.company_id')->join('tesco_template', 'tesco_item_master.id', 'tesco_template.item_id')->join('reports_template_level_name', 'reports_template_level_name.id', 'tesco_template.name_in_reports')->where('tesco_item_master.id','=',$template_id)->first();
 
            //Dynamic function name and database model name for each templates
            $order_model = 'App\\'."Tesco".str_replace(" ","",$template_data->item_name)."Orders";

@@ -233,6 +233,7 @@ class TemplateController extends Controller
                                 ->select('id','material_name_employee')
                                 ->where('is_enabled','=',true)
                                 ->get();
+         $items['name_in_reports'] = DB::table("reports_template_level_name")->pluck('name', 'id');
          return json_encode($items);
     }  
 	/**
