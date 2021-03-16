@@ -608,6 +608,8 @@ function createOrders(parsedObj = false, oType = false) {
 		var template_id = localStorage.getItem("templates");
 		var zone = localStorage.getItem("zone");
 		var type = localStorage.getItem("template type");
+		$('li.year-nav-menu').addClass('hidden');
+		$('li.buyer-nav-menu').addClass('hidden');
 
 		var word = localStorage.getItem("templates").length === 1 ? 'Artwork' : 'Artworks';
 		$('.top-content').html('<div class="page-header" style="margin: 10px 0 20px;border-bottom: 2px solid #eee;"><h4><strong>Create Order For TESCO-' + zone + ' ' + localStorage.getItem("template_group") + '</strong></h4></div>');
@@ -8489,7 +8491,8 @@ function dynamicTescoSuppliers(id)
 
 function reload_back()
 {
-	
+	$('li.year-nav-menu').removeClass('hidden');
+	$('li.buyer-nav-menu').removeClass('hidden');
 	var back_flag = localStorage.getItem("back_flag");
 	if(back_flag == "view")
 	{
