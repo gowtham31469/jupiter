@@ -655,7 +655,7 @@ function parseSingleXml(data) {
         });
         singleObj.orderQuantity.size = size;
 
-    //Case Size
+    //Units Per Case
         var caseSize = [];
         $(xml).find('page[id="2"] textbox[id="20"] textline').each(function() {
             var case_size = '';

@@ -833,7 +833,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                         <th rowspan="2">Line No.</th>\
                                                         <th rowspan="2">TPND</th>\
                                                         <th rowspan="2">EAN Barcode</th>\
-                                                        <th rowspan="2">Case Size</th>\
+                                                        <th rowspan="2">Units Per Case</th>\
                                                         <th rowspan="2">Size</th>';
 						$.each(data.templates, function (i, item) {
 							html += '<th colspan="1">' + item.template_name + '</th>';
@@ -864,7 +864,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                 </td>\
                                                 <td>\
                                                     <div class="form-group has-feedback">\
-                                                        <input type="text" class="form-control input-sm uk_single_case_size" required="" onkeyup="dynamicSVGTemplates()" onkeypress="return isNumber(event)" id="uk_single_case_size_1" name="uk_single_case_size_1" placeholder="Enter Case Size" onkeyup="dynamicSVGTemplates()" maxlength="4">\
+                                                        <input type="text" class="form-control input-sm uk_single_case_size" required="" onkeyup="dynamicSVGTemplates()" onkeypress="return isNumber(event)" id="uk_single_case_size_1" name="uk_single_case_size_1" placeholder="Enter Units Per Case" onkeyup="dynamicSVGTemplates()" maxlength="4">\
                                                         <div class="help-block with-errors"></div>\
                                                     </div>\
                                                 </td>\
@@ -911,7 +911,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                         <th rowspan="2">Line No.</th>\
                                                         <th rowspan="2">ORMS TPN</th>\
 														<th rowspan="2">ITF Barcode</th>\
-                                                        <th rowspan="2">Cases Per Carton</th>';
+                                                        <th rowspan="2">No Of Pieces In Ratio</th>';
 						$.each(data.templates, function (i, item) {
 							html += '<th colspan="1">' + item.template_name + '</th>';
 						});
@@ -940,7 +940,7 @@ function createOrders(parsedObj = false, oType = false) {
 												</td>\
                                                 <td>\
                                                     <div class="form-group has-feedback">\
-                                                        <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="ce_ratio_cpc_1" name="ce_ratio_cpc_1" onkeypress="return isNumber(event)" placeholder="Enter Cases Per Carton" onkeyup="dynamicSVGTemplates()" maxlength="5">\
+                                                        <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="ce_ratio_cpc_1" name="ce_ratio_cpc_1" onkeypress="return isNumber(event)" placeholder="Enter No Of Pieces In Ratio" onkeyup="dynamicSVGTemplates()" maxlength="5">\
                                                         <div class="help-block with-errors"></div>\
                                                     </div>\
                                                 </td>';
@@ -978,7 +978,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                     <th rowspan="2">Line No.</th>\
                                                     <th rowspan="2">ORMS TPN</th>\
 													<th rowspan="2">EAN Barcode</th>\
-                                                    <th rowspan="2">Case Size</th>\
+                                                    <th rowspan="2">Units Per Case</th>\
                                                     <th rowspan="2">Size</th>';
 						$.each(data.templates, function (i, item) {
 							html += '<th colspan="1">' + item.template_name + '</th>';
@@ -1009,7 +1009,7 @@ function createOrders(parsedObj = false, oType = false) {
 												</td>\
                                                 <td>\
                                                     <div class="form-group has-feedback">\
-                                                        <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_1" name="ce_single_case_size_1" required="" placeholder="Enter Case Size" onkeyup="dynamicSVGTemplates()" maxlength="6">\
+                                                        <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_1" name="ce_single_case_size_1" required="" placeholder="Enter Units Per Case" onkeyup="dynamicSVGTemplates()" maxlength="6">\
                                                         <div class="help-block with-errors"></div>\
                                                     </div>\
                                                 </td>\
@@ -3309,7 +3309,7 @@ function addUKSingle(rem, e) {
                         </td>\
                         <td>\
                             <div class="form-group has-feedback">\
-                                <input type="text" class="form-control input-sm uk_single_case_size" required="" onkeypress="return isNumber(event)" id="uk_single_case_size_' + val + '" name="uk_single_case_size_' + val + '" required="" placeholder="Enter Case Size" maxlength="4">\
+                                <input type="text" class="form-control input-sm uk_single_case_size" required="" onkeypress="return isNumber(event)" id="uk_single_case_size_' + val + '" name="uk_single_case_size_' + val + '" required="" placeholder="Enter Units Per Case" maxlength="4">\
                                 <div class="help-block with-errors"></div>\
                             </div>\
                         </td>\
@@ -3519,7 +3519,7 @@ function addCESingle(rem, e) {
 					</td>\
                     <td>\
                         <div class="form-group has-feedback">\
-                            <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_' + val + '" name="ce_single_case_size_' + val + '" required="" placeholder="Enter Case Size" maxlength="4">\
+                            <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_' + val + '" name="ce_single_case_size_' + val + '" required="" placeholder="Enter Units Per Case" maxlength="4">\
                             <div class="help-block with-errors"></div>\
                         </div>\
                     </td>\
@@ -3593,7 +3593,7 @@ function addCERatio(rem, e) {
 					</td>\
                     <td>\
                         <div class="form-group has-feedback">\
-                            <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="ce_ratio_cpc_' + val + '" name="ce_ratio_cpc_' + val + '" onkeypress="return isNumber(event)" placeholder="Enter Cases Per Carton" maxlength="4">\
+                            <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="ce_ratio_cpc_' + val + '" name="ce_ratio_cpc_' + val + '" onkeypress="return isNumber(event)" placeholder="Enter No Of Pieces In Ratio" maxlength="4">\
                             <div class="help-block with-errors"></div>\
                         </div>\
                     </td>';
@@ -4418,7 +4418,7 @@ function dynamicSVGTemplatescard(id, item) {
 				} else {
 					svgDoc.getElementById("tpnd").innerHTML = '';
 				}
-				/** [ Dynamically change svg CE single case size ] */
+				/** [ Dynamically change svg CE single Units Per Case ] */
 				if (case_size != '') {
 					svgDoc.getElementById("unit_per_case").innerHTML = case_size;
 				} else {
@@ -4719,7 +4719,7 @@ function dynamicSVGTemplatescard(id, item) {
 				} else {
 					svgDoc.getElementById("tpnd").innerHTML = '';
 				}
-				/** [ Dynamically change svg Uk single case size ] */
+				/** [ Dynamically change svg Uk single Units Per Case ] */
 				if (case_size != '') {
 					svgDoc.getElementById("unit_per_case").innerHTML = case_size;
 				} else {
@@ -5682,7 +5682,7 @@ function storeCESingleTCL4TSL3() {
 		orms_tpn = orms_tpn.join(',');
 		qr_code = qr_code.join('|');
 
-		/** [ Create array of ce single case size ] */
+		/** [ Create array of ce single Units Per Case ] */
 		$('.ce_single_case_size').each(function (i, item) {
 			case_size[i] = $(item).val();
 
@@ -5818,7 +5818,7 @@ function storeCESingleTHL3() {
 		orms_tpn = orms_tpn.join(',');
 		qr_code = qr_code.join('|');
 
-		/** [ Create array of ce single case size ] */
+		/** [ Create array of ce single Units Per Case ] */
 		$('.ce_single_case_size').each(function (i, item) {
 			case_size[i] = $(item).val();
 
@@ -6183,7 +6183,7 @@ function storeUKSingleTCL4TSL3() {
 		});
 		ean_code = ean_code.join(',');
 
-		/** [ Create array of uk single case size ] */
+		/** [ Create array of uk single Units Per Case ] */
 		$('.uk_single_case_size').each(function (i, item) {
 			case_size[i] = $(item).val();
 
@@ -6311,7 +6311,7 @@ function storeUKSingleTHL3() {
 		});
 		ean_code = ean_code.join(',');
 
-		/** [ Create array of uk single case size ] */
+		/** [ Create array of uk single Units Per Case ] */
 		$('.uk_single_case_size').each(function (i, item) {
 			case_size[i] = $(item).val();
 
@@ -7479,7 +7479,7 @@ function saveCESingleTCL4TSL3() {
 		orms_tpn = orms_tpn.join(',');
 		qr_code = qr_code.join('|');
 
-		/** [ Create array of ce single case size ] */
+		/** [ Create array of ce single Units Per Case ] */
 		$('.ce_single_case_size').each(function (i, item) {
 			case_size[i] = $(item).val() === '' ? 0 : $(item).val();
 
@@ -7613,7 +7613,7 @@ function saveCESingleTHL3() {
 		orms_tpn = orms_tpn.join(',');
 		qr_code = qr_code.join('|');
 
-		/** [ Create array of ce single case size ] */
+		/** [ Create array of ce single Units Per Case ] */
 		$('.ce_single_case_size').each(function (i, item) {
 			case_size[i] = $(item).val() === '' ? 0 : $(item).val();
 
@@ -7972,7 +7972,7 @@ function saveUKSingleTCL4TSL3() {
 		});
 		ean_code = ean_code.join(',');
 
-		/** [ Create array of uk single case size ] */
+		/** [ Create array of uk single Units Per Case ] */
 		$('.uk_single_case_size').each(function (i, item) {
 			case_size[i] = $(item).val() === '' ? 0 : $(item).val();
 
@@ -8098,7 +8098,7 @@ function saveUKSingleTHL3() {
 		});
 		ean_code = ean_code.join(',');
 
-		/** [ Create array of uk single case size ] */
+		/** [ Create array of uk single Units Per Case ] */
 		$('.uk_single_case_size').each(function (i, item) {
 			case_size[i] = $(item).val() === '' ? 0 : $(item).val();
 
