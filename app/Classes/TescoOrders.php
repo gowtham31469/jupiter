@@ -121,7 +121,8 @@ class TescoOrders
             'order_status'              => $order_status_id,
             'pi_status'                 => $pi_approve_status,
             'po_status'                 => $po_upload_status,
-            'name_in_reports'           => $template_data->name_in_reports
+            'name_in_reports'           => $template_data->name_in_reports,
+            'order_edit_enabled'        => $edit_permission
           ]);
 
           return $order_submitted;
