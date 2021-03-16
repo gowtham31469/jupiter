@@ -2994,7 +2994,8 @@ class OrderStatusCntrl extends Controller
                 'style'                     => $request[strtolower($request['zone']).'_style'],
                 'buyer_po'                  => $request['po_number'],
                 'ocn_number'                => $request['tesco_ocn'],
-                'order_status'              => $order_status_id
+                'order_status'              => $order_status_id,
+                'order_edit_enabled'        => $edit_permission
             ]);
             
              DB::table($qty_table_name)->where($foreign_key,$template_id)->delete();
@@ -3245,10 +3246,18 @@ class OrderStatusCntrl extends Controller
        try {
            $tablename = $request->tablename;
            $rowid     = $request->rowid;
-           $data        = DB::table($tablename)->where('id',$rowid)
-                             ->update([
-                                 'edit_permission' => 1
-                               ]);            $result = response()->json(['error'=> false,'message' =>'success'],200);
+
+           DB::table($tablename)->where('id',$rowid)
+            ->update([
+                'edit_permission' => 1
+            ]);            
+
+           // update order data in order management history table 
+           OrderManagementHistory::where([['order_table_name', $tablename], ['order_table_id', $rowid]])->update([
+            'order_edit_enabled'        => 1
+            ]);
+
+           $result = response()->json(['error'=> false,'message' =>'success'],200);
        }
        catch (\Exception $e)
        {
@@ -3268,10 +3277,18 @@ class OrderStatusCntrl extends Controller
            
            $tablename = $request->tablename;
            $rowid     = $request->rowid;
-           $data    = DB::table($tablename)->where('id',$rowid)
-                             ->update([
-                                 'edit_permission' => 0
-                               ]);               $result = response()->json(['error'=> false,'message' =>'success'],200);
+
+           DB::table($tablename)->where('id',$rowid)
+                ->update([
+                    'edit_permission' => 0
+                ]);     
+
+            // update order data in order management history table 
+           OrderManagementHistory::where([['order_table_name', $tablename], ['order_table_id', $rowid]])->update([
+            'order_edit_enabled'        => 0
+            ]);
+
+           $result = response()->json(['error'=> false,'message' =>'success'],200);
                
        }
        catch (\Exception $e)

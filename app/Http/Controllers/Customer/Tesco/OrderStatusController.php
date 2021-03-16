@@ -3417,7 +3417,8 @@ class OrderStatusController extends Controller
                 'style'                     => $request[strtolower($request['zone']).'_style'],
                 'buyer_po'                  => $request['po_number'],
                 'ocn_number'                => $request['tesco_ocn'],
-                'order_status'              => $order_status_id
+                'order_status'              => $order_status_id,
+                'order_edit_enabled'        => $edit_permission
             ]);
 
             DB::table($qty_table_name)->where($foreign_key,$template_id)->delete();
