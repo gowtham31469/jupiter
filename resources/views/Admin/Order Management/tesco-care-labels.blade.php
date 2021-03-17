@@ -1,7 +1,4 @@
-@extends('layouts.Admin.app')
-@if (Auth::guard("web")->user()) 
-    @section('content')
-    <link rel="stylesheet" href="{{ asset('css/tesco-care-orders.css') }}">
+
     <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
         <h3><i class="ion-ios-browsers-outline"></i>Create Order</h3>
@@ -1157,23 +1154,3 @@
         </div>
     </div>
     </div>
-
-
-    
-    @endsection 
-@else
-	<script type="text/javascript">
-		window.location = "{{ url('/admin') }}";
-
-	</script>
-@endif 
-@section('jqueryIncludes') 
-	<script src="{{ asset('js/common/tesco-care-label-orders.js') }}"></script>
-    <!-- Financial year selection script -->
-    <script>
-        /* Show logo on left side */
-        $('.logo').html('Orders');
-	</script>
-			
-
-@endsection

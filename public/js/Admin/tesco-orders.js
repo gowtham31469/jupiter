@@ -303,25 +303,29 @@ function tescoOrders(callback) {
 										"text": "TCL 1 , TCL 2 & TSL 1 with QR",
 										"parent_id": "3",
 										"type": "ratio",
-										"zone": "CE"
+										"zone": "CE",
+										"template_type": 'tesco_carton_stickers'
 										}, {
 										"id": "28,23",
 										"text": "TCL 4 & TSL 3 with QR",
 										"parent_id": "3",
 										"type": "single",
-										"zone": "CE"
+										"zone": "CE",
+										"template_type": 'tesco_carton_stickers'
 										}, {
 										"id": "24",
 										"text": "THL 1 with QR",
 										"parent_id": "3",
 										"type": "ratio",
-										"zone": "CE"
+										"zone": "CE",
+										"template_type": 'tesco_carton_stickers'
 										}, {
 										"id": "25",
 										"text": "THL 3 with QR",
 										"parent_id": "3",
 										"type": "single",
-										"zone": "CE"
+										"zone": "CE",
+										"template_type": 'tesco_carton_stickers'
 										}]
                                     }, {
 									"id": "4",
@@ -332,25 +336,29 @@ function tescoOrders(callback) {
 										"text": "TCL 1 , TCL 2 & TSL 1",
 										"parent_id": "4",
 										"type": "ratio",
-										"zone": "UK"
+										"zone": "UK",
+										"template_type": 'tesco_carton_stickers'
                                         }, {
 										"id": "31,16",
 										"text": "TCL 4 & TSL 3",
 										"parent_id": "4",
 										"type": "single",
-										"zone": "UK"
+										"zone": "UK",
+										"template_type": 'tesco_carton_stickers'
                                         }, {
 										"id": "17",
 										"text": "THL 1",
 										"parent_id": "4",
 										"type": "ratio",
-										"zone": "UK"
+										"zone": "UK",
+										"template_type": 'tesco_carton_stickers'
                                         }, {
 										"id": "18",
 										"text": "THL 3",
 										"parent_id": "4",
 										"type": "single",
-										"zone": "UK"
+										"zone": "UK",
+										"template_type": 'tesco_carton_stickers'
                                         }]
                                     }]
                                 }]
@@ -367,20 +375,24 @@ function tescoOrders(callback) {
 									"id": "34",
 									"text": "GCL25W/M12723G",
 									"parent_id": "33",
+									"template_type": 'tesco_care_labels'
 									}, {
 									"id": "35",
 									"text": "GCL25W/M13220G",
 									"parent_id": "33",
+									"template_type": 'tesco_care_labels'
 									},
 									{
 									"id": "36",
 									"text": "GCL25W/M12723G",
 									"parent_id": "33",
+									"template_type": 'tesco_care_labels'
 									}, 
 									{
 									"id": "37",
 									"text": "GCL25W/M13220G",
 									"parent_id": "33",
+									"template_type": 'tesco_care_labels'
 									}, ]
 								}]
 							}]
@@ -423,6 +435,7 @@ function tescoOrders(callback) {
 				$('#jstree').on('activate_node.jstree', function (e, data) {
 					if (data.instance.is_leaf(data.node) != '') {
 						template_id = data.node.id;
+						template_type = data.node.original.template_type;
 						$.ajax({
 							url: base_url + "/admin/tesco/template-management/template-view",
 							type: "Post",
@@ -522,8 +535,10 @@ function tescoOrders(callback) {
 								formData.append('zone', localStorage.getItem("zone"));
 								formData.append('template_name', localStorage.getItem("template_group").replace(" with QR", ""));
 								uploadPurchaseOrder(formData, localStorage.getItem("zone"));
-							} else {
+							} else if (template_type === 'tesco_carton_stickers') {
 								createOrders();
+							} else if(template_type === 'tesco_care_labels') {
+								createTescoCareOrders();
 							}
 							
 								localStorage.setItem("back_flag","create");

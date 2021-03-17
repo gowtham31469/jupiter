@@ -994,4 +994,4 @@ Route::put('admin/tesco/enable-tesco-warn-stmt', 'Admin\Settings\Tesco\TescoSett
 Route::put('admin/tesco/disable-tesco-warn-stmt', 'Admin\Settings\Tesco\TescoSettings@disableTescoWarningStmt');
 
 # Tesco care label orders routes
-Route::get('admin/tesco/care-label-orders', 'Admin\Tesco\CareLabelOrdersController@index');
+Route::get('/admin/tesco/care-label-orders', 'Admin\Tesco\CareLabelOrdersController@index');

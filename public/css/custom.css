@@ -67,7 +67,8 @@ h3.content-heading {
 
 .input-sm {
     height: 30px;
-    padding: 5px 10px;
+    /* padding: 5px 10px; */
+    padding:5px 10px !important;
     font-size: 12px;
     border-radius: 3px;
 }
@@ -1573,4 +1574,16 @@ span.batch-additional {
 .table-btn-xs{
     font-size: 75%;
     font-weight: bold;
+}
+
+/*New CSS [custom.css]*/
+.checkbox label, .radio label {
+    font-weight: 800;
+}
+.align-items > .checkbox, .align-items > .form-group{
+  display:inline-block;
+  margin-right:40px;
+}
+.input-sm{
+  padding:5px !important;
 }

@@ -30,21 +30,13 @@ class CareLabelOrdersController extends Controller
     public function index()
     {
         try{
-            $is_allowed = $this->module->permittedModules();
-            if($is_allowed)
-            {
-                $get_main_module = $this->module->getMainModules();
-                $get_sub_module = $this->module->getSubModules(10);
-                View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
-                    return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
-                });
-                return view('Admin/Order Management/tesco-care-labels');
-            }
-            else
-            {
-                return redirect('/admin/dashboard');
-            }
-                
+            $get_main_module = $this->module->getMainModules();
+            $get_sub_module = $this->module->getSubModules(10);
+            
+            View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
+                return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
+            });
+            return View::make('Admin/Order Management/tesco-care-labels');
             
         } catch (\Exception $e)
         {
