@@ -257,18 +257,6 @@ border: 0;
     transform: translate(0, 0) scale(1);
     pointer-events: auto;
 }
-.input-fields {
- margin-bottom: 20px;
- }
- .input-fields input,
- select {
- width: 100%;
- height: 20px;
- -ms-box-sizing: content-box;
- -moz-box-sizing: content-box;
- box-sizing: content-box;
- -webkit-box-sizing: content-box;
- }
  .order-details-notes {
  font-weight: 300;
  }

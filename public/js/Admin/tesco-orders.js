@@ -538,7 +538,7 @@ function tescoOrders(callback) {
 							} else if (template_type === 'tesco_carton_stickers') {
 								createOrders();
 							} else if(template_type === 'tesco_care_labels') {
-								createTescoCareOrders();
+								renderTescoCareOrders();
 							}
 							
 								localStorage.setItem("back_flag","create");
