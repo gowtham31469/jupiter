@@ -80,8 +80,7 @@ function tescoOrderStatus() {
                 $('input[name="startdateos"]').daterangepicker({
                     "minDate": minDate,
                     "maxDate": maxDate,
-                    autoUpdateInput: false,
-                    locale: { format: 'DD/MM/YYYY' }
+                    autoUpdateInput: false
                 },
                 function (start, end, label) {
                     var start_date = start.format('YYYY-MM-DD');
