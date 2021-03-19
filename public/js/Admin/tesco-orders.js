@@ -672,21 +672,21 @@ function createOrders(parsedObj = false, oType = false) {
                                      html += '<div class="col-md-3">\
                                         <div class="form-group has-feedback">\
                                             <label for="tesco_uk_style">UK Style Ref.</label>\
-                                            <input type="text" class="form-control" name="tesco_uk_style" id="tesco_uk_style" placeholder="Enter UK Style Ref." required="" onkeyup="dynamicSVGTemplates()" maxlength="10">\
+                                            <input type="text" class="form-control" name="tesco_uk_style" id="tesco_uk_style" placeholder="Enter UK Style Ref." required="" onkeyup="dynamicSVGTemplates()" maxlength="8">\
                                             <div class="help-block with-errors"></div>\
                                         </div>\
                                     </div>\
                                     <div class="col-md-3">\
                                         <div class="form-group has-feedback">\
                                             <label for="tesco_ce_style">CE Style Ref.</label>\
-                                            <input type="text" class="form-control" name="tesco_ce_style" id="tesco_ce_style" placeholder="Enter CE Style Ref." required="" onkeyup="dynamicSVGTemplates()" maxlength="10">\
+                                            <input type="text" class="form-control" name="tesco_ce_style" id="tesco_ce_style" placeholder="Enter CE Style Ref." required="" onkeyup="dynamicSVGTemplates()" maxlength="8">\
                                             <div class="help-block with-errors"></div>\
                                         </div>\
                                     </div>\
                                     <div class="col-md-3">\
                                         <div class="form-group has-feedback">\
                                             <label for="tesco_season_code">Season Code</label>\
-                                            <input type="text" class="form-control" data-minlength="4" data-required-error="Mandatory Field." data-minlength-error="Enter 4 digits." name="tesco_season_code" id="tesco_season_code" required="" placeholder="Enter Season Code" onkeyup="dynamicSVGTemplates()" maxlength="4">\
+                                            <input type="text" class="form-control" data-required-error="Mandatory Field." name="tesco_season_code" id="tesco_season_code" required="" placeholder="Enter Season Code" onkeyup="dynamicSVGTemplates()" maxlength="6">\
                                             <div class="help-block with-errors"></div>\
                                         </div>\
                                     </div>\
@@ -701,7 +701,7 @@ function createOrders(parsedObj = false, oType = false) {
                                     <div class="col-md-3">\
                                         <div class="form-group has-feedback">\
                                             <label for="tesco_eqos">EQOS Site Code</label>\
-                                            <input type="text" class="form-control" name="tesco_eqos" id="tesco_eqos" required="" placeholder="Enter EQOS Site Code" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()" maxlength="10">\
+                                            <input type="text" class="form-control" name="tesco_eqos" id="tesco_eqos" required="" placeholder="Enter EQOS Site Code" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()" maxlength="7">\
                                             <div class="help-block with-errors"></div>\
                                         </div>\
                                     </div>\
