@@ -38,6 +38,7 @@
             <li id="7" onclick="tescoComponents()"><a>Component</a></li>
             <li id="8" onclick="tescoFabricList()"><a>Fabrics</a></li>
             <li id="8" onclick="tescoKidsWarningStmt()"><a>Warning Statements</a></li>
+            <li id="9" onclick="tescoTranslations()"><a>Translation</a></li>
           </ul>
         </div>
         <div class="content">
@@ -50,6 +51,7 @@
     @include('Admin.Settings.includes.tesco-components')
     @include('Admin.Settings.includes.tesco-fabriclist')
     @include('Admin.Settings.includes.tesco-warnstatement')
+    @include('Admin.Settings.includes.tesco-translation')
     
     {{-- Add Orchestra Garments Modal --}}
     <div class="modal fade" id="addOrchestraGarmentsModal" tabindex="-1" role="dialog" aria-labelledby="orchestraGarmentsLabel">
@@ -2173,6 +2175,11 @@
         $("#fabric_update_error").addClass('hidden')
         $("#kids_stmt_error").addClass('hidden')
         $("#kids_stmt_update_error").addClass('hidden')
+
+        $('#add-tesco-translation-form').trigger("reset");
+        $('#edit-tesco-translation-form').trigger("reset");
+        $("#translation_error").addClass('hidden')
+        $("#translation_update_error").addClass('hidden')
        })
 
       /** Add orchestra garment form validation **/
@@ -2859,6 +2866,51 @@
            /* call disableTescoKidsWarningStmt function from tesco-settings.js*/
            disableTescoKidsStatement(id,csrf_token)
        });
+
+       /** Add tesco translation form validation **/
+      $('#add-tesco-translation-form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented()){
+        }else{
+            e.preventDefault();
+            /* call add tesco translation function from tesco-settings.js*/
+            addTescoTranslation();
+        }
+      })
+
+      /** get edit tesco translation details **/
+      $(document).on('click','.edit-tesco-translations',function(e){
+          var id = $(this).closest('tr').attr('id');
+          e.preventDefault();
+          /* call getTescoTranslationById function from tesco-settings.js*/
+          getTescoTranslationById(id);
+      });
+
+      /** submit edit tesco translation  form **/
+      $('#edit-tesco-translation-form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented()){
+        }else{
+            e.preventDefault();
+            /* call updateTescoTranslation function from tesco-settings.js*/
+            updateTescoTranslation();
+        }
+      })
+
+      /** To Enable tesco translation  on click **/
+      $(document).on('click', '#enableTescoTranslation', function(e) {
+          var id = $(this).closest('tr').attr('id');
+          
+          /* call enableTescoTranslation function from tesco-settings.js*/
+          enableTescoTranslation(id,csrf_token)
+      });
+
+
+      /** To disable tesco translation on click **/
+      $(document).on('click', '#disableTescoTranslation', function(e) {
+          var id = $(this).closest('tr').attr('id');
+          
+          /* call disableTescoTranslation function from tesco-settings.js*/
+          disableTescoTranslation(id,csrf_token)
+      });
 
 
 
