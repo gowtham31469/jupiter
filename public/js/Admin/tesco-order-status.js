@@ -977,13 +977,13 @@ function submitOs(obj)
                         $("#datatable-tesco-orders_filter input").addClass('form-control input-sm');
                         $("#datatable-tesco-orders_filter input").attr('placeholder', 'Data Search');
                         $('#datatable-tesco-orders_length select').addClass('form-control input-sm');
-                        $('.datatable-tesco-orders .filters td').each( function () {
-                            if($(this).text() != "")
-                            {
-                                var title = $('.datatable-tesco-orders thead th').eq( $(this).index() ).text();
-                                $(this).html( '<input style="width:70%" type="text" placeholder="Search '+title+'" />' );
-                            }
-                        } );
+                        // $('.datatable-tesco-orders .filters td').each( function () {
+                        //     if($(this).text() != "")
+                        //     {
+                        //         var title = $('.datatable-tesco-orders thead th').eq( $(this).index() ).text();
+                        //         $(this).html( '<input style="width:70%" type="text" placeholder="Search '+title+'" />' );
+                        //     }
+                        // } );
                     }
                 });
 
@@ -1252,7 +1252,7 @@ function tescoStatusTable(data, path) {
         }
         tr += '</tr>';
     })
-    return '<table id="datatable-tesco-orders" class="table datatable-tesco-orders table-hover table-striped table-bordered" style="width: 100%"><thead><tr>' + th + '</tr></thead><thead class="filters"><tr>'+thfilter+'</tr></thead><tbody>' + tr + '</tbody></table></div></div></div></div></div></div>';
+    return '<table id="datatable-tesco-orders" class="table datatable-tesco-orders table-hover table-striped table-bordered" style="width: 100%"><thead><tr>' + th + '</tr></thead><tbody>' + tr + '</tbody></table></div></div></div></div></div></div>';
 }
 
 
