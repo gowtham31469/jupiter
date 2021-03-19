@@ -327,17 +327,17 @@
                         </div>
                         <div class="form-group has-feedback">
                             <label for="tesco_uk_style">UK Style Ref.</label>
-                            <input type="text" class="form-control" name="tesco_uk_style" id="tesco_uk_style" placeholder="Enter UK Style Ref." maxlength="10" required="" onkeyup="dynamicSVGTemplates()">
+                            <input type="text" class="form-control" name="tesco_uk_style" id="tesco_uk_style" placeholder="Enter UK Style Ref." maxlength="8" required="" onkeyup="dynamicSVGTemplates()">
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
                             <label for="tesco_ce_style">CE Style Ref.</label>
-                            <input type="text" class="form-control" name="tesco_ce_style" id="tesco_ce_style" maxlength="10" placeholder="Enter CE Style Ref." required="" onkeyup="dynamicSVGTemplates()">
+                            <input type="text" class="form-control" name="tesco_ce_style" id="tesco_ce_style" maxlength="8" placeholder="Enter CE Style Ref." required="" onkeyup="dynamicSVGTemplates()">
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
                             <label for="tesco_season_code">Season Code</label>
-                            <input type="text" class="form-control" name="tesco_season_code" id="tesco_season_code" required="" placeholder="Enter Season Code" onkeyup="dynamicSVGTemplates()" data-minlength="4" maxlength="4" data-required-error="Mandatory Field." data-minlength-error="Enter 4 digits." maxlength="4">
+                            <input type="text" class="form-control" name="tesco_season_code" id="tesco_season_code" required="" placeholder="Enter Season Code" onkeyup="dynamicSVGTemplates()" maxlength="6" data-required-error="Mandatory Field.">
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
@@ -347,7 +347,7 @@
                         </div>
                         <div class="form-group has-feedback">
                             <label for="tesco_eqos">EQOS Site Code</label>
-                            <input type="text" class="form-control" name="tesco_eqos" id="tesco_eqos" required="" placeholder="Enter EQOS Site Code" maxlength="10" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()">
+                            <input type="text" class="form-control" name="tesco_eqos" id="tesco_eqos" required="" placeholder="Enter EQOS Site Code" maxlength="7" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()">
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">

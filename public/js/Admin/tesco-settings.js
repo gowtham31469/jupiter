@@ -3846,3 +3846,348 @@ function disableTescoKidsStatement(id, csrf_token) {
       console.log("Error:" + e)
   }
 }
+
+
+/**
+ * Function to tescoTranslations List home page
+ */
+ function tescoTranslations() {
+  try {
+      $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+      $('.orchestra-sidebar').hide();
+      $('.tesco-sidebar').show();
+      
+      $.ajax({
+          url: base_url + "/admin/tesco/settings/get-tesco-translation-lists",
+          type: "POST",
+          dataType: "json",
+          data: {
+              _token: csrf_token
+          },
+          tryCount: 0,
+          retryLimit: 2,
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          success: function(data) {
+            var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>'+
+            '<div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoTranslationModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Translation </a></div></div>'+
+            '<div class="template-block"><div class="top-content"><h3 class="content-heading"> Translations </h3></div>'+
+            '<table id="tesco-translations-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead>'+
+            '<tr><th>Sl. No</th><th>English</th><th>Polish</th><th>Czech</th><th>Slovak</th><th>Hungarian</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+            $.each(data.tesco_translationlist, function(i, item) {
+              var index = i + 1;
+              tesco_metadata += '<tr id="' + item.id + '">'+
+              '<td>' + index + '</td>'+
+              '<td>' + item.english + '</td>'+
+              '<td>' + item.polish + '</td>'+
+              '<td>' + item.czech + '</td>'+
+              '<td>' + item.slovak + '</td>'+
+              '<td>' + item.hungarian + '</td>';
+              if (item.is_enabled) {
+                tesco_metadata += '<td><span class="label label-success">Enabled</span></td>';
+              } else {
+                tesco_metadata += '<td><span class="label label-danger">Disabled</span></td>';
+              }
+              if (item.is_enabled) {
+                tesco_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="disableTescoTranslation" data-placement="left"></i></a>';
+              } else {
+                tesco_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="enableTescoTranslation" data-placement="left"></i></a>';
+              }
+              tesco_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-tesco-translations filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
+            })
+            tesco_metadata += '</tbody></table></div>';
+            $('.content').html(tesco_metadata)
+            $('#tesco-translations-list-table').DataTable();
+            $('.edit-tesco-translations').tooltip('show')
+            $('.edit-tesco-translations').tooltip('toggle')
+            $('.status').tooltip('show')
+            $('.status').tooltip('toggle')
+            $("#tesco-translations-list-table_filter input").addClass('form-control input-sm');
+            $("#tesco-translations-list-table_filter input").attr('placeholder', 'Data Search');
+            $('#tesco-translations-list-table_length select').addClass('form-control input-sm');
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+/**
+ * Adds tescoTranslations
+ */
+ function addTescoTranslation() {
+  try {
+    var english = $('#translation_english').val();
+    var polish = $('#translation_polish').val();
+    var czech = $('#translation_czech').val();
+    var slovak = $('#translation_slovak').val();
+    var hungarian = $('#translation_hungarian').val();
+      
+
+    $.ajax({
+          url: base_url + "/admin/tesco/add-tesco-translation",
+          method: 'POST',
+          data: {
+            _token: csrf_token,
+            english: english,
+            polish: polish,
+            czech: czech,
+            slovak: slovak,
+            hungarian: hungarian,
+          },
+          tryCount: 0,
+          retryLimit: 2,
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          statusCode: {
+
+              /** [ Show response status based on HTTP status code ] */
+              200: function() {
+                  $('.snackbar_span').html("Translation Added Successfully");
+                  showSnackbar();
+                  $('#addTescoTranslationModal').modal('hide');
+                  tescoTranslations()
+              },
+              208: function() {
+                  $('#translation_error').removeClass('hidden');
+                  $('#translation_error').removeAttr('style');
+                  $('#translation_error').html('Translation[English] already excists.')
+                  $("#translation_error").addClass("alert alert-warning");
+              },
+              400: function() {
+                  $('.snackbar_span').html("Something went wrong!!");
+                  showSnackbar();
+              }
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              $(".loader").hide();
+          }
+    })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+
+/**
+ * Function for get tesco translation ById details for editing
+ * @param id
+ */
+ function getTescoTranslationById(id) {
+  try {
+      if (isSubmitting) {
+          return;
+      }
+      isSubmitting = true;
+      $.ajax({
+          url: base_url + "/admin/tesco/get-tesco-translation-details",
+          dataType: "json",
+          method: "get",
+          data: { id: id },
+          tryCount: 0,
+          retryLimit: 2,
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          success: function(data) {
+              isSubmitting = false;
+              $('#edit_tesco_translation_id').val(id);
+              $('#edit_translation_english').val(data.tesco_translationlists[0].english);
+              $('#edit_translation_polish').val(data.tesco_translationlists[0].polish);
+              $('#edit_translation_czech').val(data.tesco_translationlists[0].czech);
+              $('#edit_translation_slovak').val(data.tesco_translationlists[0].slovak);
+              $('#edit_translation_hungarian').val(data.tesco_translationlists[0].hungarian);
+              $('#editTescoTranslationModal').modal({
+                  backdrop: 'static',
+                  keyboard: false
+              })
+              $('#edit-tesco-translation-form').validator('validate');
+              $('#editTescoTranslationModal').modal('show');
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+/**
+ * Function for update Tesco translation
+ */
+ function updateTescoTranslation() {
+  try {
+      var id = $('#edit_tesco_translation_id').val();
+      var english = $('#edit_translation_english').val();
+      var polish = $('#edit_translation_polish').val();
+      var czech = $('#edit_translation_czech').val();
+      var slovak = $('#edit_translation_slovak').val();
+      var hungarian = $('#edit_translation_hungarian').val();
+      
+      $.ajax({
+          url: base_url + "/admin/tesco/update-tesco-translation-details",
+          dataType: "json",
+          beforeSend: function() {
+              $(".loader").show();
+              $('#translation_update_error').addClass('hidden');
+          },
+          method: "put",
+          data: { 
+            _token: csrf_token,
+            id : id,
+            english: english,
+            polish: polish,
+            czech: czech,
+            slovak: slovak,
+            hungarian: hungarian,
+          },
+          tryCount: 0,
+          retryLimit: 2,
+          statusCode: {
+
+              /** [ Show response status based on HTTP status code ] */
+              200: function() {
+                  $('.snackbar_span').html("Translation Updated Successfully");
+                  showSnackbar();
+                  $('#editTescoTranslationModal').modal('hide');
+                  tescoTranslations()
+              },
+              208: function() {
+                  $('#translation_update_error').removeClass('hidden');
+                  $('#translation_update_error').removeAttr('style');
+                  $('#translation_update_error').html('Translation [English] already excists.')
+                  $("#translation_update_error").addClass("alert alert-warning");
+              },
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+/**
+ * Makes a Kids Warning Stmt Enabled.
+ * @param id,csrf_token
+ */
+ function enableTescoTranslation(id, csrf_token) {
+  try {
+      if (isSubmitting) {
+          return;
+      }
+      isSubmitting = true;
+      $.ajax({
+          url: base_url + "/admin/tesco/enable-tesco-translation",
+          dataType: "json",
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          method: "put",
+          data: { _token: csrf_token, id: id },
+          tryCount: 0,
+          retryLimit: 2,
+          statusCode: {
+              /** [Show response status based on HTTP status code] */
+              200: function() {
+                  isSubmitting = false;
+                  $('.snackbar_span').html('Translation is enabled ');
+                  showSnackbar();
+              }
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+            tescoTranslations();
+            $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+/**
+ * Makes a Kids Warning Stmt Enabled.
+ * @param id,csrf_token
+ */
+function disableTescoTranslation(id, csrf_token) {
+  try {
+      if (isSubmitting) {
+          return;
+      }
+      isSubmitting = true;
+      $.ajax({
+          url: base_url + "/admin/tesco/disable-tesco-translation",
+          dataType: "json",
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          method: "put",
+          data: { _token: csrf_token, id: id },
+          tryCount: 0,
+          retryLimit: 2,
+          statusCode: {
+              /** [Show response status based on HTTP status code] */
+              200: function() {
+                  isSubmitting = false;
+                  $('.snackbar_span').html('Translation is disabled ');
+                  showSnackbar();
+              }
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+            tescoTranslations();
+              $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
