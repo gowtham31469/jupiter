@@ -20,5 +20,5 @@ class OrderManagementHistory extends Model
       *
       * @var array
       */
-      protected $fillable = ['buyer_id','season', 'customer_id', 'material', 'sub_material', 'style', 'reference', 'customer_po', 'buyer_po', 'ocn_number', 'order_table_name', 'order_table_id', 'order_status', 'artwork_status', 'po_status', 'pi_status'];
+      protected $fillable = ['buyer_id','season', 'customer_id', 'material', 'sub_material', 'style', 'reference', 'customer_po', 'buyer_po', 'ocn_number', 'order_table_name', 'order_table_id', 'order_status', 'artwork_status', 'po_status', 'pi_status', 'name_in_reports', 'order_edit_enabled'];
 }

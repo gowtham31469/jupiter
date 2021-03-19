@@ -298,21 +298,21 @@ function extraQuantityTesco(type,id,name,zone,po_number,liid)
 			
 			if((name == "TCL1" && zone=="CE") ||(name == "TCL2" && zone=="CE") || (name == "TSL1" && zone=="CE") || (name == "THL1" && zone=="CE"))
 			{
-				var qty="Cases Per Carton";
+				var qty="No Of Pieces In Ratio";
 				var barcode_tr="ITF Barcode";
 				var tpnd_tr="ORMS TPND";
 				var th_tr="";
 			}
 			else if((name == "TCL4" && zone=="CE") || (name == "TSL3" && zone=="CE") || (name == "THL3" && zone=="CE"))
 			{
-				var qty="Case Size";
+				var qty="Units Per Case";
 				var barcode_tr="EAN Barcode";
 				var tpnd_tr="ORMS TPND";
 				var th_tr="<th>Size</th>";
 			}
 			else if((name == "TCL4" && zone=="UK") || (name == "TSL3" && zone=="UK") || (name == "THL3" && zone=="UK"))
 			{
-				var qty="Case Size";
+				var qty="Units Per Case";
 				var barcode_tr="EAN Barcode";
 				var tpnd_tr="TPND";
 				var th_tr="<th>Size</th>";

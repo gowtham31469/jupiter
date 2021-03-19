@@ -2348,17 +2348,17 @@ function updateArtwork(obj) {
                     var moq = data.moq
 
                     if ((TemplateName == "TCL1" && zone == "CE") || (TemplateName == "TCL2" && zone == "CE") || (TemplateName == "TSL1" && zone == "CE") || (TemplateName == "THL1" && zone == "CE")) {
-                        var qty = "Cases Per Carton";
+                        var qty = "No Of Pieces In Ratio";
                         var barcode_tr = "ITF Barcode";
                         var tpnd_tr = "ORMS TPND";
                         var th_tr = "";
                     } else if ((TemplateName == "TCL4" && zone == "CE") || (TemplateName == "TSL3" && zone == "CE") || (TemplateName == "THL3" && zone == "CE")) {
-                        var qty = "Case Size";
+                        var qty = "Units Per Case";
                         var barcode_tr = "EAN Barcode";
                         var tpnd_tr = "ORMS TPND";
                         var th_tr = "<th>Size</th>";
                     } else if ((TemplateName == "TCL4" && zone == "UK") || (TemplateName == "TSL3" && zone == "UK") || (TemplateName == "THL3" && zone == "UK")) {
-                        var qty = "Case Size";
+                        var qty = "Units Per Case";
                         var barcode_tr = "EAN Barcode";
                         var tpnd_tr = "TPND";
                         var th_tr = "<th>Size</th>";
@@ -3457,19 +3457,19 @@ function addRowOs(obj, TemplateName, zone, moq) {
     $(obj).attr('data-row-id', i);
 
     if ((TemplateName == "TCL1" && zone == "CE") || (TemplateName == "TCL2" && zone == "CE") || (TemplateName == "TSL1" && zone == "CE") || (TemplateName == "THL1" && zone == "CE")) {
-        var qty = "Cases per carton";
+        var qty = "No Of Pieces In Ratio";
         var th_td = "";
         var tpn_th = "Enter ORMS TPND";
         var tpn_len = "13";
         var unit_len = "5";
     } else if ((TemplateName == "TCL4" && zone == "CE") || (TemplateName == "TSL3" && zone == "CE") || (TemplateName == "THL3" && zone == "CE")) {
-        var qty = "Case Size";
+        var qty = "Units Per Case";
         var th_td = '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" required="" id="os_single_size_' + i + '" name="os_single_size_' + i + '"  value="" placeholder="Enter Size" maxlength="9"><div class="help-block with-errors"></div></div></td>';
         var tpn_th = "Enter ORMS TPND";
         var tpn_len = "13";
         var unit_len = "6";
     } else if ((TemplateName == "TCL4" && zone == "UK") || (TemplateName == "TSL3" && zone == "UK") || (TemplateName == "THL3" && zone == "UK")) {
-        var qty = "Case Size";
+        var qty = "Units Per Case";
         var th_td = '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" required="" id="os_single_size_' + i + '" name="os_single_size_' + i + '"  value="" placeholder="Enter Size" maxlength="9"><div class="help-block with-errors"></div></div></td>';
         var tpn_th = "Enter TPND";
         var tpn_len = "9";
@@ -3937,7 +3937,7 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
                 } else {
                     svgDoc.getElementById("tpnd").innerHTML = '';
                 }
-                /** [ Dynamically change svg CE single case size ] */
+                /** [ Dynamically change svg CE single Units Per Case ] */
                 if (case_size != '') {
                     svgDoc.getElementById("unit_per_case").innerHTML = case_size;
                 } else {
@@ -4183,7 +4183,7 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
                 } else {
                     svgDoc.getElementById("tpnd").innerHTML = '';
                 }
-                /** [ Dynamically change svg Uk single case size ] */
+                /** [ Dynamically change svg Uk single Units Per Case ] */
                 if (case_size != '') {
                     svgDoc.getElementById("unit_per_case").innerHTML = case_size;
                 } else {
