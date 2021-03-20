@@ -244,6 +244,9 @@ function tescoOrderStatus() {
                 })
                 
                 $('.selectpicker').selectpicker();
+                if(document.getElementsByClassName("bs-donebutton")) {
+                    $('.bs-donebutton button').text("OK")
+                }
 
                 var d = new Date();
                 var maxDate = d.toLocaleDateString();
