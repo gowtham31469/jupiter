@@ -309,7 +309,7 @@ class PrintController extends Controller
 					}
 					else
 					{
-						$yy += 100;
+						$yy += 77;
 						$qr_y+=100;
 					}
 					$j++;
