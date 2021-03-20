@@ -679,7 +679,7 @@ function contentdocument(data,name,zone)
 								var desc_size = (description.toUpperCase()) + ' ' + datas.size_chart[0].size;
 								if(data.tesco_item_master[0].is_qrcode_required == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc1.getElementById("description").innerHTML = desc_size;
 										if(name === "THL3")
@@ -702,7 +702,7 @@ function contentdocument(data,name,zone)
 									}
 									else
 									{
-										str = oswordWrap(desc_size, 23);
+										str = oswordWrap(desc_size, 22);
 										svgDoc1.getElementById("description").innerHTML = str;
 										
 										if(name === "THL3")
@@ -735,7 +735,7 @@ function contentdocument(data,name,zone)
 								
 								if(data.tesco_item_master[0].is_qrcode_required == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc1.getElementById("description").innerHTML = desc_size;
 										if(name === "THL3")
@@ -758,7 +758,7 @@ function contentdocument(data,name,zone)
 									}
 									else
 									{
-										str = oswordWrap(desc_size, 23);
+										str = oswordWrap(desc_size, 22);
 										svgDoc1.getElementById("description").innerHTML = str;
 										
 										if(name === "THL3")
