@@ -130,21 +130,21 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
 								var str = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
 
 								
-								if (str.length > 24) {
-									if (/\S/.test(str.charAt(24))) {
+								if (str.length > 22) {
+									if (/\S/.test(str.charAt(22))) {
 										//No Space
 										if (str.indexOf(" ") == "-1") {
-											svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
-											svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+											svgDoc.getElementById("description").innerHTML = str.substr(0, 22).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = str.substr(22).toUpperCase();
 										} else {
-											svgDoc.getElementById("description").innerHTML = str.substr(0, str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
-											svgDoc.getElementById("description1").innerHTML = str.substr(str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											svgDoc.getElementById("description").innerHTML = str.substr(0, str.substr(0, 22).lastIndexOf(" ")).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = str.substr(str.substr(0, 22).lastIndexOf(" ")).toUpperCase();
 										}
 
 									} else {
 										//Space
-										svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
-										svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+										svgDoc.getElementById("description").innerHTML = str.substr(0, 22).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = str.substr(22).toUpperCase();
 									}
 									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
 								} else {
@@ -157,21 +157,21 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
 								svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
 								svgDoc.getElementById("description1").innerHTML = '';
 							} else if (description != '') {
-								if (description.length > 24) {
-									if (/\S/.test(description.charAt(24))) {
+								if (description.length > 22) {
+									if (/\S/.test(description.charAt(22))) {
 										//No Space
 										if (description.indexOf(" ") == "-1") {
-											svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
-											svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+											svgDoc.getElementById("description").innerHTML = description.substr(0, 22).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(22).toUpperCase();
 										} else {
-											svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
-											svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 22).lastIndexOf(" ")).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 22).lastIndexOf(" ")).toUpperCase();
 										}
 
 									} else {
 										//Space
-										svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
-										svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+										svgDoc.getElementById("description").innerHTML = description.substr(0, 22).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = description.substr(22).toUpperCase();
 									}
 									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
 								} else {
@@ -204,21 +204,21 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
 					/** [ Dynamically change svg short description ] */
 					if (description != '') {
 						
-							if (description.length > 24) {
-								if (/\S/.test(description.charAt(24))) {
+							if (description.length > 22) {
+								if (/\S/.test(description.charAt(22))) {
 									//No Space
 									if (description.indexOf(" ") == "-1") {
-										svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
-										svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+										svgDoc.getElementById("description").innerHTML = description.substr(0, 22).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = description.substr(22).toUpperCase();
 									} else {
-										svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
-										svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+										svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 22).lastIndexOf(" ")).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 22).lastIndexOf(" ")).toUpperCase();
 									}
 
 								} else {
 									//Space
-									svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
-									svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+									svgDoc.getElementById("description").innerHTML = description.substr(0, 22).toUpperCase();
+									svgDoc.getElementById("description1").innerHTML = description.substr(22).toUpperCase();
 								}
 								svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
 							} else {
@@ -238,21 +238,21 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
 				}
 			} else {
 				var description =val.short_description.replace(/&/g,'&#038;');
-				if (description.length > 24) {
-					if (/\S/.test(description.charAt(24))) {
+				if (description.length > 22) {
+					if (/\S/.test(description.charAt(22))) {
 						//No Space
 						if (description.indexOf(" ") == "-1") {
-							svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
-							svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+							svgDoc.getElementById("description").innerHTML = description.substr(0, 22).toUpperCase();
+							svgDoc.getElementById("description1").innerHTML = description.substr(22).toUpperCase();
 						} else {
-							svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
-							svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+							svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 22).lastIndexOf(" ")).toUpperCase();
+							svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 22).lastIndexOf(" ")).toUpperCase();
 						}
 
 					} else {
 						//Space
-						svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
-						svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+						svgDoc.getElementById("description").innerHTML = description.substr(0, 22).toUpperCase();
+						svgDoc.getElementById("description1").innerHTML = description.substr(22).toUpperCase();
 					}
 					svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
 				} else {
