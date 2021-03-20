@@ -990,14 +990,14 @@ function submitOs(obj)
                     }
                 });
 
-                tableSelection.columns().eq( 0 ).each( function ( colIdx ) {
-                    $( 'input', $('.filters td')[colIdx] ).on( 'keyup change', function () {
-                        tableSelection
-                            .column( colIdx )
-                            .search( this.value )
-                            .draw();
-                    } );
-                } );
+                // tableSelection.columns().eq( 0 ).each( function ( colIdx ) {
+                //     $( 'input', $('.filters td')[colIdx] ).on( 'keyup change', function () {
+                //         tableSelection
+                //             .column( colIdx )
+                //             .search( this.value )
+                //             .draw();
+                //     } );
+                // } );
             },
             400: function () {
                 $('.snackbar_span').html('Something went wrong');
