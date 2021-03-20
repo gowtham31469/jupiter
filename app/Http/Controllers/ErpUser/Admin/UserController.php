@@ -85,7 +85,7 @@ class UserController extends Controller
 			$data->name = $request->name;
 			$data->email = $request->email;
 			//random_bytes(8)
-			$data->password = bcrypt(12345678);
+			$data->password = bcrypt($request->password);
 			/*   Insert and get id of ErpUser   */
 			if($data->save()) {
 				/*   ErpUser - Buyer Mapping  */
