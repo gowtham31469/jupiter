@@ -128,8 +128,7 @@
 												<th>#</th>
 												<th>Style Number</th>
 												<th>Reference</th>
-												<th>OCN Number</th>
-												<th>Company</th>
+												<th>Buyer PO Number</th>
 												<th>Quantity Ordered</th>
 												<th>Quantity Delivered</th>
 												<th>Pending Quantity</th>
@@ -143,9 +142,8 @@
 												<td>{{$loop->iteration}}</td>
 												<td>{{$detail->style_no}}</td>
 												<td>{{$detail->reference_name}}</td>
-												<td>{{$detail->ocn_number}}
+												<td>{{$detail->buyer_po_number}}
 												</td>
-												<td>{{$detail->company}}</td>
 												<td>{{$detail->order_quantity}}</td>
 												<td>{{$detail->delivered_quantity}}</td>
 												<td>{{$detail->pending_orders}}</td>
