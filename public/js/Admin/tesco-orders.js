@@ -1475,7 +1475,7 @@ function printDivTesco(data, name) {
 								var desc_size = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
 								if($('#qr_flag').val() == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
 										if(name === "THL3-sticker")
@@ -1531,7 +1531,7 @@ function printDivTesco(data, name) {
 								
 								if($('#qr_flag').val() == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
 										if(name === "THL3-sticker")
@@ -1606,7 +1606,7 @@ function printDivTesco(data, name) {
 							if($('#qr_flag').val() == 1)
 							{
 								var desc_size = description.toUpperCase();
-								if(desc_size.length <= 23)
+								if(desc_size.length <= 22)
 								{
 									svgDoc.getElementById("description").innerHTML = desc_size;
 									if(name === "THL3-sticker")
@@ -1982,7 +1982,7 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 								var desc_size = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
 								if($('#qr_flag').val() == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
 										if(name === "THL3-sticker")
@@ -2038,7 +2038,7 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 								
 								if($('#qr_flag').val() == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
 										if(name === "THL3-sticker")
@@ -2113,7 +2113,7 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 							if($('#qr_flag').val() == 1)
 							{
 								var desc_size = description.toUpperCase();
-								if(desc_size.length <= 23)
+								if(desc_size.length <= 22)
 								{
 									svgDoc.getElementById("description").innerHTML = desc_size;
 									if(name === "THL3-sticker")
@@ -2608,7 +2608,7 @@ function GenerateDivTesco(data, name) {
 								var desc_size = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
 								if($('#qr_flag').val() == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
 										if(name === "THL3-sticker")
@@ -2664,7 +2664,7 @@ function GenerateDivTesco(data, name) {
 								
 								if($('#qr_flag').val() == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
 										if(name === "THL3-sticker")
@@ -2740,7 +2740,7 @@ function GenerateDivTesco(data, name) {
 							if($('#qr_flag').val() == 1)
 							{
 								var desc_size = description.toUpperCase();
-								if(desc_size.length <= 23)
+								if(desc_size.length <= 22)
 								{
 									svgDoc.getElementById("description").innerHTML = desc_size;
 									if(name === "THL3-sticker")
@@ -4465,7 +4465,7 @@ function dynamicSVGTemplatescard(id, item) {
 								var desc_size = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
 								if($('#qr_flag').val() == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
 										
@@ -4523,7 +4523,7 @@ function dynamicSVGTemplatescard(id, item) {
 								
 								if($('#qr_flag').val() == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
 										if(item.template_name === "THL 3")
@@ -4601,7 +4601,7 @@ function dynamicSVGTemplatescard(id, item) {
 						if($('#qr_flag').val() == 1)
 						{
 							var desc_size = description.toUpperCase();
-							if(desc_size.length <= 23)
+							if(desc_size.length <= 22)
 							{
 								svgDoc.getElementById("description").innerHTML = desc_size;
 								if(item.template_name === "THL 3")
