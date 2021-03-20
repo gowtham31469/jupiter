@@ -253,9 +253,12 @@ function tescoOrderStatus() {
                 // alert(minDate)
                 // alert(maxDate)
 
+                var startmoment = moment().subtract(6, 'month');
+                var endmoment = moment();
+                
                 $('input[name="startdateos"]').daterangepicker({
-                    "minDate": minDate,
-                    "maxDate": maxDate,
+                    "minDate": startmoment,
+                    "maxDate": endmoment,
                     autoUpdateInput: false,
                     locale: { format: 'DD/MM/YYYY' }
                 },
