@@ -1498,7 +1498,7 @@ function printDivTesco(data, name) {
 									}
 									else
 									{
-										str = wordWrap(desc_size, 23);
+										str = wordWrap(desc_size, 22);
 										svgDoc.getElementById("description").innerHTML = str;
 										
 										if(name === "THL3-sticker")
@@ -1554,7 +1554,7 @@ function printDivTesco(data, name) {
 									}
 									else
 									{
-										str = wordWrap(desc_size, 23);
+										str = wordWrap(desc_size, 22);
 										svgDoc.getElementById("description").innerHTML = str;
 										
 										if(name === "THL3-sticker")
@@ -1629,7 +1629,7 @@ function printDivTesco(data, name) {
 								}
 								else
 								{
-									str = wordWrap(desc_size, 23);
+									str = wordWrap(desc_size, 22);
 									svgDoc.getElementById("description").innerHTML = str;
 
 									if(name === "THL3-sticker")
@@ -2005,7 +2005,7 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 									}
 									else
 									{
-										str = wordWrap(desc_size, 23);
+										str = wordWrap(desc_size, 22);
 										svgDoc.getElementById("description").innerHTML = str;
 										
 										if(name === "THL3-sticker")
@@ -2061,7 +2061,7 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 									}
 									else
 									{
-										str = wordWrap(desc_size, 23);
+										str = wordWrap(desc_size, 22);
 										svgDoc.getElementById("description").innerHTML = str;
 										
 										if(name === "THL3-sticker")
@@ -2136,7 +2136,7 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 								}
 								else
 								{
-									str = wordWrap(desc_size, 23);
+									str = wordWrap(desc_size, 22);
 									svgDoc.getElementById("description").innerHTML = str;
 
 									if(name === "THL3-sticker")
@@ -2631,7 +2631,7 @@ function GenerateDivTesco(data, name) {
 									}
 									else
 									{
-										str = wordWrap(desc_size, 23);
+										str = wordWrap(desc_size, 22);
 										svgDoc.getElementById("description").innerHTML = str;
 										
 										if(name === "THL3-sticker")
@@ -2687,7 +2687,7 @@ function GenerateDivTesco(data, name) {
 									}
 									else
 									{
-										str = wordWrap(desc_size, 23);
+										str = wordWrap(desc_size, 22);
 										svgDoc.getElementById("description").innerHTML = str;
 										
 										if(name === "THL3-sticker")
@@ -2763,7 +2763,7 @@ function GenerateDivTesco(data, name) {
 								}
 								else
 								{
-									str = wordWrap(desc_size, 23);
+									str = wordWrap(desc_size, 22);
 									svgDoc.getElementById("description").innerHTML = str;
 
 									if(name === "THL3-sticker")
@@ -4490,7 +4490,7 @@ function dynamicSVGTemplatescard(id, item) {
 									}
 									else
 									{
-										str = wordWrap(desc_size, 23);
+										str = wordWrap(desc_size, 22);
 										svgDoc.getElementById("description").innerHTML = str;
 										if(item.template_name === "THL 3")
 										{
@@ -4546,7 +4546,7 @@ function dynamicSVGTemplatescard(id, item) {
 									}
 									else
 									{
-										str = wordWrap(desc_size, 23);
+										str = wordWrap(desc_size, 22);
 										svgDoc.getElementById("description").innerHTML = str;
 										
 										if(item.template_name === "THL 3")
@@ -4624,7 +4624,7 @@ function dynamicSVGTemplatescard(id, item) {
 							}
 							else
 							{
-								str = wordWrap(desc_size, 23);
+								str = wordWrap(desc_size, 22);
 								svgDoc.getElementById("description").innerHTML = str;
 
 								if(item.template_name === "THL 3")
