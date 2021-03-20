@@ -129,6 +129,7 @@
 												<th>Style Number</th>
 												<th>Buyer PO Number</th>
 												<th>Reference</th>
+												<th>Size</th>
 												<th>Quantity Ordered</th>
 												<th>Quantity Delivered</th>
 												<th>Pending Quantity</th>
@@ -144,6 +145,11 @@
 												<td>{{$detail->buyer_po_number}}
 												</td>
 												<td>{{$detail->reference_name}}</td>
+												@if(is_null($detail->size))
+												<td>-</td>
+												@else
+												<td>{{$detail->size}}</td>
+												@endif
 												<td>{{$detail->order_quantity}}</td>
 												<td>{{$detail->delivered_quantity}}</td>
 												<td>{{$detail->pending_orders}}</td>
