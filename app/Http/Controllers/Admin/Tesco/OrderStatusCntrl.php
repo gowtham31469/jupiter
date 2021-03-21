@@ -1089,7 +1089,7 @@ class OrderStatusCntrl extends Controller
                   else
                   {
                       PDF::RoundedRect(15, 160, 127, 80, 0, '0000');
-                      $yy += 77;
+                      $yy += 100;
                       $qr_y+=100;
                   }
                   
