@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Http\Request;
+use Session;
+use Response;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -1000,3 +1003,9 @@ Route::get('admin/tesco/get-tesco-translation-details', 'Admin\Settings\Tesco\Te
 Route::put('admin/tesco/update-tesco-translation-details', 'Admin\Settings\Tesco\TescoSettings@updateTescoTranslationById');
 Route::put('admin/tesco/enable-tesco-translation', 'Admin\Settings\Tesco\TescoSettings@enableTescoTranslation');
 Route::put('admin/tesco/disable-tesco-translation', 'Admin\Settings\Tesco\TescoSettings@disableTescoTranslation');
+
+// Update financial year in session
+Route::post('jga/set-financial-year-session', function (Request $request) {
+	Session::put('fiscal-year', $request['year']);  
+	return response()->json(['message' => 'success'], 200);
+});

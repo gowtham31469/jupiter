@@ -196,14 +196,13 @@
          */
         function showApprovedOrders()
         {
-            $fiscal_year = getCookie("fiscal-year");
             $.ajax({
                 url: base_url + "/customer/tesco/order-management/approved-orders",
                 type: "Post",
                 dataType: "json",
                 data: {
                     _token: csrf_token,
-                    fiscal_year:$fiscal_year
+                    fiscal_year:fiscal_year
                 },
                 beforeSend: function() {
 
@@ -231,14 +230,13 @@
          */
         function showPendingOrders() 
         {
-          $fiscal_year = getCookie("fiscal-year");
           $.ajax({
               url: base_url + "/customer/tesco/order-management/pending-orders",
               type: "Post",
               dataType: "json",
               data: {
                   _token: csrf_token,
-                  fiscal_year:$fiscal_year
+                  fiscal_year:fiscal_year
               },
               beforeSend: function() {
 
@@ -267,14 +265,13 @@
          */
         function showCancelledOrders() 
         {
-            $fiscal_year = getCookie("fiscal-year");
             $.ajax({
                 url: base_url + "/customer/tesco/order-management/cancelled-orders",
                 type: "Post",
                 dataType: "json",
                 data: {
                     _token: csrf_token,
-                    fiscal_year:$fiscal_year
+                    fiscal_year:fiscal_year
                 },
                 beforeSend: function() {
 
