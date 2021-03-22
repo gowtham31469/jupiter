@@ -607,7 +607,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
 							if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
 							{
 								var desc_size = description.toUpperCase();
-								if(desc_size.length <= 23)
+								if(desc_size.length <= 22)
 								{
 									svgDoc.getElementById("description").innerHTML = desc_size;
 									if(name2 === "THL3")
@@ -630,7 +630,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
 								}
 								else
 								{
-									str = wordWrap(desc_size, 23);
+									str = wordWrap(desc_size, 22);
 									svgDoc.getElementById("description").innerHTML = str;
 
 									if(name2 === "THL3")

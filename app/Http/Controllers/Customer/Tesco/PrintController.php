@@ -309,7 +309,14 @@ class PrintController extends Controller
 					}
 					else
 					{
-						$yy += 100;
+						if($name == "TCL4-sticker")
+						{
+						  $yy += 77;
+						}
+						else
+						{
+						  $yy += 100;  
+						}
 						$qr_y+=100;
 					}
 					$j++;

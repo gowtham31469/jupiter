@@ -38,6 +38,7 @@ use Intervention\Image\ImageManagerStatic as Image;
 use App\OrderManagementHistory;
 use App\Classes\TescoMaterialQuery;
 use App\FinancialYearResetDate;
+use Session;
 
 class OrderManagementCntrl extends Controller
 {
@@ -104,10 +105,16 @@ class OrderManagementCntrl extends Controller
        // format financial year date as "yyyy-dd-mm" 
        $this->financial_year_date_format = $this->year.'-'.$this->financial_year_date;
    
-       // store financial year start and end date and
-       // financial year identification
-        $this->financial_year_start = $this->financial_year_date_format;
-        $this->financial_year_end = Carbon::parse($this->financial_year_date_format)->addYear()->subDay()->toDateString();
+       	// get the current date in "dd-mm-yyyy" format
+        $this->today_date = Carbon::now('Asia/Kolkata')->format('Y-m-d');
+        
+        if($this->today_date < $this->financial_year_date_format){
+          $this->financial_year_start = Carbon::parse($this->financial_year_date_format)->subYear()->toDateString();
+          $this->financial_year_end = Carbon::parse($this->financial_year_date_format)->subDay()->toDateString();
+        } else {
+          $this->financial_year_start = $this->financial_year_date_format;
+          $this->financial_year_end = Carbon::parse($this->financial_year_date_format)->addYear()->subDay()->toDateString();
+        }
         
     }
 
@@ -1951,7 +1958,14 @@ class OrderManagementCntrl extends Controller
 					else
 					{
 						PDF::RoundedRect(15, 160, 127, 80, 0, '0000');
-						$yy += 100;
+            if($name == "TCL4-sticker")
+            {
+              $yy += 77;
+            }
+            else
+            {
+              $yy += 100;  
+            }
 						$qr_y+=100;
 					}
 					
@@ -2534,15 +2548,13 @@ class OrderManagementCntrl extends Controller
     public function reOrder(Request $request)
     {
 
-        if(!isset($_COOKIE["fiscal-year"])) {
-
-            $from_date = $this->financial_year_start;
-            $to_date = $this->financial_year_end; 
-
+        if(Session::get('fiscal-year') != null) {
+          $year = explode('-', Session::get('fiscal-year'));
+          $from_date = $year[0].'-'.$this->financial_year_date;
+          $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
         } else {
-            $year = explode('-', $_COOKIE["fiscal-year"]);
-            $from_date = $year[0].'-'.$this->financial_year_date;
-            $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+          $from_date = $this->financial_year_start;
+          $to_date =$this->financial_year_end; 
         }
         
         $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
@@ -3071,7 +3083,8 @@ class OrderManagementCntrl extends Controller
         'ocn_number'                => $newTasks->ocn_number,
         'order_status'              => 2,
         'pi_status'                 => $pi_approve_status,
-        'po_status'                 => $po_upload_status
+        'po_status'                 => $po_upload_status,
+        'name_in_reports'           => $template_level->name_in_reports
       ]);
 		    echo true;
     }
@@ -3481,7 +3494,8 @@ class OrderManagementCntrl extends Controller
         'ocn_number'                => $ocn_number,
         'order_status'              => 2,
         'pi_status'                 => $pi_approve_status,
-        'po_status'                 => $po_upload_status
+        'po_status'                 => $po_upload_status,
+        'name_in_reports'           => $template_level->name_in_reports
       ]);
 
 		    echo $data;

@@ -1657,7 +1657,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 								var desc_size = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
 								if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
 										if(name2 === "THL3")
@@ -1680,7 +1680,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 									}
 									else
 									{
-										str = oswordWrap(desc_size, 23);
+										str = oswordWrap(desc_size, 22);
 										svgDoc.getElementById("description").innerHTML = str;
 										
 										if(name2 === "THL3")
@@ -1713,7 +1713,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 								
 								if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
 										if(name2 === "THL3")
@@ -1736,7 +1736,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 									}
 									else
 									{
-										str = oswordWrap(desc_size, 23);
+										str = oswordWrap(desc_size, 22);
 										svgDoc.getElementById("description").innerHTML = str;
 										
 										if(name2 === "THL3")
@@ -1790,7 +1790,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 							if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
 							{
 								var desc_size = description.toUpperCase();
-								if(desc_size.length <= 23)
+								if(desc_size.length <= 22)
 								{
 									svgDoc.getElementById("description").innerHTML = desc_size;
 									if(name2 === "THL3")
@@ -1813,7 +1813,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 								}
 								else
 								{
-									str = wordWrap(desc_size, 23);
+									str = wordWrap(desc_size, 22);
 									svgDoc.getElementById("description").innerHTML = str;
 
 									if(name2 === "THL3")
@@ -2417,7 +2417,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 								var desc_size = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
 								if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
 										if(name2 === "THL3")
@@ -2440,7 +2440,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 									}
 									else
 									{
-										str = oswordWrap(desc_size, 23);
+										str = oswordWrap(desc_size, 22);
 										svgDoc.getElementById("description").innerHTML = str;
 										
 										if(name2 === "THL3")
@@ -2473,7 +2473,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 								
 								if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
 										if(name2 === "THL3")
@@ -2496,7 +2496,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 									}
 									else
 									{
-										str = oswordWrap(desc_size, 23);
+										str = oswordWrap(desc_size, 22);
 										svgDoc.getElementById("description").innerHTML = str;
 										
 										if(name2 === "THL3")
@@ -2549,7 +2549,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 							if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
 							{
 								var desc_size = description.toUpperCase();
-								if(desc_size.length <= 23)
+								if(desc_size.length <= 22)
 								{
 									svgDoc.getElementById("description").innerHTML = desc_size;
 									if(name2 === "THL3")
@@ -2572,7 +2572,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 								}
 								else
 								{
-									str = wordWrap(desc_size, 23);
+									str = wordWrap(desc_size, 22);
 									svgDoc.getElementById("description").innerHTML = str;
 
 									if(name2 === "THL3")

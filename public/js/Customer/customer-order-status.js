@@ -244,6 +244,9 @@ function tescoOrderStatus() {
                 })
                 
                 $('.selectpicker').selectpicker();
+                if(document.getElementsByClassName("bs-donebutton")) {
+                    $('.bs-donebutton button').text("OK")
+                }
 
                 var d = new Date();
                 var maxDate = d.toLocaleDateString();
@@ -253,9 +256,12 @@ function tescoOrderStatus() {
                 // alert(minDate)
                 // alert(maxDate)
 
+                var startmoment = moment().subtract(6, 'month');
+                var endmoment = moment();
+                
                 $('input[name="startdateos"]').daterangepicker({
-                    "minDate": minDate,
-                    "maxDate": maxDate,
+                    "minDate": startmoment,
+                    "maxDate": endmoment,
                     autoUpdateInput: false,
                     locale: { format: 'DD/MM/YYYY' }
                 },
@@ -1146,24 +1152,24 @@ function submitOs(obj)
                         $("#datatable-tesco-orders_filter input").attr('placeholder', 'Data Search');
                         $('#datatable-tesco-orders_length select').addClass('form-control input-sm');
 
-                        $('#datatable-tesco-orders .filters td').each( function () {
-                            if($(this).text() != "")
-                            {
-                                var title = $('#datatable-tesco-orders thead th').eq( $(this).index() ).text();
-                                $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
-                            }
-                        } );
+                        // $('#datatable-tesco-orders .filters td').each( function () {
+                        //     if($(this).text() != "")
+                        //     {
+                        //         var title = $('#datatable-tesco-orders thead th').eq( $(this).index() ).text();
+                        //         $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+                        //     }
+                        // } );
                     }
                 });
 
-                tableSelection.columns().eq( 0 ).each( function ( colIdx ) {
-                    $( 'input', $('.filters td')[colIdx] ).on( 'keyup change', function () {
-                        tableSelection
-                            .column( colIdx )
-                            .search( this.value )
-                            .draw();
-                    } );
-                } );
+                // tableSelection.columns().eq( 0 ).each( function ( colIdx ) {
+                //     $( 'input', $('.filters td')[colIdx] ).on( 'keyup change', function () {
+                //         tableSelection
+                //             .column( colIdx )
+                //             .search( this.value )
+                //             .draw();
+                //     } );
+                // } );
             },
             400: function () {
                 $('.snackbar_span').html('Something went wrong');
@@ -1404,7 +1410,7 @@ function tescoStatusTable(data, path) {
         }
         tr += '</tr>';
     })
-    return '<table id="datatable-tesco-orders" class="table table-hover table-striped table-bordered" style="width: 100%"><thead><tr>' + th + '</tr></thead><thead class="filters"><tr>'+thfilter+'</tr></thead><tbody>' + tr + '</tbody></table></div></div></div></div></div></div>';
+    return '<table id="datatable-tesco-orders" class="table table-hover table-striped table-bordered" style="width: 100%"><thead><tr>' + th + '</tr></thead><tbody>' + tr + '</tbody></table></div></div></div></div></div></div>';
 }
 
 
@@ -2348,17 +2354,17 @@ function updateArtwork(obj) {
                     var moq = data.moq
 
                     if ((TemplateName == "TCL1" && zone == "CE") || (TemplateName == "TCL2" && zone == "CE") || (TemplateName == "TSL1" && zone == "CE") || (TemplateName == "THL1" && zone == "CE")) {
-                        var qty = "Cases Per Carton";
+                        var qty = "No Of Pieces In Ratio";
                         var barcode_tr = "ITF Barcode";
                         var tpnd_tr = "ORMS TPND";
                         var th_tr = "";
                     } else if ((TemplateName == "TCL4" && zone == "CE") || (TemplateName == "TSL3" && zone == "CE") || (TemplateName == "THL3" && zone == "CE")) {
-                        var qty = "Case Size";
+                        var qty = "Units Per Case";
                         var barcode_tr = "EAN Barcode";
                         var tpnd_tr = "ORMS TPND";
                         var th_tr = "<th>Size</th>";
                     } else if ((TemplateName == "TCL4" && zone == "UK") || (TemplateName == "TSL3" && zone == "UK") || (TemplateName == "THL3" && zone == "UK")) {
-                        var qty = "Case Size";
+                        var qty = "Units Per Case";
                         var barcode_tr = "EAN Barcode";
                         var tpnd_tr = "TPND";
                         var th_tr = "<th>Size</th>";
@@ -3147,7 +3153,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj) {
 								var desc_size = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
 								if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
 										if(name2 === "THL3")
@@ -3170,7 +3176,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj) {
 									}
 									else
 									{
-										str = oswordWrap(desc_size, 23);
+										str = oswordWrap(desc_size, 22);
 										svgDoc.getElementById("description").innerHTML = str;
 										
 										if(name2 === "THL3")
@@ -3203,7 +3209,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj) {
 								
 								if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
 										if(name2 === "THL3")
@@ -3226,7 +3232,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj) {
 									}
 									else
 									{
-										str = oswordWrap(desc_size, 23);
+										str = oswordWrap(desc_size, 22);
 										svgDoc.getElementById("description").innerHTML = str;
 										
 										if(name2 === "THL3")
@@ -3279,7 +3285,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj) {
 							if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
 							{
 								var desc_size = description.toUpperCase();
-								if(desc_size.length <= 23)
+								if(desc_size.length <= 22)
 								{
 									svgDoc.getElementById("description").innerHTML = desc_size;
 									if(name2 === "THL3")
@@ -3302,7 +3308,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj) {
 								}
 								else
 								{
-									str = wordWrap(desc_size, 23);
+									str = wordWrap(desc_size, 22);
 									svgDoc.getElementById("description").innerHTML = str;
 
 									if(name2 === "THL3")
@@ -3457,19 +3463,19 @@ function addRowOs(obj, TemplateName, zone, moq) {
     $(obj).attr('data-row-id', i);
 
     if ((TemplateName == "TCL1" && zone == "CE") || (TemplateName == "TCL2" && zone == "CE") || (TemplateName == "TSL1" && zone == "CE") || (TemplateName == "THL1" && zone == "CE")) {
-        var qty = "Cases per carton";
+        var qty = "No Of Pieces In Ratio";
         var th_td = "";
         var tpn_th = "Enter ORMS TPND";
         var tpn_len = "13";
         var unit_len = "5";
     } else if ((TemplateName == "TCL4" && zone == "CE") || (TemplateName == "TSL3" && zone == "CE") || (TemplateName == "THL3" && zone == "CE")) {
-        var qty = "Case Size";
+        var qty = "Units Per Case";
         var th_td = '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" required="" id="os_single_size_' + i + '" name="os_single_size_' + i + '"  value="" placeholder="Enter Size" maxlength="9"><div class="help-block with-errors"></div></div></td>';
         var tpn_th = "Enter ORMS TPND";
         var tpn_len = "13";
         var unit_len = "6";
     } else if ((TemplateName == "TCL4" && zone == "UK") || (TemplateName == "TSL3" && zone == "UK") || (TemplateName == "THL3" && zone == "UK")) {
-        var qty = "Case Size";
+        var qty = "Units Per Case";
         var th_td = '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" required="" id="os_single_size_' + i + '" name="os_single_size_' + i + '"  value="" placeholder="Enter Size" maxlength="9"><div class="help-block with-errors"></div></div></td>';
         var tpn_th = "Enter TPND";
         var tpn_len = "9";
@@ -3937,7 +3943,7 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
                 } else {
                     svgDoc.getElementById("tpnd").innerHTML = '';
                 }
-                /** [ Dynamically change svg CE single case size ] */
+                /** [ Dynamically change svg CE single Units Per Case ] */
                 if (case_size != '') {
                     svgDoc.getElementById("unit_per_case").innerHTML = case_size;
                 } else {
@@ -3973,7 +3979,7 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
 								var desc_size = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
 								if($('#qr_flag').val() == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
 										if(template_name === "THL3")
@@ -3996,7 +4002,7 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
 									}
 									else
 									{
-										str = oswordWrap(desc_size, 23);
+										str = oswordWrap(desc_size, 22);
 										svgDoc.getElementById("description").innerHTML = str;
 										
 										if(template_name === "THL3")
@@ -4029,7 +4035,7 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
 								
 								if($('#qr_flag').val() == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
 										if(template_name === "THL3")
@@ -4052,7 +4058,7 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
 									}
 									else
 									{
-										str = oswordWrap(desc_size, 23);
+										str = oswordWrap(desc_size, 22);
 										svgDoc.getElementById("description").innerHTML = str;
 										
 										if(template_name === "THL3")
@@ -4183,7 +4189,7 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
                 } else {
                     svgDoc.getElementById("tpnd").innerHTML = '';
                 }
-                /** [ Dynamically change svg Uk single case size ] */
+                /** [ Dynamically change svg Uk single Units Per Case ] */
                 if (case_size != '') {
                     svgDoc.getElementById("unit_per_case").innerHTML = case_size;
                 } else {
