@@ -37,6 +37,7 @@ use Carbon\Carbon;
 use App\OrderManagementHistory;
 use App\Classes\TescoMaterialQuery;
 use App\FinancialYearResetDate;
+use Session;
 
 class ReorderController extends Controller
 {
@@ -84,10 +85,16 @@ class ReorderController extends Controller
 		// format financial year date as "yyyy-dd-mm" 
 		$this->financial_year_date_format = $this->year.'-'.$this->financial_year_date;
 
-		// store financial year start and end date and
-		// financial year identification
-		 $this->financial_year_start = $this->financial_year_date_format;
-		 $this->financial_year_end = Carbon::parse($this->financial_year_date_format)->addYear()->subDay()->toDateString();
+       	// get the current date in "dd-mm-yyyy" format
+		$this->today_date = Carbon::now('Asia/Kolkata')->format('Y-m-d');
+	
+		if($this->today_date < $this->financial_year_date_format){
+			$this->financial_year_start = Carbon::parse($this->financial_year_date_format)->subYear()->toDateString();
+			$this->financial_year_end = Carbon::parse($this->financial_year_date_format)->subDay()->toDateString();
+		} else {
+			$this->financial_year_start = $this->financial_year_date_format;
+			$this->financial_year_end = Carbon::parse($this->financial_year_date_format)->addYear()->subDay()->toDateString();
+		}
 
     }
 	
@@ -99,15 +106,13 @@ class ReorderController extends Controller
   	public function reOrder(Request $request)
     {
 
-			if(!isset($_COOKIE["fiscal-year"])) {
-
-				$from_date = $this->financial_year_start;
-				$to_date = $this->financial_year_end; 
-
+		if(Session::get('fiscal-year') != null) {
+			$year = explode('-', Session::get('fiscal-year'));
+			$from_date = $year[0].'-'.$this->financial_year_date;
+			$to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
 		} else {
-				$year = explode('-', $_COOKIE["fiscal-year"]);
-				$from_date = $year[0].'-'.$this->financial_year_date;
-				$to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+			$from_date = $this->financial_year_start;
+			$to_date =$this->financial_year_end; 
 		}
 
 		$customer_id = Auth::guard('web_customer')->id();

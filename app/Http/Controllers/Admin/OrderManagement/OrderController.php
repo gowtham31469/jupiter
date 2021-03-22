@@ -14,6 +14,7 @@ use PDF;
 use App\Classes\Dashboard;
 use Carbon\Carbon;
 use App\FinancialYearResetDate;
+use Session;
 
 class OrderController extends Controller
 {
@@ -41,11 +42,16 @@ class OrderController extends Controller
 		// format financial year date as "yyyy-dd-mm" 
 		$this->financial_year_date_format = $this->year.'-'.$this->financial_year_date;
 
-		// store financial year start and end date and
-		// financial year identification
+		// get the current date in "dd-mm-yyyy" format
+		$this->today_date = Carbon::now('Asia/Kolkata')->format('Y-m-d');
 		
-		$this->financial_year_start = $this->financial_year_date_format;
-		$this->financial_year_end = Carbon::parse($this->financial_year_date_format)->addYear()->subDay()->toDateString();
+		if($this->today_date < $this->financial_year_date_format){
+			$this->financial_year_start = Carbon::parse($this->financial_year_date_format)->subYear()->toDateString();
+			$this->financial_year_end = Carbon::parse($this->financial_year_date_format)->subDay()->toDateString();
+		} else {
+			$this->financial_year_start = $this->financial_year_date_format;
+			$this->financial_year_end = Carbon::parse($this->financial_year_date_format)->addYear()->subDay()->toDateString();
+		}
 
     }
 
@@ -74,18 +80,14 @@ class OrderController extends Controller
             $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->get();
 			$buyer_count = count($buyers);
 			
-			if(!isset($_COOKIE["fiscal-year"])) {
-
-				$from_date = $this->financial_year_start;
-				$to_date = $this->financial_year_end; 
-
-			  } else {
-				$year = explode('-', $_COOKIE["fiscal-year"]);
+			if(Session::get('fiscal-year') != null) {
+				$year = explode('-', Session::get('fiscal-year'));
 				$from_date = $year[0].'-'.$this->financial_year_date;
 				$to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
-			  }
-
-
+			} else {
+				$from_date = $this->financial_year_start;
+				$to_date =$this->financial_year_end; 
+			}
 			
 			$new_count['tcl1'] = DB::table('tesco_tcl1_orders')
 									->whereRaw('created_at > current_date - 1')

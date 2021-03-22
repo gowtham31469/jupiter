@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -1003,3 +1004,9 @@ Route::put('admin/tesco/disable-tesco-translation', 'Admin\Settings\Tesco\TescoS
 
 # Tesco care label orders routes
 Route::get('/admin/tesco/care-label-orders', 'Admin\Tesco\CareLabelOrdersController@index');
+
+// Update financial year in session
+Route::post('jga/set-financial-year-session', function (Request $request) {
+	Session::put('fiscal-year', $request['year']);  
+	return response()->json(['message' => 'success'], 200);
+});

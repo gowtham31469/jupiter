@@ -49,7 +49,6 @@ function tescoOrders(callback) {
     localStorage.removeItem("moq_values");
     
     try {
-        $fiscal_year = getCookie("fiscal-year");
         /** [ ajax call to load tesco order page ] **/
         $.ajax({
         url: base_url + "/customer/tesco/order-management/orders",
@@ -57,7 +56,7 @@ function tescoOrders(callback) {
         dataType: "json",
         data: {
             _token: csrf_token,
-            year:$fiscal_year
+            year:fiscal_year
         },
         tryCount : 0,
         retryLimit : 2,

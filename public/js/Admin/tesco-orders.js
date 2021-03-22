@@ -36,14 +36,13 @@ function tescoOrders(callback) {
 	
 	try {
 		/** [ ajax call to load tesco order page ] **/
-		$fiscal_year = getCookie("fiscal-year");
 		$.ajax({
 			url: base_url + "/admin/tesco/order-management/orders",
 			type: "Post",
 			dataType: "json",
 			data: {
 				_token: csrf_token,
-				year:$fiscal_year
+				year:fiscal_year
 			},
 			tryCount: 0,
 			retryLimit: 2,

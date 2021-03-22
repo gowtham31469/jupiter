@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="fiscal-year" content="{{ session()->get('fiscal-year') }}">
     <link rel="icon" href="">
     <title>JGA</title>
     <!-- Bootstrap core CSS -->
@@ -83,6 +84,7 @@
 <script>
     var base_url = "<?php echo  url('/') ?>";
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    var fiscal_year = $('meta[name="fiscal-year"]').attr('content');
 
      $(document).ready(function() {
     $('#send_feedback').trigger("reset");

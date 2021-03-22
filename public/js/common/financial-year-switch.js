@@ -8,7 +8,7 @@ $(document).ready (function(){
     // Populate 30 years in selectbox options
         var yearsLength = 30;
         var currentYear = new Date().getFullYear();
-        for(var i = 0; i < 30; i++){
+        for(var i = 0; i < yearsLength; i++){
             var next = currentYear+1;
             var year_text = currentYear + '-' + next.toString().slice(-2);
             var year_value = currentYear + '-' + next;
@@ -18,35 +18,20 @@ $(document).ready (function(){
         }
 
     // Make current year as selected if fiscal year not selected
-        $fiscal_year = getCookie("fiscal-year");
-        if ($fiscal_year === "") {
-            document.cookie = "fiscal-year="+$('#financialYear option:first').val()+"; path=/;";
-            $("#financialYear").val(getCookie("fiscal-year"));
-        } else {
-            $("#financialYear").val(getCookie("fiscal-year"));
-        } 
+        $("#financialYear").val(fiscal_year); 
+
         $('#financialYear').selectpicker('refresh');
         
     // [ Trigger event on selectbox change, to change fiscal year value in local storage]
         $('#financialYear').on('change', function(e){
-            document.cookie = "fiscal-year="+this.value+"; path=/;";
-            location.reload(); 
+            $.ajax({
+                url:base_url  + "/jga/set-financial-year-session",
+                dataType:"json",
+                method:'post',
+                data: { year: this.value,  _token: csrf_token },
+                success:function(data){
+                    location.reload(); 
+                }
+            })
         });
-    
-    /** Fiscal year select box end */
-
-        function getCookie(cname) {
-            var name = cname + "=";
-            var ca = document.cookie.split(';');
-            for(var i = 0; i < ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0) == ' ') {
-                c = c.substring(1);
-            }
-            if (c.indexOf(name) == 0) {
-                return c.substring(name.length, c.length);
-            }
-            }
-            return "";
-        }
  });

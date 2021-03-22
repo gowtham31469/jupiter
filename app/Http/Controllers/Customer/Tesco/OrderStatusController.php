@@ -1837,7 +1837,14 @@ class OrderStatusController extends Controller
 					else
 					{
 						PDF::RoundedRect(15, 160, 127, 80, 0, '0000');
-						$yy += 77;
+                        if($name == "TCL4-sticker")
+                        {
+                          $yy += 77;
+                        }
+                        else
+                        {
+                          $yy += 100;  
+                        }
 						$qr_y+=100;
 					}
 					
