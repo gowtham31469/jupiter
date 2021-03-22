@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Http\Request;
-use Session;
-use Response;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
