@@ -15,7 +15,6 @@ class ErpOrders
 	private $month;
 	private $financial_year_date;
 	private $today_date;
-	private $from;
 	private $financial_year_start;
 	private $financial_year_end;
 	private $financial_year;
@@ -45,10 +44,6 @@ class ErpOrders
 
 		// get the current date in "dd-mm-yyyy" format
 		$this->today_date = Carbon::now('Asia/Kolkata')->format('Y-m-d');
-
-		$this->from  = Carbon::parse($this->financial_year_date_format)
-						->startOfDay()        // 2018-09-29 00:00:00.000000
-						->toDateTimeString(); // 2018-09-29 00:00:00
 
 		// store financial year start and end date and
 		// financial year identification
@@ -115,7 +110,7 @@ class ErpOrders
 			else
 			{
 				// erp id format : "yymmxxxxx". and for old orders "ERPID-01" 
-				$erp_id = $this->erp_id_gen_obj->generateErpID($this->from, $this->current_date, $this->today_date, $this->financial_year, $this->month);
+				$erp_id = $this->erp_id_gen_obj->generateErpID($this->financial_year_start, $this->today_date, $this->financial_year, $this->month);
 
 				$erp_orders = Erp::create([
 								'buyer_id'         => $buyer_id,
@@ -319,7 +314,7 @@ class ErpOrders
 			else
 			{
 				// erp id format : "yymmxxxxx". and for old orders "ERPID-01" 
-				$erp_id = $this->erp_id_gen_obj->generateErpID($this->from, $this->current_date, $this->today_date, $this->financial_year, $this->month);
+				$erp_id = $this->erp_id_gen_obj->generateErpID($this->financial_year_start, $this->today_date, $this->financial_year, $this->month);
 
 				$erp_orders = Erp::create([
 								'buyer_id'         => $buyer_id,
