@@ -67,10 +67,10 @@
                 </div>
             </div>
             <div class="col-md-2">
-                <div class="form-group has-feedback"><label style="visibility:hidden">Dont Show</label>
+                <div class="form-group has-feedback">{!! Form::label('tesco_care_button_space', 'Dont Show', ['class' => 'form_label', 'style' => 'visibility:hidden']) !!}
                 <div class="checkbox">
                     <label>
-                    <input type="checkbox"> Include Button Sew Space
+                    {!! Form::checkbox('tesco_care_button_space',null,null,['id' => 'tesco_care_button_space']) !!} Include Button Sew Space
                     </label>
                 </div>
                 <div class="help-block with-errors"></div>
@@ -633,29 +633,6 @@
             <hr>
         </div>
         </div>
-        <div class="row">
-            <div class="col-md-6 col-xs-12">
-                <div class="alert alert-danger" role="alert">These 3 fields are required only if the size chart selected is “Baby Sleeping Bags”</div>
-            </div>
-            <div class="col-xs-12">
-                <div class="align-items">
-                <div class="checkbox">
-                    <label>
-                    <input type="checkbox"> Conforms to BS EN 16781:2018
-                    </label>
-                </div>
-                <div class="checkbox">
-                    <label>
-                    <input type="checkbox"> <img style="height:24px" src="https://ibena.de/assets/images/7/375px-Waschen_30ss-svg-5af4f91a.png">
-                    </label>
-                </div>
-                <div class="form-group form-inline">
-                    <label>TOG</label>
-                    <input type="text" class="form-control input-sm" placeholder="XXXX">
-                </div>
-                </div>
-            </div>
-        </div>
         <hr>
         <div class="row">
         <div class="col-md-12">
@@ -676,6 +653,29 @@
         </div>
         <div class="col-md-4">
         </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-xs-12">
+                <div class="alert alert-danger" role="alert">These 3 fields are required only if the size chart selected is “Baby Sleeping Bags”</div>
+            </div>
+            <div class="col-xs-12">
+                <div class="align-items">
+                <div class="checkbox">
+                    <label>
+                    <input type="checkbox"> Conforms to BS EN 16781:2018
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                    <input type="checkbox"> <img class="baby-sleep-bag-symbol" src="{{ asset('images/i symbol.png') }}" />
+                    </label>
+                </div>
+                <div class="form-group form-inline">
+                    <label>TOG</label>
+                    <input type="text" class="form-control input-sm" placeholder="XXXX">
+                </div>
+                </div>
+            </div>
         </div>
         <div class="row">
         <div class="col-md-12">
