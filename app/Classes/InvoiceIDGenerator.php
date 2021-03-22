@@ -30,10 +30,11 @@ class InvoiceIDGenerator
     private $current_date;
     private $year;
 	private $today_date;
-    private $from;
     private $financial_year_date;
     private $financial_year_date_format;
     private $financial_year;
+    private $financial_year_start;
+    private $financial_year_end;
     /**
      * Create a new controller instance.
      *
@@ -54,15 +55,15 @@ class InvoiceIDGenerator
 
 		// get the current date in "dd-mm-yyyy" format
 		$this->today_date = Carbon::now('Asia/Kolkata')->format('Y-m-d');
-
-		$this->from  = Carbon::parse($this->financial_year_date_format)
-						->startOfDay()        // 2018-09-29 00:00:00.000000
-                        ->toDateTimeString(); // 2018-09-29 00:00:00
         
         // financial year identification
-		if($this->today_date < $this->financial_year_date_format){
+        if($this->today_date < $this->financial_year_date_format){
+			$this->financial_year_start = Carbon::parse($this->financial_year_date_format)->subYear()->toDateString();
+			$this->financial_year_end = Carbon::parse($this->financial_year_date_format)->subDay()->toDateString();
 			$this->financial_year = Carbon::parse($this->financial_year_date_format)->subYear()->format('y');
 		} else {
+			$this->financial_year_start = $this->financial_year_date_format;
+			$this->financial_year_end = Carbon::parse($this->financial_year_date_format)->addYear()->subDay()->toDateString();
 			$this->financial_year = Carbon::parse($this->financial_year_date_format)->format('y');
 		}
 
@@ -77,7 +78,7 @@ class InvoiceIDGenerator
 		try
 		{	
             // Logic for resetting invoice ID format for new financial year			 
-            $max_invoice_id = Invoices::select('invoice_id')->find(Invoices::whereBetween('created_at', [$this->from, $this->current_date])->orWhereDate('created_at', '=',$this->today_date)->max('id'));
+            $max_invoice_id = Invoices::select('invoice_id')->find(Invoices::whereBetween('created_at', [$this->financial_year_start, $this->current_date])->orWhereDate('created_at', '=',$this->today_date)->max('id'));
             $invoice_id_prefix = $this->financial_year;
 
             if($max_invoice_id){

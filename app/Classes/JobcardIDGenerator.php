@@ -12,6 +12,8 @@ class JobcardIDGenerator
     private $financial_year_date;
     private $financial_year_date_format;
     private $financial_year;
+    private $financial_year_start;
+    private $financial_year_end;
 
 	/**
 	 * Create a new controller instance.
@@ -33,8 +35,12 @@ class JobcardIDGenerator
 
 		// financial year identification
 		if($this->current_date < $this->financial_year_date_format){
+			$this->financial_year_start = Carbon::parse($this->financial_year_date_format)->subYear()->toDateString();
+			$this->financial_year_end = Carbon::parse($this->financial_year_date_format)->subDay()->toDateString();
 			$this->financial_year = Carbon::parse($this->financial_year_date_format)->subYear()->format('y');
 		} else {
+			$this->financial_year_start = $this->financial_year_date_format;
+			$this->financial_year_end = Carbon::parse($this->financial_year_date_format)->addYear()->subDay()->toDateString();
 			$this->financial_year = Carbon::parse($this->financial_year_date_format)->format('y');
 		}
 
@@ -82,7 +88,7 @@ class JobcardIDGenerator
                                     $q->where('work_order_id', 'like', $item_name . '%')
                                       ->orWhere('work_order_id', 'like', 'JGA-JC-%');
                                 })
-                                ->whereBetween('created_date', [$this->financial_year_date_format, $this->current_date])
+                                ->whereBetween('created_date', [$this->financial_year_start, $this->current_date])
                                 ->max('id'));
 
             if($max_workorder_id){
