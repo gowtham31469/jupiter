@@ -45,6 +45,12 @@
 		-moz-appearance: textfield;
 	}
 </style>
+{{-- Hidden div for svg rendering --}}
+<div id="modaldiv">
+	<div id="svgdiv" style="position:absolute;visibility:hidden">\
+	 <svg id="ean-13"></svg>\
+   </div>
+</div>
 <div class="col-sm-12 col-md-12 main">
   
 
@@ -241,7 +247,7 @@
                     <div id="uvc_select_div">
                     </div>
                     <div id="exist_artwork_div_status" class="hidden">
-                        <h4>Artworks : </h4>
+                        <h4>Artworks :  <span style="display: inline-block;margin-left: 100px;" class="tab"></span> Buyer PO No :<span style="display: inline-block;margin-left: 100px;" class="tab"></span> Cust PO No :</h4>
                         <label style='color:red' id='check_error_status' class='hidden'>Please select atleast one artwork</label>
                         <ul class="list-group checked-list-box">
                         </ul>
@@ -283,6 +289,34 @@
             </div>
         </div>
     </div>
+
+
+    <div class="modal fade" id="approve-upload-group" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="gridSystemModalLabel">Approve Artwork</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="uvc_approve_select_div">
+                    </div>
+                    <div id="exist_artwork_approve_div_status" class="hidden">
+                        <h4>Artworks : <span style="display: inline-block;margin-left: 100px;" class="tab"></span> Buyer PO No :</h4>
+                        <label style='color:red' id='check_approve_error_status' class='hidden'>Please select atleast one artwork</label>
+                        <ul class="list-group checked-list-box">
+                        </ul>
+                        <hr/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+                    <button type="button" id="approve_button" class="btn btn-primary hidden">Approve Artwork</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="left-panel col-md-12" style="display: none;">
         <div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
         <div class="div-max">          
@@ -303,17 +337,17 @@
                 </div>
                 <div class="form-group has-feedback">
                     <label for="tesco_uk_style">UK Style Ref.</label>
-                    <input type="text" class="form-control" name="tesco_uk_style" id="tesco_uk_style" placeholder="Enter UK Style Ref." maxlength="10" required="" onkeyup="dynamicSVGTemplates()">
+                    <input type="text" class="form-control" name="tesco_uk_style" id="tesco_uk_style" placeholder="Enter UK Style Ref." maxlength="8" required="" onkeyup="dynamicSVGTemplates()">
                     <div class="help-block with-errors"></div>
                 </div>
                 <div class="form-group has-feedback">
                     <label for="tesco_ce_style">CE Style Ref.</label>
-                    <input type="text" class="form-control" name="tesco_ce_style" id="tesco_ce_style" maxlength="10" placeholder="Enter CE Style Ref." required="" onkeyup="dynamicSVGTemplates()">
+                    <input type="text" class="form-control" name="tesco_ce_style" id="tesco_ce_style" maxlength="8" placeholder="Enter CE Style Ref." required="" onkeyup="dynamicSVGTemplates()">
                     <div class="help-block with-errors"></div>
                 </div>
                 <div class="form-group has-feedback">
                     <label for="tesco_season_code">Season Code</label>
-                    <input type="text" class="form-control" name="tesco_season_code" id="tesco_season_code" required="" placeholder="Enter Season Code" onkeyup="dynamicSVGTemplates()" data-required-error="Mandatory Field.">
+                    <input type="text" class="form-control" name="tesco_season_code" id="tesco_season_code" required="" placeholder="Enter Season Code" onkeyup="dynamicSVGTemplates()" maxlength="6" data-required-error="Mandatory Field.">
                     <div class="help-block with-errors"></div>
                 </div>
                 <div class="form-group has-feedback">
@@ -323,7 +357,7 @@
                 </div>
                 <div class="form-group has-feedback">
                     <label for="tesco_eqos">EQOS Site Code</label>
-                    <input type="text" class="form-control" name="tesco_eqos" id="tesco_eqos" required="" placeholder="Enter EQOS Site Code" maxlength="10" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()">
+                    <input type="text" class="form-control" name="tesco_eqos" id="tesco_eqos" required="" placeholder="Enter EQOS Site Code" maxlength="7" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()">
                     <div class="help-block with-errors"></div>
                 </div>
                 <div class="form-group has-feedback">
@@ -390,8 +424,6 @@
             </div>
             <div class="col-md-8">
             <div class="scroll" style="height: calc(100vh - 40px);">
-               <!--  <span class="pull-right" style="cursor:pointer">Enlarge</span>
-                <h4 class="text-center osartwork">Artwork</h4>  -->
                 <p class="enlarge-btn"></p>
                 
                 <h4 class="text-center osartwork" style="padding-left: 164px;">Artwork</h4> 
@@ -418,138 +450,6 @@
         </div> 
     </div>
 
-   <!-- <div class="left-panelorc col-md-12" style="display: none;">
-        <div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
-        <div class="div-max">          
-			<form method="POST" id="create_tesco_order_status_form" data-toggle="validator" role="form" novalidate="true">
-				<div class="col-md-4">
-            <h4 class="text-center osorderdetails">Order Details</h4>
-            <div class="scroll" style="height: calc(100vh - 80px);">
-				
-				<input type="hidden" id="edit_template_name">
-				<input type="hidden" id="edit_zone">
-				<input type="hidden" id="edit_template_type">
-				<input type="hidden" id="edit_id">
-				<input type="hidden" id="order_type">
-				<div class="form-group has-feedback">
-                    <label for="tesco_uk_style">PO Number.</label>
-                    <input type="text" maxlength="9" class="form-control" name="tesco_po_number" id="tesco_po_number" required="" onkeyup="dynamicSVGTemplates()">
-                    <div class="help-block with-errors"></div>
-                </div>
-                <div class="form-group has-feedback">
-                    <label for="tesco_uk_style">UK Style Ref.</label>
-                    <input type="text" class="form-control" name="tesco_uk_style" id="tesco_uk_style" placeholder="Enter UK Style Ref." maxlength="10" required="" onkeyup="dynamicSVGTemplates()">
-                    <div class="help-block with-errors"></div>
-                </div>
-                <div class="form-group has-feedback">
-                    <label for="tesco_ce_style">CE Style Ref.</label>
-                    <input type="text" class="form-control" name="tesco_ce_style" id="tesco_ce_style" maxlength="10" placeholder="Enter CE Style Ref." required="" onkeyup="dynamicSVGTemplates()">
-                    <div class="help-block with-errors"></div>
-                </div>
-                <div class="form-group has-feedback">
-                    <label for="tesco_season_code">Season Code</label>
-                    <input type="text" class="form-control" name="tesco_season_code" id="tesco_season_code" required="" placeholder="Enter Season Code" onkeyup="dynamicSVGTemplates()" data-minlength="4" maxlength="4" data-required-error="Mandatory Field." data-minlength-error="Enter 4 digits."  maxlength="4">
-                    <div class="help-block with-errors"></div>
-                </div>
-                <div class="form-group has-feedback">
-                    <label for="tesco_description">Short Description</label>
-                    <input type="text" class="form-control" name="tesco_description" id="tesco_description" required="" placeholder="Enter Description" maxlength="45" onkeyup="dynamicSVGTemplates()">
-                    <div class="help-block with-errors"></div>
-                </div>
-                <div class="form-group has-feedback">
-                    <label for="tesco_eqos">EQOS Site Code</label>
-                    <input type="text" class="form-control" name="tesco_eqos" id="tesco_eqos" required="" placeholder="Enter EQOS Site Code" maxlength="10" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()">
-                    <div class="help-block with-errors"></div>
-                </div>
-                <div class="form-group has-feedback">
-                    <label for="tesco_manufacture_date">Manufactured Date</label>
-                    <div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1">
-                        <input value="" id="tesco_manufacture_date" name="tesco_manufacture_date" type="text" class="form-control" required="" placeholder="Select Manufactured Date" onchange="dynamicSVGTemplates()">
-                        <div class="input-group-addon">
-                            <span class="glyphicon glyphicon-th"> </span > 
-                        </div > 
-                    </div >
-                    <div class="help-block with-errors"></div>
-                </div>
-                <div class="form-group has-feedback">
-                    <label for="tesco_department">Department</label>
-                    <select class="selectpicker"  data-live-search="true" id="tesco_department" name="tesco_department" required="" onchange="dynamicSVGTemplates()">
-                        <option selected value="">Select Department</option>
-                        @foreach($tesco_department as $dept)
-                            <option title="{{$dept->department}}" value="{{$dept->id}}">{{$dept->department}}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="form-group has-feedback">
-                    <label for="tesco_brand">Brand</label> 
-                    <select class="selectpicker" data-live-search="true" id="tesco_brand" name="tesco_brand" onchange="dynamicSVGTemplates()" required="">
-                        <option value="">Select Brand</option>
-                        @foreach($tesco_brand as $brand)
-                            <option title="{{$brand->brand}}" value="{{$brand->id}}">{{$brand->brand}}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="form-group has-feedback">
-                    <label for="tesco_supplier">Customer</label> 
-                    <select class="selectpicker" data-live-search="true" id="tesco_supplier" name="tesco_supplier" required="" onchange="dynamicSVGTemplates()">
-                        <option value="">Select Customer</option> @foreach($tesco_suppliers as $suppliers)
-                            <option title="{{$suppliers->supplier_name}}" value="{{$suppliers->id}}">{{$suppliers->supplier_name}}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="form-group has-feedback">
-                    <label for="tesco_ocn">OCN Code</label>
-                    <input type="text" class="form-control" name="tesco_ocn" id="tesco_ocn" required="" placeholder="Enter OCN Code">
-                    <div class="help-block with-errors"></div>
-                </div>
-                <div class="form-group has-feedback">
-                    <label for="tesco_rfid">RFID Compliant</label> 
-                    <select class="selectpicker" id="tesco_rfid" name="tesco_rfid" required="" onchange="dynamicSVGTemplates()">
-                        <option value="">Select RFID Compliant</option>
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option> 
-                    </select>
-                </div>
-                <div class="form-group has-feedback">
-                    <label for="tesco_tag_at_source">Tag At Source</label> 
-                    <select class="selectpicker" id="tesco_tag_at_source" name="tesco_tag_at_source" required="" onchange="dynamicSVGTemplates()">
-                        <option value="">Select Tag At Source</option>
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option> 
-                    </select>
-                </div>
-            </div>
-            </div>
-            <div class="col-md-8">
-            <div class="scroll" style="height: calc(100vh - 40px);">
-                <p class="enlarge-btn"></p>
-                
-                <h4 class="text-center osartwork" style="padding-left: 164px;">Artwork</h4> 
-
-                <div class="row">
-                    <div class=" col-md-6 col-md-offset-3 artwork_tesco">
-                    </div>
-                    <div class="preview"></div>
-                    <div class="col-md-12">
-                        <div class="edit-qty-table-div"></div>
-    					<div class="osfooter">
-    					
-    					</div>
-                    </div>
-                </div>
-                </div>
-            </div>
-            </form>
-            <div class="loader">
-                <div class=" fa-3x">
-                    <i class="fa fa-spinner fa-pulse"></i>
-                </div>
-            </div>
-        </div> 
-    </div>-->
     {{-- Show snackbar html code --}}
 <div id="snackbar"><span class="snackbar_span"></span></div>
 <!-- Buyer selection Modal -->
@@ -589,6 +489,39 @@
             </div>
         </div>
     </div>
+
+<!-- Tesco Artwork Approve Modal -->
+<div class="modal fade" id="approveTescoArtworkModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Approve Artwork</h4>
+            </div>
+                <div class="modal-body">
+                        <input type="hidden" value="" id="ts_table_id">
+                        <input type="hidden" value="" id="ts_table_name">
+                        <p>Are you sure, you want to  approve this artwork ?</p>
+                </div>
+                <div class="modal-footer">
+                    {!! Form::button('No', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                    {!! Form::button('Yes', ['class' => 'btn btn-primary btn-sm', 'id' => 'approve_tesco_artwork_btn','onclick' => 'approveTescoArtwork()'] ) !!}
+                </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tesco Saved order alertbox -->
+<div class="modal fade" id="savedOrderAlertBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <p>Please SUBMIT your order at the Create Order Page.</p>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection @else
 <script type="text/javascript">
     window.location = "{{ url('/admin') }}";
@@ -773,7 +706,13 @@
                 $('#snackbar').css('background-color','#00b6ff');
                 $('.snackbar_span').html('Purchase Order File Uploaded Successfully');
                 showSnackbar();
-                window.location = "{{ url('/admin/order-management/order-status') }}";
+                //window.location = "{{ url('/admin/order-management/order-status') }}";
+                if(response.po_status == "PO Uploaded")
+                {
+                    $('#'+tab_nm+'_'+row_id).find('.po_status a span').text("PO Uploaded")
+                    $('#'+tab_nm+'_'+row_id).find('.po_status a span').removeClass("label-POPending")
+                    $('#'+tab_nm+'_'+row_id).find('.po_status a span').addClass("label-POUploaded")
+                }
             });
             this.on("error", function(file, response) {
                 this.removeFile(file);

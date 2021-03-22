@@ -39,6 +39,11 @@ class OrdersStatusTableSeeder extends Seeder
 				'status_name' => 'Buyer Approval Pending',
           		'status_desc' => 'Order Approval Pending.'
 			]);
+			\App\OrdersStatus::create([
+				'id' =>6,
+				'status_name' => 'Order Pending',
+				'status_desc' => 'Order quantity is 0.'
+		   ]);
 		}
     }
 }

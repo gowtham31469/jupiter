@@ -32,7 +32,7 @@ function reOrderTesco() {
 				return 0;
 			});
 			for (i = 0; i < newObj1.length; i++) {
-				if (newObj1[i].is_order_count_empty == 0) {
+				//if (newObj1[i].is_order_count_empty == 0) {
 					if (newObj1[i].zone == "CE") {
 						if (uniqueNames.indexOf(newObj1[i].ce_style_ref) === -1) {
 							uniqueNames.push(newObj1[i].ce_style_ref);
@@ -42,7 +42,7 @@ function reOrderTesco() {
 							uniqueNames.push(newObj1[i].uk_style_ref);
 						}
 					}
-				}
+				//}
 			}
 			var options = "<option>Select Style Number</option>";
 			for (i = 0; i < uniqueNames.length; i++) {
@@ -62,7 +62,7 @@ function reOrderTesco() {
 				return 0;
 			});
 			for (i = 0; i < newObjrepeatOrder1.length; i++) {
-				if (newObjrepeatOrder1[i].is_order_count_empty == 0) {
+				//if (newObjrepeatOrder1[i].is_order_count_empty == 0) {
 					if (newObjrepeatOrder1[i].zone == "CE") {
 						if (uniqueNamesRepeatOrder.indexOf(newObjrepeatOrder1[i].ce_style_ref) === -1) {
 							uniqueNamesRepeatOrder.push(newObjrepeatOrder1[i].ce_style_ref);
@@ -72,7 +72,7 @@ function reOrderTesco() {
 							uniqueNamesRepeatOrder.push(newObjrepeatOrder1[i].uk_style_ref);
 						}
 					}
-				}
+				//}
 
 			}
 			var optionsRepeatOrder = "<option>Select Style Number</option>";
@@ -136,7 +136,7 @@ function reordertescoartworks() {
 				var i = 1;
 				$(newObj).each(function (key, index) {
 
-					if (index.is_order_count_empty == 0) {
+					//if (index.is_order_count_empty == 0) {
 						if (index.zone == "CE") {
 							var span = '<span class="label labels">' + index.zone + '</span><span id="list-li-reorder' + i + '"></span>';
 							if (index.ce_style_ref == uvc) {
@@ -152,7 +152,7 @@ function reordertescoartworks() {
 						}
 						i++;
 
-					}
+					//}
 
 				})
 
@@ -203,7 +203,7 @@ function repeatordertescoartworks() {
 
 				var i = 1;
 				$(newObj).each(function (key, index) {
-					if (index.is_order_count_empty == 0) {
+					//if (index.is_order_count_empty == 0) {
 						if (index.zone == "CE") {
 							var span = '<span class="label labels">' + index.zone + '</span><span id="list-li-repeatorder' + i + '">';
 							if (index.ce_style_ref == uvc) {
@@ -218,7 +218,7 @@ function repeatordertescoartworks() {
 							}
 						}
 						i++;
-					}
+					//}
 
 				})
 
@@ -264,17 +264,17 @@ function extraQuantityTesco(type, id, name, zone, po_number, liid) {
 		success: function (data) {
 
 			if ((name == "TCL1" && zone == "CE") || (name == "TCL2" && zone == "CE") || (name == "TSL1" && zone == "CE") || (name == "THL1" && zone == "CE")) {
-				var qty = "Cases Per Carton";
+				var qty = "No Of Pieces In Ratio";
 				var barcode_tr = "ITF Barcode";
 				var tpnd_tr = "ORMS TPND";
 				var th_tr = "";
 			} else if ((name == "TCL4" && zone == "CE") || (name == "TSL3" && zone == "CE") || (name == "THL3" && zone == "CE")) {
-				var qty = "Case Size";
+				var qty = "Units Per Case";
 				var barcode_tr = "EAN Barcode";
 				var tpnd_tr = "ORMS TPND";
 				var th_tr = "<th>Size</th>";
 			} else if ((name == "TCL4" && zone == "UK") || (name == "TSL3" && zone == "UK") || (name == "THL3" && zone == "UK")) {
-				var qty = "Case Size";
+				var qty = "Units Per Case";
 				var barcode_tr = "EAN Barcode";
 				var tpnd_tr = "TPND";
 				var th_tr = "<th>Size</th>";
@@ -599,7 +599,7 @@ function contentdocument(data, name, zone) {
 								var desc_size = (description.toUpperCase()) + ' ' + datas.size_chart[0].size;
 								if(data.tesco_item_master[0].is_qrcode_required == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc1.getElementById("description").innerHTML = desc_size;
 										if(name === "THL3")
@@ -622,7 +622,7 @@ function contentdocument(data, name, zone) {
 									}
 									else
 									{
-										str = oswordWrap(desc_size, 23);
+										str = oswordWrap(desc_size, 22);
 										svgDoc1.getElementById("description").innerHTML = str;
 										
 										if(name === "THL3")
@@ -655,7 +655,7 @@ function contentdocument(data, name, zone) {
 								
 								if(data.tesco_item_master[0].is_qrcode_required == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc1.getElementById("description").innerHTML = desc_size;
 										if(name === "THL3")
@@ -678,7 +678,7 @@ function contentdocument(data, name, zone) {
 									}
 									else
 									{
-										str = oswordWrap(desc_size, 23);
+										str = oswordWrap(desc_size, 22);
 										svgDoc1.getElementById("description").innerHTML = str;
 										
 										if(name === "THL3")

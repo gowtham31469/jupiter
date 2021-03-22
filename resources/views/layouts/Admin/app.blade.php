@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="fiscal-year" content="{{ session()->get('fiscal-year') }}">
     <link rel="icon" href="">
     <title>JGA</title>
     <!-- Bootstrap core CSS -->
@@ -33,10 +34,11 @@
     
     <div class="container-fluid">
         <div class="row">
-        @if (Auth::guard("web")->user()) @include('layouts.Admin.navbar')
+        @if (Auth::guard("web")->user())
+        @include('layouts.Admin.navbar')
         @elseif(!Auth::guest())
             <script type="text/javascript">
-       customer         window.location = "{{ url('/admin/login') }}";
+                 window.location = "{{ url('/admin/login') }}";
             </script>
         @endif
         @yield('content')
@@ -84,6 +86,7 @@
 <script>
     var base_url = "<?php echo  url('/') ?>";
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    var fiscal_year = $('meta[name="fiscal-year"]').attr('content');
 
      $(document).ready(function() {
     $('#send_feedback').trigger("reset");

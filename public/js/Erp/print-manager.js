@@ -1415,6 +1415,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 	} else {
 		var svgarr = [];
 		var qr_code_arr = [];
+		var qr_code_check_arr = [];
 		var ajax_count = 0;
 		var name_count=0;
 		var b = " ";
@@ -1581,7 +1582,8 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 							if (ajax_count == generate_data.order_details.length) {
 								var svg_fin = svgarr.join(',_');
 								var qr_code_fin = qr_code_arr.join(',_');
-								PopupTescoGeneratePrintManager(svg_fin, name,svgDoc,template_id,generate_data.tesco_item_master[0].is_qrcode_required,qr_code_fin);
+								var qr_code_check_fin = qr_code_check_arr.join(',_');
+								PopupTescoGeneratePrintManager(svg_fin, name,svgDoc,template_id,generate_data.tesco_item_master[0].is_qrcode_required,qr_code_fin,qr_code_check_fin);
 							}
 						},
 						complete: function () {
@@ -1618,7 +1620,8 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 							if (ajax_count == generate_data.order_details.length) {
 								var svg_fin = svgarr.join(',_');
 								var qr_code_fin = qr_code_arr.join(',_');
-								PopupTescoGeneratePrintManager(svg_fin, name,svgDoc,template_id,generate_data.tesco_item_master[0].is_qrcode_required,qr_code_fin);
+								var qr_code_check_fin = qr_code_check_arr.join(',_');
+								PopupTescoGeneratePrintManager(svg_fin, name,svgDoc,template_id,generate_data.tesco_item_master[0].is_qrcode_required,qr_code_fin,qr_code_check_fin);
 							}
 						},
 						complete: function () {
@@ -1657,7 +1660,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 								var desc_size = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
 								if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
 										if(name2 === "THL3")
@@ -1680,7 +1683,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 									}
 									else
 									{
-										str = oswordWrap(desc_size, 23);
+										str = oswordWrap(desc_size, 22);
 										svgDoc.getElementById("description").innerHTML = str;
 										
 										if(name2 === "THL3")
@@ -1713,7 +1716,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 								
 								if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
 										if(name2 === "THL3")
@@ -1736,7 +1739,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 									}
 									else
 									{
-										str = oswordWrap(desc_size, 23);
+										str = oswordWrap(desc_size, 22);
 										svgDoc.getElementById("description").innerHTML = str;
 										
 										if(name2 === "THL3")
@@ -1771,6 +1774,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 							var str = s.serializeToString(d);
 							svgarr.push(str)
 							qr_code_arr.push(val.qr_code)
+							qr_code_check_arr.push(val.buyer_po_number+','+val.ean_barcode+','+val.itf_barcode+','+val.orms_tpn)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
 							this.tryCount++;
@@ -1790,7 +1794,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 							if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
 							{
 								var desc_size = description.toUpperCase();
-								if(desc_size.length <= 23)
+								if(desc_size.length <= 22)
 								{
 									svgDoc.getElementById("description").innerHTML = desc_size;
 									if(name2 === "THL3")
@@ -1813,7 +1817,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 								}
 								else
 								{
-									str = wordWrap(desc_size, 23);
+									str = wordWrap(desc_size, 22);
 									svgDoc.getElementById("description").innerHTML = str;
 
 									if(name2 === "THL3")
@@ -1849,6 +1853,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 
 					svgarr.push(str)
 					qr_code_arr.push(val.qr_code)
+					qr_code_check_arr.push(val.buyer_po_number+','+val.ean_barcode+','+val.itf_barcode+','+val.orms_tpn)
 
 				}
 			} else {
@@ -1926,6 +1931,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 
 				svgarr.push(str)
 				qr_code_arr.push(val.qr_code)
+				qr_code_check_arr.push(val.buyer_po_number+','+val.ean_barcode+','+val.itf_barcode+','+val.orms_tpn)
 			}
 
 
@@ -1941,9 +1947,10 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 				if (ajax_count == data.order_details.length) {
 					var svg_fin = svgarr.join(',_');
 					var qr_code_fin = qr_code_arr.join(',_');
+					var qr_code_check_fin = qr_code_check_arr.join(',_');
 					var zone = localStorage.getItem("zone");
 
-					  PopupTescoGeneratePrintManager(svg_fin, name,svgDoc,template_id,generate_data.tesco_item_master[0].is_qrcode_required,qr_code_fin);
+					  PopupTescoGeneratePrintManager(svg_fin, name,svgDoc,template_id,generate_data.tesco_item_master[0].is_qrcode_required,qr_code_fin,qr_code_check_fin);
 
 				}
 			}
@@ -2227,6 +2234,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 	} else {
 		var svgarr = [];
 		var qr_code_arr = [];
+		var qr_code_check_arr = [];
 		var ajax_count = 0;
 		var b = " ";
 		var position = 3;
@@ -2417,7 +2425,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 								var desc_size = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
 								if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
 										if(name2 === "THL3")
@@ -2440,7 +2448,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 									}
 									else
 									{
-										str = oswordWrap(desc_size, 23);
+										str = oswordWrap(desc_size, 22);
 										svgDoc.getElementById("description").innerHTML = str;
 										
 										if(name2 === "THL3")
@@ -2473,7 +2481,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 								
 								if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
 										if(name2 === "THL3")
@@ -2496,7 +2504,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 									}
 									else
 									{
-										str = oswordWrap(desc_size, 23);
+										str = oswordWrap(desc_size, 22);
 										svgDoc.getElementById("description").innerHTML = str;
 										
 										if(name2 === "THL3")
@@ -2531,6 +2539,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 							var str = s.serializeToString(d);
 							svgarr.push(str)
 							qr_code_arr.push(val.qr_code)
+							qr_code_check_arr.push(val.buyer_po_number+','+val.ean_barcode+','+val.itf_barcode+','+val.orms_tpn)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
 							this.tryCount++;
@@ -2549,7 +2558,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 							if(generate_data.tesco_item_master[0].is_qrcode_required == 1)
 							{
 								var desc_size = description.toUpperCase();
-								if(desc_size.length <= 23)
+								if(desc_size.length <= 22)
 								{
 									svgDoc.getElementById("description").innerHTML = desc_size;
 									if(name2 === "THL3")
@@ -2572,7 +2581,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 								}
 								else
 								{
-									str = wordWrap(desc_size, 23);
+									str = wordWrap(desc_size, 22);
 									svgDoc.getElementById("description").innerHTML = str;
 
 									if(name2 === "THL3")
@@ -2608,6 +2617,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 
 					svgarr.push(str)
 					qr_code_arr.push(val.qr_code)
+					qr_code_check_arr.push(val.buyer_po_number+','+val.ean_barcode+','+val.itf_barcode+','+val.orms_tpn)
 
 				}
 			} else {
@@ -2685,6 +2695,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 
 				svgarr.push(str)
 				qr_code_arr.push(val.qr_code)
+				qr_code_check_arr.push(val.buyer_po_number+','+val.ean_barcode+','+val.itf_barcode+','+val.orms_tpn)
 			}
 
 
@@ -2694,9 +2705,10 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 			if (ajax_count == data.order_details.length) {
 				var svg_fin = svgarr.join(',_');
 				var qr_code_fin = qr_code_arr.join(',_');
+				var qr_code_check_fin = qr_code_check_arr.join(',_');
 				var zone = localStorage.getItem("zone");
 				
-				  PopupTescoPrintManager(svg_fin, name,zone,style_no,buyer_no,id,created_at,template_id,generate_data.tesco_item_master[0].is_qrcode_required,qr_code_fin);
+				  PopupTescoPrintManager(svg_fin, name,zone,style_no,buyer_no,id,created_at,template_id,generate_data.tesco_item_master[0].is_qrcode_required,qr_code_fin,qr_code_check_fin);
 			   
 			}
 				},
@@ -3059,7 +3071,7 @@ function ProofPopupOrchestrasmall(data,name,svgDoc,id,style_no,buyer_no,created_
  * @return Pdf
  */
 
-function PopupTescoPrintManager(data, name,zone,style_no,buyer_no,id,created_at,template_id,qr_flag,qr_code_fin) {
+function PopupTescoPrintManager(data, name,zone,style_no,buyer_no,id,created_at,template_id,qr_flag,qr_code_fin,qr_code_check_fin) {
 
 	//	var s = new XMLSerializer();
 	//	var d = data;
@@ -3100,6 +3112,7 @@ function PopupTescoPrintManager(data, name,zone,style_no,buyer_no,id,created_at,
 			zone:zone,
 			style:style_no,
 			qr_code_fin: qr_code_fin,
+			qr_code_check_fin:qr_code_check_fin,
 			tesco_po_number:buyer_no,
 			id:id,
 			template_id:template_id,
@@ -3204,7 +3217,7 @@ function PopupTescoSmallPrintManager(data, name,zone,style_no,buyer_no,id,create
  * @return Pdf
  */
 
-function PopupTescoGeneratePrintManager(data, name,svgDoc,template_id,qr_flag,qr_code_fin) {
+function PopupTescoGeneratePrintManager(data, name,svgDoc,template_id,qr_flag,qr_code_fin,qr_code_check_fin) {
 	
 	var url = "";
 	
@@ -3215,6 +3228,7 @@ function PopupTescoGeneratePrintManager(data, name,svgDoc,template_id,qr_flag,qr
 			_token: csrf_token,
 			svg: data,
 			qr_code_fin: qr_code_fin,
+			qr_code_check_fin:qr_code_check_fin,
 			qr_flag:qr_flag,
 			template_id: template_id,
 			name: name

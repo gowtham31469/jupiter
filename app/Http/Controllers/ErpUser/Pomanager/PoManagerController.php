@@ -15,10 +15,12 @@ use App\ErpOrders as Erp;
 use App\ErpOrderDetails as ErpOrderDetails;
 use Carbon\Carbon;
 use App\History;
+use App\Classes\TescoMaterialQuery;
 
 class PoManagerController extends Controller
 {
 	private $current_date;
+	private $tesco_material_obj;
 	
     /**
      * Create a new controller instance.
@@ -30,6 +32,8 @@ class PoManagerController extends Controller
 		$this->middleware('erpuser');
 		// get the current time
 		$this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
+
+		$this->tesco_material_obj = new TescoMaterialQuery();
    
     }
 
@@ -183,9 +187,9 @@ class PoManagerController extends Controller
 	public function getOrderDetails(Request $request)
 	{
 		  try {
-            $id = $request->erp_id; 
+            $erp_id = $request->erp_id; 
 			  
-			$data   = 	Erp::where('erp_orders.id',$id)
+			$data   = 	Erp::where('erp_orders.erp_id',$erp_id)
 								->select('erp_orders.*')
 								->get();
 			  
@@ -193,6 +197,7 @@ class PoManagerController extends Controller
 			{
 					$buyer_id = $data{0}->buyer_id;
 					$customer_id = $data{0}->customer_id;
+					$id = $data{0}->id;
 
 
 				   $arr_template =  DB::table('buyers')
@@ -400,8 +405,11 @@ class PoManagerController extends Controller
 					->where('erp_order_details.order_quantity', '!=' ,0)
 					->where('erp_order_details.erp_order_id', $erp_order_id)
 					->whereNotIn('erp_order_details.status', $erp_status_ids)
-					->select('erp_order_details.*', 'erp_orders.customer_id', 'erp_orders.buyer_id')
+					->select('erp_order_details.*', 'erp_orders.customer_id', 'erp_orders.po_no', 'erp_orders.buyer_id')
 					->get();
+
+			$customer_list =  DB::table('customers')->select('*')->where('customers.id', $orderlist{0}->customer_id)->get();
+
 			// Approve orders
 			if ($count == 0) {
 
@@ -509,10 +517,11 @@ class PoManagerController extends Controller
 
 				$to_email =  DB::table('tesco_error_report_emails')->select('*')->where('id', 1)->first();
 
-				Mail::send('mails.error-report-po', ['po' => $po, 'style_no' => $style_no, 'reference' => $reference, 'qty' => $qty, 'price' => $price, 'po_complete' => $po_complete, 'comment' => $comment, 'commenttext' => $commenttext, 'purchase_order_number' => $purchase_order_number, 'customer_name' => $customer_name, 'erp_order_id' => $erp_order_id], function ($message) use ($to_email) {
+				Mail::send('mails.error-report-po', ['po' => $po, 'style_no' => $style_no, 'reference' => $reference, 'qty' => $qty, 'price' => $price, 'po_complete' => $po_complete, 'comment' => $comment, 'commenttext' => $commenttext, 'purchase_order_number' => $orderlist{0}->po_no, 'customer_name' => $customer_list{0}->company_name, 'erp_order_id' => $erp_order_id], function ($message) use ($to_email,$customer_list) {
 					$message->from('admin@jga.com');
 					$message->subject('Jupiter Garments Accessories - Error Report');
 					$message->to($to_email->email_address);
+					$message->cc($customer_list{0}->email);
 				});
 				$result      = response()->json(['error' => false, 'message' => 'success', 'status' => true], 200);
 
@@ -539,10 +548,11 @@ class PoManagerController extends Controller
 				}	
 				$to_email =  DB::table('tesco_error_report_emails')->select('*')->where('id', 1)->first();
 
-				Mail::send('mails.error-report-po', ['po' => $po, 'style_no' => $style_no, 'reference' => $reference, 'qty' => $qty, 'price' => $price, 'po_complete' => $po_complete, 'comment' => $comment, 'commenttext' => $commenttext, 'purchase_order_number' => $purchase_order_number, 'customer_name' => $customer_name, 'erp_order_id' => $erp_order_id], function ($message) use ($to_email) {
+				Mail::send('mails.error-report-po', ['po' => $po, 'style_no' => $style_no, 'reference' => $reference, 'qty' => $qty, 'price' => $price, 'po_complete' => $po_complete, 'comment' => $comment, 'commenttext' => $commenttext, 'purchase_order_number' => $orderlist{0}->po_no, 'customer_name' => $customer_list{0}->company_name, 'erp_order_id' => $erp_order_id], function ($message) use ($to_email,$customer_list) {
 					$message->from('admin@jga.com');
 					$message->subject('Jupiter Garments Accessories - Error Report');
 					$message->to($to_email->email_address);
+					$message->cc($customer_list{0}->email);
 				});
 				$result      = response()->json(['error' => false, 'message' => 'success', 'status' => false], 200);
 			}
@@ -581,13 +591,7 @@ class PoManagerController extends Controller
 					$country        = $order_details->zone;
 					$style_zone     = strtolower($country).'_style_ref';
 					$template_id    = $order_details->template_id;
-					$template_level = DB::table('tesco_item_master as t1')
-										->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
-										->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
-										->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
-										->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
-										->where('t1.id', $template_id)
-										->first();
+					$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id);
 					
 					$material_name  = $template_level->material;
 					$material_sub   = $template_level->material_sub;

@@ -18,6 +18,7 @@ use App\TescoTSL3OrdersQuantity;
 use Carbon\Carbon;
 use App\ErpOrders as Erp;
 use App\ErpOrderDetails;
+use App\OrderManagementHistory;
 /**
  * Class to cancel the tesco template orders
  * @author [Praveen] <[praveen@wizroots.com]>
@@ -60,6 +61,14 @@ class CancelTescoOrders
                             'order_status'       => "Order Cancelled",
                             'order_cancelled_at' => $this->current_date
                           ]);
+              
+              // update order status as cancelled in order history table
+              // value = 3 , ID of cancelled status in order_status table.
+              $order_table_name = "tesco_".strtolower($table)."_orders";
+              OrderManagementHistory::where([['order_table_name', $order_table_name], ['order_table_id', $template_id]])->update([
+                'order_status'              => 3
+              ]);
+
               $order_details  = $order_model::where('id',$template_id)
                                   ->select('id','order_status','tesco_supplier_id','purchase_order_no','pi_id')
                                   ->first();

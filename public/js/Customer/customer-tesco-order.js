@@ -55,7 +55,8 @@ function tescoOrders(callback) {
         type: "Post",
         dataType: "json",
         data: {
-            _token: csrf_token
+            _token: csrf_token,
+            year:fiscal_year
         },
         tryCount : 0,
         retryLimit : 2,
@@ -311,13 +312,13 @@ function tescoOrders(callback) {
                                     "text": "CE",
                                     "parent_id": 2,
                                     "children": [{
-                                        "id": "19,20,21",
+                                        "id": "26,27,21",
                                         "text": "TCL 1 , TCL 2 & TSL 1 with QR",
                                         "parent_id": "3",
                                         "type": "ratio",
                                         "zone": "CE"
                                         }, {
-                                        "id": "22,23",
+                                        "id": "28,23",
                                         "text": "TCL 4 & TSL 3 with QR",
                                         "parent_id": "3",
                                         "type": "single",
@@ -340,13 +341,13 @@ function tescoOrders(callback) {
                                     "text": "UK",
                                     "parent_id": 2,
                                     "children": [{
-                                        "id": "12,13,14",
+                                        "id": "29,30,14",
                                         "text": "TCL 1 , TCL 2 & TSL 1",
                                         "parent_id": 4,
                                         "type":"ratio",
                                         "zone": "UK"
                                         }, {
-                                        "id": "15,16",
+                                        "id": "31,16",
                                         "text": "TCL 4 & TSL 3",
                                         "parent_id": 4,
                                         "type":"single",
@@ -568,6 +569,21 @@ function tescoOrders(callback) {
     }
 }
 
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+    }
+    }
+    return "";
+}
+
 /**
  * This Function is used to show create tesco orders page.
  * @author Praveen
@@ -627,21 +643,21 @@ function createOrders(parsedObj = false, oType = false) {
                                      html += '<div class="col-md-3">\
                                         <div class="form-group has-feedback">\
                                             <label for="tesco_uk_style">UK Style Ref.</label>\
-                                            <input type="text" class="form-control" name="tesco_uk_style" id="tesco_uk_style" placeholder="Enter UK Style Ref." required="" onkeyup="dynamicSVGTemplates()" maxlength="10">\
+                                            <input type="text" class="form-control" name="tesco_uk_style" id="tesco_uk_style" placeholder="Enter UK Style Ref." required="" onkeyup="dynamicSVGTemplates()" maxlength="8">\
                                             <div class="help-block with-errors"></div>\
                                         </div>\
                                     </div>\
                                     <div class="col-md-3">\
                                         <div class="form-group has-feedback">\
                                             <label for="tesco_ce_style">CE Style Ref.</label>\
-                                            <input type="text" class="form-control" name="tesco_ce_style" id="tesco_ce_style" placeholder="Enter CE Style Ref." required="" onkeyup="dynamicSVGTemplates()" maxlength="10">\
+                                            <input type="text" class="form-control" name="tesco_ce_style" id="tesco_ce_style" placeholder="Enter CE Style Ref." required="" onkeyup="dynamicSVGTemplates()" maxlength="8">\
                                             <div class="help-block with-errors"></div>\
                                         </div>\
                                     </div>\
                                     <div class="col-md-3">\
                                         <div class="form-group has-feedback">\
                                             <label for="tesco_season_code">Season Code</label>\
-                                            <input type="text" class="form-control" data-required-error="Mandatory Field."  name="tesco_season_code" id="tesco_season_code" required="" placeholder="Enter Season Code" onkeyup="dynamicSVGTemplates()">\
+                                            <input type="text" class="form-control" data-required-error="Mandatory Field." name="tesco_season_code" id="tesco_season_code" required="" placeholder="Enter Season Code" onkeyup="dynamicSVGTemplates()" maxlength="6">\
                                             <div class="help-block with-errors"></div>\
                                         </div>\
                                     </div>\
@@ -656,7 +672,7 @@ function createOrders(parsedObj = false, oType = false) {
                                     <div class="col-md-3">\
                                         <div class="form-group has-feedback">\
                                             <label for="tesco_eqos">EQOS Site Code</label>\
-                                            <input type="text" class="form-control" name="tesco_eqos" id="tesco_eqos" required="" placeholder="Enter EQOS Site Code" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()" maxlength="10">\
+                                            <input type="text" class="form-control" name="tesco_eqos" id="tesco_eqos" required="" placeholder="Enter EQOS Site Code" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()" maxlength="7">\
                                             <div class="help-block with-errors"></div>\
                                         </div>\
                                     </div>\
@@ -837,7 +853,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                         <th rowspan="2">Line No.</th>\
                                                         <th rowspan="2">TPND</th>\
                                                         <th rowspan="2">EAN Barcode</th>\
-                                                        <th rowspan="2">Case Size</th>\
+                                                        <th rowspan="2">Units Per Case</th>\
                                                         <th rowspan="2">Size</th>';
                              $.each(data.templates, function(i, item){
                                html += '<th colspan="1">'+item.template_name+'</th>';
@@ -868,7 +884,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                 </td>\
                                                 <td>\
                                                     <div class="form-group has-feedback">\
-                                                        <input type="text" class="form-control input-sm uk_single_case_size" required="" onkeyup="dynamicSVGTemplates()" onkeypress="return isNumber(event)" id="uk_single_case_size_1" name="uk_single_case_size_1" placeholder="Enter Case Size" onkeyup="dynamicSVGTemplates()" maxlength="4">\
+                                                        <input type="text" class="form-control input-sm uk_single_case_size" required="" onkeyup="dynamicSVGTemplates()" onkeypress="return isNumber(event)" id="uk_single_case_size_1" name="uk_single_case_size_1" placeholder="Enter Units Per Case" onkeyup="dynamicSVGTemplates()" maxlength="4">\
                                                         <div class="help-block with-errors"></div>\
                                                     </div>\
                                                 </td>\
@@ -918,7 +934,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                         <th rowspan="2">Line No.</th>\
                                                         <th rowspan="2">ORMS TPN</th>\
                                                         <th rowspan="2">ITF Barcode</th>\
-                                                        <th rowspan="2">Cases Per Carton</th>';
+                                                        <th rowspan="2">No Of Pieces In Ratio</th>';
                              $.each(data.templates, function(i, item){
                                html += '<th colspan="1">'+item.template_name+'</th>';
                              });
@@ -947,7 +963,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                 </td>\
                                                 <td>\
                                                     <div class="form-group has-feedback">\
-                                                        <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="ce_ratio_cpc_1" name="ce_ratio_cpc_1" onkeypress="return isNumber(event)" placeholder="Enter Cases Per Carton" onkeyup="dynamicSVGTemplates()" maxlength="5">\
+                                                        <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="ce_ratio_cpc_1" name="ce_ratio_cpc_1" onkeypress="return isNumber(event)" placeholder="Enter No Of Pieces In Ratio" onkeyup="dynamicSVGTemplates()" maxlength="5">\
                                                         <div class="help-block with-errors"></div>\
                                                     </div>\
                                                 </td>';
@@ -988,7 +1004,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                     <th rowspan="2">Line No.</th>\
                                                     <th rowspan="2">ORMS TPN</th>\
                                                     <th rowspan="2">EAN Barcode</th>\
-                                                    <th rowspan="2">Case Size</th>\
+                                                    <th rowspan="2">Units Per Case</th>\
                                                     <th rowspan="2">Size</th>';
                              $.each(data.templates, function(i, item){
                                html += '<th colspan="1">'+item.template_name+'</th>';
@@ -1019,7 +1035,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                 </td>\
                                                 <td>\
                                                     <div class="form-group has-feedback">\
-                                                        <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_1" name="ce_single_case_size_1" required="" placeholder="Enter Case Size" onkeyup="dynamicSVGTemplates()" maxlength="6">\
+                                                        <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_1" name="ce_single_case_size_1" required="" placeholder="Enter Units Per Case" onkeyup="dynamicSVGTemplates()" maxlength="6">\
                                                         <div class="help-block with-errors"></div>\
                                                     </div>\
                                                 </td>\
@@ -1105,7 +1121,6 @@ function createOrders(parsedObj = false, oType = false) {
                                     <div class="modal-footer">\
                                      <span class="pagename pull-left hidden-xs">Please save or submit changes before closing page.</span>\
                                      <button class="btn btn-xs btn-success save-btn" type="button" onclick="saveTescoOrder()" data-insert="true"><i class="fa fa-edit" aria-hidden="true"></i> Save & Continue</button>\
-                                     <button class="btn btn-xs btn-success approve-btn" type="button" onclick="approveTescoOrder()" data-insert="true" style="display:none;"><i class="fa fa-check" aria-hidden="true" ></i> Approve</button>\
                                         <button class="btn btn-xs btn-warning submit-btn" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button>\
                                         <button class="btn btn-xs btn-danger cancel-btn" type="button" data-toggle="modal" data-target="#cancelOrderModal" style="display:none;"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
                                         <button class="btn btn-xs btn-danger reload-btn" type="button" onclick = "reload_back()""><i class="fa fa-refresh" aria-hidden="true"></i> Reload</button>\
@@ -1118,7 +1133,6 @@ function createOrders(parsedObj = false, oType = false) {
 					 {
 						 if(parsedObj[Object.keys(parsedObj)[0]].order_status == "Order Placed")
 						 {
-							$('.approve-btn').show();
 							$('.cancel-btn').show();
 						 }
 
@@ -1598,7 +1612,7 @@ function printDivTesco(data,name) {
 								var desc_size = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
 								if($('#qr_flag').val() == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
 										if(name === "THL3-sticker")
@@ -1621,7 +1635,7 @@ function printDivTesco(data,name) {
 									}
 									else
 									{
-										str = cuswordWrap(desc_size, 23);
+										str = cuswordWrap(desc_size, 22);
 										svgDoc.getElementById("description").innerHTML = str;
 										
 										if(name === "THL3-sticker")
@@ -1654,7 +1668,7 @@ function printDivTesco(data,name) {
 								
 								if($('#qr_flag').val() == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
 										if(name === "THL3-sticker")
@@ -1677,7 +1691,7 @@ function printDivTesco(data,name) {
 									}
 									else
 									{
-										str = cuswordWrap(desc_size, 23);
+										str = cuswordWrap(desc_size, 22);
 										svgDoc.getElementById("description").innerHTML = str;
 										
 										if(name === "THL3-sticker")
@@ -1746,7 +1760,7 @@ function printDivTesco(data,name) {
 							if($('#qr_flag').val() == 1)
 							{
 								var desc_size = description.toUpperCase();
-								if(desc_size.length <= 23)
+								if(desc_size.length <= 22)
 								{
 									svgDoc.getElementById("description").innerHTML = desc_size;
 									if(name === "THL3-sticker")
@@ -1769,7 +1783,7 @@ function printDivTesco(data,name) {
 								}
 								else
 								{
-									str = cuswordWrap(desc_size, 23);
+									str = cuswordWrap(desc_size, 22);
 									svgDoc.getElementById("description").innerHTML = str;
 
 									if(name === "THL3-sticker")
@@ -2101,7 +2115,7 @@ try{
                         </td>\
                         <td>\
                             <div class="form-group has-feedback">\
-                                <input type="text" class="form-control input-sm uk_single_case_size" required="" onkeypress="return isNumber(event)" id="uk_single_case_size_'+val+'" name="uk_single_case_size_'+val+'" required="" placeholder="Enter Case Size" maxlength="4">\
+                                <input type="text" class="form-control input-sm uk_single_case_size" required="" onkeypress="return isNumber(event)" id="uk_single_case_size_'+val+'" name="uk_single_case_size_'+val+'" required="" placeholder="Enter Units Per Case" maxlength="4">\
                                 <div class="help-block with-errors"></div>\
                             </div>\
                         </td>\
@@ -2311,7 +2325,7 @@ try{
                     </td>\
                     <td>\
                         <div class="form-group has-feedback">\
-                            <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_'+val+'" name="ce_single_case_size_'+val+'" required="" placeholder="Enter Case Size" maxlength="4">\
+                            <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_'+val+'" name="ce_single_case_size_'+val+'" required="" placeholder="Enter Units Per Case" maxlength="4">\
                             <div class="help-block with-errors"></div>\
                         </div>\
                     </td>\
@@ -2384,7 +2398,7 @@ try{
                     </td>\
                     <td>\
                         <div class="form-group has-feedback">\
-                            <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="ce_ratio_cpc_'+val+'" name="ce_ratio_cpc_'+val+'" onkeypress="return isNumber(event)" placeholder="Enter Cases Per Carton" maxlength="4">\
+                            <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="ce_ratio_cpc_'+val+'" name="ce_ratio_cpc_'+val+'" onkeypress="return isNumber(event)" placeholder="Enter No Of Pieces In Ratio" maxlength="4">\
                             <div class="help-block with-errors"></div>\
                         </div>\
                     </td>';
@@ -3305,7 +3319,7 @@ function dynamicSVGTemplatescard(id,item)
                  {
                       svgDoc.getElementById("tpnd").innerHTML = '';
                  }
-                 /** [ Dynamically change svg CE single case size ] */
+                 /** [ Dynamically change svg CE single Units Per Case ] */
                  if(case_size != '')
                  {
                       svgDoc.getElementById("unit_per_case").innerHTML = case_size;
@@ -3361,7 +3375,7 @@ function dynamicSVGTemplatescard(id,item)
 								var desc_size = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
 								if($('#qr_flag').val() == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
 										
@@ -3386,7 +3400,7 @@ function dynamicSVGTemplatescard(id,item)
 									}
 									else
 									{
-										str = cuswordWrap(desc_size, 23);
+										str = cuswordWrap(desc_size, 22);
 										svgDoc.getElementById("description").innerHTML = str;
 										if(item.template_name === "THL 3")
 										{
@@ -3419,7 +3433,7 @@ function dynamicSVGTemplatescard(id,item)
 								
 								if($('#qr_flag').val() == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc.getElementById("description").innerHTML = desc_size;
 										if(item.template_name === "THL 3")
@@ -3442,7 +3456,7 @@ function dynamicSVGTemplatescard(id,item)
 									}
 									else
 									{
-										str = cuswordWrap(desc_size, 23);
+										str = cuswordWrap(desc_size, 22);
 										svgDoc.getElementById("description").innerHTML = str;
 										
 										if(item.template_name === "THL 3")
@@ -3499,7 +3513,7 @@ function dynamicSVGTemplatescard(id,item)
 						if($('#qr_flag').val() == 1)
 						{
 							var desc_size = description.toUpperCase();
-							if(desc_size.length <= 23)
+							if(desc_size.length <= 22)
 							{
 								svgDoc.getElementById("description").innerHTML = desc_size;
 								if(item.template_name === "THL 3")
@@ -3522,7 +3536,7 @@ function dynamicSVGTemplatescard(id,item)
 							}
 							else
 							{
-								str = cuswordWrap(desc_size, 23);
+								str = cuswordWrap(desc_size, 22);
 								svgDoc.getElementById("description").innerHTML = str;
 
 								if(item.template_name === "THL 3")
@@ -3641,7 +3655,7 @@ function dynamicSVGTemplatescard(id,item)
                  {
                       svgDoc.getElementById("tpnd").innerHTML = '';
                  }
-                 /** [ Dynamically change svg Uk single case size ] */
+                 /** [ Dynamically change svg Uk single Units Per Case ] */
                  if(case_size != '')
                  {
                       svgDoc.getElementById("unit_per_case").innerHTML = case_size;
@@ -4711,7 +4725,7 @@ function storeCESingleTCL4TSL3()
 		orms_tpn = orms_tpn.join(',');
 		qr_code = qr_code.join('|');
 
-        /** [ Create array of ce single case size ] */
+        /** [ Create array of ce single Units Per Case ] */
         $('.ce_single_case_size').each(function(i, item)
         {
             case_size[i]    = $(item).val();
@@ -4853,7 +4867,7 @@ function storeCESingleTHL3()
 		orms_tpn = orms_tpn.join(',');
 		qr_code = qr_code.join('|');
 
-        /** [ Create array of ce single case size ] */
+        /** [ Create array of ce single Units Per Case ] */
         $('.ce_single_case_size').each(function(i, item)
         {
             case_size[i]    = $(item).val();
@@ -5187,7 +5201,7 @@ function storeUKSingleTCL4TSL3()
         });
         ean_code = ean_code.join(',');
 
-        /** [ Create array of uk single case size ] */
+        /** [ Create array of uk single Units Per Case ] */
         $('.uk_single_case_size').each(function(i, item)
         {
             case_size[i]    = $(item).val();
@@ -5296,7 +5310,7 @@ function storeUKSingleTHL3()
         });
         ean_code = ean_code.join(',');
 
-        /** [ Create array of uk single case size ] */
+        /** [ Create array of uk single Units Per Case ] */
         $('.uk_single_case_size').each(function(i, item)
         {
             case_size[i]    = $(item).val();
@@ -5407,7 +5421,6 @@ try{
         /** remove save & submit button */
         $('.submit-btn').remove();
         $('.save-btn').remove();
-        $('.approve-btn').show();
         $('.cancel-btn').show();
         $('.print-btn').show();
         var div_html = '';
@@ -6463,7 +6476,7 @@ function saveCESingleTCL4TSL3()
 		orms_tpn = orms_tpn.join(',');
 		qr_code = qr_code.join('|');
 
-        /** [ Create array of ce single case size ] */
+        /** [ Create array of ce single Units Per Case ] */
         $('.ce_single_case_size').each(function(i, item)
         {
             case_size[i]    = $(item).val() === ''? 0 : $(item).val();
@@ -6603,7 +6616,7 @@ function saveCESingleTHL3()
 		orms_tpn = orms_tpn.join(',');
 		qr_code = qr_code.join('|');
 
-        /** [ Create array of ce single case size ] */
+        /** [ Create array of ce single Units Per Case ] */
         $('.ce_single_case_size').each(function(i, item)
         {
             case_size[i]    = $(item).val() === ''? 0 : $(item).val();
@@ -6931,7 +6944,7 @@ function saveUKSingleTCL4TSL3()
         });
         ean_code = ean_code.join(',');
 
-        /** [ Create array of uk single case size ] */
+        /** [ Create array of uk single Units Per Case ] */
         $('.uk_single_case_size').each(function(i, item)
         {
             case_size[i]    = $(item).val() === ''? 0 : $(item).val();
@@ -7038,7 +7051,7 @@ function saveUKSingleTHL3()
         });
         ean_code = ean_code.join(',');
 
-        /** [ Create array of uk single case size ] */
+        /** [ Create array of uk single Units Per Case ] */
         $('.uk_single_case_size').each(function(i, item)
         {
             case_size[i]    = $(item).val() === ''? 0 : $(item).val();
@@ -7336,12 +7349,10 @@ function mapStoredValues(oDetails) {
         $('.delete-row, .add-row-btn, .submit-btn, .save-btn').remove();
         if(order_status === 'Order Placed')
         {
-            $('.approve-btn').show();
             $('.cancel-btn').show();
         }
         else 
         {
-            $('.approve-btn').hide();
             $('.cancel-btn').hide();
         }
     }
@@ -7490,67 +7501,6 @@ function afterOrderSaved(data)
          $('.invisible-div').html(div_html);
      }
 }
-/**
- * [Approve tesco orders]
- * @author <praveen>
- */
-function approveTescoOrder()
-{
-    try {
-        var array_list   = [];
-		$('.table-id-hidden').each(function (i, table_id) {
-			my_object    = new Object();
-			var table_names = table_id.id.split("_");
-			my_object.table = table_names[0];
-			my_object.table_id = table_id.value;
-			array_list.push(my_object);
-		});
-
-        $.ajax({
-                 url: base_url + "/customer/tesco/approve-tesco-order",
-                 type: 'PUT',
-                 data: {
-                     _token: csrf_token,
-                     data_array: array_list
-                 },
-                 tryCount : 0,
-                 retryLimit : 2,
-                 dataType:"json",
-                 beforeSend: function () {
-                     $(".loader").show();
-                 },
-                 success: function (data) {
-                    $('.snackbar_span').html('Order Approved Successfully');
-                    showSnackbar();
-
-                    $('.approve-btn').remove();
-                    $('.cancel-btn').remove();
-                   
-                 },
-                 error: function(errorXHR, errorStatus, errorThrown) {
-                  this.tryCount++;
-                  if (this.tryCount <= this.retryLimit) {
-                      $.ajax(this);
-                      return;
-                  }
-                 },
-                 complete: function () {
-                      $(".loader").hide();
-                      /** [To make top menu active] */
-                      $(function () {
-                          var url = window.location;
-                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
-                          $('.dynamic-menu a').filter(function () {
-                              return this.href == url;
-                          }).parent('li').addClass('current-page').find('a').addClass('active');
-                      });
-                 }
-             })
-    } catch(e) {
-        /** [error statements] */
-        console.error("Error:"+e)
-    }
-}
 
 /**
  * [Validation for dynamic ean barcode fields]
@@ -7642,7 +7592,6 @@ function cancelTescoOrder() {
                 showSnackbar();
 
                 $('#cancelOrderModal').modal('hide');
-                $('.approve-btn').remove();
                 $('.cancel-btn').remove();
 
             },

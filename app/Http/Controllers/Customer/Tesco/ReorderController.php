@@ -34,9 +34,19 @@ use App\Classes\TescoOrders;
 use App\Classes\SaveTescoOrders;
 use PDF;
 use Carbon\Carbon;
+use App\OrderManagementHistory;
+use App\Classes\TescoMaterialQuery;
+use App\FinancialYearResetDate;
+use Session;
 
 class ReorderController extends Controller
 {
+    private $tesco_material_obj;
+    private $current_date;
+    private $year;
+    private $financial_year_date;
+    private $financial_year_start;
+    private $financial_year_end;
     /**
      * Create a new controller instance.
      *
@@ -59,7 +69,33 @@ class ReorderController extends Controller
         $this->thl1_type = "tesco_thl1_orders";
         $this->thl3_type = "tesco_thl3_orders";
         $this->tsl1_type = "tesco_tsl1_orders";
-        $this->tsl3_type = "tesco_tsl3_orders";
+		$this->tsl3_type = "tesco_tsl3_orders";
+		
+		$this->tesco_material_obj = new TescoMaterialQuery();
+
+
+		// get the current time
+		$this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
+
+		// get year as "2020"
+		$this->year = Carbon::parse($this->current_date)->format('Y');
+
+		$this->financial_year_date = FinancialYearResetDate::value('financial_year_date');
+          
+		// format financial year date as "yyyy-dd-mm" 
+		$this->financial_year_date_format = $this->year.'-'.$this->financial_year_date;
+
+       	// get the current date in "dd-mm-yyyy" format
+		$this->today_date = Carbon::now('Asia/Kolkata')->format('Y-m-d');
+	
+		if($this->today_date < $this->financial_year_date_format){
+			$this->financial_year_start = Carbon::parse($this->financial_year_date_format)->subYear()->toDateString();
+			$this->financial_year_end = Carbon::parse($this->financial_year_date_format)->subDay()->toDateString();
+		} else {
+			$this->financial_year_start = $this->financial_year_date_format;
+			$this->financial_year_end = Carbon::parse($this->financial_year_date_format)->addYear()->subDay()->toDateString();
+		}
+
     }
 	
  	/**
@@ -69,6 +105,16 @@ class ReorderController extends Controller
      */
   	public function reOrder(Request $request)
     {
+
+		if(Session::get('fiscal-year') != null) {
+			$year = explode('-', Session::get('fiscal-year'));
+			$from_date = $year[0].'-'.$this->financial_year_date;
+			$to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+		} else {
+			$from_date = $this->financial_year_start;
+			$to_date =$this->financial_year_end; 
+		}
+
 		$customer_id = Auth::guard('web_customer')->id();
 		
 		
@@ -77,37 +123,37 @@ class ReorderController extends Controller
 	  {
 		$customer_id = Auth::guard('web_customer')->user()->id;
 
-        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
 
-		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
 
-		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
 
-		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
 
-		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
 
-		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
 
-		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
 		echo json_encode($data);
 	  }
 	  else
 	  {
 		  $customer_id = Auth::guard('web_customer')->user()->id;
-        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select('*')->get();
+        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->where('order_placed_by','=',$customer_id)->select('*')->get();
 
-		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select('*')->get();
+		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->where('order_placed_by','=',$customer_id)->select('*')->get();
 
-		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select('*')->get();
+		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->where('order_placed_by','=',$customer_id)->select('*')->get();
 
-		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select('*')->get();
+		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->where('order_placed_by','=',$customer_id)->select('*')->get();
 
-		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select('*')->get();
+		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->where('order_placed_by','=',$customer_id)->select('*')->get();
 
-		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select('*')->get();
+		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->where('order_placed_by','=',$customer_id)->select('*')->get();
 
-		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select('*')->get();
+		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->where('order_placed_by','=',$customer_id)->select('*')->get();
 		echo json_encode($data);
 	  }
 		
@@ -388,6 +434,7 @@ class ReorderController extends Controller
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "reOrder";
 				$newTasks->edit_permission = 0;
+				$newTasks->total_qty = array_sum($counts);
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$id)->select('*')->get();
@@ -436,6 +483,7 @@ class ReorderController extends Controller
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "reOrder";
 				$newTasks->edit_permission = 0;
+				$newTasks->total_qty = array_sum($counts);
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$id)->select('*')->get();
@@ -484,6 +532,7 @@ class ReorderController extends Controller
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "reOrder";
 				$newTasks->edit_permission = 0;
+				$newTasks->total_qty = array_sum($counts);
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$id)->select('*')->get();
@@ -533,6 +582,7 @@ class ReorderController extends Controller
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "reOrder";
 				$newTasks->edit_permission = 0;
+				$newTasks->total_qty = array_sum($counts);
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$id)->select('*')->get();
@@ -582,6 +632,7 @@ class ReorderController extends Controller
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "reOrder";
 				$newTasks->edit_permission = 0;
+				$newTasks->total_qty = array_sum($counts);
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$id)->select('*')->get();
@@ -631,6 +682,7 @@ class ReorderController extends Controller
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "reOrder";
 				$newTasks->edit_permission = 0;
+				$newTasks->total_qty = array_sum($counts);
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tsl1_orders_quanty')->where('tsl1_order_id',$id)->select('*')->get();
@@ -679,6 +731,7 @@ class ReorderController extends Controller
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "reOrder";
 				$newTasks->edit_permission = 0;
+				$newTasks->total_qty = array_sum($counts);
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tsl3_orders_quanty')->where('tsl3_order_id',$id)->select('*')->get();
@@ -693,7 +746,35 @@ class ReorderController extends Controller
 					$newTask->save();
 					$i++;
 				}
-			}	
+			}
+			
+			/** Insert order data into history table */
+			$tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
+			$template_level = $this->tesco_material_obj->tescoMaterialDetails($newTasks->template_id);
+	  
+			$material_name  = $template_level->material;
+			$material_sub   = $template_level->material_sub;
+			$material_ref   = $template_level->ref;
+			$po_upload_status = $po_status === "PO Pending"?0:null;
+			$pi_approve_status = $pi_status === "PI Approval Pending"?0:null;
+			$style_ref = strtolower($newTasks->zone).'_style_ref';
+				   
+			OrderManagementHistory::updateOrCreate(['order_table_name'  => $type, 'order_table_id'    => $newTasks->id],[
+			  'buyer_id'                  => $tesco_buyer_id->id,
+			  'season'                    => $newTasks->season_code,
+			  'customer_id'               => $newTasks->tesco_supplier_id,
+			  'material'                  => $material_name,
+			  'sub_material'              => $material_sub,
+			  'style'                     => $newTasks->$style_ref,
+			  'reference'                 => $material_ref,
+			  'buyer_po'                  => $newTasks->po_number,
+			  'ocn_number'                => $newTasks->ocn_number,
+			  'order_status'              => 2,
+			  'pi_status'                 => $pi_approve_status,
+			  'po_status'                 => $po_upload_status,
+			  'name_in_reports'           => $template_level->name_in_reports
+			]);
+
 		    echo true;
     }
   /**
@@ -744,6 +825,7 @@ class ReorderController extends Controller
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
 				$newTasks->edit_permission = 0;
+				$newTasks->total_qty = array_sum($counts);
 				$newTasks->save();
 				
 				
@@ -797,6 +879,7 @@ class ReorderController extends Controller
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
 				$newTasks->edit_permission = 0;
+				$newTasks->total_qty = array_sum($counts);
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$id)->select('*')->get();
@@ -850,6 +933,7 @@ class ReorderController extends Controller
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
 				$newTasks->edit_permission = 0;
+				$newTasks->total_qty = array_sum($counts);
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$id)->select('*')->get();
@@ -903,6 +987,7 @@ class ReorderController extends Controller
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
 				$newTasks->edit_permission = 0;
+				$newTasks->total_qty = array_sum($counts);
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$id)->select('*')->get();
@@ -956,6 +1041,7 @@ class ReorderController extends Controller
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
 				$newTasks->edit_permission = 0;
+				$newTasks->total_qty = array_sum($counts);
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$id)->select('*')->get();
@@ -1009,6 +1095,7 @@ class ReorderController extends Controller
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
 				$newTasks->edit_permission = 0;
+				$newTasks->total_qty = array_sum($counts);
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tsl1_orders_quanty')->where('tsl1_order_id',$id)->select('*')->get();
@@ -1062,6 +1149,7 @@ class ReorderController extends Controller
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
 				$newTasks->edit_permission = 0;
+				$newTasks->total_qty = array_sum($counts);
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tsl3_orders_quanty')->where('tsl3_order_id',$id)->select('*')->get();
@@ -1078,7 +1166,34 @@ class ReorderController extends Controller
 				}
 				$data=DB::table($type)->where('id',$newTasks->id)->select('*',DB::raw("'".$this->tsl3."'".' as "TemplateName"'),DB::raw("'".$type."'".' as "type"'))->get();
 			}	
-		    
+			
+			/** Insert order data into history table */
+			$tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
+			$template_level = $this->tesco_material_obj->tescoMaterialDetails($newTasks->template_id);
+	  
+			$material_name  = $template_level->material;
+			$material_sub   = $template_level->material_sub;
+			$material_ref   = $template_level->ref;
+			$po_upload_status = $po_status === "PO Pending"?0:null;
+			$pi_approve_status = $pi_status === "PI Approval Pending"?0:null;
+			$style_ref = strtolower($newTasks->zone).'_style_ref';
+				   
+			OrderManagementHistory::updateOrCreate(['order_table_name'  => $type, 'order_table_id'    => $newTasks->id],[
+			  'buyer_id'                  => $tesco_buyer_id->id,
+			  'season'                    => $newTasks->season_code,
+			  'customer_id'               => $newTasks->tesco_supplier_id,
+			  'material'                  => $material_name,
+			  'sub_material'              => $material_sub,
+			  'style'                     => $newTasks->$style_ref,
+			  'reference'                 => $material_ref,
+			  'buyer_po'                  => $po,
+			  'ocn_number'                => $ocn_number,
+			  'order_status'              => 2,
+			  'pi_status'                 => $pi_approve_status,
+			  'po_status'                 => $po_upload_status,
+			  'name_in_reports'           => $template_level->name_in_reports
+			]);
+			
 			echo $data;
     }
 	 /**

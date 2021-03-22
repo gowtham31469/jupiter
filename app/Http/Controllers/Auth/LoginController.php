@@ -4,6 +4,9 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Carbon\Carbon;
+use App\FinancialYearResetDate;
+use Session;
 class LoginController extends Controller
 {
     /*
@@ -19,6 +22,10 @@ class LoginController extends Controller
     use AuthenticatesUsers {
         logout as performLogout;
     }
+	private $year;
+	private $financial_year_date;
+	private $financial_year_start;
+    private $financial_year;
     /**
      * Where to redirect users after login.
      *
@@ -34,6 +41,22 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest', ['except' => 'logout']);
+
+		// get year as "2020"
+		$this->year = Carbon::now('Asia/Kolkata')->format('Y');
+
+		$this->financial_year_date = FinancialYearResetDate::value('financial_year_date');
+
+		// format financial year date as "yyyy-dd-mm" 
+		$this->financial_year_date_format = $this->year.'-'.$this->financial_year_date;
+
+		// get the current date in "dd-mm-yyyy" format
+		$this->today_date = Carbon::now('Asia/Kolkata')->format('Y-m-d');
+
+		// store financial year start and end date and
+		// financial year identification
+		$this->financial_year = $this->today_date < $this->financial_year_date_format?Carbon::parse($this->financial_year_date_format)->subYear()->format('Y').'-'.$this->year:$this->year.'-'.Carbon::parse($this->financial_year_date_format)->addYear()->format('Y');
+
     }
 	
 	public function showLoginForm()
@@ -58,6 +81,7 @@ class LoginController extends Controller
         }
         // Customization: Validate if user status is active (1)
         if ($this->attemptLogin($request)) {
+            Session::put('fiscal-year', $this->financial_year);
             return $this->sendLoginResponse($request);
         }
         // Customization: Validate if user status is active (1)

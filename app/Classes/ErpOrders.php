@@ -5,7 +5,8 @@ use Carbon\Carbon;
 use App\ErpOrders as Erp;
 use App\ErpOrderDetails;
 use App\FinancialYearResetDate;
-
+use App\Classes\TescoMaterialQuery;
+use App\Classes\ErpIDGenerator;
 
 class ErpOrders
 {
@@ -14,7 +15,11 @@ class ErpOrders
 	private $month;
 	private $financial_year_date;
 	private $today_date;
-	private $from;
+	private $financial_year_start;
+	private $financial_year_end;
+	private $financial_year;
+	private $tesco_material_obj;
+	private $erp_id_gen_obj;
 	
 	/**
 	 * Create a new controller instance.
@@ -40,9 +45,20 @@ class ErpOrders
 		// get the current date in "dd-mm-yyyy" format
 		$this->today_date = Carbon::now('Asia/Kolkata')->format('Y-m-d');
 
-		$this->from  = Carbon::parse($this->financial_year_date_format)
-						->startOfDay()        // 2018-09-29 00:00:00.000000
-						->toDateTimeString(); // 2018-09-29 00:00:00
+		// store financial year start and end date and
+		// financial year identification
+		if($this->today_date < $this->financial_year_date_format){
+			$this->financial_year_start = Carbon::parse($this->financial_year_date_format)->subYear()->toDateString();
+			$this->financial_year_end = Carbon::parse($this->financial_year_date_format)->subDay()->toDateString();
+			$this->financial_year = Carbon::parse($this->financial_year_date_format)->subYear()->format('y');
+		} else {
+			$this->financial_year_start = $this->financial_year_date_format;
+			$this->financial_year_end = Carbon::parse($this->financial_year_date_format)->addYear()->subDay()->toDateString();
+			$this->financial_year = Carbon::parse($this->financial_year_date_format)->format('y');
+		}
+
+		$this->tesco_material_obj = new TescoMaterialQuery();
+		$this->erp_id_gen_obj = new ErpIDGenerator();
 	}
 
 	/**
@@ -93,33 +109,8 @@ class ErpOrders
 			}
 			else
 			{
-				// Logic for resetting ERP ID format for new financial year			 
-				$max_erp_id = Erp::select('erp_id')->find(Erp::max('id'));
-				
-				if($max_erp_id){
-					$split_erp_id = explode("-",$max_erp_id->erp_id);
-					$parsed_max_id  = ltrim(end($split_erp_id), '0');
-
-					$erp_id_prefix = count($split_erp_id) === 2?"ERPID-0":"ERPID-".$this->month."-".$this->year."-0";
-				} else {
-					(int)$parsed_max_id = 0;
-					$erp_id_prefix = "ERPID-".$this->month."-".$this->year."-0";
-				}
-				
-				if( strtotime($this->today_date) >= strtotime($this->financial_year_date_format) ){
-					// check if already order placed today.
-					$already_order_placed = Erp::whereBetween('created_at', [$this->from, $this->current_date])->orWhereDate('created_at', '=',$this->today_date)->exists();
-
-					// set erp id as 1 for first order of the financial year
-					(int)$parsed_max_id = $already_order_placed === false?1:(int)$parsed_max_id+(int)1;
-
-					$erp_id_prefix = $already_order_placed === false?"ERPID-".$this->month."-".$this->year."-0":$erp_id_prefix;
-				} else {
-					(int)$parsed_max_id += 1;
-				}
-				
-				// erp id format : "ERPID-mm-yyyy-01". and for old orders "ERPID-01" 
-				$erp_id = $erp_id_prefix.$parsed_max_id;
+				// erp id format : "yymmxxxxx". and for old orders "ERPID-01" 
+				$erp_id = $this->erp_id_gen_obj->generateErpID($this->financial_year_start, $this->today_date, $this->financial_year, $this->month);
 
 				$erp_orders = Erp::create([
 								'buyer_id'         => $buyer_id,
@@ -198,20 +189,16 @@ class ErpOrders
 							'order_status_id'       => $order_status_id->id,
 							'order_date'            => $orders->order_created_at,
 							'aw_date'               => $orders->order_approved_at,
-							'uuid'                  => $unique_id
+							'uuid'                  => $unique_id,
+							'fiscal_year_start'     => $this->financial_year_start,
+							'fiscal_year_end'       => $this->financial_year_end
 						]);
 						
 						/** Get updated data and update in history table */
 						$template          = 'Available';
 						$action_id         = DB::table('actions')->where('action', 'ilike', 'PO Manager Verification Pending')->value('id');
 	
-						$template_level = DB::table('tesco_item_master as t1')
-											->select('t3.item_name as material_sub', 't4.item_name as material', 't1.item_name as ref')
-											->leftJoin('tesco_item_master as t2', 't2.id','=','t1.parent_id')
-											->leftJoin('tesco_item_master as t3', 't3.id','=','t2.parent_id')
-											->leftJoin('tesco_item_master as t4', 't4.id','=','t3.parent_id')
-											->where('t1.id', $orders->template_id)
-											->first();
+						$template_level = $this->tesco_material_obj->tescoMaterialDetails($orders->template_id);
 	
 						$material_name  = $template_level->material;
 						$material_sub   = $template_level->material_sub;
@@ -326,33 +313,8 @@ class ErpOrders
 			}
 			else
 			{
-				// Logic for resetting ERP ID format for new financial year			 
-				$max_erp_id = Erp::select('erp_id')->find(Erp::max('id'));
-				
-				if($max_erp_id){
-					$split_erp_id = explode("-",$max_erp_id->erp_id);
-					(int)$parsed_max_id  = ltrim(end($split_erp_id), '0');
-
-					$erp_id_prefix = count($split_erp_id) === 2?"ERPID-0":"ERPID-".$this->month."-".$this->year."-0";
-				} else {
-					(int)$parsed_max_id = 0;
-					$erp_id_prefix = "ERPID-".$this->month."-".$this->year."-0";
-				}
-				
-				if( strtotime($this->today_date) >= strtotime($this->financial_year_date_format) ){
-					// check if already order placed today.
-					$already_order_placed = Erp::whereBetween('created_at', [$this->from, $this->current_date])->orWhereDate('created_at', '=',$this->today_date)->exists();
-
-					// set erp id as 1 for first order of the financial year
-					(int)$parsed_max_id = $already_order_placed === false?1:(int)$parsed_max_id+(int)1;
-
-					$erp_id_prefix = $already_order_placed === false?"ERPID-".$this->month."-".$this->year."-0":$erp_id_prefix;
-				} else {
-					(int)$parsed_max_id += 1;
-				}
-				
-				// erp id format : "ERPID-mm-yyyy-01". and for old orders "ERPID-01" 
-				$erp_id = $erp_id_prefix.$parsed_max_id;
+				// erp id format : "yymmxxxxx". and for old orders "ERPID-01" 
+				$erp_id = $this->erp_id_gen_obj->generateErpID($this->financial_year_start, $this->today_date, $this->financial_year, $this->month);
 
 				$erp_orders = Erp::create([
 								'buyer_id'         => $buyer_id,
@@ -439,6 +401,8 @@ class ErpOrders
 							'aw_date'               => $orders->order_approved_at,
 							'uuid'                  => $unique_id,
 							'template_type'         => $orders->template_type,
+							'fiscal_year_start'     => $this->financial_year_start,
+							'fiscal_year_end'       => $this->financial_year_end
 						]);
 					
 						// write data into history tables

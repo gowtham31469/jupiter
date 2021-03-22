@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -250,6 +251,16 @@ Route::group(['middleware' => 'customer_auth'], function()
 	Route::post('customer/tesco/tesco-orders', 'Customer\Tesco\OrderStatusController@index');
 	Route::post('customer/tesco/order-status', 'Customer\Tesco\OrderStatusController@index');
 	Route::post('customer/tesco/order-management/set-po-number', 'Customer\Tesco\OrderStatusController@setPONumber');
+	Route::put('customer/tesco/approve-tesco-artwork', 'Customer\Tesco\OrderStatusController@approveTescoArtwork');
+
+	Route::post('customer/tesco/tesco-orders-filter', 'Customer\Tesco\OrderStatusController@tescoFilter');
+	Route::post('customer/tesco/tesco-orders-submit-filter', 'Customer\Tesco\OrderStatusController@tescoOrdersSubmitFilter');
+	Route::post('customer/tesco/tesco-submit-os', 'Customer\Tesco\OrderStatusController@tescoSubmitOs');
+
+
+	Route::post('customer/tesco/print-div-tescoos', 'Customer\Tesco\OrderStatusController@printDivTesco');
+	Route::post('customer/tesco/print-div-tesco-smallos', 'Customer\Tesco\OrderStatusController@printDivTescoSmall');
+
 	Route::post('customer/tesco/order-management/show-tesco-pi', 'Customer\Tesco\OrderStatusController@getTescoPI');
 	Route::post('customer/tesco/approve-tesco-pi', 'Customer\Tesco\OrderStatusController@approveTescoPI');
 	Route::post('customer/tesco/reject-tesco-pi', 'Customer\Tesco\OrderStatusController@rejectTescoPI');
@@ -258,6 +269,9 @@ Route::group(['middleware' => 'customer_auth'], function()
 	Route::post('customer/orchestra/edit-artwork', 'Customer\Orchestra\OrderStatusCntrl@editArtwork');
 	
 	Route::get('customer/tesco/get-artworks', 'Customer\Tesco\OrderStatusController@getArtwork');
+	Route::post('customer/tesco/approve-artworks-bulk', 'Customer\Tesco\OrderStatusController@approveArtworkBulk');
+
+	Route::get('customer/tesco/get-approve-artworks', 'Customer\Tesco\OrderStatusController@getApproveArtwork');
 	Route::post('customer/tesco/update-po', 'Customer\Tesco\OrderStatusController@updateArtworkPO');
 	Route::post('customer/tesco/copy-po', 'Customer\Tesco\OrderStatusController@copyArtworkPO');
 	Route::post('customer/tesco/get-po-file', 'Customer\Tesco\OrderStatusController@getPOFile');
@@ -285,7 +299,6 @@ Route::group(['middleware' => 'customer_auth'], function()
 
 	Route::put('customer/tesco/save-uk-ratio-template-orders', 'Customer\Tesco\OrderController@saveUKRatioOrders');
 	Route::put('customer/tesco/save-uk-single-template-orders', 'Customer\Tesco\OrderController@saveUKSingleOrders');
-	Route::put('customer/tesco/approve-tesco-order', 'Customer\Tesco\OrderController@approveTescoOrder');
 	Route::put('customer/tesco/cancel-tesco-order', 'Customer\Tesco\OrderController@cancelTescoOrder');
     
     /** customer profile related routes */
@@ -401,9 +414,6 @@ Route::get('admin/orchestra/get-erp-status', 'Admin\Orchestra\OrderManagementCnt
 /** Tesco order-management**/
 Route::get('admin/tesco/order-management', 'Admin\Tesco\OrderManagementCntrl@index');
 Route::post('admin/tesco/template-management/template-view', 'Admin\Tesco\TemplateManagementCntrl@templateView');
-Route::post('admin/tesco/template-management/save-taxation', 'Admin\Tesco\TemplateManagementCntrl@saveTax');
-
-Route::post('admin/orchestra/template-management/save-taxation', 'Admin\Orchestra\TemplateManagementCntrl@saveTax');
 
 Route::get('admin/tesco/template-management/get-company', 'Admin\Tesco\TemplateManagementCntrl@getCompany');
 Route::post('admin/tesco/order-management/orders', 'Admin\Tesco\OrderManagementCntrl@Orders');
@@ -433,7 +443,6 @@ Route::put('admin/tesco/save-ce-single-template-orders', 'Admin\Tesco\OrderManag
 
 Route::put('admin/tesco/save-uk-ratio-template-orders', 'Admin\Tesco\OrderManagementCntrl@saveUKRatioOrders');
 Route::put('admin/tesco/save-uk-single-template-orders', 'Admin\Tesco\OrderManagementCntrl@saveUKSingleOrders');
-Route::put('admin/tesco/approve-tesco-order', 'Admin\Tesco\OrderManagementCntrl@approveTescoOrder');
 Route::put('admin/tesco/cancel-tesco-order', 'Admin\Tesco\OrderManagementCntrl@cancelTescoOrder');
 
 
@@ -595,6 +604,29 @@ Route::get('admin/common-settings', 'Admin\Settings\SettingsController@index');
 
 /** Tesco order-status**/
 Route::post('admin/tesco/tesco-orders', 'Admin\Tesco\OrderStatusCntrl@index');
+Route::post('admin/tesco/tesco-orders-filter', 'Admin\Tesco\OrderStatusCntrl@tescoFilter');
+Route::post('admin/tesco/tesco-orders-submit-filter', 'Admin\Tesco\OrderStatusCntrl@tescoOrdersSubmitFilter');
+
+
+Route::post('admin/tesco/get-order-details', 'Admin\Tesco\OrderStatusCntrl@getOrderDetails');
+
+
+
+Route::post('admin/tesco/print-div-tescoos', 'Admin\Tesco\OrderStatusCntrl@printDivTesco');
+Route::post('admin/tesco/print-div-tesco-smallos', 'Admin\Tesco\OrderStatusCntrl@printDivTescoSmall');
+
+
+Route::post('admin/tesco/generate-div-tescoos', 'Admin\Tesco\OrderStatusCntrl@generateDivTesco');
+Route::post('admin/tesco/generate-div-tesco-smallos', 'Admin\Tesco\OrderStatusCntrl@generateDivTescoSmall');
+
+Route::post('admin/tesco/generatebarcodetsl1', 'Admin\Tesco\OrderStatusCntrl@generateBarcodeTsl1');
+Route::post('admin/tesco/generatebarcodetsl3', 'Admin\Tesco\OrderStatusCntrl@generateBarcodeTsl3');
+
+Route::post('admin/tesco/generatebarcodeeanbig', 'Admin\Tesco\OrderStatusCntrl@generateBarcodeEanBig');
+Route::post('admin/tesco/generatebarcodeitfbig', 'Admin\Tesco\OrderStatusCntrl@generateBarcodeItfBig');
+
+Route::post('admin/tesco/tesco-submit-os', 'Admin\Tesco\OrderStatusCntrl@tescoSubmitOs');
+
 Route::post('admin/tesco/order-management/set-po-number', 'Admin\Tesco\OrderStatusCntrl@setPONumber');
 Route::post('admin/tesco/set-po-file', 'Admin\Tesco\OrderStatusCntrl@setCustomerPOFile');
 
@@ -604,6 +636,8 @@ Route::post('admin/tesco/reject-tesco-pi', 'Admin\Tesco\OrderStatusCntrl@rejectT
 Route::post('admin/tesco/edit-artwork', 'Admin\Tesco\OrderStatusCntrl@editArtwork');
 Route::post('admin/orchestra/edit-artwork', 'Admin\Orchestra\OrderStatusCntrl@editArtwork');
 Route::get('admin/tesco/get-artworks', 'Admin\Tesco\OrderStatusCntrl@getArtwork');
+Route::post('admin/tesco/approve-artworks-bulk', 'Admin\Tesco\OrderStatusCntrl@approveArtworkBulk');
+Route::get('admin/tesco/get-approve-artworks', 'Admin\Tesco\OrderStatusCntrl@getApproveArtwork');
 Route::post('admin/tesco/update-po', 'Admin\Tesco\OrderStatusCntrl@updateArtworkPO');
 Route::post('admin/tesco/copy-po', 'Admin\Tesco\OrderStatusCntrl@copyArtworkPO');
 Route::post('admin/tesco/get-po-file', 'Admin\Tesco\OrderStatusCntrl@getPOFile');
@@ -621,6 +655,7 @@ Route::post('admin/tesco/disable-artwork-edit', 'Admin\Tesco\OrderStatusCntrl@di
 
 Route::post('admin/tesco/edit-check-exist-po-repeat', 'Admin\Tesco\OrderStatusCntrl@editCheckExistPoRepeat');
 Route::get('admin/tesco/get-erp-status', 'Admin\Tesco\OrderStatusCntrl@checkERPStatus');
+Route::put('admin/tesco/approve-tesco-artwork', 'Admin\Tesco\OrderStatusCntrl@approveTescoArtwork');
 
 Route::get('customer/reorder', 'Customer\HomeController@reorder');
 
@@ -899,11 +934,76 @@ Route::post('/level2Filter','ErpUser\Reports\ReportController@level2Filter');
 Route::get('getTableFields','ErpUser\Reports\ReportController@getTableFields');
 Route::post('setUpDatatable', 'ErpUser\Reports\ReportController@setUpDatatable' )->name('setUpDatatable');
 
+// Routes for admin report generation
+Route::get('testQuery','Admin\Report\ReportController@testQuery')->name('testQuery');
+Route::get('admin/generate-report','Admin\Report\ReportController@index')->name('generate-report');
+Route::post('filter_level1','Admin\Report\ReportController@level1Filter')->name('filter_level1');
+Route::post('admin_level2Filter','Admin\Report\ReportController@level2Filter')->name('filter_level2');
+Route::post('admin_getTableFields','Admin\Report\ReportController@admin_getTableFields')->name('admin_getTableFields');
+Route::post('admin_setUpDatatable', 'Admin\Report\ReportController@admin_setUpDatatable' )
+													  ->name('admin_setUpDatatable');
+
+// Routes for customer report generation
+Route::get('customer/generate-report','Customer\Report\ReportController@index');
+Route::post('customer_filter_level1','Customer\Report\ReportController@level1Filter')->name('customer_filter_level1');
+Route::post('customer_filter_level2','Customer\Report\ReportController@level2Filter')->name('customer_filter_level2');
+Route::post('customer_getTableFields','Customer\Report\ReportController@customer_getTableFields')->name('customer_getTableFields');
+Route::post('customer_setUpDatatable','Customer\Report\ReportController@customer_setUpDatatable')->name('customer_setUpDatatable');
+
 Route::get('print-manager/get-customers-list', 'ErpUser\Printmanager\PrintManagerController@getCustomersListByBuyerId'); 
 Route::get('print-manager/get-style-list', 'ErpUser\Printmanager\PrintManagerController@getStyleListByBuyerCustomerId'); 
 Route::get('print-manager/get-erporder-list', 'ErpUser\Printmanager\PrintManagerController@getErpOrderListByBuyerCustomerId'); 
 
 
+#Tesco Wash care Symbols
+Route::post('admin/tesco/settings/symbols', 'Admin\Settings\Tesco\TescoSettings@tescoSymbols');
+Route::post('admin/tesco/settings/addTescoSymbols', 'Admin\Settings\Tesco\TescoSettings@addTescoSymbols');
+Route::put('admin/tesco/enable-tesco-symbol', 'Admin\Settings\Tesco\TescoSettings@enableTescoSymbol');
+Route::put('admin/tesco/disable-tesco-symbol', 'Admin\Settings\Tesco\TescoSettings@disableTescoSymbol');
 
 
+#Tesco Countries
+Route::post('admin/tesco/settings/countries', 'Admin\Settings\Tesco\TescoSettings@tescoCountries');
+Route::post('admin/tesco/add-tesco-country', 'Admin\Settings\Tesco\TescoSettings@addTescoCountry');
+Route::get('admin/tesco/get-tesco-country-details', 'Admin\Settings\Tesco\TescoSettings@getTescoCountryById');
+Route::put('admin/tesco/update-tesco-country', 'Admin\Settings\Tesco\TescoSettings@updateTescoCountryById');
+Route::put('admin/tesco/enable-tesco-country', 'Admin\Settings\Tesco\TescoSettings@enableTescoCountry');
+Route::put('admin/tesco/disable-tesco-country', 'Admin\Settings\Tesco\TescoSettings@disableTescoCountry');
 
+#Tesco Components
+Route::post('admin/tesco/settings/components', 'Admin\Settings\Tesco\TescoSettings@tescoComponents');
+Route::post('admin/tesco/add-tesco-components', 'Admin\Settings\Tesco\TescoSettings@addTescoComponents');
+Route::get('admin/tesco/get-tesco-components-details', 'Admin\Settings\Tesco\TescoSettings@getTescoComponentsById');
+Route::put('admin/tesco/update-tesco-components', 'Admin\Settings\Tesco\TescoSettings@updateTescoComponentsById');
+Route::put('admin/tesco/enable-tesco-components', 'Admin\Settings\Tesco\TescoSettings@enableTescoComponents');
+Route::put('admin/tesco/disable-tesco-components', 'Admin\Settings\Tesco\TescoSettings@disableTescoComponents');
+
+#Tesco Fabric list
+Route::post('admin/tesco/settings/fabric-lists', 'Admin\Settings\Tesco\TescoSettings@tescoFabricList');
+Route::post('admin/tesco/add-tesco-fabric', 'Admin\Settings\Tesco\TescoSettings@addTescoFabric');
+Route::get('admin/tesco/get-tesco-fabric-details', 'Admin\Settings\Tesco\TescoSettings@getTescoFabricById');
+Route::put('admin/tesco/update-tesco-fabric-details', 'Admin\Settings\Tesco\TescoSettings@updateTescoFabricById');
+Route::put('admin/tesco/enable-tesco-fabric', 'Admin\Settings\Tesco\TescoSettings@enableTescoFabric');
+Route::put('admin/tesco/disable-tesco-fabric', 'Admin\Settings\Tesco\TescoSettings@disableTescoFabric');
+
+#Tesco Kids Warning Statement
+Route::post('admin/tesco/settings/get-warn-stmts-lists', 'Admin\Settings\Tesco\TescoSettings@tescoKidsWarnLists');
+Route::post('admin/tesco/add-tesco-warn-stmt', 'Admin\Settings\Tesco\TescoSettings@addTescoWarnStmt');
+Route::get('admin/tesco/get-tesco-warn-stmt-details', 'Admin\Settings\Tesco\TescoSettings@getTescoWarningStmtById');
+Route::put('admin/tesco/update-tesco-warn-stmt-details', 'Admin\Settings\Tesco\TescoSettings@updateTescoWarningStmtById');
+Route::put('admin/tesco/enable-tesco-warn-stmt', 'Admin\Settings\Tesco\TescoSettings@enableTescoWarningStmt');
+Route::put('admin/tesco/disable-tesco-warn-stmt', 'Admin\Settings\Tesco\TescoSettings@disableTescoWarningStmt');
+
+#Tesco Translation
+Route::post('admin/tesco/settings/get-tesco-translation-lists', 'Admin\Settings\Tesco\TescoSettings@tescoTranslationLists');
+Route::post('admin/tesco/add-tesco-translation', 'Admin\Settings\Tesco\TescoSettings@addTescoTranslation');
+Route::get('admin/tesco/get-tesco-translation-details', 'Admin\Settings\Tesco\TescoSettings@getTescoTranslationById');
+Route::put('admin/tesco/update-tesco-translation-details', 'Admin\Settings\Tesco\TescoSettings@updateTescoTranslationById');
+Route::put('admin/tesco/enable-tesco-translation', 'Admin\Settings\Tesco\TescoSettings@enableTescoTranslation');
+Route::put('admin/tesco/disable-tesco-translation', 'Admin\Settings\Tesco\TescoSettings@disableTescoTranslation');
+
+// Update financial year in session
+Route::post('jga/set-financial-year-session', function (Request $request) {
+	Session::put('fiscal-year', $request['year']);  
+	return response()->json(['message' => 'success'], 200);
+});

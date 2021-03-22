@@ -3696,6 +3696,9 @@ class OrderController extends Controller
             $data        =   $pi_obj->getOrchestraPIDetails($request);
             unset($data['price_list']);
             $attachment =   $pi_obj->getOrchestraAttachment($data,$request);
+
+            // call PI generation function
+            $pi_number = $pi_obj->piNumberGenerator();
             
             $erpOrders   =   [];
             $total_qnty  =   0 ; 
@@ -3728,7 +3731,8 @@ class OrderController extends Controller
                     'place_of_supply'  => $data['bank_details']->place_of_supply,
                     'revision_no'      => $data['item_details'][0]->pi_rev_no,
                     'rep_order_id'     => $rep_order_id,
-                    'pi_file'          => $attachment
+                    'pi_file'          => $attachment,
+                    'pi_number'        => $pi_number
                     
                 ]);
 

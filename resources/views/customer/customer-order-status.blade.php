@@ -31,8 +31,19 @@
     .html2canvas-container { width: 3000px !important; height: 3000px !important; }
 </style>
 
+{{-- Hidden div for svg rendering --}}
+<div id="modaldiv">
+        <div id="svgdiv" style="position:absolute;visibility:hidden">\
+         <svg id="ean-13"></svg>\
+       </div>
+    </div>
 <input type="hidden" id="status_flag">
 <div class="col-sm-12 col-md-12 main">
+
+        <div class="main-content">
+                <div class="select-buyer">
+                </div>
+            </div>
     <div class="top-content">
         <div class="buyer-nav-div hidden">
            <a class="dropdown-toggle profile-dropdown-admin selected-buyer" style="text-transform:capitalize;cursor: pointer;">Select Buyer</a>
@@ -41,10 +52,6 @@
         <div class="clearfix"></div>
     </div>
 
-    <div class="main-content">
-        <div class="select-buyer">
-        </div>
-    </div>
     <div class="modal fade po-details" id="po-file-upload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -225,7 +232,7 @@
                     <div id="uvc_select_div">
                     </div>
                     <div id="exist_artwork_div_status" class="hidden">
-                        <h4>Artworks : </h4>
+                        <h4>Artworks :  <span style="display: inline-block;margin-left: 100px;" class="tab"></span> Buyer PO No :<span style="display: inline-block;margin-left: 100px;" class="tab"></span> Cust PO No :</h4>
                         <label style='color:red' id='check_error_status' class='hidden'>Please select atleast one artwork</label>
                         <ul class="list-group checked-list-box">
                         </ul>
@@ -239,7 +246,7 @@
                         <label style="color:red" id="select_error_status" class="hidden">Please Select PO</label>
                         <div class="form-group" id="selectpo_status">
                             <label>Select PO</label>
-                            <select class="form-control">
+                            <select id="select_po_status" class="form-control">
                                   <option>1</option>
                                   <option>2</option>
                                   <option>3</option>
@@ -275,6 +282,32 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="approve-upload-group" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="gridSystemModalLabel">Approve Artwork</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="uvc_approve_select_div">
+                    </div>
+                    <div id="exist_artwork_approve_div_status" class="hidden">
+                        <h4>Artworks : <span style="display: inline-block;margin-left: 100px;" class="tab"></span> Buyer PO No :</h4>
+                        <label style='color:red' id='check_approve_error_status' class='hidden'>Please select atleast one artwork</label>
+                        <ul class="list-group checked-list-box">
+                        </ul>
+                        <hr/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+                    <button type="button" id="approve_button" class="btn btn-primary hidden">Approve Artwork</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="left-panel col-md-12" style="display: none;">
         <div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
         <div class="div-max">
@@ -294,17 +327,17 @@
                         </div>
                         <div class="form-group has-feedback">
                             <label for="tesco_uk_style">UK Style Ref.</label>
-                            <input type="text" class="form-control" name="tesco_uk_style" id="tesco_uk_style" placeholder="Enter UK Style Ref." maxlength="10" required="" onkeyup="dynamicSVGTemplates()">
+                            <input type="text" class="form-control" name="tesco_uk_style" id="tesco_uk_style" placeholder="Enter UK Style Ref." maxlength="8" required="" onkeyup="dynamicSVGTemplates()">
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
                             <label for="tesco_ce_style">CE Style Ref.</label>
-                            <input type="text" class="form-control" name="tesco_ce_style" id="tesco_ce_style" maxlength="10" placeholder="Enter CE Style Ref." required="" onkeyup="dynamicSVGTemplates()">
+                            <input type="text" class="form-control" name="tesco_ce_style" id="tesco_ce_style" maxlength="8" placeholder="Enter CE Style Ref." required="" onkeyup="dynamicSVGTemplates()">
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
                             <label for="tesco_season_code">Season Code</label>
-                            <input type="text" class="form-control" name="tesco_season_code" id="tesco_season_code" required="" placeholder="Enter Season Code" onkeyup="dynamicSVGTemplates()" data-required-error="Mandatory Field." >
+                            <input type="text" class="form-control" name="tesco_season_code" id="tesco_season_code" required="" placeholder="Enter Season Code" onkeyup="dynamicSVGTemplates()" maxlength="6" data-required-error="Mandatory Field.">
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
@@ -314,7 +347,7 @@
                         </div>
                         <div class="form-group has-feedback">
                             <label for="tesco_eqos">EQOS Site Code</label>
-                            <input type="text" class="form-control" name="tesco_eqos" id="tesco_eqos" required="" placeholder="Enter EQOS Site Code" maxlength="10" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()">
+                            <input type="text" class="form-control" name="tesco_eqos" id="tesco_eqos" required="" placeholder="Enter EQOS Site Code" maxlength="7" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()">
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
@@ -446,11 +479,37 @@
             </div>
         </div>
     </div>
-{{-- Hidden div for svg rendering --}}
-<div id="modaldiv">
-	<div id="svgdiv" style="position:absolute;visibility:hidden">\
-	 <svg id="ean-13"></svg>\
-   </div>
+<!-- Tesco Artwork Approve Modal -->
+<div class="modal fade" id="approveTescoArtworkModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Approve Artwork</h4>
+            </div>
+                <div class="modal-body">
+                        <input type="hidden" value="" id="ts_table_id">
+                        <input type="hidden" value="" id="ts_table_name">
+                        <p>Are you sure, you want to  approve this artwork ?</p>
+                </div>
+                <div class="modal-footer">
+                    {!! Form::button('No', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                    {!! Form::button('Yes', ['class' => 'btn btn-primary btn-sm', 'id' => 'approve_tesco_artwork_btn','onclick' => 'approveTescoArtwork()'] ) !!}
+                </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tesco Saved order alertbox -->
+<div class="modal fade" id="savedOrderAlertBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <p>Please SUBMIT your order at the Create Order Page.</p>
+            </div>
+        </div>
+    </div>
 </div>
     @endsection @else
     <script type="text/javascript">
@@ -531,7 +590,13 @@
                     $('#snackbar').css('background-color','#00b6ff');
                     $('.snackbar_span').html('Purchase Order File Uploaded Successfully');
                     showSnackbar();
-                    window.location = "{{ url('/customer/order-status') }}";
+                    //window.location = "{{ url('/customer/order-status') }}";
+                    if(response.po_status == "PO Uploaded")
+                    {
+                        $('#'+tab_nm+'_'+row_id).find('.po_status a span').text("PO Uploaded")
+                        $('#'+tab_nm+'_'+row_id).find('.po_status a span').removeClass("label-POPending")
+                        $('#'+tab_nm+'_'+row_id).find('.po_status a span').addClass("label-POUploaded")
+                    }
                 });
                 this.on("error", function(file, response) {
                     this.removeFile(file);

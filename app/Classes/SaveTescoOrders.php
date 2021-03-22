@@ -8,7 +8,8 @@ use App\TescoTHL1Orders;
 use App\TescoTHL3Orders;
 use App\TescoTSL1Orders;
 use App\TescoTSL3Orders;
-use App\Classes\SaveTescoOrdersUpdateQuery;
+use App\OrderManagementHistory;
+use App\Classes\TescoMaterialQuery;
 /**
  * Class to save the tesco template orders
  * @author [Praveen] <[praveen@wizroots.com]>
@@ -16,15 +17,20 @@ use App\Classes\SaveTescoOrdersUpdateQuery;
 class SaveTescoOrders
 {
   /**
-   * method to save the tesco TCL1 orders
+   * method to save the tesco orders
    * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function saveTCL1Order($request,$template_id,$created_by)
+  public function saveTescoOrder($request,$template_id,$created_by)
   {
     try {
-           /** [ Creating new object for SaveTescoOrdersUpdateQuery() class ] */
-           $tesco_order_obj = new SaveTescoOrdersUpdateQuery(); 
+           $tesco_material_obj = new TescoMaterialQuery();
+
+           /** [ Get company id for template ] */
+           $template_data = DB::table('tesco_item_master')->select('tesco_item_master.item_name', 'reports_template_level_name.name as name_in_reports', 'tesco_item_master.company_id')->join('tesco_template', 'tesco_item_master.id', 'tesco_template.item_id')->join('reports_template_level_name', 'reports_template_level_name.id', 'tesco_template.name_in_reports')->where('tesco_item_master.id','=',$template_id)->first();
+
+           //Dynamic function name and database model name for each templates
+           $order_model = 'App\\'."Tesco".str_replace(" ","",$template_data->item_name)."Orders";
 
            if($request['supplier'] != '')
            {
@@ -36,575 +42,61 @@ class SaveTescoOrders
              $customer_id = NULL;
            }
 
-           /** Insert order details first time. If data already exits, update old values**/
-           if($request['is_insert'] == 'true')
-           {
-              /** [ Check if order already placed for this CE style OR UK style ] */
-              if($request['zone'] == 'UK')
-              {
-                $is_exists = TescoTCL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
-              }
-              else
-              {
-                $is_exists = TescoTCL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
-              }
+            /** Insert order details first time. If data already exits, update old values**/
+           $saved_order  = $order_model::updateOrCreate([strtolower($request['zone']).'_style_ref' => $request[strtolower($request['zone']).'_style'], 'po_number' => $request['po_number'], 'order_status' => 'Saved'],[
+            'order_id'             => "",
+            'zone'                 => $request['zone'],
+            'template_type'        => $request['type'],
+            'uk_style_ref'         => $request['uk_style'],
+            'ce_style_ref'         => $request['ce_style'],
+            'season_code'          => $request['season_code'],
+            'short_description'    => $request['description'],
+            'eqos_site_code'       => $request['eqos'],
+            'manufacture_date'     => $request['manufacture_date'],
+            'tesco_department_id'  => $request['department'],
+            'tesco_brand_id'       => $request['brand'],
+            'tesco_supplier_id'    => $customer_id,
+            'tesco_metadata_supplier_id' => $request['supplier'],
+            'rfid_compliant'       => $request['rfid'],
+            'tag_at_source'        => $request['tag_at_source'],
+            'template_id'          => $template_id,
+            'pi_status'            => "",
+            'po_status'            => "",
+            'order_placed_by'      => $created_by,
+            'ocn_number'           => $request['ocn_no'],
+            'full_description'     => $request['full_description']
+          ]);
 
-              if($is_exists)
-              {
-                $order_id = $is_exists->id;
-                /** [ Invoking updateTCL1Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTCL1Order($request,$order_id,$template_id,$customer_id,$created_by);
+          /** Insert order data into history table */
+          $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
+          $template_level = $tesco_material_obj->tescoMaterialDetails($template_id);
+	
+          $material_name  = $template_level->material;
+          $material_sub   = $template_level->material_sub;
+          $material_ref   = $template_level->ref;
+          $order_table_name = "tesco_".strtolower(str_replace(" ","",$template_data->item_name))."_orders";
+          
+          // order_status = 1 , ID of saved status in order_status table.
+          OrderManagementHistory::updateOrCreate(['order_table_name'  => $order_table_name, 'order_table_id'    => $saved_order->id],[
+            'buyer_id'                  => $tesco_buyer_id->id,
+            'season'                    => $request['season_code'],
+            'customer_id'               => $customer_id,
+            'material'                  => $material_name,
+            'sub_material'              => $material_sub,
+            'style'                     => $request[strtolower($request['zone']).'_style'],
+            'reference'                 => $material_ref,
+            'buyer_po'                  => $request['po_number'],
+            'ocn_number'                => $request['ocn_no'],
+            'order_status'              => 1,
+            'name_in_reports'           => $template_data->name_in_reports
+          ]);
 
-                return $is_exists;
-                
-              }
-              else
-              {
-                return TescoTCL1Orders::create([
-                          'order_id'             => "",
-                          'zone'                 => $request['zone'],
-                          'template_type'        => $request['type'],
-                          'po_number'            => $request['po_number'],
-                          'uk_style_ref'         => $request['uk_style'],
-                          'ce_style_ref'         => $request['ce_style'],
-                          'season_code'          => $request['season_code'],
-                          'short_description'    => $request['description'],
-                          'eqos_site_code'       => $request['eqos'],
-                          'manufacture_date'     => $request['manufacture_date'],
-                          'tesco_department_id'  => $request['department'],
-                          'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $customer_id,
-                          'tesco_metadata_supplier_id' => $request['supplier'],
-                          'rfid_compliant'       => $request['rfid'],
-                          'tag_at_source'        => $request['tag_at_source'],
-                          'order_status'         => "Saved",
-                          'template_id'          => $template_id,
-                          'pi_status'            => "",
-                          'po_status'            => "",
-                          'order_placed_by'      => $created_by,
-                          'ocn_number'           => $request['ocn_no'],
-                          'full_description'     => $request['full_description']
-                        ]);
-              }
-           }
-           else
-           {
-              /** [ Invoking updateTCL1Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTCL1Order($request,$request['tcl1_last_id'],$template_id,$customer_id,$created_by);
-                return $tesco_order;
-           }
-            
-            
+          return $saved_order;
+
         } catch (\Exception $e)
         {
              return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
   }
-  /**
-   * method to save the tesco TCL2 orders
-   * @param  [type] $request, $template_id
-   * @return tesco order table id (inserted_id)
-   */
-  public function saveTCL2Order($request,$template_id,$created_by)
-  {
-    try {
-          /** [ Creating new object for SaveTescoOrdersUpdateQuery() class ] */
-           $tesco_order_obj = new SaveTescoOrdersUpdateQuery(); 
-
-           if($request['supplier'] != '')
-           {
-             $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
-             $customer_id = $customer_ids != ''?$customer_ids->customer_id:NULL;
-           }
-           else
-           {
-             $customer_id = NULL;
-           }
-
-           /** Insert order details first time. If data already exits, update old values**/
-           if($request['is_insert'] == 'true')
-           {
-              /** [ Check if order already placed for this CE style OR UK style ] */
-              if($request['zone'] == 'UK')
-              {
-                $is_exists = TescoTCL2Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
-              }
-              else
-              {
-                $is_exists = TescoTCL2Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
-              }
-            
-              if($is_exists)
-              {
-                $order_id = $is_exists->id;
-                /** [ Invoking updateTCL2Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTCL2Order($request,$order_id,$template_id,$customer_id,$created_by);
-
-                return $is_exists;
-                
-              }
-              else
-              {
-                return TescoTCL2Orders::create([
-                          'order_id'             => "",
-                          'zone'                 => $request['zone'],
-                          'template_type'        => $request['type'],
-                          'po_number'            => $request['po_number'],
-                          'uk_style_ref'         => $request['uk_style'],
-                          'ce_style_ref'         => $request['ce_style'],
-                          'season_code'          => $request['season_code'],
-                          'short_description'    => $request['description'],
-                          'eqos_site_code'       => $request['eqos'],
-                          'manufacture_date'     => $request['manufacture_date'],
-                          'tesco_department_id'  => $request['department'],
-                          'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $customer_id,
-                          'tesco_metadata_supplier_id' => $request['supplier'],
-                          'rfid_compliant'       => $request['rfid'],
-                          'tag_at_source'        => $request['tag_at_source'],
-                          'order_status'         => "Saved",
-                          'template_id'          => $template_id,
-                          'pi_status'            => "",
-                          'po_status'            => "",
-                          'order_placed_by'      => $created_by,
-                          'ocn_number'           => $request['ocn_no'],
-                          'full_description'     => $request['full_description']
-                        ]);
-              }
-           }
-           else
-           {
-              /** [ Invoking updateTCL2Order function using class instance ] */
-              $tesco_order  = $tesco_order_obj->updateTCL2Order($request,$request['tcl2_last_id'],$template_id,$customer_id,$created_by);
-                return $tesco_order;
-           }
-            
-        } catch (\Exception $e)
-        {
-            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-        }
-  }
-  /**
-   * method to save the tesco TSL1 orders
-   * @param  [type] $request, $template_id
-   * @return tesco order table id (inserted_id)
-   */
-  public function saveTSL1Order($request,$template_id,$created_by)
-  {
-    try {
-           /** [ Creating new object for SaveTescoOrdersUpdateQuery() class ] */
-           $tesco_order_obj = new SaveTescoOrdersUpdateQuery(); 
-
-           if($request['supplier'] != '')
-           {
-             $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
-             $customer_id = $customer_ids != ''?$customer_ids->customer_id:NULL;
-           }
-           else
-           {
-             $customer_id = NULL;
-           }
-
-           /** Insert order details first time. If data already exits, update old values**/
-           if($request['is_insert'] == 'true')
-           {
-              /** [ Check if order already placed for this CE style OR UK style ] */
-              if($request['zone'] == 'UK')
-              {
-                $is_exists = TescoTSL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
-              }
-              else
-              {
-                $is_exists = TescoTSL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
-              }
-            
-              if($is_exists)
-              {
-                $order_id = $is_exists->id;
-                /** [ Invoking updateTCL1Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTSL1Order($request,$order_id,$template_id,$customer_id,$created_by);
-
-                return $is_exists;
-                
-              }
-              else
-              {
-                return TescoTSL1Orders::create([
-                          'order_id'             => "",
-                          'zone'                 => $request['zone'],
-                          'template_type'        => $request['type'],
-                          'po_number'            => $request['po_number'],
-                          'uk_style_ref'         => $request['uk_style'],
-                          'ce_style_ref'         => $request['ce_style'],
-                          'season_code'          => $request['season_code'],
-                          'short_description'    => $request['description'],
-                          'eqos_site_code'       => $request['eqos'],
-                          'manufacture_date'     => $request['manufacture_date'],
-                          'tesco_department_id'  => $request['department'],
-                          'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $customer_id,
-                          'tesco_metadata_supplier_id' => $request['supplier'],
-                          'rfid_compliant'       => $request['rfid'],
-                          'tag_at_source'        => $request['tag_at_source'],
-                          'order_status'         => "Saved",
-                          'template_id'          => $template_id,
-                          'pi_status'            => "",
-                          'po_status'            => "",
-                          'order_placed_by'      => $created_by,
-                          'ocn_number'           => $request['ocn_no'],
-                          'full_description'     => $request['full_description']
-                        ]);
-              }
-              
-           }
-           else
-           {
-              /** [ Invoking updateTSL1Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTSL1Order($request,$request['tsl1_last_id'],$template_id,$customer_id,$created_by);
-                return $tesco_order;
-           }
-            
-        } catch (\Exception $e)
-        {
-            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-        }
-  }
-  /**
-   * method to save the tesco THL1 orders
-   * @param  [type] $request, $template_id
-   * @return tesco order table id (inserted_id)
-   */
-  public function saveTHL1Order($request,$template_id,$created_by)
-  {
-    try {
-           /** [ Creating new object for SaveTescoOrdersUpdateQuery() class ] */
-           $tesco_order_obj = new SaveTescoOrdersUpdateQuery(); 
-
-           if($request['supplier'] != '')
-           {
-             $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
-             $customer_id = $customer_ids != ''?$customer_ids->customer_id:NULL;
-           }
-           else
-           {
-             $customer_id = NULL;
-           }
-
-           /** Insert order details first time. If data already exits, update old values**/
-           if($request['is_insert'] == 'true')
-           {
-              /** [ Check if order already placed for this CE style OR UK style ] */
-              if($request['zone'] == 'UK')
-              {
-                $is_exists = TescoTHL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
-              }
-              else
-              {
-                $is_exists = TescoTHL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
-              }
-            
-              if($is_exists)
-              {
-                $order_id = $is_exists->id;
-                /** [ Invoking updateTHL1Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTHL1Order($request,$order_id,$template_id,$customer_id,$created_by);
-
-                return $is_exists;
-                
-              }
-              else
-              {
-                return TescoTHL1Orders::create([
-                          'order_id'             => "",
-                          'zone'                 => $request['zone'],
-                          'template_type'        => $request['type'],
-                          'po_number'            => $request['po_number'],
-                          'uk_style_ref'         => $request['uk_style'],
-                          'ce_style_ref'         => $request['ce_style'],
-                          'season_code'          => $request['season_code'],
-                          'short_description'    => $request['description'],
-                          'eqos_site_code'       => $request['eqos'],
-                          'manufacture_date'     => $request['manufacture_date'],
-                          'tesco_department_id'  => $request['department'],
-                          'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $customer_id,
-                          'tesco_metadata_supplier_id' => $request['supplier'],
-                          'rfid_compliant'       => $request['rfid'],
-                          'tag_at_source'        => $request['tag_at_source'],
-                          'order_status'         => "Saved",
-                          'template_id'          => $template_id,
-                          'pi_status'            => "",
-                          'po_status'            => "",
-                          'order_placed_by'      => $created_by,
-                          'ocn_number'           => $request['ocn_no'],
-                          'full_description'     => $request['full_description']
-                        ]);
-              }
-            }
-            else
-            {
-              /** [ Invoking updateTHL1Order function using class instance ] */
-              $tesco_order  = $tesco_order_obj->updateTHL1Order($request,$request['thl1_last_id'],$template_id,$customer_id,$created_by);
-                return $tesco_order;
-            }
-            
-        } catch (\Exception $e)
-        {
-            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-        }
-  }
-  /**
-   * method to save the tesco TCL4 orders
-   * @param  [type] $request, $template_id
-   * @return tesco order table id (inserted_id)
-   */
-  public function saveTCL4Order($request,$template_id,$created_by)
-  {
-    try {
-           /** [ Creating new object for SaveTescoOrdersUpdateQuery() class ] */
-           $tesco_order_obj = new SaveTescoOrdersUpdateQuery();  
-
-           if($request['supplier'] != '')
-           {
-             $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
-             $customer_id = $customer_ids != ''?$customer_ids->customer_id:NULL;
-           }
-           else
-           {
-             $customer_id = NULL;
-           }
-
-           /** Insert order details first time. If data already exits, update old values**/
-           if($request['is_insert'] == 'true')
-           {
-                /** [ Check if order already placed for this CE style OR UK style ] */
-                if($request['zone'] == 'UK')
-                {
-                  $is_exists = TescoTCL4Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
-                }
-                else
-                {
-                  $is_exists = TescoTCL4Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
-                }
-              
-                if($is_exists)
-                {
-                  $order_id = $is_exists->id;
-                  /** [ Invoking updateTCL4Order function using class instance ] */
-                  $tesco_order  = $tesco_order_obj->updateTCL4Order($request,$order_id,$template_id,$customer_id,$created_by);
-
-                  return $is_exists;
-                  
-                }
-                else
-                {
-                  return TescoTCL4Orders::create([
-                          'order_id'             => "",
-                          'zone'                 => $request['zone'],
-                          'template_type'        => $request['type'],
-                          'po_number'            => $request['po_number'],
-                          'uk_style_ref'         => $request['uk_style'],
-                          'ce_style_ref'         => $request['ce_style'],
-                          'season_code'          => $request['season_code'],
-                          'short_description'    => $request['description'],
-                          'eqos_site_code'       => $request['eqos'],
-                          'manufacture_date'     => $request['manufacture_date'],
-                          'tesco_department_id'  => $request['department'],
-                          'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $customer_id,
-                          'tesco_metadata_supplier_id' => $request['supplier'],
-                          'rfid_compliant'       => $request['rfid'],
-                          'tag_at_source'        => $request['tag_at_source'],
-                          'order_status'         => "Saved",
-                          'template_id'          => $template_id,
-                          'pi_status'            => "",
-                          'po_status'            => "",
-                          'order_placed_by'      => $created_by,
-                          'ocn_number'           => $request['ocn_no'],
-                          'full_description'     => $request['full_description']
-                        ]);
-                }
-           }
-           else
-           {
-              /** [ Invoking updateTCL4Order function using class instance ] */
-              $tesco_order  = $tesco_order_obj->updateTCL4Order($request,$request['tcl4_last_id'],$template_id,$customer_id,$created_by);
-                return $tesco_order;
-           }
-            
-        } catch (\Exception $e)
-        {
-            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-        }
-  }
-  /**
-   * method to save the tesco TSL3 orders
-   * @param  [type] $request, $template_id
-   * @return tesco order table id (inserted_id)
-   */
-  public function saveTSL3Order($request,$template_id,$created_by)
-  {
-    try {
-            /** [ Creating new object for SaveTescoOrdersUpdateQuery() class ] */
-            $tesco_order_obj = new SaveTescoOrdersUpdateQuery();
-
-            if($request['supplier'] != '')
-             {
-               $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
-               $customer_id = $customer_ids != ''?$customer_ids->customer_id:NULL;
-             }
-             else
-             {
-               $customer_id = NULL;
-             }
-
-            /** Insert order details first time. If data already exits, update old values**/
-            if($request['is_insert'] == 'true')
-            {
-                /** [ Check if order already placed for this CE style OR UK style ] */
-                if($request['zone'] == 'UK')
-                {
-                  $is_exists = TescoTSL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
-                }
-                else
-                {
-                  $is_exists = TescoTSL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
-                }
-              
-                if($is_exists)
-                {
-                  $order_id = $is_exists->id;
-                  /** [ Invoking updateTSL3Order function using class instance ] */
-                  $tesco_order  = $tesco_order_obj->updateTSL3Order($request,$order_id,$template_id,$customer_id,$created_by);
-
-                  return $is_exists;
-                  
-                }
-                else
-                {
-                  return TescoTSL3Orders::create([
-                          'order_id'             => "",
-                          'zone'                 => $request['zone'],
-                          'template_type'        => $request['type'],
-                          'po_number'            => $request['po_number'],
-                          'uk_style_ref'         => $request['uk_style'],
-                          'ce_style_ref'         => $request['ce_style'],
-                          'season_code'          => $request['season_code'],
-                          'short_description'    => $request['description'],
-                          'eqos_site_code'       => $request['eqos'],
-                          'manufacture_date'     => $request['manufacture_date'],
-                          'tesco_department_id'  => $request['department'],
-                          'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $customer_id,
-                          'tesco_metadata_supplier_id' => $request['supplier'],
-                          'rfid_compliant'       => $request['rfid'],
-                          'tag_at_source'        => $request['tag_at_source'],
-                          'order_status'         => "Saved",
-                          'template_id'          => $template_id,
-                          'pi_status'            => "",
-                          'po_status'            => "",
-                          'order_placed_by'      => $created_by,
-                          'ocn_number'           => $request['ocn_no'],
-                          'full_description'     => $request['full_description']
-                        ]);
-                }
-            }
-            else
-            {
-              /** [ Invoking updateTSL3Order function using class instance ] */
-              $tesco_order  = $tesco_order_obj->updateTSL3Order($request,$request['tsl3_last_id'],$template_id,$customer_id,$created_by);
-                return $tesco_order;
-            }
-            
-        } catch (\Exception $e)
-        {
-            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-        }
-  }
-  /**
-   * method to save the tesco THL3 orders
-   * @param  [type] $request, $template_id
-   * @return tesco order table id (inserted_id)
-   */
-  public function saveTHL3Order($request,$template_id,$created_by)
-  {
-    try {
-            /** [ Creating new object for SaveTescoOrdersUpdateQuery() class ] */
-            $tesco_order_obj = new SaveTescoOrdersUpdateQuery();
-
-            if($request['supplier'] != '')
-             {
-               $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
-               $customer_id = $customer_ids != ''?$customer_ids->customer_id:NULL;
-             }
-             else
-             {
-               $customer_id = NULL;
-             }
-
-            /** Insert order details first time. If data already exits, update old values**/
-            if($request['is_insert'] == 'true')
-            {
-                 /** [ Check if order already placed for this CE style OR UK style ] */
-                  if($request['zone'] == 'UK')
-                  {
-                    $is_exists = TescoTHL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
-                  }
-                  else
-                  {
-                    $is_exists = TescoTHL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
-                  }
-              
-                if($is_exists)
-                {
-                  $order_id = $is_exists->id;
-                  /** [ Invoking updateTHL3Order function using class instance ] */
-                  $tesco_order  = $tesco_order_obj->updateTHL3Order($request,$order_id,$template_id,$customer_id,$created_by);
-
-                  return $is_exists;
-                  
-                }
-                else
-                {
-                  return TescoTHL3Orders::create([
-                          'order_id'             => "",
-                          'zone'                 => $request['zone'],
-                          'template_type'        => $request['type'],
-                          'po_number'            => $request['po_number'],
-                          'uk_style_ref'         => $request['uk_style'],
-                          'ce_style_ref'         => $request['ce_style'],
-                          'season_code'          => $request['season_code'],
-                          'short_description'    => $request['description'],
-                          'eqos_site_code'       => $request['eqos'],
-                          'manufacture_date'     => $request['manufacture_date'],
-                          'tesco_department_id'  => $request['department'],
-                          'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $customer_id,
-                          'tesco_metadata_supplier_id' => $request['supplier'],
-                          'rfid_compliant'       => $request['rfid'],
-                          'tag_at_source'        => $request['tag_at_source'],
-                          'order_status'         => "Saved",
-                          'template_id'          => $template_id,
-                          'pi_status'            => "",
-                          'po_status'            => "",
-                          'order_placed_by'      => $created_by,
-                          'ocn_number'           => $request['ocn_no'],
-                          'full_description'     => $request['full_description']
-                        ]);
-                }
-              
-            }
-            else
-            {
-              /** [ Invoking updateTHL3Order function using class instance ] */
-              $tesco_order  = $tesco_order_obj->updateTHL3Order($request,$request['thl3_last_id'],$template_id,$customer_id,$created_by);
-              return $tesco_order;
-            }
-            
-            
-        } catch (\Exception $e)
-        {
-            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-        }
-  }
+ 
 }

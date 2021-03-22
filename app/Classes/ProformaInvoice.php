@@ -4,10 +4,21 @@ use DB;
 use View;
 use Carbon\Carbon;
 use App\Classes\PiTCPDF;
+use App\ProfomaInvoice;
+use App\ProfomaInvoiceItemDetails;
+use App\FinancialYearResetDate;
 
 class ProformaInvoice
 {
   private $today;
+  private $current_date;
+  private $year;
+  private $month;
+  private $financial_year_date;
+  private $today_date;
+  private $financial_year_start;
+  private $financial_year_end;
+  private $financial_year;
 	
 	/**
 	 * Create a new controller instance.
@@ -17,7 +28,36 @@ class ProformaInvoice
 	public function __construct()
 	{
 		// get the current time
-		$this->today = Carbon::now('Asia/Kolkata');;
+    $this->today = Carbon::now('Asia/Kolkata');
+
+    // get the current time
+		$this->current_date = $this->today->toDateTimeString();
+
+		// get year as "2020"
+		$this->year = Carbon::parse($this->current_date)->format('Y');
+
+		// get month as "07"
+		$this->month = Carbon::parse($this->current_date)->format('m');
+
+		$this->financial_year_date = FinancialYearResetDate::value('financial_year_date');
+
+		// format financial year date as "yyyy-dd-mm" 
+		$this->financial_year_date_format = $this->year.'-'.$this->financial_year_date;
+
+		// get the current date in "dd-mm-yyyy" format
+		$this->today_date = $this->today->format('Y-m-d');
+
+		// store financial year start and end date and
+		// financial year identification
+		if($this->today_date < $this->financial_year_date_format){
+			$this->financial_year_start = Carbon::parse($this->financial_year_date_format)->subYear()->toDateString();
+			$this->financial_year_end = Carbon::parse($this->financial_year_date_format)->subDay()->toDateString();
+			$this->financial_year = Carbon::parse($this->financial_year_date_format)->subYear()->format('y');
+		} else {
+			$this->financial_year_start = $this->financial_year_date_format;
+			$this->financial_year_end = Carbon::parse($this->financial_year_date_format)->addYear()->subDay()->toDateString();
+			$this->financial_year = Carbon::parse($this->financial_year_date_format)->format('y');
+		}
   }
   
 	/**
@@ -30,7 +70,9 @@ class ProformaInvoice
 		    $id         =   $request->id;
         $table_name =   $request->table_name;
         $buyer_id   =   $request->buyer_id;
-        $pi_id      =   DB::table('profoma_invoices')->max('id')+1;
+        
+        // call PI generation function
+        $pi_id = $this->piNumberGenerator();
 
         if ($table_name === 'orchestra_hang_tag_orders') 
         {
@@ -48,15 +90,8 @@ class ProformaInvoice
                                       ->select('company.*',$table_name.'.pi_rev_no as rev_number')
                                       ->first();
                                          
-        if ($data['company_details']->id == 1) 
-        {
-          $data['company_details']->pi_number = "JGA00".$pi_id;
-        }
-        else 
-        {
-          $data['company_details']->pi_number = "SP00".$pi_id;
-        }
-
+        $data['company_details']->pi_number = $pi_id;
+        
         $data['company_details']->pi_date = $this->today->format('d/m/Y');;
         $customer_details       = DB::table($table_name)
                                   ->join('customers',$table_name.'.customer_id','=','customers.id')
@@ -181,13 +216,7 @@ class ProformaInvoice
                                        ->select('company.*')
                                        ->first();
 
-        if ($pi_details->company_id == 1)
-        {
-          $data['company_details']->pi_number = "JGA00".$pi_details->id;
-        }
-        else{
-         $data['company_details']->pi_number = "SP00".$pi_details->id;
-        }
+        $data['company_details']->pi_number = $pi_details->pi_number;
         $data['company_details']->rev_number = $pi_details->revision_no;
 
         $created_at = Carbon::parse($pi_details->created_at);
@@ -246,7 +275,9 @@ class ProformaInvoice
         $id         =   $request['id'];
         $table_name =   $request['tableName'];
         $buyer_id   =   $request->buyer_id;
-        $pi_id      =   DB::table('profoma_invoices')->max('id')+1;
+        
+        // call PI generation function
+        $pi_id = $this->piNumberGenerator();
         
         $data['company_details'] =  DB::table('tesco_item_master')
                                           ->join($table_name,$table_name.'.template_id','=','tesco_item_master.id')
@@ -255,12 +286,8 @@ class ProformaInvoice
                                           ->select('company.*',$table_name.'.pi_rev_no as rev_number')
                                           ->first();
                                          
-        if ($data['company_details']->id == 1) {
-          $data['company_details']->pi_number = "JGA00".$pi_id;
-        }
-        else {
-          $data['company_details']->pi_number = "SP00".$pi_id;
-        }
+       
+        $data['company_details']->pi_number = $pi_id;
         
         $data['company_details']->pi_date = $this->today->format('d/m/Y');;
         
@@ -568,13 +595,7 @@ class ProformaInvoice
                                        ->select('company.*')
                                        ->first();
 
-        if ($pi_details->company_id == 1)
-        {
-          $data['company_details']->pi_number = "JGA00".$pi_details->id;
-        }
-        else{
-         $data['company_details']->pi_number = "SP00".$pi_details->id;
-        }
+        $data['company_details']->pi_number = $pi_details->pi_number;
         $data['company_details']->rev_number = $pi_details->revision_no;
         
         $created_at = Carbon::parse($pi_details->created_at);
@@ -631,16 +652,9 @@ class ProformaInvoice
      * @return void
      */
     public function getTescoAttachment($data,$request){
-      // pi name based on company
-      $pi_max_id = DB::table('profoma_invoices')->max('id')+1;
-      if($data['company_details']->name === 'Jupiter Garments Accessories')
-      {
-        $pi_name = 'JGA-PI-'.$pi_max_id;
-      }
-      else 
-      {
-        $pi_name = 'SP-PI-'.$pi_max_id;
-      }
+      
+      $pi_name = $data['company_details']->pi_number;
+
       $dynView = View::make('Admin.Order Management.pi-pdf-template')
                 ->with(['company_details' => $data['company_details'], 'bank_details' => $data['bank_details'], 'ship_to'=>$data['ship_to'],'bill_to'=>$data['bill_to'],'item_details'=>$data['item_details'], 'amtText'=>$request->amntText ]);
       ob_start();
@@ -681,16 +695,8 @@ class ProformaInvoice
      * @return void
      */
     public function getOrchestraAttachment($data,$request){
-      // pi name based on company
-      $pi_max_id = DB::table('profoma_invoices')->max('id')+1;
-      if($data['company_details']->name === 'Jupiter Garments Accessories')
-      {
-        $pi_name = 'JGA-PI-'.$pi_max_id;
-      }
-      else 
-      {
-        $pi_name = 'SP-PI-'.$pi_max_id;
-      }
+      $pi_name = $data['company_details']->pi_number;
+
       $dynView = View::make('Admin.Order Management.pi-pdf-template-orchestra')
                 ->with(['company_details' => $data['company_details'], 'bank_details' => $data['bank_details'], 'ship_to'=>$data['ship_to'],'bill_to'=>$data['bill_to'],'item_details'=>$data['item_details'], 'amtText'=>$request->amntText ]);
       ob_start();
@@ -721,5 +727,34 @@ class ProformaInvoice
 
       public_path('storage/app/public/pi/'.$pi_name.'.pdf');
       return "/storage/app/public/pi/".$pi_name.".pdf";
+    }
+
+   /**
+     * Generate TESCO and Orchestra PI Number
+     * @return $pi_id
+    */
+    public function piNumberGenerator(){
+      // Logic for resetting ERP ID format for new financial year	
+      $max_pi_number = ProfomaInvoice::select('pi_number')->find(ProfomaInvoice::whereBetween('created_at', [$this->financial_year_start, $this->today_date])->orWhereDate('created_at', '=',$this->today_date)->max('id'));
+
+      // if old PI exists, then generate PIID based on old data
+      // else start new PIID from initial value(001)
+      if($max_pi_number){
+
+        // parse PI number and get last 3 continuous number.
+        // PI format for JGA "yymmXXX"
+        $explode_pi_number = explode("-",$max_pi_number->pi_number);
+        $trim_pi  = ltrim(end($explode_pi_number), '0');
+        (int)$parsed_pi_id = substr($trim_pi, 4);
+        (int)$parsed_pi_id = str_pad($parsed_pi_id+1, 3, 0, STR_PAD_LEFT);
+
+      } else {
+        (int)$parsed_pi_id = str_pad(1, 3, 0, STR_PAD_LEFT);
+      }
+      
+      // PI id format : "yymmxxx".
+      $pi_id = $this->financial_year.$this->month.$parsed_pi_id;
+
+      return $pi_id;
     }
 }
