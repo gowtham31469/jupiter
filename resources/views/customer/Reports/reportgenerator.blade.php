@@ -209,8 +209,8 @@
 		</div>
 	</div>
 </div>
-<input type="text" id="txtFrom">
-<input type="text" id="txtTo">
+<input type="hidden" id="txtFrom">
+<input type="hidden" id="txtTo">
 @endsection
     @else
     <script type="text/javascript">
