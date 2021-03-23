@@ -82,7 +82,11 @@
             <div class="col-md-12">
                 <h4>Garment Component & Fibres</h4>
             </div>
-            <div class="col-md-2">
+            <div class="col-xs-6 pull-right">
+                 <button class="btn btn-xs btn-primary submit-btn" type="button" onclick="addComponent()"><i class="fa fa-plus"
+                    aria-hidden="true"></i> Garment Component</button> 
+            </div>
+            <div class="col-md-2 component-div-1">
                 <div class="row">
                 <div class="col-xs-12">
                     <div class="form-group">
@@ -217,11 +221,11 @@
 
                 </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 component-div-2">
                 <div class="row">
                 <div class="col-xs-12">
                     <div class="form-group">
-                    <label>Garment Component 1 </label>
+                    <label>Garment Component 2 </label>
                     <select class="form-control">
                         <option>1</option>
                         <option>2</option>
@@ -352,161 +356,163 @@
 
                 </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 component-div-3">
                 <div class="row">
-                <div class="col-xs-12">
-                    <div class="form-group">
-                    <label>Garment Component 1 </label>
-                    <select class="form-control">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                        <label>Garment Component 3 </label>
+                        <select class="form-control">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                        </select>
+                        </div>
                     </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <select class="form-control input-sm">
-                        <option selected>Select Fiber</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                        <select class="form-control input-sm">
+                            <option selected>Select Fiber</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                        </select>
+                        </div>
                     </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <div class="input-group">
-                        <input type="text" class="form-control input-sm">
-                        <div class="input-group-addon">%</div>
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" class="form-control input-sm">
+                            <div class="input-group-addon">%</div>
+                        </div>
+                        </div>
                     </div>
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                        <select class="form-control input-sm">
+                            <option selected>Select Fiber</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                        </select>
+                        </div>
                     </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <select class="form-control input-sm">
-                        <option selected>Select Fiber</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" class="form-control input-sm">
+                            <div class="input-group-addon">%</div>
+                        </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <div class="input-group">
-                        <input type="text" class="form-control input-sm">
-                        <div class="input-group-addon">%</div>
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                        <select class="form-control input-sm">
+                            <option selected>Select Fiber</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                        </select>
+                        </div>
                     </div>
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" class="form-control input-sm">
+                            <div class="input-group-addon">%</div>
+                        </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <select class="form-control input-sm">
-                        <option selected>Select Fiber</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                        <select class="form-control input-sm">
+                            <option selected>Select Fiber</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                        </select>
+                        </div>
                     </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <div class="input-group">
-                        <input type="text" class="form-control input-sm">
-                        <div class="input-group-addon">%</div>
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" class="form-control input-sm">
+                            <div class="input-group-addon">%</div>
+                        </div>
+                        </div>
                     </div>
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                        <select class="form-control input-sm">
+                            <option selected>Select Fiber</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                        </select>
+                        </div>
                     </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <select class="form-control input-sm">
-                        <option selected>Select Fiber</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" class="form-control input-sm">
+                            <div class="input-group-addon">%</div>
+                        </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <div class="input-group">
-                        <input type="text" class="form-control input-sm">
-                        <div class="input-group-addon">%</div>
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                        <select class="form-control input-sm">
+                            <option selected>Select Fiber</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                        </select>
+                        </div>
                     </div>
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" class="form-control input-sm">
+                            <div class="input-group-addon">%</div>
+                        </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <select class="form-control input-sm">
-                        <option selected>Select Fiber</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
+                    <div class="col-xs-6">
+                        <h5 class="text-right"><strong>Total</strong></h5>
                     </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <div class="input-group">
-                        <input type="text" class="form-control input-sm">
-                        <div class="input-group-addon">%</div>
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" class="form-control input-sm">
+                            <div class="input-group-addon">%</div>
+                        </div>
+                        </div>
                     </div>
-                    </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <select class="form-control input-sm">
-                        <option selected>Select Fiber</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
-                    </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <div class="input-group">
-                        <input type="text" class="form-control input-sm">
-                        <div class="input-group-addon">%</div>
-                    </div>
-                    </div>
-                </div>
-                <div class="col-xs-6">
-                    <h5 class="text-right"><strong>Total</strong></h5>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <div class="input-group">
-                        <input type="text" class="form-control input-sm">
-                        <div class="input-group-addon">%</div>
-                    </div>
-                    </div>
-                </div>
-
+                   
                 </div>
             </div>
-            <div class="col-xs-12">
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-12">
                 <div class="align-items">
                 <div class="checkbox">
                     <label>
-                    <input type="checkbox"> Exclusive of Trims
+                        {!! Form::checkbox('tesco_care_exclusive_trim',null,null,['id' => 'tesco_care_exclusive_trim']) !!} Exclusive of Trims
                     </label>
                 </div>
                 <div class="checkbox">
                     <label>
-                    <input type="checkbox"> Contains Non Textile Parts
+                        {!! Form::checkbox('tesco_care_non_textile_part',null,null,['id' => 'tesco_care_non_textile_part']) !!} Contains Non Textile Parts
                     </label>
                 </div>
                 <div class="checkbox">
                     <label>
-                    <input type="checkbox"> Part of Set
+                        {!! Form::checkbox('tesco_care_part_of_set',null,null,['id' => 'tesco_care_part_of_set']) !!} Part of Set
                     </label>
                 </div>
 
                 </div>
-
             </div>
         </div>
         <hr>
@@ -611,7 +617,6 @@
                 </div>
             </div>
             </div>
-            <hr>
         </div>
         <div class="col-md-4">
             <div class="row">
@@ -630,7 +635,6 @@
                     </div>
                 </div>
             </div>
-            <hr>
         </div>
         </div>
         <hr>
@@ -643,9 +647,6 @@
             <label>Select primary size chart </label>
             <select class="form-control">
                 <option selected>select</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
             </select>
             </div>
         </div>
@@ -662,17 +663,17 @@
                 <div class="align-items">
                 <div class="checkbox">
                     <label>
-                    <input type="checkbox"> Conforms to BS EN 16781:2018
+                        {!! Form::checkbox('tesco_care_bs_en',null,null,['id' => 'tesco_care_bs_en']) !!} Conforms to BS EN 16781:2018
                     </label>
                 </div>
                 <div class="checkbox">
                     <label>
-                    <input type="checkbox"> <img class="baby-sleep-bag-symbol" src="{{ asset('images/i symbol.png') }}" />
+                       <input type="checkbox"> <img class="baby-sleep-bag-symbol" src="{{ asset('images/i symbol.png') }}" />
                     </label>
                 </div>
                 <div class="form-group form-inline">
-                    <label>TOG</label>
-                    <input type="text" class="form-control input-sm" placeholder="XXXX">
+                    {!! Form::label('tesco_care_tog', 'TOG', ['class' => 'form_label']) !!}
+                    {!! Form::text('tesco_care_tog',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'TOG','required')) !!}
                 </div>
                 </div>
             </div>
@@ -697,76 +698,6 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>Tiny Baby</td>
-                    <td>18-24M</td>
-                    <td>44cm/17 <sup>1/4</sup> In</td>
-                    <td>12.5kg/28lbs</td>
-                    <td>52.5cm/20<sup>5/8</sup>in</td>
-                    <td><div class="form-group"><input class="form-control input-sm" placeholder="UK EAN Number"></div></td>
-                    <td><div class="form-group"><input class="form-control input-sm" placeholder="CE EAN Number"></div></td>
-                    <td><div class="form-group"><input class="form-control input-sm" placeholder="Quantity"></div></td>
-                </tr>
-                <tr>
-                    <td>Tiny Baby</td>
-                    <td>18-24M</td>
-                    <td>44cm/17 <sup>1/4</sup> In</td>
-                    <td>12.5kg/28lbs</td>
-                    <td>52.5cm/20<sup>5/8</sup>in</td>
-                    <td><div class="form-group"><input class="form-control input-sm" placeholder="UK EAN Number"></div></td>
-                    <td><div class="form-group"><input class="form-control input-sm" placeholder="CE EAN Number"></div></td>
-                    <td><div class="form-group"><input class="form-control input-sm" placeholder="Quantity"></div></td>
-                </tr>
-                <tr>
-                    <td>Tiny Baby</td>
-                    <td>18-24M</td>
-                    <td>44cm/17 <sup>1/4</sup> In</td>
-                    <td>12.5kg/28lbs</td>
-                    <td>52.5cm/20<sup>5/8</sup>in</td>
-                    <td><div class="form-group"><input class="form-control input-sm" placeholder="UK EAN Number"></div></td>
-                    <td><div class="form-group"><input class="form-control input-sm" placeholder="CE EAN Number"></div></td>
-                    <td><div class="form-group"><input class="form-control input-sm" placeholder="Quantity"></div></td>
-                </tr>
-                <tr>
-                    <td>Tiny Baby</td>
-                    <td>18-24M</td>
-                    <td>44cm/17 <sup>1/4</sup> In</td>
-                    <td>12.5kg/28lbs</td>
-                    <td>52.5cm/20<sup>5/8</sup>in</td>
-                    <td><div class="form-group"><input class="form-control input-sm" placeholder="UK EAN Number"></div></td>
-                    <td><div class="form-group"><input class="form-control input-sm" placeholder="CE EAN Number"></div></td>
-                    <td><div class="form-group"><input class="form-control input-sm" placeholder="Quantity"></div></td>
-                </tr>
-                <tr>
-                    <td>Tiny Baby</td>
-                    <td>18-24M</td>
-                    <td>44cm/17 <sup>1/4</sup> In</td>
-                    <td>12.5kg/28lbs</td>
-                    <td>52.5cm/20<sup>5/8</sup>in</td>
-                    <td><div class="form-group"><input class="form-control input-sm" placeholder="UK EAN Number"></div></td>
-                    <td><div class="form-group"><input class="form-control input-sm" placeholder="CE EAN Number"></div></td>
-                    <td><div class="form-group"><input class="form-control input-sm" placeholder="Quantity"></div></td>
-                </tr>
-                <tr>
-                    <td>Tiny Baby</td>
-                    <td>18-24M</td>
-                    <td>44cm/17 <sup>1/4</sup> In</td>
-                    <td>12.5kg/28lbs</td>
-                    <td>52.5cm/20<sup>5/8</sup>in</td>
-                    <td><div class="form-group"><input class="form-control input-sm" placeholder="UK EAN Number"></div></td>
-                    <td><div class="form-group"><input class="form-control input-sm" placeholder="CE EAN Number"></div></td>
-                    <td><div class="form-group"><input class="form-control input-sm" placeholder="Quantity"></div></td>
-                </tr>
-                <tr>
-                    <td>Tiny Baby</td>
-                    <td>18-24M</td>
-                    <td>44cm/17 <sup>1/4</sup> In</td>
-                    <td>12.5kg/28lbs</td>
-                    <td>52.5cm/20<sup>5/8</sup>in</td>
-                    <td><div class="form-group"><input class="form-control input-sm" placeholder="UK EAN Number"></div></td>
-                    <td><div class="form-group"><input class="form-control input-sm" placeholder="CE EAN Number"></div></td>
-                    <td><div class="form-group"><input class="form-control input-sm" placeholder="Quantity"></div></td>
-                </tr>
                 <tr>
                     <td>Tiny Baby</td>
                     <td>18-24M</td>

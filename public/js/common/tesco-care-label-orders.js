@@ -3,16 +3,16 @@
  * @author Praveen
  * 
  */
-
-
-    function renderTescoCareOrders() {
+    // Menthod to render tesco care label orders page
+    renderTescoCareOrders = () => {
         $('.main-content').load('/admin/tesco/care-label-orders');
         $('li.year-nav-menu').addClass('hidden');
         $('li.buyer-nav-menu').addClass('hidden');
 
     }
 
-    function submitTescoCareOrders() {
+    // Menthod to validate and submit tesco care label orders
+    submitTescoCareOrders = () => {
         $('#create_tesco_care_order_form').validator('validate');
         
         /** [ bootstrap validator for create tesco order form ] **/
@@ -24,4 +24,9 @@
                 alert();
             }
         });
+    }
+
+    // Method to add dynamic garment component
+    var addComponent = () => {
+        $('.garment-component-div').append($('.component-div-1').html());
     }
