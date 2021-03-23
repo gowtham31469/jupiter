@@ -1592,3 +1592,8 @@ span.batch-additional {
     height: 30px;
     width: 50px;
 }
+
+i.remove-component-btn{
+    font-size: 16px;
+    color:rgb(244, 67, 54);
+}

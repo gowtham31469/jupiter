@@ -795,7 +795,7 @@ function createOrders(parsedObj = false, oType = false) {
                                             <hr>\
                                             <h4>Order Quantity</h4>\
                                             <p>\
-                                                <button type="button" onclick="addUKRatio(this,event)" data-id="1" class="btn btn-default add-row-btn" title="Select a supplier" data-placement="right"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
+                                                <button type="button" onclick="addUKRatio(this,event)" data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
                                             </p>\
                                         </div>\
                                     </div>\
@@ -867,7 +867,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                 <hr>\
                                                 <h4>Order Quantity</h4>\
                                                 <p>\
-                                                    <button type="button" onclick="addUKSingle(this,event)" data-id="1" class="btn btn-default add-row-btn" title="Select a supplier" data-placement="right"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
+                                                    <button type="button" onclick="addUKSingle(this,event)" data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
                                                 </p>\
                                             </div>\
                                         </div>\
@@ -945,7 +945,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                 <hr>\
                                                 <h4>Order Quantity</h4>\
                                                 <p>\
-                                                    <button type="button" onclick="addCERatio(this,event)" data-id="1" class="btn btn-default add-row-btn" title="Select a supplier" data-placement="right"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
+                                                    <button type="button" onclick="addCERatio(this,event)" data-id="1" class="btn btn-default add-row-btn" ><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
                                                 </p>\
                                             </div>\
                                         </div>\
@@ -1012,7 +1012,7 @@ function createOrders(parsedObj = false, oType = false) {
                                             <hr>\
                                             <h4>Order Quantity</h4>\
                                             <p>\
-                                                <button type="button" onclick="addCESingle(this,event)" data-id="1" class="btn btn-default add-row-btn" title="Select a supplier" data-placement="right"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
+                                                <button type="button" onclick="addCESingle(this,event)" data-id="1" class="btn btn-default add-row-btn" ><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
                                             </p>\
                                         </div>\
                                     </div>\

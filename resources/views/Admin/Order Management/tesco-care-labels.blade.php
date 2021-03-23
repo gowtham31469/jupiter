@@ -80,17 +80,14 @@
         <hr>
         <div class="row garment-component-div">
             <div class="col-md-12">
-                <h4>Garment Component & Fibres</h4>
-            </div>
-            <div class="col-xs-6 pull-right">
-                 <button class="btn btn-xs btn-primary submit-btn" type="button" onclick="addComponent()"><i class="fa fa-plus"
-                    aria-hidden="true"></i> Garment Component</button> 
+                <h4 class="pull-left">Garment Component & Fibres</h4>
+                <button class="btn btn-xs btn-primary add-garment-component-btn pull-right" type="button" data-id="3" onclick="addComponent(this,event)"><i class="fa fa-plus" aria-hidden="true"></i> Garment Component</button> 
             </div>
             <div class="col-md-2 component-div-1">
                 <div class="row">
                 <div class="col-xs-12">
                     <div class="form-group">
-                    <label>Garment Component 1 </label>
+                    <label class="component-label">Garment Component</label>
                     <select class="form-control">
                         <option>1</option>
                         <option>2</option>
@@ -225,7 +222,7 @@
                 <div class="row">
                 <div class="col-xs-12">
                     <div class="form-group">
-                    <label>Garment Component 2 </label>
+                    <label class="component-label">Garment Component</label>
                     <select class="form-control">
                         <option>1</option>
                         <option>2</option>
@@ -360,12 +357,9 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="form-group">
-                        <label>Garment Component 3 </label>
+                        <label class="component-label">Garment Component</label>
                         <select class="form-control">
                             <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
                         </select>
                         </div>
                     </div>
@@ -373,9 +367,6 @@
                         <div class="form-group">
                         <select class="form-control input-sm">
                             <option selected>Select Fiber</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
                         </select>
                         </div>
                     </div>
@@ -391,9 +382,6 @@
                         <div class="form-group">
                         <select class="form-control input-sm">
                             <option selected>Select Fiber</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
                         </select>
                         </div>
                     </div>
@@ -409,9 +397,6 @@
                         <div class="form-group">
                         <select class="form-control input-sm">
                             <option selected>Select Fiber</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
                         </select>
                         </div>
                     </div>
@@ -427,9 +412,6 @@
                         <div class="form-group">
                         <select class="form-control input-sm">
                             <option selected>Select Fiber</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
                         </select>
                         </div>
                     </div>
@@ -445,9 +427,6 @@
                         <div class="form-group">
                         <select class="form-control input-sm">
                             <option selected>Select Fiber</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
                         </select>
                         </div>
                     </div>
@@ -463,9 +442,6 @@
                         <div class="form-group">
                         <select class="form-control input-sm">
                             <option selected>Select Fiber</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
                         </select>
                         </div>
                     </div>
@@ -488,7 +464,6 @@
                         </div>
                         </div>
                     </div>
-                   
                 </div>
             </div>
         </div>
@@ -628,9 +603,6 @@
                         <label>Select Kids Warning Statement </label>
                         <select class="form-control">
                             <option selected>select</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
                         </select>
                     </div>
                 </div>
