@@ -289,6 +289,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
 	} else {
 		var svgarr = [];
 		var qr_code_arr = [];
+		var qr_code_check_arr = [];
 		var ajax_count = 0;
 		var b = " ";
 		var position = 3;
@@ -589,6 +590,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
 							var str = s.serializeToString(d);
 							svgarr.push(str)
 							qr_code_arr.push(val.qr_code)
+							qr_code_check_arr.push(val.buyer_po_number+','+val.ean_barcode+','+val.itf_barcode+','+val.orms_tpn)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
 							this.tryCount++;
@@ -666,6 +668,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
 
 					svgarr.push(str)
 					qr_code_arr.push(val.qr_code)
+					qr_code_check_arr.push(val.buyer_po_number+','+val.ean_barcode+','+val.itf_barcode+','+val.orms_tpn)
 
 				}
 			} else {
@@ -743,6 +746,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
 
 				svgarr.push(str)
 				qr_code_arr.push(val.qr_code)
+				qr_code_check_arr.push(val.buyer_po_number+','+val.ean_barcode+','+val.itf_barcode+','+val.orms_tpn)
 			}
 
 
@@ -753,8 +757,9 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
 			if (ajax_count == data.order_details.length) {
 				var svg_fin = svgarr.join(',_');
 				var qr_code_fin = qr_code_arr.join(',_');
+				var qr_code_check_fin = qr_code_check_arr.join(',_');
 				var zone = localStorage.getItem("zone");
-				PopupTesco(svg_fin, name,zone,style_no,buyer_no,id,created_at,generate_data.tesco_item_master[0].is_qrcode_required,qr_code_fin);
+				PopupTesco(svg_fin, name,zone,style_no,buyer_no,id,created_at,generate_data.tesco_item_master[0].is_qrcode_required,qr_code_fin,qr_code_check_fin);
 			}
 				},
 				error: function(data) {
@@ -779,7 +784,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
  * @return Pdf
  */
 
-function PopupTesco(data, name,zone,style_no,buyer_no,id,created_at,qr_flag,qr_code_fin) {
+function PopupTesco(data, name,zone,style_no,buyer_no,id,created_at,qr_flag,qr_code_fin,qr_code_check_fin) {
 
 	//	var s = new XMLSerializer();
 	//	var d = data;
@@ -820,6 +825,7 @@ function PopupTesco(data, name,zone,style_no,buyer_no,id,created_at,qr_flag,qr_c
 			zone:zone,
 			style:style_no,
 			qr_code_fin: qr_code_fin,
+			qr_code_check_fin:qr_code_check_fin,
 			tesco_po_number:buyer_no,
 			id:id,
 			created_at:created_at,

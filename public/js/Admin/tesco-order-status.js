@@ -1930,7 +1930,7 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj) {
 							var str = s.serializeToString(d);
 							svgarr.push(str)
 							qr_code_arr.push(val.qr_code)
-                            qr_code_check_arr.push(val.buyer_po_number+','+val.ean_barcode+','+val.itf_barcode+','+val.orms_tpn)
+                            qr_code_check_arr.push(val.po_number+','+val.ean_barcode+','+val.itf_barcode+','+val.orms_tpn)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
 							this.tryCount++;
@@ -2009,7 +2009,7 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj) {
 
 					svgarr.push(str)
 					qr_code_arr.push(val.qr_code)
-                    qr_code_check_arr.push(val.buyer_po_number+','+val.ean_barcode+','+val.itf_barcode+','+val.orms_tpn)
+                    qr_code_check_arr.push(val.po_number+','+val.ean_barcode+','+val.itf_barcode+','+val.orms_tpn)
 
 				}
 			} else {
@@ -2087,7 +2087,7 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj) {
 
 				svgarr.push(str)
 				qr_code_arr.push(val.qr_code)
-				qr_code_check_arr.push(val.buyer_po_number+','+val.ean_barcode+','+val.itf_barcode+','+val.orms_tpn)
+				qr_code_check_arr.push(val.po_number+','+val.ean_barcode+','+val.itf_barcode+','+val.orms_tpn)
 			}
 
 
@@ -2786,7 +2786,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj) {
 							var str = s.serializeToString(d);
 							svgarr.push(str)
 							qr_code_arr.push(val.qr_code)
-                            qr_code_check_arr.push(val.buyer_po_number+','+val.ean_barcode+','+val.itf_barcode+','+val.orms_tpn)
+                            qr_code_check_arr.push(val.po_number+','+val.ean_barcode+','+val.itf_barcode+','+val.orms_tpn)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
 							this.tryCount++;
@@ -2864,7 +2864,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj) {
 
 					svgarr.push(str)
 					qr_code_arr.push(val.qr_code)
-                    qr_code_check_arr.push(val.buyer_po_number+','+val.ean_barcode+','+val.itf_barcode+','+val.orms_tpn)
+                    qr_code_check_arr.push(val.po_number+','+val.ean_barcode+','+val.itf_barcode+','+val.orms_tpn)
 
 				}
 			} else {
@@ -2942,7 +2942,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj) {
 
 				svgarr.push(str)
 				qr_code_arr.push(val.qr_code)
-				qr_code_check_arr.push(val.buyer_po_number+','+val.ean_barcode+','+val.itf_barcode+','+val.orms_tpn)
+				qr_code_check_arr.push(val.po_number+','+val.ean_barcode+','+val.itf_barcode+','+val.orms_tpn)
 			}
 
 
@@ -5077,10 +5077,10 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
 										
 										if(template_name === "THL3")
 										{
-											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136.2173)");
-											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150.5557)");
-											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136.2173)");
-											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150.5557)");
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 135)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 148)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 135)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 148)");
 											
 										}
 										else
@@ -5133,10 +5133,10 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
 										
 										if(template_name === "THL3")
 										{
-											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136.2173)");
-											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150.5557)");
-											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136.2173)");
-											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150.5557)");
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 135)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 148)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 135)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 148)");
 											
 										}
 										else
