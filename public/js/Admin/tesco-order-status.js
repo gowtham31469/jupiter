@@ -697,13 +697,13 @@ function tescoOrderStatus() {
                                                                 setTimeout(function(){
                                                                     $(".loader").hide();
                                                                     submitOs(this)
+                                                                    $('#po-file-upload-group').modal('hide')
+                                                                    $('.snackbar_span').html('PO Updated Successfully');
+                                                                    showSnackbar();
                                                                 }, 10000);
 
                                                                 
                                                                 //tescoOrderStatus()
-                                                                $('#po-file-upload-group').modal('hide')
-                                                                $('.snackbar_span').html('PO Updated Successfully');
-                                                                showSnackbar();
                                                             },
                                                             error: function () {
                                                                 console.log('somethig is wrong, please try later');
@@ -781,11 +781,11 @@ function tescoOrderStatus() {
                                                                 setTimeout(function(){
                                                                     $(".loader").hide();
                                                                     submitOs(this)
+                                                                    $('#po-file-upload-group').modal('hide')
+                                                                    $('.snackbar_span').html('PO Updated Successfully');
+                                                                    showSnackbar();
                                                                 }, 10000);
                                                                 //tescoOrderStatus()
-                                                                $('#po-file-upload-group').modal('hide')
-                                                                $('.snackbar_span').html('PO Updated Successfully');
-                                                                showSnackbar();
                                                             },
                                                             error: function () {
                                                                 console.log('somethig is wrong, please try later');
@@ -852,11 +852,11 @@ function tescoOrderStatus() {
                                                             setTimeout(function(){
                                                                 $(".loader").hide();
                                                                 submitOs(this)
+                                                                $('#po-file-upload-group').modal('hide')
+                                                                $('.snackbar_span').html('PO Updated Successfully');
+                                                                showSnackbar();
                                                             }, 10000);
                                                             //tescoOrderStatus()
-                                                            $('#po-file-upload-group').modal('hide')
-                                                            $('.snackbar_span').html('PO Updated Successfully');
-                                                            showSnackbar();
                                                         },
                                                         error: function (data) {
 
@@ -3629,11 +3629,12 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
                                                                 setTimeout(function(){
                                                                     $(".loader").hide();
                                                                     submitOs(this)
+                                                                    $('#po-file-upload-group').modal('hide')
+                                                                    $('.snackbar_span').html('PO Updated Successfully');
+                                                                    showSnackbar();
                                                                 }, 10000);
                                                                 //tescoOrderStatus()
-                                                                $('#po-file-upload-group').modal('hide')
-                                                                $('.snackbar_span').html('PO Updated Successfully');
-                                                                showSnackbar();
+                                                                
                                                             },
                                                             error: function () {
                                                                 console.log('somethig is wrong, please try later');
@@ -3711,11 +3712,11 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
                                                                 setTimeout(function(){
                                                                     $(".loader").hide();
                                                                     submitOs(this)
+                                                                    $('#po-file-upload-group').modal('hide')
+                                                                    $('.snackbar_span').html('PO Updated Successfully');
+                                                                    showSnackbar();
                                                                 }, 10000);
                                                                 //tescoOrderStatus()
-                                                                $('#po-file-upload-group').modal('hide')
-                                                                $('.snackbar_span').html('PO Updated Successfully');
-                                                                showSnackbar();
                                                             },
                                                             error: function () {
                                                                 console.log('somethig is wrong, please try later');
@@ -3782,11 +3783,11 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
                                                             setTimeout(function(){
                                                                 $(".loader").hide();
                                                                 submitOs(this)
+                                                                $('#po-file-upload-group').modal('hide')
+                                                                $('.snackbar_span').html('PO Updated Successfully');
+                                                                showSnackbar();
                                                             }, 10000);
                                                             //tescoOrderStatus()
-                                                            $('#po-file-upload-group').modal('hide')
-                                                            $('.snackbar_span').html('PO Updated Successfully');
-                                                            showSnackbar();
                                                         },
                                                         error: function (data) {
 
