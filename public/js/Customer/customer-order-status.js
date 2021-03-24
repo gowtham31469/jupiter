@@ -822,7 +822,7 @@ function tescoOrderStatus() {
                                             }
 
                                         });
-                                        $('#update_new_po_status').click(function () {
+                                        $('#update_new_po_status').unbind().click(function () {
 
                                             var sList = 0;
                                             $('#exist_artwork_div_status input[type=checkbox]').each(function () {
@@ -863,13 +863,19 @@ function tescoOrderStatus() {
                                                             processData: false,
                                                             data: form_data,
                                                             type: 'post',
+                                                            beforeSend: function () {
+                                                                $(".loader").show();
+                                                            },
                                                             success: function (data) {
                                                                 $('#ukstylenoos').selectpicker('val', styleNum);
-                                                                submitOs(this)
-                                                                //tescoOrderStatus()
                                                                 $('#po-file-upload-group').modal('hide')
-                                                                $('.snackbar_span').html('PO Updated Successfully');
-                                                                showSnackbar();
+                                                                setTimeout(function(){
+                                                                    $(".loader").hide();
+                                                                    submitOs(this)
+                                                                    $('.snackbar_span').html('PO Updated Successfully');
+                                                                    showSnackbar();
+                                                                }, 10000);
+                                                                //tescoOrderStatus()
                                                             },
                                                             error: function () {
                                                                 console.log('somethig is wrong, please try later');
@@ -899,7 +905,7 @@ function tescoOrderStatus() {
                                             }
                                         });
 
-                                        $('#new_pos_status').click(function () {
+                                        $('#new_pos_status').unbind().click(function () {
                                             var sList = 0;
                                             $('#exist_artwork_div_status input[type=checkbox]').each(function () {
                                                 if (this.checked) {
@@ -939,13 +945,18 @@ function tescoOrderStatus() {
                                                             processData: false,
                                                             data: form_data,
                                                             type: 'post',
+                                                            beforeSend: function () {
+                                                                $(".loader").show();
+                                                            },
                                                             success: function (data) {
                                                                 $('#ukstylenoos').selectpicker('val', styleNum);
-                                                                submitOs(this)
-                                                                //tescoOrderStatus()
                                                                 $('#po-file-upload-group').modal('hide')
-                                                                $('.snackbar_span').html('PO Updated Successfully');
-                                                                showSnackbar();
+                                                                setTimeout(function(){
+                                                                    $(".loader").hide();
+                                                                    submitOs(this)
+                                                                    $('.snackbar_span').html('PO Updated Successfully');
+                                                                    showSnackbar();
+                                                                }, 10000);
                                                             },
                                                             error: function () {
                                                                 console.log('somethig is wrong, please try later');
@@ -974,7 +985,7 @@ function tescoOrderStatus() {
                                                 $('#check_error_status').removeClass('hidden')
                                             }
                                         });
-                                        $('#update_po_status').click(function () {
+                                        $('#update_po_status').unbind().click(function () {
 
                                             var sList = 0;
                                             $('#exist_artwork_div_status input[type=checkbox]').each(function () {
@@ -1005,15 +1016,17 @@ function tescoOrderStatus() {
                                                             po: $('#select_po_status').val()
                                                         },
                                                         beforeSend: function () {
-
+                                                            $(".loader").show();
                                                         },
                                                         success: function (data) {
                                                             $('#ukstylenoos').selectpicker('val', styleNum);
-                                                            submitOs(this)
-                                                            //tescoOrderStatus()
                                                             $('#po-file-upload-group').modal('hide')
-                                                            $('.snackbar_span').html('PO Updated Successfully');
-                                                            showSnackbar();
+                                                            setTimeout(function(){
+                                                                $(".loader").hide();
+                                                                submitOs(this)
+                                                                $('.snackbar_span').html('PO Updated Successfully');
+                                                                showSnackbar();
+                                                            }, 10000);
                                                         },
                                                         error: function (data) {
 
@@ -2013,7 +2026,7 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
                                             }
 
                                         });
-                                        $('#update_new_po_status').click(function () {
+                                        $('#update_new_po_status').unbind().click(function () {
 
                                             var sList = 0;
                                             $('#exist_artwork_div_status input[type=checkbox]').each(function () {
@@ -2054,13 +2067,18 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
                                                             processData: false,
                                                             data: form_data,
                                                             type: 'post',
+                                                            beforeSend: function () {
+                                                                $(".loader").show();
+                                                            },
                                                             success: function (data) {
                                                                 $('#ukstylenoos').selectpicker('val', styleNum);
-                                                                submitOs(this)
-                                                                //tescoOrderStatus()
                                                                 $('#po-file-upload-group').modal('hide')
-                                                                $('.snackbar_span').html('PO Updated Successfully');
-                                                                showSnackbar();
+                                                                setTimeout(function(){
+                                                                    $(".loader").hide();
+                                                                    submitOs(this)
+                                                                    $('.snackbar_span').html('PO Updated Successfully');
+                                                                    showSnackbar();
+                                                                }, 10000);
                                                             },
                                                             error: function () {
                                                                 console.log('somethig is wrong, please try later');
@@ -2090,7 +2108,7 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
                                             }
                                         });
 
-                                        $('#new_pos_status').click(function () {
+                                        $('#new_pos_status').unbind().click(function () {
                                             var sList = 0;
                                             $('#exist_artwork_div_status input[type=checkbox]').each(function () {
                                                 if (this.checked) {
@@ -2130,13 +2148,18 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
                                                             processData: false,
                                                             data: form_data,
                                                             type: 'post',
+                                                            beforeSend: function () {
+                                                                $(".loader").show();
+                                                            },
                                                             success: function (data) {
                                                                 $('#ukstylenoos').selectpicker('val', styleNum);
-                                                                submitOs(this)
-                                                                //tescoOrderStatus()
                                                                 $('#po-file-upload-group').modal('hide')
-                                                                $('.snackbar_span').html('PO Updated Successfully');
-                                                                showSnackbar();
+                                                                setTimeout(function(){
+                                                                    $(".loader").hide();
+                                                                    submitOs(this)
+                                                                    $('.snackbar_span').html('PO Updated Successfully');
+                                                                    showSnackbar();
+                                                                }, 10000);
                                                             },
                                                             error: function () {
                                                                 console.log('somethig is wrong, please try later');
@@ -2165,7 +2188,7 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
                                                 $('#check_error_status').removeClass('hidden')
                                             }
                                         });
-                                        $('#update_po_status').click(function () {
+                                        $('#update_po_status').unbind().click(function () {
 
                                             var sList = 0;
                                             $('#exist_artwork_div_status input[type=checkbox]').each(function () {
@@ -2196,15 +2219,17 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
                                                             po: $('#select_po_status').val()
                                                         },
                                                         beforeSend: function () {
-
+                                                            $(".loader").show();
                                                         },
                                                         success: function (data) {
                                                             $('#ukstylenoos').selectpicker('val', styleNum);
-                                                            submitOs(this)
-                                                            //tescoOrderStatus()
                                                             $('#po-file-upload-group').modal('hide')
-                                                            $('.snackbar_span').html('PO Updated Successfully');
-                                                            showSnackbar();
+                                                                setTimeout(function(){
+                                                                    $(".loader").hide();
+                                                                    submitOs(this)
+                                                                    $('.snackbar_span').html('PO Updated Successfully');
+                                                                    showSnackbar();
+                                                                }, 10000);
                                                         },
                                                         error: function (data) {
 
