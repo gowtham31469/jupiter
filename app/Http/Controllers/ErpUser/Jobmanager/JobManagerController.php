@@ -1398,6 +1398,13 @@ class JobManagerController extends Controller
 						->select('customers.short_name')
 						->where('erp_orders.id',$company_id)
 						->get();
+
+
+						$order_details = DB::table("erp_order_details")
+						->select('*')
+						->where('erp_order_id',$company_id)
+						->get();
+
 		 $customer_name = $customer[0]->short_name;
 		 $this->customer_name = $customer_name;
 		
@@ -1632,7 +1639,14 @@ class JobManagerController extends Controller
 						PDF::RoundedRect(15, 160, 127, 80, 0, '0000');
 						if($name == "TCL4-sticker")
 						{
-							$yy += 77;
+							if($order_details{0}->template_id == 24)
+							{
+								$yy += 77;
+							}
+							else
+							{
+								$yy += 100; 
+							}
 						}
 						else
 						{
