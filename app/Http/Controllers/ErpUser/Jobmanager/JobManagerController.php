@@ -1403,6 +1403,7 @@ class JobManagerController extends Controller
 						$order_details = DB::table("erp_order_details")
 						->select('*')
 						->where('erp_order_id',$company_id)
+						->where('order_qnty_table_name','tesco_tcl4_orders_quanty')
 						->get();
 
 		 $customer_name = $customer[0]->short_name;
@@ -1639,7 +1640,8 @@ class JobManagerController extends Controller
 						PDF::RoundedRect(15, 160, 127, 80, 0, '0000');
 						if($name == "TCL4-sticker")
 						{
-							if($order_details{0}->template_id == 28)
+							//print_r( $order_details{0}->template_id);
+							if($order_details{0}->template_id == 28 || $order_details{0}->template_id == 31)
 							{
 								$yy += 77;
 							}

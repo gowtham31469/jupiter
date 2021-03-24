@@ -599,6 +599,7 @@
                     //     $('#'+tab_nm+'_'+row_id).find('.po_status a span').removeClass("label-POPending")
                     //     $('#'+tab_nm+'_'+row_id).find('.po_status a span').addClass("label-POUploaded")
                     // }
+                    $('#po-file-upload').modal('hide')
                     setTimeout(function(){
                         $(".loader").hide();
                         submitOs(this)
