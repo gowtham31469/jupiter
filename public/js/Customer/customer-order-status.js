@@ -1364,7 +1364,7 @@ function tescoStatusTable(data, path) {
                         if (value['PO Status'] === 'PO Uploaded') {
                             status = str.replace(/ /g, "");
                             status_text = '<span class="po_class label label-' + status + '">' + value['PO Status'] + '</span>';
-                            tr += '<td align="center" class="po_status"><a href="javascript:void(0)" class="po-style" onclick=tescoPOUpload(this,"' + value.tableID + '","' + po_file + '","' + value.tableName + '","'+style_no+'") > '+status_text+' </a></td>';
+                            tr += '<td align="center" class="po_status"><a href="javascript:void(0)" class="po-style" onclick=tescoPOUploaded(this,"' + value.tableID + '","' + po_file + '","' + value.tableName + '","'+style_no+'","'+value['PO Number']+'") > '+status_text+' </a></td>';
                         } else {
                             if (value['order_status'] === 'Order Placed' || value['order_status'] === 'Order Approved') {
                                 status_text = '<span class="po_class label label-POPending"> PO Pending </span>';
@@ -1706,6 +1706,62 @@ function tescoSetPO(obj, id, tableName, po_file) {
         showSnackbar();
 		setTimeout(function(){ $(obj).removeAttr('disabled') }, 3000);
     }
+}
+
+function tescoPOUploaded(obj, id, po_file, tableName,style_no,po_number) {
+    
+    $.ajax({
+        url: base_url + "/customer/tesco/get-erp-status",
+        type: 'get',
+        data: {
+            table_name: tableName,
+            id: id,
+            _token: csrf_token
+        },
+        beforeSend: function () {
+            $(".loader").show();
+        },
+        success: function (data) {
+            // erp_details array null , if order is not moved to erp tables
+            // only editable, if order status is "Hold For JC Queue" OR "Moved To ERP"
+            if (data.erp_details[0] != null) {
+                if (data.erp_details[0].status_name !== 'Hold For JC Queue' && data.erp_details[0].status_name !== 'Moved To ERP') {
+                    $('.update-po-file').hide();
+
+                    $('#error_msg_span').html('ERP Order Status : <strong>' + data.erp_details[0].status_name + '</strong>. You are not permitted to upload any more po files for this order.')
+                } else {
+                    $('.update-po-file').show();
+                    $('#error_msg_span').html('');
+                }
+            } else {
+                $('.update-po-file').show();
+                $('#error_msg_span').html('');
+            }
+        },
+        error: function (data) {
+
+        },
+        complete: function () {
+            $(".loader").hide();
+            if (po_file == "null") {
+                $('#po_upload').removeClass('hidden')
+                $('.upload-po').removeClass('hidden')
+                $('#po_file').addClass('hidden')
+            } else {
+                $('#po_upload').addClass('hidden')
+                $('.upload-po').addClass('hidden')
+                $('#po_file').removeClass('hidden')
+
+            }
+            var po_link = base_url + po_file
+            $('#po_link').attr("href", po_link);
+            $('#rowID').val(id);
+            $('#tableName').val(tableName);
+            $('#buyer_id').val(localStorage.getItem("buyer_id"));
+            $('#po-file-upload').modal('show')
+            $('#po_number_updation').val(po_number)
+        }
+    })
 }
 /**
  * [tescoPOUpload description]
