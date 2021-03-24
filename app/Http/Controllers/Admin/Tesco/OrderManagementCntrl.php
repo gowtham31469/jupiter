@@ -1966,7 +1966,7 @@ class OrderManagementCntrl extends Controller
             if($name == "TCL4-sticker")
             {
               //print_r($company_id{0}->template_id);
-              if($company_id{0}->template_id == 28)
+              if($company_id{0}->template_id == 28 || $order_details{0}->template_id == 31)
               {
                 $yy += 77;
               }

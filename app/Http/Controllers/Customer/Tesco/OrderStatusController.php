@@ -1840,7 +1840,7 @@ class OrderStatusController extends Controller
 						PDF::RoundedRect(15, 160, 127, 80, 0, '0000');
                         if($name == "TCL4-sticker")
                         {
-                            if($order_details{0}->template_id == 28)
+                            if($order_details{0}->template_id == 28 || $order_details{0}->template_id == 31)
                             {
                                 $yy += 77;
                             }
