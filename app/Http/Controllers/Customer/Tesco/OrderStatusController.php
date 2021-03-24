@@ -1840,7 +1840,14 @@ class OrderStatusController extends Controller
 						PDF::RoundedRect(15, 160, 127, 80, 0, '0000');
                         if($name == "TCL4-sticker")
                         {
-                          $yy += 77;
+                            if($order_details{0}->template_id == 28)
+                            {
+                                $yy += 77;
+                            }
+                            else
+                            {
+                                $yy += 100; 
+                            }
                         }
                         else
                         {
@@ -3637,6 +3644,7 @@ class OrderStatusController extends Controller
             $table_name = $request->tableName;
             $row_id     = $request->id;
             $po_file = $request->file('file');
+            $po_number_updation    = $request->po_number_updation;
             $path = $request->file('file')->getRealPath();
             $filename = $request->file('file')->getClientOriginalName();
             $destination_path='/storage/app/public/po-files/';
@@ -3663,18 +3671,12 @@ class OrderStatusController extends Controller
                 
             }
             
-            if ($po_details->purchase_order_no === null || $po_details->purchase_order_no === "")
-            {
-                $po_status = "PO Pending";
-            }
-            else
-            {
-                $po_status = "PO Uploaded";
-            }
+            $po_status = "PO Uploaded";
 
             DB::table($table_name)->where('id',$row_id)
             ->update([
                 'po_file' => $destination_path_insert,
+                'purchase_order_no' => $po_number_updation,
                 'po_status' => $po_status,
                 'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
             ]);
@@ -3683,6 +3685,7 @@ class OrderStatusController extends Controller
             $po_upload_status = $po_status === "PO Pending"?0:1;
             OrderManagementHistory::where([['order_table_name', $table_name], ['order_table_id', $row_id]])->update([
                 'po_status' => $po_upload_status,
+                'customer_po' => $po_number_updation,
             ]);
 
             if ($po_status == "PO Uploaded") {
@@ -3705,7 +3708,7 @@ class OrderStatusController extends Controller
                     $buyer_id = $this->updated_erp_table_array['buyer_id'];
                     $customer_id = $this->updated_erp_table_array['customer_id'];
                     
-                    $erp_previous_status = Erp::where('buyer_id',$buyer_id)->where('customer_id',$customer_id)->where('po_no',$po_details->purchase_order_no)->first();
+                    $erp_previous_status = Erp::where('buyer_id',$buyer_id)->where('customer_id',$customer_id)->where('po_no',$po_number_updation)->first();
                     
                     if($erp_previous_status)
                     {

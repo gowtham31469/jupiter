@@ -316,7 +316,14 @@ class PrintController extends Controller
 					{
 						if($name == "TCL4-sticker")
 						{
-						  $yy += 77;
+							if($create{0}->template_id == 28)
+							{
+								$yy += 77;
+							}
+							else
+							{
+								$yy += 100; 
+							}
 						}
 						else
 						{
