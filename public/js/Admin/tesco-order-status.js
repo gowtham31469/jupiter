@@ -694,10 +694,10 @@ function tescoOrderStatus() {
                                                             },
                                                             success: function (data) {
                                                                 $('#ukstylenoos').selectpicker('val', styleNum);
+                                                                $('#po-file-upload-group').modal('hide')
                                                                 setTimeout(function(){
                                                                     $(".loader").hide();
                                                                     submitOs(this)
-                                                                    $('#po-file-upload-group').modal('hide')
                                                                     $('.snackbar_span').html('PO Updated Successfully');
                                                                     showSnackbar();
                                                                 }, 10000);
@@ -778,10 +778,10 @@ function tescoOrderStatus() {
                                                             },
                                                             success: function (data) {
                                                                 $('#ukstylenoos').selectpicker('val', styleNum);
+                                                                $('#po-file-upload-group').modal('hide')
                                                                 setTimeout(function(){
                                                                     $(".loader").hide();
                                                                     submitOs(this)
-                                                                    $('#po-file-upload-group').modal('hide')
                                                                     $('.snackbar_span').html('PO Updated Successfully');
                                                                     showSnackbar();
                                                                 }, 10000);
@@ -849,10 +849,10 @@ function tescoOrderStatus() {
                                                         },
                                                         success: function (data) {
                                                             $('#ukstylenoos').selectpicker('val', styleNum);
+                                                            $('#po-file-upload-group').modal('hide')
                                                             setTimeout(function(){
                                                                 $(".loader").hide();
                                                                 submitOs(this)
-                                                                $('#po-file-upload-group').modal('hide')
                                                                 $('.snackbar_span').html('PO Updated Successfully');
                                                                 showSnackbar();
                                                             }, 10000);
@@ -3626,10 +3626,10 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
                                                             },
                                                             success: function (data) {
                                                                 $('#ukstylenoos').selectpicker('val', styleNum);
+                                                                $('#po-file-upload-group').modal('hide')
                                                                 setTimeout(function(){
                                                                     $(".loader").hide();
                                                                     submitOs(this)
-                                                                    $('#po-file-upload-group').modal('hide')
                                                                     $('.snackbar_span').html('PO Updated Successfully');
                                                                     showSnackbar();
                                                                 }, 10000);
@@ -3709,10 +3709,10 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
                                                             },
                                                             success: function (data) {
                                                                 $('#ukstylenoos').selectpicker('val', styleNum);
+                                                                $('#po-file-upload-group').modal('hide')
                                                                 setTimeout(function(){
                                                                     $(".loader").hide();
                                                                     submitOs(this)
-                                                                    $('#po-file-upload-group').modal('hide')
                                                                     $('.snackbar_span').html('PO Updated Successfully');
                                                                     showSnackbar();
                                                                 }, 10000);
@@ -3780,10 +3780,10 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
                                                         },
                                                         success: function (data) {
                                                             $('#ukstylenoos').selectpicker('val', styleNum);
+                                                            $('#po-file-upload-group').modal('hide')
                                                             setTimeout(function(){
                                                                 $(".loader").hide();
                                                                 submitOs(this)
-                                                                $('#po-file-upload-group').modal('hide')
                                                                 $('.snackbar_span').html('PO Updated Successfully');
                                                                 showSnackbar();
                                                             }, 10000);
