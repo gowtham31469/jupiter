@@ -1965,7 +1965,7 @@ class OrderManagementCntrl extends Controller
 						PDF::RoundedRect(15, 160, 127, 80, 0, '0000');
             if($name == "TCL4-sticker")
             {
-              print_r($company_id{0}->template_id);
+              //print_r($company_id{0}->template_id);
               if($company_id{0}->template_id == 28)
               {
                 $yy += 77;
