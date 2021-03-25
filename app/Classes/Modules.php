@@ -2,7 +2,6 @@
 namespace App\Classes;
 use DB;
 use Auth;
-use App\RolePermissionMdl;
 
 class Modules{
 /**
@@ -16,7 +15,7 @@ class Modules{
     public function getSubModules($parent_id)
 	{
         $this->user_role_id = Auth::guard("web")->user()->user_role_id;
-		return RolePermissionMdl::where('role_permission.user_role_id',$this->user_role_id)
+		return DB::table('role_permission')->where('role_permission.user_role_id',$this->user_role_id)
                     ->join('module','module.id','=','role_permission.module_id')
                     ->where('module.parent_id',$parent_id)
                     ->where('permission',1)->select('module.*')->get();
@@ -30,7 +29,7 @@ class Modules{
     public function getMainModules()
     {
         $this->user_role_id = Auth::guard('web')->user()->user_role_id;
-        $modules = RolePermissionMdl::where('role_permission.user_role_id',$this->user_role_id)
+        $modules = DB::table('role_permission')->where('role_permission.user_role_id',$this->user_role_id)
                     ->join('module','module.id','=','role_permission.module_id')
                     ->where('permission',1)->select('role_permission.module_id','module.*')
                     ->orderBy('module.id')
@@ -69,7 +68,7 @@ class Modules{
     {
         $modules_array = array();
         $this->user_role_id = Auth::guard('web')->user()->user_role_id;
-        $modules = RolePermissionMdl::where('role_permission.user_role_id',$this->user_role_id)
+        $modules = DB::table('role_permission')->where('role_permission.user_role_id',$this->user_role_id)
                     ->join('module','module.id','=','role_permission.module_id')
                     ->where('permission',1)->select('module.url_path')->get();
         foreach($modules as $modules_per)
@@ -111,7 +110,7 @@ class Modules{
     public function editModules($id)
     {
         $modules_array = array();
-        return RolePermissionMdl::where('role_permission.user_role_id',$id)
+        return DB::table('role_permission')->where('role_permission.user_role_id',$id)
                     ->join('module','module.id','=','role_permission.module_id')
                     ->where('permission',1)->select('role_permission.module_id')->get();
     }
