@@ -5,6 +5,9 @@
         <div class="row">
             <div class="col-sm-12 col-md-12 main">
               <div class="top-content">
+                <!-- Financial year selection div -->
+                <div class="year-nav-div hidden"></div>
+                <div class="clearfix"></div>
               </div>
               <div class="main-sub-menu">
                 <div class="action-group pull-right sub-menu-button">
@@ -105,6 +108,8 @@
     @endif
     @section('jqueryIncludes')
     <script src="{{ asset('js/Admin/audit.js') }}"></script>
+    <!-- Financial year selection script -->
+    <script src="{{ asset('js/common/financial-year-switch.js') }}"></script>
    <script type="text/javascript">
        $( document ).ready(function() {
          /* Show logo on left side*/
