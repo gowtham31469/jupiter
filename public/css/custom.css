@@ -67,8 +67,7 @@ h3.content-heading {
 
 .input-sm {
     height: 30px;
-    /* padding: 5px 10px; */
-    padding:5px 10px !important;
+    padding: 5px 10px;
     font-size: 12px;
     border-radius: 3px;
 }
@@ -1584,9 +1583,6 @@ span.batch-additional {
   display:inline-block;
   margin-right:40px;
 }
-.input-sm{
-  padding:5px !important;
-}
 
 .baby-sleep-bag-symbol{
     height: 30px;
@@ -1596,4 +1592,9 @@ span.batch-additional {
 i.remove-component-btn{
     font-size: 16px;
     color:rgb(244, 67, 54);
+}
+
+.tesco-care-symbols{
+    height: 30px !important;
+    width: 40px;
 }

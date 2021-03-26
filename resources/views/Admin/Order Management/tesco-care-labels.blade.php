@@ -55,14 +55,21 @@
             <div class="col-md-2">
                 <div class="form-group has-feedback">
                     {!! Form::label('tesco_care_kaff', 'KAFF', ['class' => 'form_label']) !!}
-                    {{  Form::select('tesco_care_kaff',(['' => '-- Select Buyer --']),'',array('class' => 'form-control input-sm','id'=>'tesco_care_kaff','required')) }}
+                    {{  Form::select('tesco_care_kaff',(['' => '-- Select Kaff --']),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_kaff','required', 'data-live-search' => 'true')) }}
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="form-group has-feedback">
                     {!! Form::label('tesco_care_coo', 'Country Of Origin', ['class' => 'form_label']) !!}
-                    {{  Form::select('tesco_care_coo',(['' => '-- Select Country Of Origin --']),'',array('class' => 'form-control input-sm','id'=>'tesco_care_coo','required')) }}
+                    {{  Form::select('tesco_care_coo',(['' => '-- Select Country Of Origin --'] + $coo),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_coo','required', 'data-live-search' => 'true')) }}
+                    <div class="help-block with-errors"></div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group has-feedback">
+                    {!! Form::label('tesco_care_supplier', 'Supplier', ['class' => 'form_label']) !!}
+                    {{  Form::select('tesco_care_supplier',(['' => '-- Select Supplier --'] + $tesco_suppliers),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_supplier','required', 'data-live-search' => 'true')) }}
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
@@ -78,132 +85,38 @@
             </div>
         </div>
         <hr>
+        
         <div class="row garment-component-div">
             <div class="col-md-12">
                 <h4 class="pull-left">Garment Component & Fibres</h4>
                 <button class="btn btn-xs btn-primary add-garment-component-btn pull-right" type="button" data-id="3" onclick="addComponent(this,event)"><i class="fa fa-plus" aria-hidden="true"></i> Garment Component</button> 
             </div>
-            <div class="col-md-2 component-div-1">
+            @for ($j = 1; $j <= 3; $j++)
+            <div class="col-md-2 component-div-{{ $j }}">
                 <div class="row">
                 <div class="col-xs-12">
-                    <div class="form-group">
-                    <label class="component-label">Garment Component</label>
-                    <select class="form-control">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
+                    <div class="form-group has-feedback">
+                        {!! Form::label('tesco_care_garment_component', 'Garment Component', ['class' => 'form_label component-label']) !!}
+                        {{  Form::select('tesco_care_garment_component',(['' => '-- Select Garment Component --']+$components),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_garment_component','required', 'data-live-search' => 'true')) }}
+                        <div class="help-block with-errors"></div>
                     </div>
                 </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <select class="form-control input-sm">
-                        <option selected>Select Fiber</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
+                @for ($i = 1; $i <= 6; $i++)
+                    <div class="col-xs-6">
+                        <div class="form-group has-feedback">
+                            {{  Form::select('tesco_care_fiber',(['' => '-- Select Fiber --']+$fabriclists),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_fiber','required', 'data-live-search' => 'true')) }}
+                            <div class="help-block with-errors"></div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <div class="input-group">
-                        <input type="text" class="form-control input-sm">
-                        <div class="input-group-addon">%</div>
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" class="form-control input-sm">
+                            <div class="input-group-addon">%</div>
+                        </div>
+                        </div>
                     </div>
-                    </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <select class="form-control input-sm">
-                        <option selected>Select Fiber</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
-                    </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <div class="input-group">
-                        <input type="text" class="form-control input-sm">
-                        <div class="input-group-addon">%</div>
-                    </div>
-                    </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <select class="form-control input-sm">
-                        <option selected>Select Fiber</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
-                    </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <div class="input-group">
-                        <input type="text" class="form-control input-sm">
-                        <div class="input-group-addon">%</div>
-                    </div>
-                    </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <select class="form-control input-sm">
-                        <option selected>Select Fiber</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
-                    </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <div class="input-group">
-                        <input type="text" class="form-control input-sm">
-                        <div class="input-group-addon">%</div>
-                    </div>
-                    </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <select class="form-control input-sm">
-                        <option selected>Select Fiber</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
-                    </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <div class="input-group">
-                        <input type="text" class="form-control input-sm">
-                        <div class="input-group-addon">%</div>
-                    </div>
-                    </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <select class="form-control input-sm">
-                        <option selected>Select Fiber</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
-                    </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <div class="input-group">
-                        <input type="text" class="form-control input-sm">
-                        <div class="input-group-addon">%</div>
-                    </div>
-                    </div>
-                </div>
+                @endfor
                 <div class="col-xs-6">
                     <h5 class="text-right"><strong>Total</strong></h5>
                 </div>
@@ -218,254 +131,7 @@
 
                 </div>
             </div>
-            <div class="col-md-2 component-div-2">
-                <div class="row">
-                <div class="col-xs-12">
-                    <div class="form-group">
-                    <label class="component-label">Garment Component</label>
-                    <select class="form-control">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
-                    </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <select class="form-control input-sm">
-                        <option selected>Select Fiber</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
-                    </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <div class="input-group">
-                        <input type="text" class="form-control input-sm">
-                        <div class="input-group-addon">%</div>
-                    </div>
-                    </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <select class="form-control input-sm">
-                        <option selected>Select Fiber</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
-                    </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <div class="input-group">
-                        <input type="text" class="form-control input-sm">
-                        <div class="input-group-addon">%</div>
-                    </div>
-                    </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <select class="form-control input-sm">
-                        <option selected>Select Fiber</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
-                    </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <div class="input-group">
-                        <input type="text" class="form-control input-sm">
-                        <div class="input-group-addon">%</div>
-                    </div>
-                    </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <select class="form-control input-sm">
-                        <option selected>Select Fiber</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
-                    </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <div class="input-group">
-                        <input type="text" class="form-control input-sm">
-                        <div class="input-group-addon">%</div>
-                    </div>
-                    </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <select class="form-control input-sm">
-                        <option selected>Select Fiber</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
-                    </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <div class="input-group">
-                        <input type="text" class="form-control input-sm">
-                        <div class="input-group-addon">%</div>
-                    </div>
-                    </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <select class="form-control input-sm">
-                        <option selected>Select Fiber</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
-                    </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <div class="input-group">
-                        <input type="text" class="form-control input-sm">
-                        <div class="input-group-addon">%</div>
-                    </div>
-                    </div>
-                </div>
-                <div class="col-xs-6">
-                    <h5 class="text-right"><strong>Total</strong></h5>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                    <div class="input-group">
-                        <input type="text" class="form-control input-sm">
-                        <div class="input-group-addon">%</div>
-                    </div>
-                    </div>
-                </div>
-
-                </div>
-            </div>
-            <div class="col-md-2 component-div-3">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="form-group">
-                        <label class="component-label">Garment Component</label>
-                        <select class="form-control">
-                            <option>1</option>
-                        </select>
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                        <select class="form-control input-sm">
-                            <option selected>Select Fiber</option>
-                        </select>
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                        <div class="input-group">
-                            <input type="text" class="form-control input-sm">
-                            <div class="input-group-addon">%</div>
-                        </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                        <select class="form-control input-sm">
-                            <option selected>Select Fiber</option>
-                        </select>
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                        <div class="input-group">
-                            <input type="text" class="form-control input-sm">
-                            <div class="input-group-addon">%</div>
-                        </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                        <select class="form-control input-sm">
-                            <option selected>Select Fiber</option>
-                        </select>
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                        <div class="input-group">
-                            <input type="text" class="form-control input-sm">
-                            <div class="input-group-addon">%</div>
-                        </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                        <select class="form-control input-sm">
-                            <option selected>Select Fiber</option>
-                        </select>
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                        <div class="input-group">
-                            <input type="text" class="form-control input-sm">
-                            <div class="input-group-addon">%</div>
-                        </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                        <select class="form-control input-sm">
-                            <option selected>Select Fiber</option>
-                        </select>
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                        <div class="input-group">
-                            <input type="text" class="form-control input-sm">
-                            <div class="input-group-addon">%</div>
-                        </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                        <select class="form-control input-sm">
-                            <option selected>Select Fiber</option>
-                        </select>
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                        <div class="input-group">
-                            <input type="text" class="form-control input-sm">
-                            <div class="input-group-addon">%</div>
-                        </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <h5 class="text-right"><strong>Total</strong></h5>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                        <div class="input-group">
-                            <input type="text" class="form-control input-sm">
-                            <div class="input-group-addon">%</div>
-                        </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @endfor
         </div>
         <hr>
         <div class="row">
@@ -496,58 +162,63 @@
                 <h4>Care Instructions</h4>
             </div>
             <div class="col-md-2">
-                <div class="form-group">
-                <label>Select Wash Instructions</label>
-                <select class="form-control">
-                    <option selected>select</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                </select>
+                <div class="form-group has-feedback">
+                    {!! Form::label('tesco_care_wash_instruction', 'Wash Instructions', ['class' => 'form_label']) !!}
+                    <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_wash_instruction"  id="tesco_care_wash_instruction" required>
+                        <option value="">-- Select Wash Instructions --</option>
+                        @foreach($symbols['Washing'] as $key => $value)
+                                <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}">{{ $value->degree }}</option>
+                        @endforeach
+                    </select>
+                    <div class="help-block with-errors"></div>
                 </div>
             </div>
             <div class="col-md-2">
-                <div class="form-group">
-                <label>Select Bleach Instructions</label>
-                <select class="form-control">
-                    <option selected>select</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                </select>
+                <div class="form-group has-feedback">
+                    {!! Form::label('tesco_care_bleach_instruction', 'Bleach Instructions', ['class' => 'form_label']) !!}
+                    <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_bleach_instruction"  id="tesco_care_bleach_instruction" required>
+                        <option value="">-- Select Bleach Instructions --</option>
+                        @foreach($symbols['Whitening'] as $key => $value)
+                                <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}">{{ $value->degree }}</option>
+                        @endforeach
+                    </select>
+                    <div class="help-block with-errors"></div>
                 </div>
             </div>
             <div class="col-md-2">
-                <div class="form-group">
-                <label>Select Dry Instructions</label>
-                <select class="form-control">
-                    <option selected>select</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                </select>
+                <div class="form-group has-feedback">
+                    {!! Form::label('tesco_care_dry_instruction', 'Dry Instructions', ['class' => 'form_label']) !!}
+                    <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_dry_instruction"  id="tesco_care_dry_instruction" required>
+                        <option value="">-- Select Dry Instructions --</option>
+                        @foreach($symbols['Dryer'] as $key => $value)
+                                <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}">{{ $value->degree }}</option>
+                        @endforeach
+                    </select>
+                    <div class="help-block with-errors"></div>
                 </div>
             </div>
             <div class="col-md-2">
-                <div class="form-group">
-                <label>Select Iron Instructions</label>
-                <select class="form-control">
-                    <option selected>select</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                </select>
+                <div class="form-group has-feedback">
+                    {!! Form::label('tesco_care_iron_instruction', 'Iron Instructions', ['class' => 'form_label']) !!}
+                    <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_iron_instruction"  id="tesco_care_iron_instruction" required>
+                        <option value="">-- Select Iron Instructions --</option>
+                        @foreach($symbols['Ironing'] as $key => $value)
+                                <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}">{{ $value->degree }}</option>
+                        @endforeach
+                    </select>
+                    <div class="help-block with-errors"></div>
                 </div>
             </div>
             <div class="col-md-2">
-                <div class="form-group">
-                <label>Select Dry Clean Instructions</label>
-                <select class="form-control">
-                    <option selected>select</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                </select>
+                <div class="form-group has-feedback">
+                    {!! Form::label('tesco_care_dry_clean_instruction', 'Dry Clean Instructions', ['class' => 'form_label']) !!}
+                    <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_dry_clean_instruction"  id="tesco_care_dry_clean_instruction" required>
+                        <option value="">-- Select Dry Clean Instructions --</option>
+                        @foreach($symbols['Prof Cleaning'] as $key => $value)
+                                <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}">{{ $value->degree }}</option>
+                        @endforeach
+                    </select>
+                    <div class="help-block with-errors"></div>
                 </div>
             </div>
         </div>
@@ -561,7 +232,7 @@
             <div class="col-md-4">
                 <div class="form-group">
                 <label>Additional Instructions 1</label>
-                <select class="form-control">
+                <select class="form-control selectpicker input-sm">
                     <option selected>select</option>
                     <option>2</option>
                     <option>3</option>
@@ -572,7 +243,7 @@
             <div class="col-md-4">
                 <div class="form-group">
                 <label>Additional Instructions 2</label>
-                <select class="form-control">
+                <select class="form-control selectpicker input-sm">
                     <option selected>select</option>
                     <option>2</option>
                     <option>3</option>
@@ -583,7 +254,7 @@
             <div class="col-md-4">
                 <div class="form-group">
                 <label>Additional Instructions 3</label>
-                <select class="form-control">
+                <select class="form-control selectpicker input-sm">
                     <option selected>select</option>
                     <option>2</option>
                     <option>3</option>
@@ -593,17 +264,16 @@
             </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="row">
                 <div class="col-md-12">
                     <h4>Additional Instructions</h4>
                 </div>
                 <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Select Kids Warning Statement </label>
-                        <select class="form-control">
-                            <option selected>select</option>
-                        </select>
+                    <div class="form-group has-feedback">
+                        {!! Form::label('tesco_care_kids_warning', 'Kids Warning Statement', ['class' => 'form_label']) !!}
+                        {{  Form::select('tesco_care_kids_warning',(['' => '-- Select Kids Warning Statement --'] + $kids_warning),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_coo','required', 'data-live-search' => 'true')) }}
+                        <div class="help-block with-errors"></div>
                     </div>
                 </div>
             </div>
@@ -617,7 +287,7 @@
         <div class="col-md-4">
             <div class="form-group">
             <label>Select primary size chart </label>
-            <select class="form-control">
+            <select class="form-control selectpicker input-sm">
                 <option selected>select</option>
             </select>
             </div>
@@ -705,3 +375,6 @@
                 onclick="reload_back()"><i class=" fa fa-refresh" aria-hidden="true"></i> Reload</button> 
         </div>
 {!! Form::close() !!}
+
+<!-- Tesco care labels orders js -->
+<script src="{{ asset('js/common/tesco-care-label-orders.js') }}"></script>
