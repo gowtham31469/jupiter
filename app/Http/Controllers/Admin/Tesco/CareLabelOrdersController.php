@@ -60,8 +60,9 @@ class CareLabelOrdersController extends Controller
             $components = $this->caremeta->getCareMetadata()['components'];
             $fabriclists = $this->caremeta->getCareMetadata()['fabriclists'];
             $tesco_suppliers = $this->caremeta->getCareMetadata()['tesco_suppliers'];
+            $kaff = $this->caremeta->getCareMetadata()['kaff'];
             
-            return View::make('Admin/Order Management/tesco-care-labels')->with(['symbols' => $symbols, 'tesco_suppliers' => $tesco_suppliers, 'coo' => $coo, 'kids_warning' => $kids_warning, 'components' => $components, 'fabriclists' => $fabriclists]);
+            return View::make('Admin/Order Management/tesco-care-labels')->with(['symbols' => $symbols, 'tesco_suppliers' => $tesco_suppliers, 'coo' => $coo, 'kids_warning' => $kids_warning, 'components' => $components, 'fabriclists' => $fabriclists, 'kaff' => $kaff]);
             
         } catch (\Exception $e)
         {

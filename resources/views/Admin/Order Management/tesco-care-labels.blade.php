@@ -55,7 +55,7 @@
             <div class="col-md-2">
                 <div class="form-group has-feedback">
                     {!! Form::label('tesco_care_kaff', 'KAFF', ['class' => 'form_label']) !!}
-                    {{  Form::select('tesco_care_kaff',(['' => '-- Select Kaff --']),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_kaff','required', 'data-live-search' => 'true')) }}
+                    {{  Form::select('tesco_care_kaff',(['' => '-- Select Kaff --']+$kaff),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_kaff','required', 'data-live-search' => 'true')) }}
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
