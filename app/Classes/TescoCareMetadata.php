@@ -34,7 +34,6 @@ class TescoCareMetadata
     $metadata_array['kids_warning'] = DB::table('tesco_kids_warning_statements')->where('is_enabled','=',1)->pluck('english','id')->all();
     $metadata_array['components'] = DB::table('tesco_components')->where('is_enabled','=',1)->pluck('english','id')->all();
     $metadata_array['fabriclists'] = DB::table('tesco_fabriclists')->where('is_enabled','=',1)->pluck('english','id')->all();
-    $metadata_array['kaff'] = DB::table('tesco_kaffs')->where('is_enabled','=',1)->pluck('english','id')->all();
     
     $metadata_array['tesco_suppliers'] = DB::table('tesco_suppliers')
                         ->join('customer_metadata','customer_metadata.customer_metadata_id','=','tesco_suppliers.id')

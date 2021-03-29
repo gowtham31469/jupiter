@@ -1,4 +1,4 @@
-<h3><i class="ion-ios-browsers-outline"></i>Create Order</h3>
+        <h3><i class="ion-ios-browsers-outline"></i>Create Order</h3>
         <hr>
         {!! Form::open(['id' => 'create_tesco_care_order_form','data-toggle' => 'validator','role' => 'form']) !!}
         <div class="row">
@@ -54,13 +54,6 @@
             </div>
             <div class="col-md-2">
                 <div class="form-group has-feedback">
-                    {!! Form::label('tesco_care_kaff', 'KAFF', ['class' => 'form_label']) !!}
-                    {{  Form::select('tesco_care_kaff',(['' => '-- Select Kaff --']+$kaff),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_kaff','required', 'data-live-search' => 'true')) }}
-                    <div class="help-block with-errors"></div>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="form-group has-feedback">
                     {!! Form::label('tesco_care_coo', 'Country Of Origin', ['class' => 'form_label']) !!}
                     {{  Form::select('tesco_care_coo',(['' => '-- Select Country Of Origin --'] + $coo),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_coo','required', 'data-live-search' => 'true')) }}
                     <div class="help-block with-errors"></div>
@@ -85,14 +78,49 @@
             </div>
         </div>
         <hr>
-        
+        <div class="row">
+        <div class="col-md-12">
+            <h4>Order Quantity</h4>
+        </div>
+        <div class="col-md-12">
+            <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>UK</th>
+                    <th>EUR</th>
+                    <th>Height</th>
+                    <th>Weight</th>
+                    <th>Chest</th>
+                    <th>UK EAN</th>
+                    <th>CE EAN</th>
+                    <th>Quantity <small>(Units)</small></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Tiny Baby</td>
+                    <td>18-24M</td>
+                    <td>44cm/17 <sup>1/4</sup> In</td>
+                    <td>12.5kg/28lbs</td>
+                    <td>52.5cm/20<sup>5/8</sup>in</td>
+                    <td><div class="form-group"><input class="form-control input-sm" placeholder="UK EAN Number"></div></td>
+                    <td><div class="form-group"><input class="form-control input-sm" placeholder="CE EAN Number"></div></td>
+                    <td><div class="form-group"><input class="form-control input-sm" placeholder="Quantity"></div></td>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+        </div>
+        <hr>
         <div class="row garment-component-div">
             <div class="col-md-12">
                 <h4 class="pull-left">Garment Component & Fibres</h4>
                 <button class="btn btn-xs btn-primary add-garment-component-btn pull-right" type="button" data-id="3" onclick="addComponent(this,event)"><i class="fa fa-plus" aria-hidden="true"></i> Garment Component</button> 
             </div>
             @for ($j = 1; $j <= 3; $j++)
-            <div class="col-md-2 component-div-{{ $j }}">
+            <div class="col-md-4 component-div-{{ $j }}">
                 <div class="row">
                 <div class="col-xs-12">
                     <div class="form-group has-feedback">
@@ -102,13 +130,13 @@
                     </div>
                 </div>
                 @for ($i = 1; $i <= 6; $i++)
-                    <div class="col-xs-6">
+                    <div class="col-xs-9">
                         <div class="form-group has-feedback">
                             {{  Form::select('tesco_care_fiber',(['' => '-- Select Fiber --']+$fabriclists),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_fiber','required', 'data-live-search' => 'true')) }}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
-                    <div class="col-xs-6">
+                    <div class="col-xs-3">
                         <div class="form-group">
                         <div class="input-group">
                             <input type="text" class="form-control input-sm">
@@ -117,10 +145,10 @@
                         </div>
                     </div>
                 @endfor
-                <div class="col-xs-6">
+                <div class="col-xs-9">
                     <h5 class="text-right"><strong>Total</strong></h5>
                 </div>
-                <div class="col-xs-6">
+                <div class="col-xs-3">
                     <div class="form-group">
                     <div class="input-group">
                         <input type="text" class="form-control input-sm">
@@ -281,23 +309,6 @@
         </div>
         <hr>
         <div class="row">
-        <div class="col-md-12">
-            <h4>Size Chart</h4>
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
-            <label>Select primary size chart </label>
-            <select class="form-control selectpicker input-sm">
-                <option selected>select</option>
-            </select>
-            </div>
-        </div>
-        <div class="col-md-4">
-        </div>
-        <div class="col-md-4">
-        </div>
-        </div>
-        <div class="row">
             <div class="col-md-6 col-xs-12">
                 <div class="alert alert-danger" role="alert">These 3 fields are required only if the size chart selected is “Baby Sleeping Bags”</div>
             </div>
@@ -320,41 +331,6 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-        <div class="col-md-12">
-            <h4>Order Quantity</h4>
-        </div>
-        <div class="col-md-12">
-            <div class="table-responsive">
-            <table class="table table-bordered table-striped table-hover">
-                <thead>
-                <tr>
-                    <th>UK</th>
-                    <th>EUR</th>
-                    <th>Height</th>
-                    <th>Weight</th>
-                    <th>Chest</th>
-                    <th>UK EAN</th>
-                    <th>CE EAN</th>
-                    <th>Quantity <small>(Units)</small></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>Tiny Baby</td>
-                    <td>18-24M</td>
-                    <td>44cm/17 <sup>1/4</sup> In</td>
-                    <td>12.5kg/28lbs</td>
-                    <td>52.5cm/20<sup>5/8</sup>in</td>
-                    <td><div class="form-group"><input class="form-control input-sm" placeholder="UK EAN Number"></div></td>
-                    <td><div class="form-group"><input class="form-control input-sm" placeholder="CE EAN Number"></div></td>
-                    <td><div class="form-group"><input class="form-control input-sm" placeholder="Quantity"></div></td>
-                </tr>
-                </tbody>
-            </table>
-            </div>
-        </div>
-        </div>
         <hr>
     </div>
     <div class="bottom-bar">
@@ -373,7 +349,7 @@
             
                 <button class="btn btn-xs btn-danger reload-btn" type="button"
                 onclick="reload_back()"><i class=" fa fa-refresh" aria-hidden="true"></i> Reload</button> 
-        </div>
+    </div>
 {!! Form::close() !!}
 
 <!-- Tesco care labels orders js -->

@@ -46,7 +46,7 @@ var addComponent = (obj, event) => {
                 var component_count = parseInt(button_count) + 1;
                 
                 var fiber_count = 1;
-                var garment_comp_div = `<div class="col-md-2 component-div-`+component_count+`">
+                var garment_comp_div = `<div class="col-md-4 component-div-`+component_count+`">
                                             <div class="row">
                                                 <div class="col-xs-12">
                                                 <i class="fa fa-trash pull-right remove-component-btn" aria-hidden="true" title="Delete" data-placement="left" onclick="removeGarmentComponent(this,event)"></i>
@@ -62,7 +62,7 @@ var addComponent = (obj, event) => {
                                                     </div>
                                                 </div>`;
                                                 while (fiber_count <= 6) {
-                                                    garment_comp_div += `<div class="col-xs-6">
+                                                    garment_comp_div += `<div class="col-xs-9">
                                                     <div class="form-group">
                                                     <select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_fiber" name="tesco_care_fiber" required="">
                                                     <option value="">-- Select Fiber --</option>`;
@@ -72,7 +72,7 @@ var addComponent = (obj, event) => {
                                                 garment_comp_div += `</select>
                                                         </div>
                                                     </div>
-                                                    <div class="col-xs-6">
+                                                    <div class="col-xs-3">
                                                         <div class="form-group">
                                                         <div class="input-group">
                                                             <input type="text" class="form-control input-sm">
@@ -82,10 +82,10 @@ var addComponent = (obj, event) => {
                                                     </div>`;
                                                     fiber_count++
                                                 }
-                    garment_comp_div += `<div class="col-xs-6">
+                    garment_comp_div += `<div class="col-xs-9">
                                                     <h5 class="text-right"><strong>Total</strong></h5>
                                                 </div>
-                                                <div class="col-xs-6">
+                                                <div class="col-xs-3">
                                                     <div class="form-group">
                                                     <div class="input-group">
                                                         <input type="text" class="form-control input-sm">

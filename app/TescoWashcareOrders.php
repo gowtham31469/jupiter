@@ -22,7 +22,6 @@ class TescoWashcareOrders extends Model
         'ocn_number',
         'fabric_batch_code',
         'leather_suede_code',
-        'kaff_id',
         'country_of_origin_id',
         'kids_warning_id',
         'primary_size_id',
@@ -62,6 +61,9 @@ class TescoWashcareOrders extends Model
         'order_cancelled_at',
         'po_uploaded_at',
         'pi_approved_at',
+        'exclusive_trims_text',
+        'contains_non_textile_part_text',
+        'part_of_set_text'
     ]; 
 
     protected $casts = [
