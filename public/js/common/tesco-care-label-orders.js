@@ -39,8 +39,6 @@ var addComponent = (obj, event) => {
         statusCode: {
              /** [Show response status based on HTTP status code] */
              200: function(data) {
-                 console.log(data.data.components);
-                 console.log(data);
                 /** [ Get data-id of add button ] */
                 var button_count = $(obj).attr("data-id");
                 var component_count = parseInt(button_count) + 1;
