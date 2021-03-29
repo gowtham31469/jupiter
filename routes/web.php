@@ -1002,8 +1002,17 @@ Route::put('admin/tesco/update-tesco-translation-details', 'Admin\Settings\Tesco
 Route::put('admin/tesco/enable-tesco-translation', 'Admin\Settings\Tesco\TescoSettings@enableTescoTranslation');
 Route::put('admin/tesco/disable-tesco-translation', 'Admin\Settings\Tesco\TescoSettings@disableTescoTranslation');
 
+# Tesco care label orders routes
+Route::get('/admin/tesco/care-label-orders', 'Admin\Tesco\CareLabelOrdersController@index');
+
 // Update financial year in session
 Route::post('jga/set-financial-year-session', function (Request $request) {
 	Session::put('fiscal-year', $request['year']);  
 	return response()->json(['message' => 'success'], 200);
+});
+Route::get('tesco/care-label-fiber-components', function (Request $request) {
+	$data['components'] = DB::table('tesco_components')->where('is_enabled','=',1)->pluck('english','id')->all();
+	$data['fabriclists'] = DB::table('tesco_fabriclists')->where('is_enabled','=',1)->pluck('english','id')->all();
+	
+	return response()->json(['message' => 'success', 'data' => $data], 200);
 });

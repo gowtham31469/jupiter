@@ -19,7 +19,6 @@ $factory->define(App\TescoWashcareOrders::class, function (Faker $faker) {
             'ocn_number' => $faker->numberBetween($min = 1000, $max = 9000),
             'fabric_batch_code' => $faker->numberBetween($min = 1000, $max = 9000),
             'leather_suede_code' => $faker->numberBetween($min = 1000, $max = 9000),
-            'kaff_id' => 1,
             'country_of_origin_id' => 1,
             'kids_warning_id' => 1,
             'primary_size_id' => 1,

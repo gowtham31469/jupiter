@@ -302,25 +302,29 @@ function tescoOrders(callback) {
 										"text": "TCL 1 , TCL 2 & TSL 1 with QR",
 										"parent_id": "3",
 										"type": "ratio",
-										"zone": "CE"
+										"zone": "CE",
+										"template_type": 'tesco_carton_stickers'
 										}, {
 										"id": "28,23",
 										"text": "TCL 4 & TSL 3 with QR",
 										"parent_id": "3",
 										"type": "single",
-										"zone": "CE"
+										"zone": "CE",
+										"template_type": 'tesco_carton_stickers'
 										}, {
 										"id": "24",
 										"text": "THL 1 with QR",
 										"parent_id": "3",
 										"type": "ratio",
-										"zone": "CE"
+										"zone": "CE",
+										"template_type": 'tesco_carton_stickers'
 										}, {
 										"id": "25",
 										"text": "THL 3 with QR",
 										"parent_id": "3",
 										"type": "single",
-										"zone": "CE"
+										"zone": "CE",
+										"template_type": 'tesco_carton_stickers'
 										}]
                                     }, {
 									"id": "4",
@@ -331,29 +335,66 @@ function tescoOrders(callback) {
 										"text": "TCL 1 , TCL 2 & TSL 1",
 										"parent_id": "4",
 										"type": "ratio",
-										"zone": "UK"
+										"zone": "UK",
+										"template_type": 'tesco_carton_stickers'
                                         }, {
 										"id": "31,16",
 										"text": "TCL 4 & TSL 3",
 										"parent_id": "4",
 										"type": "single",
-										"zone": "UK"
+										"zone": "UK",
+										"template_type": 'tesco_carton_stickers'
                                         }, {
 										"id": "17",
 										"text": "THL 1",
 										"parent_id": "4",
 										"type": "ratio",
-										"zone": "UK"
+										"zone": "UK",
+										"template_type": 'tesco_carton_stickers'
                                         }, {
 										"id": "18",
 										"text": "THL 3",
 										"parent_id": "4",
 										"type": "single",
-										"zone": "UK"
+										"zone": "UK",
+										"template_type": 'tesco_carton_stickers'
                                         }]
                                     }]
                                 }]
-                            }]
+							},
+							{
+							"id": "32",
+							"text": "Labels",
+							"parent_id": "0",
+							"children": [{
+								"id": "33",
+								"text": "Printed Labels",
+								"parent_id": "32",
+								"children": [{
+									"id": "34",
+									"text": "GCL25W/M12723G",
+									"parent_id": "33",
+									"template_type": 'tesco_care_labels'
+									}, {
+									"id": "35",
+									"text": "GCL25W/M13220G",
+									"parent_id": "33",
+									"template_type": 'tesco_care_labels'
+									},
+									{
+									"id": "36",
+									"text": "GCL25W/M12723G",
+									"parent_id": "33",
+									"template_type": 'tesco_care_labels'
+									}, 
+									{
+									"id": "37",
+									"text": "GCL25W/M13220G",
+									"parent_id": "33",
+									"template_type": 'tesco_care_labels'
+									}, ]
+								}]
+							}]
 					},
 					"types": {
 						"default": {
@@ -393,6 +434,7 @@ function tescoOrders(callback) {
 				$('#jstree').on('activate_node.jstree', function (e, data) {
 					if (data.instance.is_leaf(data.node) != '') {
 						template_id = data.node.id;
+						template_type = data.node.original.template_type;
 						$.ajax({
 							url: base_url + "/admin/tesco/template-management/template-view",
 							type: "Post",
@@ -492,8 +534,10 @@ function tescoOrders(callback) {
 								formData.append('zone', localStorage.getItem("zone"));
 								formData.append('template_name', localStorage.getItem("template_group").replace(" with QR", ""));
 								uploadPurchaseOrder(formData, localStorage.getItem("zone"));
-							} else {
+							} else if (template_type === 'tesco_carton_stickers') {
 								createOrders();
+							} else if(template_type === 'tesco_care_labels') {
+								renderTescoCareOrders();
 							}
 							
 								localStorage.setItem("back_flag","create");
@@ -578,6 +622,8 @@ function createOrders(parsedObj = false, oType = false) {
 		var template_id = localStorage.getItem("templates");
 		var zone = localStorage.getItem("zone");
 		var type = localStorage.getItem("template type");
+		$('li.year-nav-menu').addClass('hidden');
+		$('li.buyer-nav-menu').addClass('hidden');
 
 		var word = localStorage.getItem("templates").length === 1 ? 'Artwork' : 'Artworks';
 		$('.top-content').html('<div class="page-header" style="margin: 10px 0 20px;border-bottom: 2px solid #eee;"><h4><strong>Create Order For TESCO-' + zone + ' ' + localStorage.getItem("template_group") + '</strong></h4></div>');
@@ -749,7 +795,7 @@ function createOrders(parsedObj = false, oType = false) {
                                             <hr>\
                                             <h4>Order Quantity</h4>\
                                             <p>\
-                                                <button type="button" onclick="addUKRatio(this,event)" data-id="1" class="btn btn-default add-row-btn" title="Select a supplier" data-placement="right"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
+                                                <button type="button" onclick="addUKRatio(this,event)" data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
                                             </p>\
                                         </div>\
                                     </div>\
@@ -821,7 +867,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                 <hr>\
                                                 <h4>Order Quantity</h4>\
                                                 <p>\
-                                                    <button type="button" onclick="addUKSingle(this,event)" data-id="1" class="btn btn-default add-row-btn" title="Select a supplier" data-placement="right"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
+                                                    <button type="button" onclick="addUKSingle(this,event)" data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
                                                 </p>\
                                             </div>\
                                         </div>\
@@ -899,7 +945,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                 <hr>\
                                                 <h4>Order Quantity</h4>\
                                                 <p>\
-                                                    <button type="button" onclick="addCERatio(this,event)" data-id="1" class="btn btn-default add-row-btn" title="Select a supplier" data-placement="right"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
+                                                    <button type="button" onclick="addCERatio(this,event)" data-id="1" class="btn btn-default add-row-btn" ><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
                                                 </p>\
                                             </div>\
                                         </div>\
@@ -966,7 +1012,7 @@ function createOrders(parsedObj = false, oType = false) {
                                             <hr>\
                                             <h4>Order Quantity</h4>\
                                             <p>\
-                                                <button type="button" onclick="addCESingle(this,event)" data-id="1" class="btn btn-default add-row-btn" title="Select a supplier" data-placement="right"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
+                                                <button type="button" onclick="addCESingle(this,event)" data-id="1" class="btn btn-default add-row-btn" ><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
                                             </p>\
                                         </div>\
                                     </div>\
@@ -8459,7 +8505,8 @@ function dynamicTescoSuppliers(id)
 
 function reload_back()
 {
-	
+	$('li.year-nav-menu').removeClass('hidden');
+	$('li.buyer-nav-menu').removeClass('hidden');
 	var back_flag = localStorage.getItem("back_flag");
 	if(back_flag == "view")
 	{
