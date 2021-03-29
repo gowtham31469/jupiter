@@ -104,9 +104,9 @@
                     <td>44cm/17 <sup>1/4</sup> In</td>
                     <td>12.5kg/28lbs</td>
                     <td>52.5cm/20<sup>5/8</sup>in</td>
-                    <td><div class="form-group"><input class="form-control input-sm" placeholder="UK EAN Number"></div></td>
-                    <td><div class="form-group"><input class="form-control input-sm" placeholder="CE EAN Number"></div></td>
-                    <td><div class="form-group"><input class="form-control input-sm" placeholder="Quantity"></div></td>
+                    <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="UK EAN Number" required><div class="help-block with-errors"></div></div></td>
+                    <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="CE EAN Number"><div class="help-block with-errors"></div></div></td>
+                    <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="Quantity"><div class="help-block with-errors"></div></div></td>
                 </tr>
                 </tbody>
             </table>
@@ -257,39 +257,16 @@
             <div class="col-md-12">
                 <h4>Additional Instructions</h4>
             </div>
+            @for ($i = 1; $i <= 3; $i++)
             <div class="col-md-4">
-                <div class="form-group">
-                <label>Additional Instructions 1</label>
-                <select class="form-control selectpicker input-sm">
-                    <option selected>select</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                </select>
+                <div class="form-group has-feedback">
+                    {!! Form::label('tesco_care_additional_instruction', 'Additional Instruction '.$i, ['class' => 'form_label']) !!}
+                    {{  Form::select('tesco_care_additional_instruction',(['' => '-- Select Additional Instruction --'] + $additional_instructions),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_additional_instruction','required', 'data-live-search' => 'true')) }}
+                    <div class="help-block with-errors"></div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                <label>Additional Instructions 2</label>
-                <select class="form-control selectpicker input-sm">
-                    <option selected>select</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                </select>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                <label>Additional Instructions 3</label>
-                <select class="form-control selectpicker input-sm">
-                    <option selected>select</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                </select>
-                </div>
-            </div>
+            @endfor
+            
             </div>
         </div>
         <div class="col-md-6">
