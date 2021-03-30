@@ -1002,15 +1002,14 @@ Route::put('admin/tesco/update-tesco-translation-details', 'Admin\Settings\Tesco
 Route::put('admin/tesco/enable-tesco-translation', 'Admin\Settings\Tesco\TescoSettings@enableTescoTranslation');
 Route::put('admin/tesco/disable-tesco-translation', 'Admin\Settings\Tesco\TescoSettings@disableTescoTranslation');
 
-<<<<<<< HEAD
 #Tesco Label Size Chart
 Route::post('admin/tesco/settings/get-tesco-label-size-chart', 'Admin\Settings\Tesco\TescoSettings@tescoLabelSizeChartLists');
 Route::get('admin/tesco/settings/get-label-category-data', 'Admin\Settings\Tesco\TescoSettings@getLabelSizeCategories');
 Route::post('admin/tesco/settings/add-tesco-label-size-chart', 'Admin\Settings\Tesco\TescoSettings@addTescoLabelSizeChart');
-=======
+
+
 // Update financial year in session
 Route::post('jga/set-financial-year-session', function (Request $request) {
 	Session::put('fiscal-year', $request['year']);  
 	return response()->json(['message' => 'success'], 200);
 });
->>>>>>> 7fc3f8cc6becad852b07cc69a53de5af1a6ff24b
