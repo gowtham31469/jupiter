@@ -1003,3 +1003,8 @@ Route::get('admin/tesco/get-tesco-translation-details', 'Admin\Settings\Tesco\Te
 Route::put('admin/tesco/update-tesco-translation-details', 'Admin\Settings\Tesco\TescoSettings@updateTescoTranslationById');
 Route::put('admin/tesco/enable-tesco-translation', 'Admin\Settings\Tesco\TescoSettings@enableTescoTranslation');
 Route::put('admin/tesco/disable-tesco-translation', 'Admin\Settings\Tesco\TescoSettings@disableTescoTranslation');
+
+#Tesco Label Size Chart
+Route::post('admin/tesco/settings/get-tesco-label-size-chart', 'Admin\Settings\Tesco\TescoSettings@tescoLabelSizeChartLists');
+Route::get('admin/tesco/settings/get-label-category-data', 'Admin\Settings\Tesco\TescoSettings@getLabelSizeCategories');
+Route::post('admin/tesco/settings/add-tesco-label-size-chart', 'Admin\Settings\Tesco\TescoSettings@addTescoLabelSizeChart');
