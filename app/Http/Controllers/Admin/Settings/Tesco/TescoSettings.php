@@ -24,6 +24,8 @@ use App\TescoComponents;
 use App\TescoFabricLists;
 use App\TescoKidsWarningStatements;
 use App\TescoTranslation;
+use App\TescoPrimarySize;
+use App\TescoSecondarySizeChart;
 
 class TescoSettings extends Controller
 {
@@ -1810,6 +1812,75 @@ class TescoSettings extends Controller
             $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
             return $result;
+    }
+
+
+    /**
+     * tescoLabelSizeChartLists list show using ajax.
+     * @return \Illuminate\Http\Response
+     */
+    public function tescoLabelSizeChartLists(){
+      try {
+          $tesco_translationlists = TescoPrimarySize::with(['secSizeChart' => function ($query) {
+						$query->leftJoin('tesco_secondary_size_category as tssc', 'tssc.id', '=', 'tesco_secondary_size_chart.tesco_secondary_size_category_id');
+					}])->get();
+                         
+          return response()->json(['error'=>'false','message' =>'success', 'tesco_translationlist' => $tesco_translationlists]);
+      }
+      catch (\Exception $e){
+          return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+    }
+
+     /**
+     * for LabelSize add form modal data (categories and departments)
+     * @return \Illuminate\Http\Response
+     */
+    public function getLabelSizeCategories(){
+      try {
+        $result = array();
+        $label_categories = DB::table('tesco_secondary_size_category')->select('id', 'category_name')->get();
+        $size_departments = DB::table('tesco_size_department')->select('id', 'department_name')->get();
+        $result['label_categories'] = $label_categories;
+        $result['size_departments'] = $size_departments;
+        return response()->json(['error'=>'false','message' =>'success', 'result' => $result]);
+      }
+      catch (\Exception $e){
+          return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+    }
+
+     /**
+     * add tesco label size chart 
+     * @return \Illuminate\Http\Response
+     */
+    public function addTescoLabelSizeChart(Request $request){
+      $data = $request->all();
+      $primary_data = $data['customData']['primary'];
+      $sec_data = $data['customData']['secondary'];
+
+      try {
+          $primary_inserted = TescoPrimarySize::create([
+                    'tesco_size_department_id'   => $primary_data['size_department'],
+                    'department_title'    => $primary_data['labelsize_dept_title'],
+                    'uk_size'     => $primary_data['labelsize_uksize'],
+                    'ce_size'    => $primary_data['labelsize_cesize']
+          ]);
+          
+          foreach ($sec_data as $key => $value) {
+              $cat_id = explode('_', $key);
+              $secondary_inserted = TescoSecondarySizeChart::create([
+                'tesco_primary_size_id'   => $primary_inserted->id,
+                'tesco_secondary_size_category_id'    => $cat_id[1],
+                'secondary_size'     => $value
+              ]);
+          }
+
+          $result = $primary_inserted != '' ? response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+      } catch (\Exception $e) {
+          $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+      return $result;
     }
 
 }

@@ -19,4 +19,8 @@ class TescoPrimarySize extends Model
       * @var array
       */
       protected $fillable = ['tesco_size_department_id','department_title','uk_size','ce_size','is_flag'];
+
+    public function secSizeChart(){
+        return $this->hasMany(TescoSecondarySizeChart::class);
+    }
 }
