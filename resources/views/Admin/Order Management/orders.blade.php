@@ -257,18 +257,6 @@ border: 0;
     transform: translate(0, 0) scale(1);
     pointer-events: auto;
 }
-.input-fields {
- margin-bottom: 20px;
- }
- .input-fields input,
- select {
- width: 100%;
- height: 20px;
- -ms-box-sizing: content-box;
- -moz-box-sizing: content-box;
- box-sizing: content-box;
- -webkit-box-sizing: content-box;
- }
  .order-details-notes {
  font-weight: 300;
  }
@@ -807,6 +795,8 @@ input[type="number"] {
     <script src="{{ asset('js/Admin/orchestra-pi.js') }}"></script>
     <script src="{{ asset('js/Admin/parser.js') }}"></script>
     <script src="{{ asset('js/Admin/tesco-view-orders.js') }}"></script>
+    <!-- Tesco care labels orders js -->
+    <script src="{{ asset('js/common/tesco-care-label-orders.js') }}"></script>
     <!-- Financial year selection script -->
     <script src="{{ asset('js/common/financial-year-switch.js') }}"></script>
 <script src="{{ asset('js/moment.min.js') }}"></script>

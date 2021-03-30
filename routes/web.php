@@ -1007,9 +1007,17 @@ Route::post('admin/tesco/settings/get-tesco-label-size-chart', 'Admin\Settings\T
 Route::get('admin/tesco/settings/get-label-category-data', 'Admin\Settings\Tesco\TescoSettings@getLabelSizeCategories');
 Route::post('admin/tesco/settings/add-tesco-label-size-chart', 'Admin\Settings\Tesco\TescoSettings@addTescoLabelSizeChart');
 
+# Tesco care label orders routes
+Route::get('/admin/tesco/care-label-orders', 'Admin\Tesco\CareLabelOrdersController@index');
 
 // Update financial year in session
 Route::post('jga/set-financial-year-session', function (Request $request) {
 	Session::put('fiscal-year', $request['year']);  
 	return response()->json(['message' => 'success'], 200);
+});
+Route::get('tesco/care-label-fiber-components', function (Request $request) {
+	$data['components'] = DB::table('tesco_components')->where('is_enabled','=',1)->pluck('english','id')->all();
+	$data['fabriclists'] = DB::table('tesco_fabriclists')->where('is_enabled','=',1)->pluck('english','id')->all();
+	
+	return response()->json(['message' => 'success', 'data' => $data], 200);
 });
