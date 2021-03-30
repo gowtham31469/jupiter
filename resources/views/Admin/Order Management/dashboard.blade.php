@@ -700,14 +700,13 @@
 		function new_orders_modal() {
 			
 			
-			$fiscal_year = getCookie("fiscal-year");
 				$.ajax({
 					url: base_url + "/admin/order-management/new_orders",
 					type: "Post",
 					dataType: "json",
 					data: {
 						_token: csrf_token,
-						fiscal_year:$fiscal_year
+						fiscal_year:fiscal_year
 					},
 					beforeSend: function() {
 
@@ -728,7 +727,6 @@
 
 		function aowp_modal() {
 			
-			$fiscal_year = getCookie("fiscal-year");
 			
 				$.ajax({
 					url: base_url + "/admin/order-management/aowp",
@@ -736,7 +734,7 @@
 					dataType: "json",
 					data: {
 						_token: csrf_token,
-						fiscal_year:$fiscal_year
+						fiscal_year:fiscal_year
 					},
 					beforeSend: function() {
 
@@ -757,14 +755,13 @@
 		function app_orders_modal() {
 			
 			
-			$fiscal_year = getCookie("fiscal-year");
 				$.ajax({
 					url: base_url + "/admin/order-management/approved_orders",
 					type: "Post",
 					dataType: "json",
 					data: {
 						_token: csrf_token,
-						fiscal_year:$fiscal_year
+						fiscal_year:fiscal_year
 					},
 					beforeSend: function() {
 
@@ -784,15 +781,13 @@
 
 		function pen_orders_modal() {
 			
-			
-			$fiscal_year = getCookie("fiscal-year");
 				$.ajax({
 					url: base_url + "/admin/order-management/pending_orders",
 					type: "Post",
 					dataType: "json",
 					data: {
 						_token: csrf_token,
-						fiscal_year:$fiscal_year
+						fiscal_year:fiscal_year
 					},
 					beforeSend: function() {
 

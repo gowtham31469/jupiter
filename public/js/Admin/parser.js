@@ -467,14 +467,17 @@ function readSupplierCode(supplier) {
 function renderParsedValues(parsedObj) {
     var zone        = localStorage.getItem("zone").toLowerCase();
     var type        = localStorage.getItem("template type");
-    $('#tesco_po_number').val(parsedObj.purchaseOrder).attr('disabled', true);
+
+    parsedObj.purchaseOrder != null?$('#tesco_po_number').val(parsedObj.purchaseOrder).attr('disabled', true):$('#tesco_po_number').val(parsedObj.purchaseOrder).attr('disabled', false);
+
     if(zone === 'ce') {
-        $('#tesco_ce_style').val(parsedObj.styleNumber).attr('disabled', true);
+        parsedObj.styleNumber != null?$('#tesco_ce_style').val(parsedObj.styleNumber).attr('disabled', true):$('#tesco_ce_style').val(parsedObj.styleNumber).attr('disabled', false);
      } else {
-        $('#tesco_uk_style').val(parsedObj.styleNumber).attr('disabled', true);
+        parsedObj.styleNumber != null?$('#tesco_uk_style').val(parsedObj.styleNumber).attr('disabled', true):$('#tesco_uk_style').val(parsedObj.styleNumber).attr('disabled', false);
      }
-   // $('#tesco_eqos').val(parsedObj.supplierCode).attr('disabled', true);
-    $('#tesco_season_code').val(parsedObj.seasonCode).attr('disabled', true);
+   
+   parsedObj.seasonCode != null?$('#tesco_season_code').val(parsedObj.seasonCode).attr('disabled', true):$('#tesco_season_code').val(parsedObj.seasonCode).attr('disabled', false);
+
     $('#tesco_description').val(parsedObj.shortDescription);
 	if(typeof parsedObj.originalDescription !== 'undefined') {
 		$('#tesco_description').prev().text($('#tesco_description').prev().text()+'(Full Description: '+parsedObj.originalDescription+')');
@@ -485,15 +488,19 @@ function renderParsedValues(parsedObj) {
     if(type === 'single') {
         $.each(parsedObj.orderQuantity, function(i, j) {
             var index = i + 1;
+
             if(zone === 'ce') {
-                $('#ce_single_orms_tpn_'+index).val(j.TPND).attr('disabled', true);
+                j.TPND != null?$('#ce_single_orms_tpn_'+index).val(j.TPND).attr('disabled', true):$('#ce_single_orms_tpn_'+index).val(j.TPND).attr('disabled', false);
             } else {
-                $('#uk_single_tpnd_'+index).val(j.TPND).attr('disabled', true);
+                j.TPND != null?$('#uk_single_tpnd_'+index).val(j.TPND).attr('disabled', true):$('#uk_single_tpnd_'+index).val(j.TPND).attr('disabled', false);
             }
             
-            $('#'+zone+'_single_ean_'+index).val(j.EAN_Barcode).attr('disabled', true);
-            $('#'+zone+'_single_case_size_'+index).val(j.Case_Size).attr('disabled', true);
-            $('#'+zone+'_single_size_'+index).val(j.Size).attr('disabled', true);
+            j.EAN_Barcode != null?$('#'+zone+'_single_ean_'+index).val(j.EAN_Barcode).attr('disabled', true):$('#'+zone+'_single_ean_'+index).val(j.EAN_Barcode).attr('disabled', false);
+
+            j.Case_Size != null?$('#'+zone+'_single_case_size_'+index).val(j.Case_Size).attr('disabled', true):$('#'+zone+'_single_case_size_'+index).val(j.Case_Size).attr('disabled', false);
+
+            j.Size != null?$('#'+zone+'_single_size_'+index).val(j.Size).attr('disabled', true):$('#'+zone+'_single_size_'+index).val(j.Size).attr('disabled', false);
+
             if(parsedObj.orderQuantity.length !== (i+1)) {
                 $('.add-row-btn').trigger('click');
             }
@@ -501,13 +508,17 @@ function renderParsedValues(parsedObj) {
     } else if(type === 'ratio') {
         $.each(parsedObj.orderQuantity, function(i, j) {
             var index = i + 1;
-            $('#'+zone+'_ratio_itf_'+index).val(j.itf).attr('disabled', true);
+
+            j.itf != null?$('#'+zone+'_ratio_itf_'+index).val(j.itf).attr('disabled', true):$('#'+zone+'_ratio_itf_'+index).val(j.itf).attr('disabled', false);
+
             if(zone === 'ce') {
-                $('#'+zone+'_ratio_orms_tpn_'+index).val(j.tpnd).attr('disabled', true);
-                $('#'+zone+'_ratio_cpc_'+index).val(j.cpc).attr('disabled', true);
+                j.tpnd != null?$('#'+zone+'_ratio_orms_tpn_'+index).val(j.tpnd).attr('disabled', true):$('#'+zone+'_ratio_orms_tpn_'+index).val(j.tpnd).attr('disabled', false);
+
+                j.cpc != null?$('#'+zone+'_ratio_cpc_'+index).val(j.cpc).attr('disabled', true):$('#'+zone+'_ratio_cpc_'+index).val(j.cpc).attr('disabled', false);
             } else {
-                $('#'+zone+'_ratio_tpnd_'+index).val(j.tpnd).attr('disabled', true);
-                $('#'+zone+'_ratio_upc_'+index).val(j.upc).attr('disabled', true);
+                j.tpnd != null?$('#'+zone+'_ratio_tpnd_'+index).val(j.tpnd).attr('disabled', true):$('#'+zone+'_ratio_tpnd_'+index).val(j.tpnd).attr('disabled', false);
+
+                j.upc != null?$('#'+zone+'_ratio_upc_'+index).val(j.upc).attr('disabled', true):$('#'+zone+'_ratio_upc_'+index).val(j.upc).attr('disabled', false);
             }
             if(parsedObj.orderQuantity.length !== (i+1)) {
                 $('.add-row-btn').trigger('click');
@@ -655,7 +666,7 @@ function parseSingleXml(data) {
         });
         singleObj.orderQuantity.size = size;
 
-    //Case Size
+    //Units Per Case
         var caseSize = [];
         $(xml).find('page[id="2"] textbox[id="20"] textline').each(function() {
             var case_size = '';

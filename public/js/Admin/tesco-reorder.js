@@ -298,21 +298,21 @@ function extraQuantityTesco(type,id,name,zone,po_number,liid)
 			
 			if((name == "TCL1" && zone=="CE") ||(name == "TCL2" && zone=="CE") || (name == "TSL1" && zone=="CE") || (name == "THL1" && zone=="CE"))
 			{
-				var qty="Cases Per Carton";
+				var qty="No Of Pieces In Ratio";
 				var barcode_tr="ITF Barcode";
 				var tpnd_tr="ORMS TPND";
 				var th_tr="";
 			}
 			else if((name == "TCL4" && zone=="CE") || (name == "TSL3" && zone=="CE") || (name == "THL3" && zone=="CE"))
 			{
-				var qty="Case Size";
+				var qty="Units Per Case";
 				var barcode_tr="EAN Barcode";
 				var tpnd_tr="ORMS TPND";
 				var th_tr="<th>Size</th>";
 			}
 			else if((name == "TCL4" && zone=="UK") || (name == "TSL3" && zone=="UK") || (name == "THL3" && zone=="UK"))
 			{
-				var qty="Case Size";
+				var qty="Units Per Case";
 				var barcode_tr="EAN Barcode";
 				var tpnd_tr="TPND";
 				var th_tr="<th>Size</th>";
@@ -679,7 +679,7 @@ function contentdocument(data,name,zone)
 								var desc_size = (description.toUpperCase()) + ' ' + datas.size_chart[0].size;
 								if(data.tesco_item_master[0].is_qrcode_required == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc1.getElementById("description").innerHTML = desc_size;
 										if(name === "THL3")
@@ -702,7 +702,7 @@ function contentdocument(data,name,zone)
 									}
 									else
 									{
-										str = oswordWrap(desc_size, 23);
+										str = oswordWrap(desc_size, 22);
 										svgDoc1.getElementById("description").innerHTML = str;
 										
 										if(name === "THL3")
@@ -735,7 +735,7 @@ function contentdocument(data,name,zone)
 								
 								if(data.tesco_item_master[0].is_qrcode_required == 1)
 								{
-									if(desc_size.length <= 23)
+									if(desc_size.length <= 22)
 									{
 										svgDoc1.getElementById("description").innerHTML = desc_size;
 										if(name === "THL3")
@@ -758,7 +758,7 @@ function contentdocument(data,name,zone)
 									}
 									else
 									{
-										str = oswordWrap(desc_size, 23);
+										str = oswordWrap(desc_size, 22);
 										svgDoc1.getElementById("description").innerHTML = str;
 										
 										if(name === "THL3")

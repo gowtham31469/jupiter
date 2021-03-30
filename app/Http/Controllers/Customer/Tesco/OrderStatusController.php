@@ -1815,6 +1815,7 @@ class OrderStatusController extends Controller
 				$qr_flag=$request->qr_flag;
 				$id=$request->id;
 				$qr_code=explode(',_',$request->qr_code_fin);
+				$qr_code_check_fin=explode(',_',$request->qr_code_check_fin);
 		
 				foreach($svgarr as $value)
 				{
@@ -1837,7 +1838,21 @@ class OrderStatusController extends Controller
 					else
 					{
 						PDF::RoundedRect(15, 160, 127, 80, 0, '0000');
-						$yy += 100;
+                        if($name == "TCL4-sticker")
+                        {
+                            if($order_details{0}->template_id == 28 || $order_details{0}->template_id == 31)
+                            {
+                                $yy += 77;
+                            }
+                            else
+                            {
+                                $yy += 100; 
+                            }
+                        }
+                        else
+                        {
+                          $yy += 100;  
+                        }
 						$qr_y+=100;
 					}
 					
@@ -1859,23 +1874,58 @@ class OrderStatusController extends Controller
 				);
 				if($name == "TCL1-sticker")
 				{
-					PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 88, 65, 17, 17, $style, 'N');
+                    $qr_code_check=explode(',',$qr_code_check_fin[$qr_count]);
+
+					$lasttpn = substr($qr_code_check[3] , -3);
+					$qr_check = $qr_code_check[0].",".$qr_code_check[2]."/".$lasttpn.",".$qr_code_check[3];
+                    if($qr_check == $qr_code[$qr_count])
+                    {
+                        PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 88, 65, 17, 17, $style, 'N');
+                    }
 				}
 				else if($name == "TCL2-sticker")
 				{
-					PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 89.5, 69, 17, 17, $style, 'N');
+                    $qr_code_check=explode(',',$qr_code_check_fin[$qr_count]);
+
+					$lasttpn = substr($qr_code_check[3] , -3);
+					$qr_check = $qr_code_check[0].",".$qr_code_check[2]."/".$lasttpn.",".$qr_code_check[3];
+                    if($qr_check == $qr_code[$qr_count])
+                    {
+                        PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 89.5, 69, 17, 17, $style, 'N');
+                    }
 				}
 				else if($name == "TCL4-sticker")
 				{
-					PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 89, $qr_y+1.5, 17, 17, $style, 'N');
+                    $qr_code_check=explode(',',$qr_code_check_fin[$qr_count]);
+
+					$lasttpn = substr($qr_code_check[3] , -3);
+					$qr_check = $qr_code_check[0].",".$qr_code_check[1]."/".$lasttpn.",".$qr_code_check[3];
+                    if($qr_check == $qr_code[$qr_count])
+                    {
+                        PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 89, $qr_y+1.5, 17, 17, $style, 'N');
+                    }
 				}
 				else if($name == "THL1-sticker")
 				{
-					PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 89, 66, 17, 17, $style, 'N');
+                    $qr_code_check=explode(',',$qr_code_check_fin[$qr_count]);
+
+					$lasttpn = substr($qr_code_check[3] , -3);
+					$qr_check = $qr_code_check[0].",".$qr_code_check[2]."/".$lasttpn.",".$qr_code_check[3];
+                    if($qr_check == $qr_code[$qr_count])
+                    {
+                        PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 89, 66, 17, 17, $style, 'N');
+                    }
 				}
 				else if($name == "THL3-sticker")
 				{
-					PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 90, $qr_y-2, 17, 17, $style, 'N');
+                    $qr_code_check=explode(',',$qr_code_check_fin[$qr_count]);
+
+					$lasttpn = substr($qr_code_check[3] , -3);
+					$qr_check = $qr_code_check[0].",".$qr_code_check[1]."/".$lasttpn.",".$qr_code_check[3];
+                    if($qr_check == $qr_code[$qr_count])
+                    {
+                        PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 90, $qr_y-2, 17, 17, $style, 'N');
+                    }
 				}
 				
 			}
@@ -3417,7 +3467,8 @@ class OrderStatusController extends Controller
                 'style'                     => $request[strtolower($request['zone']).'_style'],
                 'buyer_po'                  => $request['po_number'],
                 'ocn_number'                => $request['tesco_ocn'],
-                'order_status'              => $order_status_id
+                'order_status'              => $order_status_id,
+                'order_edit_enabled'        => $edit_permission
             ]);
 
             DB::table($qty_table_name)->where($foreign_key,$template_id)->delete();
@@ -3593,6 +3644,7 @@ class OrderStatusController extends Controller
             $table_name = $request->tableName;
             $row_id     = $request->id;
             $po_file = $request->file('file');
+            $po_number_updation    = $request->po_number_updation;
             $path = $request->file('file')->getRealPath();
             $filename = $request->file('file')->getClientOriginalName();
             $destination_path='/storage/app/public/po-files/';
@@ -3619,18 +3671,12 @@ class OrderStatusController extends Controller
                 
             }
             
-            if ($po_details->purchase_order_no === null || $po_details->purchase_order_no === "")
-            {
-                $po_status = "PO Pending";
-            }
-            else
-            {
-                $po_status = "PO Uploaded";
-            }
+            $po_status = "PO Uploaded";
 
             DB::table($table_name)->where('id',$row_id)
             ->update([
                 'po_file' => $destination_path_insert,
+                'purchase_order_no' => $po_number_updation,
                 'po_status' => $po_status,
                 'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
             ]);
@@ -3639,6 +3685,7 @@ class OrderStatusController extends Controller
             $po_upload_status = $po_status === "PO Pending"?0:1;
             OrderManagementHistory::where([['order_table_name', $table_name], ['order_table_id', $row_id]])->update([
                 'po_status' => $po_upload_status,
+                'customer_po' => $po_number_updation,
             ]);
 
             if ($po_status == "PO Uploaded") {
@@ -3661,7 +3708,7 @@ class OrderStatusController extends Controller
                     $buyer_id = $this->updated_erp_table_array['buyer_id'];
                     $customer_id = $this->updated_erp_table_array['customer_id'];
                     
-                    $erp_previous_status = Erp::where('buyer_id',$buyer_id)->where('customer_id',$customer_id)->where('po_no',$po_details->purchase_order_no)->first();
+                    $erp_previous_status = Erp::where('buyer_id',$buyer_id)->where('customer_id',$customer_id)->where('po_no',$po_number_updation)->first();
                     
                     if($erp_previous_status)
                     {

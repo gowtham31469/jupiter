@@ -11,10 +11,17 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Auth;
 
 use App\CustomerProfile;
+use Carbon\Carbon;
+use App\FinancialYearResetDate;
+use Session;
 class LoginController extends Controller
 {
     //Where to redirect seller after login.
     protected $redirectTo = '/customer';
+    private $year;
+	private $financial_year_date;
+	private $financial_year_start;
+    private $financial_year;
 
     //Trait
     use AuthenticatesUsers{
@@ -41,6 +48,21 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest', ['except' => 'logout']);
+
+        // get year as "2020"
+		$this->year = Carbon::now('Asia/Kolkata')->format('Y');
+
+		$this->financial_year_date = FinancialYearResetDate::value('financial_year_date');
+
+		// format financial year date as "yyyy-dd-mm" 
+		$this->financial_year_date_format = $this->year.'-'.$this->financial_year_date;
+
+		// get the current date in "dd-mm-yyyy" format
+		$this->today_date = Carbon::now('Asia/Kolkata')->format('Y-m-d');
+
+		// store financial year start and end date and
+		// financial year identification
+		$this->financial_year = $this->today_date < $this->financial_year_date_format?Carbon::parse($this->financial_year_date_format)->subYear()->format('Y').'-'.$this->year:$this->year.'-'.Carbon::parse($this->financial_year_date_format)->addYear()->format('Y');
     }
     /**
      * Handle a login request to the application.
@@ -60,6 +82,7 @@ class LoginController extends Controller
         }
         // Customization: Validate if user status is active (1)
         if ($this->attemptLogin($request)) {
+            Session::put('fiscal-year', $this->financial_year);
             return $this->sendLoginResponse($request);
         }
         // Customization: Validate if user status is active (1)

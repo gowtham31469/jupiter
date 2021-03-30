@@ -38,6 +38,7 @@ use Intervention\Image\ImageManagerStatic as Image;
 use App\OrderManagementHistory;
 use App\Classes\TescoMaterialQuery;
 use App\FinancialYearResetDate;
+use Session;
 
 class OrderManagementCntrl extends Controller
 {
@@ -104,10 +105,16 @@ class OrderManagementCntrl extends Controller
        // format financial year date as "yyyy-dd-mm" 
        $this->financial_year_date_format = $this->year.'-'.$this->financial_year_date;
    
-       // store financial year start and end date and
-       // financial year identification
-        $this->financial_year_start = $this->financial_year_date_format;
-        $this->financial_year_end = Carbon::parse($this->financial_year_date_format)->addYear()->subDay()->toDateString();
+       	// get the current date in "dd-mm-yyyy" format
+        $this->today_date = Carbon::now('Asia/Kolkata')->format('Y-m-d');
+        
+        if($this->today_date < $this->financial_year_date_format){
+          $this->financial_year_start = Carbon::parse($this->financial_year_date_format)->subYear()->toDateString();
+          $this->financial_year_end = Carbon::parse($this->financial_year_date_format)->subDay()->toDateString();
+        } else {
+          $this->financial_year_start = $this->financial_year_date_format;
+          $this->financial_year_end = Carbon::parse($this->financial_year_date_format)->addYear()->subDay()->toDateString();
+        }
         
     }
 
@@ -1901,14 +1908,16 @@ class OrderManagementCntrl extends Controller
 				{
 					$tcl1_id=$request->tcl1_id;
 
-					$qr_code = DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$tcl1_id)->select('*')->orderBy('id', 'asc')->get();
+          $qr_code = DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$tcl1_id)->select('*')->orderBy('id', 'asc')->get();
+          $qr_code_details = DB::table('tesco_tcl1_orders')->where('id',$tcl1_id)->select('*')->orderBy('id', 'asc')->get();
 
 				}
 				else if($name == "TCL2-sticker")
 				{
 					$tcl2_id=$request->tcl2_id;
 
-					$qr_code = DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$tcl2_id)->select('*')->orderBy('id', 'asc')->get();
+          $qr_code = DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$tcl2_id)->select('*')->orderBy('id', 'asc')->get();
+          $qr_code_details = DB::table('tesco_tcl2_orders')->where('id',$tcl2_id)->select('*')->orderBy('id', 'asc')->get();
 				}
 
 				else if($name == "TCL4-sticker")
@@ -1916,18 +1925,21 @@ class OrderManagementCntrl extends Controller
 					$tcl4_id=$request->tcl4_id;
 
 					$qr_code = DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$tcl4_id)->select('*')->orderBy('id', 'asc')->get();
+          $qr_code_details = DB::table('tesco_tcl4_orders')->where('id',$tcl4_id)->select('*')->orderBy('id', 'asc')->get();
 				}
 				else if($name == "THL1-sticker")
 				{
 					$thl1_id=$request->thl1_id;
 
 					$qr_code = DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$thl1_id)->select('*')->orderBy('id', 'asc')->get();
+          $qr_code_details = DB::table('tesco_thl1_orders')->where('id',$thl1_id)->select('*')->orderBy('id', 'asc')->get();
 				}
 				else if($name == "THL3-sticker")
 				{
 					$thl3_id=$request->thl3_id;
 
 					$qr_code = DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$thl3_id)->select('*')->orderBy('id', 'asc')->get();
+          $qr_code_details = DB::table('tesco_thl3_orders')->where('id',$thl3_id)->select('*')->orderBy('id', 'asc')->get();
 				}
 		
 				foreach($svgarr as $value)
@@ -1951,7 +1963,23 @@ class OrderManagementCntrl extends Controller
 					else
 					{
 						PDF::RoundedRect(15, 160, 127, 80, 0, '0000');
-						$yy += 100;
+            if($name == "TCL4-sticker")
+            {
+              //print_r($company_id{0}->template_id);
+              if($company_id{0}->template_id == 28 || $order_details{0}->template_id == 31)
+              {
+                $yy += 77;
+              }
+              else
+              {
+                $yy += 100; 
+              }
+              
+            }
+            else
+            {
+              $yy += 100;  
+            }
 						$qr_y+=100;
 					}
 					
@@ -1973,23 +2001,49 @@ class OrderManagementCntrl extends Controller
 				);
 				if($name == "TCL1-sticker")
 				{
-					PDF::write2DBarcode($qr_code[$qr_count]->qr_code, 'QRCODE,Q', 88, 65, 17, 17, $style, 'N');
+         
+          $lasttpn = substr($qr_code[$qr_count]->orms_tpn , -3);
+          $qr_check = $qr_code_details{0}->po_number.",".$qr_code[$qr_count]->itf_barcode."/".$lasttpn.",".$qr_code[$qr_count]->orms_tpn;
+          if($qr_check == $qr_code[$qr_count]->qr_code)
+          {
+            PDF::write2DBarcode($qr_code[$qr_count]->qr_code, 'QRCODE,Q', 88, 65, 17, 17, $style, 'N');
+          }
 				}
 				else if($name == "TCL2-sticker")
 				{
-					PDF::write2DBarcode($qr_code[$qr_count]->qr_code, 'QRCODE,Q', 89.5, 69, 17, 17, $style, 'N');
+          $lasttpn = substr($qr_code[$qr_count]->orms_tpn , -3);
+          $qr_check = $qr_code_details{0}->po_number.",".$qr_code[$qr_count]->itf_barcode."/".$lasttpn.",".$qr_code[$qr_count]->orms_tpn;
+          if($qr_check == $qr_code[$qr_count]->qr_code)
+          {
+            PDF::write2DBarcode($qr_code[$qr_count]->qr_code, 'QRCODE,Q', 89.5, 69, 17, 17, $style, 'N');
+          }
 				}
 				else if($name == "TCL4-sticker")
 				{
-					PDF::write2DBarcode($qr_code[$qr_count]->qr_code, 'QRCODE,Q', 89, $qr_y+1.5, 17, 17, $style, 'N');
+          $lasttpn = substr($qr_code[$qr_count]->orms_tpn , -3);
+          $qr_check = $qr_code_details{0}->po_number.",".$qr_code[$qr_count]->ean_barcode."/".$lasttpn.",".$qr_code[$qr_count]->orms_tpn;
+          if($qr_check == $qr_code[$qr_count]->qr_code)
+          {
+            PDF::write2DBarcode($qr_code[$qr_count]->qr_code, 'QRCODE,Q', 89, $qr_y+1.5, 17, 17, $style, 'N');
+          }
 				}
 				else if($name == "THL1-sticker")
 				{
-					PDF::write2DBarcode($qr_code[$qr_count]->qr_code, 'QRCODE,Q', 89, 66, 17, 17, $style, 'N');
+          $lasttpn = substr($qr_code[$qr_count]->orms_tpn , -3);
+          $qr_check = $qr_code_details{0}->po_number.",".$qr_code[$qr_count]->itf_barcode."/".$lasttpn.",".$qr_code[$qr_count]->orms_tpn;
+          if($qr_check == $qr_code[$qr_count]->qr_code)
+          {
+            PDF::write2DBarcode($qr_code[$qr_count]->qr_code, 'QRCODE,Q', 89, 66, 17, 17, $style, 'N');
+          }
 				}
 				else if($name == "THL3-sticker")
 				{
-					PDF::write2DBarcode($qr_code[$qr_count]->qr_code, 'QRCODE,Q', 90, $qr_y-2, 17, 17, $style, 'N');
+          $lasttpn = substr($qr_code[$qr_count]->orms_tpn , -3);
+          $qr_check = $qr_code_details{0}->po_number.",".$qr_code[$qr_count]->ean_barcode."/".$lasttpn.",".$qr_code[$qr_count]->orms_tpn;
+          if($qr_check == $qr_code[$qr_count]->qr_code)
+          {
+            PDF::write2DBarcode($qr_code[$qr_count]->qr_code, 'QRCODE,Q', 90, $qr_y-2, 17, 17, $style, 'N');
+          }
 				}
 				
 			}
@@ -2041,6 +2095,7 @@ class OrderManagementCntrl extends Controller
 			$tcl1_id=$request->tcl1_id;
 			
 			$qr_code = DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$tcl1_id)->select('*')->orderBy('id', 'asc')->get();
+      $qr_code_details = DB::table('tesco_tcl1_orders')->where('id',$tcl1_id)->select('*')->orderBy('id', 'asc')->get();
 			
 		}
 		else if($name == "TCL2-sticker")
@@ -2048,6 +2103,7 @@ class OrderManagementCntrl extends Controller
 			$tcl2_id=$request->tcl2_id;
 			
 			$qr_code = DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$tcl2_id)->select('*')->orderBy('id', 'asc')->get();
+      $qr_code_details = DB::table('tesco_tcl2_orders')->where('id',$tcl2_id)->select('*')->orderBy('id', 'asc')->get();
 		}
 		
 		else if($name == "TCL4-sticker")
@@ -2055,18 +2111,21 @@ class OrderManagementCntrl extends Controller
 			$tcl4_id=$request->tcl4_id;
 			
 			$qr_code = DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$tcl4_id)->select('*')->orderBy('id', 'asc')->get();
+      $qr_code_details = DB::table('tesco_tcl4_orders')->where('id',$tcl4_id)->select('*')->orderBy('id', 'asc')->get();
 		}
 		else if($name == "THL1-sticker")
 		{
 			$thl1_id=$request->thl1_id;
 			
 			$qr_code = DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$thl1_id)->select('*')->orderBy('id', 'asc')->get();
+      $qr_code_details = DB::table('tesco_thl1_orders')->where('id',$thl1_id)->select('*')->orderBy('id', 'asc')->get();
 		}
 		else if($name == "THL3-sticker")
 		{
 			$thl3_id=$request->thl3_id;
 			
 			$qr_code = DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$thl3_id)->select('*')->orderBy('id', 'asc')->get();
+      $qr_code_details = DB::table('tesco_thl3_orders')->where('id',$thl3_id)->select('*')->orderBy('id', 'asc')->get();
 		}
 		
         foreach($svgarr as $value)
@@ -2123,23 +2182,48 @@ class OrderManagementCntrl extends Controller
         {
             if($name == "TCL1-sticker")
             {
-              PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 73.5, 5, 17, 17, $style, 'N');
+              $lasttpn = substr($qr_code[$i]->orms_tpn , -3);
+              $qr_check = $qr_code_details{0}->po_number.",".$qr_code[$i]->itf_barcode."/".$lasttpn.",".$qr_code[$i]->orms_tpn;
+              if($qr_check == $qr_code[$i]->qr_code)
+              {
+                PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 73.5, 5, 17, 17, $style, 'N');
+              }
             }
             else if($name == "TCL2-sticker")
             {
-              PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 74.5, 8.5, 17, 17, $style, 'N');
+              $lasttpn = substr($qr_code[$i]->orms_tpn , -3);
+              $qr_check = $qr_code_details{0}->po_number.",".$qr_code[$i]->itf_barcode."/".$lasttpn.",".$qr_code[$i]->orms_tpn;
+              if($qr_check == $qr_code[$i]->qr_code)
+              {
+                PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 74.5, 8.5, 17, 17, $style, 'N');
+              }
             }
             else if($name == "TCL4-sticker")
             {
-              PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 74, 8.5, 17, 17, $style, 'N');
+              $lasttpn = substr($qr_code[$i]->orms_tpn , -3);
+              $qr_check = $qr_code_details{0}->po_number.",".$qr_code[$i]->ean_barcode."/".$lasttpn.",".$qr_code[$i]->orms_tpn;
+              if($qr_check == $qr_code[$i]->qr_code)
+              {
+                PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 74, 8.5, 17, 17, $style, 'N');
+              }
             }
             else if($name == "THL1-sticker")
             {
-              PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 74, 5, 17, 17, $style, 'N');
+              $lasttpn = substr($qr_code[$i]->orms_tpn , -3);
+              $qr_check = $qr_code_details{0}->po_number.",".$qr_code[$i]->itf_barcode."/".$lasttpn.",".$qr_code[$i]->orms_tpn;
+              if($qr_check == $qr_code[$i]->qr_code)
+              {
+                PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 74, 5, 17, 17, $style, 'N');
+              }
             }
             else if($name == "THL3-sticker")
             {
-              PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 75, 5, 17, 17, $style, 'N');
+              $lasttpn = substr($qr_code[$i]->orms_tpn , -3);
+              $qr_check = $qr_code_details{0}->po_number.",".$qr_code[$i]->ean_barcode."/".$lasttpn.",".$qr_code[$i]->orms_tpn;
+              if($qr_check == $qr_code[$i]->qr_code)
+              {
+                PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 75, 5, 17, 17, $style, 'N');
+              }
             }
         }
 				
@@ -2534,15 +2618,13 @@ class OrderManagementCntrl extends Controller
     public function reOrder(Request $request)
     {
 
-        if(!isset($_COOKIE["fiscal-year"])) {
-
-            $from_date = $this->financial_year_start;
-            $to_date = $this->financial_year_end; 
-
+        if(Session::get('fiscal-year') != null) {
+          $year = explode('-', Session::get('fiscal-year'));
+          $from_date = $year[0].'-'.$this->financial_year_date;
+          $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
         } else {
-            $year = explode('-', $_COOKIE["fiscal-year"]);
-            $from_date = $year[0].'-'.$this->financial_year_date;
-            $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+          $from_date = $this->financial_year_start;
+          $to_date =$this->financial_year_end; 
         }
         
         $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
@@ -3071,7 +3153,8 @@ class OrderManagementCntrl extends Controller
         'ocn_number'                => $newTasks->ocn_number,
         'order_status'              => 2,
         'pi_status'                 => $pi_approve_status,
-        'po_status'                 => $po_upload_status
+        'po_status'                 => $po_upload_status,
+        'name_in_reports'           => $template_level->name_in_reports
       ]);
 		    echo true;
     }
@@ -3481,7 +3564,8 @@ class OrderManagementCntrl extends Controller
         'ocn_number'                => $ocn_number,
         'order_status'              => 2,
         'pi_status'                 => $pi_approve_status,
-        'po_status'                 => $po_upload_status
+        'po_status'                 => $po_upload_status,
+        'name_in_reports'           => $template_level->name_in_reports
       ]);
 
 		    echo $data;

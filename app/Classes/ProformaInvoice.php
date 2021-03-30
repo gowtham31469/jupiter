@@ -16,7 +16,6 @@ class ProformaInvoice
   private $month;
   private $financial_year_date;
   private $today_date;
-  private $from;
   private $financial_year_start;
   private $financial_year_end;
   private $financial_year;
@@ -48,15 +47,15 @@ class ProformaInvoice
 		// get the current date in "dd-mm-yyyy" format
 		$this->today_date = $this->today->format('Y-m-d');
 
-		$this->from  = Carbon::parse($this->financial_year_date_format)
-						->startOfDay()        // 2018-09-29 00:00:00.000000
-						->toDateTimeString(); // 2018-09-29 00:00:00
-
 		// store financial year start and end date and
 		// financial year identification
 		if($this->today_date < $this->financial_year_date_format){
+			$this->financial_year_start = Carbon::parse($this->financial_year_date_format)->subYear()->toDateString();
+			$this->financial_year_end = Carbon::parse($this->financial_year_date_format)->subDay()->toDateString();
 			$this->financial_year = Carbon::parse($this->financial_year_date_format)->subYear()->format('y');
 		} else {
+			$this->financial_year_start = $this->financial_year_date_format;
+			$this->financial_year_end = Carbon::parse($this->financial_year_date_format)->addYear()->subDay()->toDateString();
 			$this->financial_year = Carbon::parse($this->financial_year_date_format)->format('y');
 		}
   }
@@ -736,7 +735,7 @@ class ProformaInvoice
     */
     public function piNumberGenerator(){
       // Logic for resetting ERP ID format for new financial year	
-      $max_pi_number = ProfomaInvoice::select('pi_number')->find(ProfomaInvoice::whereBetween('created_at', [$this->from, $this->current_date])->orWhereDate('created_at', '=',$this->today_date)->max('id'));
+      $max_pi_number = ProfomaInvoice::select('pi_number')->find(ProfomaInvoice::whereBetween('created_at', [$this->financial_year_start, $this->today_date])->orWhereDate('created_at', '=',$this->today_date)->max('id'));
 
       // if old PI exists, then generate PIID based on old data
       // else start new PIID from initial value(001)

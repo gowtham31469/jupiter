@@ -1398,6 +1398,14 @@ class JobManagerController extends Controller
 						->select('customers.short_name')
 						->where('erp_orders.id',$company_id)
 						->get();
+
+
+						$order_details = DB::table("erp_order_details")
+						->select('*')
+						->where('erp_order_id',$company_id)
+						->where('order_qnty_table_name','tesco_tcl4_orders_quanty')
+						->get();
+
 		 $customer_name = $customer[0]->short_name;
 		 $this->customer_name = $customer_name;
 		
@@ -1607,6 +1615,7 @@ class JobManagerController extends Controller
 				$qr_flag=$request->qr_flag;
 				$id=$request->id;
 				$qr_code=explode(',_',$request->qr_code_fin);
+				$qr_code_check_fin=explode(',_',$request->qr_code_check_fin);
 		
 				foreach($svgarr as $value)
 				{
@@ -1629,7 +1638,22 @@ class JobManagerController extends Controller
 					else
 					{
 						PDF::RoundedRect(15, 160, 127, 80, 0, '0000');
-						$yy += 100;
+						if($name == "TCL4-sticker")
+						{
+							//print_r( $order_details{0}->template_id);
+							if($order_details{0}->template_id == 28 || $order_details{0}->template_id == 31)
+							{
+								$yy += 77;
+							}
+							else
+							{
+								$yy += 100; 
+							}
+						}
+						else
+						{
+							$yy += 100;  
+						}
 						$qr_y+=100;
 					}
 					
@@ -1651,23 +1675,59 @@ class JobManagerController extends Controller
 				);
 				if($name == "TCL1-sticker")
 				{
-					PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 88, 65, 17, 17, $style, 'N');
+					
+					$qr_code_check=explode(',',$qr_code_check_fin[$qr_count]);
+
+					$lasttpn = substr($qr_code_check[3] , -3);
+					$qr_check = $qr_code_check[0].",".$qr_code_check[2]."/".$lasttpn.",".$qr_code_check[3];
+          if($qr_check == $qr_code[$qr_count])
+          {
+						PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 88, 65, 17, 17, $style, 'N');
+					}
 				}
 				else if($name == "TCL2-sticker")
 				{
-					PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 89.5, 69, 17, 17, $style, 'N');
+					$qr_code_check=explode(',',$qr_code_check_fin[$qr_count]);
+
+					$lasttpn = substr($qr_code_check[3] , -3);
+					$qr_check = $qr_code_check[0].",".$qr_code_check[2]."/".$lasttpn.",".$qr_code_check[3];
+          if($qr_check == $qr_code[$qr_count])
+          {
+						PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 89.5, 69, 17, 17, $style, 'N');
+					}
 				}
 				else if($name == "TCL4-sticker")
 				{
-					PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 89, $qr_y+1.5, 17, 17, $style, 'N');
+					$qr_code_check=explode(',',$qr_code_check_fin[$qr_count]);
+
+					$lasttpn = substr($qr_code_check[3] , -3);
+					$qr_check = $qr_code_check[0].",".$qr_code_check[1]."/".$lasttpn.",".$qr_code_check[3];
+          if($qr_check == $qr_code[$qr_count])
+          {
+						PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 89, $qr_y+1.5, 17, 17, $style, 'N');
+					}
 				}
 				else if($name == "THL1-sticker")
 				{
-					PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 89, 66, 17, 17, $style, 'N');
+					$qr_code_check=explode(',',$qr_code_check_fin[$qr_count]);
+
+					$lasttpn = substr($qr_code_check[3] , -3);
+					$qr_check = $qr_code_check[0].",".$qr_code_check[2]."/".$lasttpn.",".$qr_code_check[3];
+          if($qr_check == $qr_code[$qr_count])
+          {
+						PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 89, 66, 17, 17, $style, 'N');
+					}
 				}
 				else if($name == "THL3-sticker")
 				{
-					PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 90, $qr_y-2, 17, 17, $style, 'N');
+					$qr_code_check=explode(',',$qr_code_check_fin[$qr_count]);
+
+					$lasttpn = substr($qr_code_check[3] , -3);
+					$qr_check = $qr_code_check[0].",".$qr_code_check[1]."/".$lasttpn.",".$qr_code_check[3];
+          if($qr_check == $qr_code[$qr_count])
+          {
+						PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 90, $qr_y-2, 17, 17, $style, 'N');
+					}
 				}
 				
 			}
@@ -2500,6 +2560,7 @@ class JobManagerController extends Controller
 		 
 		$qr_flag=$request->qr_flag;
 		$qr_code=explode(',_',$request->qr_code_fin);
+		$qr_code_check_fin=explode(',_',$request->qr_code_check_fin);
 		 
 		foreach($svgarr as $value)
 		{
@@ -2552,23 +2613,58 @@ class JobManagerController extends Controller
 				);
 				if($name == "TCL1-sticker")
 				{
-					PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 73.5, 5, 17, 17, $style, 'N');
+					$qr_code_check=explode(',',$qr_code_check_fin[$i]);
+
+					$lasttpn = substr($qr_code_check[3] , -3);
+					$qr_check = $qr_code_check[0].",".$qr_code_check[2]."/".$lasttpn.",".$qr_code_check[3];
+          if($qr_check == $qr_code[$i])
+          {
+						PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 73.5, 5, 17, 17, $style, 'N');
+					}
 				}
 				else if($name == "TCL2-sticker")
 				{
-					PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 74.5, 8.5, 17, 17, $style, 'N');
+					$qr_code_check=explode(',',$qr_code_check_fin[$i]);
+
+					$lasttpn = substr($qr_code_check[3] , -3);
+					$qr_check = $qr_code_check[0].",".$qr_code_check[2]."/".$lasttpn.",".$qr_code_check[3];
+          if($qr_check == $qr_code[$i])
+          {
+						PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 74.5, 8.5, 17, 17, $style, 'N');
+					}
 				}
 				else if($name == "TCL4-sticker")
 				{
-					PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 74, 8.5, 17, 17, $style, 'N');
+					$qr_code_check=explode(',',$qr_code_check_fin[$i]);
+
+					$lasttpn = substr($qr_code_check[3] , -3);
+					$qr_check = $qr_code_check[0].",".$qr_code_check[1]."/".$lasttpn.",".$qr_code_check[3];
+          if($qr_check == $qr_code[$i])
+          {
+						PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 74, 8.5, 17, 17, $style, 'N');
+					}
 				}
 				else if($name == "THL1-sticker")
 				{
-					PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 74, 5, 17, 17, $style, 'N');
+					$qr_code_check=explode(',',$qr_code_check_fin[$i]);
+
+					$lasttpn = substr($qr_code_check[3] , -3);
+					$qr_check = $qr_code_check[0].",".$qr_code_check[2]."/".$lasttpn.",".$qr_code_check[3];
+          if($qr_check == $qr_code[$i])
+          {
+						PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 74, 5, 17, 17, $style, 'N');
+					}
 				}
 				else if($name == "THL3-sticker")
 				{
-					PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 75, 5, 17, 17, $style, 'N');
+					$qr_code_check=explode(',',$qr_code_check_fin[$i]);
+
+					$lasttpn = substr($qr_code_check[3] , -3);
+					$qr_check = $qr_code_check[0].",".$qr_code_check[1]."/".$lasttpn.",".$qr_code_check[3];
+          if($qr_check == $qr_code[$i])
+          {
+						PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 75, 5, 17, 17, $style, 'N');
+					}
 				}
 				
 			}

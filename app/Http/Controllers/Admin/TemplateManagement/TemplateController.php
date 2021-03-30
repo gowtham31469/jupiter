@@ -138,7 +138,8 @@ class TemplateController extends Controller
                           'color'            => $color,
                           'dimension_height' => $height,
                           'dimension_width'  => $width,
-                          'material_id'      => $material_id
+                          'material_id'      => $material_id,
+                          'name_in_reports'  => $request['name_in_reports']
                           ]);
 			
 			$items = DB::table($buyer."_template")
@@ -198,7 +199,8 @@ class TemplateController extends Controller
 							  'dimension_height' => $height,
 							  'dimension_width'  => $width,
 							  'material_id'      => $material_id,
-							  'hierarchy_id'     => $parent_id,
+                              'hierarchy_id'     => $parent_id,
+                              'name_in_reports'  => $request['name_in_reports']
 						  ]);
 			
 			
@@ -231,6 +233,7 @@ class TemplateController extends Controller
                                 ->select('id','material_name_employee')
                                 ->where('is_enabled','=',true)
                                 ->get();
+         $items['name_in_reports'] = DB::table("reports_template_level_name")->pluck('name', 'id');
          return json_encode($items);
     }  
 	/**

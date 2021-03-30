@@ -131,6 +131,17 @@
 							<div class="help-block with-errors"></div>
 						</div>
 					</div>
+					<div class="col-md-6">
+						<div class="form-group has-feedback">
+						  {!! Form::label('password', 'Password', ['class' => ' form_label']) !!}
+						  <div class="input-group">
+							{!! Form::text('password',$value = '', array('class' => 'form-control js-copytextarea','placeholder' => 'Password','required','minlength' => '6')) !!}
+							<span id="generate_pwd" class="input-group-addon input-sm" style="background-color:#18bc9c;border-right: white;border-style: solid;color:white;">Generate Password</span>
+							<span class="input-group-addon js-textareacopybtn clipboard input-sm" style="background-color:#2c3e50;color:white;"  data-clipboard-target="#password">Copy</span>
+						  </div>
+						  <div class="help-block with-errors"></div>
+						</div>
+					  </div>
 
 					<div class="col-md-2">
 						<div class="form-group has-feedback">
@@ -294,6 +305,37 @@
 		$('#edit_user_roles').val('0').selectpicker('refresh');
 		$('#user-list-table').DataTable();
 	})
+
+	$("#generate_pwd").validator().click(function(){
+      $("#password").val( randomString(10, 'aA#!'));
+      $('#add_user_form').validator('validate');
+	})
+
+		/** function to generate random strings */
+		function randomString(length, chars)
+      {
+        var mask = '';
+        if (chars.indexOf('a') > -1) mask += 'abcdefghijklmnopqrstuvwxyz';
+        if (chars.indexOf('A') > -1) mask += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        if (chars.indexOf('#') > -1) mask += '0123456789';
+        if (chars.indexOf('!') > -1) mask += '!@#$%&*()+=?';
+        var result = '';
+        for (var i = length; i > 0; --i) result += mask[Math.round(Math.random() * (mask.length - 1))];
+        return result;
+      }
+	
+	  /** Copy password to clipboard **/
+	  $( document ).ready(function() {
+      var clipboard = new Clipboard('.clipboard');
+      clipboard.on('success', function(e) {
+        $(e.trigger).text("Copied!");
+        e.clearSelection();
+        setTimeout(function() {
+          $(e.trigger).text("Copy");
+        }, 2500);
+      });
+	});
+	
 	/** submit add customer form and check validation **/
 	$('#add_user_form').validator().on('submit', function(e) {
 		if (!e.isDefaultPrevented()) {
@@ -313,6 +355,7 @@
 			/* Formatted Form Data */
 			var data = {
 				name: $('#user_name').val(),
+				password: $('#password').val(),
 				email: $('#user_email').val(),
 				company: $('#user_company').val(),
 				roles: $('#user_roles').val(),

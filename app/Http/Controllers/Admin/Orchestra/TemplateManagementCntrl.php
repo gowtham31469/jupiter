@@ -68,6 +68,7 @@ class TemplateManagementCntrl extends Controller
                                 ->select('id','material_name_employee')
                                 ->where('is_enabled','=',true)
                                 ->get();
+         $items['name_in_reports'] = DB::table("reports_template_level_name")->pluck('name', 'id');
          return json_encode($items);
     }  
 	/**
@@ -156,54 +157,5 @@ class TemplateManagementCntrl extends Controller
 		
          return json_encode($data);
     } 
-	public function saveTax(Request $request) {
-        try {
-            $template_id = $request['template_id'];
-            $taxation    = $request['tax'];
-            $ref         = $request['ref'];
-            $company     = $request['company'];
-            $hsncode     = $request['hsncode'];
-            $sapcode     = $request['sapcode'];
-            $glcode      = $request['glcode'];
-            $color       = $request['color'];
-            $material_id = $request['material_id'];
-            $height      = $request['height'];
-            $width       = $request['width'];
-            $gltext      = $request['gltext'];
-            DB::table('orchestra_template')
-                        ->where('id',$template_id)
-                        ->update([
-                          'tax'              => $taxation,
-                          'template_name'    => $ref,
-                          'hsn_code'         => $hsncode,
-                          'gl_code'          => $glcode,
-                          'gl_text'          => $gltext,
-                          'sap_ref'          => $sapcode,
-                          'color'            => $color,
-                          'dimension_height' => $height,
-                          'dimension_width'  => $width,
-                          'material_id'      => $material_id
-                          ]);
-			
-			$items = DB::table("orchestra_template")
-                                ->select('*')
-                                ->where('id',$template_id)
-                                ->get();
-			$item_id = $items{0}->item_id;
-			DB::table('orchestra_item_master')
-                        ->where('id',$item_id)
-                        ->update([
-            						   'company_id' => $company,
-            						   'ref_no' => $ref
-                        ]);
-            $result = response()->json(['error'=> false,'message' =>'success'],200);
-        }
-        catch (\Exception $e)
-        {
-            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-        }
-        return $result;
-         
-    }
 }
 
