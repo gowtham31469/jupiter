@@ -8,10 +8,11 @@ $(document).ready(function() {
 });
 
 // Menthod to render tesco care label orders page
-renderTescoCareOrders = () => {
+renderTescoCareOrders = (size_chart) => {
     $('.main-content').load('/admin/tesco/care-label-orders');
     $('li.year-nav-menu').addClass('hidden');
     $('li.buyer-nav-menu').addClass('hidden');
+    getSizechart(size_chart);
 }
 
 // Menthod to validate and submit tesco care label orders
@@ -112,15 +113,58 @@ var addComponent = (obj, event) => {
 }
 
 // Remove garment component
-function removeGarmentComponent(obj, event) {
-try {
-    console.log('PKDD');
-    event.preventDefault();
-    /** [ Remove Row from table ] */
-    $(obj).parent().parent().parent().remove();	
-    
-} catch (e) {
-    /** [ error statements ] */
-    console.log("Error:" + e)
+removeGarmentComponent = (obj, event) => {
+    try {
+        console.log('PKDD');
+        event.preventDefault();
+        /** [ Remove Row from table ] */
+        $(obj).parent().parent().parent().remove();	
+        
+    } catch (e) {
+        /** [ error statements ] */
+        console.log("Error:" + e)
+    }
 }
+
+// fetch tesco care size chart lists
+
+getSizechart = (size_id) => {
+    $.ajax({
+        type: "get",
+        url: base_url + "/tesco/care-size-lists",
+        dataType:"json",
+        data: {_token:csrf_token, size_id:size_id},
+        success: function (response) {
+           var quantity_html = `<div class="table-responsive">
+                                    <table class="table table-bordered table-striped table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>UK</th>
+                                            <th>EUR</th>
+                                            <th>Secondary Size</th>
+                                            <th>UK EAN</th>
+                                            <th>CE EAN</th>
+                                            <th>Quantity <small>(Units)</small></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>`;
+                                        $.each(response.data, function (indexInArray, valueOfElement) { 
+                                            console.log(`PKD:::`+valueOfElement.uk_size);
+                                             quantity_html += `<tr>
+                                                                    <td >`+valueOfElement.uk_size+`</td>
+                                                                    <td >`+valueOfElement.ce_size+`</td><td>`;
+                                                                    $.each(valueOfElement.sec_size_chart, function (index, value) { 
+                                                                        quantity_html += `<dd><strong>`+value.category_name+`</strong> : `+ value.secondary_size +`</dd>` 
+                                                                    });
+                                                                    quantity_html += `</td><td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="UK EAN Number" required><div class="help-block with-errors"></div></div></td>
+                                                                    <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="CE EAN Number" required><div class="help-block with-errors"></div></div></td>
+                                                                    <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="Quantity" required><div class="help-block with-errors"></div></div></td>
+                                                                </tr>`;
+                                        });
+                       quantity_html += `</tbody>
+                                    </table>
+                                    </div>`;
+            $('.teasco-care-quantity-div').html(quantity_html);
+        }
+    });
 }

@@ -237,7 +237,7 @@ class TemplateController extends Controller
          return json_encode($items);
     }  
 	/**
-		To Show Template When Click Tree Node
+	*To Show Template When Click Tree Node
 	*/
     public function templateView(Request $request)
     {

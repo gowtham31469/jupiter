@@ -82,36 +82,8 @@
         <div class="col-md-12">
             <h4>Order Quantity</h4>
         </div>
-        <div class="col-md-12">
-            <div class="table-responsive">
-            <table class="table table-bordered table-striped table-hover">
-                <thead>
-                <tr>
-                    <th>UK</th>
-                    <th>EUR</th>
-                    <th>Height</th>
-                    <th>Weight</th>
-                    <th>Chest</th>
-                    <th>UK EAN</th>
-                    <th>CE EAN</th>
-                    <th>Quantity <small>(Units)</small></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>Tiny Baby</td>
-                    <td>18-24M</td>
-                    <td>44cm/17 <sup>1/4</sup> In</td>
-                    <td>12.5kg/28lbs</td>
-                    <td>52.5cm/20<sup>5/8</sup>in</td>
-                    <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="UK EAN Number" required><div class="help-block with-errors"></div></div></td>
-                    <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="CE EAN Number"><div class="help-block with-errors"></div></div></td>
-                    <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="Quantity"><div class="help-block with-errors"></div></div></td>
-                </tr>
-                </tbody>
-            </table>
-            </div>
-        </div>
+        <div class="col-md-12 teasco-care-quantity-div"></div>
+                                    
         </div>
         <hr>
         <div class="row garment-component-div">
