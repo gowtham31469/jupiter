@@ -196,7 +196,14 @@ function tescoOrders(callback) {
                                                                                     <div class="help-block with-errors"></div>
                                                                                 </div>
                                                                             </div>
-                                                                        </div>
+																		</div>
+																		<div class="form-group has-feedback" id="tesco_care_size_chart_div">
+																			<label for="tesco_care_size_chart">Size Chart</label>
+																			<select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_size_chart" name="tesco_care_size_chart" required="">
+																			   <option value="">-- Select Size Chart --</option>
+																			   </select>	
+																			<div class="help-block with-errors"></div>
+																		</div>
                                                                         <button class="btn btn-primary btn-block ">Create Order</button>
                                                                     </form>
                                                                 </div>
