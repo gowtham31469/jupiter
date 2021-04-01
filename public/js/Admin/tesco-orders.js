@@ -522,8 +522,10 @@ function tescoOrders(callback) {
 						// toggle size chart select box for template_type = tesco_care_labels
 						if(template_type === 'tesco_care_labels'){
 							$("#tesco_care_size_chart_div").removeClass("hidden");
+							$('#tesco_care_size_chart').prop('required', true);
 						} else {
 							$("#tesco_care_size_chart_div").addClass("hidden");
+							$('#tesco_care_size_chart').prop('required', false);
 						}
 					}
 				});

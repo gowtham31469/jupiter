@@ -1008,26 +1008,31 @@ Route::post('admin/tesco/settings/get-tesco-label-size-chart', 'Admin\Settings\T
 Route::get('admin/tesco/settings/get-label-category-data', 'Admin\Settings\Tesco\TescoSettings@getLabelSizeCategories');
 Route::post('admin/tesco/settings/add-tesco-label-size-chart', 'Admin\Settings\Tesco\TescoSettings@addTescoLabelSizeChart');
 
+
 // Update financial year in session
 Route::post('jga/set-financial-year-session', function (Request $request) {
 	Session::put('fiscal-year', $request['year']);  
 	return response()->json(['message' => 'success'], 200);
 });
 
-# Tesco care label orders routes
-Route::get('/admin/tesco/care-label-orders', 'Admin\Tesco\CareLabelOrdersController@index');
+# Tesco care label orders admin routes
+Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function() {
+	Route::get('/tesco/care-label-orders', 'Admin\Tesco\CareLabelOrdersController@index');
 
-Route::get('tesco/care-label-fiber-components', function (Request $request) {
-	$data['components'] = DB::table('tesco_components')->where('is_enabled','=',1)->pluck('english','id')->all();
-	$data['fabriclists'] = DB::table('tesco_fabriclists')->where('is_enabled','=',1)->pluck('english','id')->all();
+	Route::get('/tesco/care-label-fiber-components', function () {
+		$data['components'] = DB::table('tesco_components')->where('is_enabled','=',1)->pluck('english','id')->all();
+		$data['fabriclists'] = DB::table('tesco_fabriclists')->where('is_enabled','=',1)->pluck('english','id')->all();
+		
+		return response()->json(['message' => 'success', 'data' => $data], 200);
+	});
 	
-	return response()->json(['message' => 'success', 'data' => $data], 200);
-});
+	Route::get('/tesco/care-size-lists', function (Request $request) {
+		$tesco_sizelists = TescoPrimarySize::with(['secSizeChart' => function ($query) {
+			$query->join('tesco_secondary_size_category as tssc', 'tssc.id', '=', 'tesco_secondary_size_chart.tesco_secondary_size_category_id');
+		}])->where('tesco_primary_size.tesco_size_department_id', $request['size_id'])->get();
+		
+		return response()->json(['message' => 'success', 'data' => $tesco_sizelists], 200);
+	});
+	
 
-Route::get('tesco/care-size-lists', function (Request $request) {
-	$tesco_sizelists = TescoPrimarySize::with(['secSizeChart' => function ($query) {
-		$query->join('tesco_secondary_size_category as tssc', 'tssc.id', '=', 'tesco_secondary_size_chart.tesco_secondary_size_category_id');
-	}])->where('tesco_primary_size.tesco_size_department_id', $request['size_id'])->get();
-	
-	return response()->json(['message' => 'success', 'data' => $tesco_sizelists], 200);
-});
+  });
