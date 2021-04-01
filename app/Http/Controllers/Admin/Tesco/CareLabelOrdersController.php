@@ -70,14 +70,4 @@ class CareLabelOrdersController extends Controller
         }
     }
 
-    /**
-     * Get the tesco care 
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
 }

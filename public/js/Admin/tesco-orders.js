@@ -118,6 +118,12 @@ function tescoOrders(callback) {
 					}
 					options += "</optgroup>";
 				}
+				
+				// tesco care size chart dropdown
+				size_options = `<option value=''>Select Size Chart</option>`;
+				$.each(data.tesco_size_department, function(i, item){
+					size_options += `<option value=` + i + `>` + item + `</option>`;
+				});
 
 				$('.main-content').html(`<div class="container-fluid">
                                             <div class="row">
@@ -197,10 +203,10 @@ function tescoOrders(callback) {
                                                                                 </div>
                                                                             </div>
 																		</div>
-																		<div class="form-group has-feedback" id="tesco_care_size_chart_div">
+																		<div class="form-group has-feedback hidden" id="tesco_care_size_chart_div">
 																			<label for="tesco_care_size_chart">Size Chart</label>
 																			<select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_size_chart" name="tesco_care_size_chart" required="">
-																			   <option value="">-- Select Size Chart --</option>
+																			   `+size_options+`
 																			   </select>	
 																			<div class="help-block with-errors"></div>
 																		</div>
@@ -258,7 +264,7 @@ function tescoOrders(callback) {
 				});
 
 				/** [ Load selectpicker ] */
-				$('.selectpicker').selectpicker();
+				$('.selectpicker').selectpicker("refresh");
 
 				/** [ Hide/Show PO upload div, PO number search based on order type selected ] */
 				$('input[type="radio"].order_type').click(function () {
@@ -492,7 +498,7 @@ function tescoOrders(callback) {
 						localStorage.setItem("templates", data.node.id);
 						localStorage.setItem("zone", data.node.original.zone);
 						localStorage.setItem("template type", data.node.original.type);
-						localStorage.setItem("template_group", data.node.text.trim());
+						localStorage.setItem("template_group", data.node.text.trim());					
 						if (data.node.original.zone === 'UK' && globalOrderType === 1) {
 							$(".po-upload").removeClass("hidden");
 							$('#po_upload').prop('required', true);
@@ -511,6 +517,15 @@ function tescoOrders(callback) {
 							$(".ce-po-upload").addClass("hidden");
 							$('#ce_orms').prop('required', false);
 							$('#ce_retek').prop('required', false);
+						}
+
+						// toggle size chart select box for template_type = tesco_care_labels
+						if(template_type === 'tesco_care_labels'){
+							$("#tesco_care_size_chart_div").removeClass("hidden");
+							$('#tesco_care_size_chart').prop('required', true);
+						} else {
+							$("#tesco_care_size_chart_div").addClass("hidden");
+							$('#tesco_care_size_chart').prop('required', false);
 						}
 					}
 				});
@@ -544,7 +559,8 @@ function tescoOrders(callback) {
 							} else if (template_type === 'tesco_carton_stickers') {
 								createOrders();
 							} else if(template_type === 'tesco_care_labels') {
-								renderTescoCareOrders();
+								var size_chart = $('#tesco_care_size_chart').val();
+								renderTescoCareOrders(size_chart);
 							}
 							
 								localStorage.setItem("back_flag","create");
