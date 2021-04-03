@@ -2933,7 +2933,28 @@
             addTescoLabelSizeChart();
         }
       })
+
+      $(document).on('click', '#disableTescoPrimarySizeChart', function(e) {
+          var id = $(this).closest('tr').attr('id');
+          
+          /* call disableTescoPrimarySizeChart function from tesco-settings.js*/
+          disableTescoPrimarySizeChart(id,csrf_token)
+      });
+
+      $(document).on('click', '#enableTescoPrimarySizeChart', function(e) {
+          var id = $(this).closest('tr').attr('id');
+          
+          /* call enableTescoPrimarySizeChart function from tesco-settings.js*/
+          enableTescoPrimarySizeChart(id,csrf_token)
+      });
       
+       /** get edit tesco size chart details **/
+      $(document).on('click','.edit-tesco-size-chart',function(e){
+          var id = $(this).closest('tr').attr('id');
+          e.preventDefault();
+          /* call getTescoSizeChartById function from tesco-settings.js*/
+          getTescoSizeChartById(id);
+      });
 
 
     });
