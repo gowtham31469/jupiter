@@ -13,7 +13,7 @@ class CreateTescoSizechartDropDownTable extends Migration
      */
     public function up()
     {
-        Schema::create('teso_size_chart_drop_down', function (Blueprint $table) {
+        Schema::create('tesco_size_chart_drop_down', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('tesco_size_department_id')->unsigned();
             $table->string('name')->nullable();
@@ -34,6 +34,6 @@ class CreateTescoSizechartDropDownTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('teso_size_chart_drop_down');
+        Schema::dropIfExists('tesco_size_chart_drop_down');
     }
 }
