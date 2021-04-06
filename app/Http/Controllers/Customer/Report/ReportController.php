@@ -40,7 +40,7 @@ class ReportController extends Controller
     	$level2_route = route('customer_filter_level2');
     	$get_table_fields_route = route('customer_getTableFields');
     	$set_Datatable_route = route('customer_setUpDatatable');
-
+    	$sticker_types=OrderManagementHistory::pluck('name_in_reports')->filter();
 		$tax=array_unique(TescoTaxCode::all()->pluck('tax')->toArray());
 		array_multisort($tax);
 		array_walk($tax, function(&$value, $key) { $value .= '% tax'; } );
@@ -54,7 +54,9 @@ class ReportController extends Controller
 							  '4'=>'PI Approval Pending',
 							  '5'=>'Cancelled',
 							  // '6'=>'On Hold by Supplier',
-							  '7'=>'Incomplete(saved,not submitted)'];
+							  '7'=>'Incomplete(saved,not submitted)',
+							  '10'=>'Orders Open For Editing'
+							];
 
 		$options_for_delivery = ['8'=>'Dispacted',
 							     '9'=>'Pending'];
@@ -78,7 +80,7 @@ class ReportController extends Controller
 		$customers=Customer::where('id',$profile_id)->orderBy('company_name')
 		->pluck('company_name','id')->toArray();  
 
-		return view('customer.Reports.reportgenerator',compact('buyers','allActions','countries','seasons','templates','options_for_orders','options_for_delivery','level1_route','customers','level2_route','set_Datatable_route','get_table_fields_route','admin_flag'));
+		return view('customer.Reports.reportgenerator',compact('buyers','allActions','countries','seasons','templates','options_for_orders','options_for_delivery','level1_route','customers','level2_route','set_Datatable_route','get_table_fields_route','admin_flag','sticker_types'));
     }
 
 
@@ -147,15 +149,17 @@ class ReportController extends Controller
 
 		// ->whereBetween('created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
 		->whereBetween('created_at', [$startDate, $endDate])
-		->select('reference','buyer_po','ocn_number','customer_po')
+		->select('reference','buyer_po','ocn_number','customer_po','name_in_reports')
 		->get();
+
 
 		$reference = $result->unique('reference')->pluck('reference')->toArray();
 		$buyer_po = $result->unique('buyer_po')->pluck('buyer_po')->toArray();
 		$customer_po = $result->unique('customer_po')->pluck('customer_po')->toArray();
 		$ocn = $result->unique('ocn_number')->pluck('ocn_number')->toArray();
+		$names = $result->unique('name_in_reports')->pluck('name_in_reports')->toArray();
 
-		return response()->json(['Reference'=>array_filter($reference),'BuyerPo'=>array_filter($buyer_po),'CustomerPo'=>array_filter($customer_po),'Ocn'=>array_filter($ocn)]);
+		return response()->json(['Reference'=>array_filter($reference),'BuyerPo'=>array_filter($buyer_po),'CustomerPo'=>array_filter($customer_po),'Ocn'=>array_filter($ocn),'Names'=>array_filter($names)]);
 	}
 
 
@@ -165,25 +169,25 @@ class ReportController extends Controller
 		$default_fields = [];
 		$extra_fields = [];
 
-		$if_Placed = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","ByrPo","Quantity","Aw_Status","PI_Status","PO_Status"];
+		$if_Placed = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","PO_No","OCN","Reference","ByrPo","Quantity","Aw_Status","PI_Status","PO_Status","Sticker_Type"];
 
-		$if_Cancelled = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","Quantity"];
+		$if_Cancelled = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","PO_No","OCN","Reference","Quantity","Sticker_Type"];
 
-		$if_Aw_Pending = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","ByrPo","Quantity","Aw_Status","PI_Status","PO_Status"];
+		$if_Aw_Pending = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","PO_No","OCN","Reference","ByrPo","Quantity","Aw_Status","PI_Status","PO_Status","Sticker_Type"];
 
-		$if_PO_Upload_Pending = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","ByrPo","Quantity","Aw_Status"];
+		$if_PO_Upload_Pending = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","PO_No","OCN","Reference","ByrPo","Quantity","Aw_Status","Sticker_Type"];
 
-		$if_PI_Upload_Pending = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","ByrPo","Quantity","Aw_Status"];
+		$if_PI_Upload_Pending = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","PO_No","OCN","Reference","ByrPo","Quantity","Aw_Status","Sticker_Type"];
 
-		$if_On_Hold = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","Quantity","Aw_Status"];
+		$if_On_Hold = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","PO_No","OCN","Reference","Quantity","Aw_Status","Sticker_Type"];
 
-		$if_Incomplete = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","Quantity"];
+		$if_Incomplete = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","PO_No","OCN","Reference","Quantity","Sticker_Type"];
 
-		$if_Dispatched = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","Quantity","DispMode","Awb"];
+		$if_Dispatched = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","PO_No","OCN","Reference","Quantity","DispMode","Awb","Sticker_Type"];
 
-		$if_Pending = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","Quantity"];
+		$if_Pending = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","PO_No","OCN","Reference","Quantity","Sticker_Type"];
 
-		$all_fields = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","P.O","OCN","Reference","ByrPo","Quantity","Aw_Status","Inv_No","Inv_Dt","Aw_Status","PI_Status","PO_Status","Reason","Reapproved_Dt","DispMode","Awb"];
+		$all_fields = ["DT_Row_Index","Order_Dt","Material","Sub_Material","Style","PO_No","OCN","Reference","ByrPo","Quantity","Aw_Status","Inv_No","Inv_Dt","Aw_Status","PI_Status","PO_Status","Reason","Reapproved_Dt","DispMode","Awb","Sticker_Type"];
 
 		foreach ($request->status as $key => $value) {
 			# code...
@@ -252,6 +256,13 @@ class ReportController extends Controller
 							}
 						break;
 
+						case 10:
+							foreach ($if_Placed as $key => $value)
+							{
+								array_push($default_fields,$value);
+							}
+						break;
+
 						default:
 						break;
 					}
@@ -264,8 +275,10 @@ class ReportController extends Controller
 
 
 	public function customer_setUpDatatable(Request $request)
-	{   
-		
+	{   		
+
+		// dd($request->all());
+
 		if($request->date_start == null || $request->date_end == null)
 		{
 			$endDate = Carbon::now();
@@ -288,6 +301,7 @@ class ReportController extends Controller
 		// ->whereIn('customer_po',$request->pos)
 		->whereIn('buyer_po',$request->buyer_pos)
 		->whereIn('ocn_number',$request->ocns)
+		->whereIn('name_in_reports',$request->names)
 		// ->whereBetween('created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
 		->whereBetween('created_at', [$startDate, $endDate])
 		->where(function($q1) use ($request) {
@@ -328,6 +342,10 @@ class ReportController extends Controller
 						$q->orWhere('order_status',1);
 					break;
 
+					case 10:
+						$q->orWhere('order_edit_enabled',true);
+					break;
+
 					default:
 						# code...
 						break;
@@ -335,7 +353,7 @@ class ReportController extends Controller
 			}
 			
 		})
-		->select('order_table_name','order_table_id')
+		->select('order_table_name','order_table_id','name_in_reports')
 		->get();
 
 		$queryRes = collect();
@@ -368,7 +386,7 @@ class ReportController extends Controller
 							'po_status as PO_Status',
 							'status as Aw_Status',
 							'po as ByrPo',
-							'po_number as P.O',
+							'po_number as PO_No',
 						])->get();
 					
 
@@ -390,7 +408,7 @@ class ReportController extends Controller
 					$material_ref   = $template_data->item_name;
 
 
-					$res->map(function ($res,$key) use($material_name,$material_sub,$material_ref) {
+					$res->map(function ($res,$key) use($value,$material_name,$material_sub,$material_ref) {
 		                    $res->Material = $material_name;
 		                    $res->Sub_Material = $material_sub;
 		                    $res->Reference = $material_ref;
@@ -401,6 +419,7 @@ class ReportController extends Controller
 		                    $res->Awb = "-";		
 		                    $res->Reason = "-";		
 		                    $res->OCN = "-";		
+		                    $res->Sticker_Type = $value['name_in_reports'];	
                    		 });
 
 					$queryRes = $queryRes->merge($res);
@@ -438,7 +457,7 @@ class ReportController extends Controller
 							'order_status as Aw_Status',
 							'po_number as ByrPo',
 							'ocn_number as OCN',
-							'purchase_order_no as P.O',
+							'purchase_order_no as PO_No',
 						])
 						->get();
 					
@@ -452,9 +471,9 @@ class ReportController extends Controller
                             ->where('t1.id', $template_id)
                             ->first();
 
-					$res->map(function ($res,$key) use($template_level) {
-		                    $res->Material = $template_level->material_sub;
-		                    $res->Sub_Material = $template_level->material;
+					$res->map(function ($res,$key) use($template_level,$value) {
+		                    $res->Material = $template_level->material;
+		                    $res->Sub_Material = $template_level->material_sub;
 		                    $res->Reference = $template_level->ref;
 		                    $res->Inv_No = "-";
 		                    $res->Inv_Dt = "-";
@@ -462,6 +481,7 @@ class ReportController extends Controller
 		                    $res->DispMode = "-";		
 		                    $res->Awb = "-";		
 		                    $res->Reason = "-";		
+		                    $res->Sticker_Type = $value['name_in_reports'];	
 		                    $res->zone=="UK" ? $res->Style = $res->uk_style_ref : $res->Style = $res->ce_style_ref;	
                    		 });
 

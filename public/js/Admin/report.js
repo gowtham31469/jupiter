@@ -139,7 +139,7 @@ $(document).ready(function($) {
 	});
 
 	$(document).on('click', '#filter3,#gen_report', function(event) {
-		console.log($("#txtFrom").val()+"------")
+		// console.log($("#txtFrom").val()+"------")
 		date1 = $("#txtFrom").val()
 		date2 = $("#txtTo").val()
 		triggerLevel3()
@@ -199,7 +199,15 @@ $(document).ready(function($) {
 
 		for (var i = 0; i < defaultFields.length ; i++)
 		{
-		def_list+=' <li class="draggable-item">'+defaultFields[i]+'</li>'
+			if(defaultFields[i]=="DT_Row_Index")
+			{
+				def_list+=' <li class="draggable-item hidden">'+defaultFields[i]+'</li>'
+			}
+			else
+			{
+				def_list+=' <li class="draggable-item">'+defaultFields[i]+'</li>'
+			}
+		
 		}
 
 		for (var i = 0; i < extraFields.length ; i++)

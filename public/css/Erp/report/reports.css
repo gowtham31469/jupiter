@@ -335,6 +335,14 @@ font-weight: 400;
     margin-top: 1%;
 }
 .startdateos{margin-top: -3.7%;height: 30px!important;}
+.stckr_type .btn-default{   
+position: absolute;
+top: -17px;
+height: 30px;
+font-size: smaller;
+font-weight: 400;
+margin-top: 2%;
+}
 /*.startdateos .form-control{height: 31px!important;}*/
 /*.btn .caret, .btn-group>.btn:first-child {height: unset!important;}*/
 /*.multiselect .btn-default{height: 25px !important;}*/
