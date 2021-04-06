@@ -264,7 +264,7 @@
 </div>
 </div>
 <hr>
-<div class="row">
+<div class="row hidden" id="baby_sleeping_bag_div">
     <div class="col-md-6 col-xs-12">
         <div class="alert alert-danger" role="alert">These 3 fields are required only if the size chart selected is “Baby Sleeping Bags”</div>
     </div>

@@ -7,11 +7,12 @@ $(function() {
     $(".selectpicker").selectpicker("refresh");
 
     // Method to render tesco care label orders page
-    renderTescoCareOrders = (size_chart) => {
+    renderTescoCareOrders = (size_id) => {
         $('.main-content').load('/admin/tesco/care-label-orders');
         $('li.year-nav-menu').addClass('hidden');
         $('li.buyer-nav-menu').addClass('hidden');
-        getSizechart(size_chart);
+        getSizechart(size_id);
+
     }
 
     // Remove garment component
@@ -170,16 +171,79 @@ $(function() {
                                             <td>42 cm</td>
                                             <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="UK EAN Number" id="uk_ean_`+indexInArray+`" name="uk_ean[]" required><div class="help-block with-errors"></div></div></td>
                                             <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="CE EAN Number" id="ce_ean_`+indexInArray+`" name="ce_ean" required><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="Quantity" id="quantity_`+indexInArray+`" name="quantity" required><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm label-quantity-field" placeholder="Quantity" id="quantity_`+indexInArray+`" name="quantity"><div class="help-block with-errors"></div></div></td>
                                         </tr>`;
                 });
                 quantity_html += `</tbody>
                                         </table>
                                         </div>`;
                 $('.teasco-care-quantity-div').html(quantity_html);
+
+                // show only for "Baby Sleeping Bags"
+                if(size_id === '4'){
+                    $('#baby_sleeping_bag_div').removeClass("hidden");
+                }
             }
         });
     }
+
+    // Get MOQ value based on supplier value.
+    $('#tesco_care_supplier').on('change',function(){ 
+        var supplier_id = $('#tesco_care_supplier option:selected').val();
+        var buyer_id  = localStorage.getItem("buyer_id");
+        var templates = localStorage.getItem("templates");
+        if (supplier_id != '') {
+		    $.ajax({
+			       url:base_url + "/admin/tesco/get-moq-value",
+			       dataType:"json",
+			       method:"get",
+			       data:{supplier:supplier_id,buyer_id:buyer_id,templates:templates},
+		           tryCount : 0,
+		           retryLimit : 2,
+		           beforeSend: function () {
+		             $(".loader").show();
+		           },
+		           success: function(data){
+		                 /** hide quantity missing error msgs */
+						 $('.label-quantity-feedback').removeClass('has-error has-danger');
+						 $('.label-quantity-feedback-err-msg').css('display', 'none');
+						 $('.label-quantity-field').prop('required', false);
+						 $('.label-quantity-field').parent().removeClass('has-error')
+						 $('.help-block').html('');
+		                 /** [ Dynamic moq value assignment on supplier change ] */
+						 $('.label-quantity-field').each(function () {
+                                $(this).attr("min", data.moq[0][localStorage.getItem("template_group")]); 
+                                $(this).data("min-error","Qty should be >= "+data.moq[0][localStorage.getItem("template_group")]); 
+                         });
+						 
+		           },
+		           error: function(errorXHR, errorStatus, errorThrown) {
+		                this.tryCount++;
+		                if (this.tryCount <= this.retryLimit) {
+		                    $.ajax(this);
+		                    return;
+		                }
+		            },
+		           complete: function () {
+	                   isSubmitting = false;
+		               $(".loader").hide();
+		           }
+		       })
+		} else {
+				localStorage.removeItem("moq_values");
+				/** hide quantity missing error msgs */
+				$('.label-quantity-feedback').removeClass('has-error has-danger');
+				$('.label-quantity-feedback-err-msg').css('display', 'none');
+				$('.label-quantity-field').prop('required', false);
+				$('.label-quantity-field').parent().removeClass('has-error')
+				$('.help-block').html('');
+				/** [ Remove MOQ values] */
+                $('.label-quantity-field').each(function () {
+                        $(this).removeAttr("min"); 
+                        $(this).data("min-error",""); 
+                });
+		}
+    });
 
     // Method to Save tesco care label orders
     saveTescoCarelabelOrder = () => {

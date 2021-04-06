@@ -21,6 +21,6 @@ class TescoPrimarySize extends Model
       protected $fillable = ['tesco_size_department_id','department_title','uk_size','ce_size','is_flag'];
 
     public function secSizeChart(){
-        return $this->hasMany(TescoSecondarySizeChart::class);
+        return $this->hasMany(TescoSecondarySizeChart::class)->join('tesco_secondary_size_category as tssc', 'tssc.id', '=', 'tesco_secondary_size_chart.tesco_secondary_size_category_id');
     }
 }

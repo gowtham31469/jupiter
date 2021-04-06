@@ -1027,10 +1027,34 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin/tesco/'], function() {
 	})->name('tesco-care-label-order.components');
 	
 	Route::get('care-size-lists', function (Request $request) {
-		$tesco_sizelists = TescoPrimarySize::with(['secSizeChart' => function ($query) {
-			$query->join('tesco_secondary_size_category as tssc', 'tssc.id', '=', 'tesco_secondary_size_chart.tesco_secondary_size_category_id');
-		}])->where('tesco_primary_size.tesco_size_department_id', $request['size_id'])->get();
-		
+		$tesco_sizelists = TescoPrimarySize::with(['secSizeChart'])->where('tesco_primary_size.tesco_size_department_id', $request['size_id'])->get();
+		// $category_array = [];
+		// $secondary_size_array = [];
+		// foreach ($tesco_sizelists as $tesco_sizelist) {
+		// 	foreach ($tesco_sizelist->secSizeChart as $sec_size) {
+		// 		!in_array($sec_size->category_name, $category_array)?array_push($category_array, $sec_size->category_name):$category_array;
+
+		// 		$secondary_size_array[$sec_size->category_name]= $sec_size->secondary_size;
+		// 	}
+		// 	$tesco_sizelist->categories = $category_array;
+		// 	$tesco_sizelist->secondary_sizes = $secondary_size_array;
+		// 	// !in_array($order_details->buyer_id, $buyers_array)?array_push($buyers_array,$order_details->buyer_id):$buyers_array;
+		// }
+
+		// dd($tesco_sizelists);
+		// $category_array = [];
+		$secondary_size_array = [];
+		foreach ($tesco_sizelists as $tesco_sizelist) {
+			foreach ($tesco_sizelist->secSizeChart as $sec_size) {
+				// !in_array($sec_size->category_name, $category_array)?array_push($category_array, $sec_size->category_name):$category_array;
+
+				$secondary_size_array[$sec_size->category_name]= $sec_size->secondary_size;
+			}
+			
+			$tesco_sizelist->secondary_sizes = $secondary_size_array;
+		}
+
+		// dd($tesco_sizelists);
 		return response()->json(['message' => 'success', 'data' => $tesco_sizelists], 200);
 	});
 

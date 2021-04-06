@@ -68,6 +68,19 @@ class StoreTescoLabelOrder
             'part_of_set_text'             => "",
             'is_order_count_empty'         => "",
         );
+
+        $uk_ean = $request->uk_ean;
+        $ce_ean = $request->ce_ean;
+        $quantity = $request->quantity;
+        
+        for($qty_index = 0; $qty_index < count($uk_ean); $qty_index++)
+        {
+            $qty_data = array(
+                'uk_ean'   => $uk_ean[$qty_index],
+                'ce_ean'   => $ce_ean[$qty_index],
+                'quantity' => $quantity[$qty_index]
+            );
+        }
         // DynamicField::insert($insert_data);
 
      }
