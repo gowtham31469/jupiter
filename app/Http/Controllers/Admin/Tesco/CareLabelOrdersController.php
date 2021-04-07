@@ -7,6 +7,7 @@ use View;
 use DB;
 use App\Classes\Modules;
 use App\Classes\TescoCareMetadata;
+use App\Classes\StoreTescoLabelOrder;
 
 use App\TescoCareSymbols;
 use App\TescoComponents;
@@ -23,19 +24,23 @@ use App\TescoWashcareOrdersComponentFibreMapping;
 use App\TescoWashcareOrdersComponentMapping;
 use App\OrderManagementHistory;
 use App\FinancialYearResetDate;
+use App\Http\Requests\SaveTescoLabelOrder;
 
 class CareLabelOrdersController extends Controller
 {
+    private $storeOrder;
+    private $caremeta;
+    private $module;
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(Modules $module, TescoCareMetadata $caremeta)
+    public function __construct(Modules $module, TescoCareMetadata $caremeta, StoreTescoLabelOrder $storeorder)
     {
-       $this->middleware('auth');
        $this->module = $module;
        $this->caremeta = $caremeta;
+       $this->storeorder = $storeorder;
     }
 
     /**
@@ -68,6 +73,31 @@ class CareLabelOrdersController extends Controller
         {
                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
+    }
+
+    public function saveCareLabelOrder(SaveTescoLabelOrder $request){
+
+        if($request->ajax()){
+
+            $request->validated();
+            
+            $this->storeorder->storeTescoLabelOrder($request);
+            // $components = $request->tesco_care_garment_component;
+            
+            // for($comp_count = 0; $comp_count < count($components); $comp_count++)
+            // {
+            //     $data = array(
+            //         'components' => $components[$comp_count]
+            //     );
+
+            //     $insert_data[] = $data; 
+            // }
+
+            return response()->json([
+            'success'  => 'Data Added successfully.'
+            ]);
+        }
+
     }
 
 }

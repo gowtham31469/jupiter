@@ -1016,23 +1016,59 @@ Route::post('jga/set-financial-year-session', function (Request $request) {
 });
 
 # Tesco care label orders admin routes
-Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function() {
-	Route::get('/tesco/care-label-orders', 'Admin\Tesco\CareLabelOrdersController@index');
+Route::group(['middleware' => 'auth', 'prefix' => 'admin/tesco/'], function() {
+	Route::get('care-label-orders', 'Admin\Tesco\CareLabelOrdersController@index')->name('tesco-care-label-order');
 
-	Route::get('/tesco/care-label-fiber-components', function () {
+	Route::get('care-label-fiber-components', function () {
 		$data['components'] = DB::table('tesco_components')->where('is_enabled','=',1)->pluck('english','id')->all();
 		$data['fabriclists'] = DB::table('tesco_fabriclists')->where('is_enabled','=',1)->pluck('english','id')->all();
 		
 		return response()->json(['message' => 'success', 'data' => $data], 200);
-	});
+	})->name('tesco-care-label-order.components');
 	
-	Route::get('/tesco/care-size-lists', function (Request $request) {
-		$tesco_sizelists = TescoPrimarySize::with(['secSizeChart' => function ($query) {
-			$query->join('tesco_secondary_size_category as tssc', 'tssc.id', '=', 'tesco_secondary_size_chart.tesco_secondary_size_category_id');
-		}])->where('tesco_primary_size.tesco_size_department_id', $request['size_id'])->get();
+	Route::get('care-size-lists', function (Request $request) {
+		$tesco_sizelists = TescoPrimarySize::with('secSizeChart')
+		->whereHas('secSizeChart', function ($query) use ($request) {
+			// $query->join('tesco_secondary_size_category as tssc', 'tssc.id', '=', 'tesco_secondary_size_chart.tesco_secondary_size_category_id');
+			$query->whereIn('tesco_secondary_size_chart.tesco_secondary_size_category_id',$request['size_category']);
+			$query->select('secondary_size'); 
+        })
+		->where('tesco_primary_size.tesco_size_department_id', $request['size_id'])
+		->get();
+		// $category_array = [];
+		// $secondary_size_array = [];
+		// foreach ($tesco_sizelists as $tesco_sizelist) {
+		// 	foreach ($tesco_sizelist->secSizeChart as $sec_size) {
+		// 		!in_array($sec_size->category_name, $category_array)?array_push($category_array, $sec_size->category_name):$category_array;
+
+		// 		$secondary_size_array[$sec_size->category_name]= $sec_size->secondary_size;
+		// 	}
+		// 	$tesco_sizelist->categories = $category_array;
+		// 	$tesco_sizelist->secondary_sizes = $secondary_size_array;
+		// 	// !in_array($order_details->buyer_id, $buyers_array)?array_push($buyers_array,$order_details->buyer_id):$buyers_array;
+		// }
+
 		
+
+		// dd($tesco_sizelists);
+		// $category_array = [];
+		// $secondary_size_array = [];
+		// foreach ($tesco_sizelists as $tesco_sizelist) {
+		// 	foreach ($tesco_sizelist->secSizeChart as $sec_size) {
+		// 		// !in_array($sec_size->category_name, $category_array)?array_push($category_array, $sec_size->category_name):$category_array;
+
+		// 		$secondary_size_array[$sec_size->category_name]= $sec_size->secondary_size;
+
+		// 	}
+			
+		// 	$tesco_sizelist->secondary_sizes = $secondary_size_array;
+		// }
+
+		// dd($tesco_sizelists);
 		return response()->json(['message' => 'success', 'data' => $tesco_sizelists], 200);
 	});
+
+	Route::put('save-care-label-order',  'Admin\Tesco\CareLabelOrdersController@saveCareLabelOrder')->name('tesco-care-label-order.save');
 	
 
   });
