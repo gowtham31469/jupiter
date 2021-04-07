@@ -1821,9 +1821,7 @@ class TescoSettings extends Controller
      */
     public function tescoLabelSizeChartLists(){
       try {
-          $tesco_translationlists = TescoPrimarySize::with(['secSizeChart' => function ($query) {
-						$query->leftJoin('tesco_secondary_size_category as tssc', 'tssc.id', '=', 'tesco_secondary_size_chart.tesco_secondary_size_category_id');
-					}])->get();
+          $tesco_translationlists = TescoPrimarySize::with('secSizeChart')->get();
                          
           return response()->json(['error'=>'false','message' =>'success', 'tesco_translationlist' => $tesco_translationlists]);
       }

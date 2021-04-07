@@ -205,6 +205,7 @@ class OrderManagementCntrl extends Controller
       $data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->select('*',DB::raw("'".$this->tsl3."'".' as "TemplateName"'))->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->whereBetween('created_at', [$from_date, $to_date])->orderBy('id', 'desc')->get();
 
       $data['tesco_size_department'] = DB::table('tesco_size_department')->pluck('department_name', 'id')->all();
+      $data['tesco_size_category'] = DB::table('tesco_secondary_size_category')->pluck('category_name', 'id')->all();
       echo json_encode($data);
     }
     /**
