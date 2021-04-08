@@ -39,13 +39,10 @@ $(function() {
             var total_fiber_percentage = 0;
             $(this).find('.fiber-individual-percentage-' + table).each(function () {
                 var individual_percentage = $(this).val();
-
                 if (!isNaN(individual_percentage) && individual_percentage.length !== 0) {
                     total_fiber_percentage += parseInt(individual_percentage);
                 }
-                console.log("total_fiber_percentage :"+total_fiber_percentage);
             });
-            console.log(`table :`+table);
             $('#fiber_total_percentage_' + (table)).val(total_fiber_percentage);
             table++;
         });
@@ -252,8 +249,24 @@ $(function() {
 		}
     });
 
+
+    // Method to validate and submit tesco care label orders
+    submitTescoCareLabelOrder = () => {
+        $('#tesco_care_label_form').validator('validate');
+
+        /** [ bootstrap validator for create tesco order form ] **/
+        $('#tesco_care_label_form').validator().on('submit', function (e) {
+            if (e.isDefaultPrevented()) {
+
+            } else {
+                e.preventDefault();
+                submitCarelabelOrder();
+            } 
+        });
+    }
+
     // Method to Save tesco care label orders
-    saveTescoCarelabelOrder = () => {
+    submitCarelabelOrder = () => {
         var form_obj = [{
             "template_id": localStorage.getItem("templates"),
             "include_btn_sew_space": $("#tesco_care_button_space").prop(":checked")?1:0,
@@ -266,15 +279,15 @@ $(function() {
         var formData = $('#tesco_care_label_form').serialize()+ '&' + $.param(form_obj[0]);
 
         $.ajax({
-            type: "put",
-            url: base_url + "/admin/tesco/save-care-label-order",
+            type: "post",
+            url: base_url + "/admin/tesco/submit-care-label-order",
             data: formData,
             dataType: "json",
             statusCode: {
                 /** [Show response status based on HTTP status code] */
                 200: function(response) {
                     console.log(JSON.stringify(response))
-                    $('#result').html('<div class="alert alert-success">Your Order Has Been Saved Successfully</div>');
+                    $('#result').html('<div class="alert alert-success">Your Order Has Been Submitted Successfully</div>');
                 },
                 400: function(error) {
                     $('.snackbar_span').html("Something went wrong!!");
@@ -289,21 +302,6 @@ $(function() {
                     $(window).scrollTop(0);
                 }
             }
-        });
-    }
-
-    // Method to validate and submit tesco care label orders
-    submitTescoCareLabelOrder = () => {
-        $('#tesco_care_label_form').validator('validate');
-
-        /** [ bootstrap validator for create tesco order form ] **/
-        $('#tesco_care_label_form').validator().on('submit', function (e) {
-            if (e.isDefaultPrevented()) {
-
-            } else {
-                e.preventDefault();
-                alert();
-            } 
         });
     }
 });
