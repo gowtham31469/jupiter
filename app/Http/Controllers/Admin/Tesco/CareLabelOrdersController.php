@@ -24,7 +24,7 @@ use App\TescoWashcareOrdersComponentFibreMapping;
 use App\TescoWashcareOrdersComponentMapping;
 use App\OrderManagementHistory;
 use App\FinancialYearResetDate;
-use App\Http\Requests\SaveTescoLabelOrder;
+use App\Http\Requests\SubmitTescoLabelOrder;
 
 class CareLabelOrdersController extends Controller
 {
@@ -75,7 +75,90 @@ class CareLabelOrdersController extends Controller
         }
     }
 
-    public function saveCareLabelOrder(SaveTescoLabelOrder $request){
+    /**
+     * Method to get fiber and germent components metadata.
+     *
+     * @param Request $request
+     * @return collection data
+     */
+    public function getFiberComponentsMeta(Request $request)
+    {
+        $data['components'] = DB::table('tesco_components')->where('is_enabled','=',1)->pluck('english','id')->all();
+		$data['fabriclists'] = DB::table('tesco_fabriclists')->where('is_enabled','=',1)->pluck('english','id')->all();
+		
+		return response()->json(['message' => 'success', 'data' => $data], 200);
+    }
+
+    /**
+     * Method to get secondary size categories based on primary size id
+     *
+     * @param Request $request
+     * @return collection size_categories
+     */
+    public function getSecondarySizeCategoriesByPrimaryID(Request $request)
+    {
+        $size_categories = DB::table('tesco_primary_size')->select('tssc.id','tssc.category_name')
+		->join('tesco_secondary_size_chart', 'tesco_secondary_size_chart.tesco_primary_size_id', '=', 'tesco_primary_size.id')
+		->join('tesco_secondary_size_category as tssc', 'tssc.id', '=', 'tesco_secondary_size_chart.tesco_secondary_size_category_id')
+		->where('tesco_primary_size.tesco_size_department_id', $request['size'])
+        ->groupBy('tssc.id','tssc.category_name')
+        ->get();
+        
+        return response()->json(['message' => 'success', 'size_categories' => $size_categories], 200);
+    }
+
+    /**
+     * Method to get secondary size list with categories
+     *
+     * @param Request $request
+     * @return collection size_lists
+     */
+    public function getSecondarySizeListsBySizeCategoryID(Request $request)
+    {
+        $tesco_sizelists = TescoPrimarySize::with(['secSizeChart' => function ($query) use ($request) {
+			$query->whereIn('tesco_secondary_size_chart.tesco_secondary_size_category_id',$request['size_category']);
+		}])
+		->whereHas('secSizeChart', function ($query) use ($request) {
+			$query->whereIn('tesco_secondary_size_chart.tesco_secondary_size_category_id',$request['size_category']);
+        })
+		->where('tesco_primary_size.tesco_size_department_id', $request['size_id'])
+        ->get();
+        
+        // $category_array = [];
+		// $secondary_size_array = [];
+		// foreach ($tesco_sizelists as $tesco_sizelist) {
+		// 	foreach ($tesco_sizelist->secSizeChart as $sec_size) {
+		// 		!in_array($sec_size->category_name, $category_array)?array_push($category_array, $sec_size->category_name):$category_array;
+
+		// 		$secondary_size_array[$sec_size->category_name]= $sec_size->secondary_size;
+		// 	}
+		// 	$tesco_sizelist->categories = $category_array;
+		// 	$tesco_sizelist->secondary_sizes = $secondary_size_array;
+		// 	// !in_array($order_details->buyer_id, $buyers_array)?array_push($buyers_array,$order_details->buyer_id):$buyers_array;
+		// }
+
+		
+
+		// dd($tesco_sizelists);
+		// $category_array = [];
+		// $secondary_size_array = [];
+		// foreach ($tesco_sizelists as $tesco_sizelist) {
+		// 	foreach ($tesco_sizelist->secSizeChart as $sec_size) {
+		// 		// !in_array($sec_size->category_name, $category_array)?array_push($category_array, $sec_size->category_name):$category_array;
+
+		// 		$secondary_size_array[$sec_size->category_name]= $sec_size->secondary_size;
+
+		// 	}
+			
+		// 	$tesco_sizelist->secondary_sizes = $secondary_size_array;
+		// }
+
+		// dd($tesco_sizelists);
+		return response()->json(['message' => 'success', 'data' => $tesco_sizelists], 200);
+    }
+
+    public function submitCareLabelOrder(SubmitTescoLabelOrder $request)
+    {
 
         if($request->ajax()){
 
