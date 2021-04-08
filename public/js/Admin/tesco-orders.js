@@ -566,12 +566,20 @@ function tescoOrders(callback) {
 							} else if(template_type === 'tesco_care_labels') {
 								var size_id = $('#tesco_care_size_chart').val();
 								var size_category = [];
+								var size_category_text = [];
 
-								/** [ Create array of multi selected buyers ] */
+								/** [ Create array of multi selected categories ] */
 								$.each($("#tesco_care_size_category option:selected"), function() {
 									size_category.push($(this).val());
+									// size_category_text.push($(this).text());
 								});
-								renderTescoCareOrders(size_id, size_category);
+
+								/** [ Create array of multiple categories ] */
+								$.each($("#tesco_care_size_category option"), function() {
+									size_category_text.push($(this).text());
+								});
+								
+								renderTescoCareOrders(size_id, size_category, size_category_text);
 							}
 							
 								localStorage.setItem("back_flag","create");

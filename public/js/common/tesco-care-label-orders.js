@@ -7,12 +7,12 @@ $(function() {
     $(".selectpicker").selectpicker("refresh");
 
     // Method to render tesco care label orders page
-    renderTescoCareOrders = (size_id, size_category) => {
+    renderTescoCareOrders = (size_id, size_category, size_category_text) => {
         $('.main-content').load('/admin/tesco/care-label-orders');
         $('li.year-nav-menu').addClass('hidden');
         $('li.buyer-nav-menu').addClass('hidden');
         
-        getSizechart(size_id, size_category);
+        getSizechart(size_id, size_category, size_category_text);
 
     }
 
@@ -137,7 +137,7 @@ $(function() {
 
 
     // Method to fetch tesco care size chart lists
-    getSizechart = (size_id, size_category) => {
+    getSizechart = (size_id, size_category, size_category_text) => {
 
         $.ajax({
             type: "get",
@@ -167,15 +167,23 @@ $(function() {
                     quantity_html += `<tr>
                                             <input type="hidden" id="secondary_size_id_` + valueOfElement.id + `" name="secondary_size_id[]" value="` + valueOfElement.id + `">
                                             <td >` + valueOfElement.uk_size + `</td>
-                                            <td >` + valueOfElement.ce_size + `</td>  <td>`;
-                                            $.each(valueOfElement.sec_size_chart, function (index, category) {
-                                                
-                                                quantity_html += `<strong>`+category['category_name']+`</strong> :`+category['secondary_size']+`<br>`;
-                                                     
-                                            });
-                                           quantity_html+= `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="UK EAN Number" id="uk_ean_`+indexInArray+`" name="uk_ean[]" required><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="CE EAN Number" id="ce_ean_`+indexInArray+`" name="ce_ean[]" required><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm label-quantity-field" placeholder="Quantity" id="quantity_`+indexInArray+`" name="quantity[]"><div class="help-block with-errors"></div></div></td>
+                                            <td >` + valueOfElement.ce_size + `</td>  <td >`;
+                                            
+                                            for (var index = 0; index < size_category_text.length; index++) {
+                                                var category_value = '-';
+
+                                                $.each(valueOfElement.sec_size_chart, function (index_1, category) {
+                                                    if($.trim(size_category_text[index]) === $.trim(category['category_name'])){
+                                                        category_value = category['secondary_size'];
+                                                        return false;
+                                                    }
+                                                });
+                                                quantity_html += `<strong class="text-justify">`+$.trim(size_category_text[index])+`</strong> : `+category_value+`<br>`;
+                                            }
+
+                                           quantity_html+= `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" required><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" required><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm label-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]"><div class="help-block with-errors"></div></div></td>
                                         </tr>`;
                 });
                 quantity_html += `</tbody>
