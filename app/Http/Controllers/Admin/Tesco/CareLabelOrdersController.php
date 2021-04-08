@@ -140,20 +140,18 @@ class CareLabelOrdersController extends Controller
 		
 
 		// dd($tesco_sizelists);
-		// $category_array = [];
-		// $secondary_size_array = [];
-		// foreach ($tesco_sizelists as $tesco_sizelist) {
-		// 	foreach ($tesco_sizelist->secSizeChart as $sec_size) {
-		// 		// !in_array($sec_size->category_name, $category_array)?array_push($category_array, $sec_size->category_name):$category_array;
+		$category_array = [];
+		foreach ($tesco_sizelists as $tesco_sizelist) {
+		$secondary_size_array = [];
+			foreach ($tesco_sizelist->secSizeChart as $sec_size) {
+				// !in_array($sec_size->category_name, $category_array)?array_push($category_array, $sec_size->category_name):$category_array;
 
-		// 		$secondary_size_array[$sec_size->category_name]= $sec_size->secondary_size;
+				$secondary_size_array[$sec_size->category_name]= $sec_size->secondary_size;
 
-		// 	}
+			}
 			
-		// 	$tesco_sizelist->secondary_sizes = $secondary_size_array;
-		// }
-
-		// dd($tesco_sizelists);
+			$tesco_sizelist->secondary_sizes = $secondary_size_array;
+		}
 		return response()->json(['message' => 'success', 'data' => $tesco_sizelists], 200);
     }
 
