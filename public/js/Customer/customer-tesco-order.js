@@ -366,6 +366,35 @@ function tescoOrders(callback) {
                                         "zone": "UK"
                                         }]
                                     }]
+                                },
+                                {
+                                "id": "32",
+                                "text": "Labels",
+                                "parent_id": "0",
+                                "children": [{
+                                    "id": "33",
+                                    "text": "Printed Labels",
+                                    "parent_id": "32",
+                                    "children": [{
+                                        "id": "34",
+                                        "text": "GCL25W/M12723G",
+                                        "parent_id": "33",
+                                        }, {
+                                        "id": "35",
+                                        "text": "GCL25W/M13220G",
+                                        "parent_id": "33",
+                                        },
+                                        {
+                                        "id": "36",
+                                        "text": "GCL25W/M12723G",
+                                        "parent_id": "33",
+                                        }, 
+                                        {
+                                        "id": "37",
+                                        "text": "GCL25W/M13220G",
+                                        "parent_id": "33",
+                                        }, ]
+                                    }]
                                 }]
                             }]
                     },
@@ -7697,7 +7726,8 @@ function validateMOQ(obj) {
 
 function reload_back()
 {
-	
+	$('li.year-nav-menu').removeClass('hidden');
+	$('li.buyer-nav-menu').removeClass('hidden');
 	var back_flag = localStorage.getItem("back_flag");
 	if(back_flag == "view")
 	{

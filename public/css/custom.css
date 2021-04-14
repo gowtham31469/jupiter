@@ -1574,3 +1574,27 @@ span.batch-additional {
     font-size: 75%;
     font-weight: bold;
 }
+
+/*New CSS [custom.css]*/
+.checkbox label, .radio label {
+    font-weight: 800;
+}
+.align-items > .checkbox, .align-items > .form-group{
+  display:inline-block;
+  margin-right:40px;
+}
+
+.baby-sleep-bag-symbol{
+    height: 30px;
+    width: 50px;
+}
+
+i.remove-component-btn{
+    font-size: 16px;
+    color:rgb(244, 67, 54);
+}
+
+.tesco-care-symbols{
+    height: 30px !important;
+    width: 40px;
+}

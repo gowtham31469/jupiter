@@ -39,6 +39,7 @@
             <li id="8" onclick="tescoFabricList()"><a>Fabrics</a></li>
             <li id="8" onclick="tescoKidsWarningStmt()"><a>Warning Statements</a></li>
             <li id="9" onclick="tescoTranslations()"><a>Translation</a></li>
+            <li id="9" onclick="tescoLabelSizeChart()"><a>Label Size Chart</a></li>
           </ul>
         </div>
         <div class="content">
@@ -52,6 +53,7 @@
     @include('Admin.Settings.includes.tesco-fabriclist')
     @include('Admin.Settings.includes.tesco-warnstatement')
     @include('Admin.Settings.includes.tesco-translation')
+    @include('Admin.Settings.includes.tesco-label-sizechart')
     
     {{-- Add Orchestra Garments Modal --}}
     <div class="modal fade" id="addOrchestraGarmentsModal" tabindex="-1" role="dialog" aria-labelledby="orchestraGarmentsLabel">
@@ -1248,7 +1250,6 @@
                 <div class="modal-body">
                     <div class="hidden-error"></div>
                     <div class="form-group has-feedback">
-                     
                          {!! Form::label('symbol_category', 'Category', ['class' => 'form_label']) !!}
                          {{ Form::select('symbol_category', $category, '', ['class' => 'form-control input-sm','required']) }}
                       <div class="help-block with-errors"></div>
@@ -2180,6 +2181,12 @@
         $('#edit-tesco-translation-form').trigger("reset");
         $("#translation_error").addClass('hidden')
         $("#translation_update_error").addClass('hidden')
+
+        $('#add-tesco-labelsize-chart-form').trigger("reset");
+        $('#edit-tesco-labelsize-chart-form').trigger("reset");
+        $("#labelsize_error").addClass('hidden');
+        $("#labelsize_update_error").addClass('hidden');
+        $(".removeLabelSizeItem").remove();
        })
 
       /** Add orchestra garment form validation **/
@@ -2912,6 +2919,21 @@
           disableTescoTranslation(id,csrf_token)
       });
 
+      $('#addTescoLabelSizeChartModal').on('shown.bs.modal', function () {
+        $('#addTescoLabelSizeChartModal').focus()
+        getLabelSizeModalData()
+      })
+      
+       /** Add tesco size chart form validation **/
+      $('#add-tesco-labelsize-chart-form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented()){
+            console.log("logged")
+        }else{
+            e.preventDefault();
+            addTescoLabelSizeChart();
+        }
+      })
+      
 
 
     });

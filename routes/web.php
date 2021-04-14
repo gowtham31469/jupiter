@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\TescoPrimarySize;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -1002,8 +1003,23 @@ Route::put('admin/tesco/update-tesco-translation-details', 'Admin\Settings\Tesco
 Route::put('admin/tesco/enable-tesco-translation', 'Admin\Settings\Tesco\TescoSettings@enableTescoTranslation');
 Route::put('admin/tesco/disable-tesco-translation', 'Admin\Settings\Tesco\TescoSettings@disableTescoTranslation');
 
+#Tesco Label Size Chart
+Route::post('admin/tesco/settings/get-tesco-label-size-chart', 'Admin\Settings\Tesco\TescoSettings@tescoLabelSizeChartLists');
+Route::get('admin/tesco/settings/get-label-category-data', 'Admin\Settings\Tesco\TescoSettings@getLabelSizeCategories');
+Route::post('admin/tesco/settings/add-tesco-label-size-chart', 'Admin\Settings\Tesco\TescoSettings@addTescoLabelSizeChart');
+
+
 // Update financial year in session
 Route::post('jga/set-financial-year-session', function (Request $request) {
 	Session::put('fiscal-year', $request['year']);  
 	return response()->json(['message' => 'success'], 200);
 });
+
+# Tesco care label orders admin routes
+Route::group(['middleware' => 'auth', 'prefix' => 'admin/tesco/'], function() {
+	Route::get('care-label-orders', 'Admin\Tesco\CareLabelOrdersController@index')->name('tesco-care-label-order');
+	Route::get('care-label-fiber-components', 'Admin\Tesco\CareLabelOrdersController@getFiberComponentsMeta')->name('tesco-care-label-order.components');
+	Route::get('care-size-lists', 'Admin\Tesco\CareLabelOrdersController@getSecondarySizeListsBySizeCategoryID')->name('tesco-care-label-order.care-size-lists');
+	Route::post('submit-care-label-order',  'Admin\Tesco\CareLabelOrdersController@submitCareLabelOrder')->name('tesco-care-label-order.submit');
+	Route::get('secondary-size-categories', 'Admin\Tesco\CareLabelOrdersController@getSecondarySizeCategoriesByPrimaryID')->name('tesco-care-label-order.size-categories');
+  });
