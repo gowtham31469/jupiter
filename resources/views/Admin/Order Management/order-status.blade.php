@@ -84,6 +84,7 @@
                     <div class="po_upload" id="po_upload">
                         <label>Upload Purchase Order</label>
                         <form method="post" class="dropzone" id="po-upload">
+                        <input type="text" placeholder="Enter Revise PO Number" class="form-control" name="po_number_updation" id="po_number_updation">
                         <input type="hidden" name="buyer_id" id="buyer_id" value="">
                             <input type="hidden" name="tableName" id="tableName" value="">
                             <input type="hidden" name="id" id="rowID" value=""> {{ csrf_field() }}
@@ -665,6 +666,7 @@
 
 
             submitButton.addEventListener("click", function() {
+                $(".loader").show();
                 myDropzone.processQueue(); // Tell Dropzone to process all queued files.
             });
 
@@ -688,31 +690,13 @@
 
             });
             this.on("success", function(file, response) {
-                $('.dz-remove').hide();
-                this.removeFile(file);
-                var po_link = base_url+response.po_file;
-                var row_id  = $('#rowID').val();
-                var tab_nm  = $('#tableName').val();
-                $('#'+tab_nm+'_'+row_id+' .po-style').attr('onclick',localStorage.getItem("buyer")+'POUpload(this,"'+row_id+'","'+response.po_file+'","'+tab_nm+'")');
-                var po_num = $('#'+tab_nm+'_'+row_id+' .'+localStorage.getItem("buyer")+'-po-'+row_id).val();
-                if(po_num != null && po_num != '' && po_num != 'undefined') {
-                    $('#'+tab_nm+'_'+row_id+' .'+localStorage.getItem("buyer")+'-po-'+row_id).val();
-                    $('#'+tab_nm+'_'+row_id).find('.po_class').html("PO Uploaded");
-                    $('#'+tab_nm+'_'+row_id).find('.po_class').removeClass("label-POPending").addClass('label-POUploaded');
-                }
-                $('#'+tab_nm+'_'+row_id).find('.'+localStorage.getItem("buyer")+'-po-submit').attr('onclick',localStorage.getItem("buyer")+'SetPO(this,"'+row_id+'","'+tab_nm+'","'+response.po_file+'")');
-                $('#'+tab_nm+'_'+row_id).find('.po-view').css('border-color', '#FFFFFF');
                 $('#po-file-upload').modal('hide')
-                $('#snackbar').css('background-color','#00b6ff');
-                $('.snackbar_span').html('Purchase Order File Uploaded Successfully');
-                showSnackbar();
-                //window.location = "{{ url('/admin/order-management/order-status') }}";
-                if(response.po_status == "PO Uploaded")
-                {
-                    $('#'+tab_nm+'_'+row_id).find('.po_status a span').text("PO Uploaded")
-                    $('#'+tab_nm+'_'+row_id).find('.po_status a span').removeClass("label-POPending")
-                    $('#'+tab_nm+'_'+row_id).find('.po_status a span').addClass("label-POUploaded")
-                }
+                setTimeout(function(){
+                    $(".loader").hide();
+                    submitOs(this)
+                    $('.snackbar_span').html('PO Updated Successfully');
+                    showSnackbar();
+                }, 10000);
             });
             this.on("error", function(file, response) {
                 this.removeFile(file);
