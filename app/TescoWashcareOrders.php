@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class TescoWashcareOrders extends Model
 {
+
+    protected $table = 'tesco_washcare_orders';
+
     protected $fillable = [
         'template_id',
         'order_id',
@@ -63,7 +66,9 @@ class TescoWashcareOrders extends Model
         'pi_approved_at',
         'exclusive_trims_text',
         'contains_non_textile_part_text',
-        'part_of_set_text'
+        'part_of_set_text',
+        'kids_warning_text',
+        'country_of_origin_text'
     ]; 
 
     protected $casts = [
