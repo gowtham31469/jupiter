@@ -24,9 +24,9 @@ class SubmitTescoLabelOrder extends FormRequest
     public function rules()
     {
         return [
-            'tesco_care_po'  => 'required',
-            'tesco_care_ce_style'  => 'required',
-            'tesco_care_uk_style'  => 'required'
+            'tesco_care_po'  => ['required', ''],
+            'tesco_care_ce_style'  => ['required'],
+            'tesco_care_uk_style'  => ['required']
         ];
     }
 
