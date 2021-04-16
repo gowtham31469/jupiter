@@ -9,7 +9,7 @@ use App\TescoTHL3Orders;
 use App\TescoTSL1Orders;
 use App\TescoTSL3Orders;
 use App\OrderManagementHistory;
-use App\Classes\TescoMaterialQuery;
+use App\Classes\StoreOrderManagementHistory;
 /**
  * Class to save the tesco template orders
  * @author [Praveen] <[praveen@wizroots.com]>
@@ -24,7 +24,7 @@ class SaveTescoOrders
   public function saveTescoOrder($request,$template_id,$created_by)
   {
     try {
-           $tesco_material_obj = new TescoMaterialQuery();
+           $order_history_obj = new StoreOrderManagementHistory();
 
            /** [ Get company id for template ] */
            $template_data = DB::table('tesco_item_master')->select('tesco_item_master.item_name', 'reports_template_level_name.name as name_in_reports', 'tesco_item_master.company_id')->join('tesco_template', 'tesco_item_master.id', 'tesco_template.item_id')->join('reports_template_level_name', 'reports_template_level_name.id', 'tesco_template.name_in_reports')->where('tesco_item_master.id','=',$template_id)->first();
@@ -68,28 +68,33 @@ class SaveTescoOrders
           ]);
 
           /** Insert order data into history table */
-          $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
-          $template_level = $tesco_material_obj->tescoMaterialDetails($template_id);
-	
-          $material_name  = $template_level->material;
-          $material_sub   = $template_level->material_sub;
-          $material_ref   = $template_level->ref;
-          $order_table_name = "tesco_".strtolower(str_replace(" ","",$template_data->item_name))."_orders";
+          $order_data = [];
+
+          $order_data['season_code'] = $request['season_code'];
+
+          $order_data['po_number'] = $request['po_number'];
+
+          $order_data['ocn_no'] = $request['ocn_no'];
+
+          $order_data['style'] = $request[strtolower($request['zone']).'_style'];
+
+          $order_data['customer_id'] = $customer_id;
+
+          $order_data['template_id'] = $template_id;
+
+          $order_data['order_id'] = $saved_order->id;
+
+          $order_data['po_status'] = null;
+
+          $order_data['pi_required'] = null;
+
+          $order_data['order_status_id'] = 1;
+
+          $order_data['edit_permission'] = 0;
           
-          // order_status = 1 , ID of saved status in order_status table.
-          OrderManagementHistory::updateOrCreate(['order_table_name'  => $order_table_name, 'order_table_id'    => $saved_order->id],[
-            'buyer_id'                  => $tesco_buyer_id->id,
-            'season'                    => $request['season_code'],
-            'customer_id'               => $customer_id,
-            'material'                  => $material_name,
-            'sub_material'              => $material_sub,
-            'style'                     => $request[strtolower($request['zone']).'_style'],
-            'reference'                 => $material_ref,
-            'buyer_po'                  => $request['po_number'],
-            'ocn_number'                => $request['ocn_no'],
-            'order_status'              => 1,
-            'name_in_reports'           => $template_data->name_in_reports
-          ]);
+          $order_data['tesco_label'] = false;
+
+          $order_history_obj->storeOrdersHistory($order_data);
 
           return $saved_order;
 
