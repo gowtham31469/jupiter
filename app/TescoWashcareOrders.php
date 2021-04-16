@@ -68,12 +68,30 @@ class TescoWashcareOrders extends Model
         'contains_non_textile_part_text',
         'part_of_set_text',
         'kids_warning_text',
-        'country_of_origin_text'
+        'country_of_origin_text',
+        'additional_care_id_1',  
+        'additional_care_text_1',
+        'additional_care_id_2',  
+        'additional_care_text_2',
+        'additional_care_id_3',  
+        'additional_care_text_3'
     ]; 
 
     protected $casts = [
-        'country_of_origin_text' => 'json',
-        'kids_warning_text' => 'json',
+        'country_of_origin_text'         => 'json',
+        'kids_warning_text'              => 'json',
+        'exclusive_trims_text'           => 'json',
+        'contains_non_textile_part_text' => 'json',
+        'part_of_set_text'               => 'json',
+        'additional_care_text_1'         => 'json',
+        'additional_care_text_2'         => 'json',
+        'additional_care_text_3'         => 'json',
+        'include_btn_sew_space'          => 'boolean',
+        'exclusive_trims'                => 'boolean',
+        'contains_non_textile_part'      => 'boolean',
+        'part_of_set'                    => 'boolean',
+        'bs_en_declaration'              => 'boolean',
+        'baby_sleeping_bag_symbol'       => 'boolean',
     ];
 
     /**
@@ -108,11 +126,4 @@ class TescoWashcareOrders extends Model
         return $this->hasMany('App\TescoWashcareOrdersQuantity');
     }
 
-    // /**
-    //  * Get the additional care instructions for the order.
-    //  */
-    // public function additionalCare()
-    // {
-    //     return $this->hasMany('App\TescoWashcareOrdersAdditionalCareInstructions');
-    // }
 }

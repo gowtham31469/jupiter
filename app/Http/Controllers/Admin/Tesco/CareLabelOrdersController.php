@@ -19,7 +19,6 @@ use App\TescoSecondarySizeCategory;
 use App\TescoSecondarySizeChart;
 use App\TescoWashcareOrders;
 use App\TescoWashcareOrdersQuantity;
-use App\TescoWashcareOrdersAdditionalCareInstructions;
 use App\TescoWashcareOrdersComponentFibreMapping;
 use App\TescoWashcareOrdersComponentMapping;
 use App\OrderManagementHistory;
@@ -121,6 +120,9 @@ class CareLabelOrdersController extends Controller
 
     public function submitCareLabelOrder(SubmitTescoLabelOrder $request)
     {
+        // return response()->json([
+        //     'success'  => $request->all()
+        //     ]);
 
         if($request->ajax()) {
 

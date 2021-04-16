@@ -11,6 +11,7 @@ class TescoWashcareOrdersComponentFibreMapping extends Model
     protected $fillable = [
         'washcare_component_id',
         'fibre_composition_id',
+        'fibre_composition_text',
         'fibre_composition_percentage'
     ]; 
 
