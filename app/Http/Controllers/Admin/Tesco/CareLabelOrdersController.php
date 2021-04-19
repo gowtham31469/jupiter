@@ -27,7 +27,7 @@ use App\Http\Requests\SubmitTescoLabelOrder;
 
 class CareLabelOrdersController extends Controller
 {
-    private $storeOrder;
+    private $storeorder;
     private $caremeta;
     private $module;
 
@@ -120,19 +120,14 @@ class CareLabelOrdersController extends Controller
 
     public function submitCareLabelOrder(SubmitTescoLabelOrder $request)
     {
-        // return response()->json([
-        //     'success'  => $request->all()
-        //     ]);
-
+        
         if($request->ajax()) {
 
             $request->validated();
             
-            $this->storeorder->storeTescoLabelOrder($request);
+            $response = $this->storeorder->storeTescoLabelOrder($request, $role = 'admin');
 
-            return response()->json([
-            'success'  => 'Data Added successfully.'
-            ]);
+            return response()->json(['message' => 'success', 'data' => $response], 200);
         }
 
     }

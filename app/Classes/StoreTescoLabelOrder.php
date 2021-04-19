@@ -1,6 +1,7 @@
 <?php
 namespace App\Classes;
 use DB;
+use Auth;
 
 use App\TescoWashcareOrders;
 use App\TescoWashcareOrdersQuantity;
@@ -15,9 +16,9 @@ use App\Classes\StoreOrderManagementHistory;
 class StoreTescoLabelOrder 
 {
 
-     public function storeTescoLabelOrder($request)
+     public function storeTescoLabelOrder($request, $role)
      {
-         
+        $user_role = $role;
         $order_history_obj = new StoreOrderManagementHistory();
 
         $template_data = DB::table('tesco_item_master')
@@ -30,50 +31,9 @@ class StoreTescoLabelOrder
         $max_id = TescoWashcareOrders::max('id');
 
         $order_id = $template_data->company_id == 1?"JGA_".str_replace(" ","",$template_data->item_name)."00".($max_id+1):"SP_".str_replace(" ","",$template_data->item_name)."00".($max_id+1);
-
-        $tesco_main_customer_id     = DB::table("customer_metadata")
-            ->where('customer_metadata_id','=', $request->tesco_care_supplier)
-            ->select('customer_id')
-            ->first();
-
-        if($tesco_main_customer_id){ 
-
-            $customer_profile_id = DB::table("customer_profile")
-            ->join('customers', 'customers.id', 'customer_profile.company_id')
-            ->where('company_id','=',$tesco_main_customer_id->customer_id)
-            ->where('role_id','=',1)
-            ->select('customer_profile.id', 'pi_required', 'delivery_date_required', 'delivery_day_count', 'po_required')
-            ->first();
         
-
-            $created_by       = $customer_profile_id != null?$customer_profile_id->id:0;
-
-            $delivery_date_req= $customer_profile_id->delivery_date_required; 
-
-            $pi_required      = $customer_profile_id->pi_required; 
-
-            $po_required      = $customer_profile_id->po_required;
-
-            $day_count        = $customer_profile_id->delivery_day_count; 
-
-            $customer_id      = $tesco_main_customer_id->customer_id;
-
-        } else {
-
-            $created_by = 0;
-
-            $delivery_date_req= 0; 
-
-            $pi_required      = 0; 
-
-            $po_required      = 0; 
-
-            $day_count        = 0; 
-
-            $customer_id      = null;
-
-        }
-
+        $customer_data = $this->getCustomerDetails($request->tesco_care_supplier, $user_role);
+       
         $total_qty = array_sum($request->quantity);
 
         $is_order_count_empty = $total_qty>0?0:1;
@@ -82,11 +42,11 @@ class StoreTescoLabelOrder
 
         $edit_permission  = $is_order_count_empty === 1?1:0;
 
-        $pi_status = $pi_required == 1?"PI Approval Pending":null;
+        $pi_status = $customer_data['pi_required'] == 1?"PI Approval Pending":null;
 
-        $po_status = $po_required == 1?"PO Pending":null;
+        $po_status = $customer_data['po_required'] == 1?"PO Pending":null;
 
-        $delivery_date_start     = Carbon::now('Asia/Kolkata')->addDay($day_count);
+        $delivery_date_start     = Carbon::now('Asia/Kolkata')->addDay($customer_data['day_count']);
 
         $country_translation = DB::table('tesco_countries')
         ->where('id', $request->tesco_care_coo)
@@ -136,7 +96,7 @@ class StoreTescoLabelOrder
             'uk_style_ref'                   => $request->tesco_care_uk_style,
             'ce_style_ref'                   => $request->tesco_care_ce_style,
             'eqos_site_code'                 => $request->tesco_care_eqos,
-            'tesco_supplier_id'              => $customer_id,
+            'tesco_supplier_id'              => $customer_data['customer_id'],
             'tesco_metadata_supplier_id'     => $request->tesco_care_supplier,
             'fabric_batch_code'              => $request->tesco_care_fabric_code,
             'leather_suede_code'             => $request->tesco_care_leather_id,
@@ -163,7 +123,7 @@ class StoreTescoLabelOrder
             'pi_status'                      => $po_status,
             'total_qty'                      => $total_qty,
             'edit_permission'                => $edit_permission,
-            'order_placed_by'                => $created_by,
+            'order_placed_by'                => $customer_data['created_by'],
             'exclusive_trims_text'           => $exclusive_trim,
             'contains_non_textile_part_text' => $non_textile_part,
             'part_of_set_text'               => $part_of_set,
@@ -271,7 +231,7 @@ class StoreTescoLabelOrder
 
         $order_data['style'] = null;
 
-        $order_data['customer_id'] = $customer_id;
+        $order_data['customer_id'] = $customer_data['customer_id'];
 
         $order_data['template_id'] = $request->template_id;
 
@@ -279,7 +239,7 @@ class StoreTescoLabelOrder
 
         $order_data['po_status'] = $po_status;
 
-        $order_data['pi_required'] = $pi_required;
+        $order_data['pi_required'] = $customer_data['pi_required'];
 
         $order_data['order_status_id'] = $order_status === 'Order Pending'?6:2;
 
@@ -291,6 +251,66 @@ class StoreTescoLabelOrder
 
         $order_history_obj->storeOrdersHistory($order_data);
 
+     }
+
+
+     public function getCustomerDetails($tesco_care_supplier, $user_type) 
+     {
+        $customer_data = [];
+
+        $customer_data['created_by'] = 0;
+
+        $customer_data['delivery_date_req']= 0; 
+
+        $customer_data['pi_required']      = 0; 
+
+        $customer_data['po_required']      = 0; 
+
+        $customer_data['day_count']        = 0; 
+
+        $customer_data['customer_id']      = null;
+
+        $tesco_main_customer_id     = DB::table("customer_metadata")
+        ->where('customer_metadata_id', $tesco_care_supplier)
+        ->select('customer_id')
+        ->first();
+       
+        if($tesco_main_customer_id){ 
+
+            if($user_type === 'admin') {
+
+                $customer_profile_id = DB::table("customer_profile")
+                ->join('customers', 'customers.id', 'customer_profile.company_id')
+                ->where('company_id', $tesco_main_customer_id->customer_id)
+                ->where('role_id', 1)
+                ->select('customer_profile.id', 'pi_required', 'delivery_date_required', 'delivery_day_count', 'po_required')
+                ->first();
+
+            } else if($user_type === 'customer') {
+
+                $customer_profile_id = DB::table("customer_profile")
+                ->join('customers', 'customers.id', 'customer_profile.company_id')
+                ->where('customer_profile.id', Auth::guard('web_customer')->id())
+                ->select('customer_profile.id', 'pi_required', 'delivery_date_required', 'delivery_day_count', 'po_required')
+                ->first();
+
+            }
+
+            $customer_data['created_by']       = $customer_profile_id != null?$customer_profile_id->id:0;
+
+            $customer_data['delivery_date_req'] = $customer_profile_id->delivery_date_required; 
+
+            $customer_data['pi_required']      = $customer_profile_id->pi_required; 
+
+            $customer_data['po_required']      = $customer_profile_id->po_required;
+
+            $customer_data['day_count']        = $customer_profile_id->delivery_day_count; 
+
+            $customer_data['customer_id']      = $tesco_main_customer_id->customer_id;
+
+        }
+
+        return $customer_data;
      }
 
 }
