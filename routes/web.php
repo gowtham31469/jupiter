@@ -618,6 +618,8 @@ Route::post('admin/tesco/print-div-tesco-smallos', 'Admin\Tesco\OrderStatusCntrl
 
 
 Route::post('admin/tesco/generate-div-tescoos', 'Admin\Tesco\OrderStatusCntrl@generateDivTesco');
+Route::post('admin/tesco/generate-div-tescolabelos', 'Admin\Tesco\OrderStatusCntrl@generateDivTescoLabelos');
+
 Route::post('admin/tesco/generate-div-tesco-smallos', 'Admin\Tesco\OrderStatusCntrl@generateDivTescoSmall');
 
 Route::post('admin/tesco/generatebarcodetsl1', 'Admin\Tesco\OrderStatusCntrl@generateBarcodeTsl1');
