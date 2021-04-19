@@ -224,32 +224,30 @@ class StoreTescoLabelOrder
         $order_data = [];
 
         $order_data['season_code'] = null;
-
         $order_data['po_number'] = $request->tesco_care_po;
-
         $order_data['ocn_no'] = null;
-
         $order_data['style'] = null;
-
         $order_data['customer_id'] = $customer_data['customer_id'];
-
         $order_data['template_id'] = $request->template_id;
-
         $order_data['order_id'] = $washcare_order_id;
-
         $order_data['po_status'] = $po_status;
-
         $order_data['pi_required'] = $customer_data['pi_required'];
-
         $order_data['order_status_id'] = $order_status === 'Order Pending'?6:2;
-
         $order_data['edit_permission'] = $edit_permission;
-
         $order_data['tesco_label'] = true;
-
         $order_data['order_table'] = "tesco_washcare_orders";
 
         $order_history_obj->storeOrdersHistory($order_data);
+
+        $response = [];
+
+        $response['last_insertion']         = $washcare_order_id;
+        $response['delivery_date_start']    = $delivery_date_start;
+        $response['pi_required']            = $customer_data['pi_required'];
+        $response['po_required']            = $customer_data['po_required'];
+        $response['delivery_date_required'] = $customer_data['delivery_date_req'];
+
+        return $response;
 
      }
 
@@ -259,15 +257,10 @@ class StoreTescoLabelOrder
         $customer_data = [];
 
         $customer_data['created_by'] = 0;
-
         $customer_data['delivery_date_req']= 0; 
-
         $customer_data['pi_required']      = 0; 
-
         $customer_data['po_required']      = 0; 
-
         $customer_data['day_count']        = 0; 
-
         $customer_data['customer_id']      = null;
 
         $tesco_main_customer_id     = DB::table("customer_metadata")
@@ -297,15 +290,10 @@ class StoreTescoLabelOrder
             }
 
             $customer_data['created_by']       = $customer_profile_id != null?$customer_profile_id->id:0;
-
             $customer_data['delivery_date_req'] = $customer_profile_id->delivery_date_required; 
-
             $customer_data['pi_required']      = $customer_profile_id->pi_required; 
-
             $customer_data['po_required']      = $customer_profile_id->po_required;
-
             $customer_data['day_count']        = $customer_profile_id->delivery_day_count; 
-
             $customer_data['customer_id']      = $tesco_main_customer_id->customer_id;
 
         }

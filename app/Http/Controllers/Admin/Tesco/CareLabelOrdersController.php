@@ -8,6 +8,7 @@ use DB;
 use App\Classes\Modules;
 use App\Classes\TescoCareMetadata;
 use App\Classes\StoreTescoLabelOrder;
+use App\Classes\CancelTescoOrders;
 
 use App\TescoCareSymbols;
 use App\TescoComponents;
@@ -30,12 +31,17 @@ class CareLabelOrdersController extends Controller
     private $storeorder;
     private $caremeta;
     private $module;
+    private $buyer_id;
 
     public function __construct(Modules $module, TescoCareMetadata $caremeta, StoreTescoLabelOrder $storeorder)
     {
        $this->module = $module;
+
        $this->caremeta = $caremeta;
+
        $this->storeorder = $storeorder;
+
+       $this->buyer_id = DB::table("buyers")->where('buyer_name','ilike','Tesco')->pluck('id')->first();
     }
 
 
@@ -128,8 +134,25 @@ class CareLabelOrdersController extends Controller
             $response = $this->storeorder->storeTescoLabelOrder($request, $role = 'admin');
 
             return response()->json(['message' => 'success', 'data' => $response], 200);
+            
         }
 
+    }
+
+    public function cancelCareLabelOrder(Request $request)
+    {
+        $cancel_order_obj = new CancelTescoOrders();
+        
+        $table_array = $request->data_array;
+
+        if(sizeof($table_array) > 0) {
+         
+            $canceled_order = $cancel_order_obj->cancelTescoOrderMethod($table_array, $this->buyer_id);
+        }
+    
+        $result = $canceled_order == "cancelled"?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+
+        return $result;
     }
 
 }

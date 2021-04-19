@@ -49,14 +49,14 @@ class CancelTescoOrders
             foreach($table_array as $index => $data)
             {
               $table = $data['table']; 
-              $template_id = $data['table_id']; 
+              $order_table_id = $data['table_id']; 
 
               //Dynamic function name and database model name for each templates
               $order_model = 'App\\'."Tesco".$table."Orders";
 
               $order_qty_model = 'App\\'."Tesco".$table."OrdersQuantity";
 
-              $order_model::where('id',$template_id)
+              $order_model::where('id',$order_table_id)
                             ->update([
                             'order_status'       => "Order Cancelled",
                             'order_cancelled_at' => $this->current_date
@@ -65,11 +65,11 @@ class CancelTescoOrders
               // update order status as cancelled in order history table
               // value = 3 , ID of cancelled status in order_status table.
               $order_table_name = "tesco_".strtolower($table)."_orders";
-              OrderManagementHistory::where([['order_table_name', $order_table_name], ['order_table_id', $template_id]])->update([
+              OrderManagementHistory::where([['order_table_name', $order_table_name], ['order_table_id', $order_table_id]])->update([
                 'order_status'              => 3
               ]);
 
-              $order_details  = $order_model::where('id',$template_id)
+              $order_details  = $order_model::where('id',$order_table_id)
                                   ->select('id','order_status','tesco_supplier_id','purchase_order_no','pi_id')
                                   ->first();
               

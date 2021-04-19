@@ -103,7 +103,6 @@ $(function() {
                 _token: csrf_token
             },
             statusCode: {
-                /** [Show response status based on HTTP status code] */
                 200: function (data) {
                     /** [ Get data-id of add button ] */
                     var button_count = $(obj).attr("data-id");
@@ -328,10 +327,12 @@ $(function() {
                 $('.label-order-submit-btn').prop('disabled', true);
             },
             statusCode: {
-                /** [Show response status based on HTTP status code] */
                 200: function(response) {
                     console.log(JSON.stringify(response))
-                    $('#result').html('<div class="alert alert-success">Your Order Has Been Submitted Successfully</div>');
+                    $('#result').html('<div class="alert alert-success alert-dismissible"><strong>Success! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Your order has been placed successfully</div>');
+                    $('.label-order-cancel-btn').show();
+                    postLabelOrderSubmit(response.data);
+                    $(window).scrollTop(0);
                 },
                 400: function(error) {
                     $('.snackbar_span').html("Something went wrong!!");
@@ -348,5 +349,56 @@ $(function() {
             }
         });
     }
+
+    postLabelOrderSubmit = (data) => {
+        $('.label-order-submit-btn').remove();
+		/** [ store last updated id as hidden input , for cancel order functionality] */
+		
+		var div_html = '<input class="washcare-table-id-hidden" id="washcare_order_id" name="washcare_order_id" type="hidden" value="' + data.last_insertion + '">';
+
+		$('.label-order-invisible-div').html(div_html);
+    }
+
+    cancelCareLabelOrder = () => {
+
+        var array_list   = [];
+        my_object    = new Object();
+
+        my_object.table    = 'Washcare';
+        my_object.table_id = $('#washcare_order_id').val();
+
+        array_list.push(my_object);
+        
+        $.ajax({
+            url: base_url + "/"+user_role+"/tesco/cancel-care-label-order",
+            type: 'PUT',
+            data: {
+                _token: csrf_token,
+                data_array:array_list
+            },
+            dataType: "json",
+            beforeSend: function () {
+                $(".loader").show();
+            },
+            statusCode: {
+                200: function(response) {
+                    $('#result').html('<div class="alert alert-success alert-dismissible"><strong>Success! </strong><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Your order has been cancelled successfully</div>');
+
+                    $('#cancelCareLabelOrderModal').modal('hide');
+                    $('.label-order-cancel-btn').remove();
+                    $(window).scrollTop(0);
+                },
+                400: function(error) {
+                    $('.snackbar_span').html("Something went wrong!!");
+                    showSnackbar();
+                }
+            },
+            complete: function () {
+                $(".loader").hide();
+            }
+        })
+        
+    }
+
 });
 

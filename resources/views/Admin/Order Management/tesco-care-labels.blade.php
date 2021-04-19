@@ -261,6 +261,7 @@
             </div>
         </div>
     </div>
+    <div class="label-order-invisible-div"></div>
 </div>
 </div>
 <hr>
@@ -298,8 +299,8 @@
         <button class="btn btn-xs btn-warning label-order-submit-btn" type="submit" onclick="submitTescoCareLabelOrder()"><i class="fa fa-floppy-o"
             aria-hidden="true"></i> Submit</button> 
 
-        <button class="btn btn-xs btn-danger cancel-btn" type="button"
-        data-toggle="modal" data-target="#cancelOrderModal" ><i class="fa fa-times"
+        <button class="btn btn-xs btn-danger label-order-cancel-btn" type="button"
+        data-toggle="modal" data-target="#cancelCareLabelOrderModal" style="display: none;"><i class="fa fa-times"
             aria-hidden="true"></i> Cancel</button>
     
         <button class="btn btn-xs btn-danger reload-btn" type="button"
