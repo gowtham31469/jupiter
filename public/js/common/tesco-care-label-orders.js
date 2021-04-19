@@ -323,6 +323,10 @@ $(function() {
             url: base_url + "/"+user_role+"/tesco/submit-care-label-order",
             data: formData,
             dataType: "json",
+            beforeSend: function () {
+                $(".loader").show();
+                $('.label-order-submit-btn').prop('disabled', true);
+            },
             statusCode: {
                 /** [Show response status based on HTTP status code] */
                 200: function(response) {

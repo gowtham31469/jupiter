@@ -77,12 +77,12 @@ class CareLabelOrdersController extends Controller
     public function getFiberComponentsMeta(Request $request)
     {
         $data['components'] = DB::table('tesco_components')
-        ->where('is_enabled','=',1)
+        ->where('is_enabled', 1)
         ->pluck('english','id')
         ->all();
 
         $data['fabriclists'] = DB::table('tesco_fabriclists')
-        ->where('is_enabled','=',1)
+        ->where('is_enabled', 1)
         ->pluck('english','id')
         ->all();
 		
@@ -94,8 +94,8 @@ class CareLabelOrdersController extends Controller
     {
         $size_categories = DB::table('tesco_primary_size')
         ->select('tssc.id','tssc.category_name')
-		->join('tesco_secondary_size_chart', 'tesco_secondary_size_chart.tesco_primary_size_id', '=', 'tesco_primary_size.id')
-		->join('tesco_secondary_size_category as tssc', 'tssc.id', '=', 'tesco_secondary_size_chart.tesco_secondary_size_category_id')
+		->join('tesco_secondary_size_chart', 'tesco_secondary_size_chart.tesco_primary_size_id', 'tesco_primary_size.id')
+		->join('tesco_secondary_size_category as tssc', 'tssc.id', 'tesco_secondary_size_chart.tesco_secondary_size_category_id')
 		->where('tesco_primary_size.tesco_size_department_id', $request['size'])
         ->groupBy('tssc.id','tssc.category_name')
         ->orderBy('tssc.id')

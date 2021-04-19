@@ -18,13 +18,13 @@ class StoreTescoLabelOrder
 
      public function storeTescoLabelOrder($request, $role)
      {
-        $user_role = $role;
+         
         $order_history_obj = new StoreOrderManagementHistory();
 
         $template_data = DB::table('tesco_item_master')
         ->join('tesco_template', 'tesco_item_master.id', 'tesco_template.item_id')
         ->join('reports_template_level_name', 'reports_template_level_name.id', 'tesco_template.name_in_reports')
-        ->where('tesco_item_master.id','=', $request->template_id)
+        ->where('tesco_item_master.id', $request->template_id)
         ->select('tesco_item_master.item_name', 'reports_template_level_name.name as name_in_reports', 'tesco_item_master.company_id')
         ->first();
 
@@ -32,7 +32,7 @@ class StoreTescoLabelOrder
 
         $order_id = $template_data->company_id == 1?"JGA_".str_replace(" ","",$template_data->item_name)."00".($max_id+1):"SP_".str_replace(" ","",$template_data->item_name)."00".($max_id+1);
         
-        $customer_data = $this->getCustomerDetails($request->tesco_care_supplier, $user_role);
+        $customer_data = $this->getCustomerDetails($request->tesco_care_supplier, $role);
        
         $total_qty = array_sum($request->quantity);
 
