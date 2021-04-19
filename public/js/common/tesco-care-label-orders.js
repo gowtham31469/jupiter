@@ -7,12 +7,12 @@ $(function() {
     $(".selectpicker").selectpicker("refresh");
 
     // Method to render tesco care label orders page
-    renderTescoCareOrders = (size_id, size_category) => {
+    renderTescoCareOrders = (size_id, size_category, size_category_text) => {
         $('.main-content').load('/admin/tesco/care-label-orders');
         $('li.year-nav-menu').addClass('hidden');
         $('li.buyer-nav-menu').addClass('hidden');
         
-        getSizechart(size_id, size_category);
+        getSizechart(size_id, size_category, size_category_text);
 
     }
 
@@ -39,13 +39,10 @@ $(function() {
             var total_fiber_percentage = 0;
             $(this).find('.fiber-individual-percentage-' + table).each(function () {
                 var individual_percentage = $(this).val();
-
                 if (!isNaN(individual_percentage) && individual_percentage.length !== 0) {
                     total_fiber_percentage += parseInt(individual_percentage);
                 }
-                console.log("total_fiber_percentage :"+total_fiber_percentage);
             });
-            console.log(`table :`+table);
             $('#fiber_total_percentage_' + (table)).val(total_fiber_percentage);
             table++;
         });
@@ -93,7 +90,7 @@ $(function() {
                     while (fiber_count <= 6) {
                         garment_comp_div += `<div class="col-xs-9">
                                                         <div class="form-group has-feedback">
-                                                        <select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_fiber_`+component_count+`_`+fiber_count+`" name="tesco_care_fiber[]">
+                                                        <select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_fiber_`+component_count+`_`+fiber_count+`" name="tesco_care_fiber_`+component_count+`[]">
                                                         <option value="">-- Select Fiber --</option>`;
                         $.each(data.data.fabriclists, function (i, item) {
                             garment_comp_div += `<option value=` + item + `>` + item + `</option>`;
@@ -104,7 +101,7 @@ $(function() {
                                                 <div class="col-xs-3">
                                                     <div class="form-group has-feedback">
                                                     <div class="input-group">
-                                                        <input type="number" class="form-control input-sm fiber-individual-percentage-`+component_count+`" onkeyup="return calculateTotalFiberPercentage()" max="100"  id="fiber_individual_percentage_`+component_count+`_`+fiber_count+`" name="fiber_individual_percentage[]" data-max-error= "Value must be <= 100">
+                                                        <input type="number" class="form-control input-sm fiber-individual-percentage-`+component_count+`" onkeyup="return calculateTotalFiberPercentage()" max="100"  id="fiber_individual_percentage_`+component_count+`_`+fiber_count+`" name="fiber_individual_percentage_`+component_count+`[]" data-max-error= "Value must be <= 100">
                                                         <div class="input-group-addon">%</div>
                                                     </div>
                                                     <div class="help-block with-errors"></div>
@@ -140,7 +137,7 @@ $(function() {
 
 
     // Method to fetch tesco care size chart lists
-    getSizechart = (size_id, size_category) => {
+    getSizechart = (size_id, size_category, size_category_text) => {
 
         $.ajax({
             type: "get",
@@ -170,15 +167,23 @@ $(function() {
                     quantity_html += `<tr>
                                             <input type="hidden" id="secondary_size_id_` + valueOfElement.id + `" name="secondary_size_id[]" value="` + valueOfElement.id + `">
                                             <td >` + valueOfElement.uk_size + `</td>
-                                            <td >` + valueOfElement.ce_size + `</td>  <td>`;
-                                            $.each(valueOfElement.sec_size_chart, function (index, category) {
-                                                
-                                                quantity_html += `<strong>`+category['category_name']+`</strong> :`+category['secondary_size']+`<br>`;
-                                                     
-                                            });
-                                           quantity_html+= `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="UK EAN Number" id="uk_ean_`+indexInArray+`" name="uk_ean[]" required><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="CE EAN Number" id="ce_ean_`+indexInArray+`" name="ce_ean[]" required><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm label-quantity-field" placeholder="Quantity" id="quantity_`+indexInArray+`" name="quantity[]"><div class="help-block with-errors"></div></div></td>
+                                            <td >` + valueOfElement.ce_size + `</td>  <td >`;
+                                            
+                                            for (var index = 0; index < size_category_text.length; index++) {
+                                                var category_value = '-';
+
+                                                $.each(valueOfElement.sec_size_chart, function (index_1, category) {
+                                                    if($.trim(size_category_text[index]) === $.trim(category['category_name'])){
+                                                        category_value = category['secondary_size'];
+                                                        return false;
+                                                    }
+                                                });
+                                                quantity_html += `<strong class="text-justify">`+$.trim(size_category_text[index])+`</strong> : `+category_value+`<br>`;
+                                            }
+
+                                           quantity_html+= `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" required><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" required><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm label-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]"><div class="help-block with-errors"></div></div></td>
                                         </tr>`;
                 });
                 quantity_html += `</tbody>
@@ -252,29 +257,39 @@ $(function() {
 		}
     });
 
+
+    // Method to validate and submit tesco care label orders
+    submitTescoCareLabelOrder = () => {
+        $('#tesco_care_label_form').validator('validate');
+
+        /** [ bootstrap validator for create tesco order form ] **/
+        $('#tesco_care_label_form').validator().on('submit', function (e) {
+            if (e.isDefaultPrevented()) {
+
+            } else {
+                e.preventDefault();
+                submitCarelabelOrder();
+            } 
+        });
+    }
+
     // Method to Save tesco care label orders
-    saveTescoCarelabelOrder = () => {
+    submitCarelabelOrder = () => {
         var form_obj = [{
-            "template_id": localStorage.getItem("templates"),
-            "include_btn_sew_space": $("#tesco_care_button_space").prop(":checked")?1:0,
-            "exclusive_trims": $("#tesco_care_exclusive_trim").prop(":checked")?1:0,
-            "contains_non_textile_part": $("#tesco_care_non_textile_part").prop(":checked")?1:0,
-            "part_of_set": $("#tesco_care_part_of_set").prop(":checked")?1:0,
-            "bs_en_declaration": $("#tesco_care_bs_en").prop(":checked")?1:0,
-            "baby_sleeping_bag_symbol": $("#tesco_care_sleep_bag_symbol").prop(":checked")?1:0
+            "template_id": localStorage.getItem("templates")
         }];
         var formData = $('#tesco_care_label_form').serialize()+ '&' + $.param(form_obj[0]);
 
         $.ajax({
-            type: "put",
-            url: base_url + "/admin/tesco/save-care-label-order",
+            type: "post",
+            url: base_url + "/admin/tesco/submit-care-label-order",
             data: formData,
             dataType: "json",
             statusCode: {
                 /** [Show response status based on HTTP status code] */
                 200: function(response) {
                     console.log(JSON.stringify(response))
-                    $('#result').html('<div class="alert alert-success">Your Order Has Been Saved Successfully</div>');
+                    $('#result').html('<div class="alert alert-success">Your Order Has Been Submitted Successfully</div>');
                 },
                 400: function(error) {
                     $('.snackbar_span').html("Something went wrong!!");
@@ -289,21 +304,6 @@ $(function() {
                     $(window).scrollTop(0);
                 }
             }
-        });
-    }
-
-    // Method to validate and submit tesco care label orders
-    submitTescoCareLabelOrder = () => {
-        $('#tesco_care_label_form').validator('validate');
-
-        /** [ bootstrap validator for create tesco order form ] **/
-        $('#tesco_care_label_form').validator().on('submit', function (e) {
-            if (e.isDefaultPrevented()) {
-
-            } else {
-                e.preventDefault();
-                alert();
-            } 
         });
     }
 });

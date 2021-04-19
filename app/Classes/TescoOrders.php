@@ -12,7 +12,7 @@ use App\Classes\SubmitTescoOrdersUpdateQuery;
 use Carbon\Carbon;
 use App\Classes\EditErpOrders;
 use App\OrderManagementHistory;
-use App\Classes\TescoMaterialQuery;
+use App\Classes\StoreOrderManagementHistory;
 /**
  * Class to store the tesco template orders
  * @author [Praveen] <[praveen@wizroots.com]>
@@ -42,7 +42,7 @@ class TescoOrders
 	public function createTescoOrder($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required, $order_status, $edit_permission)
 	{
 		try {
-          $tesco_material_obj = new TescoMaterialQuery();
+          $order_history_obj = new StoreOrderManagementHistory();
 
           /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
           $pi_status = $pi_required == 1?"PI Approval Pending":null;
@@ -97,33 +97,33 @@ class TescoOrders
                   ]);
 
           /** Insert order data into history table */
-          $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
-          $template_level = $tesco_material_obj->tescoMaterialDetails($template_id);
-	
-          $material_name  = $template_level->material;
-          $material_sub   = $template_level->material_sub;
-          $material_ref   = $template_level->ref;
-          $order_table_name = "tesco_".strtolower(str_replace(" ","",$template_data->item_name))."_orders";
-          $po_upload_status = $po_status === null?null:0;
-          $pi_approve_status = $pi_required == 1?0:null;
-          $order_status_id  = $order_status === 'Order Pending'?6:2;
-                 
-          OrderManagementHistory::updateOrCreate(['order_table_name'  => $order_table_name, 'order_table_id'    => $order_submitted->id],[
-            'buyer_id'                  => $tesco_buyer_id->id,
-            'season'                    => $request['season_code'],
-            'customer_id'               => $customer_id,
-            'material'                  => $material_name,
-            'sub_material'              => $material_sub,
-            'style'                     => $request[strtolower($request['zone']).'_style'],
-            'reference'                 => $material_ref,
-            'buyer_po'                  => $request['po_number'],
-            'ocn_number'                => $request['ocn_no'],
-            'order_status'              => $order_status_id,
-            'pi_status'                 => $pi_approve_status,
-            'po_status'                 => $po_upload_status,
-            'name_in_reports'           => $template_data->name_in_reports,
-            'order_edit_enabled'        => $edit_permission
-          ]);
+          $order_data = [];
+
+          $order_data['season_code'] = $request['season_code'];
+
+          $order_data['po_number'] = $request['po_number'];
+
+          $order_data['ocn_no'] = $request['ocn_no'];
+
+          $order_data['style'] = $request[strtolower($request['zone']).'_style'];
+
+          $order_data['customer_id'] = $customer_id;
+
+          $order_data['template_id'] = $template_id;
+
+          $order_data['order_id'] = $order_submitted->id;
+
+          $order_data['po_status'] = $po_status;
+
+          $order_data['pi_required'] = $pi_required;
+
+          $order_data['order_status_id'] = $order_status === 'Order Pending'?6:2;
+
+          $order_data['edit_permission'] = $edit_permission;
+          
+          $order_data['tesco_label'] = false;
+
+          $order_history_obj->storeOrdersHistory($order_data);
 
           return $order_submitted;
             

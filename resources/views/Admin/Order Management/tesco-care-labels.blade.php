@@ -41,7 +41,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
         {!! Form::label('tesco_care_fabric_code', 'Fabric Batch Code', ['class' => 'form_label']) !!}
-        {!! Form::text('tesco_care_fabric_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Fabric Batch Code','required','maxlength' => '7')) !!}
+        {!! Form::text('tesco_care_fabric_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Fabric Batch Code', 'maxlength' => '7')) !!}
         <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -49,7 +49,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
         {!! Form::label('tesco_care_leather_id', 'Leather & Suede ID', ['class' => 'form_label']) !!}
-        {!! Form::text('tesco_care_leather_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Leather & Suede ID','required','maxlength' => '')) !!}
+        {!! Form::text('tesco_care_leather_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Leather & Suede ID', 'maxlength' => '')) !!}
         <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -106,14 +106,14 @@
         @for ($i = 1; $i <= 6; $i++)
             <div class="col-xs-9">
                 <div class="form-group has-feedback">
-                    {{  Form::select('tesco_care_fiber_'.$j.'_'.$i,(['' => '-- Select Fiber --']+$fabriclists),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_fiber_'.$j.'_'.$i, 'data-live-search' => 'true', 'name' => 'tesco_care_fiber[]')) }}
+                    {{  Form::select('tesco_care_fiber_'.$j.'_'.$i,(['' => '-- Select Fiber --']+$fabriclists),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_fiber_'.$j.'_'.$i, 'data-live-search' => 'true', 'name' => 'tesco_care_fiber_'.$j.'[]')) }}
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
             <div class="col-xs-3">
                 <div class="form-group has-feedback">
                 <div class="input-group">
-                    <input type="number" class="form-control input-sm fiber-individual-percentage-{{$j}}" onkeyup="return calculateTotalFiberPercentage()" max="100" id="fiber_individual_percentage_{{$j}}_{{$i}}" name="fiber_individual_percentage[]" data-max-error= "Value must be <= 100">
+                    <input type="number" class="form-control input-sm fiber-individual-percentage-{{$j}}" onkeyup="return calculateTotalFiberPercentage()" max="100" id="fiber_individual_percentage_{{$j}}_{{$i}}" name="fiber_individual_percentage_{{$j}}[]" data-max-error= "Value must be <= 100">
                     <div class="input-group-addon">%</div>
                 </div>
                 <div class="help-block with-errors"></div>
@@ -174,7 +174,7 @@
             <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_wash_instruction"  id="tesco_care_wash_instruction">
                 <option value="">-- Select Wash Instructions --</option>
                 @foreach($symbols['Washing'] as $key => $value)
-                        <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}">{{ $value->degree }}</option>
+                        <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required >{{ $value->degree }}</option>
                 @endforeach
             </select>
             <div class="help-block with-errors"></div>
@@ -186,7 +186,7 @@
             <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_bleach_instruction"  id="tesco_care_bleach_instruction">
                 <option value="">-- Select Bleach Instructions --</option>
                 @foreach($symbols['Whitening'] as $key => $value)
-                        <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}">{{ $value->degree }}</option>
+                        <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
                 @endforeach
             </select>
             <div class="help-block with-errors"></div>
@@ -198,7 +198,7 @@
             <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_dry_instruction"  id="tesco_care_dry_instruction">
                 <option value="">-- Select Dry Instructions --</option>
                 @foreach($symbols['Dryer'] as $key => $value)
-                        <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}">{{ $value->degree }}</option>
+                        <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
                 @endforeach
             </select>
             <div class="help-block with-errors"></div>
@@ -210,7 +210,7 @@
             <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_iron_instruction"  id="tesco_care_iron_instruction">
                 <option value="">-- Select Iron Instructions --</option>
                 @foreach($symbols['Ironing'] as $key => $value)
-                        <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}">{{ $value->degree }}</option>
+                        <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
                 @endforeach
             </select>
             <div class="help-block with-errors"></div>
@@ -222,7 +222,7 @@
             <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_dry_clean_instruction"  id="tesco_care_dry_clean_instruction">
                 <option value="">-- Select Dry Clean Instructions --</option>
                 @foreach($symbols['Prof Cleaning'] as $key => $value)
-                        <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}">{{ $value->degree }}</option>
+                        <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
                 @endforeach
             </select>
             <div class="help-block with-errors"></div>
@@ -240,7 +240,7 @@
     <div class="col-md-4">
         <div class="form-group has-feedback">
             {!! Form::label('tesco_care_additional_instruction_'.$i, 'Additional Instruction '.$i, ['class' => 'form_label']) !!}
-            {{  Form::select('tesco_care_additional_instruction_'.$i,(['' => '-- Select Additional Instruction --'] + $additional_instructions),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_additional_instruction_'.$i, 'data-live-search' => 'true')) }}
+            {{  Form::select('tesco_care_additional_instruction_'.$i,(['' => '-- Select Additional Instruction --'] + $additional_instructions),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_additional_instruction_'.$i, 'data-live-search' => 'true', 'name' => 'tesco_care_additional_instruction_'.$i)) }}
             <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -295,10 +295,7 @@
 <div class="modal-footer"> 
     <span class="pagename pull-left hidden-xs">Please save or submit changes before closing
         page.</span> 
-        <button class="btn btn-xs btn-success save-btn" type="button" onclick="saveTescoCarelabelOrder()"
-        data-insert="true"><i class="fa fa-edit" aria-hidden="true"></i> Save &amp; Continue</button> 
-
-        <button class="btn btn-xs btn-warning submit-btn" type="button" onclick="submitTescoCareLabelOrder()"><i class="fa fa-floppy-o"
+        <button class="btn btn-xs btn-warning submit-btn" type="submit" onclick="submitTescoCareLabelOrder()"><i class="fa fa-floppy-o"
             aria-hidden="true"></i> Submit</button> 
 
         <button class="btn btn-xs btn-danger cancel-btn" type="button"

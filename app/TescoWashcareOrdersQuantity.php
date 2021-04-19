@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class TescoWashcareOrdersQuantity extends Model
 {
+    protected $table = 'tesco_washcare_orders_quanty';
+
     protected $fillable = [
         'washcare_order_id',
         'size_id',
