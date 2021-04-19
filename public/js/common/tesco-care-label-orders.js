@@ -7,12 +7,13 @@ $(function() {
     $(".selectpicker").selectpicker("refresh");
 
     // Method to render tesco care label orders page
-    renderTescoCareOrders = (size_id, size_category, size_category_text) => {
-        $('.main-content').load('/admin/tesco/care-label-orders');
+    renderTescoCareOrders = (role, size_id, size_category, size_category_text) => {
+        user_role = role;
+        $('.main-content').load('/'+user_role+'/tesco/care-label-orders');
         $('li.year-nav-menu').addClass('hidden');
         $('li.buyer-nav-menu').addClass('hidden');
         
-        getSizechart(size_id, size_category, size_category_text);
+        getSizechart(size_id, size_category, size_category_text, user_role);
 
     }
 
@@ -30,6 +31,43 @@ $(function() {
     $(document).on("focusout", ".composition-percentage", function() {
         $(this).prop('readonly', false); 
     });
+
+    // get all the secondary size categories based on primary size selection
+    getSecondarySizeCategory = (size, user_type) => {
+        $('#tesco_care_size_category_div').html('');
+        $.ajax({
+            type: "get",
+            url: base_url + "/"+user_type+"/tesco/secondary-size-categories",
+            data: {size:$(size).val()},
+            dataType: "json",
+            statusCode: {
+
+                /** [ Show response status based on HTTP status code ] */
+                200: function(response) {
+                    size_category_options = ``;
+                    $.each(response.size_categories, function(i, item){
+                        size_category_options += `<option value=` + item.id + `>` + item.category_name + `</option>`;
+                    });
+
+                    var size_category_html = `<label for="tesco_care_size_category">Size Category</label>
+                        <select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_size_category" name="tesco_care_size_category" required="" data-actions-box="true" multiple="true" multiple title="Choose one of the following..." data-width="100%">
+                        `+size_category_options+`
+                        </select>	
+                    <div class="help-block with-errors"></div>`;
+
+                    $('#tesco_care_size_category_div').append(size_category_html);
+
+                    $('#tesco_care_size_category_div').removeClass('hidden');
+                    $(".selectpicker").selectpicker("refresh");
+                    $('#create_order_form').validator('update');
+                },
+                400: function() {
+                    $('.snackbar_span').html('Something went wrong');
+                    showSnackbar();
+                }
+            },
+        });
+    }
 
     // Method to Calculate total fiber percentage
     calculateTotalFiberPercentage = () => {
@@ -58,14 +96,13 @@ $(function() {
     // Method to add dynamic garment component
     addComponent = (obj) => {
         $.ajax({
-            url: base_url + "/admin/tesco/care-label-fiber-components",
+            url: base_url + "/"+user_role+"/tesco/care-label-fiber-components",
             type: "get",
             dataType: "json",
             data: {
                 _token: csrf_token
             },
             statusCode: {
-                /** [Show response status based on HTTP status code] */
                 200: function (data) {
                     /** [ Get data-id of add button ] */
                     var button_count = $(obj).attr("data-id");
@@ -137,11 +174,11 @@ $(function() {
 
 
     // Method to fetch tesco care size chart lists
-    getSizechart = (size_id, size_category, size_category_text) => {
+    getSizechart = (size_id, size_category, size_category_text, role) => {
 
         $.ajax({
             type: "get",
-            url: base_url + "/admin/tesco/care-size-lists",
+            url: base_url + "/"+role+"/tesco/care-size-lists",
             dataType: "json",
             data: {
                 _token: csrf_token,
@@ -206,7 +243,7 @@ $(function() {
         var templates = localStorage.getItem("templates");
         if (supplier_id != '') {
 		    $.ajax({
-			       url:base_url + "/admin/tesco/get-moq-value",
+			       url:base_url + "/"+user_role+"/tesco/get-moq-value",
 			       dataType:"json",
 			       method:"get",
 			       data:{supplier:supplier_id,buyer_id:buyer_id,templates:templates},
@@ -282,14 +319,20 @@ $(function() {
 
         $.ajax({
             type: "post",
-            url: base_url + "/admin/tesco/submit-care-label-order",
+            url: base_url + "/"+user_role+"/tesco/submit-care-label-order",
             data: formData,
             dataType: "json",
+            beforeSend: function () {
+                $(".loader").show();
+                $('.label-order-submit-btn').prop('disabled', true);
+            },
             statusCode: {
-                /** [Show response status based on HTTP status code] */
                 200: function(response) {
                     console.log(JSON.stringify(response))
-                    $('#result').html('<div class="alert alert-success">Your Order Has Been Submitted Successfully</div>');
+                    $('#result').html('<div class="alert alert-success alert-dismissible"><strong>Success! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Your order has been placed successfully</div>');
+                    $('.label-order-cancel-btn').show();
+                    postLabelOrderSubmit(response.data);
+                    $(window).scrollTop(0);
                 },
                 400: function(error) {
                     $('.snackbar_span').html("Something went wrong!!");
@@ -306,5 +349,56 @@ $(function() {
             }
         });
     }
+
+    postLabelOrderSubmit = (data) => {
+        $('.label-order-submit-btn').remove();
+		/** [ store last updated id as hidden input , for cancel order functionality] */
+		
+		var div_html = '<input class="washcare-table-id-hidden" id="washcare_order_id" name="washcare_order_id" type="hidden" value="' + data.last_insertion + '">';
+
+		$('.label-order-invisible-div').html(div_html);
+    }
+
+    cancelCareLabelOrder = () => {
+
+        var array_list   = [];
+        my_object    = new Object();
+
+        my_object.table    = 'Washcare';
+        my_object.table_id = $('#washcare_order_id').val();
+
+        array_list.push(my_object);
+        
+        $.ajax({
+            url: base_url + "/"+user_role+"/tesco/cancel-care-label-order",
+            type: 'PUT',
+            data: {
+                _token: csrf_token,
+                data_array:array_list
+            },
+            dataType: "json",
+            beforeSend: function () {
+                $(".loader").show();
+            },
+            statusCode: {
+                200: function(response) {
+                    $('#result').html('<div class="alert alert-success alert-dismissible"><strong>Success! </strong><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Your order has been cancelled successfully</div>');
+
+                    $('#cancelCareLabelOrderModal').modal('hide');
+                    $('.label-order-cancel-btn').remove();
+                    $(window).scrollTop(0);
+                },
+                400: function(error) {
+                    $('.snackbar_span').html("Something went wrong!!");
+                    showSnackbar();
+                }
+            },
+            complete: function () {
+                $(".loader").hide();
+            }
+        })
+        
+    }
+
 });
 

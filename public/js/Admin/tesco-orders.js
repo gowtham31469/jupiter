@@ -205,7 +205,7 @@ function tescoOrders(callback) {
 																		</div>
 																			<div class="form-group has-feedback hidden" id="tesco_care_size_chart_div">
 																				<label for="tesco_care_size_chart">Size Chart</label>
-																				<select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_size_chart" name="tesco_care_size_chart" required="" onchange="getSecondarySizeCategory(this)">
+																				<select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_size_chart" name="tesco_care_size_chart" required="" onchange="getSecondarySizeCategory(this, role='admin')">
 																				`+size_options+`
 																				</select>	
 																				<div class="help-block with-errors"></div>
@@ -579,7 +579,7 @@ function tescoOrders(callback) {
 									size_category_text.push($(this).text());
 								});
 								
-								renderTescoCareOrders(size_id, size_category, size_category_text);
+								renderTescoCareOrders(role="admin", size_id, size_category, size_category_text);
 							}
 							
 								localStorage.setItem("back_flag","create");
@@ -8639,41 +8639,4 @@ function wordWrap(str, maxWidth) {
 function testWhite(x) {
     var white = new RegExp(/^\s$/);
     return white.test(x.charAt(0));
-}
-
-// get all the secondary size categories based on primary size selection
-getSecondarySizeCategory = (size) => {
-	$('#tesco_care_size_category_div').html('');
-	$.ajax({
-		type: "get",
-		url: base_url + "/admin/tesco/secondary-size-categories",
-		data: {size:$(size).val()},
-		dataType: "json",
-		statusCode: {
-
-			/** [ Show response status based on HTTP status code ] */
-			200: function(response) {
-				size_category_options = ``;
-				$.each(response.size_categories, function(i, item){
-					size_category_options += `<option value=` + item.id + `>` + item.category_name + `</option>`;
-				});
-
-				var size_category_html = `<label for="tesco_care_size_category">Size Category</label>
-					<select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_size_category" name="tesco_care_size_category" required="" data-actions-box="true" multiple="true" multiple title="Choose one of the following..." data-width="100%">
-					`+size_category_options+`
-					</select>	
-				<div class="help-block with-errors"></div>`;
-
-				$('#tesco_care_size_category_div').append(size_category_html);
-
-				$('#tesco_care_size_category_div').removeClass('hidden');
-				$(".selectpicker").selectpicker("refresh");
-				$('#create_order_form').validator('update');
-			},
-			400: function() {
-				$('.snackbar_span').html('Something went wrong');
-				showSnackbar();
-			}
-		},
-	});
 }

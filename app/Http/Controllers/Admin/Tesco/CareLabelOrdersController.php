@@ -8,6 +8,7 @@ use DB;
 use App\Classes\Modules;
 use App\Classes\TescoCareMetadata;
 use App\Classes\StoreTescoLabelOrder;
+use App\Classes\CancelTescoOrders;
 
 use App\TescoCareSymbols;
 use App\TescoComponents;
@@ -27,15 +28,20 @@ use App\Http\Requests\SubmitTescoLabelOrder;
 
 class CareLabelOrdersController extends Controller
 {
-    private $storeOrder;
+    private $storeorder;
     private $caremeta;
     private $module;
+    private $buyer_id;
 
     public function __construct(Modules $module, TescoCareMetadata $caremeta, StoreTescoLabelOrder $storeorder)
     {
        $this->module = $module;
+
        $this->caremeta = $caremeta;
+
        $this->storeorder = $storeorder;
+
+       $this->buyer_id = DB::table("buyers")->where('buyer_name','ilike','Tesco')->pluck('id')->first();
     }
 
 
@@ -77,12 +83,12 @@ class CareLabelOrdersController extends Controller
     public function getFiberComponentsMeta(Request $request)
     {
         $data['components'] = DB::table('tesco_components')
-        ->where('is_enabled','=',1)
+        ->where('is_enabled', 1)
         ->pluck('english','id')
         ->all();
 
         $data['fabriclists'] = DB::table('tesco_fabriclists')
-        ->where('is_enabled','=',1)
+        ->where('is_enabled', 1)
         ->pluck('english','id')
         ->all();
 		
@@ -94,8 +100,8 @@ class CareLabelOrdersController extends Controller
     {
         $size_categories = DB::table('tesco_primary_size')
         ->select('tssc.id','tssc.category_name')
-		->join('tesco_secondary_size_chart', 'tesco_secondary_size_chart.tesco_primary_size_id', '=', 'tesco_primary_size.id')
-		->join('tesco_secondary_size_category as tssc', 'tssc.id', '=', 'tesco_secondary_size_chart.tesco_secondary_size_category_id')
+		->join('tesco_secondary_size_chart', 'tesco_secondary_size_chart.tesco_primary_size_id', 'tesco_primary_size.id')
+		->join('tesco_secondary_size_category as tssc', 'tssc.id', 'tesco_secondary_size_chart.tesco_secondary_size_category_id')
 		->where('tesco_primary_size.tesco_size_department_id', $request['size'])
         ->groupBy('tssc.id','tssc.category_name')
         ->orderBy('tssc.id')
@@ -120,21 +126,33 @@ class CareLabelOrdersController extends Controller
 
     public function submitCareLabelOrder(SubmitTescoLabelOrder $request)
     {
-        // return response()->json([
-        //     'success'  => $request->all()
-        //     ]);
-
+        
         if($request->ajax()) {
 
             $request->validated();
             
-            $this->storeorder->storeTescoLabelOrder($request);
+            $response = $this->storeorder->storeTescoLabelOrder($request, $role = 'admin');
 
-            return response()->json([
-            'success'  => 'Data Added successfully.'
-            ]);
+            return response()->json(['message' => 'success', 'data' => $response], 200);
+            
         }
 
+    }
+
+    public function cancelCareLabelOrder(Request $request)
+    {
+        $cancel_order_obj = new CancelTescoOrders();
+        
+        $table_array = $request->data_array;
+
+        if(sizeof($table_array) > 0) {
+         
+            $canceled_order = $cancel_order_obj->cancelTescoOrderMethod($table_array, $this->buyer_id);
+        }
+    
+        $result = $canceled_order == "cancelled"?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+
+        return $result;
     }
 
 }
