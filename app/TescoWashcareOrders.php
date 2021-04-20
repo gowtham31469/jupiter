@@ -78,14 +78,14 @@ class TescoWashcareOrders extends Model
     ]; 
 
     protected $casts = [
-        'country_of_origin_text'         => 'json',
-        'kids_warning_text'              => 'json',
-        'exclusive_trims_text'           => 'json',
-        'contains_non_textile_part_text' => 'json',
-        'part_of_set_text'               => 'json',
-        'additional_care_text_1'         => 'json',
-        'additional_care_text_2'         => 'json',
-        'additional_care_text_3'         => 'json',
+        'country_of_origin_text'         => 'array',
+        'kids_warning_text'              => 'array',
+        'exclusive_trims_text'           => 'array',
+        'contains_non_textile_part_text' => 'array',
+        'part_of_set_text'               => 'array',
+        'additional_care_text_1'         => 'array',
+        'additional_care_text_2'         => 'array',
+        'additional_care_text_3'         => 'array',
         'include_btn_sew_space'          => 'boolean',
         'exclusive_trims'                => 'boolean',
         'contains_non_textile_part'      => 'boolean',
