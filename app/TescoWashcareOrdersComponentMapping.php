@@ -16,6 +16,6 @@ class TescoWashcareOrdersComponentMapping extends Model
     ]; 
 
     protected $casts = [
-        'garment_component_text' => 'json',
+        'garment_component_text' => 'array',
     ];
 }

@@ -139,23 +139,16 @@ class StoreTescoLabelOrder
 
         $washcare_order_id = TescoWashcareOrders::create($insert_data)->id;
 
-        $uk_ean = $request->uk_ean;
-
-        $ce_ean = $request->ce_ean;
-
-        $quantity = $request->quantity;
-
-        $secondary_size = $request->secondary_size_id;
-
-        for($qty_index = 0; $qty_index < count($uk_ean); $qty_index++)
+        for($qty_index = 0; $qty_index < count($request->uk_ean); $qty_index++)
         {
 
             $qty_data[] = array(
-                'washcare_order_id' => $washcare_order_id,
-                'uk_ean'   => $uk_ean[$qty_index],
-                'ce_ean'   => $ce_ean[$qty_index],
-                'quantity' => $quantity[$qty_index],
-                'size_id'  => $secondary_size[$qty_index]
+                'washcare_order_id'        => $washcare_order_id,
+                'uk_ean'                   => $request->uk_ean[$qty_index],
+                'ce_ean'                   => $request->ce_ean[$qty_index],
+                'quantity'                 => $request->quantity[$qty_index],
+                'size_id'                  => $request->secondary_size_id[$qty_index],
+                'selected_secondary_sizes' => json_decode( json_encode($request->secondary_size_data[$qty_index]), true)
             );
 
         }

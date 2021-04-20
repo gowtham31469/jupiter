@@ -64,6 +64,7 @@ class OrderManagementCntrl extends Controller
     private $financial_year_date;
     private $financial_year_start;
     private $financial_year_end;
+    private $buyer_id;
 
 
     /**
@@ -115,6 +116,8 @@ class OrderManagementCntrl extends Controller
           $this->financial_year_start = $this->financial_year_date_format;
           $this->financial_year_end = Carbon::parse($this->financial_year_date_format)->addYear()->subDay()->toDateString();
         }
+        
+        $this->buyer_id = DB::table("buyers")->where('buyer_name','ilike','Tesco')->pluck('id')->first();
         
     }
 
@@ -4543,33 +4546,21 @@ class OrderManagementCntrl extends Controller
      */
     public function cancelTescoOrder(Request $request)
     {
-        try {
-              /** [ Creating new object for CancelTescoOrders() class ] */
-              $cancel_order_obj = new CancelTescoOrders();
-              $buyer_id = DB::table("buyers")->where('buyer_name','ilike','Tesco')->pluck('id')->first();
-              
-              $table_array = $request->data_array;
 
-              if(sizeof($table_array) > 0)
-              {
-                /** [ Invoking cancelTescoOrderMethod function using class instance ] */
-                $canceled_order = $cancel_order_obj->cancelTescoOrderMethod($table_array, $buyer_id);
-              }
-            
-              if($canceled_order == "cancelled")
-              {
-                $result = response()->json(['error'=> false,'message' =>'success'],200);
-              }
-              else
-              {
-                $result = response()->json(['error'=> true,'message' =>'Error'],400);
-              }
+        $cancel_order_obj = new CancelTescoOrders();
+          
+        $table_array = $request->data_array;
 
-        } catch (\Exception $e)
-        {
-            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        if(sizeof($table_array) > 0) {
+        
+            $canceled_order = $cancel_order_obj->cancelTescoOrderMethod($table_array, $this->buyer_id);
+
         }
+    
+        $result = $canceled_order == "cancelled"?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+
         return $result;
+
     }
 	
 	 /**

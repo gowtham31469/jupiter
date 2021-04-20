@@ -1017,22 +1017,24 @@ Route::post('jga/set-financial-year-session', function (Request $request) {
 
 # Tesco care label orders admin routes
 Route::group(['middleware' => 'auth', 'prefix' => 'admin/tesco/'], function() {
+
 	Route::get('care-label-orders', 'Admin\Tesco\CareLabelOrdersController@index')->name('tesco-care-label-order');
 	Route::get('care-label-fiber-components', 'Admin\Tesco\CareLabelOrdersController@getFiberComponentsMeta')->name('tesco-care-label-order.components');
 	Route::get('care-size-lists', 'Admin\Tesco\CareLabelOrdersController@getSecondarySizeListsBySizeCategoryID')->name('tesco-care-label-order.care-size-lists');
 	Route::post('submit-care-label-order',  'Admin\Tesco\CareLabelOrdersController@submitCareLabelOrder')->name('tesco-care-label-order.submit');
 	Route::get('secondary-size-categories', 'Admin\Tesco\CareLabelOrdersController@getSecondarySizeCategoriesByPrimaryID')->name('tesco-care-label-order.size-categories');
-	Route::put('cancel-care-label-order', 'Admin\Tesco\CareLabelOrdersController@cancelCareLabelOrder');
+	
   });
 
 
   # Tesco care label orders customer routes
 Route::group(['middleware' => 'customer_auth', 'prefix' => 'customer/tesco/'], function() {
+	
 	Route::get('care-label-orders', 'Customer\Tesco\CustomerCareLabelOrdersController@index');
 	Route::get('care-label-fiber-components', 'Customer\Tesco\CustomerCareLabelOrdersController@getFiberComponentsMeta');
 	Route::get('care-size-lists', 'Customer\Tesco\CustomerCareLabelOrdersController@getSecondarySizeListsBySizeCategoryID');
 	Route::post('submit-care-label-order',  'Customer\Tesco\CustomerCareLabelOrdersController@submitCareLabelOrder');
 	Route::get('secondary-size-categories', 'Customer\Tesco\CustomerCareLabelOrdersController@getSecondarySizeCategoriesByPrimaryID');
 	Route::get('get-moq-value', 'Customer\Tesco\CustomerCareLabelOrdersController@getTescoTemplateMoq');
-	Route::put('cancel-care-label-order', 'Customer\Tesco\CustomerCareLabelOrdersController@cancelCareLabelOrder');
+	
   });

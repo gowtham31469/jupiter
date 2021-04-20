@@ -74,14 +74,35 @@ $(function() {
     
         var table = 1;
         $('.component-div').each(function () {
+
             var total_fiber_percentage = 0;
+
             $(this).find('.fiber-individual-percentage-' + table).each(function () {
+
                 var individual_percentage = $(this).val();
+
                 if (!isNaN(individual_percentage) && individual_percentage.length !== 0) {
+
                     total_fiber_percentage += parseInt(individual_percentage);
+
                 }
+
             });
-            $('#fiber_total_percentage_' + (table)).val(total_fiber_percentage);
+            $('#fiber_total_percentage_' + (table)).val(total_fiber_percentage).change();
+            
+            // toggle min & max validation for total percentage
+            if (  total_fiber_percentage === 0 || total_fiber_percentage === 100 ) {
+                    
+                $('#fiber_total_percentage_' + (table)).removeAttr("min"); 
+                $('#fiber_total_percentage_' + (table)).removeAttr("max"); 
+
+            } else {
+
+                $('#fiber_total_percentage_' + (table)).attr('min', 100);
+                $('#fiber_total_percentage_' + (table)).attr('max', 100);
+
+            }
+
             table++;
         });
 
@@ -104,6 +125,7 @@ $(function() {
             },
             statusCode: {
                 200: function (data) {
+
                     /** [ Get data-id of add button ] */
                     var button_count = $(obj).attr("data-id");
                     var component_count = parseInt(button_count) + 1;
@@ -152,7 +174,7 @@ $(function() {
                                                     <div class="col-xs-3">
                                                         <div class="form-group has-feedback">
                                                         <div class="input-group">
-                                                            <input type="number" class="form-control input-sm composition-percentage total-percentage-`+component_count+`" id="fiber_total_percentage_`+component_count+`" name="fiber_total_percentage[]" min="100" max="100">
+                                                            <input type="number" class="form-control input-sm composition-percentage total-percentage-`+component_count+`" id="fiber_total_percentage_`+component_count+`" name="fiber_total_percentage[]">
                                                             <div class="input-group-addon">%</div>
                                                         </div>
                                                         <div class="help-block with-errors"></div>
@@ -186,6 +208,7 @@ $(function() {
                 size_category:size_category
             },
             success: function (response) {
+
                 var quantity_html = `<input type="hidden" id="primary_size_id" name="primary_size_id" value="`+size_id+`">
                                         <div class="table-responsive">
                                         <table class="table table-bordered table-striped table-hover">
@@ -200,27 +223,49 @@ $(function() {
                                             </tr>
                                             </thead>
                                             <tbody>`;
+                
+                size_array = [];
                 $.each(response.data, function (indexInArray, valueOfElement) {
                     quantity_html += `<tr>
                                             <input type="hidden" id="secondary_size_id_` + valueOfElement.id + `" name="secondary_size_id[]" value="` + valueOfElement.id + `">
                                             <td >` + valueOfElement.uk_size + `</td>
                                             <td >` + valueOfElement.ce_size + `</td>  <td >`;
-                                            
+
+                                            secondary_sizes = [];
+
                                             for (var index = 0; index < size_category_text.length; index++) {
+
                                                 var category_value = '-';
-
+                                                var size_id = null;
+                                                
                                                 $.each(valueOfElement.sec_size_chart, function (index_1, category) {
-                                                    if($.trim(size_category_text[index]) === $.trim(category['category_name'])){
-                                                        category_value = category['secondary_size'];
-                                                        return false;
-                                                    }
-                                                });
-                                                quantity_html += `<strong class="text-justify">`+$.trim(size_category_text[index])+`</strong> : `+category_value+`<br>`;
-                                            }
 
+                                                    if($.trim(size_category_text[index]) === $.trim(category['category_name'])){
+
+                                                        category_value = category['secondary_size'];
+                                                        size_id = category['id'];
+                                                        return false;
+                                                        
+                                                    }
+
+                                                });
+                                                
+                                                quantity_html += `<strong class="text-justify">`+$.trim(size_category_text[index])+`</strong> : `+category_value+`<br>`;
+
+                                                size_value = category_value === '-'?null:category_value;
+
+                                                secondary_sizes.push({
+                                                    id : size_id,
+                                                    secondary_size : $.trim(size_category_text[index]),
+                                                    value : size_value
+                                                });
+
+                                            }
+                                            
                                            quantity_html+= `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" required><div class="help-block with-errors"></div></div></td>
                                             <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" required><div class="help-block with-errors"></div></div></td>
                                             <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm label-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]"><div class="help-block with-errors"></div></div></td>
+                                            <input type='hidden' id='secondary_size_data_` + valueOfElement.id + `' name='secondary_size_data[]' value='` + JSON.stringify(secondary_sizes) + `'>
                                         </tr>`;
                 });
                 quantity_html += `</tbody>
@@ -241,7 +286,9 @@ $(function() {
         var supplier_id = $('#tesco_care_supplier option:selected').val();
         var buyer_id  = localStorage.getItem("buyer_id");
         var templates = localStorage.getItem("templates");
+
         if (supplier_id != '') {
+
 		    $.ajax({
 			       url:base_url + "/"+user_role+"/tesco/get-moq-value",
 			       dataType:"json",
@@ -277,20 +324,25 @@ $(function() {
 	                   isSubmitting = false;
 		               $(".loader").hide();
 		           }
-		       })
+               })
+               
 		} else {
-				localStorage.removeItem("moq_values");
+
+                localStorage.removeItem("moq_values");
+                
 				/** hide quantity missing error msgs */
 				$('.label-quantity-feedback').removeClass('has-error has-danger');
 				$('.label-quantity-feedback-err-msg').css('display', 'none');
 				$('.label-quantity-field').prop('required', false);
 				$('.label-quantity-field').parent().removeClass('has-error')
-				$('.help-block').html('');
+                $('.help-block').html('');
+                
 				/** [ Remove MOQ values] */
                 $('.label-quantity-field').each(function () {
                         $(this).removeAttr("min"); 
                         $(this).data("min-error",""); 
                 });
+
 		}
     });
 
@@ -313,7 +365,8 @@ $(function() {
     // Method to Save tesco care label orders
     submitCarelabelOrder = () => {
         var form_obj = [{
-            "template_id": localStorage.getItem("templates")
+            "template_id": localStorage.getItem("templates"),
+            // 'secondary_size': size_array
         }];
         var formData = $('#tesco_care_label_form').serialize()+ '&' + $.param(form_obj[0]);
 
@@ -335,8 +388,7 @@ $(function() {
                     $(window).scrollTop(0);
                 },
                 400: function(error) {
-                    $('.snackbar_span').html("Something went wrong!!");
-                    showSnackbar();
+                    $('#result').html('<div class="alert alert-danger alert-dismissible"><strong>Error! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Something went wrong !! Try again</div>');
                 },
                 422: function(errorXHR) {
                     var error_msg = ``;
@@ -352,6 +404,7 @@ $(function() {
 
     postLabelOrderSubmit = (data) => {
         $('.label-order-submit-btn').remove();
+
 		/** [ store last updated id as hidden input , for cancel order functionality] */
 		
 		var div_html = '<input class="washcare-table-id-hidden" id="washcare_order_id" name="washcare_order_id" type="hidden" value="' + data.last_insertion + '">';
@@ -370,7 +423,7 @@ $(function() {
         array_list.push(my_object);
         
         $.ajax({
-            url: base_url + "/"+user_role+"/tesco/cancel-care-label-order",
+            url: base_url + "/"+user_role+"/tesco/cancel-tesco-order",
             type: 'PUT',
             data: {
                 _token: csrf_token,

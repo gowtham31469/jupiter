@@ -13,7 +13,8 @@ class TescoWashcareOrdersQuantity extends Model
         'size_id',
         'uk_ean',
         'ce_ean',
-        'quantity'
+        'quantity',
+        'selected_secondary_sizes'
     ]; 
 
     /**
